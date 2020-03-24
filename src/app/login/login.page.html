@@ -1,0 +1,70 @@
+<ion-content class="ion-padding login-background">
+    <ion-grid class="ion-padding">
+        <ion-row>
+            <ion-col size="12" class="ion-no-margin ion-no-padding">
+                <span class="title text-bold">
+                    Wattmonk
+                </span>
+            </ion-col>
+        </ion-row>
+
+    </ion-grid>
+
+    <ion-grid class="ion-padding form-background">
+        <ion-row class="ion-margin-top">
+            <ion-col size="12" class="ion-no-margin ion-no-padding">
+                <span class="subtitle">
+                    Welcome back,
+                </span>
+            </ion-col>
+            <ion-col size="12" class="ion-no-margin ion-no-padding">
+                <span class="subtitle-sub-text subtitle-dim-color">
+                    sign in to continue
+                </span>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-margin-top">
+            <ion-col size="12" class="ion-no-padding">
+                <form [formGroup]="loginForm" novalidate>
+                    <ion-grid class="ion-no-padding">
+                        <ion-row class="ion-margin-top">
+                            <ion-col size="12">
+                                <ion-input type="email" placeholder="your email address" class="form-control"
+                                    formControlName="identifier" email="true">
+                                </ion-input>
+                                <div style="padding: 6px;">
+                                    <span class="email_valid">(jhondoe@gmail.com)</span>
+                                </div>
+
+                            </ion-col>
+
+                            <ion-col size="12" class="ion-margin-top">
+                                <div class="password_box">
+                                    <ion-input type="password" class="password_input" [type]="getType()" style="
+                                    " placeholder="your password" formControlName="password">
+                                    </ion-input>
+                                    <div class="eye_box">
+                                        <ion-icon name="eye" (click)="toggleTextPassword()" slot="end"></ion-icon>
+                                    </div>
+                                </div>
+                            </ion-col>
+
+                            <ion-col size="12" class="forgot-password-text">
+                                <p style="text-align: end" class="ion-padding" [routerLink]="['/forgot-password']"
+                                    routerDirection="forward">Forgot your password?</p>
+                            </ion-col>
+
+                            <ion-col size="12" class="ion-margin-top">
+                                <h1 class="ion-no-margin ion-no-padding action-button-color" (click)="login()">
+                                    Login
+                                </h1>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </form>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+
+</ion-content>

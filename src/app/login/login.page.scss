@@ -1,0 +1,58 @@
+.title {
+  font-size: 3em;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 2em;
+  color: #434343;
+}
+
+ion-content.login-background {
+  --background: none;
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("/assets/images/login_background.png");
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.form-background {
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("/assets/images/wattmonk_logo.png");
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+
+
+.subtitle-sub-text {
+  font-size: 1.8em;
+  color: #A5A095;
+}
+
+.forgot-password-text {
+  color: #7DA4DD;
+}
+
+.email_valid {
+  color: #495057 !important;
+}
+
+.password_box {
+  display: flex;
+  border-bottom: 1px solid #ced4da !important;
+
+}
+
+.password_input {
+  margin-bottom: -5px;
+  color: #D9D9D9 !important;
+}
+
+.eye_box {
+  display: flex;
+  align-items: center;
+}

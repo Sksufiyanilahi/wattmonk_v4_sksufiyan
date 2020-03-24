@@ -1,0 +1,54 @@
+<ion-content>
+    <ion-progress-bar value="0.2" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
+    <ion-grid class="colored">
+        <ion-row justify-content-center>
+            <ion-col size="auto" class="ion-no-padding">
+                <ion-button fill="clear" size="small" (click)="goBack()">
+                    <ion-icon name="chevron-back-outline" color="light"></ion-icon>
+                </ion-button>
+            </ion-col>
+            <ion-col class="ion-no-padding end-centered">
+                <ion-icon name="information-circle" class="info-icon"></ion-icon>
+                <span>Capture {{itemName}}</span>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<ion-footer class="colored">
+    <ion-grid>
+        <ion-row>
+            <ion-col *ngFor="let menu of subMenu" class="ion-text-center" (click)="selectSubMenu(menu)">
+                <ion-row class="ion-align-items-center ion-justify-content-center">
+                    <ion-col size="12">
+                        <span class="deselected-menu" [ngClass]="{'selected-menu' : menu.isSelected}">
+                            {{menu.name}}
+                        </span>
+                    </ion-col>
+                </ion-row>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+            <ion-col size="3">
+            </ion-col>
+            <ion-col size="3" class="ion-text-center">
+                <span class="camera-button" (click)="takePicture()"></span>
+            </ion-col>
+            <ion-col size="3">
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-no-padding ion-no-margin">
+            <ion-col *ngFor="let menu of mainMenu" class="ion-text-center ion-no-padding ion-no-margin">
+                <ion-row class="ion-align-items-center ion-justify-content-center" (click)="selectMenu(menu)">
+                    <ion-col size="12" class="ion-no-margin ion-no-padding">
+                        <span class="deselected-menu" [ngClass]="{'selected-menu' : menu.isSelected}">
+                            {{menu.name}}
+                        </span>
+                    </ion-col>
+                    <ion-col size="12" *ngIf="menu.isSelected" class="ion-no-margin ion-no-padding ion-text-center">
+                        <span class="selected-main-menu"></span>
+                    </ion-col>
+                </ion-row>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-footer>

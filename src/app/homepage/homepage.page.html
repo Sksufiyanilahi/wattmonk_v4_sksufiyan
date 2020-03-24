@@ -1,0 +1,65 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-grid>
+            <ion-row class="ion-align-items-center">
+                <ion-col>
+                    <ion-searchbar placeholder="home" class="custom"></ion-searchbar>
+                </ion-col>
+                <ion-col size="auto">
+                    <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward">
+                        <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
+                        <span class="badge">
+                            4
+                        </span>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-tabs>
+        <ion-tab-bar slot="top" class="ion-no-border">
+            <ion-tab-button tab="design">
+                <ion-label>Design</ion-label>
+            </ion-tab-button>
+            <ion-tab-button tab="survey">
+                <ion-label>Survey</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+    </ion-tabs>
+
+</ion-content>
+
+<ion-footer class="ion-no-border">
+    <div class="position-relative">
+        <ion-fab horizontal="center" class="fab-position position-absolute">
+            <ion-fab-button [routerLink]="['/schedule']" routerDirection="forward">
+                <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
+        </ion-fab>
+        <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
+            <ion-row>
+                <ion-col size="4">
+                    <div class="tab">
+                        <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>
+                        <span class="tabText">Home</span>
+                    </div>
+                </ion-col>
+                <ion-col size="4">
+                    <div class="tab">
+                        <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
+                        <span class="tabText">Messages</span>
+                    </div>
+                </ion-col>
+                <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
+                    <div class="tab">
+                        <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
+                        <span class="tabText">Profile</span>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+
+</ion-footer>

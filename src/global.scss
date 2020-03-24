@@ -24,3 +24,99 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+@font-face {
+    font-family: 'Proxima Nova Alt';
+    src: url('/assets/fonts/ProximaNova-Regular.otf');
+}
+
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Proxima Nova Alt';
+}
+
+.full-height {
+    height: 100vh;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+
+.flex-row {
+    flex-direction: row !important;
+}
+
+.flex-column {
+    flex-direction: column !important;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.space-evenly {
+    justify-content: space-evenly;
+}
+
+.justify-center {
+    justify-content: center !important;
+}
+
+.align-center {
+    align-items: center !important;
+}
+
+.h-100 {
+    height: 100% !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.p-0 {
+    padding: 0 !important;
+}
+
+.m-0 {
+    margin: 0 !important;
+}
+
+.form-control {
+    border-bottom: 1px solid #ced4da !important;
+    color: #D9D9D9 !important;
+
+    .native-input {
+        margin-bottom: -5px;
+    }
+}
+
+.comment_box {
+    border: 1px solid #E1E1E1;
+    height: 80px;
+    margin-top: 10px;
+}
+
+.form_input {
+    margin-top: 10px;
+    margin-bottom: -10px;
+}
+
+.action-button-color {
+    color: #DC6E67 !important;
+}
+
+.position-relative {
+    position: relative !important;
+}
+
+.position-absolute {
+    position: absolute !important;
+}
+
+.password_input.item-native {
+    margin-left: -8px !important;
+}

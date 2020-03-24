@@ -1,0 +1,65 @@
+ion-content {
+  --ion-background-color: #FFFFFF;
+}
+
+.colored {
+  background: rgba(0, 0, 0, 0.66);
+  color: white;
+}
+
+.info-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.end-centered {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.progress-bar-height {
+  height: 10px;
+}
+
+.selected-main-menu {
+  width: 12px;
+  height: 12px;
+  background: #DC6E67;
+  border: 2px white solid;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.camera-button {
+  width: 4em;
+  height: 4em;
+  background: #B0B0B0;
+  border: 4px white solid;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.deselected-menu {
+  color: #969696;
+}
+
+.selected-menu {
+  color: white;
+}
+
+html, body {
+  background-color: transparent !important;
+}
+
+ion-app {
+  --background: transparent !important;
+}
+
+ion-content {
+  --background: transparent !important;
+}
+
+app-ar ion-content {
+  --background: transparent;
+}

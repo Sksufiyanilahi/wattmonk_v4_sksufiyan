@@ -1,0 +1,76 @@
+<ion-content class="ion-padding">
+    <form (ngSubmit)="submitSurveyForm()" [formGroup]="surveyForm">
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-item class="ion-no-padding">
+                        <ion-input placeholder="name" class="form_input" autocapitalize="words"
+                                   formControlName="name"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item class="ion-no-padding">
+                        <ion-input placeholder="email" autocapitalize="none" formControlName="email"
+                                   class="form_input"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-item class="ion-no-padding">
+                        <ion-input placeholder="phone" formControlName="phone" type="number" pattern="tel"
+                                   class="form_input"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-item class="ion-no-padding">
+<!--                        <app-date-time formControlName="date"></app-date-time>-->
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col size="12">
+                    <span>Comment</span>
+                </ion-col>
+                <ion-col size="12">
+                    <ion-item class="ion-no-padding">
+                        <ion-textarea class="ion-no-margin"></ion-textarea>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col>
+                    <ion-button class="action-button-color" fill="clear" (click)="startSurvey()">Start Survey</ion-button>
+                </ion-col>
+            </ion-row>
+
+        </ion-grid>
+    </form>
+
+<!--    {{surveyForm.value | json}}-->
+</ion-content>
+
+<ion-footer class="ion-no-border">
+    <ion-grid>
+        <ion-row>
+            <ion-col size="auto">
+                <span>
+                    Done
+                </span>
+            </ion-col>
+            <ion-col size="auto">
+                <span>
+                    Start Survey
+                </span>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-footer>

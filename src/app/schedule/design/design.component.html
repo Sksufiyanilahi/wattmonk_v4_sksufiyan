@@ -1,0 +1,82 @@
+<ion-content class="ion-padding">
+  <form [formGroup]="desginForm" style="margin-top: -25px;">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item class="ion-no-padding">
+            <ion-input class="form_input" placeholder="name" autocapitalize="words" formControlName="name"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item class="ion-no-padding">
+            <ion-input class="form_input" placeholder="email" autocapitalize="none" formControlName="email"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-range min="1000" max="2000" step="100" snaps="true" color="secondary"></ion-range>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6">
+          <ion-item class="ion-no-padding">
+            <ion-input class="form_input" placeholder="solar make" autocapitalize="none" formControlName="email">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item class="ion-no-padding">
+            <ion-input class="form_input" placeholder="solar made" autocapitalize="none" formControlName="email">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6">
+          <ion-item class="ion-no-padding">
+            <ion-input class="form_input" placeholder="inverter make" autocapitalize="none" formControlName="email">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item class="ion-no-padding">
+            <ion-input class="form_input" placeholder="inverter made" autocapitalize="none" formControlName="email">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span style="color: #6C6C6C;">
+            comment
+          </span>
+          <div class="comment_box">
+
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <span style="color: #6C6C6C;">
+            assign
+          </span>
+        </ion-col>
+        <ion-col size="12">
+          <div>
+            <img src="assets/images/user_placeholder.jpg" alt="User Image" class="user-image">
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div style="text-align: end;">
+            <span class="action-button-color">Done</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

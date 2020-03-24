@@ -1,5 +1,7 @@
 {
   "name": "wattmonk",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
