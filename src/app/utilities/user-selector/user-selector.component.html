@@ -1,0 +1,12 @@
+<div class="d-flex flex-column">
+  <span class="input-placeholder">{{placeholder}}</span>
+  <div scrollX="true">
+    <div class="d-flex flex-row">
+      <div *ngFor="let assignee of assignees" class="assignee-margin assignee-image" (click)="selectAssignee(assignee)">
+        <img [src]="assignee.image" class="assignee-image selected" [class.selected]="assignee.selected" [class.normal]="!assignee.selected" />
+      </div>
+    </div>
+  </div>
+
+</div>
+

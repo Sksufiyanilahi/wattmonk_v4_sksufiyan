@@ -11,22 +11,23 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AuthGuardService } from './auth-guard.service';
 import { StorageService } from './storage.service';
-import { DateTimeComponent } from './date-time/date-time.component';
+import { UtilitiesModule } from './utilities/utilities.module';
+import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
 
 @NgModule({
-  declarations: [AppComponent, DateTimeComponent],
-  entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  declarations: [AppComponent, SuccessModalComponent],
+  entryComponents: [SuccessModalComponent],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, UtilitiesModule],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     HttpClient,
     StorageService,
-    AuthGuardService
+    AuthGuardService,
   ],
   exports: [
-    DateTimeComponent
+    UtilitiesModule
   ],
   bootstrap: [AppComponent]
 })

@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
-import { CameraPreview } from "@ionic-native/camera-preview/ngx";
+import { CameraPreview } from '@ionic-native/camera-preview/ngx';
 
 import { CameraPageRoutingModule } from './camera-routing.module';
 
 import { CameraPage } from './camera.page';
+import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
+import { File } from '@ionic-native/file/ngx';
 
 @NgModule({
   imports: [
@@ -17,7 +19,11 @@ import { CameraPage } from './camera.page';
     CameraPageRoutingModule
   ],
   declarations: [CameraPage],
-  providers: [CameraPreview]
+  providers: [
+    CameraPreview,
+    Base64ToGallery,
+    File
+  ]
 })
 export class CameraPageModule {
 }

@@ -87,7 +87,7 @@
 
 .form-control {
     border-bottom: 1px solid #ced4da !important;
-    color: #D9D9D9 !important;
+    //color: #D9D9D9 !important;
 
     .native-input {
         margin-bottom: -5px;
@@ -119,4 +119,16 @@
 
 .password_input.item-native {
     margin-left: -8px !important;
+}
+
+.input-placeholder {
+    size: 1em;
+    color: #6C6C6C !important;
+}
+
+ion-modal {
+    --height: 16em !important;
+    --width: 16em !important;
+    --border-radius: 12px !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
 }

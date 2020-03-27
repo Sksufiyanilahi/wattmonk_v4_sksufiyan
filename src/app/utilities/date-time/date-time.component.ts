@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
+import { DatePicker } from '@ionic-native/date-picker/ngx';
 
 @Component({
   selector: 'app-date-time',
@@ -8,12 +9,12 @@ import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      multi: false,
+      multi: true,
       useExisting: DateTimeComponent
     },
     {
       provide: NG_VALIDATORS,
-      multi: false,
+      multi: true,
       useExisting: DateTimeComponent
     }
   ]
@@ -21,9 +22,13 @@ import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR
 export class DateTimeComponent implements ControlValueAccessor, Validator {
 
   @Input() date: Date;
+  @Input() placeholder = '';
+
   private onChange: (value: Date) => void;
 
-  constructor() {
+  constructor(
+    private datePicker: DatePicker
+  ) {
   }
 
   registerOnChange(fn: any): void {
@@ -38,7 +43,7 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    if (this.date === null || this.date === undefined) {
+    if (this.date !== null && this.date !== undefined) {
       return null;
     }
     return {
@@ -46,4 +51,31 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
     };
   }
 
+  changeDate() {
+    this.datePicker.show({
+      date: this.date,
+      mode: 'date',
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
+    }).then(
+      date => {
+        this.date = date;
+        this.onChange(date);
+      },
+      err => console.log('Error occurred while getting date: ', err)
+    );
+  }
+
+  changeTime() {
+    this.datePicker.show({
+      date: this.date,
+      mode: 'time',
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
+    }).then(
+      date => {
+        this.date = date;
+        this.onChange(date);
+      },
+      err => console.log('Error occurred while getting date: ', err)
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { LoadingController, ToastController, AlertController } from '@ionic/angular';
+import { LoadingController, ToastController, AlertController, ModalController } from '@ionic/angular';
+import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class UtilitiesService {
   constructor(
     public loadingController: LoadingController,
     private toastController: ToastController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private modalController: ModalController
   ) {
   }
 
@@ -41,6 +43,16 @@ export class UtilitiesService {
     });
 
     await alert.present();
+  }
+
+  async showSuccessModal(successMessage: string): Promise<HTMLIonModalElement> {
+    const modal = await this.modalController.create({
+      component: SuccessModalComponent,
+      componentProps: {
+        message: successMessage
+      }
+    });
+    return modal;
   }
 
 

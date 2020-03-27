@@ -6,6 +6,7 @@ import {
 import { NavController, Platform } from '@ionic/angular';
 import { MenuModel } from './menu.model';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
+import { File } from '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-camera',
@@ -14,7 +15,7 @@ import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 })
 export class CameraPage implements OnInit {
 
-  surveyTime = new Date().getTime();
+  surveyId = 12;
   itemName = 'MSP';
 
   cameraPreviewOpts: CameraPreviewOptions;
@@ -99,7 +100,8 @@ export class CameraPage implements OnInit {
     private cameraPreview: CameraPreview,
     private navController: NavController,
     private base64ToGallery: Base64ToGallery,
-    private platform: Platform
+    private platform: Platform,
+    private file: File
   ) {
     this.mainMenu[0].isSelected = true;
     this.subMenu = this.mainMenu[0].subMenu;
@@ -138,20 +140,66 @@ export class CameraPage implements OnInit {
   }
 
   takePicture() {
-    this.cameraPreview.takePicture({
-      width: 0,
-      height: 0,
-      quality: 80
-    }).then((photo) => {
-      this.base64ToGallery.base64ToGallery(photo, { prefix: 'img', mediaScanner: true }).then((result) => {
-        console.log('Saved to gallery ', result);
-      }, (error) => {
-        console.log('Error', error);
+    this.file.resolveDirectoryUrl(this.file.externalApplicationStorageDirectory).then((directory) => {
+      console.log('Directory exists ' + directory.name);
+      console.log('Directory path ' + directory.fullPath);
+      this.cameraPreview.takePicture({
+        width: 0,
+        height: 0,
+        quality: 80
+      }).then((photo) => {
+        let imageDir = '';
+        if (this.selectedSubMenu === '') {
+          imageDir = directory.fullPath + 'survey/' + this.surveyId + '/' + this.selectedMenu + '/';
+        } else {
+          imageDir = directory.fullPath + 'survey/' + this.surveyId + '/' + this.selectedMenu + '/' + this.selectedSubMenu + '/';
+        }
+        console.log('Saving to ' + imageDir);
+        const UUID = 'img_' + (new Date().getTime()).toString(16);
+        const blob = this.b64toBlob(photo[0], 'image/png');
+        this.file.writeFile(imageDir, UUID, blob).then(() => {
+          console.log('Saved');
+        }).catch((err) => {
+          console.log('Error writing blob');
+          console.log(err);
+        });
+
+        const picName = 'img_' + this.selectedMenu + '_' + this.selectedSubMenu + '_' + 1;
+        this.base64ToGallery.base64ToGallery(photo[0], { prefix: picName, mediaScanner: true }).then((result) => {
+          console.log('Saved to gallery ', result);
+        }, (error) => {
+          console.log('Error', error);
+        });
+        console.log(photo);
+      }, error => {
+        console.log(error);
       });
-      console.log(photo);
-    }, error => {
-      console.log(error);
+    }).catch((error) => {
+      console.log('No Directory');
     });
+
+  }
+
+  b64toBlob(b64Data, contentType) {
+    contentType = contentType || '';
+    const sliceSize = 512;
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
   }
 
   goBack() {
