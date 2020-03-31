@@ -1,11 +1,11 @@
-<ion-content>
+<ion-content style="--background: #FEF8F8;">
 
   <ion-grid class="profile-background">
     <ion-row>
       <ion-col size="2">
         <ion-buttons>
           <ion-button (click)="goBack()">
-            <ion-icon name="chevron-back-outline"></ion-icon>
+            <ion-icon class="action-button-color" style="font-size: 26px;" name="chevron-back-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-col>
@@ -21,7 +21,7 @@
       <ion-col size="2">
         <ion-buttons>
           <ion-button>
-            <ion-icon name="settings-outline"></ion-icon>
+            <ion-icon class="action-button-color" style="font-size: 26px;" name="settings-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-col>
@@ -29,29 +29,33 @@
     <ion-row>
       <ion-col size="12" class="ion-no-padding">
         <div style="text-align: center">
-          <span>No Name</span>
+          <span class="profile-name">No Name</span>
         </div>
       </ion-col>
 
       <ion-col size="12" class="ion-no-padding">
         <div style="text-align: center">
-          <span>nsrccs@gmail.com</span>
+          <span class="profile-email">nsrccs@gmail.com</span>
         </div>
       </ion-col>
 
       <ion-col size="12" class="ion-no-padding">
         <div style="text-align: center">
-          <span>Male</span>
+          <span style="color: #BCBCBC;">Male</span>
         </div>
       </ion-col>
       <ion-col size="12">
         <div style="text-align: center">
-          <ion-badge color="primary">$50.0</ion-badge>
+          <ion-badge class="badge-container">
+            <div class="dollar-badge">
+              <span style="color: grey;">$50</span>
+            </div>
+          </ion-badge>
         </div>
       </ion-col>
     </ion-row>
 
-    <ion-row class="ion-justify-content-center">
+    <!-- <ion-row class="ion-justify-content-center">
       <ion-col size="6">
         <div style="text-align: center">
           <span>Notifications</span>
@@ -64,23 +68,35 @@
         </div>
 
       </ion-col>
-    </ion-row>
+    </ion-row> -->
   </ion-grid>
+<ion-content style="--background: #FEF8F8;">
+  <ion-tabs style="
+  position: inherit;">
+    <ion-tab-bar slot="top" class="ion-no-border" class="profile-tab">
+        <ion-tab-button tab="profile-notification">
+            <ion-label style="font-size: 16px;">Notification</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="history">
+            <ion-label style="font-size: 16px;">History</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar>
+</ion-tabs>
+</ion-content>
 
-  <ion-grid>
-    <ion-row>
+  <!-- <ion-grid>
+    <ion-row >
       <ion-col>
-        <ion-item lines="none">
-          <ion-icon name="football" slot="start" size="large"></ion-icon>
+        <ion-item lines="none" style="--background: #FEF8F8;">
+          <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
           <ion-label>
-            <h2>Desgin Request</h2>
+            <h2>Aurora Desgin Uploaded for Will Smith</h2>
             <p>May 2,2020</p>
           </ion-label>
-          <ion-button shape="round" fill="outline" slot="end">View</ion-button>
         </ion-item>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid> -->
 
 <!--  <div>-->
 <!--    <ion-button color="primary" [routerLink]="['/camera']" routerDirection="forward">Camera</ion-button>-->

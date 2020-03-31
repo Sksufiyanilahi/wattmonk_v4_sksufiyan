@@ -1,9 +1,10 @@
 .profile-background {
   width: 100%;
-  background: azure !important;
   border-radius: 50%px;
-  border-bottom-left-radius: 6%;
-  border-bottom-right-radius: 6%;
+  // border-bottom-left-radius: 32px;
+  // border-bottom-right-radius: 32px;
+  background: white;
+
 }
 
 .user-image {
@@ -12,3 +13,54 @@
   object-fit: cover;
   border-radius: 50%;
 }
+
+.profile-name{
+  color: #8B8B8B;
+  font-size: 20px;
+}
+
+.profile-email{
+  color: #7B7B7B;
+}
+
+.dollar-badge{
+  margin-top: 6px;
+    width: 60px;
+    height: 13px;
+}
+
+.profile-icon{
+  width: 50px;
+  height: 50px;
+  margin-right: 4px;
+ 
+}
+
+.badge-container{
+  background: #F5EBEC;
+  border-radius: 10px;
+}
+
+.profile-tab{
+  border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+}
+
+
+ion-tab-bar {
+  --border: none;
+}
+
+ion-tab-button {
+  font-size: 1em;
+  --color: #9E9E9E;
+  --color-selected: #DB6E71;
+}
+
+// ion-tab-button[aria-selected=true] {
+//   border-bottom: 3px solid #DB6E71;
+//   border-bottom-left-radius: 2px;
+//   border-bottom-right-radius: 2px;
+// }
+
+
