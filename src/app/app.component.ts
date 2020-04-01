@@ -4,6 +4,7 @@ import { NavController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from "./storage.service";
+import { FCM } from '@ionic-native/fcm/ngx';
 
 @Component({
   selector: 'app-root',
@@ -16,9 +17,12 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private storageService: StorageService,
-    private navController: NavController
+    private navController: NavController,
+    private fcm: FCM
   ) {
     this.initializeApp();
+    this.getFcmToken();
+    this.getNotification();
   }
 
   initializeApp() {
@@ -30,4 +34,22 @@ export class AppComponent {
       this.navController.navigateRoot('homepage');
     }
   }
+
+  getFcmToken(){
+    this.fcm.getToken().then(token => {
+      console.log(token);
+    });
+  }
+
+  getNotification(){
+    this.fcm.onNotification().subscribe(data => {
+      console.log(data);
+      if (data.wasTapped) {
+        console.log('Received in background');
+      } else {
+        console.log('Received in foreground');
+      }
+    });  
+  }
+
 }

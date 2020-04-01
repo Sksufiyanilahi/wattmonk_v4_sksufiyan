@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "490418164508",
+    "firebase_url": "https://wattmonk-5f536.firebaseio.com",
+    "project_id": "wattmonk-5f536",
+    "storage_bucket": "wattmonk-5f536.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490418164508:android:df6d349a33e8681b5460d9",
+        "android_client_info": {
+          "package_name": "com.watt.monk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490418164508-89807l9g2toph1oh33dnum3or1gumsaj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4wuVvKp2ApS6MlS0p6hACUZfdJ5NzZRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "490418164508-89807l9g2toph1oh33dnum3or1gumsaj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "490418164508-qbrv2ndm4sp0p13njrpu075g9quj8nii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.watt.monk"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

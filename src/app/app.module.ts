@@ -13,6 +13,7 @@ import { AuthGuardService } from './auth-guard.service';
 import { StorageService } from './storage.service';
 import { UtilitiesModule } from './utilities/utilities.module';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
+import { FCM } from '@ionic-native/fcm/ngx';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -21,6 +22,7 @@ import { SuccessModalComponent } from './utilities/success-modal/success-modal.c
   providers: [
     StatusBar,
     SplashScreen,
+    FCM,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     HttpClient,
     StorageService,
