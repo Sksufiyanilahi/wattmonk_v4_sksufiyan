@@ -10,6 +10,8 @@ export class DesignComponent implements OnInit {
 
   desginForm: FormGroup;
   knobValues: '';
+  minRange = 100;
+  maxRange = 10000;
 
   constructor(
     private formBuilder: FormBuilder
