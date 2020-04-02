@@ -7,6 +7,9 @@ import { SchedulePage } from './schedule.page';
 import { SurveyComponent } from './survey/survey.component';
 import { DesignComponent } from './design/design.component';
 import { UtilitiesModule } from '../utilities/utilities.module';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+
 
 @NgModule({
   imports: [
@@ -24,6 +27,7 @@ import { UtilitiesModule } from '../utilities/utilities.module';
     DesignComponent
   ],
   providers: [
+    Diagnostic
   ]
 })
 export class SchedulePageModule {}

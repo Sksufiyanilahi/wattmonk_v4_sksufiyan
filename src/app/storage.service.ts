@@ -31,4 +31,28 @@ export class StorageService {
   getJWTToken() {
     return localStorage.getItem('token');
   }
+
+  isLocationAllowedOnIOS(): boolean {
+    if (localStorage.getItem('ios_location_allowed') === null || localStorage.getItem('ios_location_allowed') === undefined) {
+      return false;
+    } else {
+      return JSON.parse(localStorage.getItem('ios_location_allowed'));
+    }
+  }
+
+  isLocationCheckedOnIOS(): boolean {
+    if (localStorage.getItem('ios_location_checked') === null || localStorage.getItem('ios_location_checked') === undefined) {
+      return false;
+    } else {
+      return JSON.parse(localStorage.getItem('ios_location_checked'));
+    }
+  }
+
+  setLocationCheckedOnIOS(status: boolean) {
+    localStorage.setItem('ios_location_checked', JSON.stringify(status));
+  }
+
+  setLocationAllowedOnIOS(status: boolean) {
+    localStorage.setItem('ios_location_allowed', JSON.stringify(status));
+  }
 }

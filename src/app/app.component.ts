@@ -21,14 +21,14 @@ export class AppComponent {
     private fcm: FCM
   ) {
     this.initializeApp();
-    this.getFcmToken();
-    this.getNotification();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.getFcmToken();
+      this.getNotification();
     });
     if (this.storageService.isUserPresent()) {
       this.navController.navigateRoot('homepage');

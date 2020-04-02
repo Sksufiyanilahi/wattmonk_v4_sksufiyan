@@ -20,7 +20,7 @@ const routes: Routes = [
   {
     path: 'schedule',
     loadChildren: () => import('./schedule/schedule.module').then(m => m.SchedulePageModule),
-    canActivate: [AuthGuardService]
+   // canActivate: [AuthGuardService]
   },
   {
     path: 'camera',
