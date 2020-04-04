@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from './storage.service';
 import { FCM } from '@ionic-native/fcm/ngx';
+import { UtilitiesService } from './utilities.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private storageService: StorageService,
     private navController: NavController,
+    private utilitiesService: UtilitiesService,
     private fcm: FCM
   ) {
     this.initializeApp();

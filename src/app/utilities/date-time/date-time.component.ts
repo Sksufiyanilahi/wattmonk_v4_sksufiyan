@@ -21,7 +21,7 @@ import { DatePicker } from '@ionic-native/date-picker/ngx';
 })
 export class DateTimeComponent implements ControlValueAccessor, Validator {
 
-  @Input() date: Date;
+  @Input() date: number;
   @Input() placeholder = '';
 
   private onChange: (value: Date) => void;
@@ -39,7 +39,7 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
   }
 
   writeValue(date: Date): void {
-    this.date = date;
+    this.date = date.getTime();
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
@@ -58,7 +58,7 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
       androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
     }).then(
       date => {
-        this.date = date;
+        this.date = date.getTime();
         this.onChange(date);
       },
       err => console.log('Error occurred while getting date: ', err)
@@ -72,7 +72,7 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
       androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
     }).then(
       date => {
-        this.date = date;
+        this.date = date.getTime();
         this.onChange(date);
       },
       err => console.log('Error occurred while getting date: ', err)

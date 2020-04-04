@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoadingController, ToastController, AlertController, ModalController } from '@ionic/angular';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ export class UtilitiesService {
 
   loading: HTMLIonLoadingElement;
   isLoading = false;
+  address = new BehaviorSubject<string>('');
 
   constructor(
     public loadingController: LoadingController,
@@ -16,6 +18,14 @@ export class UtilitiesService {
     private alertController: AlertController,
     private modalController: ModalController
   ) {
+  }
+
+  getAddressObservable(): BehaviorSubject<string> {
+    return this.address;
+  }
+
+  setAddress(address: string) {
+    this.address.next(address);
   }
 
   async showLoading(message?: string) {
