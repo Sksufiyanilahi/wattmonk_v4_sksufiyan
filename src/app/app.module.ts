@@ -15,6 +15,7 @@ import { UtilitiesModule } from './utilities/utilities.module';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -28,7 +29,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     HttpClient,
     StorageService,
     AuthGuardService,
-    Geolocation
+    Geolocation,
+    NativeGeocoder,
   ],
   exports: [
     UtilitiesModule

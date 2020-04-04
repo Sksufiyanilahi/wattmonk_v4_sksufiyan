@@ -3,7 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from './auth-guard.service';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'homepage', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'forgot-password',
     loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule)
@@ -15,12 +15,12 @@ const routes: Routes = [
   {
     path: 'homepage',
     loadChildren: () => import('./homepage/homepage.module').then(m => m.HomepagePageModule),
-    // canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService]
   },
   {
     path: 'schedule',
     loadChildren: () => import('./schedule/schedule.module').then(m => m.SchedulePageModule),
-   // canActivate: [AuthGuardService]
+   canActivate: [AuthGuardService]
   },
   {
     path: 'camera',
@@ -34,7 +34,12 @@ const routes: Routes = [
   {
     path: 'notification',
     loadChildren: () => import('./notification/notification.module').then(m => m.NotificationPageModule)
+  },
+  {
+    path: 'map-page',
+    loadChildren: () => import('./map-page/map-page.module').then( m => m.MapPagePageModule)
   }
+
 ];
 
 @NgModule({

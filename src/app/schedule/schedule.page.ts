@@ -5,6 +5,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-schedule',
@@ -39,7 +40,8 @@ export class SchedulePage implements OnInit {
     private geolocation: Geolocation,
     private platform: Platform,
     private storage: StorageService,
-    private utilities: UtilitiesService
+    private utilities: UtilitiesService,
+    private router: Router
   ) {
     this.requestLocationPermission();
   }
@@ -62,16 +64,13 @@ export class SchedulePage implements OnInit {
       timeout: 5000
     };
     console.log(options);
-    this.utilities.showLoading('Getting Your Location');
     this.geolocation.getCurrentPosition(options).then((resp) => {
-      this.utilities.hideLoading();
       console.log(resp);
       this.geoLatitude = resp.coords.latitude;
       this.geoLongitude = resp.coords.longitude;
       this.geoAccuracy = resp.coords.accuracy;
       this.getGeoEncoder(this.geoLatitude, this.geoLongitude);
     }).catch((error) => {
-      this.utilities.hideLoading();
       this.utilities.showAlert('Unable to get location');
       console.log('Error getting location', error);
     });
@@ -195,6 +194,10 @@ export class SchedulePage implements OnInit {
       this.utilities.showAlert('GPS Not Allowed');
     });
 
+  }
+
+  goTo(){
+    this.router.navigate(['/mappage']);
   }
 
 

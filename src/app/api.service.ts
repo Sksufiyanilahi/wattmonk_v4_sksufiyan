@@ -13,7 +13,7 @@ import { StorageService } from "./storage.service";
 export class ApiService {
 
   headers: HttpHeaders;
-  baseUrl = 'http://ec2-52-15-84-24.us-east-2.compute.amazonaws.com:1338';
+  baseUrl = 'http://ec2-52-15-84-24.us-east-2.compute.amazonaws.com:1337';
 
   constructor(
     private http: HttpClient,

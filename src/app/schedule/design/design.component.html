@@ -1,5 +1,5 @@
 <ion-content class="ion-padding">
-  <form [formGroup]="desginForm" style="margin-top: -25px;">
+  <form [formGroup]="desginForm">
     <ion-grid>
       <ion-row>
         <ion-col>
@@ -48,35 +48,37 @@
           </ion-item>
         </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col>
-          <span style="color: #6C6C6C;">
-            comment
-          </span>
-          <div class="comment_box">
 
-          </div>
+      <ion-row class="ion-margin-top">
+        <ion-col size="12" class="ion-no-padding">
+            <span class="input-placeholder">Comment</span>
         </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="12">
-          <span style="color: #6C6C6C;">
-            assign
-          </span>
+        <ion-col size="12" class="ion-no-padding">
+            <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" ></ion-textarea>
         </ion-col>
-        <ion-col size="12">
-          <div>
-            <img src="assets/images/user_placeholder.jpg" alt="User Image" class="user-image">
-          </div>
-        </ion-col>
-      </ion-row>
-      <ion-row>
+    </ion-row>
+
+      <ion-row class="ion-margin-top">
         <ion-col>
-          <div style="text-align: end;">
-            <span class="action-button-color">Done</span>
-          </div>
+            <ion-item class="ion-no-padding no-border" lines="none">
+                <app-user-selector  placeholder="assign" [assignees]="listOfAssignees"></app-user-selector>
+            </ion-item>
         </ion-col>
-      </ion-row>
+    </ion-row>
     </ion-grid>
   </form>
+
+  <ion-footer class="ion-no-border">
+    <ion-grid>
+        <ion-row>
+            <ion-col size="auto">
+            </ion-col>
+            <ion-col></ion-col>
+            <ion-col  size="auto" class="ion-align-self-end">
+                <ion-button class="action-button-color" fill="clear">Done</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-footer>
+
 </ion-content>
