@@ -22,12 +22,19 @@ export class SurveyComponent implements OnInit {
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required]),
-      phone: new FormControl('', [Validators.required]),
-      date: new FormControl(new Date(), [Validators.required]),
-      comment: new FormControl(''),
+      phonenumber: new FormControl('', [Validators.required]),
+      datetime: new FormControl(new Date().getTime(), [Validators.required]),
+      comments: new FormControl(''),
+      address: new FormControl('', [Validators.required]),
+      source: new FormControl('', [Validators.required]),
       assignedTo: new FormControl(0, [Validators.required])
     });
     this.listOfAssignees = LIST_OF_ASSIGNEES;
+    this.utilities.getAddressObservable().subscribe((address) => {
+      this.surveyForm.get('address').setValue(address);
+    }, (error) => {
+      this.surveyForm.get('address').setValue('');
+    });
   }
 
   ngOnInit() {

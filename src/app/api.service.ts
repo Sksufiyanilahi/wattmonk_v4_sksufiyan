@@ -26,11 +26,11 @@ export class ApiService {
   }
 
   login(data: any): Observable<LoginModel> {
-    return this.http.post<LoginModel>(this.baseUrl + '/auth/local', data, { headers: this.headers })
+    return this.http.post<LoginModel>(this.baseUrl + '/auth/local', data, { headers: this.headers });
   }
 
   sendForgotPasswordLink(data: any) {
-    return this.http.post(this.baseUrl + '/auth/forgot-password', data, { headers: this.headers })
+    return this.http.post(this.baseUrl + '/auth/forgot-password', data, { headers: this.headers });
   }
 
   getSolarMake() {
@@ -40,7 +40,7 @@ export class ApiService {
   refreshHeader() {
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + this.storageService.getJWTToken()
+      Authorization: 'Bearer ' + this.storageService.getJWTToken()
     });
   }
 }

@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from './storage.service';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { ApiService } from './api.service';
+import { UtilitiesService } from './utilities.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,8 @@ export class AppComponent {
     private storageService: StorageService,
     private navController: NavController,
     private fcm: FCM,
-    private apiservice: ApiService
+    private apiservice: ApiService,
+    private utilitiesService: UtilitiesService,
   ) {
     this.initializeApp();
   }

@@ -19,11 +19,6 @@ export class SchedulePage implements OnInit {
   address = '25 Wainright Street, Province Road, 1118, Sector-A, Pocket-A, Vasant Kunj USA';
   currentTab = 'design';
 
-  geoLatitude: number;
-  geoLongitude: number;
-  geoAccuracy: number;
-  geoAddress: string;
-
   // Geocoder configuration
   geoEncoderOptions: NativeGeocoderOptions = {
     useLocale: true,
@@ -59,17 +54,8 @@ export class SchedulePage implements OnInit {
   }
 
   getGeoLocation() {
-    let options = {
-      enableHighAccuracy: false,
-      timeout: 5000
-    };
-    console.log(options);
-    this.geolocation.getCurrentPosition(options).then((resp) => {
-      console.log(resp);
-      this.geoLatitude = resp.coords.latitude;
-      this.geoLongitude = resp.coords.longitude;
-      this.geoAccuracy = resp.coords.accuracy;
-      this.getGeoEncoder(this.geoLatitude, this.geoLongitude);
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
     }).catch((error) => {
       this.utilities.showAlert('Unable to get location');
       console.log('Error getting location', error);
@@ -81,7 +67,8 @@ export class SchedulePage implements OnInit {
   getGeoEncoder(latitude, longitude) {
     this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
       .then((result: NativeGeocoderResult[]) => {
-        this.geoAddress = this.generateAddress(result[0]);
+        this.address = this.generateAddress(result[0]);
+        this.utilities.setAddress(this.address);
       })
       .catch((error: any) => {
         alert('Error getting location' + JSON.stringify(error));
