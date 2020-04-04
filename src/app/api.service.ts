@@ -6,6 +6,7 @@ import {
 import { LoginModel } from "./model/login.model";
 import { Observable } from "rxjs";
 import { StorageService } from "./storage.service";
+import { SolarMake } from './model/solar-make.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ import { StorageService } from "./storage.service";
 export class ApiService {
 
   headers: HttpHeaders;
-  baseUrl = 'http://ec2-52-15-84-24.us-east-2.compute.amazonaws.com:1337';
+  baseUrl = 'http://ec2-3-17-28-7.us-east-2.compute.amazonaws.com:1337';
 
   constructor(
     private http: HttpClient,
@@ -30,6 +31,10 @@ export class ApiService {
 
   sendForgotPasswordLink(data: any) {
     return this.http.post(this.baseUrl + '/auth/forgot-password', data, { headers: this.headers })
+  }
+
+  getSolarMake() {
+    return this.http.get<SolarMake[]>(this.baseUrl + '/modulemakes', { headers: this.headers })
   }
 
   refreshHeader() {

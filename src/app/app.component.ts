@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from './storage.service';
 import { FCM } from '@ionic-native/fcm/ngx';
+import { ApiService } from './api.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,8 @@ export class AppComponent {
     private statusBar: StatusBar,
     private storageService: StorageService,
     private navController: NavController,
-    private fcm: FCM
+    private fcm: FCM,
+    private apiservice: ApiService
   ) {
     this.initializeApp();
   }
@@ -31,6 +33,7 @@ export class AppComponent {
       this.getNotification();
     });
     if (this.storageService.isUserPresent()) {
+      this.apiservice.refreshHeader();
       this.navController.navigateRoot('homepage');
     }
   }

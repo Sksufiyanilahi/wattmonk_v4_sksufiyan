@@ -14,3 +14,12 @@ ion-range {
     --knob-border-radius: 50%;
     --pin-color: #E1E1E1;
 }
+
+.solar-data{
+    position: absolute;
+    margin-top: 50px;
+    width: 146px;
+    max-width: 150px;
+    z-index: 2;
+    margin-left: 0px;
+}
