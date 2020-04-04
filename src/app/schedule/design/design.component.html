@@ -8,18 +8,23 @@
           </ion-item>
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row class="ion-align-items-center ion-justify-content-center">
         <ion-col>
           <ion-item class="ion-no-padding">
             <ion-input class="form_input" placeholder="email" autocapitalize="none" formControlName="email"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
-      <ion-row>
+
+      <ion-row class="ion-margin-top">
         <ion-col>
-          <ion-range min="1000" max="2000" step="100" snaps="true" color="secondary"></ion-range>
+          <ion-range [min]="minRange" [max]="maxRange" mode="ios" pin="true" class="ion-no-padding">
+            <ion-label slot="start">{{minRange | currency :'USD':'symbol':'1.0-0'}}</ion-label>
+            <ion-label slot="end">{{maxRange | currency :'USD':'symbol':'1.0-0'  }}</ion-label>
+          </ion-range>
         </ion-col>
       </ion-row>
+
       <ion-row>
         <ion-col size="6">
           <ion-item class="ion-no-padding">
@@ -80,5 +85,4 @@
         </ion-row>
     </ion-grid>
 </ion-footer>
-
 </ion-content>

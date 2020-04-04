@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NavController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { StorageService } from "./storage.service";
+import { StorageService } from './storage.service';
 import { FCM } from '@ionic-native/fcm/ngx';
 
 @Component({
@@ -35,13 +35,13 @@ export class AppComponent {
     }
   }
 
-  getFcmToken(){
+  getFcmToken() {
     this.fcm.getToken().then(token => {
       console.log(token);
     });
   }
 
-  getNotification(){
+  getNotification() {
     this.fcm.onNotification().subscribe(data => {
       console.log(data);
       if (data.wasTapped) {
@@ -49,7 +49,7 @@ export class AppComponent {
       } else {
         console.log('Received in foreground');
       }
-    });  
+    });
   }
 
 }
