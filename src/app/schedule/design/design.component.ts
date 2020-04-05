@@ -46,13 +46,20 @@ export class DesignComponent implements OnInit {
       invertermake:new FormControl('', [Validators.required]),
       invertermodel:new FormControl('', [Validators.required]),
       monthlybill:new FormControl('', [Validators.required]),
+      address: new FormControl('', [Validators.required]),
+      assignedTo: new FormControl(0, [Validators.required]),
       rooftype: "flat",
       jobtype: "battery",
       source: "web",
       comment: new FormControl('')
     });
     this.listOfAssignees = LIST_OF_ASSIGNEES;
-   this.getSolar();
+    this.utils.getAddressObservable().subscribe((address) => {
+      this.desginForm.get('address').setValue(address);
+    }, (error) => {
+      this.desginForm.get('address').setValue('');
+    });
+    this.getSolar();
   }
 
   ngOnInit() { }
