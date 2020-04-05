@@ -7,6 +7,7 @@ import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
 import { SolarMadeModel } from 'src/app/model/solar-made.model';
 import { InverterMakeModel } from 'src/app/model/inverter-make.model';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-design',
@@ -37,6 +38,7 @@ export class DesignComponent implements OnInit {
     private formBuilder: FormBuilder,
     private apiService: ApiService,
     private utils: UtilitiesService,
+    private navController: NavController
   ) {
     this.desginForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
@@ -44,10 +46,11 @@ export class DesignComponent implements OnInit {
       solarmake:new FormControl('', [Validators.required]),
       solarmodel:new FormControl('', [Validators.required]),
       invertermake:new FormControl('', [Validators.required]),
-      invertermodel:new FormControl('', [Validators.required]),
+      invertermodel: "2",
       monthlybill:new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
-      assignedTo: new FormControl(0, [Validators.required]),
+      createdby: "string",
+      assignedto: "string",
       rooftype: "flat",
       jobtype: "battery",
       source: "web",
@@ -55,6 +58,7 @@ export class DesignComponent implements OnInit {
     });
     this.listOfAssignees = LIST_OF_ASSIGNEES;
     this.utils.getAddressObservable().subscribe((address) => {
+      console.log("Add",address);
       this.desginForm.get('address').setValue(address);
     }, (error) => {
       this.desginForm.get('address').setValue('');
@@ -63,6 +67,29 @@ export class DesignComponent implements OnInit {
   }
 
   ngOnInit() { }
+
+  addForm() {
+    console.log("Reach",this.desginForm.value);
+    if (this.desginForm.status === 'VALID') {
+      this.utils.showLoading('Adding form').then(() => {
+        this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+          this.utils.hideLoading().then(() => {
+            console.log("Res",response);
+            this.navController.navigateRoot(['homepage']);
+          });
+        }, responseError => {
+          this.utils.hideLoading().then(() => {
+            const error: ErrorModel = responseError.error;
+            this.utils.showAlert(error.message[0].messages[0].message);
+          });
+
+        })
+      });
+
+    } else {
+      this.utils.showAlert('Invalid Credentials');
+    }
+  }
 
     getSolar() {
           this.apiService.getSolarMake().subscribe(response => {
