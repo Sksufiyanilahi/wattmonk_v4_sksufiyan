@@ -9,6 +9,7 @@ import { DesignComponent } from './design/design.component';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { AutoCompleteModule } from 'ionic4-auto-complete';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
     FormsModule,
     ReactiveFormsModule,
     UtilitiesModule,
+    AutoCompleteModule,
   ],
   declarations: [
     SchedulePage,

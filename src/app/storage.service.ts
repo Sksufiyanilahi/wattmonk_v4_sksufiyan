@@ -55,4 +55,13 @@ export class StorageService {
   setLocationAllowedOnIOS(status: boolean) {
     localStorage.setItem('ios_location_allowed', JSON.stringify(status));
   }
+
+  
+  setParentId(parentId: string): any {
+    localStorage.setItem('parentId', parentId);
+  }
+
+  getParentId(): string {
+    return localStorage.getItem('parentId');
+  }
 }

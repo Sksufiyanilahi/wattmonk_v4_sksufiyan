@@ -5,6 +5,8 @@ import { SolarMake, SolarMakeData } from 'src/app/model/solar-make.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
+import { SolarMadeModel } from 'src/app/model/solar-made.model';
+import { InverterMakeModel } from 'src/app/model/inverter-make.model';
 
 @Component({
   selector: 'app-design',
@@ -20,62 +22,155 @@ export class DesignComponent implements OnInit {
 
   listOfAssignees: AssigneeModel[] = [];
   listOfSolarMAke: SolarMake[] = [];
-  itemsolar: SolarMake;
-  isItemAvailable: any;
-  itemsSolarMake = [];
-  
+  isItemSolarMakeAvailable: boolean;
+  solarMakeName:any;
+
+  listOfSolarMade: SolarMadeModel[] = [];
+  isItemSolarMadeAvailable: boolean;
+  solarMadeName:any;
+
+  listOfInverterMAke: InverterMakeModel[] = [];
+  isItemInverterMakeAvailable: boolean;
+  inverterMakeName:any;
 
   constructor(
     private formBuilder: FormBuilder,
     private apiService: ApiService,
-    private utils: UtilitiesService
+    private utils: UtilitiesService,
   ) {
     this.desginForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required]),
+      solarmake:new FormControl('', [Validators.required]),
+      solarmodel:new FormControl('', [Validators.required]),
+      invertermake:new FormControl('', [Validators.required]),
+      invertermodel:new FormControl('', [Validators.required]),
+      monthlybill:new FormControl('', [Validators.required]),
+      rooftype: "flat",
+      jobtype: "battery",
+      source: "web",
       comment: new FormControl('')
     });
     this.listOfAssignees = LIST_OF_ASSIGNEES;
-    this.itemsolar = new SolarMake();
-    this.isItemAvailable = false; 
-    this.getSolar();
+   this.getSolar();
   }
 
   ngOnInit() { }
-
-  // initializeItems(){
-  //   this.items = ["Ram","gopi", "dravid"];
-  //   }
 
     getSolar() {
           this.apiService.getSolarMake().subscribe(response => {
             console.log(response);
             this.listOfSolarMAke = response;
-            this.listOfSolarMAke.forEach((value) => {
-              this.itemsolar = value
-             this.itemsSolarMake.push(this.itemsolar.name);
-            }); 
           }, responseError => {
             const error: ErrorModel = responseError.error;
               this.utils.showAlert(error.message[0].messages[0].message);
           });
   
       } 
-   
-    getItems(ev: any) {
-    if( ev.target.value != ''){
-    const val = ev.target.value;
-    if (val && val.trim() != '') {
-        this.isItemAvailable = true;
-        this.itemsSolarMake =  this.itemsSolarMake.filter((item) => {
-        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
-    })
-    }
-    }else{
-      this.isItemAvailable = false;
-      this.itemsSolarMake = []; 
-    }
+
+      getItems(ev: any) {
+        if(this.listOfSolarMAke.length == 0){
+          this.getSolar();
+        }
+        console.log("reach", this.listOfSolarMAke );
+        if( ev.target.value != ''){
+        const val = ev.target.value;
+        if (val && val.trim() != '') {
+            this.isItemSolarMakeAvailable = true;
+            this.listOfSolarMAke =  this.listOfSolarMAke.filter((item) => {
+            return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+        })
+        }
+        }else{
+          this.isItemSolarMakeAvailable = false;
+        }
+        }
+
+
+        selectSolarMake(value){
+          this.solarMakeName = value.name
+          this.desginForm.patchValue({
+            solarmake: value.id
+          });
+          this.isItemSolarMakeAvailable = false;
+        }
+
+      getSolarMade() {
+        this.apiService.getSolarMade(this.desginForm.value.solarmake).subscribe(response => {
+          console.log(response);
+          this.listOfSolarMade = response;
+        }, responseError => {
+          const error: ErrorModel = responseError.error;
+            this.utils.showAlert(error.message[0].messages[0].message);
+        });
+
+    } 
+
+    getItemsSolarMade(ev: any) {
+      if(this.listOfSolarMade.length == 0){
+        this.getSolarMade();
+      }
+      if( ev.target.value != ''){
+      const val = ev.target.value;
+      if (val && val.trim() != '') {
+          this.isItemSolarMadeAvailable = true;
+          this.listOfSolarMade =  this.listOfSolarMade.filter((item) => {
+          return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+      }
+      }else{
+        this.isItemSolarMadeAvailable = false;
+      }
+      }
+
+      selectSolarMade(value){
+        this.solarMadeName = value.name
+        this.desginForm.patchValue({
+          solarmodel: value.id
+        });
+        this.isItemSolarMadeAvailable = false;
+      }
+
+      getInverter() {
+        this.apiService.getInverterMake().subscribe(response => {
+          console.log(response);
+          this.listOfInverterMAke = response;
+        }, responseError => {
+          const error: ErrorModel = responseError.error;
+            this.utils.showAlert(error.message[0].messages[0].message);
+        });
+
+    } 
+
+    getItemsInverterMake(ev: any) {
+      if(this.listOfInverterMAke.length == 0){
+        this.getInverter();
+      }
+      console.log("reach", this.listOfSolarMAke );
+      if( ev.target.value != ''){
+      const val = ev.target.value;
+      if (val && val.trim() != '') {
+          this.isItemInverterMakeAvailable = true;
+          this.listOfInverterMAke =  this.listOfInverterMAke.filter((item) => {
+          return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+      }
+      }else{
+        this.isItemInverterMakeAvailable = false;
+      }
+      }
+
+      selectInverterMake(value){
+        this.inverterMakeName = value.name
+        this.desginForm.patchValue({
+          invertermake: value.id
+        });
+        this.isItemInverterMakeAvailable = false;
+      }
+
+      range(){
+        console.log("range",this.desginForm.value.monthlybill)
+      }
     
-    }
 
 }

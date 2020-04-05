@@ -20,6 +20,20 @@ ion-range {
     margin-top: 50px;
     width: 146px;
     max-width: 150px;
-    z-index: 2;
+    z-index: 3;
     margin-left: 0px;
+     max-height: 200px;
+     overflow: auto;
 }
+
+.solar-made{
+    position: absolute;
+    width: 172px;
+    max-width: 175px;
+    z-index: 3;
+    margin-left: 0px;
+    max-height: 200px;
+    overflow: auto;
+    margin-top: 2px;
+}
+

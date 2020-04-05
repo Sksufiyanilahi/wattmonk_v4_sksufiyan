@@ -76,6 +76,7 @@ import {
       this.utils.showLoading('Logging In').then(() => {
         this.apiService.login(this.loginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
+            console.log("Res",response);
             this.storageService.setUser(response.user);
             this.storageService.setJWTToken(response.jwt);
             this.apiService.refreshHeader();
