@@ -23,6 +23,7 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
 
   @Input() assignees: AssigneeModel[] = [];
   @Input() placeholder = 'assign to';
+  @Input() required = false;
   private onChange: (assignee: number) => void;
   selectedUserId = 0;
 
@@ -43,13 +44,16 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    console.log(this.selectedUserId);
-    if (this.selectedUserId !== 0) {
-      return null;
+    if (this.required) {
+      console.log(this.selectedUserId);
+      if (this.selectedUserId !== 0) {
+        return null;
+      }
+      return {
+        error: 'Assignee is required'
+      };
     }
-    return {
-      required: 'Please select an assignee'
-    };
+    return null;
   }
 
   selectAssignee(assignee: AssigneeModel) {

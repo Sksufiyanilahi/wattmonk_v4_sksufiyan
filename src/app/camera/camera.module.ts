@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 import { CameraPreview } from '@ionic-native/camera-preview/ngx';
@@ -16,7 +16,9 @@ import { File } from '@ionic-native/file/ngx';
     CommonModule,
     FormsModule,
     IonicModule,
-    CameraPageRoutingModule
+    CameraPageRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [CameraPage],
   providers: [

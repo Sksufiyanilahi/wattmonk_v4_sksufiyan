@@ -4,7 +4,7 @@ import { NavController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { StorageService } from './storage.service';
-import { FCM } from '@ionic-native/fcm/ngx';
+// import { FCM } from '@ionic-native/fcm/ngx';
 import { ApiService } from './api.service';
 import { UtilitiesService } from './utilities.service';
 
@@ -20,7 +20,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private storageService: StorageService,
     private navController: NavController,
-    private fcm: FCM,
+    // private fcm: FCM,
     private apiservice: ApiService,
     private utilitiesService: UtilitiesService,
   ) {
@@ -30,6 +30,7 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
+      this.statusBar.styleLightContent();
       this.splashScreen.hide();
       this.getFcmToken();
       this.getNotification();
@@ -41,20 +42,20 @@ export class AppComponent {
   }
 
   getFcmToken() {
-    this.fcm.getToken().then(token => {
-      console.log(token);
-    });
+    // this.fcm.getToken().then(token => {
+    //   console.log(token);
+    // });
   }
 
   getNotification() {
-    this.fcm.onNotification().subscribe(data => {
-      console.log(data);
-      if (data.wasTapped) {
-        console.log('Received in background');
-      } else {
-        console.log('Received in foreground');
-      }
-    });
+    // this.fcm.onNotification().subscribe(data => {
+    //   console.log(data);
+    //   if (data.wasTapped) {
+    //     console.log('Received in background');
+    //   } else {
+    //     console.log('Received in foreground');
+    //   }
+    // });
   }
 
 }

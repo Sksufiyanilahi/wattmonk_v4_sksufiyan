@@ -25,6 +25,8 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+@import "~ionic4-auto-complete/auto-complete";
+
 @font-face {
     font-family: 'Proxima Nova Alt';
     src: url('/assets/fonts/ProximaNova-Regular.otf');
@@ -131,4 +133,8 @@ ion-modal {
     --width: 16em !important;
     --border-radius: 12px !important;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+ion-content:not(.background-color-transparent) {
+    background-color: #fff !important;
 }

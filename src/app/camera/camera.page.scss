@@ -48,6 +48,12 @@ ion-content {
   color: white;
 }
 
+.object-fit-contain {
+  object-fit: contain;
+  width: 100vw;
+  height: 100vh;
+}
+
 html, body {
   background-color: transparent !important;
 }

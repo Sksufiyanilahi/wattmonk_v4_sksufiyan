@@ -1,5 +1,5 @@
 <ion-content class="ion-padding">
-    <form (ngSubmit)="submitSurveyForm()" [formGroup]="surveyForm">
+    <form [formGroup]="surveyForm">
         <ion-grid>
             <ion-row>
                 <ion-col>
@@ -30,7 +30,7 @@
             <ion-row class="ion-margin-top">
                 <ion-col>
                     <ion-item class="ion-no-padding no-border" lines="none">
-                        <app-date-time formControlName="datetime" placeholder="date and time"></app-date-time>
+                        <app-date-time formControlName="datetime" placeholder="date and time" required="false"></app-date-time>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -52,41 +52,7 @@
                 </ion-col>
             </ion-row>
 
-            <ion-row>
-                <ion-col>
-
-                </ion-col>
-            </ion-row>
-
         </ion-grid>
     </form>
 
-    <ion-footer class="ion-no-border">
-        <ion-grid>
-            <ion-row>
-                <ion-col size="auto">
-                    <ion-button class="action-button-color" fill="clear" (click)="saveSurvey()">Done</ion-button>
-                </ion-col>
-                <ion-col></ion-col>
-                <ion-col size="auto">
-                    <ion-button class="action-button-color" fill="clear" (click)="startSurvey()">Start Survey</ion-button>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </ion-footer>
-
 </ion-content>
-
-<!--<ion-footer class="ion-no-border">-->
-<!--    <ion-grid>-->
-<!--        <ion-row>-->
-<!--            <ion-col size="auto">-->
-<!--                <ion-button class="action-button-color" fill="clear" (click)="saveSurvey()">Done</ion-button>-->
-<!--            </ion-col>-->
-<!--            <ion-col></ion-col>-->
-<!--            <ion-col size="auto">-->
-<!--                <ion-button class="action-button-color" fill="clear" (click)="startSurvey()">Start Survey</ion-button>-->
-<!--            </ion-col>-->
-<!--        </ion-row>-->
-<!--    </ion-grid>-->
-<!--</ion-footer>-->

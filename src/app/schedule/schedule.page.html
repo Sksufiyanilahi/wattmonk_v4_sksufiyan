@@ -19,7 +19,7 @@
         </ion-row>
         <ion-row class="ion-padding-start ion-padding-end">
             <ion-col class="ion-text-end">
-                <span  [routerLink]="['/map-page']" routerDirection="forward">
+                <span [routerLink]="['/map-page']" routerDirection="forward">
                     Change
                 </span>
             </ion-col>
@@ -52,3 +52,24 @@
         </ion-tabs>
     </ion-content>
 </ion-content>
+<ion-footer class="ion-no-border">
+    <ion-grid *ngIf="currentTab === 'design'">
+        <ion-row>
+            <ion-col></ion-col>
+            <ion-col size="auto">
+                <ion-button class="action-button-color" fill="clear" (click)="saveDesignForm()">Done</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-grid *ngIf="currentTab === 'survey'">
+        <ion-row>
+            <ion-col size="auto">
+                <ion-button class="action-button-color" fill="clear" (click)="saveSurveyForm()">Done</ion-button>
+            </ion-col>
+            <ion-col></ion-col>
+            <ion-col size="auto">
+                <ion-button class="action-button-color" fill="clear" (click)="startSurvey()">Start Survey</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-footer>

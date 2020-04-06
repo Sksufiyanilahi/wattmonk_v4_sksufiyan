@@ -6,6 +6,7 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Router } from '@angular/router';
+import { ScheduleFormEvent } from '../model/constants';
 
 @Component({
   selector: 'app-schedule',
@@ -16,7 +17,7 @@ export class SchedulePage implements OnInit {
 
   @ViewChild('tabs', { static: true }) tabs: IonTabs;
 
-  address = '25 Wainright Street, Province Road, 1118, Sector-A, Pocket-A, Vasant Kunj USA';
+  address = '';
   currentTab = 'design';
 
   // Geocoder configuration
@@ -50,6 +51,7 @@ export class SchedulePage implements OnInit {
 
   segmentChanged(event: CustomEvent) {
     console.log(event);
+    this.currentTab = event.detail.value;
     this.tabs.select(event.detail.value);
   }
 
@@ -83,8 +85,9 @@ export class SchedulePage implements OnInit {
     }
     obj.reverse();
     for (let val in obj) {
-      if (obj[val].length)
+      if (obj[val].length) {
         address += obj[val] + ', ';
+      }
     }
     return address.slice(0, -2);
   }
@@ -95,7 +98,7 @@ export class SchedulePage implements OnInit {
         this.fetchLocation();
       } else {
         if (!this.storage.isLocationCheckedOnIOS()) {
-         this.storage.setLocationCheckedOnIOS(true);
+          this.storage.setLocationCheckedOnIOS(true);
           this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
             switch (mode) {
               case this.diagnostic.permissionStatus.NOT_REQUESTED:
@@ -151,7 +154,7 @@ export class SchedulePage implements OnInit {
       this.getGeoLocation();
     } else {
       this.diagnostic.isGpsLocationEnabled().then((status) => {
-        if (status == true) {
+        if (status === true) {
           this.getGeoLocation();
         } else {
           this.changeLocationSettings();
@@ -183,9 +186,23 @@ export class SchedulePage implements OnInit {
 
   }
 
-  goTo(){
+  goTo() {
     this.router.navigate(['/mappage']);
   }
 
 
+  saveDesignForm() {
+    console.log('posting value');
+    this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
+  }
+
+  saveSurveyForm() {
+    console.log('posting value');
+    this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SURVEY_FORM);
+  }
+
+  startSurvey() {
+    console.log('posting value');
+    this.utilities.setScheduleFormEvent(ScheduleFormEvent.START_SURVEY);
+  }
 }

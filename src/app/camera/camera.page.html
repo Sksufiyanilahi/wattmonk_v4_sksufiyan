@@ -1,6 +1,6 @@
-<ion-content>
-    <ion-progress-bar value="0.2" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
-    <ion-grid class="colored">
+<ion-content class="background-color-transparent">
+    <ion-progress-bar [value]="totalPercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
+    <ion-grid class="colored" *ngIf="showCameraInterface && !showForm">
         <ion-row justify-content-center>
             <ion-col size="auto" class="ion-no-padding">
                 <ion-button fill="clear" size="small" (click)="goBack()">
@@ -9,15 +9,111 @@
             </ion-col>
             <ion-col class="ion-no-padding end-centered">
                 <ion-icon name="information-circle" class="info-icon"></ion-icon>
-                <span>Capture {{itemName}}</span>
+                <span>Capture {{itemName}} {{selectedImageModel.imageTitle}}</span>
             </ion-col>
         </ion-row>
     </ion-grid>
+    <ion-grid class="ion-no-padding" *ngIf="!showCameraInterface && !showForm">
+        <ion-img [src]="selectedImageModel.image" class="object-fit-contain"></ion-img>
+    </ion-grid>
+    <div class="ion-no-padding" *ngIf="!showCameraInterface && showForm">
+        <form [formGroup]="detailsForm">
+            <ion-grid class="ion-padding">
+                <ion-row>
+                    <ion-col size="12">
+                        <ion-item class="ion-no-padding">
+                            <ion-input placeholder="electricityStorage" class="form_input" autocapitalize="words"
+                                       formControlName="electricityStorage"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
+                        <ion-item class="ion-no-padding">
+                            <ion-input placeholder="solarModel" class="form_input" autocapitalize="words"
+                                       formControlName="solarModel"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
+                        <ion-item class="ion-no-padding">
+                            <ion-input placeholder="inverterMake" class="form_input" autocapitalize="words"
+                                       formControlName="inverterMake"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
+                        <ion-item class="ion-no-padding">
+                            <ion-input placeholder="noOfPanelsInstalled" class="form_input" autocapitalize="words"
+                                       formControlName="noOfPanelsInstalled"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <ion-grid formArrayName="appliances" class="ion-padding">
+                <ion-row class="ion-align-items-center ion-justify-content-center">
+                    <ion-col class="ion-no-padding">
+                        <span class="input-placeholder ion-margin-start">appliance details</span>
+                    </ion-col>
+                    <ion-col size="auto">
+                        <ion-button fill="clear" class="action-button-color" (click)="addNewAppliance()">
+                            <ion-icon slot="start" name="add"></ion-icon>
+                            Add
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngFor="let form of getAppliances().controls; let i=index" [formGroupName]="i"
+                         class="ion-align-items-center ion-justify-content-center">
+                    <ion-col>
+                        <ion-item class="ion-no-padding">
+                            <ion-input placeholder="name" class="form_input" autocapitalize="words"
+                                       formControlName="name"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col size="3">
+                        <ion-item class="ion-no-padding">
+                            <ion-input placeholder="amp" class="form_input" autocapitalize="words"
+                                       formControlName="amp"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col size="auto">
+                        <ion-button fill="clear" class="action-button-color" (click)="removeAppliance(i)">
+                            <ion-icon name="close"></ion-icon>
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <ion-grid class="ion-padding">
+                <ion-row>
+                    <ion-col size="12">
+                        <ion-item class="ion-no-padding">
+                            <ion-input placeholder="permitDesign" class="form_input" autocapitalize="words"
+                                       formControlName="permitDesign"></ion-input>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row class="ion-margin-top">
+                    <ion-col size="12" class="ion-no-padding">
+                        <span class="input-placeholder">additionalNotes</span>
+                    </ion-col>
+                    <ion-col size="12" class="ion-no-padding">
+                        <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                      formControlName="additionalNotes"></ion-textarea>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </form>
+    </div>
 </ion-content>
-<ion-footer class="colored">
-    <ion-grid>
+
+<ion-footer [ngClass]="{'colored': showCameraInterface}" class="ion-no-border">
+    <ion-grid *ngIf="showCameraInterface && !showForm">
         <ion-row>
-            <ion-col *ngFor="let menu of subMenu" class="ion-text-center" (click)="selectSubMenu(menu)">
+            <ion-col *ngFor="let menu of subMenu; let j = index" class="ion-text-center"
+                     (click)="selectSubMenu(menu, j)">
                 <ion-row class="ion-align-items-center ion-justify-content-center">
                     <ion-col size="12">
                         <span class="deselected-menu" [ngClass]="{'selected-menu' : menu.isSelected}">
@@ -37,8 +133,8 @@
             </ion-col>
         </ion-row>
         <ion-row class="ion-no-padding ion-no-margin">
-            <ion-col *ngFor="let menu of mainMenu" class="ion-text-center ion-no-padding ion-no-margin">
-                <ion-row class="ion-align-items-center ion-justify-content-center" (click)="selectMenu(menu)">
+            <ion-col *ngFor="let menu of mainMenu; let i = index" class="ion-text-center ion-no-padding ion-no-margin">
+                <ion-row class="ion-align-items-center ion-justify-content-center" (click)="selectMenu(menu, i)">
                     <ion-col size="12" class="ion-no-margin ion-no-padding">
                         <span class="deselected-menu" [ngClass]="{'selected-menu' : menu.isSelected}">
                             {{menu.name}}
@@ -51,4 +147,13 @@
             </ion-col>
         </ion-row>
     </ion-grid>
+    <ion-grid *ngIf="!showCameraInterface && showForm">
+        <ion-row>
+            <ion-col></ion-col>
+            <ion-col size="auto">
+                <ion-button class="action-button-color" fill="clear" (click)="saveSurvey()">Done</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-footer>
+

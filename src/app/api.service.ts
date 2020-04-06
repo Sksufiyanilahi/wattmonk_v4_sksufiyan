@@ -3,12 +3,13 @@ import {
   HttpClient,
   HttpHeaders,
 } from '@angular/common/http';
-import { LoginModel } from "./model/login.model";
-import { Observable } from "rxjs";
-import { StorageService } from "./storage.service";
+import { LoginModel } from './model/login.model';
+import { Observable } from 'rxjs';
+import { StorageService } from './storage.service';
 import { SolarMake } from './model/solar-make.model';
 import { SolarMadeModel } from './model/solar-made.model';
 import { InverterMakeModel } from './model/inverter-make.model';
+import { SurveyModel } from './model/survey.model';
 import { DesginDataModel } from './model/design.model';
 import { InverterMadeModel } from './model/inverter-made.model';
 
@@ -38,20 +39,21 @@ export class ApiService {
   }
 
   getSolarMake() {
-    return this.http.get<SolarMake[]>(this.baseUrl + '/modulemakes', { headers: this.headers })
+    return this.http.get<SolarMake[]>(this.baseUrl + '/modulemakes', { headers: this.headers });
   }
-   
+
   getSolarMade(id) {
-    return this.http.get<SolarMadeModel[]>(this.baseUrl + '/modulemodels?modulemake.id_eq='+id, { headers: this.headers })
+    return this.http.get<SolarMadeModel[]>(this.baseUrl + '/modulemodels?modulemake.id_eq=' + id, { headers: this.headers });
   }
 
   getInverterMake() {
-    return this.http.get<InverterMakeModel[]>(this.baseUrl + '/invertermakes', { headers: this.headers })
+    return this.http.get<InverterMakeModel[]>(this.baseUrl + '/invertermakes', { headers: this.headers });
   }
 
-  getInverterMade(id) {
-    return this.http.get<InverterMadeModel[]>(this.baseUrl + 'invertermodels?invertermake.id_eq='+id, { headers: this.headers })
+  getInverterMade(id): Observable<InverterMadeModel[]> {
+    return this.http.get<InverterMadeModel[]>(this.baseUrl + 'invertermodels?invertermake.id_eq=' + id, { headers: this.headers });
   }
+
   addDesginForm(data: any): Observable<DesginDataModel> {
     return this.http.post<DesginDataModel>(this.baseUrl + '/designs', data, { headers: this.headers });
   }
@@ -61,5 +63,9 @@ export class ApiService {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.storageService.getJWTToken()
     });
+  }
+
+  saveSurvey(data: any): Observable<SurveyModel> {
+    return this.http.post<SurveyModel>(this.baseUrl + '/surveys', data, { headers: this.headers });
   }
 }
