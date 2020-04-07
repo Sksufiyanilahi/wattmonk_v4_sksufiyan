@@ -59,7 +59,7 @@
             <ion-input class="form_input" (ionInput)="getItemsInverterMake($event)" clear-input="true"  placeholder="inverter make" autocapitalize="none" [(ngModel)]="inverterMakeName" [ngModelOptions]="{standalone: true}" >
             </ion-input>
           </ion-item>
-          <ion-card class="solar-made" *ngIf="isItemInverterMakeAvailable && listOfInverterMAke !== 0 ">
+          <ion-card class="solar-made" *ngIf="isItemInverterMakeAvailable && listOfInverterMAke.length !== 0 ">
             <ion-list *ngFor="let item of listOfInverterMAke">
               <ion-item (click)="selectInverterMake(item)">{{ item.name }}</ion-item>
           </ion-list>
@@ -70,7 +70,7 @@
             <ion-input class="form_input" (ionInput)="getItemsInverterMade($event)" clear-input="true"  placeholder="inverter made" autocapitalize="none" [(ngModel)]="inverterMadeName " [ngModelOptions]="{standalone: true}" >
             </ion-input>
           </ion-item>
-          <ion-card class="solar-made" *ngIf="isItemInverterMadeAvailable && listOfInverterMade !== 0 ">
+          <ion-card class="solar-made" *ngIf="isItemInverterMadeAvailable && listOfInverterMade.length !== 0 ">
             <ion-list *ngFor="let item of listOfInverterMade">
               <ion-item (click)="selectInverterMade(item)">{{ item.name }}</ion-item>
           </ion-list>
