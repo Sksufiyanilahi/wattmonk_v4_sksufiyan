@@ -11,6 +11,7 @@ import { NavController } from '@ionic/angular';
 import { InverterMadeModel } from 'src/app/model/inverter-made.model';
 import { ScheduleFormEvent } from '../../model/constants';
 import { Subscription } from 'rxjs';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-design',
@@ -47,7 +48,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private apiService: ApiService,
     private utils: UtilitiesService,
-    private navController: NavController
+    private navController: NavController,
+    private storage: StorageService
   ) {
     this.desginForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
@@ -58,7 +60,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       invertermodel: new FormControl('', [Validators.required]),
       monthlybill: new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
-      createdby: 'string',
+      createdby: new FormControl('', [Validators.required]),
       assignedto: 'string',
       rooftype: 'flat',
       jobtype: 'battery',
@@ -71,6 +73,9 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.desginForm.get('address').setValue(address);
     }, (error) => {
       this.desginForm.get('address').setValue('');
+    });
+    this.desginForm.patchValue({
+      createdby: this.storage.getUserID()
     });
     this.getSolar();
   }
@@ -143,7 +148,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectSolarMake(value) {
     this.solarMakeName = value.name;
     this.desginForm.patchValue({
-      solarmake: value.id
+      solarmake: value.name
     });
     this.isItemSolarMakeAvailable = false;
   }
@@ -235,7 +240,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   getItemsInverterMade(ev: any) {
     if (this.listOfInverterMade.length === 0) {
-      this.getSolarMade();
+      this.getInverterMade();
     }
     if (ev.target.value !== '') {
       const val = ev.target.value;

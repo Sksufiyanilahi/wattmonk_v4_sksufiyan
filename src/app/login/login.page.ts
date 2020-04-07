@@ -79,8 +79,11 @@ import {
           this.utils.hideLoading().then(() => {
             console.log("Res",response);
             this.storageService.setUser(response.user);
+            this.storageService.setUserId(response.user.id);
             this.storageService.setJWTToken(response.jwt);
-            // this.storageService.setParentId(response.user.parent.id);
+            if(response.user.parent){
+              this.storageService.setParentId(response.user.parent.id);
+            }
             this.apiService.refreshHeader();
             this.navController.navigateRoot(['homepage']);
           });

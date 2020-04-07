@@ -20,6 +20,14 @@ export class StorageService {
     return JSON.parse(localStorage.getItem('user'));
   }
 
+  setUserId(userId) {
+    localStorage.setItem('userId', userId);
+  }
+
+  getUserID(): string {
+   return localStorage.getItem('userId')
+  }
+
   removeUser() {
     localStorage.removeItem('user')
   }
