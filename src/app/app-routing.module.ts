@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: 'map-page',
     loadChildren: () => import('./map-page/map-page.module').then( m => m.MapPagePageModule)
+  },
+  {
+    path: 'gallery',
+    loadChildren: () => import('./gallery/gallery.module').then( m => m.GalleryPageModule)
   }
 
 ];

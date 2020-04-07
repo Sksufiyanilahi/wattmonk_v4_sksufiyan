@@ -28,20 +28,20 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private storage: StorageService
   ) {
     this.surveyForm = this.formBuilder.group({
-      name: new FormControl('Ravi', [Validators.required]),
-      email: new FormControl('ravimail26@gmail.com', [Validators.required]),
-      phonenumber: new FormControl('9711302357', [Validators.required]),
+      name: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required]),
+      phonenumber: new FormControl('', [Validators.required]),
       datetime: new FormControl(new Date().getTime(), [Validators.required]),
-      comments: new FormControl('Comments'),
-      address: new FormControl('Vasant Kunj, New Delhi', [Validators.required]),
+      comments: new FormControl(''),
+      address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
       assignedTo: new FormControl(0)
     });
     // this.listOfAssignees = LIST_OF_ASSIGNEES;
     this.utilities.getAddressObservable().subscribe((address) => {
-      // this.surveyForm.get('address').setValue(address);
+      this.surveyForm.get('address').setValue(address);
     }, (error) => {
-      // this.surveyForm.get('address').setValue('');
+      this.surveyForm.get('address').setValue('');
     });
     console.log(this.platform);
     // this.platform.ready().then(value => this.surveyForm.get('source').setValue(value));

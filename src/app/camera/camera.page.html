@@ -1,6 +1,6 @@
 <ion-content class="background-color-transparent">
     <ion-progress-bar [value]="totalPercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
-    <ion-grid class="colored" *ngIf="showCameraInterface && !showForm">
+    <ion-grid class="colored">
         <ion-row justify-content-center>
             <ion-col size="auto" class="ion-no-padding">
                 <ion-button fill="clear" size="small" (click)="goBack()">
@@ -17,7 +17,7 @@
         <ion-img [src]="selectedImageModel.image" class="object-fit-contain black-bg"></ion-img>
     </ion-grid>
     <div class="ion-no-padding" *ngIf="!showCameraInterface && showForm">
-        <form [formGroup]="detailsForm">
+        <form [formGroup]="detailsForm" class="white-bg">
             <ion-grid class="ion-padding">
                 <ion-row>
                     <ion-col size="12">
@@ -105,13 +105,23 @@
                     </ion-col>
                 </ion-row>
             </ion-grid>
+
+            <ion-grid>
+                <ion-row>
+                    <ion-col></ion-col>
+                    <ion-col size="auto">
+                        <ion-button class="action-button-color" fill="clear" (click)="saveSurvey()">Done</ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
         </form>
     </div>
 </ion-content>
 
-<ion-footer [ngClass]="{'colored': showCameraInterface}" class="ion-no-border">
-    <ion-grid *ngIf="showCameraInterface && !showForm">
-        <ion-row>
+<ion-footer class="colored ion-no-border">
+    <ion-grid>
+        <ion-row *ngIf="showCameraInterface && !showForm">
             <ion-col *ngFor="let menu of subMenu; let j = index" class="ion-text-center"
                      (click)="selectSubMenu(menu, j)">
                 <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -123,19 +133,20 @@
                 </ion-row>
             </ion-col>
         </ion-row>
-        <ion-row class="ion-align-items-center ion-justify-content-center">
-            <ion-col size="3">
+        <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="showCameraInterface && !showForm">
+            <ion-col size="4">
             </ion-col>
-            <ion-col size="3" class="ion-text-center">
+            <ion-col size="4" class="ion-text-center">
                 <span class="camera-button" (click)="takePicture()"></span>
             </ion-col>
-            <ion-col size="3">
-                <div *ngIf="listOfImages.length != 0">
+            <ion-col size="4" class="ion-align-items-center ion-justify-content-center ion-text-center">
+                <ion-item *ngIf="listOfImages.length != 0" lines="none" (click)="openGallery()">
                     <ion-img [src]="listOfImages[listOfImages.length-1]" class="gallery-image"></ion-img>
-                </div>
+                </ion-item>
+
             </ion-col>
         </ion-row>
-        <ion-row class="ion-no-padding ion-no-margin">
+        <ion-row class="ion-no-padding ion-no-margin ion-padding-top">
             <ion-col *ngFor="let menu of mainMenu; let i = index" class="ion-text-center ion-no-padding ion-no-margin">
                 <ion-row class="ion-align-items-center ion-justify-content-center" (click)="selectMenu(menu, i)">
                     <ion-col size="12" class="ion-no-margin ion-no-padding">
@@ -150,13 +161,6 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-    <ion-grid *ngIf="!showCameraInterface && showForm">
-        <ion-row>
-            <ion-col></ion-col>
-            <ion-col size="auto">
-                <ion-button class="action-button-color" fill="clear" (click)="saveSurvey()">Done</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+
 </ion-footer>
 

@@ -1,0 +1,53 @@
+<ion-img [src]="imageModel.image" class="full-image"></ion-img>
+<ion-header class="ion-no-border ion-padding">
+    <ion-grid class="ion-no-padding">
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+            <ion-col size="auto">
+                <ion-button fill="clear" size="small" (click)="goBack()">
+                    <ion-icon name="chevron-back-outline" color="dark"></ion-icon>
+                </ion-button>
+            </ion-col>
+            <ion-col class="ion-text-center">
+                <span>{{menu.name}}</span>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-button fill="light" size="small" (click)="showMenu()">
+                    <ion-icon name="grid-outline" color="dark"></ion-icon>
+                </ion-button>
+            </ion-col>
+
+        </ion-row>
+    </ion-grid>
+</ion-header>
+
+<ion-content class="background-color-transparent">
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <ion-segment mode="ios" class="segments">
+                    <ion-segment-button [value]="i" *ngFor="let menu of subMenu; let i = index">
+                        <ion-label>{{menu.name}}</ion-label>
+                    </ion-segment-button>
+                </ion-segment>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+
+<ion-footer class="ion-no-border ion-no-padding">
+    <ion-grid class="ion-no-padding">
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+            <ion-col></ion-col>
+            <ion-col size="auto"
+                     class="white-background ion-padding ion-align-items-center ion-justify-content-center ">
+                <ion-button fill="clear" size="small" (click)="previousImage()">
+                    <ion-icon name="chevron-back-outline" color="dark"></ion-icon>
+                </ion-button>
+                <span>{{currentPosition}}/{{totalSize}}</span>
+                <ion-button fill="clear" size="small" (click)="nextImage()">
+                    <ion-icon name="chevron-forward-outline" color="dark"></ion-icon>
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-footer>

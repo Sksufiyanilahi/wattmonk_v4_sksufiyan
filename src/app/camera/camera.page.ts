@@ -111,91 +111,92 @@ export class CameraPage implements OnInit {
   }
 
   startCamera() {
-    this.startCameraAfterPermission();
-    // TODO uncomment on device
-    // this.diagnostic.requestCameraAuthorization(true).then((mode) => {
-    //   console.log(mode);
-    //   switch (mode) {
-    //     case this.diagnostic.permissionStatus.NOT_REQUESTED:
-    //       this.goBack();
-    //       break;
-    //     case this.diagnostic.permissionStatus.DENIED_ALWAYS:
-    //       this.showCameraDenied();
-    //       break;
-    //     case this.diagnostic.permissionStatus.DENIED_ONCE:
-    //       this.showCameraDenied();
-    //       break;
-    //     case this.diagnostic.permissionStatus.GRANTED:
-    //       this.startCameraAfterPermission();
-    //       break;
-    //     case 'authorized_when_in_use':
-    //       this.startCameraAfterPermission();
-    //       break;
-    //   }
-    // }, (error) => {
-    //
-    // });
+    // this.startCameraAfterPermission();
+    this.diagnostic.requestCameraAuthorization(true).then((mode) => {
+      console.log(mode);
+      switch (mode) {
+        case this.diagnostic.permissionStatus.NOT_REQUESTED:
+          this.goBack();
+          break;
+        case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+          this.showCameraDenied();
+          break;
+        case this.diagnostic.permissionStatus.DENIED_ONCE:
+          this.showCameraDenied();
+          break;
+        case this.diagnostic.permissionStatus.GRANTED:
+          this.startCameraAfterPermission();
+          break;
+        case 'authorized_when_in_use':
+          this.startCameraAfterPermission();
+          break;
+      }
+    }, (error) => {
+
+    });
   }
 
   startCameraAfterPermission() {
     this.showCameraInterface = true;
-    // TODO uncomment on device
-    // this.cameraPreview.startCamera(this.cameraPreviewOpts).then(
-    //   (res) => {
-    //     console.log(res);
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   });
+    this.cameraPreview.startCamera(this.cameraPreviewOpts).then(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      });
   }
 
   stopCamera() {
-    this.showCameraInterface = false;
-    // TODO uncomment on device
-    // this.cameraPreview.stopCamera().then(result => {
-    //   this.showCameraInterface = false;
-    // });
+    this.cameraPreview.stopCamera().then(result => {
+      this.showCameraInterface = false;
+    });
 
   }
 
   takePicture() {
+    // this.handleSaveImage('iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg==');
     this.cameraPreview.takePicture({
       width: 0,
       height: 0,
       quality: 80
     }).then((photo) => {
         this.stopCamera();
-        this.selectedImageModel.image = 'data:image/png;base64,' + photo[0];
-        this.saveToRootDirectory(photo[0]);
-        // this.saveFileToAppDirectory(photo[0]);
-
-        this.listOfImages.push(this.selectedImageModel.image);
-
-        switch (this.selectedImageModel.questionType) {
-          case QuestionType.NONE:
-            this.captureNextImage();
-            break;
-          case QuestionType.YES_NO:
-            this.showAlertQuestion();
-            break;
-          case QuestionType.AUTOCOMPLETE:
-            this.captureNextImage();
-            break;
-          case QuestionType.RADIO_BUTTON:
-            this.captureNextImage();
-            break;
-          case QuestionType.STRING:
-            this.captureNextImage();
-            break;
-          case QuestionType.INPUT:
-            this.captureNextImage();
-            break;
-        }
+        this.handleSaveImage(photo[0]);
       },
       (error) => {
 
       }
     );
+  }
+
+  handleSaveImage(photo: string) {
+    this.selectedImageModel.image = 'data:image/png;base64,' + photo;
+    this.saveToRootDirectory(photo);
+    // this.saveFileToAppDirectory(photo[0]);
+
+    this.listOfImages.push(this.selectedImageModel.image);
+
+    switch (this.selectedImageModel.questionType) {
+      case QuestionType.NONE:
+        this.captureNextImage();
+        break;
+      case QuestionType.YES_NO:
+        this.showAlertQuestion();
+        break;
+      case QuestionType.AUTOCOMPLETE:
+        this.captureNextImage();
+        break;
+      case QuestionType.RADIO_BUTTON:
+        this.captureNextImage();
+        break;
+      case QuestionType.STRING:
+        this.captureNextImage();
+        break;
+      case QuestionType.INPUT:
+        this.captureNextImage();
+        break;
+    }
   }
 
   captureNextImage() {
@@ -230,20 +231,21 @@ export class CameraPage implements OnInit {
     const UUID = 'img_' + (new Date().getTime()).toString(16);
     this.base64ToGallery.base64ToGallery(base64, { prefix: UUID, mediaScanner: true }).then((result: string) => {
       console.log('Saved to gallery ', result);
-      let imageDir = '';
-      if (this.selectedSubMenu === '') {
-        imageDir = this.file.externalApplicationStorageDirectory + 'files/survey/' + this.surveyId + '/' + this.selectedMenu + '/';
-      } else {
-        imageDir = this.file.externalApplicationStorageDirectory + 'files/survey/' + this.surveyId + '/' + this.selectedMenu + '/' + this.selectedSubMenu + '/';
-      }
-      const fileData = result.split('/');
-      const fileName = fileData[fileData.length - 1];
-      console.log(fileName, ', filename');
-      this.file.moveFile('file://storage/emulated/0/', fileName, imageDir, UUID).then((copyResult) => {
-        console.log('file copied');
-      }, (error) => {
-        console.log('error copying file');
-      });
+      // TODO moving to directory
+      // let imageDir = '';
+      // if (this.selectedSubMenu === '') {
+      //   imageDir = this.file.externalApplicationStorageDirectory + 'files/survey/' + this.surveyId + '/' + this.selectedMenu + '/';
+      // } else {
+      //   imageDir = this.file.externalApplicationStorageDirectory + 'files/survey/' + this.surveyId + '/' + this.selectedMenu + '/' + this.selectedSubMenu + '/';
+      // }
+      // const fileData = result.split('/');
+      // const fileName = fileData[fileData.length - 1];
+      // console.log(fileName, ', filename');
+      // this.file.moveFile('file://storage/emulated/0/', fileName, imageDir, UUID).then((copyResult) => {
+      //   console.log('file copied');
+      // }, (error) => {
+      //   console.log('error copying file');
+      // });
     }, (error) => {
       console.log('Error', error);
     });
@@ -325,10 +327,14 @@ export class CameraPage implements OnInit {
     this.selectedMenuModel = menu;
     this.selectedMenu = menu.name;
     this.subMenu = menu.subMenu;
+    this.itemName = menu.name;
     if (menu.subMenu != null) {
       if (menu.subMenu.length !== 0) {
         this.selectSubMenu(menu.subMenu[0], 0);
       } else {
+        this.selectedSubMenuIndex = -1;
+        this.selectedImageModelIndex = 0;
+        this.selectedImageModel = menu.imageModel[0];
         this.selectedSubMenuModel = null;
         this.selectedSubMenu = menu.name;
         this.itemName = menu.name;
@@ -336,13 +342,11 @@ export class CameraPage implements OnInit {
     }
 
     if (menu.imageModel === null && menu.subMenu === null) {
+      this.stopCamera();
       this.showForm = true;
-      // this.showCameraInterface = false;
-      this.startCamera();
     } else {
-      // this.showCameraInterface = true;
-      this.showForm = false;
       this.startCamera();
+      this.showForm = false;
     }
   }
 
@@ -459,14 +463,19 @@ export class CameraPage implements OnInit {
     if (this.detailsForm.status === 'INVALID') {
       this.showInvalidFormAlert();
     } else {
-      this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
-        modal.present();
-        modal.onWillDismiss().then((dismissed) => {
-          this.navController.navigateRoot('homepage');
-        });
-      }, (error) => {
+      if (this.totalPercent !== 1) {
+        this.utilities.showAlert('Please take all images');
+      } else {
+        this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+          modal.present();
+          modal.onWillDismiss().then((dismissed) => {
+            this.navController.navigateRoot('homepage');
+          });
+        }, (error) => {
 
-      });
+        });
+      }
+
     }
   }
 
@@ -507,5 +516,9 @@ export class CameraPage implements OnInit {
 
   removeAppliance(i: number) {
     this.getAppliances().controls.splice(i, 1);
+  }
+
+  openGallery() {
+    // this.navController.navigateForward('gallery');
   }
 }

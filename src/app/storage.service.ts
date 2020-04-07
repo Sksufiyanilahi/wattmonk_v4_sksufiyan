@@ -26,7 +26,7 @@ export class StorageService {
   }
 
   getUserID(): string {
-   return localStorage.getItem('userId')
+   return localStorage.getItem('userId');
   }
 
   removeUser() {

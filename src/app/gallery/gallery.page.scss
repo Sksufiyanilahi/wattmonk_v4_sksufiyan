@@ -1,0 +1,38 @@
+.full-image {
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+ion-content {
+  --background: transparent !important;
+}
+
+.white-background {
+  background: white !important;
+  color: black;
+  border-top-left-radius: 4px;
+}
+
+ion-segment {
+  --background: #EFEFEF;
+}
+
+ion-segment-button {
+  --indicator-color: #FFFFFF;
+  --color-checked: black;
+}
+
+.segments {
+  height: 40px;
+}
+
+ion-button {
+  --background: white;
+  height: 40px;
+  width: 40px;
+}
+
