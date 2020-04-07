@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview/ngx';
 import { AlertController, NavController, Platform } from '@ionic/angular';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { ImageModel, MenuModel, MenuSubModel, QuestionType } from './menu.model';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 import { File } from '@ionic-native/file/ngx';
@@ -49,7 +50,8 @@ export class CameraPage implements OnInit {
     private storage: Storage,
     private alertController: AlertController,
     private utilities: UtilitiesService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private diagnostic: Diagnostic
   ) {
     this.selectMenu(this.mainMenu[0], 0);
     this.selectSubMenu(this.mainMenu[0].subMenu[0], 0);
@@ -86,77 +88,120 @@ export class CameraPage implements OnInit {
       alpha: 1
     };
 
+
     this.startCamera();
 
   }
 
+  async showCameraDenied() {
+    const alert = await this.alertController.create({
+      header: 'Error',
+      subHeader: 'Camera permission denied',
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.navController.pop();
+          }
+        }
+      ],
+      backdropDismiss: false
+    });
+    await alert.present();
+  }
+
   startCamera() {
+    this.startCameraAfterPermission();
+    // TODO uncomment on device
+    // this.diagnostic.requestCameraAuthorization(true).then((mode) => {
+    //   console.log(mode);
+    //   switch (mode) {
+    //     case this.diagnostic.permissionStatus.NOT_REQUESTED:
+    //       this.goBack();
+    //       break;
+    //     case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+    //       this.showCameraDenied();
+    //       break;
+    //     case this.diagnostic.permissionStatus.DENIED_ONCE:
+    //       this.showCameraDenied();
+    //       break;
+    //     case this.diagnostic.permissionStatus.GRANTED:
+    //       this.startCameraAfterPermission();
+    //       break;
+    //     case 'authorized_when_in_use':
+    //       this.startCameraAfterPermission();
+    //       break;
+    //   }
+    // }, (error) => {
+    //
+    // });
+  }
+
+  startCameraAfterPermission() {
     this.showCameraInterface = true;
-    this.cameraPreview.startCamera(this.cameraPreviewOpts).then(
-      (res) => {
-        console.log(res);
-      },
-      (err) => {
-        console.log(err);
-      });
+    // TODO uncomment on device
+    // this.cameraPreview.startCamera(this.cameraPreviewOpts).then(
+    //   (res) => {
+    //     console.log(res);
+    //   },
+    //   (err) => {
+    //     console.log(err);
+    //   });
   }
 
   stopCamera() {
-    this.cameraPreview.stopCamera().then(result => {
-      this.showCameraInterface = false;
-    });
+    this.showCameraInterface = false;
+    // TODO uncomment on device
+    // this.cameraPreview.stopCamera().then(result => {
+    //   this.showCameraInterface = false;
+    // });
 
   }
 
   takePicture() {
-    // this.cameraPreview.takePicture({
-    //   width: 0,
-    //   height: 0,
-    //   quality: 80
-    // }).then((photo) => {
-    //     this.stopCamera();
-    //     this.selectedImageModel.image = photo;
-    //     console.log(this.selectedImageModel);
-    //     // this.saveToRootDirectory(photo[0]);
-    //     // this.saveFileToAppDirectory(photo[0]);
-    //   },
-    //   (error) => {
-    //
-    //   });
+    this.cameraPreview.takePicture({
+      width: 0,
+      height: 0,
+      quality: 80
+    }).then((photo) => {
+        this.stopCamera();
+        this.selectedImageModel.image = 'data:image/png;base64,' + photo[0];
+        this.saveToRootDirectory(photo[0]);
+        // this.saveFileToAppDirectory(photo[0]);
 
-    this.showCameraInterface = false;
-    // this.stopCamera();
+        this.listOfImages.push(this.selectedImageModel.image);
 
-    this.selectedImageModel.image = 'data:image/png;base64,' + 'iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg==';
-    this.listOfImages.push(this.selectedImageModel.image);
+        switch (this.selectedImageModel.questionType) {
+          case QuestionType.NONE:
+            this.captureNextImage();
+            break;
+          case QuestionType.YES_NO:
+            this.showAlertQuestion();
+            break;
+          case QuestionType.AUTOCOMPLETE:
+            this.captureNextImage();
+            break;
+          case QuestionType.RADIO_BUTTON:
+            this.captureNextImage();
+            break;
+          case QuestionType.STRING:
+            this.captureNextImage();
+            break;
+          case QuestionType.INPUT:
+            this.captureNextImage();
+            break;
+        }
+      },
+      (error) => {
 
-    switch (this.selectedImageModel.questionType) {
-      case QuestionType.NONE:
-        this.captureNextImage();
-        break;
-      case QuestionType.YES_NO:
-        this.showAlertQuestion();
-        break;
-      case QuestionType.AUTOCOMPLETE:
-        this.captureNextImage();
-        break;
-      case QuestionType.RADIO_BUTTON:
-        this.captureNextImage();
-        break;
-      case QuestionType.STRING:
-        this.captureNextImage();
-        break;
-      case QuestionType.INPUT:
-        this.captureNextImage();
-        break;
-    }
+      }
+    );
   }
 
   captureNextImage() {
     this.shiftToNextImage();
     this.calculateImagePercentage();
-    // this.startCamera()
-    this.showCameraInterface = true;
+    this.startCamera();
   }
 
   async showAlertQuestion() {
@@ -292,12 +337,12 @@ export class CameraPage implements OnInit {
 
     if (menu.imageModel === null && menu.subMenu === null) {
       this.showForm = true;
-      this.showCameraInterface = false;
-      // this.startCamera();
+      // this.showCameraInterface = false;
+      this.startCamera();
     } else {
-      this.showCameraInterface = true;
+      // this.showCameraInterface = true;
       this.showForm = false;
-      // this.startCamera();
+      this.startCamera();
     }
   }
 

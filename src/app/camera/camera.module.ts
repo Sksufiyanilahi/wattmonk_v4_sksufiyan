@@ -10,6 +10,7 @@ import { CameraPageRoutingModule } from './camera-routing.module';
 import { CameraPage } from './camera.page';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { File } from '@ionic-native/file/ngx';
   providers: [
     CameraPreview,
     Base64ToGallery,
-    File
+    File,
+    Diagnostic
   ]
 })
 export class CameraPageModule {

@@ -14,7 +14,7 @@
         </ion-row>
     </ion-grid>
     <ion-grid class="ion-no-padding" *ngIf="!showCameraInterface && !showForm">
-        <ion-img [src]="selectedImageModel.image" class="object-fit-contain"></ion-img>
+        <ion-img [src]="selectedImageModel.image" class="object-fit-contain black-bg"></ion-img>
     </ion-grid>
     <div class="ion-no-padding" *ngIf="!showCameraInterface && showForm">
         <form [formGroup]="detailsForm">
@@ -130,6 +130,9 @@
                 <span class="camera-button" (click)="takePicture()"></span>
             </ion-col>
             <ion-col size="3">
+                <div *ngIf="listOfImages.length != 0">
+                    <ion-img [src]="listOfImages[listOfImages.length-1]" class="gallery-image"></ion-img>
+                </div>
             </ion-col>
         </ion-row>
         <ion-row class="ion-no-padding ion-no-margin">

@@ -12,6 +12,7 @@ import { InverterMakeModel } from './model/inverter-make.model';
 import { SurveyModel } from './model/survey.model';
 import { DesginDataModel } from './model/design.model';
 import { InverterMadeModel } from './model/inverter-made.model';
+import { AssigneeModel } from './model/assignee.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class ApiService {
 
   headers: HttpHeaders;
   baseUrl = 'http://ec2-3-17-28-7.us-east-2.compute.amazonaws.com:1337';
+  private parentId = '';
 
   constructor(
     private http: HttpClient,
@@ -63,9 +65,14 @@ export class ApiService {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.storageService.getJWTToken()
     });
+    this.parentId = this.storageService.getParentId();
   }
 
   saveSurvey(data: any): Observable<SurveyModel> {
     return this.http.post<SurveyModel>(this.baseUrl + '/surveys', data, { headers: this.headers });
+  }
+
+  getAssignees(userType: number): Observable<AssigneeModel[]> {
+    return this.http.get<AssigneeModel[]>(this.baseUrl + '/users?parent.id_eq=' + this.parentId + '&role.id_eq=' + userType, { headers: this.headers });
   }
 }

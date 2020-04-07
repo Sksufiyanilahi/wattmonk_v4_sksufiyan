@@ -65,4 +65,7 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
     this.onChange(assignee.id);
   }
 
+  selectSelf() {
+
+  }
 }

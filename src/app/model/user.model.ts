@@ -26,32 +26,35 @@ export class Role {
   id: number;
   name: string;
   description: string;
-  type: string
+  type: string;
 }
-  export class Parent {
-      id: number;
-      username: string;
-      email: string;
-      provider: string;
-      confirmed: boolean;
-      blocked: boolean;
-      role: number;
-      created_at: Date;
-      updated_at: Date;
-      firstname: string;
-      lastname: string;
-      phone?: any;
-      country: string;
-      company?: any;
-      callingcode?: any;
-      address?: any;
-      registrationnumber?: any;
-      isdefaultpassword?: any;
-      source?: any;
-      parent?: any;
-      contractorsubscription?: any;
-      logo?: any;
-  }
+
+export class Parent {
+  id: number;
+  username: string;
+  email: string;
+  provider: string;
+  confirmed: boolean;
+  blocked: boolean;
+  role: number;
+  created_at: Date;
+  updated_at: Date;
+  firstname: string;
+  lastname: string;
+  phone?: any;
+  country: string;
+  company?: any;
+  callingcode?: any;
+  address?: any;
+  registrationnumber?: any;
+  isdefaultpassword?: any;
+  source?: any;
+  contractorsubscription?: any;
+  logo?: any;
+  parent: {
+    id: number;
+  };
+}
 
   
 

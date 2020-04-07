@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { AssigneeModel, LIST_OF_ASSIGNEES } from 'src/app/model/assignee.model';
+import { AssigneeModel } from 'src/app/model/assignee.model';
 import { SolarMake, SolarMakeData } from 'src/app/model/solar-make.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
@@ -9,9 +9,9 @@ import { SolarMadeModel } from 'src/app/model/solar-made.model';
 import { InverterMakeModel } from 'src/app/model/inverter-make.model';
 import { NavController } from '@ionic/angular';
 import { InverterMadeModel } from 'src/app/model/inverter-made.model';
-import { ScheduleFormEvent } from '../../model/constants';
+import { ScheduleFormEvent, UserRoles } from '../../model/constants';
 import { Subscription } from 'rxjs';
-import { StorageService } from 'src/app/storage.service';
+import { StorageService } from '../../storage.service';
 
 @Component({
   selector: 'app-design',
@@ -67,7 +67,6 @@ export class DesignComponent implements OnInit, OnDestroy {
       source: 'web',
       comment: new FormControl('')
     });
-    this.listOfAssignees = LIST_OF_ASSIGNEES;
     this.utils.getAddressObservable().subscribe((address) => {
       console.log('Add', address);
       this.desginForm.get('address').setValue(address);
@@ -86,6 +85,8 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.addForm();
       }
     });
+
+    this.getAssignees();
   }
 
   ngOnDestroy(): void {
@@ -121,6 +122,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.listOfSolarMAke = response;
     }, responseError => {
       const error: ErrorModel = responseError.error;
+      console.log(error);
       this.utils.showAlert(error.message[0].messages[0].message);
     });
 
@@ -261,6 +263,22 @@ export class DesignComponent implements OnInit, OnDestroy {
       invertermodel: value.id
     });
     this.isItemInverterMadeAvailable = false;
+  }
+
+  getAssignees() {
+    this.apiService.getAssignees(UserRoles.DESIGNER).subscribe(assignees => {
+      this.listOfAssignees = [];
+      this.listOfAssignees.push({
+        firstname: '',
+        logo: {
+          url: '/assets/images/wattmonk_logo.png'
+        },
+        selected: false,
+        id: this.storage.getUser().id
+      });
+      assignees.forEach(item => this.listOfAssignees.push(item));
+      console.log(this.listOfAssignees);
+    });
   }
 
 }

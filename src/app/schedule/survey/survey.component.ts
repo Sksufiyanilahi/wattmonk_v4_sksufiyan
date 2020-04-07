@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavController, Platform } from '@ionic/angular';
-import { AssigneeModel, LIST_OF_ASSIGNEES } from '../../model/assignee.model';
+import { AssigneeModel } from '../../model/assignee.model';
 import { UtilitiesService } from '../../utilities.service';
-import { ScheduleFormEvent } from '../../model/constants';
+import { ScheduleFormEvent, UserRoles } from '../../model/constants';
 import { ApiService } from '../../api.service';
 import { Subscription } from 'rxjs';
+import { StorageService } from '../../storage.service';
 
 @Component({
   selector: 'app-survey',
@@ -23,7 +24,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private navController: NavController,
     private utilities: UtilitiesService,
     private platform: Platform,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private storage: StorageService
   ) {
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('Ravi', [Validators.required]),
@@ -35,7 +37,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       source: new FormControl('android', [Validators.required]),
       assignedTo: new FormControl(0)
     });
-    this.listOfAssignees = LIST_OF_ASSIGNEES;
+    // this.listOfAssignees = LIST_OF_ASSIGNEES;
     this.utilities.getAddressObservable().subscribe((address) => {
       // this.surveyForm.get('address').setValue(address);
     }, (error) => {
@@ -58,6 +60,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
           break;
       }
     });
+
+    this.getAssignees();
   }
 
   ngOnDestroy() {
@@ -121,5 +125,21 @@ export class SurveyComponent implements OnInit, OnDestroy {
     });
     console.log(this.surveyForm.value);
     this.utilities.showAlert(error);
+  }
+
+  getAssignees() {
+    this.apiService.getAssignees(UserRoles.SURVEYOR).subscribe(assignees => {
+      this.listOfAssignees = [];
+      this.listOfAssignees.push({
+        firstname: '',
+        logo: {
+          url: '/assets/images/wattmonk_logo.png'
+        },
+        selected: false,
+        id: this.storage.getUser().id
+      });
+      assignees.forEach(item => this.listOfAssignees.push(item));
+      console.log(this.listOfAssignees);
+    });
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonTabs, NavController, Platform } from '@ionic/angular';
+import { AlertController, IonTabs, NavController, Platform } from '@ionic/angular';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { StorageService } from '../storage.service';
@@ -37,12 +37,13 @@ export class SchedulePage implements OnInit {
     private platform: Platform,
     private storage: StorageService,
     private utilities: UtilitiesService,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController
   ) {
-    this.requestLocationPermission();
   }
 
   ngOnInit() {
+    this.requestLocationPermission();
   }
 
   goBack() {
@@ -56,25 +57,68 @@ export class SchedulePage implements OnInit {
   }
 
   getGeoLocation() {
+
     this.geolocation.getCurrentPosition().then((resp) => {
       this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
     }).catch((error) => {
       this.utilities.showAlert('Unable to get location');
       console.log('Error getting location', error);
+      this.showNoLocation();
     });
 
   }
 
+  async showNoLocation() {
+    const alert = await this.alertController.create({
+      header: 'Error',
+      subHeader: 'Unable to get location',
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.goBack();
+          }
+        }
+      ],
+      backdropDismiss: false
+    });
+    await alert.present();
+  }
+
+  async showLocationDenied() {
+    const alert = await this.alertController.create({
+      header: 'Error',
+      subHeader: 'Location services denied, please enable them manually',
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.goBack();
+          }
+        }
+      ],
+      backdropDismiss: false
+    });
+    await alert.present();
+  }
+
 
   getGeoEncoder(latitude, longitude) {
-    this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
-      .then((result: NativeGeocoderResult[]) => {
-        this.address = this.generateAddress(result[0]);
-        this.utilities.setAddress(this.address);
-      })
-      .catch((error: any) => {
-        alert('Error getting location' + JSON.stringify(error));
-      });
+    this.utilities.hideLoading().then((success) => {
+        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+          .then((result: NativeGeocoderResult[]) => {
+            this.address = this.generateAddress(result[0]);
+            this.utilities.setAddress(this.address);
+          })
+          .catch((error: any) => {
+            this.showNoLocation();
+            alert('Error getting location' + JSON.stringify(error));
+          });
+      }, (error) => {
+
+      }
+    );
+
   }
 
   generateAddress(addressObj) {
@@ -93,59 +137,69 @@ export class SchedulePage implements OnInit {
   }
 
   requestLocationPermission() {
-    if (this.platform.is('ios')) {
-      if (this.storage.isLocationAllowedOnIOS()) {
-        this.fetchLocation();
-      } else {
-        if (!this.storage.isLocationCheckedOnIOS()) {
-          this.storage.setLocationCheckedOnIOS(true);
-          this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
-            switch (mode) {
-              case this.diagnostic.permissionStatus.NOT_REQUESTED:
-                this.storage.setLocationAllowedOnIOS(false);
-                break;
-              case this.diagnostic.permissionStatus.DENIED_ALWAYS:
-                this.storage.setLocationAllowedOnIOS(false);
-                break;
-              case this.diagnostic.permissionStatus.GRANTED:
-                this.storage.setLocationAllowedOnIOS(true);
-                this.fetchLocation();
-                break;
-              case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-                this.storage.setLocationAllowedOnIOS(true);
-                this.fetchLocation();
-                break;
-              case 'authorized_when_in_use':
-                this.storage.setLocationAllowedOnIOS(true);
-                this.fetchLocation();
-                break;
-            }
-          }, (rejection) => {
-            this.locationAllowed = false;
-            this.storage.setLocationAllowedOnIOS(false);
-          });
-        }
+    this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
+      console.log(mode);
+      switch (mode) {
+        case this.diagnostic.permissionStatus.NOT_REQUESTED:
+          this.goBack();
+          break;
+        case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+          this.showLocationDenied();
+          break;
+        case this.diagnostic.permissionStatus.DENIED_ONCE:
+          this.goBack();
+          break;
+        case this.diagnostic.permissionStatus.GRANTED:
+          this.fetchLocation();
+          break;
+        case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+          this.fetchLocation();
+          break;
+        case 'authorized_when_in_use':
+          this.fetchLocation();
+          break;
       }
-    } else {
-      this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
-        switch (mode) {
-          case this.diagnostic.permissionStatus.NOT_REQUESTED:
-            break;
-          case this.diagnostic.permissionStatus.DENIED_ALWAYS:
-            break;
-          case this.diagnostic.permissionStatus.GRANTED:
-            this.fetchLocation();
-            break;
-          case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-            this.fetchLocation();
-            break;
-          case 'authorized_when_in_use':
-            this.fetchLocation();
-            break;
-        }
-      }, (rejection) => {
-      });
-    }
+    }, (rejection) => {
+      console.log(rejection);
+      this.goBack();
+    });
+
+    // if (this.platform.is('ios')) {
+    //   if (this.storage.isLocationAllowedOnIOS()) {
+    //     this.fetchLocation();
+    //   } else {
+    //     if (!this.storage.isLocationCheckedOnIOS()) {
+    //       this.storage.setLocationCheckedOnIOS(true);
+    //       this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
+    //         switch (mode) {
+    //           case this.diagnostic.permissionStatus.NOT_REQUESTED:
+    //             this.storage.setLocationAllowedOnIOS(false);
+    //             break;
+    //           case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+    //             this.storage.setLocationAllowedOnIOS(false);
+    //             break;
+    //           case this.diagnostic.permissionStatus.GRANTED:
+    //             this.storage.setLocationAllowedOnIOS(true);
+    //             this.fetchLocation();
+    //             break;
+    //           case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+    //             this.storage.setLocationAllowedOnIOS(true);
+    //             this.fetchLocation();
+    //             break;
+    //           case 'authorized_when_in_use':
+    //             this.storage.setLocationAllowedOnIOS(true);
+    //             this.fetchLocation();
+    //             break;
+    //         }
+    //       }, (rejection) => {
+    //         this.locationAllowed = false;
+    //         this.storage.setLocationAllowedOnIOS(false);
+    //       });
+    //     }
+    //   }
+    // } else {
+    //
+    // }
 
   }
 
@@ -155,16 +209,42 @@ export class SchedulePage implements OnInit {
     } else {
       this.diagnostic.isGpsLocationEnabled().then((status) => {
         if (status === true) {
-          this.getGeoLocation();
+          this.utilities.showLoading('Getting Location').then(() => {
+            this.getGeoLocation();
+          });
         } else {
-          this.changeLocationSettings();
+          this.askToChangeSettings();
         }
       });
     }
 
   }
 
+  async askToChangeSettings() {
+    const alert = await this.alertController.create({
+      header: 'Location Disabled',
+      subHeader: 'Please enable location services',
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.changeLocationSettings();
+          }
+        },
+        {
+          text: 'Cancel',
+          handler: () => {
+            this.goBack();
+          }
+        }
+      ],
+      backdropDismiss: false
+    });
+    await alert.present();
+  }
+
   changeLocationSettings() {
+
     this.diagnostic.switchToLocationSettings();
     this.diagnostic.registerLocationStateChangeHandler((state) => {
       if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) ||

@@ -7,6 +7,15 @@ export enum ScheduleFormEvent {
   START_SURVEY = 3
 }
 
+export enum UserRoles {
+  ADMIN = 5,
+  BD = 3,
+  DESIGNER = 8,
+  SURVEYOR = 9,
+  ANALYST = 10
+}
+
+
 export const CAMERA_MODULE_MENU: MenuModel[] = [
   {
     name: 'Electricals',

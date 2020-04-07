@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { User } from "./model/user.model";
+import { User } from './model/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  constructor() { }
+  constructor() {
+  }
 
   isUserPresent(): boolean {
-    return localStorage.getItem('user') !== null && localStorage.getItem('user') !== undefined
+    return localStorage.getItem('user') !== null && localStorage.getItem('user') !== undefined;
   }
 
   setUser(user: User) {
@@ -29,7 +30,7 @@ export class StorageService {
   }
 
   removeUser() {
-    localStorage.removeItem('user')
+    localStorage.removeItem('user');
   }
 
   setJWTToken(token: string) {
@@ -64,7 +65,6 @@ export class StorageService {
     localStorage.setItem('ios_location_allowed', JSON.stringify(status));
   }
 
-  
   setParentId(parentId): any {
     localStorage.setItem('parentId', parentId);
   }

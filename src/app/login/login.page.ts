@@ -1,9 +1,7 @@
 import {
   Component,
   OnInit
-}
-
-  from '@angular/core';
+} from '@angular/core';
 
 import {
   FormControl,
@@ -12,7 +10,7 @@ import {
   FormBuilder
 }
 
-  from "@angular/forms";
+  from '@angular/forms';
 
 import {
   ApiService
@@ -36,21 +34,21 @@ import {
   StorageService
 }
 
-  from "../storage.service";
+  from '../storage.service';
 
 import {
   ErrorModel
 }
 
-  from "../model/error.model";
+  from '../model/error.model';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
-}
-
-) export class LoginPage implements OnInit {
+    selector: 'app-login',
+    templateUrl: './login.page.html',
+    styleUrls: ['./login.page.scss'],
+  }
+)
+export class LoginPage implements OnInit {
 
   loginForm: FormGroup;
   isActiveToggleTextPassword: Boolean = true;
@@ -60,14 +58,14 @@ import {
     private utils: UtilitiesService,
     private apiService: ApiService,
     private storageService: StorageService,
-    private navController: NavController) { }
+    private navController: NavController) {
+  }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      identifier: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required])
-    }
-
+        identifier: new FormControl('', [Validators.required]),
+        password: new FormControl('', [Validators.required])
+      }
     );
   }
 
@@ -77,11 +75,11 @@ import {
       this.utils.showLoading('Logging In').then(() => {
         this.apiService.login(this.loginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
-            console.log("Res",response);
+            console.log('Res', response);
             this.storageService.setUser(response.user);
             this.storageService.setUserId(response.user.id);
             this.storageService.setJWTToken(response.jwt);
-            if(response.user.parent){
+            if (response.user.parent) {
               this.storageService.setParentId(response.user.parent.id);
             }
             this.apiService.refreshHeader();
@@ -93,7 +91,7 @@ import {
             this.utils.showAlert(error.message[0].messages[0].message);
           });
 
-        })
+        });
       });
 
     } else {
@@ -104,6 +102,7 @@ import {
   public toggleTextPassword() {
     this.isActiveToggleTextPassword = (this.isActiveToggleTextPassword == true) ? false : true;
   }
+
   public getType() {
     return this.isActiveToggleTextPassword ? 'password' : 'text';
   }
