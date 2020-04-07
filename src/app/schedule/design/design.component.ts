@@ -57,7 +57,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       solarmake: new FormControl('', [Validators.required]),
       solarmodel: new FormControl('', [Validators.required]),
       invertermake: new FormControl('', [Validators.required]),
-      invertermodel: new FormControl('', [Validators.required]),
+      invertermodel: '4',
       monthlybill: new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
       createdby: new FormControl('', [Validators.required]),
@@ -148,7 +148,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectSolarMake(value) {
     this.solarMakeName = value.name;
     this.desginForm.patchValue({
-      solarmake: value.name
+      solarmake: value.id
     });
     this.isItemSolarMakeAvailable = false;
   }
