@@ -57,7 +57,7 @@ export class StorageService {
   }
 
   
-  setParentId(parentId: string): any {
+  setParentId(parentId): any {
     localStorage.setItem('parentId', parentId);
   }
 

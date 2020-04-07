@@ -29,15 +29,14 @@
                     <ion-grid class="ion-no-padding">
                         <ion-row class="ion-margin-top">
                             <ion-col size="12">
-                                <ion-input type="email" placeholder="your email address" class="form-control"
-                                    formControlName="identifier" email="true">
+                                <ion-input type="text" placeholder="your email address" class="form-control"
+                                    formControlName="identifier">
                                 </ion-input>
                             </ion-col>
 
                             <ion-col size="12" class="ion-margin-top">
                                 <div class="password_box">
-                                    <ion-input type="password" class="password_input" [type]="getType()" style="
-                                    " placeholder="your password" formControlName="password">
+                                    <ion-input type="password" class="password_input" [type]="getType()" placeholder="your password" formControlName="password">
                                     </ion-input>
                                     <div class="eye_box">
                                         <ion-icon name="eye" (click)="toggleTextPassword()" slot="end"></ion-icon>
@@ -58,6 +57,8 @@
                         </ion-row>
                     </ion-grid>
                 </form>
+                {{loginForm.status}}
+                {{loginForm.value | json}}
             </ion-col>
         </ion-row>
     </ion-grid>

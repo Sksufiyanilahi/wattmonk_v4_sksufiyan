@@ -10,6 +10,7 @@ import { SolarMake } from './model/solar-make.model';
 import { SolarMadeModel } from './model/solar-made.model';
 import { InverterMakeModel } from './model/inverter-make.model';
 import { DesginDataModel } from './model/design.model';
+import { InverterMadeModel } from './model/inverter-made.model';
 
 @Injectable({
   providedIn: 'root'
@@ -49,9 +50,8 @@ export class ApiService {
   }
 
   getInverterMade(id) {
-    return this.http.get<InverterMakeModel[]>(this.baseUrl + 'invertermodels?invertermake.id_eq='+id, { headers: this.headers })
+    return this.http.get<InverterMadeModel[]>(this.baseUrl + 'invertermodels?invertermake.id_eq='+id, { headers: this.headers })
   }
-
   addDesginForm(data: any): Observable<DesginDataModel> {
     return this.http.post<DesginDataModel>(this.baseUrl + '/designs', data, { headers: this.headers });
   }

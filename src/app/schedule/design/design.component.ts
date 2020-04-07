@@ -8,6 +8,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { SolarMadeModel } from 'src/app/model/solar-made.model';
 import { InverterMakeModel } from 'src/app/model/inverter-make.model';
 import { NavController } from '@ionic/angular';
+import { InverterMadeModel } from 'src/app/model/inverter-made.model';
 
 @Component({
   selector: 'app-design',
@@ -34,6 +35,11 @@ export class DesignComponent implements OnInit {
   isItemInverterMakeAvailable: boolean;
   inverterMakeName:any;
 
+  listOfInverterMade: InverterMadeModel[] = [];
+  isItemInverterMadeAvailable: boolean;
+  inverterMadeName:any;
+
+
   constructor(
     private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -46,7 +52,7 @@ export class DesignComponent implements OnInit {
       solarmake:new FormControl('', [Validators.required]),
       solarmodel:new FormControl('', [Validators.required]),
       invertermake:new FormControl('', [Validators.required]),
-      invertermodel: "2",
+      invertermodel: new FormControl('', [Validators.required]),
       monthlybill:new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
       createdby: "string",
@@ -202,9 +208,41 @@ export class DesignComponent implements OnInit {
         this.isItemInverterMakeAvailable = false;
       }
 
-      range(){
-        console.log("range",this.desginForm.value.monthlybill)
+
+      getInverterMade() {
+        this.apiService.getInverterMade(this.desginForm.value.invertermodel).subscribe(response => {
+          console.log(response);
+          this.listOfInverterMade = response;
+        }, responseError => {
+          const error: ErrorModel = responseError.error;
+            this.utils.showAlert(error.message[0].messages[0].message);
+        });
+
+    } 
+
+    getItemsInverterMade(ev: any) {
+      if(this.listOfInverterMade.length == 0){
+        this.getSolarMade();
       }
-    
+      if( ev.target.value != ''){
+      const val = ev.target.value;
+      if (val && val.trim() != '') {
+          this.isItemInverterMadeAvailable = true;
+          this.listOfInverterMade =  this.listOfInverterMade.filter((item) => {
+          return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+      }
+      }else{
+        this.isItemInverterMadeAvailable = false;
+      }
+      }
+
+      selectInverterMade(value){
+        this.inverterMadeName = value.name
+        this.desginForm.patchValue({
+          invertermodel: value.id
+        });
+        this.isItemInverterMadeAvailable = false;
+      }
 
 }

@@ -72,6 +72,7 @@ import {
   }
 
   login() {
+    console.log(this.loginForm);
     if (this.loginForm.status === 'VALID') {
       this.utils.showLoading('Logging In').then(() => {
         this.apiService.login(this.loginForm.value).subscribe(response => {
@@ -79,6 +80,7 @@ import {
             console.log("Res",response);
             this.storageService.setUser(response.user);
             this.storageService.setJWTToken(response.jwt);
+            // this.storageService.setParentId(response.user.parent.id);
             this.apiService.refreshHeader();
             this.navController.navigateRoot(['homepage']);
           });
