@@ -43,7 +43,7 @@ export class SchedulePage implements OnInit {
   }
 
   ngOnInit() {
-    this.requestLocationPermission();
+    // this.requestLocationPermission();
   }
 
   goBack() {

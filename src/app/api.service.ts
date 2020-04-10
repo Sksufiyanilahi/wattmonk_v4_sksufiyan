@@ -44,7 +44,7 @@ export class ApiService {
     return this.http.get<SolarMake[]>(this.baseUrl + '/modulemakes', { headers: this.headers });
   }
 
-  getSolarMade(id) {
+  getSolarMade(id: number) {
     return this.http.get<SolarMadeModel[]>(this.baseUrl + '/modulemodels?modulemake.id_eq=' + id, { headers: this.headers });
   }
 
@@ -53,7 +53,8 @@ export class ApiService {
   }
 
   getInverterMade(id): Observable<InverterMadeModel[]> {
-    return this.http.get<InverterMadeModel[]>(this.baseUrl + 'invertermodels?invertermake.id_eq=' + id, { headers: this.headers });
+    console.log(id);
+    return this.http.get<InverterMadeModel[]>(this.baseUrl + '/invertermodels?invertermake.id_eq=' + id, { headers: this.headers });
   }
 
   addDesginForm(data: any): Observable<DesginDataModel> {

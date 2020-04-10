@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from 'src/app/model/assignee.model';
-import { SolarMake, SolarMakeData } from 'src/app/model/solar-make.model';
+import { SolarMake } from 'src/app/model/solar-make.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
@@ -21,12 +21,11 @@ import { StorageService } from '../../storage.service';
 export class DesignComponent implements OnInit, OnDestroy {
 
   desginForm: FormGroup;
-  knobValues: '';
   minRange = 100;
   maxRange = 10000;
 
   listOfAssignees: AssigneeModel[] = [];
-  listOfSolarMAke: SolarMake[] = [];
+  listOfSolarMake: SolarMake[] = [];
   isItemSolarMakeAvailable: boolean;
   solarMakeName: any;
 
@@ -34,7 +33,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   isItemSolarMadeAvailable: boolean;
   solarMadeName: any;
 
-  listOfInverterMAke: InverterMakeModel[] = [];
+  listOfInverterMake: InverterMakeModel[] = [];
   isItemInverterMakeAvailable: boolean;
   inverterMakeName: any;
   private subscription: Subscription;
@@ -57,18 +56,25 @@ export class DesignComponent implements OnInit, OnDestroy {
       solarmake: new FormControl('', [Validators.required]),
       solarmodel: new FormControl('', [Validators.required]),
       invertermake: new FormControl('', [Validators.required]),
-      invertermodel: '4',
+      invertermodel: new FormControl('', [Validators.required]),
       monthlybill: new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
       createdby: new FormControl('', [Validators.required]),
-      assignedto: 'string',
-      rooftype: 'flat',
-      jobtype: 'battery',
-      source: 'web',
+      assignedto: new FormControl(''),
+      rooftype: new FormControl('', [Validators.required]),
+      jobtype: new FormControl('', [Validators.required]),
+      source: new FormControl('android', [Validators.required]),
       comment: new FormControl('')
     });
+
+    this.desginForm.get('solarmake').valueChanges.subscribe(val => {
+      this.getSolarMade();
+    });
+    this.desginForm.get('invertermake').valueChanges.subscribe(val => {
+      this.getInverterMade();
+    });
+
     this.utils.getAddressObservable().subscribe((address) => {
-      console.log('Add', address);
       this.desginForm.get('address').setValue(address);
     }, (error) => {
       this.desginForm.get('address').setValue('');
@@ -76,7 +82,6 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.desginForm.patchValue({
       createdby: this.storage.getUserID()
     });
-    this.getSolar();
   }
 
   ngOnInit() {
@@ -85,7 +90,8 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.addForm();
       }
     });
-
+    this.getSolarMake();
+    this.getInverterMake();
     this.getAssignees();
   }
 
@@ -116,155 +122,6 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  getSolar() {
-    this.apiService.getSolarMake().subscribe(response => {
-      console.log(response);
-      this.listOfSolarMAke = response;
-    }, responseError => {
-      const error: ErrorModel = responseError.error;
-      console.log(error);
-      this.utils.showAlert(error.message[0].messages[0].message);
-    });
-
-  }
-
-  getItems(ev: any) {
-    if (this.listOfSolarMAke.length === 0) {
-      this.getSolar();
-    }
-    console.log('reach', this.listOfSolarMAke);
-    if (ev.target.value !== '') {
-      const val = ev.target.value;
-      if (val && val.trim() !== '') {
-        this.isItemSolarMakeAvailable = true;
-        this.listOfSolarMAke = this.listOfSolarMAke.filter((item) => {
-          return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
-        });
-      }
-    } else {
-      this.isItemSolarMakeAvailable = false;
-    }
-  }
-
-
-  selectSolarMake(value) {
-    this.solarMakeName = value.name;
-    this.desginForm.patchValue({
-      solarmake: value.id
-    });
-    this.isItemSolarMakeAvailable = false;
-  }
-
-  getSolarMade() {
-    this.apiService.getSolarMade(this.desginForm.value.solarmake).subscribe(response => {
-      console.log(response);
-      this.listOfSolarMade = response;
-    }, responseError => {
-      const error: ErrorModel = responseError.error;
-      this.utils.showAlert(error.message[0].messages[0].message);
-    });
-
-  }
-
-  getItemsSolarMade(ev: any) {
-    if (this.listOfSolarMade.length === 0) {
-      this.getSolarMade();
-    }
-    if (ev.target.value !== '') {
-      const val = ev.target.value;
-      if (val && val.trim() !== '') {
-        this.isItemSolarMadeAvailable = true;
-        this.listOfSolarMade = this.listOfSolarMade.filter((item) => {
-          return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
-        });
-      }
-    } else {
-      this.isItemSolarMadeAvailable = false;
-    }
-  }
-
-  selectSolarMade(value) {
-    this.solarMadeName = value.name;
-    this.desginForm.patchValue({
-      solarmodel: value.id
-    });
-    this.isItemSolarMadeAvailable = false;
-  }
-
-  getInverter() {
-    this.apiService.getInverterMake().subscribe(response => {
-      console.log(response);
-      this.listOfInverterMAke = response;
-    }, responseError => {
-      const error: ErrorModel = responseError.error;
-      this.utils.showAlert(error.message[0].messages[0].message);
-    });
-
-  }
-
-  getItemsInverterMake(ev: any) {
-    if (this.listOfInverterMAke.length === 0) {
-      this.getInverter();
-    }
-    console.log('reach', this.listOfSolarMAke);
-    if (ev.target.value !== '') {
-      const val = ev.target.value;
-      if (val && val.trim() !== '') {
-        this.isItemInverterMakeAvailable = true;
-        this.listOfInverterMAke = this.listOfInverterMAke.filter((item) => {
-          return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
-        });
-      }
-    } else {
-      this.isItemInverterMakeAvailable = false;
-    }
-  }
-
-  selectInverterMake(value) {
-    this.inverterMakeName = value.name;
-    this.desginForm.patchValue({
-      invertermake: value.id
-    });
-    this.isItemInverterMakeAvailable = false;
-  }
-
-
-  getInverterMade() {
-    this.apiService.getInverterMade(this.desginForm.value.invertermodel).subscribe(response => {
-      console.log(response);
-      this.listOfInverterMade = response;
-    }, responseError => {
-      const error: ErrorModel = responseError.error;
-      this.utils.showAlert(error.message[0].messages[0].message);
-    });
-
-  }
-
-  getItemsInverterMade(ev: any) {
-    if (this.listOfInverterMade.length === 0) {
-      this.getInverterMade();
-    }
-    if (ev.target.value !== '') {
-      const val = ev.target.value;
-      if (val && val.trim() !== '') {
-        this.isItemInverterMadeAvailable = true;
-        this.listOfInverterMade = this.listOfInverterMade.filter((item) => {
-          return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
-        });
-      }
-    } else {
-      this.isItemInverterMadeAvailable = false;
-    }
-  }
-
-  selectInverterMade(value) {
-    this.inverterMadeName = value.name;
-    this.desginForm.patchValue({
-      invertermodel: value.id
-    });
-    this.isItemInverterMadeAvailable = false;
-  }
-
   getAssignees() {
     this.apiService.getAssignees(UserRoles.DESIGNER).subscribe(assignees => {
       this.listOfAssignees = [];
@@ -281,4 +138,59 @@ export class DesignComponent implements OnInit, OnDestroy {
     });
   }
 
+  getSolarMade() {
+    this.utils.showLoading('Getting solar models').then((success) => {
+      this.apiService.getSolarMade(this.desginForm.get('solarmake').value).subscribe(response => {
+        this.utils.hideLoading();
+        console.log(response);
+        this.listOfSolarMade = response;
+      }, responseError => {
+        this.utils.hideLoading();
+        const error: ErrorModel = responseError.error;
+        this.utils.showAlert(error.message[0].messages[0].message);
+      });
+    }, (error) => {
+
+    });
+
+
+  }
+
+  getSolarMake() {
+    this.apiService.getSolarMake().subscribe(response => {
+      this.listOfSolarMake = response;
+    }, responseError => {
+      const error: ErrorModel = responseError.error;
+      console.log(error);
+      this.utils.showAlert(error.message[0].messages[0].message);
+    });
+  }
+
+  getInverterMade() {
+    console.log(this.desginForm.get('invertermake').value);
+    this.utils.showLoading('Getting inverter models').then((success) => {
+      this.apiService.getInverterMade(this.desginForm.get('invertermake').value).subscribe(response => {
+        this.utils.hideLoading();
+        console.log(response);
+        this.listOfInverterMade = response;
+      }, responseError => {
+        this.utils.hideLoading();
+        const error: ErrorModel = responseError.error;
+        this.utils.showAlert(error.message[0].messages[0].message);
+      });
+    }, (reject) => {
+
+    });
+
+  }
+
+  getInverterMake() {
+    this.apiService.getInverterMake().subscribe(response => {
+      console.log(response);
+      this.listOfInverterMake = response;
+    }, responseError => {
+      const error: ErrorModel = responseError.error;
+      this.utils.showAlert(error.message[0].messages[0].message);
+    });
+  }
 }

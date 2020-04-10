@@ -1,0 +1,14 @@
+<ion-item class="ion-no-padding" #searchBar>
+    <ion-input [placeholder]="placeholder" class="form_input" (ionChange)="onValueChanged($event)"
+               [(ngModel)]="selectedDataName"></ion-input>
+</ion-item>
+<ion-grid class="ion-no-padding popup-list" [ngStyle]="{'width.px': searchBar.offSetWidth }"
+          *ngIf="sortedList.length !== 0">
+    <ion-row *ngFor="let data of sortedList" (click)="selectOption(data)">
+        <ion-col size="12">
+            <ion-item>
+                <ion-label>{{data.name}}</ion-label>
+            </ion-item>
+        </ion-col>
+    </ion-row>
+</ion-grid>

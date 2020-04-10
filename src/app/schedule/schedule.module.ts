@@ -7,9 +7,7 @@ import { SchedulePage } from './schedule.page';
 import { SurveyComponent } from './survey/survey.component';
 import { DesignComponent } from './design/design.component';
 import { UtilitiesModule } from '../utilities/utilities.module';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { AutoCompleteModule } from 'ionic4-auto-complete';
 
 
 @NgModule({
@@ -20,8 +18,7 @@ import { AutoCompleteModule } from 'ionic4-auto-complete';
     SchedulePageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    UtilitiesModule,
-    AutoCompleteModule,
+    UtilitiesModule
   ],
   declarations: [
     SchedulePage,
