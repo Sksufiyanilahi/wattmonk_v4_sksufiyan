@@ -73,6 +73,10 @@ export class ApiService {
     return this.http.get<SurveyDataModel[]>(this.baseUrl + '/surveys', { headers: this.headers });
   }
 
+  getSurveyDetail(id): Observable<SurveyDataModel> {
+    return this.http.get<SurveyDataModel>(this.baseUrl + '/surveys?id=' + id, { headers: this.headers });
+  }
+
   refreshHeader() {
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',

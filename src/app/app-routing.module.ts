@@ -45,6 +45,10 @@ const routes: Routes = [
   },  {
     path: 'homepagedetail',
     loadChildren: () => import('./homepagedetail/homepagedetail.module').then( m => m.HomepagedetailPageModule)
+  },
+  {
+    path: 'surveypagedetail',
+    loadChildren: () => import('./surveypagedetail/surveypagedetail.module').then( m => m.SurveypagedetailPageModule)
   }
 
 

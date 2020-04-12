@@ -8,7 +8,7 @@
           </span>
         </ion-col>
         <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
-          <div class="ion-padding custom-card">
+          <div class="ion-padding custom-card"  [routerLink]=" ['/surveypagedetail/',surveyData.id]" routerDirection="forward">
             <span class="customer-name">{{surveyData.name}}</span>
             <span class="customer-email">{{surveyData.email}}</span>
             <span class="customer-phone">{{surveyData.phonenumber}}</span>
