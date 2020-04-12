@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from './model/user.model';
+import { DesginDataHelper } from './homepage/design/design.component';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,14 @@ export class StorageService {
 
   getUser(): User {
     return JSON.parse(localStorage.getItem('user'));
+  }
+
+  setDesgings(desgins: DesginDataHelper[]) {
+    localStorage.setItem('desgin', JSON.stringify(desgins));
+  }
+
+  getDesgins(): DesginDataHelper[] {
+    return JSON.parse(localStorage.getItem('desgin'));
   }
 
   setUserId(userId) {

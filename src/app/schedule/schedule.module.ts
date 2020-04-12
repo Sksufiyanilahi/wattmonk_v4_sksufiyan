@@ -23,7 +23,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
   declarations: [
     SchedulePage,
     SurveyComponent,
-    DesignComponent,
+    DesignComponent
   ],
   providers: [
     Diagnostic

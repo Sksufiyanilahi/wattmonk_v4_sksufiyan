@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { UtilitiesService } from '../utilities.service';
+import { ApiService } from '../api.service';
+import { DatePipe } from '@angular/common';
+import { ErrorModel } from '../model/error.model';
+import { DesginDataModel } from '../model/design.model';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-homepage',
@@ -11,7 +17,13 @@ export class HomepagePage implements OnInit {
   searchQuery: string = '';
   items: string[];
 
-  constructor() {
+
+  constructor(
+    private utils:UtilitiesService,
+    private apiService:ApiService,
+    private datePipe: DatePipe,
+    private storage: StorageService
+  ) {
     this.initializeItems();
   }
 
@@ -44,4 +56,7 @@ export class HomepagePage implements OnInit {
   clearList() {
 
   }
+
 }
+
+

@@ -3,6 +3,7 @@ import { AlertController, LoadingController, ModalController, ToastController } 
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
 import { BehaviorSubject } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
+import { DesginDataModel } from './model/design.model';
 
 @Injectable({
   providedIn: 'root'

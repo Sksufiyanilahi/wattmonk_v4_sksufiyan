@@ -70,6 +70,29 @@ export class DesignDetails {
   }
 
   export class Createdby {
+    id?: number;
+    username: string;
+    email: string;
+    provider: string;
+    confirmed?: boolean;
+    blocked?: boolean;
+    role?: number;
+    created_at?: Date;
+    updated_at?: Date;
+    firstname: string;
+    lastname: string;
+    phone: string;
+    country: string;
+    company: string;
+    callingcode: string;
+    address?: any;
+    registrationnumber?: any;
+    isdefaultpassword?: any;
+    source: string;
+    parent?: any;
+    contractorsubscription?: any;
+    addedby?: any;
+    logo?: any;
   }
 
   export class Assignedto {

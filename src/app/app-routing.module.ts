@@ -42,7 +42,11 @@ const routes: Routes = [
   {
     path: 'gallery',
     loadChildren: () => import('./gallery/gallery.module').then( m => m.GalleryPageModule)
+  },  {
+    path: 'homepagedetail',
+    loadChildren: () => import('./homepagedetail/homepagedetail.module').then( m => m.HomepagedetailPageModule)
   }
+
 
 ];
 

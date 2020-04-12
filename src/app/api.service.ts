@@ -9,7 +9,7 @@ import { StorageService } from './storage.service';
 import { SolarMake } from './model/solar-make.model';
 import { SolarMadeModel } from './model/solar-made.model';
 import { InverterMakeModel } from './model/inverter-make.model';
-import { SurveyModel } from './model/survey.model';
+import { SurveyModel, SurveyDataModel } from './model/survey.model';
 import { DesginDataModel } from './model/design.model';
 import { InverterMadeModel } from './model/inverter-made.model';
 import { AssigneeModel } from './model/assignee.model';
@@ -61,6 +61,18 @@ export class ApiService {
     return this.http.post<DesginDataModel>(this.baseUrl + '/designs', data, { headers: this.headers });
   }
 
+  getDesgin() {
+    return this.http.get<DesginDataModel[]>(this.baseUrl + '/designs', { headers: this.headers });
+  }
+
+  getDesginDetail(id): Observable<DesginDataModel> {
+    return this.http.get<DesginDataModel>(this.baseUrl + '/designs?id=' + id, { headers: this.headers });
+  }
+
+  getSurvey() {
+    return this.http.get<SurveyDataModel[]>(this.baseUrl + '/surveys', { headers: this.headers });
+  }
+
   refreshHeader() {
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -69,8 +81,8 @@ export class ApiService {
     this.parentId = this.storageService.getParentId();
   }
 
-  saveSurvey(data: any): Observable<SurveyModel> {
-    return this.http.post<SurveyModel>(this.baseUrl + '/surveys', data, { headers: this.headers });
+  saveSurvey(data: any): Observable<SurveyDataModel[]> {
+    return this.http.post<SurveyDataModel[]>(this.baseUrl + '/surveys', data, { headers: this.headers });
   }
 
   getAssignees(userType: number): Observable<AssigneeModel[]> {

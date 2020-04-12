@@ -1,18 +1,18 @@
 <ion-content>
-  <div *ngFor="let design of listOfDesigns" class="ion-no-padding">
+  <div *ngFor="let item of listofDesginDataHelper;let i = index" class="ion-no-padding">
     <ion-grid>
       <ion-row>
         <ion-col size="12">
           <span class="ion-padding">
-            {{design.date}}
+            {{item.date}}
           </span>
         </ion-col>
-        <ion-col *ngFor="let customer of design.designs" size="6">
-          <div class="ion-padding custom-card">
-            <span class="customer-name">{{customer.customer}}</span>
-            <span class="customer-email">{{customer.customerEmail}}</span>
-            <span class="customer-phone">{{customer.customerPhone}}</span>
-            <span class="customer-address">{{customer.customerAddress}}</span>
+        <ion-col *ngFor="let desginData of item.listOfDesigns;let i = index " size="6">
+          <div class="ion-padding custom-card"  [routerLink]=" ['/homepagedetail/',desginData.id]" routerDirection="forward">
+            <span class="customer-name">{{desginData.name}}</span>
+            <span class="customer-email">{{desginData.email}}</span>
+            <span class="customer-phone">+91-7325878737</span>
+            <span class="customer-address">{{desginData.address}}</span>
             <span class="ion-text-end action-button-color">Assign</span>
           </div>
 
