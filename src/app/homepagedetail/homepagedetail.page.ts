@@ -4,6 +4,7 @@ import { DesginDataModel } from '../model/design.model';
 import { ApiService } from '../api.service';
 import { UtilitiesService } from '../utilities.service';
 import { ErrorModel } from '../model/error.model';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-homepagedetail',
@@ -18,7 +19,8 @@ export class HomepagedetailPage implements OnInit {
   constructor(
     private route:ActivatedRoute,
     private apiservice: ApiService,
-    private utils: UtilitiesService
+    private utils: UtilitiesService,
+    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -26,6 +28,7 @@ export class HomepagedetailPage implements OnInit {
     console.log(this.myId);
     this.desginData = new DesginDataModel();
     this.getDesginDetail();
+    console.log("re",this.desginData.phonenumber)
   }
 
   getDesginDetail(){
@@ -40,6 +43,10 @@ export class HomepagedetailPage implements OnInit {
         this.utils.showAlert(error.message[0].messages[0].message);
       });   
   });
+  }
+
+  goBack() {
+    this.navController.pop()
   }
 
 }

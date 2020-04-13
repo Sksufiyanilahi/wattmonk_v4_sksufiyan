@@ -103,6 +103,7 @@ export class DesignDetails {
       name: string;
       email: string;
       monthlybill: number;
+      phonenumber: string;
       created_at: Date;
       updated_at: Date;
       address: string;
