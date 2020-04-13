@@ -17,7 +17,7 @@ export class DesignDetailsPage implements OnInit {
 
   designId: number;
   design: DesginDataModel;
-  private listOfAssignees: AssigneeModel[] = [];
+  listOfAssignees: AssigneeModel[] = [];
 
   constructor(
     private utilities: UtilitiesService,

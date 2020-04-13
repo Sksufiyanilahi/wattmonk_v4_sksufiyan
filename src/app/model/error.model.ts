@@ -1,7 +1,7 @@
 export class ErrorModel {
   statusCode: number;
   error: string;
-  message: ErrorMessageList[] | string;
+  message: ErrorMessageList[];
 }
 
 export class ErrorMessageList {

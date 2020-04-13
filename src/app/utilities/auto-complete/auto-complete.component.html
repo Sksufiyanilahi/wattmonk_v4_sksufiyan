@@ -2,7 +2,7 @@
     <ion-input [placeholder]="placeholder" class="form_input" (ionChange)="onValueChanged($event)"
                [(ngModel)]="selectedDataName"></ion-input>
 </ion-item>
-<ion-grid class="ion-no-padding popup-list" [ngStyle]="{'width.px': searchBar.offSetWidth }"
+<ion-grid class="ion-no-padding popup-list"
           *ngIf="sortedList.length !== 0">
     <ion-row *ngFor="let data of sortedList" (click)="selectOption(data)">
         <ion-col size="12">

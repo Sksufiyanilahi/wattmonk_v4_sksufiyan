@@ -85,6 +85,14 @@ export class ApiService {
     return this.http.get<SurveyDataModel>(this.baseUrl + '/surveys/' + id, { headers: this.headers });
   }
 
+  deleteSurvey(id): Observable<SurveyDataModel> {
+    return this.http.delete<SurveyDataModel>(this.baseUrl + '/surveys/' + id, { headers: this.headers });
+  }
+
+  updateSurveyForm(data: any, id: number): Observable<SurveyDataModel> {
+    return this.http.put<SurveyDataModel>(this.baseUrl + '/surveys/' + id, data, { headers: this.headers });
+  }
+
   refreshHeader() {
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',

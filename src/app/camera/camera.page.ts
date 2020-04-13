@@ -151,6 +151,7 @@ export class CameraPage implements OnInit {
   }
 
   stopCamera() {
+    this.showCameraInterface = false;
     this.cameraPreview.stopCamera().then(result => {
       this.showCameraInterface = false;
     });

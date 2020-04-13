@@ -3,7 +3,11 @@
         <ion-row>
             <ion-col size="auto">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
-                    <ion-icon name="arrow-back-outline" color="dark" size="large"></ion-icon>
+                    <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+                </ion-button>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-button fill="clear" disabled="true" size="small" class="ion-no-padding action-icon">
                 </ion-button>
             </ion-col>
             <ion-col>
@@ -14,14 +18,16 @@
                     <ion-row class="ion-align-items-center ion-justify-content-center">
                         <span class="survey-email">{{survey.email}}</span>
                     </ion-row>
-                    <ion-row class="ion-align-items-center ion-justify-content-center">
-                        <span class="survey-phone">{{survey.phonenumber}}</span>
-                    </ion-row>
                 </ion-grid>
             </ion-col>
             <ion-col size="auto">
-                <ion-button fill="clear" size="small" class="ion-no-padding" (click)="chat()">
-                    <ion-icon name="chatbox-sharp" color="dark" size="large"></ion-icon>
+                <ion-button fill="clear" size="small" class="ion-no-padding">
+                    <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
+                </ion-button>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteSurvey()">
+                    <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
         </ion-row>
@@ -40,24 +46,50 @@
     </ion-grid>
 </ion-header>
 
-<ion-content class="ion-padding">
-    <ion-grid *ngIf="survey">
+<ion-content class="ion-padding page-text-color" no-bounce>
+    <ion-grid *ngIf="survey" class="page-text-color">
         <ion-row>
-            <ion-col size="7">
-                <span>{{survey.address}}</span>
+            <ion-col size="12">
+                <span class="address">{{survey.address}}</span>
             </ion-col>
-            <ion-col size="5" class="ion-text-end">
-                <ion-grid class="ion-no-padding">
-                    <ion-row>
-                        <ion-col><span>{{survey.datetime | date: 'dd MMM, yyyy'}}</span></ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span>{{survey.datetime | date: 'hh:MM a'}}</span></ion-col>
-                    </ion-row>
-                </ion-grid>
-
+            <!--            <ion-col size="5" class="ion-text-end">-->
+            <!--                <ion-grid class="ion-no-padding">-->
+            <!--                    <ion-row>-->
+            <!--                        <ion-col><span>{{survey.datetime | date: 'dd MMM, yyyy'}}</span></ion-col>-->
+            <!--                    </ion-row>-->
+            <!--                    <ion-row>-->
+            <!--                        <ion-col><span>{{survey.datetime | date: 'hh:MM a'}}</span></ion-col>-->
+            <!--                    </ion-row>-->
+            <!--                </ion-grid>-->
+            <!--            </ion-col>-->
+        </ion-row>
+        <ion-row class="ion-margin-top">
+            <ion-col size="12">
+                <span class="input-placeholder">date and time</span>
+            </ion-col>
+            <ion-col>
+                <div class="d-flex">
+                    <div class="d-flex flex-column">
+                        <div class="main-background d-flex flex-row align-center justify-center">
+                            <div class="d-flex flex-column align-center justify-center ion-padding date-background">
+                                <span class="month">{{survey.datetime | date: 'MMM'}}</span>
+                                <span class="day">{{survey.datetime | date: 'dd'}}</span>
+                            </div>
+                            <div class="ion-padding">
+                                <span class="time">{{survey.datetime | date: 'hh : mm a'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ion-col>
+            <ion-col size="auto">
+                <div class="d-flex flex-column align-center justify-center" (click)="reschedule()">
+                    <ion-img src="/assets/images/schedule.svg" class="reschedule-icon"></ion-img>
+                    <span>Reschedule</span>
+                </div>
             </ion-col>
         </ion-row>
+
 
         <ion-row class="ion-align-items-center ion-justify-content-center ion-margin-top">
             <ion-col class="ion-no-padding">
@@ -81,5 +113,71 @@
             </ion-col>
         </ion-row>
 
+        <ion-row class="ion-no-padding ion-margin-top">
+            <ion-col size="12">
+                <span class="models">assign</span>
+            </ion-col>
+            <ion-col size="12">
+                <div scrollX="true">
+                    <div class="d-flex flex-row">
+                        <div *ngFor="let assignee of listOfAssignees" class="assignee-margin assignee-image">
+                            <img *ngIf="assignee.logo" [src]="assignee.logo.url" class="assignee-image selected"
+                                 [class.selected]="assignee.selected" [class.normal]="!assignee.selected"/>
+                            <img *ngIf="!assignee.logo" src="/assets/images/user_placeholder.jpg"
+                                 class="assignee-image selected" [class.selected]="assignee.selected"
+                                 [class.normal]="!assignee.selected"/>
+                        </div>
+                    </div>
+                </div>
+            </ion-col>
+        </ion-row>
+
     </ion-grid>
 </ion-content>
+
+<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
+                   shouldBounce="false" distanceTop="0" class="ion-padding drawer">
+    <form [formGroup]="rescheduleForm">
+        <ion-grid class="drawer">
+
+            <ion-row>
+                <ion-col size="12">
+                    <span>date and time</span>
+                </ion-col>
+                <ion-col *ngIf="survey" size="auto">
+                    <ion-item lines="none" class="date-picker" (click)="changeDate()">
+                        {{date | date: 'dd MMM'}}
+                    </ion-item>
+                </ion-col>
+                <ion-col *ngIf="survey" size="auto">
+                    <ion-item lines="none" class="date-picker" (click)="changeTime()">
+                        {{date | date: 'hh mm a'}}
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col size="12">
+                    <span>comments</span>
+                </ion-col>
+                <ion-col size="12">
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" formControlName="comments" rows="3"></ion-textarea>
+                </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col size="auto">
+                    <ion-item lines="none" class="picker-button" (click)="rescheduleSurvey()">
+                        Confirm
+                    </ion-item>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-item lines="none" class="picker-button" (click)="dismissBottomSheet()">
+                        Cancel
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+
+</ion-bottom-drawer>
