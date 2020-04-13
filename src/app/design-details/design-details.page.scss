@@ -1,0 +1,105 @@
+.survey-email {
+  font-size: 0.8em;
+}
+
+.survey-name {
+  font-size: 1.7em;
+}
+
+.survey-phone {
+  font-size: 0.8em;
+}
+
+ion-header {
+  color: #666666;
+}
+
+.page-text-color {
+  color: #666666 !important;;
+}
+
+.header-icon {
+  padding: 8px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  width: 48px;
+  height: 48px;
+}
+
+.image-count {
+  width: 48px;
+  height: 48px;
+}
+
+.data-header {
+  font-size: 0.9em;
+  color: #BFBFBF;
+}
+
+.data-point {
+  font-size: 1em;
+  color: black;
+}
+
+.address {
+  font-size: 1.3em;
+  color: #3a7be0;
+}
+
+.models {
+  font-size: 1.2em;
+}
+
+.model-type {
+  font-size: 1em;
+}
+
+.model-name {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.comment {
+  font-size: 1.3em;
+}
+
+.assignee-image {
+  width: 3.5em;
+  height: 3.5em;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #FFF1CF;
+}
+
+.assignee-margin {
+  margin: 8px;
+}
+
+.selected {
+  border: 4px solid #DC6E67;
+}
+
+.normal {
+  border: 4px solid white;
+}
+
+div[scrollx=true], div[scrolly=true] {
+  position: relative;
+  overflow: hidden;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+div[scrollx=true] {
+  overflow-x: auto;
+}
+
+div[scrolly=true] {
+  overflow-y: auto;
+}
+
+
+

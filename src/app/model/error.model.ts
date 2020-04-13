@@ -1,10 +1,10 @@
 export class ErrorModel {
   statusCode: number;
   error: string;
-  message: ErrorMessageList[];
+  message: ErrorMessageList[] | string;
 }
 
-export class ErrorMessageList{
+export class ErrorMessageList {
   messages: ErrorMessage[];
 }
 

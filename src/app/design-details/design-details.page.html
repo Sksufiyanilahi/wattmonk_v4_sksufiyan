@@ -1,0 +1,154 @@
+<ion-header class="ion-no-border" *ngIf="design">
+    <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
+        <ion-row>
+            <ion-col size="auto">
+                <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+                    <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+                </ion-button>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-button fill="clear" disabled="true" size="small" class="ion-no-padding action-icon">
+                </ion-button>
+            </ion-col>
+            <ion-col>
+                <ion-grid class="ion-align-items-center ion-justify-content-center">
+                    <ion-row class="ion-align-items-center ion-justify-content-center">
+                        <span class="survey-name">{{design.name}}</span>
+                    </ion-row>
+                    <ion-row class="ion-align-items-center ion-justify-content-center">
+                        <span class="survey-email">{{design.email}}</span>
+                    </ion-row>
+                </ion-grid>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-button fill="clear" size="small" class="ion-no-padding" [routerLink]="['/edit-design/',designId]"
+                            routerDirection="forward">
+                    <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
+                </ion-button>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()">
+                    <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-grid class="position-relative ion-no-padding">
+        <ion-row class="ion-no-padding border-header header-half-height">
+        </ion-row>
+        <ion-row class="ion-no-padding header-half-height">
+
+        </ion-row>
+        <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
+            <ion-col class="flex-center">
+                <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
+
+<ion-content class="ion-padding page-text-color">
+    <ion-grid *ngIf="design" class="page-text-color">
+        <ion-row>
+            <ion-col>
+                <span class="address">{{design.address}}</span>
+            </ion-col>
+            <ion-col size="auto" class="ion-text-end">
+                <ion-grid class="ion-no-padding">
+                    <ion-row>
+                        <ion-col><span class="data-header">monthly bill</span></ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span>{{design.monthlybill | currency: 'USD'}}</span></ion-col>
+                    </ion-row>
+                </ion-grid>
+
+            </ion-col>
+        </ion-row>
+
+        <!--    <ion-row class="ion-align-items-center ion-justify-content-center ion-margin-top">-->
+        <!--      <ion-col class="ion-no-padding">-->
+        <!--        <span class="data-header">gallery</span>-->
+        <!--      </ion-col>-->
+        <!--      <ion-col size="auto">-->
+        <!--        <span>View all</span>-->
+        <!--      </ion-col>-->
+        <!--      <ion-col class="ion-align-items-center d-flex" size="12">-->
+        <!--        <img src="/assets/images/images.svg" class="image-count">-->
+        <!--        <span>{{getSurveyImages()}} images</span>-->
+        <!--      </ion-col>-->
+        <!--    </ion-row>-->
+
+        <ion-row class="ion-margin-top">
+            <ion-col size="12">
+                <span class="models">Solar Details</span>
+            </ion-col>
+            <ion-col>
+                <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-no-padding">
+                        <ion-col><span class="model-type">make</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{design.solarmake.name}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">model</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{design.solarmodel.name}}</span>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-margin-top">
+            <ion-col size="12">
+                <span class="models">Inverter Details</span>
+            </ion-col>
+            <ion-col>
+                <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-no-padding">
+                        <ion-col><span class="model-type">make</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{design.invertermake.name}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">model</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{design.invertermodel.name}}</span>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-no-padding ion-margin-top">
+            <ion-col size="12" class="ion-no-padding">
+                <span class="models">comment</span>
+            </ion-col>
+            <ion-col size="12" class="ion-no-padding">
+                <span class="comment">"{{design.comments}}"</span>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-no-padding ion-margin-top">
+            <ion-col size="12">
+                <span class="models">assign</span>
+            </ion-col>
+            <ion-col size="12">
+                <div scrollX="true">
+                    <div class="d-flex flex-row">
+                        <div *ngFor="let assignee of listOfAssignees" class="assignee-margin assignee-image">
+                            <img *ngIf="assignee.logo" [src]="assignee.logo.url" class="assignee-image selected"
+                                 [class.selected]="assignee.selected" [class.normal]="!assignee.selected"/>
+                            <img *ngIf="!assignee.logo" src="/assets/images/user_placeholder.jpg"
+                                 class="assignee-image selected" [class.selected]="assignee.selected"
+                                 [class.normal]="!assignee.selected"/>
+                        </div>
+                    </div>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

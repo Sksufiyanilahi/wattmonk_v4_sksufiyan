@@ -78,7 +78,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
-            this.navController.navigateForward('camera');
+            this.navController.navigateForward('camera' + survey.id);
           });
         }, (error) => {
 

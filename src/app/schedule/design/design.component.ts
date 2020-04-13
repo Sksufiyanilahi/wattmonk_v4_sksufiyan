@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from 'src/app/model/assignee.model';
 import { SolarMake } from 'src/app/model/solar-make.model';
 import { ApiService } from 'src/app/api.service';
@@ -64,7 +64,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       rooftype: new FormControl('', [Validators.required]),
       jobtype: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
-      comment: new FormControl('')
+      comments: new FormControl('')
     });
 
     this.desginForm.get('solarmake').valueChanges.subscribe(val => {
@@ -102,7 +102,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   addForm() {
     console.log('Reach', this.desginForm.value);
     if (this.desginForm.status === 'VALID') {
-      this.utils.showLoading('Adding form').then(() => {
+      this.utils.showLoading('Saving').then(() => {
         this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
@@ -118,9 +118,33 @@ export class DesignComponent implements OnInit, OnDestroy {
       });
 
     } else {
-      this.utils.showAlert('Invalid Credentials');
+      this.showInvalidFormAlert();
     }
   }
+
+  showInvalidFormAlert() {
+    let error = '';
+    Object.keys(this.desginForm.controls).forEach((key: string) => {
+      const control: AbstractControl = this.desginForm.get(key);
+      if (control.invalid) {
+        if (error !== '') {
+          error = error + '<br/>';
+        }
+        if (control.errors.required === true) {
+          error = error + this.utils.capitalizeWord(key) + ' is required';
+        }
+        if (control.errors.email === true) {
+          error = error + 'Invalid email';
+        }
+        if (control.errors.error !== null && control.errors.error !== undefined) {
+          error = error + control.errors.error;
+        }
+      }
+    });
+    console.log(this.desginForm.value);
+    this.utils.showAlert(error);
+  }
+
 
   getAssignees() {
     this.apiService.getAssignees(UserRoles.DESIGNER).subscribe(assignees => {
@@ -131,7 +155,7 @@ export class DesignComponent implements OnInit, OnDestroy {
           url: '/assets/images/wattmonk_logo.png'
         },
         selected: false,
-        id: this.storage.getUser().id
+        id: +this.storage.getUserID()
       });
       assignees.forEach(item => this.listOfAssignees.push(item));
       console.log(this.listOfAssignees);

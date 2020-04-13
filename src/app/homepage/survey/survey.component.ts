@@ -13,39 +13,45 @@ import { DatePipe } from '@angular/common';
 export class SurveyComponent implements OnInit {
 
   listOfSurveyData: SurveyDataModel[] = [];
-  listofSurveyDataHelper: SurveyDataHelper[] = [];
+  listOfSurveyDataHelper: SurveyDataHelper[] = [];
 
   constructor(
-    private utils:UtilitiesService,
+    private utils: UtilitiesService,
     private apiService: ApiService,
     private datePipe: DatePipe,
-  ) { 
+  ) {
+  }
+
+  ngOnInit() {
+  }
+
+  ionViewDidEnter() {
     this.getSurvey();
   }
 
-  ngOnInit() {}
-
   getSurvey() {
+    this.listOfSurveyData = [];
+    this.listOfSurveyDataHelper = [];
     this.utils.showLoading('Getting Surveys').then((success) => {
       this.apiService.getSurvey().subscribe(response => {
         this.utils.hideLoading();
         console.log(response);
         this.listOfSurveyData = response;
         this.listOfSurveyData.forEach((surveyItem) => {
-          if (this.listofSurveyDataHelper.length === 0) {
+          if (this.listOfSurveyDataHelper.length === 0) {
             const listOfSurvey = new SurveyDataHelper();
             listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
             listOfSurvey.listOfSurveys.push(surveyItem);
-            this.listofSurveyDataHelper.push(listOfSurvey);
+            this.listOfSurveyDataHelper.push(listOfSurvey);
           } else {
-            this.listofSurveyDataHelper.forEach((surveyList) => {
-              if(surveyList.date === this.datePipe.transform(surveyItem.created_at,'M/d/yy')) {
+            this.listOfSurveyDataHelper.forEach((surveyList) => {
+              if (surveyList.date === this.datePipe.transform(surveyItem.created_at, 'M/d/yy')) {
                 surveyList.listOfSurveys.push(surveyItem);
-              }else{
+              } else {
                 const listOfSurvey = new SurveyDataHelper();
                 listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
                 listOfSurvey.listOfSurveys.push(surveyItem);
-                this.listofSurveyDataHelper.push(listOfSurvey);
+                this.listOfSurveyDataHelper.push(listOfSurvey);
               }
             });
           }

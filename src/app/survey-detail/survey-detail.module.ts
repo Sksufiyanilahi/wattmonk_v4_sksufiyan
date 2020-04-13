@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { SurveypagedetailPageRoutingModule } from './surveypagedetail-routing.module';
+import { SurveyDetailPageRoutingModule } from './survey-detail-routing.module';
 
-import { SurveypagedetailPage } from './surveypagedetail.page';
+import { SurveyDetailPage } from './survey-detail.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SurveypagedetailPageRoutingModule
+    SurveyDetailPageRoutingModule
   ],
-  declarations: [SurveypagedetailPage]
+  declarations: [SurveyDetailPage]
 })
-export class SurveypagedetailPageModule {}
+export class SurveyDetailPageModule {}

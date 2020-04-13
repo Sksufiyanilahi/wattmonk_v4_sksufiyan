@@ -1,24 +1,34 @@
 <ion-content>
-  <div *ngFor="let item of listofDesginDataHelper;let i = index" class="ion-no-padding">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="12">
-          <span class="ion-padding">
-            {{item.date}}
-          </span>
-        </ion-col>
-        <ion-col *ngFor="let desginData of item.listOfDesigns;let i = index " size="6">
-          <div class="ion-padding custom-card"  [routerLink]=" ['/homepagedetail/',desginData.id]" routerDirection="forward">
-            <span class="customer-name">{{desginData.name}}</span>
-            <span class="customer-email">{{desginData.email}}</span>
-            <span class="customer-phone">+91-7325878737</span>
-            <span class="customer-address">{{desginData.address}}</span>
-            <span class="ion-text-end action-button-color">Assign</span>
-          </div>
+    <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
+        <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index">
+            <ion-col size="12">
+                    <span class="ion-padding">
+                      {{item.date | date: 'dd MMM yyyy'}}
+                    </span>
+            </ion-col>
+            <ion-col *ngFor="let desginData of item.listOfDesigns;let i = index " size="6">
+                <div class="ion-padding custom-card" [routerLink]="['/design-details/',desginData.id]"
+                     routerDirection="forward">
+                    <span class="customer-name">{{desginData.name}}</span>
+                    <span class="customer-email">{{desginData.email}}</span>
+                    <span class="customer-phone">+91-7325878737</span>
+                    <span class="customer-address">{{desginData.address}}</span>
+                    <span class="ion-text-end action-button-color">Assign</span>
+                </div>
 
-        </ion-col>
-      </ion-row>
+            </ion-col>
+        </ion-row>
     </ion-grid>
-  </div>
+
+    <ion-grid *ngIf="listOfDesignDataHelper.length === 0" class="ion-margin ion-padding">
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+            <ion-col class="ion-align-items-center ion-justify-content-center d-flex">
+                <ion-item lines="none" class="ion-align-items-center ion-justify-content-center d-flex">
+                    <ion-img src="/assets/images/login_background.png" class="placeholder"></ion-img>
+                </ion-item>
+
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
 </ion-content>

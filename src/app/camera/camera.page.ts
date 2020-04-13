@@ -9,6 +9,7 @@ import { CAMERA_MODULE_MENU } from '../model/constants';
 import { Storage } from '@ionic/storage';
 import { UtilitiesService } from '../utilities.service';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-camera',
@@ -17,7 +18,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 })
 export class CameraPage implements OnInit {
 
-  surveyId = 12;
+  surveyId: number;
   itemName = 'MSP';
 
   cameraPreviewOpts: CameraPreviewOptions;
@@ -51,8 +52,10 @@ export class CameraPage implements OnInit {
     private alertController: AlertController,
     private utilities: UtilitiesService,
     private formBuilder: FormBuilder,
-    private diagnostic: Diagnostic
+    private diagnostic: Diagnostic,
+    private route: ActivatedRoute
   ) {
+    this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.selectMenu(this.mainMenu[0], 0);
     this.selectSubMenu(this.mainMenu[0].subMenu[0], 0);
 
