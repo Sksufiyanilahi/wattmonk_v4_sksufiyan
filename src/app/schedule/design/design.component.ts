@@ -75,7 +75,15 @@ export class DesignComponent implements OnInit, OnDestroy {
     });
 
     this.utils.getAddressObservable().subscribe((address) => {
-      this.desginForm.get('address').setValue(address);
+      console.log("reaching",this.desginForm.value);
+      console.log("reaching 2",address);
+      if(this.desginForm.value.address !== ""){
+        this.desginForm.patchValue({
+          address: address
+        });
+      }else{
+        this.desginForm.get('address').setValue(address);
+      }
     }, (error) => {
       this.desginForm.get('address').setValue('');
     });

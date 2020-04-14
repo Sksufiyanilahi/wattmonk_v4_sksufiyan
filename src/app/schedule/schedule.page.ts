@@ -107,6 +107,7 @@ export class SchedulePage implements OnInit {
     this.utilities.hideLoading().then((success) => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
+            console.log("resul",result)
             this.address = this.generateAddress(result[0]);
             this.utilities.setAddress(this.address);
           })

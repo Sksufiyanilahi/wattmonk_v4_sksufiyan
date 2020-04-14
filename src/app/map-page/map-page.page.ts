@@ -1,7 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { GeolocationOptions, Geoposition, Geolocation } from '@ionic-native/geolocation/ngx';
+import { google } from "google-maps";
+import { UtilitiesService } from '../utilities.service';
+import { Router } from '@angular/router';
 
-declare var google;
+ declare var google;
 
 @Component({
   selector: 'app-map-page',
@@ -14,11 +17,27 @@ export class MapPagePage implements OnInit {
   options : GeolocationOptions;
  currentPos : Geoposition;
 
+  GoogleAutocomplete: google.maps.places.AutocompleteService;
+  autocomplete: { input: string; };
+  autocompleteItems: any[];
+  location: any;
+  placeid: any;
+  address = '';
+
 map: any;
 
+geocoder = new google.maps.Geocoder();
+
   constructor(
-    private geoLocation: Geolocation
-  ) { }
+    private geoLocation: Geolocation,
+    public zone: NgZone,
+    public utils: UtilitiesService,
+    public router: Router
+  ) {
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService()
+    this.autocomplete = { input: '' };
+    this.autocompleteItems = [];
+   }
 
   ngOnInit() {
     this.getUserPosition();
@@ -46,7 +65,6 @@ addMarker(){
   animation: google.maps.Animation.DROP,
   position: this.map.getCenter()
   });
-
   let content = "<p>This is your current position !</p>";          
   let infoWindow = new google.maps.InfoWindow({
   content: content
@@ -56,6 +74,47 @@ addMarker(){
   infoWindow.open(this.map, marker);
   });
 
+}
+
+updateSearchResults(){
+  if (this.autocomplete.input == '') {
+    this.autocompleteItems = [];
+    return;
+  }
+  this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
+  (predictions, status) => {
+    console.log("pre",predictions);
+    this.autocompleteItems = [];
+    this.zone.run(() => {
+      predictions.forEach((prediction) => {
+        this.autocompleteItems.push(prediction);
+      });
+    });
+  });
+}
+selectSearchResult(item) {
+  var  address;
+  console.log(item)
+  this.location = item
+  this.placeid = this.location.place_id
+  console.log('placeid'+ this.placeid)
+  this.geocoder.geocode({ 
+    'placeId': this.placeid
+},(responses, status) => {
+    if (status == 'OK') {
+      responses.forEach((response) => {
+        console.log("response",response);
+       address = response.formatted_address;
+});
+        var lat = responses[0].geometry.location.lat();
+        var lng = responses[0].geometry.location.lng();
+        console.log(lat, lng);
+    }
+    console.log("add",address);
+    this.utils.setAddress(address);
+    console.log("addnew",this.utils.getAddressObservable());   
+this.router.navigateByUrl('/schedule');
+});
 }
 
 getUserPosition(){
