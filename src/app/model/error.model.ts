@@ -4,7 +4,7 @@ export class ErrorModel {
   message: ErrorMessageList[];
 }
 
-export class ErrorMessageList{
+export class ErrorMessageList {
   messages: ErrorMessage[];
 }
 

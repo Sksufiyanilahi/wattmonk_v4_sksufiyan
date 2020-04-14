@@ -23,7 +23,7 @@ const routes: Routes = [
    canActivate: [AuthGuardService]
   },
   {
-    path: 'camera',
+    path: 'camera/:id',
     loadChildren: () => import('./camera/camera.module').then(m => m.CameraPageModule),
     canActivate: [AuthGuardService]
   },
@@ -42,14 +42,25 @@ const routes: Routes = [
   {
     path: 'gallery',
     loadChildren: () => import('./gallery/gallery.module').then( m => m.GalleryPageModule)
-  },  {
+  },
+  {
     path: 'homepagedetail',
     loadChildren: () => import('./homepagedetail/homepagedetail.module').then( m => m.HomepagedetailPageModule)
   },
   {
-    path: 'surveypagedetail',
-    loadChildren: () => import('./surveypagedetail/surveypagedetail.module').then( m => m.SurveypagedetailPageModule)
+    path: 'survey-detail/:id',
+    loadChildren: () => import('./survey-detail/survey-detail.module').then( m => m.SurveyDetailPageModule)
+  },
+  {
+    path: 'design-details/:id',
+    loadChildren: () => import('./design-details/design-details.module').then( m => m.DesignDetailsPageModule)
+  },
+  {
+    path: 'edit-design/:id',
+    loadChildren: () => import('./edit-design/edit-design.module').then( m => m.EditDesignPageModule)
   }
+
+
 
 
 ];

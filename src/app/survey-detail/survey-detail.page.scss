@@ -1,0 +1,132 @@
+.survey-email {
+  font-size: 0.8em;
+}
+
+.survey-name {
+  font-size: 1.7em;
+}
+
+.survey-phone {
+  font-size: 0.8em;
+}
+
+ion-header {
+  color: #666666;
+}
+
+.header-icon {
+  padding: 8px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  width: 48px;
+  height: 48px;
+}
+
+.image-count {
+  width: 48px;
+  height: 48px;
+}
+
+.data-header {
+  font-size: 0.9em;
+  color: #BFBFBF;
+}
+
+.data-point {
+  font-size: 1em;
+  color: black;
+}
+
+.address {
+  font-size: 1.3em;
+  color: #3a7be0;
+}
+
+.main-background {
+  background: #EFEFEF;
+  border-radius: 0.5em;
+  color: #656565;
+}
+
+.date-background {
+  width: 4em;
+  height: 4em;
+  background: #DC6E67;
+  border-radius: 0.5em;
+  color: white;
+}
+
+.month {
+  font-size: 1em;
+}
+
+.day {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.time {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.reschedule-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.assignee-image {
+  width: 3.5em;
+  height: 3.5em;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #FFF1CF;
+}
+
+.assignee-margin {
+  margin: 8px;
+}
+
+.selected {
+  border: 4px solid #DC6E67;
+}
+
+.normal {
+  border: 4px solid white;
+}
+
+div[scrollx=true], div[scrolly=true] {
+  position: relative;
+  overflow: hidden;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+div[scrollx=true] {
+  overflow-x: auto;
+}
+
+div[scrolly=true] {
+  overflow-y: auto;
+}
+
+.drawer {
+  background: #F3F3F3;
+}
+
+.ion-bottom-drawer-scrollable-content {
+  background: #F3F3F3 !important;
+}
+
+.date-picker {
+  --background: #E1E1E1;
+  --border: 2px solid #666666;
+}
+
+.picker-button {
+  --background: #DC6E67;
+  --color: white;
+}

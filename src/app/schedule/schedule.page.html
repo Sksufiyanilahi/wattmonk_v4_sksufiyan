@@ -25,10 +25,8 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-</ion-header>
 
-<ion-content>
-    <div class="ion-margin-start ion-margin-end">
+    <ion-grid class="ion-margin-start ion-margin-end margin-top">
         <ion-segment mode="ios" class="segments" (ionChange)="segmentChanged($event)" [value]="currentTab">
             <ion-segment-button value="design">
                 <ion-label>Design</ion-label>
@@ -37,21 +35,23 @@
                 <ion-label>Survey</ion-label>
             </ion-segment-button>
         </ion-segment>
-    </div>
-    <ion-content>
-        <ion-tabs #tabs>
-            <ion-tab-bar slot="top" style="display:none;">
-                <ion-tab-button tab="design">
-                    <ion-label>Design</ion-label>
-                </ion-tab-button>
+    </ion-grid>
+</ion-header>
 
-                <ion-tab-button tab="survey">
-                    <ion-label>Survey</ion-label>
-                </ion-tab-button>
-            </ion-tab-bar>
-        </ion-tabs>
-    </ion-content>
+<ion-content>
+    <ion-tabs #tabs>
+        <ion-tab-bar slot="top" style="display:none;">
+            <ion-tab-button tab="design">
+                <ion-label>Design</ion-label>
+            </ion-tab-button>
+
+            <ion-tab-button tab="survey">
+                <ion-label>Survey</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+    </ion-tabs>
 </ion-content>
+
 <ion-footer class="ion-no-border white-bg">
     <ion-grid *ngIf="currentTab === 'design'">
         <ion-row>

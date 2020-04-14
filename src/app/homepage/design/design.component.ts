@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DesignModel, DesginDataModel } from "../../model/design.model";
+import { DesignModel, DesginDataModel } from '../../model/design.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
@@ -13,54 +13,61 @@ import { StorageService } from 'src/app/storage.service';
 })
 export class DesignComponent implements OnInit {
 
-  listofDesginDataHelper: DesginDataHelper[] = [];
+  listOfDesignDataHelper: DesginDataHelper[] = [];
   listOfDesignsData: DesginDataModel[] = [];
 
 
   constructor(
-    private utils:UtilitiesService,
-    private apiService:ApiService,
+    private utils: UtilitiesService,
+    private apiService: ApiService,
     private datePipe: DatePipe,
     private storage: StorageService
-      ) {
-     this.getDesgin();
-    // this.listofDesginDataHelper = this.storage.getDesgins();
-    // console.log("desgin",this.listofDesginDataHelper);
+  ) {
+
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
-  getDesgin() {
-    this.utils.showLoading('Getting desgins').then((success) => {
+  ionViewDidEnter() {
+    this.getDesign();
+  }
+
+  getDesign() {
+    this.listOfDesignsData = [];
+    this.listOfDesignDataHelper = [];
+    this.utils.showLoading('Getting designs').then((success) => {
       this.apiService.getDesgin().subscribe(response => {
         this.utils.hideLoading();
         console.log(response);
         this.listOfDesignsData = response;
         this.listOfDesignsData.forEach((desginItem) => {
-          if (this.listofDesginDataHelper.length === 0) {
+          if (this.listOfDesignDataHelper.length === 0) {
             const listOfDesign = new DesginDataHelper();
             listOfDesign.date = this.datePipe.transform(desginItem.created_at, 'M/d/yy');
             listOfDesign.listOfDesigns.push(desginItem);
-            this.listofDesginDataHelper.push(listOfDesign);
+            this.listOfDesignDataHelper.push(listOfDesign);
           } else {
-            this.listofDesginDataHelper.forEach((desginList) => {
-              if(desginList.date === this.datePipe.transform(desginItem.created_at,'M/d/yy')) {
+            this.listOfDesignDataHelper.forEach((desginList) => {
+              if (desginList.date === this.datePipe.transform(desginItem.created_at, 'M/d/yy')) {
                 desginList.listOfDesigns.push(desginItem);
-              }else{
+              } else {
                 const listOfDesign = new DesginDataHelper();
                 listOfDesign.date = this.datePipe.transform(desginItem.created_at, 'M/d/yy');
                 listOfDesign.listOfDesigns.push(desginItem);
-                this.listofDesginDataHelper.push(listOfDesign);
+                this.listOfDesignDataHelper.push(listOfDesign);
               }
             });
           }
-      }, responseError => {
+        }, responseError => {
+          this.utils.hideLoading();
+          const error: ErrorModel = responseError.error;
+          this.utils.showAlert(error.message[0].messages[0].message);
+        });
+      }, (apiError) => {
         this.utils.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utils.showAlert(error.message[0].messages[0].message);
-      });   
-  });
-});
+      });
+    });
   }
 }
 
@@ -73,7 +80,3 @@ export class DesginDataHelper {
     this.listOfDesigns = [];
   }
 }
-
-  
-
- 

@@ -141,3 +141,36 @@ ion-modal {
     background: white !important;
 }
 
+.header-bg {
+    background: #F9F9F9 !important;
+}
+
+.header-icon-position {
+    position: relative;
+    top: 0;
+}
+
+.full-width {
+    width: 100vw !important;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.border-header {
+    background: url("/assets/images/border_header.svg") no-repeat;
+    background-size: cover;
+}
+
+.header-half-height {
+    height: 24px;
+}
+
+.action-icon {
+    width: 24px;
+    height: 24px;
+}
+

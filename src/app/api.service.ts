@@ -61,20 +61,36 @@ export class ApiService {
     return this.http.post<DesginDataModel>(this.baseUrl + '/designs', data, { headers: this.headers });
   }
 
+  updateDesignForm(data: any, id: number): Observable<DesginDataModel> {
+    return this.http.put<DesginDataModel>(this.baseUrl + '/designs/' + id, data, { headers: this.headers });
+  }
+
   getDesgin() {
-    return this.http.get<DesginDataModel[]>(this.baseUrl + '/designs', { headers: this.headers });
+    return this.http.get<DesginDataModel[]>(this.baseUrl + '/designs?_sort=created_at:DESC', { headers: this.headers });
   }
 
   getDesginDetail(id): Observable<DesginDataModel> {
-    return this.http.get<DesginDataModel>(this.baseUrl + '/designs?id=' + id, { headers: this.headers });
+    return this.http.get<DesginDataModel>(this.baseUrl + '/designs/' + id, { headers: this.headers });
+  }
+
+  deleteDesign(id): Observable<DesginDataModel> {
+    return this.http.delete<DesginDataModel>(this.baseUrl + '/designs/' + id, { headers: this.headers });
   }
 
   getSurvey() {
-    return this.http.get<SurveyDataModel[]>(this.baseUrl + '/surveys', { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(this.baseUrl + '/surveys?_sort=created_at:DESC', { headers: this.headers });
   }
 
   getSurveyDetail(id): Observable<SurveyDataModel> {
-    return this.http.get<SurveyDataModel>(this.baseUrl + '/surveys?id=' + id, { headers: this.headers });
+    return this.http.get<SurveyDataModel>(this.baseUrl + '/surveys/' + id, { headers: this.headers });
+  }
+
+  deleteSurvey(id): Observable<SurveyDataModel> {
+    return this.http.delete<SurveyDataModel>(this.baseUrl + '/surveys/' + id, { headers: this.headers });
+  }
+
+  updateSurveyForm(data: any, id: number): Observable<SurveyDataModel> {
+    return this.http.put<SurveyDataModel>(this.baseUrl + '/surveys/' + id, data, { headers: this.headers });
   }
 
   refreshHeader() {
@@ -85,8 +101,8 @@ export class ApiService {
     this.parentId = this.storageService.getParentId();
   }
 
-  saveSurvey(data: any): Observable<SurveyDataModel[]> {
-    return this.http.post<SurveyDataModel[]>(this.baseUrl + '/surveys', data, { headers: this.headers });
+  saveSurvey(data: any): Observable<SurveyDataModel> {
+    return this.http.post<SurveyDataModel>(this.baseUrl + '/surveys', data, { headers: this.headers });
   }
 
   getAssignees(userType: number): Observable<AssigneeModel[]> {

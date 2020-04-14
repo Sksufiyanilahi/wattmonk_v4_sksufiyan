@@ -1,25 +1,37 @@
 <ion-content>
-  <div *ngFor="let item of  listofSurveyDataHelper;let i = index" class="ion-no-padding">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="12">
-          <span class="ion-padding">
-            {{item.date}}
-          </span>
-        </ion-col>
-        <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
-          <div class="ion-padding custom-card"  [routerLink]=" ['/surveypagedetail/',surveyData.id]" routerDirection="forward">
-            <span class="customer-name">{{surveyData.name}}</span>
-            <span class="customer-email">{{surveyData.email}}</span>
-            <span class="customer-phone">{{surveyData.phonenumber}}</span>
-            <span class="customer-address">{{surveyData.address}}</span>
-            <span class="ion-text-end action-button-color">Assign</span>
-          </div>
+    <div class="ion-no-padding ion-margin-top">
+        <ion-grid>
+            <ion-row *ngFor="let item of  listOfSurveyDataHelper;let i = index">
+                <ion-col size="12">
+                    <span class="ion-padding">
+                      {{item.date | date: 'dd MMM yyyy'}}
+                    </span>
+                </ion-col>
+                <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
+                    <div class="ion-padding custom-card" [routerLink]="['/survey-detail/',surveyData.id]"
+                         routerDirection="forward">
+                        <span class="customer-name">{{surveyData.name}}</span>
+                        <span class="customer-email">{{surveyData.email}}</span>
+                        <span class="customer-phone">{{surveyData.phonenumber}}</span>
+                        <span class="customer-address">{{surveyData.address}}</span>
+                        <span class="ion-text-end action-button-color">Assign</span>
+                    </div>
 
-        </ion-col>
-      </ion-row>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+
+    <ion-grid *ngIf="listOfSurveyDataHelper.length === 0" class="ion-margin ion-padding">
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+            <ion-col class="ion-align-items-center ion-justify-content-center d-flex">
+                <ion-item lines="none" class="ion-align-items-center ion-justify-content-center d-flex">
+                    <ion-img src="/assets/images/login_background.png" class="placeholder"></ion-img>
+                </ion-item>
+
+            </ion-col>
+        </ion-row>
     </ion-grid>
-  </div>
 
 </ion-content>
 

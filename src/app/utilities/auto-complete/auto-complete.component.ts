@@ -49,7 +49,29 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   writeValue(data: number): void {
+    console.log('patchedvalue ,' + data);
     this.selectedDataId = data;
+    let selectedData: any;
+    this.dataList.forEach((item) => {
+      if (item.id === data) {
+        selectedData = item;
+      }
+    });
+
+    this.sortedList = this.dataList.filter((item) => {
+      return (item.name.toLowerCase().indexOf(selectedData.name.toLowerCase()) > -1);
+    });
+    if (this.sortedList.length === 1) {
+      if (this.sortedList[0].name.toLowerCase() === selectedData.name.toLowerCase()) {
+        this.sortedList = [];
+      }
+    }
+
+    if (selectedData) {
+      console.log('Patching ');
+      console.log(selectedData);
+      this.selectOption(selectedData);
+    }
   }
 
   onValueChanged(event: CustomEvent) {
