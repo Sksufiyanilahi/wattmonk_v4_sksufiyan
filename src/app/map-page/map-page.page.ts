@@ -35,11 +35,11 @@ geocoder = new google.maps.Geocoder();
     public router: Router
   ) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService()
-    this.autocomplete = { input: '' };
     this.autocompleteItems = [];
    }
 
   ngOnInit() {
+    this.autocomplete = { input: '' };
     this.getUserPosition();
   }
 
@@ -76,8 +76,10 @@ addMarker(){
 
 }
 
-updateSearchResults(){
-  if (this.autocomplete.input == '') {
+updateSearchResults(e){
+  console.log("E",e);
+  console.log("Evtt",this.autocomplete.input)
+  if (this.autocomplete.input === '') {
     this.autocompleteItems = [];
     return;
   }
@@ -133,5 +135,9 @@ getUserPosition(){
       console.log("error : " + err.message);
   ;
   })
+}
+
+onCancel(){
+  this.autocompleteItems = [];
 }
 }

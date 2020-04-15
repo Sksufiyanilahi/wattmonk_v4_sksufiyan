@@ -1,18 +1,65 @@
-<ion-header>
-  <ion-header>
-    <ion-toolbar color="primary">
-      <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
-    </ion-toolbar>
-    <ion-list [hidden]="autocompleteItems.length == 0">
-      <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
-        {{ item.description }}
-      </ion-item>
-    </ion-list>
-  </ion-header>
-  </ion-header>
-  
-  <ion-content padding>
-  
-  <div #map id="map"></div> 
+  <ion-content padding >
+    <!-- <ion-header>
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
+        </ion-toolbar>
+        <ion-list [hidden]="autocompleteItems.length == 0">
+          <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+            {{ item.description }}
+          </ion-item>
+        </ion-list>
+      </ion-header>
+      </ion-header> -->
+      <ion-row>
+        <ion-col class="search-box" size="10">
+          <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults($event)"  (ionClear)="onCancel()" placeholder="Search for a place"></ion-searchbar>
+          <ion-list *ngIf="autocompleteItems.length > 0" class="searchbox-list">
+            <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+              {{ item.description }}
+            </ion-item>
+          </ion-list>
+        </ion-col>
+        <ion-col size="2" class="jd-box">
+          <div class="jd-padding">
+            <div class="jd-div">
+              <span>JD</span>
+            </div>
+              <span class="badge">
+                  4
+              </span>
+          </div>
+      </ion-col>
+      </ion-row>
+       <ion-row>
+        <ion-col class="search-box" size="10">
+          <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults($event)"  (touchstart)="touchstart($event)" (touchend)="touchend($event)"  (ionClear)="onCancel()" placeholder="Search for a place"></ion-searchbar>
+          <ion-list *ngIf="autocompleteItems.length > 0" class="searchbox-list">
+            <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+              {{ item.description }}
+            </ion-item>
+          </ion-list>
+        </ion-col>
+        <ion-col size="2" class="jd-box">
+          <div class="jd-padding">
+            <div class="jd-div">
+              <span>JD</span>
+            </div>
+              <span class="badge">
+                  4
+              </span>
+          </div>
+      </ion-col>
+      <ion-col size="2" class="jd1-box">
+        <div class="jd-padding">
+          <div class="jd-div">
+            <span>JD</span>
+          </div>
+        </div>
+    </ion-col>
+      </ion-row>
+     
+  <div #map id="map">
+  </div> 
   
   </ion-content>
