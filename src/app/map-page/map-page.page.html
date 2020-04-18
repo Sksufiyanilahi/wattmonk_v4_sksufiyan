@@ -13,7 +13,7 @@
       </ion-header> -->
       <ion-row>
         <ion-col class="search-box" size="10">
-          <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults($event)"  (ionClear)="onCancel()" placeholder="Search for a place"></ion-searchbar>
+          <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()"  (ionClear)="onCancel()" placeholder="Search for a place"></ion-searchbar>
           <ion-list *ngIf="autocompleteItems.length > 0" class="searchbox-list">
             <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
               {{ item.description }}

@@ -83,5 +83,14 @@ export class UtilitiesService {
     return word[0].toUpperCase() + word.substr(1).toLowerCase();
   }
 
+  async showSnackBar(message) {
+    this.hideLoading();
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
+  }
+
 
 }

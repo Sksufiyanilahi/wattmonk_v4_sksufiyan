@@ -40,6 +40,7 @@ export class DesignDetailsPage implements OnInit {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
         this.design = result;
+        console.log("reaching",this.design);
       }, (error) => {
         this.utilities.hideLoading();
       });
@@ -77,10 +78,13 @@ export class DesignDetailsPage implements OnInit {
   deleteDesignFromServer() {
     this.utilities.showLoading('Deleting Design').then((success) => {
       this.apiService.deleteDesign(this.designId).subscribe((result) => {
+        console.log("result",result);
         this.utilities.hideLoading();
-        this.navController.pop();
+         this.utilities.showSnackBar('Desgin deleted successfully');
+         this.navController.pop();
       }, (error) => {
         this.utilities.hideLoading();
+        this.utilities.showSnackBar('Some Error Occurred');
       });
     });
   }

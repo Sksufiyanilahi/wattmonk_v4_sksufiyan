@@ -40,14 +40,16 @@ export class SchedulePage implements OnInit {
     private router: Router,
     private alertController: AlertController
   ) {
+    
   }
 
   ngOnInit() {
     this.requestLocationPermission();
+    console.log("Addre sch",this.utilities.getAddressObservable());
   }
 
   goBack() {
-    this.navController.pop();
+    // this.navController.pop();
   }
 
   segmentChanged(event: CustomEvent) {

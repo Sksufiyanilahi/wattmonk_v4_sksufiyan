@@ -75,15 +75,15 @@ export class DesignComponent implements OnInit, OnDestroy {
     });
 
     this.utils.getAddressObservable().subscribe((address) => {
-      console.log("reaching",this.desginForm.value);
       console.log("reaching 2",address);
-      if(this.desginForm.value.address !== ""){
-        this.desginForm.patchValue({
-          address: address
-        });
-      }else{
-        this.desginForm.get('address').setValue(address);
-      }
+      this.desginForm.get('address').setValue(address);
+      // if(this.desginForm.value.address !== ""){
+      //   this.desginForm.patchValue({
+      //     address: address
+      //   });
+      // }else{
+      //   this.desginForm.get('address').setValue(address);
+      // }
     }, (error) => {
       this.desginForm.get('address').setValue('');
     });
@@ -93,6 +93,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log("reaching")
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {
         this.addForm();
@@ -114,7 +115,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
-            this.navController.navigateRoot(['homepage']);
+            this.navController.pop();
           });
         }, responseError => {
           this.utils.hideLoading().then(() => {

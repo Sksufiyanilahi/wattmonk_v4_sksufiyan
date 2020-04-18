@@ -304,6 +304,7 @@ export class EditDesignPage implements OnInit {
         this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
+            this.utils.showSnackBar('Desgin updated successfully')
             this.navController.pop();
           });
         }, responseError => {

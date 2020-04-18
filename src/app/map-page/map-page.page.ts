@@ -32,7 +32,7 @@ geocoder = new google.maps.Geocoder();
     private geoLocation: Geolocation,
     public zone: NgZone,
     public utils: UtilitiesService,
-    public router: Router
+    public router: Router,
   ) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService()
     this.autocompleteItems = [];
@@ -76,9 +76,7 @@ addMarker(){
 
 }
 
-updateSearchResults(e){
-  console.log("E",e);
-  console.log("Evtt",this.autocomplete.input)
+updateSearchResults(){
   if (this.autocomplete.input === '') {
     this.autocompleteItems = [];
     return;
@@ -140,4 +138,5 @@ getUserPosition(){
 onCancel(){
   this.autocompleteItems = [];
 }
+
 }
