@@ -70,6 +70,8 @@ export class EditDesignPage implements OnInit {
       assignedto: new FormControl(''),
       rooftype: new FormControl('', [Validators.required]),
       jobtype: new FormControl('', [Validators.required]),
+      projecttype: new FormControl('', [Validators.required]),
+      construction: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl('')
     });
@@ -303,6 +305,7 @@ export class EditDesignPage implements OnInit {
       this.utils.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
           this.utils.hideLoading().then(() => {
+            this.utils.setDesignDetailsRefresh(true);
             console.log('Res', response);
             this.utils.showSnackBar('Desgin updated successfully')
             this.navController.pop();

@@ -18,6 +18,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   surveyForm: FormGroup;
   listOfAssignees: AssigneeModel[] = [];
   private subscription: Subscription;
+  private addressSubscription: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,19 +38,18 @@ export class SurveyComponent implements OnInit, OnDestroy {
       source: new FormControl('android', [Validators.required]),
       assignedTo: new FormControl(0)
     });
-    // this.listOfAssignees = LIST_OF_ASSIGNEES;
-    this.utilities.getAddressObservable().subscribe((address) => {
-      this.surveyForm.get('address').setValue(address);
-    }, (error) => {
-      this.surveyForm.get('address').setValue('');
-    });
-    console.log(this.platform);
+    // console.log(this.platform);
     // this.platform.ready().then(value => this.surveyForm.get('source').setValue(value));
 
   }
 
+
   ngOnInit() {
-    console.log('subscribing');
+    this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
+      this.surveyForm.get('address').setValue(address.address);
+    }, (error) => {
+      this.surveyForm.get('address').setValue('');
+    });
     this.subscription = this.utilities.getScheduleFormEvent().subscribe((event) => {
       switch (event) {
         case ScheduleFormEvent.SAVE_SURVEY_FORM:
@@ -65,8 +65,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('unsubscribed');
     this.subscription.unsubscribe();
+    this.addressSubscription.unsubscribe();
     // this.utilities.getScheduleFormEvent().unsubscribe();
   }
 
@@ -95,7 +95,6 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
-            this.utilities.showSnackBar("Survey added")
             this.navController.pop();
           });
         }, (error) => {

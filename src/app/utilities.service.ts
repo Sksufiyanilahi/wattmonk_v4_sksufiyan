@@ -4,6 +4,7 @@ import { SuccessModalComponent } from './utilities/success-modal/success-modal.c
 import { BehaviorSubject } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
 import { DesginDataModel } from './model/design.model';
+import { AddressModel } from './model/address.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,16 @@ export class UtilitiesService {
 
   loading: HTMLIonLoadingElement;
   isLoading = false;
-  address = new BehaviorSubject<string>('');
+  address = new BehaviorSubject<AddressModel>({
+    address: '',
+    lat: 0,
+    long: 0
+  });
   saveScheduleForm = new BehaviorSubject<ScheduleFormEvent>(ScheduleFormEvent.NO_EVENT);
+  homepageDesignRefresh = new BehaviorSubject<boolean>(false);
+  homepageSurveyRefresh = new BehaviorSubject<boolean>(false);
+  surveyDetailsRefresh = new BehaviorSubject<boolean>(false);
+  designDetailsRefresh = new BehaviorSubject<boolean>(false);
 
   constructor(
     public loadingController: LoadingController,
@@ -23,12 +32,45 @@ export class UtilitiesService {
   ) {
   }
 
-  getAddressObservable(): BehaviorSubject<string> {
+  getAddressObservable(): BehaviorSubject<AddressModel> {
     return this.address;
   }
 
-  setAddress(address: string) {
+  setAddress(address: AddressModel) {
     this.address.next(address);
+  }
+
+  getHomepageDesignRefresh(): BehaviorSubject<boolean> {
+    return this.homepageDesignRefresh;
+  }
+
+  sethomepageDesignRefresh(refresh: boolean) {
+    this.homepageDesignRefresh.next(refresh);
+  }
+
+  getHomepageSurveyRefresh(): BehaviorSubject<boolean> {
+    return this.homepageSurveyRefresh;
+  }
+
+  sethomepageSurveyRefresh(refresh: boolean) {
+    this.homepageSurveyRefresh.next(refresh);
+  }
+
+
+  getSurveyDetailsRefresh(): BehaviorSubject<boolean> {
+    return this.surveyDetailsRefresh;
+  }
+
+  setSurveyDetailsRefresh(refresh: boolean) {
+    this.surveyDetailsRefresh.next(refresh);
+  }
+
+  getDesignDetailsRefresh(): BehaviorSubject<boolean> {
+    return this.designDetailsRefresh;
+  }
+
+  setDesignDetailsRefresh(value: boolean) {
+    this.designDetailsRefresh.next(value);
   }
 
   getScheduleFormEvent(): BehaviorSubject<ScheduleFormEvent> {

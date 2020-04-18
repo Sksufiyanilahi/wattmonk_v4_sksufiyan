@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { GeolocationOptions, Geoposition, Geolocation } from '@ionic-native/geolocation/ngx';
-import { google } from "google-maps";
+import { google } from 'google-maps';
 import { UtilitiesService } from '../utilities.service';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
+import { AddressModel } from '../model/address.model';
 
- declare var google;
+declare var google;
 
 @Component({
   selector: 'app-map-page',
@@ -13,130 +15,115 @@ import { Router } from '@angular/router';
 })
 export class MapPagePage implements OnInit {
 
-  @ViewChild('map', {static: false}) mapElement: ElementRef;
-  options : GeolocationOptions;
- currentPos : Geoposition;
+  @ViewChild('map', { static: false }) mapElement: ElementRef;
+  options: GeolocationOptions;
+  currentPos: Geoposition;
 
   GoogleAutocomplete: google.maps.places.AutocompleteService;
-  autocomplete: { input: string; };
   autocompleteItems: any[];
-  location: any;
-  placeid: any;
-  address = '';
 
-map: any;
+  map: any;
 
-geocoder = new google.maps.Geocoder();
+  geocoder = new google.maps.Geocoder();
 
   constructor(
     private geoLocation: Geolocation,
-    public zone: NgZone,
-    public utils: UtilitiesService,
-    public router: Router,
+    private zone: NgZone,
+    private utils: UtilitiesService,
+    private router: Router,
+    private navController: NavController
   ) {
-    this.GoogleAutocomplete = new google.maps.places.AutocompleteService()
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
-   }
+  }
 
   ngOnInit() {
-    this.autocomplete = { input: '' };
     this.getUserPosition();
   }
 
-  addMap(lat,long){
+  addMap(lat, long) {
 
-    let latLng = new google.maps.LatLng(lat, long);
+    const latLng = new google.maps.LatLng(lat, long);
 
-    let mapOptions = {
-    center: latLng,
-    zoom: 15,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
+    const mapOptions = {
+      center: latLng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
 
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
     this.addMarker();
 
-}
-
-addMarker(){
-
-  let marker = new google.maps.Marker({
-  map: this.map,
-  animation: google.maps.Animation.DROP,
-  position: this.map.getCenter()
-  });
-  let content = "<p>This is your current position !</p>";          
-  let infoWindow = new google.maps.InfoWindow({
-  content: content
-  });
-
-  google.maps.event.addListener(marker, 'click', () => {
-  infoWindow.open(this.map, marker);
-  });
-
-}
-
-updateSearchResults(){
-  if (this.autocomplete.input === '') {
-    this.autocompleteItems = [];
-    return;
   }
-  this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
-  (predictions, status) => {
-    console.log("pre",predictions);
-    this.autocompleteItems = [];
-    this.zone.run(() => {
-      predictions.forEach((prediction) => {
-        this.autocompleteItems.push(prediction);
-      });
+
+  addMarker() {
+
+    const marker = new google.maps.Marker({
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      position: this.map.getCenter()
     });
-  });
-}
-selectSearchResult(item) {
-  var  address;
-  console.log(item)
-  this.location = item
-  this.placeid = this.location.place_id
-  console.log('placeid'+ this.placeid)
-  this.geocoder.geocode({ 
-    'placeId': this.placeid
-},(responses, status) => {
-    if (status == 'OK') {
-      responses.forEach((response) => {
-        console.log("response",response);
-       address = response.formatted_address;
-});
-        var lat = responses[0].geometry.location.lat();
-        var lng = responses[0].geometry.location.lng();
-        console.log(lat, lng);
+    const content = '<p>This is your current position !</p>';
+    const infoWindow = new google.maps.InfoWindow({
+      content
+    });
+
+    google.maps.event.addListener(marker, 'click', () => {
+      infoWindow.open(this.map, marker);
+    });
+
+  }
+
+  updateSearchResults(event: CustomEvent) {
+    const input = event.detail.value;
+    if (input === '') {
+      this.autocompleteItems = [];
+      return;
     }
-    console.log("add",address);
-    this.utils.setAddress(address);
-    console.log("addnew",this.utils.getAddressObservable());   
-this.router.navigateByUrl('/schedule');
-});
-}
+    this.GoogleAutocomplete.getPlacePredictions({ input },
+      (predictions, status) => {
+        this.autocompleteItems = [];
+        this.zone.run(() => {
+          predictions.forEach((prediction) => {
+            this.autocompleteItems.push(prediction);
+          });
+        });
+      });
+  }
 
-getUserPosition(){
-  this.options = {
-  enableHighAccuracy : false,
-  timeout: 5000
-  };
-  this.geoLocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
+  selectSearchResult(item) {
+    console.log(item);
+    this.geocoder.geocode({
+      placeId: item.place_id
+    }, (responses, status) => {
+      console.log(responses);
+      const address: AddressModel = {
+        address : responses[0].formatted_address,
+        lat: responses[0].geometry.location.lat(),
+        long: responses[0].geometry.location.lng()
+      }
+      this.utils.setAddress(address)
+      this.goBack();
+    });
+  }
 
-      this.currentPos = pos;     
+  getUserPosition() {
+    this.options = {
+      enableHighAccuracy: false,
+      timeout: 5000
+    };
+    this.geoLocation.getCurrentPosition(this.options).then((pos: Geoposition) => {
+      this.addMap(pos.coords.latitude, pos.coords.longitude);
+    }, (err: PositionError) => {
+      console.log('error : ' + err.message);
+    });
+  }
 
-      console.log(pos);
-      this.addMap(pos.coords.latitude,pos.coords.longitude);
+  onCancel() {
+    this.autocompleteItems = [];
+  }
 
-  },(err : PositionError)=>{
-      console.log("error : " + err.message);
-  ;
-  })
-}
-
-onCancel(){
-  this.autocompleteItems = [];
-}
-
+  goBack() {
+    this.navController.pop();
+  }
 }

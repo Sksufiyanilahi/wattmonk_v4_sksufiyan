@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AlertController, IonTabs, NavController, Platform } from '@ionic/angular';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -7,13 +7,14 @@ import { UtilitiesService } from '../utilities.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Router } from '@angular/router';
 import { ScheduleFormEvent } from '../model/constants';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.page.html',
   styleUrls: ['./schedule.page.scss'],
 })
-export class SchedulePage implements OnInit {
+export class SchedulePage implements OnInit, OnDestroy {
 
   @ViewChild('tabs', { static: true }) tabs: IonTabs;
 
@@ -28,6 +29,7 @@ export class SchedulePage implements OnInit {
 
   locationAllowed = false;
   gpsActive = false;
+  private subscription: Subscription;
 
   constructor(
     private navController: NavController,
@@ -40,16 +42,22 @@ export class SchedulePage implements OnInit {
     private router: Router,
     private alertController: AlertController
   ) {
-    
   }
 
   ngOnInit() {
     this.requestLocationPermission();
-    console.log("Addre sch",this.utilities.getAddressObservable());
+    this.subscription = this.utilities.getAddressObservable().subscribe((address) => {
+      console.log(address);
+      this.address = address.address;
+    });
   }
 
   goBack() {
     // this.navController.pop();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   segmentChanged(event: CustomEvent) {
@@ -109,9 +117,8 @@ export class SchedulePage implements OnInit {
     this.utilities.hideLoading().then((success) => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
-            console.log("resul",result)
-            this.address = this.generateAddress(result[0]);
-            this.utilities.setAddress(this.address);
+            console.log(result);
+            // this.utilities.setAddress(this.generateAddress(result[0]));
           })
           .catch((error: any) => {
             this.showNoLocation();
@@ -121,7 +128,6 @@ export class SchedulePage implements OnInit {
 
       }
     );
-
   }
 
   generateAddress(addressObj) {
@@ -131,7 +137,7 @@ export class SchedulePage implements OnInit {
       obj.push(addressObj[key]);
     }
     obj.reverse();
-    for (let val in obj) {
+    for (const val in obj) {
       if (obj[val].length) {
         address += obj[val] + ', ';
       }

@@ -63,8 +63,8 @@ export class DesignComponent implements OnInit, OnDestroy {
       assignedto: new FormControl(''),
       rooftype: new FormControl('', [Validators.required]),
       jobtype: new FormControl('', [Validators.required]),
-      projecttype:new FormControl('', [Validators.required]),
-      construction:new FormControl('', [Validators.required]),
+      projecttype: new FormControl('', [Validators.required]),
+      construction: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl('')
     });
@@ -77,8 +77,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     });
 
     this.utils.getAddressObservable().subscribe((address) => {
-      console.log("reaching 2",address);
-      this.desginForm.get('address').setValue(address);
+      this.desginForm.get('address').setValue(address.address);
       // if(this.desginForm.value.address !== ""){
       //   this.desginForm.patchValue({
       //     address: address
@@ -95,7 +94,6 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log("reaching")
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {
         this.addForm();
@@ -115,9 +113,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (this.desginForm.status === 'VALID') {
       this.utils.showLoading('Saving').then(() => {
         this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+          this.utils.sethomepageDesignRefresh(true);
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
-            this.utils.showSnackBar("Desgin added")
             this.navController.pop();
           });
         }, responseError => {

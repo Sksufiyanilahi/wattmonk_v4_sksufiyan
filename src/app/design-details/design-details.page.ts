@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { AlertController, NavController } from '@ionic/angular';
 import { UtilitiesService } from '../utilities.service';
@@ -7,17 +7,19 @@ import { DesginDataModel } from '../model/design.model';
 import { UserRoles } from '../model/constants';
 import { AssigneeModel } from '../model/assignee.model';
 import { StorageService } from '../storage.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-design-details',
   templateUrl: './design-details.page.html',
   styleUrls: ['./design-details.page.scss'],
 })
-export class DesignDetailsPage implements OnInit {
+export class DesignDetailsPage implements OnInit, OnDestroy {
 
   designId: number;
   design: DesginDataModel;
   listOfAssignees: AssigneeModel[] = [];
+  dataSubscription: Subscription;
 
   constructor(
     private utilities: UtilitiesService,
@@ -31,8 +33,15 @@ export class DesignDetailsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.getDesignDetails();
-    this.getAssignees();
+    this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
+      this.getDesignDetails();
+      this.getAssignees();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.dataSubscription.unsubscribe();
+    this.utilities.sethomepageDesignRefresh(true);
   }
 
   getDesignDetails() {
@@ -40,7 +49,6 @@ export class DesignDetailsPage implements OnInit {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
         this.design = result;
-        console.log("reaching",this.design);
       }, (error) => {
         this.utilities.hideLoading();
       });
@@ -78,10 +86,10 @@ export class DesignDetailsPage implements OnInit {
   deleteDesignFromServer() {
     this.utilities.showLoading('Deleting Design').then((success) => {
       this.apiService.deleteDesign(this.designId).subscribe((result) => {
-        console.log("result",result);
+        console.log('result', result);
         this.utilities.hideLoading();
-         this.utilities.showSnackBar('Desgin deleted successfully');
-         this.navController.pop();
+        this.utilities.showSnackBar('Desgin deleted successfully');
+        this.navController.pop();
       }, (error) => {
         this.utilities.hideLoading();
         this.utilities.showSnackBar('Some Error Occurred');
