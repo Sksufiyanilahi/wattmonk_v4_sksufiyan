@@ -63,6 +63,8 @@ export class DesignComponent implements OnInit, OnDestroy {
       assignedto: new FormControl(''),
       rooftype: new FormControl('', [Validators.required]),
       jobtype: new FormControl('', [Validators.required]),
+      projecttype:new FormControl('', [Validators.required]),
+      construction:new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl('')
     });
@@ -115,6 +117,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
+            this.utils.showSnackBar("Desgin added")
             this.navController.pop();
           });
         }, responseError => {

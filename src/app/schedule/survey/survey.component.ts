@@ -95,6 +95,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
+            this.utilities.showSnackBar("Survey added")
             this.navController.pop();
           });
         }, (error) => {
