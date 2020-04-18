@@ -15,6 +15,9 @@ export enum UserRoles {
   ANALYST = 10
 }
 
+export const INVALID_EMAIL_MESSAGE = 'Invalid Email';
+export const FIELD_REQUIRED = 'This field is required';
+
 
 export const CAMERA_MODULE_MENU: MenuModel[] = [
   {

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { UtilitiesService } from "../utilities.service";
-import { NavController } from "@ionic/angular";
-import { ApiService } from "../api.service";
-import { ErrorModel } from "../model/error.model";
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UtilitiesService } from '../utilities.service';
+import { NavController } from '@ionic/angular';
+import { ApiService } from '../api.service';
+import { ErrorModel } from '../model/error.model';
+import { FIELD_REQUIRED, INVALID_EMAIL_MESSAGE } from '../model/constants';
 
 @Component({
   selector: 'app-forgot-password',
@@ -12,9 +13,11 @@ import { ErrorModel } from "../model/error.model";
 })
 export class ForgotPasswordPage implements OnInit {
 
-  forgotPasswordForm: FormGroup;
-  email: "";
+  // error messages from constants
+  emailError = INVALID_EMAIL_MESSAGE;
+  fieldRequired = FIELD_REQUIRED;
 
+  forgotPasswordForm: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
