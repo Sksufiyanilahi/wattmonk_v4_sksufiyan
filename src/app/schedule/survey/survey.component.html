@@ -6,6 +6,7 @@
                     <ion-item class="ion-no-padding">
                         <ion-input placeholder="name" class="form_input" autocapitalize="words"
                                    formControlName="name"></ion-input>
+                                   <span style="color:red">*</span>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -14,6 +15,7 @@
                     <ion-item class="ion-no-padding">
                         <ion-input placeholder="email" autocapitalize="none" formControlName="email" email="true" type="email"
                                    class="form_input"></ion-input>
+                                   <span style="color:red">*</span>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -23,6 +25,7 @@
                     <ion-item class="ion-no-padding">
                         <ion-input placeholder="phone" formControlName="phonenumber" type="number"
                                    class="form_input"></ion-input>
+                                   <span style="color:red">*</span>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -37,7 +40,7 @@
 
             <ion-row class="ion-margin-top">
                 <ion-col size="12" class="ion-no-padding">
-                    <span class="input-placeholder">Comment</span>
+                    <span class="input-placeholder">Comments</span>
                 </ion-col>
                 <ion-col size="12" class="ion-no-padding">
                     <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="comments"></ion-textarea>

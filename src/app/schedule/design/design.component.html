@@ -6,6 +6,7 @@
                     <ion-item class="ion-no-padding">
                         <ion-input class="form_input" placeholder="name" autocapitalize="words"
                                    formControlName="name"></ion-input>
+                                   <span style="color:red">*</span>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -14,6 +15,7 @@
                     <ion-item class="ion-no-padding">
                         <ion-input class="form_input" placeholder="email" autocapitalize="none"
                                    formControlName="email"></ion-input>
+                                   <span style="color:red">*</span>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -23,8 +25,10 @@
                     <ion-range [min]="minRange" [max]="maxRange" formControlName="monthlybill" mode="ios" pin="true"
                                class="ion-no-padding">
                         <ion-label slot="start">{{minRange | currency :'USD':'symbol':'1.0-0'}}</ion-label>
-                        <ion-label slot="end">{{maxRange | currency :'USD':'symbol':'1.0-0'  }}</ion-label>
+                        <ion-label slot="end">{{maxRange | currency :'USD':'symbol':'1.0-0'  }} <span style="color:red">*</span></ion-label>
+                       
                     </ion-range>
+                    
                 </ion-col>
             </ion-row>
 
@@ -35,18 +39,21 @@
                 </ion-col>
                 <ion-col size="6">
                     <app-auto-complete [dataList]="listOfSolarMade" placeholder="solar made"
-                                       formControlName="solarmodel"></app-auto-complete>
+                                       formControlName="solarmodel"> </app-auto-complete>
+                                     
                 </ion-col>
             </ion-row>
 
             <ion-row>
                 <ion-col size="6">
                     <app-auto-complete [dataList]="listOfInverterMake" placeholder="inverter make"
-                                       formControlName="invertermake"></app-auto-complete>
+                                       formControlName="invertermake"> </app-auto-complete>
+                                    
                 </ion-col>
                 <ion-col size="6">
                     <app-auto-complete [dataList]="listOfInverterMade" placeholder="inverter made"
                                        formControlName="invertermodel"></app-auto-complete>
+                                       
                 </ion-col>
             </ion-row>
 
@@ -59,6 +66,7 @@
                             <ion-select-option value="flat">Flat</ion-select-option>
                             <ion-select-option value="pitch">Pitch</ion-select-option>
                         </ion-select>
+                        <span style="color:red">*</span>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -74,6 +82,7 @@
                   <ion-select-option value="residential">Residential</ion-select-option>
                   <ion-select-option value="commercial">Commercial</ion-select-option>
                 </ion-select>
+                <span style="color:red">*</span>
               </ion-item>
             </ion-col>
           </ion-row>
