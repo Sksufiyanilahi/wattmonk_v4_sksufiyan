@@ -11,6 +11,7 @@ import { SurveyComponent } from './survey/survey.component';
 import { DesignComponent } from './design/design.component';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
+import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
   providers: [
     DatePipe,
     Diagnostic,
-    NativeGeocoder
+    NativeGeocoder,
+    LaunchNavigator
   ]
 })
 export class HomepagePageModule {

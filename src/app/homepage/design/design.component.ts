@@ -6,6 +6,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
 import { StorageService } from 'src/app/storage.service';
 import { Subscription } from 'rxjs';
+import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 
 @Component({
   selector: 'app-design',
@@ -19,14 +20,18 @@ export class DesignComponent implements OnInit, OnDestroy {
   private refreshSubscription: Subscription;
 
   today: any;
-
+  options: LaunchNavigatorOptions = {
+    start: '',
+    app: this.launchNavigator.APP.GOOGLE_MAPS
+  };
 
   constructor(
     private utils: UtilitiesService,
     private apiService: ApiService,
     private datePipe: DatePipe,
     private storage: StorageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private launchNavigator: LaunchNavigator
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -91,6 +96,10 @@ export class DesignComponent implements OnInit, OnDestroy {
     }, (apiError) => {
       this.utils.hideLoading();
     });
+  }
+
+  openAddressOnMap(address: string) {
+    this.launchNavigator.navigate(address, this.options);
   }
 }
 

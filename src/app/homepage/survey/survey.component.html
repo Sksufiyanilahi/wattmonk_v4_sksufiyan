@@ -16,7 +16,7 @@
                         <span class="customer-email">{{surveyData.email}}</span>
                         <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;">
                             <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
-                        <span class="customer-address">{{surveyData.address}}</span>
+                        <span class="customer-address" (click)="openAddressOnMap(surveyData.address)">{{surveyData.address}}</span>
                         <span class="ion-text-end action-button-color" (click)="openSurveyDetails(surveyData.id)">Assign</span>
                     </div>
 

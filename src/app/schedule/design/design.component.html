@@ -17,19 +17,19 @@
                     </ion-item>
                 </ion-col>
                 <ion-col size="12" class="ion-no-padding"
-                *ngIf="desginForm.get('email').hasError('pattern') && desginForm.get('email').dirty">
-           <span class="error">{{emailError}}</span>
-       </ion-col>
-       <ion-col size="12" class="ion-no-padding"
-                *ngIf="desginForm.get('email').value === '' && desginForm.get('email').dirty">
-           <span class="error">{{fieldRequired}}</span>
-       </ion-col>
+                         *ngIf="desginForm.get('email').hasError('pattern') && desginForm.get('email').dirty">
+                    <span class="error">{{emailError}}</span>
+                </ion-col>
+                <ion-col size="12" class="ion-no-padding"
+                         *ngIf="desginForm.get('email').value === '' && desginForm.get('email').dirty">
+                    <span class="error">{{fieldRequired}}</span>
+                </ion-col>
             </ion-row>
             <ion-row class="ion-align-items-center ion-justify-content-center">
                 <ion-col>
                     <ion-item class="ion-no-padding">
                         <ion-input class="form_input" placeholder="Monthly bill*" type="number"
-                        formControlName="monthlybill"></ion-input>
+                                   formControlName="monthlybill"></ion-input>
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -53,16 +53,16 @@
                 </ion-col>
                 <ion-col size="6">
                     <app-auto-complete [dataList]="listOfSolarMade" placeholder="module made*"
-                                       formControlName="solarmodel"> </app-auto-complete>
-                                     
+                                       formControlName="solarmodel"></app-auto-complete>
+
                 </ion-col>
             </ion-row>
 
             <ion-row>
                 <ion-col size="6">
                     <app-auto-complete [dataList]="listOfInverterMake" placeholder="inverter made*"
-                                       formControlName="invertermake"> </app-auto-complete>
-                                    
+                                       formControlName="invertermake"></app-auto-complete>
+
                 </ion-col>
                 <ion-col size="6">
                     <app-auto-complete [dataList]="listOfInverterMade" placeholder="inverter model*"
@@ -73,57 +73,57 @@
 
             <ion-row class="ion-align-items-center ion-justify-content-center">
                 <ion-col>
-                  <ion-item class="ion-no-padding">
-                    <ion-label class="form_input">Construction*</ion-label>
-                    <ion-select class="form_input" placeholder="construction" ok-text="Ok" cancel-text="Cancel"
-                                formControlName="construction">
-                     <ion-select-option value="yes">Yes</ion-select-option>
-                     <ion-select-option value="no">No</ion-select-option>
-                    </ion-select>
-                  </ion-item>
+                    <ion-item class="ion-no-padding">
+                        <ion-label class="form_input">Construction*</ion-label>
+                        <ion-select class="form_input" placeholder="construction" ok-text="Ok" cancel-text="Cancel"
+                                    formControlName="construction">
+                            <ion-select-option value="yes">Yes</ion-select-option>
+                            <ion-select-option value="no">No</ion-select-option>
+                        </ion-select>
+                    </ion-item>
                 </ion-col>
             </ion-row>
 
-          <ion-row class="ion-align-items-center ion-justify-content-center">
-            <ion-col>
-              <ion-item class="ion-no-padding">
-                <ion-label class="form_input">Project Type*</ion-label>
-                <ion-select class="form_input" placeholder="project type" ok-text="Ok" cancel-text="Cancel"
-                            formControlName="projecttype">
-                 <ion-select-option value="residential">Residential</ion-select-option>
-                 <ion-select-option value="commercial">Commercial</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-          </ion-row>
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col>
+                    <ion-item class="ion-no-padding">
+                        <ion-label class="form_input">Project Type*</ion-label>
+                        <ion-select class="form_input" placeholder="project type" ok-text="Ok" cancel-text="Cancel"
+                                    formControlName="projecttype">
+                            <ion-select-option value="residential">Residential</ion-select-option>
+                            <ion-select-option value="commercial">Commercial</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
 
-          <ion-row class="ion-align-items-center ion-justify-content-center">
-            <ion-col>
-              <ion-item class="ion-no-padding">
-                <ion-label class="form_input">Job Type*</ion-label>
-                <ion-select class="form_input" placeholder="job type" ok-text="Ok" cancel-text="Cancel"
-                            formControlName="jobtype">
-                 <ion-select-option value="pv+">PV+</ion-select-option>
-                  <ion-select-option value="battery">Battery</ion-select-option>
-                  <ion-select-option value="pv">PV</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-          </ion-row>
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col>
+                    <ion-item class="ion-no-padding">
+                        <ion-label class="form_input">Job Type*</ion-label>
+                        <ion-select class="form_input" placeholder="job type" ok-text="Ok" cancel-text="Cancel"
+                                    formControlName="jobtype">
+                            <ion-select-option value="pvbattery">PV Battery</ion-select-option>
+                            <ion-select-option value="battery">Battery</ion-select-option>
+                            <ion-select-option value="pv">PV</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
 
-          <ion-row class="ion-align-items-center ion-justify-content-center">
-            <ion-col>
-                <ion-item class="ion-no-padding">
-                    <ion-label class="form_input">Roof Type*</ion-label>
-                    <ion-select class="form_input" placeholder="roof type" ok-text="Ok" cancel-text="Cancel"
-                                formControlName="rooftype">
-                        <ion-select-option value="flat">Flat</ion-select-option>
-                        <ion-select-option value="pitch">Pitch</ion-select-option>
-                        <ion-select-option value="both">Both</ion-select-option>
-                    </ion-select>
-                </ion-item>
-            </ion-col>
-        </ion-row>
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col>
+                    <ion-item class="ion-no-padding">
+                        <ion-label class="form_input">Roof Type*</ion-label>
+                        <ion-select class="form_input" placeholder="roof type" ok-text="Ok" cancel-text="Cancel"
+                                    formControlName="rooftype">
+                            <ion-select-option value="flat">Flat</ion-select-option>
+                            <ion-select-option value="pitch">Pitch</ion-select-option>
+                            <ion-select-option value="both">Both</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
 
             <ion-row class="ion-margin-top">
                 <ion-col size="12" class="ion-no-padding">
