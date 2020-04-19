@@ -41,6 +41,7 @@ import {
 }
 
   from '../model/error.model';
+import { INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../model/constants';
 
 @Component({
     selector: 'app-login',
@@ -53,6 +54,10 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup;
   isActiveToggleTextPassword: Boolean = true;
 
+  emailError = INVALID_EMAIL_MESSAGE;
+  fieldRequired = FIELD_REQUIRED;
+
+
   constructor(
     private formBuilder: FormBuilder,
     private utils: UtilitiesService,
@@ -62,9 +67,10 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.loginForm = this.formBuilder.group({
-        identifier: new FormControl('', [Validators.required]),
-        password: new FormControl('', [Validators.required])
+        identifier: new FormControl('',  [Validators.required, Validators.pattern(EMAILPATTERN)]),
+        password: new FormControl('', [Validators.required,Validators.minLength(6)])
       }
     );
   }
@@ -88,7 +94,7 @@ export class LoginPage implements OnInit {
         }, responseError => {
           this.utils.hideLoading().then(() => {
             const error: ErrorModel = responseError.error;
-            this.utils.showAlert(error.message[0].messages[0].message);
+            this.utils.showSnackBar(error.message[0].messages[0].message);
           });
 
         });
@@ -106,6 +112,10 @@ export class LoginPage implements OnInit {
   public getType() {
     return this.isActiveToggleTextPassword ? 'password' : 'text';
   }
+
+  get password() {
+    return this.loginForm.get('password');
+} 
 
 
 }

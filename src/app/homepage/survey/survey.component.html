@@ -8,13 +8,14 @@
                     </span>
                 </ion-col>
                 <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
-                    <div class="ion-padding custom-card" [routerLink]="['/survey-detail/',surveyData.id]"
-                         routerDirection="forward">
+                    <div class="ion-padding custom-card">
                         <span class="customer-name">{{surveyData.name}}</span>
                         <span class="customer-email">{{surveyData.email}}</span>
-                        <span class="customer-phone">{{surveyData.phonenumber}}</span>
+                        <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;">
+                        <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
                         <span class="customer-address">{{surveyData.address}}</span>
-                        <span class="ion-text-end action-button-color">Assign</span>
+                        <span class="ion-text-end action-button-color"  [routerLink]="['/survey-detail/',surveyData.id]"
+                        routerDirection="forward">Assign</span>
                     </div>
 
                 </ion-col>

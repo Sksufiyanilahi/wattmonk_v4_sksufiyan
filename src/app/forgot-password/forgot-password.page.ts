@@ -39,17 +39,18 @@ export class ForgotPasswordPage implements OnInit {
       this.utils.showLoading('Sending password Link').then(() => {
         this.apiService.sendForgotPasswordLink(this.forgotPasswordForm.value).subscribe((response) => {
           this.utils.hideLoading().then(() => {
+            this.utils.showSnackBar('Password link sent successfully');
             this.goBack();
           });
         }, (responseError) => {
           const error: ErrorModel = responseError.error;
           this.utils.hideLoading().then(() => {
-            this.utils.showAlert(error.message[0].messages[0].message);
+            this.utils.showSnackBar(error.message[0].messages[0].message);
           });
         });
       });
     } else {
-      this.utils.showAlert('Invalid Email address');
+      this.utils.showSnackBar('Invalid Email address');
     }
   }
 

@@ -18,6 +18,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   listOfDesignsData: DesginDataModel[] = [];
   private refreshSubscription: Subscription;
 
+  today:any;
+
 
   constructor(
     private utils: UtilitiesService,
@@ -25,7 +27,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private storage: StorageService
   ) {
-
+    let latest_date  = new Date();
+    this.today = datePipe.transform(latest_date,'M/dd/yy')  
+    console.log("date",this.today);
   }
 
   ngOnInit() {
@@ -69,6 +73,7 @@ export class DesignComponent implements OnInit, OnDestroy {
                 listOfDesign.listOfDesigns.push(desginItem);
                 tempData.push(listOfDesign);
                 added = true;
+                this.listOfDesignDataHelper.push(listOfDesign);
               }
             }
           });
@@ -78,7 +83,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       }, responseError => {
         this.utils.hideLoading().then((loaderHidden) => {
           const error: ErrorModel = responseError.error;
-          this.utils.showAlert(error.message[0].messages[0].message);
+          this.utils.showSnackBar(error.message[0].messages[0].message);
         });
 
       });

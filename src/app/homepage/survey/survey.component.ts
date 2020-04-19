@@ -72,7 +72,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
-        this.utils.showAlert(error.message[0].messages[0].message);
+        this.utils.showSnackBar(error.message[0].messages[0].message);
       });
     });
   }

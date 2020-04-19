@@ -1,7 +1,6 @@
 <ion-item class="ion-no-padding" #searchBar>
     <ion-input [placeholder]="placeholder" class="form_input" (ionChange)="onValueChanged($event)"
                [(ngModel)]="selectedDataName"></ion-input>
-               <span style="color:red">*</span>
 </ion-item>
 <ion-grid class="ion-no-padding popup-list"
           *ngIf="sortedList.length !== 0">

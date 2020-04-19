@@ -170,7 +170,7 @@ export class SurveyDetailPage implements OnInit {
 
   rescheduleSurvey() {
     if (this.rescheduleForm.status === 'INVALID') {
-      this.utilities.showAlert('Invalid Data');
+      this.utilities.showSnackBar('Invalid Data');
     } else {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateSurveyForm(this.rescheduleForm.value, this.surveyId).subscribe(response => {
@@ -182,9 +182,9 @@ export class SurveyDetailPage implements OnInit {
           this.utilities.hideLoading().then(() => {
             const error: ErrorModel = responseError.error;
             if (error.message instanceof String) {
-              this.utilities.showAlert(error.message);
+              this.utilities.showSnackBar(error.message);
             } else if (error.message instanceof Array) {
-              this.utilities.showAlert(error.message[0].messages[0].message);
+              this.utilities.showSnackBar(error.message[0].messages[0].message);
             }
           });
         });

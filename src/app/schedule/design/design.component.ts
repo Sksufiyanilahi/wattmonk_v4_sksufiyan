@@ -9,7 +9,7 @@ import { SolarMadeModel } from 'src/app/model/solar-made.model';
 import { InverterMakeModel } from 'src/app/model/inverter-make.model';
 import { NavController } from '@ionic/angular';
 import { InverterMadeModel } from 'src/app/model/inverter-made.model';
-import { ScheduleFormEvent, UserRoles } from '../../model/constants';
+import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../../model/constants';
 import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 
@@ -42,6 +42,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   isItemInverterMadeAvailable: boolean;
   inverterMadeName: any;
 
+  emailError = INVALID_EMAIL_MESSAGE;
+  fieldRequired = FIELD_REQUIRED;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,15 +53,16 @@ export class DesignComponent implements OnInit, OnDestroy {
     private navController: NavController,
     private storage: StorageService
   ) {
+    const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.desginForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required]),
+      email: new FormControl('',  [Validators.required, Validators.pattern(EMAILPATTERN)]),
       solarmake: new FormControl('', [Validators.required]),
       solarmodel: new FormControl('', [Validators.required]),
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
       monthlybill: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
+      address: new FormControl('',),
       createdby: new FormControl('', [Validators.required]),
       assignedto: new FormControl(''),
       rooftype: new FormControl('', [Validators.required]),
@@ -121,7 +125,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         }, responseError => {
           this.utils.hideLoading().then(() => {
             const error: ErrorModel = responseError.error;
-            this.utils.showAlert(error.message[0].messages[0].message);
+            this.utils.showSnackBar(error.message[0].messages[0].message);
           });
 
         });
@@ -181,7 +185,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
-        this.utils.showAlert(error.message[0].messages[0].message);
+        this.utils.showSnackBar(error.message[0].messages[0].message);
       });
     }, (error) => {
 
@@ -196,7 +200,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     }, responseError => {
       const error: ErrorModel = responseError.error;
       console.log(error);
-      this.utils.showAlert(error.message[0].messages[0].message);
+      this.utils.showSnackBar(error.message[0].messages[0].message);
     });
   }
 
@@ -210,7 +214,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
-        this.utils.showAlert(error.message[0].messages[0].message);
+        this.utils.showSnackBar(error.message[0].messages[0].message);
       });
     }, (reject) => {
 
@@ -224,7 +228,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.listOfInverterMake = response;
     }, responseError => {
       const error: ErrorModel = responseError.error;
-      this.utils.showAlert(error.message[0].messages[0].message);
+      this.utils.showSnackBar(error.message[0].messages[0].message);
     });
   }
 }

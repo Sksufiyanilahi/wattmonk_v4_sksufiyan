@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { NavController, Platform } from '@ionic/angular';
 import { AssigneeModel } from '../../model/assignee.model';
 import { UtilitiesService } from '../../utilities.service';
-import { ScheduleFormEvent, UserRoles } from '../../model/constants';
+import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../../model/constants';
 import { ApiService } from '../../api.service';
 import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
@@ -20,6 +20,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private addressSubscription: Subscription;
 
+  
+  emailError = INVALID_EMAIL_MESSAGE;
+  fieldRequired = FIELD_REQUIRED;
+
   constructor(
     private formBuilder: FormBuilder,
     private navController: NavController,
@@ -28,9 +32,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private storage: StorageService
   ) {
+    const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       phonenumber: new FormControl('', [Validators.required]),
       datetime: new FormControl(new Date().getTime(), [Validators.required]),
       comments: new FormControl(''),

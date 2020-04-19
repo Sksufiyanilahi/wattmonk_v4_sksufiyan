@@ -46,10 +46,6 @@ export class SchedulePage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.requestLocationPermission();
-    this.subscription = this.utilities.getAddressObservable().subscribe((address) => {
-      console.log(address);
-      this.address = address.address;
-    });
   }
 
   goBack() {
@@ -270,7 +266,7 @@ export class SchedulePage implements OnInit, OnDestroy {
     this.diagnostic.isLocationAuthorized().then((success) => {
       this.fetchLocation();
     }, (error) => {
-      this.utilities.showAlert('GPS Not Allowed');
+      this.utilities.showSnackBar('GPS Not Allowed');
     });
 
   }

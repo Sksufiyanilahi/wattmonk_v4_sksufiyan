@@ -2,7 +2,10 @@
     <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
         <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index" class="ion-margin-top">
             <ion-col size="12">
-                    <span class="ion-padding">
+                <span class="ion-padding" *ngIf="today === item.date">
+                    Today
+                  </span>
+                    <span class="ion-padding" *ngIf="today !== item.date">
                       {{item.date | date: 'dd MMM yyyy'}}
                     </span>
             </ion-col>
@@ -11,7 +14,6 @@
                      routerDirection="forward">
                     <span class="customer-name">{{desginData.name}}</span>
                     <span class="customer-email">{{desginData.email}}</span>
-                    <span class="customer-phone">+91-7325878737</span>
                     <span class="customer-address">{{desginData.address}}</span>
                     <span class="ion-text-end action-button-color">Assign</span>
                 </div>
@@ -24,7 +26,7 @@
         <ion-row class="ion-align-items-center ion-justify-content-center">
             <ion-col class="ion-align-items-center ion-justify-content-center d-flex">
                 <ion-item lines="none" class="ion-align-items-center ion-justify-content-center d-flex">
-                    <ion-img src="/assets/images/login_background.png" class="placeholder"></ion-img>
+                    <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
                 </ion-item>
 
             </ion-col>
