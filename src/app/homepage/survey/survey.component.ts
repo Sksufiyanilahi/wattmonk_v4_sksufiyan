@@ -17,11 +17,16 @@ export class SurveyComponent implements OnInit, OnDestroy {
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
 
+  today:any;
+
   constructor(
     private utils: UtilitiesService,
     private apiService: ApiService,
     private datePipe: DatePipe,
   ) {
+    let latest_date  = new Date();
+    this.today = datePipe.transform(latest_date,'M/dd/yy')  
+    console.log("date",this.today);
   }
 
   ngOnInit() {

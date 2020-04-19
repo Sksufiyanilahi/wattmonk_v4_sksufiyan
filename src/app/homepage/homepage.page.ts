@@ -17,6 +17,9 @@ export class HomepagePage implements OnInit {
   searchQuery: string = '';
   items: string[];
 
+  showSearchBar:boolean = false;
+  showHome:boolean = true;
+
 
   constructor(
     private utils:UtilitiesService,
@@ -53,8 +56,14 @@ export class HomepagePage implements OnInit {
     }
   }
 
-  clearList() {
+  showHom() {
+    this.showHome = true;
+    this.showSearchBar = false;
+  }
 
+  onClick(){
+    this.showHome = false;
+    this.showSearchBar = true;
   }
 
 }

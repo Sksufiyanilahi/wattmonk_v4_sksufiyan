@@ -129,7 +129,7 @@ export class UtilitiesService {
     this.hideLoading();
     const toast = await this.toastController.create({
       message: message,
-      duration: 100000,
+      duration: 2000,
       cssClass: "my-custom-class"
     });
     toast.present();

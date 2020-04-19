@@ -2,8 +2,16 @@
     <ion-toolbar>
         <ion-grid>
             <ion-row class="ion-align-items-center">
-                <ion-col>
-                    <ion-searchbar placeholder="home" class="custom"></ion-searchbar>
+                <ion-col *ngIf="showHome === true">
+                    <h1 class="ion-no-padding ion-no-margin home">Home</h1>
+                </ion-col>
+                <ion-col *ngIf="showSearchBar === true">
+                    <ion-searchbar  placeholder="home" (ionClear)="showHom()" class="custom"></ion-searchbar>
+                </ion-col>
+                <ion-col size="auto" *ngIf="showHome === true">
+                    <div class="notification-padding" (click)="onClick()">
+                        <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
+                    </div>
                 </ion-col>
                 <ion-col size="auto">
                     <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward">
