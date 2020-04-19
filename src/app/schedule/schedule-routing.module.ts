@@ -33,8 +33,7 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
   providers: [
-    Geolocation,
-    NativeGeocoder
+    Geolocation
   ]
 })
 export class SchedulePageRoutingModule { }

@@ -7,8 +7,10 @@ import { IonicModule } from '@ionic/angular';
 import { HomepagePageRoutingModule } from './homepage-routing.module';
 
 import { HomepagePage } from './homepage.page';
-import { SurveyComponent } from "./survey/survey.component";
-import { DesignComponent } from "./design/design.component";
+import { SurveyComponent } from './survey/survey.component';
+import { DesignComponent } from './design/design.component';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 @NgModule({
   imports: [
@@ -19,7 +21,9 @@ import { DesignComponent } from "./design/design.component";
   ],
   declarations: [HomepagePage, SurveyComponent, DesignComponent],
   providers: [
-    DatePipe
+    DatePipe,
+    Diagnostic,
+    NativeGeocoder
   ]
 })
 export class HomepagePageModule {

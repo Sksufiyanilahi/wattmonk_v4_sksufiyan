@@ -5,6 +5,7 @@ import { SurveyDataModel } from 'src/app/model/survey.model';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-survey',
@@ -23,6 +24,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private utils: UtilitiesService,
     private apiService: ApiService,
     private datePipe: DatePipe,
+    private navController: NavController
   ) {
     let latest_date  = new Date();
     this.today = datePipe.transform(latest_date,'M/dd/yy')  
@@ -82,6 +84,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
     });
   }
 
+  openSurveyDetails(id: number) {
+    this.navController.navigateForward('/survey-detail/' + id);
+  }
 }
 
 export class SurveyDataHelper {

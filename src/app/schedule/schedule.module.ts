@@ -8,6 +8,7 @@ import { SurveyComponent } from './survey/survey.component';
 import { DesignComponent } from './design/design.component';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
     DesignComponent
   ],
   providers: [
-    Diagnostic
+    Diagnostic,
+    NativeGeocoder
   ]
 })
 export class SchedulePageModule {}

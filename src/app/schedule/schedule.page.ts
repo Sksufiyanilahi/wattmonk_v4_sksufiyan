@@ -8,6 +8,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Router } from '@angular/router';
 import { ScheduleFormEvent } from '../model/constants';
 import { Subscription } from 'rxjs';
+import { AddressModel } from '../model/address.model';
 
 @Component({
   selector: 'app-schedule',
@@ -45,11 +46,15 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.requestLocationPermission();
+    // this.requestLocationPermission();
+    this.subscription = this.utilities.getAddressObservable().subscribe((address) => {
+      console.log(address);
+      this.address = address.address;
+    });
   }
 
   goBack() {
-    // this.navController.pop();
+    this.navController.pop();
   }
 
   ngOnDestroy(): void {
@@ -114,7 +119,12 @@ export class SchedulePage implements OnInit, OnDestroy {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
             console.log(result);
-            // this.utilities.setAddress(this.generateAddress(result[0]));
+            const address: AddressModel = {
+              address: this.generateAddress(result[0]),
+              lat: latitude,
+              long: longitude
+            };
+            this.utilities.setAddress(address);
           })
           .catch((error: any) => {
             this.showNoLocation();

@@ -3,7 +3,6 @@ import { AlertController, LoadingController, ModalController, ToastController } 
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
 import { BehaviorSubject } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
-import { DesginDataModel } from './model/design.model';
 import { AddressModel } from './model/address.model';
 
 @Injectable({
@@ -79,6 +78,7 @@ export class UtilitiesService {
 
   setScheduleFormEvent(event: ScheduleFormEvent) {
     this.saveScheduleForm.next(event);
+    this.saveScheduleForm.next(ScheduleFormEvent.NO_EVENT);
   }
 
   async showLoading(message?: string) {
@@ -101,7 +101,7 @@ export class UtilitiesService {
   async showAlert(message) {
     const alert = await this.alertController.create({
       header: 'Error',
-      message: message,
+      message,
       buttons: ['OK']
     });
 
@@ -128,9 +128,9 @@ export class UtilitiesService {
   async showSnackBar(message) {
     this.hideLoading();
     const toast = await this.toastController.create({
-      message: message,
+      message,
       duration: 2000,
-      cssClass: "my-custom-class"
+      cssClass: 'my-custom-class'
     });
     toast.present();
   }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { DesignModel, DesginDataModel } from '../../model/design.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
@@ -18,18 +18,19 @@ export class DesignComponent implements OnInit, OnDestroy {
   listOfDesignsData: DesginDataModel[] = [];
   private refreshSubscription: Subscription;
 
-  today:any;
+  today: any;
 
 
   constructor(
     private utils: UtilitiesService,
     private apiService: ApiService,
     private datePipe: DatePipe,
-    private storage: StorageService
+    private storage: StorageService,
+    private cdr: ChangeDetectorRef
   ) {
-    let latest_date  = new Date();
-    this.today = datePipe.transform(latest_date,'M/dd/yy')  
-    console.log("date",this.today);
+    const latestDate = new Date();
+    this.today = datePipe.transform(latestDate, 'M/dd/yy');
+    console.log('date', this.today);
   }
 
   ngOnInit() {
@@ -78,7 +79,7 @@ export class DesignComponent implements OnInit, OnDestroy {
             }
           });
           this.listOfDesignDataHelper = tempData;
-          console.log(this.listOfDesignDataHelper);
+          this.cdr.detectChanges();
         });
       }, responseError => {
         this.utils.hideLoading().then((loaderHidden) => {

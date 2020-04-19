@@ -1,24 +1,23 @@
 <ion-content>
     <div class="ion-no-padding">
         <ion-grid>
-            <ion-row *ngFor="let item of  listOfSurveyDataHelper;let i = index">
+            <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
                 <ion-col size="12" class="ion-margin-top">
                     <span class="ion-padding" *ngIf="today === item.date">
                         Today
                       </span>
-                        <span class="ion-padding" *ngIf="today !== item.date">
+                    <span class="ion-padding" *ngIf="today !== item.date">
                           {{item.date | date: 'dd MMM yyyy'}}
-                        </span>
+                    </span>
                 </ion-col>
                 <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
                     <div class="ion-padding custom-card">
                         <span class="customer-name">{{surveyData.name}}</span>
                         <span class="customer-email">{{surveyData.email}}</span>
                         <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;">
-                        <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
+                            <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
                         <span class="customer-address">{{surveyData.address}}</span>
-                        <span class="ion-text-end action-button-color"  [routerLink]="['/survey-detail/',surveyData.id]"
-                        routerDirection="forward">Assign</span>
+                        <span class="ion-text-end action-button-color" (click)="openSurveyDetails(surveyData.id)">Assign</span>
                     </div>
 
                 </ion-col>
@@ -30,7 +29,7 @@
         <ion-row class="ion-align-items-center ion-justify-content-center">
             <ion-col class="ion-align-items-center ion-justify-content-center d-flex">
                 <ion-item lines="none" class="ion-align-items-center ion-justify-content-center d-flex">
-                    <ion-img src="/assets/images/login_background.png" class="placeholder"></ion-img>
+                    <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
                 </ion-item>
 
             </ion-col>

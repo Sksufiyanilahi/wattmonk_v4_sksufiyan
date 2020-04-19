@@ -82,13 +82,6 @@ export class DesignComponent implements OnInit, OnDestroy {
 
     this.utils.getAddressObservable().subscribe((address) => {
       this.desginForm.get('address').setValue(address.address);
-      // if(this.desginForm.value.address !== ""){
-      //   this.desginForm.patchValue({
-      //     address: address
-      //   });
-      // }else{
-      //   this.desginForm.get('address').setValue(address);
-      // }
     }, (error) => {
       this.desginForm.get('address').setValue('');
     });
@@ -120,7 +113,14 @@ export class DesignComponent implements OnInit, OnDestroy {
           this.utils.sethomepageDesignRefresh(true);
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
-            this.navController.pop();
+            this.utils.showSuccessModal('Survey have been saved').then((modal) => {
+              modal.present();
+              modal.onWillDismiss().then((dismissed) => {
+                this.navController.pop();
+              });
+            }, (error) => {
+
+            });
           });
         }, responseError => {
           this.utils.hideLoading().then(() => {

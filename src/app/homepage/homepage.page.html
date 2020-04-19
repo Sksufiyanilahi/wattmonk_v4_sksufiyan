@@ -1,15 +1,22 @@
 <ion-header class="ion-no-border white-bg">
     <ion-toolbar>
         <ion-grid>
-            <ion-row class="ion-align-items-center">
-                <ion-col *ngIf="showHome === true">
+            <ion-row *ngIf="showSearchBar === true" class="ion-align-items-center">
+                <ion-col>
+                    <ion-searchbar placeholder="home" class="custom"></ion-searchbar>
+                </ion-col>
+                <!--                <ion-col size="auto">-->
+                <!--                    <ion-button fill="clear" size="small" class="ion-no-padding" (click)="showSearchBar = !showSearchBar">-->
+                <!--                        <ion-icon name="close-outline" color="dark" size="large"></ion-icon>-->
+                <!--                    </ion-button>-->
+                <!--                </ion-col>-->
+            </ion-row>
+            <ion-row class="ion-align-items-center" *ngIf="showSearchBar !== true">
+                <ion-col>
                     <h1 class="ion-no-padding ion-no-margin home">Home</h1>
                 </ion-col>
-                <ion-col *ngIf="showSearchBar === true">
-                    <ion-searchbar  placeholder="home" (ionClear)="showHom()" class="custom"></ion-searchbar>
-                </ion-col>
-                <ion-col size="auto" *ngIf="showHome === true">
-                    <div class="notification-padding" (click)="onClick()">
+                <ion-col size="auto">
+                    <div class="notification-padding" (click)="showSearchBar = true">
                         <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
                     </div>
                 </ion-col>
