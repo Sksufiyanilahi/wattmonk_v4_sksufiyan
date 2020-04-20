@@ -1,5 +1,6 @@
 <div class="d-flex flex-column">
-  <span class="input-placeholder">{{placeholder}}*</span>
+  <span class="input-placeholder">{{placeholder}}</span>
+  <span class="input-placeholder" *ngIf="required">*</span>
   <div scrollX="true">
     <div class="d-flex flex-row">
       <div *ngFor="let assignee of assignees" class="assignee-margin assignee-image" (click)="selectAssignee(assignee)">

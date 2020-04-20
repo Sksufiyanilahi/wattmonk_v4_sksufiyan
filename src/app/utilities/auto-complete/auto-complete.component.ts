@@ -37,6 +37,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   registerOnTouched(fn: any): void {
+
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
@@ -75,6 +76,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   onValueChanged(event: CustomEvent) {
+    console.log('value changed');
     this.sortedList = this.dataList.filter((item) => {
       return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
     });
@@ -86,6 +88,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   selectOption(data: any) {
+    console.log('value changed');
     this.sortedList = [];
 
     this.selectedOption = data;
@@ -93,5 +96,27 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
     this.selectedDataName = data.name;
 
     this.onChange(data.id);
+  }
+
+  onFocus(event: CustomEvent) {
+    console.log('visible');
+    console.log(event);
+    this.sortedList = this.dataList.filter((item) => {
+      return (item.name.toLowerCase().indexOf(this.selectedDataName) > -1);
+    });
+    if (this.sortedList.length === 1) {
+      if (this.sortedList[0].name.toLowerCase() === this.selectedDataName.toLowerCase()) {
+        this.sortedList = [];
+      }
+    }
+  }
+
+  onBlur(event: CustomEvent) {
+    console.log('gone');
+    console.log(event);
+    setTimeout(() => {
+      this.sortedList = [];
+    }, 100);
+
   }
 }

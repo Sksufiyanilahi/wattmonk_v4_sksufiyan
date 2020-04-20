@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { DesignModel, DesginDataModel } from '../../model/design.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
@@ -6,6 +6,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
 import { StorageService } from 'src/app/storage.service';
 import { Subscription } from 'rxjs';
+import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 
 @Component({
   selector: 'app-design',
@@ -18,18 +19,23 @@ export class DesignComponent implements OnInit, OnDestroy {
   listOfDesignsData: DesginDataModel[] = [];
   private refreshSubscription: Subscription;
 
-  today:any;
-
+  today: any;
+  options: LaunchNavigatorOptions = {
+    start: '',
+    app: this.launchNavigator.APP.GOOGLE_MAPS
+  };
 
   constructor(
     private utils: UtilitiesService,
     private apiService: ApiService,
     private datePipe: DatePipe,
-    private storage: StorageService
+    private storage: StorageService,
+    private cdr: ChangeDetectorRef,
+    private launchNavigator: LaunchNavigator
   ) {
-    let latest_date  = new Date();
-    this.today = datePipe.transform(latest_date,'M/dd/yy')  
-    console.log("date",this.today);
+    const latestDate = new Date();
+    this.today = datePipe.transform(latestDate, 'M/dd/yy');
+    console.log('date', this.today);
   }
 
   ngOnInit() {
@@ -78,7 +84,7 @@ export class DesignComponent implements OnInit, OnDestroy {
             }
           });
           this.listOfDesignDataHelper = tempData;
-          console.log(this.listOfDesignDataHelper);
+          this.cdr.detectChanges();
         });
       }, responseError => {
         this.utils.hideLoading().then((loaderHidden) => {
@@ -90,6 +96,10 @@ export class DesignComponent implements OnInit, OnDestroy {
     }, (apiError) => {
       this.utils.hideLoading();
     });
+  }
+
+  openAddressOnMap(address: string) {
+    this.launchNavigator.navigate(address, this.options);
   }
 }
 

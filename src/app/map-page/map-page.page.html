@@ -1,53 +1,39 @@
-<!--<ion-header>-->
-<!--  <ion-grid>-->
-<!--    <ion-row>-->
-<!--      <ion-col size="12">-->
-<!--        <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults($event)"-->
-<!--                       (touchstart)="touchstart($event)" (touchend)="touchend($event)" (ionClear)="onCancel()"-->
-<!--                       placeholder="Search for a place"></ion-searchbar>-->
-<!--      </ion-col>-->
-<!--    </ion-row>-->
-<!--  </ion-grid>-->
-<!--</ion-header>-->
-
-<ion-content class="position-relative">
-    <!-- <ion-header>
-      <ion-header>
-        <ion-toolbar color="primary">
-          <ion-searchbar [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="Search for a place"></ion-searchbar>
-        </ion-toolbar>
-        <ion-list [hidden]="autocompleteItems.length == 0">
-          <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
-            {{ item.description }}
-          </ion-item>
-        </ion-list>
-      </ion-header>
-      </ion-header> -->
+<ion-header class="ion-no-border">
     <ion-grid
-            class="position-absolute search-bar-position ion-no-padding ion-align-items-center ion-justify-content-center">
+            class="ion-no-padding ion-align-items-center ion-justify-content-center">
         <ion-row class="ion-align-items-center ion-justify-content-center">
-            <ion-col>
+            <ion-col size="auto">
                 <ion-button fill="clear" (click)="goBack()" style="width: 48px;">
                     <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
-        </ion-row>
-        <ion-row>
             <ion-col>
                 <ion-searchbar (ionChange)="updateSearchResults($event)"
                                (ionClear)="onCancel()" debounce="300"
                                placeholder="Search for a place"></ion-searchbar>
-                <ion-list *ngIf="autocompleteItems.length > 0" class="searchbox-list">
-                    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
-                        <ion-label>
-                            {{ item.description }}
-                        </ion-label>
-                    </ion-item>
-                </ion-list>
+
             </ion-col>
         </ion-row>
     </ion-grid>
-    <div #map id="map">
-    </div>
+</ion-header>
+
+<ion-content class="position-relative">
+
+    <ion-list *ngIf="autocompleteItems.length > 0">
+        <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+            <ion-label>
+                {{ item.description }}
+            </ion-label>
+        </ion-item>
+    </ion-list>
+
+
+    <ion-item *ngIf="autocompleteItems.length === 0" lines="none">
+        <ion-label class="ion-text-center">
+            Search for address
+        </ion-label>
+    </ion-item>
+
 
 </ion-content>
+

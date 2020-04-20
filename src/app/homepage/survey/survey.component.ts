@@ -5,6 +5,8 @@ import { SurveyDataModel } from 'src/app/model/survey.model';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { NavController } from '@ionic/angular';
+import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 
 @Component({
   selector: 'app-survey',
@@ -17,16 +19,22 @@ export class SurveyComponent implements OnInit, OnDestroy {
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
 
-  today:any;
+  today: any;
+  options: LaunchNavigatorOptions = {
+    start: '',
+    app: this.launchNavigator.APP.GOOGLE_MAPS
+  };
 
   constructor(
     private utils: UtilitiesService,
     private apiService: ApiService,
     private datePipe: DatePipe,
+    private navController: NavController,
+    private launchNavigator: LaunchNavigator
   ) {
-    let latest_date  = new Date();
-    this.today = datePipe.transform(latest_date,'M/dd/yy')  
-    console.log("date",this.today);
+    const latestDate = new Date();
+    this.today = datePipe.transform(latestDate, 'M/dd/yy');
+    console.log('date', this.today);
   }
 
   ngOnInit() {
@@ -82,6 +90,13 @@ export class SurveyComponent implements OnInit, OnDestroy {
     });
   }
 
+  openSurveyDetails(id: number) {
+    this.navController.navigateForward('/survey-detail/' + id);
+  }
+
+  openAddressOnMap(address: string) {
+    this.launchNavigator.navigate(address, this.options);
+  }
 }
 
 export class SurveyDataHelper {

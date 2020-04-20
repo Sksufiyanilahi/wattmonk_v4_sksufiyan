@@ -37,8 +37,7 @@ import { IonicStorageModule } from '@ionic/storage';
     HttpClient,
     StorageService,
     AuthGuardService,
-    Geolocation,
-    NativeGeocoder,
+    Geolocation
   ],
   exports: [
     UtilitiesModule

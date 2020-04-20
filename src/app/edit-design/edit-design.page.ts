@@ -307,8 +307,14 @@ export class EditDesignPage implements OnInit {
           this.utils.hideLoading().then(() => {
             this.utils.setDesignDetailsRefresh(true);
             console.log('Res', response);
-            this.utils.showSnackBar('Desgin updated successfully')
-            this.navController.pop();
+            this.utils.showSuccessModal('Survey have been updated').then((modal) => {
+              modal.present();
+              modal.onWillDismiss().then((dismissed) => {
+                this.navController.pop();
+              });
+            }, (error) => {
+
+            });
           });
         }, responseError => {
           this.utils.hideLoading().then(() => {

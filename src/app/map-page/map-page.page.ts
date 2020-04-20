@@ -15,14 +15,13 @@ declare var google;
 })
 export class MapPagePage implements OnInit {
 
-  @ViewChild('map', { static: false }) mapElement: ElementRef;
   options: GeolocationOptions;
   currentPos: Geoposition;
 
   GoogleAutocomplete: google.maps.places.AutocompleteService;
   autocompleteItems: any[];
 
-  map: any;
+  // map: any;
 
   geocoder = new google.maps.Geocoder();
 
@@ -45,34 +44,34 @@ export class MapPagePage implements OnInit {
 
     const latLng = new google.maps.LatLng(lat, long);
 
-    const mapOptions = {
-      center: latLng,
-      zoom: 15,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
+    // const mapOptions = {
+    //   center: latLng,
+    //   zoom: 15,
+    //   mapTypeId: google.maps.MapTypeId.ROADMAP
+    // };
 
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-    this.addMarker();
-
-  }
-
-  addMarker() {
-
-    const marker = new google.maps.Marker({
-      map: this.map,
-      animation: google.maps.Animation.DROP,
-      position: this.map.getCenter()
-    });
-    const content = '<p>This is your current position !</p>';
-    const infoWindow = new google.maps.InfoWindow({
-      content
-    });
-
-    google.maps.event.addListener(marker, 'click', () => {
-      infoWindow.open(this.map, marker);
-    });
+    // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+    // this.addMarker();
 
   }
+
+  // addMarker() {
+  //
+  //   const marker = new google.maps.Marker({
+  //     map: this.map,
+  //     animation: google.maps.Animation.DROP,
+  //     position: this.map.getCenter()
+  //   });
+  //   const content = '<p>This is your current position !</p>';
+  //   const infoWindow = new google.maps.InfoWindow({
+  //     content
+  //   });
+  //
+  //   google.maps.event.addListener(marker, 'click', () => {
+  //     infoWindow.open(this.map, marker);
+  //   });
+  //
+  // }
 
   updateSearchResults(event: CustomEvent) {
     const input = event.detail.value;
@@ -101,8 +100,8 @@ export class MapPagePage implements OnInit {
         address : responses[0].formatted_address,
         lat: responses[0].geometry.location.lat(),
         long: responses[0].geometry.location.lng()
-      }
-      this.utils.setAddress(address)
+      };
+      this.utils.setAddress(address);
       this.goBack();
     });
   }
