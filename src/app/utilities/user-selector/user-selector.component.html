@@ -4,7 +4,11 @@
     <div class="d-flex flex-row">
       <div *ngFor="let assignee of assignees" class="assignee-margin assignee-image" (click)="selectAssignee(assignee)">
         <img *ngIf="assignee.logo" [src]="assignee.logo.url" class="assignee-image selected" [class.selected]="assignee.selected" [class.normal]="!assignee.selected" />
-        <img *ngIf="!assignee.logo" src="/assets/images/user_placeholder.jpg" class="assignee-image selected" [class.selected]="assignee.selected" [class.normal]="!assignee.selected" />
+        <div *ngIf="!assignee.logo" class="assignee-image selected" style="background: #FFF1CF;" [class.selected]="assignee.selected" [class.normal]="!assignee.selected" >
+          <div class="name_div">
+            <span>{{assignee.firstname.substring(0,2)}}</span>
+          </div>
+      </div>
       </div>
     </div>
   </div>

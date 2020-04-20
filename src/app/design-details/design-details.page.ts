@@ -20,6 +20,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   design: DesginDataModel;
   listOfAssignees: AssigneeModel[] = [];
   dataSubscription: Subscription;
+  name:any = 'Nitish'
 
   constructor(
     private utilities: UtilitiesService,

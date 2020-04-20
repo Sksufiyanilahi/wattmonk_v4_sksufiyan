@@ -8,6 +8,7 @@
 
 .assignee-margin {
   margin: 8px;
+  text-align: center;
 }
 
 .selected {
@@ -33,6 +34,11 @@ div[scrollx=true] {
 
 div[scrolly=true] {
   overflow-y: auto;
+}
+
+.name_div{
+    margin-top: 11px;
+    font-size: 20px;
 }
 
 
