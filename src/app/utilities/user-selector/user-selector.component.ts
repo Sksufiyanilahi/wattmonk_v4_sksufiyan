@@ -26,10 +26,8 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
   @Input() required = false;
   private onChange: (assignee: number) => void;
   selectedUserId = 0;
-  name:String = 'Nitish';
 
   constructor() {
-    this.name;
   }
 
   registerOnChange(fn: any): void {
