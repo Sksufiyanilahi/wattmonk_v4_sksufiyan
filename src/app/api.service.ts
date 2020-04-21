@@ -67,7 +67,7 @@ export class ApiService {
   }
 
   getDesgin() {
-    return this.http.get<DesginDataModel[]>(this.baseUrl + '/designs?_sort=created_at:DESC&createdby=' + this.userId + '||assignedto=' + this.userId, { headers: this.headers });
+    return this.http.get<DesginDataModel[]>(this.baseUrl + '/userdesigns?id=' + this.userId, { headers: this.headers });
   }
 
   getDesginDetail(id): Observable<DesginDataModel> {
@@ -79,7 +79,7 @@ export class ApiService {
   }
 
   getSurvey() {
-    return this.http.get<SurveyDataModel[]>(this.baseUrl + '/surveys?_sort=created_at:DESC&createdby=' + this.userId + '||assignedto=' + this.userId, { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(this.baseUrl + '/surveys?_sort=created_at:DESC', { headers: this.headers });
   }
 
   getSurveyDetail(id): Observable<SurveyDataModel> {

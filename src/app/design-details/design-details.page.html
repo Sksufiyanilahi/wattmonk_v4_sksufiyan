@@ -153,15 +153,16 @@
             </ion-col>
         </ion-row>
 
-        <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center" *ngIf="assigned">
-            <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type">assigned to</span></ion-col>
+        <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
+                 *ngIf="assigned">
+            <ion-col class="ion-justify-content-center ion-align-items-center"><span
+                    class="model-type">assigned to</span></ion-col>
             <ion-col size="auto">
-                <img *ngIf="design.assignedto.logo" [src]="design.assignedto.logo.url" class="assignee-image selected"/>
-                <div *ngIf="!design.assignedto.logo" class="assignee-image selected d-flex flex-row align-center justify-center"
+                <img *ngIf="design.assignedto.logo" [src]="design.assignedto.logo" class="assignee-image selected"/>
+                <div *ngIf="!design.assignedto.logo"
+                     class="assignee-image selected d-flex flex-row align-center justify-center"
                      style="background: #FFF1CF;">
-                    <div class="name_div">
-                        <span style="text-transform: capitalize;">{{design.assignedto.firstname.substring(0, 1)}}{{design.assignedto.lastname.substring(0, 1)}}</span>
-                    </div>
+                    <span style="text-transform: capitalize;">{{design.assignedto.firstname.substring(0, 1)}}{{design.assignedto.lastname.substring(0, 1)}}</span>
                 </div>
             </ion-col>
         </ion-row>

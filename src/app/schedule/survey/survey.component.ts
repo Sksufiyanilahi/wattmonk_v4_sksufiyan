@@ -41,7 +41,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
-      assignedTo: new FormControl(0)
+      assignTo: new FormControl(0),
+      createdby: new FormControl(this.storage.getUserID(), [Validators.required])
     });
     // console.log(this.platform);
     // this.platform.ready().then(value => this.surveyForm.get('source').setValue(value));
@@ -100,6 +101,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
+            this.utilities.sethomepageSurveyRefresh(true);
             this.navController.pop();
           });
         }, (error) => {

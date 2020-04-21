@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UtilitiesService } from '../utilities.service';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
@@ -11,13 +11,14 @@ import { DrawerState } from 'ion-bottom-drawer';
 import { DatePicker } from '@ionic-native/date-picker/ngx';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ErrorModel } from '../model/error.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-survey-detail',
   templateUrl: './survey-detail.page.html',
   styleUrls: ['./survey-detail.page.scss'],
 })
-export class SurveyDetailPage implements OnInit {
+export class SurveyDetailPage implements OnInit, OnDestroy {
 
   surveyId: number;
   survey: SurveyDataModel;
@@ -25,6 +26,10 @@ export class SurveyDetailPage implements OnInit {
   drawerState = DrawerState.Bottom;
   date: Date;
   rescheduleForm: FormGroup;
+  assigned = false;
+  assigneeForm: FormGroup;
+  dataSubscription: Subscription;
+  refreshDataOnPreviousPage = 0;
 
   constructor(
     private utilities: UtilitiesService,
@@ -41,24 +46,43 @@ export class SurveyDetailPage implements OnInit {
       datetime: new FormControl('', [Validators.required]),
       comments: new FormControl('', [Validators.required])
     });
+    this.assigneeForm = this.formBuilder.group({
+      assignto: new FormControl('', [Validators.required])
+    });
   }
 
   ngOnInit() {
-    this.getSurveyDetails();
-    this.getAssignees();
+    this.dataSubscription = this.utilities.getSurveyDetailsRefresh().subscribe((result) => {
+      this.refreshDataOnPreviousPage++;
+      this.getSurveyDetails();
+      this.getAssignees();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.dataSubscription.unsubscribe();
+    if (this.refreshDataOnPreviousPage > 1) {
+      this.utilities.setHomepageDesignRefresh(true);
+    }
   }
 
   getSurveyDetails() {
     this.utilities.showLoading('Getting Survey Details').then((success) => {
       this.apiService.getSurveyDetail(this.surveyId).subscribe((result) => {
-        this.utilities.hideLoading();
-        this.survey = result;
-        this.rescheduleForm.patchValue({
-          datetime: this.survey.datetime
+        this.utilities.hideLoading().then(() => {
+          this.setData(result);
         });
       }, (error) => {
         this.utilities.hideLoading();
       });
+    });
+  }
+
+  setData(result: SurveyDataModel) {
+    this.survey = result;
+    this.assigned = this.survey.assignto.id !== null && this.survey.assignto.id !== undefined;
+    this.rescheduleForm.patchValue({
+      datetime: this.survey.datetime
     });
   }
 
@@ -187,5 +211,25 @@ export class SurveyDetailPage implements OnInit {
 
   dismissBottomSheet() {
     this.drawerState = DrawerState.Bottom;
+  }
+
+  updateAssignee() {
+    if (this.assigneeForm.status === 'INVALID') {
+      this.utilities.showAlert('Please select an assignee');
+    } else {
+      this.utilities.showLoading('Updating').then(() => {
+        this.apiService.updateSurveyForm(this.assigneeForm.value, this.surveyId).subscribe((success) => {
+          this.utilities.hideLoading().then(() => {
+            this.setData(success);
+            this.refreshDataOnPreviousPage++;
+          });
+        }, (error) => {
+          this.utilities.hideLoading().then(() => {
+            this.utilities.showSnackBar('Some Error Occurred');
+          });
+        });
+      });
+
+    }
   }
 }

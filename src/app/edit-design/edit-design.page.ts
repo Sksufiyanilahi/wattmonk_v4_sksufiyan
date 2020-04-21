@@ -304,12 +304,12 @@ export class EditDesignPage implements OnInit {
       this.utils.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
           this.utils.hideLoading().then(() => {
-            this.utils.setDesignDetailsRefresh(true);
             console.log('Res', response);
             this.utils.showSuccessModal('Survey have been updated').then((modal) => {
               modal.present();
               modal.onWillDismiss().then((dismissed) => {
                 this.navController.pop();
+                this.utils.setDesignDetailsRefresh(true);
               });
             }, (error) => {
 

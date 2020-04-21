@@ -8,6 +8,7 @@ import { SurveyDetailPageRoutingModule } from './survey-detail-routing.module';
 
 import { SurveyDetailPage } from './survey-detail.page';
 import { IonBottomDrawerModule } from 'ion-bottom-drawer';
+import { UtilitiesModule } from '../utilities/utilities.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { IonBottomDrawerModule } from 'ion-bottom-drawer';
     ReactiveFormsModule,
     IonicModule,
     IonBottomDrawerModule,
-    SurveyDetailPageRoutingModule
+    SurveyDetailPageRoutingModule,
+    UtilitiesModule
   ],
   declarations: [SurveyDetailPage]
 })

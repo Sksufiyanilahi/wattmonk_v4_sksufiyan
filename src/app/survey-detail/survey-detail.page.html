@@ -106,32 +106,38 @@
 
         <ion-row class="ion-no-padding ion-margin-top">
             <ion-col size="12" class="ion-no-padding">
-                <span class="data-header">comment</span>
+                <span class="data-header">comments</span>
             </ion-col>
             <ion-col size="12" class="ion-no-padding">
                 <span class="data-point">"{{survey.comments}}"</span>
             </ion-col>
+            <ion-col size="12" class="ion-no-padding ion-text-end">
+                <span class="comment-by">Posted by {{survey.createdby.firstname}} {{survey.createdby.lastname}}</span>
+            </ion-col>
         </ion-row>
 
-        <ion-row class="ion-no-padding ion-margin-top">
-            <ion-col size="12">
-                <span class="models">assign</span>
-            </ion-col>
-            <ion-col size="12">
-                <div scrollX="true">
-                    <div class="d-flex flex-row">
-                        <div *ngFor="let assignee of listOfAssignees" class="assignee-margin assignee-image">
-                            <img *ngIf="assignee.logo" [src]="assignee.logo.url" class="assignee-image selected"
-                                 [class.selected]="assignee.selected" [class.normal]="!assignee.selected"/>
-                                 <div  *ngIf="!assignee.logo" class="assignee-image selected" style="background: #FFF1CF;" [class.selected]="assignee.selected"
-                                 [class.normal]="!assignee.selected">
-                                 <div class="name_div">
-                                     <span>{{assignee.firstname.substring(0,2)}}</span>
-                                 </div>
-                                 </div>
-                        </div>
-                    </div>
+        <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
+                 *ngIf="assigned">
+            <ion-col class="ion-justify-content-center ion-align-items-center"><span
+                    class="model-type">assigned to</span></ion-col>
+            <ion-col size="auto">
+                <img *ngIf="survey.assignto.logo" [src]="survey.assignto.logo.url" class="assignee-image selected"/>
+                <div *ngIf="!survey.assignto.logo"
+                     class="assignee-image selected d-flex flex-row align-center justify-center"
+                     style="background: #FFF1CF;">
+                    <span style="text-transform: capitalize;">{{survey.assignto.firstname.substring(0, 1)}}{{survey.assignto.lastname.substring(0, 1)}}</span>
                 </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-no-padding ion-margin-top" *ngIf="!assigned">
+            <ion-col size="12">
+                <form novalidate [formGroup]="assigneeForm">
+                    <ion-item class="ion-no-padding no-border" lines="none">
+                        <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
+                                           formControlName="assignto"></app-user-selector>
+                    </ion-item>
+                </form>
             </ion-col>
         </ion-row>
 
@@ -164,7 +170,8 @@
                     <span>comments</span>
                 </ion-col>
                 <ion-col size="12">
-                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" formControlName="comments" rows="3"></ion-textarea>
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" formControlName="comments"
+                                  rows="3"></ion-textarea>
                 </ion-col>
             </ion-row>
 
@@ -184,3 +191,15 @@
     </form>
 
 </ion-bottom-drawer>
+
+<ion-footer *ngIf="!assigned" class="ion-no-border">
+    <ion-grid>
+        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+            <ion-col size="auto">
+                <ion-button class="action-button-color" fill="clear" (click)="updateAssignee()">Done</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-footer>
+

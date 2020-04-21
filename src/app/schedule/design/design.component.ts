@@ -110,12 +110,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (this.desginForm.status === 'VALID') {
       this.utils.showLoading('Saving').then(() => {
         this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
-          this.utils.sethomepageDesignRefresh(true);
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
             this.utils.showSuccessModal('Survey have been saved').then((modal) => {
               modal.present();
               modal.onWillDismiss().then((dismissed) => {
+                this.utils.setHomepageDesignRefresh(true);
                 this.navController.pop();
               });
             }, (error) => {

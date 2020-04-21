@@ -44,7 +44,7 @@ export class UtilitiesService {
     return this.homepageDesignRefresh;
   }
 
-  sethomepageDesignRefresh(refresh: boolean) {
+  setHomepageDesignRefresh(refresh: boolean) {
     this.homepageDesignRefresh.next(refresh);
   }
 

@@ -20,7 +20,7 @@ const routes: Routes = [
   {
     path: 'schedule',
     loadChildren: () => import('./schedule/schedule.module').then(m => m.SchedulePageModule),
-   canActivate: [AuthGuardService]
+    canActivate: [AuthGuardService]
   },
   {
     path: 'camera/:id',
@@ -29,38 +29,44 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule)
+    loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'notification',
-    loadChildren: () => import('./notification/notification.module').then(m => m.NotificationPageModule)
+    loadChildren: () => import('./notification/notification.module').then(m => m.NotificationPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'map-page',
-    loadChildren: () => import('./map-page/map-page.module').then( m => m.MapPagePageModule)
+    loadChildren: () => import('./map-page/map-page.module').then(m => m.MapPagePageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'gallery',
-    loadChildren: () => import('./gallery/gallery.module').then( m => m.GalleryPageModule)
+    loadChildren: () => import('./gallery/gallery.module').then(m => m.GalleryPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'homepagedetail',
-    loadChildren: () => import('./homepagedetail/homepagedetail.module').then( m => m.HomepagedetailPageModule)
+    loadChildren: () => import('./homepagedetail/homepagedetail.module').then(m => m.HomepagedetailPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'survey-detail/:id',
-    loadChildren: () => import('./survey-detail/survey-detail.module').then( m => m.SurveyDetailPageModule)
+    loadChildren: () => import('./survey-detail/survey-detail.module').then(m => m.SurveyDetailPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'design-details/:id',
-    loadChildren: () => import('./design-details/design-details.module').then( m => m.DesignDetailsPageModule)
+    loadChildren: () => import('./design-details/design-details.module').then(m => m.DesignDetailsPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'edit-design/:id',
-    loadChildren: () => import('./edit-design/edit-design.module').then( m => m.EditDesignPageModule)
+    loadChildren: () => import('./edit-design/edit-design.module').then(m => m.EditDesignPageModule),
+    canActivate: [AuthGuardService]
   }
-
-
 
 
 ];

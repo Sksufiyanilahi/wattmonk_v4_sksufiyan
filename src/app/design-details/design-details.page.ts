@@ -23,6 +23,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   listOfAssignees: AssigneeModel[] = [];
   dataSubscription: Subscription;
   assigneeForm: FormGroup;
+  refreshDataOnPreviousPage = 0;
+
 
   constructor(
     private utilities: UtilitiesService,
@@ -41,6 +43,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
+      this.refreshDataOnPreviousPage++;
       this.getDesignDetails();
       this.getAssignees();
     });
@@ -48,7 +51,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.dataSubscription.unsubscribe();
-    this.utilities.sethomepageDesignRefresh(true);
+    if (this.refreshDataOnPreviousPage > 1) {
+      this.utilities.setHomepageDesignRefresh(true);
+    }
   }
 
   getDesignDetails() {
@@ -128,6 +133,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.assigneeForm.value, this.designId).subscribe((success) => {
           this.utilities.hideLoading().then(() => {
+            this.refreshDataOnPreviousPage++;
             this.setData(success);
           });
         }, (error) => {

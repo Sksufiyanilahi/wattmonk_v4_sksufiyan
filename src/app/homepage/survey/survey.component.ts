@@ -38,13 +38,13 @@ export class SurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-    //   this.getSurvey();
-    // });
+    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+      this.getSurvey();
+    });
   }
 
   ngOnDestroy(): void {
-    // this.surveyRefreshSubscription.unsubscribe();
+    this.surveyRefreshSubscription.unsubscribe();
   }
 
   getSurvey() {

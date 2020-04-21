@@ -1,3 +1,5 @@
+import { User } from './user.model';
+
 export class SurveyModel {
   id: number;
 }
@@ -13,8 +15,8 @@ export class SurveyDataModel {
   updated_at: Date;
   address: string;
   source: string;
-  assignto?: any;
-  createdby?: any;
+  assignto?: User;
+  createdby?: User;
   mspimages: any[];
   utilitymeterimages: any[];
   pvinverterimages: any[];

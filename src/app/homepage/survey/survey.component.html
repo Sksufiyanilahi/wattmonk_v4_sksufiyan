@@ -9,16 +9,25 @@
                           {{item.date | date: 'dd MMM yyyy'}}
                     </span>
             </ion-col>
-            <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6"
-                     [routerLink]="['/survey-details/',surveyData.id]" routerDirection="forward">
+            <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
                 <div class="ion-padding custom-card">
-                    <span class="customer-name">{{surveyData.name}}</span>
-                    <span class="customer-email">{{surveyData.email}}</span>
+                    <span class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">{{surveyData.name}}</span>
+                    <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">{{surveyData.email}}</span>
                     <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
                         <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
                     <span class="customer-address z-100"
                           (click)="openAddressOnMap(surveyData.address)">{{surveyData.address}}</span>
-                    <span class="ion-text-end action-button-color">Assign</span>
+                    <ion-row class="ion-no-margin ion-no-margin">
+                        <ion-col size="auto" class="ion-no-margin ion-no-padding" [routerLink]="['/camera/',surveyData.id]" routerDirection="forward">
+                            <span class="ion-text-end action-button-color">Start Survey</span>
+                        </ion-col>
+                        <ion-col></ion-col>
+                        <ion-col size="auto" class="ion-no-margin ion-no-padding">
+                            <span class="ion-text-end action-button-color" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward"
+                                  *ngIf="surveyData.assignto.id === null || surveyData.assignto.id === undefined">Assign</span>
+                        </ion-col>
+                    </ion-row>
+
                 </div>
 
             </ion-col>
