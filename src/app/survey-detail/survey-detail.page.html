@@ -121,11 +121,13 @@
             <ion-col class="ion-justify-content-center ion-align-items-center"><span
                     class="model-type">assigned to</span></ion-col>
             <ion-col size="auto">
-                <img *ngIf="survey.assignto.logo" [src]="survey.assignto.logo.url" class="assignee-image selected"/>
-                <div *ngIf="!survey.assignto.logo"
-                     class="assignee-image selected d-flex flex-row align-center justify-center"
-                     style="background: #FFF1CF;">
-                    <span style="text-transform: capitalize;">{{survey.assignto.firstname.substring(0, 1)}}{{survey.assignto.lastname.substring(0, 1)}}</span>
+                <div class="selected d-flex">
+                    <img *ngIf="survey.assignto.logo" [src]="survey.assignto.logo.url" class="assignee-image"/>
+                    <div *ngIf="!survey.assignto.logo" class="assignee-image d-flex flex-row align-center justify-center">
+                        <div class="name_div">
+                            <span style="text-transform: capitalize;">{{survey.assignto.firstname.substring(0, 1)}}{{survey.assignto.lastname.substring(0, 1)}}</span>
+                        </div>
+                    </div>
                 </div>
             </ion-col>
         </ion-row>
