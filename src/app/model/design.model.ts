@@ -96,6 +96,7 @@ export class DesignDetails {
   }
 
   export class Assignedto {
+
   }
 
   export class DesginDataModel {
@@ -109,6 +110,8 @@ export class DesignDetails {
       address: string;
       rooftype: string;
       jobtype: string;
+      construction: string;
+      projectype: string;
       comments: string;
       source: string;
       solarmake: Solarmake;
@@ -116,7 +119,7 @@ export class DesignDetails {
       invertermake: Invertermake;
       invertermodel: Invertermodel;
       createdby: Createdby;
-      assignedto: Assignedto;
+      assignedto: Createdby;
   }
 
 

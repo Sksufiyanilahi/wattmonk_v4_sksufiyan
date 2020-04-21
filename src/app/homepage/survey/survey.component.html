@@ -1,31 +1,29 @@
 <ion-content>
-    <div class="ion-no-padding">
-        <ion-grid>
-            <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
-                <ion-col size="12" class="ion-margin-top">
+    <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
+        <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
+            <ion-col size="12" class="ion-margin-top">
                     <span class="ion-padding" *ngIf="today === item.date">
                         Today
                       </span>
-                    <span class="ion-padding" *ngIf="today !== item.date">
+                <span class="ion-padding" *ngIf="today !== item.date">
                           {{item.date | date: 'dd MMM yyyy'}}
                     </span>
-                </ion-col>
-                <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6"
-                         [routerLink]="['/survey-details/',surveyData.id]" routerDirection="forward">
-                    <div class="ion-padding custom-card">
-                        <span class="customer-name">{{surveyData.name}}</span>
-                        <span class="customer-email">{{surveyData.email}}</span>
-                        <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;">
-                            <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
-                        <span class="customer-address"
-                              (click)="openAddressOnMap(surveyData.address)">{{surveyData.address}}</span>
-                        <span class="ion-text-end action-button-color">Assign</span>
-                    </div>
+            </ion-col>
+            <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6"
+                     [routerLink]="['/survey-details/',surveyData.id]" routerDirection="forward">
+                <div class="ion-padding custom-card">
+                    <span class="customer-name">{{surveyData.name}}</span>
+                    <span class="customer-email">{{surveyData.email}}</span>
+                    <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
+                        <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
+                    <span class="customer-address z-100"
+                          (click)="openAddressOnMap(surveyData.address)">{{surveyData.address}}</span>
+                    <span class="ion-text-end action-button-color">Assign</span>
+                </div>
 
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
     <ion-grid *ngIf="listOfSurveyDataHelper.length === 0" class="ion-margin ion-padding">
         <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -33,7 +31,6 @@
                 <ion-item lines="none" class="ion-align-items-center ion-justify-content-center d-flex">
                     <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
                 </ion-item>
-
             </ion-col>
         </ion-row>
     </ion-grid>

@@ -38,13 +38,13 @@ export class SurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-      this.getSurvey();
-    });
+    // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+    //   this.getSurvey();
+    // });
   }
 
   ngOnDestroy(): void {
-    this.surveyRefreshSubscription.unsubscribe();
+    // this.surveyRefreshSubscription.unsubscribe();
   }
 
   getSurvey() {
@@ -52,40 +52,42 @@ export class SurveyComponent implements OnInit, OnDestroy {
     this.listOfSurveyDataHelper = [];
     this.utils.showLoading('Getting Surveys').then((success) => {
       this.apiService.getSurvey().subscribe(response => {
-        this.utils.hideLoading();
-        console.log(response);
-        this.listOfSurveyData = response;
-        const tempData: SurveyDataHelper[] = [];
-        this.listOfSurveyData.forEach((surveyItem) => {
-          if (tempData.length === 0) {
-            const listOfSurvey = new SurveyDataHelper();
-            listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
-            listOfSurvey.listOfSurveys.push(surveyItem);
-            tempData.push(listOfSurvey);
-          } else {
-            let added = false;
-            tempData.forEach((surveyList) => {
-              if (!added) {
-                if (surveyList.date === this.datePipe.transform(surveyItem.created_at, 'M/d/yy')) {
-                  surveyList.listOfSurveys.push(surveyItem);
-                  added = true;
-                }
-              }
-            });
-            if (!added) {
+        this.utils.hideLoading().then(() => {
+          console.log(response);
+          this.listOfSurveyData = response;
+          const tempData: SurveyDataHelper[] = [];
+          this.listOfSurveyData.forEach((surveyItem) => {
+            if (tempData.length === 0) {
               const listOfSurvey = new SurveyDataHelper();
               listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
               listOfSurvey.listOfSurveys.push(surveyItem);
               tempData.push(listOfSurvey);
-              added = true;
+            } else {
+              let added = false;
+              tempData.forEach((surveyList) => {
+                if (!added) {
+                  if (surveyList.date === this.datePipe.transform(surveyItem.created_at, 'M/d/yy')) {
+                    surveyList.listOfSurveys.push(surveyItem);
+                    added = true;
+                  }
+                }
+              });
+              if (!added) {
+                const listOfSurvey = new SurveyDataHelper();
+                listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
+                listOfSurvey.listOfSurveys.push(surveyItem);
+                tempData.push(listOfSurvey);
+                added = true;
+              }
             }
-          }
+          });
+          this.listOfSurveyDataHelper = tempData;
         });
-        this.listOfSurveyDataHelper = tempData;
       }, responseError => {
-        this.utils.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utils.showSnackBar(error.message[0].messages[0].message);
+        this.utils.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utils.showSnackBar(error.message[0].messages[0].message);
+        });
       });
     });
   }

@@ -96,8 +96,14 @@ export class EditDesignPage implements OnInit {
           createdby: this.design.createdby.id,
           rooftype: this.design.rooftype,
           jobtype: this.design.jobtype,
-          comments: this.design.comments
+          comments: this.design.comments,
         });
+
+        if(this.design.assignedto.id !== null && this.design.assignedto.id !== undefined) {
+          this.desginForm.patchValue({
+            assignedto: this.design.assignedto.id
+          });
+        }
 
         this.getSolarMakeForForm();
         this.getInverterMakeForForm();
@@ -114,14 +120,7 @@ export class EditDesignPage implements OnInit {
   getAssignees() {
     this.apiService.getAssignees(UserRoles.DESIGNER).subscribe(assignees => {
       this.listOfAssignees = [];
-      this.listOfAssignees.push({
-        firstname: '',
-        logo: {
-          url: '/assets/images/wattmonk_logo.png'
-        },
-        selected: false,
-        id: +this.storage.getUserID()
-      });
+      this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
       console.log(this.listOfAssignees);
     });

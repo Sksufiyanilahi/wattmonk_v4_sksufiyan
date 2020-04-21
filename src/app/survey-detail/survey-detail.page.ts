@@ -112,14 +112,7 @@ export class SurveyDetailPage implements OnInit {
   getAssignees() {
     this.apiService.getAssignees(UserRoles.SURVEYOR).subscribe(assignees => {
       this.listOfAssignees = [];
-      this.listOfAssignees.push({
-        firstname: '',
-        logo: {
-          url: '/assets/images/wattmonk_logo.png'
-        },
-        selected: false,
-        id: +this.storage.getUserID()
-      });
+      this.listOfAssignees.push(this.utilities.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
       console.log(this.listOfAssignees);
     });

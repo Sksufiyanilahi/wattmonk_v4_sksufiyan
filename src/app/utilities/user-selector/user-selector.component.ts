@@ -40,6 +40,9 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
 
   writeValue(assignee: number): void {
     this.selectedUserId = assignee;
+    this.assignees.forEach((item) => {
+      item.selected = item.id === this.selectedUserId;
+    });
   }
 
   validate(control: AbstractControl): ValidationErrors | null {

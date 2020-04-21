@@ -4,6 +4,7 @@ import { SuccessModalComponent } from './utilities/success-modal/success-modal.c
 import { BehaviorSubject } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
 import { AddressModel } from './model/address.model';
+import { AssigneeModel } from './model/assignee.model';
 
 @Injectable({
   providedIn: 'root'
@@ -133,6 +134,18 @@ export class UtilitiesService {
       cssClass: 'my-custom-class'
     });
     toast.present();
+  }
+
+  getDefaultAssignee(userId: string): AssigneeModel {
+    return {
+      firstname: '',
+      lastname: '',
+      logo: {
+        url: '/assets/images/wattmonk_logo.png'
+      },
+      selected: false,
+      id: +userId
+    };
   }
 
 

@@ -99,7 +99,6 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   onFocus(event: CustomEvent) {
-    console.log('visible');
     console.log(event);
     this.sortedList = this.dataList.filter((item) => {
       return (item.name.toLowerCase().indexOf(this.selectedDataName) > -1);
@@ -112,7 +111,6 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   onBlur(event: CustomEvent) {
-    console.log('gone');
     console.log(event);
     setTimeout(() => {
       this.sortedList = [];

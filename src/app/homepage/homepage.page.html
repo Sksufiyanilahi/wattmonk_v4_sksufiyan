@@ -3,7 +3,7 @@
         <ion-grid>
             <ion-row *ngIf="showSearchBar === true" class="ion-align-items-center">
                 <ion-col>
-                    <ion-searchbar placeholder="home" class="custom"></ion-searchbar>
+                    <ion-searchbar placeholder="home" class="custom" (ionClear)="showSearchBar = false"></ion-searchbar>
                 </ion-col>
                 <!--                <ion-col size="auto">-->
                 <!--                    <ion-button fill="clear" size="small" class="ion-no-padding" (click)="showSearchBar = !showSearchBar">-->

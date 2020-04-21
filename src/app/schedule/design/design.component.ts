@@ -163,14 +163,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   getAssignees() {
     this.apiService.getAssignees(UserRoles.DESIGNER).subscribe(assignees => {
       this.listOfAssignees = [];
-      this.listOfAssignees.push({
-        firstname: '',
-        logo: {
-          url: '/assets/images/wattmonk_logo.png'
-        },
-        selected: false,
-        id: +this.storage.getUserID()
-      });
+      this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
       console.log(this.listOfAssignees);
     });

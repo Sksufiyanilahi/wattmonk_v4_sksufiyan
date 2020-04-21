@@ -58,6 +58,12 @@ ion-header {
   font-size: 18px;
 }
 
+.comment-by {
+  font-size: 10px;
+  font-style: italic;
+  color: #666666 !important;
+}
+
 .assignee-image {
   width: 3.5em;
   height: 3.5em;
@@ -97,7 +103,6 @@ div[scrolly=true] {
 }
 
 .name_div{
-  margin-top: 11px;
   font-size: 20px;
 }
 

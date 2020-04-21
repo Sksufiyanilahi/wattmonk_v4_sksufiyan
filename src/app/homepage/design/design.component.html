@@ -14,9 +14,9 @@
                      routerDirection="forward">
                     <span class="customer-name">{{designData.name}}</span>
                     <span class="customer-email">{{designData.email}}</span>
-                    <span class="customer-address"
+                    <span class="customer-address z-100"
                           (click)="openAddressOnMap(designData.address)">{{designData.address}}</span>
-                    <span class="ion-text-end action-button-color" >Assign</span>
+                    <span class="ion-text-end action-button-color" *ngIf="designData.assignedto.id === null || designData.assignedto.id === undefined">Assign</span>
                 </div>
 
             </ion-col>
@@ -29,7 +29,6 @@
                 <ion-item lines="none" class="ion-align-items-center ion-justify-content-center d-flex">
                     <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
                 </ion-item>
-
             </ion-col>
         </ion-row>
     </ion-grid>

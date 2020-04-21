@@ -8,6 +8,7 @@ import { UserRoles } from '../model/constants';
 import { AssigneeModel } from '../model/assignee.model';
 import { StorageService } from '../storage.service';
 import { Subscription } from 'rxjs';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-design-details',
@@ -18,8 +19,10 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   designId: number;
   design: DesginDataModel;
+  assigned = false;
   listOfAssignees: AssigneeModel[] = [];
   dataSubscription: Subscription;
+  assigneeForm: FormGroup;
 
   constructor(
     private utilities: UtilitiesService,
@@ -27,9 +30,13 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private navController: NavController,
     private alertController: AlertController,
-    private storage: StorageService
+    private storage: StorageService,
+    private formBuilder: FormBuilder
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
+    this.assigneeForm = this.formBuilder.group({
+      assignedto: new FormControl('', [Validators.required])
+    });
   }
 
   ngOnInit() {
@@ -48,7 +55,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     this.utilities.showLoading('Getting Design Details').then((success) => {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
-        this.design = result;
+        this.setData(result);
       }, (error) => {
         this.utilities.hideLoading();
       });
@@ -61,6 +68,11 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   editDesign() {
 
+  }
+
+  setData(result: DesginDataModel) {
+    this.design = result;
+    this.assigned = this.design.assignedto.id !== null && this.design.assignedto.id !== undefined;
   }
 
   async deleteDesign() {
@@ -87,12 +99,15 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     this.utilities.showLoading('Deleting Design').then((success) => {
       this.apiService.deleteDesign(this.designId).subscribe((result) => {
         console.log('result', result);
-        this.utilities.hideLoading();
-        this.utilities.showSnackBar('Desgin deleted successfully');
+        this.utilities.hideLoading().then(() => {
+          this.utilities.showSnackBar('Desgin deleted successfully');
+        });
         this.navController.pop();
       }, (error) => {
-        this.utilities.hideLoading();
-        this.utilities.showSnackBar('Some Error Occurred');
+        this.utilities.hideLoading().then(() => {
+          this.utilities.showSnackBar('Some Error Occurred');
+        });
+
       });
     });
   }
@@ -100,17 +115,28 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   getAssignees() {
     this.apiService.getAssignees(UserRoles.DESIGNER).subscribe(assignees => {
       this.listOfAssignees = [];
-      this.listOfAssignees.push({
-        firstname: '',
-        logo: {
-          url: '/assets/images/wattmonk_logo.png'
-        },
-        selected: false,
-        id: +this.storage.getUserID()
-      });
+      this.listOfAssignees.push(this.utilities.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
       console.log(this.listOfAssignees);
     });
   }
 
+  updateAssignee() {
+    if (this.assigneeForm.status === 'INVALID') {
+      this.utilities.showAlert('Please select an assignee');
+    } else {
+      this.utilities.showLoading('Updating').then(() => {
+        this.apiService.updateDesignForm(this.assigneeForm.value, this.designId).subscribe((success) => {
+          this.utilities.hideLoading().then(() => {
+            this.setData(success);
+          });
+        }, (error) => {
+          this.utilities.hideLoading().then(() => {
+            this.utilities.showSnackBar('Some Error Occurred');
+          });
+        });
+      });
+
+    }
+  }
 }
