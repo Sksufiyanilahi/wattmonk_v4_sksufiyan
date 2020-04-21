@@ -9,14 +9,14 @@
                       {{item.date | date: 'dd MMM yyyy'}}
                     </span>
             </ion-col>
-            <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="6">
+            <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="6" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
                 <div class="ion-padding custom-card"
                      routerDirection="forward">
                     <span class="customer-name">{{designData.name}}</span>
                     <span class="customer-email">{{designData.email}}</span>
                     <span class="customer-address"
                           (click)="openAddressOnMap(designData.address)">{{designData.address}}</span>
-                    <span class="ion-text-end action-button-color" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">Assign</span>
+                    <span class="ion-text-end action-button-color" >Assign</span>
                 </div>
 
             </ion-col>

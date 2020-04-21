@@ -22,6 +22,7 @@ export class ApiService {
   headers: HttpHeaders;
   baseUrl = 'http://ec2-3-17-28-7.us-east-2.compute.amazonaws.com:1337';
   private parentId = '';
+  private userId = '';
 
   constructor(
     private http: HttpClient,
@@ -66,7 +67,7 @@ export class ApiService {
   }
 
   getDesgin() {
-    return this.http.get<DesginDataModel[]>(this.baseUrl + '/designs?_sort=created_at:DESC', { headers: this.headers });
+    return this.http.get<DesginDataModel[]>(this.baseUrl + '/designs?_sort=created_at:DESC&createdby=' + this.userId + '||assignedto=' + this.userId, { headers: this.headers });
   }
 
   getDesginDetail(id): Observable<DesginDataModel> {
@@ -78,7 +79,7 @@ export class ApiService {
   }
 
   getSurvey() {
-    return this.http.get<SurveyDataModel[]>(this.baseUrl + '/surveys?_sort=created_at:DESC', { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(this.baseUrl + '/surveys?_sort=created_at:DESC&createdby=' + this.userId + '||assignedto=' + this.userId, { headers: this.headers });
   }
 
   getSurveyDetail(id): Observable<SurveyDataModel> {
@@ -99,6 +100,7 @@ export class ApiService {
       Authorization: 'Bearer ' + this.storageService.getJWTToken()
     });
     this.parentId = this.storageService.getParentId();
+    this.userId = this.storageService.getUserID();
   }
 
   saveSurvey(data: any): Observable<SurveyDataModel> {
