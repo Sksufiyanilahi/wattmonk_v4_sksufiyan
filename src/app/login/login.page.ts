@@ -52,11 +52,11 @@ import { INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../model/constants';
 export class LoginPage implements OnInit {
 
   loginForm: FormGroup;
-  isActiveToggleTextPassword: Boolean = true;
+  isActiveToggleTextPassword = true;
 
   emailError = INVALID_EMAIL_MESSAGE;
   fieldRequired = FIELD_REQUIRED;
-
+  isLoggedInOnce = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -64,13 +64,14 @@ export class LoginPage implements OnInit {
     private apiService: ApiService,
     private storageService: StorageService,
     private navController: NavController) {
+    this.isLoggedInOnce = this.storageService.isLoggedInOnce();
   }
 
   ngOnInit() {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.loginForm = this.formBuilder.group({
-        identifier: new FormControl('',  [Validators.required, Validators.pattern(EMAILPATTERN)]),
-        password: new FormControl('', [Validators.required,Validators.minLength(6)])
+        identifier: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
+        password: new FormControl('', [Validators.required, Validators.minLength(6)])
       }
     );
   }
@@ -82,12 +83,7 @@ export class LoginPage implements OnInit {
         this.apiService.login(this.loginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
-            this.storageService.setUser(response.user);
-            this.storageService.setUserId(response.user.id);
-            this.storageService.setJWTToken(response.jwt);
-            if (response.user.parent) {
-              this.storageService.setParentId(response.user.parent.id);
-            }
+            this.storageService.setUser(response.user, response.jwt);
             this.apiService.refreshHeader();
             this.navController.navigateRoot(['homepage']);
           });
@@ -115,7 +111,7 @@ export class LoginPage implements OnInit {
 
   get password() {
     return this.loginForm.get('password');
-} 
+  }
 
 
 }

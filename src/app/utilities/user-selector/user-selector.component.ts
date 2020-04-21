@@ -62,9 +62,14 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
     this.assignees.forEach((item) => {
       item.selected = false;
     });
-    assignee.selected = true;
-    this.selectedUserId = assignee.id;
-    this.onChange(assignee.id);
+    if (assignee.id === this.selectedUserId) {
+      this.selectedUserId = 0;
+      this.onChange(0);
+    } else {
+      assignee.selected = true;
+      this.selectedUserId = assignee.id;
+      this.onChange(assignee.id);
+    }
   }
 
   selectSelf() {

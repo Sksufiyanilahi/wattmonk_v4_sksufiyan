@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from "@ionic/angular";
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-profile',
@@ -9,14 +10,19 @@ import { NavController } from "@ionic/angular";
 export class ProfilePage implements OnInit {
 
   constructor(
-    private navController: NavController
+    private navController: NavController,
+    private storage: StorageService
   ) { }
 
   ngOnInit() {
   }
 
   goBack() {
-    this.navController.pop()
+    this.navController.pop();
   }
 
+  logout() {
+    this.storage.logout();
+    this.navController.navigateRoot('login');
+  }
 }

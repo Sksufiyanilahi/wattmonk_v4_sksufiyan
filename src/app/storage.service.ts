@@ -14,8 +14,14 @@ export class StorageService {
     return localStorage.getItem('user') !== null && localStorage.getItem('user') !== undefined;
   }
 
-  setUser(user: User) {
+  setUser(user: User, jwt: string) {
     localStorage.setItem('user', JSON.stringify(user));
+    this.setUserId(user.id);
+    if (user.parent) {
+      this.setParentId(user.parent.id);
+    }
+    this.setJWTToken(jwt);
+    this.setLoggedInOnce();
   }
 
   getUser(): User {
@@ -35,7 +41,7 @@ export class StorageService {
   }
 
   getUserID(): string {
-   return localStorage.getItem('userId');
+    return localStorage.getItem('userId');
   }
 
   removeUser() {
@@ -80,5 +86,18 @@ export class StorageService {
 
   getParentId(): string {
     return localStorage.getItem('parentId');
+  }
+
+  logout() {
+    localStorage.clear();
+    this.setLoggedInOnce();
+  }
+
+  setLoggedInOnce() {
+    localStorage.setItem('loggedInOnce', 'yes');
+  }
+
+  isLoggedInOnce(): boolean {
+    return localStorage.getItem('loggedInOnce') !== null && localStorage.getItem('loggedInOnce') !== undefined;
   }
 }

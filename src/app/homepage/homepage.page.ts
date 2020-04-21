@@ -8,6 +8,7 @@ import { AlertController, Platform } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-homepage',
@@ -15,7 +16,6 @@ import { AddressModel } from '../model/address.model';
   styleUrls: ['./homepage.page.scss'],
 })
 export class HomepagePage implements OnInit {
-
 
   searchQuery = '';
   items: string[];
@@ -27,8 +27,7 @@ export class HomepagePage implements OnInit {
     maxResults: 5
   };
 
-  // showHome = true;
-
+  private subscription: Subscription;
 
   constructor(
     private utilities: UtilitiesService,
@@ -238,6 +237,21 @@ export class HomepagePage implements OnInit {
       backdropDismiss: false
     });
     await alert.present();
+  }
+
+  ionViewDidEnter() {
+    this.subscription = this.platform.backButton.subscribe(() => {
+      if (this.showSearchBar === true) {
+        this.showSearchBar = false;
+      } else {
+        navigator['app'].exitApp();
+      }
+    });
+  }
+
+  ionViewWillLeave() {
+    this.subscription.unsubscribe();
+
   }
 
 }
