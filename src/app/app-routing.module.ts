@@ -66,7 +66,11 @@ const routes: Routes = [
     path: 'edit-design/:id',
     loadChildren: () => import('./edit-design/edit-design.module').then(m => m.EditDesignPageModule),
     canActivate: [AuthGuardService]
+  },  {
+    path: 'message',
+    loadChildren: () => import('./message/message.module').then( m => m.MessagePageModule)
   }
+
 
 
 ];
