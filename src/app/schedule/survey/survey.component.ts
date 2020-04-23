@@ -41,7 +41,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
-      assignTo: new FormControl(0),
+      assignedTo: new FormControl(0),
       createdby: new FormControl(this.storage.getUserID(), [Validators.required])
     });
     // console.log(this.platform);
