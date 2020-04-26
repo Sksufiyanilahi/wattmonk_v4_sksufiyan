@@ -71,7 +71,7 @@ export class EditDesignPage implements OnInit {
       rooftype: new FormControl('', [Validators.required]),
       jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
-      construction: new FormControl('', [Validators.required]),
+      newconstruction: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl('')
     });
@@ -98,7 +98,7 @@ export class EditDesignPage implements OnInit {
           jobtype: this.design.jobtype,
           comments: this.design.comments,
           projecttype:this.design.projecttype,
-          construction:this.design.newconstruction
+          newconstruction:this.design.newconstruction
         });
 
         if(this.design.assignedto.id !== null && this.design.assignedto.id !== undefined) {
