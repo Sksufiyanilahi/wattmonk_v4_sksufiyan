@@ -136,6 +136,16 @@ export class UtilitiesService {
     toast.present();
   }
 
+  async errorSnackBar(message) {
+    this.hideLoading();
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      cssClass: 'my-custom-error-class'
+    });
+    toast.present();
+  }
+
   getDefaultAssignee(userId: string): AssigneeModel {
     return {
       firstname: '',

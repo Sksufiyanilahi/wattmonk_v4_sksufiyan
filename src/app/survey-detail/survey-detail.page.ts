@@ -108,13 +108,13 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
       subHeader: 'Are you sure you want to delete this survey?',
       buttons: [
         {
-          text: 'OK',
+          text: 'Yes',
           handler: () => {
             this.deleteSurveyFromServer();
           }
         },
         {
-          text: 'Cancel'
+          text: 'No'
         }
       ],
       backdropDismiss: false
@@ -126,9 +126,18 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     this.utilities.showLoading('Deleting Survey').then((success) => {
       this.apiService.deleteSurvey(this.surveyId).subscribe((result) => {
         this.utilities.hideLoading();
-        this.navController.pop();
+        this.utilities.showSuccessModal('Desgin deleted successfully').then((modal) => {
+          modal.present();
+          modal.onWillDismiss().then((dismissed) => {
+            this.navController.pop();
+          });
+        },(error) => {
+
+        });
       }, (error) => {
-        this.utilities.hideLoading();
+        this.utilities.hideLoading().then(() => {
+          this.utilities.errorSnackBar('Some Error Occurred');
+        });
       });
     });
   }
@@ -220,8 +229,16 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateSurveyForm(this.assigneeForm.value, this.surveyId).subscribe((success) => {
           this.utilities.hideLoading().then(() => {
-            this.setData(success);
+            this.utilities.showSuccessModal('Assignee selected').then((modal) => {
+              modal.present();
+              modal.onWillDismiss().then((dismissed) => {
+                this.setData(success);
             this.refreshDataOnPreviousPage++;
+              });
+            },(error) => {
+  
+            });
+           
           });
         }, (error) => {
           this.utilities.hideLoading().then(() => {

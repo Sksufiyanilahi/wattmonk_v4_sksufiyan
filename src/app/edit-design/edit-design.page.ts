@@ -97,6 +97,8 @@ export class EditDesignPage implements OnInit {
           rooftype: this.design.rooftype,
           jobtype: this.design.jobtype,
           comments: this.design.comments,
+          projecttype:this.design.projecttype,
+          construction:this.design.newconstruction
         });
 
         if(this.design.assignedto.id !== null && this.design.assignedto.id !== undefined) {

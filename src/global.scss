@@ -103,6 +103,7 @@
 .form_input {
     margin-top: 10px;
     margin-bottom: -10px;
+    color: black !important;
 }
 
 .action-button-color {
@@ -192,10 +193,15 @@ ion-modal {
 }
 
 .my-custom-class{
-    --background:#D8EAD2;
+    --background: red;
     --border-radius:5px;
     --color:#5A6158
+}
 
+.my-custom-error-class{
+    --background: red;
+    --border-radius:5px;
+    --color:white;
 }
 
 .z-100 {

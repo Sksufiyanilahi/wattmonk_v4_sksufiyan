@@ -60,6 +60,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     this.utilities.showLoading('Getting Design Details').then((success) => {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
+        console.log("re",result);
         this.setData(result);
       }, (error) => {
         this.utilities.hideLoading();
@@ -86,13 +87,13 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       subHeader: 'Are you sure you want to delete this design?',
       buttons: [
         {
-          text: 'OK',
+          text: 'Yes',
           handler: () => {
             this.deleteDesignFromServer();
           }
         },
         {
-          text: 'Cancel'
+          text: 'No'
         }
       ],
       backdropDismiss: false
@@ -105,12 +106,18 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.apiService.deleteDesign(this.designId).subscribe((result) => {
         console.log('result', result);
         this.utilities.hideLoading().then(() => {
-          this.utilities.showSnackBar('Desgin deleted successfully');
+          this.utilities.showSuccessModal('Desgin deleted successfully').then((modal) => {
+            modal.present();
+            modal.onWillDismiss().then((dismissed) => {
+              this.navController.pop();
+            });
+          },(error) => {
+
+          });
         });
-        this.navController.pop();
       }, (error) => {
         this.utilities.hideLoading().then(() => {
-          this.utilities.showSnackBar('Some Error Occurred');
+          this.utilities.errorSnackBar('Some Error Occurred');
         });
 
       });
@@ -133,12 +140,19 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.assigneeForm.value, this.designId).subscribe((success) => {
           this.utilities.hideLoading().then(() => {
-            this.refreshDataOnPreviousPage++;
-            this.setData(success);
+            this.utilities.showSuccessModal('Assignee selected').then((modal) => {
+              modal.present();
+              modal.onWillDismiss().then((dismissed) => {
+                this.refreshDataOnPreviousPage++;
+                this.setData(success);
+              });
+            },(error) => {
+  
+            });
           });
         }, (error) => {
           this.utilities.hideLoading().then(() => {
-            this.utilities.showSnackBar('Some Error Occurred');
+            this.utilities.errorSnackBar('Some Error Occurred');
           });
         });
       });

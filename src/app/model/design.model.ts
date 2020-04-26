@@ -82,8 +82,8 @@ export class DesginDataModel {
   address: string;
   rooftype: string;
   jobtype: string;
-  construction: string;
-  projectype: string;
+  newconstruction: string;
+  projecttype: string;
   comments: string;
   source: string;
   solarmake: Solarmake;

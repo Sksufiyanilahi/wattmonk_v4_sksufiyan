@@ -15,7 +15,7 @@
                     <span class="customer-name" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">{{designData.name}}</span>
                     <span class="customer-email" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">{{designData.email}}</span>
                     <span class="customer-address z-100"
-                          (click)="openAddressOnMap(designData.address)">{{designData.address}}</span>
+                          (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
                     <span class="ion-text-end action-button-color" [routerLink]="['/design-details/',designData.id]" routerDirection="forward"
                           *ngIf="designData.assignedto.id === null || designData.assignedto.id === undefined">Assign</span>
                 </div>
@@ -24,7 +24,7 @@
         </ion-row>
     </ion-grid>
 
-    <ion-grid *ngIf="listOfDesignDataHelper.length === 0" class="ion-margin ion-padding">
+    <ion-grid *ngIf="listOfDesignDataHelper.length === 0" >
         <ion-row class="ion-align-items-center ion-justify-content-center">
             <ion-col class="ion-align-items-center ion-justify-content-center d-flex">
                 <ion-item lines="none" class="ion-align-items-center ion-justify-content-center d-flex">
