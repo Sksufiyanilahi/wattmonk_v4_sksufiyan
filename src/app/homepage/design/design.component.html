@@ -24,14 +24,8 @@
         </ion-row>
     </ion-grid>
 
-    <ion-grid *ngIf="listOfDesignDataHelper.length === 0" >
-        <ion-row class="ion-align-items-center ion-justify-content-center">
-            <ion-col class="ion-align-items-center ion-justify-content-center d-flex">
-                <ion-item lines="none" class="ion-align-items-center ion-justify-content-center d-flex">
-                    <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
-                </ion-item>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <div *ngIf="listOfDesignDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+        <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>      
+      </div>
 
 </ion-content>

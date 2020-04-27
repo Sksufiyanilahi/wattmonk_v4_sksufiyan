@@ -20,7 +20,8 @@ export class HomepagePage implements OnInit {
   searchQuery = '';
   items: string[];
 
-  showSearchBar = false;
+  showSearchBar:boolean = false;
+  showHome:boolean = true;
   // Geocoder configuration
   geoEncoderOptions: NativeGeocoderOptions = {
     useLocale: true,
@@ -252,6 +253,16 @@ export class HomepagePage implements OnInit {
   ionViewWillLeave() {
     this.subscription.unsubscribe();
 
+  }
+
+  showHom() {
+    this.showHome = true;
+    this.showSearchBar = false;
+  }
+
+  onClick(){
+    this.showHome = false;
+    this.showSearchBar = true;
   }
 
 }

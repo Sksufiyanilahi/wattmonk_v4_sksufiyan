@@ -62,7 +62,7 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
     this.datePicker.show({
       date: new Date(this.date),
       mode: 'date',
-      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_DARK
     }).then(
       date => {
         this.date = date.getTime();
@@ -78,7 +78,7 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
     this.datePicker.show({
       date: new Date(this.date),
       mode: 'time',
-      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_DARK
     }).then(
       date => {
         const oldDate = new Date(this.date);
