@@ -12,6 +12,7 @@ import { DatePicker } from '@ionic-native/date-picker/ngx';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ErrorModel } from '../model/error.model';
 import { Subscription } from 'rxjs';
+import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 
 @Component({
   selector: 'app-survey-detail',
@@ -31,6 +32,11 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   dataSubscription: Subscription;
   refreshDataOnPreviousPage = 0;
 
+  options: LaunchNavigatorOptions = {
+    start: '',
+    app: this.launchNavigator.APP.GOOGLE_MAPS
+  };
+
   constructor(
     private utilities: UtilitiesService,
     private apiService: ApiService,
@@ -39,7 +45,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     private alertController: AlertController,
     private storage: StorageService,
     private datePicker: DatePicker,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private launchNavigator: LaunchNavigator
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.rescheduleForm = this.formBuilder.group({
@@ -249,4 +256,9 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
 
     }
   }
+
+  openAddressOnMap(address: string) {
+    this.launchNavigator.navigate(address, this.options);
+  }
+
 }

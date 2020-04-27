@@ -9,6 +9,7 @@ import { AssigneeModel } from '../model/assignee.model';
 import { StorageService } from '../storage.service';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 
 @Component({
   selector: 'app-design-details',
@@ -25,6 +26,11 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   assigneeForm: FormGroup;
   refreshDataOnPreviousPage = 0;
 
+  options: LaunchNavigatorOptions = {
+    start: '',
+    app: this.launchNavigator.APP.GOOGLE_MAPS
+  };
+
 
   constructor(
     private utilities: UtilitiesService,
@@ -33,7 +39,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private navController: NavController,
     private alertController: AlertController,
     private storage: StorageService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private launchNavigator: LaunchNavigator
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
@@ -158,5 +165,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       });
 
     }
+  }
+
+  openAddressOnMap(address: string) {
+    this.launchNavigator.navigate(address, this.options);
   }
 }

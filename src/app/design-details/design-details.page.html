@@ -51,7 +51,7 @@
     <ion-grid *ngIf="design" class="page-text-color">
         <ion-row>
             <ion-col>
-                <span class="address">{{design.address}}</span>
+                <span (click)="openAddressOnMap(design.address)" class="address">{{design.address}}</span>
             </ion-col>
             <ion-col size="auto" class="ion-text-end">
                 <ion-grid class="ion-no-padding">

@@ -8,6 +8,7 @@ import { DesignDetailsPageRoutingModule } from './design-details-routing.module'
 
 import { DesignDetailsPage } from './design-details.page';
 import { UtilitiesModule } from '../utilities/utilities.module';
+import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 
 @NgModule({
   imports: [
@@ -18,7 +19,10 @@ import { UtilitiesModule } from '../utilities/utilities.module';
     DesignDetailsPageRoutingModule,
     UtilitiesModule
   ],
-  declarations: [DesignDetailsPage]
+  declarations: [DesignDetailsPage],
+  providers: [
+    LaunchNavigator
+  ]
 })
 export class DesignDetailsPageModule {
 }
