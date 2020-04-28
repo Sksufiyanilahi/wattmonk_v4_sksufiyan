@@ -13,8 +13,16 @@ const routes: Routes = [
     component: SchedulePage,
     children: [
       {
+        path: 'design/:id',
+        component: DesignComponent
+      },
+      {
         path: 'design',
         component: DesignComponent
+      },
+      {
+        path: 'survey/:id',
+        component: SurveyComponent
       },
       {
         path: 'survey',

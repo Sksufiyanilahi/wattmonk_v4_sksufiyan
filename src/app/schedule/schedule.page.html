@@ -2,7 +2,8 @@
     <ion-grid class="ion-no-padding ">
         <ion-row class="ion-align-items-center ion-padding-start">
             <ion-col>
-                <h1 class="ion-no-padding ion-no-margin">Schedule</h1>
+                <h1 class="ion-no-padding ion-no-margin" *ngIf="!tabsDisabled">Schedule</h1>
+                <h1 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit</h1>
             </ion-col>
             <ion-col size="auto">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
@@ -18,8 +19,13 @@
             </ion-col>
         </ion-row>
         <ion-row class="ion-padding-start ion-padding-end">
-            <ion-col class="ion-text-end">
+            <ion-col class="ion-text-end" *ngIf="!tabsDisabled">
                 <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
+                    Change
+                </span>
+            </ion-col>
+            <ion-col class="ion-text-end" *ngIf="tabsDisabled">
+                <span>
                     Change
                 </span>
             </ion-col>
@@ -27,7 +33,7 @@
     </ion-grid>
 
     <ion-grid class="ion-margin-start ion-margin-end margin-top">
-        <ion-segment mode="ios" class="segments" (ionChange)="segmentChanged($event)" [value]="currentTab">
+        <ion-segment mode="ios" class="segments" (ionChange)="segmentChanged($event)" [value]="currentTab" [disabled]="tabsDisabled">
             <ion-segment-button value="design">
                 <ion-label>Design</ion-label>
             </ion-segment-button>

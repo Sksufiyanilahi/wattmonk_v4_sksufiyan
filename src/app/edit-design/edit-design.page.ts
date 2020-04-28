@@ -26,20 +26,12 @@ export class EditDesignPage implements OnInit {
   design: DesginDataModel;
 
   desginForm: FormGroup;
-  minRange = 100;
-  maxRange = 10000;
 
   listOfAssignees: AssigneeModel[] = [];
   listOfSolarMake: SolarMake[] = [];
-  isItemSolarMakeAvailable: boolean;
-  solarMakeName: any;
-
   listOfSolarMade: SolarMadeModel[] = [];
-  isItemSolarMadeAvailable: boolean;
-  solarMadeName: any;
 
   listOfInverterMake: InverterMakeModel[] = [];
-  isItemInverterMakeAvailable: boolean;
   inverterMakeName: any;
   private subscription: Subscription;
 
@@ -97,11 +89,11 @@ export class EditDesignPage implements OnInit {
           rooftype: this.design.rooftype,
           jobtype: this.design.jobtype,
           comments: this.design.comments,
-          projecttype:this.design.projecttype,
-          newconstruction:this.design.newconstruction
+          projecttype: this.design.projecttype,
+          newconstruction: this.design.newconstruction
         });
 
-        if(this.design.assignedto.id !== null && this.design.assignedto.id !== undefined) {
+        if (this.design.assignedto.id !== null && this.design.assignedto.id !== undefined) {
           this.desginForm.patchValue({
             assignedto: this.design.assignedto.id
           });

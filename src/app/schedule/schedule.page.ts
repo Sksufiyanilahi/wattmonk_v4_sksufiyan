@@ -5,7 +5,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ScheduleFormEvent } from '../model/constants';
 import { Subscription } from 'rxjs';
 import { AddressModel } from '../model/address.model';
@@ -21,6 +21,7 @@ export class SchedulePage implements OnInit, OnDestroy {
 
   address = '';
   currentTab = 'design';
+  tabsDisabled = false;
 
   // Geocoder configuration
   geoEncoderOptions: NativeGeocoderOptions = {
@@ -43,6 +44,9 @@ export class SchedulePage implements OnInit, OnDestroy {
     private router: Router,
     private alertController: AlertController
   ) {
+    const url = this.router.url;
+    const splittedUrl = url.split('/');
+    this.tabsDisabled = splittedUrl.length === 4;
   }
 
   ngOnInit() {

@@ -21,7 +21,8 @@
                 </ion-grid>
             </ion-col>
             <ion-col size="auto">
-                <ion-button fill="clear" size="small" class="ion-no-padding">
+                <ion-button fill="clear" size="small" class="ion-no-padding" [routerLink]="['/schedule/survey/',surveyId]"
+                            routerDirection="forward">
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>

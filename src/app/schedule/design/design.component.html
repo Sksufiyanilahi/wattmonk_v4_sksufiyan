@@ -18,11 +18,11 @@
                     <div style="height: 5px;">
                         <div *ngIf="desginForm.get('email').hasError('pattern') && desginForm.get('email').dirty">
                             <span class="error">{{emailError}}</span>
-                        </div> 
+                        </div>
                         <div *ngIf="desginForm.get('email').value === '' && desginForm.get('email').dirty">
                             <span class="error">{{fieldRequired}}</span>
-                        </div>      
-                    </div>  
+                        </div>
+                    </div>
                 </ion-col>
             </ion-row>
             <ion-row class="ion-align-items-center ion-justify-content-center">
