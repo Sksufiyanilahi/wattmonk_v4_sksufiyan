@@ -126,9 +126,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   getAssignees() {
-    this.apiService.getAssignees(UserRoles.DESIGNER).subscribe(assignees => {
+    this.apiService.getDesigners(UserRoles.DESIGNER).subscribe(assignees => {
       this.listOfAssignees = [];
-      this.listOfAssignees.push(this.utilities.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
       console.log(this.listOfAssignees);
     });

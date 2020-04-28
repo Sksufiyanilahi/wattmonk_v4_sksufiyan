@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ApiService } from 'src/app/api.service';
 import { SurveyDataModel } from 'src/app/model/survey.model';
@@ -7,6 +7,10 @@ import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NavController } from '@ionic/angular';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
+import { DrawerState } from 'ion-bottom-drawer';
+import { AssigneeModel } from '../../model/assignee.model';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserRoles } from '../../model/constants';
 
 @Component({
   selector: 'app-survey',
@@ -24,17 +28,26 @@ export class SurveyComponent implements OnInit, OnDestroy {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+  drawerState = DrawerState.Bottom;
+  surveyId = 0;
+  assignForm: FormGroup;
+  listOfAssignees: AssigneeModel[] = [];
 
   constructor(
     private utils: UtilitiesService,
     private apiService: ApiService,
     private datePipe: DatePipe,
     private navController: NavController,
-    private launchNavigator: LaunchNavigator
+    private launchNavigator: LaunchNavigator,
+    private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef,
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
+    this.assignForm = this.formBuilder.group({
+      assignto: new FormControl('', [Validators.required])
+    });
   }
 
   ngOnInit() {
@@ -82,6 +95,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             }
           });
           this.listOfSurveyDataHelper = tempData;
+          this.cdr.detectChanges();
         });
       }, responseError => {
         this.utils.hideLoading().then(() => {
@@ -98,6 +112,40 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
   openAddressOnMap(address: string) {
     this.launchNavigator.navigate(address, this.options);
+  }
+
+  dismissBottomSheet() {
+    this.drawerState = DrawerState.Bottom;
+    this.utils.setBottomBarHomepage(true);
+  }
+
+  assignToSurveyor() {
+    if (this.assignForm.status === 'INVALID') {
+      this.utils.errorSnackBar('Please select a surveyor');
+    } else {
+      this.apiService.updateSurveyForm(this.assignForm.value, this.surveyId).subscribe((value) => {
+        this.dismissBottomSheet();
+        this.utils.sethomepageSurveyRefresh(true);
+      }, (error) => {
+        this.dismissBottomSheet();
+      });
+    }
+
+  }
+
+  openSurveyors(id: number) {
+    this.surveyId = id;
+    this.utils.setBottomBarHomepage(false);
+    this.drawerState = DrawerState.Docked;
+    this.apiService.getDesigners(UserRoles.SURVEYOR).subscribe(assignees => {
+      this.listOfAssignees = [];
+      // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+      assignees.forEach(item => this.listOfAssignees.push(item));
+      console.log(this.listOfAssignees);
+      this.assignForm.patchValue({
+        assignedto: 0
+      });
+    });
   }
 }
 

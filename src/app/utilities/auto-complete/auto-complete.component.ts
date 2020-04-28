@@ -49,30 +49,38 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
     };
   }
 
-  writeValue(data: number): void {
-    console.log('patchedvalue ,' + data);
-    this.selectedDataId = data;
-    let selectedData: any;
-    this.dataList.forEach((item) => {
-      if (item.id === data) {
-        selectedData = item;
-      }
-    });
+  writeValue(data: any): void {
+    console.log('patchedvalue ,');
+    console.log(data);
+    if (data !== null && data !== undefined && data !== '') {
+      this.selectedDataId = data;
+      let selectedData: any;
+      this.dataList.forEach((item) => {
+        if (item.id === data) {
+          selectedData = item;
+        }
+      });
 
-    this.sortedList = this.dataList.filter((item) => {
-      return (item.name.toLowerCase().indexOf(selectedData.name.toLowerCase()) > -1);
-    });
-    if (this.sortedList.length === 1) {
-      if (this.sortedList[0].name.toLowerCase() === selectedData.name.toLowerCase()) {
-        this.sortedList = [];
+      this.sortedList = this.dataList.filter((item) => {
+        return (item.name.toLowerCase().indexOf(selectedData.name.toLowerCase()) > -1);
+      });
+      if (this.sortedList.length === 1) {
+        if (this.sortedList[0].name.toLowerCase() === selectedData.name.toLowerCase()) {
+          this.sortedList = [];
+        }
       }
+
+      if (selectedData) {
+        console.log('Patching ');
+        console.log(selectedData);
+        this.selectOption(selectedData);
+      }
+    } else {
+      this.selectedDataId = 0;
+      this.selectedDataName = '';
+      this.dataList = [];
     }
 
-    if (selectedData) {
-      console.log('Patching ');
-      console.log(selectedData);
-      this.selectOption(selectedData);
-    }
   }
 
   onValueChanged(event: CustomEvent) {
@@ -88,7 +96,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   selectOption(data: any) {
-    console.log('value changed');
+    console.log('data changed');
     this.sortedList = [];
 
     this.selectedOption = data;

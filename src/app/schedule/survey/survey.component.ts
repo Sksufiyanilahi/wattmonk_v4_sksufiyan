@@ -7,6 +7,8 @@ import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } f
 import { ApiService } from '../../api.service';
 import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
+import { ActivatedRoute } from '@angular/router';
+import { SurveyDataModel } from '../../model/survey.model';
 
 @Component({
   selector: 'app-survey',
@@ -20,9 +22,12 @@ export class SurveyComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private addressSubscription: Subscription;
 
-  
+
   emailError = INVALID_EMAIL_MESSAGE;
   fieldRequired = FIELD_REQUIRED;
+
+  surveyId = 0;
+  private survey: SurveyDataModel;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,8 +35,12 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private utilities: UtilitiesService,
     private platform: Platform,
     private apiService: ApiService,
-    private storage: StorageService
+    private storage: StorageService,
+    private route: ActivatedRoute
   ) {
+
+    this.surveyId = +this.route.snapshot.paramMap.get('id');
+
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required]),
@@ -41,21 +50,14 @@ export class SurveyComponent implements OnInit, OnDestroy {
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
-      assignedTo: new FormControl(0),
+      assignto: new FormControl(0),
       createdby: new FormControl(this.storage.getUserID(), [Validators.required])
     });
-    // console.log(this.platform);
-    // this.platform.ready().then(value => this.surveyForm.get('source').setValue(value));
 
   }
 
 
   ngOnInit() {
-    this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
-      this.surveyForm.get('address').setValue(address.address);
-    }, (error) => {
-      this.surveyForm.get('address').setValue('');
-    });
     this.subscription = this.utilities.getScheduleFormEvent().subscribe((event) => {
       switch (event) {
         case ScheduleFormEvent.SAVE_SURVEY_FORM:
@@ -67,12 +69,24 @@ export class SurveyComponent implements OnInit, OnDestroy {
       }
     });
 
+    if (this.surveyId !== 0) {
+      this.getSurveyDetails();
+    } else {
+      this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
+        this.surveyForm.get('address').setValue(address.address);
+      }, (error) => {
+        this.surveyForm.get('address').setValue('');
+      });
+    }
+
     this.getAssignees();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.addressSubscription.unsubscribe();
+    if (this.surveyId === 0) {
+      this.addressSubscription.unsubscribe();
+    }
     // this.utilities.getScheduleFormEvent().unsubscribe();
   }
 
@@ -97,11 +111,33 @@ export class SurveyComponent implements OnInit, OnDestroy {
     if (this.surveyForm.status === 'INVALID') {
       this.showInvalidFormAlert();
     } else {
-      this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
-        this.utilities.showSnackBar('Survey have been saved');
-        this.utilities.sethomepageSurveyRefresh(true);
-        this.navController.pop();
+      this.utilities.showLoading('Saving Survey').then(() => {
+        if (this.surveyId !== 0) {
+          this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
+            this.utilities.hideLoading().then(() => {
+              this.utilities.showSnackBar('Survey has been updated');
+              this.navController.pop();
+              this.utilities.setSurveyDetailsRefresh(true);
+            });
+          });
+
+        } else {
+          this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
+            this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+              this.utilities.hideLoading().then(() => {
+                modal.present();
+                modal.onWillDismiss().then((dismissed) => {
+                  this.navController.pop();
+                  this.utilities.sethomepageSurveyRefresh(true);
+
+                });
+              });
+            });
+
+          });
+        }
       });
+
     }
   }
 
@@ -129,11 +165,41 @@ export class SurveyComponent implements OnInit, OnDestroy {
   }
 
   getAssignees() {
-    this.apiService.getAssignees(UserRoles.SURVEYOR).subscribe(assignees => {
+    this.apiService.getSurveyors(UserRoles.SURVEYOR).subscribe(assignees => {
       this.listOfAssignees = [];
-      this.listOfAssignees.push(this.utilities.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
       console.log(this.listOfAssignees);
+    });
+  }
+
+  getSurveyDetails() {
+    this.utilities.showLoading('Getting Survey Details').then((success) => {
+      this.apiService.getSurveyDetail(this.surveyId).subscribe((result) => {
+        this.utilities.hideLoading().then(() => {
+          this.survey = result;
+
+          const date = new Date(this.survey.datetime);
+          this.surveyForm.patchValue({
+            name: this.survey.name,
+            email: this.survey.email,
+            phonenumber: this.survey.phonenumber,
+            datetime: date.getTime(),
+            comments: this.survey.comments,
+            address: this.survey.comments,
+            source: this.survey.source,
+            createdby: this.survey.createdby.id
+          });
+          if (this.survey.assignto !== null && this.survey.assignto !== undefined) {
+            this.surveyForm.patchValue({
+              assignto: this.survey.assignto.id
+            });
+          }
+          this.utilities.setStaticAddress(this.survey.address);
+
+        });
+      }, (error) => {
+        this.utilities.hideLoading();
+      });
     });
   }
 }

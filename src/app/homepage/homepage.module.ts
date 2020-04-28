@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -12,6 +12,8 @@ import { DesignComponent } from './design/design.component';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
+import { IonBottomDrawerModule } from 'ion-bottom-drawer';
+import { UtilitiesModule } from '../utilities/utilities.module';
 
 @NgModule({
   imports: [
@@ -19,6 +21,9 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
     FormsModule,
     IonicModule,
     HomepagePageRoutingModule,
+    IonBottomDrawerModule,
+    ReactiveFormsModule,
+    UtilitiesModule,
   ],
   declarations: [HomepagePage, SurveyComponent, DesignComponent],
   providers: [

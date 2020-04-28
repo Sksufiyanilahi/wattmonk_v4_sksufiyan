@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UtilitiesService } from '../utilities.service';
 import { ApiService } from '../api.service';
 import { DatePipe } from '@angular/common';
@@ -9,19 +9,22 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
 import { Subscription } from 'rxjs';
+import { DrawerState } from 'ion-bottom-drawer';
 
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.page.html',
   styleUrls: ['./homepage.page.scss'],
 })
-export class HomepagePage implements OnInit {
+export class HomepagePage implements OnInit, OnDestroy {
 
   searchQuery = '';
   items: string[];
 
-  showSearchBar:boolean = false;
-  showHome:boolean = true;
+  showSearchBar = false;
+  showHome = true;
+
+  showFooter = true;
   // Geocoder configuration
   geoEncoderOptions: NativeGeocoderOptions = {
     useLocale: true,
@@ -29,6 +32,7 @@ export class HomepagePage implements OnInit {
   };
 
   private subscription: Subscription;
+  drawerState = DrawerState.Docked;
 
   constructor(
     private utilities: UtilitiesService,
@@ -46,8 +50,14 @@ export class HomepagePage implements OnInit {
 
   ngOnInit() {
     this.requestLocationPermission();
+    this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
+      this.showFooter = value;
+    });
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   initializeItems() {
     this.items = [

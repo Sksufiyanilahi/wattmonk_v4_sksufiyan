@@ -11,20 +11,24 @@
             </ion-col>
             <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
                 <div class="ion-padding custom-card">
-                    <span class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">{{surveyData.name}}</span>
-                    <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">{{surveyData.email}}</span>
+                    <span class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
+                          routerDirection="forward">{{surveyData.name}}</span>
+                    <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
+                          routerDirection="forward">{{surveyData.email}}</span>
                     <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
                         <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
                     <span class="customer-address z-100"
-                          (click)="openAddressOnMap(surveyData.address)">{{surveyData.address}}</span>
+                          (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
                     <ion-row class="ion-no-margin ion-no-margin">
-                        <ion-col size="auto" class="ion-no-margin ion-no-padding" [routerLink]="['/camera/',surveyData.id]" routerDirection="forward">
+                        <ion-col size="auto" class="ion-no-margin ion-no-padding"
+                                 [routerLink]="['/camera/',surveyData.id]" routerDirection="forward">
                             <span class="ion-text-end action-button-color">Start Survey</span>
                         </ion-col>
                         <ion-col></ion-col>
-                        <ion-col size="auto" class="ion-no-margin ion-no-padding">
-                            <span class="ion-text-end action-button-color" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward"
-                                  *ngIf="surveyData.assignto.id === null || surveyData.assignto.id === undefined">Assign</span>
+                        <ion-col size="auto" class="ion-no-margin ion-no-padding"
+                                 *ngIf="surveyData.assignto === null || surveyData.assignto === undefined">
+                            <span class="ion-text-end action-button-color"
+                                  (click)="openSurveyors(surveyData.id)">Assign</span>
                         </ion-col>
                     </ion-row>
 
@@ -34,10 +38,39 @@
         </ion-row>
     </ion-grid>
 
-
     <div *ngIf="listOfSurveyDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
-        <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>      
-      </div>
+        <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+    </div>
 
 </ion-content>
+
+<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
+                   shouldBounce="false" distanceTop="0" class="ion-padding drawer">
+    <form [formGroup]="assignForm">
+        <ion-grid class="drawer" style="background: #F3F3F3;">
+
+            <ion-row>
+                <ion-col>
+                    <ion-item class="ion-no-padding no-border" lines="none">
+                        <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
+                                           formControlName="assignto"></app-user-selector>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="auto">
+                    <ion-item lines="none" class="picker-button" (click)="assignToSurveyor()">
+                        Confirm
+                    </ion-item>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-item lines="none" class="picker-button" (click)="dismissBottomSheet()">
+                        Cancel
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+
+</ion-bottom-drawer>
 

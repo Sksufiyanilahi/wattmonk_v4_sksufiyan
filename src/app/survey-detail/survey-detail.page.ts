@@ -69,7 +69,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.dataSubscription.unsubscribe();
     if (this.refreshDataOnPreviousPage > 1) {
-      this.utilities.setHomepageDesignRefresh(true);
+      this.utilities.sethomepageSurveyRefresh(true);
     }
   }
 
@@ -133,8 +133,9 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     this.utilities.showLoading('Deleting Survey').then((success) => {
       this.apiService.deleteSurvey(this.surveyId).subscribe((result) => {
         this.utilities.hideLoading();
-        this.utilities.showSnackBar('Desgin deleted successfully');
+        this.utilities.showSnackBar('Survey deleted successfully');
         this.navController.pop();
+        this.utilities.sethomepageSurveyRefresh(true);
       }, (error) => {
         this.utilities.hideLoading().then(() => {
           this.utilities.errorSnackBar('Some Error Occurred');
@@ -144,9 +145,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   getAssignees() {
-    this.apiService.getAssignees(UserRoles.SURVEYOR).subscribe(assignees => {
+    this.apiService.getSurveyors(UserRoles.SURVEYOR).subscribe(assignees => {
       this.listOfAssignees = [];
-      this.listOfAssignees.push(this.utilities.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
       console.log(this.listOfAssignees);
     });

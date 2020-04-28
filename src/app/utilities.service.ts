@@ -18,11 +18,13 @@ export class UtilitiesService {
     lat: 0,
     long: 0
   });
+  staticAddress = new BehaviorSubject<string>('');
   saveScheduleForm = new BehaviorSubject<ScheduleFormEvent>(ScheduleFormEvent.NO_EVENT);
   homepageDesignRefresh = new BehaviorSubject<boolean>(false);
   homepageSurveyRefresh = new BehaviorSubject<boolean>(false);
   surveyDetailsRefresh = new BehaviorSubject<boolean>(false);
   designDetailsRefresh = new BehaviorSubject<boolean>(false);
+  showBottomBarHomepage = new BehaviorSubject<boolean>(true);
 
   constructor(
     public loadingController: LoadingController,
@@ -63,6 +65,14 @@ export class UtilitiesService {
 
   setSurveyDetailsRefresh(refresh: boolean) {
     this.surveyDetailsRefresh.next(refresh);
+  }
+
+  getBottomBarHomepage(): BehaviorSubject<boolean> {
+    return this.showBottomBarHomepage;
+  }
+
+  setBottomBarHomepage(value: boolean) {
+    this.showBottomBarHomepage.next(value);
   }
 
   getDesignDetailsRefresh(): BehaviorSubject<boolean> {
@@ -159,4 +169,11 @@ export class UtilitiesService {
   }
 
 
+  setStaticAddress(address: string) {
+    this.staticAddress.next(address);
+  }
+
+  getStaticAddress(): BehaviorSubject<string> {
+    return this.staticAddress;
+  }
 }

@@ -47,9 +47,10 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
       return null;
     }
     if (this.date > 0 && this.date < new Date().getTime()) {
-      return {
-        error: 'Date must be a future date'
-      };
+      return null;
+      // return {
+      //   error: 'Date must be a future date'
+      // };
     }
     return {
       error: 'Please choose a date'

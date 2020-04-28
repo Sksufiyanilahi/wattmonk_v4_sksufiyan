@@ -39,7 +39,7 @@
 
 </ion-content>
 
-<ion-footer class="ion-no-border white-bg">
+<ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
     <div class="position-relative">
         <ion-fab horizontal="center" class="fab-position position-absolute">
             <ion-fab-button [routerLink]="['/schedule']" routerDirection="forward" mode="md">

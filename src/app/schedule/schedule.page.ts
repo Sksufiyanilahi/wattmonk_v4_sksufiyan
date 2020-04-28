@@ -46,15 +46,25 @@ export class SchedulePage implements OnInit, OnDestroy {
   ) {
     const url = this.router.url;
     const splittedUrl = url.split('/');
+    console.log(splittedUrl);
     this.tabsDisabled = splittedUrl.length === 4;
+    this.currentTab = splittedUrl[2];
+
   }
 
   ngOnInit() {
     // this.requestLocationPermission();
-    this.subscription = this.utilities.getAddressObservable().subscribe((address) => {
-      console.log(address);
-      this.address = address.address;
-    });
+    if (this.tabsDisabled) {
+      this.subscription = this.utilities.getStaticAddress().subscribe((address) => {
+        this.address = address;
+      });
+    } else {
+      this.subscription = this.utilities.getAddressObservable().subscribe((address) => {
+        console.log(address);
+        this.address = address.address;
+      });
+    }
+
   }
 
   goBack() {
@@ -63,6 +73,7 @@ export class SchedulePage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    this.utilities.setStaticAddress('');
   }
 
   segmentChanged(event: CustomEvent) {

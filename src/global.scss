@@ -195,7 +195,7 @@ ion-modal {
 .my-custom-class{
     --background: #D8EAD2;
     --border-radius:5px;
-    --color: white;
+    --color: #5A6158;
 }
 
 .my-custom-error-class{
@@ -211,6 +211,8 @@ ion-modal {
 .error_div{
     height: 2px;
 }
+
+ion-bottom-drawer { background: #F3F3F3; ion-content { --background: #F3F3F3; } }
 
 
 

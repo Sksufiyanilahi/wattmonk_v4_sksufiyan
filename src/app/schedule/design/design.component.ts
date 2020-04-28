@@ -33,6 +33,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   listOfInverterMake: InverterMakeModel[] = [];
 
   private subscription: Subscription;
+  private addressSubscription: Subscription;
 
   emailError = INVALID_EMAIL_MESSAGE;
   fieldRequired = FIELD_REQUIRED;
@@ -57,7 +58,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
       monthlybill: new FormControl('', [Validators.required]),
-      address: new FormControl('',),
+      address: new FormControl('', [Validators.required]),
       createdby: new FormControl('', [Validators.required]),
       assignedto: new FormControl(''),
       rooftype: new FormControl('', [Validators.required]),
@@ -65,7 +66,8 @@ export class DesignComponent implements OnInit, OnDestroy {
       projecttype: new FormControl('', [Validators.required]),
       newconstruction: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
-      comments: new FormControl('')
+      comments: new FormControl(''),
+      requesttype: new FormControl('prelim', [Validators.required]),
     });
 
     this.designId = +this.route.snapshot.paramMap.get('id');
@@ -73,22 +75,23 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
+      if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {
+        this.addForm();
+      }
+    });
+
     if (this.designId !== 0) {
       this.getDesignDetails();
 
     } else {
-      this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
-        if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {
-          this.addForm();
-        }
-      });
       this.desginForm.get('solarmake').valueChanges.subscribe(val => {
         this.getSolarMade();
       });
       this.desginForm.get('invertermake').valueChanges.subscribe(val => {
         this.getInverterMade();
       });
-      this.utils.getAddressObservable().subscribe((address) => {
+      this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         this.desginForm.get('address').setValue(address.address);
       }, (error) => {
         this.desginForm.get('address').setValue('');
@@ -105,8 +108,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.subscription.unsubscribe();
     if (this.designId === 0) {
-      this.subscription.unsubscribe();
+      this.addressSubscription.unsubscribe();
     }
   }
 
@@ -116,6 +120,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.utils.hideLoading();
         this.design = result;
 
+        console.log(this.design);
         this.desginForm.patchValue({
           name: this.design.name,
           email: this.design.email,
@@ -126,8 +131,9 @@ export class DesignComponent implements OnInit, OnDestroy {
           jobtype: this.design.jobtype,
           comments: this.design.comments,
           projecttype: this.design.projecttype,
-          newconstruction: this.design.newconstruction
+          newconstruction: this.design.newconstruction + ''
         });
+        this.utils.setStaticAddress(this.design.address);
 
         if (this.design.assignedto.id !== null && this.design.assignedto.id !== undefined) {
           this.desginForm.patchValue({
@@ -225,20 +231,42 @@ export class DesignComponent implements OnInit, OnDestroy {
     console.log('Reach', this.desginForm.value);
     if (this.desginForm.status === 'VALID') {
       this.utils.showLoading('Saving').then(() => {
-        this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
-          this.utils.hideLoading().then(() => {
-            console.log('Res', response);
-            this.utils.showSnackBar('Survey have been saved');
-            this.utils.setHomepageDesignRefresh(true);
-            this.navController.pop();
-          });
-        }, responseError => {
-          this.utils.hideLoading().then(() => {
-            const error: ErrorModel = responseError.error;
-            this.utils.errorSnackBar(error.message[0].messages[0].message);
+        if (this.designId === 0) {
+          this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+            this.utils.hideLoading().then(() => {
+              console.log('Res', response);
+              this.utils.showSuccessModal('Survey have been saved').then((modal) => {
+                modal.present();
+                modal.onWillDismiss().then((dismissed) => {
+                  this.utils.setHomepageDesignRefresh(true);
+                  this.navController.pop();
+                });
+              });
+            });
+          }, responseError => {
+            this.utils.hideLoading().then(() => {
+              const error: ErrorModel = responseError.error;
+              this.utils.errorSnackBar(error.message[0].messages[0].message);
+            });
           });
 
-        });
+        } else {
+          this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
+            this.utils.hideLoading().then(() => {
+              console.log('Res', response);
+              this.utils.showSnackBar('Survey have been updated');
+              this.utils.setHomepageDesignRefresh(true);
+              this.navController.pop();
+            });
+          }, responseError => {
+            this.utils.hideLoading().then(() => {
+              const error: ErrorModel = responseError.error;
+              this.utils.errorSnackBar(error.message[0].messages[0].message);
+            });
+
+          });
+        }
+
       });
 
     } else {
@@ -271,9 +299,9 @@ export class DesignComponent implements OnInit, OnDestroy {
 
 
   getAssignees() {
-    this.apiService.getAssignees(UserRoles.DESIGNER).subscribe(assignees => {
+    this.apiService.getDesigners(UserRoles.DESIGNER).subscribe(assignees => {
       this.listOfAssignees = [];
-      this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+      // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
       console.log(this.listOfAssignees);
     });
@@ -285,6 +313,9 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.utils.hideLoading();
         console.log(response);
         this.listOfSolarMade = response;
+        this.desginForm.patchValue({
+          solarmodel: ''
+        });
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
@@ -314,6 +345,9 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.utils.hideLoading();
         console.log(response);
         this.listOfInverterMade = response;
+        this.desginForm.patchValue({
+          invertermodel: ''
+        });
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;

@@ -106,8 +106,12 @@ export class ApiService {
   saveSurvey(data: any): Observable<SurveyDataModel> {
     return this.http.post<SurveyDataModel>(this.baseUrl + '/surveys', data, { headers: this.headers });
   }
+  
+  getSurveyors(userType: number): Observable<AssigneeModel[]> {
+    return this.http.get<AssigneeModel[]>(this.baseUrl + '/surveyors?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
+  }
 
-  getAssignees(userType: number): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(this.baseUrl + '/users?parent.id_eq=' + this.parentId + '&role.id_eq=' + userType, { headers: this.headers });
+  getDesigners(userType: number): Observable<AssigneeModel[]> {
+    return this.http.get<AssigneeModel[]>(this.baseUrl + '/designers?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
 }

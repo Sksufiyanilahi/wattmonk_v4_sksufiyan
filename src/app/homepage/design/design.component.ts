@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { DesignModel, DesginDataModel } from '../../model/design.model';
+import { DesginDataModel } from '../../model/design.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
@@ -7,6 +7,10 @@ import { DatePipe } from '@angular/common';
 import { StorageService } from 'src/app/storage.service';
 import { Subscription } from 'rxjs';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
+import { DrawerState } from 'ion-bottom-drawer';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AssigneeModel } from '../../model/assignee.model';
+import { UserRoles } from '../../model/constants';
 
 @Component({
   selector: 'app-design',
@@ -24,6 +28,11 @@ export class DesignComponent implements OnInit, OnDestroy {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+  drawerState = DrawerState.Bottom;
+  assignForm: FormGroup;
+  listOfAssignees: AssigneeModel[] = [];
+
+  designId = 0;
 
   constructor(
     private utils: UtilitiesService,
@@ -31,11 +40,15 @@ export class DesignComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private storage: StorageService,
     private cdr: ChangeDetectorRef,
-    private launchNavigator: LaunchNavigator
+    private launchNavigator: LaunchNavigator,
+    private formBuilder: FormBuilder
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
+    this.assignForm = this.formBuilder.group({
+      assignedto: new FormControl('', [Validators.required])
+    });
   }
 
   ngOnInit() {
@@ -100,6 +113,40 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   openAddressOnMap(address: string) {
     this.launchNavigator.navigate(address, this.options);
+  }
+
+  dismissBottomSheet() {
+    this.drawerState = DrawerState.Bottom;
+    this.utils.setBottomBarHomepage(true);
+  }
+
+  assignToDesigner() {
+    if (this.assignForm.status === 'INVALID') {
+      this.utils.errorSnackBar('Please select a designer');
+    } else {
+      this.apiService.updateDesignForm(this.assignForm.value, this.designId).subscribe((value) => {
+        this.dismissBottomSheet();
+        this.utils.setHomepageDesignRefresh(true);
+      }, (error) => {
+        this.dismissBottomSheet();
+      });
+    }
+
+  }
+
+  openDesigners(id: number) {
+    this.designId = id;
+    this.utils.setBottomBarHomepage(false);
+    this.drawerState = DrawerState.Docked;
+    this.apiService.getSurveyors(UserRoles.DESIGNER).subscribe(assignees => {
+      this.listOfAssignees = [];
+      // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+      assignees.forEach(item => this.listOfAssignees.push(item));
+      console.log(this.listOfAssignees);
+      this.assignForm.patchValue({
+        assignto: 0
+      });
+    });
   }
 }
 
