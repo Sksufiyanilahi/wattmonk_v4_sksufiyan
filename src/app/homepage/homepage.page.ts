@@ -157,7 +157,7 @@ export class HomepagePage implements OnInit {
     this.geolocation.getCurrentPosition().then((resp) => {
       this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
     }).catch((error) => {
-      this.utilities.showAlert('Unable to get location');
+      this.utilities.errorSnackBar('Unable to get location');
       console.log('Error getting location', error);
       this.showNoLocation();
     });
@@ -218,7 +218,7 @@ export class HomepagePage implements OnInit {
     this.diagnostic.isLocationAuthorized().then((success) => {
       this.fetchLocation();
     }, (error) => {
-      this.utilities.showSnackBar('GPS Not Allowed');
+      this.utilities.errorSnackBar('GPS Not Allowed');
     });
 
   }

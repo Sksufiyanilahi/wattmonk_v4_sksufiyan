@@ -57,7 +57,7 @@ export class ForgotPasswordPage implements OnInit {
         });
       });
     } else {
-      this.utils.showSnackBar('Invalid Email address');
+      this.utils.errorSnackBar('Invalid Email address');
     }
   }
 

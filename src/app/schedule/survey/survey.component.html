@@ -15,15 +15,15 @@
                         <ion-input placeholder="email*" autocapitalize="none" formControlName="email" email="true" type="email"
                                    class="form_input"></ion-input>
                     </ion-item>
+                    <div style="height: 5px;">
+                        <div *ngIf="surveyForm.get('email').hasError('pattern') && surveyForm.get('email').dirty">
+                            <span class="error">{{emailError}}</span>
+                        </div> 
+                        <div *ngIf="surveyForm.get('email').value === '' && surveyForm.get('email').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>      
+                    </div>  
                 </ion-col>
-                <ion-col size="12" class="ion-no-padding"
-                *ngIf="surveyForm.get('email').hasError('pattern') && surveyForm.get('email').dirty">
-           <span class="error">{{emailError}}</span>
-       </ion-col>
-       <ion-col size="12" class="ion-no-padding"
-                *ngIf="surveyForm.get('email').value === '' && surveyForm.get('email').dirty">
-           <span class="error">{{fieldRequired}}</span>
-           </ion-col>
             </ion-row>
 
             <ion-row>

@@ -138,9 +138,9 @@ export class EditDesignPage implements OnInit {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
         if (error.message instanceof String) {
-          this.utils.showAlert(error.message);
+          this.utils.errorSnackBar(error.message);
         } else if (error.message instanceof Array) {
-          this.utils.showAlert(error.message[0].messages[0].message);
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
         }
       });
     }, (error) => {
@@ -157,9 +157,9 @@ export class EditDesignPage implements OnInit {
       const error: ErrorModel = responseError.error;
       console.log(error);
       if (error.message instanceof String) {
-        this.utils.showAlert(error.message);
+        this.utils.errorSnackBar(error.message);
       } else if (error.message instanceof Array) {
-        this.utils.showAlert(error.message[0].messages[0].message);
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
       }
     });
   }
@@ -175,9 +175,9 @@ export class EditDesignPage implements OnInit {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
         if (error.message instanceof String) {
-          this.utils.showAlert(error.message);
+          this.utils.errorSnackBar(error.message);
         } else if (error.message instanceof Array) {
-          this.utils.showAlert(error.message[0].messages[0].message);
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
         }
       });
     }, (reject) => {
@@ -193,9 +193,9 @@ export class EditDesignPage implements OnInit {
     }, responseError => {
       const error: ErrorModel = responseError.error;
       if (error.message instanceof String) {
-        this.utils.showAlert(error.message);
+        this.utils.errorSnackBar(error.message);
       } else if (error.message instanceof Array) {
-        this.utils.showAlert(error.message[0].messages[0].message);
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
       }
     });
   }
@@ -225,17 +225,17 @@ export class EditDesignPage implements OnInit {
         this.utils.hideLoading();
         const error: ErrorModel = makeResponseError.error;
         if (error.message instanceof String) {
-          this.utils.showAlert(error.message);
+          this.utils.errorSnackBar(error.message);
         } else if (error.message instanceof Array) {
-          this.utils.showAlert(error.message[0].messages[0].message);
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
         }
       });
     }, responseError => {
       const error: ErrorModel = responseError.error;
       if (error.message instanceof String) {
-        this.utils.showAlert(error.message);
+        this.utils.errorSnackBar(error.message);
       } else if (error.message instanceof Array) {
-        this.utils.showAlert(error.message[0].messages[0].message);
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
       }
     });
   }
@@ -262,18 +262,18 @@ export class EditDesignPage implements OnInit {
         this.utils.hideLoading();
         const error: ErrorModel = solarResponseError.error;
         if (error.message instanceof String) {
-          this.utils.showAlert(error.message);
+          this.utils.errorSnackBar(error.message);
         } else if (error.message instanceof Array) {
-          this.utils.showAlert(error.message[0].messages[0].message);
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
         }
       });
 
     }, responseError => {
       const error: ErrorModel = responseError.error;
       if (error.message instanceof String) {
-        this.utils.showAlert(error.message);
+        this.utils.errorSnackBar(error.message);
       } else if (error.message instanceof Array) {
-        this.utils.showAlert(error.message[0].messages[0].message);
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
       }
     });
   }
@@ -306,24 +306,17 @@ export class EditDesignPage implements OnInit {
       this.utils.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
           this.utils.hideLoading().then(() => {
-            console.log('Res', response);
-            this.utils.showSuccessModal('Survey have been updated').then((modal) => {
-              modal.present();
-              modal.onWillDismiss().then((dismissed) => {
-                this.navController.pop();
-                this.utils.setDesignDetailsRefresh(true);
-              });
-            }, (error) => {
-
-            });
+             this.utils.showSnackBar('Desgin have been updated');
+             this.navController.pop();
+             this.utils.setDesignDetailsRefresh(true);
           });
         }, responseError => {
           this.utils.hideLoading().then(() => {
             const error: ErrorModel = responseError.error;
             if (error.message instanceof String) {
-              this.utils.showAlert(error.message);
+              this.utils.errorSnackBar(error.message);
             } else if (error.message instanceof Array) {
-              this.utils.showAlert(error.message[0].messages[0].message);
+              this.utils.errorSnackBar(error.message[0].messages[0].message);
             }
 
           });

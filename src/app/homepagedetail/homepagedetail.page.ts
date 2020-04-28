@@ -40,7 +40,7 @@ export class HomepagedetailPage implements OnInit {
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
-        this.utils.showAlert(error.message[0].messages[0].message);
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
       });   
   });
   }

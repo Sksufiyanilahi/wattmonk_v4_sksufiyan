@@ -62,7 +62,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
       monthlybill: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
+      address: new FormControl('',),
       createdby: new FormControl('', [Validators.required]),
       assignedto: new FormControl(''),
       rooftype: new FormControl('', [Validators.required]),
@@ -112,20 +112,14 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
-            this.utils.showSuccessModal('Survey have been saved').then((modal) => {
-              modal.present();
-              modal.onWillDismiss().then((dismissed) => {
-                this.utils.setHomepageDesignRefresh(true);
-                this.navController.pop();
-              });
-            }, (error) => {
-
-            });
+            this.utils.showSnackBar('Survey have been saved');
+            this.utils.setHomepageDesignRefresh(true);
+            this.navController.pop();
           });
         }, responseError => {
           this.utils.hideLoading().then(() => {
             const error: ErrorModel = responseError.error;
-            this.utils.showSnackBar(error.message[0].messages[0].message);
+            this.utils.errorSnackBar(error.message[0].messages[0].message);
           });
 
         });
@@ -178,7 +172,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
-        this.utils.showSnackBar(error.message[0].messages[0].message);
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
       });
     }, (error) => {
 
@@ -193,7 +187,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     }, responseError => {
       const error: ErrorModel = responseError.error;
       console.log(error);
-      this.utils.showSnackBar(error.message[0].messages[0].message);
+      this.utils.errorSnackBar(error.message[0].messages[0].message);
     });
   }
 
@@ -207,7 +201,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
-        this.utils.showSnackBar(error.message[0].messages[0].message);
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
       });
     }, (reject) => {
 
@@ -221,7 +215,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.listOfInverterMake = response;
     }, responseError => {
       const error: ErrorModel = responseError.error;
-      this.utils.showSnackBar(error.message[0].messages[0].message);
+      this.utils.errorSnackBar(error.message[0].messages[0].message);
     });
   }
 }

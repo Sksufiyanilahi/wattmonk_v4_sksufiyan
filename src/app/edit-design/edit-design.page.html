@@ -19,7 +19,7 @@
         </ion-row>
         <ion-row class="ion-padding-start ion-padding-end" *ngIf="design">
             <ion-col class="ion-text-end">
-                <span>
+                <span class="btn_disable">
                     Change
                 </span>
             </ion-col>
@@ -95,14 +95,14 @@
             <ion-row class="ion-align-items-center ion-justify-content-center">
                 <ion-col size="6">
                         <ion-select class="select_div" placeholder="project type" ok-text="Ok" cancel-text="Cancel"
-                                    formControlName="projecttype">
+                                    formControlName="projecttype" interface="popover">
                             <ion-select-option value="residential">Residential</ion-select-option>
                             <ion-select-option value="commercial">Commercial</ion-select-option>
                         </ion-select>
                 </ion-col>
                 <ion-col size="6">
                         <ion-select class="select_div" placeholder="roof type" ok-text="Ok" cancel-text="Cancel"
-                                    formControlName="rooftype">
+                                    formControlName="rooftype" interface="popover">
                             <ion-select-option value="flat">Flat</ion-select-option>
                             <ion-select-option value="pitch">Pitch</ion-select-option>
                             <ion-select-option value="both">Both</ion-select-option>
@@ -113,7 +113,7 @@
             <ion-row class="ion-align-items-center ion-justify-content-center">
                 <ion-col>
                         <ion-select class="select_div" placeholder="job type" ok-text="Ok" cancel-text="Cancel"
-                                    formControlName="jobtype">
+                                    formControlName="jobtype" interface="popover">
                             <ion-select-option value="pvbattery">PV Battery</ion-select-option>
                             <ion-select-option value="battery">Battery</ion-select-option>
                             <ion-select-option value="pv">PV</ion-select-option>
@@ -121,7 +121,7 @@
                 </ion-col>
                 <ion-col>
                         <ion-select class="select_div" placeholder="construction" ok-text="Ok" cancel-text="Cancel"
-                                    formControlName="newconstruction">
+                                    formControlName="newconstruction" interface="popover">
                             <ion-select-option value="true">Yes</ion-select-option>
                             <ion-select-option value="false">No</ion-select-option>
                         </ion-select>

@@ -113,14 +113,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.apiService.deleteDesign(this.designId).subscribe((result) => {
         console.log('result', result);
         this.utilities.hideLoading().then(() => {
-          this.utilities.showSuccessModal('Desgin deleted successfully').then((modal) => {
-            modal.present();
-            modal.onWillDismiss().then((dismissed) => {
-              this.navController.pop();
-            });
-          },(error) => {
-
-          });
+          this.utilities.showSnackBar('Desgin deleted successfully');
+          this.navController.pop();
         });
       }, (error) => {
         this.utilities.hideLoading().then(() => {
@@ -147,15 +141,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.assigneeForm.value, this.designId).subscribe((success) => {
           this.utilities.hideLoading().then(() => {
-            this.utilities.showSuccessModal('Assignee selected').then((modal) => {
-              modal.present();
-              modal.onWillDismiss().then((dismissed) => {
-                this.refreshDataOnPreviousPage++;
-                this.setData(success);
-              });
-            },(error) => {
-  
-            });
+            this.utilities.showSnackBar('Assignee selected');
           });
         }, (error) => {
           this.utilities.hideLoading().then(() => {
