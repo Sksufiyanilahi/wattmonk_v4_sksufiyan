@@ -11,6 +11,7 @@ import { CameraPage } from './camera.page';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { UtilitiesModule } from '../utilities/utilities.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
     IonicModule,
     CameraPageRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    UtilitiesModule
   ],
   declarations: [CameraPage],
   providers: [

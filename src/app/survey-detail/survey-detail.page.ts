@@ -87,6 +87,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   setData(result: SurveyDataModel) {
+    console.log(result);
     this.survey = result;
     this.assigned = this.survey.assignto.id !== null && this.survey.assignto.id !== undefined;
     this.rescheduleForm.patchValue({

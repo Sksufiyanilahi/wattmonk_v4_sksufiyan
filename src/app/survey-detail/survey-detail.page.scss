@@ -136,10 +136,14 @@ div[scrolly=true] {
 }
 
 .picker-button {
-  --background: #DC6E67;
-  --color: white;
-}
+   --background: #DC6E67;
+   --color: white;
+ }
 
 .name_div{
   font-size: 20px;
+}
+
+.page-text-color {
+  color: #666666 !important;;
 }

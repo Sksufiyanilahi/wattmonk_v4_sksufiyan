@@ -28,90 +28,161 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       {
         name: 'MSP',
         isSelected: true,
+        askBeforeImage: false,
+        formControlToUpdate: '',
         images: [
           {
             image: '',
             imageTitle: 'Long Shot',
+            popupTitle: 'Confirm',
             showPopup: true,
-            popupQuestion: 'MSP',
+            popupQuestion: 'MSP Location',
             questionType: QuestionType.YES_NO,
             questionOptions: ['Inside', 'Outside'],
-            givenAnswer: ''
+            givenAnswer: '',
+            formValueToUpdate: 'msplocation'
           },
           {
             image: '',
             imageTitle: 'Open Shutter, Zoom Shot',
             showPopup: true,
-            popupQuestion: '',
-            questionType: QuestionType.AUTOCOMPLETE,
-            questionOptions: ['Main_Breakers'],
-            givenAnswer: ''
+            popupTitle: 'Confirm',
+            popupQuestion: 'Main Breaker Size',
+            questionType: QuestionType.INPUT_NUMBER,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: 'mainbreakersize'
           },
           {
             image: '',
             imageTitle: 'Zoom Shot',
             showPopup: true,
-            popupQuestion: 'MSP',
-            questionType: QuestionType.AUTOCOMPLETE,
+            popupTitle: 'Confirm',
+            popupQuestion: 'MSP Rating',
+            questionType: QuestionType.INPUT_NUMBER,
             questionOptions: ['MSP Rating', 'Bus Rating'],
-            givenAnswer: ''
+            givenAnswer: '',
+            formValueToUpdate: 'msprating'
           },
           {
             image: '',
             imageTitle: 'Without Cover, Zoom shot',
             showPopup: true,
+            popupTitle: 'Confirm',
             popupQuestion: 'Breaker',
             questionType: QuestionType.RADIO_BUTTON,
-            questionOptions: ['Top Fed', 'Bottom', 'Center'],
-            givenAnswer: ''
+            questionOptions: ['Top', 'Bottom', 'Center'],
+            givenAnswer: '',
+            formValueToUpdate: 'mspbreaker'
+          }
+        ]
+      },
+      {
+        name: 'PV Inverter',
+        isSelected: false,
+        askBeforeImage: false,
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: 'Wide angle shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Inverter Location',
+            questionType: QuestionType.YES_NO,
+            questionOptions: ['Inside', 'Outside'],
+            givenAnswer: '',
+            formValueToUpdate: 'pvinverterlocation'
+          },
+          {
+            image: '',
+            imageTitle: 'Zoom shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Inverter manufacture model',
+            questionType: QuestionType.STRING,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: ''
           }
         ]
       },
       {
         name: 'PV Meter',
         isSelected: false,
+        askBeforeImage: true,
+        formControlToUpdate: 'pvmeter',
         images: [
           {
             image: '',
-            imageTitle: 'Wide angle shot',
+            imageTitle: 'PV Meter',
             showPopup: true,
+            popupTitle: 'Confirm',
             popupQuestion: 'Inverter Location',
-            questionType: QuestionType.YES_NO,
-            questionOptions: ['Inside', 'Outside'],
-            givenAnswer: ''
+            questionType: QuestionType.NONE,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: ''
+          }
+        ]
+      },
+      {
+        name: 'AC Disconnect',
+        isSelected: false,
+        askBeforeImage: true,
+        formControlToUpdate: 'acdisconnect',
+        images: [
+          {
+            image: '',
+            imageTitle: 'Wide Angle Shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Inverter Location',
+            questionType: QuestionType.NONE,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: ''
           },
           {
             image: '',
-            imageTitle: 'Zoom shot',
+            imageTitle: 'Zoom Shot',
             showPopup: true,
-            popupQuestion: 'Inverter manufacture model',
-            questionType: QuestionType.STRING,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Inverter Location',
+            questionType: QuestionType.NONE,
             questionOptions: [],
-            givenAnswer: ''
+            givenAnswer: '',
+            formValueToUpdate: ''
           }
         ]
       },
       {
         name: 'Utility Meter',
         isSelected: false,
+        askBeforeImage: false,
+        formControlToUpdate: '',
         images: [
           {
             image: '',
             imageTitle: 'Wide angle shot',
             showPopup: true,
+            popupTitle: 'Confirm',
             popupQuestion: 'Utility meter',
             questionType: QuestionType.YES_NO,
             questionOptions: ['Attach', 'Detach'],
-            givenAnswer: ''
+            givenAnswer: '',
+            formValueToUpdate: 'utilitymeter'
           },
           {
             image: '',
             imageTitle: 'Zoom shot',
             showPopup: true,
-            popupQuestion: 'Utility meter name',
+            popupTitle: 'Confirm',
+            popupQuestion: 'Utility Name',
             questionType: QuestionType.STRING,
             questionOptions: [],
-            givenAnswer: ''
+            givenAnswer: '',
+            formValueToUpdate: ''
           }
         ]
       }
@@ -125,40 +196,18 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       {
         name: 'Panels',
         isSelected: true,
+        askBeforeImage: false,
+        formControlToUpdate: '',
         images: [{
           image: '',
-          imageTitle: '',
+          imageTitle: 'Wide angle shot',
           showPopup: false,
-          popupQuestion: '',
-          questionType: QuestionType.NONE,
+          popupTitle: 'Confirm',
+          popupQuestion: 'Number of Modules',
+          questionType: QuestionType.INPUT_NUMBER,
           questionOptions: [],
-          givenAnswer: ''
-        }]
-      },
-      {
-        name: 'Inverter',
-        isSelected: false,
-        images: [{
-          image: '',
-          imageTitle: '',
-          showPopup: false,
-          popupQuestion: '',
-          questionType: QuestionType.NONE,
-          questionOptions: [],
-          givenAnswer: ''
-        }]
-      },
-      {
-        name: 'Obstacles',
-        isSelected: false,
-        images: [{
-          image: '',
-          imageTitle: '',
-          showPopup: false,
-          popupQuestion: '',
-          questionType: QuestionType.NONE,
-          questionOptions: [],
-          givenAnswer: ''
+          givenAnswer: '',
+          formValueToUpdate: 'numberofmodules'
         }]
       }
     ]
@@ -169,11 +218,13 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
     imageModel: [{
       image: '',
       imageTitle: '',
+      popupTitle: 'Confirm',
       showPopup: false,
       popupQuestion: '',
       questionType: QuestionType.NONE,
       questionOptions: [],
-      givenAnswer: ''
+      givenAnswer: '',
+      formValueToUpdate: ''
     }],
     subMenu: []
   },
@@ -183,11 +234,13 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
     imageModel: [{
       image: '',
       imageTitle: '',
+      popupTitle: 'Confirm',
       showPopup: false,
       popupQuestion: '',
       questionType: QuestionType.NONE,
       questionOptions: [],
-      givenAnswer: ''
+      givenAnswer: '',
+      formValueToUpdate: ''
     }],
     subMenu: []
   },

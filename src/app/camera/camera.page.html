@@ -20,71 +20,91 @@
         <form [formGroup]="detailsForm" class="white-bg">
             <ion-grid class="ion-padding">
                 <ion-row>
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-input placeholder="electricityStorage" class="form_input" autocapitalize="words"
-                                       formControlName="electricityStorage"></ion-input>
-                        </ion-item>
+                    <ion-col size="6">
+                        <app-auto-complete [dataList]="listOfSolarMake" placeholder="module make*"
+                                           formControlName="modulemake"></app-auto-complete>
+                    </ion-col>
+                    <ion-col size="6">
+                        <app-auto-complete [dataList]="listOfSolarMade" placeholder="module model*"
+                                           formControlName="modulemodel"></app-auto-complete>
+
                     </ion-col>
                 </ion-row>
+
+                <ion-row>
+                    <ion-col size="6">
+                        <app-auto-complete [dataList]="listOfInverterMake" placeholder="inverter make*"
+                                           formControlName="invertermake"></app-auto-complete>
+                    </ion-col>
+                    <ion-col size="6">
+                        <app-auto-complete [dataList]="listOfInverterMade" placeholder="inverter model*"
+                                           formControlName="invertermodel"></app-auto-complete>
+                    </ion-col>
+                </ion-row>
+
                 <ion-row>
                     <ion-col size="12">
                         <ion-item class="ion-no-padding">
-                            <ion-input placeholder="solarModel" class="form_input" autocapitalize="words"
-                                       formControlName="solarModel"></ion-input>
+                            <ion-label>battery backup</ion-label>
+                            <ion-select class="form_input select_div" placeholder="Battery Backup" ok-text="Ok"
+                                        cancel-text="Cancel"
+                                        formControlName="batterybackup">
+                                <ion-select-option value="whole">Whole</ion-select-option>
+                                <ion-select-option value="partial">Partial</ion-select-option>
+                            </ion-select>
                         </ion-item>
                     </ion-col>
                 </ion-row>
+
+
                 <ion-row>
                     <ion-col size="12">
                         <ion-item class="ion-no-padding">
-                            <ion-input placeholder="inverterMake" class="form_input" autocapitalize="words"
-                                       formControlName="inverterMake"></ion-input>
+                            <ion-label>service feed source</ion-label>
+                            <ion-select class="form_input select_div" placeholder="service feed source" ok-text="Ok"
+                                        cancel-text="Cancel"
+                                        formControlName="servicefeedsource">
+                                <ion-select-option value="underground">Underground</ion-select-option>
+                                <ion-select-option value="overhead">Overhead</ion-select-option>
+                            </ion-select>
                         </ion-item>
                     </ion-col>
                 </ion-row>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-input placeholder="noOfPanelsInstalled" class="form_input" autocapitalize="words"
-                                       formControlName="noOfPanelsInstalled"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
+
             </ion-grid>
-            <ion-grid formArrayName="appliances" class="ion-padding">
-                <ion-row class="ion-align-items-center ion-justify-content-center">
-                    <ion-col class="ion-no-padding">
-                        <span class="input-placeholder ion-margin-start">appliance details</span>
-                    </ion-col>
-                    <ion-col size="auto">
-                        <ion-button fill="clear" class="action-button-color" (click)="addNewAppliance()">
-                            <ion-icon slot="start" name="add"></ion-icon>
-                            Add
-                        </ion-button>
-                    </ion-col>
-                </ion-row>
-                <ion-row *ngFor="let form of getAppliances().controls; let i=index" [formGroupName]="i"
-                         class="ion-align-items-center ion-justify-content-center">
-                    <ion-col>
-                        <ion-item class="ion-no-padding">
-                            <ion-input placeholder="name" class="form_input" autocapitalize="words"
-                                       formControlName="name"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col size="3">
-                        <ion-item class="ion-no-padding">
-                            <ion-input placeholder="amp" class="form_input" autocapitalize="words"
-                                       formControlName="amp"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col size="auto">
-                        <ion-button fill="clear" class="action-button-color" (click)="removeAppliance(i)">
-                            <ion-icon name="close"></ion-icon>
-                        </ion-button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+<!--            <ion-grid formArrayName="appliances" class="ion-padding">-->
+<!--                <ion-row class="ion-align-items-center ion-justify-content-center">-->
+<!--                    <ion-col class="ion-no-padding">-->
+<!--                        <span class="input-placeholder ion-margin-start">appliance details</span>-->
+<!--                    </ion-col>-->
+<!--                    <ion-col size="auto">-->
+<!--                        <ion-button fill="clear" class="action-button-color" (click)="addNewAppliance()">-->
+<!--                            <ion-icon slot="start" name="add"></ion-icon>-->
+<!--                            Add-->
+<!--                        </ion-button>-->
+<!--                    </ion-col>-->
+<!--                </ion-row>-->
+<!--                <ion-row *ngFor="let form of getAppliances().controls; let i=index" [formGroupName]="i"-->
+<!--                         class="ion-align-items-center ion-justify-content-center">-->
+<!--                    <ion-col>-->
+<!--                        <ion-item class="ion-no-padding">-->
+<!--                            <ion-input placeholder="name" class="form_input" autocapitalize="words"-->
+<!--                                       formControlName="name"></ion-input>-->
+<!--                        </ion-item>-->
+<!--                    </ion-col>-->
+<!--                    <ion-col size="3">-->
+<!--                        <ion-item class="ion-no-padding">-->
+<!--                            <ion-input placeholder="amp" class="form_input" autocapitalize="words"-->
+<!--                                       formControlName="amp"></ion-input>-->
+<!--                        </ion-item>-->
+<!--                    </ion-col>-->
+<!--                    <ion-col size="auto">-->
+<!--                        <ion-button fill="clear" class="action-button-color" (click)="removeAppliance(i)">-->
+<!--                            <ion-icon name="close"></ion-icon>-->
+<!--                        </ion-button>-->
+<!--                    </ion-col>-->
+<!--                </ion-row>-->
+<!--            </ion-grid>-->
             <ion-grid class="ion-padding">
                 <ion-row>
                     <ion-col size="12">

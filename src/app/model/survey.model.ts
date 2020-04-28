@@ -1,4 +1,5 @@
 import { User } from './user.model';
+import { Invertermake, Invertermodel, Solarmake, Solarmodel } from './design.model';
 
 export class SurveyModel {
   id: number;
@@ -22,6 +23,21 @@ export class SurveyDataModel {
   pvinverterimages: any[];
   pvmeterimages: any[];
   roofimages: any[];
+  modulemake: Solarmake;
+  modulemodel: Solarmodel;
+  invertermake: Invertermake;
+  invertermodel: Invertermodel;
+  batterybackup: string;
+  acdisconnect: boolean;
+  mainbreakersize: number;
+  mspbreaker: string;
+  msplocation: string;
+  msprating: number;
+  numberofmodules: number;
+  pvinverterlocation: string;
+  pvmeter: boolean;
+  servicefeedsource: string;
+  utilitymeter: string;
 }
 
 

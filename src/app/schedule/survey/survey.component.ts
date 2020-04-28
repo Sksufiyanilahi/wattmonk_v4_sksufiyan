@@ -94,16 +94,28 @@ export class SurveyComponent implements OnInit, OnDestroy {
     if (this.surveyForm.status === 'INVALID') {
       this.showInvalidFormAlert();
     } else {
-      this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
-        this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
-          modal.present();
-          modal.onWillDismiss().then((dismissed) => {
-            this.navController.navigateForward('camera/' + survey.id);
+      if (this.surveyId !== 0) {
+        this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
+          this.utilities.hideLoading().then(() => {
+            this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+              modal.present();
+              modal.onWillDismiss().then((dismissed) => {
+                this.navController.navigateForward('camera/' + survey.id);
+              });
+            });
           });
-        }, (error) => {
-
         });
-      });
+      } else {
+        this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
+          this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+            modal.present();
+            modal.onWillDismiss().then((dismissed) => {
+              this.navController.navigateForward('camera/' + survey.id);
+            });
+          });
+        });
+      }
+
     }
   }
 

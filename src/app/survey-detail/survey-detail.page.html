@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border" *ngIf="survey">
+<ion-header class="ion-no-border white-bg" *ngIf="survey">
     <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
         <ion-row>
             <ion-col size="auto">
@@ -88,6 +88,125 @@
                     <ion-img src="/assets/images/schedule.svg" class="reschedule-icon"></ion-img>
                     <span>Reschedule</span>
                 </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-margin-top">
+            <ion-col size="12">
+                <span class="models">Solar Details</span>
+            </ion-col>
+            <ion-col>
+                <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-no-padding">
+                        <ion-col><span class="model-type">make</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.modulemake.name}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">model</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.modulemodel.name}}</span>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-margin-top">
+            <ion-col size="12">
+                <span class="models">Inverter Details</span>
+            </ion-col>
+            <ion-col>
+                <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-no-padding">
+                        <ion-col><span class="model-type">make</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.invertermake.name}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">model</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.invertermodel.name}}</span>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-margin-top">
+            <ion-col>
+                <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-no-padding">
+                        <ion-col><span class="model-type">msp Location</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.msplocation}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">msp breaker</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.mspbreaker}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">msp rating</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.msprating}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">main breaker size</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.mainbreakersize}}</span>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-margin-top">
+            <ion-col>
+                <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-no-padding">
+                        <ion-col><span class="model-type">pv meter</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.pvmeter}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">pv inverter location</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.pvinverterlocation}}</span>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-margin-top">
+            <ion-col>
+                <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-no-padding">
+                        <ion-col><span class="model-type">utility meter</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.utilitymeter}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">ac disconnect</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.acdisconnect}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">service feed source</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{survey.servicefeedsource}}</span>
+                        </ion-col>
+                    </ion-row>
+
+                </ion-grid>
             </ion-col>
         </ion-row>
 
@@ -195,7 +314,7 @@
 
 </ion-bottom-drawer>
 
-<ion-footer *ngIf="!assigned" class="ion-no-border">
+<ion-footer *ngIf="!assigned" class="ion-no-border white-bg">
     <ion-grid>
         <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
             <ion-col size="auto">

@@ -44,14 +44,13 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
     if (this.selectedDataId !== 0) {
       return null;
     }
-    return {
-      error: 'No option selected'
-    };
+    return null;
+    // return {
+    //   error: 'No option selected'
+    // };
   }
 
   writeValue(data: any): void {
-    console.log('patchedvalue ,');
-    console.log(data);
     if (data !== null && data !== undefined && data !== '') {
       this.selectedDataId = data;
       let selectedData: any;
@@ -71,8 +70,6 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
       }
 
       if (selectedData) {
-        console.log('Patching ');
-        console.log(selectedData);
         this.selectOption(selectedData);
       }
     } else {
@@ -85,6 +82,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
 
   onValueChanged(event: CustomEvent) {
     console.log('value changed');
+    console.log(this.dataList);
     this.sortedList = this.dataList.filter((item) => {
       return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
     });
