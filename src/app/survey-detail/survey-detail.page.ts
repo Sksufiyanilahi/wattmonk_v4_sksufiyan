@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UtilitiesService } from '../utilities.service';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { SurveyDataModel } from '../model/survey.model';
 import { UserRoles } from '../model/constants';
 import { AssigneeModel } from '../model/assignee.model';
@@ -46,7 +46,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     private storage: StorageService,
     private datePicker: DatePicker,
     private formBuilder: FormBuilder,
-    private launchNavigator: LaunchNavigator
+    private launchNavigator: LaunchNavigator,
+    private toastController:ToastController
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.rescheduleForm = this.formBuilder.group({
@@ -110,24 +111,24 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   async deleteSurvey() {
-    const alert = await this.alertController.create({
+    const toast = await this.toastController.create({
       header: 'Delete Survey',
-      subHeader: 'Are you sure you want to delete this survey?',
+      message: 'Are you sure you want to delete this survey?',
+      cssClass: 'my-custom-class',
       buttons: [
         {
           text: 'Yes',
           handler: () => {
-            this.deleteSurveyFromServer();
+            this. deleteSurveyFromServer()
           }
-        },
-        {
+        }, {
           text: 'No'
         }
-      ],
-      backdropDismiss: false
+      ]
     });
-    await alert.present();
+    toast.present();
   }
+
 
   deleteSurveyFromServer() {
     this.utilities.showLoading('Deleting Survey').then((success) => {
@@ -197,7 +198,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
 
   rescheduleSurvey() {
     if (this.rescheduleForm.status === 'INVALID') {
-      this.utilities.showSnackBar('Invalid Data');
+      this.utilities.errorSnackBar('Invalid Data');
     } else {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateSurveyForm(this.rescheduleForm.value, this.surveyId).subscribe(response => {
@@ -225,7 +226,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
 
   updateAssignee() {
     if (this.assigneeForm.status === 'INVALID') {
-      this.utilities.showAlert('Please select an assignee');
+      this.utilities.errorSnackBar('Please select an assignee');
     } else {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateSurveyForm(this.assigneeForm.value, this.surveyId).subscribe((success) => {

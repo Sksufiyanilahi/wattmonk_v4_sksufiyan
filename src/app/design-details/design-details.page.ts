@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { AlertController, NavController } from '@ionic/angular';
+import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { UtilitiesService } from '../utilities.service';
 import { ActivatedRoute } from '@angular/router';
 import { DesginDataModel } from '../model/design.model';
@@ -40,7 +40,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private alertController: AlertController,
     private storage: StorageService,
     private formBuilder: FormBuilder,
-    private launchNavigator: LaunchNavigator
+    private launchNavigator: LaunchNavigator,
+    private toastController:ToastController
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
@@ -87,25 +88,24 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     this.design = result;
     this.assigned = this.design.assignedto.id !== null && this.design.assignedto.id !== undefined;
   }
-
+  
   async deleteDesign() {
-    const alert = await this.alertController.create({
+    const toast = await this.toastController.create({
       header: 'Delete Design',
-      subHeader: 'Are you sure you want to delete this design?',
+      message: 'Are you sure you want to delete this design?',
+      cssClass: 'my-custom-class',
       buttons: [
         {
           text: 'Yes',
           handler: () => {
             this.deleteDesignFromServer();
           }
-        },
-        {
+        }, {
           text: 'No'
         }
-      ],
-      backdropDismiss: false
+      ]
     });
-    await alert.present();
+    toast.present();
   }
 
   deleteDesignFromServer() {
@@ -135,7 +135,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   updateAssignee() {
     if (this.assigneeForm.status === 'INVALID') {
-      this.utilities.showAlert('Please select an assignee');
+      this.utilities.errorSnackBar('Please select an assignee');
     } else {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.assigneeForm.value, this.designId).subscribe((success) => {

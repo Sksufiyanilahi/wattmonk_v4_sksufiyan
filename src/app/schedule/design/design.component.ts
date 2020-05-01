@@ -58,7 +58,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
       monthlybill: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
+      address: new FormControl('',),
       createdby: new FormControl('', [Validators.required]),
       assignedto: new FormControl(''),
       rooftype: new FormControl('', [Validators.required]),
@@ -171,18 +171,18 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.utils.hideLoading();
         const error: ErrorModel = solarResponseError.error;
         if (error.message instanceof String) {
-          this.utils.showAlert(error.message);
+          this.utils.errorSnackBar(error.message);
         } else if (error.message instanceof Array) {
-          this.utils.showAlert(error.message[0].messages[0].message);
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
         }
       });
 
     }, responseError => {
       const error: ErrorModel = responseError.error;
       if (error.message instanceof String) {
-        this.utils.showAlert(error.message);
+        this.utils.errorSnackBar(error.message);
       } else if (error.message instanceof Array) {
-        this.utils.showAlert(error.message[0].messages[0].message);
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
       }
     });
   }
@@ -212,17 +212,17 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.utils.hideLoading();
         const error: ErrorModel = makeResponseError.error;
         if (error.message instanceof String) {
-          this.utils.showAlert(error.message);
+          this.utils.errorSnackBar(error.message);
         } else if (error.message instanceof Array) {
-          this.utils.showAlert(error.message[0].messages[0].message);
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
         }
       });
     }, responseError => {
       const error: ErrorModel = responseError.error;
       if (error.message instanceof String) {
-        this.utils.showAlert(error.message);
+        this.utils.errorSnackBar(error.message);
       } else if (error.message instanceof Array) {
-        this.utils.showAlert(error.message[0].messages[0].message);
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
       }
     });
   }
@@ -235,7 +235,7 @@ export class DesignComponent implements OnInit, OnDestroy {
           this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
-              this.utils.showSuccessModal('Survey have been saved').then((modal) => {
+              this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
                 modal.present();
                 modal.onWillDismiss().then((dismissed) => {
                   this.utils.setHomepageDesignRefresh(true);
@@ -254,7 +254,7 @@ export class DesignComponent implements OnInit, OnDestroy {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
-              this.utils.showSnackBar('Survey have been updated');
+              this.utils.showSnackBar('Desgin have been updated');
               this.utils.setHomepageDesignRefresh(true);
               this.navController.pop();
             });
@@ -270,7 +270,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       });
 
     } else {
-      this.showInvalidFormAlert();
+      this.utils.errorSnackBar('Invalid form detail')
     }
   }
 

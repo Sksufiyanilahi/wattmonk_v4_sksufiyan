@@ -109,7 +109,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
   saveSurvey() {
     if (this.surveyForm.status === 'INVALID') {
-      this.showInvalidFormAlert();
+      this.utilities.errorSnackBar('Invalid form detail')
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
         if (this.surveyId !== 0) {

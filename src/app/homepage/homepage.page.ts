@@ -4,7 +4,7 @@ import { ApiService } from '../api.service';
 import { DatePipe } from '@angular/common';
 import { StorageService } from '../storage.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
@@ -43,7 +43,8 @@ export class HomepagePage implements OnInit, OnDestroy {
     private storage: StorageService,
     private diagnostic: Diagnostic,
     private alertController: AlertController,
-    private geolocation: Geolocation
+    private geolocation: Geolocation,
+    private toastController:ToastController
   ) {
     this.initializeItems();
   }
@@ -112,20 +113,19 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   async showLocationDenied() {
-    const alert = await this.alertController.create({
+    const toast = await this.toastController.create({
       header: 'Error',
-      subHeader: 'Location services denied, please enable them manually',
+      message: 'Location services denied, please enable them manually',
+      cssClass: 'my-custom-class',
       buttons: [
         {
           text: 'OK',
           handler: () => {
-
           }
         }
-      ],
-      backdropDismiss: false
+      ]
     });
-    await alert.present();
+    toast.present();
   }
 
   fetchLocation() {
@@ -141,26 +141,27 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   async askToChangeSettings() {
-    const alert = await this.alertController.create({
+    const toast = await this.toastController.create({
       header: 'Location Disabled',
-      subHeader: 'Please enable location services',
+      message: 'Please enable location services',
+      cssClass: 'my-custom-class',
       buttons: [
         {
           text: 'OK',
           handler: () => {
             this.changeLocationSettings();
           }
-        },
-        {
+        }, {
           text: 'Cancel',
           handler: () => {
           }
         }
-      ],
-      backdropDismiss: false
+      ]
     });
-    await alert.present();
+    toast.present();
   }
+
+  
 
   getGeoLocation() {
 

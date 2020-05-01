@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AlertController, IonTabs, NavController, Platform } from '@ionic/angular';
+import { AlertController, IonTabs, NavController, Platform, ToastController } from '@ionic/angular';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { StorageService } from '../storage.service';
@@ -42,7 +42,8 @@ export class SchedulePage implements OnInit, OnDestroy {
     private storage: StorageService,
     private utilities: UtilitiesService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private toastController: ToastController
   ) {
     const url = this.router.url;
     const splittedUrl = url.split('/');
@@ -87,17 +88,18 @@ export class SchedulePage implements OnInit, OnDestroy {
     this.geolocation.getCurrentPosition().then((resp) => {
       this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
     }).catch((error) => {
-      this.utilities.showAlert('Unable to get location');
+      this.utilities.errorSnackBar('Unable to get location');
       console.log('Error getting location', error);
       this.showNoLocation();
     });
 
   }
 
-  async showNoLocation() {
-    const alert = await this.alertController.create({
+  async  showNoLocation() {
+    const toast = await this.toastController.create({
       header: 'Error',
-      subHeader: 'Unable to get location',
+      message: 'Unable to get location',
+      cssClass: 'my-custom-class',
       buttons: [
         {
           text: 'OK',
@@ -105,16 +107,18 @@ export class SchedulePage implements OnInit, OnDestroy {
             this.goBack();
           }
         }
-      ],
-      backdropDismiss: false
+      ]
     });
-    await alert.present();
+    toast.present();
   }
 
+
+
   async showLocationDenied() {
-    const alert = await this.alertController.create({
+    const toast = await this.toastController.create({
       header: 'Error',
-      subHeader: 'Location services denied, please enable them manually',
+      message: 'Location services denied, please enable them manually',
+      cssClass: 'my-custom-class',
       buttons: [
         {
           text: 'OK',
@@ -122,10 +126,9 @@ export class SchedulePage implements OnInit, OnDestroy {
             this.goBack();
           }
         }
-      ],
-      backdropDismiss: false
+      ]
     });
-    await alert.present();
+    toast.present();
   }
 
 
@@ -251,26 +254,25 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
   async askToChangeSettings() {
-    const alert = await this.alertController.create({
+    const toast = await this.toastController.create({
       header: 'Location Disabled',
-      subHeader: 'Please enable location services',
+      message: 'Please enable location services',
+      cssClass: 'my-custom-class',
       buttons: [
         {
           text: 'OK',
           handler: () => {
             this.changeLocationSettings();
           }
-        },
-        {
+        }, {
           text: 'Cancel',
           handler: () => {
             this.goBack();
           }
         }
-      ],
-      backdropDismiss: false
+      ]
     });
-    await alert.present();
+    toast.present();
   }
 
   changeLocationSettings() {
