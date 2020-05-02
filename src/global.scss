@@ -214,6 +214,15 @@ ion-modal {
 
 ion-bottom-drawer { background: #F3F3F3; ion-content { --background: #F3F3F3; } }
 
+.form_div{
+border-bottom: 1px solid #ced4da !important;
+
+}
+
+ion-item{
+    --highlight-height:0
+  }
+
 
 
 

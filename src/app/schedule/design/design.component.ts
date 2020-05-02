@@ -58,7 +58,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
       monthlybill: new FormControl('', [Validators.required]),
-      address: new FormControl('',),
+      address: new FormControl('',[Validators.required]),
       createdby: new FormControl('', [Validators.required]),
       assignedto: new FormControl(''),
       rooftype: new FormControl('', [Validators.required]),
