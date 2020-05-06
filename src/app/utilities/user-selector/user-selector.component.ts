@@ -25,7 +25,7 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
   @Input() placeholder = 'assign to';
   @Input() required = false;
   private onChange: (assignee: number) => void;
-  selectedUserId = 0;
+  selectedUserId = null;
 
   constructor() {
   }
@@ -48,7 +48,7 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
   validate(control: AbstractControl): ValidationErrors | null {
     if (this.required) {
       console.log(this.selectedUserId);
-      if (this.selectedUserId !== 0) {
+      if (this.selectedUserId !== null) {
         return null;
       }
       return {
@@ -63,8 +63,8 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
       item.selected = false;
     });
     if (assignee.id === this.selectedUserId) {
-      this.selectedUserId = 0;
-      this.onChange(0);
+      this.selectedUserId = null;
+      this.onChange(null);
     } else {
       assignee.selected = true;
       this.selectedUserId = assignee.id;

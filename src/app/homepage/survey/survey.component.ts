@@ -134,18 +134,26 @@ export class SurveyComponent implements OnInit, OnDestroy {
   }
 
   openSurveyors(id: number) {
-    this.surveyId = id;
-    this.utils.setBottomBarHomepage(false);
-    this.drawerState = DrawerState.Docked;
-    this.apiService.getDesigners(UserRoles.SURVEYOR).subscribe(assignees => {
-      this.listOfAssignees = [];
-      // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
-      assignees.forEach(item => this.listOfAssignees.push(item));
-      console.log(this.listOfAssignees);
-      this.assignForm.patchValue({
-        assignedto: 0
+    this.utils.showLoading('Getting Surveyors').then(() => {
+      this.apiService.getDesigners(UserRoles.SURVEYOR).subscribe(assignees => {
+        this.utils.hideLoading().then(() => {
+          this.listOfAssignees = [];
+          assignees.forEach(item => this.listOfAssignees.push(item));
+          this.surveyId = id;
+          this.utils.setBottomBarHomepage(false);
+          this.drawerState = DrawerState.Docked;
+          console.log(this.listOfAssignees);
+          this.assignForm.patchValue({
+            assignedto: 0
+          });
+        });
+      }, (error) => {
+        this.utils.hideLoading().then(() => {
+          this.utils.errorSnackBar('Some error occurred. Please try again later');
+        });
       });
     });
+
   }
 }
 

@@ -60,7 +60,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       monthlybill: new FormControl('', [Validators.required]),
       address: new FormControl('',[Validators.required]),
       createdby: new FormControl('', [Validators.required]),
-      assignedto: new FormControl(''),
+      assignedto: new FormControl(null),
       rooftype: new FormControl('', [Validators.required]),
       jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
@@ -135,7 +135,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         });
         this.utils.setStaticAddress(this.design.address);
 
-        if (this.design.assignedto.id !== null && this.design.assignedto.id !== undefined) {
+        if (this.design.assignedto !== null && this.design.assignedto !== undefined) {
           this.desginForm.patchValue({
             assignedto: this.design.assignedto.id
           });
@@ -255,7 +255,7 @@ export class DesignComponent implements OnInit, OnDestroy {
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
               this.utils.showSnackBar('Desgin have been updated');
-              this.utils.setHomepageDesignRefresh(true);
+              this.utils.setDesignDetailsRefresh(true);
               this.navController.pop();
             });
           }, responseError => {
@@ -270,7 +270,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       });
 
     } else {
-      this.utils.errorSnackBar('Invalid form detail')
+      this.utils.errorSnackBar('Invalid form detail');
     }
   }
 

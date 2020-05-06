@@ -50,7 +50,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
-      assignto: new FormControl(0),
+      assignto: new FormControl(null),
       createdby: new FormControl(this.storage.getUserID(), [Validators.required])
     });
 
@@ -94,34 +94,29 @@ export class SurveyComponent implements OnInit, OnDestroy {
     if (this.surveyForm.status === 'INVALID') {
       this.showInvalidFormAlert();
     } else {
-      if (this.surveyId !== 0) {
-        this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
-          this.utilities.hideLoading().then(() => {
-            this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
-              modal.present();
-              modal.onWillDismiss().then((dismissed) => {
-                this.navController.navigateForward('camera/' + survey.id);
-              });
-            });
-          });
-        });
-      } else {
-        this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
-          this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
-            modal.present();
-            modal.onWillDismiss().then((dismissed) => {
+      this.utilities.showLoading('Saving Survey').then(() => {
+        if (this.surveyId !== 0) {
+          this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
+            this.utilities.hideLoading().then(() => {
+              this.utilities.setDesignDetailsRefresh(true);
               this.navController.navigateForward('camera/' + survey.id);
             });
           });
-        });
-      }
-
+        } else {
+          this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
+            this.utilities.hideLoading().then(() => {
+              this.utilities.setDesignDetailsRefresh(true);
+              this.navController.navigateForward('camera/' + survey.id);
+            });
+          });
+        }
+      });
     }
   }
 
   saveSurvey() {
     if (this.surveyForm.status === 'INVALID') {
-      this.utilities.errorSnackBar('Invalid form detail')
+      this.utilities.errorSnackBar('Invalid form detail');
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
         if (this.surveyId !== 0) {

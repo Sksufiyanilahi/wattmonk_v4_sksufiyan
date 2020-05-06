@@ -135,18 +135,27 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   openDesigners(id: number) {
-    this.designId = id;
-    this.utils.setBottomBarHomepage(false);
-    this.drawerState = DrawerState.Docked;
-    this.apiService.getSurveyors(UserRoles.DESIGNER).subscribe(assignees => {
-      this.listOfAssignees = [];
-      // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
-      assignees.forEach(item => this.listOfAssignees.push(item));
-      console.log(this.listOfAssignees);
-      this.assignForm.patchValue({
-        assignto: 0
+    this.utils.showLoading('Getting Designers').then(() => {
+      this.apiService.getSurveyors(UserRoles.DESIGNER).subscribe(assignees => {
+        this.utils.hideLoading().then(() => {
+          this.listOfAssignees = [];
+          // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+          assignees.forEach(item => this.listOfAssignees.push(item));
+          console.log(this.listOfAssignees);
+          this.designId = id;
+          this.utils.setBottomBarHomepage(false);
+          this.drawerState = DrawerState.Docked;
+          this.assignForm.patchValue({
+            assignto: 0
+          });
+        });
+      }, (error) => {
+        this.utils.hideLoading().then(() => {
+          this.utils.errorSnackBar('Some error occurred. Please try again later');
+        });
       });
     });
+
   }
 }
 

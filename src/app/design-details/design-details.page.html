@@ -114,7 +114,7 @@
             <ion-col>
                 <ion-grid class="ion-no-padding">
                     <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type">construction</span></ion-col>
+                        <ion-col><span class="model-type">new construction</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name">{{design.newconstruction}}</span>
                         </ion-col>
@@ -153,6 +153,13 @@
             </ion-col>
         </ion-row>
 
+        <ion-row>
+            <ion-col><span class="model-type">created at</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
+            </ion-col>
+        </ion-row>
+
         <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
                  *ngIf="assigned">
             <ion-col class="ion-justify-content-center ion-align-items-center"><span
@@ -182,7 +189,7 @@
     </ion-grid>
 </ion-content>
 
-<ion-footer *ngIf="!assigned" class="ion-no-border white-bg">
+<ion-footer *ngIf="design && !assigned" class="ion-no-border white-bg">
     <ion-grid>
         <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
             <ion-col size="auto">

@@ -17,9 +17,20 @@ export class User {
   address: string;
   registrationnumber: string;
   isdefaultpassword: string;
-  logo: any;
+  contractorlogo: ContractorLogo;
   parent: User;
 
+}
+
+export class ContractorLogo {
+  id: number;
+  logo: Image;
+
+}
+
+export class Image {
+  url: string;
+  id: number;
 }
 
 export class Role {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from "@ionic/angular";
+import { NavController } from '@ionic/angular';
 import { StorageService } from '../storage.service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-profile',
@@ -11,8 +12,10 @@ export class ProfilePage implements OnInit {
 
   constructor(
     private navController: NavController,
+    private apiService: ApiService,
     private storage: StorageService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
   }
@@ -23,6 +26,7 @@ export class ProfilePage implements OnInit {
 
   logout() {
     this.storage.logout();
+    this.apiService.resetHeaders();
     this.navController.navigateRoot('login');
   }
 }

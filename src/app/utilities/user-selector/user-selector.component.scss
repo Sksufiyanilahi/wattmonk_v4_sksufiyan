@@ -1,3 +1,8 @@
+.transparent-background {
+  --background: transparent !important;
+  background: transparent !important;
+}
+
 .assignee-image {
   width: 3.5em;
   height: 3.5em;
@@ -10,7 +15,7 @@
 }
 
 .assignee-margin {
-  margin: 8px;
+  margin: 4px;
   text-align: center;
 }
 
@@ -20,7 +25,8 @@
 }
 
 .normal {
-  border: 3px solid white;
+  border: 3px solid transparent;
+  border-radius: 50%;
 }
 
 div[scrollx=true], div[scrolly=true] {

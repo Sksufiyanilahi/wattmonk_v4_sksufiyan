@@ -41,7 +41,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private storage: StorageService,
     private formBuilder: FormBuilder,
     private launchNavigator: LaunchNavigator,
-    private toastController:ToastController
+    private toastController: ToastController
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
@@ -68,7 +68,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     this.utilities.showLoading('Getting Design Details').then((success) => {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
-        console.log("re",result);
+        console.log('re', result);
         this.setData(result);
       }, (error) => {
         this.utilities.hideLoading();
@@ -85,10 +85,15 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   setData(result: DesginDataModel) {
+    if (result.newconstruction === 'true') {
+      result.newconstruction = 'Yes';
+    } else {
+      result.newconstruction = 'No';
+    }
     this.design = result;
-    this.assigned = this.design.assignedto.id !== null && this.design.assignedto.id !== undefined;
+    this.assigned = this.design.assignedto !== null && this.design.assignedto !== undefined;
   }
-  
+
   async deleteDesign() {
     const toast = await this.toastController.create({
       header: 'Delete Design',
@@ -140,6 +145,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.assigneeForm.value, this.designId).subscribe((success) => {
           this.utilities.hideLoading().then(() => {
+            this.setData(success);
             this.utilities.showSnackBar('Assignee selected');
           });
         }, (error) => {

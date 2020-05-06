@@ -89,8 +89,12 @@ export class StorageService {
   }
 
   logout() {
+    const username = this.getUserName();
+    const password = this.getPassword();
     localStorage.clear();
     this.setLoggedInOnce();
+    this.setUserName(username);
+    this.setPassword(password);
   }
 
   setLoggedInOnce() {
@@ -99,5 +103,29 @@ export class StorageService {
 
   isLoggedInOnce(): boolean {
     return localStorage.getItem('loggedInOnce') !== null && localStorage.getItem('loggedInOnce') !== undefined;
+  }
+
+  setUserName(username: string) {
+    localStorage.setItem('username', username);
+  }
+
+  getUserName(): string {
+    return this.checkKeyAndReturnValue('username');
+  }
+
+  setPassword(password: string) {
+    localStorage.setItem('password', password);
+  }
+
+  getPassword(): string {
+    return this.checkKeyAndReturnValue('password');
+  }
+
+  checkKeyAndReturnValue(key: string) {
+    if (localStorage.getItem(key) === null || localStorage.getItem(key) === undefined) {
+      return '';
+    } else {
+      return localStorage.getItem(key);
+    }
   }
 }

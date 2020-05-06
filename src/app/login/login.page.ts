@@ -2,45 +2,27 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-
 import {
   FormControl,
   FormGroup,
   Validators,
   FormBuilder
-}
-
-  from '@angular/forms';
-
+} from '@angular/forms';
 import {
   ApiService
-}
-
-  from '../api.service';
-
+} from '../api.service';
 import {
   UtilitiesService
-}
-
-  from '../utilities.service';
-
+} from '../utilities.service';
 import {
   NavController
-}
-
-  from '@ionic/angular';
-
+} from '@ionic/angular';
 import {
   StorageService
-}
-
-  from '../storage.service';
-
+} from '../storage.service';
 import {
   ErrorModel
-}
-
-  from '../model/error.model';
+} from '../model/error.model';
 import { INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../model/constants';
 
 @Component({
@@ -70,10 +52,11 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.loginForm = this.formBuilder.group({
-        identifier: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
-        password: new FormControl('', [Validators.required, Validators.minLength(6)])
+        identifier: new FormControl(this.storageService.getUserName(), [Validators.required, Validators.pattern(EMAILPATTERN)]),
+        password: new FormControl(this.storageService.getPassword(), [Validators.required, Validators.minLength(6)])
       }
     );
+
   }
 
   login() {
@@ -83,6 +66,8 @@ export class LoginPage implements OnInit {
         this.apiService.login(this.loginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
+            this.storageService.setUserName(this.loginForm.get('identifier').value);
+            this.storageService.setPassword(this.loginForm.get('password').value);
             this.storageService.setUser(response.user, response.jwt);
             this.apiService.refreshHeader();
             this.navController.navigateRoot(['homepage']);

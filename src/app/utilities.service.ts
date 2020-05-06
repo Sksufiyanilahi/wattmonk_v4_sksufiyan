@@ -143,7 +143,7 @@ export class UtilitiesService {
       duration: 2000,
       cssClass: 'my-custom-class'
     });
-    toast.present();
+    await toast.present();
   }
 
   async errorSnackBar(message) {
@@ -153,19 +153,7 @@ export class UtilitiesService {
       duration: 2000,
       cssClass: 'my-custom-error-class'
     });
-    toast.present();
-  }
-
-  getDefaultAssignee(userId: string): AssigneeModel {
-    return {
-      firstname: '',
-      lastname: '',
-      logo: {
-        url: '/assets/images/wattmonk_logo.png'
-      },
-      selected: false,
-      id: +userId
-    };
+    await toast.present();
   }
 
 

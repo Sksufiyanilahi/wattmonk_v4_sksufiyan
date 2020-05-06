@@ -20,7 +20,7 @@
                     <span class="customer-address z-100"
                           (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
                     <ion-row class="ion-no-margin ion-no-margin">
-                        <ion-col size="auto" class="ion-no-margin ion-no-padding"
+                        <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="!surveyData.modulemodel"
                                  [routerLink]="['/camera/',surveyData.id]" routerDirection="forward">
                             <span class="ion-text-end action-button-color">Start Survey</span>
                         </ion-col>
@@ -45,28 +45,25 @@
 </ion-content>
 
 <ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
-                   shouldBounce="false" distanceTop="0" class="ion-padding drawer">
+                   shouldBounce="false" distanceTop="0" class="drawer">
     <form [formGroup]="assignForm">
-        <ion-grid class="drawer" style="background: #F3F3F3;">
-
+        <ion-grid class="drawer">
             <ion-row>
-                <ion-col>
-                    <ion-item class="ion-no-padding no-border" lines="none">
-                        <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
-                                           formControlName="assignto"></app-user-selector>
-                    </ion-item>
+                <ion-col size="12">
+                    <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
+                                       formControlName="assignto"></app-user-selector>
                 </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col size="auto">
-                    <ion-item lines="none" class="picker-button" (click)="assignToSurveyor()">
+                    <ion-button class="buttom-drawer-button" (click)="assignToSurveyor()">
                         Confirm
-                    </ion-item>
+                    </ion-button>
                 </ion-col>
                 <ion-col size="auto">
-                    <ion-item lines="none" class="picker-button" (click)="dismissBottomSheet()">
+                    <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
                         Cancel
-                    </ion-item>
+                    </ion-button>
                 </ion-col>
             </ion-row>
         </ion-grid>

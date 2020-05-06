@@ -28,9 +28,7 @@ export class ApiService {
     private http: HttpClient,
     private storageService: StorageService
   ) {
-    this.headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
+    this.resetHeaders();
   }
 
   login(data: any): Observable<LoginModel> {
@@ -101,6 +99,14 @@ export class ApiService {
     });
     this.parentId = this.storageService.getParentId();
     this.userId = this.storageService.getUserID();
+  }
+
+  resetHeaders() {
+    this.headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    this.parentId = '';
+    this.userId = '';
   }
 
   saveSurvey(data: any): Observable<SurveyDataModel> {

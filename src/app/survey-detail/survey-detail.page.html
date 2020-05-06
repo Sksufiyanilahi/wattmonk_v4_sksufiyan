@@ -100,13 +100,15 @@
                     <ion-row class="ion-no-padding">
                         <ion-col><span class="model-type">make</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.modulemake.name}}</span>
+                            <span class="model-name" *ngIf="survey.modulemake">{{survey.modulemake.name}}</span>
+                            <span class="model-name" *ngIf="!survey.modulemake">n/a</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">model</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.modulemodel.name}}</span>
+                            <span class="model-name" *ngIf="survey.modulemodel">{{survey.modulemodel.name}}</span>
+                            <span class="model-name" *ngIf="!survey.modulemodel">n/a</span>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -122,13 +124,15 @@
                     <ion-row class="ion-no-padding">
                         <ion-col><span class="model-type">make</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.invertermake.name}}</span>
+                            <span class="model-name" *ngIf="survey.invertermake">{{survey.invertermake.name}}</span>
+                            <span class="model-name" *ngIf="!survey.invertermake">n/a</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">model</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.invertermodel.name}}</span>
+                            <span class="model-name" *ngIf="survey.invertermodel">{{survey.invertermodel.name}}</span>
+                            <span class="model-name" *ngIf="!survey.invertermodel">n/a</span>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -140,19 +144,22 @@
                     <ion-row class="ion-no-padding">
                         <ion-col><span class="model-type">msp Location</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.msplocation}}</span>
+                            <span class="model-name" *ngIf="survey.msplocation">{{survey.msplocation}}</span>
+                            <span class="model-name" *ngIf="!survey.msplocation">n/a</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">msp breaker</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.mspbreaker}}</span>
+                            <span class="model-name" *ngIf="survey.mspbreaker">{{survey.mspbreaker}}</span>
+                            <span class="model-name" *ngIf="!survey.mspbreaker">n/a</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">msp rating</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.msprating}}</span>
+                            <span class="model-name" *ngIf="survey.msprating">{{survey.msprating}}</span>
+                            <span class="model-name" *ngIf="!survey.msprating">n/a</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
@@ -171,13 +178,15 @@
                     <ion-row class="ion-no-padding">
                         <ion-col><span class="model-type">pv meter</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.pvmeter}}</span>
+                            <span class="model-name" *ngIf="survey.pvmeter">{{survey.pvmeter}}</span>
+                            <span class="model-name" *ngIf="!survey.pvmeter">n/a</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">pv inverter location</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.pvinverterlocation}}</span>
+                            <span class="model-name" *ngIf="survey.pvinverterlocation">{{survey.pvinverterlocation}}</span>
+                            <span class="model-name" *ngIf="!survey.pvinverterlocation">n/a</span>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -190,19 +199,22 @@
                     <ion-row class="ion-no-padding">
                         <ion-col><span class="model-type">utility meter</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.utilitymeter}}</span>
+                            <span class="model-name" *ngIf="survey.utilitymeter">{{survey.utilitymeter}}</span>
+                            <span class="model-name" *ngIf="!survey.utilitymeter">n/a</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">ac disconnect</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.acdisconnect}}</span>
+                            <span class="model-name" *ngIf="survey.acdisconnect">{{survey.acdisconnect}}</span>
+                            <span class="model-name" *ngIf="!survey.acdisconnect">n/a</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">service feed source</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.servicefeedsource}}</span>
+                            <span class="model-name" *ngIf="survey.servicefeedsource">{{survey.servicefeedsource}}</span>
+                            <span class="model-name" *ngIf="!survey.servicefeedsource">n/a</span>
                         </ion-col>
                     </ion-row>
 
@@ -233,6 +245,13 @@
             </ion-col>
             <ion-col size="12" class="ion-no-padding ion-text-end">
                 <span class="comment-by">Posted by {{survey.createdby.firstname}} {{survey.createdby.lastname}}</span>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col><span class="model-type">created at</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name">{{survey.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
             </ion-col>
         </ion-row>
 
@@ -267,10 +286,9 @@
 </ion-content>
 
 <ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
-                   shouldBounce="false" distanceTop="0" class="ion-padding drawer">
+                   shouldBounce="false" distanceTop="0" class="drawer">
     <form [formGroup]="rescheduleForm">
         <ion-grid class="drawer">
-
             <ion-row>
                 <ion-col size="12">
                     <span>date and time</span>
@@ -282,7 +300,7 @@
                 </ion-col>
                 <ion-col *ngIf="survey" size="auto">
                     <ion-item lines="none" class="date-picker" (click)="changeTime()">
-                        {{date | date: 'hh mm a'}}
+                        {{date | date: 'hh:mm a'}}
                     </ion-item>
                 </ion-col>
             </ion-row>
@@ -314,7 +332,7 @@
 
 </ion-bottom-drawer>
 
-<ion-footer *ngIf="!assigned" class="ion-no-border white-bg">
+<ion-footer *ngIf="!assigned && survey" class="ion-no-border white-bg">
     <ion-grid>
         <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
             <ion-col size="auto">

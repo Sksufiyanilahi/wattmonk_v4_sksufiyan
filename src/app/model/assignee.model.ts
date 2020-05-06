@@ -1,7 +1,9 @@
+import { ContractorLogo } from './user.model';
+
 export class AssigneeModel {
   firstname: string;
   lastname: string;
-  logo: any;
+  contractorlogo: ContractorLogo;
   id: number;
   selected = false;
 }

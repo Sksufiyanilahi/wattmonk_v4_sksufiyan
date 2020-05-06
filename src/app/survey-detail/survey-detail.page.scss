@@ -14,15 +14,6 @@ ion-header {
   color: #666666;
 }
 
-.header-icon {
-  padding: 8px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  width: 48px;
-  height: 48px;
-}
-
 .image-count {
   width: 48px;
   height: 48px;
@@ -120,14 +111,6 @@ div[scrollx=true] {
 
 div[scrolly=true] {
   overflow-y: auto;
-}
-
-.drawer {
-  background: #F3F3F3;
-}
-
-.ion-bottom-drawer-scrollable-content {
-  background: #F3F3F3 !important;
 }
 
 .date-picker {
