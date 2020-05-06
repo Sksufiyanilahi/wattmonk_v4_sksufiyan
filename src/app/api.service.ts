@@ -112,12 +112,44 @@ export class ApiService {
   saveSurvey(data: any): Observable<SurveyDataModel> {
     return this.http.post<SurveyDataModel>(this.baseUrl + '/surveys', data, { headers: this.headers });
   }
-  
+
   getSurveyors(userType: number): Observable<AssigneeModel[]> {
     return this.http.get<AssigneeModel[]>(this.baseUrl + '/surveyors?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
 
   getDesigners(userType: number): Observable<AssigneeModel[]> {
     return this.http.get<AssigneeModel[]>(this.baseUrl + '/designers?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
+  }
+
+  uploadImage(surveyId: number, key: string, image: File): Promise<boolean> {
+
+    return new Promise<boolean>((resolve, reject) => {
+      const data = new FormData();
+      data.append('files', image);
+      data.append('path', '');
+      data.append('refId', surveyId + '');
+      data.append('ref', 'survey');
+      data.append('field', key);
+
+      const xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
+
+      xhr.onload = event => {
+        // this.ngProgress.complete();
+        console.log(xhr.response);
+        resolve(true);
+      };
+
+      xhr.open('POST', this.baseUrl + '/upload');
+      xhr.setRequestHeader('Connection', 'keep-alive');
+      xhr.setRequestHeader('Accept', 'application/json, text/plain, */*');
+      xhr.setRequestHeader('Authorization', 'Bearer ' + this.storageService.getJWTToken());
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.send(data);
+    });
+
+
+    // return this.http.post(this.baseUrl + '/upload', data, { headers: this.headers });
   }
 }

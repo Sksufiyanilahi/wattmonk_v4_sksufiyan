@@ -1,6 +1,5 @@
-<ion-img [src]="imageModel.image" class="full-image"></ion-img>
-<ion-header class="ion-no-border ion-padding">
-    <ion-grid class="ion-no-padding">
+<ion-content class="white-bg">
+    <ion-grid slot="fixed" style="top: 0; width: 100vw;">
         <ion-row class="ion-justify-content-center ion-align-items-center">
             <ion-col size="auto">
                 <ion-button fill="clear" size="small" (click)="goBack()">
@@ -8,46 +7,50 @@
                 </ion-button>
             </ion-col>
             <ion-col class="ion-text-center">
-                <span>{{menu.name}}</span>
+                <span>{{menuName}}</span>
             </ion-col>
             <ion-col size="auto">
-                <ion-button fill="light" size="small" (click)="showMenu()">
+                <ion-button fill="light" size="small" (click)="showMenu($event)">
                     <ion-icon name="grid-outline" color="dark"></ion-icon>
                 </ion-button>
             </ion-col>
 
         </ion-row>
     </ion-grid>
-</ion-header>
 
-<ion-content class="background-color-transparent">
-    <ion-grid>
-        <ion-row>
-            <ion-col>
-                <ion-segment mode="ios" class="segments">
-                    <ion-segment-button [value]="i" *ngFor="let menu of subMenu; let i = index">
-                        <ion-label>{{menu.name}}</ion-label>
-                    </ion-segment-button>
-                </ion-segment>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-</ion-content>
-
-<ion-footer class="ion-no-border ion-no-padding">
-    <ion-grid class="ion-no-padding">
+    <ion-grid class="ion-no-padding" slot="fixed" style="bottom: 0; width: 100vw;" *ngIf="listOfImages.length !== 0">
         <ion-row class="ion-justify-content-center ion-align-items-center">
             <ion-col></ion-col>
             <ion-col size="auto"
-                     class="white-background ion-padding ion-align-items-center ion-justify-content-center ">
-                <ion-button fill="clear" size="small" (click)="previousImage()">
-                    <ion-icon name="chevron-back-outline" color="dark"></ion-icon>
-                </ion-button>
-                <span>{{currentPosition}}/{{totalSize}}</span>
-                <ion-button fill="clear" size="small" (click)="nextImage()">
-                    <ion-icon name="chevron-forward-outline" color="dark"></ion-icon>
-                </ion-button>
+                     class="white-background ion-align-items-center ion-justify-content-center" style="padding: 8px;">
+                <ion-row class="ion-justify-content-center ion-align-items-center">
+                    <ion-col>
+                        <ion-button fill="clear" size="small" (click)="previousImage()">
+                            <ion-icon name="chevron-back-outline" color="dark"></ion-icon>
+                        </ion-button>
+                    </ion-col>
+                    <ion-col>
+                        <ion-label>
+                            {{currentPosition + 1}}/{{listOfImages.length}}
+                        </ion-label>
+                    </ion-col>
+                    <ion-col>
+                        <ion-button fill="clear" size="small" (click)="nextImage()">
+                            <ion-icon name="chevron-forward-outline" color="dark"></ion-icon>
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
             </ion-col>
         </ion-row>
     </ion-grid>
-</ion-footer>
+
+    <pinch-zoom *ngIf="image" class="full-image white-bg">
+        <ion-img [src]="image.url" class="full-image"></ion-img>
+    </pinch-zoom>
+    <div *ngIf="!image" class="d-flex flex-row align-center justify-center full-image">
+        <h1>No image available</h1>
+    </div>
+
+</ion-content>
+
+

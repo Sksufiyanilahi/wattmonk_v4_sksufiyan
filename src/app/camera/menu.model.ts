@@ -9,6 +9,8 @@ export class MenuSubModel {
   name: string;
   isSelected: boolean;
   askBeforeImage: boolean;
+  answered: boolean;
+  questionToAsk: string;
   formControlToUpdate: string;
   images: ImageModel[] = [];
 }
@@ -19,6 +21,7 @@ export class ImageModel {
   popupTitle: string;
   showPopup: boolean;
   popupQuestion: string;
+  imageUploadTag: string;
   questionType: QuestionType;
   questionOptions: string[] = [];
   givenAnswer: string | boolean;

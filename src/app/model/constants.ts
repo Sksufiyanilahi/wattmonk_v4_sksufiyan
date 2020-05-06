@@ -29,6 +29,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
         name: 'MSP',
         isSelected: true,
         askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
         formControlToUpdate: '',
         images: [
           {
@@ -36,11 +38,12 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             imageTitle: 'Long Shot',
             popupTitle: 'Confirm',
             showPopup: true,
-            popupQuestion: 'MSP Location',
+            popupQuestion: 'Is MSP location inside or outside of building?',
             questionType: QuestionType.YES_NO,
             questionOptions: ['Inside', 'Outside'],
             givenAnswer: '',
-            formValueToUpdate: 'msplocation'
+            formValueToUpdate: 'msplocation',
+            imageUploadTag: 'mspimages'
           },
           {
             image: '',
@@ -51,7 +54,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             questionType: QuestionType.INPUT_NUMBER,
             questionOptions: [],
             givenAnswer: '',
-            formValueToUpdate: 'mainbreakersize'
+            formValueToUpdate: 'mainbreakersize',
+            imageUploadTag: 'mspimages'
           },
           {
             image: '',
@@ -62,18 +66,20 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             questionType: QuestionType.INPUT_NUMBER,
             questionOptions: ['MSP Rating', 'Bus Rating'],
             givenAnswer: '',
-            formValueToUpdate: 'msprating'
+            formValueToUpdate: 'msprating',
+            imageUploadTag: 'mspimages'
           },
           {
             image: '',
             imageTitle: 'Without Cover, Zoom shot',
             showPopup: true,
             popupTitle: 'Confirm',
-            popupQuestion: 'Breaker',
+            popupQuestion: 'Main breaker location in MSP',
             questionType: QuestionType.RADIO_BUTTON,
             questionOptions: ['Top', 'Bottom', 'Center'],
             givenAnswer: '',
-            formValueToUpdate: 'mspbreaker'
+            formValueToUpdate: 'mspbreaker',
+            imageUploadTag: 'mspimages'
           }
         ]
       },
@@ -81,6 +87,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
         name: 'PV Inverter',
         isSelected: false,
         askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
         formControlToUpdate: '',
         images: [
           {
@@ -92,7 +100,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             questionType: QuestionType.YES_NO,
             questionOptions: ['Inside', 'Outside'],
             givenAnswer: '',
-            formValueToUpdate: 'pvinverterlocation'
+            formValueToUpdate: 'pvinverterlocation',
+            imageUploadTag: 'pvinverterimages',
           },
           {
             image: '',
@@ -103,7 +112,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             questionType: QuestionType.STRING,
             questionOptions: [],
             givenAnswer: '',
-            formValueToUpdate: ''
+            formValueToUpdate: '',
+            imageUploadTag: 'pvinverterimages',
           }
         ]
       },
@@ -111,6 +121,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
         name: 'PV Meter',
         isSelected: false,
         askBeforeImage: true,
+        answered: false,
+        questionToAsk: 'Is PV meter installed in premises',
         formControlToUpdate: 'pvmeter',
         images: [
           {
@@ -122,7 +134,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             questionType: QuestionType.NONE,
             questionOptions: [],
             givenAnswer: '',
-            formValueToUpdate: ''
+            formValueToUpdate: '',
+            imageUploadTag: 'pvmeterimages'
           }
         ]
       },
@@ -130,6 +143,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
         name: 'AC Disconnect',
         isSelected: false,
         askBeforeImage: true,
+        answered: false,
+        questionToAsk: 'Is AC disconnected?',
         formControlToUpdate: 'acdisconnect',
         images: [
           {
@@ -141,7 +156,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             questionType: QuestionType.NONE,
             questionOptions: [],
             givenAnswer: '',
-            formValueToUpdate: ''
+            formValueToUpdate: '',
+            imageUploadTag: 'roofimages'
           },
           {
             image: '',
@@ -152,7 +168,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             questionType: QuestionType.NONE,
             questionOptions: [],
             givenAnswer: '',
-            formValueToUpdate: ''
+            formValueToUpdate: '',
+            imageUploadTag: 'roofimages'
           }
         ]
       },
@@ -160,6 +177,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
         name: 'Utility Meter',
         isSelected: false,
         askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
         formControlToUpdate: '',
         images: [
           {
@@ -167,11 +186,12 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             imageTitle: 'Wide angle shot',
             showPopup: true,
             popupTitle: 'Confirm',
-            popupQuestion: 'Utility meter',
+            popupQuestion: 'Is Utility meter is attached or detached with MSP?',
             questionType: QuestionType.YES_NO,
             questionOptions: ['Attach', 'Detach'],
             givenAnswer: '',
-            formValueToUpdate: 'utilitymeter'
+            formValueToUpdate: 'utilitymeter',
+            imageUploadTag: 'utilitymeterimages'
           },
           {
             image: '',
@@ -182,7 +202,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             questionType: QuestionType.STRING,
             questionOptions: [],
             givenAnswer: '',
-            formValueToUpdate: ''
+            formValueToUpdate: '',
+            imageUploadTag: 'utilitymeterimages'
           }
         ]
       }
@@ -197,6 +218,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
         name: 'Panels',
         isSelected: true,
         askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
         formControlToUpdate: '',
         images: [{
           image: '',
@@ -207,7 +230,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
           questionType: QuestionType.INPUT_NUMBER,
           questionOptions: [],
           givenAnswer: '',
-          formValueToUpdate: 'numberofmodules'
+          formValueToUpdate: 'numberofmodules',
+          imageUploadTag: 'roofimages'
         }]
       }
     ]
@@ -224,7 +248,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       questionType: QuestionType.NONE,
       questionOptions: [],
       givenAnswer: '',
-      formValueToUpdate: ''
+      formValueToUpdate: '',
+      imageUploadTag: 'roofimages'
     }],
     subMenu: []
   },
@@ -240,7 +265,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       questionType: QuestionType.NONE,
       questionOptions: [],
       givenAnswer: '',
-      formValueToUpdate: ''
+      formValueToUpdate: '',
+      imageUploadTag: 'roofimages'
     }],
     subMenu: []
   },
@@ -251,3 +277,8 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
     subMenu: null
   }
 ];
+
+export class ImageUploadModel {
+  key: string;
+  imageData: string;
+}

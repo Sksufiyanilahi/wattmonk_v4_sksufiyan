@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
 
 @Component({
   selector: 'app-menu-popup',
@@ -7,8 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuPopupComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private popoverController: PopoverController
+  ) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
+  showImages(keyname: string) {
+    this.popoverController.dismiss(keyname);
+  }
 }

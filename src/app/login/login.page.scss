@@ -12,7 +12,7 @@
 }
 
 ion-content.login-background {
-  --background: none;
+  --background: white;
   background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("/assets/images/login_background.png");
   background-position: bottom;
   background-repeat: no-repeat;

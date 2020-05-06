@@ -43,7 +43,7 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
-    path: 'gallery',
+    path: 'gallery/:id',
     loadChildren: () => import('./gallery/gallery.module').then(m => m.GalleryPageModule),
     canActivate: [AuthGuardService]
   },

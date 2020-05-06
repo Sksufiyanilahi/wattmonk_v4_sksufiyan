@@ -1,5 +1,6 @@
-import { User } from './user.model';
+import { Image, User } from './user.model';
 import { Invertermake, Invertermodel, Solarmake, Solarmodel } from './design.model';
+import { ImageModel } from '../camera/menu.model';
 
 export class SurveyModel {
   id: number;
@@ -18,24 +19,24 @@ export class SurveyDataModel {
   source: string;
   assignto?: User;
   createdby?: User;
-  mspimages: any[];
-  utilitymeterimages: any[];
-  pvinverterimages: any[];
-  pvmeterimages: any[];
-  roofimages: any[];
+  mspimages: Image[];
+  utilitymeterimages: Image[];
+  pvinverterimages: Image[];
+  pvmeterimages: Image[];
+  roofimages: Image[];
   modulemake: Solarmake;
   modulemodel: Solarmodel;
   invertermake: Invertermake;
   invertermodel: Invertermodel;
   batterybackup: string;
-  acdisconnect: boolean;
+  acdisconnect: string;
   mainbreakersize: number;
   mspbreaker: string;
   msplocation: string;
   msprating: number;
   numberofmodules: number;
   pvinverterlocation: string;
-  pvmeter: boolean;
+  pvmeter: string;
   servicefeedsource: string;
   utilitymeter: string;
 }

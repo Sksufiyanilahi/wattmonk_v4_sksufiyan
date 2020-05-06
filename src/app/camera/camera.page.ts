@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview/ngx';
-import { AlertController, NavController, Platform } from '@ionic/angular';
+import { AlertController, IonContent, IonGrid, NavController, Platform } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { ImageModel, MenuModel, MenuSubModel, QuestionType } from './menu.model';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
-import { File } from '@ionic-native/file/ngx';
-import { CAMERA_MODULE_MENU } from '../model/constants';
+import { CAMERA_MODULE_MENU, ImageUploadModel } from '../model/constants';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { Storage } from '@ionic/storage';
 import { UtilitiesService } from '../utilities.service';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -23,6 +23,9 @@ import { ApiService } from '../api.service';
   styleUrls: ['./camera.page.scss'],
 })
 export class CameraPage implements OnInit {
+
+  @ViewChild('contentArea', { static: true }) content: IonContent;
+  @ViewChild('header', { static: true }) header: IonGrid;
 
   surveyId: number;
   itemName = 'MSP';
@@ -53,12 +56,16 @@ export class CameraPage implements OnInit {
   listOfInverterMade: InverterMadeModel[] = [];
   listOfInverterMake: InverterMakeModel[] = [];
 
+  hardwareCameraEnabled = true;
+  imageAreaHeight = 600;
+  imageUploadIndex = 1;
+  totalImagesToUpload = 1;
+
   constructor(
     private cameraPreview: CameraPreview,
     private navController: NavController,
     private base64ToGallery: Base64ToGallery,
     private platform: Platform,
-    private file: File,
     private storage: Storage,
     private alertController: AlertController,
     private utilities: UtilitiesService,
@@ -66,7 +73,8 @@ export class CameraPage implements OnInit {
     private diagnostic: Diagnostic,
     private route: ActivatedRoute,
     private cd: ChangeDetectorRef,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private fileTransfer: FileTransfer
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.selectMenu(this.mainMenu[0], 0);
@@ -108,7 +116,9 @@ export class CameraPage implements OnInit {
 
   ngOnInit() {
     this.platform.backButton.subscribe(() => {
-      this.cameraPreview.stopCamera();
+      if (this.hardwareCameraEnabled) {
+        this.cameraPreview.stopCamera();
+      }
     });
 
     this.cameraPreviewOpts = {
@@ -124,8 +134,26 @@ export class CameraPage implements OnInit {
       alpha: 1
     };
 
+    this.calculateContentHeight();
 
+    // const sample: ImageUploadModel[] = [];
+    // const testImage = new ImageUploadModel();
+    // testImage.key = 'mspimages';
+    // testImage.imageData = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg==';
+    // sample.push(testImage);
+    // this.uploadImageByIndex(sample);
     this.startCamera();
+  }
+
+  calculateContentHeight() {
+    setTimeout(() => {
+      this.content.getScrollElement().then((data) => {
+        console.log(data.offsetHeight);
+        const progressbarheight = 10;
+        const headerHeight = 44;
+        this.imageAreaHeight = data.offsetHeight - progressbarheight - headerHeight;
+      });
+    }, 100);
 
   }
 
@@ -202,7 +230,7 @@ export class CameraPage implements OnInit {
         {
           text: 'OK',
           handler: () => {
-            this.navController.pop();
+            this.navController.navigateRoot('homepage');
           }
         }
       ],
@@ -212,72 +240,85 @@ export class CameraPage implements OnInit {
   }
 
   startCamera() {
-    // this.startCameraAfterPermission();
-    // return;
-    this.diagnostic.requestCameraAuthorization(true).then((mode) => {
-      console.log(mode);
-      switch (mode) {
-        case this.diagnostic.permissionStatus.NOT_REQUESTED:
-          this.goBack();
-          break;
-        case this.diagnostic.permissionStatus.DENIED_ALWAYS:
-          this.showCameraDenied();
-          break;
-        case this.diagnostic.permissionStatus.DENIED_ONCE:
-          this.showCameraDenied();
-          break;
-        case this.diagnostic.permissionStatus.GRANTED:
-          this.startCameraAfterPermission();
-          break;
-        case 'authorized_when_in_use':
-          this.startCameraAfterPermission();
-          break;
-      }
-    }, (error) => {
+    if (this.hardwareCameraEnabled) {
+      this.diagnostic.requestCameraAuthorization(true).then((mode) => {
+        console.log(mode);
+        switch (mode) {
+          case this.diagnostic.permissionStatus.NOT_REQUESTED:
+            this.goBack();
+            break;
+          case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+            this.showCameraDenied();
+            break;
+          case this.diagnostic.permissionStatus.DENIED_ONCE:
+            this.showCameraDenied();
+            break;
+          case this.diagnostic.permissionStatus.GRANTED:
+            this.startCameraAfterPermission();
+            break;
+          case 'authorized_when_in_use':
+            this.startCameraAfterPermission();
+            break;
+        }
+      }, (error) => {
 
-    });
+      });
+    } else {
+      this.startCameraAfterPermission();
+    }
+
+
   }
 
   startCameraAfterPermission() {
-    this.showCameraInterface = true;
-    this.cameraPreview.startCamera(this.cameraPreviewOpts).then(
-      (res) => {
-        console.log(res);
-      },
-      (err) => {
-        console.log(err);
-      });
+    if (this.hardwareCameraEnabled) {
+      this.cameraPreview.startCamera(this.cameraPreviewOpts).then(
+        (res) => {
+          this.showCameraInterface = true;
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        });
+    } else {
+      this.showCameraInterface = true;
+    }
   }
 
   stopCamera() {
     this.showCameraInterface = false;
-    this.cameraPreview.stopCamera().then(result => {
-      this.showCameraInterface = false;
-    });
+    if (this.hardwareCameraEnabled) {
+      this.cameraPreview.stopCamera().then(result => {
+      });
+    }
 
   }
 
   takePicture() {
-    // this.handleSaveImage('iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg==');
-    this.cameraPreview.takePicture({
-      width: 0,
-      height: 0,
-      quality: 80
-    }).then((photo) => {
-        this.stopCamera();
-        this.handleSaveImage(photo[0]);
-      },
-      (error) => {
+    if (this.hardwareCameraEnabled) {
+      this.cameraPreview.takePicture({
+        width: 0,
+        height: 0,
+        quality: 80
+      }).then((photo) => {
+          this.stopCamera();
+          this.handleSaveImage(photo[0]);
+        },
+        (error) => {
 
-      }
-    );
+        }
+      );
+    } else {
+      this.handleSaveImage('iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg==');
+    }
   }
 
   handleSaveImage(photo: string) {
     this.selectedImageModel.image = 'data:image/png;base64,' + photo;
-    this.saveToRootDirectory(photo);
-    // this.saveFileToAppDirectory(photo[0]);
-
+    if (this.hardwareCameraEnabled) {
+      this.saveToRootDirectory(photo);
+      // this.saveFileToAppDirectory(photo[0]);
+    }
     this.listOfImages.push(this.selectedImageModel.image);
 
     switch (this.selectedImageModel.questionType) {
@@ -331,39 +372,39 @@ export class CameraPage implements OnInit {
   }
 
   saveFileToAppDirectory(image: string) {
-    this.file.resolveDirectoryUrl(this.file.externalApplicationStorageDirectory).then((directory) => {
-      let imageDir = '';
-      if (this.selectedSubMenu === '') {
-        imageDir = directory.fullPath + 'files/survey/' + this.surveyId + '/' + this.selectedMenu + '/';
-      } else {
-        imageDir = directory.fullPath + 'files/survey/' + this.surveyId + '/' + this.selectedMenu + '/' + this.selectedSubMenu + '/';
-      }
-      console.log('Saving to ' + imageDir);
-      const UUID = 'img_' + (new Date().getTime()).toString(16) + '.png';
-      console.log(UUID);
-      const blob = this.b64toBlob(image, 'image/png');
-      this.file.writeFile(imageDir, UUID, blob, { replace: true }).then(() => {
-        console.log('Saved');
-      }).catch((err) => {
-        console.log('Error writing blob');
-        console.log(err);
-      });
-      //
-      // const picName = 'img_' + this.selectedMenu + '_' + this.selectedSubMenu + '_' + 1;
-      this.base64ToGallery.base64ToGallery(image, { prefix: UUID, mediaScanner: true }).then((result) => {
-        console.log('Saved to gallery ', result);
-        this.file.moveFile(this.file.externalDataDirectory, UUID, imageDir, UUID).then((copyResult) => {
-          console.log('file copied');
-        }, (error) => {
-          console.log('error copying file');
-        });
-      }, (error) => {
-        console.log('Error', error);
-      });
-      // console.log(photo);
-    }).catch((error) => {
-      console.log('No Directory');
-    });
+    // this.file.resolveDirectoryUrl(this.file.externalApplicationStorageDirectory).then((directory) => {
+    //   let imageDir = '';
+    //   if (this.selectedSubMenu === '') {
+    //     imageDir = directory.fullPath + 'files/survey/' + this.surveyId + '/' + this.selectedMenu + '/';
+    //   } else {
+    //     imageDir = directory.fullPath + 'files/survey/' + this.surveyId + '/' + this.selectedMenu + '/' + this.selectedSubMenu + '/';
+    //   }
+    //   console.log('Saving to ' + imageDir);
+    //   const UUID = 'img_' + (new Date().getTime()).toString(16) + '.png';
+    //   console.log(UUID);
+    //   const blob = this.b64toBlob(image, 'image/png');
+    //   this.file.writeFile(imageDir, UUID, blob, { replace: true }).then(() => {
+    //     console.log('Saved');
+    //   }).catch((err) => {
+    //     console.log('Error writing blob');
+    //     console.log(err);
+    //   });
+    //   //
+    //   // const picName = 'img_' + this.selectedMenu + '_' + this.selectedSubMenu + '_' + 1;
+    //   this.base64ToGallery.base64ToGallery(image, { prefix: UUID, mediaScanner: true }).then((result) => {
+    //     console.log('Saved to gallery ', result);
+    //     this.file.moveFile(this.file.externalDataDirectory, UUID, imageDir, UUID).then((copyResult) => {
+    //       console.log('file copied');
+    //     }, (error) => {
+    //       console.log('error copying file');
+    //     });
+    //   }, (error) => {
+    //     console.log('Error', error);
+    //   });
+    //   // console.log(photo);
+    // }).catch((error) => {
+    //   console.log('No Directory');
+    // });
   }
 
   b64toBlob(b64Data, contentType) {
@@ -390,11 +431,38 @@ export class CameraPage implements OnInit {
     return blob;
   }
 
+  getByteStreamOfImage(dataURI): Blob {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    const byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to an ArrayBuffer
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    // write the ArrayBuffer to a blob, and you're done
+    const bb = new Blob([ab], { type: mimeString });
+    // bb.append(ab);
+    return bb;
+  }
+
   goBack() {
-    this.cameraPreview.stopCamera().then(() => {
-      this.navController.pop();
-    }, (error) => {
-    });
+    if (this.hardwareCameraEnabled) {
+      this.cameraPreview.stopCamera().then(() => {
+        this.navController.navigateRoot('homepage');
+      }, (error) => {
+        this.navController.navigateRoot('homepage');
+      });
+    } else {
+      this.navController.navigateRoot('homepage');
+    }
+
   }
 
   selectMenu(menu: MenuModel, index: number) {
@@ -473,15 +541,29 @@ export class CameraPage implements OnInit {
     this.mainMenu.forEach((mainMenu) => {
       if (mainMenu.subMenu !== null && mainMenu.imageModel !== null) {
         if (mainMenu.subMenu.length !== 0) {
-          mainMenu.subMenu.forEach(submenu => {
-            if (submenu.images.length !== 0) {
-              submenu.images.forEach(image => {
-                total++;
-                if (image.image !== '') {
-                  existing++;
+          mainMenu.subMenu.forEach((submenu) => {
+            if (submenu.askBeforeImage === true) {
+              if (submenu.answered === true) {
+                if (submenu.images.length !== 0) {
+                  submenu.images.forEach(image => {
+                    total++;
+                    if (image.image !== '') {
+                      existing++;
+                    }
+                  });
                 }
-              });
+              }
+            } else {
+              if (submenu.images.length !== 0) {
+                submenu.images.forEach(image => {
+                  total++;
+                  if (image.image !== '') {
+                    existing++;
+                  }
+                });
+              }
             }
+
           });
         }
         if (mainMenu.imageModel.length !== 0) {
@@ -565,13 +647,8 @@ export class CameraPage implements OnInit {
         this.utilities.showLoading('Saving Survey').then(() => {
           this.apiService.updateSurveyForm(this.detailsForm.value, this.surveyId).subscribe((data) => {
             this.utilities.hideLoading().then(() => {
-              this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
-                modal.present();
-                modal.onWillDismiss().then((dismissed) => {
-                  this.navController.navigateRoot('homepage');
-                  this.utilities.sethomepageSurveyRefresh(true);
-                });
-              });
+              this.showUpdateImagesAlert();
+
             });
           }, (error) => {
             this.utilities.hideLoading().then(() => {
@@ -580,6 +657,105 @@ export class CameraPage implements OnInit {
           });
         });
       }
+    }
+  }
+
+  async showUpdateImagesAlert() {
+    const alert = await this.alertController.create({
+      header: 'Save Images',
+      subHeader: 'Upload images to server now?',
+      buttons: [
+        {
+          text: 'Later',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            this.storage.set(this.surveyId + '', this.mainMenu);
+            this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+              modal.present();
+              modal.onWillDismiss().then((dismissed) => {
+                this.navController.navigateRoot('homepage');
+                this.utilities.sethomepageSurveyRefresh(true);
+              });
+            });
+          }
+        }, {
+          text: 'Now',
+          handler: (data) => {
+            this.uploadAllImages();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  uploadAllImages() {
+    const mapOfImages: ImageUploadModel[] = [];
+    this.mainMenu.forEach((mainMenu) => {
+      if (mainMenu.imageModel !== null && mainMenu.imageModel !== undefined) {
+        mainMenu.imageModel.forEach((imageModel) => {
+          const image = new ImageUploadModel();
+          image.key = imageModel.imageUploadTag;
+          image.imageData = imageModel.image;
+        });
+      }
+      if (mainMenu.subMenu !== null && mainMenu.subMenu !== undefined) {
+        mainMenu.subMenu.forEach((submenu) => {
+          submenu.images.forEach((imageModel) => {
+            const image = new ImageUploadModel();
+            image.key = imageModel.imageUploadTag;
+            image.imageData = imageModel.image;
+          });
+        });
+      }
+    });
+    this.utilities.showLoading('Uploading Images').then(() => {
+      this.totalImagesToUpload = mapOfImages.length;
+      this.uploadImageByIndex(mapOfImages);
+    });
+  }
+
+  uploadImageByIndex(mapOfImages: ImageUploadModel[]) {
+    if (mapOfImages.length !== 0) {
+      const imageToUpload = mapOfImages[0];
+      const blob = this.getByteStreamOfImage(imageToUpload.imageData);
+      const file = new File([blob], Date.now().toString() + '.png', {
+        type: 'image/png',
+        lastModified: Date.now()
+      });
+      // const options: FileUploadOptions = {
+      //   params: {
+      //     refId: this.surveyId + '',
+      //     ref: 'survey',
+      //     field: imageToUpload.key
+      //   }
+      // };
+      // const fileTransfer = this.fileTransfer.create();
+      // fileTransfer.upload(imageToUpload.imageData, 'http://ec2-3-17-28-7.us-east-2.compute.amazonaws.com:1337/upload', options, true)
+      //   .then((result) => {
+      //     console.log(result);
+      //   }, (error) => {
+      //     console.log(error);
+      //   });
+      this.utilities.setLoadingMessage('Uploading ' + this.imageUploadIndex + ' of ' + this.totalImagesToUpload);
+      this.apiService.uploadImage(this.surveyId, imageToUpload.key, file).then((result) => {
+        this.imageUploadIndex++;
+        this.uploadImageByIndex(mapOfImages);
+      }, (error) => {
+
+      });
+    } else {
+      this.utilities.hideLoading().then(() => {
+        this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+          modal.present();
+          modal.onWillDismiss().then((dismissed) => {
+            this.storage.set(this.surveyId + '', this.mainMenu)
+            this.navController.navigateRoot('homepage');
+            this.utilities.sethomepageSurveyRefresh(true);
+          });
+        });
+      });
     }
   }
 
@@ -624,11 +800,13 @@ export class CameraPage implements OnInit {
   }
 
   openGallery() {
-    // this.navController.navigateForward('gallery');
+    this.storage.set(this.surveyId + '', this.mainMenu);
+    this.navController.navigateForward('/gallery/' + this.surveyId);
   }
 
 
   async showAlertQuestion() {
+    this.stopCamera();
     const buttonOptions = [];
     this.selectedImageModel.questionOptions.forEach(option => {
       const buttonOption = {
@@ -650,26 +828,35 @@ export class CameraPage implements OnInit {
       buttons: buttonOptions,
       backdropDismiss: false
     });
-
+    this.calculateContentHeight();
     await alert.present();
   }
 
   async askBeforeCapture() {
     const alert = await this.alertController.create({
-      header: this.selectedSubMenuModel.name,
+      header: this.selectedSubMenuModel.questionToAsk,
       buttons: [
         {
           text: 'No',
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
+            this.selectedSubMenuModel.answered = false;
             this.detailsForm.get(this.selectedSubMenuModel.formControlToUpdate).setValue(false);
-            this.shiftToNextImage();
+            this.selectedImageModelIndex = -1;
+            if (this.mainMenu[this.selectedMenuIndex].subMenu.length - 1 > this.selectedSubMenuIndex) {
+              this.selectedSubMenuIndex++;
+              this.selectSubMenu(this.mainMenu[this.selectedMenuIndex].subMenu[this.selectedSubMenuIndex], this.selectedSubMenuIndex);
+              this.cd.detectChanges();
+            } else {
+              this.shiftMainMenu();
+            }
             console.log(this.detailsForm.value);
           }
         }, {
           text: 'Yes',
           handler: () => {
+            this.selectedSubMenuModel.answered = true;
             this.detailsForm.get(this.selectedSubMenuModel.formControlToUpdate).setValue(true);
             this.startCamera();
             console.log(this.detailsForm.value);
@@ -677,11 +864,12 @@ export class CameraPage implements OnInit {
         }
       ]
     });
-
+    this.calculateContentHeight();
     await alert.present();
   }
 
   async showAlertWithInputNumber() {
+    this.stopCamera();
     const alert = await this.alertController.create({
       header: this.selectedImageModel.popupTitle,
       subHeader: this.selectedImageModel.popupQuestion,
@@ -717,11 +905,12 @@ export class CameraPage implements OnInit {
         }
       ]
     });
-
+    this.calculateContentHeight();
     await alert.present();
   }
 
   async showAlertWithInputString() {
+    this.stopCamera();
     const alert = await this.alertController.create({
       header: this.selectedImageModel.popupTitle,
       subHeader: this.selectedImageModel.popupQuestion,
@@ -757,11 +946,12 @@ export class CameraPage implements OnInit {
         }
       ]
     });
-
+    this.calculateContentHeight();
     await alert.present();
   }
 
   async showAlertWithRadioButtons() {
+    this.stopCamera();
     const inputList = [];
     this.selectedImageModel.questionOptions.forEach((item) => {
       const buttonOption = {
@@ -802,7 +992,7 @@ export class CameraPage implements OnInit {
         }
       ]
     });
-
+    this.calculateContentHeight();
     await alert.present();
   }
 }

@@ -8,14 +8,17 @@ import { GalleryPageRoutingModule } from './gallery-routing.module';
 
 import { GalleryPage } from './gallery.page';
 import { MenuPopupComponent } from './menu-popup/menu-popup.component';
+import { PinchZoomModule } from 'ngx-pinch-zoom';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    GalleryPageRoutingModule
+    GalleryPageRoutingModule,
+    PinchZoomModule
   ],
-  declarations: [GalleryPage, MenuPopupComponent]
+  declarations: [GalleryPage, MenuPopupComponent],
+  entryComponents: [GalleryPage, MenuPopupComponent]
 })
 export class GalleryPageModule {}

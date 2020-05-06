@@ -166,8 +166,8 @@
                     class="model-type">assigned to</span></ion-col>
             <ion-col size="auto">
                 <div class="selected d-flex">
-                    <img *ngIf="design.assignedto.logo" [src]="design.assignedto.logo.url" class="assignee-image"/>
-                    <div *ngIf="!design.assignedto.logo" class="assignee-image d-flex flex-row align-center justify-center">
+                    <img *ngIf="design.assignedto.contractorlogo" [src]="design.assignedto.contractorlogo.logo.url" class="assignee-image"/>
+                    <div *ngIf="!design.assignedto.contractorlogo" class="assignee-image d-flex flex-row align-center justify-center">
                         <div class="name_div">
                             <span style="text-transform: capitalize;">{{design.assignedto.firstname.substring(0, 1)}}{{design.assignedto.lastname.substring(0, 1)}}</span>
                         </div>

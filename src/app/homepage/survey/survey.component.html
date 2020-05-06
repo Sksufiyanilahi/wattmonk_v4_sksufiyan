@@ -45,7 +45,7 @@
 </ion-content>
 
 <ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
-                   shouldBounce="false" distanceTop="0" class="drawer">
+                   shouldBounce="false" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
     <form [formGroup]="assignForm">
         <ion-grid class="drawer">
             <ion-row>

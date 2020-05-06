@@ -21,7 +21,8 @@
                 </ion-grid>
             </ion-col>
             <ion-col size="auto">
-                <ion-button fill="clear" size="small" class="ion-no-padding" [routerLink]="['/schedule/survey/',surveyId]"
+                <ion-button fill="clear" size="small" class="ion-no-padding"
+                            [routerLink]="['/schedule/survey/',surveyId]"
                             routerDirection="forward">
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
@@ -142,7 +143,7 @@
             <ion-col>
                 <ion-grid class="ion-no-padding">
                     <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type">msp Location</span></ion-col>
+                        <ion-col><span class="model-type">msp location</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name" *ngIf="survey.msplocation">{{survey.msplocation}}</span>
                             <span class="model-name" *ngIf="!survey.msplocation">n/a</span>
@@ -165,7 +166,8 @@
                     <ion-row>
                         <ion-col><span class="model-type">main breaker size</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{survey.mainbreakersize}}</span>
+                            <span class="model-name" *ngIf="survey.mainbreakersize">{{survey.mainbreakersize}}</span>
+                            <span class="model-name" *ngIf="!survey.mainbreakersize">n/a</span>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -185,7 +187,8 @@
                     <ion-row>
                         <ion-col><span class="model-type">pv inverter location</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.pvinverterlocation">{{survey.pvinverterlocation}}</span>
+                            <span class="model-name"
+                                  *ngIf="survey.pvinverterlocation">{{survey.pvinverterlocation}}</span>
                             <span class="model-name" *ngIf="!survey.pvinverterlocation">n/a</span>
                         </ion-col>
                     </ion-row>
@@ -211,9 +214,17 @@
                         </ion-col>
                     </ion-row>
                     <ion-row>
+                        <ion-col><span class="model-type">no of modules</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name" *ngIf="survey.numberofmodules">{{survey.numberofmodules}}</span>
+                            <span class="model-name" *ngIf="!survey.numberofmodules">n/a</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
                         <ion-col><span class="model-type">service feed source</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.servicefeedsource">{{survey.servicefeedsource}}</span>
+                            <span class="model-name"
+                                  *ngIf="survey.servicefeedsource">{{survey.servicefeedsource}}</span>
                             <span class="model-name" *ngIf="!survey.servicefeedsource">n/a</span>
                         </ion-col>
                     </ion-row>
@@ -227,7 +238,8 @@
             <ion-col class="ion-no-padding">
                 <span class="data-header">gallery</span>
             </ion-col>
-            <ion-col size="auto">
+            <ion-col size="auto" [routerLink]="['/gallery/', surveyId]"
+                     routerDirection="forward">
                 <span>View all</span>
             </ion-col>
             <ion-col class="ion-align-items-center d-flex" size="12">
@@ -261,8 +273,10 @@
                     class="model-type">assigned to</span></ion-col>
             <ion-col size="auto">
                 <div class="selected d-flex">
-                    <img *ngIf="survey.assignto.logo" [src]="survey.assignto.logo.url" class="assignee-image"/>
-                    <div *ngIf="!survey.assignto.logo" class="assignee-image d-flex flex-row align-center justify-center">
+                    <img *ngIf="survey.assignto.contractorlogo" [src]="survey.assignto.contractorlogo.logo.url"
+                         class="assignee-image"/>
+                    <div *ngIf="!survey.assignto.contractorlogo"
+                         class="assignee-image d-flex flex-row align-center justify-center">
                         <div class="name_div">
                             <span style="text-transform: capitalize;">{{survey.assignto.firstname.substring(0, 1)}}{{survey.assignto.lastname.substring(0, 1)}}</span>
                         </div>
@@ -317,14 +331,14 @@
 
             <ion-row>
                 <ion-col size="auto">
-                    <ion-item lines="none" class="picker-button" (click)="rescheduleSurvey()">
+                    <ion-button class="buttom-drawer-button" (click)="rescheduleSurvey()">
                         Confirm
-                    </ion-item>
+                    </ion-button>
                 </ion-col>
                 <ion-col size="auto">
-                    <ion-item lines="none" class="picker-button" (click)="dismissBottomSheet()">
+                    <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
                         Cancel
-                    </ion-item>
+                    </ion-button>
                 </ion-col>
             </ion-row>
         </ion-grid>

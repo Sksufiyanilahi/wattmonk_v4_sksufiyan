@@ -215,10 +215,16 @@ ion-modal {
   height: 2px;
 }
 
+.z-top {
+  z-index: 9999 !important;
+}
+
 ion-bottom-drawer {
+  z-index: 9999 !important;
   background: #F3F3F3;
 
   ion-content {
+    z-index: 9999 !important;
     --background: #F3F3F3;
   }
 }
@@ -239,6 +245,10 @@ ion-item {
 
 .buttom-drawer-button-cancel {
     --color: #DC6E67 !important;
+}
+
+.flex-1 {
+  flex: 1;
 }
 
 

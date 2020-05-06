@@ -1,5 +1,5 @@
-<ion-header class="ion-no-border ion-padding white-bg">
-    <ion-grid class="ion-no-padding ">
+<ion-content>
+    <ion-grid>
         <ion-row class="ion-align-items-center ion-padding-start">
             <ion-col>
                 <h1 class="ion-no-padding ion-no-margin" *ngIf="!tabsDisabled">Schedule</h1>
@@ -33,7 +33,8 @@
     </ion-grid>
 
     <ion-grid class="ion-margin-start ion-margin-end margin-top">
-        <ion-segment mode="ios" class="segments" (ionChange)="segmentChanged($event)" [value]="currentTab" [disabled]="tabsDisabled">
+        <ion-segment mode="ios" class="segments" (ionChange)="segmentChanged($event)" [value]="currentTab"
+                     [disabled]="tabsDisabled">
             <ion-segment-button value="design">
                 <ion-label>Design</ion-label>
             </ion-segment-button>
@@ -42,20 +43,19 @@
             </ion-segment-button>
         </ion-segment>
     </ion-grid>
-</ion-header>
+    <ion-content>
+        <ion-tabs #tabs>
+            <ion-tab-bar slot="top" style="display:none;">
+                <ion-tab-button tab="design">
+                    <ion-label>Design</ion-label>
+                </ion-tab-button>
 
-<ion-content>
-    <ion-tabs #tabs>
-        <ion-tab-bar slot="top" style="display:none;">
-            <ion-tab-button tab="design">
-                <ion-label>Design</ion-label>
-            </ion-tab-button>
-
-            <ion-tab-button tab="survey">
-                <ion-label>Survey</ion-label>
-            </ion-tab-button>
-        </ion-tab-bar>
-    </ion-tabs>
+                <ion-tab-button tab="survey">
+                    <ion-label>Survey</ion-label>
+                </ion-tab-button>
+            </ion-tab-bar>
+        </ion-tabs>
+    </ion-content>
 </ion-content>
 
 <ion-footer class="ion-no-border white-bg">

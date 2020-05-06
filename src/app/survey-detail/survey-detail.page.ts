@@ -47,7 +47,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     private datePicker: DatePicker,
     private formBuilder: FormBuilder,
     private launchNavigator: LaunchNavigator,
-    private toastController:ToastController
+    private toastController: ToastController
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.rescheduleForm = this.formBuilder.group({
@@ -89,6 +89,20 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   setData(result: SurveyDataModel) {
     console.log(result);
     this.survey = result;
+    if (this.survey.acdisconnect) {
+      if (this.survey.acdisconnect === 'true') {
+        this.survey.acdisconnect = 'yes';
+      } else {
+        this.survey.acdisconnect = 'no';
+      }
+    }
+    if (this.survey.pvmeter) {
+      if (this.survey.pvmeter === 'true') {
+        this.survey.pvmeter = 'yes';
+      } else {
+        this.survey.pvmeter = 'no';
+      }
+    }
     this.assigned = this.survey.assignto !== null && this.survey.assignto !== undefined;
     this.rescheduleForm.patchValue({
       datetime: this.survey.datetime
@@ -120,7 +134,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
         {
           text: 'Yes',
           handler: () => {
-            this. deleteSurveyFromServer()
+            this.deleteSurveyFromServer();
           }
         }, {
           text: 'No'
@@ -164,6 +178,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     console.log(currentDate);
     this.datePicker.show({
       date: new Date(this.date),
+      minDate: new Date(),
       mode: 'date',
       androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
     }).then(
@@ -183,6 +198,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     this.datePicker.show({
       date: new Date(this.date),
       mode: 'time',
+      minDate: new Date(),
       androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
     }).then(
       date => {

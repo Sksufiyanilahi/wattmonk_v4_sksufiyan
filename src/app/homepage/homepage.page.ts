@@ -44,7 +44,7 @@ export class HomepagePage implements OnInit, OnDestroy {
     private diagnostic: Diagnostic,
     private alertController: AlertController,
     private geolocation: Geolocation,
-    private toastController:ToastController
+    private toastController: ToastController
   ) {
     this.initializeItems();
   }

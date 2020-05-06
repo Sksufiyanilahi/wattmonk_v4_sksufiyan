@@ -105,6 +105,10 @@ export class UtilitiesService {
     return this.loading.present();
   }
 
+  setLoadingMessage(message: string) {
+    this.loading.message = message;
+  }
+
   hideLoading(): Promise<boolean> {
     return this.loading.dismiss();
   }
@@ -164,4 +168,6 @@ export class UtilitiesService {
   getStaticAddress(): BehaviorSubject<string> {
     return this.staticAddress;
   }
+
+
 }

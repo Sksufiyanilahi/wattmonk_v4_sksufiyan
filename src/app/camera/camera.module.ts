@@ -12,6 +12,7 @@ import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { UtilitiesModule } from '../utilities/utilities.module';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { UtilitiesModule } from '../utilities/utilities.module';
     CameraPreview,
     Base64ToGallery,
     File,
-    Diagnostic
+    Diagnostic,
+    FileTransfer
   ]
 })
 export class CameraPageModule {
