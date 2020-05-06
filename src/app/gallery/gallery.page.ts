@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ImageModel, MenuModel, MenuSubModel } from '../camera/menu.model';
-import { CAMERA_MODULE_MENU } from '../model/constants';
+import { MenuModel } from '../camera/menu.model';
 import { MenuPopupComponent } from './menu-popup/menu-popup.component';
 import { NavController, PopoverController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
@@ -19,10 +18,10 @@ export class GalleryPage implements OnInit {
 
   currentPosition = 0;
   surveyId: number;
-  private survey: SurveyDataModel;
-  private listOfImages: Image[] = [];
-  private image: Image;
-  private menuName = 'MSP Images';
+  survey: SurveyDataModel;
+  listOfImages: Image[] = [];
+  image: Image;
+  menuName = 'MSP Images';
 
   constructor(
     private popoverController: PopoverController,
