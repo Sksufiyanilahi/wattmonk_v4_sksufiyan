@@ -48,22 +48,12 @@
     </ion-grid>
 </ion-header>
 
-<ion-content class="ion-padding page-text-color" no-bounce>
+<ion-content class="ion-padding page-text-color">
     <ion-grid *ngIf="survey" class="page-text-color">
         <ion-row>
             <ion-col size="12">
                 <span (click)="openAddressOnMap(survey.address)" class="address">{{survey.address}}</span>
             </ion-col>
-            <!--            <ion-col size="5" class="ion-text-end">-->
-            <!--                <ion-grid class="ion-no-padding">-->
-            <!--                    <ion-row>-->
-            <!--                        <ion-col><span>{{survey.datetime | date: 'dd MMM, yyyy'}}</span></ion-col>-->
-            <!--                    </ion-row>-->
-            <!--                    <ion-row>-->
-            <!--                        <ion-col><span>{{survey.datetime | date: 'hh:MM a'}}</span></ion-col>-->
-            <!--                    </ion-row>-->
-            <!--                </ion-grid>-->
-            <!--            </ion-col>-->
         </ion-row>
         <ion-row class="ion-margin-top">
             <ion-col size="12">
@@ -89,6 +79,13 @@
                     <ion-img src="/assets/images/schedule.svg" class="reschedule-icon"></ion-img>
                     <span>Reschedule</span>
                 </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-no-padding">
+            <ion-col><span class="model-type">jobtype</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name">{{survey.jobtype}}</span>
             </ion-col>
         </ion-row>
 
@@ -139,6 +136,7 @@
                 </ion-grid>
             </ion-col>
         </ion-row>
+
         <ion-row class="ion-margin-top">
             <ion-col>
                 <ion-grid class="ion-no-padding">
@@ -273,9 +271,9 @@
                     class="model-type">assigned to</span></ion-col>
             <ion-col size="auto">
                 <div class="selected d-flex">
-                    <img *ngIf="survey.assignto.contractorlogo" [src]="survey.assignto.contractorlogo.logo.url"
+                    <img *ngIf="survey.assignto.contractorlogo && survey.assignto.contractorlogo.logo" [src]="survey.assignto.contractorlogo.logo.url"
                          class="assignee-image"/>
-                    <div *ngIf="!survey.assignto.contractorlogo"
+                    <div *ngIf="!survey.assignto.contractorlogo || !survey.assignto.contractorlogo.logo"
                          class="assignee-image d-flex flex-row align-center justify-center">
                         <div class="name_div">
                             <span style="text-transform: capitalize;">{{survey.assignto.firstname.substring(0, 1)}}{{survey.assignto.lastname.substring(0, 1)}}</span>
@@ -298,6 +296,17 @@
 
     </ion-grid>
 </ion-content>
+
+<ion-footer *ngIf="!assigned && survey" class="ion-no-border white-bg">
+    <ion-grid>
+        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+            <ion-col size="auto">
+                <ion-button class="action-button-color" fill="clear" (click)="updateAssignee()">Done</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-footer>
 
 <ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
                    shouldBounce="false" distanceTop="0" class="drawer">
@@ -345,15 +354,4 @@
     </form>
 
 </ion-bottom-drawer>
-
-<ion-footer *ngIf="!assigned && survey" class="ion-no-border white-bg">
-    <ion-grid>
-        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
-            <ion-col size="auto">
-                <ion-button class="action-button-color" fill="clear" (click)="updateAssignee()">Done</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-
-</ion-footer>
 

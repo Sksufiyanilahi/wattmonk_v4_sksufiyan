@@ -46,6 +46,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       phonenumber: new FormControl('', [Validators.required]),
+      jobtype: new FormControl('', [Validators.required]),
       datetime: new FormControl(new Date().getTime(), [Validators.required]),
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
@@ -189,6 +190,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.surveyForm.patchValue({
             name: this.survey.name,
             email: this.survey.email,
+            jobtype: this.survey.jobtype,
             phonenumber: this.survey.phonenumber,
             datetime: date.getTime(),
             comments: this.survey.comments,

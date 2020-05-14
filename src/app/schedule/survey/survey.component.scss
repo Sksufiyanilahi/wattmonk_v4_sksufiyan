@@ -1,4 +1,10 @@
 .error {
-    color: rgb(223, 62, 62);
-    font-size: 11px;
-  }
+  color: rgb(223, 62, 62);
+  font-size: 11px;
+}
+
+ion-select{
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 0px !important;
+}

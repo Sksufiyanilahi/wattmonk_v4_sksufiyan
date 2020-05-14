@@ -30,8 +30,15 @@
             <ion-row>
                 <ion-col>
                     <ion-item class="ion-no-padding">
-                        <ion-input placeholder="phone*" formControlName="phonenumber" type="number"
-                                   class="form_input"></ion-input>
+                        <ion-label style="display: none;">Job Type</ion-label>
+                        <ion-select class="form_input select_div" placeholder="job type"
+                                    ok-text="Ok"
+                                    cancel-text="Cancel"
+                                    formControlName="jobtype">
+                            <ion-select-option value="pvbattery">PV+ Battery</ion-select-option>
+                            <ion-select-option value="battery">Battery</ion-select-option>
+                            <ion-select-option value="pv">PV</ion-select-option>
+                        </ion-select>
                     </ion-item>
                 </ion-col>
             </ion-row>

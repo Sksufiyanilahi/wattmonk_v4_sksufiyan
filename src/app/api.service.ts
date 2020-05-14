@@ -77,7 +77,7 @@ export class ApiService {
   }
 
   getSurvey() {
-    return this.http.get<SurveyDataModel[]>(this.baseUrl + '/surveys?_sort=created_at:DESC&createdby=' + this.userId + '||assignto=' + this.userId, { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(this.baseUrl + '/usersurveys?id=' + this.userId, { headers: this.headers });
   }
 
   getSurveyDetail(id): Observable<SurveyDataModel> {

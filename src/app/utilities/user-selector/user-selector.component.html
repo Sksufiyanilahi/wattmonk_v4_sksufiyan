@@ -6,8 +6,8 @@
       <div *ngFor="let assignee of assignees" class="assignee-margin " (click)="selectAssignee(assignee)">
         <div class="selected d-flex"
              [class.selected]="assignee.selected" [class.normal]="!assignee.selected">
-          <img *ngIf="assignee.contractorlogo" [src]="assignee.contractorlogo.logo.url" class="assignee-image"/>
-          <div *ngIf="!assignee.contractorlogo" class="assignee-image d-flex flex-row align-center justify-center">
+          <img *ngIf="assignee.contractorlogo && assignee.contractorlogo.logo" [src]="assignee.contractorlogo.logo.url" class="assignee-image"/>
+          <div *ngIf="!assignee.contractorlogo || !assignee.contractorlogo.logo" class="assignee-image d-flex flex-row align-center justify-center">
             <div class="name_div">
               <span style="text-transform: capitalize;">{{assignee.firstname.substring(0, 1)}}{{assignee.lastname.substring(0, 1)}}</span>
             </div>

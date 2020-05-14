@@ -39,6 +39,7 @@ export class SurveyDataModel {
   pvmeter: string;
   servicefeedsource: string;
   utilitymeter: string;
+  jobtype: string;
 }
 
 
