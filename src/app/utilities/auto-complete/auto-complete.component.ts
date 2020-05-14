@@ -22,6 +22,8 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
 
   @Input() dataList: any[];
   @Input() placeholder = '';
+  @Input() mode = 'id'; //id or object
+
   private onChange: (data: number) => void;
   selectedOption: any;
   showSuggestions: false;
@@ -101,7 +103,11 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
     this.selectedDataId = data.id;
     this.selectedDataName = data.name;
 
-    this.onChange(data.id);
+    if (this.mode === 'id') {
+      this.onChange(data.id);
+    } else {
+      this.onChange(data);
+    }
   }
 
   onFocus(event: CustomEvent) {

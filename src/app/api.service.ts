@@ -20,6 +20,7 @@ import { AssigneeModel } from './model/assignee.model';
 export class ApiService {
 
   headers: HttpHeaders;
+  uploadHeaders: HttpHeaders;
   baseUrl = 'http://ec2-3-17-28-7.us-east-2.compute.amazonaws.com:1337';
   private parentId = '';
   private userId = '';
@@ -49,6 +50,10 @@ export class ApiService {
 
   getInverterMake() {
     return this.http.get<InverterMakeModel[]>(this.baseUrl + '/invertermakes', { headers: this.headers });
+  }
+
+  getUtilities() {
+    return this.http.get<InverterMakeModel[]>(this.baseUrl + '/utilities', { headers: this.headers });
   }
 
   getInverterMade(id): Observable<InverterMadeModel[]> {
@@ -97,6 +102,9 @@ export class ApiService {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + this.storageService.getJWTToken()
     });
+    this.uploadHeaders = new HttpHeaders({
+      Authorization: 'Bearer ' + this.storageService.getJWTToken()
+    });
     this.parentId = this.storageService.getParentId();
     this.userId = this.storageService.getUserID();
   }
@@ -105,6 +113,7 @@ export class ApiService {
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
+    this.uploadHeaders = new HttpHeaders();
     this.parentId = '';
     this.userId = '';
   }
@@ -121,35 +130,14 @@ export class ApiService {
     return this.http.get<AssigneeModel[]>(this.baseUrl + '/designers?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
 
-  uploadImage(surveyId: number, key: string, image: File): Promise<boolean> {
+  uploadImage(surveyId: number, key: string, image: File) {
+    const data = new FormData();
+    data.append('files', image);
+    data.append('path', '');
+    data.append('refId', surveyId + '');
+    data.append('ref', 'survey');
+    data.append('field', key);
 
-    return new Promise<boolean>((resolve, reject) => {
-      const data = new FormData();
-      data.append('files', image);
-      data.append('path', '');
-      data.append('refId', surveyId + '');
-      data.append('ref', 'survey');
-      data.append('field', key);
-
-      const xhr = new XMLHttpRequest();
-      xhr.withCredentials = true;
-
-      xhr.onload = event => {
-        // this.ngProgress.complete();
-        console.log(xhr.response);
-        resolve(true);
-      };
-
-      xhr.open('POST', this.baseUrl + '/upload');
-      xhr.setRequestHeader('Connection', 'keep-alive');
-      xhr.setRequestHeader('Accept', 'application/json, text/plain, */*');
-      xhr.setRequestHeader('Authorization', 'Bearer ' + this.storageService.getJWTToken());
-      xhr.setRequestHeader('Content-Type', 'application/json');
-
-      xhr.send(data);
-    });
-
-
-    // return this.http.post(this.baseUrl + '/upload', data, { headers: this.headers });
+    return this.http.post(this.baseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
 }

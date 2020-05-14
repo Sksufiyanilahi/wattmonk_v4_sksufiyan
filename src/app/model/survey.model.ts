@@ -1,6 +1,7 @@
 import { Image, User } from './user.model';
 import { Invertermake, Invertermodel, Solarmake, Solarmodel } from './design.model';
 import { ImageModel } from '../camera/menu.model';
+import { InverterMadeModel } from './inverter-made.model';
 
 export class SurveyModel {
   id: number;
@@ -26,8 +27,8 @@ export class SurveyDataModel {
   roofimages: Image[];
   modulemake: Solarmake;
   modulemodel: Solarmodel;
-  invertermake: Invertermake;
-  invertermodel: Invertermodel;
+  invertermake: string;
+  invertermodel: string;
   batterybackup: string;
   acdisconnect: string;
   mainbreakersize: number;
@@ -40,6 +41,8 @@ export class SurveyDataModel {
   servicefeedsource: string;
   utilitymeter: string;
   jobtype: string;
+  interconnection: string;
+  utility: InverterMadeModel;
 }
 
 

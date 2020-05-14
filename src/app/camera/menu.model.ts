@@ -7,6 +7,7 @@ export class MenuModel {
 
 export class MenuSubModel {
   name: string;
+  allCaptured: boolean;
   isSelected: boolean;
   askBeforeImage: boolean;
   answered: boolean;
@@ -33,6 +34,8 @@ export enum QuestionType {
   YES_NO = 1,
   RADIO_BUTTON = 2,
   STRING = 3,
-  INPUT_NUMBER = 4
+  INPUT_NUMBER = 4,
+  INVERTER_MODEL = 5,
+  UTILITIES = 6
 }
 

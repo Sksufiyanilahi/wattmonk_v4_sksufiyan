@@ -12,7 +12,8 @@ import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { UtilitiesModule } from '../utilities/utilities.module';
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import { InverterSelectionPage } from './inverter-selection/inverter-selection.page';
+import { UtilitiesSelectionComponent } from './utilities-selection/utilities-selection.component';
 
 @NgModule({
   imports: [
@@ -24,13 +25,13 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
     ReactiveFormsModule,
     UtilitiesModule
   ],
-  declarations: [CameraPage],
+  declarations: [CameraPage, InverterSelectionPage, UtilitiesSelectionComponent],
+  entryComponents: [InverterSelectionPage, UtilitiesSelectionComponent],
   providers: [
     CameraPreview,
     Base64ToGallery,
     File,
-    Diagnostic,
-    FileTransfer
+    Diagnostic
   ]
 })
 export class CameraPageModule {

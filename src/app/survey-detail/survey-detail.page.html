@@ -122,14 +122,14 @@
                     <ion-row class="ion-no-padding">
                         <ion-col><span class="model-type">make</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.invertermake">{{survey.invertermake.name}}</span>
+                            <span class="model-name" *ngIf="survey.invertermake">{{survey.invertermake}}</span>
                             <span class="model-name" *ngIf="!survey.invertermake">n/a</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">model</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.invertermodel">{{survey.invertermodel.name}}</span>
+                            <span class="model-name" *ngIf="survey.invertermodel">{{survey.invertermodel}}</span>
                             <span class="model-name" *ngIf="!survey.invertermodel">n/a</span>
                         </ion-col>
                     </ion-row>
@@ -140,6 +140,13 @@
         <ion-row class="ion-margin-top">
             <ion-col>
                 <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-no-padding">
+                        <ion-col><span class="model-type">utility</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name" *ngIf="survey.utility">{{survey.utility.name}}</span>
+                            <span class="model-name" *ngIf="!survey.utility">n/a</span>
+                        </ion-col>
+                    </ion-row>
                     <ion-row class="ion-no-padding">
                         <ion-col><span class="model-type">msp location</span></ion-col>
                         <ion-col size="auto">
@@ -224,6 +231,14 @@
                             <span class="model-name"
                                   *ngIf="survey.servicefeedsource">{{survey.servicefeedsource}}</span>
                             <span class="model-name" *ngIf="!survey.servicefeedsource">n/a</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col><span class="model-type">service feed source</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name"
+                                  *ngIf="survey.interconnection">{{survey.interconnection}}</span>
+                            <span class="model-name" *ngIf="!survey.interconnection">n/a</span>
                         </ion-col>
                     </ion-row>
 

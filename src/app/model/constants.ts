@@ -28,6 +28,7 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       {
         name: 'MSP',
         isSelected: true,
+        allCaptured: false,
         askBeforeImage: false,
         answered: false,
         questionToAsk: '',
@@ -86,6 +87,7 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       {
         name: 'PV Inverter',
         isSelected: false,
+        allCaptured: false,
         askBeforeImage: false,
         answered: false,
         questionToAsk: '',
@@ -109,7 +111,7 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             showPopup: true,
             popupTitle: 'Confirm',
             popupQuestion: 'Inverter manufacture model',
-            questionType: QuestionType.STRING,
+            questionType: QuestionType.INVERTER_MODEL,
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
@@ -120,6 +122,7 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       {
         name: 'PV Meter',
         isSelected: false,
+        allCaptured: false,
         askBeforeImage: true,
         answered: false,
         questionToAsk: 'Is PV meter installed in premises',
@@ -142,6 +145,7 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       {
         name: 'AC Disconnect',
         isSelected: false,
+        allCaptured: false,
         askBeforeImage: true,
         answered: false,
         questionToAsk: 'Is AC disconnected?',
@@ -176,6 +180,7 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       {
         name: 'Utility Meter',
         isSelected: false,
+        allCaptured: false,
         askBeforeImage: false,
         answered: false,
         questionToAsk: '',
@@ -199,7 +204,7 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
             showPopup: true,
             popupTitle: 'Confirm',
             popupQuestion: 'Utility Name',
-            questionType: QuestionType.STRING,
+            questionType: QuestionType.UTILITIES,
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
@@ -217,6 +222,7 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       {
         name: 'Panels',
         isSelected: true,
+        allCaptured: false,
         askBeforeImage: false,
         answered: false,
         questionToAsk: '',

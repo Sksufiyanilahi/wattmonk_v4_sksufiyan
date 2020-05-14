@@ -7,13 +7,13 @@
                     <ion-icon name="chevron-back-outline" color="light"></ion-icon>
                 </ion-button>
             </ion-col>
-            <ion-col class="ion-no-padding end-centered">
+            <ion-col class="ion-no-padding end-centered" *ngIf="!showForm">
                 <ion-icon name="information-circle" class="info-icon"></ion-icon>
                 <span>Capture {{itemName}} {{selectedImageModel.imageTitle}}</span>
             </ion-col>
         </ion-row>
     </ion-grid>
-    <div class="ion-no-padding black-bg" *ngIf="!showCameraInterface && !showForm" [style.height.px]="imageAreaHeight">
+    <div class="ion-no-padding black-bg" *ngIf="!showCameraInterface && !showForm || showImageOptions" [style.height.px]="imageAreaHeight">
         <ion-img *ngIf="selectedImageModel.image" [src]="selectedImageModel.image" class="object-fit-contain"></ion-img>
     </div>
     <div class="ion-no-padding" *ngIf="!showCameraInterface && showForm">
@@ -32,17 +32,6 @@
                 </ion-row>
 
                 <ion-row>
-                    <ion-col size="6">
-                        <app-auto-complete [dataList]="listOfInverterMake" placeholder="inverter make*"
-                                           formControlName="invertermake"></app-auto-complete>
-                    </ion-col>
-                    <ion-col size="6">
-                        <app-auto-complete [dataList]="listOfInverterMade" placeholder="inverter model*"
-                                           formControlName="invertermodel"></app-auto-complete>
-                    </ion-col>
-                </ion-row>
-
-                <ion-row>
                     <ion-col size="12">
                         <ion-item class="ion-no-padding">
                             <ion-label style="display: none">battery backup</ion-label>
@@ -56,6 +45,22 @@
                     </ion-col>
                 </ion-row>
 
+                <ion-row>
+                    <ion-col size="12">
+                        <ion-item class="ion-no-padding">
+                            <ion-label style="display: none">Interconnection</ion-label>
+                            <ion-select class="form_input select_div" placeholder="Interconnection" ok-text="Ok"
+                                        cancel-text="Cancel"
+                                        formControlName="interconnection">
+                                <ion-select-option value="backfed">Backfed</ion-select-option>
+                                <ion-select-option value="dreatemainbreaker">Derate main breaker</ion-select-option>
+                                <ion-select-option value="sstwithct">SST with CT</ion-select-option>
+                                <ion-select-option value="loadsidetap">Load Side Tap</ion-select-option>
+                                <ion-select-option value="sstwithlocationofsst">SST with location of SST</ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
 
                 <ion-row>
                     <ion-col size="12">
@@ -141,12 +146,23 @@
 
 <ion-footer class="colored ion-no-border">
     <ion-grid>
-        <ion-row *ngIf="showCameraInterface && !showForm">
+        <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="showImageOptions">
+            <ion-col>
+                <span>{{itemName}} {{selectedImageModel.imageTitle}}</span>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-button fill="clear" (click)="retakeImage()">Retake</ion-button>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-button fill="clear" (click)="shiftToNextImage()">Next</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="showCameraInterface && !showForm || showImageOptions">
             <ion-col *ngFor="let menu of subMenu; let j = index" class="ion-text-center"
                      (click)="selectSubMenu(menu, j)">
                 <ion-row class="ion-align-items-center ion-justify-content-center">
                     <ion-col size="12">
-                        <span class="deselected-menu" [ngClass]="{'selected-menu' : menu.isSelected}">
+                        <span class="deselected-menu" [ngClass]="{'selected-menu' : menu.isSelected, 'completed-menu': menu.allCaptured}">
                             {{menu.name}}
                         </span>
                     </ion-col>
