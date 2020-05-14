@@ -5,6 +5,7 @@ import { UtilitiesService } from '../utilities.service';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { AddressModel } from '../model/address.model';
+import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 
 declare var google;
 
@@ -23,14 +24,20 @@ export class MapPagePage implements OnInit {
 
   // map: any;
 
+  geoEncoderOptions: NativeGeocoderOptions = {
+    useLocale: true,
+    maxResults: 5
+  };
+
   geocoder = new google.maps.Geocoder();
 
   constructor(
     private geoLocation: Geolocation,
     private zone: NgZone,
-    private utils: UtilitiesService,
+    private utilities: UtilitiesService,
     private router: Router,
-    private navController: NavController
+    private navController: NavController,
+    private nativeGeocoder : NativeGeocoder,
   ) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
@@ -95,13 +102,14 @@ export class MapPagePage implements OnInit {
     this.geocoder.geocode({
       placeId: item.place_id
     }, (responses, status) => {
-      console.log(responses);
-      const address: AddressModel = {
-        address : responses[0].formatted_address,
-        lat: responses[0].geometry.location.lat(),
-        long: responses[0].geometry.location.lng()
-      };
-      this.utils.setAddress(address);
+      console.log("respo",responses);
+      this.getGeoEncoder(responses[0].geometry.location.lat(),responses[0].geometry.location.lng());
+      // const address: AddressModel = {
+      //   address : responses[0].formatted_address,
+      //   lat: responses[0].geometry.location.lat(),
+      //   long: responses[0].geometry.location.lng()
+      // };
+      // this.utils.setAddress(address);
       this.goBack();
     });
   }
@@ -117,6 +125,47 @@ export class MapPagePage implements OnInit {
       console.log('error : ' + err.message);
     });
   }
+
+  getGeoEncoder(latitude, longitude) {
+    // this.utilities.hideLoading().then((success) => {
+    this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+      .then((result: NativeGeocoderResult[]) => {
+        console.log("resu",result);
+        const address: AddressModel = {
+          address: this.generateAddress(result[0]),
+          lat: latitude,
+          long: longitude,
+          country:result[0].countryName,
+          state: result[0].administrativeArea,
+          city:result[0].locality,
+          postalcode:result[0].postalCode
+        };
+        this.utilities.setAddress(address);
+      })
+      .catch((error: any) => {
+        alert('Error getting location' + JSON.stringify(error));
+      });
+    // }, (error) => {
+    //
+    // }
+    // );
+  }
+
+  generateAddress(addressObj) {
+    const obj = [];
+    let address = '';
+    for (const key in addressObj) {
+      obj.push(addressObj[key]);
+    }
+    obj.reverse();
+    for (const val in obj) {
+      if (obj[val].length) {
+        address += obj[val] + ', ';
+      }
+    }
+    return address.slice(0, -2);
+  }
+
 
   onCancel() {
     this.autocompleteItems = [];

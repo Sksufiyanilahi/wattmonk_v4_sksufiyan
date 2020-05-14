@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { MapPagePageRoutingModule } from './map-page-routing.module';
 
 import { MapPagePage } from './map-page.page';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 @NgModule({
   imports: [
@@ -15,6 +16,9 @@ import { MapPagePage } from './map-page.page';
     IonicModule,
     MapPagePageRoutingModule
   ],
-  declarations: [MapPagePage]
+  declarations: [MapPagePage],
+  providers: [
+    NativeGeocoder,
+  ]
 })
 export class MapPagePageModule {}

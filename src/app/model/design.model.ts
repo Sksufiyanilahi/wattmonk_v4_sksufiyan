@@ -92,6 +92,12 @@ export class DesginDataModel {
   invertermodel: Invertermodel;
   createdby: User;
   assignedto: User;
+  latitude: number;
+  longitude: number;
+  country: string;
+  state: string;
+  city:string;
+  postalcode: string;
 }
 
 

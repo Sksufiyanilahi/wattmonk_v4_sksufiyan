@@ -68,6 +68,12 @@ export class DesignComponent implements OnInit, OnDestroy {
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim', [Validators.required]),
+      latitude: new FormControl(''),
+      longitude: new FormControl(''),
+      country: new FormControl(''),
+      state: new FormControl(''),
+      city: new FormControl(''),
+      postalcode: new FormControl(''),
     });
 
     this.designId = +this.route.snapshot.paramMap.get('id');
@@ -93,6 +99,12 @@ export class DesignComponent implements OnInit, OnDestroy {
       });
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         this.desginForm.get('address').setValue(address.address);
+        this.desginForm.get('latitude').setValue(address.lat);
+        this.desginForm.get('longitude').setValue(address.long);
+        this.desginForm.get('country').setValue(address.country);
+        this.desginForm.get('city').setValue(address.city);
+        this.desginForm.get('state').setValue(address.state);
+        this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
       });
@@ -131,6 +143,12 @@ export class DesignComponent implements OnInit, OnDestroy {
           jobtype: this.design.jobtype,
           comments: this.design.comments,
           projecttype: this.design.projecttype,
+          latitude: this.design.latitude,
+          longitude: this.design.longitude,
+          country: this.design.country,
+          state: this.design.state,
+          city: this.design.city,
+          postalcode:this.design.postalcode,
           newconstruction: this.design.newconstruction + ''
         });
         this.utils.setStaticAddress(this.design.address);
@@ -235,13 +253,16 @@ export class DesignComponent implements OnInit, OnDestroy {
           this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
-              this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-                modal.present();
-                modal.onWillDismiss().then((dismissed) => {
-                  this.utils.setHomepageDesignRefresh(true);
-                  this.navController.pop();
-                });
-              });
+              this.utils.showSnackBar('Desgin have been saved');
+              this.utils.setHomepageDesignRefresh(true);
+              this.navController.pop();
+              // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+              //   modal.present();
+              //   modal.onWillDismiss().then((dismissed) => {
+              //     this.utils.setHomepageDesignRefresh(true);
+              //     this.navController.pop();
+              //   });
+              // });
             });
           }, responseError => {
             this.utils.hideLoading().then(() => {

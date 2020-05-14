@@ -16,7 +16,11 @@ export class UtilitiesService {
   address = new BehaviorSubject<AddressModel>({
     address: '',
     lat: 0,
-    long: 0
+    long: 0,
+  country: '',
+  state: '',
+  city: '',
+  postalcode: ''
   });
   staticAddress = new BehaviorSubject<string>('');
   saveScheduleForm = new BehaviorSubject<ScheduleFormEvent>(ScheduleFormEvent.NO_EVENT);

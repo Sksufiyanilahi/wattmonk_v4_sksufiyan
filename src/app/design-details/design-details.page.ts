@@ -145,8 +145,11 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.assigneeForm.value, this.designId).subscribe((success) => {
           this.utilities.hideLoading().then(() => {
+            console.log("suc",success);
             this.setData(success);
-            this.utilities.showSnackBar('Assignee selected');
+            this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
+            this.utilities.setHomepageDesignRefresh(true);
+            this.navController.navigateRoot(['homepage']);
           });
         }, (error) => {
           this.utilities.hideLoading().then(() => {

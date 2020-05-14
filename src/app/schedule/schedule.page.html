@@ -11,14 +11,19 @@
                 </ion-button>
             </ion-col>
         </ion-row>
-        <ion-row class="ion-padding-start ion-padding-end">
-            <ion-col>
+        <ion-row class="ion-padding-start ion-padding-end" >
+            <ion-col *ngIf="address !== '' ">
                 <span>
                     {{address}}
                 </span>
             </ion-col>
+            <ion-col *ngIf="address === '' ">
+                <span>
+                    No address found
+                </span>
+            </ion-col>
         </ion-row>
-        <ion-row class="ion-padding-start ion-padding-end">
+        <ion-row class="ion-padding-start ion-padding-end" *ngIf="address !== '' ">
             <ion-col class="ion-text-end" *ngIf="!tabsDisabled">
                 <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
                     Change
@@ -27,6 +32,13 @@
             <ion-col class="ion-text-end" *ngIf="tabsDisabled">
                 <span class="edit_span">
                     Change
+                </span>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-padding-start ion-padding-end" *ngIf="address === '' ">
+            <ion-col class="ion-text-end">
+                <span style="color: #4E6FB0;" (click)="fetchLocation()">
+                    Fetch Location
                 </span>
             </ion-col>
         </ion-row>

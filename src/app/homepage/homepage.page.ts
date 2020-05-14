@@ -166,6 +166,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   getGeoLocation() {
 
     this.geolocation.getCurrentPosition().then((resp) => {
+      console.log("resp",resp);
       this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
     }).catch((error) => {
       this.utilities.errorSnackBar('Unable to get location');
@@ -179,11 +180,15 @@ export class HomepagePage implements OnInit, OnDestroy {
     // this.utilities.hideLoading().then((success) => {
     this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
       .then((result: NativeGeocoderResult[]) => {
-        console.log(result);
+        console.log("resu",result);
         const address: AddressModel = {
           address: this.generateAddress(result[0]),
           lat: latitude,
-          long: longitude
+          long: longitude,
+          country:result[0].countryName,
+          state: result[0].administrativeArea,
+          city:result[0].locality,
+          postalcode:result[0].postalCode
         };
         this.utilities.setAddress(address);
       })
