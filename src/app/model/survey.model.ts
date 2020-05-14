@@ -22,6 +22,7 @@ export class SurveyDataModel {
   createdby?: User;
   mspimages: Image[];
   utilitymeterimages: Image[];
+  acdisconnectimages: Image[];
   pvinverterimages: Image[];
   pvmeterimages: Image[];
   roofimages: Image[];

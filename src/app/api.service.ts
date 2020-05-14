@@ -130,9 +130,9 @@ export class ApiService {
     return this.http.get<AssigneeModel[]>(this.baseUrl + '/designers?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
 
-  uploadImage(surveyId: number, key: string, image: File) {
+  uploadImage(surveyId: number, key: string, blob: Blob) {
     const data = new FormData();
-    data.append('files', image);
+    data.append('files', blob);
     data.append('path', '');
     data.append('refId', surveyId + '');
     data.append('ref', 'survey');

@@ -27,6 +27,7 @@ export class ImageModel {
   questionOptions: string[] = [];
   givenAnswer: string | boolean;
   formValueToUpdate: string;
+  imageName: string;
 }
 
 export enum QuestionType {

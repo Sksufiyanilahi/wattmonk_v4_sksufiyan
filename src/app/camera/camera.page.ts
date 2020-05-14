@@ -673,7 +673,6 @@ export class CameraPage implements OnInit {
             this.apiService.updateSurveyForm(this.detailsForm.value, this.surveyId).subscribe((data) => {
               this.utilities.hideLoading().then(() => {
                 this.showUpdateImagesAlert();
-
               });
             }, (error) => {
               this.utilities.hideLoading().then(() => {
@@ -742,17 +741,26 @@ export class CameraPage implements OnInit {
     this.mainMenu.forEach((mainMenu) => {
       if (mainMenu.imageModel !== null && mainMenu.imageModel !== undefined) {
         mainMenu.imageModel.forEach((imageModel) => {
-          const image = new ImageUploadModel();
-          image.key = imageModel.imageUploadTag;
-          image.imageData = imageModel.image;
+          if (imageModel.image !== '') {
+            const image = new ImageUploadModel();
+            image.key = imageModel.imageUploadTag;
+            image.imageData = imageModel.image;
+            image.imagename = imageModel.imageName;
+            mapOfImages.push(image);
+          }
+
         });
       }
       if (mainMenu.subMenu !== null && mainMenu.subMenu !== undefined) {
         mainMenu.subMenu.forEach((submenu) => {
           submenu.images.forEach((imageModel) => {
-            const image = new ImageUploadModel();
-            image.key = imageModel.imageUploadTag;
-            image.imageData = imageModel.image;
+            if (imageModel.image !== '') {
+              const image = new ImageUploadModel();
+              image.key = imageModel.imageUploadTag;
+              image.imageData = imageModel.image;
+              image.imagename = imageModel.imageName;
+              mapOfImages.push(image);
+            }
           });
         });
       }
@@ -767,16 +775,24 @@ export class CameraPage implements OnInit {
     if (mapOfImages.length !== 0) {
       const imageToUpload = mapOfImages[0];
       const blob = this.getByteStreamOfImage(imageToUpload.imageData);
-      const file = new File([blob], Date.now().toString() + '.png', {
+      let filename = '';
+      if(imageToUpload.imagename === ''){
+        filename = Date.now().toString() + '.png';
+      } else {
+        filename = imageToUpload.imagename + '.png';
+      }
+      const file = new File([blob], filename, {
         type: 'image/png',
         lastModified: Date.now()
       });
       this.utilities.setLoadingMessage('Uploading ' + this.imageUploadIndex + ' of ' + this.totalImagesToUpload);
-      this.apiService.uploadImage(this.surveyId, imageToUpload.key, file).subscribe((data) => {
+      this.apiService.uploadImage(this.surveyId, imageToUpload.key, blob).subscribe((data) => {
         this.imageUploadIndex++;
+        mapOfImages.splice(0, 1);
         this.uploadImageByIndex(mapOfImages);
       }, (error) => {
         this.imageUploadIndex++;
+        mapOfImages.splice(0, 1);
         this.uploadImageByIndex(mapOfImages);
       });
     } else {
@@ -784,7 +800,7 @@ export class CameraPage implements OnInit {
         this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
-            this.storage.set(this.surveyId + '', this.mainMenu);
+            this.storage.remove(this.surveyId + '');
             this.navController.navigateRoot('homepage');
             this.utilities.sethomepageSurveyRefresh(true);
           });
@@ -890,7 +906,8 @@ export class CameraPage implements OnInit {
               questionOptions: [],
               givenAnswer: '',
               formValueToUpdate: '',
-              imageUploadTag: ''
+              imageUploadTag: 'roofimages',
+              imageName: ''
             });
             this.shiftToNextImage();
             this.calculateImagePercentage();

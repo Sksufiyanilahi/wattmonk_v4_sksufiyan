@@ -44,7 +44,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             questionOptions: ['Inside', 'Outside'],
             givenAnswer: '',
             formValueToUpdate: 'msplocation',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'msplongshot'
           },
           {
             image: '',
@@ -56,7 +57,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: 'mainbreakersize',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'mspopenshutterzoomshot'
           },
           {
             image: '',
@@ -68,7 +70,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             questionOptions: ['MSP Rating', 'Bus Rating'],
             givenAnswer: '',
             formValueToUpdate: 'msprating',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'mspzoomshot'
           },
           {
             image: '',
@@ -80,7 +83,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             questionOptions: ['Top', 'Bottom', 'Center'],
             givenAnswer: '',
             formValueToUpdate: 'mspbreaker',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'mspwithoutcovershot'
           }
         ]
       },
@@ -104,6 +108,7 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: 'pvinverterlocation',
             imageUploadTag: 'pvinverterimages',
+            imageName: 'pvinverterwideshoturl'
           },
           {
             image: '',
@@ -116,6 +121,7 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'pvinverterimages',
+            imageName: 'pvinverterzoomshoturl'
           }
         ]
       },
@@ -138,7 +144,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'pvmeterimages'
+            imageUploadTag: 'pvmeterimages',
+            imageName: 'pvmeterwideshoturl'
           }
         ]
       },
@@ -161,7 +168,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages'
+            imageUploadTag: 'acdisconnectimages',
+            imageName: 'acdisconnectwideshoturl'
           },
           {
             image: '',
@@ -173,7 +181,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages'
+            imageUploadTag: 'acdisconnectimages',
+            imageName: 'acdisconnectzoomshoturl'
           }
         ]
       },
@@ -196,7 +205,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             questionOptions: ['Attach', 'Detach'],
             givenAnswer: '',
             formValueToUpdate: 'utilitymeter',
-            imageUploadTag: 'utilitymeterimages'
+            imageUploadTag: 'utilitymeterimages',
+            imageName: 'umwideshoturl'
           },
           {
             image: '',
@@ -208,7 +218,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'utilitymeterimages'
+            imageUploadTag: 'utilitymeterimages',
+            imageName: 'umzoomshoturl'
           }
         ]
       }
@@ -237,7 +248,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
           questionOptions: [],
           givenAnswer: '',
           formValueToUpdate: 'numberofmodules',
-          imageUploadTag: 'roofimages'
+          imageUploadTag: 'roofimages',
+          imageName: ''
         }]
       }
     ]
@@ -255,7 +267,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
-      imageUploadTag: 'roofimages'
+      imageUploadTag: 'roofimages',
+      imageName: ''
     }],
     subMenu: []
   },
@@ -272,7 +285,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
-      imageUploadTag: 'roofimages'
+      imageUploadTag: 'roofimages',
+      imageName: ''
     }],
     subMenu: []
   },
@@ -309,7 +323,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: ['Inside', 'Outside'],
             givenAnswer: '',
             formValueToUpdate: 'msplocation',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'msplongshot'
           },
           {
             image: '',
@@ -321,7 +336,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: 'mainbreakersize',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'mspopenshutterzoomshot'
           },
           {
             image: '',
@@ -333,7 +349,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: ['MSP Rating', 'Bus Rating'],
             givenAnswer: '',
             formValueToUpdate: 'msprating',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'mspzoomshot'
           },
           {
             image: '',
@@ -345,7 +362,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: ['Top', 'Bottom', 'Center'],
             givenAnswer: '',
             formValueToUpdate: 'mspbreaker',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'mspwithoutcovershot'
           }
         ]
       },
@@ -368,7 +386,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       },
@@ -391,7 +410,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: ['Attach', 'Detach'],
             givenAnswer: '',
             formValueToUpdate: 'utilitymeter',
-            imageUploadTag: 'utilitymeterimages'
+            imageUploadTag: 'utilitymeterimages',
+            imageName: 'umwideshoturl'
           },
           {
             image: '',
@@ -403,7 +423,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'utilitymeterimages'
+            imageUploadTag: 'utilitymeterimages',
+            imageName: 'umzoomshoturl'
           }
         ]
       }
@@ -433,7 +454,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       },
@@ -456,7 +478,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       },
@@ -479,7 +502,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       },
@@ -502,7 +526,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       }
@@ -532,7 +557,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       }
@@ -551,7 +577,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
-      imageUploadTag: 'roofimages'
+      imageUploadTag: 'roofimages',
+      imageName: ''
     }],
     subMenu: []
   },
@@ -588,7 +615,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: ['Inside', 'Outside'],
             givenAnswer: '',
             formValueToUpdate: 'msplocation',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'msplongshot'
           },
           {
             image: '',
@@ -600,7 +628,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: 'mainbreakersize',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'mspopenshutterzoomshot'
           },
           {
             image: '',
@@ -612,7 +641,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: ['MSP Rating', 'Bus Rating'],
             givenAnswer: '',
             formValueToUpdate: 'msprating',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'mspzoomshot'
           },
           {
             image: '',
@@ -624,7 +654,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: ['Top', 'Bottom', 'Center'],
             givenAnswer: '',
             formValueToUpdate: 'mspbreaker',
-            imageUploadTag: 'mspimages'
+            imageUploadTag: 'mspimages',
+            imageName: 'mspwithoutcovershot'
           }
         ]
       },
@@ -647,7 +678,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       },
@@ -670,7 +702,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       },
@@ -693,7 +726,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: ['Attach', 'Detach'],
             givenAnswer: '',
             formValueToUpdate: 'utilitymeter',
-            imageUploadTag: 'utilitymeterimages'
+            imageUploadTag: 'utilitymeterimages',
+            imageName: 'umwideshoturl'
           },
           {
             image: '',
@@ -705,7 +739,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'utilitymeterimages'
+            imageUploadTag: 'utilitymeterimages',
+            imageName: 'umzoomshoturl'
           }
         ]
       }
@@ -735,7 +770,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       },
@@ -758,7 +794,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       },
@@ -781,7 +818,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       },
@@ -804,7 +842,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       }
@@ -834,7 +873,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: ''
+            imageUploadTag: 'roofimages',
+            imageName: ''
           }
         ]
       }
@@ -853,7 +893,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
-      imageUploadTag: 'roofimages'
+      imageUploadTag: 'roofimages',
+      imageName: ''
     }],
     subMenu: []
   },
@@ -868,4 +909,5 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
 export class ImageUploadModel {
   key: string;
   imageData: string;
+  imagename: string;
 }

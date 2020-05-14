@@ -133,6 +133,9 @@ export class GalleryPage implements OnInit {
         case 'roofimages':
           this.menuName = 'Roof Images';
           break;
+        case 'acdisconnectimages':
+          this.menuName = 'Ac Disconnect Images';
+          break;
       }
       this.listOfImages = this.survey[data.data];
       this.currentPosition = 0;

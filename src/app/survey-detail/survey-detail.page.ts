@@ -122,7 +122,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
       + this.survey.utilitymeterimages.length
       + this.survey.pvinverterimages.length
       + this.survey.pvmeterimages.length
-      + this.survey.roofimages.length;
+      + this.survey.roofimages.length
+      + this.survey.acdisconnectimages.length;
   }
 
   async deleteSurvey() {
