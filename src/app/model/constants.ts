@@ -19,7 +19,7 @@ export const INVALID_EMAIL_MESSAGE = 'Invalid Email';
 export const FIELD_REQUIRED = 'This field is required';
 
 
-export const CAMERA_MODULE_MENU: MenuModel[] = [
+export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
   {
     name: 'Electricals',
     isSelected: true,
@@ -258,6 +258,587 @@ export const CAMERA_MODULE_MENU: MenuModel[] = [
       imageUploadTag: 'roofimages'
     }],
     subMenu: []
+  },
+  {
+    name: 'Appliances',
+    isSelected: false,
+    imageModel: [{
+      image: '',
+      imageTitle: '',
+      popupTitle: 'Confirm',
+      showPopup: false,
+      popupQuestion: '',
+      questionType: QuestionType.NONE,
+      questionOptions: [],
+      givenAnswer: '',
+      formValueToUpdate: '',
+      imageUploadTag: 'roofimages'
+    }],
+    subMenu: []
+  },
+  {
+    name: 'Details',
+    isSelected: false,
+    imageModel: null,
+    subMenu: null
+  }
+];
+
+export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
+  {
+    name: 'Electricals',
+    isSelected: true,
+    imageModel: [],
+    subMenu: [
+      {
+        name: 'MSP',
+        isSelected: true,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: 'Long Shot',
+            popupTitle: 'Confirm',
+            showPopup: true,
+            popupQuestion: 'Is MSP location inside or outside of building?',
+            questionType: QuestionType.YES_NO,
+            questionOptions: ['Inside', 'Outside'],
+            givenAnswer: '',
+            formValueToUpdate: 'msplocation',
+            imageUploadTag: 'mspimages'
+          },
+          {
+            image: '',
+            imageTitle: 'Open Shutter, Zoom Shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Main Breaker Size',
+            questionType: QuestionType.INPUT_NUMBER,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: 'mainbreakersize',
+            imageUploadTag: 'mspimages'
+          },
+          {
+            image: '',
+            imageTitle: 'Zoom Shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'MSP Rating',
+            questionType: QuestionType.INPUT_NUMBER,
+            questionOptions: ['MSP Rating', 'Bus Rating'],
+            givenAnswer: '',
+            formValueToUpdate: 'msprating',
+            imageUploadTag: 'mspimages'
+          },
+          {
+            image: '',
+            imageTitle: 'Without Cover, Zoom shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Main breaker location in MSP',
+            questionType: QuestionType.RADIO_BUTTON,
+            questionOptions: ['Top', 'Bottom', 'Center'],
+            givenAnswer: '',
+            formValueToUpdate: 'mspbreaker',
+            imageUploadTag: 'mspimages'
+          }
+        ]
+      },
+      {
+        name: 'Existing Sub Panel',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.NONE,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      },
+      {
+        name: 'Utility Meter',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: 'Wide angle shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Is Utility meter is attached or detached with MSP?',
+            questionType: QuestionType.YES_NO,
+            questionOptions: ['Attach', 'Detach'],
+            givenAnswer: '',
+            formValueToUpdate: 'utilitymeter',
+            imageUploadTag: 'utilitymeterimages'
+          },
+          {
+            image: '',
+            imageTitle: 'Zoom shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Utility Name',
+            questionType: QuestionType.UTILITIES,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: 'utilitymeterimages'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Roof',
+    isSelected: false,
+    imageModel: [],
+    subMenu: [
+      {
+        name: 'Roof Photos',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.MORE_PHOTOS,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      },
+      {
+        name: 'Roof Dimensions',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.MORE_PHOTOS,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      },
+      {
+        name: 'Obstacle Photos',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.MORE_PHOTOS,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      },
+      {
+        name: 'Obstacle Dimensions',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.MORE_PHOTOS,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Attic',
+    isSelected: false,
+    imageModel: [],
+    subMenu: [
+      {
+        name: 'Attic Photos',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.MORE_PHOTOS,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Appliances',
+    isSelected: false,
+    imageModel: [{
+      image: '',
+      imageTitle: '',
+      popupTitle: 'Confirm',
+      showPopup: false,
+      popupQuestion: '',
+      questionType: QuestionType.NONE,
+      questionOptions: [],
+      givenAnswer: '',
+      formValueToUpdate: '',
+      imageUploadTag: 'roofimages'
+    }],
+    subMenu: []
+  },
+  {
+    name: 'Details',
+    isSelected: false,
+    imageModel: null,
+    subMenu: null
+  }
+];
+
+export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
+  {
+    name: 'Electricals',
+    isSelected: true,
+    imageModel: [],
+    subMenu: [
+      {
+        name: 'MSP',
+        isSelected: true,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: 'Long Shot',
+            popupTitle: 'Confirm',
+            showPopup: true,
+            popupQuestion: 'Is MSP location inside or outside of building?',
+            questionType: QuestionType.YES_NO,
+            questionOptions: ['Inside', 'Outside'],
+            givenAnswer: '',
+            formValueToUpdate: 'msplocation',
+            imageUploadTag: 'mspimages'
+          },
+          {
+            image: '',
+            imageTitle: 'Open Shutter, Zoom Shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Main Breaker Size',
+            questionType: QuestionType.INPUT_NUMBER,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: 'mainbreakersize',
+            imageUploadTag: 'mspimages'
+          },
+          {
+            image: '',
+            imageTitle: 'Zoom Shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'MSP Rating',
+            questionType: QuestionType.INPUT_NUMBER,
+            questionOptions: ['MSP Rating', 'Bus Rating'],
+            givenAnswer: '',
+            formValueToUpdate: 'msprating',
+            imageUploadTag: 'mspimages'
+          },
+          {
+            image: '',
+            imageTitle: 'Without Cover, Zoom shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Main breaker location in MSP',
+            questionType: QuestionType.RADIO_BUTTON,
+            questionOptions: ['Top', 'Bottom', 'Center'],
+            givenAnswer: '',
+            formValueToUpdate: 'mspbreaker',
+            imageUploadTag: 'mspimages'
+          }
+        ]
+      },
+      {
+        name: 'Existing Sub Panel',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.NONE,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      },
+      {
+        name: 'Location of Battery',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.NONE,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      },
+      {
+        name: 'Utility Meter',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: 'Wide angle shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Is Utility meter is attached or detached with MSP?',
+            questionType: QuestionType.YES_NO,
+            questionOptions: ['Attach', 'Detach'],
+            givenAnswer: '',
+            formValueToUpdate: 'utilitymeter',
+            imageUploadTag: 'utilitymeterimages'
+          },
+          {
+            image: '',
+            imageTitle: 'Zoom shot',
+            showPopup: true,
+            popupTitle: 'Confirm',
+            popupQuestion: 'Utility Name',
+            questionType: QuestionType.UTILITIES,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: 'utilitymeterimages'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Roof',
+    isSelected: false,
+    imageModel: [],
+    subMenu: [
+      {
+        name: 'Roof Photos',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.MORE_PHOTOS,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      },
+      {
+        name: 'Roof Dimensions',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.MORE_PHOTOS,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      },
+      {
+        name: 'Obstacle Photos',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.MORE_PHOTOS,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      },
+      {
+        name: 'Obstacle Dimensions',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.MORE_PHOTOS,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: 'Attic',
+    isSelected: false,
+    imageModel: [],
+    subMenu: [
+      {
+        name: 'Attic Photos',
+        isSelected: false,
+        allCaptured: false,
+        askBeforeImage: false,
+        answered: false,
+        questionToAsk: '',
+        formControlToUpdate: '',
+        images: [
+          {
+            image: '',
+            imageTitle: '',
+            showPopup: true,
+            popupTitle: '',
+            popupQuestion: '',
+            questionType: QuestionType.MORE_PHOTOS,
+            questionOptions: [],
+            givenAnswer: '',
+            formValueToUpdate: '',
+            imageUploadTag: ''
+          }
+        ]
+      }
+    ]
   },
   {
     name: 'Appliances',

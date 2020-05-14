@@ -63,15 +63,22 @@ export class InverterSelectionPage implements OnInit {
   }
 
   getInverterMake() {
-    this.apiService.getInverterMake().subscribe(response => {
-      console.log(response);
-      this.listOfInverterMake = response;
-      console.log(this.listOfInverterMake);
-      this.cd.detectChanges();
-    }, responseError => {
-      const error: ErrorModel = responseError.error;
-      this.utilities.errorSnackBar(error.message[0].messages[0].message);
+    this.utilities.showLoading('Loading').then(() => {
+      this.apiService.getInverterMake().subscribe(response => {
+        this.utilities.hideLoading().then(() => {
+          console.log(response);
+          this.listOfInverterMake = response;
+          console.log(this.listOfInverterMake);
+          this.cd.detectChanges();
+        });
+      }, responseError => {
+        this.utilities.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilities.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
     });
+
   }
 
   submitForm() {

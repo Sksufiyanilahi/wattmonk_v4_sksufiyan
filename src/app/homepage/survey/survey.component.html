@@ -20,8 +20,9 @@
                     <span class="customer-address z-100"
                           (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
                     <ion-row class="ion-no-margin ion-no-margin">
-                        <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="!surveyData.modulemodel"
-                                 [routerLink]="['/camera/',surveyData.id]" routerDirection="forward">
+                        <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="!surveyData.utility"
+                                 [routerLink]="['/camera/',surveyData.id, surveyData.jobtype]"
+                                 routerDirection="forward">
                             <span class="ion-text-end action-button-color">Start Survey</span>
                         </ion-col>
                         <ion-col></ion-col>

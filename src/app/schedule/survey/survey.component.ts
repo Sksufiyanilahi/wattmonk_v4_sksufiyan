@@ -100,14 +100,14 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
-              this.navController.navigateForward('camera/' + survey.id);
+              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype);
             });
           });
         } else {
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
-              this.navController.navigateForward('camera/' + survey.id);
+              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype);
             });
           });
         }

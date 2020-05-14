@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview/ngx';
 import { AlertController, IonContent, IonGrid, ModalController, NavController, Platform } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { ImageModel, MenuModel, MenuSubModel, QuestionType } from './menu.model';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
-import { CAMERA_MODULE_MENU, ImageUploadModel } from '../model/constants';
+import { CAMERA_MODULE_MENU_BATTERY, CAMERA_MODULE_MENU_PV, CAMERA_MODULE_MENU_PV_BATTERY, ImageUploadModel } from '../model/constants';
 import { Storage } from '@ionic/storage';
 import { UtilitiesService } from '../utilities.service';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -34,8 +34,7 @@ export class CameraPage implements OnInit {
   selectedMenu = 'Electricals';
   selectedSubMenu = 'MSP';
 
-  mainMenu: MenuModel[] = JSON.parse(JSON.stringify(CAMERA_MODULE_MENU));
-
+  mainMenu: MenuModel[] = [];
   subMenu: MenuSubModel[] = [];
 
   selectedMenuModel: MenuModel;
@@ -49,14 +48,16 @@ export class CameraPage implements OnInit {
   selectedSubMenuIndex = 0;
   selectedImageModelIndex = 0;
   detailsForm: FormGroup;
+  pvDetailsForm: FormGroup;
   listOfSolarMake: SolarMake[] = [];
   listOfSolarMade: SolarMadeModel[] = [];
 
-  hardwareCameraEnabled = false;
+  hardwareCameraEnabled = true;
   imageAreaHeight = 600;
   imageUploadIndex = 1;
   totalImagesToUpload = 1;
   showImageOptions = false;
+  private surveyType: string;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -74,37 +75,69 @@ export class CameraPage implements OnInit {
     private modalController: ModalController
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
+    this.surveyType = this.route.snapshot.paramMap.get('type');
+    if (this.surveyType === 'battery') {
+      this.mainMenu = JSON.parse(JSON.stringify(CAMERA_MODULE_MENU_BATTERY));
+    } else if (this.surveyType === 'pv') {
+      this.mainMenu = JSON.parse(JSON.stringify(CAMERA_MODULE_MENU_PV));
+    } else if (this.surveyType === 'pvbattery') {
+      this.mainMenu = JSON.parse(JSON.stringify(CAMERA_MODULE_MENU_PV_BATTERY));
+    }
+
     this.selectMenu(this.mainMenu[0], 0);
     this.selectSubMenu(this.mainMenu[0].subMenu[0], 0);
 
-    this.detailsForm = this.formBuilder.group({
-      modulemake: new FormControl('', [Validators.required]),
-      modulemodel: new FormControl('', [Validators.required]),
-      invertermake: new FormControl('', [Validators.required]),
-      invertermodel: new FormControl('', [Validators.required]),
-      numberofmodules: new FormControl('', [Validators.required]),
-      permitDesign: new FormControl('', []),
-      additionalNotes: new FormControl('', []),
-      // appliances: this.formBuilder.array([]),
-      batterybackup: new FormControl('', [Validators.required]),
-      servicefeedsource: new FormControl('', [Validators.required]),
-      mainbreakersize: new FormControl('', [Validators.required]),
-      msprating: new FormControl('', [Validators.required]),
-      msplocation: new FormControl('', [Validators.required]),
-      mspbreaker: new FormControl('', [Validators.required]),
-      utilitymeter: new FormControl('', [Validators.required]),
-      utility: new FormControl('', [Validators.required]),
-      pvinverterlocation: new FormControl('', [Validators.required]),
-      pvmeter: new FormControl('', [Validators.required]),
-      acdisconnect: new FormControl('', [Validators.required]),
-      interconnection: new FormControl('', [Validators.required])
+    if (this.surveyType === 'battery') {
+      this.detailsForm = this.formBuilder.group({
+        modulemake: new FormControl('', [Validators.required]),
+        modulemodel: new FormControl('', [Validators.required]),
+        invertermake: new FormControl('', [Validators.required]),
+        invertermodel: new FormControl('', [Validators.required]),
+        numberofmodules: new FormControl('', [Validators.required]),
+        permitDesign: new FormControl('', []),
+        additionalNotes: new FormControl('', []),
+        // appliances: this.formBuilder.array([]),
+        batterybackup: new FormControl('', [Validators.required]),
+        servicefeedsource: new FormControl('', [Validators.required]),
+        mainbreakersize: new FormControl('', [Validators.required]),
+        msprating: new FormControl('', [Validators.required]),
+        msplocation: new FormControl('', [Validators.required]),
+        mspbreaker: new FormControl('', [Validators.required]),
+        utilitymeter: new FormControl('', [Validators.required]),
+        utility: new FormControl('', [Validators.required]),
+        pvinverterlocation: new FormControl('', [Validators.required]),
+        pvmeter: new FormControl('', [Validators.required]),
+        acdisconnect: new FormControl('', [Validators.required]),
+        interconnection: new FormControl('', [Validators.required])
+      });
 
-    });
+      this.detailsForm.get('modulemake').valueChanges.subscribe(val => {
+        this.getSolarMade();
+      });
+      this.getSolarMake();
 
-    this.detailsForm.get('modulemake').valueChanges.subscribe(val => {
-      this.getSolarMade();
-    });
-    this.getSolarMake();
+    } else {
+      this.pvDetailsForm = this.formBuilder.group({
+        permitDesign: new FormControl('', []),
+        additionalNotes: new FormControl('', []),
+        servicefeedsource: new FormControl('', [Validators.required]),
+        mainbreakersize: new FormControl('', [Validators.required]),
+        msprating: new FormControl('', [Validators.required]),
+        msplocation: new FormControl('', [Validators.required]),
+        mspbreaker: new FormControl('', [Validators.required]),
+        utilitymeter: new FormControl('', [Validators.required]),
+        utility: new FormControl('', [Validators.required]),
+        roofMaterial: new FormControl('', [Validators.required]),
+        existingSolarSystem: new FormControl('', [Validators.required]),
+        existingSolarSystemDetails: new FormControl(''),
+        newConstruction: new FormControl('', [Validators.required]),
+        newConstructionplans: new FormControl(''),
+        backupsystem: new FormControl(''),
+        loadnotbackedup: new FormControl(''),
+      });
+    }
+
+
     // this.addNewAppliance();
 
   }
@@ -298,6 +331,9 @@ export class CameraPage implements OnInit {
         break;
       case QuestionType.UTILITIES:
         this.showAlertWithUtilitiesModel();
+        break;
+      case QuestionType.MORE_PHOTOS:
+        this.showAlertForMorePhoto();
         break;
     }
   }
@@ -626,24 +662,47 @@ export class CameraPage implements OnInit {
   }
 
   saveSurvey() {
-    if (this.detailsForm.status === 'INVALID') {
-      this.showInvalidFormAlert();
-    } else {
-      if (this.totalPercent !== 1) {
-        this.utilities.showAlert('Please take all images');
+    if (this.surveyType === 'battery') {
+      if (this.detailsForm.status === 'INVALID') {
+        this.showInvalidFormAlert();
       } else {
-        this.utilities.showLoading('Saving Survey').then(() => {
-          this.apiService.updateSurveyForm(this.detailsForm.value, this.surveyId).subscribe((data) => {
-            this.utilities.hideLoading().then(() => {
-              this.showUpdateImagesAlert();
+        if (this.totalPercent !== 1) {
+          this.utilities.showAlert('Please take all images');
+        } else {
+          this.utilities.showLoading('Saving Survey').then(() => {
+            this.apiService.updateSurveyForm(this.detailsForm.value, this.surveyId).subscribe((data) => {
+              this.utilities.hideLoading().then(() => {
+                this.showUpdateImagesAlert();
 
-            });
-          }, (error) => {
-            this.utilities.hideLoading().then(() => {
-              this.utilities.errorSnackBar('Some error occurred');
+              });
+            }, (error) => {
+              this.utilities.hideLoading().then(() => {
+                this.utilities.errorSnackBar('Some error occurred');
+              });
             });
           });
-        });
+        }
+      }
+    } else {
+      if (this.pvDetailsForm.status === 'INVALID') {
+        this.showInvalidFormAlert();
+      } else {
+        if (this.totalPercent !== 1) {
+          this.utilities.showAlert('Please take all images');
+        } else {
+          this.utilities.showLoading('Saving Survey').then(() => {
+            this.apiService.updateSurveyForm(this.pvDetailsForm.value, this.surveyId).subscribe((data) => {
+              this.utilities.hideLoading().then(() => {
+                this.showUpdateImagesAlert();
+
+              });
+            }, (error) => {
+              this.utilities.hideLoading().then(() => {
+                this.utilities.errorSnackBar('Some error occurred');
+              });
+            });
+          });
+        }
       }
     }
   }
@@ -736,26 +795,50 @@ export class CameraPage implements OnInit {
 
   showInvalidFormAlert() {
     let error = '';
-    Object.keys(this.detailsForm.controls).forEach((key: string) => {
-      const control: AbstractControl = this.detailsForm.get(key);
-      if (control.invalid) {
-        if (error !== '') {
-          error = error + '<br/>';
+    if (this.surveyType === 'battery') {
+      Object.keys(this.detailsForm.controls).forEach((key: string) => {
+        const control: AbstractControl = this.detailsForm.get(key);
+        if (control.invalid) {
+          if (error !== '') {
+            error = error + '<br/>';
+          }
+          console.log(this.detailsForm.get(key));
+          if (control.errors.required === true) {
+            error = error + this.utilities.capitalizeWord(key) + ' is required';
+          }
+          if (control.errors.email === true) {
+            error = error + 'Invalid email';
+          }
+          if (control.errors.error !== null && control.errors.error !== undefined) {
+            error = error + control.errors.error;
+          }
         }
-        console.log(this.detailsForm.get(key));
-        if (control.errors.required === true) {
-          error = error + this.utilities.capitalizeWord(key) + ' is required';
+      });
+      console.log(this.detailsForm.value);
+      this.utilities.showAlert(error);
+    } else {
+      Object.keys(this.pvDetailsForm.controls).forEach((key: string) => {
+        const control: AbstractControl = this.pvDetailsForm.get(key);
+        if (control.invalid) {
+          if (error !== '') {
+            error = error + '<br/>';
+          }
+          console.log(this.pvDetailsForm.get(key));
+          if (control.errors.required === true) {
+            error = error + this.utilities.capitalizeWord(key) + ' is required';
+          }
+          if (control.errors.email === true) {
+            error = error + 'Invalid email';
+          }
+          if (control.errors.error !== null && control.errors.error !== undefined) {
+            error = error + control.errors.error;
+          }
         }
-        if (control.errors.email === true) {
-          error = error + 'Invalid email';
-        }
-        if (control.errors.error !== null && control.errors.error !== undefined) {
-          error = error + control.errors.error;
-        }
-      }
-    });
-    console.log(this.detailsForm.value);
-    this.utilities.showAlert(error);
+      });
+      console.log(this.pvDetailsForm.value);
+      this.utilities.showAlert(error);
+    }
+
   }
 
   addNewAppliance() {
@@ -779,6 +862,46 @@ export class CameraPage implements OnInit {
     this.navController.navigateForward('/gallery/' + this.surveyId);
   }
 
+  async showAlertForMorePhoto() {
+    this.stopCamera();
+    const alert = await this.alertController.create({
+      header: 'Capture More Photos',
+      subHeader: 'Do you want to take more photos?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            this.shiftToNextImage();
+            this.calculateImagePercentage();
+          }
+        }, {
+          text: 'Yes',
+          handler: () => {
+            this.selectedImageModel.questionType = QuestionType.NONE;
+            this.selectedSubMenuModel.images.push({
+              image: '',
+              imageTitle: '',
+              showPopup: true,
+              popupTitle: '',
+              popupQuestion: '',
+              questionType: QuestionType.MORE_PHOTOS,
+              questionOptions: [],
+              givenAnswer: '',
+              formValueToUpdate: '',
+              imageUploadTag: ''
+            });
+            this.shiftToNextImage();
+            this.calculateImagePercentage();
+          }
+        }
+      ],
+      backdropDismiss: false
+    });
+    this.calculateContentHeight();
+    await alert.present();
+  }
 
   async showAlertQuestion() {
     this.stopCamera();
@@ -788,9 +911,12 @@ export class CameraPage implements OnInit {
         text: option,
         handler: () => {
           if (this.selectedImageModel.formValueToUpdate !== '') {
-            this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(option.toLowerCase());
+            if (this.surveyType === 'battery') {
+              this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(option.toLowerCase());
+            } else {
+              this.pvDetailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(option.toLowerCase());
+            }
           }
-          console.log(this.detailsForm.value);
           this.selectedImageModel.givenAnswer = option.toLowerCase();
           this.captureNextImage();
         }
@@ -827,16 +953,18 @@ export class CameraPage implements OnInit {
             } else {
               this.shiftMainMenu();
             }
-            console.log(this.detailsForm.value);
           }
         }, {
           text: 'Yes',
           handler: () => {
             this.selectedSubMenuModel.answered = true;
             this.selectedSubMenuModel.allCaptured = true;
-            this.detailsForm.get(this.selectedSubMenuModel.formControlToUpdate).setValue(true);
+            if (this.surveyType === 'battery') {
+              this.detailsForm.get(this.selectedSubMenuModel.formControlToUpdate).setValue(true);
+            } else {
+              this.pvDetailsForm.get(this.selectedSubMenuModel.formControlToUpdate).setValue(true);
+            }
             this.startCamera();
-            console.log(this.detailsForm.value);
           }
         }
       ]
@@ -872,9 +1000,12 @@ export class CameraPage implements OnInit {
               this.showAlertWithInputNumber();
             } else {
               if (this.selectedImageModel.formValueToUpdate !== '') {
-                this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.input.toLowerCase());
+                if (this.surveyType === 'battery') {
+                  this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.input.toLowerCase());
+                } else {
+                  this.pvDetailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.input.toLowerCase());
+                }
               }
-              console.log(this.detailsForm.value);
               this.selectedImageModel.givenAnswer = data.input.toLowerCase();
               this.captureNextImage();
             }
@@ -895,10 +1026,17 @@ export class CameraPage implements OnInit {
     await modal.present();
     const { data } = await modal.onWillDismiss();
     console.log(data);
-    this.detailsForm.patchValue({
-      invertermake: data.invertermake,
-      invertermodel: data.invertermodel
-    });
+    if (this.surveyType === 'battery') {
+      this.detailsForm.patchValue({
+        invertermake: data.invertermake,
+        invertermodel: data.invertermodel
+      });
+    } else {
+      this.pvDetailsForm.patchValue({
+        invertermake: data.invertermake,
+        invertermodel: data.invertermodel
+      });
+    }
     this.captureNextImage();
   }
 
@@ -911,9 +1049,16 @@ export class CameraPage implements OnInit {
     await modal.present();
     const { data } = await modal.onWillDismiss();
     console.log(data);
-    this.detailsForm.patchValue({
-      utility: data.utilities
-    });
+    if (this.surveyType === 'battery') {
+      this.detailsForm.patchValue({
+        utility: data.utilities
+      });
+    } else {
+      this.pvDetailsForm.patchValue({
+        utility: data.utilities
+      });
+    }
+
     this.captureNextImage();
   }
 
@@ -944,9 +1089,12 @@ export class CameraPage implements OnInit {
               this.showAlertWithInputString();
             } else {
               if (this.selectedImageModel.formValueToUpdate !== '') {
-                this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.input.toLowerCase());
+                if (this.surveyType === 'battery') {
+                  this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.input.toLowerCase());
+                } else {
+                  this.pvDetailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.input.toLowerCase());
+                }
               }
-              console.log(this.detailsForm.value);
               this.selectedImageModel.givenAnswer = data.input.toLowerCase();
               this.captureNextImage();
             }
@@ -989,10 +1137,12 @@ export class CameraPage implements OnInit {
               this.showAlertWithRadioButtons();
             } else {
               if (this.selectedImageModel.formValueToUpdate !== '') {
-                this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.toLowerCase());
+                if (this.surveyType === 'battery') {
+                  this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.toLowerCase());
+                } else {
+                  this.pvDetailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.toLowerCase());
+                }
               }
-              console.log(this.detailsForm.value);
-              console.log(data);
               this.selectedImageModel.givenAnswer = data.toLowerCase();
               this.captureNextImage();
             }

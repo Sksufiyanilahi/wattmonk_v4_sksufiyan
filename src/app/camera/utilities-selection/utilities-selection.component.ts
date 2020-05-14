@@ -33,14 +33,23 @@ export class UtilitiesSelectionComponent implements OnInit {
   }
 
   getUtilities() {
-    this.apiService.getUtilities().subscribe(response => {
-      console.log(response);
-      this.listOfInverterMade = response;
-      this.cd.detectChanges();
-    }, responseError => {
-      const error: ErrorModel = responseError.error;
-      this.utilities.errorSnackBar(error.message[0].messages[0].message);
+    this.utilities.showLoading('Loading').then(() => {
+      this.apiService.getUtilities().subscribe(response => {
+        this.utilities.hideLoading().then(() => {
+          console.log(response);
+          this.listOfInverterMade = response;
+          this.cd.detectChanges();
+        });
+
+      }, responseError => {
+        this.utilities.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilities.errorSnackBar(error.message[0].messages[0].message);
+        });
+
+      });
     });
+
   }
 
   submitForm() {
