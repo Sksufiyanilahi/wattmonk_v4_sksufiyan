@@ -98,7 +98,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     const toast = await this.toastController.create({
       header: 'Delete Design',
       message: 'Are you sure you want to delete this design?',
-      cssClass: 'my-custom-class',
+      cssClass: 'my-custom-delete-class',
       buttons: [
         {
           text: 'Yes',

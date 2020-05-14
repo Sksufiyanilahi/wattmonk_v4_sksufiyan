@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content (click)="close()">
     <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
         <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index" class="ion-margin-top">
             <ion-col size="12">
@@ -32,8 +32,8 @@
 
 </ion-content>
 
-<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
-                   shouldBounce="false" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
+<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="400" draggable="false" disableDrag="true"
+                   shouldBounce="true" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
     <form [formGroup]="assignForm">
         <ion-grid class="drawer">
             <ion-row>
@@ -42,15 +42,19 @@
                                        formControlName="assignedto"></app-user-selector>
                 </ion-col>
             </ion-row>
-            <ion-row>
-                <ion-col size="auto">
+            <ion-row >
+                <ion-col size="12" >
+                    <span class="input-placeholder">comments</span>
+                </ion-col>
+                <ion-col size="12" style="padding-top: 0px;">
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
+                    formControlName="comment" ></ion-textarea>
+                </ion-col>
+            </ion-row>
+            <ion-row style="justify-content: flex-end;">
+                <ion-col size="auto" style="padding-top: 0px;">
                     <ion-button class="buttom-drawer-button" (click)="assignToDesigner()">
                         Confirm
-                    </ion-button>
-                </ion-col>
-                <ion-col size="auto">
-                    <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
-                        Cancel
                     </ion-button>
                 </ion-col>
             </ion-row>

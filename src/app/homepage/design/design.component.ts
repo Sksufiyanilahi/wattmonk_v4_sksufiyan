@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DesginDataModel } from '../../model/design.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
@@ -33,6 +33,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   listOfAssignees: AssigneeModel[] = [];
 
   designId = 0;
+  showBottomDraw: boolean = false;
 
   constructor(
     private utils: UtilitiesService,
@@ -47,7 +48,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
     this.assignForm = this.formBuilder.group({
-      assignedto: new FormControl('', [Validators.required])
+      assignedto: new FormControl('', [Validators.required]),
+      comment:new FormControl('')
     });
   }
 
@@ -116,6 +118,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   dismissBottomSheet() {
+    console.log("this",this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
   }
@@ -125,16 +128,21 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.utils.errorSnackBar('Please select a designer');
     } else {
       this.apiService.updateDesignForm(this.assignForm.value, this.designId).subscribe((value) => {
+        console.log("reach ",value);
+        this.utils.showSnackBar('Design request has been assigned to' + " " + value.name + " " +'successfully');
         this.dismissBottomSheet();
+        this.showBottomDraw = false;
         this.utils.setHomepageDesignRefresh(true);
       }, (error) => {
         this.dismissBottomSheet();
+        this.showBottomDraw = false;
       });
     }
 
   }
 
   openDesigners(id: number) {
+    if(this.listOfAssignees.length === 0){
     this.utils.showLoading('Getting Designers').then(() => {
       this.apiService.getSurveyors(UserRoles.DESIGNER).subscribe(assignees => {
         this.utils.hideLoading().then(() => {
@@ -142,6 +150,7 @@ export class DesignComponent implements OnInit, OnDestroy {
           // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
           assignees.forEach(item => this.listOfAssignees.push(item));
           console.log(this.listOfAssignees);
+          this.showBottomDraw = true;
           this.designId = id;
           this.utils.setBottomBarHomepage(false);
           this.drawerState = DrawerState.Docked;
@@ -156,7 +165,26 @@ export class DesignComponent implements OnInit, OnDestroy {
       });
     });
 
+  }else{
+    this.listOfAssignees;
+    this.designId = id;
+    this.utils.setBottomBarHomepage(false);
+    this.drawerState = DrawerState.Docked;
+    this.assignForm.patchValue({
+      assignto: 0
+    });
   }
+}
+
+close(){
+  if( this.showBottomDraw === true){
+    this.showBottomDraw = false;
+    this.drawerState = DrawerState.Bottom;
+    this.utils.setBottomBarHomepage(true);
+  }else{
+    this.showBottomDraw = true;
+  }
+}
 }
 
 
