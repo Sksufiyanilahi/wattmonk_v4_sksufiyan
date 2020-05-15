@@ -81,12 +81,18 @@
             </ion-grid>
 
             <ion-grid class="ion-padding">
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-input placeholder="permitDesign" class="form_input" autocapitalize="words"
-                                       formControlName="permitDesign"></ion-input>
-                        </ion-item>
+                <ion-row class="ion-align-items-center ion-justify-content-center">
+                    <ion-col *ngIf="prelimUrl === ''">
+                        <span>Select Prelim Design</span>
+                    </ion-col>
+                    <ion-col *ngIf="prelimUrl !== ''">
+                        <span>Prelim Design Selected</span>
+                    </ion-col>
+                    <ion-col size="auto" *ngIf="prelimUrl !== ''">
+                        <ion-button (click)="removeFile()" fill="clear">Remove</ion-button>
+                    </ion-col>
+                    <ion-col size="auto" *ngIf="prelimUrl === ''">
+                        <ion-button (click)="selectFile()" fill="clear">Select</ion-button>
                     </ion-col>
                 </ion-row>
 
@@ -118,7 +124,7 @@
                     <ion-col size="12">
                         <ion-item class="ion-no-padding">
                             <ion-label style="display: none">Type of roof material</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Type of roof material" ok-text="Ok"
+                            <ion-select class="form_input select_div" placeholder="Type of roof material*" ok-text="Ok"
                                         cancel-text="Cancel"
                                         formControlName="roofMaterial">
                                 <ion-select-option value="asphalt">asphalt</ion-select-option>
@@ -131,7 +137,7 @@
                     <ion-col size="12">
                         <ion-item class="ion-no-padding">
                             <ion-label style="display: none">Service feed source</ion-label>
-                            <ion-select class="form_input select_div" placeholder="service feed source" ok-text="Ok"
+                            <ion-select class="form_input select_div" placeholder="Service feed source*" ok-text="Ok"
                                         cancel-text="Cancel"
                                         formControlName="servicefeedsource">
                                 <ion-select-option value="underground">Underground</ion-select-option>
@@ -146,7 +152,7 @@
                     <ion-col size="12">
                         <ion-item class="ion-no-padding">
                             <ion-label style="display: none">Any existing solar system</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Any Existing Solar System"
+                            <ion-select class="form_input select_div" placeholder="Any Existing Solar System*"
                                         ok-text="Ok"
                                         cancel-text="Cancel"
                                         formControlName="existingSolarSystem">
@@ -159,7 +165,8 @@
                 <ion-row *ngIf="pvDetailsForm.get('existingSolarSystem').value === 'true'">
                     <ion-col size="12" class="ion-no-padding">
                         <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
-                                      formControlName="existingSolarSystemDetails" placeholder="Existing solar system details"></ion-textarea>
+                                      formControlName="existingSolarSystemDetails"
+                                      placeholder="Existing solar system details*"></ion-textarea>
                     </ion-col>
                 </ion-row>
 
@@ -167,7 +174,7 @@
                     <ion-col size="12">
                         <ion-item class="ion-no-padding">
                             <ion-label style="display: none">is it newly constructed house</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Is it newly constructed house"
+                            <ion-select class="form_input select_div" placeholder="Is it newly constructed house*"
                                         ok-text="Ok"
                                         cancel-text="Cancel"
                                         formControlName="newConstruction">
@@ -180,7 +187,8 @@
                 <ion-row *ngIf="pvDetailsForm.get('newConstruction').value === 'true'">
                     <ion-col size="12" class="ion-no-padding">
                         <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
-                                      formControlName="newConstructionplans" placeholder="New construction plans"></ion-textarea>
+                                      formControlName="newConstructionplans"
+                                      placeholder="New construction plans*"></ion-textarea>
                     </ion-col>
                 </ion-row>
 
@@ -188,7 +196,7 @@
                     <ion-col size="12">
                         <ion-item class="ion-no-padding">
                             <ion-label style="display: none">Is it newly constructed house</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Client require backup system"
+                            <ion-select class="form_input select_div" placeholder="Client require backup system*"
                                         ok-text="Ok"
                                         cancel-text="Cancel"
                                         formControlName="backupsystem">
@@ -200,7 +208,7 @@
                 </ion-row>
                 <ion-row *ngIf="surveyType === 'pvbattery'" class="ion-margin-top">
                     <ion-col size="12" class="ion-no-padding">
-                        <span class="input-placeholder">any load not backed up</span>
+                        <span class="input-placeholder">Any load not backed up*</span>
                     </ion-col>
                     <ion-col size="12" class="ion-no-padding">
                         <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"

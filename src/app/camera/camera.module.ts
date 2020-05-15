@@ -14,6 +14,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { InverterSelectionPage } from './inverter-selection/inverter-selection.page';
 import { UtilitiesSelectionComponent } from './utilities-selection/utilities-selection.component';
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { UtilitiesSelectionComponent } from './utilities-selection/utilities-sel
     CameraPreview,
     Base64ToGallery,
     File,
-    Diagnostic
+    Diagnostic,
+    FileChooser
   ]
 })
 export class CameraPageModule {

@@ -15,6 +15,7 @@ import { ErrorModel } from '../model/error.model';
 import { ApiService } from '../api.service';
 import { InverterSelectionPage } from './inverter-selection/inverter-selection.page';
 import { UtilitiesSelectionComponent } from './utilities-selection/utilities-selection.component';
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
 
 @Component({
   selector: 'app-camera',
@@ -58,6 +59,7 @@ export class CameraPage implements OnInit {
   totalImagesToUpload = 1;
   showImageOptions = false;
   private surveyType: string;
+  prelimUrl = '';
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -72,7 +74,8 @@ export class CameraPage implements OnInit {
     private route: ActivatedRoute,
     private cd: ChangeDetectorRef,
     private apiService: ApiService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private fileChooser: FileChooser
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.surveyType = this.route.snapshot.paramMap.get('type');
@@ -94,7 +97,6 @@ export class CameraPage implements OnInit {
         invertermake: new FormControl('', [Validators.required]),
         invertermodel: new FormControl('', [Validators.required]),
         numberofmodules: new FormControl('', [Validators.required]),
-        permitDesign: new FormControl('', []),
         additionalNotes: new FormControl('', []),
         // appliances: this.formBuilder.array([]),
         batterybackup: new FormControl('', [Validators.required]),
@@ -118,7 +120,6 @@ export class CameraPage implements OnInit {
 
     } else {
       this.pvDetailsForm = this.formBuilder.group({
-        permitDesign: new FormControl('', []),
         additionalNotes: new FormControl('', []),
         servicefeedsource: new FormControl('', [Validators.required]),
         mainbreakersize: new FormControl('', [Validators.required]),
@@ -1176,5 +1177,15 @@ export class CameraPage implements OnInit {
     this.selectedImageModel.givenAnswer = '';
     this.showImageOptions = false;
     this.startCamera();
+  }
+
+  selectFile() {
+    this.fileChooser.open()
+      .then(uri => this.prelimUrl = uri)
+      .catch(e => console.log(e));
+  }
+
+  removeFile() {
+    this.prelimUrl = '';
   }
 }

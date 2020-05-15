@@ -195,7 +195,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             phonenumber: this.survey.phonenumber,
             datetime: date.getTime(),
             comments: this.survey.comments,
-            address: this.survey.comments,
+            address: this.survey.address,
             source: this.survey.source,
             createdby: this.survey.createdby.id
           });
