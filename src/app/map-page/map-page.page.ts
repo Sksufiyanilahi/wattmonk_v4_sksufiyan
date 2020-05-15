@@ -3,9 +3,11 @@ import { GeolocationOptions, Geoposition, Geolocation } from '@ionic-native/geol
 import { google } from 'google-maps';
 import { UtilitiesService } from '../utilities.service';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform, AlertController, ToastController } from '@ionic/angular';
 import { AddressModel } from '../model/address.model';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
+import { StorageService } from '../storage.service';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 declare var google;
 
@@ -38,6 +40,12 @@ export class MapPagePage implements OnInit {
     private router: Router,
     private navController: NavController,
     private nativeGeocoder : NativeGeocoder,
+    private diagnostic: Diagnostic,
+    private geolocation: Geolocation,
+    private platform: Platform,
+    private storage: StorageService,
+    private alertController: AlertController,
+    private toastController: ToastController
   ) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
@@ -110,7 +118,6 @@ export class MapPagePage implements OnInit {
       //   long: responses[0].geometry.location.lng()
       // };
       // this.utils.setAddress(address);
-      this.goBack();
     });
   }
 
@@ -141,6 +148,7 @@ export class MapPagePage implements OnInit {
           postalcode:result[0].postalCode
         };
         this.utilities.setAddress(address);
+        this.goBack();
       })
       .catch((error: any) => {
         alert('Error getting location' + JSON.stringify(error));
@@ -165,6 +173,102 @@ export class MapPagePage implements OnInit {
     }
     return address.slice(0, -2);
   }
+
+  getGeoLocation() {
+    this.utilities.showLoading('Getting Location');
+    this.geolocation.getCurrentPosition().then((resp) => {
+      console.log('resp',resp);
+      this.utilities.hideLoading();
+      this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
+    }).catch((error) => {
+      this.utilities.errorSnackBar('Unable to get location');
+      console.log('Error getting location', error);
+      this.showNoLocation();
+    });
+
+  }
+
+  async  showNoLocation() {
+    const toast = await this.toastController.create({
+      header: 'Error',
+      message: 'Unable to get location',
+      cssClass: 'my-custom-class',
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.goBack();
+          }
+        }
+      ]
+    });
+    toast.present();
+  }
+
+
+  fetchLocation() {
+    if (this.platform.is('ios')) {
+      this.getGeoLocation();
+    } else {
+      this.diagnostic.isGpsLocationEnabled().then((status) => {
+        if (status === true) {
+          this.getGeoLocation();
+          // this.utilities.showLoading('Getting Location').then(() => {
+           
+          // });
+        } else {
+          this.askToChangeSettings();
+        }
+      });
+    }
+
+  }
+
+  async askToChangeSettings() {
+    const toast = await this.toastController.create({
+      header: 'Location Disabled',
+      message: 'Please enable location services',
+      cssClass: 'my-custom-class',
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+            this.changeLocationSettings();
+          }
+        }, {
+          text: 'Cancel',
+          handler: () => {
+            this.goBack();
+          }
+        }
+      ]
+    });
+    toast.present();
+  }
+
+  changeLocationSettings() {
+
+    this.diagnostic.switchToLocationSettings();
+    this.diagnostic.registerLocationStateChangeHandler((state) => {
+      if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) ||
+        (this.platform.is('ios')) && (state === this.diagnostic.permissionStatus.GRANTED ||
+          state === this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE
+        )) {
+        this.checkLocationAccess();
+      }
+
+    });
+  }
+
+  checkLocationAccess() {
+    this.diagnostic.isLocationAuthorized().then((success) => {
+      this.fetchLocation();
+    }, (error) => {
+      this.utilities.showSnackBar('GPS Not Allowed');
+    });
+
+  }
+
 
 
   onCancel() {

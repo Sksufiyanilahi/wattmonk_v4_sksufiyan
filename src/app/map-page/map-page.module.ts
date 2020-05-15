@@ -8,6 +8,7 @@ import { MapPagePageRoutingModule } from './map-page-routing.module';
 
 import { MapPagePage } from './map-page.page';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
   ],
   declarations: [MapPagePage],
   providers: [
+    Diagnostic,
     NativeGeocoder,
   ]
 })
