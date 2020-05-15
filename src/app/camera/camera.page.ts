@@ -58,7 +58,7 @@ export class CameraPage implements OnInit {
   imageUploadIndex = 1;
   totalImagesToUpload = 1;
   showImageOptions = false;
-  private surveyType: string;
+  surveyType: string;
   prelimUrl = '';
 
   constructor(
