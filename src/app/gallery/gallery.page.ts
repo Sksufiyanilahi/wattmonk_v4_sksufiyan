@@ -21,7 +21,8 @@ export class GalleryPage implements OnInit {
   survey: SurveyDataModel;
   listOfImages: Image[] = [];
   image: Image;
-  menuName = 'MSP Images';
+  menuName = 'Electricals';
+  selectedTab = 'mspimages';
 
   constructor(
     private popoverController: PopoverController,
@@ -71,19 +72,9 @@ export class GalleryPage implements OnInit {
       this.apiService.getSurveyDetail(this.surveyId).subscribe((result) => {
         this.utilities.hideLoading().then(() => {
           this.survey = result;
-          this.storage.get(this.surveyId + '').then((data: MenuModel[]) => {
-            console.log(data);
-            if (data !== null) {
-              this.setDataToDataModel(data);
-            } else {
-              this.listOfImages = this.survey.mspimages;
-              this.currentPosition = 0;
-              this.setImage();
-            }
-          }, (error) => {
-            console.log(error);
-
-          });
+          this.listOfImages = this.survey.mspimages;
+          this.currentPosition = 0;
+          this.setImage();
         });
       }, (error) => {
         this.utilities.hideLoading();
@@ -118,28 +109,18 @@ export class GalleryPage implements OnInit {
     });
     popover.onWillDismiss().then((data) => {
       switch (data.data) {
-        case 'mspimages':
-          this.menuName = 'MSP Images';
+        case 'electrical':
+          this.menuName = 'Electricals';
+          this.setImageSource();
           break;
-        case 'pvinverterimages':
-          this.menuName = 'PV Inverter';
-          break;
-        case 'pvmeterimages':
-          this.menuName = 'PV Meter';
-          break;
-        case 'utilitymeterimages':
-          this.menuName = 'Utility Meter';
-          break;
-        case 'roofimages':
-          this.menuName = 'Roof Images';
-          break;
-        case 'acdisconnectimages':
-          this.menuName = 'Ac Disconnect Images';
+        case 'roof':
+          this.menuName = 'Roof';
+          this.listOfImages = this.survey.roofimages;
+          this.currentPosition = 0;
+          this.setImage();
           break;
       }
-      this.listOfImages = this.survey[data.data];
-      this.currentPosition = 0;
-      this.setImage();
+
     });
     return await popover.present();
   }
@@ -151,5 +132,17 @@ export class GalleryPage implements OnInit {
   private setImage() {
     this.image = this.listOfImages[this.currentPosition];
     console.log(this.image);
+  }
+
+  onTabSelected(event: CustomEvent) {
+    console.log(event.detail.value);
+    this.selectedTab = event.detail.value;
+    this.setImageSource();
+  }
+
+  setImageSource() {
+    this.listOfImages = this.survey[this.selectedTab];
+    this.currentPosition = 0;
+    this.setImage();
   }
 }

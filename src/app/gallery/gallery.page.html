@@ -16,6 +16,27 @@
             </ion-col>
 
         </ion-row>
+        <ion-row *ngIf="menuName === 'Electricals'">
+            <ion-col>
+                <ion-segment mode="ios" class="segments" (ionChange)="onTabSelected($event)">
+                    <ion-segment-button value="mspimages">
+                        <ion-label>MSP</ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="utilitymeterimages">
+                        <ion-label>Utility Meter</ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="pvinverterimages">
+                        <ion-label>Pv Inverter</ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="pvmeterimages">
+                        <ion-label>Pv Meter</ion-label>
+                    </ion-segment-button>
+                    <ion-segment-button value="acdisconnectimages">
+                        <ion-label>Ac Disconnect</ion-label>
+                    </ion-segment-button>
+                </ion-segment>
+            </ion-col>
+        </ion-row>
     </ion-grid>
 
     <ion-grid class="ion-no-padding" slot="fixed" style="bottom: 0; width: 100vw;" *ngIf="listOfImages.length !== 0">
