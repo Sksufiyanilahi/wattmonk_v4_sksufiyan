@@ -389,4 +389,8 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.utils.errorSnackBar(error.message[0].messages[0].message);
     });
   }
+
+  // onProjectChange(event){
+  // console.log("eve",this.desginForm);
+  // }
 }
