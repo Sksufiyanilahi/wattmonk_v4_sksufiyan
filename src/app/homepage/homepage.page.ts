@@ -19,6 +19,7 @@ import { DrawerState } from 'ion-bottom-drawer';
 export class HomepagePage implements OnInit, OnDestroy {
 
   searchQuery = '';
+  searchbarElement = '';
   items: string[];
 
   showSearchBar = false;
@@ -46,7 +47,7 @@ export class HomepagePage implements OnInit, OnDestroy {
     private geolocation: Geolocation,
     private toastController: ToastController
   ) {
-    this.initializeItems();
+    // this.initializeItems();
   }
 
   ngOnInit() {
@@ -80,6 +81,16 @@ export class HomepagePage implements OnInit, OnDestroy {
         return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
       });
     }
+  }
+
+  searchDesgin() {
+    if (this.searchbarElement !== '') {
+      this.apiService.searchAllDesgin(this.searchbarElement).subscribe((item) => {
+      }, (error) => {
+        console.log(error);
+      });
+    }
+
   }
 
   requestLocationPermission() {

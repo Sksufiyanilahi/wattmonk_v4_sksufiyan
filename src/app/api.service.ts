@@ -126,6 +126,10 @@ export class ApiService {
     return this.http.get<AssigneeModel[]>(this.baseUrl + '/surveyors?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
 
+  searchAllDesgin(searchterm) {
+    return this.http.get(this.baseUrl + '/globalsearch?term=' + searchterm , { headers: this.headers });
+  }
+
   getDesigners(userType: number): Observable<AssigneeModel[]> {
     return this.http.get<AssigneeModel[]>(this.baseUrl + '/designers?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
