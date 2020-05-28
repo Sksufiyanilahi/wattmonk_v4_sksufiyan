@@ -13,6 +13,11 @@
                                placeholder="Search for a place"></ion-searchbar>
 
             </ion-col>
+            <ion-col size="auto">
+                <ion-button fill="clear" (click)="fetchLocation()" style="width: 48px;">
+                    <ion-icon name="location-outline"></ion-icon>
+                </ion-button>
+            </ion-col>
         </ion-row>
     </ion-grid>
 </ion-header>
@@ -33,15 +38,7 @@
             Search for address
         </ion-label>
     </ion-item>
-
-    <ion-row *ngIf="autocompleteItems.length === 0" style="justify-content: center;">
-        <ion-col size="auto" style="padding-top: 0px;">
-            <ion-button class="buttom-drawer-button" (click)="fetchLocation()">
-                My current location
-            </ion-button>
-        </ion-col>
-    </ion-row>
-
+    
 
 </ion-content>
 

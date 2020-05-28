@@ -1,31 +1,29 @@
+<ion-header class="ion-no-border">
+    <ion-grid>
+        <ion-row>
+            <ion-col size="auto">
+                <ion-button fill="clear" (click)="goBack()" style="width: 48px;">
+                    <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+                </ion-button>
+            </ion-col>
+            <ion-col></ion-col>
+            <ion-col size="auto">
+                    <ion-button fill="clear" style="width: 48px;">
+                        <ion-icon class="action-button-color" style="font-size: 26px;"
+                                  name="settings-outline"></ion-icon>
+                    </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
 <ion-content style="--background: #FEF8F8;">
 
     <ion-grid class="profile-background">
         <ion-row>
-            <ion-col size="2">
-                <ion-buttons>
-                    <ion-button (click)="goBack()">
-                        <ion-icon class="action-button-color" style="font-size: 26px;"
-                                  name="chevron-back-outline"></ion-icon>
-                    </ion-button>
-                </ion-buttons>
-            </ion-col>
-            <ion-col size="8" margin-top>
-                <ion-row>
-                    <ion-col size="12">
-                        <div style="text-align:center;">
-                            <img src="assets/images/user_placeholder.jpg" alt="User Image" class="user-image">
-                        </div>
-                    </ion-col>
-                </ion-row>
-            </ion-col>
-            <ion-col size="2">
-                <ion-buttons>
-                    <ion-button>
-                        <ion-icon class="action-button-color" style="font-size: 26px;"
-                                  name="settings-outline"></ion-icon>
-                    </ion-button>
-                </ion-buttons>
+            <ion-col size="12">
+                <div style="text-align:center;">
+                    <img src="assets/images/user_placeholder.jpg" alt="User Image" class="user-image">
+                </div>
             </ion-col>
         </ion-row>
         <ion-row>

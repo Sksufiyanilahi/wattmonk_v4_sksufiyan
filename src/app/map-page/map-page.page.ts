@@ -39,7 +39,7 @@ export class MapPagePage implements OnInit {
     private utilities: UtilitiesService,
     private router: Router,
     private navController: NavController,
-    private nativeGeocoder : NativeGeocoder,
+    private nativeGeocoder: NativeGeocoder,
     private diagnostic: Diagnostic,
     private geolocation: Geolocation,
     private platform: Platform,
@@ -52,41 +52,8 @@ export class MapPagePage implements OnInit {
   }
 
   ngOnInit() {
-    this.getUserPosition();
-  }
-
-  addMap(lat, long) {
-
-    const latLng = new google.maps.LatLng(lat, long);
-
-    // const mapOptions = {
-    //   center: latLng,
-    //   zoom: 15,
-    //   mapTypeId: google.maps.MapTypeId.ROADMAP
-    // };
-
-    // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-    // this.addMarker();
 
   }
-
-  // addMarker() {
-  //
-  //   const marker = new google.maps.Marker({
-  //     map: this.map,
-  //     animation: google.maps.Animation.DROP,
-  //     position: this.map.getCenter()
-  //   });
-  //   const content = '<p>This is your current position !</p>';
-  //   const infoWindow = new google.maps.InfoWindow({
-  //     content
-  //   });
-  //
-  //   google.maps.event.addListener(marker, 'click', () => {
-  //     infoWindow.open(this.map, marker);
-  //   });
-  //
-  // }
 
   updateSearchResults(event: CustomEvent) {
     const input = event.detail.value;
@@ -110,53 +77,45 @@ export class MapPagePage implements OnInit {
     this.geocoder.geocode({
       placeId: item.place_id
     }, (responses, status) => {
-      console.log("respo",responses);
-      this.getGeoEncoder(responses[0].geometry.location.lat(),responses[0].geometry.location.lng());
-      // const address: AddressModel = {
-      //   address : responses[0].formatted_address,
-      //   lat: responses[0].geometry.location.lat(),
-      //   long: responses[0].geometry.location.lng()
-      // };
-      // this.utils.setAddress(address);
+      console.log('respo', responses);
+      this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
     });
   }
 
-  getUserPosition() {
-    this.options = {
-      enableHighAccuracy: false,
-      timeout: 5000
-    };
-    this.geoLocation.getCurrentPosition(this.options).then((pos: Geoposition) => {
-      this.addMap(pos.coords.latitude, pos.coords.longitude);
-    }, (err: PositionError) => {
-      console.log('error : ' + err.message);
-    });
-  }
-
-  getGeoEncoder(latitude, longitude) {
+  getGeoEncoder(latitude, longitude, formattedAddress) {
     // this.utilities.hideLoading().then((success) => {
-    this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
-      .then((result: NativeGeocoderResult[]) => {
-        console.log("resu",result);
-        const address: AddressModel = {
-          address: this.generateAddress(result[0]),
-          lat: latitude,
-          long: longitude,
-          country:result[0].countryName,
-          state: result[0].administrativeArea,
-          city:result[0].locality,
-          postalcode:result[0].postalCode
-        };
-        this.utilities.setAddress(address);
-        this.goBack();
-      })
-      .catch((error: any) => {
-        alert('Error getting location' + JSON.stringify(error));
-      });
-    // }, (error) => {
-    //
-    // }
-    // );
+    this.utilities.showLoading('Loading').then(() => {
+      this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+        .then((result: NativeGeocoderResult[]) => {
+          let add = '';
+          if (formattedAddress === '') {
+            add = this.generateAddress(result[0]);
+          } else {
+            add = formattedAddress;
+          }
+          this.utilities.hideLoading().then(() => {
+            console.log('resu', result);
+            const address: AddressModel = {
+              address: add,
+              lat: latitude,
+              long: longitude,
+              country: result[0].countryName,
+              state: result[0].administrativeArea,
+              city: result[0].locality,
+              postalcode: result[0].postalCode
+            };
+            this.utilities.setAddress(address);
+            this.goBack();
+          });
+
+        })
+        .catch((error: any) => {
+          this.utilities.hideLoading().then(() => {
+            alert('Error getting location' + JSON.stringify(error));
+          });
+
+        });
+    });
   }
 
   generateAddress(addressObj) {
@@ -177,9 +136,9 @@ export class MapPagePage implements OnInit {
   getGeoLocation() {
     this.utilities.showLoading('Getting Location');
     this.geolocation.getCurrentPosition().then((resp) => {
-      console.log('resp',resp);
+      console.log('resp', resp);
       this.utilities.hideLoading();
-      this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
+      this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude, '');
     }).catch((error) => {
       this.utilities.errorSnackBar('Unable to get location');
       console.log('Error getting location', error);
@@ -188,7 +147,7 @@ export class MapPagePage implements OnInit {
 
   }
 
-  async  showNoLocation() {
+  async showNoLocation() {
     const toast = await this.toastController.create({
       header: 'Error',
       message: 'Unable to get location',
@@ -214,7 +173,7 @@ export class MapPagePage implements OnInit {
         if (status === true) {
           this.getGeoLocation();
           // this.utilities.showLoading('Getting Location').then(() => {
-           
+
           // });
         } else {
           this.askToChangeSettings();
@@ -268,7 +227,6 @@ export class MapPagePage implements OnInit {
     });
 
   }
-
 
 
   onCancel() {
