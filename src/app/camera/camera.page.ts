@@ -57,7 +57,7 @@ export class CameraPage implements OnInit {
   listOfRoofMaterial: SolarMake[] = [];
   listOfSolarMade: SolarMadeModel[] = [];
 
-  hardwareCameraEnabled = false;
+  hardwareCameraEnabled = true;
   imageAreaHeight = 600;
   imageUploadIndex = 1;
   totalImagesToUpload = 1;
