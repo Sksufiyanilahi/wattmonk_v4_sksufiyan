@@ -84,19 +84,19 @@ export class MapPagePage implements OnInit {
 
   getGeoEncoder(latitude, longitude, formattedAddress) {
 
-    // TODO remove later
-    const address: AddressModel = {
-      address: 'Vasant Kunj, New Delhi, Delhi',
-      lat: 28.5200491,
-      long: 77.158687,
-      country: 'India',
-      state: 'Delhi',
-      city: 'New Delhi',
-      postalcode: '110070'
-    };
-    this.utilities.setAddress(address);
-    this.goBack();
-    return;
+    // // TODO remove later
+    // const address: AddressModel = {
+    //   address: 'Vasant Kunj, New Delhi, Delhi',
+    //   lat: 28.5200491,
+    //   long: 77.158687,
+    //   country: 'India',
+    //   state: 'Delhi',
+    //   city: 'New Delhi',
+    //   postalcode: '110070'
+    // };
+    // this.utilities.setAddress(address);
+    // this.goBack();
+    // return;
 
     this.utilities.showLoading('Loading').then(() => {
       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
