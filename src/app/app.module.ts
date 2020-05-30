@@ -13,6 +13,7 @@ import { AuthGuardService } from './auth-guard.service';
 import { StorageService } from './storage.service';
 import { UtilitiesModule } from './utilities/utilities.module';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 // import { FCM } from '@ionic-native/fcm/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';

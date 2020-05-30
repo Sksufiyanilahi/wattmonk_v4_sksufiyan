@@ -1,0 +1,14 @@
+<ion-content fullscreen>
+    <ion-grid>
+        <ion-row>
+            <ion-col size="12" class="ion-padding">
+                Please take these images before saving this survey
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-list class="ion-no-padding">
+        <ion-item *ngFor="let image of listOfImages" (click)="openImage(image)">
+            <span>{{image.title}}</span>
+        </ion-item>
+    </ion-list>
+</ion-content>

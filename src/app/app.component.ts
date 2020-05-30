@@ -7,6 +7,8 @@ import { StorageService } from './storage.service';
 // import { FCM } from '@ionic-native/fcm/ngx';
 import { ApiService } from './api.service';
 import { UtilitiesService } from './utilities.service';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { COMET_CHAT_APP_ID, COMET_CHAT_REGION } from './model/constants';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +36,7 @@ export class AppComponent {
       this.splashScreen.hide();
       this.getFcmToken();
       this.getNotification();
+      this.setupCometChat();
     });
     if (this.storageService.isUserPresent()) {
       this.apiservice.refreshHeader();
@@ -56,6 +59,18 @@ export class AppComponent {
     //     console.log('Received in foreground');
     //   }
     // });
+  }
+
+  setupCometChat() {
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMET_CHAT_REGION).build();
+    CometChat.init(COMET_CHAT_APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+      },
+      error => {
+        console.log('Initialization failed with error:', error);
+      }
+    );
   }
 
 }

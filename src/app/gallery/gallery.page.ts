@@ -119,6 +119,12 @@ export class GalleryPage implements OnInit {
           this.currentPosition = 0;
           this.setImage();
           break;
+        default:
+          this.menuName = data.data;
+          this.listOfImages = this.survey[data.data];
+          this.currentPosition = 0;
+          this.setImage();
+          break;
       }
 
     });

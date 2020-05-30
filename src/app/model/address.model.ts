@@ -4,6 +4,6 @@ export class AddressModel {
   long: number;
   country: string;
   state: string;
-  city:string;
+  city: string;
   postalcode: string;
 }

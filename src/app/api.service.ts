@@ -134,13 +134,14 @@ export class ApiService {
     return this.http.get<AssigneeModel[]>(this.baseUrl + '/designers?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
 
-  uploadImage(surveyId: number, key: string, blob: Blob) {
+  uploadImage(surveyId: number, key: string, blob: Blob, fileName: string) {
     const data = new FormData();
     data.append('files', blob);
     data.append('path', '');
     data.append('refId', surveyId + '');
     data.append('ref', 'survey');
     data.append('field', key);
+    data.append('name', fileName);
 
     return this.http.post(this.baseUrl + '/upload', data, { headers: this.uploadHeaders });
   }

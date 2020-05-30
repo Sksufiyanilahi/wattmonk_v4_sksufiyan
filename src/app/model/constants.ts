@@ -18,6 +18,10 @@ export enum UserRoles {
 export const INVALID_EMAIL_MESSAGE = 'Invalid Email';
 export const FIELD_REQUIRED = 'This field is required';
 
+export const COMET_CHAT_APP_ID = '190385dcec51285';
+export const COMET_CHAT_AUTH_KEY = '5cafae1939d4fc620698c50ae3f25e727fc90213';
+export const COMET_CHAT_REGION = 'us';
+
 
 export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
   {
@@ -249,7 +253,7 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
           givenAnswer: '',
           formValueToUpdate: 'numberofmodules',
           imageUploadTag: 'roofimages',
-          imageName: ''
+          imageName: 'solarpanels'
         }]
       }
     ]
@@ -268,7 +272,7 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
       givenAnswer: '',
       formValueToUpdate: '',
       imageUploadTag: 'roofimages',
-      imageName: ''
+      imageName: 'roofimages'
     }],
     subMenu: []
   },
@@ -285,8 +289,8 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
-      imageUploadTag: 'roofimages',
-      imageName: ''
+      imageUploadTag: 'appliancesimages',
+      imageName: 'appliances'
     }],
     subMenu: []
   },
@@ -386,8 +390,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages',
-            imageName: ''
+            imageUploadTag: 'existingsubpanelimages',
+            imageName: 'Existingsubpanelimages'
           }
         ]
       },
@@ -455,7 +459,7 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'roofimages',
-            imageName: ''
+            imageName: 'roofphotos'
           }
         ]
       },
@@ -478,8 +482,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages',
-            imageName: ''
+            imageUploadTag: 'roofdimensionimages',
+            imageName: 'roofdimensions'
           }
         ]
       },
@@ -502,8 +506,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages',
-            imageName: ''
+            imageUploadTag: 'obstaclesimages',
+            imageName: 'obstaclesphotos'
           }
         ]
       },
@@ -526,8 +530,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages',
-            imageName: ''
+            imageUploadTag: 'obstaclesdimensionsimages',
+            imageName: 'obstaclesdimensions'
           }
         ]
       }
@@ -557,8 +561,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages',
-            imageName: ''
+            imageUploadTag: 'atticimages',
+            imageName: 'atticphotos'
           }
         ]
       }
@@ -577,8 +581,8 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
-      imageUploadTag: 'roofimages',
-      imageName: ''
+      imageUploadTag: 'appliancesimages',
+      imageName: 'appliances'
     }],
     subMenu: []
   },
@@ -678,8 +682,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages',
-            imageName: ''
+            imageUploadTag: 'existingsubpanelimages',
+            imageName: 'existingsubpanelimages'
           }
         ]
       },
@@ -703,7 +707,7 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'roofimages',
-            imageName: ''
+            imageName: 'locationofbattery'
           }
         ]
       },
@@ -771,7 +775,7 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'roofimages',
-            imageName: ''
+            imageName: 'roofimage'
           }
         ]
       },
@@ -794,8 +798,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages',
-            imageName: ''
+            imageUploadTag: 'roofdimensionimages',
+            imageName: 'roofdimensions'
           }
         ]
       },
@@ -818,8 +822,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages',
-            imageName: ''
+            imageUploadTag: 'obstaclesimages',
+            imageName: 'obstaclephotos'
           }
         ]
       },
@@ -842,8 +846,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages',
-            imageName: ''
+            imageUploadTag: 'obstaclesdimensionsimages',
+            imageName: 'obstaclesdimensions'
           }
         ]
       }
@@ -873,8 +877,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             questionOptions: [],
             givenAnswer: '',
             formValueToUpdate: '',
-            imageUploadTag: 'roofimages',
-            imageName: ''
+            imageUploadTag: 'atticimages',
+            imageName: 'atticphotos'
           }
         ]
       }
@@ -893,8 +897,8 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
-      imageUploadTag: 'roofimages',
-      imageName: ''
+      imageUploadTag: 'appliancesimages',
+      imageName: 'appliances'
     }],
     subMenu: []
   },

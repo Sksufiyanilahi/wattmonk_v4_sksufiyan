@@ -66,10 +66,12 @@ const routes: Routes = [
     path: 'message',
     loadChildren: () => import('./message/message.module').then( m => m.MessagePageModule),
     canActivate: [AuthGuardService]
+  },
+  {
+    path: 'chat/:id',
+    loadChildren: () => import('./chat/chat.module').then( m => m.ChatPageModule),
+    canActivate: [AuthGuardService]
   }
-
-
-
 ];
 
 @NgModule({

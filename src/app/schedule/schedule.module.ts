@@ -9,6 +9,7 @@ import { DesignComponent } from './design/design.component';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
+import { NumberOnlyDirective } from './number.directive';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
   declarations: [
     SchedulePage,
     SurveyComponent,
-    DesignComponent
+    DesignComponent,
+    NumberOnlyDirective
   ],
   providers: [
     Diagnostic,

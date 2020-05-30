@@ -24,6 +24,12 @@ export class SurveyDataModel {
   utilitymeterimages: Image[];
   acdisconnectimages: Image[];
   pvinverterimages: Image[];
+  existingsubpanelimages: Image[];
+  appliancesimages: Image[];
+  atticimages: Image[];
+  roofdimensionimages: Image[];
+  obstaclesimages: Image[];
+  obstaclesdimensionsimages: Image[];
   pvmeterimages: Image[];
   roofimages: Image[];
   modulemake: Solarmake;

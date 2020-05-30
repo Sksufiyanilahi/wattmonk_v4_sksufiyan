@@ -1,56 +1,83 @@
 <ion-header class="ion-no-border">
-  <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
-    <ion-row>
-        <ion-col size="auto">
-            <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
-                <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
-            </ion-button>
-        </ion-col>
-        <ion-col>
-            <ion-grid class="ion-align-items-center ion-justify-content-center">
-                <ion-row class="ion-align-items-center ion-justify-content-center">
-                    <span class="survey-name ion-text-center">Chats</span>
-                </ion-row>
-            </ion-grid>
-        </ion-col>
-        <ion-col size="auto">
-        </ion-col>
-        <ion-col size="auto">
-        </ion-col>
-    </ion-row>
-</ion-grid>
-<ion-grid class="position-relative ion-no-padding">
-  <ion-row class="ion-no-padding border-header header-half-height">
-  </ion-row>
-  <ion-row class="ion-no-padding header-half-height">
+    <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
+        <ion-row>
+            <ion-col size="auto">
+                <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+                    <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+                </ion-button>
+            </ion-col>
+            <ion-col>
+                <ion-grid class="ion-align-items-center ion-justify-content-center">
+                    <ion-row class="ion-align-items-center ion-justify-content-center">
+                        <span class="survey-name ion-text-center">Chats</span>
+                    </ion-row>
+                </ion-grid>
+            </ion-col>
+            <ion-col size="auto">
+            </ion-col>
+            <ion-col size="auto">
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <ion-grid class="position-relative ion-no-padding">
+        <ion-row class="ion-no-padding border-header header-half-height">
+        </ion-row>
+        <ion-row class="ion-no-padding header-half-height">
 
-  </ion-row>
-  <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
-      <ion-col class="flex-center">
-          <ion-img src="/assets/images/icons8-chat-room.svg" class="header-icon"></ion-img>
-      </ion-col>
-  </ion-row>
-</ion-grid>
+        </ion-row>
+        <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
+            <ion-col class="flex-center">
+                <ion-img src="/assets/images/icons8-chat-room.svg" class="header-icon"></ion-img>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ion-row >
-      <ion-col size="2">
-        <ion-img class="profile-icon" src="/assets/images/icons8-drawing-compass.svg"></ion-img>
-      </ion-col>
-      <ion-col size="10" style="margin-top: 6px;">
-        <div class="message-box">
-          <span class="history-name" >jhondoe@gmail.com</span>
-          <span class="history-time" >12:20 P.M</span>
-        </div>
-        <div>
-          <span class="history-add" >
-           "Complete this on priority.
-          </span>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    <ion-grid *ngIf="conversations.length === 0">
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+            <ion-col size="12" class="ion-align-items-center ion-justify-content-center">
+                No Messages
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-list *ngIf="conversations.length !== 0">
+        <ion-item *ngFor="let conversation of conversations" (click)="openConversation(conversation)">
+            <ion-avatar slot="start">
+                <img [src]="conversation.getConversationWith().getAvatar()">
+            </ion-avatar>
+            <ion-label>
+                <h2>{{conversation.getConversationWith().getName()}}</h2>
+                <p>{{conversation.getLastMessage().getText()}}</p>
+            </ion-label>
+        </ion-item>
+
+<!--        <ion-grid>-->
+<!--            <ion-row>-->
+<!--                <ion-col>-->
+<!--                    <ion-img class="profile-icon" ></ion-img>-->
+<!--                </ion-col>-->
+<!--                <ion-col size="10" style="margin-top: 6px;">-->
+<!--                    <div class="message-box">-->
+<!--                        <span class="history-name"></span>-->
+<!--                    </div>-->
+<!--                    <div>-->
+<!--              <span class="history-add">-->
+<!--               {{conversation.getLastMessage().getText()}}-->
+<!--              </span>-->
+<!--                    </div>-->
+<!--                </ion-col>-->
+<!--            </ion-row>-->
+<!--        </ion-grid>-->
+    </ion-list>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content
+                loadingSpinner="bubbles"
+                loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
 
 </ion-content>

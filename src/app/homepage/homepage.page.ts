@@ -10,6 +10,8 @@ import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@io
 import { AddressModel } from '../model/address.model';
 import { Subscription } from 'rxjs';
 import { DrawerState } from 'ion-bottom-drawer';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 
 @Component({
   selector: 'app-homepage',
@@ -51,6 +53,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.setupCometChatUser();
     this.requestLocationPermission();
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
@@ -66,6 +69,27 @@ export class HomepagePage implements OnInit, OnDestroy {
       'Amsterdam',
       'Bogota'
     ];
+  }
+
+  setupCometChatUser() {
+    const user = new CometChat.User(this.storage.getUserID());
+    user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
+    CometChat.createUser(user, COMET_CHAT_AUTH_KEY).then(
+      (user) => {
+        console.log('user created', user);
+      }, error => {
+        console.log('error', error);
+      }
+    );
+    CometChat.login(this.storage.getUserID(), COMET_CHAT_AUTH_KEY).then(
+      (user) => {
+        console.log('Login Successful:', { user });
+      },
+      error => {
+        console.log('Login failed with exception:', { error });
+      }
+    );
+
   }
 
   getItems(ev: any) {
@@ -172,12 +196,12 @@ export class HomepagePage implements OnInit, OnDestroy {
     toast.present();
   }
 
-  
+
 
   getGeoLocation() {
 
     this.geolocation.getCurrentPosition().then((resp) => {
-      console.log("resp",resp);
+      console.log('resp', resp);
       this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
     }).catch((error) => {
       this.utilities.errorSnackBar('Unable to get location');
@@ -191,15 +215,15 @@ export class HomepagePage implements OnInit, OnDestroy {
     // this.utilities.hideLoading().then((success) => {
     this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
       .then((result: NativeGeocoderResult[]) => {
-        console.log("resu",result);
+        console.log('resu', result);
         const address: AddressModel = {
           address: this.generateAddress(result[0]),
           lat: latitude,
           long: longitude,
-          country:result[0].countryName,
+          country: result[0].countryName,
           state: result[0].administrativeArea,
-          city:result[0].locality,
-          postalcode:result[0].postalCode
+          city: result[0].locality,
+          postalcode: result[0].postalCode
         };
         this.utilities.setAddress(address);
       })
@@ -272,7 +296,7 @@ export class HomepagePage implements OnInit, OnDestroy {
       if (this.showSearchBar === true) {
         this.showSearchBar = false;
       } else {
-        navigator['app'].exitApp();
+        // navigator.app.exitApp();
       }
     });
   }
@@ -287,7 +311,7 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.showSearchBar = false;
   }
 
-  onClick(){
+  onClick() {
     this.showHome = false;
     this.showSearchBar = true;
   }

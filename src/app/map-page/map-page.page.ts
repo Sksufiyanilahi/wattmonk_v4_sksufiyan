@@ -83,7 +83,21 @@ export class MapPagePage implements OnInit {
   }
 
   getGeoEncoder(latitude, longitude, formattedAddress) {
-    // this.utilities.hideLoading().then((success) => {
+
+    //TODO remove later
+    const address: AddressModel = {
+      address: 'Vasant Kunj, New Delhi, Delhi',
+      lat: 28.5200491,
+      long: 77.158687,
+      country: 'India',
+      state: 'Delhi',
+      city: 'New Delhi',
+      postalcode: '110070'
+    };
+    this.utilities.setAddress(address);
+    this.goBack();
+    return;
+
     this.utilities.showLoading('Loading').then(() => {
       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
         .then((result: NativeGeocoderResult[]) => {
@@ -137,12 +151,14 @@ export class MapPagePage implements OnInit {
     this.utilities.showLoading('Getting Location');
     this.geolocation.getCurrentPosition().then((resp) => {
       console.log('resp', resp);
-      this.utilities.hideLoading();
-      this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude, '');
+      this.utilities.hideLoading().then(() => {
+        this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude, '');
+      });
     }).catch((error) => {
-      this.utilities.errorSnackBar('Unable to get location');
-      console.log('Error getting location', error);
-      this.showNoLocation();
+      this.utilities.errorSnackBar('Unable to get location').then(() => {
+        console.log('Error getting location', error);
+        this.showNoLocation();
+      });
     });
 
   }
@@ -161,7 +177,7 @@ export class MapPagePage implements OnInit {
         }
       ]
     });
-    toast.present();
+    await toast.present();
   }
 
 

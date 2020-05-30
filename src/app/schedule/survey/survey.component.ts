@@ -52,7 +52,14 @@ export class SurveyComponent implements OnInit, OnDestroy {
       address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
       assignto: new FormControl(null),
-      createdby: new FormControl(this.storage.getUserID(), [Validators.required])
+      createdby: new FormControl(this.storage.getUserID(), [Validators.required]),
+      latitude: new FormControl(''),
+      longitude: new FormControl(''),
+      country: new FormControl(''),
+      state: new FormControl(''),
+      city: new FormControl(''),
+      postalcode: new FormControl(''),
+      status: new FormControl('created')
     });
 
   }
@@ -75,8 +82,20 @@ export class SurveyComponent implements OnInit, OnDestroy {
     } else {
       this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
         this.surveyForm.get('address').setValue(address.address);
+        this.surveyForm.get('latitude').setValue(address.lat);
+        this.surveyForm.get('longitude').setValue(address.long);
+        this.surveyForm.get('country').setValue(address.country);
+        this.surveyForm.get('city').setValue(address.city);
+        this.surveyForm.get('state').setValue(address.state);
+        this.surveyForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.surveyForm.get('address').setValue('');
+        this.surveyForm.get('latitude').setValue('');
+        this.surveyForm.get('longitude').setValue('');
+        this.surveyForm.get('country').setValue('');
+        this.surveyForm.get('city').setValue('');
+        this.surveyForm.get('state').setValue('');
+        this.surveyForm.get('postalcode').setValue('');
       });
     }
 
@@ -131,6 +150,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
           });
 
         } else {
+          if (this.surveyForm.get('assignto').value !== '') {
+            this.surveyForm.get('status').setValue('surveyassigned');
+          }
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
               this.utilities.hideLoading().then(() => {
@@ -201,7 +223,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
           });
           if (this.survey.assignto !== null && this.survey.assignto !== undefined) {
             this.surveyForm.patchValue({
-              assignto: this.survey.assignto.id
+              assignto: this.survey.assignto.id,
+              status: 'surveyassigned'
             });
           }
           this.utilities.setStaticAddress(this.survey.address);

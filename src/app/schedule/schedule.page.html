@@ -11,7 +11,7 @@
                 </ion-button>
             </ion-col>
         </ion-row>
-        <ion-row class="ion-padding-start ion-padding-end" >
+        <ion-row class="ion-padding-start ion-padding-end">
             <ion-col *ngIf="address !== '' ">
                 <span class="address-text">
                     {{address}}
@@ -37,7 +37,7 @@
         </ion-row>
     </ion-grid>
 
-    <ion-grid class="ion-margin-start ion-margin-end margin-top">
+    <ion-grid class="ion-margin-start ion-margin-end">
         <ion-segment mode="ios" class="segments" (ionChange)="segmentChanged($event)" [value]="currentTab"
                      [disabled]="tabsDisabled">
             <ion-segment-button value="design">

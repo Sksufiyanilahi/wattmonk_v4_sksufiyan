@@ -14,6 +14,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { IonBottomDrawerModule } from 'ion-bottom-drawer';
 import { UtilitiesModule } from '../utilities/utilities.module';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
 @NgModule({
   imports: [

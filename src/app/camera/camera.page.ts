@@ -16,6 +16,9 @@ import { ApiService } from '../api.service';
 import { InverterSelectionPage } from './inverter-selection/inverter-selection.page';
 import { UtilitiesSelectionComponent } from './utilities-selection/utilities-selection.component';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { SurveyStorageModel } from '../model/survey-storage.model';
+import { LeftoverImagesModel } from '../model/leftover-images.model';
+import { ImageErrorListComponent } from './image-error-list/image-error-list.component';
 
 @Component({
   selector: 'app-camera',
@@ -53,7 +56,7 @@ export class CameraPage implements OnInit {
   listOfSolarMake: SolarMake[] = [];
   listOfSolarMade: SolarMadeModel[] = [];
 
-  hardwareCameraEnabled = true;
+  hardwareCameraEnabled = false;
   imageAreaHeight = 600;
   imageUploadIndex = 1;
   totalImagesToUpload = 1;
@@ -79,18 +82,8 @@ export class CameraPage implements OnInit {
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.surveyType = this.route.snapshot.paramMap.get('type');
-    if (this.surveyType === 'battery') {
-      this.mainMenu = JSON.parse(JSON.stringify(CAMERA_MODULE_MENU_BATTERY));
-    } else if (this.surveyType === 'pv') {
-      this.mainMenu = JSON.parse(JSON.stringify(CAMERA_MODULE_MENU_PV));
-    } else if (this.surveyType === 'pvbattery') {
-      this.mainMenu = JSON.parse(JSON.stringify(CAMERA_MODULE_MENU_PV_BATTERY));
-    }
 
-    this.selectMenu(this.mainMenu[0], 0);
-    this.selectSubMenu(this.mainMenu[0].subMenu[0], 0);
-
-    if (this.surveyType === 'battery') {
+    if (this.isBatterySurvey()) {
       this.detailsForm = this.formBuilder.group({
         modulemake: new FormControl('', [Validators.required]),
         modulemodel: new FormControl('', [Validators.required]),
@@ -138,6 +131,36 @@ export class CameraPage implements OnInit {
       });
     }
 
+    this.storage.get(this.surveyId + '').then((data: SurveyStorageModel) => {
+      console.log(data);
+      if (data) {
+        this.mainMenu = data.surveyMenu;
+        // calculate progressbar, and position of image to be captured
+        this.calculateImagePercentageAndListOfImages();
+        // restore form
+        Object.keys(data.formData).forEach((key: string) => {
+          let control: AbstractControl = null;
+          if (this.isBatterySurvey()) {
+            control = this.detailsForm.get(key);
+          } else {
+            control = this.pvDetailsForm.get(key);
+          }
+          control.setValue(data.formData[key]);
+        });
+
+      } else {
+        if (this.isBatterySurvey()) {
+          this.mainMenu = JSON.parse(JSON.stringify(CAMERA_MODULE_MENU_BATTERY));
+        } else if (this.surveyType === 'pv') {
+          this.mainMenu = JSON.parse(JSON.stringify(CAMERA_MODULE_MENU_PV));
+        } else if (this.surveyType === 'pvbattery') {
+          this.mainMenu = JSON.parse(JSON.stringify(CAMERA_MODULE_MENU_PV_BATTERY));
+        }
+        this.selectMenu(this.mainMenu[0], 0);
+        this.selectSubMenu(this.mainMenu[0].subMenu[0], 0);
+      }
+
+    });
 
     // this.addNewAppliance();
 
@@ -454,14 +477,55 @@ export class CameraPage implements OnInit {
   goBack() {
     if (this.hardwareCameraEnabled) {
       this.cameraPreview.stopCamera().then(() => {
-        this.navController.navigateRoot('homepage');
+        this.navigateHome(false);
       }, (error) => {
+        this.navigateHome(false);
+      });
+    } else {
+      this.navigateHome(false);
+    }
+  }
+
+  navigateHome(saveData: boolean) {
+    if (saveData) {
+      const data = this.makeSurveyStorageData();
+      this.storage.set(this.surveyId + '', data).then(() => {
         this.navController.navigateRoot('homepage');
       });
     } else {
       this.navController.navigateRoot('homepage');
     }
+  }
 
+  makeSurveyStorageData(): SurveyStorageModel {
+    const surveyStorageModel = new SurveyStorageModel();
+    surveyStorageModel.surveyMenu = this.mainMenu;
+    if (this.isBatterySurvey()) {
+      surveyStorageModel.formData = this.detailsForm.value;
+    } else {
+      surveyStorageModel.formData = this.pvDetailsForm.value;
+    }
+    return surveyStorageModel;
+  }
+
+  isBatterySurvey(): boolean {
+    if (this.surveyType === 'battery') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  saveForLater() {
+    if (this.hardwareCameraEnabled) {
+      this.cameraPreview.stopCamera().then(() => {
+        this.navigateHome(true);
+      }, (error) => {
+        this.navigateHome(true);
+      });
+    } else {
+      this.navigateHome(true);
+    }
   }
 
   selectMenu(menu: MenuModel, index: number) {
@@ -504,6 +568,21 @@ export class CameraPage implements OnInit {
 
   }
 
+  selectMenuWithImageIndex(menu: MenuModel, index: number, imageIndex: number) {
+    this.mainMenu.forEach((menuItem) => {
+      menuItem.isSelected = false;
+    });
+    menu.isSelected = true;
+    this.selectedMenuIndex = index;
+    this.selectedMenuModel = menu;
+    this.selectedMenu = menu.name;
+    this.subMenu = menu.subMenu;
+    this.itemName = menu.name;
+    this.startCamera();
+    this.showForm = false;
+    this.selectedImageModel = menu.imageModel[imageIndex];
+  }
+
   selectSubMenu(menu: MenuSubModel, index: number) {
     this.subMenu.forEach((menuItem) => {
       menuItem.isSelected = false;
@@ -527,27 +606,31 @@ export class CameraPage implements OnInit {
         this.startCamera();
       }
     }
-    // let imageIndex = 0;
-    // for (let i = 0; i < this.selectedSubMenuModel.images.length; i++) {
-    //   const image = this.selectedSubMenuModel.images[i];
-    //   console.log(image);
-    //   if (image.image === '') {
-    //     this.selectedImageModel = image;
-    //     this.selectedImageModelIndex = imageIndex;
-    //     break;
-    //   }
-    //   imageIndex++;
-    // }
-    // if (this.selectedImageModelIndex === -1) {
-    //   this.shiftToNextImage();
-    // }
+  }
 
-    // if (this.selectedSubMenuModel.askBeforeImage) {
-    //   this.stopCamera();
-    //   this.askBeforeCapture();
-    // } else {
-    //   this.startCamera();
-    // }
+  selectSubMenuWithSubImage(menu: MenuSubModel, index: number, subMenuIndex: number) {
+    this.subMenu.forEach((menuItem) => {
+      menuItem.isSelected = false;
+    });
+    this.selectedSubMenuModel = menu;
+    this.selectedSubMenuIndex = index;
+    menu.isSelected = true;
+    this.selectedSubMenu = menu.name;
+    this.itemName = menu.name;
+    this.selectedImageModel = this.selectedSubMenuModel.images[subMenuIndex];
+    this.selectedImageModelIndex = subMenuIndex;
+    if (this.selectedImageModel.image !== '') {
+      this.stopCamera();
+      this.showImageOptions = true;
+    } else {
+      this.showImageOptions = false;
+      if (this.selectedSubMenuModel.askBeforeImage) {
+        this.stopCamera();
+        this.askBeforeCapture();
+      } else {
+        this.startCamera();
+      }
+    }
   }
 
 
@@ -593,6 +676,82 @@ export class CameraPage implements OnInit {
       }
     });
     this.totalPercent = existing / total;
+  }
+
+  calculateImagePercentageAndListOfImages() {
+    let total = 0;
+    let existing = 0;
+    let mainMenuIndex = -1;
+    let subMenuIndex = -1;
+    let subMenuImageIndex = -1;
+    let mainMenuImageIndex = -1;
+    this.mainMenu.forEach((mainMenu, mainMenuPosition) => {
+      if (mainMenu.subMenu !== null && mainMenu.imageModel !== null) {
+
+        // check submenu first
+        if (mainMenu.subMenu.length !== 0) {
+          mainMenu.subMenu.forEach((submenu, subMenuPosition) => {
+            if (submenu.images.length !== 0) {
+              submenu.images.forEach((image, subMenuImagePosition) => {
+                total++;
+                if (image.image !== '') {
+                  existing++;
+                  this.listOfImages.push(image.image);
+                } else {
+                  if (mainMenuIndex === -1) {
+                    mainMenuIndex = mainMenuPosition;
+                  }
+                  if (subMenuIndex === -1) {
+                    subMenuIndex = subMenuPosition;
+                  }
+                  if (subMenuImageIndex === -1) {
+                    subMenuImageIndex = subMenuImagePosition;
+                  }
+                }
+              });
+            }
+          });
+        }
+        // check images for main menu
+        if (mainMenu.imageModel.length !== 0) {
+          mainMenu.imageModel.forEach((image, mainMenuImagePosition) => {
+            total++;
+            if (image.image !== '') {
+              existing++;
+              this.listOfImages.push(image.image);
+            } else {
+              if (mainMenuIndex === -1) {
+                mainMenuIndex = mainMenuPosition;
+              }
+              if (subMenuIndex === -1) {
+                if (mainMenuImageIndex === -1) {
+                  mainMenuImageIndex = mainMenuImagePosition;
+                }
+              }
+            }
+          });
+        }
+      } else {
+        // images and submenu both are null, this is details form
+        if (mainMenuIndex === -1) {
+          mainMenuIndex = this.mainMenu.length - 1;
+        }
+
+      }
+    });
+    this.totalPercent = existing / total;
+    if (mainMenuImageIndex === -1) {
+      this.selectMenu(this.mainMenu[mainMenuIndex], mainMenuIndex);
+      if (subMenuIndex !== -1) {
+        if (subMenuImageIndex !== -1) {
+          this.selectSubMenuWithSubImage(this.mainMenu[mainMenuIndex].subMenu[subMenuIndex], subMenuIndex, subMenuImageIndex);
+        } else {
+          this.selectSubMenu(this.mainMenu[mainMenuIndex].subMenu[subMenuIndex], subMenuIndex);
+        }
+      }
+    } else {
+      this.selectMenuWithImageIndex(this.mainMenu[mainMenuIndex], mainMenuIndex, mainMenuImageIndex);
+    }
   }
 
   shiftToNextImage() {
@@ -662,13 +821,65 @@ export class CameraPage implements OnInit {
     // }
   }
 
+  checkLeftImages(): LeftoverImagesModel[] {
+    const leftOverImages: LeftoverImagesModel[] = [];
+    this.mainMenu.forEach((mainMenu, mainMenuPosition) => {
+      if (mainMenu.subMenu !== null && mainMenu.imageModel !== null) {
+
+        // check submenu first
+        if (mainMenu.subMenu.length !== 0) {
+          mainMenu.subMenu.forEach((submenu, subMenuPosition) => {
+            if (submenu.images.length !== 0) {
+              submenu.images.forEach((image, subMenuImagePosition) => {
+                if (image.image === '') {
+                  const leftOverImage = new LeftoverImagesModel();
+                  if (image.imageTitle === '') {
+                    leftOverImage.title = mainMenu.name + ' - ' + submenu.name;
+                  } else {
+                    leftOverImage.title = mainMenu.name + ' - ' + submenu.name + ' - ' + image.imageTitle;
+                  }
+                  leftOverImage.mainMenuIndex = mainMenuPosition;
+                  leftOverImage.mainMenuImageIndex = -1;
+                  leftOverImage.subMenuIndex = subMenuPosition;
+                  leftOverImage.subMenuImageIndex = subMenuImagePosition;
+                  leftOverImages.push(leftOverImage);
+                }
+              });
+            }
+          });
+        }
+        // check images for main menu
+        if (mainMenu.imageModel.length !== 0) {
+          mainMenu.imageModel.forEach((image, mainMenuImagePosition) => {
+            if (image.image === '') {
+              const leftOverImage = new LeftoverImagesModel();
+              if (image.imageTitle === '') {
+                leftOverImage.title = mainMenu.name;
+              } else {
+                leftOverImage.title = mainMenu.name + ' - ' + image.imageTitle;
+              }
+              leftOverImage.mainMenuIndex = mainMenuPosition;
+              leftOverImage.mainMenuImageIndex = mainMenuImagePosition;
+              leftOverImage.subMenuIndex = -1;
+              leftOverImage.subMenuImageIndex = -1;
+              leftOverImages.push(leftOverImage);
+              this.listOfImages.push(image.image);
+            }
+          });
+        }
+      }
+    });
+    return leftOverImages;
+  }
+
   saveSurvey() {
-    if (this.surveyType === 'battery') {
-      if (this.detailsForm.status === 'INVALID') {
-        this.showInvalidFormAlert();
-      } else {
-        if (this.totalPercent !== 1) {
-          this.utilities.showAlert('Please take all images');
+    if (this.totalPercent !== 1) {
+      const imagesLeft = this.checkLeftImages();
+      this.showLeftOverImagesAlert(imagesLeft);
+    } else {
+      if (this.isBatterySurvey()) {
+        if (this.detailsForm.status === 'INVALID') {
+          this.showInvalidFormAlert();
         } else {
           this.utilities.showLoading('Saving Survey').then(() => {
             this.apiService.updateSurveyForm(this.detailsForm.value, this.surveyId).subscribe((data) => {
@@ -682,13 +893,9 @@ export class CameraPage implements OnInit {
             });
           });
         }
-      }
-    } else {
-      if (this.pvDetailsForm.status === 'INVALID') {
-        this.showInvalidFormAlert();
       } else {
-        if (this.totalPercent !== 1) {
-          this.utilities.showAlert('Please take all images');
+        if (this.pvDetailsForm.status === 'INVALID') {
+          this.showInvalidFormAlert();
         } else {
           this.utilities.showLoading('Saving Survey').then(() => {
             this.apiService.updateSurveyForm(this.pvDetailsForm.value, this.surveyId).subscribe((data) => {
@@ -705,6 +912,7 @@ export class CameraPage implements OnInit {
         }
       }
     }
+
   }
 
   async showUpdateImagesAlert() {
@@ -717,7 +925,8 @@ export class CameraPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            this.storage.set(this.surveyId + '', this.mainMenu);
+            const data = this.makeSurveyStorageData();
+            this.storage.set(this.surveyId + '', data);
             this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
               modal.present();
               modal.onWillDismiss().then((dismissed) => {
@@ -777,17 +986,13 @@ export class CameraPage implements OnInit {
       const imageToUpload = mapOfImages[0];
       const blob = this.getByteStreamOfImage(imageToUpload.imageData);
       let filename = '';
-      if(imageToUpload.imagename === ''){
+      if (imageToUpload.imagename === '') {
         filename = Date.now().toString() + '.png';
       } else {
         filename = imageToUpload.imagename + '.png';
       }
-      const file = new File([blob], filename, {
-        type: 'image/png',
-        lastModified: Date.now()
-      });
       this.utilities.setLoadingMessage('Uploading ' + this.imageUploadIndex + ' of ' + this.totalImagesToUpload);
-      this.apiService.uploadImage(this.surveyId, imageToUpload.key, blob).subscribe((data) => {
+      this.apiService.uploadImage(this.surveyId, imageToUpload.key, blob, filename).subscribe((data) => {
         this.imageUploadIndex++;
         mapOfImages.splice(0, 1);
         this.uploadImageByIndex(mapOfImages);
@@ -812,7 +1017,7 @@ export class CameraPage implements OnInit {
 
   showInvalidFormAlert() {
     let error = '';
-    if (this.surveyType === 'battery') {
+    if (this.isBatterySurvey()) {
       Object.keys(this.detailsForm.controls).forEach((key: string) => {
         const control: AbstractControl = this.detailsForm.get(key);
         if (control.invalid) {
@@ -875,7 +1080,8 @@ export class CameraPage implements OnInit {
   }
 
   openGallery() {
-    this.storage.set(this.surveyId + '', this.mainMenu);
+    const data = this.makeSurveyStorageData();
+    this.storage.set(this.surveyId + '', data);
     this.navController.navigateForward('/gallery/' + this.surveyId);
   }
 
@@ -929,7 +1135,7 @@ export class CameraPage implements OnInit {
         text: option,
         handler: () => {
           if (this.selectedImageModel.formValueToUpdate !== '') {
-            if (this.surveyType === 'battery') {
+            if (this.isBatterySurvey()) {
               this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(option.toLowerCase());
             } else {
               this.pvDetailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(option.toLowerCase());
@@ -977,7 +1183,7 @@ export class CameraPage implements OnInit {
           handler: () => {
             this.selectedSubMenuModel.answered = true;
             this.selectedSubMenuModel.allCaptured = true;
-            if (this.surveyType === 'battery') {
+            if (this.isBatterySurvey()) {
               this.detailsForm.get(this.selectedSubMenuModel.formControlToUpdate).setValue(true);
             } else {
               this.pvDetailsForm.get(this.selectedSubMenuModel.formControlToUpdate).setValue(true);
@@ -1018,7 +1224,7 @@ export class CameraPage implements OnInit {
               this.showAlertWithInputNumber();
             } else {
               if (this.selectedImageModel.formValueToUpdate !== '') {
-                if (this.surveyType === 'battery') {
+                if (this.isBatterySurvey()) {
                   this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.input.toLowerCase());
                 } else {
                   this.pvDetailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.input.toLowerCase());
@@ -1044,7 +1250,7 @@ export class CameraPage implements OnInit {
     await modal.present();
     const { data } = await modal.onWillDismiss();
     console.log(data);
-    if (this.surveyType === 'battery') {
+    if (this.isBatterySurvey()) {
       this.detailsForm.patchValue({
         invertermake: data.invertermake,
         invertermodel: data.invertermodel
@@ -1067,7 +1273,7 @@ export class CameraPage implements OnInit {
     await modal.present();
     const { data } = await modal.onWillDismiss();
     console.log(data);
-    if (this.surveyType === 'battery') {
+    if (this.isBatterySurvey()) {
       this.detailsForm.patchValue({
         utility: data.utilities
       });
@@ -1107,7 +1313,7 @@ export class CameraPage implements OnInit {
               this.showAlertWithInputString();
             } else {
               if (this.selectedImageModel.formValueToUpdate !== '') {
-                if (this.surveyType === 'battery') {
+                if (this.isBatterySurvey()) {
                   this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.input.toLowerCase());
                 } else {
                   this.pvDetailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.input.toLowerCase());
@@ -1155,7 +1361,7 @@ export class CameraPage implements OnInit {
               this.showAlertWithRadioButtons();
             } else {
               if (this.selectedImageModel.formValueToUpdate !== '') {
-                if (this.surveyType === 'battery') {
+                if (this.isBatterySurvey()) {
                   this.detailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.toLowerCase());
                 } else {
                   this.pvDetailsForm.get(this.selectedImageModel.formValueToUpdate).setValue(data.toLowerCase());
@@ -1188,4 +1394,33 @@ export class CameraPage implements OnInit {
   removeFile() {
     this.prelimUrl = '';
   }
+
+  async showLeftOverImagesAlert(imagesLeft: LeftoverImagesModel[]) {
+    console.log(imagesLeft);
+    const modal = await this.modalController.create({
+      component: ImageErrorListComponent,
+      componentProps: {
+        listOfImages: imagesLeft
+      }
+    });
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
+    const image: LeftoverImagesModel = data.imageToLoad;
+
+    if (image.mainMenuImageIndex === -1) {
+      this.selectMenu(this.mainMenu[image.mainMenuIndex], image.mainMenuIndex);
+      if (image.subMenuIndex !== -1) {
+        if (image.subMenuImageIndex !== -1) {
+          this.selectSubMenuWithSubImage(this.mainMenu[image.mainMenuIndex].subMenu[image.subMenuIndex], image.subMenuIndex, image.subMenuImageIndex);
+        } else {
+          this.selectSubMenu(this.mainMenu[image.mainMenuIndex].subMenu[image.subMenuIndex], image.subMenuIndex);
+        }
+      }
+    } else {
+      this.selectMenuWithImageIndex(this.mainMenu[image.mainMenuIndex], image.mainMenuIndex, image.mainMenuImageIndex);
+    }
+    console.log('test');
+    console.log(this.listOfImages);
+  }
+
 }

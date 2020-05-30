@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
     "@babel/compat-data": "^7.8.0",
+    "@cometchat-pro/cordova-ionic-chat": "^2.0.8",
     "@ionic-native/base64-to-gallery": "^5.22.0",
     "@ionic-native/camera-preview": "^5.22.0",
     "@ionic-native/core": "^5.0.0",

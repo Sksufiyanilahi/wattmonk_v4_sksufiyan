@@ -15,6 +15,7 @@ import { UtilitiesModule } from '../utilities/utilities.module';
 import { InverterSelectionPage } from './inverter-selection/inverter-selection.page';
 import { UtilitiesSelectionComponent } from './utilities-selection/utilities-selection.component';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { ImageErrorListComponent } from './image-error-list/image-error-list.component';
 
 @NgModule({
   imports: [
@@ -26,8 +27,8 @@ import { FileChooser } from '@ionic-native/file-chooser/ngx';
     ReactiveFormsModule,
     UtilitiesModule
   ],
-  declarations: [CameraPage, InverterSelectionPage, UtilitiesSelectionComponent],
-  entryComponents: [InverterSelectionPage, UtilitiesSelectionComponent],
+  declarations: [CameraPage, InverterSelectionPage, UtilitiesSelectionComponent, ImageErrorListComponent],
+  entryComponents: [InverterSelectionPage, UtilitiesSelectionComponent, ImageErrorListComponent],
   providers: [
     CameraPreview,
     Base64ToGallery,
