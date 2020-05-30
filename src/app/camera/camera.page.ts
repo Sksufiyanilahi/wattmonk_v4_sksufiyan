@@ -1,10 +1,17 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview/ngx';
-import { AlertController, IonContent, IonGrid, ModalController, NavController, Platform } from '@ionic/angular';
+import { AlertController, IonGrid, ModalController, NavController, Platform } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { ImageModel, MenuModel, MenuSubModel, QuestionType } from './menu.model';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
-import { CAMERA_MODULE_MENU_BATTERY, CAMERA_MODULE_MENU_PV, CAMERA_MODULE_MENU_PV_BATTERY, ImageUploadModel } from '../model/constants';
+import {
+  CAMERA_MODULE_MENU_BATTERY,
+  CAMERA_MODULE_MENU_PV,
+  CAMERA_MODULE_MENU_PV_BATTERY,
+  GOOGLE_API_KEY,
+  ImageUploadModel,
+  MapPageType
+} from '../model/constants';
 import { Storage } from '@ionic/storage';
 import { UtilitiesService } from '../utilities.service';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -27,8 +34,11 @@ import { ImageErrorListComponent } from './image-error-list/image-error-list.com
 })
 export class CameraPage implements OnInit {
 
-  @ViewChild('contentArea', { static: true }) content: IonContent;
+  // @ViewChild('contentArea', { static: true }) content: IonContent;
   @ViewChild('header', { static: true }) header: IonGrid;
+
+  page: MapPageType = MapPageType.NONE;
+  PageType = MapPageType;
 
   surveyId: number;
   itemName = 'MSP';
@@ -44,8 +54,6 @@ export class CameraPage implements OnInit {
   selectedMenuModel: MenuModel;
   selectedSubMenuModel: MenuSubModel;
   selectedImageModel: ImageModel;
-  showCameraInterface = true;
-  showForm = true;
   listOfImages: string[] = [];
   totalPercent = 0;
   selectedMenuIndex = 0;
@@ -57,13 +65,15 @@ export class CameraPage implements OnInit {
   listOfRoofMaterial: SolarMake[] = [];
   listOfSolarMade: SolarMadeModel[] = [];
 
-  hardwareCameraEnabled = true;
+  hardwareCameraEnabled = false;
   imageAreaHeight = 600;
   imageUploadIndex = 1;
   totalImagesToUpload = 1;
-  showImageOptions = false;
   surveyType: string;
   prelimUrl = '';
+  latitude: number;
+  longitude: number;
+  googleImageUrl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=24&maptype=satellite&size=900x1600&scale=2&key=' + GOOGLE_API_KEY;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -83,6 +93,10 @@ export class CameraPage implements OnInit {
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.surveyType = this.route.snapshot.paramMap.get('type');
+    this.latitude = +this.route.snapshot.paramMap.get('lat');
+    this.longitude = +this.route.snapshot.paramMap.get('long');
+    this.googleImageUrl = this.googleImageUrl + '&center=' + this.latitude + ',' + this.longitude;
+    this.googleImageUrl = this.googleImageUrl + '&&markers=size:normal|color:red|' + this.latitude + ',' + this.longitude;
 
     if (this.isBatterySurvey()) {
       this.detailsForm = this.formBuilder.group({
@@ -92,7 +106,6 @@ export class CameraPage implements OnInit {
         invertermodel: new FormControl('', [Validators.required]),
         numberofmodules: new FormControl('', [Validators.required]),
         additionalNotes: new FormControl('', []),
-        // appliances: this.formBuilder.array([]),
         batterybackup: new FormControl('', [Validators.required]),
         servicefeedsource: new FormControl('', [Validators.required]),
         mainbreakersize: new FormControl('', [Validators.required]),
@@ -111,7 +124,6 @@ export class CameraPage implements OnInit {
       this.detailsForm.get('modulemake').valueChanges.subscribe(val => {
         this.getSolarMade();
       });
-      this.getSolarMake();
 
     } else {
       this.pvDetailsForm = this.formBuilder.group({
@@ -164,11 +176,7 @@ export class CameraPage implements OnInit {
       }
 
     });
-
-    // this.addNewAppliance();
-
   }
-
 
   ngOnInit() {
     this.platform.backButton.subscribe(() => {
@@ -189,38 +197,24 @@ export class CameraPage implements OnInit {
       toBack: true,
       alpha: 1
     };
-    this.calculateContentHeight();
-    this.startCamera();
-  }
-
-  calculateContentHeight() {
-    setTimeout(() => {
-      this.content.getScrollElement().then((data) => {
-        console.log(data.offsetHeight);
-        const progressbarheight = 10;
-        const headerHeight = 44;
-        this.imageAreaHeight = data.offsetHeight - progressbarheight - headerHeight;
-      });
-    }, 100);
-
   }
 
   getSolarMade() {
     this.utilities.showLoading('Getting solar models').then((success) => {
       this.apiService.getSolarMade(this.detailsForm.get('modulemake').value).subscribe(response => {
-        this.utilities.hideLoading();
-        console.log(response);
-        this.listOfSolarMade = response;
-        this.detailsForm.patchValue({
-          modulemodel: ''
+        this.utilities.hideLoading().then(() => {
+          console.log(response);
+          this.listOfSolarMade = response;
+          // this.detailsForm.patchValue({
+          //   modulemodel: ''
+          // });
         });
       }, responseError => {
-        this.utilities.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utilities.errorSnackBar(error.message[0].messages[0].message);
+        this.utilities.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilities.errorSnackBar(error.message[0].messages[0].message);
+        });
       });
-    }, (error) => {
-
     });
 
 
@@ -307,19 +301,18 @@ export class CameraPage implements OnInit {
     if (this.hardwareCameraEnabled) {
       this.cameraPreview.startCamera(this.cameraPreviewOpts).then(
         (res) => {
-          this.showCameraInterface = true;
+          this.page = MapPageType.CAMERA_INTERFACE;
           console.log(res);
         },
         (err) => {
           console.log(err);
         });
     } else {
-      this.showCameraInterface = true;
+      this.page = MapPageType.CAMERA_INTERFACE;
     }
   }
 
   stopCamera() {
-    this.showCameraInterface = false;
     if (this.hardwareCameraEnabled) {
       this.cameraPreview.stopCamera().then(result => {
       });
@@ -335,6 +328,7 @@ export class CameraPage implements OnInit {
         quality: 80
       }).then((photo) => {
           this.stopCamera();
+          this.page = MapPageType.IMAGE_PREVIEW;
           this.handleSaveImage(photo[0]);
         },
         (error) => {
@@ -353,7 +347,6 @@ export class CameraPage implements OnInit {
       // this.saveFileToAppDirectory(photo[0]);
     }
     this.listOfImages.push(this.selectedImageModel.image);
-    this.showImageOptions = false;
 
     switch (this.selectedImageModel.questionType) {
       case QuestionType.NONE:
@@ -474,27 +467,6 @@ export class CameraPage implements OnInit {
     return blob;
   }
 
-  getByteStreamOfImage(dataURI): Blob {
-    // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-    const byteString = atob(dataURI.split(',')[1]);
-
-    // separate out the mime component
-    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-    // write the bytes of the string to an ArrayBuffer
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-
-    // write the ArrayBuffer to a blob, and you're done
-    const bb = new Blob([ab], { type: mimeString });
-    // bb.append(ab);
-    return bb;
-  }
-
   goBack() {
     if (this.hardwareCameraEnabled) {
       this.cameraPreview.stopCamera().then(() => {
@@ -510,10 +482,13 @@ export class CameraPage implements OnInit {
   navigateHome(saveData: boolean) {
     if (saveData) {
       const data = this.makeSurveyStorageData();
+      data.saved = false;
       this.storage.set(this.surveyId + '', data).then(() => {
+        this.utilities.sethomepageSurveyRefresh(true);
         this.navController.navigateRoot('homepage');
       });
     } else {
+      this.utilities.sethomepageSurveyRefresh(true);
       this.navController.navigateRoot('homepage');
     }
   }
@@ -521,6 +496,7 @@ export class CameraPage implements OnInit {
   makeSurveyStorageData(): SurveyStorageModel {
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.surveyMenu = this.mainMenu;
+    surveyStorageModel.surveyId = this.surveyId;
     if (this.isBatterySurvey()) {
       surveyStorageModel.formData = this.detailsForm.value;
     } else {
@@ -559,9 +535,19 @@ export class CameraPage implements OnInit {
     this.selectedMenu = menu.name;
     this.subMenu = menu.subMenu;
     this.itemName = menu.name;
-    if (menu.subMenu != null) {
-      this.showForm = false;
-      if (menu.subMenu.length !== 0) {
+    // if both submenu and imagemodel are null, then it is details form
+    if (menu.subMenu === null && menu.imageModel === null) {
+      this.stopCamera();
+      this.page = MapPageType.DETAILS_FORM;
+      this.selectedImageModel = null;
+      if (this.isBatterySurvey()) {
+        this.getSolarMake();
+      } else {
+        this.getRoofMaterial();
+      }
+      this.cd.detectChanges();
+    } else {
+      if (menu.subMenu !== null && this.subMenu.length !== 0) {
         this.selectSubMenu(menu.subMenu[0], 0);
       } else {
         this.selectedSubMenuIndex = -1;
@@ -571,20 +557,6 @@ export class CameraPage implements OnInit {
         this.selectedSubMenu = menu.name;
         this.itemName = menu.name;
         this.checkAlreadyExistingImage();
-        this.calculateContentHeight();
-      }
-    } else {
-      if (menu.imageModel === null) {
-        this.stopCamera();
-        this.selectedImageModel = null;
-        this.showImageOptions = false;
-        this.showForm = true;
-        this.getSolarMake();
-        this.getRoofMaterial();
-        this.cd.detectChanges();
-      } else {
-        this.startCamera();
-        this.showForm = false;
       }
     }
 
@@ -601,7 +573,6 @@ export class CameraPage implements OnInit {
     this.subMenu = menu.subMenu;
     this.itemName = menu.name;
     this.startCamera();
-    this.showForm = false;
     this.selectedImageModel = menu.imageModel[imageIndex];
   }
 
@@ -618,11 +589,11 @@ export class CameraPage implements OnInit {
     this.selectedImageModelIndex = 0;
     if (this.selectedImageModel.image !== '') {
       this.stopCamera();
-      this.showImageOptions = true;
+      this.page = MapPageType.IMAGE_PREVIEW_WITH_OPTIONS;
     } else {
-      this.showImageOptions = false;
       if (this.selectedSubMenuModel.askBeforeImage) {
         this.stopCamera();
+        this.page = MapPageType.IMAGE_PREVIEW;
         this.askBeforeCapture();
       } else {
         this.startCamera();
@@ -643,11 +614,11 @@ export class CameraPage implements OnInit {
     this.selectedImageModelIndex = subMenuIndex;
     if (this.selectedImageModel.image !== '') {
       this.stopCamera();
-      this.showImageOptions = true;
+      this.page = MapPageType.IMAGE_PREVIEW_WITH_OPTIONS;
     } else {
-      this.showImageOptions = false;
       if (this.selectedSubMenuModel.askBeforeImage) {
         this.stopCamera();
+        this.page = MapPageType.IMAGE_PREVIEW;
         this.askBeforeCapture();
       } else {
         this.startCamera();
@@ -701,6 +672,7 @@ export class CameraPage implements OnInit {
   }
 
   calculateImagePercentageAndListOfImages() {
+    this.listOfImages = [];
     let total = 0;
     let existing = 0;
     let mainMenuIndex = -1;
@@ -830,17 +802,11 @@ export class CameraPage implements OnInit {
 
   checkAlreadyExistingImage() {
     if (this.selectedImageModel.image !== '') {
-      this.showImageOptions = true;
       this.stopCamera();
+      this.page = MapPageType.IMAGE_PREVIEW_WITH_OPTIONS;
     } else {
-      this.showImageOptions = false;
       this.startCamera();
     }
-    // if (this.selectedImageModel.image !== '') {
-    //   this.shiftToNextImage();
-    // } else {
-    //   this.startCamera();
-    // }
   }
 
   checkLeftImages(): LeftoverImagesModel[] {
@@ -948,6 +914,7 @@ export class CameraPage implements OnInit {
           cssClass: 'secondary',
           handler: () => {
             const data = this.makeSurveyStorageData();
+            data.saved = true;
             this.storage.set(this.surveyId + '', data);
             this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
               modal.present();
@@ -1006,7 +973,7 @@ export class CameraPage implements OnInit {
   uploadImageByIndex(mapOfImages: ImageUploadModel[]) {
     if (mapOfImages.length !== 0) {
       const imageToUpload = mapOfImages[0];
-      const blob = this.getByteStreamOfImage(imageToUpload.imageData);
+      const blob = this.utilities.getBlobFromImageData(imageToUpload.imageData);
       let filename = '';
       if (imageToUpload.imagename === '') {
         filename = Date.now().toString() + '.png';
@@ -1103,12 +1070,14 @@ export class CameraPage implements OnInit {
 
   openGallery() {
     const data = this.makeSurveyStorageData();
+    data.saved = false;
     this.storage.set(this.surveyId + '', data);
     this.navController.navigateForward('/gallery/' + this.surveyId);
   }
 
   async showAlertForMorePhoto() {
     this.stopCamera();
+    this.page = MapPageType.IMAGE_PREVIEW;
     const alert = await this.alertController.create({
       header: 'Capture More Photos',
       subHeader: 'Do you want to take more photos?',
@@ -1125,19 +1094,12 @@ export class CameraPage implements OnInit {
           text: 'Yes',
           handler: () => {
             this.selectedImageModel.questionType = QuestionType.NONE;
-            this.selectedSubMenuModel.images.push({
-              image: '',
-              imageTitle: '',
-              showPopup: true,
-              popupTitle: '',
-              popupQuestion: '',
-              questionType: QuestionType.MORE_PHOTOS,
-              questionOptions: [],
-              givenAnswer: '',
-              formValueToUpdate: '',
-              imageUploadTag: 'roofimages',
-              imageName: ''
-            });
+            const subMenuImage: ImageModel = JSON.parse(JSON.stringify(this.selectedSubMenuModel.images[this.selectedSubMenuModel.images.length - 1]));
+            const imageName = subMenuImage.imageName.slice(0, subMenuImage.imageName.length - 2) + (this.selectedSubMenuModel.images.length + 1);
+            subMenuImage.imageName = imageName;
+            subMenuImage.image = '';
+            subMenuImage.questionType = QuestionType.MORE_PHOTOS;
+            this.selectedSubMenuModel.images.push(subMenuImage);
             this.shiftToNextImage();
             this.calculateImagePercentage();
           }
@@ -1145,12 +1107,12 @@ export class CameraPage implements OnInit {
       ],
       backdropDismiss: false
     });
-    this.calculateContentHeight();
     await alert.present();
   }
 
   async showAlertQuestion() {
     this.stopCamera();
+    this.page = MapPageType.IMAGE_PREVIEW;
     const buttonOptions = [];
     this.selectedImageModel.questionOptions.forEach(option => {
       const buttonOption = {
@@ -1175,7 +1137,6 @@ export class CameraPage implements OnInit {
       buttons: buttonOptions,
       backdropDismiss: false
     });
-    this.calculateContentHeight();
     await alert.present();
   }
 
@@ -1215,12 +1176,12 @@ export class CameraPage implements OnInit {
         }
       ]
     });
-    this.calculateContentHeight();
     await alert.present();
   }
 
   async showAlertWithInputNumber() {
     this.stopCamera();
+    this.page = MapPageType.IMAGE_PREVIEW;
     const alert = await this.alertController.create({
       header: this.selectedImageModel.popupTitle,
       subHeader: this.selectedImageModel.popupQuestion,
@@ -1259,13 +1220,12 @@ export class CameraPage implements OnInit {
         }
       ]
     });
-    this.calculateContentHeight();
     await alert.present();
   }
 
   async showAlertWithInverterModel() {
     this.stopCamera();
-    this.calculateContentHeight();
+    this.page = MapPageType.IMAGE_PREVIEW;
     const modal = await this.modalController.create({
       component: InverterSelectionPage
     });
@@ -1288,7 +1248,7 @@ export class CameraPage implements OnInit {
 
   async showAlertWithUtilitiesModel() {
     this.stopCamera();
-    this.calculateContentHeight();
+    this.page = MapPageType.IMAGE_PREVIEW;
     const modal = await this.modalController.create({
       component: UtilitiesSelectionComponent
     });
@@ -1310,6 +1270,7 @@ export class CameraPage implements OnInit {
 
   async showAlertWithInputString() {
     this.stopCamera();
+    this.page = MapPageType.IMAGE_PREVIEW;
     const alert = await this.alertController.create({
       header: this.selectedImageModel.popupTitle,
       subHeader: this.selectedImageModel.popupQuestion,
@@ -1348,12 +1309,12 @@ export class CameraPage implements OnInit {
         }
       ]
     });
-    this.calculateContentHeight();
     await alert.present();
   }
 
   async showAlertWithRadioButtons() {
     this.stopCamera();
+    this.page = MapPageType.IMAGE_PREVIEW;
     const inputList = [];
     this.selectedImageModel.questionOptions.forEach((item) => {
       const buttonOption = {
@@ -1396,14 +1357,12 @@ export class CameraPage implements OnInit {
         }
       ]
     });
-    this.calculateContentHeight();
     await alert.present();
   }
 
   retakeImage() {
     this.selectedImageModel.image = '';
     this.selectedImageModel.givenAnswer = '';
-    this.showImageOptions = false;
     this.startCamera();
   }
 
@@ -1445,4 +1404,12 @@ export class CameraPage implements OnInit {
     console.log(this.listOfImages);
   }
 
+  showMapViewForSurvey() {
+    this.stopCamera();
+    this.page = MapPageType.MAP_PAGE;
+  }
+
+  showCameraViewForSurvey() {
+    this.calculateImagePercentageAndListOfImages();
+  }
 }

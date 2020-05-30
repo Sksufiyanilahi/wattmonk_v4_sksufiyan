@@ -51,7 +51,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
-      assignto: new FormControl(null),
+      assignedto: new FormControl(null),
       createdby: new FormControl(this.storage.getUserID(), [Validators.required]),
       latitude: new FormControl(''),
       longitude: new FormControl(''),
@@ -119,14 +119,14 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
-              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype);
+              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.latitude + '/' + survey.longitude);
             });
           });
         } else {
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
-              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype);
+              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.latitude + '/' + survey.longitude);
             });
           });
         }
@@ -150,7 +150,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           });
 
         } else {
-          if (this.surveyForm.get('assignto').value !== '') {
+          if (this.surveyForm.get('assignedto').value !== '') {
             this.surveyForm.get('status').setValue('surveyassigned');
           }
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
@@ -221,9 +221,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
             source: this.survey.source,
             createdby: this.survey.createdby.id
           });
-          if (this.survey.assignto !== null && this.survey.assignto !== undefined) {
+          if (this.survey.assignedto !== null && this.survey.assignedto !== undefined) {
             this.surveyForm.patchValue({
-              assignto: this.survey.assignto.id,
+              assignedto: this.survey.assignedto.id,
               status: 'surveyassigned'
             });
           }

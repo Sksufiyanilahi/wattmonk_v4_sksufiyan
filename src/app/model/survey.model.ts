@@ -18,7 +18,7 @@ export class SurveyDataModel {
   updated_at: Date;
   address: string;
   source: string;
-  assignto?: User;
+  assignedto?: User;
   createdby?: User;
   mspimages: Image[];
   utilitymeterimages: Image[];
@@ -51,6 +51,8 @@ export class SurveyDataModel {
   interconnection: string;
   utility: InverterMadeModel;
   status: string;
+  latitude: string;
+  longitude: string;
 }
 
 

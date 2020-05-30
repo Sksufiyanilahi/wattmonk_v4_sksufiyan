@@ -1,5 +1,4 @@
-<ion-content [ngClass]="{'background-color-transparent': showCameraInterface, 'white-bg': !showCameraInterface}"
-             #contentArea>
+<ion-header [ngClass]="{'background-color-transparent': page === PageType.CAMERA_INTERFACE, 'white-bg': page !== PageType.CAMERA_INTERFACE}">
     <ion-progress-bar [value]="totalPercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
     <ion-grid class="colored" #header>
         <ion-row justify-content-center>
@@ -8,238 +7,253 @@
                     <ion-icon name="chevron-back-outline" color="light"></ion-icon>
                 </ion-button>
             </ion-col>
-            <ion-col class="ion-no-padding end-centered" *ngIf="!showForm">
+            <ion-col class="ion-no-padding end-centered" *ngIf="page === PageType.CAMERA_INTERFACE">
                 <ion-icon name="information-circle" class="info-icon"></ion-icon>
                 <span>Capture {{itemName}} {{selectedImageModel.imageTitle}}</span>
             </ion-col>
         </ion-row>
     </ion-grid>
-    <div class="ion-no-padding black-bg" *ngIf="!showCameraInterface && !showForm || showImageOptions"
-         [style.height.px]="imageAreaHeight">
-        <ion-img *ngIf="selectedImageModel.image" [src]="selectedImageModel.image" class="object-fit-contain"></ion-img>
-    </div>
-    <div class="ion-no-padding" *ngIf="!showCameraInterface && showForm">
-        <form [formGroup]="detailsForm" class="white-bg" *ngIf="surveyType === 'battery'">
-            <ion-grid class="ion-padding">
-                <ion-row>
-                    <ion-col size="6">
-                        <app-auto-complete [dataList]="listOfSolarMake" placeholder="module make*"
-                                           formControlName="modulemake"></app-auto-complete>
-                    </ion-col>
-                    <ion-col size="6">
-                        <app-auto-complete [dataList]="listOfSolarMade" placeholder="module model*"
-                                           formControlName="modulemodel"></app-auto-complete>
+</ion-header>
 
-                    </ion-col>
-                </ion-row>
+<!--Old-->
+<!--<ion-content *ngIf="!showCameraInterface && !showForm || showImageOptions" class="ion-no-padding black-bg">-->
+<!--    <ion-img *ngIf="selectedImageModel.image" [src]="selectedImageModel.image" class="object-fit-contain"></ion-img>-->
+<!--</ion-content>-->
 
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-label style="display: none">battery backup</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Battery Backup" ok-text="Ok"
-                                        cancel-text="Cancel"
-                                        formControlName="batterybackup">
-                                <ion-select-option value="whole">Whole</ion-select-option>
-                                <ion-select-option value="partial">Partial</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
+<ion-content *ngIf="page === PageType.CAMERA_INTERFACE">
+    <span *ngIf="!hardwareCameraEnabled">Camera Interface</span>
+</ion-content>
 
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-label style="display: none">Interconnection</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Interconnection" ok-text="Ok"
-                                        cancel-text="Cancel"
-                                        formControlName="interconnection">
-                                <ion-select-option value="backfed">Backfed</ion-select-option>
-                                <ion-select-option value="dreatemainbreaker">Derate main breaker</ion-select-option>
-                                <ion-select-option value="sstwithct">SST with CT</ion-select-option>
-                                <ion-select-option value="loadsidetap">Load Side Tap</ion-select-option>
-                                <ion-select-option value="sstwithlocationofsst">SST with location of SST
-                                </ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
+<ion-content *ngIf="page === PageType.IMAGE_PREVIEW || page === PageType.IMAGE_PREVIEW_WITH_OPTIONS" class="ion-no-padding black-bg">
+    <ion-img *ngIf="selectedImageModel.image" [src]="selectedImageModel.image" class="object-fit-contain"></ion-img>
+</ion-content>
 
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-label style="display: none">service feed source</ion-label>
-                            <ion-select class="form_input select_div" placeholder="service feed source" ok-text="Ok"
-                                        cancel-text="Cancel"
-                                        formControlName="servicefeedsource">
-                                <ion-select-option value="underground">Underground</ion-select-option>
-                                <ion-select-option value="overhead">Overhead</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+<ion-content *ngIf="page === PageType.MAP_PAGE" class="ion-no-padding black-bg">
+    <ion-img [src]="googleImageUrl" class="object-fit-contain"></ion-img>
+</ion-content>
 
-            <ion-grid class="ion-padding">
-                <ion-row class="ion-align-items-center ion-justify-content-center">
-                    <ion-col *ngIf="prelimUrl === ''">
-                        <span>Select Prelim Design</span>
-                    </ion-col>
-                    <ion-col *ngIf="prelimUrl !== ''">
-                        <span>Prelim Design Selected</span>
-                    </ion-col>
-                    <ion-col size="auto" *ngIf="prelimUrl !== ''">
-                        <ion-button (click)="removeFile()" fill="clear">Remove</ion-button>
-                    </ion-col>
-                    <ion-col size="auto" *ngIf="prelimUrl === ''">
-                        <ion-button (click)="selectFile()" fill="clear">Select</ion-button>
-                    </ion-col>
-                </ion-row>
+<ion-content class="ion-no-padding" *ngIf="page === PageType.DETAILS_FORM">
+    <form [formGroup]="detailsForm" class="white-bg" *ngIf="surveyType === 'battery'">
+        <ion-grid class="ion-padding">
+            <ion-row>
+                <ion-col size="6">
+                    <app-auto-complete [dataList]="listOfSolarMake" placeholder="module make*"
+                                       formControlName="modulemake"></app-auto-complete>
+                </ion-col>
+                <ion-col size="6">
+                    <app-auto-complete [dataList]="listOfSolarMade" placeholder="module model*"
+                                       formControlName="modulemodel"></app-auto-complete>
 
-                <ion-row class="ion-margin-top">
-                    <ion-col size="12" class="ion-no-padding">
-                        <span class="input-placeholder">additionalNotes</span>
-                    </ion-col>
-                    <ion-col size="12" class="ion-no-padding">
-                        <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
-                                      formControlName="additionalNotes"></ion-textarea>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+                </ion-col>
+            </ion-row>
 
-            <ion-grid>
-                <ion-row>
-                    <ion-col></ion-col>
-                    <ion-col size="auto">
-                        <ion-button class="action-button-color" fill="clear" (click)="saveSurvey()">Done</ion-button>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item class="ion-no-padding">
+                        <ion-label style="display: none">battery backup</ion-label>
+                        <ion-select class="form_input select_div" placeholder="Battery Backup" ok-text="Ok"
+                                    cancel-text="Cancel"
+                                    formControlName="batterybackup">
+                            <ion-select-option value="whole">Whole</ion-select-option>
+                            <ion-select-option value="partial">Partial</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
 
-        </form>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item class="ion-no-padding">
+                        <ion-label style="display: none">Interconnection</ion-label>
+                        <ion-select class="form_input select_div" placeholder="Interconnection" ok-text="Ok"
+                                    cancel-text="Cancel"
+                                    formControlName="interconnection">
+                            <ion-select-option value="backfed">Backfed</ion-select-option>
+                            <ion-select-option value="dreatemainbreaker">Derate main breaker</ion-select-option>
+                            <ion-select-option value="sstwithct">SST with CT</ion-select-option>
+                            <ion-select-option value="loadsidetap">Load Side Tap</ion-select-option>
+                            <ion-select-option value="sstwithlocationofsst">SST with location of SST
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
 
-        <form [formGroup]="pvDetailsForm" class="white-bg" *ngIf="surveyType !== 'battery'">
-            <ion-grid class="ion-padding">
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-label style="display: none">Type of roof material</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Type of roof material*" ok-text="Ok"
-                                        cancel-text="Cancel"
-                                        formControlName="roofMaterial">
-                                <ion-select-option value="material.id" *ngFor="let material of listOfRoofMaterial">{{material.name}}</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-label style="display: none">Service feed source</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Service feed source*" ok-text="Ok"
-                                        cancel-text="Cancel"
-                                        formControlName="servicefeedsource">
-                                <ion-select-option value="underground">Underground</ion-select-option>
-                                <ion-select-option value="overhead">Overhead</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item class="ion-no-padding">
+                        <ion-label style="display: none">service feed source</ion-label>
+                        <ion-select class="form_input select_div" placeholder="service feed source" ok-text="Ok"
+                                    cancel-text="Cancel"
+                                    formControlName="servicefeedsource">
+                            <ion-select-option value="underground">Underground</ion-select-option>
+                            <ion-select-option value="overhead">Overhead</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+        <ion-grid class="ion-padding">
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col *ngIf="prelimUrl === ''">
+                    <span>Select Prelim Design</span>
+                </ion-col>
+                <ion-col *ngIf="prelimUrl !== ''">
+                    <span>Prelim Design Selected</span>
+                </ion-col>
+                <ion-col size="auto" *ngIf="prelimUrl !== ''">
+                    <ion-button (click)="removeFile()" fill="clear">Remove</ion-button>
+                </ion-col>
+                <ion-col size="auto" *ngIf="prelimUrl === ''">
+                    <ion-button (click)="selectFile()" fill="clear">Select</ion-button>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="ion-margin-top">
+                <ion-col size="12" class="ion-no-padding">
+                    <span class="input-placeholder">additionalNotes</span>
+                </ion-col>
+                <ion-col size="12" class="ion-no-padding">
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                  formControlName="additionalNotes"></ion-textarea>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+        <ion-grid>
+            <ion-row>
+                <ion-col></ion-col>
+                <ion-col size="auto">
+                    <ion-button class="action-button-color" fill="clear" (click)="saveSurvey()">Done</ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+    </form>
+
+    <form [formGroup]="pvDetailsForm" class="white-bg" *ngIf="surveyType !== 'battery'">
+        <ion-grid class="ion-padding">
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item class="ion-no-padding">
+                        <ion-label style="display: none">Type of roof material</ion-label>
+                        <ion-select class="form_input select_div" placeholder="Type of roof material*" ok-text="Ok"
+                                    cancel-text="Cancel"
+                                    formControlName="roofMaterial">
+                            <ion-select-option value="material.id"
+                                               *ngFor="let material of listOfRoofMaterial">{{material.name}}</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item class="ion-no-padding">
+                        <ion-label style="display: none">Service feed source</ion-label>
+                        <ion-select class="form_input select_div" placeholder="Service feed source*" ok-text="Ok"
+                                    cancel-text="Cancel"
+                                    formControlName="servicefeedsource">
+                            <ion-select-option value="underground">Underground</ion-select-option>
+                            <ion-select-option value="overhead">Overhead</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
 
 
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-label style="display: none">Any existing solar system</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Any Existing Solar System*"
-                                        ok-text="Ok"
-                                        cancel-text="Cancel"
-                                        formControlName="existingSolarSystem">
-                                <ion-select-option value="true">Yes</ion-select-option>
-                                <ion-select-option value="false">No</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
-                <ion-row *ngIf="pvDetailsForm.get('existingSolarSystem').value === 'true'">
-                    <ion-col size="12" class="ion-no-padding">
-                        <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
-                                      formControlName="existingSolarSystemDetails"
-                                      placeholder="Existing solar system details*"></ion-textarea>
-                    </ion-col>
-                </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item class="ion-no-padding">
+                        <ion-label style="display: none">Any existing solar system</ion-label>
+                        <ion-select class="form_input select_div" placeholder="Any Existing Solar System*"
+                                    ok-text="Ok"
+                                    cancel-text="Cancel"
+                                    formControlName="existingSolarSystem">
+                            <ion-select-option value="true">Yes</ion-select-option>
+                            <ion-select-option value="false">No</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="pvDetailsForm.get('existingSolarSystem').value === 'true'">
+                <ion-col size="12" class="ion-no-padding">
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                  formControlName="existingSolarSystemDetails"
+                                  placeholder="Existing solar system details*"></ion-textarea>
+                </ion-col>
+            </ion-row>
 
-                <ion-row>
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-label style="display: none">is it newly constructed house</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Is it newly constructed house*"
-                                        ok-text="Ok"
-                                        cancel-text="Cancel"
-                                        formControlName="newConstruction">
-                                <ion-select-option value="true">Yes</ion-select-option>
-                                <ion-select-option value="false">No</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
-                <ion-row *ngIf="pvDetailsForm.get('newConstruction').value === 'true'">
-                    <ion-col size="12" class="ion-no-padding">
-                        <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
-                                      formControlName="newConstructionplans"
-                                      placeholder="New construction plans*"></ion-textarea>
-                    </ion-col>
-                </ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item class="ion-no-padding">
+                        <ion-label style="display: none">is it newly constructed house</ion-label>
+                        <ion-select class="form_input select_div" placeholder="Is it newly constructed house*"
+                                    ok-text="Ok"
+                                    cancel-text="Cancel"
+                                    formControlName="newConstruction">
+                            <ion-select-option value="true">Yes</ion-select-option>
+                            <ion-select-option value="false">No</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="pvDetailsForm.get('newConstruction').value === 'true'">
+                <ion-col size="12" class="ion-no-padding">
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                  formControlName="newConstructionplans"
+                                  placeholder="New construction plans*"></ion-textarea>
+                </ion-col>
+            </ion-row>
 
-                <ion-row *ngIf="surveyType === 'pvbattery'">
-                    <ion-col size="12">
-                        <ion-item class="ion-no-padding">
-                            <ion-label style="display: none">Is it newly constructed house</ion-label>
-                            <ion-select class="form_input select_div" placeholder="Client require backup system*"
-                                        ok-text="Ok"
-                                        cancel-text="Cancel"
-                                        formControlName="backupsystem">
-                                <ion-select-option value="whole">Whole</ion-select-option>
-                                <ion-select-option value="partial">Partial</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
-                <ion-row *ngIf="surveyType === 'pvbattery'" class="ion-margin-top">
-                    <ion-col size="12" class="ion-no-padding">
-                        <span class="input-placeholder">Any load not backed up*</span>
-                    </ion-col>
-                    <ion-col size="12" class="ion-no-padding">
-                        <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
-                                      formControlName="loadnotbackedup"></ion-textarea>
-                    </ion-col>
-                </ion-row>
+            <ion-row *ngIf="surveyType === 'pvbattery'">
+                <ion-col size="12">
+                    <ion-item class="ion-no-padding">
+                        <ion-label style="display: none">Is it newly constructed house</ion-label>
+                        <ion-select class="form_input select_div" placeholder="Client require backup system*"
+                                    ok-text="Ok"
+                                    cancel-text="Cancel"
+                                    formControlName="backupsystem">
+                            <ion-select-option value="whole">Whole</ion-select-option>
+                            <ion-select-option value="partial">Partial</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="surveyType === 'pvbattery'" class="ion-margin-top">
+                <ion-col size="12" class="ion-no-padding">
+                    <span class="input-placeholder">Any load not backed up*</span>
+                </ion-col>
+                <ion-col size="12" class="ion-no-padding">
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                  formControlName="loadnotbackedup"></ion-textarea>
+                </ion-col>
+            </ion-row>
 
-                <ion-row class="ion-margin-top">
-                    <ion-col size="12" class="ion-no-padding">
-                        <span class="input-placeholder">additionalNotes</span>
-                    </ion-col>
-                    <ion-col size="12" class="ion-no-padding">
-                        <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
-                                      formControlName="additionalNotes"></ion-textarea>
-                    </ion-col>
-                </ion-row>
+            <ion-row class="ion-margin-top">
+                <ion-col size="12" class="ion-no-padding">
+                    <span class="input-placeholder">additionalNotes</span>
+                </ion-col>
+                <ion-col size="12" class="ion-no-padding">
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                  formControlName="additionalNotes"></ion-textarea>
+                </ion-col>
+            </ion-row>
 
-                <ion-row>
-                    <ion-col></ion-col>
-                    <ion-col size="auto">
-                        <ion-button class="action-button-color" fill="clear" (click)="saveSurvey()">Done</ion-button>
-                    </ion-col>
-                </ion-row>
+            <ion-row>
+                <ion-col></ion-col>
+                <ion-col size="auto">
+                    <ion-button class="action-button-color" fill="clear" (click)="saveSurvey()">Done</ion-button>
+                </ion-col>
+            </ion-row>
 
-            </ion-grid>
-        </form>
-    </div>
+        </ion-grid>
+    </form>
 </ion-content>
 
 <ion-footer class="colored ion-no-border">
-    <ion-grid>
-        <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="showImageOptions">
+    <ion-grid *ngIf="page !== PageType.MAP_PAGE">
+        <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="page === PageType.IMAGE_PREVIEW_WITH_OPTIONS">
             <ion-col>
                 <span>{{itemName}} {{selectedImageModel.imageTitle}}</span>
             </ion-col>
@@ -250,7 +264,7 @@
                 <ion-button fill="clear" (click)="shiftToNextImage()">Next</ion-button>
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="showCameraInterface && !showForm || showImageOptions">
+        <ion-row>
             <ion-col *ngFor="let menu of subMenu; let j = index" class="ion-text-center"
                      (click)="selectSubMenu(menu, j)">
                 <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -263,7 +277,7 @@
                 </ion-row>
             </ion-col>
         </ion-row>
-        <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="showCameraInterface && !showForm">
+        <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="page === PageType.CAMERA_INTERFACE">
             <ion-col size="4">
             </ion-col>
             <ion-col size="4" class="ion-text-center">
@@ -291,12 +305,30 @@
         </ion-row>
     </ion-grid>
     <ion-grid>
-        <ion-row>
-            <ion-col size="6" class="ion-text-center" (click)="saveForLater()">
-                Save/Home
+        <ion-row class="ion-no-padding">
+            <ion-col size="12" class="ion-no-padding" style="background: white; height: 1px;">
             </ion-col>
-            <ion-col size="6" class="ion-text-center" (click)="goBack()">
+        </ion-row>
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+            <ion-col size="4"
+                     class="ion-text-center bottom-button ion-align-items-center ion-justify-content-center d-flex"
+                     (click)="saveForLater()">
+                <span>Save/Home</span>
+            </ion-col>
+            <ion-col size="4"
+                     class="ion-text-center bottom-button ion-align-items-center ion-justify-content-center d-flex"
+                     (click)="goBack()">
                 Discard Changes
+            </ion-col>
+            <ion-col size="4" *ngIf="page !== PageType.MAP_PAGE"
+                     class="ion-text-center bottom-button ion-align-items-center ion-justify-content-center d-flex"
+                     (click)="showMapViewForSurvey()">
+                Show Map
+            </ion-col>
+            <ion-col size="4" *ngIf="page === PageType.MAP_PAGE"
+                     class="ion-text-center bottom-button ion-align-items-center ion-justify-content-center d-flex"
+                     (click)="showCameraViewForSurvey()">
+                Show Camera
             </ion-col>
         </ion-row>
     </ion-grid>

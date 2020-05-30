@@ -55,7 +55,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
       comments: new FormControl('', [Validators.required])
     });
     this.assigneeForm = this.formBuilder.group({
-      assignto: new FormControl('', [Validators.required])
+      assignedto: new FormControl('', [Validators.required])
     });
   }
 
@@ -103,7 +103,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
         this.survey.pvmeter = 'no';
       }
     }
-    this.assigned = this.survey.assignto !== null && this.survey.assignto !== undefined;
+    this.assigned = this.survey.assignedto !== null && this.survey.assignedto !== undefined;
     this.rescheduleForm.patchValue({
       datetime: this.survey.datetime
     });

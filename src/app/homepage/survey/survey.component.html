@@ -20,19 +20,20 @@
                     <span class="customer-address z-100"
                           (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
                     <ion-row class="ion-no-margin ion-no-margin">
-                        <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="surveyData.status !== 'surveycompleted'"
-                                 [routerLink]="['/camera/',surveyData.id, surveyData.jobtype]"
+                        <ion-col size="auto" class="ion-no-margin ion-no-padding"
+                                 *ngIf="surveyData.status !== 'surveycompleted'"
+                                 [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                  routerDirection="forward">
                             <span class="ion-text-end action-button-color">Start Survey</span>
                         </ion-col>
                         <ion-col></ion-col>
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
-                                 *ngIf="surveyData.assignto === null || surveyData.assignto === undefined">
+                                 *ngIf="surveyData.assignedto === null || surveyData.assignedto === undefined">
                             <span class="ion-text-end action-button-color"
                                   (click)="openSurveyors(surveyData.id)">Assign</span>
                         </ion-col>
                     </ion-row>
-                    <span class="ion-text-end timestamp" [routerLink]="['/design-details/',surveyData.id]">
+                    <span class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                         {{surveyData.created_at | date: 'hh:mm a'}}
                     </span>
 
@@ -59,7 +60,7 @@
             <ion-row>
                 <ion-col size="12">
                     <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
-                                       formControlName="assignto"></app-user-selector>
+                                       formControlName="assignedto"></app-user-selector>
                 </ion-col>
             </ion-row>
             <ion-row>

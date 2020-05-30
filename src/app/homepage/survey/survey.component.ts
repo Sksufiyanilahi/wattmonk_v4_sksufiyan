@@ -46,7 +46,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
     this.assignForm = this.formBuilder.group({
-      assignto: new FormControl('', [Validators.required])
+      assignedto: new FormControl('', [Validators.required])
     });
   }
 
@@ -104,10 +104,6 @@ export class SurveyComponent implements OnInit, OnDestroy {
         });
       });
     });
-  }
-
-  openSurveyDetails(id: number) {
-    this.navController.navigateForward('/survey-detail/' + id);
   }
 
   openAddressOnMap(address: string) {

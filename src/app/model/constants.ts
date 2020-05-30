@@ -15,6 +15,15 @@ export enum UserRoles {
   ANALYST = 10
 }
 
+export enum MapPageType {
+  CAMERA_INTERFACE = 0,
+  IMAGE_PREVIEW = 1,
+  IMAGE_PREVIEW_WITH_OPTIONS = 2,
+  DETAILS_FORM = 3,
+  NONE = 4,
+  MAP_PAGE = 5
+}
+
 export const INVALID_EMAIL_MESSAGE = 'Invalid Email';
 export const FIELD_REQUIRED = 'This field is required';
 
@@ -22,6 +31,7 @@ export const COMET_CHAT_APP_ID = '190385dcec51285';
 export const COMET_CHAT_AUTH_KEY = '5cafae1939d4fc620698c50ae3f25e727fc90213';
 export const COMET_CHAT_REGION = 'us';
 
+export const GOOGLE_API_KEY = 'AIzaSyCePxz4wA_knfjvNBhV0RKzrySsf4o8QFU';
 
 export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
   {
@@ -459,7 +469,7 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'roofimages',
-            imageName: 'roofphotos'
+            imageName: 'roofphotos1'
           }
         ]
       },
@@ -483,7 +493,7 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'roofdimensionimages',
-            imageName: 'roofdimensions'
+            imageName: 'roofdimensions1'
           }
         ]
       },
@@ -507,7 +517,7 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'obstaclesimages',
-            imageName: 'obstaclesphotos'
+            imageName: 'obstaclesphotos1'
           }
         ]
       },
@@ -531,7 +541,7 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'obstaclesdimensionsimages',
-            imageName: 'obstaclesdimensions'
+            imageName: 'obstaclesdimensions1'
           }
         ]
       }
@@ -562,7 +572,7 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'atticimages',
-            imageName: 'atticphotos'
+            imageName: 'atticphotos1'
           }
         ]
       }
@@ -775,7 +785,7 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'roofimages',
-            imageName: 'roofimage'
+            imageName: 'roofphotos1'
           }
         ]
       },
@@ -799,7 +809,7 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'roofdimensionimages',
-            imageName: 'roofdimensions'
+            imageName: 'roofdimensions1'
           }
         ]
       },
@@ -823,7 +833,7 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'obstaclesimages',
-            imageName: 'obstaclephotos'
+            imageName: 'obstaclephotos1'
           }
         ]
       },
@@ -847,7 +857,7 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'obstaclesdimensionsimages',
-            imageName: 'obstaclesdimensions'
+            imageName: 'obstaclesdimensions1'
           }
         ]
       }
@@ -878,7 +888,7 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'atticimages',
-            imageName: 'atticphotos'
+            imageName: 'atticphotos1'
           }
         ]
       }
