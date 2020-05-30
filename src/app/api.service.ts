@@ -13,6 +13,7 @@ import { SurveyModel, SurveyDataModel } from './model/survey.model';
 import { DesginDataModel } from './model/design.model';
 import { InverterMadeModel } from './model/inverter-made.model';
 import { AssigneeModel } from './model/assignee.model';
+import { SearchModel } from './model/search.model';
 
 @Injectable({
   providedIn: 'root'
@@ -130,8 +131,8 @@ export class ApiService {
     return this.http.get<AssigneeModel[]>(this.baseUrl + '/surveyors?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
 
-  searchAllDesgin(searchterm) {
-    return this.http.get(this.baseUrl + '/globalsearch?term=' + searchterm , { headers: this.headers });
+  searchAllDesgin(searchterm): Observable<SearchModel[]> {
+    return this.http.get<SearchModel[]>(this.baseUrl + '/globalsearch?term=' + searchterm , { headers: this.headers });
   }
 
   getDesigners(userType: number): Observable<AssigneeModel[]> {

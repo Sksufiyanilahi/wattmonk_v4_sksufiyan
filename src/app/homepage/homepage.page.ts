@@ -12,6 +12,8 @@ import { Subscription } from 'rxjs';
 import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
+import { DesginDataModel } from '../model/design.model';
+import { SurveyDataModel } from '../model/survey.model';
 
 @Component({
   selector: 'app-homepage',
@@ -33,6 +35,9 @@ export class HomepagePage implements OnInit, OnDestroy {
     useLocale: true,
     maxResults: 5
   };
+
+  searchDesginItem: DesginDataModel[] = [];
+  searchSurveyItem: SurveyDataModel[] = [];
 
   private subscription: Subscription;
   drawerState = DrawerState.Docked;
@@ -107,9 +112,13 @@ export class HomepagePage implements OnInit, OnDestroy {
     }
   }
 
-  searchDesgin() {
+  searchDesginAndSurvey() {
     if (this.searchbarElement !== '') {
       this.apiService.searchAllDesgin(this.searchbarElement).subscribe((item) => {
+        item.forEach((item) => {
+          this.searchDesginItem = item.desgin
+          this.searchSurveyItem = item.survey
+        });
       }, (error) => {
         console.log(error);
       });
@@ -309,6 +318,9 @@ export class HomepagePage implements OnInit, OnDestroy {
   showHom() {
     this.showHome = true;
     this.showSearchBar = false;
+    this.searchSurveyItem = [];
+    this.searchDesginItem = [];
+    this.searchbarElement = '';
   }
 
   onClick() {
