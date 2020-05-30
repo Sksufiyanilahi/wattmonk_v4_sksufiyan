@@ -1,30 +1,31 @@
 <ion-content style="position: relative;">
     <!-- <ion-header class="ion-no-border white-bg" style="position: relative;">
         <ion-toolbar> -->
-            <ion-grid>
-                <ion-row class="ion-align-items-center">
-                    <ion-col *ngIf="showHome === true">
-                        <h1 class="ion-no-padding ion-no-margin home">Home</h1>
-                    </ion-col>
-                    <ion-col *ngIf="showSearchBar === true">
-                        <ion-searchbar  placeholder="home" (ionClear)="showHom()" [(ngModel)]="searchbarElement" (ionInput)="getItems($event)" class="custom"></ion-searchbar>
-                    </ion-col>
-                    <ion-col size="auto" *ngIf="showHome === true">
-                        <div class="notification-padding" (click)="onClick()">
-                            <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
-                        </div>
-                    </ion-col>
-                    <ion-col size="auto">
-                        <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward">
-                            <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
-                            <span class="badge">
+    <ion-grid>
+        <ion-row class="ion-align-items-center">
+            <ion-col *ngIf="showHome === true">
+                <h1 class="ion-no-padding ion-no-margin home">Home</h1>
+            </ion-col>
+            <ion-col *ngIf="showSearchBar === true">
+                <ion-searchbar placeholder="home" (ionClear)="showHom()" [(ngModel)]="searchbarElement"
+                               (ionInput)="getItems($event)" class="custom"></ion-searchbar>
+            </ion-col>
+            <ion-col size="auto" *ngIf="showHome === true">
+                <div class="notification-padding" (click)="onClick()">
+                    <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
+                </div>
+            </ion-col>
+            <ion-col size="auto">
+                <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward">
+                    <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
+                    <span class="badge">
                                 4
                             </span>
-                        </div>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        <!-- </ion-toolbar> -->
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <!-- </ion-toolbar> -->
     <!-- </ion-header> -->
     <ion-tabs style="margin-top: 52px;">
         <ion-tab-bar slot="top" class="ion-no-border">
@@ -38,38 +39,38 @@
     </ion-tabs>
 
     <ion-grid style="position: absolute;">
-                <div class="searchbar_div">
-                    <ion-grid *ngIf="items && items.length !== 0" >
-                        <ion-row >
-                          <ion-col size="2">
-                            <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
-                          </ion-col>
-                          <ion-col size="10" style="margin-top: 6px;">
-                            <div style="display: flex; justify-content: space-between;">
-                              <span class="history-name" >Will Smith</span>
-                              <span class="history-add" >updated May 2,2020</span>
-                            </div>
-                            <div>
-                              <span class="history-add" >
+        <div class="searchbar_div">
+            <ion-grid *ngIf="items && items.length !== 0">
+                <ion-row>
+                    <ion-col size="2">
+                        <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
+                    </ion-col>
+                    <ion-col size="10" style="margin-top: 6px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span class="history-name">Will Smith</span>
+                            <span class="history-add">updated May 2,2020</span>
+                        </div>
+                        <div>
+                              <span class="history-add">
                                 25,Wanright,St Providence Road USA
                               </span>
-                            </div>
-                            <div>
+                        </div>
+                        <div>
                               <span class="assign">
                                desgined assign to.....
                               </span>
-                            </div>
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
-          </div>
-          <div class="searchbar_div nodata_div">
-            <ion-grid *ngIf="items && items.length === 0" >
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+        <div class="searchbar_div nodata_div">
+            <ion-grid *ngIf="items && items.length === 0">
                 <div class="h-100 d-flex flex-column align-center justify-center">
                     <span>No desgin found</span>
                 </div>
-              </ion-grid>
-          </div>
+            </ion-grid>
+        </div>
     </ion-grid>
 
 </ion-content>

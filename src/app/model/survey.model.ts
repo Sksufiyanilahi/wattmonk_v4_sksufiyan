@@ -50,6 +50,7 @@ export class SurveyDataModel {
   jobtype: string;
   interconnection: string;
   utility: InverterMadeModel;
+  status: string;
 }
 
 

@@ -54,6 +54,7 @@ export class CameraPage implements OnInit {
   detailsForm: FormGroup;
   pvDetailsForm: FormGroup;
   listOfSolarMake: SolarMake[] = [];
+  listOfRoofMaterial: SolarMake[] = [];
   listOfSolarMade: SolarMadeModel[] = [];
 
   hardwareCameraEnabled = false;
@@ -103,7 +104,8 @@ export class CameraPage implements OnInit {
         pvinverterlocation: new FormControl('', [Validators.required]),
         pvmeter: new FormControl('', [Validators.required]),
         acdisconnect: new FormControl('', [Validators.required]),
-        interconnection: new FormControl('', [Validators.required])
+        interconnection: new FormControl('', [Validators.required]),
+        status: new FormControl('surveycompleted', [Validators.required])
       });
 
       this.detailsForm.get('modulemake').valueChanges.subscribe(val => {
@@ -128,6 +130,7 @@ export class CameraPage implements OnInit {
         newConstructionplans: new FormControl(''),
         backupsystem: new FormControl(''),
         loadnotbackedup: new FormControl(''),
+        status: new FormControl('surveycompleted', [Validators.required])
       });
     }
 
@@ -232,6 +235,24 @@ export class CameraPage implements OnInit {
       console.log(error);
       this.utilities.errorSnackBar(error.message[0].messages[0].message);
     });
+  }
+
+  getRoofMaterial() {
+    this.utilities.showLoading('Loading').then(() => {
+      this.apiService.getRoofMaterial().subscribe(response => {
+        this.utilities.hideLoading().then(() => {
+          this.listOfRoofMaterial = response;
+          console.log(this.listOfRoofMaterial);
+        });
+      }, responseError => {
+        this.utilities.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          console.log(error);
+          this.utilities.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+
   }
 
   async showCameraDenied() {
@@ -559,6 +580,7 @@ export class CameraPage implements OnInit {
         this.showImageOptions = false;
         this.showForm = true;
         this.getSolarMake();
+        this.getRoofMaterial();
         this.cd.detectChanges();
       } else {
         this.startCamera();

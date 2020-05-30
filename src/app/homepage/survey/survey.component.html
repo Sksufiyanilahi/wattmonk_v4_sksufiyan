@@ -20,7 +20,7 @@
                     <span class="customer-address z-100"
                           (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
                     <ion-row class="ion-no-margin ion-no-margin">
-                        <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="!surveyData.utility"
+                        <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="surveyData.status !== 'surveycompleted'"
                                  [routerLink]="['/camera/',surveyData.id, surveyData.jobtype]"
                                  routerDirection="forward">
                             <span class="ion-text-end action-button-color">Start Survey</span>
@@ -32,6 +32,9 @@
                                   (click)="openSurveyors(surveyData.id)">Assign</span>
                         </ion-col>
                     </ion-row>
+                    <span class="ion-text-end timestamp" [routerLink]="['/design-details/',surveyData.id]">
+                        {{surveyData.created_at | date: 'hh:mm a'}}
+                    </span>
 
                 </div>
 

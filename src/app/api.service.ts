@@ -44,6 +44,10 @@ export class ApiService {
     return this.http.get<SolarMake[]>(this.baseUrl + '/modulemakes', { headers: this.headers });
   }
 
+  getRoofMaterial() {
+    return this.http.get<SolarMake[]>(this.baseUrl + '/roofmaterials', { headers: this.headers });
+  }
+
   getSolarMade(id: number) {
     return this.http.get<SolarMadeModel[]>(this.baseUrl + '/modulemodels?modulemake.id_eq=' + id, { headers: this.headers });
   }
