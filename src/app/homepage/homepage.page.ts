@@ -112,13 +112,11 @@ export class HomepagePage implements OnInit, OnDestroy {
     }
   }
 
-  searchDesginAndSurvey() {
+  searchDesginAndSurvey(event: CustomEvent) {
     if (this.searchbarElement !== '') {
-      this.apiService.searchAllDesgin(this.searchbarElement).subscribe((item) => {
-        item.forEach((item) => {
-          this.searchDesginItem = item.desgin
-          this.searchSurveyItem = item.survey
-        });
+      this.apiService.searchAllDesgin(this.searchbarElement).subscribe((searchModel) => {
+        this.searchDesginItem = searchModel.desgin;
+        this.searchSurveyItem = searchModel.survey;
       }, (error) => {
         console.log(error);
       });
@@ -206,7 +204,6 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
 
-
   getGeoLocation() {
 
     this.geolocation.getCurrentPosition().then((resp) => {
@@ -240,10 +237,6 @@ export class HomepagePage implements OnInit, OnDestroy {
         this.showNoLocation();
         alert('Error getting location' + JSON.stringify(error));
       });
-    // }, (error) => {
-    //
-    // }
-    // );
   }
 
   generateAddress(addressObj) {
@@ -305,7 +298,7 @@ export class HomepagePage implements OnInit, OnDestroy {
       if (this.showSearchBar === true) {
         this.showSearchBar = false;
       } else {
-        // navigator.app.exitApp();
+        (navigator as any).app.exitApp();
       }
     });
   }

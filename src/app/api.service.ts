@@ -131,8 +131,8 @@ export class ApiService {
     return this.http.get<AssigneeModel[]>(this.baseUrl + '/surveyors?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
 
-  searchAllDesgin(searchterm): Observable<SearchModel[]> {
-    return this.http.get<SearchModel[]>(this.baseUrl + '/globalsearch?term=' + searchterm , { headers: this.headers });
+  searchAllDesgin(searchterm): Observable<SearchModel> {
+    return this.http.get<SearchModel>(this.baseUrl + '/globalsearch?term=' + searchterm , { headers: this.headers });
   }
 
   getDesigners(userType: number): Observable<AssigneeModel[]> {
