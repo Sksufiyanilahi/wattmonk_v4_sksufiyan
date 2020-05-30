@@ -1,4 +1,4 @@
-<ion-content (click)="close()">
+<ion-content (click)="close()" style="padding-bottom: 250px;">
     <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
         <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index" class="ion-margin-top">
             <ion-col size="12">
@@ -25,6 +25,10 @@
                     </span>
                 </div>
 
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="12" style="height: 100px;">
             </ion-col>
         </ion-row>
     </ion-grid>
