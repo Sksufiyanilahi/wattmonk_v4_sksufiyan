@@ -18,6 +18,7 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { IonicStorageModule } from '@ionic/storage';
+import { Firebase } from '@ionic-native/firebase/ngx';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -38,7 +39,8 @@ import { IonicStorageModule } from '@ionic/storage';
     HttpClient,
     StorageService,
     AuthGuardService,
-    Geolocation
+    Geolocation,
+    Firebase
   ],
   exports: [
     UtilitiesModule

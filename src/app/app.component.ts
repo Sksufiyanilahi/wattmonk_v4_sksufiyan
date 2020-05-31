@@ -9,6 +9,7 @@ import { ApiService } from './api.service';
 import { UtilitiesService } from './utilities.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_APP_ID, COMET_CHAT_REGION } from './model/constants';
+import { Firebase } from '@ionic-native/firebase/ngx';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ export class AppComponent {
     // private fcm: FCM,
     private apiservice: ApiService,
     private utilitiesService: UtilitiesService,
+    private firebase: Firebase
   ) {
     this.initializeApp();
   }
@@ -45,20 +47,19 @@ export class AppComponent {
   }
 
   getFcmToken() {
-    // this.fcm.getToken().then(token => {
-    //   console.log(token);
-    // });
+  this.firebase.getToken()
+  .then(token => {
+    console.log(`The token is ${token}`)})
+  .catch(error => {
+   console.error('Error getting token', error)});
   }
 
   getNotification() {
-    // this.fcm.onNotification().subscribe(data => {
-    //   console.log(data);
-    //   if (data.wasTapped) {
-    //     console.log('Received in background');
-    //   } else {
-    //     console.log('Received in foreground');
-    //   }
-    // });
+    this.firebase.onNotificationOpen()
+   .subscribe(data => {
+     console.log(`User opened a notification ${data}`)
+    });
+
   }
 
   setupCometChat() {
