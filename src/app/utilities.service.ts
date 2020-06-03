@@ -175,9 +175,7 @@ export class UtilitiesService {
 
   getBlobFromImageData(dataURI): Blob {
     // convert base64 to raw binary data held in a string
-    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
     const byteString = atob(dataURI.split(',')[1]);
-
     // separate out the mime component
     const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
 
@@ -188,10 +186,7 @@ export class UtilitiesService {
       ia[i] = byteString.charCodeAt(i);
     }
 
-    // write the ArrayBuffer to a blob, and you're done
-    const bb = new Blob([ab], { type: mimeString });
-    // bb.append(ab);
-    return bb;
+    return new Blob([ab], { type: mimeString });
   }
 
 

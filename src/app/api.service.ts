@@ -9,7 +9,7 @@ import { StorageService } from './storage.service';
 import { SolarMake } from './model/solar-make.model';
 import { SolarMadeModel } from './model/solar-made.model';
 import { InverterMakeModel } from './model/inverter-make.model';
-import { SurveyModel, SurveyDataModel } from './model/survey.model';
+import { SurveyDataModel } from './model/survey.model';
 import { DesginDataModel } from './model/design.model';
 import { InverterMadeModel } from './model/inverter-made.model';
 import { AssigneeModel } from './model/assignee.model';
@@ -141,12 +141,11 @@ public searchbarElement :string='';
 
   uploadImage(surveyId: number, key: string, blob: Blob, fileName: string) {
     const data = new FormData();
-    data.append('files', blob);
-    data.append('path', '');
+    data.append('files', blob, fileName);
+    data.append('path', 'survey/' + surveyId);
     data.append('refId', surveyId + '');
     data.append('ref', 'survey');
     data.append('field', key);
-    data.append('name', fileName);
 
     return this.http.post(this.baseUrl + '/upload', data, { headers: this.uploadHeaders });
   }

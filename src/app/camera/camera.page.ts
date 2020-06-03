@@ -176,6 +176,7 @@ export class CameraPage implements OnInit {
       }
 
     });
+
   }
 
   ngOnInit() {
@@ -323,9 +324,9 @@ export class CameraPage implements OnInit {
   takePicture() {
     if (this.hardwareCameraEnabled) {
       this.cameraPreview.takePicture({
-        width: 0,
-        height: 0,
-        quality: 80
+        width: 1080,
+        height: 1920,
+        quality: 70
       }).then((photo) => {
           this.stopCamera();
           this.page = MapPageType.IMAGE_PREVIEW;
