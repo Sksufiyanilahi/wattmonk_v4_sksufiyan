@@ -63,7 +63,7 @@
                     </ion-col>
                 </ion-row>
             </ion-grid>
-            <ion-grid *ngIf="searchSurveyItem && searchSurveyItem.length !== 0">
+            <ion-grid *ngIf="(searchSurveyItem && searchSurveyItem.length !== 0) else noDesignandSurvey" >
                 <ion-row *ngFor="let searchitem of searchSurveyItem">
                     <ion-col size="2">
                         <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
@@ -88,12 +88,14 @@
             </ion-grid>
         </div>
         <div class="searchbar_div nodata_div">
+            <ng-template #noDesignandSurvey>
             <ion-grid *ngIf="searchbarElement != '' && (searchSurveyItem && searchSurveyItem.length === 0) && (searchDesginItem && searchDesginItem.length === 0)">
-                <div class="h-100 d-flex flex-column align-center justify-center">
-                    <span>No desgin or survey found</span>
-                </div>
-            </ion-grid>
-        </div>
+                    <div class="h-100 d-flex flex-column align-center justify-center">
+                        <span>No desgin or survey found</span>
+                    </div>
+                </ion-grid>
+            </ng-template>
+            </div>
     </ion-grid>
 
 </ion-content>

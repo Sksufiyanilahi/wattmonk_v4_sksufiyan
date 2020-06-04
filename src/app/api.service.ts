@@ -132,7 +132,7 @@ public searchbarElement :string='';
   }
 
   searchAllDesgin(searchterm): Observable<SearchModel> {
-    return this.http.get<SearchModel>(this.baseUrl + '/globalsearch?term=' + searchterm , { headers: this.headers });
+    return this.http.get<SearchModel>(this.baseUrl + '/globalsearch?term=' + searchterm + '&userid=' + this.userId, { headers: this.headers });
   }
 
   getDesigners(userType: number): Observable<AssigneeModel[]> {
