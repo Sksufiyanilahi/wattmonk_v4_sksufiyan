@@ -25,7 +25,7 @@ export class ApiService {
   baseUrl = 'http://ec2-3-17-28-7.us-east-2.compute.amazonaws.com:1337';
   private parentId = '';
   private userId = '';
-
+public searchbarElement :string='';
   constructor(
     private http: HttpClient,
     private storageService: StorageService

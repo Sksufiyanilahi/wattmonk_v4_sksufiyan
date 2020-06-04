@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { UtilitiesService } from '../utilities.service';
 import { ApiService } from '../api.service';
 import { DatePipe } from '@angular/common';
@@ -14,6 +14,7 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { DesginDataModel } from '../model/design.model';
 import { SurveyDataModel } from '../model/survey.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
@@ -21,6 +22,8 @@ import { SurveyDataModel } from '../model/survey.model';
   styleUrls: ['./homepage.page.scss'],
 })
 export class HomepagePage implements OnInit, OnDestroy {
+  @Output() ionInput = new EventEmitter();
+  
 
   searchQuery = '';
   searchbarElement = '';
@@ -36,8 +39,8 @@ export class HomepagePage implements OnInit, OnDestroy {
     maxResults: 5
   };
 
-  searchDesginItem: DesginDataModel[] = [];
-  searchSurveyItem: SurveyDataModel[] = [];
+  searchDesginItem: []=[];
+  searchSurveyItem: []=[];
 
   private subscription: Subscription;
   drawerState = DrawerState.Docked;
@@ -52,7 +55,8 @@ export class HomepagePage implements OnInit, OnDestroy {
     private diagnostic: Diagnostic,
     private alertController: AlertController,
     private geolocation: Geolocation,
-    private toastController: ToastController
+    private toastController: ToastController,
+    public route: Router
   ) {
     // this.initializeItems();
   }
@@ -112,16 +116,54 @@ export class HomepagePage implements OnInit, OnDestroy {
     }
   }
 
-  searchDesginAndSurvey(event: CustomEvent) {
+  searchDesginAndSurvey(event) {
+
+      console.log(event ,this.searchbarElement);
+    
+      
     if (this.searchbarElement !== '') {
-      this.apiService.searchAllDesgin(this.searchbarElement).subscribe((searchModel) => {
-        this.searchDesginItem = searchModel.desgin;
-        this.searchSurveyItem = searchModel.survey;
+      this.apiService.searchAllDesgin(this.searchbarElement).subscribe((searchModel:any) => {
+        // console.log(searchModel);
+        this.searchDesginItem=[];
+        this.searchSurveyItem=[];
+        if(event.target.value !==""){
+         
+          searchModel.filter((element:any) => {
+            if(element.type=='design'){
+              this.searchDesginItem = searchModel;
+              // console.log(this.searchDesginItem);
+              
+            }else{
+              
+              this.searchSurveyItem = searchModel;
+            }
+          });
+          console.log(this.searchDesginItem);
+        }else{
+          this.searchDesginItem=[];
+          this.searchSurveyItem=[];
+        }
       }, (error) => {
         console.log(error);
       });
+    }else{
+      this.route.navigate(['homepage/design']);
     }
 
+  }
+
+  getdesigndata(serchTermData:any={"type":""}){
+    
+    console.log(serchTermData)
+    if(serchTermData.type=='design'){
+      this.route.navigate(['homepage/design'], {queryParams:{ serchTerm: serchTermData.id }});
+    }else  if(serchTermData.type=='survey'){
+      this.route.navigate(['homepage/survey'], {queryParams:{ serchTerm: serchTermData.id }});
+    }else{
+      this.route.navigate(['homepage/design']);
+    }
+ this.searchDesginItem=[];
+ this.searchSurveyItem=[];
   }
 
   requestLocationPermission() {
@@ -314,6 +356,7 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.searchSurveyItem = [];
     this.searchDesginItem = [];
     this.searchbarElement = '';
+    this.getdesigndata();
   }
 
   onClick() {

@@ -7,8 +7,8 @@
                 <h1 class="ion-no-padding ion-no-margin home">Home</h1>
             </ion-col>
             <ion-col *ngIf="showSearchBar === true">
-                <ion-searchbar placeholder="home" (ionClear)="showHom()" [(ngModel)]="searchbarElement"
-                               (ionInput)="searchDesginAndSurvey($event)" class="custom"></ion-searchbar>
+                <ion-searchbar debounce="0" placeholder="home" (ionClear)="showHom()" [(ngModel)]="searchbarElement"
+                               (ionChange)="searchDesginAndSurvey($event)" class="custom"></ion-searchbar>
             </ion-col>
             <ion-col size="auto" *ngIf="showHome === true">
                 <div class="notification-padding" (click)="onClick()">
@@ -41,48 +41,48 @@
     <ion-grid style="position: absolute;">
         <div class="searchbar_div">
             <ion-grid *ngIf="searchDesginItem && searchDesginItem.length !== 0">
-                <ion-row>
+                <ion-row *ngFor="let searchitem of searchDesginItem" (click)="getdesigndata(searchitem)">
                     <ion-col size="2">
                         <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
                     </ion-col>
                     <ion-col size="10" style="margin-top: 6px;">
                         <div style="display: flex; justify-content: space-between;">
-                            <span class="history-name">Will Smith</span>
-                            <span class="history-add">updated May 2,2020</span>
+                            <span class="history-name">{{searchitem.name}}</span>
+                            <span class="history-add">{{searchitem.created_at | date:'dd/MM/yyyy'}}</span>
                         </div>
                         <div>
                               <span class="history-add">
-                                25,Wanright,St Providence Road USA
+                                {{searchitem.address}}
                               </span>
                         </div>
-                        <div>
+                        <!-- <div>
                               <span class="assign">
                                desgined assign to.....
                               </span>
-                        </div>
+                        </div> -->
                     </ion-col>
                 </ion-row>
             </ion-grid>
             <ion-grid *ngIf="searchSurveyItem && searchSurveyItem.length !== 0">
-                <ion-row >
+                <ion-row *ngFor="let searchitem of searchSurveyItem">
                     <ion-col size="2">
                         <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
                     </ion-col>
                     <ion-col size="10" style="margin-top: 6px;">
                         <div style="display: flex; justify-content: space-between;">
-                            <span class="history-name">Will Smith</span>
-                            <span class="history-add">updated May 2,2020</span>
+                            <span class="history-name">{{searchitem.name}}</span>
+                            <span class="history-add">{{searchitem.created_at | date:'dd/MM/yyyy'}}</span>
                         </div>
                         <div>
                               <span class="history-add">
-                                25,Wanright,St Providence Road USA
+                                {{searchitem.address}}
                               </span>
                         </div>
-                        <div>
+                        <!-- <div>
                               <span class="assign">
                                desgined assign to.....
                               </span>
-                        </div>
+                        </div> -->
                     </ion-col>
                 </ion-row>
             </ion-grid>
