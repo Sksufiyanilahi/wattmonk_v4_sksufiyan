@@ -7,6 +7,10 @@ import { IonicModule } from '@ionic/angular';
 import { ChatPageRoutingModule } from './chat-routing.module';
 
 import { ChatPage } from './chat.page';
+import { ImageViewerComponent } from './image-viewer/image-viewer.component';
+import { Chooser } from '@ionic-native/chooser/ngx';
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @NgModule({
   imports: [
@@ -15,6 +19,12 @@ import { ChatPage } from './chat.page';
     IonicModule,
     ChatPageRoutingModule
   ],
-  declarations: [ChatPage]
+  declarations: [ChatPage, ImageViewerComponent],
+  providers: [
+    Chooser,
+    InAppBrowser,
+    ImagePicker
+  ]
 })
-export class ChatPageModule {}
+export class ChatPageModule {
+}

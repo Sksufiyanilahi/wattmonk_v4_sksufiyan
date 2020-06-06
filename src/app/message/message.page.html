@@ -45,31 +45,16 @@
     <ion-list *ngIf="conversations.length !== 0">
         <ion-item *ngFor="let conversation of conversations" (click)="openConversation(conversation)">
             <ion-avatar slot="start">
-                <img [src]="conversation.getConversationWith().getAvatar()">
+                <img *ngIf="conversation.getConversationWith().getAvatar()" [src]="conversation.getConversationWith().getAvatar()">
+                <img *ngIf="!conversation.getConversationWith().getAvatar()" src="/assets/images/user_placeholder.jpg">
             </ion-avatar>
             <ion-label>
                 <h2>{{conversation.getConversationWith().getName()}}</h2>
-                <p>{{conversation.getLastMessage().getText()}}</p>
+                <p *ngIf="conversation.getLastMessage().getType() === 'text'">{{conversation.getLastMessage().getText()}}</p>
+                <p *ngIf="conversation.getLastMessage().getType() !== 'text'">Media Message</p>
             </ion-label>
         </ion-item>
 
-<!--        <ion-grid>-->
-<!--            <ion-row>-->
-<!--                <ion-col>-->
-<!--                    <ion-img class="profile-icon" ></ion-img>-->
-<!--                </ion-col>-->
-<!--                <ion-col size="10" style="margin-top: 6px;">-->
-<!--                    <div class="message-box">-->
-<!--                        <span class="history-name"></span>-->
-<!--                    </div>-->
-<!--                    <div>-->
-<!--              <span class="history-add">-->
-<!--               {{conversation.getLastMessage().getText()}}-->
-<!--              </span>-->
-<!--                    </div>-->
-<!--                </ion-col>-->
-<!--            </ion-row>-->
-<!--        </ion-grid>-->
     </ion-list>
 
     <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">

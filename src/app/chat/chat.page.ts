@@ -1,10 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ModalController, NavController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
-import Conversation = CometChat.Conversation;
+import { Chooser } from '@ionic-native/chooser/ngx';
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { ActionSheetController } from '@ionic/angular';
 import BaseMessage = CometChat.BaseMessage;
 import { UtilitiesService } from '../utilities.service';
+import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 
 @Component({
   selector: 'app-chat',
@@ -35,7 +39,13 @@ export class ChatPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private navController: NavController,
-    private utilities: UtilitiesService
+    private utilities: UtilitiesService,
+    private router: Router,
+    private chooser: Chooser,
+    private iab: InAppBrowser,
+    public actionSheetController: ActionSheetController,
+    private imagePicker: ImagePicker,
+    public modalController: ModalController
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.messagesRequest = new CometChat.MessagesRequestBuilder()
@@ -119,19 +129,19 @@ export class ChatPage implements OnInit {
     );
   }
 
-  // async viewImage(src: string) {
-  //   const modal = await this.modalController.create({
-  //     component: ImageViewerComponent,
-  //     componentProps: {
-  //       imgSource: src
-  //     },
-  //     cssClass: 'modal-fullscreen',
-  //     keyboardClose: true,
-  //     showBackdrop: true
-  //   });
-  //
-  //   return await modal.present();
-  // }
+  async viewImage(src: string) {
+    const modal = await this.modalController.create({
+      component: ImageViewerComponent,
+      componentProps: {
+        imgSource: src
+      },
+      cssClass: 'modal-fullscreen',
+      keyboardClose: true,
+      showBackdrop: true
+    });
+
+    return await modal.present();
+  }
 
   loadPreviousMessages() {
     this.messagesRequest.fetchPrevious().then(
@@ -161,19 +171,19 @@ export class ChatPage implements OnInit {
   }
 
   logScrollStart() {
-    console.log('logScrollStart : When Scroll Starts');
+    // console.log('logScrollStart : When Scroll Starts');
   }
 
   logScrolling($event) {
-    console.log('logScrolling : When Scrolling ', $event.detail.scrollTop);
+    // console.log('logScrolling : When Scrolling ', $event.detail.scrollTop);
     if ($event.detail.scrollTop === 0) {
-      console.log('scroll reached to top');
+      // console.log('scroll reached to top');
       this.loadPreviousMessages();
     }
   }
 
   logScrollEnd() {
-    console.log('logScrollEnd : When Scroll Ends');
+    // console.log('logScrollEnd : When Scroll Ends');
   }
 
   addMessageEventListner() {
@@ -315,7 +325,6 @@ export class ChatPage implements OnInit {
 
 
   updatedeReadAt(messageReceipt) {
-
     for (let i = 0; i < this.userMessages.length; i++) {
       if (this.userMessages[i].id === messageReceipt.messageId) {
         console.log('here the Read item is', this.userMessages[i]);
@@ -327,7 +336,6 @@ export class ChatPage implements OnInit {
   }
 
   updateDeliveredAt(messageReceipt) {
-
     for (let i = 0; i < this.userMessages.length; i++) {
       if (this.userMessages[i].id === messageReceipt.messageId) {
         console.log('here the Delivered item is', this.userMessages[i]);
@@ -349,143 +357,121 @@ export class ChatPage implements OnInit {
 
   sendReadBulkReceipts() {
     for (let i = 0; i < this.userMessages.length; i++) {
-
       if (this.userMessages[i].receiver !== this.currentData.uid) {
         CometChat.markAsRead(this.userMessages[i].id, this.userMessages[i].sender.uid, this.userMessages[i].receiverType);
       }
-
     }
   }
 
-  // async showActionSheet() {
-  //   const actionSheet = await this.actionSheetController.create({
-  //     header: 'Actions',
-  //     buttons: [{
-  //       text: 'Image',
-  //       handler: () => {
-  //         console.log('IMAGE PICKER CLICKED');
-  //         this.ImagePicker();
-  //       }
-  //     },
-  //       {
-  //         text: 'Document',
-  //         handler: () => {
-  //           console.log('DOCUMENT PICKER CLICKED');
-  //           this.DocumentPicker();
-  //         }
-  //       },
-  //       {
-  //         text: 'Cancel',
-  //         role: 'cancel',
-  //         handler: () => {
-  //           console.log('Cancel clicked');
-  //         }
-  //       }]
-  //   });
-  //   await actionSheet.present();
-  // }
+  async showActionSheet() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Actions',
+      buttons: [{
+        text: 'Image',
+        handler: () => {
+          console.log('IMAGE PICKER CLICKED');
+          this.ImagePicker();
+        }
+      },
+        {
+          text: 'Document',
+          handler: () => {
+            console.log('DOCUMENT PICKER CLICKED');
+            this.DocumentPicker();
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }]
+    });
+    await actionSheet.present();
+  }
 
-  // DocumentPicker() {
-  //   this.chooser.getFile('all')
-  //     .then(response => {
-  //
-  //       const blob_nw = this.dataURItoBlob(response.dataURI);
-  //
-  //       const file = {
-  //         file: blob_nw,
-  //         type: response.mediaType,
-  //         name: response.name
-  //       };
-  //
-  //       this.messageMedia = file;
-  //       this.sendMediaMessage();
-  //     })
-  //     .catch(e => console.log(e));
-  // }
-  //
-  // ImagePicker() {
-  //   const options = {
-  //     outputType: 1
-  //   };
-  //   this.imagePicker.getPictures(options)
-  //     .then((results) => {
-  //       results[0] = 'data:image/jpeg;base64,' + results[0];
-  //       const blob_nw = this.dataURItoBlob(results[0]);
-  //       const date = new Date();
-  //       const file = {
-  //         file: blob_nw,
-  //         type: 'image/jpeg',
-  //         name: 'temp_img' + date.getTime()
-  //       };
-  //
-  //       this.messageMedia = file;
-  //       this.sendMediaMessage();
-  //     }, (err) => {
-  //       console.log(err);
-  //     });
-  // }
+  DocumentPicker() {
+    this.chooser.getFile('all')
+      .then(response => {
 
-  // dataURItoBlob(dataURI) {
-  //   const byteString = atob(dataURI.split(',')[1]);
-  //   const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-  //   const ab = new ArrayBuffer(byteString.length);
-  //   const ia = new Uint8Array(ab);
-  //   for (let i = 0; i < byteString.length; i++) {
-  //     ia[i] = byteString.charCodeAt(i);
-  //   }
-  //   const bb = new Blob([ab], { type: mimeString });
-  //   return bb;
-  // }
-  //
-  // sendMediaMessage() {
-  //   let messageType = CometChat.MESSAGE_TYPE.IMAGE;
-  //   if (this.messageMedia.type.split('/')[0] === 'image') {
-  //     messageType = CometChat.MESSAGE_TYPE.IMAGE;
-  //   } else if (this.messageMedia.type.split('/')[0] === 'video') {
-  //     messageType = CometChat.MESSAGE_TYPE.VIDEO;
-  //   } else {
-  //     messageType = CometChat.MESSAGE_TYPE.FILE;
-  //   }
-  //   const receiverType = CometChat.RECEIVER_TYPE.USER;
-  //   const mediaMessage = new CometChat.MediaMessage(this.currentData.uid, this.messageMedia.file, messageType, receiverType);
-  //   console.log('mediaMessage', mediaMessage);
-  //   CometChat.sendMessage(mediaMessage)
-  //     .then(message => {
-  //         console.log('cometchat send media message', message);
-  //         this.userMessages.push(message);
-  //         this.messageMedia = {};
-  //         this.moveToBottom();
-  //       },
-  //       error => {
-  //         console.log('Media message sending failed with error', error);
-  //       }
-  //     );
-  // }
+        const blob_nw = this.dataURItoBlob(response.dataURI);
 
-  // sendMsg() {
-  //   if (this.messageText === undefined || this.messageText === '') {
-  //     // this.sendMediaMessage();
-  //   } else {
-  //     this.sendMessage();
-  //   }
-  // }
+        const file = {
+          file: blob_nw,
+          type: response.mediaType,
+          name: response.name
+        };
 
-  // openLink(url) {
-  //   this.iab.create(url, '_system');
-  // }
+        this.messageMedia = file;
+        this.sendMediaMessage();
+      })
+      .catch(e => console.log(e));
+  }
 
-  // ngOnInit() {
-  //
-  //   this.messagesRequest.fetchPrevious().then((conversation) => {
-  //     conversation.forEach(message => {
-  //       this.conversation.push(message);
-  //     });
-  //     console.log(this.conversation);
-  //   }, (error) => {
-  //     console.log('error while fetching a conversation', error);
-  //   });
-  // }
-  //
+  ImagePicker() {
+    const options = {
+      outputType: 1
+    };
+    this.imagePicker.getPictures(options)
+      .then((results) => {
+        results[0] = 'data:image/jpeg;base64,' + results[0];
+        const blob_nw = this.dataURItoBlob(results[0]);
+        const date = new Date();
+        const file = {
+          file: blob_nw,
+          type: 'image/jpeg',
+          name: 'temp_img' + date.getTime()
+        };
+
+        this.messageMedia = file;
+        this.sendMediaMessage();
+      }, (err) => {
+        console.log(err);
+      });
+  }
+
+  dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const bb = new Blob([ab], { type: mimeString });
+    return bb;
+  }
+
+  sendMediaMessage() {
+    let messageType = CometChat.MESSAGE_TYPE.IMAGE;
+    if (this.messageMedia.type.split('/')[0] === 'image') {
+      messageType = CometChat.MESSAGE_TYPE.IMAGE;
+    } else if (this.messageMedia.type.split('/')[0] === 'video') {
+      messageType = CometChat.MESSAGE_TYPE.VIDEO;
+    } else {
+      messageType = CometChat.MESSAGE_TYPE.FILE;
+    }
+    const receiverType = CometChat.RECEIVER_TYPE.USER;
+    const mediaMessage = new CometChat.MediaMessage(this.currentData.uid, this.messageMedia.file, messageType, receiverType);
+    console.log('mediaMessage', mediaMessage);
+    CometChat.sendMessage(mediaMessage)
+      .then(message => {
+          console.log('cometchat send media message', message);
+          this.userMessages.push(message);
+          this.messageMedia = {};
+          this.moveToBottom();
+        },
+        error => {
+          console.log('Media message sending failed with error', error);
+        }
+      );
+  }
+
+  openLink(url) {
+    this.iab.create(url, '_system');
+  }
+
   goBack() {
     this.navController.pop();
   }
