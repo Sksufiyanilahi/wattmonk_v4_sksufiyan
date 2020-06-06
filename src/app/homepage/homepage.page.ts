@@ -69,7 +69,7 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
-     this.userRole= this.storage.getUser().role.type;
+     this.userRole= this.storage.getUser().role.id;
      console.log(this.userRole,"USERR");
      
     

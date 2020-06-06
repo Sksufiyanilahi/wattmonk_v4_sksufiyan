@@ -102,7 +102,7 @@
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
     <div class="position-relative">
-        <ion-fab horizontal="center" class="fab-position position-absolute" *ngIf='userRole !=="surveyors"'>
+        <ion-fab horizontal="center" class="fab-position position-absolute" *ngIf='userRole !==9'>
             <ion-fab-button [routerLink]="['/schedule']" routerDirection="forward" mode="md">
                 <ion-icon name="add"></ion-icon>
             </ion-fab-button>
