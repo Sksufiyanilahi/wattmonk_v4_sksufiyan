@@ -89,7 +89,7 @@
         </div>
         <div class="searchbar_div nodata_div">
             <ng-template #noDesignandSurvey>
-            <ion-grid *ngIf="searchbarElement != '' && (searchSurveyItem && searchSurveyItem.length === 0) && (searchDesginItem && searchDesginItem.length === 0)">
+            <ion-grid *ngIf="searchbarElement !== '' && (searchSurveyItem && searchSurveyItem.length === 0) && (searchDesginItem && searchDesginItem.length === 0)">
                     <div class="h-100 d-flex flex-column align-center justify-center">
                         <span>No desgin or survey found</span>
                     </div>
@@ -102,7 +102,7 @@
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
     <div class="position-relative">
-        <ion-fab horizontal="center" class="fab-position position-absolute">
+        <ion-fab horizontal="center" class="fab-position position-absolute" *ngIf='userRole !=="surveyors"'>
             <ion-fab-button [routerLink]="['/schedule']" routerDirection="forward" mode="md">
                 <ion-icon name="add"></ion-icon>
             </ion-fab-button>

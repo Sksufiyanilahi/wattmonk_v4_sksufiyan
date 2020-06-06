@@ -44,6 +44,8 @@ export class HomepagePage implements OnInit, OnDestroy {
 
   private subscription: Subscription;
   drawerState = DrawerState.Docked;
+  name: any;
+  userRole: any;
 
   constructor(
     private utilities: UtilitiesService,
@@ -67,7 +69,12 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
+     this.userRole= this.storage.getUser().role.type;
+     console.log(this.userRole,"USERR");
+     
+    
   }
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -154,7 +161,9 @@ export class HomepagePage implements OnInit, OnDestroy {
 
   getdesigndata(serchTermData:any={"type":""}){
     
-    console.log(serchTermData)
+    console.log(serchTermData.name)
+    this.name = serchTermData.name;
+    this.searchbarElement = this.name;
     if(serchTermData.type=='design'){
       this.route.navigate(['homepage/design'], {queryParams:{ serchTerm: serchTermData.id }});
     }else  if(serchTermData.type=='survey'){
