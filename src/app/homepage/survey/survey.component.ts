@@ -12,6 +12,8 @@ import { AssigneeModel } from '../../model/assignee.model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserRoles } from '../../model/constants';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { StorageService } from 'src/app/storage.service';
+import { ROLES } from 'src/app/contants';
 
 @Component({
   selector: 'app-survey',
@@ -44,7 +46,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private storage: StorageService
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -74,11 +77,14 @@ export class SurveyComponent implements OnInit, OnDestroy {
             console.log("Serach Term", _res)
             if (Object.keys(_res).length !== 0) {
               //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
-
               this.filterData(_res.serchTerm);
             } else {
-              this.surveyRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-                this.getSurvey();
+              this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+                if (this.storage.getUser().role.id == ROLES.Surveyor) {
+                  this.getSurveyorSurveys();
+                }else{
+                  this.getSurvey();
+                }
               });
             }
           })
@@ -152,6 +158,52 @@ export class SurveyComponent implements OnInit, OnDestroy {
               if (!added) {
                 const listOfSurvey = new SurveyDataHelper();
                 listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
+                listOfSurvey.listOfSurveys.push(surveyItem);
+                tempData.push(listOfSurvey);
+                added = true;
+              }
+            }
+          });
+          this.listOfSurveyDataHelper = tempData;
+          this.cdr.detectChanges();
+        });
+      }, responseError => {
+        this.utils.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  getSurveyorSurveys() {
+    this.listOfSurveyData = [];
+    this.listOfSurveyDataHelper = [];
+    this.utils.showLoading('Getting Surveys').then((success) => {
+      this.apiService.getSurveyorSurveys().subscribe(response => {
+        this.utils.hideLoading().then(() => {
+          console.log(response);
+          this.listOfSurveyData = response;
+          const tempData: SurveyDataHelper[] = [];
+          this.listOfSurveyData.forEach((surveyItem) => {
+            if (tempData.length === 0) {
+              const listOfSurvey = new SurveyDataHelper();
+              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+              listOfSurvey.listOfSurveys.push(surveyItem);
+              tempData.push(listOfSurvey);
+            } else {
+              let added = false;
+              tempData.forEach((surveyList) => {
+                if (!added) {
+                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/d/yy')) {
+                    surveyList.listOfSurveys.push(surveyItem);
+                    added = true;
+                  }
+                }
+              });
+              if (!added) {
+                const listOfSurvey = new SurveyDataHelper();
+                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
                 listOfSurvey.listOfSurveys.push(surveyItem);
                 tempData.push(listOfSurvey);
                 added = true;

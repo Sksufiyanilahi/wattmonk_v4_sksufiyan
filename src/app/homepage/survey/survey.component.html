@@ -34,7 +34,7 @@
                         </ion-col>
                     </ion-row>
                     <span class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
-                        {{surveyData.created_at | date: 'hh:mm a'}}
+                        {{surveyData.datetime | date: 'hh:mm a'}}
                     </span>
 
                 </div>
