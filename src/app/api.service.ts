@@ -14,6 +14,7 @@ import { DesginDataModel } from './model/design.model';
 import { InverterMadeModel } from './model/inverter-made.model';
 import { AssigneeModel } from './model/assignee.model';
 import { SearchModel } from './model/search.model';
+import { BaseUrl } from './contants';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,6 @@ export class ApiService {
 
   headers: HttpHeaders;
   uploadHeaders: HttpHeaders;
-  baseUrl = 'http://ec2-3-17-28-7.us-east-2.compute.amazonaws.com:1337';
   private parentId = '';
   private userId = '';
 public searchbarElement :string='';
@@ -34,72 +34,76 @@ public searchbarElement :string='';
   }
 
   login(data: any): Observable<LoginModel> {
-    return this.http.post<LoginModel>(this.baseUrl + '/auth/local', data, { headers: this.headers });
+    return this.http.post<LoginModel>(BaseUrl + '/auth/local', data, { headers: this.headers });
   }
 
   sendForgotPasswordLink(data: any) {
-    return this.http.post(this.baseUrl + '/auth/forgot-password', data, { headers: this.headers });
+    return this.http.post(BaseUrl + '/auth/forgot-password', data, { headers: this.headers });
   }
 
   getSolarMake() {
-    return this.http.get<SolarMake[]>(this.baseUrl + '/modulemakes', { headers: this.headers });
+    return this.http.get<SolarMake[]>(BaseUrl + '/modulemakes', { headers: this.headers });
   }
 
   getRoofMaterial() {
-    return this.http.get<SolarMake[]>(this.baseUrl + '/roofmaterials', { headers: this.headers });
+    return this.http.get<SolarMake[]>(BaseUrl + '/roofmaterials', { headers: this.headers });
   }
 
   getSolarMade(id: number) {
-    return this.http.get<SolarMadeModel[]>(this.baseUrl + '/modulemodels?modulemake.id_eq=' + id, { headers: this.headers });
+    return this.http.get<SolarMadeModel[]>(BaseUrl + '/modulemodels?modulemake.id_eq=' + id, { headers: this.headers });
   }
 
   getInverterMake() {
-    return this.http.get<InverterMakeModel[]>(this.baseUrl + '/invertermakes', { headers: this.headers });
+    return this.http.get<InverterMakeModel[]>(BaseUrl + '/invertermakes', { headers: this.headers });
   }
 
   getUtilities() {
-    return this.http.get<InverterMakeModel[]>(this.baseUrl + '/utilities', { headers: this.headers });
+    return this.http.get<InverterMakeModel[]>(BaseUrl + '/utilities', { headers: this.headers });
   }
 
   getInverterMade(id): Observable<InverterMadeModel[]> {
     console.log(id);
-    return this.http.get<InverterMadeModel[]>(this.baseUrl + '/invertermodels?invertermake.id_eq=' + id, { headers: this.headers });
+    return this.http.get<InverterMadeModel[]>(BaseUrl + '/invertermodels?invertermake.id_eq=' + id, { headers: this.headers });
   }
 
   addDesginForm(data: any): Observable<DesginDataModel> {
-    return this.http.post<DesginDataModel>(this.baseUrl + '/designs', data, { headers: this.headers });
+    return this.http.post<DesginDataModel>(BaseUrl + '/designs', data, { headers: this.headers });
   }
 
   updateDesignForm(data: any, id: number): Observable<DesginDataModel> {
-    return this.http.put<DesginDataModel>(this.baseUrl + '/designs/' + id, data, { headers: this.headers });
+    return this.http.put<DesginDataModel>(BaseUrl + '/designs/' + id, data, { headers: this.headers });
   }
 
   getDesgin() {
-    return this.http.get<DesginDataModel[]>(this.baseUrl + '/userdesigns?id=' + this.userId, { headers: this.headers });
+    return this.http.get<DesginDataModel[]>(BaseUrl + '/userdesigns?id=' + this.userId, { headers: this.headers });
   }
 
   getDesginDetail(id): Observable<DesginDataModel> {
-    return this.http.get<DesginDataModel>(this.baseUrl + '/designs/' + id, { headers: this.headers });
+    return this.http.get<DesginDataModel>(BaseUrl + '/designs/' + id, { headers: this.headers });
   }
 
   deleteDesign(id): Observable<DesginDataModel> {
-    return this.http.delete<DesginDataModel>(this.baseUrl + '/designs/' + id, { headers: this.headers });
+    return this.http.delete<DesginDataModel>(BaseUrl + '/designs/' + id, { headers: this.headers });
   }
 
   getSurvey() {
-    return this.http.get<SurveyDataModel[]>(this.baseUrl + '/usersurveys?id=' + this.userId, { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId, { headers: this.headers });
   }
 
   getSurveyDetail(id): Observable<SurveyDataModel> {
-    return this.http.get<SurveyDataModel>(this.baseUrl + '/surveys/' + id, { headers: this.headers });
+    return this.http.get<SurveyDataModel>(BaseUrl + '/surveys/' + id, { headers: this.headers });
   }
 
   deleteSurvey(id): Observable<SurveyDataModel> {
-    return this.http.delete<SurveyDataModel>(this.baseUrl + '/surveys/' + id, { headers: this.headers });
+    return this.http.delete<SurveyDataModel>(BaseUrl + '/surveys/' + id, { headers: this.headers });
   }
 
   updateSurveyForm(data: any, id: number): Observable<SurveyDataModel> {
-    return this.http.put<SurveyDataModel>(this.baseUrl + '/surveys/' + id, data, { headers: this.headers });
+    return this.http.put<SurveyDataModel>(BaseUrl + '/surveys/' + id, data, { headers: this.headers });
+  }
+
+  getSurveyorSurveys(){
+    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + "&status_eq=surveyassigned&status_eq=surveyinprocess", { headers: this.headers });
   }
 
   refreshHeader() {
@@ -124,19 +128,19 @@ public searchbarElement :string='';
   }
 
   saveSurvey(data: any): Observable<SurveyDataModel> {
-    return this.http.post<SurveyDataModel>(this.baseUrl + '/surveys', data, { headers: this.headers });
+    return this.http.post<SurveyDataModel>(BaseUrl + '/surveys', data, { headers: this.headers });
   }
 
   getSurveyors(userType: number): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(this.baseUrl + '/surveyors?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
 
   searchAllDesgin(searchterm): Observable<SearchModel> {
-    return this.http.get<SearchModel>(this.baseUrl + '/globalsearch?term=' + searchterm + '&userid=' + this.userId, { headers: this.headers });
+    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm + '&userid=' + this.userId, { headers: this.headers });
   }
 
   getDesigners(userType: number): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(this.baseUrl + '/designers?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
   }
 
   uploadImage(surveyId: number, key: string, blob: Blob, fileName: string) {
@@ -147,6 +151,6 @@ public searchbarElement :string='';
     data.append('ref', 'survey');
     data.append('field', key);
 
-    return this.http.post(this.baseUrl + '/upload', data, { headers: this.uploadHeaders });
+    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
 }

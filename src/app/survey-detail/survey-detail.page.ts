@@ -13,6 +13,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ErrorModel } from '../model/error.model';
 import { Subscription } from 'rxjs';
 import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
+import { ROLES } from '../contants';
 
 @Component({
   selector: 'app-survey-detail',
@@ -37,6 +38,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
 
+  iseditable = true;
+
   constructor(
     private utilities: UtilitiesService,
     private apiService: ApiService,
@@ -57,6 +60,10 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     this.assigneeForm = this.formBuilder.group({
       assignedto: new FormControl('', [Validators.required])
     });
+
+    if (this.storage.getUser().role.id == ROLES.Surveyor) {
+      this.iseditable = false;
+    }
   }
 
   ngOnInit() {
