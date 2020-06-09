@@ -53,13 +53,15 @@ export class SchedulePage implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit() {
-    // this.requestLocationPermission();
+ async ngOnInit() {
+    debugger;
+    this.requestLocationPermission();
     if (this.tabsDisabled) {
       this.subscription = this.utilities.getStaticAddress().subscribe((address) => {
         this.address = address;
       });
     } else {
+      // await this.getGeoLocation();
       this.subscription = this.utilities.getAddressObservable().subscribe((address) => {
         console.log(address);
         this.address = address.address;
@@ -91,10 +93,10 @@ export class SchedulePage implements OnInit, OnDestroy {
       this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
     }).catch((error) => {
       this.utilities.errorSnackBar('Unable to get location');
+      
       console.log('Error getting location', error);
       this.showNoLocation();
     });
-
   }
 
   async  showNoLocation() {

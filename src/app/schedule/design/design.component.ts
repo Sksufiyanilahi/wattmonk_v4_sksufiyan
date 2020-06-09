@@ -98,6 +98,8 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.getInverterMade();
       });
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        
         this.desginForm.get('address').setValue(address.address);
         this.desginForm.get('latitude').setValue(address.lat);
         this.desginForm.get('longitude').setValue(address.long);

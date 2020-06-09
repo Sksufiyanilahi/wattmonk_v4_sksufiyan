@@ -203,7 +203,7 @@ filterData(serchTerm:any ){
   openDesigners(id: number) {
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
-        this.apiService.getSurveyors(UserRoles.DESIGNER).subscribe(assignees => {
+        this.apiService.getSurveyors().subscribe(assignees => {
           this.utils.hideLoading().then(() => {
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
