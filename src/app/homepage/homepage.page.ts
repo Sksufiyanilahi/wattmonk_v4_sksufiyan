@@ -12,9 +12,8 @@ import { Subscription } from 'rxjs';
 import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
-import { DesginDataModel } from '../model/design.model';
-import { SurveyDataModel } from '../model/survey.model';
 import { Router } from '@angular/router';
+import { ROLES } from '../contants';
 
 @Component({
   selector: 'app-homepage',
@@ -23,11 +22,12 @@ import { Router } from '@angular/router';
 })
 export class HomepagePage implements OnInit, OnDestroy {
   @Output() ionInput = new EventEmitter();
-  
+
 
   searchQuery = '';
   searchbarElement = '';
   items: string[];
+  isUserSurveyor = false;
 
   showSearchBar = false;
   showHome = true;
@@ -39,8 +39,8 @@ export class HomepagePage implements OnInit, OnDestroy {
     maxResults: 5
   };
 
-  searchDesginItem: []=[];
-  searchSurveyItem: []=[];
+  searchDesginItem: [] = [];
+  searchSurveyItem: [] = [];
 
   private subscription: Subscription;
   drawerState = DrawerState.Docked;
@@ -69,10 +69,10 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
-     this.userRole= this.storage.getUser().role.id;
-     console.log(this.userRole,"USERR");
-     
-    
+    if (this.storage.getUser().role.id == ROLES.Surveyor) {
+      this.isUserSurveyor = true;
+      this.route.navigate(['homepage/survey']);
+    }
   }
 
 
@@ -125,54 +125,54 @@ export class HomepagePage implements OnInit, OnDestroy {
 
   searchDesginAndSurvey(event) {
 
-      console.log(event ,this.searchbarElement);
-    
-      
+    console.log(event, this.searchbarElement);
+
+
     if (this.searchbarElement !== '') {
-      this.apiService.searchAllDesgin(this.searchbarElement).subscribe((searchModel:any) => {
+      this.apiService.searchAllDesgin(this.searchbarElement).subscribe((searchModel: any) => {
         // console.log(searchModel);
-        this.searchDesginItem=[];
-        this.searchSurveyItem=[];
-        if(event.target.value !==""){
-         
-          searchModel.filter((element:any) => {
-            if(element.type=='design'){
+        this.searchDesginItem = [];
+        this.searchSurveyItem = [];
+        if (event.target.value !== "") {
+
+          searchModel.filter((element: any) => {
+            if (element.type == 'design') {
               this.searchDesginItem = searchModel;
               // console.log(this.searchDesginItem);
-              
-            }else{
-              
+
+            } else {
+
               this.searchSurveyItem = searchModel;
             }
           });
           console.log(this.searchDesginItem);
-        }else{
-          this.searchDesginItem=[];
-          this.searchSurveyItem=[];
+        } else {
+          this.searchDesginItem = [];
+          this.searchSurveyItem = [];
         }
       }, (error) => {
         console.log(error);
       });
-    }else{
+    } else {
       this.route.navigate(['homepage/design']);
     }
 
   }
 
-  getdesigndata(serchTermData:any={"type":""}){
-    
+  getdesigndata(serchTermData: any = { "type": "" }) {
+
     console.log(serchTermData.name)
     this.name = serchTermData.name;
     this.searchbarElement = this.name;
-    if(serchTermData.type=='design'){
-      this.route.navigate(['homepage/design'], {queryParams:{ serchTerm: serchTermData.id }});
-    }else  if(serchTermData.type=='survey'){
-      this.route.navigate(['homepage/survey'], {queryParams:{ serchTerm: serchTermData.id }});
-    }else{
+    if (serchTermData.type == 'design') {
+      this.route.navigate(['homepage/design'], { queryParams: { serchTerm: serchTermData.id } });
+    } else if (serchTermData.type == 'survey') {
+      this.route.navigate(['homepage/survey'], { queryParams: { serchTerm: serchTermData.id } });
+    } else {
       this.route.navigate(['homepage/design']);
     }
- this.searchDesginItem=[];
- this.searchSurveyItem=[];
+    this.searchDesginItem = [];
+    this.searchSurveyItem = [];
   }
 
   requestLocationPermission() {

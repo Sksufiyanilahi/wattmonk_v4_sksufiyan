@@ -29,7 +29,7 @@
     <!-- </ion-header> -->
     <ion-tabs style="margin-top: 52px;">
         <ion-tab-bar slot="top" class="ion-no-border">
-            <ion-tab-button tab="design">
+            <ion-tab-button tab="design" *ngIf='!isUserSurveyor'>
                 <ion-label>Design</ion-label>
             </ion-tab-button>
             <ion-tab-button tab="survey">
@@ -102,7 +102,7 @@
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
     <div class="position-relative">
-        <ion-fab horizontal="center" class="fab-position position-absolute" *ngIf='userRole !==9'>
+        <ion-fab horizontal="center" class="fab-position position-absolute" *ngIf='!isUserSurveyor'>
             <ion-fab-button [routerLink]="['/schedule']" routerDirection="forward" mode="md">
                 <ion-icon name="add"></ion-icon>
             </ion-fab-button>

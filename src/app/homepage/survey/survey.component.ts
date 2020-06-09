@@ -43,8 +43,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private launchNavigator: LaunchNavigator,
     private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
-    private router:Router,
-    private route:ActivatedRoute
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -54,9 +54,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
     });
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     this.routeSubscription.unsubscribe()
-   }
+  }
 
   // ngOnInit() {
   //   this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
@@ -64,60 +64,61 @@ export class SurveyComponent implements OnInit, OnDestroy {
   //   });
   // }
   ngOnInit() {
-    this.routeSubscription=  this.router.events.subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          // Trick the Router into believing it's last link wasn't previously loaded
-          if (this.router.url.indexOf('page') > -1) {
+    console.log("inside init");
+    this.routeSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Trick the Router into believing it's last link wasn't previously loaded
+        if (this.router.url.indexOf('page') > -1) {
           this.router.navigated = false;
           let data = this.route.queryParams.subscribe((_res: any) => {
             console.log("Serach Term", _res)
             if (Object.keys(_res).length !== 0) {
-            //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
-          
-            this.filterData(_res.serchTerm );
-            }else {
-             this.surveyRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+              //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
+
+              this.filterData(_res.serchTerm);
+            } else {
+              this.surveyRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
                 this.getSurvey();
-             });
+              });
             }
           })
         }
-        }
-      });
-    }
+      }
+    });
+  }
 
-    filterData(serchTerm:any ){
-      console.log(this.listOfSurveyData)
-      let  filterDataArray:any = this.listOfSurveyData.filter(x=> x.id == serchTerm)
-      const tempData: SurveyDataHelper[] = [];
-          this.listOfSurveyData.forEach((surveyItem) => {
-            if (tempData.length === 0) {
-              const listOfSurvey = new SurveyDataHelper();
-              listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
-              listOfSurvey.listOfSurveys.push(surveyItem);
-              tempData.push(listOfSurvey);
-            } else {
-              let added = false;
-              tempData.forEach((surveyList) => {
-                if (!added) {
-                  if (surveyList.date === this.datePipe.transform(surveyItem.created_at, 'M/d/yy')) {
-                    surveyList.listOfSurveys.push(surveyItem);
-                    added = true;
-                  }
-                }
-              });
-              if (!added) {
-                const listOfSurvey = new SurveyDataHelper();
-                listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
-                listOfSurvey.listOfSurveys.push(surveyItem);
-                tempData.push(listOfSurvey);
-                added = true;
-              }
+  filterData(serchTerm: any) {
+    console.log(this.listOfSurveyData)
+    let filterDataArray: any = this.listOfSurveyData.filter(x => x.id == serchTerm)
+    const tempData: SurveyDataHelper[] = [];
+    this.listOfSurveyData.forEach((surveyItem) => {
+      if (tempData.length === 0) {
+        const listOfSurvey = new SurveyDataHelper();
+        listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
+        listOfSurvey.listOfSurveys.push(surveyItem);
+        tempData.push(listOfSurvey);
+      } else {
+        let added = false;
+        tempData.forEach((surveyList) => {
+          if (!added) {
+            if (surveyList.date === this.datePipe.transform(surveyItem.created_at, 'M/d/yy')) {
+              surveyList.listOfSurveys.push(surveyItem);
+              added = true;
             }
-          });
-          this.listOfSurveyDataHelper = tempData;
-          this.cdr.detectChanges();
-    }
+          }
+        });
+        if (!added) {
+          const listOfSurvey = new SurveyDataHelper();
+          listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
+          listOfSurvey.listOfSurveys.push(surveyItem);
+          tempData.push(listOfSurvey);
+          added = true;
+        }
+      }
+    });
+    this.listOfSurveyDataHelper = tempData;
+    this.cdr.detectChanges();
+  }
 
   ngOnDestroy(): void {
     this.surveyRefreshSubscription.unsubscribe();
