@@ -131,16 +131,16 @@ public searchbarElement :string='';
     return this.http.post<SurveyDataModel>(BaseUrl + '/surveys', data, { headers: this.headers });
   }
 
-  getSurveyors(userType: number): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
+  getSurveyors(): Observable<AssigneeModel[]> {
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId + '&parentcompany=' + this.storageService.getUser().company, { headers: this.headers });
   }
 
   searchAllDesgin(searchterm): Observable<SearchModel> {
     return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm + '&userid=' + this.userId, { headers: this.headers });
   }
 
-  getDesigners(userType: number): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId + '&role_eq=' + userType, { headers: this.headers });
+  getDesigners(): Observable<AssigneeModel[]> {
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId + '&parentcompany=' + this.storageService.getUser().company, { headers: this.headers });
   }
 
   uploadImage(surveyId: number, key: string, blob: Blob, fileName: string) {

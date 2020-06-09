@@ -326,7 +326,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
 
   getAssignees() {
-    this.apiService.getDesigners(UserRoles.DESIGNER).subscribe(assignees => {
+    this.apiService.getDesigners().subscribe(assignees => {
       this.listOfAssignees = [];
       // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
