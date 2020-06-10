@@ -196,7 +196,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   }
 
   getAssignees() {
-    this.apiService.getSurveyors(UserRoles.SURVEYOR).subscribe(assignees => {
+    this.apiService.getSurveyors().subscribe(assignees => {
       this.listOfAssignees = [];
       assignees.forEach(item => this.listOfAssignees.push(item));
       console.log(this.listOfAssignees);
