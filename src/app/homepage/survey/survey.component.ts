@@ -53,12 +53,13 @@ export class SurveyComponent implements OnInit, OnDestroy {
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
     this.assignForm = this.formBuilder.group({
-      assignedto: new FormControl('', [Validators.required])
+      assignedto: new FormControl('', [Validators.required]),
+      status: new FormControl('surveyassigned', [Validators.required])
     });
   }
 
   ionViewDidEnter() {
-    this.routeSubscription.unsubscribe()
+    this.routeSubscription.unsubscribe();
   }
 
   // ngOnInit() {
@@ -67,35 +68,32 @@ export class SurveyComponent implements OnInit, OnDestroy {
   //   });
   // }
   ngOnInit() {
-    console.log("inside init");
+    console.log('inside init');
     this.routeSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // Trick the Router into believing it's last link wasn't previously loaded
         if (this.router.url.indexOf('page') > -1) {
           this.router.navigated = false;
-          let data = this.route.queryParams.subscribe((_res: any) => {
-            console.log("Serach Term", _res)
+          const data = this.route.queryParams.subscribe((_res: any) => {
+            console.log('Search Term', _res);
             if (Object.keys(_res).length !== 0) {
               //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
               this.filterData(_res.serchTerm);
             } else {
               this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-                if (this.storage.getUser().role.id == ROLES.Surveyor) {
-                  this.getSurveyorSurveys();
-                }else{
-                  this.getSurvey();
-                }
+                this.getSurveys(null);
               });
             }
-          })
+          });
         }
       }
     });
   }
 
+
   filterData(serchTerm: any) {
-    console.log(this.listOfSurveyData)
-    let filterDataArray: any = this.listOfSurveyData.filter(x => x.id == serchTerm)
+    console.log(this.listOfSurveyData);
+    const filterDataArray: any = this.listOfSurveyData.filter(x => x.id == serchTerm);
     const tempData: SurveyDataHelper[] = [];
     this.listOfSurveyData.forEach((surveyItem) => {
       if (tempData.length === 0) {
@@ -130,58 +128,15 @@ export class SurveyComponent implements OnInit, OnDestroy {
     this.surveyRefreshSubscription.unsubscribe();
   }
 
-  getSurvey() {
+  getSurvey(event, showLoader: boolean) {
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
-    this.utils.showLoading('Getting Surveys').then((success) => {
+    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
       this.apiService.getSurvey().subscribe(response => {
-        this.utils.hideLoading().then(() => {
-          console.log(response);
-          this.listOfSurveyData = response;
-          const tempData: SurveyDataHelper[] = [];
-          this.listOfSurveyData.forEach((surveyItem) => {
-            if (tempData.length === 0) {
-              const listOfSurvey = new SurveyDataHelper();
-              listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
-              listOfSurvey.listOfSurveys.push(surveyItem);
-              tempData.push(listOfSurvey);
-            } else {
-              let added = false;
-              tempData.forEach((surveyList) => {
-                if (!added) {
-                  if (surveyList.date === this.datePipe.transform(surveyItem.created_at, 'M/d/yy')) {
-                    surveyList.listOfSurveys.push(surveyItem);
-                    added = true;
-                  }
-                }
-              });
-              if (!added) {
-                const listOfSurvey = new SurveyDataHelper();
-                listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
-                listOfSurvey.listOfSurveys.push(surveyItem);
-                tempData.push(listOfSurvey);
-                added = true;
-              }
-            }
-          });
-          this.listOfSurveyDataHelper = tempData;
-          this.cdr.detectChanges();
-        });
-      }, responseError => {
-        this.utils.hideLoading().then(() => {
-          const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
-        });
-      });
-    });
-  }
-
-  getSurveyorSurveys() {
-    this.listOfSurveyData = [];
-    this.listOfSurveyDataHelper = [];
-    this.utils.showLoading('Getting Surveys').then((success) => {
-      this.apiService.getSurveyorSurveys().subscribe(response => {
-        this.utils.hideLoading().then(() => {
+        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+          if (event !== null) {
+            event.target.complete();
+          }
           console.log(response);
           this.listOfSurveyData = response;
           const tempData: SurveyDataHelper[] = [];
@@ -214,7 +169,62 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         });
       }, responseError => {
-        this.utils.hideLoading().then(() => {
+        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+          if (event !== null) {
+            event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  getSurveyorSurveys(event, showLoader: boolean) {
+    this.listOfSurveyData = [];
+    this.listOfSurveyDataHelper = [];
+    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
+      this.apiService.getSurveyorSurveys().subscribe(response => {
+        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+          if (event !== null) {
+            event.target.complete();
+          }
+          console.log(response);
+          this.listOfSurveyData = response;
+          const tempData: SurveyDataHelper[] = [];
+          this.listOfSurveyData.forEach((surveyItem) => {
+            if (tempData.length === 0) {
+              const listOfSurvey = new SurveyDataHelper();
+              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+              listOfSurvey.listOfSurveys.push(surveyItem);
+              tempData.push(listOfSurvey);
+            } else {
+              let added = false;
+              tempData.forEach((surveyList) => {
+                if (!added) {
+                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/d/yy')) {
+                    surveyList.listOfSurveys.push(surveyItem);
+                    added = true;
+                  }
+                }
+              });
+              if (!added) {
+                const listOfSurvey = new SurveyDataHelper();
+                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+                listOfSurvey.listOfSurveys.push(surveyItem);
+                tempData.push(listOfSurvey);
+                added = true;
+              }
+            }
+          });
+          this.listOfSurveyDataHelper = tempData;
+          this.cdr.detectChanges();
+        });
+      }, responseError => {
+        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+          if (event !== null) {
+            event.target.complete();
+          }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
         });
@@ -267,6 +277,19 @@ export class SurveyComponent implements OnInit, OnDestroy {
     });
 
   }
+
+  getSurveys(event: CustomEvent) {
+    let showLoader = true;
+    if (event != null && event !== undefined) {
+      showLoader = false;
+    }
+    if (this.storage.getUser().role.id === ROLES.Surveyor) {
+      this.getSurveyorSurveys(event, showLoader);
+    } else {
+      this.getSurvey(event, showLoader);
+    }
+  }
+
 }
 
 export class SurveyDataHelper {

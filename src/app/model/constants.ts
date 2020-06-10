@@ -282,7 +282,7 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
       givenAnswer: '',
       formValueToUpdate: '',
       imageUploadTag: 'roofimages',
-      imageName: 'roofimages'
+      imageName: 'modulewideshoturl'
     }],
     subMenu: []
   },
@@ -469,7 +469,7 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'roofimages',
-            imageName: 'roofphotos1'
+            imageName: 'moduleshot1'
           }
         ]
       },
@@ -785,7 +785,7 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
             givenAnswer: '',
             formValueToUpdate: '',
             imageUploadTag: 'roofimages',
-            imageName: 'roofphotos1'
+            imageName: 'moduleshot1'
           }
         ]
       },

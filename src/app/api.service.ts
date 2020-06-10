@@ -25,7 +25,8 @@ export class ApiService {
   uploadHeaders: HttpHeaders;
   private parentId = '';
   private userId = '';
-public searchbarElement :string='';
+  public searchbarElement: string = '';
+
   constructor(
     private http: HttpClient,
     private storageService: StorageService
@@ -102,8 +103,8 @@ public searchbarElement :string='';
     return this.http.put<SurveyDataModel>(BaseUrl + '/surveys/' + id, data, { headers: this.headers });
   }
 
-  getSurveyorSurveys(){
-    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + "&status_eq=surveyassigned&status_eq=surveyinprocess", { headers: this.headers });
+  getSurveyorSurveys() {
+    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&status_eq=surveyassigned&status_eq=surveyinprocess', { headers: this.headers });
   }
 
   refreshHeader() {
