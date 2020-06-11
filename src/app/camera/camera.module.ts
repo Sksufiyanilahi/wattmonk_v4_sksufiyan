@@ -16,6 +16,7 @@ import { InverterSelectionPage } from './inverter-selection/inverter-selection.p
 import { UtilitiesSelectionComponent } from './utilities-selection/utilities-selection.component';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { ImageErrorListComponent } from './image-error-list/image-error-list.component';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { ImageErrorListComponent } from './image-error-list/image-error-list.com
     CameraPageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    UtilitiesModule
+    UtilitiesModule,
+    AngularDraggableModule
   ],
   declarations: [CameraPage, InverterSelectionPage, UtilitiesSelectionComponent, ImageErrorListComponent],
   entryComponents: [InverterSelectionPage, UtilitiesSelectionComponent, ImageErrorListComponent],

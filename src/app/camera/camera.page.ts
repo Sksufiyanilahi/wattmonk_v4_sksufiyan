@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview/ngx';
 import { AlertController, IonGrid, ModalController, NavController, Platform } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
@@ -26,6 +26,9 @@ import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { SurveyStorageModel } from '../model/survey-storage.model';
 import { LeftoverImagesModel } from '../model/leftover-images.model';
 import { ImageErrorListComponent } from './image-error-list/image-error-list.component';
+import html2canvas from 'html2canvas';
+
+// import * as html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-camera',
@@ -65,7 +68,7 @@ export class CameraPage implements OnInit {
   listOfRoofMaterial: SolarMake[] = [];
   listOfSolarMade: SolarMadeModel[] = [];
 
-  hardwareCameraEnabled = true;
+  hardwareCameraEnabled = false;
   imageAreaHeight = 600;
   imageUploadIndex = 1;
   totalImagesToUpload = 1;
@@ -74,6 +77,10 @@ export class CameraPage implements OnInit {
   latitude: number;
   longitude: number;
   googleImageUrl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=24&maptype=satellite&size=900x1600&scale=2&key=' + GOOGLE_API_KEY;
+
+  obstacles: any[] = [];
+  selectedObstacleIndex = -1;
+  private mapCanvas: HTMLCanvasElement;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -198,6 +205,8 @@ export class CameraPage implements OnInit {
       toBack: true,
       alpha: 1
     };
+
+
   }
 
   getSolarMade() {
@@ -324,8 +333,8 @@ export class CameraPage implements OnInit {
   takePicture() {
     if (this.hardwareCameraEnabled) {
       this.cameraPreview.takePicture({
-        width: 1080,
-        height: 1920,
+        width: 0,
+        height: 0,
         quality: 70
       }).then((photo) => {
           this.stopCamera();
@@ -498,6 +507,9 @@ export class CameraPage implements OnInit {
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.surveyMenu = this.mainMenu;
     surveyStorageModel.surveyId = this.surveyId;
+    if (this.mapCanvas !== null && this.mapCanvas !== undefined) {
+      surveyStorageModel.canvasImage = this.mapCanvas.toDataURL();
+    }
     if (this.isBatterySurvey()) {
       surveyStorageModel.formData = this.detailsForm.value;
     } else {
@@ -965,6 +977,11 @@ export class CameraPage implements OnInit {
         });
       }
     });
+    const image = new ImageUploadModel();
+    image.key = 'electricalslocation';
+    image.imageData = this.mapCanvas.toDataURL();
+    image.imagename = 'electricalslocation';
+    mapOfImages.push(image);
     this.utilities.showLoading('Uploading Images').then(() => {
       this.totalImagesToUpload = mapOfImages.length;
       this.uploadImageByIndex(mapOfImages);
@@ -1412,5 +1429,20 @@ export class CameraPage implements OnInit {
 
   showCameraViewForSurvey() {
     this.calculateImagePercentageAndListOfImages();
+  }
+
+  addObstacle() {
+    this.obstacles.push({});
+    this.selectedObstacleIndex = this.obstacles.length - 1;
+  }
+
+  removeObstacle(index: number) {
+    this.obstacles.splice(index, 1);
+  }
+
+  saveMap() {
+    html2canvas(document.getElementById('mapImageArea'), { allowTaint: true }).then(canvas => {
+      this.mapCanvas = canvas;
+    });
   }
 }

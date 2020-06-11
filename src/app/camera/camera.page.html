@@ -15,11 +15,6 @@
     </ion-grid>
 </ion-header>
 
-<!--Old-->
-<!--<ion-content *ngIf="!showCameraInterface && !showForm || showImageOptions" class="ion-no-padding black-bg">-->
-<!--    <ion-img *ngIf="selectedImageModel.image" [src]="selectedImageModel.image" class="object-fit-contain"></ion-img>-->
-<!--</ion-content>-->
-
 <ion-content *ngIf="page === PageType.CAMERA_INTERFACE">
     <span *ngIf="!hardwareCameraEnabled">Camera Interface</span>
 </ion-content>
@@ -28,8 +23,11 @@
     <ion-img *ngIf="selectedImageModel.image" [src]="selectedImageModel.image" class="object-fit-contain"></ion-img>
 </ion-content>
 
-<ion-content *ngIf="page === PageType.MAP_PAGE" class="ion-no-padding black-bg">
+<ion-content *ngIf="page === PageType.MAP_PAGE" class="ion-no-padding black-bg" id="mapImageArea">
     <ion-img [src]="googleImageUrl" class="object-fit-contain"></ion-img>
+    <div ngDraggable ngResizable class="obstacle" *ngFor="let obstacle of obstacles; let i = index" (click)="selectedObstacleIndex = i;">
+
+    </div>
 </ion-content>
 
 <ion-content class="ion-no-padding" *ngIf="page === PageType.DETAILS_FORM">
@@ -252,6 +250,21 @@
 </ion-content>
 
 <ion-footer class="colored ion-no-border">
+
+    <ion-grid *ngIf="page === PageType.MAP_PAGE">
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+            <ion-col class="ion-align-items-center ion-justify-content-center ion-text-center">
+                <span (click)="addObstacle()">Add Roof Obstacle</span>
+            </ion-col>
+            <ion-col class="ion-align-items-center ion-justify-content-center ion-text-center">
+                <span (click)="removeObstacle(selectedObstacleIndex)">Remove Roof Obstacle</span>
+            </ion-col>
+            <ion-col class="ion-align-items-center ion-justify-content-center ion-text-center">
+                <span (click)="saveMap()">Save Roof Image</span>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
     <ion-grid *ngIf="page !== PageType.MAP_PAGE">
         <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="page === PageType.IMAGE_PREVIEW_WITH_OPTIONS">
             <ion-col>
@@ -261,7 +274,7 @@
                 <ion-button fill="clear" (click)="retakeImage()">Retake</ion-button>
             </ion-col>
             <ion-col size="auto">
-                <ion-button fill="clear" (click)="shiftToNextImage()">Next</ion-button>
+                <ion-button fill="clear" (click)="shiftToNextImage()" id="test">Next</ion-button>
             </ion-col>
         </ion-row>
         <ion-row>
@@ -304,6 +317,7 @@
             </ion-col>
         </ion-row>
     </ion-grid>
+
     <ion-grid>
         <ion-row class="ion-no-padding">
             <ion-col size="12" class="ion-no-padding" style="background: white; height: 1px;">
