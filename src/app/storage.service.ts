@@ -6,6 +6,7 @@ import { DesginDataHelper } from './homepage/design/design.component';
   providedIn: 'root'
 })
 export class StorageService {
+  data: any;
 
   constructor() {
   }
@@ -127,5 +128,13 @@ export class StorageService {
     } else {
       return localStorage.getItem(key);
     }
+  }
+
+  setData(value:any){
+    this.data = value;
+  }
+
+  getData():any{
+    return this.data;
   }
 }

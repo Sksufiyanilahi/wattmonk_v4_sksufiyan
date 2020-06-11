@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, Input } from '@angular/core';
 import { AlertController, IonTabs, NavController, Platform, ToastController } from '@ionic/angular';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -18,6 +18,7 @@ import { AddressModel } from '../model/address.model';
 export class SchedulePage implements OnInit, OnDestroy {
 
   @ViewChild('tabs', { static: true }) tabs: IonTabs;
+
 
   address = '';
   currentTab = 'design';
@@ -54,17 +55,18 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
  async ngOnInit() {
-    debugger;
     this.requestLocationPermission();
     if (this.tabsDisabled) {
       this.subscription = this.utilities.getStaticAddress().subscribe((address) => {
         this.address = address;
+        this.storage.setData(this.address);
       });
     } else {
       // await this.getGeoLocation();
       this.subscription = this.utilities.getAddressObservable().subscribe((address) => {
         console.log(address);
         this.address = address.address;
+      this.storage.setData(this.address);
       });
     }
 
@@ -202,7 +204,7 @@ export class SchedulePage implements OnInit, OnDestroy {
       }
     }, (rejection) => {
       console.log(rejection);
-      this.goBack();
+      // this.goBack();
     });
 
     // if (this.platform.is('ios')) {

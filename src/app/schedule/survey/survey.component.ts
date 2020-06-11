@@ -28,6 +28,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
   surveyId = 0;
   private survey: SurveyDataModel;
+  address: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -66,6 +67,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    // this.address= this.storage.getData();
     this.subscription = this.utilities.getScheduleFormEvent().subscribe((event) => {
       switch (event) {
         case ScheduleFormEvent.SAVE_SURVEY_FORM:

@@ -11,7 +11,7 @@
                 </ion-button>
             </ion-col>
         </ion-row>
-        <ion-row class="ion-padding-start ion-padding-end">
+        <!-- <ion-row class="ion-padding-start ion-padding-end">
             <ion-col *ngIf="address !== '' ">
                 <span class="address-text">
                     {{address}}
@@ -22,8 +22,8 @@
                     No address found
                 </span>
             </ion-col>
-        </ion-row>
-        <ion-row class="ion-padding-start ion-padding-end">
+        </ion-row> -->
+        <!-- <ion-row class="ion-padding-start ion-padding-end">
             <ion-col class="ion-text-end" *ngIf="!tabsDisabled">
                 <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
                     Change
@@ -34,12 +34,12 @@
                     Change
                 </span>
             </ion-col>
-        </ion-row>
+        </ion-row> -->
     </ion-grid>
 
     <ion-grid class="ion-margin-start ion-margin-end">
         <ion-segment mode="ios" class="segments" (ionChange)="segmentChanged($event)" [value]="currentTab"
-                     [disabled]="tabsDisabled">
+            [disabled]="tabsDisabled">
             <ion-segment-button value="design">
                 <ion-label>Design</ion-label>
             </ion-segment-button>
@@ -60,6 +60,27 @@
                 </ion-tab-button>
             </ion-tab-bar>
         </ion-tabs>
+        <ion-grid>
+            <ion-row class="ion-padding-start ion-padding-end mrT">
+                <ion-col *ngIf="address == ''" size="9">
+                    <!-- <span class="address-text"> -->
+                    {{address == "" ? "No Address Found" : address}}
+                    <!-- </span> -->
+                </ion-col>
+              
+                <ion-col class="ion-text-end" *ngIf="!tabsDisabled" size="3">
+                    <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
+                        Change
+                    </span>
+                </ion-col>
+                <ion-col class="ion-text-end" *ngIf="tabsDisabled" size="3">
+                    <span class="edit_span">
+                        Change
+                    </span>
+                </ion-col>
+            </ion-row>
+
+        </ion-grid>
     </ion-content>
 </ion-content>
 

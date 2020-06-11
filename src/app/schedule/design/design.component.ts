@@ -40,6 +40,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   designId = 0;
   design: DesginDataModel = null;
+  address: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -81,6 +82,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {
         this.addForm();
@@ -401,4 +403,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   // onProjectChange(event){
   // console.log("eve",this.desginForm);
   // }
+
+  getclass=()=>{
+  return   this.address == "" ? "0px" : "50px";
+  }
 }
