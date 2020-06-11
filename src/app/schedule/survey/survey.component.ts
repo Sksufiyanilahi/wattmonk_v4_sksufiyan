@@ -125,6 +125,11 @@ export class SurveyComponent implements OnInit, OnDestroy {
             });
           });
         } else {
+
+          // if starting survey directly, assign the survey to yourself
+          this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
+          this.surveyForm.get('status').setValue('surveyassigned');
+
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
@@ -152,9 +157,14 @@ export class SurveyComponent implements OnInit, OnDestroy {
           });
 
         } else {
-          if (this.surveyForm.get('assignedto').value !== '') {
+          if (this.surveyForm.get('assignedto').value !== ''
+            && this.surveyForm.get('assignedto').value !== null
+            && this.surveyForm.get('assignedto').value !== undefined
+            && this.surveyForm.get('assignedto').value !== 0
+          ) {
             this.surveyForm.get('status').setValue('surveyassigned');
           }
+          console.log(this.surveyForm.value);
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
               this.utilities.hideLoading().then(() => {

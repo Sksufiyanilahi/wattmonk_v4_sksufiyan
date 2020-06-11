@@ -1,4 +1,7 @@
 <ion-content (click)="close()" style="padding-bottom: 250px;">
+    <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
         <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index" class="ion-margin-top">
             <ion-col size="12">
@@ -10,7 +13,7 @@
                 </span>
             </ion-col>
             <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="6">
-                <div class="ion-padding custom-card"
+                <div class="ion-padding custom-card" style="height: 100%;"
                      routerDirection="forward">
                     <span class="customer-name" [routerLink]="['/design-details/',designData.id]"
                           routerDirection="forward">{{designData.name}}</span>

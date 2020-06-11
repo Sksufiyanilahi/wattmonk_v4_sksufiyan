@@ -28,6 +28,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   searchbarElement = '';
   items: string[];
   isUserSurveyor = false;
+  isUserDesigner = false;
 
   showSearchBar = false;
   showHome = true;
@@ -69,9 +70,24 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
-    if (this.storage.getUser().role.id == ROLES.Surveyor) {
+
+    if (this.storage.getUser().role.id === ROLES.Surveyor) {
+      // surveyor will only see survey tab
       this.isUserSurveyor = true;
+      this.isUserDesigner = false;
       this.route.navigate(['homepage/survey']);
+
+    } else if (this.storage.getUser().role.id === ROLES.Designer) {
+      // designer will only see design tab
+      this.isUserSurveyor = false;
+      this.isUserDesigner = true;
+      this.route.navigate(['homepage/design']);
+
+    } else if (this.storage.getUser().role.id === ROLES.BD) {
+      // admin will see both tabs
+      this.isUserSurveyor = true;
+      this.isUserDesigner = true;
+      this.route.navigate(['homepage/design']);
     }
   }
 
@@ -133,7 +149,7 @@ export class HomepagePage implements OnInit, OnDestroy {
         // console.log(searchModel);
         this.searchDesginItem = [];
         this.searchSurveyItem = [];
-        if (event.target.value !== "") {
+        if (event.target.value !== '') {
 
           searchModel.filter((element: any) => {
             if (element.type == 'design') {
@@ -159,9 +175,9 @@ export class HomepagePage implements OnInit, OnDestroy {
 
   }
 
-  getdesigndata(serchTermData: any = { "type": "" }) {
+  getdesigndata(serchTermData: any = { 'type': '' }) {
 
-    console.log(serchTermData.name)
+    console.log(serchTermData.name);
     this.name = serchTermData.name;
     this.searchbarElement = this.name;
     if (serchTermData.type == 'design') {

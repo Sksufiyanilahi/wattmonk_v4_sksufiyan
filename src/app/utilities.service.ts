@@ -17,10 +17,10 @@ export class UtilitiesService {
     address: '',
     lat: 0,
     long: 0,
-  country: '',
-  state: '',
-  city: '',
-  postalcode: ''
+    country: '',
+    state: '',
+    city: '',
+    postalcode: ''
   });
   staticAddress = new BehaviorSubject<string>('');
   saveScheduleForm = new BehaviorSubject<ScheduleFormEvent>(ScheduleFormEvent.NO_EVENT);
@@ -109,12 +109,39 @@ export class UtilitiesService {
     return this.loading.present();
   }
 
+  async showLoadingWithPullRefreshSupport(showPopup: boolean, message?: string) {
+    if (showPopup) {
+      let finalMessage = '';
+      if (message) {
+        finalMessage = message;
+      } else {
+        finalMessage = 'Please Wait';
+      }
+      this.loading = await this.loadingController.create({
+        message: finalMessage
+      });
+      return this.loading.present();
+    } else {
+      return Promise.resolve();
+    }
+
+  }
+
   setLoadingMessage(message: string) {
     this.loading.message = message;
   }
 
   hideLoading(): Promise<boolean> {
     return this.loading.dismiss();
+  }
+
+  hideLoadingWithPullRefreshSupport(showPopup: boolean): Promise<boolean> {
+    if (showPopup) {
+      return this.loading.dismiss();
+    } else {
+      return Promise.resolve(true);
+    }
+
   }
 
   async showAlert(message) {

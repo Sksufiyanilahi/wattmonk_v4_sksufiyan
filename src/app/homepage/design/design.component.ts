@@ -12,7 +12,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AssigneeModel } from '../../model/assignee.model';
 import { UserRoles } from '../../model/constants';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { takeUntil, take } from "rxjs/operators"
+import { takeUntil, take } from 'rxjs/operators';
+
 @Component({
   selector: 'app-design',
   templateUrl: './design.component.html',
@@ -55,30 +56,32 @@ export class DesignComponent implements OnInit, OnDestroy {
       comment: new FormControl('')
     });
 
-    
+
   }
- ionViewDidEnter(){
-  this.routeSubscription.unsubscribe()
- }
+
+  ionViewDidEnter() {
+    this.routeSubscription.unsubscribe();
+  }
+
   ngOnInit() {
-  this.routeSubscription=  this.router.events.subscribe((event) => {
+    this.routeSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // Trick the Router into believing it's last link wasn't previously loaded
         if (this.router.url.indexOf('page') > -1) {
-        this.router.navigated = false;
-        let data = this.route.queryParams.subscribe((_res: any) => {
-          console.log("Serach Term", _res)
-          if (Object.keys(_res).length !== 0) {
-          //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
-        
-          this.filterData(_res.serchTerm );
-          }else {
-           this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-              this.getDesign();
-           });
-          }
-        })
-      }
+          this.router.navigated = false;
+          let data = this.route.queryParams.subscribe((_res: any) => {
+            console.log('Serach Term', _res);
+            if (Object.keys(_res).length !== 0) {
+              //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
+
+              this.filterData(_res.serchTerm);
+            } else {
+              this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+                this.getDesign(null, true);
+              });
+            }
+          });
+        }
       }
     });
   }
@@ -87,47 +90,52 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.refreshSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
   }
-filterData(serchTerm:any ){
-  console.log(this.listOfDesignsData)
-  let  filterDataArray:any = this.listOfDesignsData.filter(x=> x.id == serchTerm)
-  const tempData: DesginDataHelper[] = [];
-  filterDataArray.forEach((desginItem) => {
-    if (tempData.length === 0) {
-      const listOfDesign = new DesginDataHelper();
-      listOfDesign.date = this.datePipe.transform(desginItem.created_at, 'M/d/yy');
-      listOfDesign.listOfDesigns.push(desginItem);
-      tempData.push(listOfDesign);
-    } else {
-      let added = false;
-      tempData.forEach((desginList) => {
-        if (!added) {
-          if (desginList.date === this.datePipe.transform(desginItem.created_at, 'M/d/yy')) {
-            desginList.listOfDesigns.push(desginItem);
-            added = true;
-          }
-        }
-      });
-      if (!added) {
+
+  filterData(serchTerm: any) {
+    console.log(this.listOfDesignsData);
+    let filterDataArray: any = this.listOfDesignsData.filter(x => x.id == serchTerm);
+    const tempData: DesginDataHelper[] = [];
+    filterDataArray.forEach((desginItem) => {
+      if (tempData.length === 0) {
         const listOfDesign = new DesginDataHelper();
         listOfDesign.date = this.datePipe.transform(desginItem.created_at, 'M/d/yy');
         listOfDesign.listOfDesigns.push(desginItem);
         tempData.push(listOfDesign);
-        added = true;
-        this.listOfDesignDataHelper.push(listOfDesign);
-        console.log(this.listOfDesignDataHelper)
+      } else {
+        let added = false;
+        tempData.forEach((desginList) => {
+          if (!added) {
+            if (desginList.date === this.datePipe.transform(desginItem.created_at, 'M/d/yy')) {
+              desginList.listOfDesigns.push(desginItem);
+              added = true;
+            }
+          }
+        });
+        if (!added) {
+          const listOfDesign = new DesginDataHelper();
+          listOfDesign.date = this.datePipe.transform(desginItem.created_at, 'M/d/yy');
+          listOfDesign.listOfDesigns.push(desginItem);
+          tempData.push(listOfDesign);
+          added = true;
+          this.listOfDesignDataHelper.push(listOfDesign);
+          console.log(this.listOfDesignDataHelper);
+        }
       }
-    }
-  });
-  this.listOfDesignDataHelper = tempData;
-  this.cdr.detectChanges();
-}
-  getDesign() {
+    });
+    this.listOfDesignDataHelper = tempData;
+    this.cdr.detectChanges();
+  }
+
+  getDesign(event, showLoader: boolean) {
     this.listOfDesignsData = [];
     this.listOfDesignDataHelper = [];
-    this.utils.showLoading('Getting designs').then((success) => {
+    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting designs').then((success) => {
       this.apiService.getDesgin().subscribe(response => {
-        this.utils.hideLoading().then((loaderHidden) => {
-          console.log(response,">>");
+        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then((loaderHidden) => {
+          if (event !== null) {
+            event.target.complete();
+          }
+          console.log(response, '>>');
           this.listOfDesignsData = response;
           const tempData: DesginDataHelper[] = [];
           this.listOfDesignsData.forEach((desginItem) => {
@@ -153,7 +161,7 @@ filterData(serchTerm:any ){
                 tempData.push(listOfDesign);
                 added = true;
                 this.listOfDesignDataHelper.push(listOfDesign);
-                console.log(this.listOfDesignDataHelper)
+                console.log(this.listOfDesignDataHelper);
               }
             }
           });
@@ -161,14 +169,22 @@ filterData(serchTerm:any ){
           this.cdr.detectChanges();
         });
       }, responseError => {
-        this.utils.hideLoading().then((loaderHidden) => {
+        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then((loaderHidden) => {
+          if (event !== null) {
+            event.target.complete();
+          }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
         });
 
       });
     }, (apiError) => {
-      this.utils.hideLoading();
+      this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+        if (event !== null) {
+          event.target.complete();
+        }
+      });
+
     });
   }
 
@@ -242,6 +258,14 @@ filterData(serchTerm:any ){
     } else {
       this.showBottomDraw = true;
     }
+  }
+
+  refreshDesigns(event: CustomEvent) {
+    let showLoader = true;
+    if (event !== null && event !== undefined) {
+      showLoader = false;
+    }
+    this.getDesign(event, showLoader);
   }
 }
 

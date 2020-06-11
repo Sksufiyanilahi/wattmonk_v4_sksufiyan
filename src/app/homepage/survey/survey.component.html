@@ -1,4 +1,7 @@
 <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
         <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
             <ion-col size="12" class="ion-margin-top">
@@ -10,7 +13,7 @@
                     </span>
             </ion-col>
             <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
-                <div class="ion-padding custom-card">
+                <div class="ion-padding custom-card" style="height: 100%;">
                     <span class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
                           routerDirection="forward">{{surveyData.name}}</span>
                     <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"

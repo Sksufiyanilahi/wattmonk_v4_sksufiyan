@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { HomepagePage } from './homepage.page';
-import { DesignComponent } from "./design/design.component";
-import { SurveyComponent } from "./survey/survey.component";
+import { DesignComponent } from './design/design.component';
+import { SurveyComponent } from './survey/survey.component';
 
 const routes: Routes = [
   {
@@ -17,11 +17,6 @@ const routes: Routes = [
       {
         path: 'survey',
         component: SurveyComponent
-      },
-      {
-        path: '',
-        redirectTo: 'design',
-        pathMatch: 'full'
       }
     ]
   }
