@@ -8,10 +8,10 @@
             </ion-col>
             <ion-col></ion-col>
             <ion-col size="auto">
-                    <ion-button fill="clear" style="width: 48px;">
-                        <ion-icon class="action-button-color" style="font-size: 26px;"
-                                  name="settings-outline"></ion-icon>
-                    </ion-button>
+                <ion-button fill="clear" style="width: 48px;">
+                    <ion-icon class="action-button-color" style="font-size: 26px;"
+                              name="settings-outline"></ion-icon>
+                </ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>
@@ -29,13 +29,13 @@
         <ion-row>
             <ion-col size="12" class="ion-no-padding">
                 <div style="text-align: center">
-                    <span class="profile-name">No Name</span>
+                    <span class="profile-name">{{user.firstname}} {{user.lastname}}</span>
                 </div>
             </ion-col>
 
             <ion-col size="12" class="ion-no-padding">
                 <div style="text-align: center">
-                    <span class="profile-email">nsrccs@gmail.com</span>
+                    <span class="profile-email">{{user.email}}</span>
                 </div>
             </ion-col>
 
@@ -54,7 +54,7 @@
                 </div>
             </ion-col>
             <ion-col class="ion-align-items-center ion-text-center">
-              <ion-button fill="clear" class="action-button-color" (click)="logout()">Logout</ion-button>
+                <ion-button fill="clear" class="action-button-color" (click)="logout()">Logout</ion-button>
             </ion-col>
             <ion-col class="ion-align-items-center ion-text-center">
                 <ion-button fill="clear" class="action-button-color" (click)="syncSurvey()">Sync Surveys</ion-button>
@@ -77,17 +77,17 @@
         </ion-row> -->
     </ion-grid>
     <ion-content style="--background: #FEF8F8;">
-        <ion-tabs style="
-  position: inherit;">
-            <ion-tab-bar slot="top" class="ion-no-border" class="profile-tab">
-                <ion-tab-button tab="profile-notification">
-                    <ion-label style="font-size: 16px;">Notification</ion-label>
-                </ion-tab-button>
-                <ion-tab-button tab="history">
-                    <ion-label style="font-size: 16px;">History</ion-label>
-                </ion-tab-button>
-            </ion-tab-bar>
-        </ion-tabs>
+        <!--        <ion-tabs style="-->
+        <!--  position: inherit;">-->
+        <!--            <ion-tab-bar slot="top" class="ion-no-border" class="profile-tab">-->
+        <!--                <ion-tab-button tab="profile-notification">-->
+        <!--                    <ion-label style="font-size: 16px;">Notification</ion-label>-->
+        <!--                </ion-tab-button>-->
+        <!--                <ion-tab-button tab="history">-->
+        <!--                    <ion-label style="font-size: 16px;">History</ion-label>-->
+        <!--                </ion-tab-button>-->
+        <!--            </ion-tab-bar>-->
+        <!--        </ion-tabs>-->
         <ion-content>
             <!-- <ion-grid>
               <ion-row class="ion-align-items-center">
@@ -135,5 +135,8 @@
               </ion-row>
 
             </ion-grid> -->
-
         </ion-content>
+
+    </ion-content>
+
+</ion-content>

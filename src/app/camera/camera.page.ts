@@ -7,7 +7,7 @@ import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 import {
   CAMERA_MODULE_MENU_BATTERY,
   CAMERA_MODULE_MENU_PV,
-  CAMERA_MODULE_MENU_PV_BATTERY,
+  CAMERA_MODULE_MENU_PV_BATTERY, EQUIPMENTS,
   GOOGLE_API_KEY,
   ImageUploadModel,
   MapPageType
@@ -16,7 +16,7 @@ import { Storage } from '@ionic/storage';
 import { UtilitiesService } from '../utilities.service';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { SolarMake } from '../model/solar-make.model';
+import { Equipment, SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
 import { ErrorModel } from '../model/error.model';
 import { ApiService } from '../api.service';
@@ -26,6 +26,9 @@ import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { SurveyStorageModel } from '../model/survey-storage.model';
 import { LeftoverImagesModel } from '../model/leftover-images.model';
 import { ImageErrorListComponent } from './image-error-list/image-error-list.component';
+import * as domtoimage from 'dom-to-image';
+
+// import * as html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-camera',
@@ -74,6 +77,10 @@ export class CameraPage implements OnInit {
   latitude: number;
   longitude: number;
   googleImageUrl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=24&maptype=satellite&size=900x1600&scale=2&key=' + GOOGLE_API_KEY;
+
+  obstacles: Equipment[] = EQUIPMENTS;
+  selectedObstacles: Equipment[] = [];
+  private mapCanvasImage = '';
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -198,6 +205,8 @@ export class CameraPage implements OnInit {
       toBack: true,
       alpha: 1
     };
+
+
   }
 
   getSolarMade() {
@@ -324,8 +333,8 @@ export class CameraPage implements OnInit {
   takePicture() {
     if (this.hardwareCameraEnabled) {
       this.cameraPreview.takePicture({
-        width: 1080,
-        height: 1920,
+        width: 0,
+        height: 0,
         quality: 70
       }).then((photo) => {
           this.stopCamera();
@@ -498,6 +507,7 @@ export class CameraPage implements OnInit {
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.surveyMenu = this.mainMenu;
     surveyStorageModel.surveyId = this.surveyId;
+    surveyStorageModel.canvasImage = this.mapCanvasImage;
     if (this.isBatterySurvey()) {
       surveyStorageModel.formData = this.detailsForm.value;
     } else {
@@ -865,6 +875,8 @@ export class CameraPage implements OnInit {
     if (this.totalPercent !== 1) {
       const imagesLeft = this.checkLeftImages();
       this.showLeftOverImagesAlert(imagesLeft);
+    } else if (this.mapCanvasImage === '') {
+      this.showMapViewForSurvey();
     } else {
       if (this.isBatterySurvey()) {
         if (this.detailsForm.status === 'INVALID') {
@@ -965,6 +977,11 @@ export class CameraPage implements OnInit {
         });
       }
     });
+    const image = new ImageUploadModel();
+    image.key = 'electricalslocation';
+    image.imageData = this.mapCanvasImage;
+    image.imagename = 'electricalslocation';
+    mapOfImages.push(image);
     this.utilities.showLoading('Uploading Images').then(() => {
       this.totalImagesToUpload = mapOfImages.length;
       this.uploadImageByIndex(mapOfImages);
@@ -1411,6 +1428,46 @@ export class CameraPage implements OnInit {
   }
 
   showCameraViewForSurvey() {
-    this.calculateImagePercentageAndListOfImages();
+    const imageArea = document.getElementById('mapImageArea');
+    console.log(imageArea);
+    domtoimage.toPng(imageArea)
+      .then((dataUrl) => {
+        this.mapCanvasImage = dataUrl;
+        console.log(dataUrl);
+        this.calculateImagePercentageAndListOfImages();
+      })
+      .catch((error) => {
+        console.error('oops, something went wrong!', error);
+      });
+
+  }
+
+  selectObstacle(equipment: Equipment) {
+    if (equipment.enabled) {
+      this.selectedObstacles.push(equipment);
+      equipment.enabled = false;
+    }
+  }
+
+  removeEquipment(index: number) {
+    const equipment: Equipment[] = this.selectedObstacles.splice(index, 1);
+    this.obstacles.forEach(item => {
+      if (item.id === equipment[0].id) {
+        item.enabled = true;
+      }
+    });
+  }
+
+  saveMap() {
+    const imageArea = document.getElementById('mapImageArea');
+    console.log(imageArea);
+    domtoimage.toPng(imageArea)
+      .then((dataUrl) => {
+        this.mapCanvasImage = dataUrl;
+        console.log(dataUrl);
+      })
+      .catch((error) => {
+        console.error('oops, something went wrong!', error);
+      });
   }
 }
