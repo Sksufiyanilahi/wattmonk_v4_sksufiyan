@@ -22,7 +22,7 @@
                     <span class="customer-address z-100"
                           (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
                     <span class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
-                          *ngIf="designData.assignedto === null || designData.assignedto === undefined">Assign</span>
+                          *ngIf="(designData.assignedto === null || designData.assignedto === undefined) && roleType!=='design'">Assign</span>
                     <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]">
                         {{designData.created_at | date: 'hh:mm a'}}
                     </span>

@@ -36,6 +36,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   designId = 0;
   showBottomDraw: boolean = false;
+  roleType: any;
 
   constructor(
     private utils: UtilitiesService,
@@ -130,13 +131,18 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.listOfDesignsData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting designs').then((success) => {
-      this.apiService.getDesgin().subscribe(response => {
+      this.apiService.getDesgin().subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then((loaderHidden) => {
           if (event !== null) {
             event.target.complete();
           }
           console.log(response, '>>');
           this.listOfDesignsData = response;
+           response.forEach(element => {
+              this.roleType = element.type;            
+          });;
+          console.log(this.roleType);
+          
           const tempData: DesginDataHelper[] = [];
           this.listOfDesignsData.forEach((desginItem) => {
             if (tempData.length === 0) {
@@ -161,7 +167,7 @@ export class DesignComponent implements OnInit, OnDestroy {
                 tempData.push(listOfDesign);
                 added = true;
                 this.listOfDesignDataHelper.push(listOfDesign);
-                console.log(this.listOfDesignDataHelper);
+                console.log(this.listOfDesignDataHelper,"<<<<>>>>");
               }
             }
           });

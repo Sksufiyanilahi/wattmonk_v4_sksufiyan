@@ -98,6 +98,7 @@ export class DesginDataModel {
   state: string;
   city:string;
   postalcode: string;
+  type:string;
 }
 
 
