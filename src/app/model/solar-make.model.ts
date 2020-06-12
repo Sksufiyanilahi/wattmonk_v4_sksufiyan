@@ -5,7 +5,11 @@ export class SolarMake {
     updated_at: Date;
 }
 
-export class SolarMakeData {
-  
+export class Equipment {
+    id: number;
+    name: string;
+    color: string;
+    disabledColor: string;
+    enabled: boolean;
 }
 

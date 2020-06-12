@@ -1,4 +1,5 @@
-<ion-header [ngClass]="{'background-color-transparent': page === PageType.CAMERA_INTERFACE, 'white-bg': page !== PageType.CAMERA_INTERFACE}">
+<ion-header
+        [ngClass]="{'background-color-transparent': page === PageType.CAMERA_INTERFACE, 'white-bg': page !== PageType.CAMERA_INTERFACE}">
     <ion-progress-bar [value]="totalPercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
     <ion-grid class="colored" #header>
         <ion-row justify-content-center>
@@ -19,15 +20,24 @@
     <span *ngIf="!hardwareCameraEnabled">Camera Interface</span>
 </ion-content>
 
-<ion-content *ngIf="page === PageType.IMAGE_PREVIEW || page === PageType.IMAGE_PREVIEW_WITH_OPTIONS" class="ion-no-padding black-bg">
+<ion-content *ngIf="page === PageType.IMAGE_PREVIEW || page === PageType.IMAGE_PREVIEW_WITH_OPTIONS"
+             class="ion-no-padding black-bg">
     <ion-img *ngIf="selectedImageModel.image" [src]="selectedImageModel.image" class="object-fit-contain"></ion-img>
 </ion-content>
 
 <ion-content *ngIf="page === PageType.MAP_PAGE" class="ion-no-padding black-bg" id="mapImageArea">
-    <ion-img [src]="googleImageUrl" class="object-fit-contain"></ion-img>
-    <div ngDraggable ngResizable class="obstacle" *ngFor="let obstacle of obstacles; let i = index" (click)="selectedObstacleIndex = i;">
+    <img [src]="googleImageUrl" class="object-fit-contain" />
+    <div class="position-absolute" style="top:0;left: 0" ngDraggable
+         *ngFor="let obstacle of selectedObstacles; let i = index">
+        <div class="obstacle d-flex align-center justify-center position-relative"
+             [ngStyle]="{'background': obstacle.color }">
+            <ion-icon name="close-circle" class="position-absolute" (click)="removeEquipment(i)"
+                      style="top:0;right: 0; width: 20px; height: 20px;"></ion-icon>
+            <span style="color: white; font-size: 8px; line-height: 0;">{{obstacle.name}}</span>
+        </div>
 
     </div>
+
 </ion-content>
 
 <ion-content class="ion-no-padding" *ngIf="page === PageType.DETAILS_FORM">
@@ -253,20 +263,21 @@
 
     <ion-grid *ngIf="page === PageType.MAP_PAGE">
         <ion-row class="ion-align-items-center ion-justify-content-center">
-            <ion-col class="ion-align-items-center ion-justify-content-center ion-text-center">
-                <span (click)="addObstacle()">Add Roof Obstacle</span>
-            </ion-col>
-            <ion-col class="ion-align-items-center ion-justify-content-center ion-text-center">
-                <span (click)="removeObstacle(selectedObstacleIndex)">Remove Roof Obstacle</span>
-            </ion-col>
-            <ion-col class="ion-align-items-center ion-justify-content-center ion-text-center">
-                <span (click)="saveMap()">Save Roof Image</span>
+            <ion-col class="d-flex flex-column ion-align-items-center"
+                     *ngFor="let obstacle of obstacles; let i = index">
+                <div class="obstacle-images"
+                     [ngStyle]="{'background': obstacle.enabled ? obstacle.color : obstacle.disabledColor}"
+                     (click)="selectObstacle(obstacle)">
+                </div>
+                <span style="color: white; font-size: 12px; line-height: 7px; margin-top: 2px;"
+                      class="ion-text-center">{{obstacle.name}}</span>
             </ion-col>
         </ion-row>
     </ion-grid>
 
     <ion-grid *ngIf="page !== PageType.MAP_PAGE">
-        <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="page === PageType.IMAGE_PREVIEW_WITH_OPTIONS">
+        <ion-row class="ion-align-items-center ion-justify-content-center"
+                 *ngIf="page === PageType.IMAGE_PREVIEW_WITH_OPTIONS">
             <ion-col>
                 <span>{{itemName}} {{selectedImageModel.imageTitle}}</span>
             </ion-col>

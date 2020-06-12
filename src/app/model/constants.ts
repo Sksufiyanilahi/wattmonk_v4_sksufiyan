@@ -1,4 +1,5 @@
 import { MenuModel, QuestionType } from '../camera/menu.model';
+import { Equipment } from './solar-make.model';
 
 export enum ScheduleFormEvent {
   NO_EVENT = 0,
@@ -917,6 +918,52 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
     isSelected: false,
     imageModel: null,
     subMenu: null
+  }
+];
+
+export const EQUIPMENTS: Equipment[] = [
+  {
+    id: 1,
+    name: 'AC Disconnect',
+    color: '#FEC412',
+    disabledColor: '#fec41280',
+    enabled: true
+  }, {
+    id: 2,
+    name: 'PV Meter',
+    color: '#6AA84F',
+    disabledColor: '#6aa84f80',
+    enabled: true
+  }, {
+    id: 3,
+    name: 'MSP',
+    color: '#FF0000',
+    disabledColor: '#ff000080',
+    enabled: true
+  }, {
+    id: 4,
+    name: 'Inverter',
+    color: '#6D9EEB',
+    disabledColor: '#6d9eeb80',
+    enabled: true
+  }, {
+    id: 5,
+    name: 'Battery',
+    color: '#FF00FF',
+    disabledColor: '#ff00ff80',
+    enabled: true
+  }, {
+    id: 6,
+    name: 'GP',
+    color: '#00FFFF',
+    disabledColor: '#00ffff80',
+    enabled: true
+  }, {
+    id: 7,
+    name: 'Electrical Equipment',
+    color: '#FFFF00',
+    disabledColor: '#ffff0080',
+    enabled: true
   }
 ];
 

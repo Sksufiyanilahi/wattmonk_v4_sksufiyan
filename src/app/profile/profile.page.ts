@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { SurveyStorageModel } from '../model/survey-storage.model';
 import { ImageUploadModel } from '../model/constants';
 import { UtilitiesService } from '../utilities.service';
+import { User } from '../model/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -20,6 +21,8 @@ export class ProfilePage implements OnInit {
   surveyIndex = 1;
   listOfSurveysToSave: SurveyStorageModel[] = [];
 
+  user: User;
+
   constructor(
     private navController: NavController,
     private apiService: ApiService,
@@ -31,6 +34,7 @@ export class ProfilePage implements OnInit {
   }
 
   ngOnInit() {
+    this.user = this.storage.getUser();
   }
 
   goBack() {
@@ -118,6 +122,13 @@ export class ProfilePage implements OnInit {
         });
       }
     });
+
+    const image = new ImageUploadModel();
+    image.key = 'electricalslocation';
+    image.imageData = surveyData.canvasImage;
+    image.imagename = 'electricalslocation';
+    mapOfImages.push(image);
+
     this.imageUploadIndex = 1;
     this.totalImagesToUpload = mapOfImages.length;
     this.uploadImageByIndex(mapOfImages, surveyData.surveyId);
