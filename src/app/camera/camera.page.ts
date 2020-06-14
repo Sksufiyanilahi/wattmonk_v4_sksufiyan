@@ -7,7 +7,8 @@ import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 import {
   CAMERA_MODULE_MENU_BATTERY,
   CAMERA_MODULE_MENU_PV,
-  CAMERA_MODULE_MENU_PV_BATTERY, EQUIPMENTS,
+  CAMERA_MODULE_MENU_PV_BATTERY,
+  EQUIPMENTS,
   GOOGLE_API_KEY,
   ImageUploadModel,
   MapPageType
@@ -282,7 +283,7 @@ export class CameraPage implements OnInit {
         console.log(mode);
         switch (mode) {
           case this.diagnostic.permissionStatus.NOT_REQUESTED:
-            this.goBack();
+            this.showCameraDenied();
             break;
           case this.diagnostic.permissionStatus.DENIED_ALWAYS:
             this.showCameraDenied();
@@ -369,7 +370,7 @@ export class CameraPage implements OnInit {
         this.showAlertWithRadioButtons();
         break;
       case QuestionType.STRING:
-        this.showAlertWithInputString();
+        this.showAlertWithInputString(false);
         break;
       case QuestionType.INPUT_NUMBER:
         this.showAlertWithInputNumber();
@@ -382,6 +383,9 @@ export class CameraPage implements OnInit {
         break;
       case QuestionType.MORE_PHOTOS:
         this.showAlertForMorePhoto();
+        break;
+      case QuestionType.MORE_PHOTOS_WITH_INPUT_STRING:
+        this.showAlertWithInputString(true);
         break;
     }
   }
@@ -478,6 +482,7 @@ export class CameraPage implements OnInit {
   }
 
   goBack() {
+    this.utilities.sethomepageSurveyRefresh(false);
     if (this.hardwareCameraEnabled) {
       this.cameraPreview.stopCamera().then(() => {
         this.navigateHome(false);
@@ -764,7 +769,13 @@ export class CameraPage implements OnInit {
     // move to next image
     if (this.selectedSubMenuIndex === -1) {
       // this image was not of submenu but main menu
-      this.shiftMainMenu();
+      if (this.mainMenu[this.selectedMenuIndex].imageModel.length - 1 === this.selectedImageModelIndex) {
+        this.shiftMainMenu();
+      } else {
+        this.selectedImageModelIndex++;
+        this.selectedImageModel = this.mainMenu[this.selectedMenuIndex].imageModel[this.selectedImageModelIndex];
+        this.checkAlreadyExistingImage();
+      }
     } else {
       if (this.selectedSubMenuModel.images.length - 1 > this.selectedImageModelIndex) {
         // submodel has more images to go
@@ -1111,13 +1122,23 @@ export class CameraPage implements OnInit {
         }, {
           text: 'Yes',
           handler: () => {
-            this.selectedImageModel.questionType = QuestionType.NONE;
-            const subMenuImage: ImageModel = JSON.parse(JSON.stringify(this.selectedSubMenuModel.images[this.selectedSubMenuModel.images.length - 1]));
-            const imageName = subMenuImage.imageName.slice(0, subMenuImage.imageName.length - 2) + (this.selectedSubMenuModel.images.length + 1);
-            subMenuImage.imageName = imageName;
+            let subMenuImage: ImageModel;
+            if (this.selectedSubMenuIndex !== -1) {
+              subMenuImage = JSON.parse(JSON.stringify(this.selectedSubMenuModel.images[this.selectedSubMenuModel.images.length - 1]));
+              subMenuImage.imageName = subMenuImage.imageName.slice(0, subMenuImage.imageName.length - 2) + (this.selectedSubMenuModel.images.length + 1);
+            } else {
+              subMenuImage = JSON.parse(JSON.stringify(this.selectedMenuModel.imageModel[this.selectedMenuModel.imageModel.length - 1]));
+              subMenuImage.imageName = subMenuImage.imageName.slice(0, subMenuImage.imageName.length - 2) + (this.selectedMenuModel.imageModel.length + 1);
+            }
             subMenuImage.image = '';
-            subMenuImage.questionType = QuestionType.MORE_PHOTOS;
-            this.selectedSubMenuModel.images.push(subMenuImage);
+            subMenuImage.questionType = this.selectedImageModel.questionType;
+            this.selectedImageModel.questionType = QuestionType.NONE;
+            if (this.selectedSubMenuIndex !== -1) {
+              this.selectedSubMenuModel.images.push(subMenuImage);
+            } else {
+              this.selectedMenuModel.imageModel.push(subMenuImage);
+            }
+
             this.shiftToNextImage();
             this.calculateImagePercentage();
           }
@@ -1286,7 +1307,7 @@ export class CameraPage implements OnInit {
     this.captureNextImage();
   }
 
-  async showAlertWithInputString() {
+  async showAlertWithInputString(morePhotos: boolean) {
     this.stopCamera();
     this.page = MapPageType.IMAGE_PREVIEW;
     const alert = await this.alertController.create({
@@ -1311,7 +1332,7 @@ export class CameraPage implements OnInit {
           text: 'Ok',
           handler: (data) => {
             if (data.input === '') {
-              this.showAlertWithInputString();
+              this.showAlertWithInputString(morePhotos);
             } else {
               if (this.selectedImageModel.formValueToUpdate !== '') {
                 if (this.isBatterySurvey()) {
@@ -1321,7 +1342,12 @@ export class CameraPage implements OnInit {
                 }
               }
               this.selectedImageModel.givenAnswer = data.input.toLowerCase();
-              this.captureNextImage();
+              if (morePhotos) {
+                this.showAlertForMorePhoto();
+              } else {
+                this.captureNextImage();
+              }
+
             }
           }
         }

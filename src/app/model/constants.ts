@@ -278,12 +278,12 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
       popupTitle: 'Confirm',
       showPopup: false,
       popupQuestion: '',
-      questionType: QuestionType.NONE,
+      questionType: QuestionType.MORE_PHOTOS,
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
       imageUploadTag: 'roofimages',
-      imageName: 'modulewideshoturl'
+      imageName: 'modulewideshoturl1'
     }],
     subMenu: []
   },
@@ -293,15 +293,15 @@ export const CAMERA_MODULE_MENU_BATTERY: MenuModel[] = [
     imageModel: [{
       image: '',
       imageTitle: '',
-      popupTitle: 'Confirm',
+      popupTitle: 'Appliance Name',
       showPopup: false,
-      popupQuestion: '',
-      questionType: QuestionType.NONE,
+      popupQuestion: 'Please enter appliance name',
+      questionType: QuestionType.MORE_PHOTOS_WITH_INPUT_STRING,
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
       imageUploadTag: 'appliancesimages',
-      imageName: 'appliances'
+      imageName: 'appliances1'
     }],
     subMenu: []
   },
@@ -585,15 +585,15 @@ export const CAMERA_MODULE_MENU_PV: MenuModel[] = [
     imageModel: [{
       image: '',
       imageTitle: '',
-      popupTitle: 'Confirm',
+      popupTitle: 'Appliance Name',
       showPopup: false,
-      popupQuestion: '',
-      questionType: QuestionType.NONE,
+      popupQuestion: 'Please enter appliance name',
+      questionType: QuestionType.MORE_PHOTOS_WITH_INPUT_STRING,
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
       imageUploadTag: 'appliancesimages',
-      imageName: 'appliances'
+      imageName: 'appliances1'
     }],
     subMenu: []
   },
@@ -901,15 +901,15 @@ export const CAMERA_MODULE_MENU_PV_BATTERY: MenuModel[] = [
     imageModel: [{
       image: '',
       imageTitle: '',
-      popupTitle: 'Confirm',
+      popupTitle: 'Appliance Name',
       showPopup: false,
-      popupQuestion: '',
-      questionType: QuestionType.NONE,
+      popupQuestion: 'Please enter appliance name',
+      questionType: QuestionType.MORE_PHOTOS_WITH_INPUT_STRING,
       questionOptions: [],
       givenAnswer: '',
       formValueToUpdate: '',
       imageUploadTag: 'appliancesimages',
-      imageName: 'appliances'
+      imageName: 'appliances1'
     }],
     subMenu: []
   },
