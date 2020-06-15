@@ -41,6 +41,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   designId = 0;
   design: DesginDataModel = null;
   address: string;
+  showValue: any;
+  uploadbox: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,17 +60,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       solarmodel: new FormControl('', [Validators.required]),
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
-      monthlybill: new FormControl('', [Validators.required]),
+      monthlybill: new FormControl(''),
       address: new FormControl('',[Validators.required]),
-      createdby: new FormControl('', [Validators.required]),
-      assignedto: new FormControl(null),
-      rooftype: new FormControl('', [Validators.required]),
+      createdby: new FormControl(''),
+      assignedto: new FormControl(''),
+      rooftype: new FormControl(''),
+      // upload: new FormControl('', [Validators.required]),
+      tiltofgroundmountingsystem: new FormControl(''),
+      mountingtype: new FormControl('', [Validators.required]),
       jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
       newconstruction: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
-      requesttype: new FormControl('prelim', [Validators.required]),
+      requesttype: new FormControl('prelim'),
       latitude: new FormControl(''),
       longitude: new FormControl(''),
       country: new FormControl(''),
@@ -124,10 +129,31 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.getSolarMake();
       this.getInverterMake();
     }
-
+this.formControlValueChanged();
     this.getAssignees();
 
   }
+  
+formControlValueChanged() {
+  const tiltControl = this.desginForm.get('tiltofgroundmountingsystem');
+  const roofcontrol = this.desginForm.get('rooftype');
+  this.desginForm.get('mountingtype').valueChanges.subscribe(
+      (mode: string) => {
+          console.log(mode);
+          if (mode === 'ground' || mode === 'both') {
+              tiltControl.setValidators([Validators.required]);
+          }
+          else if (mode === 'roof') {
+            roofcontrol.setValidators([Validators.required]);
+              tiltControl.clearValidators();
+          }else{
+            tiltControl.clearValidators();
+            roofcontrol.clearValidators();
+          }
+          tiltControl.updateValueAndValidity();
+          roofcontrol.updateValueAndValidity();
+      });
+}
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
@@ -150,7 +176,9 @@ export class DesignComponent implements OnInit, OnDestroy {
           address: this.design.address,
           createdby: this.design.createdby.id,
           rooftype: this.design.rooftype,
+          mountingtype:this.design.mountingtype,
           jobtype: this.design.jobtype,
+          tiltofgroundmountingsystem: this.design.tilt,
           comments: this.design.comments,
           projecttype: this.design.projecttype,
           latitude: this.design.latitude,
@@ -188,8 +216,8 @@ export class DesignComponent implements OnInit, OnDestroy {
         console.log('patching solar');
         setTimeout(() => {
           this.desginForm.patchValue({
-            solarmake: this.design.solarmake.id,
-            solarmodel: this.design.solarmodel.id
+            solarmake: this.design.solarmake,
+            solarmodel: this.design.solarmodel
           });
           this.desginForm.get('solarmake').valueChanges.subscribe(val => {
             this.getSolarMade();
@@ -406,5 +434,16 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   getclass=()=>{
   return   this.address == "" ? "0px" : "50px";
+  }
+
+  eventcheck(e){
+    this.showValue = e.target.value;
+    console.log(this.showValue);
+    
+  }
+  showUpload(e){
+    this.uploadbox = e.target.value;
+    console.log(this.uploadbox);
+    
   }
 }

@@ -99,6 +99,8 @@ export class DesginDataModel {
   city:string;
   postalcode: string;
   type:string;
+  mountingtype:string;
+  tilt:string;
 }
 
 
