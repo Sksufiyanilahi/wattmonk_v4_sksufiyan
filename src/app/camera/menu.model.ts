@@ -38,6 +38,7 @@ export enum QuestionType {
   INPUT_NUMBER = 4,
   INVERTER_MODEL = 5,
   UTILITIES = 6,
-  MORE_PHOTOS = 7
+  MORE_PHOTOS = 7,
+  MORE_PHOTOS_WITH_INPUT_STRING = 8
 }
 
