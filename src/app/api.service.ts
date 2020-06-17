@@ -154,4 +154,7 @@ export class ApiService {
 
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
+  uploaddesign(data) {
+    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
+  }
 }

@@ -43,6 +43,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   address: string;
   showValue: any;
   uploadbox: any;
+  archFiles: string[]=[];
+  prelimFiles: string[]=[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,7 +52,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     private utils: UtilitiesService,
     private navController: NavController,
     private storage: StorageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.desginForm = this.formBuilder.group({
@@ -65,12 +67,13 @@ export class DesignComponent implements OnInit, OnDestroy {
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
       rooftype: new FormControl(''),
-      // upload: new FormControl('', [Validators.required]),
+      preliemdesign: new FormControl('', [Validators.required]),
+      architecturaldesign: new FormControl([]),
       tiltofgroundmountingsystem: new FormControl(''),
       mountingtype: new FormControl('', [Validators.required]),
-      jobtype: new FormControl('', [Validators.required]),
+      // jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
-      newconstruction: new FormControl('', [Validators.required]),
+      newconstruction: new FormControl(''),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim'),
@@ -79,7 +82,8 @@ export class DesignComponent implements OnInit, OnDestroy {
       country: new FormControl(''),
       state: new FormControl(''),
       city: new FormControl(''),
-      postalcode: new FormControl('')
+      postalcode: new FormControl(''),
+      // uploadbox:new FormControl('')
     });
 
     this.designId = +this.route.snapshot.paramMap.get('id');
@@ -107,13 +111,22 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        this.desginForm.get('address').setValue(address.address);
-        this.desginForm.get('latitude').setValue(address.lat);
-        this.desginForm.get('longitude').setValue(address.long);
-        this.desginForm.get('country').setValue(address.country);
-        this.desginForm.get('city').setValue(address.city);
-        this.desginForm.get('state').setValue(address.state);
-        this.desginForm.get('postalcode').setValue(address.postalcode);
+        // this.desginForm.get('address').setValue(address.address);
+        // this.desginForm.get('latitude').setValue(address.lat);
+        // this.desginForm.get('longitude').setValue(address.long);
+        // this.desginForm.get('country').setValue(address.country);
+        // this.desginForm.get('city').setValue(address.city);
+        // this.desginForm.get('state').setValue(address.state);
+        // this.desginForm.get('postalcode').setValue(address.postalcode);
+
+           
+        this.desginForm.get('address').setValue("124/250");
+        this.desginForm.get('latitude').setValue("26.87666655");
+        this.desginForm.get('longitude').setValue("28.66474645645");
+        this.desginForm.get('country').setValue("india");
+        this.desginForm.get('city').setValue("lucknow");
+        this.desginForm.get('state').setValue("uttar pradesh");
+        this.desginForm.get('postalcode').setValue("208006");
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -130,6 +143,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.getInverterMake();
     }
 this.formControlValueChanged();
+this.uploadcontrolvalidation();
     this.getAssignees();
 
   }
@@ -140,12 +154,18 @@ formControlValueChanged() {
   this.desginForm.get('mountingtype').valueChanges.subscribe(
       (mode: string) => {
           console.log(mode);
-          if (mode === 'ground' || mode === 'both') {
+          if (mode === 'ground') {
               tiltControl.setValidators([Validators.required]);
+              roofcontrol.clearValidators();
+              roofcontrol.reset();
+          }else if(mode ==='both'){
+            tiltControl.setValidators([Validators.required]);
+            roofcontrol.setValidators([Validators.required]);
           }
           else if (mode === 'roof') {
             roofcontrol.setValidators([Validators.required]);
               tiltControl.clearValidators();
+              tiltControl.reset();
           }else{
             tiltControl.clearValidators();
             roofcontrol.clearValidators();
@@ -153,6 +173,22 @@ formControlValueChanged() {
           tiltControl.updateValueAndValidity();
           roofcontrol.updateValueAndValidity();
       });
+
+}
+
+uploadcontrolvalidation(){
+  const uploadboxcontrol= this.desginForm.get('architecturaldesign');
+    this.desginForm.get('newconstruction').valueChanges.subscribe(
+    (uploadmode:any)=>{
+      console.log(uploadmode);
+        if(uploadmode=='true'){
+          uploadboxcontrol.setValidators([Validators.required]);
+        }else if(uploadmode=='false'){
+          uploadboxcontrol.clearValidators();
+          uploadboxcontrol.reset();
+        }
+        uploadboxcontrol.updateValueAndValidity();
+  })
 }
 
   ngOnDestroy(): void {
@@ -174,10 +210,10 @@ formControlValueChanged() {
           email: this.design.email,
           monthlybill: this.design.monthlybill,
           address: this.design.address,
-          createdby: this.design.createdby.id,
+          createdby: this.design.createdby,
           rooftype: this.design.rooftype,
           mountingtype:this.design.mountingtype,
-          jobtype: this.design.jobtype,
+          // jobtype: this.design.jobtype,
           tiltofgroundmountingsystem: this.design.tilt,
           comments: this.design.comments,
           projecttype: this.design.projecttype,
@@ -206,18 +242,20 @@ formControlValueChanged() {
   }
 
   getSolarMakeForForm() {
+    debugger;
     this.apiService.getSolarMake().subscribe(response => {
       this.listOfSolarMake = response;
 
       this.apiService.getSolarMade(this.design.solarmake.id).subscribe(solarresponse => {
+        debugger;
         this.utils.hideLoading();
         this.listOfSolarMade = solarresponse;
         console.log(solarresponse);
         console.log('patching solar');
         setTimeout(() => {
           this.desginForm.patchValue({
-            solarmake: this.design.solarmake,
-            solarmodel: this.design.solarmodel
+            solarmake: this.design.solarmake.id,
+            solarmodel: this.design.solarmodel.id
           });
           this.desginForm.get('solarmake').valueChanges.subscribe(val => {
             this.getSolarMade();
@@ -247,13 +285,14 @@ formControlValueChanged() {
     this.apiService.getInverterMake().subscribe(response => {
       console.log(response);
       this.listOfInverterMake = response;
-
+        debugger;
       this.apiService.getInverterMade(this.design.invertermake.id).subscribe(makeResponse => {
         this.utils.hideLoading();
         console.log('patching inverter');
         this.listOfInverterMade = makeResponse;
 
         setTimeout(() => {
+          debugger;
           this.desginForm.patchValue({
             invertermake: this.design.invertermake.id,
             invertermodel: this.design.invertermodel.id
@@ -262,7 +301,7 @@ formControlValueChanged() {
             this.getInverterMade();
           });
         }, 500);
-
+          debugger;
 
       }, makeResponseError => {
         this.utils.hideLoading();
@@ -285,13 +324,18 @@ formControlValueChanged() {
 
   addForm() {
     console.log('Reach', this.desginForm.value);
+   
+  
     if (this.desginForm.status === 'VALID') {
       this.utils.showLoading('Saving').then(() => {
         if (this.designId === 0) {
           this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
+              debugger;
               this.utils.showSnackBar('Desgin have been saved');
+              this.uploaarchitecturedesign(response.id,'architecturaldesign');
+              this.uploaarchitecturedesign(response.id,'prelimdesign')
               this.utils.setHomepageDesignRefresh(true);
               this.navController.pop();
               // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
@@ -305,16 +349,19 @@ formControlValueChanged() {
           }, responseError => {
             this.utils.hideLoading().then(() => {
               const error: ErrorModel = responseError.error;
-              this.utils.errorSnackBar(error.message[0].messages[0].message);
+              this.utils.errorSnackBar(error.message);
             });
           });
 
         } else {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(() => {
+              debugger;
               console.log('Res', response);
               this.utils.showSnackBar('Desgin have been updated');
               this.utils.setDesignDetailsRefresh(true);
+              
+              this.uploaarchitecturedesign(response.id,'architecturaldesign');
               this.navController.pop();
             });
           }, responseError => {
@@ -443,7 +490,46 @@ formControlValueChanged() {
   }
   showUpload(e){
     this.uploadbox = e.target.value;
-    console.log(this.uploadbox);
+
     
+  }
+
+
+  files(event){
+   console.log(event.target.files);
+    for(var i=0; i< event.target.files.length;i++){
+      this.archFiles.push(event.target.files[i]) 
+    }
+    console.log(this.archFiles);
+  }
+
+  prelimfiles(event){
+    console.log(event.target.files);
+    for(var i=0; i< event.target.files.length;i++){
+      this.prelimFiles.push(event.target.files[i]) 
+    }
+    console.log(this.prelimFiles);
+  }
+  
+
+  uploaarchitecturedesign(designId?: number, key?: string,filearray?:File[]){
+    debugger;
+    console.log(this.archFiles);
+    const imageData = new FormData();
+    for(var i=0; i< this.archFiles.length;i++){
+      imageData.append("files",this.archFiles[i]);
+      if(i ==0){
+        imageData.append('path', 'design/' + designId);
+        imageData.append('refId', designId + '');
+        imageData.append('ref', 'design');
+        imageData.append('field', key);
+      }
+    } 
+    this.apiService.uploaddesign(imageData).subscribe(res=>{
+      console.log(res); 
+      
+    })
+
+
   }
 }

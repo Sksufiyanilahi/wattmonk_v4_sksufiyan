@@ -37,6 +37,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   designId = 0;
   showBottomDraw: boolean = false;
   roleType: any;
+  myFiles: string[] = [];  
 
   constructor(
     private utils: UtilitiesService,
@@ -57,7 +58,6 @@ export class DesignComponent implements OnInit, OnDestroy {
       comment: new FormControl('')
     });
 
-
   }
 
   ionViewDidEnter() {
@@ -77,9 +77,10 @@ export class DesignComponent implements OnInit, OnDestroy {
 
               this.filterData(_res.serchTerm);
             } else {
-              this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+              // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+                // debugger;
                 this.getDesign(null, true);
-              });
+              // });
             }
           });
         }
@@ -88,7 +89,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.refreshSubscription.unsubscribe();
+   // this.refreshSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
   }
 
@@ -128,11 +129,15 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   getDesign(event, showLoader: boolean) {
+
     this.listOfDesignsData = [];
     this.listOfDesignDataHelper = [];
+    
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting designs').then((success) => {
+      // debugger;
       this.apiService.getDesgin().subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then((loaderHidden) => {
+          // debugger;
           if (event !== null) {
             event.target.complete();
           }
@@ -173,6 +178,14 @@ export class DesignComponent implements OnInit, OnDestroy {
           });
           this.listOfDesignDataHelper = tempData;
           this.cdr.detectChanges();
+        },responseError=>{
+          this.utils.hideLoadingWithPullRefreshSupport(showLoader).then((loaderHidden) => {
+            if (event !== null) {
+              event.target.complete();
+            }
+            const error: ErrorModel = responseError.error;
+            this.utils.errorSnackBar(error.message[0].messages[0].message);
+          });
         });
       }, responseError => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then((loaderHidden) => {

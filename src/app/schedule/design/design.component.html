@@ -96,7 +96,7 @@
 
                 </ion-col>
             
-                <ion-col size="6">
+                <!-- <ion-col size="6">
                     <ion-item class="ion-no-padding">
                         <ion-label style="display: none;">Job Type</ion-label>
                         <ion-select class="form_input select_div" placeholder="job type"
@@ -108,10 +108,7 @@
                             <ion-select-option value="pv">PV</ion-select-option>
                         </ion-select>
                     </ion-item>
-                </ion-col>
-            </ion-row>
-
-            <ion-row class="ion-align-items-center ion-justify-content-center">
+                </ion-col> -->
                 <ion-col size="6">
                     <ion-item class="ion-no-padding">
                         <ion-label style="display: none;">New construction</ion-label>
@@ -124,7 +121,11 @@
                         </ion-select>
                     </ion-item>
                 </ion-col>
-                <ion-col size="6">
+            </ion-row>
+
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+           
+                <ion-col size="12">
                     <ion-item class="ion-no-padding">
                         <ion-label style="display: none;">Mounting Type</ion-label>
                         <ion-select class="form_input select_div" (ionChange)="eventcheck($event)"  placeholder="mounting type"
@@ -160,13 +161,21 @@
             </ion-row>
               <!--upload box-->
               <ion-row *ngIf='uploadbox=="true"'>
-                <ion-col size="6">
+                <ion-col size="12">
                     <ion-item class="ion-no-padding">
-                        <ion-input class="form_input" type="file" placeholder="Upload Architectural design" 
-                                   formControlName="upload"></ion-input>
+                        <!-- <ion-input class="form_input" type="file" placeholder="Upload Architectural design" 
+                              (ionChange)="files($event)"  multiple></ion-input> -->
+                              <input type="file" (change)="files($event)" formControlName="architecturaldesign" placeholder="Upload Architectural design" multiple/>
                     </ion-item>
                 </ion-col>
-                <ion-col size="6">
+               
+            </ion-row>
+
+            <ion-row>
+                <ion-col size="12">
+                    <ion-item class="ion-no-padding">
+                              <input type="file" (change)="prelimfiles($event)" formControlName="preliemdesign" placeholder="Upload Prelim design" multiple/>
+                    </ion-item>
                
                 </ion-col>
             </ion-row>
