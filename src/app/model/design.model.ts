@@ -82,7 +82,7 @@ export class DesginDataModel {
   address: string;
   rooftype: string;
   jobtype: string;
-  newconstruction: string;
+  newconstruction: any;
   projecttype: string;
   comments: string;
   source: string;
@@ -92,6 +92,7 @@ export class DesginDataModel {
   invertermodel: Invertermodel;
   createdby: User;
   assignedto: User;
+  designassignedto: User;
   latitude: number;
   longitude: number;
   country: string;
@@ -100,7 +101,18 @@ export class DesginDataModel {
   postalcode: string;
   type:string;
   mountingtype:string;
-  tilt:string;
+  tiltofgroundmountingsystem:string;
+  architecturaldesign:[];
+  prelimdesign:PrelimDesign;
+}
+
+export class PrelimDesign{
+  created_at:string;
+  ext:string;
+  name:string;
+  url:string;
+  updated_at:string;
+
 }
 
 

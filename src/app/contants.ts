@@ -1,6 +1,6 @@
 // export const BaseUrl = 'http://ec2-3-17-28-7.us-east-2.compute.amazonaws.com:1337';
 // export const BaseUrl = 'http://localhost:1337';
-export const BaseUrl = 'https://admin.wattmonk.com/api';
+export const BaseUrl = ' https://testorbit.wattmonk.com/api';
 export enum ROLES {
     SuperAdmin = 4,
     ContractorSuperAdmin = 6,
@@ -13,7 +13,7 @@ export enum ROLES {
 }
 
 export const COMETCHAT_CONSTANTS = {
-    APP_ID: '190385dcec51285',
+    APP_ID: '20408823135ffb5',
     REGION: 'US',
-    API_KEY: '5cafae1939d4fc620698c50ae3f25e727fc90213'
+    API_KEY: 'd796aef95e10a159c16b6b590199e838c58af7a4'
 }

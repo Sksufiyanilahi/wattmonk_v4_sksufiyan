@@ -25,11 +25,15 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   dataSubscription: Subscription;
   assigneeForm: FormGroup;
   refreshDataOnPreviousPage = 0;
+  imageName:any;
+  imagebox :boolean=false;
 
   options: LaunchNavigatorOptions = {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+  prelimFiles: string[]=[];
+  targetLength: any;
 
 
   constructor(
@@ -45,7 +49,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
-      assignedto: new FormControl('', [Validators.required])
+      designassignedto: new FormControl('', [Validators.required]),
+      status: new FormControl('designassigned')
     });
   }
 
@@ -85,13 +90,18 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   setData(result: DesginDataModel) {
-    if (result.newconstruction === 'true') {
-      result.newconstruction = 'Yes';
-    } else {
-      result.newconstruction = 'No';
-    }
+ debugger;
     this.design = result;
-    this.assigned = this.design.assignedto !== null && this.design.assignedto !== undefined;
+    console.log(this.design,">>>>>>>>>>>>>>>>");
+    this.imageName= result.prelimdesign.name + result.prelimdesign.ext;
+    console.log(this.imageName)
+    
+    if (this.design.newconstruction == true) {
+      this.design.newconstruction = 'Yes';
+    } else {
+      this.design.newconstruction = 'No';
+    }
+    this.assigned = this.design.designassignedto !== null && this.design.designassignedto !== undefined;
   }
 
   async deleteDesign() {
@@ -163,5 +173,38 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   openAddressOnMap(address: string) {
     this.launchNavigator.navigate(address, this.options);
+  }
+
+  showuploadbox(){
+    this.imageName='';
+  }
+
+  prelimfiles(event){
+    console.log(event.target.files);
+    for(var i=0; i< event.target.files.length;i++){
+      this.prelimFiles.push(event.target.files[i]) 
+      this.imagebox= true;
+    }
+      this.targetLength= event.target.files.length;
+    console.log(this.prelimFiles);
+  }
+
+  uploadpreliumdesign(designId?: number, key?: string,filearray?:File[]){
+    this.imageName=this.prelimFiles;
+    console.log(this.prelimFiles);
+    const imageData = new FormData();
+    for(var i=0; i< this.prelimFiles.length;i++){
+      imageData.append("files",this.prelimFiles[i]);
+      // if(i ==0){
+        imageData.append('path', 'design/' + designId);
+        imageData.append('refId', designId + '');
+        imageData.append('ref', 'design');
+        imageData.append('field', key);
+      // }
+    } 
+    this.apiService.uploaddesign(imageData).subscribe(res=>{
+      console.log(res); 
+      
+    })
   }
 }

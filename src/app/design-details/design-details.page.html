@@ -21,13 +21,13 @@
                 </ion-grid>
             </ion-col>
             <ion-col size="auto">
-                <ion-button *ngIf='design.type !=="design"' fill="clear" size="small" class="ion-no-padding" [routerLink]="['/schedule/design/',designId]"
-                            routerDirection="forward">
+                <ion-button fill="clear" size="small" class="ion-no-padding"
+                    [routerLink]="['/schedule/design/',designId]" routerDirection="forward">
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
             <ion-col size="auto">
-                <ion-button *ngIf='design.type !=="design"' fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()">
+                <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()">
                     <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
@@ -119,6 +119,12 @@
                             <span class="model-name">{{design.newconstruction}}</span>
                         </ion-col>
                     </ion-row>
+                    <ion-row *ngIf="design.newconstruction=='Yes'" class="ion-no-padding">
+                        <ion-col><span class="model-type">Architectural design</span></ion-col>
+                        <ion-col size="auto" *ngFor="let archdesign of design.architecturaldesign">
+                            <span class="model-name">{{archdesign.name}}{{archdesign.ext}}</span>
+                        </ion-col>
+                    </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">project type</span></ion-col>
                         <ion-col size="auto">
@@ -126,31 +132,50 @@
                         </ion-col>
                     </ion-row>
                     <ion-row>
-                        <ion-col><span class="model-type">job type</span></ion-col>
+                        <!-- <ion-col><span class="model-type">job type</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name">{{design.jobtype}}</span>
-                        </ion-col>
+                        </ion-col> -->
                     </ion-row>
                     <ion-row>
+                        <ion-col><span class="model-type">Mounting Type</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{design.mountingtype}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="design.mountingtype == 'roof' || design.mountingtype =='both'">
                         <ion-col><span class="model-type">roof type</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name">{{design.rooftype}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="design.mountingtype=='ground' || design.mountingtype == 'both'">
+                        <ion-col><span class="model-type">tilt of ground mounting system</span></ion-col>
+                        <ion-col size="auto">
+                            <span class="model-name">{{design.tiltofgroundmountingsystem}}</span>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
             </ion-col>
         </ion-row>
 
-        <ion-row class="ion-no-padding ion-margin-top">
+        <ion-row *ngIf="design.comments != '' || design.comments !==null  " class="ion-no-padding ion-margin-top">
             <ion-col size="12" class="ion-no-padding">
                 <span class="models">comments</span>
             </ion-col>
-            <ion-col size="12" class="ion-no-padding">
-                <span class="comment">"{{design.comments}}"</span>
+            <!-- <div> -->
+
+            <ion-col size="12" *ngFor="let comment of design.comments" class="ion-no-padding">
+                <p class="comment">{{comment.message}}</p>
+                <p class="comment-by" style="text-align: right;">Posted by {{comment.createdby.firstname}}
+                    {{comment.createdby.lastname}}</p>
             </ion-col>
-            <ion-col size="12" class="ion-no-padding ion-text-end">
-                <span class="comment-by">Posted by {{design.createdby.firstname}} {{design.createdby.lastname}}</span>
-            </ion-col>
+            <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
+                         
+                        </ion-col> -->
+
+            <!-- </div> -->
+
         </ion-row>
 
         <ion-row>
@@ -160,16 +185,29 @@
             </ion-col>
         </ion-row>
 
+        <ion-row>
+            <ion-col><span class="model-type">Preliem Design</span></ion-col>
+            <ion-col size="auto">
+                <input type="file" *ngIf="imageName =='' || imageName ==null || imageName ==undefined"  (change)="prelimfiles($event)"/>
+                <span class="model-name">{{imageName}}</span>
+                <button *ngIf="imageName !==''" (click)="showuploadbox()">Remove</button>
+                <button *ngIf="imageName =='' && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')">Upload</button>
+            </ion-col>
+        </ion-row>
+
         <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
-                 *ngIf="assigned">
-            <ion-col class="ion-justify-content-center ion-align-items-center"><span
-                    class="model-type">assigned to</span></ion-col>
+            *ngIf="assigned">
+            <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type">assigned
+                    to</span></ion-col>
             <ion-col size="auto">
                 <div class="selected d-flex">
-                    <img *ngIf="design.assignedto.contractorlogo && design.assignedto.contractorlogo.logo" [src]="design.assignedto.contractorlogo.logo.url" class="assignee-image"/>
-                    <div *ngIf="!design.assignedto.contractorlogo || !design.assignedto.contractorlogo.logo" class="assignee-image d-flex flex-row align-center justify-center">
+                    <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"
+                        [src]="design.designassignedto.contractorlogo.logo.url" class="assignee-image" />
+                    <div *ngIf="!design.designassignedto.contractorlogo || !design.designassignedto.contractorlogo.logo"
+                        class="assignee-image d-flex flex-row align-center justify-center">
                         <div class="name_div">
-                            <span style="text-transform: capitalize;">{{design.assignedto.firstname.substring(0, 1)}}{{design.assignedto.lastname.substring(0, 1)}}</span>
+                            <span
+                                style="text-transform: capitalize;">{{design.designassignedto.firstname.substring(0, 1)}}{{design.designassignedto.lastname.substring(0, 1)}}</span>
                         </div>
                     </div>
                 </div>
@@ -181,7 +219,7 @@
                 <form novalidate [formGroup]="assigneeForm">
                     <ion-item class="ion-no-padding no-border" lines="none">
                         <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
-                                           formControlName="assignedto"></app-user-selector>
+                            formControlName="designassignedto"></app-user-selector>
                     </ion-item>
                 </form>
             </ion-col>
