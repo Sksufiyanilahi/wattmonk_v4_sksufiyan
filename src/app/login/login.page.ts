@@ -24,6 +24,7 @@ import {
   ErrorModel
 } from '../model/error.model';
 import { INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../model/constants';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-login',
@@ -45,6 +46,7 @@ export class LoginPage implements OnInit {
     private utils: UtilitiesService,
     private apiService: ApiService,
     private storageService: StorageService,
+    private router:Router,
     private navController: NavController) {
     this.isLoggedInOnce = this.storageService.isLoggedInOnce();
   }
@@ -66,11 +68,16 @@ export class LoginPage implements OnInit {
         this.apiService.login(this.loginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
+            // debugger;
             this.storageService.setUserName(this.loginForm.get('identifier').value);
             this.storageService.setPassword(this.loginForm.get('password').value);
-            this.storageService.setUser(response.user, response.jwt);
+             this.storageService.setUser(response.user, response.jwt);
             this.apiService.refreshHeader();
-            this.navController.navigateRoot(['homepage']);
+            if(response.user.isdefaultpassword){
+              this.navController.navigateRoot(['changepassword'])
+            }else{ 
+              this.navController.navigateRoot(['homepage']);
+            }
           });
         }, responseError => {
           this.utils.hideLoading().then(() => {
@@ -90,12 +97,18 @@ export class LoginPage implements OnInit {
     this.isActiveToggleTextPassword = (this.isActiveToggleTextPassword == true) ? false : true;
   }
 
-  public getType() {
+  getType() {
     return this.isActiveToggleTextPassword ? 'password' : 'text';
   }
 
   get password() {
     return this.loginForm.get('password');
+  }
+
+  changepassword(){
+    console.log('rrrrrrrrrrrrrrr');
+    
+    this.router.navigate(['/changepassword'])
   }
 
 

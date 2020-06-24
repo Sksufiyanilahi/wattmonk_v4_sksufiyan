@@ -71,7 +71,13 @@ const routes: Routes = [
     path: 'chat/:id',
     loadChildren: () => import('./chat/chat.module').then( m => m.ChatPageModule),
     canActivate: [AuthGuardService]
+  },
+  {
+    path: 'changepassword',
+    loadChildren: () => import('./change-password/change-password.module').then( m => m.ChangePasswordPageModule),
+    // canActivate: [AuthGuardService]
   }
+
 ];
 
 @NgModule({

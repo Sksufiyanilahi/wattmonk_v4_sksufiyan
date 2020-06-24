@@ -62,7 +62,7 @@ export class ForgotPasswordPage implements OnInit {
   }
 
   goBack() {
-    this.navController.pop();
+    this.navController.navigateBack('login');
   }
 
 }

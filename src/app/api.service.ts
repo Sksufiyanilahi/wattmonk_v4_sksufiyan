@@ -157,4 +157,12 @@ export class ApiService {
   uploaddesign(data) {
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
+
+  changepassword(data){
+    return this.http.post(BaseUrl + '/auth/reset-password',data,{ headers: this.uploadHeaders });
+  }
+
+  updateresetpassword(userId,data){
+    return this.http.put(BaseUrl + '/users/'+ userId,data,{ headers: this.uploadHeaders });
+  }
 }
