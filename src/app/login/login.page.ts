@@ -82,7 +82,8 @@ export class LoginPage implements OnInit {
         }, responseError => {
           this.utils.hideLoading().then(() => {
             const error: ErrorModel = responseError.error;
-            this.utils.errorSnackBar(error);
+            // this.utils.errorSnackBar(error);
+            this.utils.errorSnackBar('Invalid Credentials');
           });
 
         });
