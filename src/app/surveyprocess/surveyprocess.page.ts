@@ -38,7 +38,8 @@ export class SurveyprocessPage implements OnInit {
   selectedchild : CHILDREN;
   currentshots : SHOT[];
 
-  issidemenucollapsed = false;
+  issidemenucollapsed = true;
+  isdataloaded = false;
   totalPercent = 0;
   surveyid: number;
   surveytype: string;
@@ -69,6 +70,7 @@ export class SurveyprocessPage implements OnInit {
            this.selectedchild = this.selectedmenu.children[0];
           this.currentshots = this.selectedchild.shots;
            console.log(this.selectedchild);
+           this.isdataloaded = true;
         });
     }
   }
@@ -86,6 +88,11 @@ export class SurveyprocessPage implements OnInit {
     //   toBack: true,
     //   alpha: 1
     // }
+  }
+
+  toggleSidebar(isopen : boolean){
+    this.issidemenucollapsed = isopen;
+    console.log(this.issidemenucollapsed);
   }
 
 }

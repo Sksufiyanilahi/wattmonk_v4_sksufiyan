@@ -26,26 +26,35 @@
   </ion-grid>
 
   <!-- Sidebar for highlighting step process to follow -->
-  <ion-grid class="ion-no-padding" [ngClass]="{'sidestepper' : !issidemenucollapsed, 'sidestepper-mini': issidemenucollapsed}">
-    <div *ngFor="let childshot of currentshots; let i = index">
-      <ion-row>
-        <div class="stepper-index">{{i + 1}}</div>
-        <p class="stepper-title">Step</p>
-      </ion-row>
-      <ion-row *ngIf="!issidemenucollapsed">
-        <ion-col>
-          <ion-row class="stepper-list-row">
-            <div class="stepper-check-disabled"></div>
-            <!-- <div class="stepper-check-enabled"><ion-icon name="checkmark-outline"></ion-icon></div> -->
-            <p class="stepper-text">{{childshot.shotinfo}}</p>
-          </ion-row>
-          <ion-row class="stepper-list-row">
-            <div class="stepper-check-disabled"></div>
-            <!-- <div class="stepper-check-enabled"><ion-icon name="checkmark-outline"></ion-icon></div> -->
-            <p class="stepper-text">{{childshot.questioninfo}}</p>
-          </ion-row>
-        </ion-col>
-      </ion-row>
+  <ion-grid class="ion-no-padding"
+    [ngClass]="[ issidemenucollapsed ? 'sidestepper sidestepper-mini' : 'sidestepper sidestepper-max']" *ngIf="isdataloaded">
+    <ion-row *ngIf="issidemenucollapsed">
+      <div class="stepper-index">{{selectedchild.shotscount}}</div>
+      <p class="stepper-title">Steps</p>
+      <ion-button class="togglebutton" fill="clear" (click)="toggleSidebar(false)">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-row>
+    <div *ngIf="!issidemenucollapsed">
+      <div *ngFor="let childshot of currentshots; let i = index">
+        <ion-row>
+          <div class="stepper-index">{{i + 1}}</div>
+          <p class="stepper-title">Step</p>
+          <ion-button *ngIf="i == 0" class="togglebutton" fill="clear" (click)="toggleSidebar(true)">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </ion-button>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-row class="stepper-list-row">
+              <p class="stepper-text-default">{{childshot.shotinfo}}</p>
+            </ion-row>
+            <ion-row class="stepper-list-row">
+              <p class="stepper-text-default">{{childshot.questioninfo}}</p>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </div>
     </div>
   </ion-grid>
 </ion-content>

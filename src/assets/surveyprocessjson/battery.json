@@ -7,6 +7,7 @@
                 "shotscount":4,
                 "shots":[
                     {
+                        "isactive": true,
                         "shotinfo":"Capture Long Shot",
                         "questioninfo":"Provide MSP Location",
                         "question" : "MSP is located inside or outside the building?",
@@ -15,6 +16,7 @@
                         "result" : ""
                     },
                     {
+                        "isactive": false,
                         "shotinfo":"Capture Zoom Shot",
                         "questioninfo":"Provide MSP Rating",
                         "question" : "MSP is located inside or outside the building?",
@@ -23,6 +25,7 @@
                         "result" : ""
                     },
                     {
+                        "isactive": false,
                         "shotinfo":"Open MSP Shutter & Capture Zoom Shot",
                         "questioninfo":"Provide Main Breaker Size",
                         "question" : "MSP is located inside or outside the building?",
@@ -31,6 +34,7 @@
                         "result" : ""
                     },
                     {
+                        "isactive": false,
                         "shotinfo":"Open MSP Inside Cover & Capture Zoom Shot",
                         "questioninfo":"Provide Main breaker location in MSP",
                         "question" : "MSP is located inside or outside the building?",
