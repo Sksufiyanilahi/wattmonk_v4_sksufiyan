@@ -1,9 +1,11 @@
 [
     {
         "name":"Electricals",
+        "isactive": true,
         "children":[
             {
                 "name":"MSP",
+                "isactive": true,
                 "shotscount":4,
                 "shots":[
                     {
@@ -45,33 +47,41 @@
                 ]
             },
             {
-                "name":"Utility Meter"
+                "name":"Utility Meter",
+                "isactive": false
             },
             {
-                "name":"PV Inverter"
+                "name":"PV Inverter",
+                "isactive": false
             },
             {
-                "name":"PV Meter"
+                "name":"PV Meter",
+                "isactive": false
             },
             {
-                "name":"AC Disconnect"
+                "name":"AC Disconnect",
+                "isactive": false
             }
         ]
     },
     {
         "name": "Solar",
+        "isactive": false,
         "children":[]
     },
     {
         "name": "Roof",
+        "isactive": false,
         "children":[]
     },
     {
         "name": "Appliances",
+        "isactive": false,
         "children":[]
     },
     {
         "name": "Details",
+        "isactive": false,
         "children":[]
     }
 ]

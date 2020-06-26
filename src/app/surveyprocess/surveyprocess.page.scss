@@ -1,7 +1,27 @@
+ion-content {
+    --ion-background-color: #FFFFFF;
+  }
+
+  html, body {
+    background-color: transparent !important;
+  }
+  
+  ion-app {
+    --background: transparent !important;
+  }
+  
+  ion-content {
+    --background: transparent !important;
+  }
+  
+  app-ar ion-content {
+    --background: transparent;
+  }
+
 .actionarea {
+    background-color: #000000aa;
     position: absolute;
     bottom: 0em;
-    background-color: brown;
     margin-left: 0px;
     margin-right: 0px;
 }
@@ -24,6 +44,21 @@
 }
 
 .actionarea .mainbuttons .normal {
+    color: #ffffff;
+    font-size: 14px;
+    opacity: 0.5;
+    font-weight: 100;
+    padding: 0 4px;
+}
+
+.actionarea .childbuttons .active {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0 4px;
+}
+
+.actionarea .childbuttons .normal {
     color: #ffffff;
     font-size: 14px;
     opacity: 0.5;
@@ -56,18 +91,13 @@
 }
 
 .sidestepper {
+    background-color: #ffffffaa;
     position: fixed;
-    top: 8px;
-    left: 0;
-    height: 75vh;
-}
-
-.sidestepper-max {
-    width: 30vw;
-}
-
-.sidestepper-mini {
-    width: 22vw;
+    top: 85px;
+    left: 16px;
+    width: 200px;
+    height: 60vh;
+    border-radius: 14px;
 }
 
 .stepper-index {
@@ -80,11 +110,13 @@
     color: #ffffff;
     font-size: 12px;
     margin: 12px;
+    font-weight: 600;
     margin-bottom: 0px;
 }
 
 .stepper-title {
     font-size: 14px;
+    font-weight: 600;
     color: #000000;
     padding-top: 1px;
     margin-bottom: 8px;
@@ -112,6 +144,14 @@
     color: #686968;
 }
 
-.sidestepper .togglebutton{
-    margin-top: 6px;
+.infobutton{
+    margin-top: 40px;
+    margin-left: 16px;
+    background-color: #ffffffd7;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #282829;
+    font-weight: 600;
+    border: 2px solid #ffffff;
 }

@@ -1,6 +1,6 @@
 // export const BaseUrl = 'http://ec2-3-17-28-7.us-east-2.compute.amazonaws.com:1337';
-export const BaseUrl = 'http://localhost:1337';
-// export const BaseUrl = 'https://testorbit.wattmonk.com/api';
+// export const BaseUrl = 'http://localhost:1337';
+export const BaseUrl = 'https://testorbit.wattmonk.com/api';
 export enum ROLES {
     SuperAdmin = 4,
     ContractorSuperAdmin = 6,

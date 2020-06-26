@@ -201,7 +201,7 @@ export class CameraPage implements OnInit {
       height: window.screen.height,
       camera: 'rear',
       tapPhoto: false,
-      tapToFocus: true,
+      tapFocus: true,
       previewDrag: true,
       toBack: true,
       alpha: 1

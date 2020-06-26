@@ -9,7 +9,7 @@
         <ion-col size="12" class="actionareacol">
           <ion-row class="childbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">
-              <ion-button fill="clear" *ngFor="let button of submenuitems">{{button.name}}</ion-button>
+              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']" *ngFor="let button of submenuitems">{{button.name}}</ion-button>
             </div>
           </ion-row>
           <ion-row class="ion-justify-content-center">
@@ -17,7 +17,7 @@
           </ion-row>
           <ion-row class="mainbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">
-              <ion-button fill="clear" *ngFor="let button of mainmenuitems">{{button.name}}</ion-button>
+              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']" *ngFor="let button of mainmenuitems">{{button.name}}</ion-button>
             </div>
           </ion-row>
         </ion-col>
@@ -26,23 +26,18 @@
   </ion-grid>
 
   <!-- Sidebar for highlighting step process to follow -->
-  <ion-grid class="ion-no-padding"
-    [ngClass]="[ issidemenucollapsed ? 'sidestepper sidestepper-mini' : 'sidestepper sidestepper-max']" *ngIf="isdataloaded">
+  <ion-grid class="ion-no-padding">
     <ion-row *ngIf="issidemenucollapsed">
-      <div class="stepper-index">{{selectedchild.shotscount}}</div>
-      <p class="stepper-title">Steps</p>
-      <ion-button class="togglebutton" fill="clear" (click)="toggleSidebar(false)">
-        <ion-icon name="chevron-forward-outline"></ion-icon>
-      </ion-button>
+      <ion-button fill="clear" class="infobutton" (click)="toggleSidebar(false)">i</ion-button>
     </ion-row>
-    <div *ngIf="!issidemenucollapsed">
+    <ion-row *ngIf="!issidemenucollapsed">
+      <ion-button class="infobutton" fill="clear" (click)="toggleSidebar(true)">X</ion-button>
+    </ion-row>
+    <div *ngIf="!issidemenucollapsed && isdataloaded" class="sidestepper">
       <div *ngFor="let childshot of currentshots; let i = index">
         <ion-row>
           <div class="stepper-index">{{i + 1}}</div>
           <p class="stepper-title">Step</p>
-          <ion-button *ngIf="i == 0" class="togglebutton" fill="clear" (click)="toggleSidebar(true)">
-            <ion-icon name="chevron-back-outline"></ion-icon>
-          </ion-button>
         </ion-row>
         <ion-row>
           <ion-col>
