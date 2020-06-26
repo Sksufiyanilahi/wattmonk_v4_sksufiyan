@@ -24,7 +24,7 @@
           </ion-row>
           <ion-row class="childbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">
-              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']" *ngFor="let button of mainmenuitems[selectedmainmenuindex].children">{{button.name}}</ion-button>
+              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']" *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index" (click)="toggleSubMenuSelection(i)">{{button.name}}</ion-button>
             </div>
           </ion-row>
           <ion-row class="ion-justify-content-center">
@@ -76,8 +76,12 @@
     <ion-row *ngIf="!isgallerymenucollapsed">
       <ion-button class="infobutton" fill="clear" (click)="toggleGallerybar(true)">x</ion-button>
     </ion-row>
-    <div class="gallerysidebar" *ngIf="!isgallerymenucollapsed && capture">
-
+    <div class="gallerysidebar ion-justify-content-cente" *ngIf="isdataloaded && isgallerymenucollapsed && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages != null">
+      <div class="scroll" scrollY="true">
+        <ion-button class="gallerybutton" *ngFor="let shotimage of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages; let i = index">
+          <img [src]="shotimage" />
+        </ion-button>
+      </div>
     </div>
   </ion-grid>
 </ion-content>

@@ -42,6 +42,7 @@ export class SurveyprocessPage implements OnInit {
   mainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
   selectedsubmenuindex = 0;
+  selectedshotindex = 0;
 
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
@@ -125,6 +126,12 @@ export class SurveyprocessPage implements OnInit {
         this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
       }
     });
+  }
+
+  toggleSubMenuSelection(index){
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+    this.selectedsubmenuindex = index;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
   }
 
   startCamera() {
@@ -214,6 +221,7 @@ export class SurveyprocessPage implements OnInit {
         quality: 85
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages.push(this.capturedImage);
       },
         (error) => {
 
