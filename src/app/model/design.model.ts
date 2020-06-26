@@ -103,7 +103,7 @@ export class DesginDataModel {
   mountingtype:string;
   tiltofgroundmountingsystem:string;
   architecturaldesign:[];
-  prelimdesign:PrelimDesign;
+  prelimdesign:any;
 }
 
 export class PrelimDesign{
