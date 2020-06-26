@@ -6,10 +6,11 @@
             {
                 "name":"MSP",
                 "isactive": true,
-                "shotscount":4,
+                "ispending": true,
                 "shots":[
                     {
                         "isactive": true,
+                        "ispending": true,
                         "shotinfo":"Capture Long Shot",
                         "questioninfo":"Provide MSP Location",
                         "question" : "MSP is located inside or outside the building?",
@@ -19,47 +20,54 @@
                     },
                     {
                         "isactive": false,
+                        "ispending": true,
                         "shotinfo":"Capture Zoom Shot",
                         "questioninfo":"Provide MSP Rating",
-                        "question" : "MSP is located inside or outside the building?",
-                        "positiveaction" : "Inside",
-                        "negativeaction" : "Outside",
+                        "question" : "MSP/BUS Rating?",
+                        "positiveaction" : "Confirm",
+                        "negativeaction" : "",
                         "result" : ""
                     },
                     {
                         "isactive": false,
+                        "ispending": true,
                         "shotinfo":"Open MSP Shutter & Capture Zoom Shot",
                         "questioninfo":"Provide Main Breaker Size",
-                        "question" : "MSP is located inside or outside the building?",
-                        "positiveaction" : "Inside",
-                        "negativeaction" : "Outside",
+                        "question" : "Main Breaker Size",
+                        "positiveaction" : "Confirm",
+                        "negativeaction" : "",
                         "result" : ""
                     },
                     {
                         "isactive": false,
+                        "ispending": true,
                         "shotinfo":"Open MSP Inside Cover & Capture Zoom Shot",
                         "questioninfo":"Provide Main breaker location in MSP",
-                        "question" : "MSP is located inside or outside the building?",
-                        "positiveaction" : "Inside",
-                        "negativeaction" : "Outside",
+                        "question" : "Main breaker location in MSP",
+                        "positiveaction" : "Confirm",
+                        "negativeaction" : "",
                         "result" : ""
                     }
                 ]
             },
             {
                 "name":"Utility Meter",
+                "ispending": true,
                 "isactive": false
             },
             {
                 "name":"PV Inverter",
+                "ispending": true,
                 "isactive": false
             },
             {
                 "name":"PV Meter",
+                "ispending": true,
                 "isactive": false
             },
             {
                 "name":"AC Disconnect",
+                "ispending": true,
                 "isactive": false
             }
         ]
@@ -67,7 +75,25 @@
     {
         "name": "Solar",
         "isactive": false,
-        "children":[]
+        "children":[
+            {
+                "name":"Panels",
+                "ispending": true,
+                "isactive": false,
+                "shots":[
+                    {
+                        "isactive": true,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"Provide Number Of Modules Installed",
+                        "question" : "Number of Modules",
+                        "positiveaction" : "Submit",
+                        "negativeaction" : "Cancel",
+                        "result" : ""
+                    }
+                ]
+            }
+        ]
     },
     {
         "name": "Roof",

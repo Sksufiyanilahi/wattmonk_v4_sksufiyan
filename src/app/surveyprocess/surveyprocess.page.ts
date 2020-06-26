@@ -7,24 +7,29 @@ import { NavController, AlertController } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 export interface MAINMENU {
-  name : string;
-  isselected : boolean;
-  children : CHILDREN[];
+  name: string;
+  isactive: boolean;
+  children: CHILDREN[];
 }
 
 export interface CHILDREN {
-  name : string;
-  isselected : boolean;
-  shotscount : number;
-  shots : SHOT[];
+  name: string;
+  isactive: boolean;
+  ispending: boolean;
+  shotscount: number;
+  shots: SHOT[];
 }
 
-export interface SHOT{
-  shotinfo : string;
-  question : string;
-  positiveaction : string;
-  negativeaction : string;
-  result : string;
+export interface SHOT {
+  isactive: boolean;
+  ispending: boolean;
+  shotinfo: string;
+  questioninfo: string;
+  question: string;
+  positiveaction: string;
+  negativeaction: string;
+  result: string;
+  capturedimages: string[];
 }
 
 @Component({
@@ -34,17 +39,18 @@ export interface SHOT{
 })
 export class SurveyprocessPage implements OnInit {
 
-  mainmenuitems : MAINMENU[];
-  submenuitems : CHILDREN[];
-  selectedmenu : MAINMENU;
-  selectedchild : CHILDREN;
-  currentshots : SHOT[];
+  mainmenuitems: MAINMENU[];
+  selectedmainmenuindex = 0;
+  selectedsubmenuindex = 0;
 
   cameraPreviewOpts: CameraPreviewOptions;
-  capturedImage : string;
+  capturedImage: string;
 
+  currentzoom = 2;
+  displayflashrow = false;
   hardwareCameraEnabled = true;
   issidemenucollapsed = true;
+  isgallerymenucollapsed = true;
   isdataloaded = false;
   totalPercent = 0;
   surveyid: number;
@@ -67,17 +73,13 @@ export class SurveyprocessPage implements OnInit {
     this.googleimageurl = this.googleimageurl + '&center=' + this.latitude + ',' + this.longitude;
     this.googleimageurl = this.googleimageurl + '&&markers=size:normal|color:red|' + this.latitude + ',' + this.longitude;
 
-    if(this.surveytype == "battery"){
+    if (this.surveytype == "battery") {
       console.log("is battery");
       this.http
         .get("assets/surveyprocessjson/battery.json")
         .subscribe((data) => {
-           this.mainmenuitems = JSON.parse(JSON.stringify(data));
-           this.selectedmenu = this.mainmenuitems[0];
-           this.submenuitems = this.selectedmenu.children;
-           this.selectedchild = this.selectedmenu.children[0];
-          this.currentshots = this.selectedchild.shots;
-           this.isdataloaded = true;
+          this.mainmenuitems = JSON.parse(JSON.stringify(data));
+          this.isdataloaded = true;
         });
     }
   }
@@ -100,8 +102,29 @@ export class SurveyprocessPage implements OnInit {
     this.startCamera();
   }
 
-  toggleSidebar(isopen : boolean){
+  toggleSidebar(isopen: boolean) {
     this.issidemenucollapsed = isopen;
+  }
+
+  toggleGallerybar(isopen: boolean) {
+    this.isgallerymenucollapsed = isopen;
+  }
+
+  toggleMainMenuSelection(index){
+    //Unset previous menu and select new one
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+    this.selectedmainmenuindex = index;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+
+    var issubmenuset = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
+      if (element.ispending && !issubmenuset){
+        console.log(element.name);
+        element.isactive = true;
+        issubmenuset = true;
+        this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
+      }
+    });
   }
 
   startCamera() {
@@ -171,6 +194,18 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
+  switchCamera() {
+    this.cameraPreview.switchCamera();
+  }
+
+  changeFlashMode(flashmode) {
+    this.cameraPreview.setFlashMode(flashmode);
+  }
+
+  changeZoom() {
+    this.cameraPreview.setZoom(this.currentzoom);
+  }
+
   takePicture() {
     if (this.hardwareCameraEnabled) {
       this.cameraPreview.takePicture({
@@ -178,8 +213,8 @@ export class SurveyprocessPage implements OnInit {
         height: 0,
         quality: 85
       }).then((photo) => {
-          this.capturedImage = 'data:image/png;base64,' + photo;
-        },
+        this.capturedImage = 'data:image/png;base64,' + photo;
+      },
         (error) => {
 
         }

@@ -1,26 +1,41 @@
-<ion-header class="background-color-transparent">
-  <ion-progress-bar [value]="totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
+<ion-header class="defaultcameraoptions">
+  <ion-row>
+    
+    
+  </ion-row>
 </ion-header>
 
 <ion-content>
   <ion-grid class="ion-no-padding">
+    <ion-progress-bar [value]="totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
     <ion-row>
-      <ion-row class="actionarea">
+      <ion-row class="actionarea" *ngIf="isdataloaded">
         <ion-col size="12" class="actionareacol">
+          <ion-row>
+            <!-- <ion-button color="warning" (click)="switchCamera()">Switch</ion-button> -->
+            <!-- <ion-button icon-only (click)="displayflashrow = !displayflashrow"><ion-icon name="flash-outline"></ion-icon></ion-button>
+            <ion-row *ngIf="displayflashrow">
+              <ion-button fill="clear" (click)="changeFlashMode(auto)">Auto</ion-button>
+              <ion-button fill="clear" (click)="changeFlashMode(on)">On</ion-button>
+              <ion-button fill="clear" (click)="changeFlashMode(off)">Off</ion-button>
+              <ion-button fill="clear" (click)="changeFlashMode(torch)">Torch</ion-button>
+            </ion-row> -->
+            <!-- <ion-button (click)="changeZoom()">Zoom in</ion-button> -->
+          </ion-row>
           <ion-row class="childbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">
-              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']" *ngFor="let button of submenuitems">{{button.name}}</ion-button>
+              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']" *ngFor="let button of mainmenuitems[selectedmainmenuindex].children">{{button.name}}</ion-button>
             </div>
           </ion-row>
           <ion-row class="ion-justify-content-center">
             <ion-button fill="clear" (click)="takePicture()" class="capturebutton"></ion-button>
-            <ion-button class="gallerybutton">
+            <ion-button *ngIf="capturedImage != null" class="gallerybutton">
               <img [src]="capturedImage" />
             </ion-button>
           </ion-row>
           <ion-row class="mainbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">
-              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']" *ngFor="let button of mainmenuitems">{{button.name}}</ion-button>
+              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']" *ngFor="let button of mainmenuitems; let i = index" (click)="toggleMainMenuSelection(i)">{{button.name}}</ion-button>
             </div>
           </ion-row>
         </ion-col>
@@ -34,10 +49,10 @@
       <ion-button fill="clear" class="infobutton" (click)="toggleSidebar(false)">i</ion-button>
     </ion-row>
     <ion-row *ngIf="!issidemenucollapsed">
-      <ion-button class="infobutton" fill="clear" (click)="toggleSidebar(true)">X</ion-button>
+      <ion-button class="infobutton" fill="clear" (click)="toggleSidebar(true)">x</ion-button>
     </ion-row>
     <div *ngIf="!issidemenucollapsed && isdataloaded" class="sidestepper">
-      <div *ngFor="let childshot of currentshots; let i = index">
+      <div *ngFor="let childshot of mainmenuitems[selectedmainmenuindex].children[selectedsubmenuindex].shots; let i = index">
         <ion-row>
           <div class="stepper-index">{{i + 1}}</div>
           <p class="stepper-title">Step</p>
@@ -53,6 +68,16 @@
           </ion-col>
         </ion-row>
       </div>
+    </div>
+  </ion-grid>
+
+  <!-- Sidebar for showing gallery view -->
+  <ion-grid class="ion-no-padding">
+    <ion-row *ngIf="!isgallerymenucollapsed">
+      <ion-button class="infobutton" fill="clear" (click)="toggleGallerybar(true)">x</ion-button>
+    </ion-row>
+    <div class="gallerysidebar" *ngIf="!isgallerymenucollapsed && capture">
+
     </div>
   </ion-grid>
 </ion-content>
