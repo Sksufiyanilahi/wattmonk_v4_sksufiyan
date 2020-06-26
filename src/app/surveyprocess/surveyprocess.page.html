@@ -13,7 +13,10 @@
             </div>
           </ion-row>
           <ion-row class="ion-justify-content-center">
-            <ion-button fill="clear" class="capturebutton"></ion-button>
+            <ion-button fill="clear" (click)="takePicture()" class="capturebutton"></ion-button>
+            <ion-button class="gallerybutton">
+              <img [src]="capturedImage" />
+            </ion-button>
           </ion-row>
           <ion-row class="mainbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">

@@ -66,6 +66,20 @@ ion-content {
     padding: 0 4px;
 }
 
+.actionarea .gallerybutton {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    right: 50px;
+    padding: 0px;
+    box-shadow: none;
+  }
+  
+  .actionarea .gallerybutton img {
+    width: 70px;
+    max-width: 70px;
+  }
+
 .mainbuttonscontainer {
     width: 100vw;
     overflow: hidden;

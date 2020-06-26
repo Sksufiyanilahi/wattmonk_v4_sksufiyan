@@ -41,6 +41,7 @@ export class SurveyprocessPage implements OnInit {
   currentshots : SHOT[];
 
   cameraPreviewOpts: CameraPreviewOptions;
+  capturedImage : string;
 
   hardwareCameraEnabled = true;
   issidemenucollapsed = true;
@@ -104,7 +105,6 @@ export class SurveyprocessPage implements OnInit {
   }
 
   startCamera() {
-    console.log("inside start camera");
     if (this.hardwareCameraEnabled) {
       this.diagnostic.requestCameraAuthorization(true).then((mode) => {
         console.log(mode);
@@ -169,6 +169,22 @@ export class SurveyprocessPage implements OnInit {
       this.cameraPreview.stopCamera().then(result => {
       });
     }
+  }
 
+  takePicture() {
+    if (this.hardwareCameraEnabled) {
+      this.cameraPreview.takePicture({
+        width: 0,
+        height: 0,
+        quality: 85
+      }).then((photo) => {
+          this.capturedImage = 'data:image/png;base64,' + photo;
+        },
+        (error) => {
+
+        }
+      );
+    } else {
+    }
   }
 }
