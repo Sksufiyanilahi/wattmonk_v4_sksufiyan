@@ -1,0 +1,73 @@
+[
+    {
+        "name":"Electricals",
+        "children":[
+            {
+                "name":"MSP",
+                "shotscount":4,
+                "shots":[
+                    {
+                        "shotinfo":"Capture Long Shot",
+                        "questioninfo":"Provide MSP Location",
+                        "question" : "MSP is located inside or outside the building?",
+                        "positiveaction" : "Inside",
+                        "negativeaction" : "Outside",
+                        "result" : ""
+                    },
+                    {
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide MSP Rating",
+                        "question" : "MSP is located inside or outside the building?",
+                        "positiveaction" : "Inside",
+                        "negativeaction" : "Outside",
+                        "result" : ""
+                    },
+                    {
+                        "shotinfo":"Open MSP Shutter & Capture Zoom Shot",
+                        "questioninfo":"Provide Main Breaker Size",
+                        "question" : "MSP is located inside or outside the building?",
+                        "positiveaction" : "Inside",
+                        "negativeaction" : "Outside",
+                        "result" : ""
+                    },
+                    {
+                        "shotinfo":"Open MSP Inside Cover & Capture Zoom Shot",
+                        "questioninfo":"Provide Main breaker location in MSP",
+                        "question" : "MSP is located inside or outside the building?",
+                        "positiveaction" : "Inside",
+                        "negativeaction" : "Outside",
+                        "result" : ""
+                    }
+                ]
+            },
+            {
+                "name":"Utility Meter"
+            },
+            {
+                "name":"PV Inverter"
+            },
+            {
+                "name":"PV Meter"
+            },
+            {
+                "name":"AC Disconnect"
+            }
+        ]
+    },
+    {
+        "name": "Solar",
+        "children":[]
+    },
+    {
+        "name": "Roof",
+        "children":[]
+    },
+    {
+        "name": "Appliances",
+        "children":[]
+    },
+    {
+        "name": "Details",
+        "children":[]
+    }
+]
