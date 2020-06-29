@@ -1,10 +1,17 @@
-<ion-header class="defaultcameraoptions">
+<ion-header>
   <ion-progress-bar [value]="totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
 </ion-header>
 
 <ion-content>
   <ion-grid class="ion-no-padding">
     <ion-row>
+      <ion-row style="width: 100%;" *ngIf="isdataloaded">
+        <ion-col size="12" class="actionareacol">
+      <ion-row class="ion-justify-content-center ion-align-items-center">
+        <p class="shotinfo">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}</p>
+      </ion-row>
+        </ion-col>
+      </ion-row>
       <ion-row class="native-actionarea">
         <ion-col size="12" class="actionareacol">
           <ion-row class="ion-justify-content-center">

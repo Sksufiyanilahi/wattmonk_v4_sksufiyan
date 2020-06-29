@@ -1,262 +1,274 @@
 ion-content {
-    --ion-background-color: #FFFFFF;
-  }
+  --ion-background-color: #ffffff;
+}
 
-  html, body {
-    background-color: transparent !important;
-  }
-  
-  ion-app {
-    --background: transparent !important;
-  }
-  
-  ion-content {
-    --background: transparent !important;
-  }
-  
-  app-ar ion-content {
-    --background: transparent;
-  }
+html,
+body {
+  background-color: transparent !important;
+}
 
-  .defaultcameraoptions{
-      background-color: #000000;
-  }
+ion-app {
+  --background: transparent !important;
+}
+
+ion-content {
+  --background: transparent !important;
+}
+
+app-ar ion-content {
+  --background: transparent;
+}
+
+.defaultcameraoptions {
+  background-color: #000000;
+}
 
 .actionarea {
-    background-color: #000000aa;
-    position: absolute;
-    bottom: 0em;
-    margin-left: 0px;
-    margin-right: 0px;
+  background-color: #000000aa;
+  position: absolute;
+  bottom: 0em;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 .actionareacol {
-    padding-left: 0px;
-    padding-right: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .actionarea .mainbuttons {
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-bottom: 24px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-bottom: 24px;
 }
 
 .actionarea .mainbuttons .active {
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 0 4px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 4px;
 }
 
 .actionarea .mainbuttons .normal {
-    color: #ffffff;
-    font-size: 14px;
-    opacity: 0.5;
-    font-weight: 100;
-    padding: 0 4px;
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 0.5;
+  font-weight: 100;
+  padding: 0 4px;
 }
 
 .actionarea .childbuttons .active {
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 0 4px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 4px;
 }
 
 .actionarea .childbuttons .normal {
-    color: #ffffff;
-    font-size: 14px;
-    opacity: 0.5;
-    font-weight: 100;
-    padding: 0 4px;
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 0.5;
+  font-weight: 100;
+  padding: 0 4px;
 }
 
 .actionarea .gallerybutton {
-    width: 70px;
-    height: 70px;
-    position: absolute;
-    right: 50px;
-    padding: 0px;
-    box-shadow: none;
-    border: 2px solid #ffffff;
-    border-radius: 10px;
-  }
-  
-  .actionarea .gallerybutton img {
-    width: 70px;
-    max-width: 70px;
-  }
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  right: 50px;
+  padding: 0px;
+  box-shadow: none;
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+}
+
+.actionarea .gallerybutton img {
+  width: 70px;
+  max-width: 70px;
+}
 
 .mainbuttonscontainer {
-    width: 100vw;
-    overflow: hidden;
-    white-space: nowrap;
+  width: 100vw;
+  overflow: hidden;
+  white-space: nowrap;
 
-    ::-webkit-scrollbar {
-        display: none;
-    }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
-    .scroll {
-        overflow: auto;
-    }
+  .scroll {
+    overflow: auto;
+  }
 }
 
 .actionarea .capturebutton {
-    background-color: #ffffffaa;
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    min-width: 0px;
-    border: 4px solid #ffffff;
-    margin: 4px 0px 4px 0px;
+  background-color: #ffffffaa;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  min-width: 0px;
+  border: 4px solid #ffffff;
+  margin: 4px 0px 4px 0px;
 }
 
 .native-actionarea {
-    position: absolute;
-    bottom: 26vh;
-    margin-left: 0px;
-    margin-right: 0px;
-    width: 100%;
+  position: absolute;
+  bottom: 26vh;
+  margin-left: 0px;
+  margin-right: 0px;
+  width: 100%;
 }
 
-.native-actionarea .zoombutton{
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    min-width: 0px;
-    border: 2px solid #ffffff;
-    font-size: 0.7em;
-    font-weight: 600;
-    color: #ffffff;
+.native-actionarea .zoombutton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  min-width: 0px;
+  border: 2px solid #ffffff;
+  font-size: 0.7em;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .sidestepper {
-    background-color: #ffffffe7;
-    position: fixed;
-    top: 85px;
-    right: 16px;
-    width: 200px;
-    height: 60vh;
-    border-radius: 14px;
-    padding-top: 16px;
+  background-color: #ffffffe7;
+  position: fixed;
+  top: 55px;
+  right: 16px;
+  width: 200px;
+  height: 60vh;
+  border-radius: 14px;
+  padding-top: 16px;
 }
 
 .stepper-index {
-    width: 24px;
-    height: 24px;
-    background-color: #3880ff;
-    border-radius: 50%;
-    text-align: center;
-    padding-top: 4px;
-    color: #ffffff;
-    font-size: 12px;
-    margin: 12px;
-    font-weight: 600;
-    margin-bottom: 0px;
+  width: 24px;
+  height: 24px;
+  background-color: #3880ff;
+  border-radius: 50%;
+  text-align: center;
+  padding-top: 4px;
+  color: #ffffff;
+  font-size: 12px;
+  margin: 12px;
+  font-weight: 600;
+  margin-bottom: 0px;
 }
 
 .stepper-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #000000;
-    padding-top: 1px;
-    margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+  padding-top: 1px;
+  margin-bottom: 8px;
 }
 
 .sidestepper .stepper-list-row {
-    margin-left: 15px;
-    margin-top: 6px;
+  margin-left: 15px;
+  margin-top: 6px;
 }
 
 .sidestepper .stepper-text-active {
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 0px;
-    margin-top: 2px;
-    margin-left: 6px;
-    color: #4f8339;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 0px;
+  margin-top: 2px;
+  margin-left: 6px;
+  color: #4f8339;
 }
 
 .sidestepper .stepper-text-default {
-    font-size: 12px;
-    margin-bottom: 0px;
-    margin-top: 2px;
-    margin-left: 6px;
-    color: #272727;
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin-top: 2px;
+  margin-left: 6px;
+  color: #272727;
 }
 
-.infobutton{
-    position: absolute;
-    right: 16px;
-    top: 40px;
-    background-color: #ffffffd7;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    color: #282829;
-    font-weight: 600;
-    border: 2px solid #ffffff;
+.infobutton {
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  background-color: #ffffffd7;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #282829;
+  font-weight: 600;
+  border: 2px solid #ffffff;
 }
 
-.gallerysidebar{
-    // background-color: #d80c0caa;
-    position: fixed;
-    top: 85px;
-    left: 16px;
-    width: 200px;
-    border-radius: 14px;
-    padding-top: 8px;
+.gallerysidebar {
+  // background-color: #d80c0caa;
+  position: fixed;
+  top: 55px;
+  left: 16px;
+  width: 100px;
+  border-radius: 14px;
+  padding-top: 8px;
 }
 
-.galleryscrollcontainer{
-    height: 60vh;
-    overflow: hidden;
-    white-space: nowrap;
+.galleryscrollcontainer {
+  height: 60vh;
+  overflow: hidden;
+  white-space: nowrap;
 
-    ::-webkit-scrollbar {
-        display: none;
-    }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
-    .scroll {
-        overflow: auto;
-    }
+  .scroll {
+    overflow: auto;
+  }
 }
 
 .galleryclosebutton {
-    position: absolute;
-    left: 16px;
-    top: 40px;
-    background-color: #ffffffd7;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    color: #282829;
-    font-weight: 600;
-    border: 2px solid #ffffff;
+  position: absolute;
+  left: 16px;
+  top: 10px;
+  background-color: #ffffffd7;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #282829;
+  font-weight: 600;
+  border: 2px solid #ffffff;
 }
 
 .gallerysidebar .cameraimagesbutton {
-    width: 70px;
-    height: 70px;
-    border: 2px solid #ffffff;
-    border-radius: 10px;
-    padding: 0px;
-    box-shadow: none;
-    display: block;
-  }
+  width: 70px;
+  height: 70px;
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+  padding: 0px;
+  box-shadow: none;
+  display: block;
+}
 
-  .gallerysidebar .cameraimagesbutton img {
-    width: 70px;
-    max-width: 70px;
-  }
+.gallerysidebar .cameraimagesbutton img {
+  width: 70px;
+  max-width: 70px;
+}
 
-  .questionaireview {
-      width: 76vw;
-      position: relative;
-      top: 30vh;
-  }
+.questionaireview {
+  width: 76vw;
+  position: relative;
+  top: 30vh;
+}
 
-  .questionaireview-row{
-    background-color: #ffffff;
-    border-radius: 12px;
-  }
+.questionaireview-row {
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.shotinfo {
+  background-color: #6ab04c8a;
+  color: #ffffff;
+  font-size: 0.7em;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  border: 1px solid #6ab04c;
+  margin-bottom: 0;
+}

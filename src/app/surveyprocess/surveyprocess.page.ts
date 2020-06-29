@@ -266,8 +266,22 @@ export class SurveyprocessPage implements OnInit {
 
   handleAnswerSubmission(result){
     console.log(result);
+    this.iscapturingallowed = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result = result;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+    if(this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length){
+      this.selectedshotindex += 1;
+    }else{
+      if(this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length){
+        this.selectedsubmenuindex += 1;
+        this.toggleSubMenuSelection(this.selectedsubmenuindex);
+      }else{
+        if(this.selectedmainmenuindex < this.mainmenuitems.length){
+          this.selectedmainmenuindex += 1;
+          this.toggleMainMenuSelection(this.selectedmainmenuindex);
+        }
+      }
+    }
   }
 }
