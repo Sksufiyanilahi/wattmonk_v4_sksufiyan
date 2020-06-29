@@ -113,19 +113,20 @@ ion-content {
 
 .native-actionarea {
     position: absolute;
-    bottom: 30vh;
+    bottom: 26vh;
     margin-left: 0px;
     margin-right: 0px;
     width: 100%;
 }
 
 .native-actionarea .zoombutton{
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     min-width: 0px;
-    border: 1px solid #ffffff;
+    border: 2px solid #ffffff;
     font-size: 0.7em;
+    font-weight: 600;
     color: #ffffff;
 }
 
