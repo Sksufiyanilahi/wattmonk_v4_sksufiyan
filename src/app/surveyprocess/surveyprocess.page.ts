@@ -25,6 +25,8 @@ export interface SHOT {
   ispending: boolean;
   shotinfo: string;
   questioninfo: string;
+  inputrequired: boolean;
+  promptquestion: boolean;
   question: string;
   positiveaction: string;
   negativeaction: string;
@@ -47,6 +49,7 @@ export class SurveyprocessPage implements OnInit {
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
 
+  iscapturingallowed = true;
   currentzoom = 2;
   displayflashrow = false;
   hardwareCameraEnabled = true;
@@ -104,14 +107,18 @@ export class SurveyprocessPage implements OnInit {
   }
 
   toggleSidebar(isopen: boolean) {
+    this.isgallerymenucollapsed = true;
     this.issidemenucollapsed = isopen;
   }
 
   toggleGallerybar(isopen: boolean) {
+    this.issidemenucollapsed = true;
     this.isgallerymenucollapsed = isopen;
   }
 
   toggleMainMenuSelection(index){
+    this.issidemenucollapsed = true;
+    this.isgallerymenucollapsed = true;
     //Unset previous menu and select new one
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = index;
@@ -129,6 +136,8 @@ export class SurveyprocessPage implements OnInit {
   }
 
   toggleSubMenuSelection(index){
+    this.issidemenucollapsed = true;
+    this.isgallerymenucollapsed = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
     this.selectedsubmenuindex = index;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
@@ -214,7 +223,7 @@ export class SurveyprocessPage implements OnInit {
   }
 
   takePicture() {
-    if (this.hardwareCameraEnabled) {
+    if (this.hardwareCameraEnabled && this.iscapturingallowed) {
       this.cameraPreview.takePicture({
         width: 0,
         height: 0,
@@ -225,6 +234,10 @@ export class SurveyprocessPage implements OnInit {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages = [];
         }
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages.push(this.capturedImage);
+        if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputrequired){
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
+          this.iscapturingallowed = false;
+        }
       },
         (error) => {
 
@@ -232,5 +245,9 @@ export class SurveyprocessPage implements OnInit {
       );
     } else {
     }
+  }
+
+  handleAnswerSubmission(result){
+    console.log(result);
   }
 }

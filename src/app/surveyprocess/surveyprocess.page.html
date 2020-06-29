@@ -1,13 +1,9 @@
 <ion-header class="defaultcameraoptions">
-  <ion-row>
-    
-    
-  </ion-row>
+  <ion-progress-bar [value]="totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
 </ion-header>
 
 <ion-content>
   <ion-grid class="ion-no-padding">
-    <ion-progress-bar [value]="totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
     <ion-row>
       <ion-row class="actionarea" *ngIf="isdataloaded">
         <ion-col size="12" class="actionareacol">
@@ -76,47 +72,25 @@
     <ion-row *ngIf="!isgallerymenucollapsed">
       <ion-button class="galleryclosebutton" fill="clear" (click)="toggleGallerybar(true)">x</ion-button>
     </ion-row>
-    <!-- <ion-row class="gallerysidebar galleryscrollcontainer">
-      <div class="scroll" scrollY="true">
-        <ion-button color="dark" class="cameraimagesbutton">
-          <img src="../../assets/images/login_background.png" />
-        </ion-button>
-        <ion-button color="dark" class="cameraimagesbutton">
-          <img src="../../assets/images/login_background.png" />
-        </ion-button>
-        <ion-button color="dark" class="cameraimagesbutton">
-          <img src="../../assets/images/login_background.png" />
-        </ion-button>
-        <ion-button color="dark" class="cameraimagesbutton">
-          <img src="../../assets/images/login_background.png" />
-        </ion-button>
-        <ion-button color="dark" class="cameraimagesbutton">
-          <img src="../../assets/images/login_background.png" />
-        </ion-button>
-        <ion-button color="dark" class="cameraimagesbutton">
-          <img src="../../assets/images/login_background.png" />
-        </ion-button>
-        <ion-button color="dark" class="cameraimagesbutton">
-          <img src="../../assets/images/login_background.png" />
-        </ion-button>
-        <ion-button color="dark" class="cameraimagesbutton">
-          <img src="../../assets/images/login_background.png" />
-        </ion-button>
-        <ion-button color="dark" class="cameraimagesbutton">
-          <img src="../../assets/images/login_background.png" />
-        </ion-button>
-        <ion-button color="dark" class="cameraimagesbutton">
-          <img src="../../assets/images/login_background.png" />
-        </ion-button>
-        </div>
-      </ion-row> -->
-    
       <ion-row class="gallerysidebar galleryscrollcontainer" *ngIf="isdataloaded && !isgallerymenucollapsed">
       <div class="scroll" scrollY="true">
         <ion-button color="dark" class="cameraimagesbutton" *ngFor="let shotimage of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages; let i = index">
           <img [src]="shotimage" />
         </ion-button>
       </div>
+    </ion-row>
+  </ion-grid>
+
+  <!-- QUESTIONARE VIEW -->
+  <ion-grid class="questionaireview" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
+    <ion-row class="questionaireview-row ion-padding-horizontal">
+      <ion-col>
+        <p>{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}</p>
+        <ion-row class="ion-float-right">
+          <ion-button fill="clear" (click)="handleAnswerSubmission(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].positiveaction)">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].positiveaction}}</ion-button>
+          <ion-button fill="clear" (click)="handleAnswerSubmission(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].negativeaction)">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].negativeaction}}</ion-button>
+        </ion-row>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
