@@ -5,6 +5,7 @@ import { GOOGLE_API_KEY } from '../model/constants';
 import { HttpClient } from '@angular/common/http';
 import { NavController, AlertController } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 export interface MAINMENU {
   name: string;
@@ -25,14 +26,22 @@ export interface SHOT {
   ispending: boolean;
   shotinfo: string;
   questioninfo: string;
-  shotstatus : boolean;
+  shotstatus: boolean;
   inputrequired: boolean;
   promptquestion: boolean;
   question: string;
   actions: string[];
   result: string;
-  questionstatus : boolean;
+  questionstatus: boolean;
+  questiontype: QUESTIONTYPE;
+  inputformcontrol: string;
   capturedimages: string[];
+}
+
+export enum QUESTIONTYPE {
+  NONE = 0,
+  OPTIONS = 1,
+  INPUT_NUMBER = 2
 }
 
 @Component({
@@ -41,6 +50,8 @@ export interface SHOT {
   styleUrls: ['./surveyprocess.page.scss'],
 })
 export class SurveyprocessPage implements OnInit {
+
+  QuestionTypes = QUESTIONTYPE;
 
   mainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
@@ -65,13 +76,16 @@ export class SurveyprocessPage implements OnInit {
   longitude: number;
   googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=24&maptype=satellite&size=900x1600&scale=2&key=' + GOOGLE_API_KEY;
 
+  batteryForm: FormGroup;
+
   constructor(
     private cameraPreview: CameraPreview,
     private route: ActivatedRoute,
     private http: HttpClient,
     private diagnostic: Diagnostic,
     private navController: NavController,
-    private alertController: AlertController) {
+    private alertController: AlertController,
+    private formBuilder: FormBuilder) {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
     this.latitude = +this.route.snapshot.paramMap.get('lat');
@@ -86,6 +100,28 @@ export class SurveyprocessPage implements OnInit {
         .subscribe((data) => {
           this.mainmenuitems = JSON.parse(JSON.stringify(data));
           this.isdataloaded = true;
+
+          this.batteryForm = this.formBuilder.group({
+            modulemake: new FormControl('', [Validators.required]),
+            modulemodel: new FormControl('', [Validators.required]),
+            invertermake: new FormControl('', [Validators.required]),
+            invertermodel: new FormControl('', [Validators.required]),
+            numberofmodules: new FormControl('', [Validators.required]),
+            additionalNotes: new FormControl('', []),
+            batterybackup: new FormControl('', [Validators.required]),
+            servicefeedsource: new FormControl('', [Validators.required]),
+            mainbreakersize: new FormControl('', [Validators.required]),
+            msprating: new FormControl('', [Validators.required]),
+            msplocation: new FormControl('', [Validators.required]),
+            mspbreaker: new FormControl('', [Validators.required]),
+            utilitymeter: new FormControl('', [Validators.required]),
+            utility: new FormControl('', [Validators.required]),
+            pvinverterlocation: new FormControl('', [Validators.required]),
+            pvmeter: new FormControl('', [Validators.required]),
+            acdisconnect: new FormControl('', [Validators.required]),
+            interconnection: new FormControl('', [Validators.required]),
+            status: new FormControl('surveycompleted', [Validators.required])
+          });
         });
     }
   }
@@ -118,7 +154,7 @@ export class SurveyprocessPage implements OnInit {
     this.isgallerymenucollapsed = isopen;
   }
 
-  toggleMainMenuSelection(index){
+  toggleMainMenuSelection(index) {
     this.issidemenucollapsed = true;
     this.isgallerymenucollapsed = true;
     //Unset previous menu and select new one
@@ -128,7 +164,7 @@ export class SurveyprocessPage implements OnInit {
 
     var issubmenuset = false;
     this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
-      if (element.ispending && !issubmenuset){
+      if (element.ispending && !issubmenuset) {
         console.log(element.name);
         element.isactive = true;
         issubmenuset = true;
@@ -137,7 +173,7 @@ export class SurveyprocessPage implements OnInit {
     });
   }
 
-  toggleSubMenuSelection(index){
+  toggleSubMenuSelection(index) {
     this.issidemenucollapsed = true;
     this.isgallerymenucollapsed = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
@@ -201,13 +237,13 @@ export class SurveyprocessPage implements OnInit {
         (err) => {
           console.log(err);
         });
-        this.cameraPreview.getMaxZoom().then((value) => {
-          this.maxzoom = value;
-          if(this.maxzoom > 5){
-            this.maxzoom = 5;
-          }
-     }, (error) => {
-     })
+      this.cameraPreview.getMaxZoom().then((value) => {
+        this.maxzoom = value;
+        if (this.maxzoom > 5) {
+          this.maxzoom = 5;
+        }
+      }, (error) => {
+      })
     } else {
     }
   }
@@ -228,9 +264,9 @@ export class SurveyprocessPage implements OnInit {
   }
 
   changeZoom() {
-    if(this.currentzoom < this.maxzoom){
+    if (this.currentzoom < this.maxzoom) {
       this.currentzoom = this.currentzoom + 1;
-    }else{
+    } else {
       this.currentzoom = 1;
     }
     this.cameraPreview.setZoom(this.currentzoom);
@@ -246,12 +282,12 @@ export class SurveyprocessPage implements OnInit {
         quality: 85
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
-        if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages == null){
+        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages == null) {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages = [];
         }
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages.push(this.capturedImage);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
-        if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputrequired){
+        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputrequired) {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
           this.iscapturingallowed = false;
         }
@@ -264,22 +300,32 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
-  handleAnswerSubmission(result){
+  handleAnswerSubmission(result) {
     console.log(result);
     this.iscapturingallowed = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result = result;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
-    if(this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length){
+    if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1) {
       this.selectedshotindex += 1;
-    }else{
-      if(this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length){
+    } else {
+      if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
+        this.issidemenucollapsed = true;
+        this.isgallerymenucollapsed = true;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
         this.selectedsubmenuindex += 1;
-        this.toggleSubMenuSelection(this.selectedsubmenuindex);
-      }else{
-        if(this.selectedmainmenuindex < this.mainmenuitems.length){
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+        this.selectedshotindex = 0;
+      } else {
+        if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
+          this.issidemenucollapsed = true;
+          this.isgallerymenucollapsed = true;
+          //Unset previous menu and select new one
+          this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
           this.selectedmainmenuindex += 1;
-          this.toggleMainMenuSelection(this.selectedmainmenuindex);
+          this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+          this.selectedshotindex = 0;
+          this.selectedsubmenuindex = 0;
         }
       }
     }

@@ -97,6 +97,18 @@
     <ion-row class="questionaireview-row ion-padding-horizontal">
       <ion-col>
         <p>{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}</p>
+        <ion-row *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_NUMBER">
+          <ion-col size="12">
+            <ion-input type="number" class="form-control" autocomplete="off"
+                formControlName="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol">
+            </ion-input>
+            <div class="error_div">
+                <div *ngIf="batteryForm.get('this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol').value === '' && batteryForm.get('this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol').dirty" >
+                    <span class="error">Field input is required.</span>
+                </div>      
+            </div>
+        </ion-col>
+        </ion-row>
         <ion-row class="ion-float-right">
           <ion-button fill="clear" *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions" (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
         </ion-row>

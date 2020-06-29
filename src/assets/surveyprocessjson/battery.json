@@ -19,7 +19,9 @@
                         "question" : "MSP is located inside or outside the building?",
                         "actions" : ["inside","outside"],
                         "result" : "",
-                        "questionstatus": false
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "msplocation"
                     },
                     {
                         "isactive": false,
@@ -32,7 +34,9 @@
                         "question" : "MSP/BUS Rating?",
                         "actions" : ["confirm"],
                         "result" : "",
-                        "questionstatus": false
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "msprating"
                     },
                     {
                         "isactive": false,
@@ -45,7 +49,9 @@
                         "question" : "Main Breaker Size",
                         "actions" : ["confirm"],
                         "result" : "",
-                        "questionstatus": false
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "mainbreakersize"
                     },
                     {
                         "isactive": false,
@@ -56,16 +62,50 @@
                         "inputrequired": true,
                         "promptquestion": false,
                         "question" : "Main breaker location in MSP",
-                        "actions" : ["confirm"],
+                        "actions" : ["top","bottom", "center"],
                         "result" : "",
-                        "questionstatus": false
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "mspbreaker"
                     }
                 ]
             },
             {
                 "name":"Utility Meter",
                 "ispending": true,
-                "isactive": false
+                "isactive": false,
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Wide Angle Shot",
+                        "questioninfo":"Provide Utility Meter",
+                        "shotstatus": false,
+                        "inputrequired": true,
+                        "promptquestion": false,
+                        "question" : "Utility meter is attached or detached with MSP?",
+                        "actions" : ["attach","detach"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "utilitymeter"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide Utility Name",
+                        "shotstatus": false,
+                        "inputrequired": true,
+                        "promptquestion": false,
+                        "question" : "Utility Name?",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 3,
+                        "inputformcontrol" : ""
+                    }
+                ]
             },
             {
                 "name":"PV Inverter",
