@@ -33,8 +33,16 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.statusBar.styleLightContent();
+      if(this.platform.is('ios')){
+        this.statusBar.overlaysWebView(false);
+        // this.statusBar.styleDefault();
+        this.statusBar.backgroundColorByHexString("#666666");
+      }else if(this.platform.is('android')){
+        this.statusBar.styleDefault();
+        this.statusBar.styleLightContent();
+      }else{
+        alert('other');
+      }
       this.splashScreen.hide();
       this.getFcmToken();
       this.getNotification();

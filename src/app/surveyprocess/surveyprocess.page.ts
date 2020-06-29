@@ -221,6 +221,9 @@ export class SurveyprocessPage implements OnInit {
         quality: 85
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
+        if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages == null){
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages = [];
+        }
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages.push(this.capturedImage);
       },
         (error) => {

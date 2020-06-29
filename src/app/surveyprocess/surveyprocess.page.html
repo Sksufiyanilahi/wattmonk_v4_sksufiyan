@@ -29,7 +29,7 @@
           </ion-row>
           <ion-row class="ion-justify-content-center">
             <ion-button fill="clear" (click)="takePicture()" class="capturebutton"></ion-button>
-            <ion-button *ngIf="capturedImage != null" class="gallerybutton">
+            <ion-button *ngIf="capturedImage != null" class="gallerybutton" (click)="toggleGallerybar(false)">
               <img [src]="capturedImage" />
             </ion-button>
           </ion-row>
@@ -74,14 +74,49 @@
   <!-- Sidebar for showing gallery view -->
   <ion-grid class="ion-no-padding">
     <ion-row *ngIf="!isgallerymenucollapsed">
-      <ion-button class="infobutton" fill="clear" (click)="toggleGallerybar(true)">x</ion-button>
+      <ion-button class="galleryclosebutton" fill="clear" (click)="toggleGallerybar(true)">x</ion-button>
     </ion-row>
-    <div class="gallerysidebar ion-justify-content-cente" *ngIf="isdataloaded && isgallerymenucollapsed && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages != null">
+    <!-- <ion-row class="gallerysidebar galleryscrollcontainer">
       <div class="scroll" scrollY="true">
-        <ion-button class="gallerybutton" *ngFor="let shotimage of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages; let i = index">
+        <ion-button color="dark" class="cameraimagesbutton">
+          <img src="../../assets/images/login_background.png" />
+        </ion-button>
+        <ion-button color="dark" class="cameraimagesbutton">
+          <img src="../../assets/images/login_background.png" />
+        </ion-button>
+        <ion-button color="dark" class="cameraimagesbutton">
+          <img src="../../assets/images/login_background.png" />
+        </ion-button>
+        <ion-button color="dark" class="cameraimagesbutton">
+          <img src="../../assets/images/login_background.png" />
+        </ion-button>
+        <ion-button color="dark" class="cameraimagesbutton">
+          <img src="../../assets/images/login_background.png" />
+        </ion-button>
+        <ion-button color="dark" class="cameraimagesbutton">
+          <img src="../../assets/images/login_background.png" />
+        </ion-button>
+        <ion-button color="dark" class="cameraimagesbutton">
+          <img src="../../assets/images/login_background.png" />
+        </ion-button>
+        <ion-button color="dark" class="cameraimagesbutton">
+          <img src="../../assets/images/login_background.png" />
+        </ion-button>
+        <ion-button color="dark" class="cameraimagesbutton">
+          <img src="../../assets/images/login_background.png" />
+        </ion-button>
+        <ion-button color="dark" class="cameraimagesbutton">
+          <img src="../../assets/images/login_background.png" />
+        </ion-button>
+        </div>
+      </ion-row> -->
+    
+      <ion-row class="gallerysidebar galleryscrollcontainer" *ngIf="isdataloaded && !isgallerymenucollapsed">
+      <div class="scroll" scrollY="true">
+        <ion-button color="dark" class="cameraimagesbutton" *ngFor="let shotimage of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages; let i = index">
           <img [src]="shotimage" />
         </ion-button>
       </div>
-    </div>
+    </ion-row>
   </ion-grid>
 </ion-content>

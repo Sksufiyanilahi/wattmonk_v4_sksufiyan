@@ -78,6 +78,8 @@ ion-content {
     right: 50px;
     padding: 0px;
     box-shadow: none;
+    border: 2px solid #ffffff;
+    border-radius: 10px;
   }
   
   .actionarea .gallerybutton img {
@@ -178,12 +180,53 @@ ion-content {
 }
 
 .gallerysidebar{
-    background-color: #ffffffaa;
+    // background-color: #d80c0caa;
     position: fixed;
     top: 85px;
     left: 16px;
     width: 200px;
-    height: 60vh;
     border-radius: 14px;
-    padding-top: 16px;
+    padding-top: 8px;
 }
+
+.galleryscrollcontainer{
+    height: 60vh;
+    overflow: hidden;
+    white-space: nowrap;
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scroll {
+        overflow: auto;
+    }
+}
+
+.galleryclosebutton {
+    position: absolute;
+    left: 16px;
+    top: 40px;
+    background-color: #ffffffd7;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #282829;
+    font-weight: 600;
+    border: 2px solid #ffffff;
+}
+
+.gallerysidebar .cameraimagesbutton {
+    width: 70px;
+    height: 70px;
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+    padding: 0px;
+    box-shadow: none;
+    display: block;
+  }
+
+  .gallerysidebar .cameraimagesbutton img {
+    width: 70px;
+    max-width: 70px;
+  }
