@@ -111,6 +111,24 @@ ion-content {
     margin: 4px 0px 4px 0px;
 }
 
+.native-actionarea {
+    position: absolute;
+    bottom: 30vh;
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 100%;
+}
+
+.native-actionarea .zoombutton{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    min-width: 0px;
+    border: 1px solid #ffffff;
+    font-size: 0.7em;
+    color: #ffffff;
+}
+
 .sidestepper {
     background-color: #ffffffe7;
     position: fixed;

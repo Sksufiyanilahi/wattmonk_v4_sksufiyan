@@ -51,7 +51,8 @@ export class SurveyprocessPage implements OnInit {
   capturedImage: string;
 
   iscapturingallowed = true;
-  currentzoom = 2;
+  currentzoom = 1;
+  maxzoom = 0;
   displayflashrow = false;
   hardwareCameraEnabled = true;
   issidemenucollapsed = true;
@@ -200,6 +201,13 @@ export class SurveyprocessPage implements OnInit {
         (err) => {
           console.log(err);
         });
+        this.cameraPreview.getMaxZoom().then((value) => {
+          this.maxzoom = value;
+          if(this.maxzoom > 5){
+            this.maxzoom = 5;
+          }
+     }, (error) => {
+     })
     } else {
     }
   }
@@ -220,6 +228,11 @@ export class SurveyprocessPage implements OnInit {
   }
 
   changeZoom() {
+    if(this.currentzoom < this.maxzoom){
+      this.currentzoom = this.currentzoom + 1;
+    }else{
+      this.currentzoom = 1;
+    }
     this.cameraPreview.setZoom(this.currentzoom);
   }
 
