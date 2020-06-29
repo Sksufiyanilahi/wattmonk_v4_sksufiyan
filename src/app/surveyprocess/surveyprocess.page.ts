@@ -25,11 +25,13 @@ export interface SHOT {
   ispending: boolean;
   shotinfo: string;
   questioninfo: string;
+  shotstatus : boolean;
   inputrequired: boolean;
   promptquestion: boolean;
   question: string;
   actions: string[];
   result: string;
+  questionstatus : boolean;
   capturedimages: string[];
 }
 
@@ -222,6 +224,8 @@ export class SurveyprocessPage implements OnInit {
   }
 
   takePicture() {
+    this.issidemenucollapsed = true;
+    this.isgallerymenucollapsed = true;
     if (this.hardwareCameraEnabled && this.iscapturingallowed) {
       this.cameraPreview.takePicture({
         width: 0,
@@ -233,6 +237,7 @@ export class SurveyprocessPage implements OnInit {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages = [];
         }
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages.push(this.capturedImage);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
         if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputrequired){
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
           this.iscapturingallowed = false;
@@ -248,5 +253,8 @@ export class SurveyprocessPage implements OnInit {
 
   handleAnswerSubmission(result){
     console.log(result);
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result = result;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
   }
 }

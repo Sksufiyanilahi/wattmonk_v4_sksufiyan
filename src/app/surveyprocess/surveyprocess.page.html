@@ -56,10 +56,10 @@
         <ion-row>
           <ion-col>
             <ion-row class="stepper-list-row">
-              <p class="stepper-text-default">{{childshot.shotinfo}}</p>
+              <p [ngClass]="childshot.shotstatus ? 'stepper-text-active' : 'stepper-text-default'">{{childshot.shotinfo}}</p>
             </ion-row>
             <ion-row class="stepper-list-row">
-              <p class="stepper-text-default">{{childshot.questioninfo}}</p>
+              <p [ngClass]="childshot.questionstatus ? 'stepper-text-active' : 'stepper-text-default'">{{childshot.questioninfo}}</p>
             </ion-row>
           </ion-col>
         </ion-row>
@@ -82,12 +82,12 @@
   </ion-grid>
 
   <!-- QUESTIONARE VIEW -->
-  <ion-grid class="questionaireview" *ngIf="isdataloaded ">
+  <ion-grid class="questionaireview" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
     <ion-row class="questionaireview-row ion-padding-horizontal">
       <ion-col>
         <p>{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}</p>
         <ion-row class="ion-float-right">
-          <ion-button fill="clear" *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions" (click)="handleAnswerSubmission(action)">{{action}}</ion-button>
+          <ion-button fill="clear" *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions" (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
         </ion-row>
       </ion-col>
     </ion-row>

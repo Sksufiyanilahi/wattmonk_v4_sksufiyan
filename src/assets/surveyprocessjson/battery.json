@@ -13,44 +13,52 @@
                         "ispending": true,
                         "shotinfo":"Capture Long Shot",
                         "questioninfo":"Provide MSP Location",
+                        "shotstatus": false,
                         "inputrequired": true,
                         "promptquestion": false,
                         "question" : "MSP is located inside or outside the building?",
                         "actions" : ["inside","outside"],
-                        "result" : ""
+                        "result" : "",
+                        "questionstatus": false
                     },
                     {
                         "isactive": false,
                         "ispending": true,
                         "shotinfo":"Capture Zoom Shot",
                         "questioninfo":"Provide MSP Rating",
+                        "shotstatus": false,
                         "inputrequired": true,
                         "promptquestion": false,
                         "question" : "MSP/BUS Rating?",
                         "actions" : ["confirm"],
-                        "result" : ""
+                        "result" : "",
+                        "questionstatus": false
                     },
                     {
                         "isactive": false,
                         "ispending": true,
                         "shotinfo":"Open MSP Shutter & Capture Zoom Shot",
                         "questioninfo":"Provide Main Breaker Size",
+                        "shotstatus": false,
                         "inputrequired": true,
                         "promptquestion": false,
                         "question" : "Main Breaker Size",
                         "actions" : ["confirm"],
-                        "result" : ""
+                        "result" : "",
+                        "questionstatus": false
                     },
                     {
                         "isactive": false,
                         "ispending": true,
                         "shotinfo":"Open MSP Inside Cover & Capture Zoom Shot",
                         "questioninfo":"Provide Main breaker location in MSP",
+                        "shotstatus": false,
                         "inputrequired": true,
                         "promptquestion": false,
                         "question" : "Main breaker location in MSP",
                         "actions" : ["confirm"],
-                        "result" : ""
+                        "result" : "",
+                        "questionstatus": false
                     }
                 ]
             },
