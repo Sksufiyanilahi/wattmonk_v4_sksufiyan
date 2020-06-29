@@ -16,8 +16,7 @@
                         "inputrequired": true,
                         "promptquestion": false,
                         "question" : "MSP is located inside or outside the building?",
-                        "positiveaction" : "Inside",
-                        "negativeaction" : "Outside",
+                        "actions" : ["inside","outside"],
                         "result" : ""
                     },
                     {
@@ -28,8 +27,7 @@
                         "inputrequired": true,
                         "promptquestion": false,
                         "question" : "MSP/BUS Rating?",
-                        "positiveaction" : "Confirm",
-                        "negativeaction" : "",
+                        "actions" : ["confirm"],
                         "result" : ""
                     },
                     {
@@ -40,8 +38,7 @@
                         "inputrequired": true,
                         "promptquestion": false,
                         "question" : "Main Breaker Size",
-                        "positiveaction" : "Confirm",
-                        "negativeaction" : "",
+                        "actions" : ["confirm"],
                         "result" : ""
                     },
                     {
@@ -52,8 +49,7 @@
                         "inputrequired": true,
                         "promptquestion": false,
                         "question" : "Main breaker location in MSP",
-                        "positiveaction" : "Confirm",
-                        "negativeaction" : "",
+                        "actions" : ["confirm"],
                         "result" : ""
                     }
                 ]

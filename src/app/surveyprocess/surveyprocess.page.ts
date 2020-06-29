@@ -28,8 +28,7 @@ export interface SHOT {
   inputrequired: boolean;
   promptquestion: boolean;
   question: string;
-  positiveaction: string;
-  negativeaction: string;
+  actions: string[];
   result: string;
   capturedimages: string[];
 }

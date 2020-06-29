@@ -82,13 +82,12 @@
   </ion-grid>
 
   <!-- QUESTIONARE VIEW -->
-  <ion-grid class="questionaireview" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
+  <ion-grid class="questionaireview" *ngIf="isdataloaded ">
     <ion-row class="questionaireview-row ion-padding-horizontal">
       <ion-col>
         <p>{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}</p>
         <ion-row class="ion-float-right">
-          <ion-button fill="clear" (click)="handleAnswerSubmission(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].positiveaction)">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].positiveaction}}</ion-button>
-          <ion-button fill="clear" (click)="handleAnswerSubmission(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].negativeaction)">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].negativeaction}}</ion-button>
+          <ion-button fill="clear" *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions" (click)="handleAnswerSubmission(action)">{{action}}</ion-button>
         </ion-row>
       </ion-col>
     </ion-row>
