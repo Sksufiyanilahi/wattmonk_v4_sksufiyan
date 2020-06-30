@@ -95,8 +95,8 @@
     <ion-row class="gallerysidebar galleryscrollcontainer" *ngIf="isdataloaded && !isgallerymenucollapsed">
       <div class="scroll" scrollY="true">
         <ion-button color="dark" class="cameraimagesbutton"
-          *ngFor="let shotimage of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages; let i = index">
-          <img [src]="shotimage" />
+          *ngFor="let shots of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots; let i = index">
+          <img [src]="shots.capturedshot" />
         </ion-button>
       </div>
     </ion-row>

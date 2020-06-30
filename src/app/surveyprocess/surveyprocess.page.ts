@@ -35,7 +35,7 @@ export interface SHOT {
   questionstatus: boolean;
   questiontype: QUESTIONTYPE;
   inputformcontrol: string;
-  capturedimages: string[];
+  capturedshot : string;
 }
 
 export enum QUESTIONTYPE {
@@ -56,7 +56,7 @@ export class SurveyprocessPage implements OnInit {
   mainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
   selectedsubmenuindex = 0;
-  selectedshotindex = 1;
+  selectedshotindex = 0;
 
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
@@ -284,10 +284,7 @@ export class SurveyprocessPage implements OnInit {
         quality: 85
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
-        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages == null) {
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages = [];
-        }
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages.push(this.capturedImage);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshot = this.capturedImage;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
         if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputrequired) {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
