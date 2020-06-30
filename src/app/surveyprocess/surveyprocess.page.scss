@@ -140,12 +140,11 @@ app-ar ion-content {
 .sidestepper {
   background-color: #ffffffe7;
   position: fixed;
-  top: 55px;
+  top: 71px;
   right: 16px;
   width: 200px;
-  height: 60vh;
   border-radius: 14px;
-  padding-top: 16px;
+  padding: 8px;
 }
 
 .stepper-index {
@@ -195,7 +194,7 @@ app-ar ion-content {
 .infobutton {
   position: absolute;
   right: 16px;
-  top: 10px;
+  top: 26px;
   background-color: #ffffffd7;
   width: 36px;
   height: 36px;
@@ -208,7 +207,7 @@ app-ar ion-content {
 .gallerysidebar {
   // background-color: #d80c0caa;
   position: fixed;
-  top: 55px;
+  top: 71px;
   left: 16px;
   width: 100px;
   border-radius: 14px;
@@ -232,7 +231,7 @@ app-ar ion-content {
 .galleryclosebutton {
   position: absolute;
   left: 16px;
-  top: 10px;
+  top: 26px;
   background-color: #ffffffd7;
   width: 36px;
   height: 36px;
