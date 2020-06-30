@@ -116,7 +116,7 @@
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
         <ion-row class="ion-float-right">
-          <ion-button fill="clear"
+          <ion-button fill="clear" size="small"
             *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions"
             (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
         </ion-row>
@@ -139,8 +139,25 @@
           </div>
         </form>
         <ion-row class="ion-float-right">
-          <ion-button fill="clear"
+          <ion-button fill="clear" size="small"
             (click)="handleInputSubmission(activeForm)">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}</ion-button>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- CHECK EXISTENCE VIEW -->
+  <ion-grid class="checkexistenceview"
+    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence">
+    <!-- Row for choice questions -->
+    <ion-row class="checkexistenceview-row ion-padding-horizontal">
+      <ion-col size="12">
+        <p>
+          Is {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name}} present?
+        </p>
+        <ion-row class="ion-float-right">
+          <ion-button fill="clear" size="small" (click)="handleExistence(true)">Yes</ion-button>
+          <ion-button fill="clear" size="small" (click)="handleExistence(false)">No</ion-button>
         </ion-row>
       </ion-col>
     </ion-row>

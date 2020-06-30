@@ -7,6 +7,8 @@
                 "name":"MSP",
                 "isactive": true,
                 "ispending": true,
+                "checkexistence":false,
+                "inputformcontrol": "",
                 "shots":[
                     {
                         "isactive": true,
@@ -78,6 +80,8 @@
                 "name":"Utility Meter",
                 "ispending": true,
                 "isactive": false,
+                "checkexistence":false,
+                "inputformcontrol": "",
                 "shots":[
                     {
                         "isactive": false,
@@ -117,6 +121,8 @@
                 "name":"PV Inverter",
                 "ispending": true,
                 "isactive": false,
+                "checkexistence":false,
+                "inputformcontrol": "",
                 "shots":[
                     {
                         "isactive": false,
@@ -156,6 +162,8 @@
                 "name":"PV Meter",
                 "ispending": true,
                 "isactive": false,
+                "checkexistence":true,
+                "inputformcontrol": "pvmeter",
                 "shots":[
                     {
                         "isactive": false,
@@ -178,7 +186,9 @@
             {
                 "name":"AC Disconnect",
                 "ispending": true,
-                "isactive": false
+                "isactive": false,
+                "checkexistence":true,
+                "inputformcontrol": "acdisconnect"
             }
         ]
     },

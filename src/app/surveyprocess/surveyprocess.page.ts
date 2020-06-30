@@ -17,6 +17,8 @@ export interface CHILDREN {
   name: string;
   isactive: boolean;
   ispending: boolean;
+  checkexistence: boolean;
+  inputformcontrol : string;
   shotscount: number;
   shots: SHOT[];
 }
@@ -41,7 +43,8 @@ export interface SHOT {
 export enum QUESTIONTYPE {
   NONE = 0,
   OPTIONS = 1,
-  INPUT_NUMBER = 2
+  INPUT_NUMBER = 2,
+  INPUT_AUTOCOMPLETE = 3
 }
 
 @Component({
@@ -102,7 +105,7 @@ export class SurveyprocessPage implements OnInit {
         invertermake: new FormControl('', [Validators.required]),
         invertermodel: new FormControl('', [Validators.required]),
         numberofmodules: new FormControl('', [Validators.required]),
-        additionalNotes: new FormControl('', []),
+        additionalnotes: new FormControl('', []),
         batterybackup: new FormControl('', [Validators.required]),
         servicefeedsource: new FormControl('', [Validators.required]),
         mainbreakersize: new FormControl('', [Validators.required]),
@@ -341,6 +344,14 @@ export class SurveyprocessPage implements OnInit {
   }
 
   handleSurveyExit(){
-    
+
+  }
+
+  handleExistence(doesexist : boolean){
+    if(doesexist){
+      this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
+    }else{
+      this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
+    }
   }
 }
