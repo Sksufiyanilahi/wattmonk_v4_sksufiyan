@@ -466,6 +466,7 @@ export class SurveyprocessPage implements OnInit {
         } else {
           if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
             //Unset previous menu and select new one
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
             this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
             this.selectedmainmenuindex += 1;
             this.mainmenuitems[this.selectedmainmenuindex].isactive = true;

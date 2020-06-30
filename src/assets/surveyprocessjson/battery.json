@@ -225,7 +225,7 @@
         "children":[
             {
                 "name":"Panels",
-                "isactive": true,
+                "isactive": false,
                 "ispending": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
@@ -257,7 +257,7 @@
         "children":[
             {
                 "name":"",
-                "isactive": true,
+                "isactive": false,
                 "ispending": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
@@ -286,7 +286,34 @@
     {
         "name": "Appliances",
         "isactive": false,
-        "children":[]
+        "children":[
+            {
+                "name":"",
+                "isactive": false,
+                "ispending": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture all appliances of higher load",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : ""
+                    }
+                ]
+            }
+        ]
     },
     {
         "name": "Details",
