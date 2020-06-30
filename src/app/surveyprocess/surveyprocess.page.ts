@@ -15,6 +15,7 @@ import { InverterMadeModel } from '../model/inverter-made.model';
 export interface MAINMENU {
   name: string;
   isactive: boolean;
+  lastcapturedimage: string;
   children: CHILDREN[];
 }
 
@@ -26,6 +27,7 @@ export interface CHILDREN {
   isexistencechecked: boolean,
   inputformcontrol: string;
   shotscount: number;
+  allowmultipleshots: boolean;
   shots: SHOT[];
 }
 
@@ -35,7 +37,6 @@ export interface SHOT {
   shotinfo: string;
   questioninfo: string;
   shotstatus: boolean;
-  inputrequired: boolean;
   promptquestion: boolean;
   question: string;
   actions: string[];
@@ -43,7 +44,7 @@ export interface SHOT {
   questionstatus: boolean;
   questiontype: QUESTIONTYPE;
   inputformcontrol: string;
-  capturedshot: string;
+  capturedshots: string[];
 }
 
 export enum QUESTIONTYPE {
@@ -359,20 +360,23 @@ export class SurveyprocessPage implements OnInit {
         quality: 85
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshot = this.capturedImage;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshots.push(this.capturedImage);
+        this.mainmenuitems[this.selectedmainmenuindex].lastcapturedimage = this.capturedImage;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
-        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputrequired) {
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
-          this.iscapturingallowed = false;
-          if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
-            this.getUtilities();
-          } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
-            this.getInverterMakes();
-          } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.NONE) {
+        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
+          if(!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus){
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
+            this.iscapturingallowed = false;
+            if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
+              this.getUtilities();
+            } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
+              this.getInverterMakes();
+            }
+          }
+        } else {
+          if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
             this.handleMenuSwitch();
           }
-        }else{
-          this.handleMenuSwitch();
         }
       },
         (error) => {
@@ -439,24 +443,26 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
-  handleMenuSwitch(){
+  handleMenuSwitch() {
     this.iscapturingallowed = true;
-    if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1) {
-      this.selectedshotindex += 1;
-    } else {
-      if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-        this.selectedsubmenuindex += 1;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-        this.selectedshotindex = 0;
+    if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
+      if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1) {
+        this.selectedshotindex += 1;
       } else {
-        if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
-          //Unset previous menu and select new one
-          this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-          this.selectedmainmenuindex += 1;
-          this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+        if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+          this.selectedsubmenuindex += 1;
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
           this.selectedshotindex = 0;
-          this.selectedsubmenuindex = 0;
+        } else {
+          if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
+            //Unset previous menu and select new one
+            this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+            this.selectedmainmenuindex += 1;
+            this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+            this.selectedshotindex = 0;
+            this.selectedsubmenuindex = 0;
+          }
         }
       }
     }
