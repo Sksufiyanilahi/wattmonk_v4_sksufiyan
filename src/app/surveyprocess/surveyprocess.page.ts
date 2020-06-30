@@ -339,4 +339,8 @@ export class SurveyprocessPage implements OnInit {
       control.markAsDirty();
     }
   }
+
+  handleSurveyExit(){
+    
+  }
 }
