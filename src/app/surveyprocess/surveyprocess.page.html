@@ -40,8 +40,8 @@
           </ion-row>
           <ion-row class="ion-justify-content-center">
             <ion-button fill="clear" (click)="takePicture()" class="capturebutton"></ion-button>
-            <ion-button *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshots.length > 0" class="gallerybutton" (click)="toggleGallerybar(false)">
-              <img [src]="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshots[this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshots.length - 1]" />
+            <ion-button *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0" class="gallerybutton" (click)="toggleGallerybar(false)">
+              <img [src]="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length - 1].shotimage" />
             </ion-button>
           </ion-row>
           <ion-row class="mainbuttons ion-justify-content-center mainbuttonscontainer">
@@ -98,8 +98,8 @@
     <ion-row class="gallerysidebar galleryscrollcontainer" *ngIf="isdataloaded && !isgallerymenucollapsed">
       <div class="scroll" scrollY="true">
         <ion-button color="dark" class="cameraimagesbutton"
-          *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshots; let i = index">
-          <img [src]="shot" />
+          *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
+          <img [src]="shot.shotimage" />
         </ion-button>
       </div>
     </ion-row>

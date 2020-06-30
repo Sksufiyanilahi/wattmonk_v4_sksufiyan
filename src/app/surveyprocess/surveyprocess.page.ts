@@ -27,6 +27,7 @@ export interface CHILDREN {
   inputformcontrol: string;
   shotscount: number;
   allowmultipleshots: boolean;
+  capturedshots: CAPTUREDSHOT[];
   shots: SHOT[];
 }
 
@@ -43,7 +44,11 @@ export interface SHOT {
   questionstatus: boolean;
   questiontype: QUESTIONTYPE;
   inputformcontrol: string;
-  capturedshots: string[];
+}
+
+export interface CAPTUREDSHOT {
+  shotindex: number;
+  shotimage: string;
 }
 
 export enum QUESTIONTYPE {
@@ -361,7 +366,11 @@ export class SurveyprocessPage implements OnInit {
         quality: 85
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshots.push(this.capturedImage);
+        var captureshot : CAPTUREDSHOT = {
+          shotindex : this.selectedshotindex,
+          shotimage : this.capturedImage
+        }
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
         if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
           if(!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus){
