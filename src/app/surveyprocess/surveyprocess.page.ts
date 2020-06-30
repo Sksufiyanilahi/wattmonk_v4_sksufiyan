@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview/ngx';
 import { ActivatedRoute } from '@angular/router';
 import { GOOGLE_API_KEY } from '../model/constants';
 import { HttpClient } from '@angular/common/http';
 import { NavController, AlertController } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UtilitiesService } from '../utilities.service';
+import { ApiService } from '../api.service';
+import { InverterMakeModel } from '../model/inverter-make.model';
+import { ErrorModel } from '../model/error.model';
 
 export interface MAINMENU {
   name: string;
@@ -44,7 +48,7 @@ export enum QUESTIONTYPE {
   NONE = 0,
   OPTIONS = 1,
   INPUT_NUMBER = 2,
-  INPUT_AUTOCOMPLETE = 3
+  INPUT_UTILITIES_AUTOCOMPLETE = 3
 }
 
 @Component({
@@ -82,6 +86,8 @@ export class SurveyprocessPage implements OnInit {
   batteryForm: FormGroup;
   activeForm : FormGroup;
 
+  utilities: InverterMakeModel[] = [];
+
   constructor(
     private cameraPreview: CameraPreview,
     private route: ActivatedRoute,
@@ -89,7 +95,9 @@ export class SurveyprocessPage implements OnInit {
     private diagnostic: Diagnostic,
     private navController: NavController,
     private alertController: AlertController,
-    private formBuilder: FormBuilder) {
+    private utilitieservice: UtilitiesService,
+    private apiService: ApiService,
+    private changedetectorref: ChangeDetectorRef) {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
     this.latitude = +this.route.snapshot.paramMap.get('lat');
@@ -147,6 +155,25 @@ export class SurveyprocessPage implements OnInit {
     }
 
     this.startCamera();
+  }
+
+  getUtilities() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getUtilities().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          console.log(response);
+          this.utilities = response;
+          this.changedetectorref.detectChanges();
+        });
+
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+
+      });
+    });
   }
 
   toggleSidebar(isopen: boolean) {
@@ -330,6 +357,10 @@ export class SurveyprocessPage implements OnInit {
           this.selectedsubmenuindex = 0;
         }
       }
+    }
+
+    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE){
+      this.getUtilities();
     }
   }
 

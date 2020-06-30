@@ -11,6 +11,7 @@ import { CameraPreview } from '@ionic-native/camera-preview/ngx';
 import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { UtilitiesModule } from '../utilities/utilities.module';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { FileChooser } from '@ionic-native/file-chooser/ngx';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
+    UtilitiesModule,
     SurveyprocessPageRoutingModule
   ],
   declarations: [SurveyprocessPage],
