@@ -14,23 +14,23 @@
           </ion-row>
         </ion-col>
       </ion-row>
-      <ion-row class="native-actionarea">
-        <ion-col size="12" class="actionareacol">
-          <ion-row class="ion-justify-content-center">
-            <ion-button fill="clear" (click)="changeZoom()" class="zoombutton">{{currentzoom}}x</ion-button>
-            <!-- <ion-button color="warning" (click)="switchCamera()">Switch</ion-button> -->
-            <!-- <ion-button icon-only (click)="displayflashrow = !displayflashrow"><ion-icon name="flash-outline"></ion-icon></ion-button>
-            <ion-row *ngIf="displayflashrow">
-              <ion-button fill="clear" (click)="changeFlashMode(auto)">Auto</ion-button>
-              <ion-button fill="clear" (click)="changeFlashMode(on)">On</ion-button>
-              <ion-button fill="clear" (click)="changeFlashMode(off)">Off</ion-button>
-              <ion-button fill="clear" (click)="changeFlashMode(torch)">Torch</ion-button>
-            </ion-row> -->
-          </ion-row>
-        </ion-col>
-      </ion-row>
       <ion-row class="actionarea" *ngIf="isdataloaded">
-        <ion-col size="12" class="actionareacol">
+        <ion-row style="width: 100%;">
+          <ion-col size="12" class="actionareacol">
+            <ion-row class="ion-justify-content-center">
+              <ion-button fill="clear" (click)="changeZoom()" class="zoombutton">{{currentzoom}}x</ion-button>
+              <!-- <ion-button color="warning" (click)="switchCamera()">Switch</ion-button> -->
+              <!-- <ion-button icon-only (click)="displayflashrow = !displayflashrow"><ion-icon name="flash-outline"></ion-icon></ion-button>
+              <ion-row *ngIf="displayflashrow">
+                <ion-button fill="clear" (click)="changeFlashMode(auto)">Auto</ion-button>
+                <ion-button fill="clear" (click)="changeFlashMode(on)">On</ion-button>
+                <ion-button fill="clear" (click)="changeFlashMode(off)">Off</ion-button>
+                <ion-button fill="clear" (click)="changeFlashMode(torch)">Torch</ion-button>
+              </ion-row> -->
+            </ion-row>
+          </ion-col>
+        </ion-row>
+        <ion-col size="12" class="actionareacol translucent-background">
           <ion-row class="childbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">
               <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']"
