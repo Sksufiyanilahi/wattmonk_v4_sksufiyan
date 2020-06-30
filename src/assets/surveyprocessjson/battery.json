@@ -67,7 +67,7 @@
                         "shotstatus": false,
                         "inputrequired": true,
                         "promptquestion": false,
-                        "question" : "Main breaker location in MSP",
+                        "question" : "Main breaker location in MSP?",
                         "actions" : ["top","bottom", "center"],
                         "result" : "",
                         "questionstatus": false,
@@ -113,7 +113,7 @@
                         "result" : "",
                         "questionstatus": false,
                         "questiontype": 3,
-                        "inputformcontrol" : ""
+                        "inputformcontrol" : "utility"
                     }
                 ]
             },

@@ -150,7 +150,7 @@
           <ion-input type="number" class="form-control" autocomplete="off" formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
           </ion-input>
           <div class="error_div">
-            <div *ngIf="batteryForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && batteryForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+            <div *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && batteryForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
               <span class="error">Field input is required.</span>
             </div>
           </div>
@@ -169,7 +169,7 @@
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
         <form [formGroup]="activeForm" novalidate>
-          <app-auto-complete [dataList]="utilities" class="form-control" formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
+          <app-auto-complete [dataList]="utilities" class="form-control" formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}" #make>
           </app-auto-complete>
           <div class="error_div">
             <div *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
