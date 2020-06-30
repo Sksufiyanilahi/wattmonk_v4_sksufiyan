@@ -10,6 +10,7 @@ import { UtilitiesService } from '../utilities.service';
 import { ApiService } from '../api.service';
 import { InverterMakeModel } from '../model/inverter-make.model';
 import { ErrorModel } from '../model/error.model';
+import { InverterMadeModel } from '../model/inverter-made.model';
 
 export interface MAINMENU {
   name: string;
@@ -48,7 +49,8 @@ export enum QUESTIONTYPE {
   NONE = 0,
   OPTIONS = 1,
   INPUT_NUMBER = 2,
-  INPUT_UTILITIES_AUTOCOMPLETE = 3
+  INPUT_UTILITIES_AUTOCOMPLETE = 3,
+  INPUT_INVERTER_AUTOCOMPLETE = 4,
 }
 
 @Component({
@@ -87,6 +89,11 @@ export class SurveyprocessPage implements OnInit {
   activeForm : FormGroup;
 
   utilities: InverterMakeModel[] = [];
+  invertermodels: InverterMadeModel[] = [];
+  invertermakes: InverterMakeModel[] = [];
+
+  selectedInverterMakeID : number;
+  selectedInverterModelID : number;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -136,6 +143,10 @@ export class SurveyprocessPage implements OnInit {
         });
 
         this.activeForm = this.batteryForm;
+
+        this.activeForm.get('invertermake').valueChanges.subscribe(val => {
+          this.getInverterModels(this.activeForm.get('invertermake').value.id);
+        });
     }
   }
 
@@ -174,6 +185,39 @@ export class SurveyprocessPage implements OnInit {
 
       });
     });
+  }
+
+  getInverterModels(selectedmakeid : string) {
+    console.log(selectedmakeid);
+    this.utilitieservice.showLoading('Getting inverter models').then((success) => {
+      this.apiService.getInverterMade(selectedmakeid).subscribe(response => {
+        this.utilitieservice.hideLoading();
+        console.log(response);
+        this.invertermodels = response;
+      }, responseError => {
+        this.utilitieservice.hideLoading();
+        const error: ErrorModel = responseError.error;
+        this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+      });
+    });
+  }
+
+  getInverterMakes() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getInverterMake().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          console.log(response);
+          this.invertermakes = response;
+          this.changedetectorref.detectChanges();
+        });
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+
   }
 
   toggleSidebar(isopen: boolean) {
@@ -321,6 +365,8 @@ export class SurveyprocessPage implements OnInit {
           this.iscapturingallowed = false;
           if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE){
             this.getUtilities();
+          }else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE){
+            this.getInverterMakes();
           }
         }
       },
@@ -370,6 +416,20 @@ export class SurveyprocessPage implements OnInit {
     }else{
       control.markAsTouched();
       control.markAsDirty();
+    }
+  }
+
+  handleInverterFieldsSubmission(){
+    var invertermakecontrol = this.activeForm.get("invertermake");
+    var invertermodelcontrol = this.activeForm.get("invertermodel");
+    if (invertermakecontrol.value != "" && invertermodelcontrol.value != ""){
+      this.selectedInverterMakeID = invertermakecontrol.value.id;
+      this.selectedInverterModelID = invertermodelcontrol.value.id;
+    }else{
+      invertermakecontrol.markAsTouched();
+      invertermakecontrol.markAsDirty();
+      invertermodelcontrol.markAsTouched();
+      invertermodelcontrol.markAsDirty();
     }
   }
 

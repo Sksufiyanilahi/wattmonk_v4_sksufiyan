@@ -86,7 +86,7 @@
                     {
                         "isactive": false,
                         "ispending": true,
-                        "shotinfo":"Wide Angle Shot",
+                        "shotinfo":"Capture Wide Angle Shot",
                         "questioninfo":"Provide Utility Meter",
                         "capturedshot": "",
                         "shotstatus": false,
@@ -127,13 +127,13 @@
                     {
                         "isactive": false,
                         "ispending": true,
-                        "shotinfo":"Wide Angle Shot",
+                        "shotinfo":"Capture Wide Angle Shot",
                         "questioninfo":"Provide Inverter Location",
                         "capturedshot": "",
                         "shotstatus": false,
                         "inputrequired": true,
                         "promptquestion": false,
-                        "question" : "Inverter Location?",
+                        "question" : "PV Inverter is located inside or outside?",
                         "actions" : ["inside","outside"],
                         "result" : "",
                         "questionstatus": false,
@@ -149,11 +149,11 @@
                         "shotstatus": false,
                         "inputrequired": true,
                         "promptquestion": false,
-                        "question" : "Inverter Make & Model?",
+                        "question" : "PV Inverter Make & Model?",
                         "actions" : ["confirm"],
                         "result" : "",
                         "questionstatus": false,
-                        "questiontype": 3,
+                        "questiontype": 4,
                         "inputformcontrol" : ""
                     }
                 ]
@@ -168,8 +168,8 @@
                     {
                         "isactive": false,
                         "ispending": true,
-                        "shotinfo":"Wide Angle Shot",
-                        "questioninfo":"Provide Inverter Location",
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"",
                         "capturedshot": "",
                         "shotstatus": false,
                         "inputrequired": true,
@@ -179,7 +179,7 @@
                         "result" : "",
                         "questionstatus": false,
                         "questiontype": 0,
-                        "inputformcontrol" : "pvinverterlocation"
+                        "inputformcontrol" : ""
                     }
                 ]
             },
@@ -188,7 +188,41 @@
                 "ispending": true,
                 "isactive": false,
                 "checkexistence":true,
-                "inputformcontrol": "acdisconnect"
+                "inputformcontrol": "acdisconnect",
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"",
+                        "capturedshot": "",
+                        "shotstatus": false,
+                        "inputrequired": true,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : ""
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"",
+                        "capturedshot": "",
+                        "shotstatus": false,
+                        "inputrequired": true,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : ""
+                    }
+                ]
             }
         ]
     },
