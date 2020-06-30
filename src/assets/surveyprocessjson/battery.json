@@ -8,6 +8,7 @@
                 "isactive": true,
                 "ispending": true,
                 "checkexistence":false,
+                "isexistencechecked":false,
                 "inputformcontrol": "",
                 "shots":[
                     {
@@ -81,6 +82,7 @@
                 "ispending": true,
                 "isactive": false,
                 "checkexistence":false,
+                "isexistencechecked":false,
                 "inputformcontrol": "",
                 "shots":[
                     {
@@ -122,6 +124,7 @@
                 "ispending": true,
                 "isactive": false,
                 "checkexistence":false,
+                "isexistencechecked":false,
                 "inputformcontrol": "",
                 "shots":[
                     {
@@ -163,6 +166,7 @@
                 "ispending": true,
                 "isactive": false,
                 "checkexistence":true,
+                "isexistencechecked":false,
                 "inputformcontrol": "pvmeter",
                 "shots":[
                     {
@@ -188,6 +192,7 @@
                 "ispending": true,
                 "isactive": false,
                 "checkexistence":true,
+                "isexistencechecked":false,
                 "inputformcontrol": "acdisconnect",
                 "shots":[
                     {

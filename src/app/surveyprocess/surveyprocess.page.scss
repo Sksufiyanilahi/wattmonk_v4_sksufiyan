@@ -277,11 +277,16 @@ app-ar ion-content {
 }
 
 .checkexistenceview{
-    width: 70px;
-    max-width: 70px;
+    width: 76vw;
+    position: relative;
+    top: 30vh;
 }
 
 .checkexistenceview-row{
     background-color: #ffffff;
     border-radius: 12px;
+}
+
+.checkexistenceview-row p {
+    font-size: 14px;
 }

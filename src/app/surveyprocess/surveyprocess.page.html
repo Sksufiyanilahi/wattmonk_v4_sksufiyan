@@ -107,7 +107,7 @@
 
   <!-- CHECK EXISTENCE VIEW -->
   <ion-grid class="checkexistenceview"
-    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence">
+    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
     <!-- Row for choice questions -->
     <ion-row class="checkexistenceview-row ion-padding-horizontal">
       <ion-col size="12">

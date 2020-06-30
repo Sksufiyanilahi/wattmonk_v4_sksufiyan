@@ -23,6 +23,7 @@ export interface CHILDREN {
   isactive: boolean;
   ispending: boolean;
   checkexistence: boolean;
+  isexistencechecked: boolean,
   inputformcontrol : string;
   shotscount: number;
   shots: SHOT[];
@@ -381,6 +382,8 @@ export class SurveyprocessPage implements OnInit {
   handleAnswerSubmission(result) {
     console.log(result);
     this.iscapturingallowed = true;
+    this.issidemenucollapsed = true;
+        this.isgallerymenucollapsed = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result = result;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
@@ -388,16 +391,12 @@ export class SurveyprocessPage implements OnInit {
       this.selectedshotindex += 1;
     } else {
       if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
-        this.issidemenucollapsed = true;
-        this.isgallerymenucollapsed = true;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
         this.selectedsubmenuindex += 1;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
         this.selectedshotindex = 0;
       } else {
         if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
-          this.issidemenucollapsed = true;
-          this.isgallerymenucollapsed = true;
           //Unset previous menu and select new one
           this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
           this.selectedmainmenuindex += 1;
@@ -438,10 +437,28 @@ export class SurveyprocessPage implements OnInit {
   }
 
   handleExistence(doesexist : boolean){
+    this.issidemenucollapsed = true;
+    this.isgallerymenucollapsed = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
     if(doesexist){
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
     }else{
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
+      if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+        this.selectedsubmenuindex += 1;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+        this.selectedshotindex = 0;
+      } else {
+        if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
+          //Unset previous menu and select new one
+          this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+          this.selectedmainmenuindex += 1;
+          this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+          this.selectedshotindex = 0;
+          this.selectedsubmenuindex = 0;
+        }
+      }
     }
   }
 }
