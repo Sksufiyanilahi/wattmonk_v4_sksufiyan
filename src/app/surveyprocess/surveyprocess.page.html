@@ -40,8 +40,8 @@
           </ion-row>
           <ion-row class="ion-justify-content-center">
             <ion-button fill="clear" (click)="takePicture()" class="capturebutton"></ion-button>
-            <ion-button *ngIf="this.mainmenuitems[this.selectedmainmenuindex].lastcapturedimage != null" class="gallerybutton" (click)="toggleGallerybar(false)">
-              <img [src]="this.mainmenuitems[this.selectedmainmenuindex].lastcapturedimage" />
+            <ion-button *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshots.length > 0" class="gallerybutton" (click)="toggleGallerybar(false)">
+              <img [src]="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshots[this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedshots.length - 1]" />
             </ion-button>
           </ion-row>
           <ion-row class="mainbuttons ion-justify-content-center mainbuttonscontainer">
