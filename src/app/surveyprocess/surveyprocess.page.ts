@@ -24,7 +24,7 @@ export interface CHILDREN {
   ispending: boolean;
   checkexistence: boolean;
   isexistencechecked: boolean,
-  inputformcontrol : string;
+  inputformcontrol: string;
   shotscount: number;
   shots: SHOT[];
 }
@@ -43,7 +43,7 @@ export interface SHOT {
   questionstatus: boolean;
   questiontype: QUESTIONTYPE;
   inputformcontrol: string;
-  capturedshot : string;
+  capturedshot: string;
 }
 
 export enum QUESTIONTYPE {
@@ -87,14 +87,14 @@ export class SurveyprocessPage implements OnInit {
   googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=24&maptype=satellite&size=900x1600&scale=2&key=' + GOOGLE_API_KEY;
 
   batteryForm: FormGroup;
-  activeForm : FormGroup;
+  activeForm: FormGroup;
 
   utilities: InverterMakeModel[] = [];
   invertermodels: InverterMadeModel[] = [];
   invertermakes: InverterMakeModel[] = [];
 
-  selectedInverterMakeID : number;
-  selectedInverterModelID : number;
+  selectedInverterMakeID: number;
+  selectedInverterModelID: number;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -143,11 +143,11 @@ export class SurveyprocessPage implements OnInit {
           this.isdataloaded = true;
         });
 
-        this.activeForm = this.batteryForm;
+      this.activeForm = this.batteryForm;
 
-        this.activeForm.get('invertermake').valueChanges.subscribe(val => {
-          this.getInverterModels(this.activeForm.get('invertermake').value.id);
-        });
+      this.activeForm.get('invertermake').valueChanges.subscribe(val => {
+        this.getInverterModels(this.activeForm.get('invertermake').value.id);
+      });
     }
   }
 
@@ -188,7 +188,7 @@ export class SurveyprocessPage implements OnInit {
     });
   }
 
-  getInverterModels(selectedmakeid : string) {
+  getInverterModels(selectedmakeid: string) {
     console.log(selectedmakeid);
     this.utilitieservice.showLoading('Getting inverter models').then((success) => {
       this.apiService.getInverterMade(selectedmakeid).subscribe(response => {
@@ -364,11 +364,15 @@ export class SurveyprocessPage implements OnInit {
         if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputrequired) {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
           this.iscapturingallowed = false;
-          if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE){
+          if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
             this.getUtilities();
-          }else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE){
+          } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
             this.getInverterMakes();
+          } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.NONE) {
+            this.handleMenuSwitch();
           }
+        }else{
+          this.handleMenuSwitch();
         }
       },
         (error) => {
@@ -383,48 +387,31 @@ export class SurveyprocessPage implements OnInit {
     console.log(result);
     this.iscapturingallowed = true;
     this.issidemenucollapsed = true;
-        this.isgallerymenucollapsed = true;
+    this.isgallerymenucollapsed = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result = result;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
-    if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1) {
-      this.selectedshotindex += 1;
-    } else {
-      if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-        this.selectedsubmenuindex += 1;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-        this.selectedshotindex = 0;
-      } else {
-        if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
-          //Unset previous menu and select new one
-          this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-          this.selectedmainmenuindex += 1;
-          this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-          this.selectedshotindex = 0;
-          this.selectedsubmenuindex = 0;
-        }
-      }
-    }
+    this.handleMenuSwitch();
   }
 
-  handleInputSubmission(form : FormGroup) {
+  handleInputSubmission(form: FormGroup) {
     var control = form.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol);
-    if(control.value != ""){
+    if (control.value != "") {
       this.handleAnswerSubmission(control.value);
-    }else{
+    } else {
       control.markAsTouched();
       control.markAsDirty();
     }
   }
 
-  handleInverterFieldsSubmission(){
+  handleInverterFieldsSubmission() {
     var invertermakecontrol = this.activeForm.get("invertermake");
     var invertermodelcontrol = this.activeForm.get("invertermodel");
-    if (invertermakecontrol.value != "" && invertermodelcontrol.value != ""){
+    if (invertermakecontrol.value != "" && invertermodelcontrol.value != "") {
       this.selectedInverterMakeID = invertermakecontrol.value.id;
       this.selectedInverterModelID = invertermodelcontrol.value.id;
-    }else{
+      this.handleMenuSwitch();
+    } else {
       invertermakecontrol.markAsTouched();
       invertermakecontrol.markAsDirty();
       invertermodelcontrol.markAsTouched();
@@ -432,22 +419,31 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
-  handleSurveyExit(){
+  handleSurveyExit() {
 
   }
 
-  handleExistence(doesexist : boolean){
+  handleExistence(doesexist: boolean) {
     this.issidemenucollapsed = true;
     this.isgallerymenucollapsed = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
-    if(doesexist){
+    if (doesexist) {
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
-    }else{
+    } else {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
         element.ispending = false;
       });
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
+      this.handleMenuSwitch();
+    }
+  }
+
+  handleMenuSwitch(){
+    this.iscapturingallowed = true;
+    if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1) {
+      this.selectedshotindex += 1;
+    } else {
       if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
         this.selectedsubmenuindex += 1;

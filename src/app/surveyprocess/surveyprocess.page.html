@@ -191,24 +191,24 @@
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
         <form [formGroup]="activeForm" novalidate>
-          <app-auto-complete [dataList]="invertermakes" class="form-control" mode="object" formControlName="invertermake" #make>
+          <app-auto-complete placeholder="inverter make*" [dataList]="invertermakes" class="form-control" mode="object" formControlName="invertermake" #invertermake>
           </app-auto-complete>
           <div class="error_div">
-            <div *ngIf="activeForm.get(invertermake).value === '' && activeForm.get(invertermake).dirty">
+            <div *ngIf="activeForm.get('invertermake').value === '' && activeForm.get('invertermake').dirty">
               <span class="error">Field input is required.</span>
             </div>
           </div>
-          <app-auto-complete [dataList]="invertermodels" class="form-control" mode="object" formControlName="invertermodel" #model>
+          <app-auto-complete placeholder="inverter model*" [dataList]="invertermodels" class="form-control" mode="object" formControlName="invertermodel" #invertermodel>
           </app-auto-complete>
           <div class="error_div">
-            <div *ngIf="activeForm.get(invertermodel).value === '' && activeForm.get(invertermodel).dirty">
+            <div *ngIf="activeForm.get('invertermodel').value === '' && activeForm.get('invertermodel').dirty">
               <span class="error">Field input is required.</span>
             </div>
           </div>
         </form>
         <ion-row class="ion-float-right">
           <ion-button fill="clear" size="small"
-            (click)="handleInputSubmission(activeForm)">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}</ion-button>
+            (click)="handleInverterFieldsSubmission()">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}</ion-button>
         </ion-row>
       </ion-col>
     </ion-row>
