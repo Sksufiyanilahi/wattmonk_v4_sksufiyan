@@ -319,6 +319,9 @@ export class SurveyprocessPage implements OnInit {
         if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputrequired) {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
           this.iscapturingallowed = false;
+          if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE){
+            this.getUtilities();
+          }
         }
       },
         (error) => {
@@ -357,10 +360,6 @@ export class SurveyprocessPage implements OnInit {
           this.selectedsubmenuindex = 0;
         }
       }
-    }
-
-    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE){
-      this.getUtilities();
     }
   }
 
