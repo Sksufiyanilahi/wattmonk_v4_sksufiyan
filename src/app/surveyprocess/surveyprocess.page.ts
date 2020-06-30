@@ -247,6 +247,7 @@ export class SurveyprocessPage implements OnInit {
         element.isactive = true;
         issubmenuset = true;
         this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
+        this.selectedshotindex = 0;
       }
     });
   }
@@ -257,6 +258,7 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
     this.selectedsubmenuindex = index;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+    this.selectedshotindex = 0;
   }
 
   startCamera() {
