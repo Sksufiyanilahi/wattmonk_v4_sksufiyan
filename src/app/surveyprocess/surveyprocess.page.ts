@@ -56,7 +56,7 @@ export class SurveyprocessPage implements OnInit {
   mainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
   selectedsubmenuindex = 0;
-  selectedshotindex = 0;
+  selectedshotindex = 1;
 
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
@@ -77,6 +77,7 @@ export class SurveyprocessPage implements OnInit {
   googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=24&maptype=satellite&size=900x1600&scale=2&key=' + GOOGLE_API_KEY;
 
   batteryForm: FormGroup;
+  activeForm : FormGroup;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -95,34 +96,35 @@ export class SurveyprocessPage implements OnInit {
 
     if (this.surveytype == "battery") {
       console.log("is battery");
+      this.batteryForm = new FormGroup({
+        modulemake: new FormControl('', [Validators.required]),
+        modulemodel: new FormControl('', [Validators.required]),
+        invertermake: new FormControl('', [Validators.required]),
+        invertermodel: new FormControl('', [Validators.required]),
+        numberofmodules: new FormControl('', [Validators.required]),
+        additionalNotes: new FormControl('', []),
+        batterybackup: new FormControl('', [Validators.required]),
+        servicefeedsource: new FormControl('', [Validators.required]),
+        mainbreakersize: new FormControl('', [Validators.required]),
+        msprating: new FormControl('', [Validators.required]),
+        msplocation: new FormControl('', [Validators.required]),
+        mspbreaker: new FormControl('', [Validators.required]),
+        utilitymeter: new FormControl('', [Validators.required]),
+        utility: new FormControl('', [Validators.required]),
+        pvinverterlocation: new FormControl('', [Validators.required]),
+        pvmeter: new FormControl('', [Validators.required]),
+        acdisconnect: new FormControl('', [Validators.required]),
+        interconnection: new FormControl('', [Validators.required]),
+        status: new FormControl('surveycompleted', [Validators.required])
+      });
       this.http
         .get("assets/surveyprocessjson/battery.json")
         .subscribe((data) => {
           this.mainmenuitems = JSON.parse(JSON.stringify(data));
           this.isdataloaded = true;
-
-          this.batteryForm = this.formBuilder.group({
-            modulemake: new FormControl('', [Validators.required]),
-            modulemodel: new FormControl('', [Validators.required]),
-            invertermake: new FormControl('', [Validators.required]),
-            invertermodel: new FormControl('', [Validators.required]),
-            numberofmodules: new FormControl('', [Validators.required]),
-            additionalNotes: new FormControl('', []),
-            batterybackup: new FormControl('', [Validators.required]),
-            servicefeedsource: new FormControl('', [Validators.required]),
-            mainbreakersize: new FormControl('', [Validators.required]),
-            msprating: new FormControl('', [Validators.required]),
-            msplocation: new FormControl('', [Validators.required]),
-            mspbreaker: new FormControl('', [Validators.required]),
-            utilitymeter: new FormControl('', [Validators.required]),
-            utility: new FormControl('', [Validators.required]),
-            pvinverterlocation: new FormControl('', [Validators.required]),
-            pvmeter: new FormControl('', [Validators.required]),
-            acdisconnect: new FormControl('', [Validators.required]),
-            interconnection: new FormControl('', [Validators.required]),
-            status: new FormControl('surveycompleted', [Validators.required])
-          });
         });
+
+        this.activeForm = this.batteryForm;
     }
   }
 
@@ -328,6 +330,16 @@ export class SurveyprocessPage implements OnInit {
           this.selectedsubmenuindex = 0;
         }
       }
+    }
+  }
+
+  handleInputSubmission(form : FormGroup) {
+    var control = form.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol);
+    if(control.value != ""){
+      this.handleAnswerSubmission(control.value);
+    }else{
+      control.markAsTouched();
+      control.markAsDirty();
     }
   }
 }

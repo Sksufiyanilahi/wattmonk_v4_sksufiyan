@@ -9,7 +9,7 @@
                 "ispending": true,
                 "shots":[
                     {
-                        "isactive": true,
+                        "isactive": false,
                         "ispending": true,
                         "shotinfo":"Capture Long Shot",
                         "questioninfo":"Provide MSP Location",
@@ -30,7 +30,7 @@
                         "questioninfo":"Provide MSP Rating",
                         "shotstatus": false,
                         "inputrequired": true,
-                        "promptquestion": false,
+                        "promptquestion": true,
                         "question" : "MSP/BUS Rating?",
                         "actions" : ["confirm"],
                         "result" : "",
@@ -110,12 +110,61 @@
             {
                 "name":"PV Inverter",
                 "ispending": true,
-                "isactive": false
+                "isactive": false,
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Wide Angle Shot",
+                        "questioninfo":"Provide Inverter Location",
+                        "shotstatus": false,
+                        "inputrequired": true,
+                        "promptquestion": false,
+                        "question" : "Inverter Location?",
+                        "actions" : ["inside","outside"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "pvinverterlocation"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide Inverter Details",
+                        "shotstatus": false,
+                        "inputrequired": true,
+                        "promptquestion": false,
+                        "question" : "Inverter Make & Model?",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 3,
+                        "inputformcontrol" : ""
+                    }
+                ]
             },
             {
                 "name":"PV Meter",
                 "ispending": true,
-                "isactive": false
+                "isactive": false,
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Wide Angle Shot",
+                        "questioninfo":"Provide Inverter Location",
+                        "shotstatus": false,
+                        "inputrequired": true,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "pvinverterlocation"
+                    }
+                ]
             },
             {
                 "name":"AC Disconnect",

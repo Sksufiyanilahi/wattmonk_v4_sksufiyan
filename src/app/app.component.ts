@@ -41,7 +41,6 @@ export class AppComponent {
         this.statusBar.styleDefault();
         this.statusBar.styleLightContent();
       }else{
-        alert('other');
       }
       this.splashScreen.hide();
       this.getFcmToken();

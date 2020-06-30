@@ -7,9 +7,11 @@
     <ion-row>
       <ion-row style="width: 100%;" *ngIf="isdataloaded">
         <ion-col size="12" class="actionareacol">
-      <ion-row class="ion-justify-content-center ion-align-items-center">
-        <p class="shotinfo">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}</p>
-      </ion-row>
+          <ion-row class="ion-justify-content-center ion-align-items-center">
+            <p class="shotinfo">
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
+            </p>
+          </ion-row>
         </ion-col>
       </ion-row>
       <ion-row class="native-actionarea">
@@ -31,7 +33,9 @@
         <ion-col size="12" class="actionareacol">
           <ion-row class="childbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">
-              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']" *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index" (click)="toggleSubMenuSelection(i)">{{button.name}}</ion-button>
+              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']"
+                *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index"
+                (click)="toggleSubMenuSelection(i)">{{button.name}}</ion-button>
             </div>
           </ion-row>
           <ion-row class="ion-justify-content-center">
@@ -42,7 +46,9 @@
           </ion-row>
           <ion-row class="mainbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">
-              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']" *ngFor="let button of mainmenuitems; let i = index" (click)="toggleMainMenuSelection(i)">{{button.name}}</ion-button>
+              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']"
+                *ngFor="let button of mainmenuitems; let i = index" (click)="toggleMainMenuSelection(i)">{{button.name}}
+              </ion-button>
             </div>
           </ion-row>
         </ion-col>
@@ -59,7 +65,8 @@
       <ion-button class="infobutton" fill="clear" (click)="toggleSidebar(true)">x</ion-button>
     </ion-row>
     <div *ngIf="!issidemenucollapsed && isdataloaded" class="sidestepper">
-      <div *ngFor="let childshot of mainmenuitems[selectedmainmenuindex].children[selectedsubmenuindex].shots; let i = index">
+      <div
+        *ngFor="let childshot of mainmenuitems[selectedmainmenuindex].children[selectedsubmenuindex].shots; let i = index">
         <ion-row>
           <div class="stepper-index">{{i + 1}}</div>
           <p class="stepper-title">Step</p>
@@ -67,10 +74,12 @@
         <ion-row>
           <ion-col>
             <ion-row class="stepper-list-row">
-              <p [ngClass]="childshot.shotstatus ? 'stepper-text-active' : 'stepper-text-default'">{{childshot.shotinfo}}</p>
+              <p [ngClass]="childshot.shotstatus ? 'stepper-text-active' : 'stepper-text-default'">
+                {{childshot.shotinfo}}</p>
             </ion-row>
             <ion-row class="stepper-list-row">
-              <p [ngClass]="childshot.questionstatus ? 'stepper-text-active' : 'stepper-text-default'">{{childshot.questioninfo}}</p>
+              <p [ngClass]="childshot.questionstatus ? 'stepper-text-active' : 'stepper-text-default'">
+                {{childshot.questioninfo}}</p>
             </ion-row>
           </ion-col>
         </ion-row>
@@ -83,9 +92,10 @@
     <ion-row *ngIf="!isgallerymenucollapsed">
       <ion-button class="galleryclosebutton" fill="clear" (click)="toggleGallerybar(true)">x</ion-button>
     </ion-row>
-      <ion-row class="gallerysidebar galleryscrollcontainer" *ngIf="isdataloaded && !isgallerymenucollapsed">
+    <ion-row class="gallerysidebar galleryscrollcontainer" *ngIf="isdataloaded && !isgallerymenucollapsed">
       <div class="scroll" scrollY="true">
-        <ion-button color="dark" class="cameraimagesbutton" *ngFor="let shotimage of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages; let i = index">
+        <ion-button color="dark" class="cameraimagesbutton"
+          *ngFor="let shotimage of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedimages; let i = index">
           <img [src]="shotimage" />
         </ion-button>
       </div>
@@ -93,24 +103,41 @@
   </ion-grid>
 
   <!-- QUESTIONARE VIEW -->
-  <ion-grid class="questionaireview" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
-    <ion-row class="questionaireview-row ion-padding-horizontal">
-      <ion-col>
-        <p>{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}</p>
-        <ion-row *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_NUMBER">
-          <ion-col size="12">
-            <ion-input type="number" class="form-control" autocomplete="off"
-                formControlName="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol">
-            </ion-input>
-            <div class="error_div">
-                <div *ngIf="batteryForm.get('this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol').value === '' && batteryForm.get('this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol').dirty" >
-                    <span class="error">Field input is required.</span>
-                </div>      
-            </div>
-        </ion-col>
-        </ion-row>
+  <ion-grid class="questionaireview"
+    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
+
+    <!-- Row for choice questions -->
+    <ion-row class="questionaireview-row ion-padding-horizontal" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.OPTIONS">
+      <ion-col size="12">
+        <p>
+          {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+        </p>
         <ion-row class="ion-float-right">
-          <ion-button fill="clear" *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions" (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
+          <ion-button fill="clear"
+            *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions"
+            (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
+    <!-- Row for input questions -->
+    <ion-row class="questionaireview-row ion-padding-horizontal" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_NUMBER">
+      <ion-col size="12">
+        <p>
+          {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+        </p>
+        <form [formGroup]="activeForm" novalidate>
+          <ion-input type="number" class="form-control" autocomplete="off" formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
+          </ion-input>
+          <div class="error_div">
+            <div *ngIf="batteryForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && batteryForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+              <span class="error">Field input is required.</span>
+            </div>
+          </div>
+        </form>
+        <ion-row class="ion-float-right">
+          <ion-button fill="clear"
+            (click)="handleInputSubmission(activeForm)">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}</ion-button>
         </ion-row>
       </ion-col>
     </ion-row>

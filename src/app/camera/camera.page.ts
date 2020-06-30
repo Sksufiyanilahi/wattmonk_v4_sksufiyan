@@ -354,7 +354,7 @@ export class CameraPage implements OnInit {
   handleSaveImage(photo: string) {
     this.selectedImageModel.image = 'data:image/png;base64,' + photo;
     if (this.hardwareCameraEnabled) {
-      this.saveToRootDirectory(photo);
+      // this.saveToRootDirectory(photo);
       // this.saveFileToAppDirectory(photo[0]);
     }
     this.listOfImages.push(this.selectedImageModel.image);
