@@ -325,7 +325,7 @@
   </form>
 </ion-content>
 
-<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.MAP">
+<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.MAP" id="canvasarea">
   <ion-grid class="ion-no-padding">
     <ion-button class="backbutton" (click)="handleEquipmentMarkingBack()">Back</ion-button>
     <ion-row class="locationmarkingboundary">

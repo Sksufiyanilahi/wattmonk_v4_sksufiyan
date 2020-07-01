@@ -14,6 +14,7 @@ import { InverterMadeModel } from '../model/inverter-made.model';
 import { SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
+import * as domtoimage from 'dom-to-image';
 
 export interface MAINMENU {
   name: string;
@@ -188,6 +189,8 @@ export class SurveyprocessPage implements OnInit {
     enabled: true,
     event: null
   }
+
+  equipmentscanvasimage : string;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -723,6 +726,17 @@ export class SurveyprocessPage implements OnInit {
         });
       });
     });
+
+    if(this.equipmentscanvasimage != ""){
+      var captureshot: CAPTUREDSHOT = {
+        shotindex: imagesArray.length + 1,
+        shotimage: this.equipmentscanvasimage,
+        imagekey: "electricalslocation",
+        imagename: "electricalslocation"
+      }
+      imagesArray.push(captureshot);
+    }
+    
     this.utilitieservice.showLoading('Uploading Images').then(() => {
       this.totalimagestoupload = imagesArray.length;
       this.uploadImageByIndex(imagesArray);
@@ -782,10 +796,22 @@ export class SurveyprocessPage implements OnInit {
   }
 
   handleEquipmentMarkingBack(){
+    this.handleCanvasImageSaveOfMap();
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = this.previousmainmenuindex;
     this.selectedsubmenuindex = this.previoussubmenuindex;
     this.selectedshotindex = this.previousshotindex;
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+  }
+
+  handleCanvasImageSaveOfMap(){
+    const canvasarea = document.getElementById('canvasarea');
+    domtoimage.toPng(canvasarea)
+      .then((dataUrl) => {
+        this.equipmentscanvasimage = dataUrl;
+      })
+      .catch((error) => {
+        console.error('Something went wrong. Please try again.', error);
+      });
   }
 }
