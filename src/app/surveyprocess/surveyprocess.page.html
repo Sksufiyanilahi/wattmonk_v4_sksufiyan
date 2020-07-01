@@ -169,7 +169,7 @@
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
         <form [formGroup]="activeForm" novalidate>
-          <app-auto-complete [dataList]="utilities" class="form-control" formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}" #make>
+          <app-auto-complete [dataList]="utilities" class="form-control" mode="object" formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}" #make>
           </app-auto-complete>
           <div class="error_div">
             <div *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
@@ -179,7 +179,7 @@
         </form>
         <ion-row class="ion-float-right">
           <ion-button fill="clear" size="small"
-            (click)="handleInputSubmission(activeForm)">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}</ion-button>
+            (click)="handleUtilitySubmission()">{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}</ion-button>
         </ion-row>
       </ion-col>
     </ion-row>

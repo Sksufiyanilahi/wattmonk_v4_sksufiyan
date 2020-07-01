@@ -133,7 +133,6 @@ export class SurveyprocessPage implements OnInit {
     this.googleimageurl = this.googleimageurl + '&&markers=size:normal|color:red|' + this.latitude + ',' + this.longitude;
 
     if (this.surveytype == "battery") {
-      console.log("is battery");
       this.totalstepcount = 14;
       this.batteryForm = new FormGroup({
         modulemake: new FormControl('', [Validators.required]),
@@ -197,7 +196,6 @@ export class SurveyprocessPage implements OnInit {
     this.utilitieservice.showLoading('Loading').then(() => {
       this.apiService.getUtilities().subscribe(response => {
         this.utilitieservice.hideLoading().then(() => {
-          console.log(response);
           this.utilities = response;
           this.changedetectorref.detectChanges();
         });
@@ -213,11 +211,9 @@ export class SurveyprocessPage implements OnInit {
   }
 
   getInverterModels(selectedmakeid: string) {
-    console.log(selectedmakeid);
     this.utilitieservice.showLoading('Getting inverter models').then((success) => {
       this.apiService.getInverterMade(selectedmakeid).subscribe(response => {
         this.utilitieservice.hideLoading();
-        console.log(response);
         this.invertermodels = response;
       }, responseError => {
         this.utilitieservice.hideLoading();
@@ -231,7 +227,6 @@ export class SurveyprocessPage implements OnInit {
     this.utilitieservice.showLoading('Loading').then(() => {
       this.apiService.getInverterMake().subscribe(response => {
         this.utilitieservice.hideLoading().then(() => {
-          console.log(response);
           this.invertermakes = response;
           this.changedetectorref.detectChanges();
         });
@@ -297,7 +292,6 @@ export class SurveyprocessPage implements OnInit {
       var issubmenuset = false;
       this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
         if (element.ispending && !issubmenuset) {
-          console.log(element.name);
           element.isactive = true;
           issubmenuset = true;
           this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
@@ -328,7 +322,6 @@ export class SurveyprocessPage implements OnInit {
   startCamera() {
     if (this.hardwareCameraEnabled) {
       this.diagnostic.requestCameraAuthorization(true).then((mode) => {
-        console.log(mode);
         switch (mode) {
           case this.diagnostic.permissionStatus.NOT_REQUESTED:
             this.showCameraDenied();
@@ -373,13 +366,11 @@ export class SurveyprocessPage implements OnInit {
 
   startCameraAfterPermission() {
     if (this.hardwareCameraEnabled) {
-      console.log("starting camera");
       this.cameraPreview.startCamera(this.cameraPreviewOpts).then(
         (res) => {
-          console.log(res);
+
         },
         (err) => {
-          console.log(err);
         });
       this.cameraPreview.getMaxZoom().then((value) => {
         this.maxzoom = value;
@@ -470,7 +461,6 @@ export class SurveyprocessPage implements OnInit {
   }
 
   handleAnswerSubmission(result) {
-    console.log(result);
     this.iscapturingallowed = true;
     this.issidemenucollapsed = true;
     this.isgallerymenucollapsed = true;
@@ -505,6 +495,18 @@ export class SurveyprocessPage implements OnInit {
       invertermakecontrol.markAsDirty();
       invertermodelcontrol.markAsTouched();
       invertermodelcontrol.markAsDirty();
+    }
+  }
+
+  handleUtilitySubmission(){
+    var utilitycontrol = this.activeForm.get("utility");
+    if (utilitycontrol.value != "") {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+      this.handleMenuSwitch();
+    }else{
+      utilitycontrol.markAsTouched();
+      utilitycontrol.markAsDirty();
     }
   }
 
@@ -616,7 +618,6 @@ export class SurveyprocessPage implements OnInit {
         status: 'surveycompleted'
       }
       this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
-        console.log(data);
         this.utilitieservice.hideLoading().then(() => {
           this.uploadImagesToServer();
         });
@@ -654,7 +655,7 @@ export class SurveyprocessPage implements OnInit {
         filename = imageToUpload.imagename + '.png';
       }
       this.utilitieservice.setLoadingMessage('Uploading ' + this.imageuploadindex + ' of ' + this.totalimagestoupload);
-      this.apiService.uploadImage(this.surveyid, imageToUpload.key, blob, filename).subscribe((data) => {
+      this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
         this.imageuploadindex++;
         mapOfImages.splice(0, 1);
         this.uploadImageByIndex(mapOfImages);

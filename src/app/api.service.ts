@@ -152,6 +152,8 @@ export class ApiService {
     data.append('ref', 'survey');
     data.append('field', key);
 
+    console.log("file upload data---"+data);
+
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
   uploaddesign(data) {
