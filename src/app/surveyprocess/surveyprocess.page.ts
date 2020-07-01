@@ -84,7 +84,6 @@ export class SurveyprocessPage implements OnInit {
   issidemenucollapsed = true;
   isgallerymenucollapsed = true;
   isdataloaded = false;
-  totalPercent = 0;
   surveyid: number;
   surveytype: string;
   latitude: number;
@@ -94,6 +93,8 @@ export class SurveyprocessPage implements OnInit {
   batteryForm: FormGroup;
   activeForm: FormGroup;
 
+  totalpercent = 0;
+  shotcompletecount = 0;
   totalstepcount: number;
 
   utilities: InverterMakeModel[] = [];
@@ -387,6 +388,7 @@ export class SurveyprocessPage implements OnInit {
           }
         } else {
           if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
             this.handleMenuSwitch();
           }
         }
@@ -426,6 +428,8 @@ export class SurveyprocessPage implements OnInit {
     if (invertermakecontrol.value != "" && invertermodelcontrol.value != "") {
       this.selectedInverterMakeID = invertermakecontrol.value.id;
       this.selectedInverterModelID = invertermodelcontrol.value.id;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
       this.handleMenuSwitch();
     } else {
       invertermakecontrol.markAsTouched();
@@ -446,9 +450,10 @@ export class SurveyprocessPage implements OnInit {
     if (doesexist) {
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
     } else {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
         element.ispending = false;
+        element.shotstatus = true;
+        element.questionstatus = true;
       });
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
       this.handleMenuSwitch();
@@ -458,12 +463,12 @@ export class SurveyprocessPage implements OnInit {
   handleMenuSwitch() {
     this.iscapturingallowed = true;
     if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
+      this.markShotCompletion(this.selectedshotindex);
+      this.updateProgressStatus();
       if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1) {
-        this.markShotCompletion(this.selectedshotindex);
         this.selectedshotindex += 1;
       } else {
         if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
-          this.markShotCompletion(this.selectedshotindex);
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
           this.selectedsubmenuindex += 1;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
@@ -480,13 +485,18 @@ export class SurveyprocessPage implements OnInit {
           }
         }
       }
+    }else{
+      if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0){
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+        this.markShotCompletion(this.selectedshotindex);
+        this.updateProgressStatus();
+      }
     }
   }
 
   markShotCompletion(index) {
     if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus){
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].ispending = false;
-      // alert("set false for --"+this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotinfo);
 
       var ispendingset = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
@@ -497,5 +507,10 @@ export class SurveyprocessPage implements OnInit {
         }
       });
     }
+  }
+
+  updateProgressStatus(){
+    this.shotcompletecount += 1;
+    this.totalpercent = (this.shotcompletecount / this.totalstepcount);
   }
 }

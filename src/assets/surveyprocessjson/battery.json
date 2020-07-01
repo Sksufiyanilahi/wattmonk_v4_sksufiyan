@@ -256,7 +256,7 @@
         "isactive": false,
         "children":[
             {
-                "name":"",
+                "name":"Roof Area",
                 "isactive": false,
                 "ispending": true,
                 "checkexistence": false,
@@ -288,7 +288,7 @@
         "isactive": false,
         "children":[
             {
-                "name":"",
+                "name":"Heavy Load Appliances",
                 "isactive": false,
                 "ispending": true,
                 "checkexistence": false,
