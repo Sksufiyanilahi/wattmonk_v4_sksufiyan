@@ -94,6 +94,8 @@ export class SurveyprocessPage implements OnInit {
   batteryForm: FormGroup;
   activeForm: FormGroup;
 
+  totalstepcount: number;
+
   utilities: InverterMakeModel[] = [];
   invertermodels: InverterMadeModel[] = [];
   invertermakes: InverterMakeModel[] = [];
@@ -120,6 +122,7 @@ export class SurveyprocessPage implements OnInit {
 
     if (this.surveytype == "battery") {
       console.log("is battery");
+      this.totalstepcount = 14;
       this.batteryForm = new FormGroup({
         modulemake: new FormControl('', [Validators.required]),
         modulemodel: new FormControl('', [Validators.required]),
@@ -366,14 +369,14 @@ export class SurveyprocessPage implements OnInit {
         quality: 85
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
-        var captureshot : CAPTUREDSHOT = {
-          shotindex : this.selectedshotindex,
-          shotimage : this.capturedImage
+        var captureshot: CAPTUREDSHOT = {
+          shotindex: this.selectedshotindex,
+          shotimage: this.capturedImage
         }
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
         if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
-          if(!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus){
+          if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus) {
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
             this.iscapturingallowed = false;
             if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
@@ -456,9 +459,11 @@ export class SurveyprocessPage implements OnInit {
     this.iscapturingallowed = true;
     if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
       if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1) {
+        this.markShotCompletion(this.selectedshotindex);
         this.selectedshotindex += 1;
       } else {
         if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
+          this.markShotCompletion(this.selectedshotindex);
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
           this.selectedsubmenuindex += 1;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
@@ -475,6 +480,22 @@ export class SurveyprocessPage implements OnInit {
           }
         }
       }
+    }
+  }
+
+  markShotCompletion(index) {
+    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus){
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].ispending = false;
+      // alert("set false for --"+this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotinfo);
+
+      var ispendingset = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+        if(element.ispending && !ispendingset){
+          ispendingset = true;
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+        }
+      });
     }
   }
 }

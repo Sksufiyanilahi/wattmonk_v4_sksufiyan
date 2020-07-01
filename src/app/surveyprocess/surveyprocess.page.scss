@@ -72,6 +72,21 @@ app-ar ion-content {
     padding: 0 4px;
 }
 
+.actionarea .childbuttons .completed {
+    color: #6ab04c;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0 4px;
+}
+
+.actionarea .childbuttons .completed-inactive {
+    color: #6ab04c;
+    opacity: 0.7;
+    font-size: 14px;
+    font-weight: 100;
+    padding: 0 4px;
+}
+
 .actionarea .childbuttons .normal {
     color: #ffffff;
     font-size: 14px;
