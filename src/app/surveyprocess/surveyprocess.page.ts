@@ -134,14 +134,14 @@ export class SurveyprocessPage implements OnInit {
 
   equipments: Equipment[] = [{
     id: 1,
-    name: "AC Disconnect",
+    name: "ACD",
     color: "#fec412",
     disabledcolor: "#fec41280",
     enabled: true,
     event: null
   }, {
     id: 2,
-    name: "PV Meter",
+    name: "PVM",
     color: "#6aa84f",
     disabledcolor: "#6aa84f80",
     enabled: true,
@@ -155,14 +155,14 @@ export class SurveyprocessPage implements OnInit {
     event: null
   }, {
     id: 4,
-    name: "Inverter",
+    name: "INV",
     color: "#6d9eeb",
     disabledcolor: "#6d9eeb80",
     enabled: true,
     event: null
   }, {
     id: 5,
-    name: "Battery",
+    name: "BT",
     color: "#ff00ff",
     disabledcolor: "#ff00ff80",
     enabled: true,
@@ -176,7 +176,7 @@ export class SurveyprocessPage implements OnInit {
     event: null
   }, {
     id: 7,
-    name: "Electrical Equipment",
+    name: "EEQ",
     color: "#ffff00",
     disabledcolor: "#ffff0080",
     enabled: true,

@@ -335,10 +335,11 @@ font-weight: 600;
   
   .legend .legendtext {
     margin-bottom: 0;
-    margin-left: 0.6em;
+    margin-top: 0;
     font-size: 0.8em;
     color: #000000;
     font-weight: 600;
+    text-align: center;
   }
   
   .disabledlegend {
@@ -352,10 +353,11 @@ font-weight: 600;
   
   .disabledlegendtext{
     margin-bottom: 0;
-    margin-left: 0.6em;
+    margin-top: 0;
     font-size: 0.8em;
     color: #999999;
     font-weight: 600;
+    text-align: center;
   }
   
   .undobutton {
@@ -375,7 +377,7 @@ font-weight: 600;
   .dotcontainer{
     height: 24px;
     width: 24px;
-    margin-left: 16px;
+    margin-top: 4px;
     background-color: #bbb;
     border-radius: 4px;
     display: inline-block;
@@ -383,8 +385,9 @@ font-weight: 600;
 
   .legendscontainer{
       position: absolute;
-      top: 0;
+      bottom: 0;
       left: 0;
+      width: 100%;
   }
 
   .dot {
