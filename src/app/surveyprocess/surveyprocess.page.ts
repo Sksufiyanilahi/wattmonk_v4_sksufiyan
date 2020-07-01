@@ -11,10 +11,13 @@ import { ApiService } from '../api.service';
 import { InverterMakeModel } from '../model/inverter-make.model';
 import { ErrorModel } from '../model/error.model';
 import { InverterMadeModel } from '../model/inverter-made.model';
+import { SolarMake } from '../model/solar-make.model';
+import { SolarMadeModel } from '../model/solar-made.model';
 
 export interface MAINMENU {
   name: string;
   isactive: boolean;
+  isformview: boolean;
   children: CHILDREN[];
 }
 
@@ -100,6 +103,8 @@ export class SurveyprocessPage implements OnInit {
   utilities: InverterMakeModel[] = [];
   invertermodels: InverterMadeModel[] = [];
   invertermakes: InverterMakeModel[] = [];
+  solarmakes: SolarMake[] = [];
+  solarmodels: SolarMadeModel[] = [];
 
   selectedInverterMakeID: number;
   selectedInverterModelID: number;
@@ -156,6 +161,10 @@ export class SurveyprocessPage implements OnInit {
 
       this.activeForm.get('invertermake').valueChanges.subscribe(val => {
         this.getInverterModels(this.activeForm.get('invertermake').value.id);
+      });
+
+      this.activeForm.get('modulemake').valueChanges.subscribe(val => {
+        this.getSolarModels(this.activeForm.get('modulemake').value.id);
       });
     }
   }
@@ -227,7 +236,37 @@ export class SurveyprocessPage implements OnInit {
         });
       });
     });
+  }
 
+  getSolarModels(selectedsolarmakeid : number) {
+    this.utilitieservice.showLoading('Getting solar models').then((success) => {
+      this.apiService.getSolarMade(selectedsolarmakeid).subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.solarmodels = response;
+        });
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  getSolarMakes() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getSolarMake().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.solarmakes = response;
+          this.changedetectorref.detectChanges();
+        });
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
   }
 
   toggleSidebar(isopen: boolean) {
@@ -248,16 +287,27 @@ export class SurveyprocessPage implements OnInit {
     this.selectedmainmenuindex = index;
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
 
-    var issubmenuset = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
-      if (element.ispending && !issubmenuset) {
-        console.log(element.name);
-        element.isactive = true;
-        issubmenuset = true;
-        this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
-        this.selectedshotindex = 0;
+    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+      var issubmenuset = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
+        if (element.ispending && !issubmenuset) {
+          console.log(element.name);
+          element.isactive = true;
+          issubmenuset = true;
+          this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
+          this.selectedshotindex = 0;
+        }
+      });
+    }
+
+    if (this.mainmenuitems[this.selectedmainmenuindex].isformview) {
+      this.cameraPreview.stopCamera();
+      if(this.surveytype == 'battery'){
+        this.getSolarMakes();
       }
-    });
+    } else {
+      this.startCameraAfterPermission();
+    }
   }
 
   toggleSubMenuSelection(index) {
@@ -429,7 +479,7 @@ export class SurveyprocessPage implements OnInit {
       this.selectedInverterMakeID = invertermakecontrol.value.id;
       this.selectedInverterModelID = invertermodelcontrol.value.id;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
       this.handleMenuSwitch();
     } else {
       invertermakecontrol.markAsTouched();
@@ -482,11 +532,20 @@ export class SurveyprocessPage implements OnInit {
             this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
             this.selectedshotindex = 0;
             this.selectedsubmenuindex = 0;
+
+            if (this.mainmenuitems[this.selectedmainmenuindex].isformview) {
+              this.cameraPreview.stopCamera();
+              if(this.surveytype == 'battery'){
+                this.getSolarMakes();
+              }
+            } else {
+              this.startCameraAfterPermission();
+            }
           }
         }
       }
-    }else{
-      if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0){
+    } else {
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
         this.markShotCompletion(this.selectedshotindex);
         this.updateProgressStatus();
@@ -495,13 +554,13 @@ export class SurveyprocessPage implements OnInit {
   }
 
   markShotCompletion(index) {
-    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus){
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus) {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].ispending = false;
 
       var ispendingset = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
-        if(element.ispending && !ispendingset){
+        if (element.ispending && !ispendingset) {
           ispendingset = true;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
         }
@@ -509,7 +568,7 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
-  updateProgressStatus(){
+  updateProgressStatus() {
     this.shotcompletecount += 1;
     this.totalpercent = (this.shotcompletecount / this.totalstepcount);
   }
