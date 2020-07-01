@@ -97,6 +97,10 @@ export class SurveyprocessPage implements OnInit {
   selectedsubmenuindex = 0;
   selectedshotindex = 0;
 
+  previousmainmenuindex = 0;
+  previoussubmenuindex = 0;
+  previousshotindex = 0;
+
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
 
@@ -128,9 +132,6 @@ export class SurveyprocessPage implements OnInit {
   invertermakes: InverterMakeModel[] = [];
   solarmakes: SolarMake[] = [];
   solarmodels: SolarMadeModel[] = [];
-
-  selectedInverterMakeID: number;
-  selectedInverterModelID: number;
 
   equipments: Equipment[] = [{
     id: 1,
@@ -367,6 +368,12 @@ export class SurveyprocessPage implements OnInit {
   toggleMainMenuSelection(index) {
     this.issidemenucollapsed = true;
     this.isgallerymenucollapsed = true;
+
+    //Retaining previous state
+    this.previousmainmenuindex = this.selectedmainmenuindex;
+    this.previoussubmenuindex = this.selectedsubmenuindex;
+    this.previousshotindex = this.selectedshotindex;
+
     //Unset previous menu and select new one
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = index;
@@ -384,13 +391,15 @@ export class SurveyprocessPage implements OnInit {
       });
     }
 
-    if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
+    if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+      this.startCameraAfterPermission();
+    } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
       this.cameraPreview.stopCamera();
       if(this.surveytype == 'battery'){
         this.getSolarMakes();
       }
-    } else {
-      this.startCameraAfterPermission();
+    } else if(this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP){
+      this.cameraPreview.stopCamera();
     }
   }
 
@@ -569,8 +578,6 @@ export class SurveyprocessPage implements OnInit {
     var invertermakecontrol = this.activeForm.get("invertermake");
     var invertermodelcontrol = this.activeForm.get("invertermodel");
     if (invertermakecontrol.value != "" && invertermodelcontrol.value != "") {
-      this.selectedInverterMakeID = invertermakecontrol.value.id;
-      this.selectedInverterModelID = invertermodelcontrol.value.id;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
       this.handleMenuSwitch();
@@ -617,6 +624,12 @@ export class SurveyprocessPage implements OnInit {
 
   handleMenuSwitch() {
     this.iscapturingallowed = true;
+
+    //Retaining previous shots
+    this.previousmainmenuindex = this.selectedmainmenuindex;
+    this.previoussubmenuindex = this.selectedsubmenuindex;
+    this.previousshotindex = this.selectedshotindex;
+
     if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
       this.markShotCompletion(this.selectedshotindex);
       this.updateProgressStatus();
@@ -638,13 +651,15 @@ export class SurveyprocessPage implements OnInit {
             this.selectedshotindex = 0;
             this.selectedsubmenuindex = 0;
 
-            if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
+            if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+              this.startCameraAfterPermission();
+            } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
               this.cameraPreview.stopCamera();
               if(this.surveytype == 'battery'){
                 this.getSolarMakes();
               }
-            } else {
-              this.startCameraAfterPermission();
+            } else if(this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP){
+              this.cameraPreview.stopCamera();
             }
           }
         }
@@ -759,5 +774,13 @@ export class SurveyprocessPage implements OnInit {
         });
       });
     }
+  }
+
+  handleEquipmentMarkingBack(){
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+    this.selectedmainmenuindex = this.previousmainmenuindex;
+    this.selectedsubmenuindex = this.previoussubmenuindex;
+    this.selectedshotindex = this.previousshotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
   }
 }

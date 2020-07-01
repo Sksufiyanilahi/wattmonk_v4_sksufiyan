@@ -315,10 +315,6 @@ padding-top: 7px;
 padding-left: 16px;
 font-weight: 600;
 }
-
-.locationmarkingboundary {
-    border: dashed #ccc 1px;
-  }
   
   .locationmarkingboundary .col {
     padding-left: 0px;
@@ -396,4 +392,10 @@ font-weight: 600;
     background-color: #bbb;
     border-radius: 4px;
     display: inline-block;
+  }
+
+  .backbutton{
+      position: absolute;
+      top: 16px;
+      left: 16px;
   }

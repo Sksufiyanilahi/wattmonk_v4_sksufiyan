@@ -327,6 +327,7 @@
 
 <ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.MAP">
   <ion-grid class="ion-no-padding">
+    <ion-button class="backbutton" (click)="handleEquipmentMarkingBack()">Back</ion-button>
     <ion-row class="locationmarkingboundary">
       <img [src]="googleimageurl" class="object-fit-contain" style="height: 100vh;" />
     </ion-row>
