@@ -336,13 +336,14 @@
         <div class="dotcontainer"
           [ngStyle]="item.enabled ? {'background-color': item.color} : {'background-color': item.disabledcolor}">
           <span id="item.id" class="dot" [ngStyle]="{'background-color': item.color}"
-            cdkDragBoundary=".locationmarkingboundary" cdkDrag (cdkDragEnded)="dragEnded($event, item)"></span>
+            cdkDragBoundary=".locationmarkingboundary" cdkDrag (cdkDragEnded)="dragEnded($event, item)">
+          </span>
         </div>
         <p [ngClass]="[ item.enabled ? 'legendtext' : 'disabledlegendtext']">{{item.name}}</p>
-        <button mat-button [ngClass]="[ item.enabled ? 'undobutton' : 'hiddenundobutton']"
+        <ion-button fill="clear" size="small" class="undobutton" [ngClass]="[ item.enabled ? 'hidden' : 'unhidden']"
           (click)="reverttoOriginalPosition(item)">
           <img class="undoimage" src="../../assets/images/undoarrow.svg" />
-        </button>
+        </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

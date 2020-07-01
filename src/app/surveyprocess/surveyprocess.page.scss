@@ -355,24 +355,28 @@ font-weight: 600;
     font-weight: 600;
     text-align: center;
   }
-  
-  .undobutton {
-    display: none;
-    margin-left: 10px;
+
+  .undobutton{
+    position: absolute;
+    top: -3px;
+    right: -6px;
   }
   
-  .hiddenundobutton {
+  .hidden {
+    display: none;
+  }
+  
+  .unhidden {
     display: block;
-    margin-left: 18px;
   }
   
   .undoimage {
-    width: 18px;
+    width: 14px;
   }
 
   .dotcontainer{
-    height: 24px;
-    width: 24px;
+    height: 20px;
+    width: 20px;
     margin-top: 4px;
     background-color: #bbb;
     border-radius: 4px;
@@ -387,8 +391,8 @@ font-weight: 600;
   }
 
   .dot {
-    height: 24px;
-    width: 24px;
+    height: 20px;
+    width: 20px;
     background-color: #bbb;
     border-radius: 4px;
     display: inline-block;
