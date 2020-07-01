@@ -134,20 +134,6 @@ export class SurveyprocessPage implements OnInit {
   solarmodels: SolarMadeModel[] = [];
 
   equipments: Equipment[] = [{
-    id: 1,
-    name: "ACD",
-    color: "#fec412",
-    disabledcolor: "#fec41280",
-    enabled: true,
-    event: null
-  }, {
-    id: 2,
-    name: "PVM",
-    color: "#6aa84f",
-    disabledcolor: "#6aa84f80",
-    enabled: true,
-    event: null
-  }, {
     id: 3,
     name: "MSP",
     color: "#ff0000",
@@ -184,6 +170,24 @@ export class SurveyprocessPage implements OnInit {
     event: null
   }
   ]
+
+  acdisconnectequipment : Equipment = {
+    id: 1,
+    name: "ACD",
+    color: "#fec412",
+    disabledcolor: "#fec41280",
+    enabled: true,
+    event: null
+  }
+
+  pvmeterequipment : Equipment = {
+    id: 2,
+    name: "PVM",
+    color: "#6aa84f",
+    disabledcolor: "#6aa84f80",
+    enabled: true,
+    event: null
+  }
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -391,16 +395,7 @@ export class SurveyprocessPage implements OnInit {
       });
     }
 
-    if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
-      this.startCameraAfterPermission();
-    } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
-      this.cameraPreview.stopCamera();
-      if(this.surveytype == 'battery'){
-        this.getSolarMakes();
-      }
-    } else if(this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP){
-      this.cameraPreview.stopCamera();
-    }
+    this.handleViewModeSwitch();
   }
 
   toggleSubMenuSelection(index) {
@@ -651,16 +646,7 @@ export class SurveyprocessPage implements OnInit {
             this.selectedshotindex = 0;
             this.selectedsubmenuindex = 0;
 
-            if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
-              this.startCameraAfterPermission();
-            } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
-              this.cameraPreview.stopCamera();
-              if(this.surveytype == 'battery'){
-                this.getSolarMakes();
-              }
-            } else if(this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP){
-              this.cameraPreview.stopCamera();
-            }
+            this.handleViewModeSwitch();
           }
         }
       }
@@ -773,6 +759,25 @@ export class SurveyprocessPage implements OnInit {
           });
         });
       });
+    }
+  }
+
+  handleViewModeSwitch(){
+    if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+      this.startCameraAfterPermission();
+    } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
+      this.cameraPreview.stopCamera();
+      if(this.surveytype == 'battery'){
+        this.getSolarMakes();
+      }
+    } else if(this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP){
+      this.cameraPreview.stopCamera();
+      if(JSON.parse(this.activeForm.get("acdisconnect").value)){
+        this.equipments.splice(0, 0, this.acdisconnectequipment);
+      }
+      if(JSON.parse(this.activeForm.get("pvmeter").value)){
+        this.equipments.splice(1, 0, this.pvmeterequipment);
+      }
     }
   }
 
