@@ -47,11 +47,15 @@ export interface SHOT {
   questionstatus: boolean;
   questiontype: QUESTIONTYPE;
   inputformcontrol: string;
+  imagekey: string;
+  imagename: string;
 }
 
 export interface CAPTUREDSHOT {
   shotindex: number;
   shotimage: string;
+  imagekey : string;
+  imagename : string;
 }
 
 export enum QUESTIONTYPE {
@@ -99,6 +103,8 @@ export class SurveyprocessPage implements OnInit {
   totalpercent = 0;
   shotcompletecount = 0;
   totalstepcount: number;
+  totalimagestoupload = 1;
+  imageuploadindex = 1;
 
   utilities: InverterMakeModel[] = [];
   invertermodels: InverterMadeModel[] = [];
@@ -420,11 +426,23 @@ export class SurveyprocessPage implements OnInit {
         quality: 85
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
+        if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
         var captureshot: CAPTUREDSHOT = {
           shotindex: this.selectedshotindex,
-          shotimage: this.capturedImage
+          shotimage: this.capturedImage,
+          imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
+          imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename
         }
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
+      }else{
+        var captureshot: CAPTUREDSHOT = {
+          shotindex: this.selectedshotindex,
+          shotimage: this.capturedImage,
+          imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
+          imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename+(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length + 1)
+        }
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
+      }
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
         if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
           if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus) {
@@ -456,6 +474,7 @@ export class SurveyprocessPage implements OnInit {
     this.iscapturingallowed = true;
     this.issidemenucollapsed = true;
     this.isgallerymenucollapsed = true;
+    this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).setValue(result);
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result = result;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
@@ -571,5 +590,89 @@ export class SurveyprocessPage implements OnInit {
   updateProgressStatus() {
     this.shotcompletecount += 1;
     this.totalpercent = (this.shotcompletecount / this.totalstepcount);
+  }
+
+  handleCompleteSurveyDataSubmission(){
+    this.utilitieservice.showLoading('Saving Survey').then(() => {
+      const data = {
+        modulemake: this.batteryForm.get("modulemake").value.id,
+        modulemodel: this.batteryForm.get("modulemodel").value.id,
+        invertermake: this.batteryForm.get("invertermake").value.name,
+        invertermodel: this.batteryForm.get("invertermodel").value.name,
+        numberofmodules: parseInt(this.batteryForm.get("numberofmodules").value),
+        additionalnotes: this.batteryForm.get("additionalnotes").value,
+        batterybackup: this.batteryForm.get("batterybackup").value,
+        servicefeedsource: this.batteryForm.get("servicefeedsource").value,
+        mainbreakersize: parseInt(this.batteryForm.get("mainbreakersize").value),
+        msprating: parseInt(this.batteryForm.get("msprating").value),
+        msplocation: this.batteryForm.get("msplocation").value,
+        mspbreaker: this.batteryForm.get("mspbreaker").value,
+        utilitymeter: this.batteryForm.get("utilitymeter").value,
+        utility: this.batteryForm.get("utility").value.id,
+        pvinverterlocation: this.batteryForm.get("pvinverterlocation").value,
+        pvmeter: JSON.parse(this.batteryForm.get("pvmeter").value),
+        acdisconnect: JSON.parse(this.batteryForm.get("acdisconnect").value),
+        interconnection: this.batteryForm.get("interconnection").value,
+        status: 'surveycompleted'
+      }
+      this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
+        console.log(data);
+        this.utilitieservice.hideLoading().then(() => {
+          this.uploadImagesToServer();
+        });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar(JSON.stringify(error));
+        });
+      });
+    });
+  }
+
+  uploadImagesToServer(){
+    var imagesArray = [];
+    this.mainmenuitems.forEach(mainmenu => {
+      mainmenu.children.forEach(child => {
+        child.capturedshots.forEach(shot => {
+          imagesArray.push(shot);
+        });
+      });
+    });
+    this.utilitieservice.showLoading('Uploading Images').then(() => {
+      this.totalimagestoupload = imagesArray.length;
+      this.uploadImageByIndex(imagesArray);
+    });
+  }
+
+  uploadImageByIndex(mapOfImages) {
+    if (mapOfImages.length !== 0) {
+      const imageToUpload = mapOfImages[0];
+      const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
+      let filename = '';
+      if (imageToUpload.imagename === '') {
+        filename = Date.now().toString() + '.png';
+      } else {
+        filename = imageToUpload.imagename + '.png';
+      }
+      this.utilitieservice.setLoadingMessage('Uploading ' + this.imageuploadindex + ' of ' + this.totalimagestoupload);
+      this.apiService.uploadImage(this.surveyid, imageToUpload.key, blob, filename).subscribe((data) => {
+        this.imageuploadindex++;
+        mapOfImages.splice(0, 1);
+        this.uploadImageByIndex(mapOfImages);
+      }, (error) => {
+        this.imageuploadindex++;
+        mapOfImages.splice(0, 1);
+        this.uploadImageByIndex(mapOfImages);
+      });
+    } else {
+      this.utilitieservice.hideLoading().then(() => {
+        this.utilitieservice.showSuccessModal('Survey have been saved').then((modal) => {
+          modal.present();
+          modal.onWillDismiss().then((dismissed) => {
+            this.navController.navigateRoot('homepage');
+            this.utilitieservice.sethomepageSurveyRefresh(true);
+          });
+        });
+      });
+    }
   }
 }
