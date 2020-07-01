@@ -13,6 +13,8 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { UtilitiesModule } from '../utilities/utilities.module';
 
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -20,6 +22,7 @@ import { UtilitiesModule } from '../utilities/utilities.module';
     ReactiveFormsModule,
     IonicModule,
     UtilitiesModule,
+    DragDropModule,
     SurveyprocessPageRoutingModule
   ],
   declarations: [SurveyprocessPage],

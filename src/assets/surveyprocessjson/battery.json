@@ -2,7 +2,7 @@
     {
         "name":"Electricals",
         "isactive": true,
-        "isformview": false,
+        "viewmode": 0,
         "children":[
             {
                 "name":"MSP",
@@ -245,7 +245,7 @@
     {
         "name": "Solar",
         "isactive": false,
-        "isformview": false,
+        "viewmode": 0,
         "children":[
             {
                 "name":"Panels",
@@ -280,7 +280,7 @@
     {
         "name": "Roof",
         "isactive": false,
-        "isformview": false,
+        "viewmode": 0,
         "children":[
             {
                 "name":"Roof Area",
@@ -315,7 +315,7 @@
     {
         "name": "Appliances",
         "isactive": false,
-        "isformview": false,
+        "viewmode": 0,
         "children":[
             {
                 "name":"Heavy Load Appliances",
@@ -348,9 +348,15 @@
         ]
     },
     {
+        "name": "Marking",
+        "isactive": false,
+        "viewmode": 2,
+        "children":[]
+    },
+    {
         "name": "Details",
         "isactive": false,
-        "isformview": true,
+        "viewmode": 1,
         "children":[]
     }
 ]

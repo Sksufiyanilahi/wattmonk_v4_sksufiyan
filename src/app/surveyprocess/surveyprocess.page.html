@@ -2,7 +2,7 @@
   <ion-progress-bar [value]="totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
 </ion-header>
 
-<ion-content *ngIf="isdataloaded && !this.mainmenuitems[this.selectedmainmenuindex].isformview">
+<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-row style="width: 100%;" *ngIf="isdataloaded">
@@ -215,7 +215,7 @@
   </ion-grid>
 </ion-content>
 
-<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].isformview">
+<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
     <form [formGroup]="activeForm" class="white-bg" *ngIf="surveytype === 'battery'">
       <p class="formheader">Additional Information</p>
       <ion-grid class="ion-padding">
@@ -303,4 +303,25 @@
       </ion-row>
       </ion-grid>
     </form>
+</ion-content>
+
+<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.MAP">
+  <ion-grid class="ion-no-padding">
+    <ion-row class="locationmarkingboundary">
+      <img [src]="googleimageurl" class="object-fit-contain" />
+    </ion-row>
+    <div class="legendscontainer">
+      <ion-row class="ion-align-items-center legend" *ngFor="let item of equipments">
+        <div class="dotcontainer"
+                  [ngStyle]="item.enabled ? {'background-color': item.color} : {'background-color': item.disabledcolor}">
+                  <span id="item.id" class="dot" [ngStyle]="{'background-color': item.color}"
+                    cdkDragBoundary=".locationmarkingboundary" cdkDrag (cdkDragEnded)="dragEnded($event, item)"></span>
+                </div>
+                <p [ngClass]="[ item.enabled ? 'legendtext' : 'disabledlegendtext']">{{item.name}}</p>
+                <button mat-button [ngClass]="[ item.enabled ? 'undobutton' : 'hiddenundobutton']" (click)="reverttoOriginalPosition(item)">
+                  <img class="undoimage" src="../../assets/images/undoarrow.svg"/>
+                </button>
+      </ion-row>
+    </div>
+  </ion-grid>
 </ion-content>

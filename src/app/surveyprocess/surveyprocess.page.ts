@@ -13,11 +13,12 @@ import { ErrorModel } from '../model/error.model';
 import { InverterMadeModel } from '../model/inverter-made.model';
 import { SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 
 export interface MAINMENU {
   name: string;
   isactive: boolean;
-  isformview: boolean;
+  viewmode: number;
   children: CHILDREN[];
 }
 
@@ -58,12 +59,27 @@ export interface CAPTUREDSHOT {
   imagename : string;
 }
 
+export interface Equipment {
+  id: number;
+  name: string;
+  color: string;
+  disabledcolor: string;
+  enabled: boolean;
+  event: CdkDragEnd;
+}
+
 export enum QUESTIONTYPE {
   NONE = 0,
   OPTIONS = 1,
   INPUT_NUMBER = 2,
   INPUT_UTILITIES_AUTOCOMPLETE = 3,
   INPUT_INVERTER_AUTOCOMPLETE = 4,
+}
+
+export enum VIEWMODE {
+  CAMERA = 0,
+  FORM = 1,
+  MAP = 2
 }
 
 @Component({
@@ -74,6 +90,7 @@ export enum QUESTIONTYPE {
 export class SurveyprocessPage implements OnInit {
 
   QuestionTypes = QUESTIONTYPE;
+  ViewModes = VIEWMODE;
 
   mainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
@@ -114,6 +131,58 @@ export class SurveyprocessPage implements OnInit {
 
   selectedInverterMakeID: number;
   selectedInverterModelID: number;
+
+  equipments: Equipment[] = [{
+    id: 1,
+    name: "AC Disconnect",
+    color: "#fec412",
+    disabledcolor: "#fec41280",
+    enabled: true,
+    event: null
+  }, {
+    id: 2,
+    name: "PV Meter",
+    color: "#6aa84f",
+    disabledcolor: "#6aa84f80",
+    enabled: true,
+    event: null
+  }, {
+    id: 3,
+    name: "MSP",
+    color: "#ff0000",
+    disabledcolor: "#ff000080",
+    enabled: true,
+    event: null
+  }, {
+    id: 4,
+    name: "Inverter",
+    color: "#6d9eeb",
+    disabledcolor: "#6d9eeb80",
+    enabled: true,
+    event: null
+  }, {
+    id: 5,
+    name: "Battery",
+    color: "#ff00ff",
+    disabledcolor: "#ff00ff80",
+    enabled: true,
+    event: null
+  }, {
+    id: 6,
+    name: "GP",
+    color: "#00ffff",
+    disabledcolor: "#00ffff80",
+    enabled: true,
+    event: null
+  }, {
+    id: 7,
+    name: "Electrical Equipment",
+    color: "#ffff00",
+    disabledcolor: "#ffff0080",
+    enabled: true,
+    event: null
+  }
+  ]
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -270,6 +339,21 @@ export class SurveyprocessPage implements OnInit {
     });
   }
 
+  dragEnded(event: CdkDragEnd, item: Equipment) {
+    console.log("inside drag end");
+    console.log(item.name);
+    item.enabled = false;
+    console.log(item);
+    item.event = event;
+  }
+
+  reverttoOriginalPosition(item: Equipment) {
+    item.event.source.element.nativeElement.style.transform = 'none'; // visually reset element to its origin
+    const source: any = item.event.source;
+    source._passiveTransform = { x: 0, y: 0 };
+    item.enabled = true;
+  }
+
   toggleSidebar(isopen: boolean) {
     this.isgallerymenucollapsed = true;
     this.issidemenucollapsed = isopen;
@@ -300,7 +384,7 @@ export class SurveyprocessPage implements OnInit {
       });
     }
 
-    if (this.mainmenuitems[this.selectedmainmenuindex].isformview) {
+    if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
       this.cameraPreview.stopCamera();
       if(this.surveytype == 'battery'){
         this.getSolarMakes();
@@ -554,7 +638,7 @@ export class SurveyprocessPage implements OnInit {
             this.selectedshotindex = 0;
             this.selectedsubmenuindex = 0;
 
-            if (this.mainmenuitems[this.selectedmainmenuindex].isformview) {
+            if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
               this.cameraPreview.stopCamera();
               if(this.surveytype == 'battery'){
                 this.getSolarMakes();
