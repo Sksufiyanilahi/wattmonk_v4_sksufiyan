@@ -55,6 +55,8 @@ export interface SHOT {
 }
 
 export interface CAPTUREDSHOT {
+  menuindex: number;
+  submenuindex: number;
   shotindex: number;
   shotimage: string;
   imagekey: string;
@@ -81,7 +83,8 @@ export enum QUESTIONTYPE {
 export enum VIEWMODE {
   CAMERA = 0,
   FORM = 1,
-  MAP = 2
+  MAP = 2,
+  GALLERY = 3
 }
 
 @Component({
@@ -98,6 +101,11 @@ export class SurveyprocessPage implements OnInit {
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
 
+  slideOpts = {
+    initialSlide: 1,
+    speed: 400
+  };
+
   mainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
   selectedsubmenuindex = 0;
@@ -106,6 +114,7 @@ export class SurveyprocessPage implements OnInit {
   previousmainmenuindex = 0;
   previoussubmenuindex = 0;
   previousshotindex = 0;
+  previousviewmode = 0;
 
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
@@ -138,6 +147,8 @@ export class SurveyprocessPage implements OnInit {
   invertermakes: InverterMakeModel[] = [];
   solarmakes: SolarMake[] = [];
   solarmodels: SolarMadeModel[] = [];
+
+  galleryshots : CAPTUREDSHOT[];
 
   equipments: Equipment[] = [{
     id: 3,
@@ -517,6 +528,8 @@ export class SurveyprocessPage implements OnInit {
         this.capturedImage = 'data:image/png;base64,' + photo;
         if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
           var captureshot: CAPTUREDSHOT = {
+            menuindex: this.selectedmainmenuindex,
+            submenuindex: this.selectedsubmenuindex,
             shotindex: this.selectedshotindex,
             shotimage: this.capturedImage,
             imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
@@ -525,6 +538,8 @@ export class SurveyprocessPage implements OnInit {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
         } else {
           var captureshot: CAPTUREDSHOT = {
+            menuindex: this.selectedmainmenuindex,
+            submenuindex: this.selectedsubmenuindex,
             shotindex: this.selectedshotindex,
             shotimage: this.capturedImage,
             imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
@@ -744,6 +759,8 @@ export class SurveyprocessPage implements OnInit {
 
     if (this.equipmentscanvasimage != "") {
       var captureshot: CAPTUREDSHOT = {
+        menuindex: -1,
+        submenuindex: -1,
         shotindex: imagesArray.length + 1,
         shotimage: this.equipmentscanvasimage,
         imagekey: "electricalslocation",
@@ -836,5 +853,20 @@ export class SurveyprocessPage implements OnInit {
         this.selectedshotindex = this.previousshotindex;
         this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
     });
+  }
+
+  handleGalleryViewSwitch(shot: CAPTUREDSHOT){
+    this.stopCamera();
+    this.isgallerymenucollapsed = true;
+    this.issidemenucollapsed = true;
+    this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
+    console.log(this.previousviewmode);
+    this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.GALLERY;
+  }
+
+  handleGalleryBack(){
+    this.mainmenuitems[this.selectedmainmenuindex].viewmode = this.previousviewmode;
+    console.log(this.mainmenuitems[this.selectedmainmenuindex].viewmode);
+    this.startCameraAfterPermission();
   }
 }

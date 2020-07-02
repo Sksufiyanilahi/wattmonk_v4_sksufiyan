@@ -103,7 +103,8 @@
     <ion-row class="gallerysidebar galleryscrollcontainer" *ngIf="isdataloaded && !isgallerymenucollapsed">
       <div class="scroll" scrollY="true">
         <ion-button color="dark" class="cameraimagesbutton"
-          *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
+          *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index"
+          (click)="handleGalleryViewSwitch(shot)">
           <img [src]="shot.shotimage" />
         </ion-button>
       </div>
@@ -350,4 +351,13 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+</ion-content>
+
+<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.GALLERY" class="white-bg">
+  <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
+      <img [src]="shot.shotimage" />
+    </ion-slide>
+  </ion-slides>
+  <ion-button class="backbutton" style="z-index: 1000;" (click)="handleGalleryBack()">Back</ion-button>
 </ion-content>
