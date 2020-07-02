@@ -495,6 +495,7 @@ export class SurveyprocessPage implements OnInit {
     } else {
       this.currentzoom = 1;
     }
+    console.log(this.currentzoom);
     this.cameraPreview.setZoom(this.currentzoom);
   }
 
@@ -713,6 +714,7 @@ export class SurveyprocessPage implements OnInit {
       }
       this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
         this.utilitieservice.hideLoading().then(() => {
+          this.updateProgressStatus();
           this.uploadImagesToServer();
         });
       }, (error) => {
@@ -802,7 +804,7 @@ export class SurveyprocessPage implements OnInit {
   }
 
   handleEquipmentMarkingBack() {
-    this.handleCanvasImageSaveOfMap();
+    this.startCameraAfterPermission();
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = this.previousmainmenuindex;
     this.selectedsubmenuindex = this.previoussubmenuindex;
@@ -810,11 +812,23 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
   }
 
+  handleEquipmentMarkingSave() {
+    this.handleCanvasImageSaveOfMap();
+  }
+
   handleCanvasImageSaveOfMap() {
     const canvasarea = document.getElementById('canvasarea');
     domtoimage.toPng(canvasarea)
       .then((dataUrl) => {
+        console.log(dataUrl);
         this.equipmentscanvasimage = dataUrl;
+        this.updateProgressStatus();
+    this.startCameraAfterPermission();
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+    this.selectedmainmenuindex = this.previousmainmenuindex;
+    this.selectedsubmenuindex = this.previoussubmenuindex;
+    this.selectedshotindex = this.previousshotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
       })
       .catch((error) => {
         console.error('Something went wrong. Please try again.', error);
