@@ -56,8 +56,8 @@ export interface SHOT {
 export interface CAPTUREDSHOT {
   shotindex: number;
   shotimage: string;
-  imagekey : string;
-  imagename : string;
+  imagekey: string;
+  imagename: string;
 }
 
 export interface Equipment {
@@ -172,7 +172,7 @@ export class SurveyprocessPage implements OnInit {
   }
   ]
 
-  acdisconnectequipment : Equipment = {
+  acdisconnectequipment: Equipment = {
     id: 1,
     name: "ACD",
     color: "#fec412",
@@ -181,7 +181,7 @@ export class SurveyprocessPage implements OnInit {
     event: null
   }
 
-  pvmeterequipment : Equipment = {
+  pvmeterequipment: Equipment = {
     id: 2,
     name: "PVM",
     color: "#6aa84f",
@@ -190,7 +190,7 @@ export class SurveyprocessPage implements OnInit {
     event: null
   }
 
-  equipmentscanvasimage : string;
+  equipmentscanvasimage: string;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -210,7 +210,7 @@ export class SurveyprocessPage implements OnInit {
     this.googleimageurl = this.googleimageurl + '&&markers=size:normal|color:red|' + this.latitude + ',' + this.longitude;
 
     if (this.surveytype == "battery") {
-      this.totalstepcount = 14;
+      this.totalstepcount = 16;
       this.batteryForm = new FormGroup({
         modulemake: new FormControl('', [Validators.required]),
         modulemodel: new FormControl('', [Validators.required]),
@@ -316,7 +316,7 @@ export class SurveyprocessPage implements OnInit {
     });
   }
 
-  getSolarModels(selectedsolarmakeid : number) {
+  getSolarModels(selectedsolarmakeid: number) {
     this.utilitieservice.showLoading('Getting solar models').then((success) => {
       this.apiService.getSolarMade(selectedsolarmakeid).subscribe(response => {
         this.utilitieservice.hideLoading().then(() => {
@@ -509,22 +509,22 @@ export class SurveyprocessPage implements OnInit {
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
         if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
-        var captureshot: CAPTUREDSHOT = {
-          shotindex: this.selectedshotindex,
-          shotimage: this.capturedImage,
-          imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
-          imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename
+          var captureshot: CAPTUREDSHOT = {
+            shotindex: this.selectedshotindex,
+            shotimage: this.capturedImage,
+            imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
+            imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename
+          }
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
+        } else {
+          var captureshot: CAPTUREDSHOT = {
+            shotindex: this.selectedshotindex,
+            shotimage: this.capturedImage,
+            imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
+            imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename + (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length + 1)
+          }
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
         }
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
-      }else{
-        var captureshot: CAPTUREDSHOT = {
-          shotindex: this.selectedshotindex,
-          shotimage: this.capturedImage,
-          imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
-          imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename+(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length + 1)
-        }
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
-      }
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
         if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
           if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus) {
@@ -540,6 +540,12 @@ export class SurveyprocessPage implements OnInit {
           if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
             this.handleMenuSwitch();
+          }else{
+            if(!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus){
+              this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+              this.markShotCompletion(this.selectedshotindex);
+              this.updateProgressStatus();
+            }
           }
         }
       },
@@ -587,13 +593,13 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
-  handleUtilitySubmission(){
+  handleUtilitySubmission() {
     var utilitycontrol = this.activeForm.get("utility");
     if (utilitycontrol.value != "") {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
       this.handleMenuSwitch();
-    }else{
+    } else {
       utilitycontrol.markAsTouched();
       utilitycontrol.markAsDirty();
     }
@@ -682,7 +688,7 @@ export class SurveyprocessPage implements OnInit {
     this.totalpercent = (this.shotcompletecount / this.totalstepcount);
   }
 
-  handleCompleteSurveyDataSubmission(){
+  handleCompleteSurveyDataSubmission() {
     this.utilitieservice.showLoading('Saving Survey').then(() => {
       const data = {
         modulemake: this.batteryForm.get("modulemake").value.id,
@@ -717,7 +723,7 @@ export class SurveyprocessPage implements OnInit {
     });
   }
 
-  uploadImagesToServer(){
+  uploadImagesToServer() {
     var imagesArray = [];
     this.mainmenuitems.forEach(mainmenu => {
       mainmenu.children.forEach(child => {
@@ -727,7 +733,7 @@ export class SurveyprocessPage implements OnInit {
       });
     });
 
-    if(this.equipmentscanvasimage != ""){
+    if (this.equipmentscanvasimage != "") {
       var captureshot: CAPTUREDSHOT = {
         shotindex: imagesArray.length + 1,
         shotimage: this.equipmentscanvasimage,
@@ -736,7 +742,7 @@ export class SurveyprocessPage implements OnInit {
       }
       imagesArray.push(captureshot);
     }
-    
+
     this.utilitieservice.showLoading('Uploading Images').then(() => {
       this.totalimagestoupload = imagesArray.length;
       this.uploadImageByIndex(imagesArray);
@@ -776,26 +782,26 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
-  handleViewModeSwitch(){
+  handleViewModeSwitch() {
     if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
       this.startCameraAfterPermission();
     } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
       this.cameraPreview.stopCamera();
-      if(this.surveytype == 'battery'){
+      if (this.surveytype == 'battery') {
         this.getSolarMakes();
       }
-    } else if(this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP){
+    } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP) {
       this.cameraPreview.stopCamera();
-      if(JSON.parse(this.activeForm.get("acdisconnect").value)){
+      if (JSON.parse(this.activeForm.get("acdisconnect").value)) {
         this.equipments.splice(0, 0, this.acdisconnectequipment);
       }
-      if(JSON.parse(this.activeForm.get("pvmeter").value)){
+      if (JSON.parse(this.activeForm.get("pvmeter").value)) {
         this.equipments.splice(1, 0, this.pvmeterequipment);
       }
     }
   }
 
-  handleEquipmentMarkingBack(){
+  handleEquipmentMarkingBack() {
     this.handleCanvasImageSaveOfMap();
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = this.previousmainmenuindex;
@@ -804,7 +810,7 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
   }
 
-  handleCanvasImageSaveOfMap(){
+  handleCanvasImageSaveOfMap() {
     const canvasarea = document.getElementById('canvasarea');
     domtoimage.toPng(canvasarea)
       .then((dataUrl) => {
