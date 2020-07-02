@@ -1,9 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview/ngx';
 import { ActivatedRoute } from '@angular/router';
 import { GOOGLE_API_KEY } from '../model/constants';
 import { HttpClient } from '@angular/common/http';
-import { NavController, AlertController } from '@ionic/angular';
+import { NavController, AlertController, Platform } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UtilitiesService } from '../utilities.service';
@@ -15,6 +15,7 @@ import { SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import * as domtoimage from 'dom-to-image';
+import html2canvas from 'html2canvas';
 
 export interface MAINMENU {
   name: string;
@@ -89,6 +90,10 @@ export enum VIEWMODE {
   styleUrls: ['./surveyprocess.page.scss'],
 })
 export class SurveyprocessPage implements OnInit {
+
+  @ViewChild('screen', {static: false}) screen: ElementRef;
+  @ViewChild('canvas', {static: false}) canvas: ElementRef;
+  @ViewChild('downloadLink', {static: false}) downloadLink: ElementRef;
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
@@ -201,7 +206,8 @@ export class SurveyprocessPage implements OnInit {
     private alertController: AlertController,
     private utilitieservice: UtilitiesService,
     private apiService: ApiService,
-    private changedetectorref: ChangeDetectorRef) {
+    private changedetectorref: ChangeDetectorRef,
+    private platform : Platform) {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
     this.latitude = +this.route.snapshot.paramMap.get('lat');
@@ -541,8 +547,8 @@ export class SurveyprocessPage implements OnInit {
           if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
             this.handleMenuSwitch();
-          }else{
-            if(!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus){
+          } else {
+            if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus) {
               this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
               this.markShotCompletion(this.selectedshotindex);
               this.updateProgressStatus();
@@ -819,20 +825,16 @@ export class SurveyprocessPage implements OnInit {
 
   handleCanvasImageSaveOfMap() {
     const canvasarea = document.getElementById('canvasarea');
-    domtoimage.toPng(canvasarea)
-      .then((dataUrl) => {
-        console.log(dataUrl);
-        this.equipmentscanvasimage = dataUrl;
-        this.updateProgressStatus();
-    this.startCameraAfterPermission();
-    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-    this.selectedmainmenuindex = this.previousmainmenuindex;
-    this.selectedsubmenuindex = this.previoussubmenuindex;
-    this.selectedshotindex = this.previousshotindex;
-    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-      })
-      .catch((error) => {
-        console.error('Something went wrong. Please try again.', error);
-      });
+    html2canvas(canvasarea, { width: this.platform.width(), height: this.platform.height(), scrollX: 0, scrollY: 0, x: 0 }).then(canvas => {
+      this.equipmentscanvasimage = canvas.toDataURL('image/png');
+      console.log(this.equipmentscanvasimage);
+      this.updateProgressStatus();
+        this.startCameraAfterPermission();
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+        this.selectedmainmenuindex = this.previousmainmenuindex;
+        this.selectedsubmenuindex = this.previoussubmenuindex;
+        this.selectedshotindex = this.previousshotindex;
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+    });
   }
 }

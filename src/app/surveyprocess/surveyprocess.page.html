@@ -328,14 +328,10 @@
 <ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.MAP" id="canvasarea">
   <ion-grid class="ion-no-padding">
     <ion-row>
-      <ion-col>
-        <ion-button class="backbutton" (click)="handleEquipmentMarkingBack()">Back</ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button class="backbutton" (click)="handleEquipmentMarkingSave()">Save</ion-button>
-      </ion-col>
+      <ion-button class="backbutton" (click)="handleEquipmentMarkingBack()">&#x2B05;</ion-button>
+      <ion-button class="savebutton" (click)="handleEquipmentMarkingSave()">Save</ion-button>
     </ion-row>
-    <ion-row class="locationmarkingboundary">
+    <ion-row #screen class="locationmarkingboundary">
       <img [src]="googleimageurl" class="object-fit-contain" style="height: 100vh;" />
     </ion-row>
     <ion-row class="legendscontainer">
