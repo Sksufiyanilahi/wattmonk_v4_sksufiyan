@@ -655,6 +655,7 @@ export class SurveyprocessPage implements OnInit {
             this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
             this.selectedshotindex = 0;
             this.selectedsubmenuindex = 0;
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
 
             this.handleViewModeSwitch();
           }
