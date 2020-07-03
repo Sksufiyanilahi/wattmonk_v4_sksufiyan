@@ -67,6 +67,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   ngOnInit() {
     this.setupCometChatUser();
     this.requestLocationPermission();
+    this.updateUserPushToken();
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
@@ -89,6 +90,12 @@ export class HomepagePage implements OnInit, OnDestroy {
       this.isUserDesigner = true;
       this.route.navigate(['homepage/design']);
     }
+  }
+
+  updateUserPushToken(){
+    this.apiService.updateUser(this.storage.getUserID(), {"pushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
+    }, (error) => {
+    });
   }
 
 

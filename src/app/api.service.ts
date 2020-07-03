@@ -167,4 +167,8 @@ export class ApiService {
   updateresetpassword(userId,data){
     return this.http.put(BaseUrl + '/users/'+ userId,data,{ headers: this.uploadHeaders });
   }
+
+  updateUser(id, data){
+    return this.http.put(BaseUrl + '/users/'+ id, data, { headers: this.uploadHeaders } );
+  }
 }

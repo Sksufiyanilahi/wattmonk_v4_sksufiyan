@@ -56,7 +56,9 @@ export class AppComponent {
   getFcmToken() {
   this.firebase.getToken()
   .then(token => {
-    console.log(`The token is ${token}`)})
+    console.log(`The token is ${token}`)
+    localStorage.setItem('pushtoken', token);
+  })
   .catch(error => {
    console.error('Error getting token', error)});
   }

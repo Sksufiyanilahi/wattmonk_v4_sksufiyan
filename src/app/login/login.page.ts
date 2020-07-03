@@ -78,8 +78,8 @@ export class LoginPage implements OnInit {
               if (response.user.isdefaultpassword) {
                 this.navController.navigateRoot(['changepassword'])
               } else {
-                // this.navController.navigateRoot(['homepage']);
-                this.navController.navigateRoot(['surveyoroverview']);
+                this.navController.navigateRoot(['homepage']);
+                // this.navController.navigateRoot(['surveyoroverview']);
               }
             } else {
               this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
