@@ -28,10 +28,10 @@ import { Router } from '@angular/router';
 import { ROLES } from '../contants';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.page.html',
-    styleUrls: ['./login.page.scss'],
-  }
+  selector: 'app-login',
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
+}
 )
 export class LoginPage implements OnInit {
 
@@ -47,7 +47,7 @@ export class LoginPage implements OnInit {
     private utils: UtilitiesService,
     private apiService: ApiService,
     private storageService: StorageService,
-    private router:Router,
+    private router: Router,
     private navController: NavController) {
     this.isLoggedInOnce = this.storageService.isLoggedInOnce();
   }
@@ -55,9 +55,9 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.loginForm = this.formBuilder.group({
-        identifier: new FormControl(this.storageService.getUserName(), [Validators.required, Validators.pattern(EMAILPATTERN)]),
-        password: new FormControl(this.storageService.getPassword(), [Validators.required, Validators.minLength(6)])
-      }
+      identifier: new FormControl(this.storageService.getUserName(), [Validators.required, Validators.pattern(EMAILPATTERN)]),
+      password: new FormControl(this.storageService.getPassword(), [Validators.required, Validators.minLength(6)])
+    }
     );
 
   }
@@ -69,19 +69,19 @@ export class LoginPage implements OnInit {
         this.apiService.login(this.loginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
-            if(response.user.role.id == ROLES.Surveyor){
-// debugger;
-this.storageService.setUserName(this.loginForm.get('identifier').value);
-this.storageService.setPassword(this.loginForm.get('password').value);
- this.storageService.setUser(response.user, response.jwt);
-this.apiService.refreshHeader();
-if(response.user.isdefaultpassword){
-  this.navController.navigateRoot(['changepassword'])
-}else{ 
-  // this.navController.navigateRoot(['homepage']);
-  this.navController.navigateRoot(['surveyoroverview']);
-}
-            }else{
+            if (response.user.role.id == ROLES.Surveyor) {
+              // debugger;
+              this.storageService.setUserName(this.loginForm.get('identifier').value);
+              this.storageService.setPassword(this.loginForm.get('password').value);
+              this.storageService.setUser(response.user, response.jwt);
+              this.apiService.refreshHeader();
+              if (response.user.isdefaultpassword) {
+                this.navController.navigateRoot(['changepassword'])
+              } else {
+                // this.navController.navigateRoot(['homepage']);
+                this.navController.navigateRoot(['surveyoroverview']);
+              }
+            } else {
               this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
             }
           });
@@ -112,9 +112,9 @@ if(response.user.isdefaultpassword){
     return this.loginForm.get('password');
   }
 
-  changepassword(){
+  changepassword() {
     console.log('rrrrrrrrrrrrrrr');
-    
+
     this.router.navigate(['/changepassword'])
   }
 
