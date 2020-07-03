@@ -353,12 +353,12 @@
   </ion-grid>
 </ion-content>
 
-<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.GALLERY" class="white-bg">
+<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.GALLERY">
   <ion-slides #slides pager="true" [options]="slideOpts" (ionSlidesDidLoad)="this.slideDidChange();" (ionSlideDidChange)="this.slideDidChange();">
     <ion-slide *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
-      <img [src]="shot.shotimage" />
+      <img class="slideimage" [src]="shot.shotimage" />
     </ion-slide>
   </ion-slides>
-  <ion-button class="backbutton" style="z-index: 1000;" (click)="handleGalleryBack()">Back</ion-button>
-  <ion-button class="savebutton" style="z-index: 1000;" (click)="handleShotDelete()">Delete</ion-button>
+  <ion-button fill="clear" class="backbutton z-top" (click)="handleGalleryBack()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
+  <ion-button fill="clear" class="savebutton z-top" (click)="handleShotDelete()"><ion-icon slot="icon-only" name="trash-outline"></ion-icon></ion-button>
 </ion-content>
