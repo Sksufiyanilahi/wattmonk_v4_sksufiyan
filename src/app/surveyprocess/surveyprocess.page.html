@@ -354,10 +354,11 @@
 </ion-content>
 
 <ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.GALLERY" class="white-bg">
-  <ion-slides pager="true" [options]="slideOpts">
+  <ion-slides #slides pager="true" [options]="slideOpts" (ionSlidesDidLoad)="this.slideDidChange();" (ionSlideDidChange)="this.slideDidChange();">
     <ion-slide *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
       <img [src]="shot.shotimage" />
     </ion-slide>
   </ion-slides>
   <ion-button class="backbutton" style="z-index: 1000;" (click)="handleGalleryBack()">Back</ion-button>
+  <ion-button class="savebutton" style="z-index: 1000;" (click)="handleShotDelete()">Delete</ion-button>
 </ion-content>

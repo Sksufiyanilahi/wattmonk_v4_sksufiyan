@@ -3,7 +3,7 @@ import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, Camer
 import { ActivatedRoute } from '@angular/router';
 import { GOOGLE_API_KEY } from '../model/constants';
 import { HttpClient } from '@angular/common/http';
-import { NavController, AlertController, Platform } from '@ionic/angular';
+import { NavController, AlertController, Platform, IonSlides } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UtilitiesService } from '../utilities.service';
@@ -95,16 +95,16 @@ export enum VIEWMODE {
 export class SurveyprocessPage implements OnInit {
 
   @ViewChild('screen', {static: false}) screen: ElementRef;
-  @ViewChild('canvas', {static: false}) canvas: ElementRef;
-  @ViewChild('downloadLink', {static: false}) downloadLink: ElementRef;
+  @ViewChild ('slides', {static: false}) slider: IonSlides;
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
 
   slideOpts = {
-    initialSlide: 1,
     speed: 400
   };
+
+  protected sliderIndex: number = 0;
 
   mainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
@@ -860,13 +860,30 @@ export class SurveyprocessPage implements OnInit {
     this.isgallerymenucollapsed = true;
     this.issidemenucollapsed = true;
     this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
-    console.log(this.previousviewmode);
     this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.GALLERY;
+    setTimeout(() => {
+      var activeshot = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.indexOf(shot);
+      this.slider.slideTo(activeshot, 0);
+   });
   }
 
   handleGalleryBack(){
     this.mainmenuitems[this.selectedmainmenuindex].viewmode = this.previousviewmode;
-    console.log(this.mainmenuitems[this.selectedmainmenuindex].viewmode);
     this.startCameraAfterPermission();
+  }
+
+  handleShotDelete(){
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.sliderIndex].shotstatus = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.sliderIndex].ispending = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.splice(this.sliderIndex, 1);
+    this.markShotCompletion(this.selectedshotindex);
+    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 0){
+      this.handleGalleryBack();
+    }
+  }
+
+  protected async slideDidChange(): Promise<void> {
+    this.sliderIndex = await this.slider.getActiveIndex();
+		return Promise.resolve();
   }
 }
