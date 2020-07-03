@@ -25,6 +25,7 @@ import {
 } from '../model/error.model';
 import { INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../model/constants';
 import { Router } from '@angular/router';
+import { ROLES } from '../contants';
 
 @Component({
     selector: 'app-login',
@@ -68,15 +69,20 @@ export class LoginPage implements OnInit {
         this.apiService.login(this.loginForm.value).subscribe(response => {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
-            // debugger;
-            this.storageService.setUserName(this.loginForm.get('identifier').value);
-            this.storageService.setPassword(this.loginForm.get('password').value);
-             this.storageService.setUser(response.user, response.jwt);
-            this.apiService.refreshHeader();
-            if(response.user.isdefaultpassword){
-              this.navController.navigateRoot(['changepassword'])
-            }else{ 
-              this.navController.navigateRoot(['homepage']);
+            if(response.user.role.id == ROLES.Surveyor){
+// debugger;
+this.storageService.setUserName(this.loginForm.get('identifier').value);
+this.storageService.setPassword(this.loginForm.get('password').value);
+ this.storageService.setUser(response.user, response.jwt);
+this.apiService.refreshHeader();
+if(response.user.isdefaultpassword){
+  this.navController.navigateRoot(['changepassword'])
+}else{ 
+  // this.navController.navigateRoot(['homepage']);
+  this.navController.navigateRoot(['surveyoroverview']);
+}
+            }else{
+              this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
             }
           });
         }, responseError => {

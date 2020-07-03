@@ -81,6 +81,10 @@ const routes: Routes = [
     path: 'surveyprocess/:id/:type/:lat/:long',
     loadChildren: () => import('./surveyprocess/surveyprocess.module').then( m => m.SurveyprocessPageModule),
     canActivate: [AuthGuardService]
+  },
+  {
+    path: 'surveyoroverview',
+    loadChildren: () => import('./surveyoroverview/surveyoroverview.module').then( m => m.SurveyoroverviewPageModule)
   }
 
 ];
