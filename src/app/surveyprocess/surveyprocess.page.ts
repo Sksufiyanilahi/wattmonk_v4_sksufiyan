@@ -3,7 +3,7 @@ import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, Camer
 import { ActivatedRoute } from '@angular/router';
 import { GOOGLE_API_KEY } from '../model/constants';
 import { HttpClient } from '@angular/common/http';
-import { NavController, AlertController, Platform, IonSlides } from '@ionic/angular';
+import { NavController, AlertController, Platform, IonSlides, IonRouterOutlet } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UtilitiesService } from '../utilities.service';
@@ -218,7 +218,8 @@ export class SurveyprocessPage implements OnInit {
     private utilitieservice: UtilitiesService,
     private apiService: ApiService,
     private changedetectorref: ChangeDetectorRef,
-    private platform : Platform) {
+    private platform : Platform,
+    private routeroutlet : IonRouterOutlet) {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
     this.latitude = +this.route.snapshot.paramMap.get('lat');
@@ -269,6 +270,8 @@ export class SurveyprocessPage implements OnInit {
   }
 
   ngOnInit() {
+
+    this.routeroutlet.swipeGesture = false;
     // camera options (Size and location). In the following example, the preview uses the rear camera and display the preview in the back of the webview
     this.cameraPreviewOpts = {
       x: 0,
