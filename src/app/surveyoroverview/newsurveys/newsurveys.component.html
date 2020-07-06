@@ -1,6 +1,6 @@
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="fetchPendingSurveys($event)">
-    <ion-refresher-content></ion-refresher-content>
+  <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull down to refresh" refreshingSpinner="lines"></ion-refresher-content>
   </ion-refresher>
   <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
     <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">

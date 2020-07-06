@@ -38,7 +38,15 @@ export class NewsurveysComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchPendingSurveys(null, true);
+    this.getSurveys(null);
+  }
+
+  getSurveys(event: CustomEvent) {
+    let showLoader = true;
+    if (event != null && event !== undefined) {
+      showLoader = false;
+    }
+    this.fetchPendingSurveys(event, showLoader);
   }
 
   fetchPendingSurveys(event, showLoader: boolean) {
@@ -48,9 +56,6 @@ export class NewsurveysComponent implements OnInit {
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
       this.apiService.getSurveyorSurveys().subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          if (event !== null) {
-            event.target.complete();
-          }
           console.log(response);
           this.listOfSurveyData = response;
           const tempData: SurveyDataHelper[] = [];
@@ -81,6 +86,9 @@ export class NewsurveysComponent implements OnInit {
           });
           this.listOfSurveyDataHelper = tempData;
           this.cdr.detectChanges();
+          if (event !== null) {
+            event.target.complete();
+          }
         });
       }, responseError => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
