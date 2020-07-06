@@ -104,7 +104,7 @@ export class ApiService {
   }
 
   getSurveyorSurveys() {
-    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&status_eq=surveyassigned&status_eq=surveyinprocess', { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&status=surveyassigned&status=surveyinprocess', { headers: this.headers });
   }
 
   refreshHeader() {
