@@ -49,7 +49,8 @@ export class AppComponent {
     });
     if (this.storageService.isUserPresent()) {
       this.apiservice.refreshHeader();
-      this.navController.navigateRoot('homepage');
+      // this.navController.navigateRoot('homepage');
+      this.navController.navigateRoot('surveyoroverview');
     }
   }
 

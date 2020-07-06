@@ -36,3 +36,15 @@ ion-tab-button[aria-selected=true] {
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
 }
+
+.custombadge{
+    background-color: #3c78d8;
+    color: #ffffff;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 8px;
+    padding: 4px;
+    position: absolute;
+    margin-left: 4px;
+}
