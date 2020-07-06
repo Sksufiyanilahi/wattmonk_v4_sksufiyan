@@ -1,0 +1,38 @@
+.bottom-bar {
+    margin: 8px;
+    border-radius: 50px;
+    box-shadow: 0 -2px 8px 0 rgba(0, 0, 0, 0.1);
+    border: 2px solid white;
+    background: #FFFAEB;
+}
+
+.tab {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-bottom: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tabText {
+    margin-left: 8px;
+    font-size: 1em;
+}
+
+.tab-icon {
+    width: 24px;
+    height: 24px;
+}
+
+ion-tab-button {
+    font-size: 1em;
+    --color: #9E9E9E;
+    --color-selected: #3c78d8;
+}
+
+ion-tab-button[aria-selected=true] {
+    border-bottom: 3px solid #3c78d8;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+}

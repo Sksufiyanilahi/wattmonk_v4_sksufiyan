@@ -1,9 +1,51 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>surveyoroverview</ion-title>
+    <ion-title>Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-tabs>
+    <ion-tab-bar slot="top">
+      <ion-tab-button tab="newsurveys">
+        <ion-label>New</ion-label>
+      </ion-tab-button>
+      <ion-tab-button tab="completedsurveys">
+        <ion-label>Completed</ion-label>
+      </ion-tab-button>
+      <ion-tab-button tab="inreviewsurveys">
+        <ion-label>In Review</ion-label>
+      </ion-tab-button>
+      <ion-tab-button tab="deliveredsurveys">
+        <ion-label>Delivered</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-content>
+
+<ion-footer class="ion-no-border white-bg">
+  <div class="position-relative">
+    <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
+      <ion-row>
+        <ion-col size="4">
+          <div class="tab">
+            <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>
+            <span class="tabText">Home</span>
+          </div>
+        </ion-col>
+        <ion-col size="4" [routerLink]="['/message']">
+          <div class="tab">
+            <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
+            <span class="tabText">Messages</span>
+          </div>
+        </ion-col>
+        <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
+          <div class="tab">
+            <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
+            <span class="tabText">Profile</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-footer>

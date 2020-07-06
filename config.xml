@@ -3,7 +3,7 @@
     <name>Wattmonk</name>
     <description>Wattmonk</description>
     <author email="tech@wattmonk.com" href="http://ionicframework.com/">tech@wattmonk.com</author>
-    <content original-src="index.html" src="http://192.168.1.32:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
