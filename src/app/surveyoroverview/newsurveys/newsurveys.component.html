@@ -14,8 +14,11 @@
         </ion-col>
         <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
             <div class="ion-padding custom-card" style="height: 100%;">
-                <span class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
-                      routerDirection="forward">{{surveyData.name}}</span>
+                <p class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
+                      routerDirection="forward">{{surveyData.name}}
+                      <span class="chipdetail" style="background-color: #fa983a;" >Wattmonk</span>
+                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.isoverdue">Overdue</span>
+            </p>
                 <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
                       routerDirection="forward">{{surveyData.email}}</span>
                 <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">

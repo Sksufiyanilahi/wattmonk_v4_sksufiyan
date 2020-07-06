@@ -10,6 +10,8 @@
     font-size: 1.2em;
     color: #434343;
     font-weight: bold;
+    display:table;
+    margin: 0px;
   }
   
   .customer-email {
@@ -37,3 +39,13 @@
     font-size: 0.7em;
   }
   
+  .chipdetail{
+    display: inline;
+    vertical-align: middle;
+    background-color: #95afc0;
+    font-size: 0.4em;
+    padding: 2px 10px;
+    border-radius: 10px;
+    text-align: center;
+    color: #fff;
+}
