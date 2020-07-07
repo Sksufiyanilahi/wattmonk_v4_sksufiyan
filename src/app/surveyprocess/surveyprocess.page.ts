@@ -941,4 +941,13 @@ export class SurveyprocessPage implements OnInit {
     this.sliderIndex = await this.slider.getActiveIndex();
     return Promise.resolve();
   }
+
+  handleFormBack(){
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+    this.selectedmainmenuindex = this.previousmainmenuindex;
+    this.selectedsubmenuindex = this.previoussubmenuindex;
+    this.selectedshotindex = this.previousshotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+    this.startCameraAfterPermission();
+  }
 }
