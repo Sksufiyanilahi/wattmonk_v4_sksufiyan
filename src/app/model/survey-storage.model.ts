@@ -11,4 +11,5 @@ export class SurveyStorageModel {
   selectedmainmenuindex : number;
   selectedsubmenuindex : number;
   selectedshotindex : number;
+  shotcompletecount : number;
 }

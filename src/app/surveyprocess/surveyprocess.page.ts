@@ -265,6 +265,7 @@ export class SurveyprocessPage implements OnInit {
           this.selectedmainmenuindex = data.selectedmainmenuindex;
           this.selectedsubmenuindex = data.selectedsubmenuindex;
           this.selectedshotindex = data.selectedshotindex;
+          this.shotcompletecount = data.shotcompletecount;
 
           // restore form
         Object.keys(data.formdata).forEach((key: string) => {
@@ -681,6 +682,7 @@ export class SurveyprocessPage implements OnInit {
     surveyStorageModel.selectedmainmenuindex = this.selectedmainmenuindex;
     surveyStorageModel.selectedsubmenuindex = this.selectedsubmenuindex;
     surveyStorageModel.selectedshotindex = this.selectedshotindex;
+    surveyStorageModel.shotcompletecount = this.shotcompletecount;
     return surveyStorageModel;
   }
 
