@@ -14,8 +14,9 @@ import { InverterMadeModel } from '../model/inverter-made.model';
 import { SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
-import * as domtoimage from 'dom-to-image';
 import html2canvas from 'html2canvas';
+import { SurveyStorageModel } from '../model/survey-storage.model';
+import { Storage } from '@ionic/storage';
 
 export interface MAINMENU {
   name: string;
@@ -94,8 +95,8 @@ export enum VIEWMODE {
 })
 export class SurveyprocessPage implements OnInit {
 
-  @ViewChild('screen', {static: false}) screen: ElementRef;
-  @ViewChild ('slides', {static: false}) slider: IonSlides;
+  @ViewChild('screen', { static: false }) screen: ElementRef;
+  @ViewChild('slides', { static: false }) slider: IonSlides;
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
@@ -105,6 +106,8 @@ export class SurveyprocessPage implements OnInit {
   };
 
   protected sliderIndex: number = 0;
+
+  surveystoreddata = {};
 
   mainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
@@ -148,7 +151,7 @@ export class SurveyprocessPage implements OnInit {
   solarmakes: SolarMake[] = [];
   solarmodels: SolarMadeModel[] = [];
 
-  galleryshots : CAPTUREDSHOT[];
+  galleryshots: CAPTUREDSHOT[];
 
   equipments: Equipment[] = [{
     id: 3,
@@ -215,11 +218,12 @@ export class SurveyprocessPage implements OnInit {
     private diagnostic: Diagnostic,
     private navController: NavController,
     private alertController: AlertController,
+    private storage: Storage,
     private utilitieservice: UtilitiesService,
     private apiService: ApiService,
     private changedetectorref: ChangeDetectorRef,
-    private platform : Platform,
-    private routeroutlet : IonRouterOutlet) {
+    private platform: Platform,
+    private routeroutlet: IonRouterOutlet) {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
     this.latitude = +this.route.snapshot.paramMap.get('lat');
@@ -250,12 +254,22 @@ export class SurveyprocessPage implements OnInit {
         interconnection: new FormControl('', [Validators.required]),
         status: new FormControl('surveycompleted', [Validators.required])
       });
-      this.http
-        .get("assets/surveyprocessjson/battery.json")
-        .subscribe((data) => {
-          this.mainmenuitems = JSON.parse(JSON.stringify(data));
-          this.isdataloaded = true;
-        });
+
+      this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
+        console.log(data);
+        if (data) {
+          this.mainmenuitems = data.menuitems;
+          this.totalpercent = data.currentprogress;
+          this.isdataloaded = true
+        } else {
+          this.http
+            .get("assets/surveyprocessjson/battery.json")
+            .subscribe((data) => {
+              this.mainmenuitems = JSON.parse(JSON.stringify(data));
+              this.isdataloaded = true;
+            });
+        }
+      });
 
       this.activeForm = this.batteryForm;
 
@@ -631,7 +645,21 @@ export class SurveyprocessPage implements OnInit {
   }
 
   handleSurveyExit() {
+    this.cameraPreview.stopCamera();
 
+    const data = this.preapresurveystorage();
+    data.saved = true;
+    this.storage.set(this.surveyid + '', data);
+
+    this.navController.navigateBack('surveyoroverview');
+  }
+
+  preapresurveystorage(): SurveyStorageModel {
+    const surveyStorageModel = new SurveyStorageModel();
+    surveyStorageModel.menuitems = this.mainmenuitems;
+    surveyStorageModel.currentprogress = this.totalpercent;
+    surveyStorageModel.formData = this.activeForm.value;
+    return surveyStorageModel;
   }
 
   handleExistence(doesexist: boolean) {
@@ -849,16 +877,16 @@ export class SurveyprocessPage implements OnInit {
       this.equipmentscanvasimage = canvas.toDataURL('image/png');
       console.log(this.equipmentscanvasimage);
       this.updateProgressStatus();
-        this.startCameraAfterPermission();
-        this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-        this.selectedmainmenuindex = this.previousmainmenuindex;
-        this.selectedsubmenuindex = this.previoussubmenuindex;
-        this.selectedshotindex = this.previousshotindex;
-        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+      this.startCameraAfterPermission();
+      this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+      this.selectedmainmenuindex = this.previousmainmenuindex;
+      this.selectedsubmenuindex = this.previoussubmenuindex;
+      this.selectedshotindex = this.previousshotindex;
+      this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
     });
   }
 
-  handleGalleryViewSwitch(shot: CAPTUREDSHOT){
+  handleGalleryViewSwitch(shot: CAPTUREDSHOT) {
     this.stopCamera();
     this.isgallerymenucollapsed = true;
     this.issidemenucollapsed = true;
@@ -867,26 +895,26 @@ export class SurveyprocessPage implements OnInit {
     setTimeout(() => {
       var activeshot = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.indexOf(shot);
       this.slider.slideTo(activeshot, 0);
-   });
+    });
   }
 
-  handleGalleryBack(){
+  handleGalleryBack() {
     this.mainmenuitems[this.selectedmainmenuindex].viewmode = this.previousviewmode;
     this.startCameraAfterPermission();
   }
 
-  handleShotDelete(){
+  handleShotDelete() {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.sliderIndex].shotstatus = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.sliderIndex].ispending = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.splice(this.sliderIndex, 1);
     this.markShotCompletion(this.selectedshotindex);
-    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 0){
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 0) {
       this.handleGalleryBack();
     }
   }
 
   protected async slideDidChange(): Promise<void> {
     this.sliderIndex = await this.slider.getActiveIndex();
-		return Promise.resolve();
+    return Promise.resolve();
   }
 }

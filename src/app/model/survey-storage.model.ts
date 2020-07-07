@@ -4,4 +4,8 @@ export class SurveyStorageModel {
   formData: any;
   saved: boolean;
   surveyId: number;
+
+  menuitems : any;
+  formdata: any;
+  currentprogress : number;
 }

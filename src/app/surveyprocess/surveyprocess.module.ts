@@ -8,9 +8,7 @@ import { SurveyprocessPageRoutingModule } from './surveyprocess-routing.module';
 
 import { SurveyprocessPage } from './surveyprocess.page';
 import { CameraPreview } from '@ionic-native/camera-preview/ngx';
-import { Base64ToGallery } from '@ionic-native/base64-to-gallery/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { UtilitiesModule } from '../utilities/utilities.module';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
