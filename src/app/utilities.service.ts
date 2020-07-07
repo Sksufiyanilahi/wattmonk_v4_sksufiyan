@@ -216,5 +216,15 @@ export class UtilitiesService {
     return new Blob([ab], { type: mimeString });
   }
 
+  getJobTypeName(type) {
+    if (type == "pvbattery") {
+      return "PV + Battery";
+    } else if (type == "battery") {
+      return "Battery";
+    } else {
+      return "PV";
+    }
+  }
+
 
 }

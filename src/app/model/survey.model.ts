@@ -53,6 +53,9 @@ export class SurveyDataModel {
   status: string;
   latitude: string;
   longitude: string;
+  totalpercent : number;
+  isoverdue : boolean;
+  formattedjobtype : string;
 }
 
 

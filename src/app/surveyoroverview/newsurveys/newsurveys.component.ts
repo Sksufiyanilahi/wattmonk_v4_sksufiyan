@@ -7,6 +7,8 @@ import { DatePipe } from '@angular/common';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ApiService } from 'src/app/api.service';
 import { ErrorModel } from 'src/app/model/error.model';
+import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-newsurveys',
@@ -30,6 +32,7 @@ export class NewsurveysComponent implements OnInit {
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
+    private storage: Storage,
     private apiService: ApiService) {
       console.log("inside new surveys");
     const latestDate = new Date();
@@ -57,7 +60,7 @@ export class NewsurveysComponent implements OnInit {
       this.apiService.getSurveyorSurveys().subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.listOfSurveyData = response;
+          this.listOfSurveyData = this.fillinDynamicData(response);
           const tempData: SurveyDataHelper[] = [];
           this.listOfSurveyData.forEach((surveyItem) => {
             if (tempData.length === 0) {
@@ -104,6 +107,22 @@ export class NewsurveysComponent implements OnInit {
 
   openAddressOnMap(address: string) {
     this.launchNavigator.navigate(address, this.options);
+  }
+
+  fillinDynamicData(records : SurveyDataModel[]) : SurveyDataModel[]{
+    records.forEach(element => {
+      element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
+      this.storage.get(''+element.id).then((data: SurveyStorageModel) => {
+        console.log(data);
+        if (data) {
+          element.totalpercent = data.currentprogress;
+        }else{
+          element.totalpercent = 0;
+        }
+      });
+    });
+
+    return records;
   }
 
 }

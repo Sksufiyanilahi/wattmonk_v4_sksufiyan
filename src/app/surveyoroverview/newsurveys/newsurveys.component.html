@@ -29,7 +29,7 @@
 
                 <ion-row style="margin-bottom: 8px;">
                     <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                    <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.jobtype}}</span>
+                    <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
                       <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.isoverdue">Overdue</span>
                 </ion-row>
                 <ion-row class="ion-no-margin ion-no-margin">
@@ -41,8 +41,8 @@
                         </ion-button>
                     </ion-col>
                 </ion-row>
+                <ion-progress-bar [value]="surveyData.totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
             </div>
-
         </ion-col>
     </ion-row>
     <ion-row>
