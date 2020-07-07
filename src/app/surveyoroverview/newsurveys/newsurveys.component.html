@@ -13,7 +13,7 @@
                 </span>
         </ion-col>
         <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
-            <div class="ion-padding custom-card" style="height: 100%;">
+            <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
                       routerDirection="forward">{{surveyData.name}}
                       <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
@@ -29,12 +29,13 @@
 
                 <ion-row style="margin-bottom: 8px;">
                     <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
+                    <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.jobtype}}</span>
                       <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.isoverdue">Overdue</span>
                 </ion-row>
                 <ion-row class="ion-no-margin ion-no-margin">
                     <ion-col></ion-col>
                     <ion-col class="ion-no-margin ion-no-padding">
-                        <ion-button class="ion-no-margin" fill="clear" [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
+                        <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                         routerDirection="forward">
                             Start Survey
                         </ion-button>
