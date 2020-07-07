@@ -20,7 +20,7 @@ export class NewsurveysComponent implements OnInit {
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
-  routeSubscription: Subscription;
+  private dataRefreshSubscription: Subscription;
 
   today: any;
   options: LaunchNavigatorOptions = {
@@ -41,15 +41,15 @@ export class NewsurveysComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getSurveys(null);
-  }
+    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+      this.getSurveys(null);
+    });
 
-  ionViewDidEnter(){
-    console.log("got back");
-    if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-      console.log("reloading data");
-      this.formatSurveyData(this.listOfSurveyData);
-    }
+    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+      if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+        this.formatSurveyData(this.listOfSurveyData);
+      }
+    });
   }
 
   getSurveys(event: CustomEvent) {
@@ -65,7 +65,7 @@ export class NewsurveysComponent implements OnInit {
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
-      this.apiService.getSurveyorSurveys().subscribe(response => {
+      this.apiService.getSurveyorSurveys("status=surveyassigned&status=surveyinprocess").subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           this.formatSurveyData(response);

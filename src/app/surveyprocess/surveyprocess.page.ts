@@ -671,6 +671,7 @@ export class SurveyprocessPage implements OnInit {
     data.saved = true;
     this.storage.set(this.surveyid + '', data);
 
+    this.utilitieservice.setDataRefresh(true);
     this.navController.navigateBack('surveyoroverview');
   }
 
@@ -855,8 +856,8 @@ export class SurveyprocessPage implements OnInit {
         this.utilitieservice.showSuccessModal('Survey have been saved').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
-            this.navController.navigateRoot('homepage');
             this.utilitieservice.sethomepageSurveyRefresh(true);
+            this.navController.navigateRoot('surveyoroverview');
           });
         });
       });

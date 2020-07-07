@@ -103,8 +103,8 @@ export class ApiService {
     return this.http.put<SurveyDataModel>(BaseUrl + '/surveys/' + id, data, { headers: this.headers });
   }
 
-  getSurveyorSurveys() {
-    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&status=surveyassigned&status=surveyinprocess', { headers: this.headers });
+  getSurveyorSurveys(search : string) {
+    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search, { headers: this.headers });
   }
 
   refreshHeader() {

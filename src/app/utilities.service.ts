@@ -30,6 +30,8 @@ export class UtilitiesService {
   designDetailsRefresh = new BehaviorSubject<boolean>(false);
   showBottomBarHomepage = new BehaviorSubject<boolean>(true);
 
+  dataRefresh = new BehaviorSubject<boolean>(false);
+
   constructor(
     public loadingController: LoadingController,
     private toastController: ToastController,
@@ -62,6 +64,13 @@ export class UtilitiesService {
     this.homepageSurveyRefresh.next(refresh);
   }
 
+  getDataRefresh() : BehaviorSubject<boolean>{
+    return this.dataRefresh;
+  }
+
+  setDataRefresh(refresh: boolean){
+    this.dataRefresh.next(refresh);
+  }
 
   getSurveyDetailsRefresh(): BehaviorSubject<boolean> {
     return this.surveyDetailsRefresh;
