@@ -44,6 +44,14 @@ export class NewsurveysComponent implements OnInit {
     this.getSurveys(null);
   }
 
+  ionViewDidEnter(){
+    console.log("got back");
+    if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+      console.log("reloading data");
+      this.formatSurveyData(this.listOfSurveyData);
+    }
+  }
+
   getSurveys(event: CustomEvent) {
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -60,8 +68,30 @@ export class NewsurveysComponent implements OnInit {
       this.apiService.getSurveyorSurveys().subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.listOfSurveyData = this.fillinDynamicData(response);
-          const tempData: SurveyDataHelper[] = [];
+          this.formatSurveyData(response);
+          if (event !== null) {
+            event.target.complete();
+          }
+        });
+      }, responseError => {
+        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+          if (event !== null) {
+            event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  openAddressOnMap(address: string) {
+    this.launchNavigator.navigate(address, this.options);
+  }
+
+  formatSurveyData(records : SurveyDataModel[]){
+    this.listOfSurveyData = this.fillinDynamicData(records);
+    const tempData: SurveyDataHelper[] = [];
           this.listOfSurveyData.forEach((surveyItem) => {
             if (tempData.length === 0) {
               const listOfSurvey = new SurveyDataHelper();
@@ -89,24 +119,6 @@ export class NewsurveysComponent implements OnInit {
           });
           this.listOfSurveyDataHelper = tempData;
           this.cdr.detectChanges();
-          if (event !== null) {
-            event.target.complete();
-          }
-        });
-      }, responseError => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          if (event !== null) {
-            event.target.complete();
-          }
-          const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
-        });
-      });
-    });
-  }
-
-  openAddressOnMap(address: string) {
-    this.launchNavigator.navigate(address, this.options);
   }
 
   fillinDynamicData(records : SurveyDataModel[]) : SurveyDataModel[]{
