@@ -184,7 +184,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
-      this.apiService.getSurveyorSurveys().subscribe(response => {
+      this.apiService.getSurveyorSurveys("").subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           if (event !== null) {
             event.target.complete();

@@ -321,6 +321,16 @@ export class SurveyprocessPage implements OnInit {
     }
 
     this.startCamera();
+
+    setTimeout(() => {
+      this.cameraPreview.getMaxZoom().then((value) => {
+        this.maxzoom = value;
+        if (this.maxzoom > 5) {
+          this.maxzoom = 5;
+        }
+      }, (error) => {
+      });
+    }, 2000);
   }
 
   getUtilities() {
@@ -517,13 +527,6 @@ export class SurveyprocessPage implements OnInit {
         },
         (err) => {
         });
-      this.cameraPreview.getMaxZoom().then((value) => {
-        this.maxzoom = value;
-        if (this.maxzoom > 5) {
-          this.maxzoom = 5;
-        }
-      }, (error) => {
-      })
     } else {
     }
   }
