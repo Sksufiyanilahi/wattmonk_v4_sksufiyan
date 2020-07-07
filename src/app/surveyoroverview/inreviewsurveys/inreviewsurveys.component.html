@@ -30,7 +30,8 @@
                 <ion-row style="margin-bottom: 8px;">
                     <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
                     <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
-                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.isoverdue">Overdue</span>
+                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.status == 'reviewfailed'">Failed</span>
+                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="survey.status == 'reviewpassed'">Passed</span>
                 </ion-row>
                 <ion-row class="ion-no-margin ion-no-margin" *ngIf="surveyData.status == 'reviewfailed'">
                     <ion-col></ion-col>
