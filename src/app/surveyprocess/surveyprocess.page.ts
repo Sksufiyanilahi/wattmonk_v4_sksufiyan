@@ -5,7 +5,7 @@ import { GOOGLE_API_KEY } from '../model/constants';
 import { HttpClient } from '@angular/common/http';
 import { NavController, AlertController, Platform, IonSlides, IonRouterOutlet } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { UtilitiesService } from '../utilities.service';
 import { ApiService } from '../api.service';
 import { InverterMakeModel } from '../model/inverter-make.model';
@@ -260,7 +260,15 @@ export class SurveyprocessPage implements OnInit {
         if (data) {
           this.mainmenuitems = data.menuitems;
           this.totalpercent = data.currentprogress;
-          this.isdataloaded = true
+
+          // restore form
+        Object.keys(data.formdata).forEach((key: string) => {
+          let control: AbstractControl = null;
+          control = this.activeForm.get(key);
+          control.setValue(data.formdata[key]);
+        });
+
+          this.isdataloaded = true;
         } else {
           this.http
             .get("assets/surveyprocessjson/battery.json")
