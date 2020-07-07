@@ -8,4 +8,7 @@ export class SurveyStorageModel {
   menuitems : any;
   formdata: any;
   currentprogress : number;
+  selectedmainmenuindex : number;
+  selectedsubmenuindex : number;
+  selectedshotindex : number;
 }

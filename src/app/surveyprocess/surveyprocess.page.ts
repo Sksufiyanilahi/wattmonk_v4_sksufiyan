@@ -251,15 +251,20 @@ export class SurveyprocessPage implements OnInit {
         pvinverterlocation: new FormControl('', [Validators.required]),
         pvmeter: new FormControl('', [Validators.required]),
         acdisconnect: new FormControl('', [Validators.required]),
-        interconnection: new FormControl('', [Validators.required]),
-        status: new FormControl('surveycompleted', [Validators.required])
+        interconnection: new FormControl('', [Validators.required])
       });
 
+      this.activeForm = this.batteryForm;
+
+      // this.storage.clear();
       this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
         console.log(data);
         if (data) {
           this.mainmenuitems = data.menuitems;
           this.totalpercent = data.currentprogress;
+          this.selectedmainmenuindex = data.selectedmainmenuindex;
+          this.selectedsubmenuindex = data.selectedsubmenuindex;
+          this.selectedshotindex = data.selectedshotindex;
 
           // restore form
         Object.keys(data.formdata).forEach((key: string) => {
@@ -269,24 +274,30 @@ export class SurveyprocessPage implements OnInit {
         });
 
           this.isdataloaded = true;
+
+          this.activeForm.get('invertermake').valueChanges.subscribe(val => {
+            this.getInverterModels(this.activeForm.get('invertermake').value.id);
+          });
+    
+          this.activeForm.get('modulemake').valueChanges.subscribe(val => {
+            this.getSolarModels(this.activeForm.get('modulemake').value.id);
+          });
         } else {
           this.http
             .get("assets/surveyprocessjson/battery.json")
             .subscribe((data) => {
               this.mainmenuitems = JSON.parse(JSON.stringify(data));
               this.isdataloaded = true;
+
+              this.activeForm.get('invertermake').valueChanges.subscribe(val => {
+                this.getInverterModels(this.activeForm.get('invertermake').value.id);
+              });
+        
+              this.activeForm.get('modulemake').valueChanges.subscribe(val => {
+                this.getSolarModels(this.activeForm.get('modulemake').value.id);
+              });
             });
         }
-      });
-
-      this.activeForm = this.batteryForm;
-
-      this.activeForm.get('invertermake').valueChanges.subscribe(val => {
-        this.getInverterModels(this.activeForm.get('invertermake').value.id);
-      });
-
-      this.activeForm.get('modulemake').valueChanges.subscribe(val => {
-        this.getSolarModels(this.activeForm.get('modulemake').value.id);
       });
     }
   }
@@ -666,7 +677,10 @@ export class SurveyprocessPage implements OnInit {
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.menuitems = this.mainmenuitems;
     surveyStorageModel.currentprogress = this.totalpercent;
-    surveyStorageModel.formData = this.activeForm.value;
+    surveyStorageModel.formdata = this.activeForm.value;
+    surveyStorageModel.selectedmainmenuindex = this.selectedmainmenuindex;
+    surveyStorageModel.selectedsubmenuindex = this.selectedsubmenuindex;
+    surveyStorageModel.selectedshotindex = this.selectedshotindex;
     return surveyStorageModel;
   }
 
