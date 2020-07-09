@@ -31,14 +31,14 @@
                     <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
                     <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
                       <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.status == 'reviewfailed'">Failed</span>
-                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="survey.status == 'reviewpassed'">Passed</span>
+                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="surveyData.status == 'reviewpassed'">Passed</span>
                 </ion-row>
                 <ion-row class="ion-no-margin ion-no-margin" *ngIf="surveyData.status == 'reviewfailed'">
                     <ion-col></ion-col>
                     <ion-col class="ion-no-margin ion-no-padding">
                         <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                         routerDirection="forward">
-                            Start Survey
+                            Restart Survey
                         </ion-button>
                     </ion-col>
                 </ion-row>
