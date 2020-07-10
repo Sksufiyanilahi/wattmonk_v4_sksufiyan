@@ -172,6 +172,32 @@
       </ion-col>
     </ion-row>
 
+    <!-- Row for question type 5 -->
+    <ion-row class="questionaireview-row ion-padding-horizontal"
+      *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_SHOT_NAME">
+      <ion-col size="12">
+        <p>
+          {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+        </p>
+        <form [formGroup]="activeForm" novalidate>
+          <ion-input type="text" class="form-control" autocomplete="off"
+            formControlName="shotname">
+          </ion-input>
+          <div class="error_div">
+            <div
+              *ngIf="activeForm.get(shotname).dirty">
+              <span class="error">Field input is required.</span>
+            </div>
+          </div>
+        </form>
+        <ion-row class="ion-float-right">
+          <ion-button fill="clear" size="small" (click)="handleShotNameSubmission(activeForm)">
+            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
+          </ion-button>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
     <!-- Row for utilities questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
       *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_UTILITIES_AUTOCOMPLETE">

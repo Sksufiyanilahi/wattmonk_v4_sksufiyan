@@ -80,6 +80,7 @@ export enum QUESTIONTYPE {
   INPUT_NUMBER = 2,
   INPUT_UTILITIES_AUTOCOMPLETE = 3,
   INPUT_INVERTER_AUTOCOMPLETE = 4,
+  INPUT_SHOT_NAME = 5
 }
 
 export enum VIEWMODE {
@@ -252,7 +253,8 @@ export class SurveyprocessPage implements OnInit {
         pvinverterlocation: new FormControl('', [Validators.required]),
         pvmeter: new FormControl('', [Validators.required]),
         acdisconnect: new FormControl('', [Validators.required]),
-        interconnection: new FormControl('', [Validators.required])
+        interconnection: new FormControl('', [Validators.required]),
+        shotname: new FormControl('', [Validators.required])
       });
 
       this.activeForm = this.batteryForm;
@@ -640,6 +642,18 @@ export class SurveyprocessPage implements OnInit {
     } else {
       control.markAsTouched();
       control.markAsDirty();
+    }
+  }
+
+  handleShotNameSubmission(form: FormGroup){
+    var shotnameformcontrol = form.get("shotname");
+    if (shotnameformcontrol.value != "") {
+      var shots = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots;
+      shots[shots.length - 1].imagename = shotnameformcontrol.value;
+      console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots);
+    } else {
+      shotnameformcontrol.markAsTouched();
+      shotnameformcontrol.markAsDirty();
     }
   }
 
