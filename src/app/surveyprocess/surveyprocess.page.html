@@ -2,7 +2,7 @@
   <ion-progress-bar [value]="totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
 </ion-header>
 
-<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
+<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA" [forceOverscroll]="false">
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-row style="width: 100%;" *ngIf="isdataloaded">
@@ -234,7 +234,7 @@
   </ion-grid>
 </ion-content>
 
-<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
+<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM" [forceOverscroll]="false">
   <form [formGroup]="activeForm" class="white-bg" *ngIf="surveytype === 'battery'">
     <p class="formheader">Additional Information</p>
     <ion-grid class="ion-padding">
@@ -325,7 +325,7 @@
   </form>
 </ion-content>
 
-<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.MAP" id="canvasarea">
+<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.MAP" id="canvasarea" [forceOverscroll]="false">
   <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-button fill="clear" class="backbutton" (click)="handleEquipmentMarkingBack()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
@@ -352,7 +352,7 @@
   </ion-grid>
 </ion-content>
 
-<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.GALLERY">
+<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.GALLERY" [forceOverscroll]="false">
   <ion-slides #slides pager="true" [options]="slideOpts" (ionSlidesDidLoad)="this.slideDidChange();" (ionSlideDidChange)="this.slideDidChange();">
     <ion-slide *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
       <img class="slideimage" [src]="shot.shotimage" />

@@ -21,6 +21,7 @@ import { Storage } from '@ionic/storage';
 export interface MAINMENU {
   name: string;
   isactive: boolean;
+  ispending: boolean;
   viewmode: number;
   children: CHILDREN[];
 }
@@ -268,18 +269,18 @@ export class SurveyprocessPage implements OnInit {
           this.shotcompletecount = data.shotcompletecount;
 
           // restore form
-        Object.keys(data.formdata).forEach((key: string) => {
-          let control: AbstractControl = null;
-          control = this.activeForm.get(key);
-          control.setValue(data.formdata[key]);
-        });
+          Object.keys(data.formdata).forEach((key: string) => {
+            let control: AbstractControl = null;
+            control = this.activeForm.get(key);
+            control.setValue(data.formdata[key]);
+          });
 
           this.isdataloaded = true;
 
           this.activeForm.get('invertermake').valueChanges.subscribe(val => {
             this.getInverterModels(this.activeForm.get('invertermake').value.id);
           });
-    
+
           this.activeForm.get('modulemake').valueChanges.subscribe(val => {
             this.getSolarModels(this.activeForm.get('modulemake').value.id);
           });
@@ -293,7 +294,7 @@ export class SurveyprocessPage implements OnInit {
               this.activeForm.get('invertermake').valueChanges.subscribe(val => {
                 this.getInverterModels(this.activeForm.get('invertermake').value.id);
               });
-        
+
               this.activeForm.get('modulemake').valueChanges.subscribe(val => {
                 this.getSolarModels(this.activeForm.get('modulemake').value.id);
               });
@@ -763,7 +764,19 @@ export class SurveyprocessPage implements OnInit {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
         }
       });
+
+      this.markMainMenuCompletion();
     }
+  }
+
+  markMainMenuCompletion() {
+    var ispendingset = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
+      if (element.ispending && !ispendingset) {
+        ispendingset = true;
+        this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+      }
+    });
   }
 
   updateProgressStatus() {
@@ -771,40 +784,75 @@ export class SurveyprocessPage implements OnInit {
     this.totalpercent = (this.shotcompletecount / this.totalstepcount);
   }
 
-  handleCompleteSurveyDataSubmission() {
-    this.utilitieservice.showLoading('Saving Survey').then(() => {
-      const data = {
-        modulemake: this.batteryForm.get("modulemake").value.id,
-        modulemodel: this.batteryForm.get("modulemodel").value.id,
-        invertermake: this.batteryForm.get("invertermake").value.name,
-        invertermodel: this.batteryForm.get("invertermodel").value.name,
-        numberofmodules: parseInt(this.batteryForm.get("numberofmodules").value),
-        additionalnotes: this.batteryForm.get("additionalnotes").value,
-        batterybackup: this.batteryForm.get("batterybackup").value,
-        servicefeedsource: this.batteryForm.get("servicefeedsource").value,
-        mainbreakersize: parseInt(this.batteryForm.get("mainbreakersize").value),
-        msprating: parseInt(this.batteryForm.get("msprating").value),
-        msplocation: this.batteryForm.get("msplocation").value,
-        mspbreaker: this.batteryForm.get("mspbreaker").value,
-        utilitymeter: this.batteryForm.get("utilitymeter").value,
-        utility: this.batteryForm.get("utility").value.id,
-        pvinverterlocation: this.batteryForm.get("pvinverterlocation").value,
-        pvmeter: JSON.parse(this.batteryForm.get("pvmeter").value),
-        acdisconnect: JSON.parse(this.batteryForm.get("acdisconnect").value),
-        interconnection: this.batteryForm.get("interconnection").value,
-        status: 'surveycompleted'
+  checkProcessCompletion(): boolean {
+    var ispendingset = false;
+    var checkstatus = false;
+    this.mainmenuitems.forEach(element => {
+      if (element.ispending && !ispendingset) {
+        ispendingset = true;
+        checkstatus = true;
       }
-      this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.updateProgressStatus();
-          this.uploadImagesToServer();
-        });
-      }, (error) => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.utilitieservice.errorSnackBar(JSON.stringify(error));
+    });
+    return checkstatus;
+  }
+
+  handleCompleteSurveyDataSubmission() {
+    if (this.checkProcessCompletion()) {
+      this.utilitieservice.showLoading('Saving Survey').then(() => {
+        const data = {
+          modulemake: this.batteryForm.get("modulemake").value.id,
+          modulemodel: this.batteryForm.get("modulemodel").value.id,
+          invertermake: this.batteryForm.get("invertermake").value.name,
+          invertermodel: this.batteryForm.get("invertermodel").value.name,
+          numberofmodules: parseInt(this.batteryForm.get("numberofmodules").value),
+          additionalnotes: this.batteryForm.get("additionalnotes").value,
+          batterybackup: this.batteryForm.get("batterybackup").value,
+          servicefeedsource: this.batteryForm.get("servicefeedsource").value,
+          mainbreakersize: parseInt(this.batteryForm.get("mainbreakersize").value),
+          msprating: parseInt(this.batteryForm.get("msprating").value),
+          msplocation: this.batteryForm.get("msplocation").value,
+          mspbreaker: this.batteryForm.get("mspbreaker").value,
+          utilitymeter: this.batteryForm.get("utilitymeter").value,
+          utility: this.batteryForm.get("utility").value.id,
+          pvinverterlocation: this.batteryForm.get("pvinverterlocation").value,
+          pvmeter: JSON.parse(this.batteryForm.get("pvmeter").value),
+          acdisconnect: JSON.parse(this.batteryForm.get("acdisconnect").value),
+          interconnection: this.batteryForm.get("interconnection").value,
+          status: 'surveycompleted'
+        }
+        this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
+          this.utilitieservice.hideLoading().then(() => {
+            this.updateProgressStatus();
+            this.uploadImagesToServer();
+          });
+        }, (error) => {
+          this.utilitieservice.hideLoading().then(() => {
+            this.utilitieservice.errorSnackBar(JSON.stringify(error));
+          });
         });
       });
+    } else {
+      this.displayAlertForRemainingShots();
+    }
+  }
+
+  async displayAlertForRemainingShots() {
+    const alert = await this.alertController.create({
+      header: 'Incomplete',
+      subHeader: 'Try submitting the survey once all required information is filled.',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+
+          }
+        }
+      ],
+      backdropDismiss: false
     });
+    await alert.present();
   }
 
   uploadImagesToServer() {
@@ -947,7 +995,7 @@ export class SurveyprocessPage implements OnInit {
     return Promise.resolve();
   }
 
-  handleFormBack(){
+  handleFormBack() {
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = this.previousmainmenuindex;
     this.selectedsubmenuindex = this.previoussubmenuindex;

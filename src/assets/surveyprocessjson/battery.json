@@ -2,6 +2,7 @@
     {
         "name":"Electricals",
         "isactive": true,
+        "ispending": true,
         "viewmode": 0,
         "children":[
             {
@@ -245,6 +246,7 @@
     {
         "name": "Solar",
         "isactive": false,
+        "ispending": true,
         "viewmode": 0,
         "children":[
             {
@@ -280,6 +282,7 @@
     {
         "name": "Roof",
         "isactive": false,
+        "ispending": true,
         "viewmode": 0,
         "children":[
             {
@@ -315,6 +318,7 @@
     {
         "name": "Appliances",
         "isactive": false,
+        "ispending": true,
         "viewmode": 0,
         "children":[
             {
@@ -350,12 +354,14 @@
     {
         "name": "Marking",
         "isactive": false,
+        "ispending": true,
         "viewmode": 2,
         "children":[]
     },
     {
         "name": "Details",
         "isactive": false,
+        "ispending": true,
         "viewmode": 1,
         "children":[]
     }
