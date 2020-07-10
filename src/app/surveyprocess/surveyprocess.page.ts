@@ -293,6 +293,12 @@ export class SurveyprocessPage implements OnInit {
               this.mainmenuitems = JSON.parse(JSON.stringify(data));
               this.isdataloaded = true;
 
+              this.mainmenuitems.forEach(element => {
+                if (element.isactive) {
+                  this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+                }
+              });
+
               this.activeForm.get('invertermake').valueChanges.subscribe(val => {
                 this.getInverterModels(this.activeForm.get('invertermake').value.id);
               });
@@ -651,6 +657,11 @@ export class SurveyprocessPage implements OnInit {
       var shots = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots;
       shots[shots.length - 1].imagename = shotnameformcontrol.value;
       console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots);
+      this.iscapturingallowed = true;
+      this.issidemenucollapsed = true;
+      this.isgallerymenucollapsed = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
+      form.get("shotname").setValue("");
     } else {
       shotnameformcontrol.markAsTouched();
       shotnameformcontrol.markAsDirty();

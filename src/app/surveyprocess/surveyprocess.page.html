@@ -185,7 +185,7 @@
           </ion-input>
           <div class="error_div">
             <div
-              *ngIf="activeForm.get(shotname).dirty">
+            *ngIf="activeForm.get('shotname').value === '' && activeForm.get('shotname').dirty">
               <span class="error">Field input is required.</span>
             </div>
           </div>
