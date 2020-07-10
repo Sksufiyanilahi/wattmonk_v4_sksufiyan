@@ -402,6 +402,7 @@ export class SurveyprocessPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           this.solarmakes = response;
           this.changedetectorref.detectChanges();
+          this.getUtilities();
         });
       }, responseError => {
         this.utilitieservice.hideLoading().then(() => {
@@ -790,7 +791,7 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems.forEach(element => {
       if (element.ispending && !ispendingset) {
         ispendingset = true;
-        checkstatus = true;
+        checkstatus = false;
       }
     });
     return checkstatus;
