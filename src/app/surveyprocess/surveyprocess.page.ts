@@ -459,6 +459,7 @@ export class SurveyprocessPage implements OnInit {
     if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME){
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
       this.markShotCompletion(this.selectedshotindex);
+      this.updateProgressStatus();
     }
 
     //Unset previous menu and select new one
