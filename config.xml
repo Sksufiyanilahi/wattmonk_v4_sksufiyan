@@ -121,5 +121,5 @@
         <splash src="resources/windows/splash/Splash.png" target="SplashScreen" />
     </platform>
     <allow-navigation href="http://192.168.1.32:8100" sessionid="507306ab" />
-    <allow-navigation href="http://172.20.10.5:8100" sessionid="0c9caf4c" />
+    <allow-navigation href="http://172.20.10.5:8100" sessionid="d737b9a3" />
 </widget>

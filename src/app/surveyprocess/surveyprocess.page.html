@@ -19,7 +19,7 @@
           <ion-col size="12" class="actionareacol">
             <ion-row class="ion-justify-content-center">
               <ion-button fill="clear" (click)="changeZoom()" class="zoombutton">{{currentzoom}}x</ion-button>
-              <!-- <ion-button color="warning" (click)="switchCamera()">Switch</ion-button> -->
+              <a (click)="switchCamera()" class="circularbutton"><img src="../../assets/images/switch-camera.svg"/></a>
               <!-- <ion-button icon-only (click)="displayflashrow = !displayflashrow"><ion-icon name="flash-outline"></ion-icon></ion-button>
               <ion-row *ngIf="displayflashrow">
                 <ion-button fill="clear" (click)="changeFlashMode(auto)">Auto</ion-button>
