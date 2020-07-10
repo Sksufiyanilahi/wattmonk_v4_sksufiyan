@@ -18,15 +18,14 @@
         <ion-row style="width: 100%;">
           <ion-col size="12" class="actionareacol">
             <ion-row class="ion-justify-content-center">
-              <ion-button fill="clear" (click)="changeZoom()" class="zoombutton">{{currentzoom}}x</ion-button>
-              <a (click)="switchCamera()" class="circularbutton"><img src="../../assets/images/switch-camera.svg"/></a>
-              <!-- <ion-button icon-only (click)="displayflashrow = !displayflashrow"><ion-icon name="flash-outline"></ion-icon></ion-button>
+              <ion-button *ngIf="!displayflashrow" fill="clear" (click)="changeZoom()" class="zoombutton">{{currentzoom}}x</ion-button>
+              <a *ngIf="!displayflashrow" (click)="switchCamera()" class="circularbutton"><img src="../../assets/images/switch-camera.svg"/></a>
+              <a (click)="displayflashrow = !displayflashrow" class="flashbutton"><ion-icon name="flash-outline"></ion-icon></a>
               <ion-row *ngIf="displayflashrow">
-                <ion-button fill="clear" (click)="changeFlashMode(auto)">Auto</ion-button>
-                <ion-button fill="clear" (click)="changeFlashMode(on)">On</ion-button>
-                <ion-button fill="clear" (click)="changeFlashMode(off)">Off</ion-button>
-                <ion-button fill="clear" (click)="changeFlashMode(torch)">Torch</ion-button>
-              </ion-row> -->
+                <ion-button style="margin-top: 8px;" color="light" size="small" (click)="changeFlashMode(auto)">Auto</ion-button>
+                <ion-button style="margin-top: 8px;" color="light" size="small" (click)="changeFlashMode(on)">On</ion-button>
+                <ion-button style="margin-top: 8px;" color="light" size="small" (click)="changeFlashMode(off)">Off</ion-button>
+              </ion-row>
             </ion-row>
           </ion-col>
         </ion-row>

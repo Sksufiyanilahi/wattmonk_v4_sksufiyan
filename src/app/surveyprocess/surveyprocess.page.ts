@@ -544,6 +544,7 @@ export class SurveyprocessPage implements OnInit {
 
   changeFlashMode(flashmode) {
     this.cameraPreview.setFlashMode(flashmode);
+    this.displayflashrow = !this.displayflashrow;
   }
 
   changeZoom() {

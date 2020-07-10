@@ -159,7 +159,22 @@ app-ar ion-content {
 .actionarea .circularbutton img{
   width: 56%;
   margin-left: 7px;
-margin-top: 7px;
+  margin-top: 7px;
+}
+
+.actionarea .flashbutton {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  color: #ffffff;
+  margin-top: 4px;
+  margin-left: 4px;
+}
+
+.actionarea .flashbutton ion-icon{
+  margin-left: 8px;
+  margin-top: 8px;
 }
 
 .sidestepper {
