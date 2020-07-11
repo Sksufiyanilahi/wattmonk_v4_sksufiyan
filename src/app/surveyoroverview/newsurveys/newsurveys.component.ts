@@ -34,7 +34,6 @@ export class NewsurveysComponent implements OnInit {
     private utils: UtilitiesService,
     private storage: Storage,
     private apiService: ApiService) {
-      console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -61,7 +60,6 @@ export class NewsurveysComponent implements OnInit {
   }
 
   fetchPendingSurveys(event, showLoader: boolean) {
-    console.log("inside fetch surveys");
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {

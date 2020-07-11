@@ -21,12 +21,9 @@ export class SurveyoroverviewPage implements OnInit {
 
   ngOnInit() {
     this.setupCometChatUser();
-    this.updateUserPushToken();
-    this.route.navigate(['surveyoroverview/newsurveys']);
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
   setupCometChatUser() {
@@ -37,21 +34,26 @@ export class SurveyoroverviewPage implements OnInit {
         CometChat.login(this.storage.getUserID(), COMET_CHAT_AUTH_KEY).then(
           (user) => {
             console.log('Login Successful:', { user });
+            this.updateUserPushToken();
           },
           error => {
             console.log('Login failed with exception:', { error });
+            this.updateUserPushToken();
           }
         );
       },
       error => {
         console.log('Initialization failed with error:', error);
+        this.updateUserPushToken();
       }
     );
   }
 
   updateUserPushToken(){
     this.apiService.updateUser(this.storage.getUserID(), {"pushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
+      this.route.navigate(['surveyoroverview/newsurveys']);
     }, (error) => {
+      this.route.navigate(['surveyoroverview/newsurveys']);
     });
   }
 
