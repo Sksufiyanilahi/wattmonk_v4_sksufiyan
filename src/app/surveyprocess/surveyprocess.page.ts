@@ -92,6 +92,23 @@ export enum VIEWMODE {
   GALLERY = 3
 }
 
+export interface PENDING_MENU {
+  index: number;
+  name: string;
+  pendingchilds: PENDING_CHILD[];
+}
+
+export interface PENDING_CHILD {
+  index: number;
+  name: string;
+  pendingshots: PENDING_SHOT[];
+}
+
+export interface PENDING_SHOT {
+  index: number;
+  name: string;
+}
+
 @Component({
   selector: 'app-surveyprocess',
   templateUrl: './surveyprocess.page.html',
@@ -124,6 +141,8 @@ export class SurveyprocessPage implements OnInit {
   previousshotindex = 0;
   previousviewmode = 0;
 
+  pendingmenuitems: PENDING_MENU[];
+
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
 
@@ -141,7 +160,7 @@ export class SurveyprocessPage implements OnInit {
   surveystate: string;
   latitude: number;
   longitude: number;
-  platformname : string;
+  platformname: string;
   googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=24&maptype=satellite&size=900x1600&scale=2&key=' + GOOGLE_API_KEY;
 
   batteryForm: FormGroup;
@@ -154,7 +173,7 @@ export class SurveyprocessPage implements OnInit {
   imageuploadindex = 1;
 
   utilities: InverterMakeModel[] = [];
-  selectedutilityid : number;
+  selectedutilityid: number;
   invertermodels: InverterMadeModel[] = [];
   invertermakes: InverterMakeModel[] = [];
   solarmakes: SolarMake[] = [];
@@ -243,11 +262,11 @@ export class SurveyprocessPage implements OnInit {
     this.googleimageurl = this.googleimageurl + '&center=' + this.latitude + ',' + this.longitude;
     // this.googleimageurl = this.googleimageurl + '&markers=size:normal|color:red|' + this.latitude + ',' + this.longitude;
 
-    if(this.platform.is('ios')){
+    if (this.platform.is('ios')) {
       this.platformname = "iphone"
-    }else if(this.platform.is('android')){
+    } else if (this.platform.is('android')) {
       this.platformname = "android"
-    }else{
+    } else {
       this.platformname = "other"
     }
 
@@ -330,13 +349,13 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
-  formatDateInBackendFormat(){
+  formatDateInBackendFormat() {
     const d = new Date()
-      const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-      const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
-      const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
+    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+    const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
 
-      return (`${ye}-${mo}-${da}`)
+    return (`${ye}-${mo}-${da}`)
   }
 
   ngOnInit() {
@@ -483,7 +502,7 @@ export class SurveyprocessPage implements OnInit {
     this.previousshotindex = this.selectedshotindex;
 
     //Set questionstatus true for question type 5
-    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME){
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
       this.markShotCompletion(this.selectedshotindex);
       this.updateProgressStatus();
@@ -685,7 +704,7 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
-  handleShotNameSubmission(form: FormGroup){
+  handleShotNameSubmission(form: FormGroup) {
     var shotnameformcontrol = form.get("shotname");
     if (shotnameformcontrol.value != "") {
       var shots = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots;
@@ -846,39 +865,89 @@ export class SurveyprocessPage implements OnInit {
 
   checkProcessCompletion(): boolean {
     var ispendingset = false;
-    var checkstatus = false;
+    var checkstatus = true;
     this.mainmenuitems.forEach(element => {
       if (element.ispending && !ispendingset) {
         ispendingset = true;
         checkstatus = false;
-        // checkstatus = true;
+        this.preparePendingItemsList();
       }
     });
     return checkstatus;
+  }
+
+  preparePendingItemsList() {
+    this.pendingmenuitems = [];
+    this.mainmenuitems.forEach(function (element, mainindex) {
+      if (element.ispending) {
+        if (element.children.length > 0) {
+          var menu: PENDING_MENU = {
+            index: mainindex,
+            pendingchilds: [],
+            name: element.name
+          }
+          element.children.forEach(function (child, childindex) {
+            if (child.ispending) {
+              if (child.shots.length > 0) {
+                var childitem: PENDING_CHILD = {
+                  index: childindex,
+                  pendingshots: [],
+                  name: child.name
+                }
+                child.shots.forEach(function (shot, shotindex) {
+                  if (shot.ispending) {
+                    var shotitem: PENDING_SHOT = {
+                      index: shotindex,
+                      name: shot.shotinfo
+                    }
+                    childitem.pendingshots.push(shotitem);
+                  }
+                });
+              } else {
+                var childitem: PENDING_CHILD = {
+                  index: childindex,
+                  pendingshots: [],
+                  name: child.name
+                }
+                menu.pendingchilds.push(childitem);
+              }
+            }
+          });
+          this.pendingmenuitems.push(menu);
+        } else {
+          var menu: PENDING_MENU = {
+            index: mainindex,
+            pendingchilds: [],
+            name: element.name
+          }
+          this.pendingmenuitems.push(menu);
+        }
+      }
+    });
   }
 
   handleCompleteSurveyDataSubmission() {
     if (this.checkProcessCompletion()) {
       this.utilitieservice.showLoading('Saving Survey').then(() => {
         const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value);
-        if(!isutilityfound){
+        if (!isutilityfound) {
           const data = {
-            name:this.utility.manualinput,
-            source:this.platformname,
-      lastused:this.formatDateInBackendFormat(),
-      city: this.surveycity,
-      state: this.surveystate,
-      addedby: this.storageService.getUserID()
+            name: this.utility.manualinput,
+            source: this.platformname,
+            lastused: this.formatDateInBackendFormat(),
+            city: this.surveycity,
+            state: this.surveystate,
+            addedby: this.storageService.getUserID()
           }
           this.apiService.addUtility(data).subscribe((data) => {
             this.selectedutilityid = data.id;
             this.saveFormData();
-          },(error)=>{
+          }, (error) => {
             this.utilitieservice.hideLoading().then(() => {
               this.utilitieservice.errorSnackBar(JSON.stringify(error));
             });
           });
-        }else{
+        } else {
           this.selectedutilityid = this.batteryForm.get("utility").value.id;
           this.saveFormData();
         }
@@ -888,7 +957,7 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
-  saveFormData(){
+  saveFormData() {
     const data = {
       modulemake: this.batteryForm.get("modulemake").value.id,
       modulemodel: this.batteryForm.get("modulemodel").value.id,
