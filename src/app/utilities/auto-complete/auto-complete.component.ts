@@ -30,6 +30,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   sortedList: any[] = [];
   selectedDataId = 0;
   selectedDataName = '';
+  manualinput = '';
 
   constructor() {
   }
@@ -85,6 +86,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   onValueChanged(event: CustomEvent) {
     console.log('value changed');
     console.log(this.dataList);
+    this.manualinput = event.detail.value;
     this.sortedList = this.dataList.filter((item) => {
       return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
     });

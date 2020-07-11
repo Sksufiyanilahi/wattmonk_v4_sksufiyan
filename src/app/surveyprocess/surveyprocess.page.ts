@@ -17,6 +17,8 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import html2canvas from 'html2canvas';
 import { SurveyStorageModel } from '../model/survey-storage.model';
 import { Storage } from '@ionic/storage';
+import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
+import { StorageService } from '../storage.service';
 
 export interface MAINMENU {
   name: string;
@@ -99,6 +101,7 @@ export class SurveyprocessPage implements OnInit {
 
   @ViewChild('screen', { static: false }) screen: ElementRef;
   @ViewChild('slides', { static: false }) slider: IonSlides;
+  @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
@@ -134,8 +137,11 @@ export class SurveyprocessPage implements OnInit {
   isdataloaded = false;
   surveyid: number;
   surveytype: string;
+  surveycity: string;
+  surveystate: string;
   latitude: number;
   longitude: number;
+  platformname : string;
   googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=24&maptype=satellite&size=900x1600&scale=2&key=' + GOOGLE_API_KEY;
 
   batteryForm: FormGroup;
@@ -148,6 +154,7 @@ export class SurveyprocessPage implements OnInit {
   imageuploadindex = 1;
 
   utilities: InverterMakeModel[] = [];
+  selectedutilityid : number;
   invertermodels: InverterMadeModel[] = [];
   invertermakes: InverterMakeModel[] = [];
   solarmakes: SolarMake[] = [];
@@ -225,13 +232,24 @@ export class SurveyprocessPage implements OnInit {
     private apiService: ApiService,
     private changedetectorref: ChangeDetectorRef,
     private platform: Platform,
-    private routeroutlet: IonRouterOutlet) {
+    private routeroutlet: IonRouterOutlet,
+    private storageService: StorageService) {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
+    this.surveycity = this.route.snapshot.paramMap.get('city');
+    this.surveystate = this.route.snapshot.paramMap.get('state');
     this.latitude = +this.route.snapshot.paramMap.get('lat');
     this.longitude = +this.route.snapshot.paramMap.get('long');
     this.googleimageurl = this.googleimageurl + '&center=' + this.latitude + ',' + this.longitude;
     // this.googleimageurl = this.googleimageurl + '&markers=size:normal|color:red|' + this.latitude + ',' + this.longitude;
+
+    if(this.platform.is('ios')){
+      this.platformname = "iphone"
+    }else if(this.platform.is('android')){
+      this.platformname = "android"
+    }else{
+      this.platformname = "other"
+    }
 
     if (this.surveytype == "battery") {
       this.totalstepcount = 16;
@@ -310,6 +328,15 @@ export class SurveyprocessPage implements OnInit {
         }
       });
     }
+  }
+
+  formatDateInBackendFormat(){
+    const d = new Date()
+      const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+      const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+      const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
+
+      return (`${ye}-${mo}-${da}`)
   }
 
   ngOnInit() {
@@ -823,7 +850,8 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems.forEach(element => {
       if (element.ispending && !ispendingset) {
         ispendingset = true;
-        checkstatus = false;
+        // checkstatus = false;
+        checkstatus = true;
       }
     });
     return checkstatus;
@@ -832,41 +860,66 @@ export class SurveyprocessPage implements OnInit {
   handleCompleteSurveyDataSubmission() {
     if (this.checkProcessCompletion()) {
       this.utilitieservice.showLoading('Saving Survey').then(() => {
-        const data = {
-          modulemake: this.batteryForm.get("modulemake").value.id,
-          modulemodel: this.batteryForm.get("modulemodel").value.id,
-          invertermake: this.batteryForm.get("invertermake").value.name,
-          invertermodel: this.batteryForm.get("invertermodel").value.name,
-          numberofmodules: parseInt(this.batteryForm.get("numberofmodules").value),
-          additionalnotes: this.batteryForm.get("additionalnotes").value,
-          batterybackup: this.batteryForm.get("batterybackup").value,
-          servicefeedsource: this.batteryForm.get("servicefeedsource").value,
-          mainbreakersize: parseInt(this.batteryForm.get("mainbreakersize").value),
-          msprating: parseInt(this.batteryForm.get("msprating").value),
-          msplocation: this.batteryForm.get("msplocation").value,
-          mspbreaker: this.batteryForm.get("mspbreaker").value,
-          utilitymeter: this.batteryForm.get("utilitymeter").value,
-          utility: this.batteryForm.get("utility").value.id,
-          pvinverterlocation: this.batteryForm.get("pvinverterlocation").value,
-          pvmeter: JSON.parse(this.batteryForm.get("pvmeter").value),
-          acdisconnect: JSON.parse(this.batteryForm.get("acdisconnect").value),
-          interconnection: this.batteryForm.get("interconnection").value,
-          status: 'surveycompleted'
+        const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value);
+        if(!isutilityfound){
+          const data = {
+            name:this.utility.manualinput,
+            source:this.platformname,
+      lastused:this.formatDateInBackendFormat(),
+      city: this.surveycity,
+      state: this.surveystate,
+      addedby: this.storageService.getUserID()
+          }
+          this.apiService.addUtility(data).subscribe((data) => {
+            this.selectedutilityid = data.id;
+            this.saveFormData();
+          },(error)=>{
+            this.utilitieservice.hideLoading().then(() => {
+              this.utilitieservice.errorSnackBar(JSON.stringify(error));
+            });
+          });
+        }else{
+          this.selectedutilityid = this.batteryForm.get("utility").value.id;
+          this.saveFormData();
         }
-        this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
-          this.utilitieservice.hideLoading().then(() => {
-            this.updateProgressStatus();
-            this.uploadImagesToServer();
-          });
-        }, (error) => {
-          this.utilitieservice.hideLoading().then(() => {
-            this.utilitieservice.errorSnackBar(JSON.stringify(error));
-          });
-        });
       });
     } else {
       this.displayAlertForRemainingShots();
     }
+  }
+
+  saveFormData(){
+    const data = {
+      modulemake: this.batteryForm.get("modulemake").value.id,
+      modulemodel: this.batteryForm.get("modulemodel").value.id,
+      invertermake: this.batteryForm.get("invertermake").value.name,
+      invertermodel: this.batteryForm.get("invertermodel").value.name,
+      numberofmodules: parseInt(this.batteryForm.get("numberofmodules").value),
+      additionalnotes: this.batteryForm.get("additionalnotes").value,
+      batterybackup: this.batteryForm.get("batterybackup").value,
+      servicefeedsource: this.batteryForm.get("servicefeedsource").value,
+      mainbreakersize: parseInt(this.batteryForm.get("mainbreakersize").value),
+      msprating: parseInt(this.batteryForm.get("msprating").value),
+      msplocation: this.batteryForm.get("msplocation").value,
+      mspbreaker: this.batteryForm.get("mspbreaker").value,
+      utilitymeter: this.batteryForm.get("utilitymeter").value,
+      utility: this.selectedutilityid,
+      pvinverterlocation: this.batteryForm.get("pvinverterlocation").value,
+      pvmeter: JSON.parse(this.batteryForm.get("pvmeter").value),
+      acdisconnect: JSON.parse(this.batteryForm.get("acdisconnect").value),
+      interconnection: this.batteryForm.get("interconnection").value,
+      status: 'surveycompleted'
+    }
+    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.updateProgressStatus();
+        this.uploadImagesToServer();
+      });
+    }, (error) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.utilitieservice.errorSnackBar(JSON.stringify(error));
+      });
+    });
   }
 
   async displayAlertForRemainingShots() {

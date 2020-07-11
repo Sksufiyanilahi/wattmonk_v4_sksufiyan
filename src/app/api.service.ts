@@ -62,6 +62,10 @@ export class ApiService {
     return this.http.get<InverterMakeModel[]>(BaseUrl + '/utilities', { headers: this.headers });
   }
 
+  addUtility(data: any): Observable<InverterMakeModel> {
+    return this.http.post<InverterMakeModel>(BaseUrl + '/utilities', data, { headers: this.headers });
+  }
+
   getInverterMade(id): Observable<InverterMadeModel[]> {
     console.log(id);
     return this.http.get<InverterMadeModel[]>(BaseUrl + '/invertermodels?invertermake.id_eq=' + id, { headers: this.headers });
