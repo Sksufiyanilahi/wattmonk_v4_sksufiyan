@@ -608,7 +608,7 @@ export class SurveyprocessPage implements OnInit {
       this.cameraPreview.takePicture({
         width: 0,
         height: 0,
-        quality: 85
+        quality: 0
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
         if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
