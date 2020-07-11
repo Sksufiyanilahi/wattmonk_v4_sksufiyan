@@ -850,8 +850,8 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems.forEach(element => {
       if (element.ispending && !ispendingset) {
         ispendingset = true;
-        // checkstatus = false;
-        checkstatus = true;
+        checkstatus = false;
+        // checkstatus = true;
       }
     });
     return checkstatus;
