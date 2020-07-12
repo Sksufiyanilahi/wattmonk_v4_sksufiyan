@@ -296,7 +296,7 @@ export class SurveyprocessPage implements OnInit {
 
       this.activeForm = this.batteryForm;
 
-      // this.storage.clear();
+      this.storage.clear();
       this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
         console.log(data);
         if (data) {
@@ -335,6 +335,8 @@ export class SurveyprocessPage implements OnInit {
                   this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
                 }
               });
+
+              this.preparePendingItemsList();
 
               this.activeForm.get('invertermake').valueChanges.subscribe(val => {
                 this.getInverterModels(this.activeForm.get('invertermake').value.id);
@@ -878,7 +880,9 @@ export class SurveyprocessPage implements OnInit {
 
   preparePendingItemsList() {
     this.pendingmenuitems = [];
-    this.mainmenuitems.forEach(function (element, mainindex) {
+    for (let mainindex = 0; mainindex < this.mainmenuitems.length; mainindex++) {
+      const element = this.mainmenuitems[mainindex];
+
       if (element.ispending) {
         if (element.children.length > 0) {
           var menu: PENDING_MENU = {
@@ -886,7 +890,8 @@ export class SurveyprocessPage implements OnInit {
             pendingchilds: [],
             name: element.name
           }
-          element.children.forEach(function (child, childindex) {
+          for (let childindex = 0; childindex < element.children.length; childindex++) {
+            const child = element.children[childindex];
             if (child.ispending) {
               if (child.shots.length > 0) {
                 var childitem: PENDING_CHILD = {
@@ -894,7 +899,8 @@ export class SurveyprocessPage implements OnInit {
                   pendingshots: [],
                   name: child.name
                 }
-                child.shots.forEach(function (shot, shotindex) {
+                for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
+                  const shot = child.shots[shotindex];
                   if (shot.ispending) {
                     var shotitem: PENDING_SHOT = {
                       index: shotindex,
@@ -902,7 +908,8 @@ export class SurveyprocessPage implements OnInit {
                     }
                     childitem.pendingshots.push(shotitem);
                   }
-                });
+                }
+                menu.pendingchilds.push(childitem);
               } else {
                 var childitem: PENDING_CHILD = {
                   index: childindex,
@@ -912,7 +919,7 @@ export class SurveyprocessPage implements OnInit {
                 menu.pendingchilds.push(childitem);
               }
             }
-          });
+          }
           this.pendingmenuitems.push(menu);
         } else {
           var menu: PENDING_MENU = {
@@ -923,7 +930,7 @@ export class SurveyprocessPage implements OnInit {
           this.pendingmenuitems.push(menu);
         }
       }
-    });
+    }
   }
 
   handleCompleteSurveyDataSubmission() {
