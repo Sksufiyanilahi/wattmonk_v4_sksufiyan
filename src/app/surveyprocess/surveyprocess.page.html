@@ -393,3 +393,25 @@
   <ion-button fill="clear" class="backbutton z-top" (click)="handleGalleryBack()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
   <ion-button fill="clear" class="savebutton z-top" (click)="handleShotDelete()"><ion-icon slot="icon-only" name="trash-outline"></ion-icon></ion-button>
 </ion-content>
+
+<ion-content *ngIf="isdataloaded && viewpendingitems" [forceOverscroll]="false" class="white-bg">
+  <ion-grid class="ion-padding">
+    <ion-row>
+      <ion-col size="2">
+        <ion-button fill="clear" class="solidbackbutton" (click)="handlePendingItemsBack()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
+      </ion-col>
+      <ion-col>
+        <p class="section-title">PENDING DETAILS</p>
+      </ion-col>
+    </ion-row>
+    <ion-row class="fullwidth" *ngFor="let mainmenu of pendingmenuitems; let mainindex = index">
+      <p class="pending-menu-title">{{mainmenu.name | titlecase}}</p>
+        <ion-row class="fullwidth" *ngFor="let childmenu of mainmenu.pendingchilds; let childindex = index">
+          <p class="pending-title">{{childindex + 1}}. {{childmenu.name}}</p>
+            <ion-row class="fullwidth" *ngFor="let shot of childmenu.pendingshots; let shotindex = index">
+              <p class="pending-text">{{shot.name}}</p>
+            </ion-row>
+        </ion-row>
+    </ion-row>
+</ion-grid>
+</ion-content>

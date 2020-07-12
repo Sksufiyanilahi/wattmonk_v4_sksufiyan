@@ -86,6 +86,7 @@ export enum QUESTIONTYPE {
 }
 
 export enum VIEWMODE {
+  NONE = -1,
   CAMERA = 0,
   FORM = 1,
   MAP = 2,
@@ -142,6 +143,7 @@ export class SurveyprocessPage implements OnInit {
   previousviewmode = 0;
 
   pendingmenuitems: PENDING_MENU[];
+  viewpendingitems: boolean = false;
 
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
@@ -296,35 +298,7 @@ export class SurveyprocessPage implements OnInit {
 
       this.activeForm = this.batteryForm;
 
-      this.storage.clear();
-      this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
-        console.log(data);
-        if (data) {
-          this.mainmenuitems = data.menuitems;
-          this.totalpercent = data.currentprogress;
-          this.selectedmainmenuindex = data.selectedmainmenuindex;
-          this.selectedsubmenuindex = data.selectedsubmenuindex;
-          this.selectedshotindex = data.selectedshotindex;
-          this.shotcompletecount = data.shotcompletecount;
-
-          // restore form
-          Object.keys(data.formdata).forEach((key: string) => {
-            let control: AbstractControl = null;
-            control = this.activeForm.get(key);
-            control.setValue(data.formdata[key]);
-          });
-
-          this.isdataloaded = true;
-
-          this.activeForm.get('invertermake').valueChanges.subscribe(val => {
-            this.getInverterModels(this.activeForm.get('invertermake').value.id);
-          });
-
-          this.activeForm.get('modulemake').valueChanges.subscribe(val => {
-            this.getSolarModels(this.activeForm.get('modulemake').value.id);
-          });
-        } else {
-          this.http
+      this.http
             .get("assets/surveyprocessjson/battery.json")
             .subscribe((data) => {
               this.mainmenuitems = JSON.parse(JSON.stringify(data));
@@ -346,8 +320,59 @@ export class SurveyprocessPage implements OnInit {
                 this.getSolarModels(this.activeForm.get('modulemake').value.id);
               });
             });
-        }
-      });
+
+      // this.storage.clear();
+      // this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
+      //   console.log(data);
+      //   if (data) {
+      //     this.mainmenuitems = data.menuitems;
+      //     this.totalpercent = data.currentprogress;
+      //     this.selectedmainmenuindex = data.selectedmainmenuindex;
+      //     this.selectedsubmenuindex = data.selectedsubmenuindex;
+      //     this.selectedshotindex = data.selectedshotindex;
+      //     this.shotcompletecount = data.shotcompletecount;
+
+      //     // restore form
+      //     Object.keys(data.formdata).forEach((key: string) => {
+      //       let control: AbstractControl = null;
+      //       control = this.activeForm.get(key);
+      //       control.setValue(data.formdata[key]);
+      //     });
+
+      //     this.isdataloaded = true;
+
+      //     this.activeForm.get('invertermake').valueChanges.subscribe(val => {
+      //       this.getInverterModels(this.activeForm.get('invertermake').value.id);
+      //     });
+
+      //     this.activeForm.get('modulemake').valueChanges.subscribe(val => {
+      //       this.getSolarModels(this.activeForm.get('modulemake').value.id);
+      //     });
+      //   } else {
+      //     this.http
+      //       .get("assets/surveyprocessjson/battery.json")
+      //       .subscribe((data) => {
+      //         this.mainmenuitems = JSON.parse(JSON.stringify(data));
+      //         this.isdataloaded = true;
+
+      //         this.mainmenuitems.forEach(element => {
+      //           if (element.isactive) {
+      //             this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+      //           }
+      //         });
+
+      //         this.preparePendingItemsList();
+
+      //         this.activeForm.get('invertermake').valueChanges.subscribe(val => {
+      //           this.getInverterModels(this.activeForm.get('invertermake').value.id);
+      //         });
+
+      //         this.activeForm.get('modulemake').valueChanges.subscribe(val => {
+      //           this.getSolarModels(this.activeForm.get('modulemake').value.id);
+      //         });
+      //       });
+      //   }
+      // });
     }
   }
 
@@ -931,6 +956,8 @@ export class SurveyprocessPage implements OnInit {
         }
       }
     }
+
+    this.displayAlertForRemainingShots();
   }
 
   handleCompleteSurveyDataSubmission() {
@@ -1001,14 +1028,20 @@ export class SurveyprocessPage implements OnInit {
   async displayAlertForRemainingShots() {
     const alert = await this.alertController.create({
       header: 'Incomplete',
-      subHeader: 'Try submitting the survey once all required information is filled.',
+      subHeader: 'Please check list of pending items and try submitting the survey once all required information is filled.',
       buttons: [
         {
-          text: 'OK',
+          text: 'VIEW PENDING ITEMS',
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-
+            this.viewpendingitems = true;
+            this.cameraPreview.stopCamera();
+            this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
+            this.previousmainmenuindex = this.selectedmainmenuindex;
+            this.previoussubmenuindex = this.selectedsubmenuindex;
+            this.previousshotindex = this.selectedshotindex;
+            this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.NONE;
           }
         }
       ],
@@ -1095,6 +1128,16 @@ export class SurveyprocessPage implements OnInit {
         this.equipments.splice(1, 0, this.pvmeterequipment);
       }
     }
+  }
+
+  handlePendingItemsBack() {
+    this.viewpendingitems = false;
+    this.startCameraAfterPermission();
+    this.selectedmainmenuindex = this.previousmainmenuindex;
+    this.selectedsubmenuindex = this.previoussubmenuindex;
+    this.selectedshotindex = this.previousshotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].viewmode = this.previousviewmode;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
   }
 
   handleEquipmentMarkingBack() {
