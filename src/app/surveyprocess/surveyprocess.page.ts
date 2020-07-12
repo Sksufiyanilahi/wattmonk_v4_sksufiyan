@@ -1140,6 +1140,19 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
   }
 
+  handlePendingShotClick( menuindex: number, childindex: number, shotindex: number){
+    this.mainmenuitems[this.previousmainmenuindex].isactive = false;
+    this.mainmenuitems[this.previousmainmenuindex].children[this.previoussubmenuindex].isactive = false;
+    this.mainmenuitems[this.previousmainmenuindex].viewmode = this.previousviewmode;
+    this.viewpendingitems = false;
+    this.startCameraAfterPermission();
+    this.selectedmainmenuindex = menuindex;
+    this.selectedsubmenuindex = childindex;
+    this.selectedshotindex = shotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[childindex].isactive = true;
+  }
+
   handleEquipmentMarkingBack() {
     this.startCameraAfterPermission();
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;

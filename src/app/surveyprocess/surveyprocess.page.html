@@ -409,7 +409,7 @@
         <ion-row class="fullwidth" *ngFor="let childmenu of mainmenu.pendingchilds; let childindex = index">
           <p class="pending-title">{{childindex + 1}}. {{childmenu.name}}</p>
             <ion-row class="fullwidth" *ngFor="let shot of childmenu.pendingshots; let shotindex = index">
-              <p class="pending-text">{{shot.name}}</p>
+              <ion-button fill="clear" class="pending-text" (click)="handlePendingShotClick(mainindex, childindex, shotindex)">{{shot.name}}</ion-button>
             </ion-row>
         </ion-row>
     </ion-row>
