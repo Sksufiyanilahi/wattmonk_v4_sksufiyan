@@ -35,6 +35,7 @@ export class ApiService {
   }
 
   login(data: any): Observable<LoginModel> {
+    this.resetHeaders();
     return this.http.post<LoginModel>(BaseUrl + '/auth/local', data, { headers: this.headers });
   }
 

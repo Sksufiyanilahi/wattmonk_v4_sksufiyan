@@ -26,7 +26,7 @@ export class SurveyoroverviewPage implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    // this.subscription.unsubscribe();
   }
 
   setupCometChatUser() {
@@ -51,6 +51,8 @@ export class SurveyoroverviewPage implements OnInit {
 
   updateUserPushToken(){
     this.apiService.updateUser(this.storage.getUserID(), {"pushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
+    console.log(data, "fcm data");
+    
     }, (error) => {
     });
   }

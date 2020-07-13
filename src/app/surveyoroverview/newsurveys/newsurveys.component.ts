@@ -41,6 +41,9 @@ export class NewsurveysComponent implements OnInit {
   }
 
   ngOnInit() {
+ 
+  }
+  ionViewDidEnter(){
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
       this.getSurveys(null);
     });
@@ -52,7 +55,7 @@ export class NewsurveysComponent implements OnInit {
     });
   }
 
-  getSurveys(event: CustomEvent) {
+  getSurveys(event?: CustomEvent) {
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
