@@ -508,6 +508,12 @@ export class SurveyprocessPage implements OnInit {
     this.previoussubmenuindex = this.selectedsubmenuindex;
     this.previousshotindex = this.selectedshotindex;
 
+    //Set questionstatus true for question type 5
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
+    }
+
     //Unset previous menu and select new one
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = index;
@@ -716,8 +722,8 @@ export class SurveyprocessPage implements OnInit {
       form.get("shotname").setValue("");
 
       if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 1){
-        alert("inside this");
-        this.markShotCompletion(this.selectedshotindex);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+        this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
         this.updateProgressStatus();
       }
     } else {
