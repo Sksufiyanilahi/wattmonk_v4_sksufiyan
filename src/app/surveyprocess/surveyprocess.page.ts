@@ -319,6 +319,8 @@ export class SurveyprocessPage implements OnInit {
 
           this.isdataloaded = true;
 
+          this.handleViewModeSwitch();
+
           this.activeForm.get('invertermake').valueChanges.subscribe(val => {
             this.getInverterModels(this.activeForm.get('invertermake').value.id);
           });
@@ -944,6 +946,16 @@ export class SurveyprocessPage implements OnInit {
   }
 
   handleCompleteSurveyDataSubmission() {
+    //Code to save current status
+    const data = this.preapresurveystorage();
+    data.saved = true;
+    this.storage.set(this.surveyid + '', data);
+    this.utilitieservice.setDataRefresh(true);
+
+    if(this.batteryForm.status == 'INVALID'){
+      this.displayIncompleteFormAlert();
+    }else{
+      this.markMainMenuCompletion();
     if (this.checkProcessCompletion()) {
       this.utilitieservice.showLoading('Saving Survey').then(() => {
         const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value);
@@ -972,6 +984,7 @@ export class SurveyprocessPage implements OnInit {
     } else {
       this.displayAlertForRemainingShots();
     }
+  }
   }
 
   saveFormData() {
@@ -1006,6 +1019,24 @@ export class SurveyprocessPage implements OnInit {
         this.utilitieservice.errorSnackBar(JSON.stringify(error));
       });
     });
+  }
+
+  async displayIncompleteFormAlert(){
+    const alert = await this.alertController.create({
+      header: 'Incomplete',
+      subHeader: 'Please fill the additional information form.',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+          }
+        }
+      ],
+      backdropDismiss: false
+    });
+    await alert.present();
   }
 
   async displayAlertForRemainingShots() {
