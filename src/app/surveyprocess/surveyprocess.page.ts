@@ -19,6 +19,7 @@ import { SurveyStorageModel } from '../model/survey-storage.model';
 import { Storage } from '@ionic/storage';
 import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
 import { StorageService } from '../storage.service';
+import { Insomnia } from '@ionic-native/insomnia/ngx';
 
 export interface MAINMENU {
   name: string;
@@ -255,7 +256,8 @@ export class SurveyprocessPage implements OnInit {
     private changedetectorref: ChangeDetectorRef,
     private platform: Platform,
     private routeroutlet: IonRouterOutlet,
-    private storageService: StorageService) {
+    private storageService: StorageService,
+    private insomnia: Insomnia) {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
     this.surveycity = this.route.snapshot.paramMap.get('city');
@@ -294,7 +296,7 @@ export class SurveyprocessPage implements OnInit {
         pvmeter: new FormControl('', [Validators.required]),
         acdisconnect: new FormControl('', [Validators.required]),
         interconnection: new FormControl('', [Validators.required]),
-        shotname: new FormControl('', [Validators.required])
+        shotname: new FormControl('', [])
       });
 
       this.activeForm = this.batteryForm;
@@ -506,13 +508,6 @@ export class SurveyprocessPage implements OnInit {
     this.previoussubmenuindex = this.selectedsubmenuindex;
     this.previousshotindex = this.selectedshotindex;
 
-    //Set questionstatus true for question type 5
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
-      this.markShotCompletion(this.selectedshotindex);
-      this.updateProgressStatus();
-    }
-
     //Unset previous menu and select new one
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = index;
@@ -714,12 +709,16 @@ export class SurveyprocessPage implements OnInit {
     if (shotnameformcontrol.value != "") {
       var shots = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots;
       shots[shots.length - 1].imagename = shotnameformcontrol.value;
-      console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots);
       this.iscapturingallowed = true;
       this.issidemenucollapsed = true;
       this.isgallerymenucollapsed = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
       form.get("shotname").setValue("");
+
+      if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 1){
+        this.markShotCompletion(this.selectedshotindex);
+        this.updateProgressStatus();
+      }
     } else {
       shotnameformcontrol.markAsTouched();
       shotnameformcontrol.markAsDirty();
@@ -1011,8 +1010,15 @@ export class SurveyprocessPage implements OnInit {
     }
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
       this.utilitieservice.hideLoading().then(() => {
-        this.updateProgressStatus();
-        this.uploadImagesToServer();
+        this.insomnia.keepAwake()
+  .then(
+    () => {
+      console.log('success')
+      this.uploadImagesToServer();
+    },
+    () => console.log('error')
+  );
+
       });
     }, (error) => {
       this.utilitieservice.hideLoading().then(() => {
@@ -1022,6 +1028,26 @@ export class SurveyprocessPage implements OnInit {
   }
 
   async displayIncompleteFormAlert(){
+    // let error = '';
+    // Object.keys(this.batteryForm.controls).forEach((key: string) => {
+    //   const control: AbstractControl = this.batteryForm.get(key);
+    //   if (control.invalid) {
+    //     if (error !== '') {
+    //       error = error + '<br/>';
+    //     }
+    //     console.log(this.batteryForm.get(key));
+    //     if (control.errors.required === true) {
+    //       error = error + this.utilitieservice.capitalizeWord(key) + ' is required';
+    //     }
+    //     if (control.errors.email === true) {
+    //       error = error + 'Invalid email';
+    //     }
+    //     if (control.errors.error !== null && control.errors.error !== undefined) {
+    //       error = error + control.errors.error;
+    //     }
+    //   }
+    // });
+    // this.utilitieservice.showAlert(error);
     const alert = await this.alertController.create({
       header: 'Incomplete',
       subHeader: 'Please fill the additional information form.',
@@ -1120,6 +1146,11 @@ export class SurveyprocessPage implements OnInit {
           modal.onWillDismiss().then((dismissed) => {
             this.utilitieservice.sethomepageSurveyRefresh(true);
             this.navController.navigateRoot('surveyoroverview');
+            this.insomnia.allowSleepAgain()
+  .then(
+    () => console.log('success'),
+    () => console.log('error')
+  );
           });
         });
       });
