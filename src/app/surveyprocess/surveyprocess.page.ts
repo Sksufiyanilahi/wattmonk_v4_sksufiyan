@@ -17,10 +17,13 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import html2canvas from 'html2canvas';
 import { SurveyStorageModel } from '../model/survey-storage.model';
 import { Storage } from '@ionic/storage';
+import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
+import { StorageService } from '../storage.service';
 
 export interface MAINMENU {
   name: string;
   isactive: boolean;
+  ispending: boolean;
   viewmode: number;
   children: CHILDREN[];
 }
@@ -79,13 +82,32 @@ export enum QUESTIONTYPE {
   INPUT_NUMBER = 2,
   INPUT_UTILITIES_AUTOCOMPLETE = 3,
   INPUT_INVERTER_AUTOCOMPLETE = 4,
+  INPUT_SHOT_NAME = 5
 }
 
 export enum VIEWMODE {
+  NONE = -1,
   CAMERA = 0,
   FORM = 1,
   MAP = 2,
   GALLERY = 3
+}
+
+export interface PENDING_MENU {
+  index: number;
+  name: string;
+  pendingchilds: PENDING_CHILD[];
+}
+
+export interface PENDING_CHILD {
+  index: number;
+  name: string;
+  pendingshots: PENDING_SHOT[];
+}
+
+export interface PENDING_SHOT {
+  index: number;
+  name: string;
 }
 
 @Component({
@@ -97,6 +119,7 @@ export class SurveyprocessPage implements OnInit {
 
   @ViewChild('screen', { static: false }) screen: ElementRef;
   @ViewChild('slides', { static: false }) slider: IonSlides;
+  @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
@@ -119,6 +142,10 @@ export class SurveyprocessPage implements OnInit {
   previousshotindex = 0;
   previousviewmode = 0;
 
+  pendingmenuitems: PENDING_MENU[];
+  viewpendingitems: boolean = false;
+  ispendingitemsmode: boolean = false;
+
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
 
@@ -132,8 +159,11 @@ export class SurveyprocessPage implements OnInit {
   isdataloaded = false;
   surveyid: number;
   surveytype: string;
+  surveycity: string;
+  surveystate: string;
   latitude: number;
   longitude: number;
+  platformname: string;
   googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=24&maptype=satellite&size=900x1600&scale=2&key=' + GOOGLE_API_KEY;
 
   batteryForm: FormGroup;
@@ -146,6 +176,7 @@ export class SurveyprocessPage implements OnInit {
   imageuploadindex = 1;
 
   utilities: InverterMakeModel[] = [];
+  selectedutilityid: number;
   invertermodels: InverterMadeModel[] = [];
   invertermakes: InverterMakeModel[] = [];
   solarmakes: SolarMake[] = [];
@@ -223,13 +254,24 @@ export class SurveyprocessPage implements OnInit {
     private apiService: ApiService,
     private changedetectorref: ChangeDetectorRef,
     private platform: Platform,
-    private routeroutlet: IonRouterOutlet) {
+    private routeroutlet: IonRouterOutlet,
+    private storageService: StorageService) {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
+    this.surveycity = this.route.snapshot.paramMap.get('city');
+    this.surveystate = this.route.snapshot.paramMap.get('state');
     this.latitude = +this.route.snapshot.paramMap.get('lat');
     this.longitude = +this.route.snapshot.paramMap.get('long');
     this.googleimageurl = this.googleimageurl + '&center=' + this.latitude + ',' + this.longitude;
-    this.googleimageurl = this.googleimageurl + '&&markers=size:normal|color:red|' + this.latitude + ',' + this.longitude;
+    // this.googleimageurl = this.googleimageurl + '&markers=size:normal|color:red|' + this.latitude + ',' + this.longitude;
+
+    if (this.platform.is('ios')) {
+      this.platformname = "iphone"
+    } else if (this.platform.is('android')) {
+      this.platformname = "android"
+    } else {
+      this.platformname = "other"
+    }
 
     if (this.surveytype == "battery") {
       this.totalstepcount = 16;
@@ -251,7 +293,8 @@ export class SurveyprocessPage implements OnInit {
         pvinverterlocation: new FormControl('', [Validators.required]),
         pvmeter: new FormControl('', [Validators.required]),
         acdisconnect: new FormControl('', [Validators.required]),
-        interconnection: new FormControl('', [Validators.required])
+        interconnection: new FormControl('', [Validators.required]),
+        shotname: new FormControl('', [Validators.required])
       });
 
       this.activeForm = this.batteryForm;
@@ -268,18 +311,18 @@ export class SurveyprocessPage implements OnInit {
           this.shotcompletecount = data.shotcompletecount;
 
           // restore form
-        Object.keys(data.formdata).forEach((key: string) => {
-          let control: AbstractControl = null;
-          control = this.activeForm.get(key);
-          control.setValue(data.formdata[key]);
-        });
+          Object.keys(data.formdata).forEach((key: string) => {
+            let control: AbstractControl = null;
+            control = this.activeForm.get(key);
+            control.setValue(data.formdata[key]);
+          });
 
           this.isdataloaded = true;
 
           this.activeForm.get('invertermake').valueChanges.subscribe(val => {
             this.getInverterModels(this.activeForm.get('invertermake').value.id);
           });
-    
+
           this.activeForm.get('modulemake').valueChanges.subscribe(val => {
             this.getSolarModels(this.activeForm.get('modulemake').value.id);
           });
@@ -290,10 +333,16 @@ export class SurveyprocessPage implements OnInit {
               this.mainmenuitems = JSON.parse(JSON.stringify(data));
               this.isdataloaded = true;
 
+              this.mainmenuitems.forEach(element => {
+                if (element.isactive) {
+                  this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+                }
+              });
+
               this.activeForm.get('invertermake').valueChanges.subscribe(val => {
                 this.getInverterModels(this.activeForm.get('invertermake').value.id);
               });
-        
+
               this.activeForm.get('modulemake').valueChanges.subscribe(val => {
                 this.getSolarModels(this.activeForm.get('modulemake').value.id);
               });
@@ -301,6 +350,15 @@ export class SurveyprocessPage implements OnInit {
         }
       });
     }
+  }
+
+  formatDateInBackendFormat() {
+    const d = new Date()
+    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+    const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d)
+    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
+
+    return (`${ye}-${mo}-${da}`)
   }
 
   ngOnInit() {
@@ -401,6 +459,7 @@ export class SurveyprocessPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           this.solarmakes = response;
           this.changedetectorref.detectChanges();
+          this.getUtilities();
         });
       }, responseError => {
         this.utilitieservice.hideLoading().then(() => {
@@ -444,6 +503,13 @@ export class SurveyprocessPage implements OnInit {
     this.previousmainmenuindex = this.selectedmainmenuindex;
     this.previoussubmenuindex = this.selectedsubmenuindex;
     this.previousshotindex = this.selectedshotindex;
+
+    //Set questionstatus true for question type 5
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+      this.markShotCompletion(this.selectedshotindex);
+      this.updateProgressStatus();
+    }
 
     //Unset previous menu and select new one
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
@@ -544,6 +610,7 @@ export class SurveyprocessPage implements OnInit {
 
   changeFlashMode(flashmode) {
     this.cameraPreview.setFlashMode(flashmode);
+    this.displayflashrow = !this.displayflashrow;
   }
 
   changeZoom() {
@@ -563,7 +630,7 @@ export class SurveyprocessPage implements OnInit {
       this.cameraPreview.takePicture({
         width: 0,
         height: 0,
-        quality: 85
+        quality: 0
       }).then((photo) => {
         this.capturedImage = 'data:image/png;base64,' + photo;
         if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
@@ -637,6 +704,23 @@ export class SurveyprocessPage implements OnInit {
     } else {
       control.markAsTouched();
       control.markAsDirty();
+    }
+  }
+
+  handleShotNameSubmission(form: FormGroup) {
+    var shotnameformcontrol = form.get("shotname");
+    if (shotnameformcontrol.value != "") {
+      var shots = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots;
+      shots[shots.length - 1].imagename = shotnameformcontrol.value;
+      console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots);
+      this.iscapturingallowed = true;
+      this.issidemenucollapsed = true;
+      this.isgallerymenucollapsed = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
+      form.get("shotname").setValue("");
+    } else {
+      shotnameformcontrol.markAsTouched();
+      shotnameformcontrol.markAsDirty();
     }
   }
 
@@ -762,7 +846,19 @@ export class SurveyprocessPage implements OnInit {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
         }
       });
+
+      this.markMainMenuCompletion();
     }
+  }
+
+  markMainMenuCompletion() {
+    var ispendingset = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
+      if (element.ispending && !ispendingset) {
+        ispendingset = true;
+        this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+      }
+    });
   }
 
   updateProgressStatus() {
@@ -770,40 +866,163 @@ export class SurveyprocessPage implements OnInit {
     this.totalpercent = (this.shotcompletecount / this.totalstepcount);
   }
 
-  handleCompleteSurveyDataSubmission() {
-    this.utilitieservice.showLoading('Saving Survey').then(() => {
-      const data = {
-        modulemake: this.batteryForm.get("modulemake").value.id,
-        modulemodel: this.batteryForm.get("modulemodel").value.id,
-        invertermake: this.batteryForm.get("invertermake").value.name,
-        invertermodel: this.batteryForm.get("invertermodel").value.name,
-        numberofmodules: parseInt(this.batteryForm.get("numberofmodules").value),
-        additionalnotes: this.batteryForm.get("additionalnotes").value,
-        batterybackup: this.batteryForm.get("batterybackup").value,
-        servicefeedsource: this.batteryForm.get("servicefeedsource").value,
-        mainbreakersize: parseInt(this.batteryForm.get("mainbreakersize").value),
-        msprating: parseInt(this.batteryForm.get("msprating").value),
-        msplocation: this.batteryForm.get("msplocation").value,
-        mspbreaker: this.batteryForm.get("mspbreaker").value,
-        utilitymeter: this.batteryForm.get("utilitymeter").value,
-        utility: this.batteryForm.get("utility").value.id,
-        pvinverterlocation: this.batteryForm.get("pvinverterlocation").value,
-        pvmeter: JSON.parse(this.batteryForm.get("pvmeter").value),
-        acdisconnect: JSON.parse(this.batteryForm.get("acdisconnect").value),
-        interconnection: this.batteryForm.get("interconnection").value,
-        status: 'surveycompleted'
+  checkProcessCompletion(): boolean {
+    var ispendingset = false;
+    var checkstatus = true;
+    this.mainmenuitems.forEach(element => {
+      if (element.ispending && !ispendingset) {
+        ispendingset = true;
+        checkstatus = false;
+        this.preparePendingItemsList();
       }
-      this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.updateProgressStatus();
-          this.uploadImagesToServer();
-        });
-      }, (error) => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.utilitieservice.errorSnackBar(JSON.stringify(error));
-        });
+    });
+    return checkstatus;
+  }
+
+  preparePendingItemsList() {
+    this.pendingmenuitems = [];
+    for (let mainindex = 0; mainindex < this.mainmenuitems.length; mainindex++) {
+      const element = this.mainmenuitems[mainindex];
+
+      if (element.ispending) {
+        if (element.children.length > 0) {
+          var menu: PENDING_MENU = {
+            index: mainindex,
+            pendingchilds: [],
+            name: element.name
+          }
+          for (let childindex = 0; childindex < element.children.length; childindex++) {
+            const child = element.children[childindex];
+            if (child.ispending) {
+              if (child.shots.length > 0) {
+                var childitem: PENDING_CHILD = {
+                  index: childindex,
+                  pendingshots: [],
+                  name: child.name
+                }
+                for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
+                  const shot = child.shots[shotindex];
+                  if (shot.ispending) {
+                    var shotitem: PENDING_SHOT = {
+                      index: shotindex,
+                      name: shot.shotinfo
+                    }
+                    childitem.pendingshots.push(shotitem);
+                  }
+                }
+                menu.pendingchilds.push(childitem);
+              } else {
+                var childitem: PENDING_CHILD = {
+                  index: childindex,
+                  pendingshots: [],
+                  name: child.name
+                }
+                menu.pendingchilds.push(childitem);
+              }
+            }
+          }
+          this.pendingmenuitems.push(menu);
+        } else {
+          var menu: PENDING_MENU = {
+            index: mainindex,
+            pendingchilds: [],
+            name: element.name
+          }
+          this.pendingmenuitems.push(menu);
+        }
+      }
+    }
+  }
+
+  handleCompleteSurveyDataSubmission() {
+    if (this.checkProcessCompletion()) {
+      this.utilitieservice.showLoading('Saving Survey').then(() => {
+        const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value);
+        if (!isutilityfound) {
+          const data = {
+            name: this.utility.manualinput,
+            source: this.platformname,
+            lastused: this.formatDateInBackendFormat(),
+            city: this.surveycity,
+            state: this.surveystate,
+            addedby: this.storageService.getUserID()
+          }
+          this.apiService.addUtility(data).subscribe((data) => {
+            this.selectedutilityid = data.id;
+            this.saveFormData();
+          }, (error) => {
+            this.utilitieservice.hideLoading().then(() => {
+              this.utilitieservice.errorSnackBar(JSON.stringify(error));
+            });
+          });
+        } else {
+          this.selectedutilityid = this.batteryForm.get("utility").value.id;
+          this.saveFormData();
+        }
+      });
+    } else {
+      this.displayAlertForRemainingShots();
+    }
+  }
+
+  saveFormData() {
+    const data = {
+      modulemake: this.batteryForm.get("modulemake").value.id,
+      modulemodel: this.batteryForm.get("modulemodel").value.id,
+      invertermake: this.batteryForm.get("invertermake").value.name,
+      invertermodel: this.batteryForm.get("invertermodel").value.name,
+      numberofmodules: parseInt(this.batteryForm.get("numberofmodules").value),
+      additionalnotes: this.batteryForm.get("additionalnotes").value,
+      batterybackup: this.batteryForm.get("batterybackup").value,
+      servicefeedsource: this.batteryForm.get("servicefeedsource").value,
+      mainbreakersize: parseInt(this.batteryForm.get("mainbreakersize").value),
+      msprating: parseInt(this.batteryForm.get("msprating").value),
+      msplocation: this.batteryForm.get("msplocation").value,
+      mspbreaker: this.batteryForm.get("mspbreaker").value,
+      utilitymeter: this.batteryForm.get("utilitymeter").value,
+      utility: this.selectedutilityid,
+      pvinverterlocation: this.batteryForm.get("pvinverterlocation").value,
+      pvmeter: JSON.parse(this.batteryForm.get("pvmeter").value),
+      acdisconnect: JSON.parse(this.batteryForm.get("acdisconnect").value),
+      interconnection: this.batteryForm.get("interconnection").value,
+      status: 'surveycompleted'
+    }
+    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.updateProgressStatus();
+        this.uploadImagesToServer();
+      });
+    }, (error) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.utilitieservice.errorSnackBar(JSON.stringify(error));
       });
     });
+  }
+
+  async displayAlertForRemainingShots() {
+    const alert = await this.alertController.create({
+      header: 'Incomplete',
+      subHeader: 'Please check list of pending items and try submitting the survey once all required information is filled.',
+      buttons: [
+        {
+          text: 'VIEW PENDING ITEMS',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            this.viewpendingitems = true;
+            this.ispendingitemsmode = true;
+            this.cameraPreview.stopCamera();
+            this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
+            this.previousmainmenuindex = this.selectedmainmenuindex;
+            this.previoussubmenuindex = this.selectedsubmenuindex;
+            this.previousshotindex = this.selectedshotindex;
+            this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.NONE;
+          }
+        }
+      ],
+      backdropDismiss: false
+    });
+    await alert.present();
   }
 
   uploadImagesToServer() {
@@ -886,6 +1105,50 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
+  handlePendingItemsSwitch() {
+    this.preparePendingItemsList();
+    if (this.pendingmenuitems.length > 0) {
+      this.ispendingitemsmode = true;
+    } else {
+      this.ispendingitemsmode = false;
+    }
+    this.viewpendingitems = true;
+    this.cameraPreview.stopCamera();
+    this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
+    this.previousmainmenuindex = this.selectedmainmenuindex;
+    this.previoussubmenuindex = this.selectedsubmenuindex;
+    this.previousshotindex = this.selectedshotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.NONE;
+  }
+
+  handlePendingItemsBack() {
+    this.viewpendingitems = false;
+    this.startCameraAfterPermission();
+    this.selectedmainmenuindex = this.previousmainmenuindex;
+    this.selectedsubmenuindex = this.previoussubmenuindex;
+    this.selectedshotindex = this.previousshotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].viewmode = this.previousviewmode;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+  }
+
+  handlePendingShotClick(menuindex: number, childindex: number, shotindex: number) {
+    this.mainmenuitems[this.previousmainmenuindex].isactive = false;
+    this.mainmenuitems[this.previousmainmenuindex].viewmode = this.previousviewmode;
+    if (this.mainmenuitems[this.previousmainmenuindex].children.length > 0) {
+      this.mainmenuitems[this.previousmainmenuindex].children[this.previoussubmenuindex].isactive = false;
+    }
+    this.viewpendingitems = false;
+    this.startCameraAfterPermission();
+    this.selectedmainmenuindex = menuindex;
+    this.selectedsubmenuindex = childindex;
+    this.selectedshotindex = shotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+      this.mainmenuitems[this.selectedmainmenuindex].children[childindex].isactive = true;
+    }
+  }
+
   handleEquipmentMarkingBack() {
     this.startCameraAfterPermission();
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
@@ -946,7 +1209,7 @@ export class SurveyprocessPage implements OnInit {
     return Promise.resolve();
   }
 
-  handleFormBack(){
+  handleFormBack() {
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = this.previousmainmenuindex;
     this.selectedsubmenuindex = this.previoussubmenuindex;

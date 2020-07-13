@@ -26,7 +26,6 @@ export class SurveyoroverviewPage implements OnInit {
   }
 
   ngOnDestroy() {
-    // this.subscription.unsubscribe();
   }
 
   setupCometChatUser() {

@@ -20,6 +20,7 @@ export class CompletedsurveysComponent implements OnInit {
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
+  private dataRefreshSubscription: Subscription;
   routeSubscription: Subscription;
 
   today: any;
@@ -41,15 +42,15 @@ export class CompletedsurveysComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getSurveys(null);
-  }
+    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+      this.getSurveys(null);
+    });
 
-  ionViewDidEnter(){
-    console.log("got back");
-    if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-      console.log("reloading data");
-      this.formatSurveyData(this.listOfSurveyData);
-    }
+    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+      if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+        this.formatSurveyData(this.listOfSurveyData);
+      }
+    });
   }
 
   getSurveys(event: CustomEvent) {

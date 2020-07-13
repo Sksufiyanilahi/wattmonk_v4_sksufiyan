@@ -87,6 +87,7 @@ export class LoginPage implements OnInit {
           });
         }, responseError => {
           this.utils.hideLoading().then(() => {
+            this.apiService.resetHeaders();
             const error: ErrorModel = responseError.error;
             // this.utils.errorSnackBar(error);
             this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
@@ -96,6 +97,7 @@ export class LoginPage implements OnInit {
       });
 
     } else {
+      this.apiService.resetHeaders();
       this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
     }
   }

@@ -4,7 +4,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { LoginModel } from './model/login.model';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { StorageService } from './storage.service';
 import { SolarMake } from './model/solar-make.model';
 import { SolarMadeModel } from './model/solar-made.model';
@@ -26,14 +26,21 @@ export class ApiService {
   private parentId = '';
   private userId = '';
   public searchbarElement: string = '';
-
+  public _OnMessageReceivedSubject: Subject<string>;
   constructor(
     private http: HttpClient,
     private storageService: StorageService
   ) {
     this.resetHeaders();
+    this._OnMessageReceivedSubject = new Subject<string>();
   }
-
+  
+ /**
+ * emits a message. 
+ */
+  public emitMessageReceived(msg: string): void {
+    this._OnMessageReceivedSubject.next(msg);
+  }
   login(data: any): Observable<LoginModel> {
     this.resetHeaders();
     return this.http.post<LoginModel>(BaseUrl + '/auth/local', data, { headers: this.headers });
@@ -61,6 +68,10 @@ export class ApiService {
 
   getUtilities() {
     return this.http.get<InverterMakeModel[]>(BaseUrl + '/utilities', { headers: this.headers });
+  }
+
+  addUtility(data: any): Observable<InverterMakeModel> {
+    return this.http.post<InverterMakeModel>(BaseUrl + '/utilities', data, { headers: this.headers });
   }
 
   getInverterMade(id): Observable<InverterMadeModel[]> {

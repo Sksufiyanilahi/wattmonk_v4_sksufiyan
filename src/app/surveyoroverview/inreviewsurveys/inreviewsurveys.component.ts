@@ -34,7 +34,6 @@ export class InreviewsurveysComponent implements OnInit {
     private utils: UtilitiesService,
     private storage: Storage,
     private apiService: ApiService) {
-      console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);

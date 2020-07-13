@@ -16,7 +16,7 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./newsurveys.component.scss'],
 })
 export class NewsurveysComponent implements OnInit {
-
+ 
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
@@ -34,16 +34,25 @@ export class NewsurveysComponent implements OnInit {
     private utils: UtilitiesService,
     private storage: Storage,
     private apiService: ApiService) {
-      console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
+    this.apiService._OnMessageReceivedSubject.subscribe((r) => {
+      console.log('message received! ', r);
+      this.getSurveys();
+    });
   }
 
   ngOnInit() {
+ console.log("ngoninit");
+
  
   }
-  ionViewDidEnter(){
+
+
+  ionViewDidEnter(event){
+    
+    this.getSurveys(event);
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
       this.getSurveys(null);
     });
@@ -56,15 +65,14 @@ export class NewsurveysComponent implements OnInit {
   }
 
   getSurveys(event?: CustomEvent) {
-    let showLoader = true;
+    // let showLoader = true;
     if (event != null && event !== undefined) {
-      showLoader = false;
+      // showLoader = false;
     }
-    this.fetchPendingSurveys(event, showLoader);
+    this.fetchPendingSurveys(event);
   }
 
-  fetchPendingSurveys(event, showLoader: boolean) {
-    console.log("inside fetch surveys");
+  fetchPendingSurveys(event?, showLoader?: boolean) {
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {

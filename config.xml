@@ -3,7 +3,7 @@
     <name>Wattmonk</name>
     <description>Wattmonk</description>
     <author email="tech@wattmonk.com" href="http://ionicframework.com/">tech@wattmonk.com</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://localhost:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -121,5 +121,5 @@
         <splash src="resources/windows/splash/Splash.png" target="SplashScreen" />
     </platform>
     <allow-navigation href="http://192.168.1.32:8100" sessionid="507306ab" />
-    <allow-navigation href="http://172.20.10.5:8100" sessionid="d737b9a3" />
+    <allow-navigation href="http://172.20.10.5:8100" sessionid="ce0bf415" />
 </widget>

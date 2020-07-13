@@ -159,7 +159,22 @@ app-ar ion-content {
 .actionarea .circularbutton img{
   width: 56%;
   margin-left: 7px;
-margin-top: 7px;
+  margin-top: 7px;
+}
+
+.actionarea .flashbutton {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  color: #ffffff;
+  margin-top: 4px;
+  margin-left: 4px;
+}
+
+.actionarea .flashbutton ion-icon{
+  margin-left: 8px;
+  margin-top: 8px;
 }
 
 .sidestepper {
@@ -440,6 +455,16 @@ margin-top: 7px;
     border-radius: 50%;
 }
 
+.solidbackbutton {
+  width: 38px;
+  height: 38px;
+  color: #ffffff;
+  background-color: #666666;
+  font-size: 8px;
+  border: 2px solid #666666;
+  border-radius: 50%;
+}
+
 ion-slides {
   height: 100%;
 }
@@ -448,4 +473,42 @@ ion-slides {
   object-fit: cover;
   height: 100%;
   width: auto !important;
+}
+
+.pending-menu-title{
+  font-size: 18px;
+font-weight: 600;
+background-color: #ff6b6b;
+padding: 6px;
+margin-bottom: 0px;
+color: #fff;
+border-radius: 4px;
+width: 100%;
+}
+
+.pending-title{
+  font-size: 16px;
+  font-weight: 600;
+  color: #666666;
+  padding-top: 1px;
+  margin-bottom: 8px;
+}
+
+.pending-text {
+  font-size: 14px;
+margin-bottom: 0px;
+margin-top: 2px;
+font-weight: 600;
+  color: #ff6b6b;
+}
+
+.fullwidth{
+  width: 100%;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 0px;
+margin-top: 11px;
 }
