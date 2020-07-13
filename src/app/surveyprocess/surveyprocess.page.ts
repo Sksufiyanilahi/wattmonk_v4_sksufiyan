@@ -835,30 +835,39 @@ export class SurveyprocessPage implements OnInit {
   }
 
   markShotCompletion(index) {
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus) {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].ispending = false;
+    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus) {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].ispending = false;
 
-      var ispendingset = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
-        if (element.ispending && !ispendingset) {
-          ispendingset = true;
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
-        }
-      });
+        var ispendingset = false;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+          if (element.ispending && !ispendingset) {
+            ispendingset = true;
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+          }
+        });
 
+        this.markMainMenuCompletion();
+      }
+    } else {
       this.markMainMenuCompletion();
     }
   }
 
   markMainMenuCompletion() {
     var ispendingset = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
-      if (element.ispending && !ispendingset) {
-        ispendingset = true;
-        this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
-      }
-    });
+    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+      this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
+        if (element.ispending && !ispendingset) {
+          ispendingset = true;
+          this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+        }
+      });
+    } else {
+      this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
+    }
   }
 
   updateProgressStatus() {
@@ -1168,6 +1177,7 @@ export class SurveyprocessPage implements OnInit {
       this.equipmentscanvasimage = canvas.toDataURL('image/png');
       console.log(this.equipmentscanvasimage);
       this.updateProgressStatus();
+      this.markShotCompletion(this.selectedshotindex);
       this.startCameraAfterPermission();
       this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
       this.selectedmainmenuindex = this.previousmainmenuindex;
