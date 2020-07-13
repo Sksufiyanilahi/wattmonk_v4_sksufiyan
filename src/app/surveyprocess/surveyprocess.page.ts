@@ -716,6 +716,7 @@ export class SurveyprocessPage implements OnInit {
       form.get("shotname").setValue("");
 
       if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 1){
+        alert("inside this");
         this.markShotCompletion(this.selectedshotindex);
         this.updateProgressStatus();
       }

@@ -12,6 +12,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { UtilitiesModule } from '../utilities/utilities.module';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { Insomnia } from '@ionic-native/insomnia/ngx';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   declarations: [SurveyprocessPage],
   providers: [
     CameraPreview,
-    Diagnostic
+    Diagnostic,
+    Insomnia
   ]
 })
 export class SurveyprocessPageModule {}
