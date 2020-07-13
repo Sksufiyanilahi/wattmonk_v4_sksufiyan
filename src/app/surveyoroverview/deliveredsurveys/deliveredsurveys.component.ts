@@ -117,7 +117,11 @@ export class DeliveredsurveysComponent implements OnInit {
               }
             }
           });
-          this.listOfSurveyDataHelper = tempData;
+          this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+            var dateA = new Date(a.date).getTime(),
+              dateB = new Date(b.date).getTime();
+            return dateA - dateB;
+          });
           this.cdr.detectChanges();
   }
 
