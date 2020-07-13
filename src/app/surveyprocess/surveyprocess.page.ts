@@ -144,7 +144,7 @@ export class SurveyprocessPage implements OnInit {
 
   pendingmenuitems: PENDING_MENU[];
   viewpendingitems: boolean = false;
-  ispendingitemsmode : boolean = false;
+  ispendingitemsmode: boolean = false;
 
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
@@ -1105,20 +1105,20 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
-  handlePendingItemsSwitch(){
+  handlePendingItemsSwitch() {
     this.preparePendingItemsList();
-    if(this.pendingmenuitems.length > 0){
+    if (this.pendingmenuitems.length > 0) {
       this.ispendingitemsmode = true;
-    }else{
+    } else {
       this.ispendingitemsmode = false;
     }
     this.viewpendingitems = true;
-            this.cameraPreview.stopCamera();
-            this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
-            this.previousmainmenuindex = this.selectedmainmenuindex;
-            this.previoussubmenuindex = this.selectedsubmenuindex;
-            this.previousshotindex = this.selectedshotindex;
-            this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.NONE;
+    this.cameraPreview.stopCamera();
+    this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
+    this.previousmainmenuindex = this.selectedmainmenuindex;
+    this.previoussubmenuindex = this.selectedsubmenuindex;
+    this.previousshotindex = this.selectedshotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.NONE;
   }
 
   handlePendingItemsBack() {
@@ -1132,10 +1132,10 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
   }
 
-  handlePendingShotClick( menuindex: number, childindex: number, shotindex: number){
+  handlePendingShotClick(menuindex: number, childindex: number, shotindex: number) {
     this.mainmenuitems[this.previousmainmenuindex].isactive = false;
     this.mainmenuitems[this.previousmainmenuindex].viewmode = this.previousviewmode;
-    if(this.mainmenuitems[this.previousmainmenuindex].children.length > 0){
+    if (this.mainmenuitems[this.previousmainmenuindex].children.length > 0) {
       this.mainmenuitems[this.previousmainmenuindex].children[this.previoussubmenuindex].isactive = false;
     }
     this.viewpendingitems = false;
@@ -1144,7 +1144,7 @@ export class SurveyprocessPage implements OnInit {
     this.selectedsubmenuindex = childindex;
     this.selectedshotindex = shotindex;
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-    if(this.mainmenuitems[this.selectedmainmenuindex].children.length > 0){
+    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
       this.mainmenuitems[this.selectedmainmenuindex].children[childindex].isactive = true;
     }
   }
