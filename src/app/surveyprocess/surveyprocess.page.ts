@@ -144,6 +144,7 @@ export class SurveyprocessPage implements OnInit {
 
   pendingmenuitems: PENDING_MENU[];
   viewpendingitems: boolean = false;
+  ispendingitemsmode : boolean = false;
 
   cameraPreviewOpts: CameraPreviewOptions;
   capturedImage: string;
@@ -1009,6 +1010,7 @@ export class SurveyprocessPage implements OnInit {
           cssClass: 'secondary',
           handler: () => {
             this.viewpendingitems = true;
+            this.ispendingitemsmode = true;
             this.cameraPreview.stopCamera();
             this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
             this.previousmainmenuindex = this.selectedmainmenuindex;
@@ -1105,6 +1107,11 @@ export class SurveyprocessPage implements OnInit {
 
   handlePendingItemsSwitch(){
     this.preparePendingItemsList();
+    if(this.pendingmenuitems.length > 0){
+      this.ispendingitemsmode = true;
+    }else{
+      this.ispendingitemsmode = false;
+    }
     this.viewpendingitems = true;
             this.cameraPreview.stopCamera();
             this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
@@ -1122,19 +1129,24 @@ export class SurveyprocessPage implements OnInit {
     this.selectedshotindex = this.previousshotindex;
     this.mainmenuitems[this.selectedmainmenuindex].viewmode = this.previousviewmode;
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
   }
 
   handlePendingShotClick( menuindex: number, childindex: number, shotindex: number){
     this.mainmenuitems[this.previousmainmenuindex].isactive = false;
-    this.mainmenuitems[this.previousmainmenuindex].children[this.previoussubmenuindex].isactive = false;
     this.mainmenuitems[this.previousmainmenuindex].viewmode = this.previousviewmode;
+    if(this.mainmenuitems[this.previousmainmenuindex].children.length > 0){
+      this.mainmenuitems[this.previousmainmenuindex].children[this.previoussubmenuindex].isactive = false;
+    }
     this.viewpendingitems = false;
     this.startCameraAfterPermission();
     this.selectedmainmenuindex = menuindex;
     this.selectedsubmenuindex = childindex;
     this.selectedshotindex = shotindex;
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[childindex].isactive = true;
+    if(this.mainmenuitems[this.selectedmainmenuindex].children.length > 0){
+      this.mainmenuitems[this.selectedmainmenuindex].children[childindex].isactive = true;
+    }
   }
 
   handleEquipmentMarkingBack() {

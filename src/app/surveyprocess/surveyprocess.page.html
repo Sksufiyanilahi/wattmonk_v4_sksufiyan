@@ -59,7 +59,7 @@
               <ion-button style="margin-bottom: 24px;" expand="full" color="primary" size="small"
               (click)="handleSurveyExit()">Exit Survey</ion-button>
             </ion-col>
-            <ion-col class="ion-padding" *ngIf="viewpendingitems">
+            <ion-col class="ion-padding" *ngIf="ispendingitemsmode">
               <ion-button style="margin-bottom: 24px;" expand="full" color="danger" size="small"
               (click)="handlePendingItemsSwitch()">Pending Items</ion-button>
             </ion-col>
