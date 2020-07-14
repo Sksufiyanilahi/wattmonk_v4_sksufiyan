@@ -183,4 +183,8 @@ export class ApiService {
   updateUser(id, data){
     return this.http.put(BaseUrl + '/users/'+ id, data, { headers: this.uploadHeaders } );
   }
+
+  profileNotification(){
+    return this.http.get(BaseUrl + '/notifications/user/' + this.userId)
+  }
 }
