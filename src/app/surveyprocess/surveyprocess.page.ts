@@ -526,7 +526,14 @@ export class SurveyprocessPage implements OnInit {
           element.isactive = true;
           issubmenuset = true;
           this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
-          this.selectedshotindex = 0;
+          var isshotmenuset = false;
+          element.shots.forEach(shot =>{
+            if(shot.ispending && !isshotmenuset){
+              shot.isactive = true;
+              isshotmenuset = true
+              this.selectedshotindex = element.shots.indexOf(shot);
+            }
+          });
         }
       });
     }
@@ -1151,6 +1158,7 @@ export class SurveyprocessPage implements OnInit {
         this.utilitieservice.showSuccessModal('Survey have been saved').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
+            this.storage.remove(""+this.surveyid);
             this.utilitieservice.sethomepageSurveyRefresh(true);
             this.navController.navigateRoot('surveyoroverview');
             this.insomnia.allowSleepAgain()
