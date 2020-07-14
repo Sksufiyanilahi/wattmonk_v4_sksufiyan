@@ -312,6 +312,8 @@ export class SurveyprocessPage implements OnInit {
           this.selectedshotindex = data.selectedshotindex;
           this.shotcompletecount = data.shotcompletecount;
 
+          this.getSolarMakes();
+
           // restore form
           Object.keys(data.formdata).forEach((key: string) => {
             let control: AbstractControl = null;
