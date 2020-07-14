@@ -3,7 +3,7 @@
     <name>Wattmonk</name>
     <description>Wattmonk</description>
     <author email="tech@wattmonk.com" href="http://ionicframework.com/">tech@wattmonk.com</author>
-    <content original-src="index.html" src="http://172.20.10.5:8100" />
+    <content original-src="index.html" src="http://172.20.10.2:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -122,4 +122,5 @@
     </platform>
     <allow-navigation href="http://192.168.1.32:8100" sessionid="507306ab" />
     <allow-navigation href="http://172.20.10.5:8100" sessionid="ce0bf415" />
+    <allow-navigation href="http://172.20.10.2:8100" sessionid="528eed70" />
 </widget>
