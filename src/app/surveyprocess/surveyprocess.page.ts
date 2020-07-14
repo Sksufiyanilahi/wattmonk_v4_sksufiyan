@@ -20,6 +20,7 @@ import { Storage } from '@ionic/storage';
 import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
 import { StorageService } from '../storage.service';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
+import { DomSanitizer } from '@angular/platform-browser';
 
 export interface MAINMENU {
   name: string;
@@ -165,7 +166,7 @@ export class SurveyprocessPage implements OnInit {
   latitude: number;
   longitude: number;
   platformname: string;
-  googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=19&maptype=satellite&size=1200x1600&scale=2&key=' + GOOGLE_API_KEY;
+  // googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=19&maptype=satellite&size=1200x1600&scale=2&key=' + GOOGLE_API_KEY;
 
   batteryForm: FormGroup;
   activeForm: FormGroup;
@@ -242,6 +243,7 @@ export class SurveyprocessPage implements OnInit {
   }
 
   equipmentscanvasimage: string;
+  sitelocationimage: any;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -257,14 +259,15 @@ export class SurveyprocessPage implements OnInit {
     private platform: Platform,
     private routeroutlet: IonRouterOutlet,
     private storageService: StorageService,
-    private insomnia: Insomnia) {
+    private insomnia: Insomnia,
+    private sanitizer:DomSanitizer) {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
     this.surveycity = this.route.snapshot.paramMap.get('city');
     this.surveystate = this.route.snapshot.paramMap.get('state');
     this.latitude = +this.route.snapshot.paramMap.get('lat');
     this.longitude = +this.route.snapshot.paramMap.get('long');
-    this.googleimageurl = this.googleimageurl + '&center=' + this.latitude + ',' + this.longitude;
+    // this.googleimageurl = this.googleimageurl + '&center=' + this.latitude + ',' + this.longitude;
     // this.googleimageurl = this.googleimageurl + '&markers=size:normal|color:red|' + this.latitude + ',' + this.longitude;
 
     if (this.platform.is('ios')) {
@@ -356,6 +359,8 @@ export class SurveyprocessPage implements OnInit {
             });
         }
       });
+
+      this.getSiteLocationGoogleImageFromService();
     }
   }
 
@@ -1236,11 +1241,29 @@ export class SurveyprocessPage implements OnInit {
     this.handleCanvasImageSaveOfMap();
   }
 
+  getSiteLocationGoogleImageFromService() {
+    this.apiService.getGoogleImage(this.latitude,
+      this.longitude).subscribe(data => {
+        this.createImageFromBlob(data);
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  createImageFromBlob(image: Blob) {
+    let reader = new FileReader();
+    if (image) {
+      reader.readAsDataURL(image);
+    }
+    reader.onloadend = (e) => {
+      this.sitelocationimage = reader.result;
+    };
+  }
+
   handleCanvasImageSaveOfMap() {
     const canvasarea = document.getElementById('canvasarea');
     html2canvas(canvasarea, { width: this.platform.width(), height: this.platform.height(), scrollX: 0, scrollY: 0, x: 0 }).then(canvas => {
-      this.equipmentscanvasimage = canvas.toDataURL('image/png');
-      console.log(this.equipmentscanvasimage);
+      this.equipmentscanvasimage = canvas.toDataURL('image/jpeg');
       this.updateProgressStatus();
       this.markShotCompletion(this.selectedshotindex);
       this.startCameraAfterPermission();
