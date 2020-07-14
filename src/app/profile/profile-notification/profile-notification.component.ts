@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/api.service';
 
 @Component({
   selector: 'app-profile-notification',
@@ -6,9 +7,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile-notification.component.scss'],
 })
 export class ProfileNotificationComponent implements OnInit {
+  notification: Object;
 
-  constructor() { }
+  constructor(
+    private apiservice:ApiService
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+    this.getNotification();
+  }
+
+    getNotification(){
+      this.apiservice.profileNotification().subscribe(res=>{
+        this.notification = res;
+        console.log(this.notification);
+        
+      })
+    }
 
 }

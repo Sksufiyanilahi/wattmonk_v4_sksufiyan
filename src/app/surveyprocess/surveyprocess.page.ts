@@ -165,7 +165,7 @@ export class SurveyprocessPage implements OnInit {
   latitude: number;
   longitude: number;
   platformname: string;
-  googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=24&maptype=satellite&size=900x1600&scale=2&key=' + GOOGLE_API_KEY;
+  googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=19&maptype=satellite&size=1200x1600&scale=2&key=' + GOOGLE_API_KEY;
 
   batteryForm: FormGroup;
   activeForm: FormGroup;
@@ -311,6 +311,9 @@ export class SurveyprocessPage implements OnInit {
           this.selectedsubmenuindex = data.selectedsubmenuindex;
           this.selectedshotindex = data.selectedshotindex;
           this.shotcompletecount = data.shotcompletecount;
+          this.previousmainmenuindex = data.previousmainmenuindex;
+          this.previoussubmenuindex = data.previoussubmenuindex;
+          this.previousshotindex = data.previousshotindex;
 
           // restore form
           Object.keys(data.formdata).forEach((key: string) => {
@@ -475,10 +478,7 @@ export class SurveyprocessPage implements OnInit {
   }
 
   dragEnded(event: CdkDragEnd, item: Equipment) {
-    console.log("inside drag end");
-    console.log(item.name);
     item.enabled = false;
-    console.log(item);
     item.event = event;
   }
 
@@ -508,6 +508,12 @@ export class SurveyprocessPage implements OnInit {
     this.previoussubmenuindex = this.selectedsubmenuindex;
     this.previousshotindex = this.selectedshotindex;
 
+    //Set questionstatus true for question type 5
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
+    }
+
     //Unset previous menu and select new one
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = index;
@@ -520,7 +526,14 @@ export class SurveyprocessPage implements OnInit {
           element.isactive = true;
           issubmenuset = true;
           this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
-          this.selectedshotindex = 0;
+          var isshotmenuset = false;
+          element.shots.forEach(shot => {
+            if (shot.ispending && !isshotmenuset) {
+              shot.isactive = true;
+              isshotmenuset = true
+              this.selectedshotindex = element.shots.indexOf(shot);
+            }
+          });
         }
       });
     }
@@ -715,9 +728,9 @@ export class SurveyprocessPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
       form.get("shotname").setValue("");
 
-      if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 1){
-        alert("inside this");
-        this.markShotCompletion(this.selectedshotindex);
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 1) {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+        this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
         this.updateProgressStatus();
       }
     } else {
@@ -773,6 +786,10 @@ export class SurveyprocessPage implements OnInit {
     surveyStorageModel.selectedsubmenuindex = this.selectedsubmenuindex;
     surveyStorageModel.selectedshotindex = this.selectedshotindex;
     surveyStorageModel.shotcompletecount = this.shotcompletecount;
+    surveyStorageModel.previousmainmenuindex = this.previousmainmenuindex;
+    surveyStorageModel.previoussubmenuindex = this.previoussubmenuindex;
+    surveyStorageModel.previousshotindex = this.previousshotindex;
+
     return surveyStorageModel;
   }
 
@@ -952,39 +969,39 @@ export class SurveyprocessPage implements OnInit {
     this.storage.set(this.surveyid + '', data);
     this.utilitieservice.setDataRefresh(true);
 
-    if(this.batteryForm.status == 'INVALID'){
+    if (this.batteryForm.status == 'INVALID') {
       this.displayIncompleteFormAlert();
-    }else{
-      this.markMainMenuCompletion();
-    if (this.checkProcessCompletion()) {
-      this.utilitieservice.showLoading('Saving Survey').then(() => {
-        const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value);
-        if (!isutilityfound) {
-          const data = {
-            name: this.utility.manualinput,
-            source: this.platformname,
-            lastused: this.formatDateInBackendFormat(),
-            city: this.surveycity,
-            state: this.surveystate,
-            addedby: this.storageService.getUserID()
-          }
-          this.apiService.addUtility(data).subscribe((data) => {
-            this.selectedutilityid = data.id;
-            this.saveFormData();
-          }, (error) => {
-            this.utilitieservice.hideLoading().then(() => {
-              this.utilitieservice.errorSnackBar(JSON.stringify(error));
-            });
-          });
-        } else {
-          this.selectedutilityid = this.batteryForm.get("utility").value.id;
-          this.saveFormData();
-        }
-      });
     } else {
-      this.displayAlertForRemainingShots();
+      this.markMainMenuCompletion();
+      if (this.checkProcessCompletion()) {
+        this.utilitieservice.showLoading('Saving Survey').then(() => {
+          const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value);
+          if (!isutilityfound) {
+            const data = {
+              name: this.utility.manualinput,
+              source: this.platformname,
+              lastused: this.formatDateInBackendFormat(),
+              city: this.surveycity,
+              state: this.surveystate,
+              addedby: this.storageService.getUserID()
+            }
+            this.apiService.addUtility(data).subscribe((data) => {
+              this.selectedutilityid = data.id;
+              this.saveFormData();
+            }, (error) => {
+              this.utilitieservice.hideLoading().then(() => {
+                this.utilitieservice.errorSnackBar(JSON.stringify(error));
+              });
+            });
+          } else {
+            this.selectedutilityid = this.batteryForm.get("utility").value.id;
+            this.saveFormData();
+          }
+        });
+      } else {
+        this.displayAlertForRemainingShots();
+      }
     }
-  }
   }
 
   saveFormData() {
@@ -1012,13 +1029,13 @@ export class SurveyprocessPage implements OnInit {
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
       this.utilitieservice.hideLoading().then(() => {
         this.insomnia.keepAwake()
-  .then(
-    () => {
-      console.log('success')
-      this.uploadImagesToServer();
-    },
-    () => console.log('error')
-  );
+          .then(
+            () => {
+              console.log('success')
+            },
+            () => console.log('error')
+          );
+        this.uploadImagesToServer();
 
       });
     }, (error) => {
@@ -1028,42 +1045,26 @@ export class SurveyprocessPage implements OnInit {
     });
   }
 
-  async displayIncompleteFormAlert(){
-    // let error = '';
-    // Object.keys(this.batteryForm.controls).forEach((key: string) => {
-    //   const control: AbstractControl = this.batteryForm.get(key);
-    //   if (control.invalid) {
-    //     if (error !== '') {
-    //       error = error + '<br/>';
-    //     }
-    //     console.log(this.batteryForm.get(key));
-    //     if (control.errors.required === true) {
-    //       error = error + this.utilitieservice.capitalizeWord(key) + ' is required';
-    //     }
-    //     if (control.errors.email === true) {
-    //       error = error + 'Invalid email';
-    //     }
-    //     if (control.errors.error !== null && control.errors.error !== undefined) {
-    //       error = error + control.errors.error;
-    //     }
-    //   }
-    // });
-    // this.utilitieservice.showAlert(error);
-    const alert = await this.alertController.create({
-      header: 'Incomplete',
-      subHeader: 'Please fill the additional information form.',
-      buttons: [
-        {
-          text: 'OK',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-          }
+  async displayIncompleteFormAlert() {
+    let error = '';
+    Object.keys(this.batteryForm.controls).forEach((key: string) => {
+      const control: AbstractControl = this.batteryForm.get(key);
+      if (control.invalid) {
+        if (error !== '') {
+          error = error + '<br/>';
         }
-      ],
-      backdropDismiss: false
+        if (control.errors.required === true) {
+          error = error + "Input for field "+key+ ' is missing.';
+        }
+        if (control.errors.email === true) {
+          error = error + 'Invalid email';
+        }
+        if (control.errors.error !== null && control.errors.error !== undefined) {
+          error = error + control.errors.error;
+        }
+      }
     });
-    await alert.present();
+    this.utilitieservice.showAlert(error);
   }
 
   async displayAlertForRemainingShots() {
@@ -1145,13 +1146,14 @@ export class SurveyprocessPage implements OnInit {
         this.utilitieservice.showSuccessModal('Survey have been saved').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
+            this.storage.remove("" + this.surveyid);
             this.utilitieservice.sethomepageSurveyRefresh(true);
             this.navController.navigateRoot('surveyoroverview');
             this.insomnia.allowSleepAgain()
-  .then(
-    () => console.log('success'),
-    () => console.log('error')
-  );
+              .then(
+                () => console.log('success'),
+                () => console.log('error')
+              );
           });
         });
       });
@@ -1288,6 +1290,8 @@ export class SurveyprocessPage implements OnInit {
     this.selectedsubmenuindex = this.previoussubmenuindex;
     this.selectedshotindex = this.previousshotindex;
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
     this.startCameraAfterPermission();
   }
 }

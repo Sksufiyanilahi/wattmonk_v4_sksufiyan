@@ -364,13 +364,16 @@
 </ion-content>
 
 <ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.MAP" id="canvasarea" [forceOverscroll]="false">
-  <ion-grid class="ion-no-padding">
+  <ion-grid class="ion-no-padding" #screen>
     <ion-row>
-      <ion-button fill="clear" class="backbutton" (click)="handleEquipmentMarkingBack()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
-      <ion-button fill="clear" class="savebutton" (click)="handleEquipmentMarkingSave()"><ion-icon slot="icon-only" name="save-outline"></ion-icon></ion-button>
+      <ion-button fill="clear" class="backbutton z-top" (click)="handleEquipmentMarkingBack()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
+      <ion-button fill="clear" class="savebutton z-top" (click)="handleEquipmentMarkingSave()"><ion-icon slot="icon-only" name="save-outline"></ion-icon></ion-button>
     </ion-row>
-    <ion-row #screen class="locationmarkingboundary">
-      <img [src]="googleimageurl" class="object-fit-contain" style="height: 100vh;" />
+    <ion-row class="locationmarkingboundary">
+      <pinch-zoom>
+        <img [src]="googleimageurl" style="height: 100vh;"/>
+    </pinch-zoom>
+      <!-- <img [src]="googleimageurl" class="object-fit-contain" style="height: 100vh;" /> -->
     </ion-row>
     <ion-row class="legendscontainer">
       <ion-col class="legend ion-text-center" *ngFor="let item of equipments">
@@ -415,7 +418,7 @@
         <ion-row class="fullwidth" *ngFor="let childmenu of mainmenu.pendingchilds; let childindex = index">
           <p class="pending-title">{{childindex + 1}}. {{childmenu.name}}</p>
             <ion-row class="fullwidth" *ngFor="let shot of childmenu.pendingshots; let shotindex = index">
-              <ion-button fill="clear" class="pending-text" (click)="handlePendingShotClick(mainindex, childindex, shotindex)">{{shot.name}}</ion-button>
+              <ion-button fill="clear" class="pending-text" (click)="handlePendingShotClick(mainmenu.index, childmenu.index, shot.index)">{{shot.name}}</ion-button>
             </ion-row>
         </ion-row>
     </ion-row>

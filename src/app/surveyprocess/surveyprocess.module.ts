@@ -13,6 +13,7 @@ import { UtilitiesModule } from '../utilities/utilities.module';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
+import { PinchZoomModule } from 'ngx-pinch-zoom';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { Insomnia } from '@ionic-native/insomnia/ngx';
     IonicModule,
     UtilitiesModule,
     DragDropModule,
-    SurveyprocessPageRoutingModule
+    SurveyprocessPageRoutingModule,
+    PinchZoomModule
   ],
   declarations: [SurveyprocessPage],
   providers: [

@@ -185,6 +185,6 @@ export class ApiService {
   }
 
   profileNotification(){
-    return this.http.get(BaseUrl + '/notifications/user/' + this.userId)
+    return this.http.get(BaseUrl + '/notifications/user/' + this.userId,{ headers: this.headers })
   }
 }
