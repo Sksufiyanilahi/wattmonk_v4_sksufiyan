@@ -1,11 +1,11 @@
-<ion-content style="--background: #FEF8F8;">
+<ion-content style="--background: #e9f1ff;">
    <ion-grid>
     <ion-row >
-      <ion-col>
-        <ion-item lines="none" style="--background: #FEF8F8;" *ngFor="let notifications of notification">
+      <ion-col class="padding_adjust">
+        <ion-item lines="none" style="--background: #e9f1ff;" *ngFor="let notifications of notification">
           <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
           <ion-label>
-            <h2 style="word-wrap: break-word !important;">{{notifications.message}}</h2>
+            <h2 style="white-space: normal;font-size:14px !important">{{notifications.message}}</h2>
             <p>{{notifications.created_at | date:'dd/MM/yyyy'}}</p>
           </ion-label>
         </ion-item>

@@ -12,6 +12,8 @@
   height: 120px;
   object-fit: cover;
   border-radius: 50%;
+  border: 4px solid #4c8dff;
+
 }
 
 .profile-name{
@@ -37,7 +39,7 @@
 }
 
 .badge-container{
-  background: #F5EBEC;
+  background: #e9f1ff;
   border-radius: 10px;
 }
 
@@ -62,5 +64,9 @@ ion-tab-button {
 //   border-bottom-left-radius: 2px;
 //   border-bottom-right-radius: 2px;
 // }
+
+._color{
+  color: #6e6e6e;
+}
 
 
