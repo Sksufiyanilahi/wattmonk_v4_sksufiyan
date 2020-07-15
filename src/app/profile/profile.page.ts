@@ -35,6 +35,8 @@ export class ProfilePage implements OnInit {
 
   ngOnInit() {
     this.user = this.storage.getUser();
+    console.log(this.user);
+    
   }
 
   goBack() {

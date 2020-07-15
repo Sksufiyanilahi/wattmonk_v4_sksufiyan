@@ -50,6 +50,8 @@ export class SurveyoroverviewPage implements OnInit {
 
   updateUserPushToken(){
     this.apiService.updateUser(this.storage.getUserID(), {"pushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
+    console.log(data, "fcm data");
+    
     }, (error) => {
     });
   }

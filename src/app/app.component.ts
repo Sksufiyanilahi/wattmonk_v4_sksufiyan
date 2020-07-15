@@ -67,7 +67,8 @@ export class AppComponent {
   getNotification() {
     this.firebase.onNotificationOpen()
    .subscribe(data => {
-     console.log(`User opened a notification ${data}`)
+     console.log(`User opened a notification ${data}`,data)
+     this.apiservice.emitMessageReceived("pushNotification");
     });
 
   }

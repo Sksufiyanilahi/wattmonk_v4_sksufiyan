@@ -4,7 +4,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { LoginModel } from './model/login.model';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { StorageService } from './storage.service';
 import { SolarMake } from './model/solar-make.model';
 import { SolarMadeModel } from './model/solar-made.model';
@@ -27,15 +27,23 @@ export class ApiService {
   private parentId = '';
   private userId = '';
   public searchbarElement: string = '';
-
+  public _OnMessageReceivedSubject: Subject<string>;
   constructor(
     private http: HttpClient,
     private storageService: StorageService
   ) {
     this.resetHeaders();
+    this._OnMessageReceivedSubject = new Subject<string>();
   }
-
+  
+ /**
+ * emits a message. 
+ */
+  public emitMessageReceived(msg: string): void {
+    this._OnMessageReceivedSubject.next(msg);
+  }
   login(data: any): Observable<LoginModel> {
+    this.resetHeaders();
     return this.http.post<LoginModel>(BaseUrl + '/auth/local', data, { headers: this.headers });
   }
 
@@ -177,6 +185,9 @@ export class ApiService {
     return this.http.put(BaseUrl + '/users/'+ id, data, { headers: this.uploadHeaders } );
   }
 
+  profileNotification(){
+    return this.http.get(BaseUrl + '/notifications/user/' + this.userId,{ headers: this.headers })
+  }
   getGoogleImage(lat:number, lng:number): Observable<Blob> {
     var imageurl = "https://maps.googleapis.com/maps/api/staticmap?zoom=19&size=1200x1600&scale=2&maptype=satellite&center=" + lat + ","+ lng + "&key=" + GOOGLE_API_KEY;
     console.log(imageurl);
