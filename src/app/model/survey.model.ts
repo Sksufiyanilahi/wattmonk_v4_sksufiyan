@@ -1,6 +1,6 @@
 import { Image, User } from './user.model';
 import { Invertermake, Invertermodel, Solarmake, Solarmodel } from './design.model';
-import { ImageModel } from '../camera/menu.model';
+// import { ImageModel } from '../camera/menu.model';
 import { InverterMadeModel } from './inverter-made.model';
 
 export class SurveyModel {

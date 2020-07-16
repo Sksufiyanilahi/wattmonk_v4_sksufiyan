@@ -23,11 +23,6 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
-    path: 'camera/:id/:type/:lat/:long',
-    loadChildren: () => import('./camera/camera.module').then(m => m.CameraPageModule),
-    canActivate: [AuthGuardService]
-  },
-  {
     path: 'profile',
     loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule),
     canActivate: [AuthGuardService]

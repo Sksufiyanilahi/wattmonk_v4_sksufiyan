@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuModel } from '../camera/menu.model';
 import { MenuPopupComponent } from './menu-popup/menu-popup.component';
 import { NavController, PopoverController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
@@ -39,33 +38,33 @@ export class GalleryPage implements OnInit {
     this.getSurveyDetails();
   }
 
-  setDataToDataModel(data: MenuModel[]) {
-    console.log(this.survey);
-    data.forEach((mainMenu) => {
-      if (mainMenu.imageModel !== null && mainMenu.imageModel !== undefined) {
-        mainMenu.imageModel.forEach((imageModel) => {
-          if (imageModel.image !== '') {
-            const image = new Image();
-            image.url = imageModel.image;
-            this.survey[imageModel.imageUploadTag].push(image);
-          }
-        });
-      }
-      if (mainMenu.subMenu !== null && mainMenu.subMenu !== undefined) {
-        mainMenu.subMenu.forEach((submenu) => {
-          submenu.images.forEach((imageModel) => {
-            if (imageModel.image !== '') {
-              const image = new Image();
-              image.url = imageModel.image;
-              this.survey[imageModel.imageUploadTag].push(image);
-            }
-          });
-        });
-      }
-    });
-    this.listOfImages = this.survey.mspimages;
-    this.setImage();
-  }
+  // setDataToDataModel(data: MenuModel[]) {
+  //   console.log(this.survey);
+  //   data.forEach((mainMenu) => {
+  //     if (mainMenu.imageModel !== null && mainMenu.imageModel !== undefined) {
+  //       mainMenu.imageModel.forEach((imageModel) => {
+  //         if (imageModel.image !== '') {
+  //           const image = new Image();
+  //           image.url = imageModel.image;
+  //           this.survey[imageModel.imageUploadTag].push(image);
+  //         }
+  //       });
+  //     }
+  //     if (mainMenu.subMenu !== null && mainMenu.subMenu !== undefined) {
+  //       mainMenu.subMenu.forEach((submenu) => {
+  //         submenu.images.forEach((imageModel) => {
+  //           if (imageModel.image !== '') {
+  //             const image = new Image();
+  //             image.url = imageModel.image;
+  //             this.survey[imageModel.imageUploadTag].push(image);
+  //           }
+  //         });
+  //       });
+  //     }
+  //   });
+  //   this.listOfImages = this.survey.mspimages;
+  //   this.setImage();
+  // }
 
   getSurveyDetails() {
     this.utilities.showLoading('Getting Survey Details').then((success) => {
