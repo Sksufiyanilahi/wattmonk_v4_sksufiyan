@@ -156,7 +156,7 @@ app-ar ion-content {
   margin-left: 4px;
 }
 
-.actionarea .circularbutton img{
+.actionarea .circularbutton img {
   width: 56%;
   margin-left: 7px;
   margin-top: 7px;
@@ -172,7 +172,7 @@ app-ar ion-content {
   margin-left: 4px;
 }
 
-.actionarea .flashbutton ion-icon{
+.actionarea .flashbutton ion-icon {
   margin-left: 8px;
   margin-top: 8px;
 }
@@ -443,16 +443,16 @@ app-ar ion-content {
 }
 
 .savebutton {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 38px;
-    height: 38px;
-    color: #282829;
-    background-color: #ffffffd7;
-    font-size: 8px;
-    border: 2px solid #ffffff;
-    border-radius: 50%;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 38px;
+  height: 38px;
+  color: #282829;
+  background-color: #ffffffd7;
+  font-size: 8px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
 }
 
 .solidbackbutton {
@@ -475,18 +475,18 @@ ion-slides {
   width: auto !important;
 }
 
-.pending-menu-title{
+.pending-menu-title {
   font-size: 18px;
-font-weight: 600;
-background-color: #ff6b6b;
-padding: 6px;
-margin-bottom: 0px;
-color: #fff;
-border-radius: 4px;
-width: 100%;
+  font-weight: 600;
+  background-color: #ff6b6b;
+  padding: 6px;
+  margin-bottom: 0px;
+  color: #fff;
+  border-radius: 4px;
+  width: 100%;
 }
 
-.pending-title{
+.pending-title {
   font-size: 16px;
   font-weight: 600;
   color: #666666;
@@ -496,13 +496,13 @@ width: 100%;
 
 .pending-text {
   font-size: 14px;
-margin-bottom: 0px;
-margin-top: 2px;
-font-weight: 600;
+  margin-bottom: 0px;
+  margin-top: 2px;
+  font-weight: 600;
   color: #ff6b6b;
 }
 
-.fullwidth{
+.fullwidth {
   width: 100%;
 }
 
@@ -510,5 +510,12 @@ font-weight: 600;
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 0px;
-margin-top: 11px;
+  margin-top: 11px;
+}
+
+.siteimage {
+  display: block;
+  width: 100%; 
+  height: 100%;
+  object-fit: contain;
 }
