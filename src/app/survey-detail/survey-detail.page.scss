@@ -130,3 +130,69 @@ div[scrolly=true] {
 .page-text-color {
   color: #666666 !important;;
 }
+
+.segments{
+  height:40px;
+}
+
+ion-segment-button {
+  width: calc(100% / 4);
+
+  ion-label {
+      max-width: calc(90vw / 4);
+  }
+}
+
+
+.bkg{
+  color: #666;
+  background-color: #f9f9f9;
+}
+ion-slides {
+  height: 100%;
+}
+
+.position-fix{
+  position:absolute;
+  z-index:999;
+  transform: translateY(-1000%);
+}
+
+.segment-btn{
+background: blue !important;
+color:#fff !important;
+}
+.wd140{
+min-width: auto;
+max-width: 100%;width: auto !important;
+color:#fff;
+}
+.wd140 ion-label{width: auto !important;max-width: 100%;}
+
+.colorwht{
+  color:#111 !important;
+  background: #fff !important;
+}
+
+main inner-scroll scroll-y{
+padding:0px !important;}
+
+ion-slides{
+  padding:0px !important;
+}
+
+ion-content{
+  main{
+    padding:0px !important;
+  }
+}
+
+button{
+  background: blue !important;
+}
+
+.hgt-margin{
+  height: 39px;
+  margin-top: 10px;
+}
+

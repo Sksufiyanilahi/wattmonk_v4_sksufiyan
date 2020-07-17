@@ -31,6 +31,7 @@ export class ContractorLogo {
 export class Image {
   url: string;
   id: number;
+  name:string
 }
 
 export class Role {

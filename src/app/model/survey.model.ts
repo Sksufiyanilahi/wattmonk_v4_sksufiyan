@@ -13,7 +13,7 @@ export class SurveyDataModel {
   email: string;
   phonenumber: string;
   datetime: Date;
-  comments: string;
+  comments: {};
   created_at: Date;
   updated_at: Date;
   address: string;
@@ -56,6 +56,7 @@ export class SurveyDataModel {
   totalpercent : number;
   isoverdue : boolean;
   formattedjobtype : string;
+  solarpanelsimages:Image[];
 }
 
 
