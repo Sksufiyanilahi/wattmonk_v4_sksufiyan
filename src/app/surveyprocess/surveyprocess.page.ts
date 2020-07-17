@@ -20,6 +20,7 @@ import { Storage } from '@ionic/storage';
 import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
 import { StorageService } from '../storage.service';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
+import * as domtoimage from 'dom-to-image';
 
 export interface MAINMENU {
   name: string;
@@ -243,6 +244,7 @@ export class SurveyprocessPage implements OnInit {
 
   equipmentscanvasimage: string;
   sitelocationimage: any;
+  displaymarkedimage = false;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -1264,17 +1266,29 @@ export class SurveyprocessPage implements OnInit {
 
   handleCanvasImageSaveOfMap() {
     const canvasarea = document.getElementById('canvasarea');
-    html2canvas(canvasarea, { width: this.platform.width(), height: this.platform.height(), scrollX: 0, scrollY: 0, x: 0 }).then(canvas => {
-      this.equipmentscanvasimage = canvas.toDataURL('image/jpeg');
-      this.updateProgressStatus();
-      this.markShotCompletion(this.selectedshotindex);
-      this.startCameraAfterPermission();
-      this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-      this.selectedmainmenuindex = this.previousmainmenuindex;
-      this.selectedsubmenuindex = this.previoussubmenuindex;
-      this.selectedshotindex = this.previousshotindex;
-      this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-    });
+    if (this.platform.is('ios')) {
+      html2canvas(canvasarea, { width: this.platform.width(), height: this.platform.height(), scrollX: 0, scrollY: 0, x: 0 }).then(canvas => {
+        this.equipmentscanvasimage = canvas.toDataURL('image/jpeg');
+        this.displaymarkedimage = true;
+        // this.updateProgressStatus();
+        // this.markShotCompletion(this.selectedshotindex);
+        // this.startCameraAfterPermission();
+        // this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+        // this.selectedmainmenuindex = this.previousmainmenuindex;
+        // this.selectedsubmenuindex = this.previoussubmenuindex;
+        // this.selectedshotindex = this.previousshotindex;
+        // this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+      });
+    }else{
+      domtoimage.toPng(canvasarea)
+      .then((dataUrl) => {
+        this.equipmentscanvasimage = dataUrl;
+        this.displaymarkedimage = true;
+      })
+      .catch((error) => {
+        console.error('oops, something went wrong!', error);
+      });
+    }
   }
 
   handleGalleryViewSwitch(shot: CAPTUREDSHOT) {
