@@ -20,7 +20,7 @@ import { Storage } from '@ionic/storage';
 import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
 import { StorageService } from '../storage.service';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
-import { DomSanitizer } from '@angular/platform-browser';
+import * as domtoimage from 'dom-to-image';
 
 export interface MAINMENU {
   name: string;
@@ -259,16 +259,13 @@ export class SurveyprocessPage implements OnInit {
     private platform: Platform,
     private routeroutlet: IonRouterOutlet,
     private storageService: StorageService,
-    private insomnia: Insomnia,
-    private sanitizer:DomSanitizer) {
+    private insomnia: Insomnia) {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
     this.surveycity = this.route.snapshot.paramMap.get('city');
     this.surveystate = this.route.snapshot.paramMap.get('state');
     this.latitude = +this.route.snapshot.paramMap.get('lat');
     this.longitude = +this.route.snapshot.paramMap.get('long');
-    // this.googleimageurl = this.googleimageurl + '&center=' + this.latitude + ',' + this.longitude;
-    // this.googleimageurl = this.googleimageurl + '&markers=size:normal|color:red|' + this.latitude + ',' + this.longitude;
 
     if (this.platform.is('ios')) {
       this.platformname = "iphone"
@@ -277,6 +274,12 @@ export class SurveyprocessPage implements OnInit {
     } else {
       this.platformname = "other"
     }
+
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      console.log('Handler was called!');
+      this.handleSurveyExit();
+      navController.pop();
+    });
 
     if (this.surveytype == "battery") {
       this.totalstepcount = 16;
@@ -384,7 +387,7 @@ export class SurveyprocessPage implements OnInit {
       height: window.screen.height,
       camera: 'rear',
       tapPhoto: true,
-      tapToFocus: true,
+      tapFocus: true,
       previewDrag: true,
       toBack: true,
       alpha: 1
@@ -1262,17 +1265,35 @@ export class SurveyprocessPage implements OnInit {
 
   handleCanvasImageSaveOfMap() {
     const canvasarea = document.getElementById('canvasarea');
-    html2canvas(canvasarea, { width: this.platform.width(), height: this.platform.height(), scrollX: 0, scrollY: 0, x: 0 }).then(canvas => {
-      this.equipmentscanvasimage = canvas.toDataURL('image/jpeg');
-      this.updateProgressStatus();
-      this.markShotCompletion(this.selectedshotindex);
-      this.startCameraAfterPermission();
-      this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-      this.selectedmainmenuindex = this.previousmainmenuindex;
-      this.selectedsubmenuindex = this.previoussubmenuindex;
-      this.selectedshotindex = this.previousshotindex;
-      this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-    });
+    if (this.platform.is('ios')) {
+      html2canvas(canvasarea, { width: this.platform.width(), height: this.platform.height(), scrollX: 0, scrollY: 0, x: 0 }).then(canvas => {
+        this.equipmentscanvasimage = canvas.toDataURL('image/jpeg');
+        this.updateProgressStatus();
+        this.markShotCompletion(this.selectedshotindex);
+        this.startCameraAfterPermission();
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+        this.selectedmainmenuindex = this.previousmainmenuindex;
+        this.selectedsubmenuindex = this.previoussubmenuindex;
+        this.selectedshotindex = this.previousshotindex;
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+      });
+    }else{
+      domtoimage.toPng(canvasarea)
+      .then((dataUrl) => {
+        this.equipmentscanvasimage = dataUrl;
+        this.updateProgressStatus();
+        this.markShotCompletion(this.selectedshotindex);
+        this.startCameraAfterPermission();
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+        this.selectedmainmenuindex = this.previousmainmenuindex;
+        this.selectedsubmenuindex = this.previoussubmenuindex;
+        this.selectedshotindex = this.previousshotindex;
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+      })
+      .catch((error) => {
+        console.error('oops, something went wrong!', error);
+      });
+    }
   }
 
   handleGalleryViewSwitch(shot: CAPTUREDSHOT) {

@@ -32,7 +32,7 @@
         <ion-col size="12" class="actionareacol translucent-background">
           <ion-row class="childbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">
-              <ion-button fill="clear"
+              <ion-button id="'submenu'+index" fill="clear"
                 [ngClass]="{'completed-inactive' : !button.ispending && !button.isactive, 'completed' : !button.ispending && button.isactive, 'active' : button.ispending && button.isactive, 'normal' : button.ispending && !button.isactive}"
                 *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index"
                 (click)="toggleSubMenuSelection(i)">{{button.name}}</ion-button>
@@ -369,9 +369,9 @@
       <ion-button fill="clear" class="backbutton z-top" (click)="handleEquipmentMarkingBack()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
       <ion-button fill="clear" class="savebutton z-top" (click)="handleEquipmentMarkingSave()"><ion-icon slot="icon-only" name="save-outline"></ion-icon></ion-button>
     </ion-row>
-    <ion-row class="locationmarkingboundary">
+    <ion-row class="locationmarkingboundary ion-justify-content-center ion-align-items-center">
       <pinch-zoom>
-        <img src="{{sitelocationimage}}" style="height: 100vh;"/>
+        <img src="{{sitelocationimage}}"/>
     </pinch-zoom>
     </ion-row>
     <ion-row class="legendscontainer">
