@@ -32,7 +32,7 @@
         <ion-col size="12" class="actionareacol translucent-background">
           <ion-row class="childbuttons ion-justify-content-center mainbuttonscontainer">
             <div class="scroll" scrollX="true">
-              <ion-button fill="clear"
+              <ion-button id="'submenu'+index" fill="clear"
                 [ngClass]="{'completed-inactive' : !button.ispending && !button.isactive, 'completed' : !button.ispending && button.isactive, 'active' : button.ispending && button.isactive, 'normal' : button.ispending && !button.isactive}"
                 *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index"
                 (click)="toggleSubMenuSelection(i)">{{button.name}}</ion-button>
