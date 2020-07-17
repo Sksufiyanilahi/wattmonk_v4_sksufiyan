@@ -406,6 +406,10 @@ export class SurveyprocessPage implements OnInit {
     }, 2000);
   }
 
+  ngOnDestroy() {
+    this.stopCamera();
+  }
+
   getUtilities() {
     this.utilitieservice.showLoading('Loading').then(() => {
       this.apiService.getUtilities().subscribe(response => {
