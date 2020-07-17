@@ -387,7 +387,7 @@ export class SurveyprocessPage implements OnInit {
       height: window.screen.height,
       camera: 'rear',
       tapPhoto: true,
-      tapFocus: true,
+      tapToFocus: true,
       previewDrag: true,
       toBack: true,
       alpha: 1

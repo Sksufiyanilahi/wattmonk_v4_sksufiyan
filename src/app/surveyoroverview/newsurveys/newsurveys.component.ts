@@ -102,6 +102,8 @@ export class NewsurveysComponent implements OnInit {
 
   formatSurveyData(records : SurveyDataModel[]){
     this.listOfSurveyData = this.fillinDynamicData(records);
+    console.log(this.listOfSurveyData);
+    
     const tempData: SurveyDataHelper[] = [];
           this.listOfSurveyData.forEach((surveyItem) => {
             if (tempData.length === 0) {
