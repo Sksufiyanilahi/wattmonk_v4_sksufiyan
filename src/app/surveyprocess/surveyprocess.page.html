@@ -369,13 +369,12 @@
       <ion-button fill="clear" class="backbutton z-top" (click)="handleEquipmentMarkingBack()"><ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon></ion-button>
       <ion-button fill="clear" class="savebutton z-top" (click)="handleEquipmentMarkingSave()"><ion-icon slot="icon-only" name="save-outline"></ion-icon></ion-button>
     </ion-row>
-    <ion-row class="locationmarkingboundary ion-justify-content-center ion-align-items-center" *ngIf="!displaymarkedimage">
+    <ion-row class="locationmarkingboundary ion-justify-content-center ion-align-items-center">
       <pinch-zoom>
         <img src="{{sitelocationimage}}"/>
     </pinch-zoom>
     </ion-row>
-    <img *ngIf="displaymarkedimage" src={{equipmentscanvasimage}}/>
-    <ion-row class="legendscontainer" *ngIf="!displaymarkedimage">
+    <ion-row class="legendscontainer">
       <ion-col class="legend ion-text-center" *ngFor="let item of equipments">
         <div class="dotcontainer"
           [ngStyle]="item.enabled ? {'background-color': item.color} : {'background-color': item.disabledcolor}">

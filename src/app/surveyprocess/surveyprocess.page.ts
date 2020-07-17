@@ -244,7 +244,6 @@ export class SurveyprocessPage implements OnInit {
 
   equipmentscanvasimage: string;
   sitelocationimage: any;
-  displaymarkedimage = false;
 
   constructor(
     private cameraPreview: CameraPreview,
@@ -1269,21 +1268,27 @@ export class SurveyprocessPage implements OnInit {
     if (this.platform.is('ios')) {
       html2canvas(canvasarea, { width: this.platform.width(), height: this.platform.height(), scrollX: 0, scrollY: 0, x: 0 }).then(canvas => {
         this.equipmentscanvasimage = canvas.toDataURL('image/jpeg');
-        this.displaymarkedimage = true;
-        // this.updateProgressStatus();
-        // this.markShotCompletion(this.selectedshotindex);
-        // this.startCameraAfterPermission();
-        // this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-        // this.selectedmainmenuindex = this.previousmainmenuindex;
-        // this.selectedsubmenuindex = this.previoussubmenuindex;
-        // this.selectedshotindex = this.previousshotindex;
-        // this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+        this.updateProgressStatus();
+        this.markShotCompletion(this.selectedshotindex);
+        this.startCameraAfterPermission();
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+        this.selectedmainmenuindex = this.previousmainmenuindex;
+        this.selectedsubmenuindex = this.previoussubmenuindex;
+        this.selectedshotindex = this.previousshotindex;
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
       });
     }else{
       domtoimage.toPng(canvasarea)
       .then((dataUrl) => {
         this.equipmentscanvasimage = dataUrl;
-        this.displaymarkedimage = true;
+        this.updateProgressStatus();
+        this.markShotCompletion(this.selectedshotindex);
+        this.startCameraAfterPermission();
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+        this.selectedmainmenuindex = this.previousmainmenuindex;
+        this.selectedsubmenuindex = this.previoussubmenuindex;
+        this.selectedshotindex = this.previousshotindex;
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
       })
       .catch((error) => {
         console.error('oops, something went wrong!', error);
