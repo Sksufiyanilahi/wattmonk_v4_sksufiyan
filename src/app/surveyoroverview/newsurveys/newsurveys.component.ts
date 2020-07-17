@@ -65,9 +65,9 @@ export class NewsurveysComponent implements OnInit {
   }
 
   getSurveys(event?: CustomEvent) {
-    // let showLoader = true;
+    let showLoader = true;
     if (event != null && event !== undefined) {
-      // showLoader = false;
+      showLoader = false;
     }
     this.fetchPendingSurveys(event);
   }

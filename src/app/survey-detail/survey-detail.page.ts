@@ -22,6 +22,11 @@ import { ROLES } from '../contants';
 })
 export class SurveyDetailPage implements OnInit, OnDestroy {
 
+  slideOpts = {
+    initialSlide: 1,
+    speed: 400
+  };
+
   surveyId: number;
   survey: SurveyDataModel;
   listOfAssignees: AssigneeModel[] = [];
@@ -32,6 +37,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   assigneeForm: FormGroup;
   dataSubscription: Subscription;
   refreshDataOnPreviousPage = 0;
+  segments:any='SiteDetils';
+  electricals:any='MSB';
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -86,6 +93,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
       this.apiService.getSurveyDetail(this.surveyId).subscribe((result) => {
         this.utilities.hideLoading().then(() => {
           this.setData(result);
+          console.log(">>>",result);
+          
         });
       }, (error) => {
         this.utilities.hideLoading();
