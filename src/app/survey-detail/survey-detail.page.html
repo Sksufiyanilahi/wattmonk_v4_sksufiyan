@@ -178,30 +178,39 @@
                     </ion-row>
                             <div [ngSwitch]="electricals">
                                 <div *ngSwitchCase="'MSB'">
-                                    <ion-slides pager="true" [options]="slideOpts">
+                                    <ion-slides pager="true" zoom [options]="slideOpts" class="image-slider">
                                         <ion-slide *ngFor="let elecmsb of survey.mspimages">
-                                            <img [src]="elecmsb.url" />
+                                            <div class="swiper-zoom-container">
+                                                <img [src]="elecmsb.url" />
+                                            </div>
                                         </ion-slide>
                                     </ion-slides>
                                 </div>
                                 <div *ngSwitchCase="'utilityMeter'">
-                                    <ion-slides pager="true" [options]="slideOpts">
+                                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
                                         <ion-slide *ngFor="let elecutility of survey.utilitymeterimages">
-                                            <img [src]="elecutility.url" width='100%'/>
+                                            <div class="swiper-zoom-container">
+                                                <img [src]="elecutility.url" width='100%'/>
+                                            </div>
                                         </ion-slide>
                                     </ion-slides>
                                 </div>
                                 <div *ngSwitchCase="'pvMeter'">
-                                    <ion-slides pager="true" [options]="slideOpts">
+                                    <ion-slides pager="true" [options]="slideOpts" zom="true">
                                         <ion-slide *ngFor="let elecpvmeter of survey.pvmeterimages">
-                                            <img [src]="elecpvmeter.url" width='100%'/>
+                                            <div class="swiper-zoom-container">
+                                                <img [src]="elecpvmeter.url" width='100%'/>
+                                            </div>
                                         </ion-slide>
                                     </ion-slides>
                                 </div>
                                 <div *ngSwitchCase="'acDisconnect'">
-                                    <ion-slides pager="true" [options]="slideOpts">
+                                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
                                         <ion-slide *ngFor="let elecacdisconnect of survey.acdisconnectimages">
-                                            <img [src]="elecacdisconnect.url" width='100%'/>
+                                            <div class="swiper-zoom-container">
+                                                <img [src]="elecacdisconnect.url" width='100%'/>
+                                            </div>
+
                                         </ion-slide>
                                     </ion-slides>
                                 </div>
@@ -209,26 +218,33 @@
                      
                  </ion-grid>
                    <ion-grid *ngSwitchCase="'solarPanel'">
-                    <ion-slides pager="true" [options]="slideOpts">
+                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
                         <ion-slide *ngFor="let solarpanel of survey.solarpanelsimages">
+                            <div class="swiper-zoom-container">
                             <h2 class="position-fix">{{solarpanel.name}}</h2>
-                            <img [src]="solarpanel.url" />
+                                <img [src]="solarpanel.url" />
+                            </div>
                         </ion-slide>
                     </ion-slides>
                  </ion-grid>
                    <ion-grid *ngSwitchCase="'roof'">
-                    <ion-slides pager="true" [options]="slideOpts">
+                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
                         <ion-slide *ngFor="let roof of survey.roofimages">
-                            <h2 class="position-fix">{{roof.name}}</h2>
-                            <img [src]="roof.url" />
+                            <div class="swiper-zoom-container">
+                                <h2 class="position-fix">{{roof.name}}</h2>
+                                <img [src]="roof.url" />
+                            </div>
+
                         </ion-slide>
                     </ion-slides>
                  </ion-grid>
                    <ion-grid *ngSwitchCase="'appliances'">
-                    <ion-slides pager="true" [options]="slideOpts">
+                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
                         <ion-slide *ngFor="let appliance of survey.appliancesimages">
-                            <h2 class="position-fix">{{appliance.name}}</h2>
-                            <img [src]="appliance.url" />
+                            <div class="swiper-zoom-container">
+                                <h2 class="position-fix">{{appliance.name}}</h2>
+                                <img [src]="appliance.url" />
+                            </div>
                         </ion-slide>
                     </ion-slides>
                  </ion-grid>

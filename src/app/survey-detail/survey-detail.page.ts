@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UtilitiesService } from '../utilities.service';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, NavController, ToastController, ModalController } from '@ionic/angular';
 import { SurveyDataModel } from '../model/survey.model';
 import { UserRoles } from '../model/constants';
 import { AssigneeModel } from '../model/assignee.model';
@@ -14,6 +14,7 @@ import { ErrorModel } from '../model/error.model';
 import { Subscription } from 'rxjs';
 import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { ROLES } from '../contants';
+import { ModalPageComponent } from './modal-page/modal-page.component';
 
 @Component({
   selector: 'app-survey-detail',
@@ -57,7 +58,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     private datePicker: DatePicker,
     private formBuilder: FormBuilder,
     private launchNavigator: LaunchNavigator,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private modalController:ModalController
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.rescheduleForm = this.formBuilder.group({
@@ -287,6 +289,20 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
 
   openAddressOnMap(address: string) {
     this.launchNavigator.navigate(address, this.options);
+  }
+
+  async openModal(image){
+    console.log(image)
+
+    const modal = await this.modalController.create({
+      component: ModalPageComponent,
+      showBackdrop:true,
+      backdropDismiss: true,
+      componentProps: {
+        image_url : image,
+      },
+    });
+    return await modal.present();
   }
 
 }

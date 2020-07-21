@@ -20,6 +20,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { Firebase } from '@ionic-native/firebase/ngx';
 
+
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
   entryComponents: [SuccessModalComponent],
@@ -29,7 +30,7 @@ import { Firebase } from '@ionic-native/firebase/ngx';
     AppRoutingModule,
     HttpClientModule,
     UtilitiesModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
   ],
   providers: [
     StatusBar,

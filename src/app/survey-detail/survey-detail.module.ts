@@ -10,6 +10,7 @@ import { SurveyDetailPage } from './survey-detail.page';
 import { IonBottomDrawerModule } from 'ion-bottom-drawer';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
+import { ModalPageComponent } from './modal-page/modal-page.component';
 
 @NgModule({
   imports: [
@@ -21,9 +22,10 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
     SurveyDetailPageRoutingModule,
     UtilitiesModule
   ],
-  declarations: [SurveyDetailPage],
+  declarations: [SurveyDetailPage,ModalPageComponent],
   providers: [
     LaunchNavigator
-  ]
+  ],
+  entryComponents: [ModalPageComponent],
 })
 export class SurveyDetailPageModule {}
