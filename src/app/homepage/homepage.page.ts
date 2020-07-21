@@ -84,7 +84,7 @@ export class HomepagePage implements OnInit, OnDestroy {
       this.isUserDesigner = true;
       this.route.navigate(['homepage/design']);
 
-    } else if (this.storage.getUser().role.id === ROLES.BD) {
+    } else if (this.storage.getUser().role.id === ROLES.BD || this.storage.getUser().role.id === ROLES.Admin || this.storage.getUser().role.id === ROLES.ContractorAdmin) {
       // admin will see both tabs
       this.isUserSurveyor = true;
       this.isUserDesigner = true;
