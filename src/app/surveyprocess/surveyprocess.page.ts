@@ -307,7 +307,7 @@ export class SurveyprocessPage implements OnInit {
 
       this.activeForm = this.batteryForm;
 
-      // this.storage.clear();
+      this.storage.clear();
       this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
         console.log(data);
         if (data) {
@@ -320,6 +320,13 @@ export class SurveyprocessPage implements OnInit {
           this.previousmainmenuindex = data.previousmainmenuindex;
           this.previoussubmenuindex = data.previoussubmenuindex;
           this.previousshotindex = data.previousshotindex;
+
+          this.surveyid = data.surveyid;
+          this.surveytype = data.surveytype;
+          this.surveycity = data.city;
+          this.surveystate = data.state;
+          this.latitude = data.latitude;
+          this.longitude = data.longitude;
 
           // restore form
           Object.keys(data.formdata).forEach((key: string) => {
@@ -387,7 +394,7 @@ export class SurveyprocessPage implements OnInit {
       height: window.screen.height,
       camera: 'rear',
       tapPhoto: true,
-      tapToFocus: true,
+      tapFocus: true,
       previewDrag: true,
       toBack: true,
       alpha: 1
@@ -783,7 +790,7 @@ export class SurveyprocessPage implements OnInit {
   handleSurveyExit() {
     this.cameraPreview.stopCamera();
 
-    const data = this.preapresurveystorage();
+    const data = this.preparesurveystorage();
     data.saved = true;
     this.storage.set(this.surveyid + '', data);
 
@@ -791,7 +798,7 @@ export class SurveyprocessPage implements OnInit {
     this.navController.navigateBack('surveyoroverview');
   }
 
-  preapresurveystorage(): SurveyStorageModel {
+  preparesurveystorage(): SurveyStorageModel {
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.menuitems = this.mainmenuitems;
     surveyStorageModel.currentprogress = this.totalpercent;
@@ -803,6 +810,13 @@ export class SurveyprocessPage implements OnInit {
     surveyStorageModel.previousmainmenuindex = this.previousmainmenuindex;
     surveyStorageModel.previoussubmenuindex = this.previoussubmenuindex;
     surveyStorageModel.previousshotindex = this.previousshotindex;
+
+    surveyStorageModel.surveyid = this.surveyid;
+    surveyStorageModel.surveytype = this.surveytype;
+    surveyStorageModel.city = this.surveycity;
+    surveyStorageModel.state = this.surveystate;
+    surveyStorageModel.latitude = this.latitude;
+    surveyStorageModel.longitude = this.longitude;
 
     return surveyStorageModel;
   }
@@ -978,10 +992,18 @@ export class SurveyprocessPage implements OnInit {
 
   handleCompleteSurveyDataSubmission() {
     //Code to save current status
-    const data = this.preapresurveystorage();
+    const data = this.preparesurveystorage();
     data.saved = true;
     this.storage.set(this.surveyid + '', data);
     this.utilitieservice.setDataRefresh(true);
+    
+    var isutilitymanualinput = false;
+    if (this.batteryForm.get("utility").value == null || this.batteryForm.get("utility").value == ""){
+      if(this.utility.manualinput != ""){
+        isutilitymanualinput = true;
+        this.batteryForm.get("utility").setValue(this.utility.manualinput);
+      }
+    }
 
     if (this.batteryForm.status == 'INVALID') {
       this.displayIncompleteFormAlert();
@@ -989,8 +1011,8 @@ export class SurveyprocessPage implements OnInit {
       this.markMainMenuCompletion();
       if (this.checkProcessCompletion()) {
         this.utilitieservice.showLoading('Saving Survey').then(() => {
-          const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value);
-          if (!isutilityfound) {
+          // const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value.name);
+          if (isutilitymanualinput) {
             const data = {
               name: this.utility.manualinput,
               source: this.platformname,
@@ -1053,6 +1075,7 @@ export class SurveyprocessPage implements OnInit {
 
       });
     }, (error) => {
+      alert(JSON.stringify(error));
       this.utilitieservice.hideLoading().then(() => {
         this.utilitieservice.errorSnackBar(JSON.stringify(error));
       });

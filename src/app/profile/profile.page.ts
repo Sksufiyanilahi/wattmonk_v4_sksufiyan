@@ -133,7 +133,7 @@ export class ProfilePage implements OnInit {
 
     this.imageUploadIndex = 1;
     this.totalImagesToUpload = mapOfImages.length;
-    this.uploadImageByIndex(mapOfImages, surveyData.surveyId);
+    this.uploadImageByIndex(mapOfImages, surveyData.surveyid);
 
   }
 
