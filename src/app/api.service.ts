@@ -119,6 +119,9 @@ export class ApiService {
   getSurveyorSurveys(search : string) {
     return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search, { headers: this.headers });
   }
+  getDesignSurveys(search : string) {
+    return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search, { headers: this.headers });
+  }
 
   refreshHeader() {
     this.headers = new HttpHeaders({
