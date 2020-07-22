@@ -121,6 +121,8 @@ export class SurveyprocessPage implements OnInit {
   @ViewChild('screen', { static: false }) screen: ElementRef;
   @ViewChild('slides', { static: false }) slider: IonSlides;
   @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
+  @ViewChild('mainscroll', { static: false }) mainscroll: any;
+  @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
@@ -306,7 +308,7 @@ export class SurveyprocessPage implements OnInit {
 
       this.activeForm = this.batteryForm;
 
-      this.storage.clear();
+      // this.storage.clear();
       this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
         console.log(data);
         if (data) {
@@ -856,6 +858,7 @@ export class SurveyprocessPage implements OnInit {
           this.selectedsubmenuindex += 1;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
           this.selectedshotindex = 0;
+          this.scrollToSubmenuElement(this.selectedsubmenuindex);
         } else {
           if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
             //Unset previous menu and select new one
@@ -866,7 +869,7 @@ export class SurveyprocessPage implements OnInit {
             this.selectedshotindex = 0;
             this.selectedsubmenuindex = 0;
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-
+            this.scrollToMainmenuElement(this.selectedmainmenuindex);
             this.handleViewModeSwitch();
           }
         }
@@ -879,6 +882,22 @@ export class SurveyprocessPage implements OnInit {
       }
     }
   }
+
+  scrollToSubmenuElement(index) {
+    var el = document.getElementById("submenu"+index);
+    var rect = el.getBoundingClientRect();
+    // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
+
+    this.submenuscroll.nativeElement.scrollLeft = rect.left;
+}
+
+scrollToMainmenuElement(index) {
+  var el = document.getElementById("mainmenu"+index);
+  var rect = el.getBoundingClientRect();
+  // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
+
+  this.mainscroll.nativeElement.scrollLeft = rect.left;
+}
 
   markShotCompletion(index) {
     if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
