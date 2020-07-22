@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview/ngx';
 import { ActivatedRoute } from '@angular/router';
-import { GOOGLE_API_KEY } from '../model/constants';
 import { HttpClient } from '@angular/common/http';
 import { NavController, AlertController, Platform, IonSlides, IonRouterOutlet } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
@@ -1075,7 +1074,6 @@ export class SurveyprocessPage implements OnInit {
 
       });
     }, (error) => {
-      alert(JSON.stringify(error));
       this.utilitieservice.hideLoading().then(() => {
         this.utilitieservice.errorSnackBar(JSON.stringify(error));
       });

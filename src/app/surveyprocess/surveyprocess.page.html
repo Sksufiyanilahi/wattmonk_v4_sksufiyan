@@ -370,7 +370,7 @@
       <ion-button fill="clear" class="savebutton z-top" (click)="handleEquipmentMarkingSave()"><ion-icon slot="icon-only" name="save-outline"></ion-icon></ion-button>
     </ion-row>
     <ion-row class="locationmarkingboundary ion-justify-content-center ion-align-items-center">
-      <pinch-zoom>
+      <pinch-zoom [limit-zoom]="6">
         <img class="siteimage" src="{{sitelocationimage}}" style="height: 100vh;"/>
     </pinch-zoom>
     </ion-row>
