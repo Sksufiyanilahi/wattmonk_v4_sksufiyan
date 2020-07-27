@@ -20,6 +20,7 @@ export class ProfilePage implements OnInit {
   totalSurveys = 0;
   surveyIndex = 1;
   listOfSurveysToSave: SurveyStorageModel[] = [];
+  enableDisable:boolean=false;
 
   user: User;
 
@@ -34,6 +35,7 @@ export class ProfilePage implements OnInit {
   }
 
   ngOnInit() {
+    this.enableDisable= false;
     this.user = this.storage.getUser();
     console.log(this.user);
     
@@ -44,6 +46,7 @@ export class ProfilePage implements OnInit {
   }
 
   async logout() {
+    this.enableDisable= true;
     const toast = await this.toastController.create({
       header: 'Logout?',
       message: 'Any unsynced survey data will be lost',
@@ -58,7 +61,10 @@ export class ProfilePage implements OnInit {
             this.navController.navigateRoot('login');
           }
         }, {
-          text: 'No'
+          text: 'No',
+          handler:()=>{
+            this.enableDisable= false;
+          }
         }
       ]
     });

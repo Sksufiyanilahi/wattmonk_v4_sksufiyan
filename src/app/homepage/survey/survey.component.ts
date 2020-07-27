@@ -36,6 +36,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   assignForm: FormGroup;
   listOfAssignees: AssigneeModel[] = [];
   routeSubscription: Subscription;
+  filterDataArray: SurveyDataModel[];
 
   constructor(
     private utils: UtilitiesService,
@@ -68,34 +69,57 @@ export class SurveyComponent implements OnInit, OnDestroy {
   //   });
   // }
   ngOnInit() {
-    console.log('inside init');
+    debugger;
+    this.filterData(this.filterDataArray);
     this.routeSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // Trick the Router into believing it's last link wasn't previously loaded
         if (this.router.url.indexOf('page') > -1) {
           this.router.navigated = false;
-          const data = this.route.queryParams.subscribe((_res: any) => {
-            console.log('Search Term', _res);
+          let data = this.route.queryParams.subscribe((_res: any) => {
+            console.log('Serach Term', _res);
             if (Object.keys(_res).length !== 0) {
               //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
+
               this.filterData(_res.serchTerm);
             } else {
-              this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+              // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+                // debugger;
                 this.getSurveys(null);
-              });
+              // });
             }
           });
         }
       }
     });
+    // console.log('inside init');
+    // this.routeSubscription = this.router.events.subscribe((event) => {
+    //   if (event instanceof NavigationEnd) {
+    //     // Trick the Router into believing it's last link wasn't previously loaded
+    //     if (this.router.url.indexOf('page') > -1) {
+    //       this.router.navigated = false;
+    //       const data = this.route.queryParams.subscribe((_res: any) => {
+    //         console.log('Search Term', _res);
+    //         if (Object.keys(_res).length !== 0) {
+    //           //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
+    //           this.filterData(_res.serchTerm);
+    //         } else {
+    //           this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+    //             this.getSurveys(null);
+    //           });
+    //         }
+    //       });
+    //     }
+    //   }
+    // });
   }
 
 
   filterData(serchTerm: any) {
     console.log(this.listOfSurveyData);
-    const filterDataArray: any = this.listOfSurveyData.filter(x => x.id == serchTerm);
+    this.filterDataArray = this.listOfSurveyData.filter(x => x.id == serchTerm);
     const tempData: SurveyDataHelper[] = [];
-    this.listOfSurveyData.forEach((surveyItem) => {
+    this.filterDataArray.forEach((surveyItem) => {
       if (tempData.length === 0) {
         const listOfSurvey = new SurveyDataHelper();
         listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');

@@ -19,9 +19,9 @@
                     <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
                           routerDirection="forward">{{surveyData.email}}</span>
                     <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
-                        <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
+                        <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
                     <span class="customer-address z-100"
-                          (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
+                          (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
                     <ion-row class="ion-no-margin ion-no-margin">
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
                                  *ngIf="surveyData.status !== 'surveycompleted'"

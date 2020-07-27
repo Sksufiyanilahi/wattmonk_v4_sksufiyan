@@ -17,6 +17,7 @@ import { Firebase } from '@ionic-native/firebase/ngx';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
+  user: any;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -49,8 +50,15 @@ export class AppComponent {
     });
     if (this.storageService.isUserPresent()) {
       this.apiservice.refreshHeader();
-      // this.navController.navigateRoot('homepage');
-      this.navController.navigateRoot('surveyoroverview');
+      this.user= JSON.parse(localStorage.getItem('user'));
+      // console.log("???",this.user.role);
+        if(this.user.role.type=='surveyors'){
+          this.navController.navigateRoot('surveyoroverview');
+        }else if(this.user.role.type=='designer'){
+          this.navController.navigateRoot('designoverview');
+        }else{
+          this.navController.navigateRoot('homepage');
+        }
     }
   }
 

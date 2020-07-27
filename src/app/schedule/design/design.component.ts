@@ -92,6 +92,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    debugger;
     this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {

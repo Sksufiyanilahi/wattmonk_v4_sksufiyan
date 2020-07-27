@@ -2,14 +2,17 @@
     <ion-grid>
         <ion-row>
             <ion-col size="2">
-                <!-- <ion-button fill="clear" (click)="goBack()" style="width: 55px !important; height:20px !important"> -->
-                    <ion-img fill="clear" src="/assets/images/back.svg" (click)="goBack()" class="action-icon"></ion-img>
+                <!-- <ion-button  (click)="goBack()" style="width: 55px !important; height:20px !important"> -->
+                  <ion-button fill="clear" (click)="goBack()">
+                    <ion-img fill="clear" src="/assets/images/back.svg" class="action-icon"></ion-img>
+                  </ion-button>
                 <!-- </ion-button> -->
             </ion-col>
             <ion-col size="8" ></ion-col>
             <ion-col size="2">
-                <!-- <ion-button fill="clear"> -->
-                  <ion-icon  class="_color" name="log-out-outline" style="font-size: 26px;width:48px;text-align: top;" (click)="logout()"></ion-icon>
+                <ion-button fill="clear" (click)="logout()" [disabled]='enableDisable'>
+                    <ion-icon  class="_color" name="log-out-outline" style="font-size: 26px;width:48px;text-align: center;"></ion-icon>
+                  </ion-button>
                     <!-- <ion-icon class="action-button-color" style="font-size: 26px;"
                               name="settings-outline"></ion-icon> -->
                 <!-- </ion-button> -->

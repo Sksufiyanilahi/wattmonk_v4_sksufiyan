@@ -153,7 +153,7 @@ export class ApiService {
   }
 
   searchAllDesgin(searchterm): Observable<SearchModel> {
-    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm + '&userid=' + this.userId, { headers: this.headers });
+    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm, { headers: this.headers });
   }
 
   getDesigners(): Observable<AssigneeModel[]> {
@@ -195,5 +195,9 @@ export class ApiService {
     var imageurl = "https://maps.googleapis.com/maps/api/staticmap?zoom=19&size=1200x1600&scale=2&maptype=satellite&center=" + lat + ","+ lng + "&key=" + GOOGLE_API_KEY;
     console.log(imageurl);
     return this.http.get(imageurl, { responseType: 'blob' });
+  }
+
+  deletePrelimImage(id){
+    return this.http.delete(BaseUrl + "upload/files/" + id,{ headers: this.headers });
   }
 }

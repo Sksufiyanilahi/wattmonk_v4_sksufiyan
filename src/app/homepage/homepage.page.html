@@ -15,12 +15,12 @@
                     <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
                 </div>
             </ion-col>
-            <ion-col size="auto">
-                <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward">
+            <ion-col size="auto" style="position: relative;">
+                <div class="notification-padding" [routerLink]="['/profile']" routerDirection="forward">
                     <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
-                    <span class="badge">
+                    <!-- <span class="badge">
                                 4
-                            </span>
+                            </span> -->
                 </div>
             </ion-col>
         </ion-row>
@@ -41,7 +41,7 @@
     <ion-grid style="position: absolute;">
         <div class="searchbar_div">
             <ion-grid *ngIf="searchDesginItem && searchDesginItem.length !== 0">
-                <ion-row *ngFor="let searchitem of searchDesginItem" (click)="getdesigndata(searchitem)">
+                <ion-row *ngFor="let searchitem of searchDesginItem;" (click)="getdesigndata(searchitem)">
                     <ion-col size="2">
                         <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
                     </ion-col>
@@ -63,8 +63,8 @@
                     </ion-col>
                 </ion-row>
             </ion-grid>
-            <ion-grid *ngIf="(searchSurveyItem && searchSurveyItem.length !== 0) else noDesignandSurvey">
-                <ion-row *ngFor="let searchitem of searchSurveyItem">
+            <ion-grid *ngIf="(searchSurveyItem && searchSurveyItem.length !== 0)">
+                <ion-row *ngFor="let searchitem of searchSurveyItem" (click)="getdesigndata(searchitem)">
                     <ion-col size="2">
                         <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
                     </ion-col>

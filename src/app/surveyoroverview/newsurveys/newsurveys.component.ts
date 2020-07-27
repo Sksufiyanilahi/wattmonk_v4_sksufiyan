@@ -21,7 +21,6 @@ export class NewsurveysComponent implements OnInit {
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
-  currentDate:any=new Date()
 
   today: any;
   options: LaunchNavigatorOptions = {
@@ -45,10 +44,7 @@ export class NewsurveysComponent implements OnInit {
   }
 
   ngOnInit() {
- console.log("ngoninit");
-console.log(this.currentDate.toISOString());
-
- 
+ console.log("ngoninit"); 
   }
 
 

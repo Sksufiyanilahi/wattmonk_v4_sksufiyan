@@ -13,10 +13,10 @@
             <ion-col>
                 <ion-grid class="ion-align-items-center ion-justify-content-center">
                     <ion-row class="ion-align-items-center ion-justify-content-center">
-                        <span class="survey-name ion-text-center">{{design.name}}</span>
+                        <span class="survey-name ion-text-center">{{design?.name}}</span>
                     </ion-row>
                     <ion-row class="ion-align-items-center ion-justify-content-center">
-                        <span class="survey-email ion-text-center">{{design.email}}</span>
+                        <span class="survey-email ion-text-center">{{design?.email}}</span>
                     </ion-row>
                 </ion-grid>
             </ion-col>
@@ -51,7 +51,7 @@
     <ion-grid *ngIf="design" class="page-text-color">
         <ion-row>
             <ion-col>
-                <span (click)="openAddressOnMap(design.address)" class="address">{{design.address}}</span>
+                <span (click)="openAddressOnMap(design.address)" class="address">{{design?.address}}</span>
             </ion-col>
             <ion-col size="auto" class="ion-text-end">
                 <ion-grid class="ion-no-padding">
@@ -59,7 +59,7 @@
                         <ion-col><span class="data-header">monthly bill</span></ion-col>
                     </ion-row>
                     <ion-row>
-                        <ion-col><span>{{design.monthlybill | currency: 'USD'}}</span></ion-col>
+                        <ion-col><span>{{design?.monthlybill | currency: 'USD'}}</span></ion-col>
                     </ion-row>
                 </ion-grid>
 
@@ -75,13 +75,13 @@
                     <ion-row class="ion-no-padding">
                         <ion-col><span class="model-type">make</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{design.solarmake.name}}</span>
+                            <span class="model-name">{{design.solarmake?.name}}</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">model</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{design.solarmodel.name}}</span>
+                            <span class="model-name">{{design.solarmodel?.name}}</span>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -97,13 +97,13 @@
                     <ion-row class="ion-no-padding">
                         <ion-col><span class="model-type">make</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{design.invertermake.name}}</span>
+                            <span class="model-name">{{design.invertermake?.name}}</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">model</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{design.invertermodel.name}}</span>
+                            <span class="model-name">{{design.invertermodel?.name}}</span>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -116,19 +116,19 @@
                     <ion-row class="ion-no-padding">
                         <ion-col><span class="model-type">new construction</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{design.newconstruction}}</span>
+                            <span class="model-name">{{design?.newconstruction}}</span>
                         </ion-col>
                     </ion-row>
                     <ion-row *ngIf="design.newconstruction=='Yes'" class="ion-no-padding">
                         <ion-col><span class="model-type">Architectural design</span></ion-col>
                         <ion-col size="auto" *ngFor="let archdesign of design.architecturaldesign">
-                            <span class="model-name">{{archdesign.name}}{{archdesign.ext}}</span>
+                            <span class="model-name">{{archdesign?.name}}{{archdesign?.ext}}</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col><span class="model-type">project type</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{design.projecttype}}</span>
+                            <span class="model-name">{{design?.projecttype}}</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
@@ -140,19 +140,19 @@
                     <ion-row>
                         <ion-col><span class="model-type">Mounting Type</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{design.mountingtype}}</span>
+                            <span class="model-name">{{design?.mountingtype}}</span>
                         </ion-col>
                     </ion-row>
                     <ion-row *ngIf="design.mountingtype == 'roof' || design.mountingtype =='both'">
                         <ion-col><span class="model-type">roof type</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{design.rooftype}}</span>
+                            <span class="model-name">{{design?.rooftype}}</span>
                         </ion-col>
                     </ion-row>
                     <ion-row *ngIf="design.mountingtype=='ground' || design.mountingtype == 'both'">
                         <ion-col><span class="model-type">tilt of ground mounting system</span></ion-col>
                         <ion-col size="auto">
-                            <span class="model-name">{{design.tiltofgroundmountingsystem}}</span>
+                            <span class="model-name">{{design?.tiltofgroundmountingsystem}}</span>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -166,9 +166,9 @@
             <!-- <div> -->
 
             <ion-col size="12" *ngFor="let comment of design.comments" class="ion-no-padding">
-                <p class="comment">{{comment.message}}</p>
-                <p class="comment-by" style="text-align: right;">Posted by {{comment.createdby.firstname}}
-                    {{comment.createdby.lastname}}</p>
+                <p class="comment">{{comment?.message}}</p>
+                <p class="comment-by" style="text-align: right;">Posted by {{comment.createdby?.firstname}}
+                    {{comment.createdby?.lastname}}</p>
             </ion-col>
             <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
                          
@@ -186,12 +186,12 @@
         </ion-row>
 
         <ion-row>
-            <ion-col><span class="model-type">Preliem Design</span></ion-col>
+            <ion-col><span class="model-type">Prelim Design</span></ion-col>
             <ion-col size="auto">
-                <input type="file" *ngIf="imageName =='' || imageName ==null || imageName ==undefined"  (change)="prelimfiles($event)"/>
+                <input type="file" *ngIf="imageName.length==0"  (change)="prelimfiles($event)"/>
                 <span class="model-name">{{imageName}}</span>
-                <button *ngIf="imageName !==''" (click)="showuploadbox()">Remove</button>
-                <button *ngIf="imageName =='' && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')">Upload</button>
+                <button *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()">Remove</button>
+                <button *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')">Upload</button>
             </ion-col>
         </ion-row>
 

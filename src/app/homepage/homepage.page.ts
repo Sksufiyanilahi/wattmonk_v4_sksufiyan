@@ -163,9 +163,8 @@ export class HomepagePage implements OnInit, OnDestroy {
               this.searchDesginItem = searchModel;
               // console.log(this.searchDesginItem);
 
-            } else {
-
-              this.searchSurveyItem = searchModel;
+            } else {    
+                this.searchSurveyItem = searchModel;
             }
           });
           console.log(this.searchDesginItem);
@@ -183,7 +182,6 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   getdesigndata(serchTermData: any = { 'type': '' }) {
-
     console.log(serchTermData.name);
     this.name = serchTermData.name;
     this.searchbarElement = this.name;

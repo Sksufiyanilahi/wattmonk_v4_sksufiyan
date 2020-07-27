@@ -76,6 +76,7 @@
     "html2canvas": "^1.0.0-rc.5",
     "ion-bottom-drawer": "^2.0.0",
     "jquery-ui": "^1.12.1",
+    "ngx-image-compress": "^8.0.4",
     "ngx-pinch-zoom": "^2.4.4",
     "recursive-readdir": "^2.2.2",
     "rxjs": "~6.5.1",

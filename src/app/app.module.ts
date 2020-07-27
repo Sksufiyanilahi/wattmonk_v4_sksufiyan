@@ -19,7 +19,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { Firebase } from '@ionic-native/firebase/ngx';
-
+import {NgxImageCompressService} from 'ngx-image-compress';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -30,7 +30,7 @@ import { Firebase } from '@ionic-native/firebase/ngx';
     AppRoutingModule,
     HttpClientModule,
     UtilitiesModule,
-    IonicStorageModule.forRoot(),
+    IonicStorageModule.forRoot()
   ],
   providers: [
     StatusBar,
@@ -41,8 +41,9 @@ import { Firebase } from '@ionic-native/firebase/ngx';
     StorageService,
     AuthGuardService,
     Geolocation,
-    Firebase
-  ],
+    Firebase,
+    NgxImageCompressService
+    ],
   exports: [
     UtilitiesModule
   ],

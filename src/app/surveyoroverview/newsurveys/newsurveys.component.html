@@ -35,7 +35,7 @@
                 <ion-row class="ion-no-margin ion-no-margin">
                     <ion-col></ion-col>
                     <!-- <ion-col class="ion-no-margin ion-no-padding"> -->
-                    <ion-col class="ion-no-margin ion-no-padding" *ngIf="surveyData.datetime == currentDate">
+                    <ion-col class="ion-no-margin ion-no-padding" *ngIf="today==item.date">
                         <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude + '/' + surveyData.city + '/' + surveyData.state]"
                         routerDirection="forward">
                             Start Survey

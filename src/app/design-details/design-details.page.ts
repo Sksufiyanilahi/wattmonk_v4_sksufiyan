@@ -10,6 +10,7 @@ import { StorageService } from '../storage.service';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
+import {NgxImageCompressService} from 'ngx-image-compress';
 
 @Component({
   selector: 'app-design-details',
@@ -25,14 +26,14 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   dataSubscription: Subscription;
   assigneeForm: FormGroup;
   refreshDataOnPreviousPage = 0;
-  imageName:any;
+  imageName:string[]=[];
   imagebox :boolean=false;
 
   options: LaunchNavigatorOptions = {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
-  prelimFiles: string[]=[];
+  prelimFiles: File[]=[];
   targetLength: any;
 
 
@@ -45,7 +46,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private storage: StorageService,
     private formBuilder: FormBuilder,
     private launchNavigator: LaunchNavigator,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private imageCompress: NgxImageCompressService
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
@@ -55,6 +57,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log(this.imageName);
+    
     this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getDesignDetails();
@@ -90,7 +94,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   setData(result: DesginDataModel) {
- debugger;
     this.design = result;
     console.log(this.design,">>>>>>>>>>>>>>>>");
     this.imageName= result.prelimdesign.name + result.prelimdesign.ext;
@@ -176,22 +179,42 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   showuploadbox(){
-    this.imageName='';
+    // console.log(this.design.prelimdesign.id);
+    this.apiService.deletePrelimImage(this.design.prelimdesign.id).subscribe(_res=>{})
+    console.log(this.imageName);
+    this.imageName=[];
+    
   }
 
   prelimfiles(event){
+    console.log(this.imageName);
     console.log(event.target.files);
-    for(var i=0; i< event.target.files.length;i++){
-      this.prelimFiles.push(event.target.files[i]) 
+    // for(var i=0; i< event.target.files.length;i++){
+      // this.prelimFiles.push(event.target.files) 
+      this.prelimFiles= event.target.files;
+      this.imageName= event.target.files[0].name;
       this.imagebox= true;
-    }
-      this.targetLength= event.target.files.length;
+    // }
     console.log(this.prelimFiles);
-  }
+    
+      this.targetLength= event.target.files.length;
+
+//       var reader = new FileReader();
+// reader.onload = (event: any) => {
+//   var orientation = -1;
+// let localUrl = event.target.result;
+// this.imageCompress.compressFile(localUrl,orientation, 50, 50).then(res=>{
+//   // console.log(res,">><><><");
+//   this.aa= res;
+  
+// })
+// }
+// reader.readAsDataURL(event.target.files[0]);
+}
+
 
   uploadpreliumdesign(designId?: number, key?: string,filearray?:File[]){
-    this.imageName=this.prelimFiles;
-    console.log(this.prelimFiles);
+    // console.log(typeof(this.prelimFiles[0]));
     const imageData = new FormData();
     for(var i=0; i< this.prelimFiles.length;i++){
       imageData.append("files",this.prelimFiles[i]);
@@ -202,9 +225,11 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
         imageData.append('field', key);
       // }
     } 
+    
     this.apiService.uploaddesign(imageData).subscribe(res=>{
       console.log(res); 
-      
+      this.imagebox= false;
+      // this.getDesignDetails();
     })
   }
 }

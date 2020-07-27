@@ -70,7 +70,6 @@ export class LoginPage implements OnInit {
           this.utils.hideLoading().then(() => {
             console.log('Res', response);
             if (response.user.role.id == ROLES.Surveyor) {
-              // debugger;
               this.storageService.setUserName(this.loginForm.get('identifier').value);
               this.storageService.setPassword(this.loginForm.get('password').value);
               this.storageService.setUser(response.user, response.jwt);

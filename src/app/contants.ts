@@ -13,7 +13,7 @@ export enum ROLES {
 }
 
 export const COMETCHAT_CONSTANTS = {
-    APP_ID: '20408823135ffb5',
+    APP_ID: '2145560cac03137',
     REGION: 'US',
-    API_KEY: 'd796aef95e10a159c16b6b590199e838c58af7a4'
+    API_KEY: '83ac811da8283c9e235ab912bf7a6213c207dd4d'
 }
