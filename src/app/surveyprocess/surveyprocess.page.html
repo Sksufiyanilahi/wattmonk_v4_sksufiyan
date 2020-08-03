@@ -31,8 +31,8 @@
         </ion-row>
         <ion-col size="12" class="actionareacol translucent-background">
           <ion-row class="childbuttons ion-justify-content-center mainbuttonscontainer">
-            <div class="scroll" scrollX="true">
-              <ion-button id="'submenu'+index" fill="clear"
+            <div #submenuscroll class="scroll" scrollX="true">
+              <ion-button id="submenu{{i}}" fill="clear"
                 [ngClass]="{'completed-inactive' : !button.ispending && !button.isactive, 'completed' : !button.ispending && button.isactive, 'active' : button.ispending && button.isactive, 'normal' : button.ispending && !button.isactive}"
                 *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index"
                 (click)="toggleSubMenuSelection(i)">{{button.name}}</ion-button>
@@ -48,8 +48,8 @@
             </ion-button>
           </ion-row>
           <ion-row class="mainbuttons ion-justify-content-center mainbuttonscontainer">
-            <div class="scroll" scrollX="true">
-              <ion-button fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']"
+            <div #mainscroll class="scroll" scrollX="true">
+              <ion-button id="mainmenu{{i}}" fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']"
                 *ngFor="let button of mainmenuitems; let i = index" (click)="toggleMainMenuSelection(i)">{{button.name}}
               </ion-button>
             </div>
@@ -370,7 +370,7 @@
       <ion-button fill="clear" class="savebutton z-top" (click)="handleEquipmentMarkingSave()"><ion-icon slot="icon-only" name="save-outline"></ion-icon></ion-button>
     </ion-row>
     <ion-row class="locationmarkingboundary ion-justify-content-center ion-align-items-center">
-      <pinch-zoom>
+      <pinch-zoom [limit-zoom]="6">
         <img class="siteimage" src="{{sitelocationimage}}" style="height: 100vh;"/>
     </pinch-zoom>
     </ion-row>

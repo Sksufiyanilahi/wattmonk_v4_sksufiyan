@@ -80,11 +80,11 @@ const routes: Routes = [
   {
     path: 'surveyoroverview',
     loadChildren: () => import('./surveyoroverview/surveyoroverview.module').then( m => m.SurveyoroverviewPageModule)
-  },  {
+  },
+  {
     path: 'designoverview',
     loadChildren: () => import('./designoverview/designoverview.module').then( m => m.DesignoverviewPageModule)
   }
-
 
 ];
 

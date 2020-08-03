@@ -176,8 +176,11 @@ export class ApiService {
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
 
-  changepassword(data){
+  resetpassword(data){
     return this.http.post(BaseUrl + '/auth/reset-password',data,{ headers: this.uploadHeaders });
+  }
+  changepassword(data){
+    return this.http.post(BaseUrl + '/auth/set-password',data,{ headers: this.uploadHeaders });
   }
 
   updateresetpassword(userId,data){
@@ -192,12 +195,45 @@ export class ApiService {
     return this.http.get(BaseUrl + '/notifications/user/' + this.userId,{ headers: this.headers })
   }
   getGoogleImage(lat:number, lng:number): Observable<Blob> {
-    var imageurl = "https://maps.googleapis.com/maps/api/staticmap?zoom=19&size=1200x1600&scale=2&maptype=satellite&center=" + lat + ","+ lng + "&key=" + GOOGLE_API_KEY;
-    console.log(imageurl);
+    var imageurl = "https://maps.googleapis.com/maps/api/staticmap?zoom=19&size=1200x1600&scale=4&maptype=satellite&center=" + lat + ","+ lng + "&key=" + GOOGLE_API_KEY;
     return this.http.get(imageurl, { responseType: 'blob' });
   }
 
   deletePrelimImage(id){
     return this.http.delete(BaseUrl + "upload/files/" + id,{ headers: this.headers });
+  }
+
+
+  compress(file: File): Observable<any> {
+    const width = 600; // For scaling relative to width
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    return Observable.create(observer => {
+      reader.onload = ev => {
+        const img = new Image();
+        img.src = (ev.target as any).result;
+        (img.onload = () => {
+          const elem = document.createElement('canvas'); // Use Angular's Renderer2 method
+          const scaleFactor = width / img.width;
+          elem.width = width;
+          elem.height = img.height * scaleFactor;
+          const ctx = <CanvasRenderingContext2D>elem.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, img.height * scaleFactor);
+          ctx.canvas.toBlob(
+            blob => {
+              observer.next(
+                new File([blob], file.name, {
+                  type: 'image/jpeg',
+                  lastModified: Date.now(),
+                }),
+              );
+            },
+            'image/jpeg',
+            1,
+          );
+        }),
+          (reader.onerror = error => observer.error(error));
+      };
+    });
   }
 }

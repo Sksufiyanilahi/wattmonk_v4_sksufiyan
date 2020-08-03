@@ -22,7 +22,7 @@ export class DesignoverviewPage implements OnInit {
   ngOnInit() {
     this.setupCometChatUser();
     this.updateUserPushToken();
-    this.route.navigate(['designoverview/newdesign']);
+    this.route.navigate(['designoverview/newdesigns']);
   }
 
   ngOnDestroy() {

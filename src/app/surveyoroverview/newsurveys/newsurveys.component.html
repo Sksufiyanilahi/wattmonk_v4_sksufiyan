@@ -22,14 +22,14 @@
             </p>
                 <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
                       routerDirection="forward">{{surveyData.email}}</span>
-                <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
-                    <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
+                <a href="tel:{{surveyData?.phonenumber}}" style="text-decoration: none;" class="z-100">
+                    <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
                 <span class="customer-address z-100"
-                      (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
+                      (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
 
                 <ion-row style="margin-bottom: 8px;">
                     <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                    <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
+                    <!-- <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span> -->
                       <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.isoverdue">Overdue</span>
                 </ion-row>
                 <ion-row class="ion-no-margin ion-no-margin">

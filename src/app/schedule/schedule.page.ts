@@ -74,7 +74,7 @@ export class SchedulePage implements OnInit, OnDestroy {
 
   goBack() {
     debugger;
-    this.navController.navigateBack('homepage/design');
+    this.navController.pop();
   }
 
   ngOnDestroy(): void {

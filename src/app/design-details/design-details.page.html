@@ -6,11 +6,11 @@
                     <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
-            <ion-col size="auto">
+            <!-- <ion-col size="auto">
                 <ion-button fill="clear" disabled="true" size="small" class="ion-no-padding action-icon">
                 </ion-button>
-            </ion-col>
-            <ion-col>
+            </ion-col> -->
+            <ion-col class="ion-text-center">
                 <ion-grid class="ion-align-items-center ion-justify-content-center">
                     <ion-row class="ion-align-items-center ion-justify-content-center">
                         <span class="survey-name ion-text-center">{{design?.name}}</span>
@@ -20,13 +20,13 @@
                     </ion-row>
                 </ion-grid>
             </ion-col>
-            <ion-col size="auto">
+            <ion-col size="auto" *ngIf="design.type !=='design'">
                 <ion-button fill="clear" size="small" class="ion-no-padding"
                     [routerLink]="['/schedule/design/',designId]" routerDirection="forward">
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
-            <ion-col size="auto">
+            <ion-col size="auto" *ngIf="design.type !=='design'">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()">
                     <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
                 </ion-button>
@@ -42,6 +42,11 @@
         <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
             <ion-col class="flex-center">
                 <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-no-padding">
+            <ion-col class="flex-center">
+                <countdown-timer [countDownTimerConfig]="timerConfig"></countdown-timer>
             </ion-col>
         </ion-row>
     </ion-grid>
@@ -160,13 +165,13 @@
         </ion-row>
 
         <ion-row *ngIf="design.comments != '' || design.comments !==null  " class="ion-no-padding ion-margin-top">
-            <ion-col size="12" class="ion-no-padding">
+            <ion-col size="6" class="ion-no-padding">
                 <span class="models">comments</span>
             </ion-col>
             <!-- <div> -->
 
-            <ion-col size="12" *ngFor="let comment of design.comments" class="ion-no-padding">
-                <p class="comment">{{comment?.message}}</p>
+            <ion-col size="6" *ngFor="let comment of design.comments" class="ion-no-padding">
+                <p class="comment" style="text-align: right;">{{comment?.message}}</p>
                 <p class="comment-by" style="text-align: right;">Posted by {{comment.createdby?.firstname}}
                     {{comment.createdby?.lastname}}</p>
             </ion-col>
@@ -185,7 +190,7 @@
             </ion-col>
         </ion-row>
 
-        <ion-row>
+        <ion-row *ngIf="(design.status=='designassigned' || design.status=='reviewfailed') else showimageName">
             <ion-col><span class="model-type">Prelim Design</span></ion-col>
             <ion-col size="auto">
                 <input type="file" *ngIf="imageName.length==0"  (change)="prelimfiles($event)"/>
@@ -194,6 +199,12 @@
                 <button *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')">Upload</button>
             </ion-col>
         </ion-row>
+        <ng-template #showimageName>
+            <ion-col><span class="model-type">Prelim Design</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name">{{imageName}}</span>
+            </ion-col>
+        </ng-template>
 
         <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
             *ngIf="assigned">
@@ -214,7 +225,7 @@
             </ion-col>
         </ion-row>
 
-        <ion-row class="ion-no-padding ion-margin-top" *ngIf="!assigned">
+        <ion-row class="ion-no-padding ion-margin-top" *ngIf="design && design.type !=='design'">
             <ion-col size="12">
                 <form novalidate [formGroup]="assigneeForm">
                     <ion-item class="ion-no-padding no-border" lines="none">
@@ -227,7 +238,7 @@
     </ion-grid>
 </ion-content>
 
-<ion-footer *ngIf="design && !assigned" class="ion-no-border white-bg">
+<ion-footer *ngIf="design && design.type !=='design'" class="ion-no-border white-bg">
     <ion-grid>
         <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
             <ion-col size="auto">

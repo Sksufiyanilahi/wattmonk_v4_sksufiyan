@@ -84,7 +84,7 @@ export class DesginDataModel {
   jobtype: string;
   newconstruction: any;
   projecttype: string;
-  comments: string;
+  comments: {};
   source: string;
   solarmake: Solarmake;
   solarmodel: Solarmodel;
@@ -102,11 +102,14 @@ export class DesginDataModel {
   type:string;
   mountingtype:string;
   tiltofgroundmountingsystem:string;
-  architecturaldesign:[];
+  architecturaldesign:any=[];
   prelimdesign:any;
   deliverydate:any;
   formattedjobtype : string;
   totalpercent : number;
+  status:string;
+  reviewstarttime:any;
+  designstarttime:any;
 }
 
 export class PrelimDesign{

@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview/ngx';
 import { ActivatedRoute } from '@angular/router';
-import { GOOGLE_API_KEY } from '../model/constants';
 import { HttpClient } from '@angular/common/http';
 import { NavController, AlertController, Platform, IonSlides, IonRouterOutlet } from '@ionic/angular';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
@@ -122,6 +121,8 @@ export class SurveyprocessPage implements OnInit {
   @ViewChild('screen', { static: false }) screen: ElementRef;
   @ViewChild('slides', { static: false }) slider: IonSlides;
   @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
+  @ViewChild('mainscroll', { static: false }) mainscroll: any;
+  @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
@@ -320,6 +321,13 @@ export class SurveyprocessPage implements OnInit {
           this.previousmainmenuindex = data.previousmainmenuindex;
           this.previoussubmenuindex = data.previoussubmenuindex;
           this.previousshotindex = data.previousshotindex;
+
+          this.surveyid = data.surveyid;
+          this.surveytype = data.surveytype;
+          this.surveycity = data.city;
+          this.surveystate = data.state;
+          this.latitude = data.latitude;
+          this.longitude = data.longitude;
 
           // restore form
           Object.keys(data.formdata).forEach((key: string) => {
@@ -783,7 +791,7 @@ export class SurveyprocessPage implements OnInit {
   handleSurveyExit() {
     this.cameraPreview.stopCamera();
 
-    const data = this.preapresurveystorage();
+    const data = this.preparesurveystorage();
     data.saved = true;
     this.storage.set(this.surveyid + '', data);
 
@@ -791,7 +799,7 @@ export class SurveyprocessPage implements OnInit {
     this.navController.navigateBack('surveyoroverview');
   }
 
-  preapresurveystorage(): SurveyStorageModel {
+  preparesurveystorage(): SurveyStorageModel {
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.menuitems = this.mainmenuitems;
     surveyStorageModel.currentprogress = this.totalpercent;
@@ -803,6 +811,13 @@ export class SurveyprocessPage implements OnInit {
     surveyStorageModel.previousmainmenuindex = this.previousmainmenuindex;
     surveyStorageModel.previoussubmenuindex = this.previoussubmenuindex;
     surveyStorageModel.previousshotindex = this.previousshotindex;
+
+    surveyStorageModel.surveyid = this.surveyid;
+    surveyStorageModel.surveytype = this.surveytype;
+    surveyStorageModel.city = this.surveycity;
+    surveyStorageModel.state = this.surveystate;
+    surveyStorageModel.latitude = this.latitude;
+    surveyStorageModel.longitude = this.longitude;
 
     return surveyStorageModel;
   }
@@ -843,6 +858,7 @@ export class SurveyprocessPage implements OnInit {
           this.selectedsubmenuindex += 1;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
           this.selectedshotindex = 0;
+          this.scrollToSubmenuElement(this.selectedsubmenuindex);
         } else {
           if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
             //Unset previous menu and select new one
@@ -853,7 +869,7 @@ export class SurveyprocessPage implements OnInit {
             this.selectedshotindex = 0;
             this.selectedsubmenuindex = 0;
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-
+            this.scrollToMainmenuElement(this.selectedmainmenuindex);
             this.handleViewModeSwitch();
           }
         }
@@ -866,6 +882,22 @@ export class SurveyprocessPage implements OnInit {
       }
     }
   }
+
+  scrollToSubmenuElement(index) {
+    var el = document.getElementById("submenu"+index);
+    var rect = el.getBoundingClientRect();
+    // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
+
+    this.submenuscroll.nativeElement.scrollLeft = rect.left;
+}
+
+scrollToMainmenuElement(index) {
+  var el = document.getElementById("mainmenu"+index);
+  var rect = el.getBoundingClientRect();
+  // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
+
+  this.mainscroll.nativeElement.scrollLeft = rect.left;
+}
 
   markShotCompletion(index) {
     if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
@@ -978,10 +1010,18 @@ export class SurveyprocessPage implements OnInit {
 
   handleCompleteSurveyDataSubmission() {
     //Code to save current status
-    const data = this.preapresurveystorage();
+    const data = this.preparesurveystorage();
     data.saved = true;
     this.storage.set(this.surveyid + '', data);
     this.utilitieservice.setDataRefresh(true);
+    
+    var isutilitymanualinput = false;
+    if (this.batteryForm.get("utility").value == null || this.batteryForm.get("utility").value == ""){
+      if(this.utility.manualinput != ""){
+        isutilitymanualinput = true;
+        this.batteryForm.get("utility").setValue(this.utility.manualinput);
+      }
+    }
 
     if (this.batteryForm.status == 'INVALID') {
       this.displayIncompleteFormAlert();
@@ -989,8 +1029,8 @@ export class SurveyprocessPage implements OnInit {
       this.markMainMenuCompletion();
       if (this.checkProcessCompletion()) {
         this.utilitieservice.showLoading('Saving Survey').then(() => {
-          const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value);
-          if (!isutilityfound) {
+          // const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value.name);
+          if (isutilitymanualinput) {
             const data = {
               name: this.utility.manualinput,
               source: this.platformname,

@@ -1,9 +1,9 @@
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
+  <ion-refresher slot="fixed" (ionRefresh)="getDesigns($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull down to refresh" refreshingSpinner="lines"></ion-refresher-content>
   </ion-refresher>
-  <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
-    <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
+  <ion-grid *ngIf="listofDesignDataHelper.length !== 0">
+    <ion-row *ngFor="let item of listofDesignDataHelper;let i = index">
         <ion-col size="12" class="ion-margin-top">
                 <span class="ion-padding" *ngIf="today === item.date">
                     Today
@@ -12,24 +12,24 @@
                       {{item.date | date: 'dd MMM yyyy'}}
                 </span>
         </ion-col>
-        <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
+        <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="6">
             <div class="ion-no-padding custom-card" style="height: 100%;">
-                <p class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
-                      routerDirection="forward">{{surveyData.name}}
-                      <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
-                        {{surveyData.datetime | date: 'hh:mm a'}}
+                <p class="customer-name" [routerLink]="['/design-details/',designData.id]"
+                      routerDirection="forward">{{designData.name}}
+                      <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
+                        {{designData.deliverydate | date: 'hh:mm a'}}
                     </span>
             </p>
-                <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
-                      routerDirection="forward">{{surveyData.email}}</span>
-                <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
-                    <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
+                <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
+                      routerDirection="forward">{{designData.email}}</span>
+                <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
+                    <span class="customer-phone">{{designData.phonenumber}}</span></a>
                 <span class="customer-address z-100"
-                      (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
+                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
 
                 <ion-row style="margin-bottom: 8px;">
                     <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                    <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
+                    <span class="chipdetail" style="background-color: #95afc0;" >{{designData.formattedjobtype}}</span>
                 </ion-row>
             </div>
         </ion-col>
@@ -40,7 +40,7 @@
     </ion-row>
 </ion-grid>
 
-<div *ngIf="listOfSurveyDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+<div *ngIf="listofDesignDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
     <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
 </div>
 </ion-content>

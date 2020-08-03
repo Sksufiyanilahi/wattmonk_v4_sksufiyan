@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import {NgxImageCompressService} from 'ngx-image-compress';
+import { CountdownTimerService, countDownTimerConfigModel, countDownTimerTexts } from 'ngx-timer';
 
 @Component({
   selector: 'app-design-details',
@@ -35,6 +36,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   };
   prelimFiles: File[]=[];
   targetLength: any;
+  image: string;
+  timerConfig: any;
 
 
   constructor(
@@ -47,7 +50,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private launchNavigator: LaunchNavigator,
     private toastController: ToastController,
-    private imageCompress: NgxImageCompressService
+    private imageCompress: NgxImageCompressService,
+    private countdownservice: CountdownTimerService
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
@@ -58,13 +62,43 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log(this.imageName);
-    
+    // debugger;
     this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getDesignDetails();
       this.getAssignees();
     });
+     ​
   }
+
+
+  timer(){
+     //countUpTimerConfigModel
+     this.timerConfig = new countDownTimerConfigModel();
+     ​
+         //custom class
+         this.timerConfig.timerClass = 'remainingtimerclass';
+     ​
+         //timer text values  
+         this.timerConfig.timerTexts = new countDownTimerTexts();
+         this.timerConfig.timerTexts.hourText = " :"; //default - hh
+         this.timerConfig.timerTexts.minuteText = " :"; //default - mm
+         this.timerConfig.timerTexts.secondsText = " "; //default - ss
+    debugger;
+         if (this.design.status == "designassigned"){
+          let cdate = new Date(this.design.designstarttime);
+          console.log(cdate);
+          
+          cdate.setHours(cdate.getHours() + 2);
+          this.countdownservice.startTimer(cdate);
+        }else if (this.design.status == "reviewassigned"){
+          let cdate = new Date(this.design.reviewstarttime);
+          cdate.setMinutes(cdate.getMinutes() + 15);
+          this.countdownservice.startTimer(cdate);
+        }
+
+  }
+
 
   ngOnDestroy(): void {
     this.dataSubscription.unsubscribe();
@@ -79,6 +113,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
         this.utilities.hideLoading();
         console.log('re', result);
         this.setData(result);
+        this.timer();
       }, (error) => {
         this.utilities.hideLoading();
       });
@@ -94,9 +129,10 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   setData(result: DesginDataModel) {
+    debugger;
     this.design = result;
     console.log(this.design,">>>>>>>>>>>>>>>>");
-    this.imageName= result.prelimdesign.name + result.prelimdesign.ext;
+    this.imageName= result.prelimdesign==null ? '' : result.prelimdesign.name + result.prelimdesign.ext;
     console.log(this.imageName)
     
     if (this.design.newconstruction == true) {
@@ -199,25 +235,38 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     
       this.targetLength= event.target.files.length;
 
-//       var reader = new FileReader();
-// reader.onload = (event: any) => {
-//   var orientation = -1;
-// let localUrl = event.target.result;
-// this.imageCompress.compressFile(localUrl,orientation, 50, 50).then(res=>{
-//   // console.log(res,">><><><");
-//   this.aa= res;
+
+
+      var reader = new FileReader();
+reader.onload = (event: any) => {
+  var orientation = -1;
+let localUrl = event.target.result;
+// this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
+  // console.log(res,">><><><");
+  // this.image= res;  
+  this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
+    result => {
+      this.image = result;
+      console.warn('Size in bytes is now:', this.imageCompress.byteCount(result));
+    }
+  );
   
 // })
-// }
-// reader.readAsDataURL(event.target.files[0]);
+}
+reader.readAsDataURL(event.target.files[0]);
 }
 
 
-  uploadpreliumdesign(designId?: number, key?: string,filearray?:File[]){
+  uploadpreliumdesign(designId?: number, key?: string){
+    // const blob = this.utilities.getBlobFromImageData(this.prelimFiles);
+    // console.log(blob);
+     let blob= this.utilities.b64toBlob(this.image);
+      console.log(blob);
+      
     // console.log(typeof(this.prelimFiles[0]));
     const imageData = new FormData();
     for(var i=0; i< this.prelimFiles.length;i++){
-      imageData.append("files",this.prelimFiles[i]);
+      imageData.append("files",blob,this.prelimFiles[i].name);
       // if(i ==0){
         imageData.append('path', 'design/' + designId);
         imageData.append('refId', designId + '');
@@ -225,11 +274,21 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
         imageData.append('field', key);
       // }
     } 
-    
-    this.apiService.uploaddesign(imageData).subscribe(res=>{
-      console.log(res); 
-      this.imagebox= false;
-      // this.getDesignDetails();
-    })
+      this.utilities.showLoading('Uploading image').then(()=>{
+        this.apiService.uploaddesign(imageData).subscribe(res=>{
+          this.utilities.hideLoading().then(()=>{
+            console.log(res); 
+            this.imagebox= false;
+            // this.getDesignDetails();
+            this.navController.pop();
+          })
+        },err=>{
+          this.utilities.hideLoading().then(()=>{
+            console.log(err);
+            
+          })
+        })
+      })
   }
+
 }

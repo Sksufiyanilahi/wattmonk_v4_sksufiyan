@@ -9,6 +9,7 @@ import { DesignDetailsPageRoutingModule } from './design-details-routing.module'
 import { DesignDetailsPage } from './design-details.page';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
+import { NgxTimerModule } from 'ngx-timer';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
     ReactiveFormsModule,
     IonicModule,
     DesignDetailsPageRoutingModule,
-    UtilitiesModule
+    UtilitiesModule,
+    NgxTimerModule
   ],
   declarations: [DesignDetailsPage],
   providers: [

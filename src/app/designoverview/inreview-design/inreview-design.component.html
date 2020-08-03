@@ -14,13 +14,13 @@
         </ion-col>
         <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="6">
             <div class="ion-no-padding custom-card" style="height: 100%;">
-                <p class="customer-name" [routerLink]="['/survey-detail/',designData.id]"
+                <p class="customer-name" [routerLink]="['/design-details/',designData.id]"
                       routerDirection="forward">{{designData.name}}
-                      <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',designData.id]" routerDirection="forward">
+                      <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span>
             </p>
-                <span class="customer-email" [routerLink]="['/survey-detail/',designData.id]"
+                <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
                       routerDirection="forward">{{designData.email}}</span>
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{designData.phonenumber}}</span></a>
@@ -35,12 +35,12 @@
                 </ion-row>
                 <ion-row class="ion-no-margin ion-no-margin" *ngIf="designData.status == 'reviewfailed'">
                     <ion-col></ion-col>
-                    <ion-col class="ion-no-margin ion-no-padding">
+                    <!-- <ion-col class="ion-no-margin ion-no-padding">
                         <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + designData.id + '/' + designData.jobtype + '/' + designData.latitude + '/' + designData.longitude]"
                         routerDirection="forward">
                             Restart Survey
                         </ion-button>
-                    </ion-col>
+                    </ion-col> -->
                 </ion-row>
                 <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
             </div>

@@ -23,6 +23,7 @@ export class ChangePasswordPage implements OnInit {
   isActiveToggleTextPassword: boolean;
   isActiveToggleTextnewPassword: boolean;
   changepassword: FormGroup;
+  password: string;
 
  constructor(
    private formBuilder: FormBuilder,
@@ -35,9 +36,11 @@ export class ChangePasswordPage implements OnInit {
  }
 
  ngOnInit() {
+   this.password= localStorage.getItem('password');
   this.changepassword = this.formBuilder.group({
-    password: new FormControl('', [Validators.required, Validators.minLength(6)] ),
-    code: new FormControl('',Validators.minLength(6))
+    newpassword: new FormControl('', [Validators.required, Validators.minLength(6)] ),
+    oldpassword: new FormControl('',Validators.minLength(6)),
+    confirmpassword: new FormControl('',Validators.minLength(6))
   })
  }
 
@@ -48,10 +51,10 @@ export class ChangePasswordPage implements OnInit {
   this.isActiveToggleTextnewPassword = (this.isActiveToggleTextnewPassword == true) ? false : true;
 }
 
-public getType() {
+getType() {
   return this.isActiveToggleTextPassword ? 'text' : 'password';
 }
-public getnewType() {
+getnewType() {
   return this.isActiveToggleTextnewPassword ? 'text' : 'password';
 }
 
@@ -59,16 +62,16 @@ public getnewType() {
  resetPassword() {
   
    let data={
-    password:this.changepassword.controls.password.value,
-    passwordConfirmation:this.changepassword.controls.password.value,
-    code:this.changepassword.controls.code.value
+    newpassword:this.changepassword.controls.newpassword.value,
+    confirmpassword:this.changepassword.controls.confirmpassword.value,
+    oldpassword:this.password
    }
    console.log(data,">>>>>>>>>>>>>>>>.");
    
 
    if (this.changepassword.status === 'VALID') {
       console.log(this.changepassword.value);
-      // debugger;
+      debugger;
      this.utils.showLoading('Resetting password').then(() => {
        this.apiService.changepassword(data).subscribe((response:any) => {
          console.log(response);
@@ -76,15 +79,15 @@ public getnewType() {
           isdefaultpassword:false
          }
          this.utils.hideLoading().then(() => {
-           this.utils.showSuccessModal('Password has been updated successfully').then((modal) => {
-             this.apiService.updateresetpassword(response.user.id,postdata).subscribe(res=>{
+           this.utils.showSuccessModal('User password changed successfully!').then((modal) => {
+            //  this.apiService.updateresetpassword(response.user.id,postdata).subscribe(res=>{
              
-              console.log(res,"ressss");
+            //   console.log(res,"ressss");
               
-             },err=>{
-                  console.log(err,"errr");
+            //  },err=>{
+            //       console.log(err,"errr");
                   
-             })
+            //  })
              modal.present();
              modal.onWillDismiss().then((dismissed) => {
               // this.goBack();

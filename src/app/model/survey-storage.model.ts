@@ -3,8 +3,13 @@ export class SurveyStorageModel {
   canvasImage: string;
   formData: any;
   saved: boolean;
-  surveyId: number;
 
+  surveyid: number;
+  surveytype: string;
+  city: string;
+  state: string;
+  latitude: number;
+  longitude: number;
   menuitems : any;
   formdata: any;
   currentprogress : number;

@@ -80,7 +80,7 @@ export class LoginPage implements OnInit {
                 // this.navController.navigateRoot(['homepage']);
                 this.navController.navigateRoot(['surveyoroverview']);
               }
-            } else {
+            } else if(response.user.role.id == ROLES.Designer){
               // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
               this.storageService.setUserName(this.loginForm.get('identifier').value);
               this.storageService.setPassword(this.loginForm.get('password').value);
@@ -89,8 +89,19 @@ export class LoginPage implements OnInit {
               if (response.user.isdefaultpassword) {
                 this.navController.navigateRoot(['changepassword'])
               } else {
-                this.navController.navigateRoot(['homepage']);
+                this.navController.navigateRoot(['designoverview']);
               }
+            }else{
+               // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
+               this.storageService.setUserName(this.loginForm.get('identifier').value);
+               this.storageService.setPassword(this.loginForm.get('password').value);
+               this.storageService.setUser(response.user, response.jwt);
+               this.apiService.refreshHeader();
+               if (response.user.isdefaultpassword) {
+                 this.navController.navigateRoot(['changepassword'])
+               } else {
+                 this.navController.navigateRoot(['homepage']);
+               }
             }
           });
         }, responseError => {

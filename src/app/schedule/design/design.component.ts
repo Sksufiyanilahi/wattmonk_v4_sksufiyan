@@ -45,6 +45,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   uploadbox: any;
   archFiles: string[]=[];
   prelimFiles: string[]=[];
+ imageName:any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -67,7 +68,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
       rooftype: new FormControl(''),
-      preliemdesign: new FormControl('', [Validators.required]),
+      prelimdesign: new FormControl('', [Validators.required]),
       architecturaldesign: new FormControl(''),
       tiltofgroundmountingsystem: new FormControl(''),
       mountingtype: new FormControl('', [Validators.required]),
@@ -191,12 +192,12 @@ uploadcontrolvalidation(){
     }
   }
 
-  getDesignDetails() {
+ async getDesignDetails() {
     this.utils.showLoading('Getting Design Details').then((success) => {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utils.hideLoading();
+        debugger;
         this.design = result;
-
         console.log(this.design);
         this.desginForm.patchValue({
           name: this.design.name,
@@ -209,7 +210,7 @@ uploadcontrolvalidation(){
           architecturaldesign:this.design.architecturaldesign,
           // jobtype: this.design.jobtype,
           tiltofgroundmountingsystem: this.design.tiltofgroundmountingsystem,
-          comments: this.design.comments,
+          comments: this.design.comments[0].message,
           projecttype: this.design.projecttype,
           latitude: this.design.latitude,
           longitude: this.design.longitude,
@@ -218,7 +219,7 @@ uploadcontrolvalidation(){
           city: this.design.city,
           postalcode:this.design.postalcode,
           newconstruction: this.design.newconstruction + '',
-          prelimdesign:this.design.prelimdesign
+          prelimdesign:this.design.prelimdesign.name + this.design.prelimdesign.ext
         });
         this.utils.setStaticAddress(this.design.address);
 
@@ -227,7 +228,7 @@ uploadcontrolvalidation(){
             assignedto: this.design.assignedto.id
           });
         }
-
+      
         this.getSolarMakeForForm();
         this.getInverterMakeForForm();
       }, (error) => {
@@ -237,6 +238,7 @@ uploadcontrolvalidation(){
   }
 
   getSolarMakeForForm() {
+    debugger;
     this.apiService.getSolarMake().subscribe(response => {
       this.listOfSolarMake = response;
 
@@ -316,7 +318,7 @@ uploadcontrolvalidation(){
   addForm() {
     console.log('Reach', this.desginForm.value);
    
-  
+  debugger;
     if (this.desginForm.status === 'VALID') {
       this.utils.showLoading('Saving').then(() => {
         if (this.designId === 0) {
@@ -345,16 +347,17 @@ uploadcontrolvalidation(){
           });
 
         } else {
+          debugger;
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(() => {
               debugger;
               console.log('Res', response);
               this.utils.showSnackBar('Desgin have been updated');
-              this.utils.setDesignDetailsRefresh(true);
-              
               this.uploaarchitecturedesign(response.id,'architecturaldesign');
               this.uploadpreliumdesign(response.id,'prelimdesign')
-              this.navController.pop();
+              this.utils.setDesignDetailsRefresh(true);
+              
+              this.navController.navigateRoot('homepage');
             });
           }, responseError => {
             this.utils.hideLoading().then(() => {

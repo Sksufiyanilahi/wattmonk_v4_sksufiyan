@@ -20,7 +20,7 @@ export class NewdesignComponent implements OnInit {
 
   listOfDesignData: DesginDataModel[] = [];
   listOfDesignDataHelper: DesginDataHelper[] = [];
-  private surveyRefreshSubscription: Subscription;
+  private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
   currentDate:any=new Date()
 
@@ -56,13 +56,13 @@ console.log(this.currentDate.toISOString());
   ionViewDidEnter(event){
     
     this.getDesigns(event);
-    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+    this.designRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfDesignData != null && this.listOfDesignData.length > 0){
-        this.formatSurveyData(this.listOfDesignData);
+        this.formatDesignData(this.listOfDesignData);
       }
     });
   }
@@ -72,17 +72,17 @@ console.log(this.currentDate.toISOString());
     if (event != null && event !== undefined) {
       showLoader = false;
     }
-    this.fetchPendingSurveys(event);
+    this.fetchPendingDesigns(event);
   }
 
-  fetchPendingSurveys(event?, showLoader?: boolean) {
+  fetchPendingDesigns(event?, showLoader?: boolean) {
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys("status=designassigned&status=designinprocess").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatSurveyData(response);
+          this.formatDesignData(response);
           if (event !== null) {
             event.target.complete();
           }
@@ -103,7 +103,7 @@ console.log(this.currentDate.toISOString());
     this.launchNavigator.navigate(address, this.options);
   }
 
-  formatSurveyData(records : DesginDataModel[]){
+  formatDesignData(records : DesginDataModel[]){
     this.listOfDesignData = this.fillinDynamicData(records);
     console.log(this.listOfDesignData);
     
@@ -116,10 +116,10 @@ console.log(this.currentDate.toISOString());
               tempData.push(listOfDesigns);
             } else {
               let added = false;
-              tempData.forEach((surveyList) => {
+              tempData.forEach((designList:any) => {
                 if (!added) {
-                  if (surveyList.date === this.datePipe.transform(designItem.deliverydate, 'M/d/yy')) {
-                    surveyList.listOfDesigns.push(designItem);
+                  if (designList.date === this.datePipe.transform(designList.deliverydate, 'M/d/yy')) {
+                    designList.listOfDesigns.push(designList);
                     added = true;
                   }
                 }

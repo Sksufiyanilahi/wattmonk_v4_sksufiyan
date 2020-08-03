@@ -9,6 +9,8 @@ import { ApiService } from 'src/app/api.service';
 import { ErrorModel } from 'src/app/model/error.model';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
+import { DesginDataModel } from 'src/app/model/design.model';
+import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 
 @Component({
   selector: 'app-completeddesign',
@@ -17,9 +19,9 @@ import { Storage } from '@ionic/storage';
 })
 export class CompleteddesignComponent implements OnInit {
 
-  listOfSurveyData: SurveyDataModel[] = [];
-  listOfSurveyDataHelper: SurveyDataHelper[] = [];
-  private surveyRefreshSubscription: Subscription;
+  listOfDesignData: DesginDataModel[] = [];
+  listOfDesignDataHelper: DesginDataHelper[] = [];
+  private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
   routeSubscription: Subscription;
 
@@ -35,41 +37,40 @@ export class CompleteddesignComponent implements OnInit {
     private utils: UtilitiesService,
     private storage: Storage,
     private apiService: ApiService) {
-      console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
   }
 
   ngOnInit() {
-    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-      this.getSurveys(null);
+    this.designRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+      this.getDesigns(null);
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-        this.formatSurveyData(this.listOfSurveyData);
+      if(this.listOfDesignData != null && this.listOfDesignData.length > 0){
+        this.formatDesignData(this.listOfDesignData);
       }
     });
   }
 
-  getSurveys(event: CustomEvent) {
+  getDesigns(event: CustomEvent) {
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
     }
-    this.fetchPendingSurveys(event, showLoader);
+    this.fetchPendingDesigns(event, showLoader);
   }
 
-  fetchPendingSurveys(event, showLoader: boolean) {
+  fetchPendingDesigns(event, showLoader: boolean) {
     console.log("inside fetch surveys");
-    this.listOfSurveyData = [];
-    this.listOfSurveyDataHelper = [];
-    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
-      this.apiService.getSurveyorSurveys("status=surveycompleted").subscribe(response => {
+    this.listOfDesignData = [];
+    this.listOfDesignDataHelper = [];
+    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
+      this.apiService.getDesignSurveys("status=surveycompleted").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatSurveyData(response);
+          this.formatDesignData(response);
           if (event !== null) {
             event.target.complete();
           }
@@ -90,35 +91,35 @@ export class CompleteddesignComponent implements OnInit {
     this.launchNavigator.navigate(address, this.options);
   }
 
-  formatSurveyData(records : SurveyDataModel[]){
-    this.listOfSurveyData = this.fillinDynamicData(records);
-    const tempData: SurveyDataHelper[] = [];
-          this.listOfSurveyData.forEach((surveyItem) => {
+  formatDesignData(records : DesginDataModel[]){
+    this.listOfDesignData = this.fillinDynamicData(records);
+    const tempData: DesginDataHelper[] = [];
+          this.listOfDesignData.forEach((designItem) => {
             if (tempData.length === 0) {
-              const listOfSurvey = new SurveyDataHelper();
-              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
-              listOfSurvey.listOfSurveys.push(surveyItem);
-              tempData.push(listOfSurvey);
+              const listOfDesign = new DesginDataHelper();
+              listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+              listOfDesign.listOfDesigns.push(designItem);
+              tempData.push(listOfDesign);
             } else {
               let added = false;
               tempData.forEach((surveyList) => {
                 if (!added) {
-                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/d/yy')) {
-                    surveyList.listOfSurveys.push(surveyItem);
+                  if (surveyList.date === this.datePipe.transform(designItem.deliverydate, 'M/d/yy')) {
+                    surveyList.listOfDesigns.push(designItem);
                     added = true;
                   }
                 }
               });
               if (!added) {
-                const listOfSurvey = new SurveyDataHelper();
-                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
-                listOfSurvey.listOfSurveys.push(surveyItem);
-                tempData.push(listOfSurvey);
+                const listOfDesign = new DesginDataHelper();
+                listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+                listOfDesign.listOfDesigns.push(designItem);
+                tempData.push(listOfDesign);
                 added = true;
               }
             }
           });
-          this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+          this.listOfDesignDataHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
             return dateA - dateB;
@@ -126,10 +127,10 @@ export class CompleteddesignComponent implements OnInit {
           this.cdr.detectChanges();
   }
 
-  fillinDynamicData(records : SurveyDataModel[]) : SurveyDataModel[]{
+  fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
-      this.storage.get(''+element.id).then((data: SurveyStorageModel) => {
+      this.storage.get(''+element.id).then((data) => {
         console.log(data);
         if (data) {
           element.totalpercent = data.currentprogress;
