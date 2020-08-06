@@ -1,44 +1,89 @@
 <ion-content (click)="close()" style="padding-bottom: 250px;">
-    <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
-        <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
-    <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
-        <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index" class="ion-margin-top">
-            <ion-col size="12">
-                <span class="ion-padding" *ngIf="today === item.date">
-                    Today
-                  </span>
-                <span class="ion-padding" *ngIf="today !== item.date">
-                    {{item.date | date: 'dd MMM yyyy'}}
-                </span>
-            </ion-col>
-            <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="6">
-                <div class="ion-padding custom-card" style="height: 100%;"
-                     routerDirection="forward">
-                    <span class="customer-name" [routerLink]="['/design-details/',designData.id]"
-                          routerDirection="forward">{{designData.name}}</span>
-                    <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
-                          routerDirection="forward">{{designData.email}}</span>
-                    <span class="customer-address z-100"
-                          (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
-                    <span class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
-                          *ngIf="(designData.assignedto === null || designData.assignedto === undefined) && roleType!=='design'">Assign</span>
-                    <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]">
-                        {{designData.created_at | date: 'hh:mm a'}}
+
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
+        <ion-segment-button value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
+          <ion-label>Pending</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="requesttype=prelim&status=designassigned">
+          <ion-label>In Designing</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="requesttype=prelim&status=designcompleted">
+          <ion-label>Completed</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed">
+          <ion-label>Review</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="requesttype=prelim&status=delivered">
+          <ion-label>Delivered</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+                   
+                       
+        <ion-grid *ngIf="listOfDesignsHelper.length !== 0">
+            <ion-row *ngFor="let item of listOfDesignsHelper;let i = index">
+                <ion-col size="12" class="ion-margin-top">
+                        <span class="ion-padding" *ngIf="today === item.date">
+                            Today
+                            </span>
+                    <span class="ion-padding" *ngIf="today !== item.date">
+                                {{item.date | date: 'dd MMM yyyy'}}
+                        </span>
+                </ion-col>
+                <ion-col *ngFor="let designData of item.listOfDesigns;let i = index" size="6">
+                    <div class="ion-padding custom-card" style="height: 100%;">
+                        <span class="customer-name" [routerLink]="['/design-details/',designData.id]"
+                                routerDirection="forward">{{designData.name}} </span>
+                                <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
+                                {{designData.deliverydate | date: 'hh:mm a'}}
+                           
+                    </span> -->
+                        <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
+                                routerDirection="forward">{{designData.email}}</span>
+                        <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
+                            <span class="customer-phone">{{designData.phonenumber}}</span></a>
+                        <span class="customer-address z-100"
+                                (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
+        
+                        <ion-row style="margin-bottom: 8px;">
+                            <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
+                            <!-- <span class="chipdetail" style="background-color: #95afc0;" >{{designData.formattedjobtype}}</span> -->
+                            <ion-col>    
+                                <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'">Failed</span>
+                                <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'">Passed</span>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row class="ion-no-margin ion-no-margin">
+                            <ion-col>
+                                <span class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                *ngIf="(designData.assignedto === null || designData.assignedto === undefined) && roleType!=='design'">Assign</span>
+                            </ion-col>
+                            <!-- <ion-col class="ion-no-margin ion-no-padding">
+                                <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + designData.id + '/' + designData.jobtype + '/' + designData.latitude + '/' + designData.longitude]"
+                                routerDirection="forward">
+                                    Restart Survey
+                                </ion-button>
+                            </ion-col> -->
+                        </ion-row>
+                        <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
+                          <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
+                                {{designData.deliverydate | date: 'hh:mm a'}}
+                           
                     </span>
-                </div>
-
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col size="12" style="height: 100px;">
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-
-    <div *ngIf="listOfDesignDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
-        <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
-    </div>
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12" style="height: 100px;">
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        
+        <div *ngIf="listOfDesignsHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+            <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+        </div>
 
 </ion-content>
 
@@ -72,3 +117,5 @@
     </form>
 
 </ion-bottom-drawer>
+
+<router-outlet></router-outlet>

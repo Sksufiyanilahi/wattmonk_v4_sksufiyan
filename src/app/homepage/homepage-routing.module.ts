@@ -4,16 +4,19 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomepagePage } from './homepage.page';
 import { DesignComponent } from './design/design.component';
 import { SurveyComponent } from './survey/survey.component';
+import { PendingComponent } from './design/pending/pending.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomepagePage,
     children: [
+      // { path: 'design', loadChildren: () => import(`./design/design.module`).then(m => m.DesignModule) },
       {
-        path: 'design',
-        component: DesignComponent
+        path:'design',
+        component:DesignComponent
       },
+     
       {
         path: 'survey',
         component: SurveyComponent

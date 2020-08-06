@@ -38,6 +38,23 @@
         </ion-tab-bar>
     </ion-tabs>
 
+    <!-- <ion-tabs style="margin-top: 20%;">
+        <ion-tab-bar slot="top">
+          <ion-tab-button tab="pending">
+            <ion-label>Pending</ion-label>
+          </ion-tab-button>
+          <ion-tab-button tab="completed">
+            <ion-label>Completed</ion-label>
+          </ion-tab-button>
+          <ion-tab-button tab="inreview">
+            <ion-label>Review</ion-label>
+          </ion-tab-button>
+          <ion-tab-button tab="delivered">
+            <ion-label>Delivered</ion-label>
+          </ion-tab-button>
+        </ion-tab-bar>
+      </ion-tabs> -->
+
     <ion-grid style="position: absolute;">
         <div class="searchbar_div">
             <ion-grid *ngIf="searchDesginItem && searchDesginItem.length !== 0">
@@ -133,3 +150,5 @@
     </div>
 
 </ion-footer>
+<router-outlet></router-outlet>
+

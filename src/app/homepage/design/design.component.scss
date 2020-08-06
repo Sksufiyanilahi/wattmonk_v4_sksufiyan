@@ -1,14 +1,13 @@
 .custom-card {
-  display: flex;
-  flex-direction: column;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  height: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  background: white !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 .customer-name {
-  font-size: 1em;
+  font-size: 1.2em;
   color: #434343;
   font-weight: bold;
 }
@@ -34,6 +33,12 @@
   // width: 50vw !important;
 }
 
+.timestamp {
+  font-size: 0.7em;
+ 
+}
+
+
 //.drawer {
 //  background: #F3F3F3;
 //  --background: #F3F3F3;
@@ -56,6 +61,4 @@ ion-bottom-drawer {
   }
 }
 
-.timestamp {
-  font-size: 0.7em;
-}
+

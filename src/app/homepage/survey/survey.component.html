@@ -1,58 +1,78 @@
 <ion-content>
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="status=created&status=outsourced&status=requestaccepted">
+        <ion-segment-button value="status=created&status=outsourced&status=requestaccepted">
+          <ion-label>Pending</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="status=surveyassigned&status=surveyinprocess">
+          <ion-label>In Progress</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="status=surveycompleted">
+          <ion-label>Completed</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="status=reviewassigned&status=reviewpassed&status=reviewfailed">
+          <ion-label>Review</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="status=delivered">
+          <ion-label>Delivered</ion-label>
+        </ion-segment-button>
+      </ion-segment>
     <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
-        <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
-            <ion-col size="12" class="ion-margin-top">
-                    <span class="ion-padding" *ngIf="today === item.date">
-                        Today
-                      </span>
-                <span class="ion-padding" *ngIf="today !== item.date">
-                          {{item.date | date: 'dd MMM yyyy'}}
-                    </span>
-            </ion-col>
-            <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
-                <div class="ion-padding custom-card" style="height: 100%;">
-                    <span class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
-                          routerDirection="forward">{{surveyData.name}}</span>
-                    <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
-                          routerDirection="forward">{{surveyData.email}}</span>
-                    <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
-                        <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
-                    <span class="customer-address z-100"
-                          (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
-                    <ion-row class="ion-no-margin ion-no-margin">
-                        <ion-col size="auto" class="ion-no-margin ion-no-padding"
-                                 *ngIf="surveyData.status !== 'surveycompleted'"
-                                 [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
-                                 routerDirection="forward">
-                            <span class="ion-text-end action-button-color">Start Survey</span>
-                        </ion-col>
-                        <ion-col></ion-col>
-                        <ion-col size="auto" class="ion-no-margin ion-no-padding"
-                                 *ngIf="surveyData.assignedto === null || surveyData.assignedto === undefined">
-                            <span class="ion-text-end action-button-color"
-                                  (click)="openSurveyors(surveyData.id)">Assign</span>
-                        </ion-col>
-                    </ion-row>
-                    <span class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
-                        {{surveyData.datetime | date: 'hh:mm a'}}
-                    </span>
-
-                </div>
-
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col size="12" style="height: 100px;">
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-
-    <div *ngIf="listOfSurveyDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
-        <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
-    </div>
+    
+       
+            <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0" style="margin-top: 40px;">
+                <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
+                    <ion-col size="12" class="ion-margin-top">
+                            <span class="ion-padding" *ngIf="today === item.date">
+                                Today
+                              </span>
+                        <span class="ion-padding" *ngIf="today !== item.date">
+                                  {{item.date | date: 'dd MMM yyyy'}}
+                            </span>
+                    </ion-col>
+                    <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
+                        <div class="ion-padding custom-card" style="height: 100%;">
+                            <span class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
+                                  routerDirection="forward">{{surveyData.name}}</span>
+                            <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
+                                  routerDirection="forward">{{surveyData.email}}</span>
+                            <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
+                                <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
+                            <span class="customer-address z-100"
+                                  (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
+                            <ion-row class="ion-no-margin ion-no-margin">
+                                <ion-col size="auto" class="ion-no-margin ion-no-padding"
+                                         *ngIf="surveyData.status !== 'surveycompleted'"
+                                         [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
+                                         routerDirection="forward">
+                                    <span class="ion-text-end action-button-color">Start Survey</span>
+                                </ion-col>
+                                <ion-col></ion-col>
+                                <ion-col size="auto" class="ion-no-margin ion-no-padding"
+                                         *ngIf="surveyData.assignedto === null || surveyData.assignedto === undefined">
+                                    <span class="ion-text-end action-button-color"
+                                          (click)="openSurveyors(surveyData.id)">Assign</span>
+                                </ion-col>
+                            </ion-row>
+                            <span class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
+                                {{surveyData.datetime | date: 'hh:mm a'}}
+                            </span>
+        
+                        </div>
+        
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12" style="height: 100px;">
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        
+            <div *ngIf="listOfSurveyDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+                <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+            </div>
+   
 
 </ion-content>
 

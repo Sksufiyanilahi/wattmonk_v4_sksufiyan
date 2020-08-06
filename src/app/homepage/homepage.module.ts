@@ -15,6 +15,10 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { IonBottomDrawerModule } from 'ion-bottom-drawer';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { PendingComponent } from './design/pending/pending.component';
+import { CompletedComponent } from './design/completed/completed.component';
+import { DeliveredComponent } from './design/delivered/delivered.component';
+import { InreviewComponent } from './design/inreview/inreview.component';
 
 @NgModule({
   imports: [
@@ -26,7 +30,7 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
     ReactiveFormsModule,
     UtilitiesModule,
   ],
-  declarations: [HomepagePage, SurveyComponent, DesignComponent],
+  declarations: [HomepagePage, SurveyComponent,DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent],
   providers: [
     DatePipe,
     Diagnostic,

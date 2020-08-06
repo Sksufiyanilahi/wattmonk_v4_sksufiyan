@@ -14,6 +14,8 @@ import { UserRoles } from '../../model/constants';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { StorageService } from 'src/app/storage.service';
 import { ROLES } from 'src/app/contants';
+import {Storage} from '@ionic/storage';
+import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 
 @Component({
   selector: 'app-survey',
@@ -25,6 +27,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
+  private dataRefreshSubscription: Subscription;
 
   today: any;
   options: LaunchNavigatorOptions = {
@@ -37,6 +40,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   listOfAssignees: AssigneeModel[] = [];
   routeSubscription: Subscription;
   filterDataArray: SurveyDataModel[];
+  segments:any='status=created&status=outsourced&status=requestaccepted';
 
   constructor(
     private utils: UtilitiesService,
@@ -48,7 +52,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute,
-    private storage: StorageService
+    private storage: Storage
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -59,202 +63,312 @@ export class SurveyComponent implements OnInit, OnDestroy {
     });
   }
 
-  ionViewDidEnter() {
-    this.routeSubscription.unsubscribe();
-  }
+  segmentChanged(event){
+    this.segments= event.target.value;
+    this.getSurveys(event);
 
-  // ngOnInit() {
-  //   this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-  //     this.getSurvey();
-  //   });
-  // }
-  ngOnInit() {
-    debugger;
-    this.filterData(this.filterDataArray);
-    this.routeSubscription = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        // Trick the Router into believing it's last link wasn't previously loaded
-        if (this.router.url.indexOf('page') > -1) {
-          this.router.navigated = false;
-          let data = this.route.queryParams.subscribe((_res: any) => {
-            console.log('Serach Term', _res);
-            if (Object.keys(_res).length !== 0) {
-              //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
+    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+      this.getSurveys(null);
+    });
 
-              this.filterData(_res.serchTerm);
-            } else {
-              // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-                // debugger;
-                this.getSurveys(null);
-              // });
-            }
-          });
-        }
+    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+      if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+        this.formatSurveyData(this.listOfSurveyData);
       }
     });
-    // console.log('inside init');
-    // this.routeSubscription = this.router.events.subscribe((event) => {
-    //   if (event instanceof NavigationEnd) {
-    //     // Trick the Router into believing it's last link wasn't previously loaded
-    //     if (this.router.url.indexOf('page') > -1) {
-    //       this.router.navigated = false;
-    //       const data = this.route.queryParams.subscribe((_res: any) => {
-    //         console.log('Search Term', _res);
-    //         if (Object.keys(_res).length !== 0) {
-    //           //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
-    //           this.filterData(_res.serchTerm);
-    //         } else {
-    //           this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-    //             this.getSurveys(null);
-    //           });
-    //         }
-    //       });
-    //     }
-    //   }
+  }
+
+  ionViewDidEnter(event) {
+    this.getSurveys(event);
+   
+    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+      this.getSurveys(null);
+    });
+
+    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+      if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+        this.formatSurveyData(this.listOfSurveyData);
+      }
+    });
+    // debugger;
+    // this.routeSubscription.unsubscribe();
+  }
+
+  ngOnInit() {
+    // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+    //   this.getSurvey();
     // });
   }
+  // ngOnInit() {
+  //   // this.filterData(this.filterDataArray);
+  //   // this.routeSubscription = this.router.events.subscribe((event) => {
+  //   //   if (event instanceof NavigationEnd) {
+  //   //     // Trick the Router into believing it's last link wasn't previously loaded
+  //   //     if (this.router.url.indexOf('page') > -1) {
+  //   //       this.router.navigated = false;
+  //   //       let data = this.route.queryParams.subscribe((_res: any) => {
+  //   //         console.log('Serach Term', _res);
+  //   //         if (Object.keys(_res).length !== 0) {
+  //   //           //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
 
+  //   //           this.filterData(_res.serchTerm);
+  //   //         } else {
+  //   //           // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+  //   //             // debugger;
+  //   //             this.getSurveys(null);
+  //   //           // });
+  //   //         }
+  //   //       });
+  //   //     }
+  //   //   }
+  //   // });
+  //   // console.log('inside init');
+  //   // this.routeSubscription = this.router.events.subscribe((event) => {
+  //   //   if (event instanceof NavigationEnd) {
+  //   //     // Trick the Router into believing it's last link wasn't previously loaded
+  //   //     if (this.router.url.indexOf('page') > -1) {
+  //   //       this.router.navigated = false;
+  //   //       const data = this.route.queryParams.subscribe((_res: any) => {
+  //   //         console.log('Search Term', _res);
+  //   //         if (Object.keys(_res).length !== 0) {
+  //   //           //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
+  //   //           this.filterData(_res.serchTerm);
+  //   //         } else {
+  //   //           this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+  //   //             this.getSurveys(null);
+  //   //           });
+  //   //         }
+  //   //       });
+  //   //     }
+  //   //   }
+  //   // });
+  // }
+  getSurveys(event?: CustomEvent) {
+    let showLoader = true;
+    if (event != null && event !== undefined) {
+      showLoader = false;
+    }
+    this.fetchPendingSurveys(event);
+  }
 
-  filterData(serchTerm: any) {
-    console.log(this.listOfSurveyData);
-    this.filterDataArray = this.listOfSurveyData.filter(x => x.id == serchTerm);
-    const tempData: SurveyDataHelper[] = [];
-    this.filterDataArray.forEach((surveyItem) => {
-      if (tempData.length === 0) {
-        const listOfSurvey = new SurveyDataHelper();
-        listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
-        listOfSurvey.listOfSurveys.push(surveyItem);
-        tempData.push(listOfSurvey);
-      } else {
-        let added = false;
-        tempData.forEach((surveyList) => {
-          if (!added) {
-            if (surveyList.date === this.datePipe.transform(surveyItem.created_at, 'M/d/yy')) {
-              surveyList.listOfSurveys.push(surveyItem);
-              added = true;
-            }
+  fetchPendingSurveys(event?, showLoader?: boolean) {
+    this.listOfSurveyData = [];
+    this.listOfSurveyDataHelper = [];
+    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
+      this.apiService.getSurveyorSurveys(this.segments).subscribe(response => {
+        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+          console.log(response);
+          this.formatSurveyData(response);
+          if (event !== null) {
+            event.target.complete();
           }
         });
-        if (!added) {
-          const listOfSurvey = new SurveyDataHelper();
-          listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
-          listOfSurvey.listOfSurveys.push(surveyItem);
-          tempData.push(listOfSurvey);
-          added = true;
-        }
-      }
+      }, responseError => {
+        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+          if (event !== null) {
+            event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
     });
-    this.listOfSurveyDataHelper = tempData;
-    this.cdr.detectChanges();
+  }
+
+  // filterData(serchTerm: any) {
+  //   console.log(this.listOfSurveyData);
+  //   this.filterDataArray = this.listOfSurveyData.filter(x => x.id == serchTerm);
+  //   const tempData: SurveyDataHelper[] = [];
+  //   this.filterDataArray.forEach((surveyItem) => {
+  //     if (tempData.length === 0) {
+  //       const listOfSurvey = new SurveyDataHelper();
+  //       listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
+  //       listOfSurvey.listOfSurveys.push(surveyItem);
+  //       tempData.push(listOfSurvey);
+  //     } else {
+  //       let added = false;
+  //       tempData.forEach((surveyList) => {
+  //         if (!added) {
+  //           if (surveyList.date === this.datePipe.transform(surveyItem.created_at, 'M/d/yy')) {
+  //             surveyList.listOfSurveys.push(surveyItem);
+  //             added = true;
+  //           }
+  //         }
+  //       });
+  //       if (!added) {
+  //         const listOfSurvey = new SurveyDataHelper();
+  //         listOfSurvey.date = this.datePipe.transform(surveyItem.created_at, 'M/d/yy');
+  //         listOfSurvey.listOfSurveys.push(surveyItem);
+  //         tempData.push(listOfSurvey);
+  //         added = true;
+  //       }
+  //     }
+  //   });
+  //   this.listOfSurveyDataHelper = tempData;
+  //   this.cdr.detectChanges();
+  // }
+
+  formatSurveyData(records : SurveyDataModel[]){
+    this.listOfSurveyData = this.fillinDynamicData(records);
+    console.log(this.listOfSurveyData);
+    
+    const tempData: SurveyDataHelper[] = [];
+          this.listOfSurveyData.forEach((surveyItem) => {
+            if (tempData.length === 0) {
+              const listOfSurvey = new SurveyDataHelper();
+              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+              listOfSurvey.listOfSurveys.push(surveyItem);
+              tempData.push(listOfSurvey);
+            } else {
+              let added = false;
+              tempData.forEach((surveyList) => {
+                if (!added) {
+                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/d/yy')) {
+                    surveyList.listOfSurveys.push(surveyItem);
+                    added = true;
+                  }
+                }
+              });
+              if (!added) {
+                const listOfSurvey = new SurveyDataHelper();
+                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+                listOfSurvey.listOfSurveys.push(surveyItem);
+                tempData.push(listOfSurvey);
+                added = true;
+              }
+            }
+          });
+          this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+            var dateA = new Date(a.date).getTime(),
+              dateB = new Date(b.date).getTime();
+            return dateA - dateB;
+          });
+          this.cdr.detectChanges();
+  }
+
+  fillinDynamicData(records : SurveyDataModel[]) : SurveyDataModel[]{
+    records.forEach(element => {
+      element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
+      this.storage.get(''+element.id).then((data: SurveyStorageModel) => {
+        console.log(data);
+        if (data) {
+          element.totalpercent = data.currentprogress;
+        }else{
+          element.totalpercent = 0;
+        }
+      });
+    });
+
+    return records;
   }
 
   ngOnDestroy(): void {
     this.surveyRefreshSubscription.unsubscribe();
   }
 
-  getSurvey(event, showLoader: boolean) {
-    this.listOfSurveyData = [];
-    this.listOfSurveyDataHelper = [];
-    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
-      this.apiService.getSurvey().subscribe(response => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          if (event !== null) {
-            event.target.complete();
-          }
-          console.log(response);
-          this.listOfSurveyData = response;
-          const tempData: SurveyDataHelper[] = [];
-          this.listOfSurveyData.forEach((surveyItem) => {
-            if (tempData.length === 0) {
-              const listOfSurvey = new SurveyDataHelper();
-              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
-              listOfSurvey.listOfSurveys.push(surveyItem);
-              tempData.push(listOfSurvey);
-            } else {
-              let added = false;
-              tempData.forEach((surveyList) => {
-                if (!added) {
-                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/d/yy')) {
-                    surveyList.listOfSurveys.push(surveyItem);
-                    added = true;
-                  }
-                }
-              });
-              if (!added) {
-                const listOfSurvey = new SurveyDataHelper();
-                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
-                listOfSurvey.listOfSurveys.push(surveyItem);
-                tempData.push(listOfSurvey);
-                added = true;
-              }
-            }
-          });
-          this.listOfSurveyDataHelper = tempData;
-          this.cdr.detectChanges();
-        });
-      }, responseError => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          if (event !== null) {
-            event.target.complete();
-          }
-          const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
-        });
-      });
-    });
-  }
+  // getSurvey(event, showLoader: boolean) {
+  //   this.listOfSurveyData = [];
+  //   this.listOfSurveyDataHelper = [];
+  //   this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
+  //     this.apiService.getSurvey().subscribe(response => {
+  //       this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+  //         if (event !== null) {
+  //           event.target.complete();
+  //         }
+  //         console.log(response);
+  //         this.listOfSurveyData = response;
+  //         const tempData: SurveyDataHelper[] = [];
+  //         this.listOfSurveyData.forEach((surveyItem) => {
+  //           if (tempData.length === 0) {
+  //             const listOfSurvey = new SurveyDataHelper();
+  //             listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+  //             listOfSurvey.listOfSurveys.push(surveyItem);
+  //             tempData.push(listOfSurvey);
+  //           } else {
+  //             let added = false;
+  //             tempData.forEach((surveyList) => {
+  //               if (!added) {
+  //                 if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/d/yy')) {
+  //                   surveyList.listOfSurveys.push(surveyItem);
+  //                   added = true;
+  //                 }
+  //               }
+  //             });
+  //             if (!added) {
+  //               const listOfSurvey = new SurveyDataHelper();
+  //               listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+  //               listOfSurvey.listOfSurveys.push(surveyItem);
+  //               tempData.push(listOfSurvey);
+  //               added = true;
+  //             }
+  //           }
+  //         });
+  //         this.listOfSurveyDataHelper = tempData;
+  //         this.cdr.detectChanges();
+  //       });
+  //     }, responseError => {
+  //       this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+  //         if (event !== null) {
+  //           event.target.complete();
+  //         }
+  //         const error: ErrorModel = responseError.error;
+  //         this.utils.errorSnackBar(error.message[0].messages[0].message);
+  //       });
+  //     });
+  //   });
+  // }
 
-  getSurveyorSurveys(event, showLoader: boolean) {
-    this.listOfSurveyData = [];
-    this.listOfSurveyDataHelper = [];
-    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
-      this.apiService.getSurveyorSurveys("").subscribe(response => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          if (event !== null) {
-            event.target.complete();
-          }
-          console.log(response);
-          this.listOfSurveyData = response;
-          const tempData: SurveyDataHelper[] = [];
-          this.listOfSurveyData.forEach((surveyItem) => {
-            if (tempData.length === 0) {
-              const listOfSurvey = new SurveyDataHelper();
-              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
-              listOfSurvey.listOfSurveys.push(surveyItem);
-              tempData.push(listOfSurvey);
-            } else {
-              let added = false;
-              tempData.forEach((surveyList) => {
-                if (!added) {
-                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/d/yy')) {
-                    surveyList.listOfSurveys.push(surveyItem);
-                    added = true;
-                  }
-                }
-              });
-              if (!added) {
-                const listOfSurvey = new SurveyDataHelper();
-                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
-                listOfSurvey.listOfSurveys.push(surveyItem);
-                tempData.push(listOfSurvey);
-                added = true;
-              }
-            }
-          });
-          this.listOfSurveyDataHelper = tempData;
-          this.cdr.detectChanges();
-        });
-      }, responseError => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          if (event !== null) {
-            event.target.complete();
-          }
-          const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
-        });
-      });
-    });
-  }
+  // getSurveyorSurveys(event, showLoader: boolean) {
+  //   this.listOfSurveyData = [];
+  //   this.listOfSurveyDataHelper = [];
+  //   this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
+  //     this.apiService.getSurveyorSurveys("").subscribe(response => {
+  //       this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+  //         if (event !== null) {
+  //           event.target.complete();
+  //         }
+  //         console.log(response);
+  //         this.listOfSurveyData = response;
+  //         const tempData: SurveyDataHelper[] = [];
+  //         this.listOfSurveyData.forEach((surveyItem) => {
+  //           if (tempData.length === 0) {
+  //             const listOfSurvey = new SurveyDataHelper();
+  //             listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+  //             listOfSurvey.listOfSurveys.push(surveyItem);
+  //             tempData.push(listOfSurvey);
+  //           } else {
+  //             let added = false;
+  //             tempData.forEach((surveyList) => {
+  //               if (!added) {
+  //                 if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/d/yy')) {
+  //                   surveyList.listOfSurveys.push(surveyItem);
+  //                   added = true;
+  //                 }
+  //               }
+  //             });
+  //             if (!added) {
+  //               const listOfSurvey = new SurveyDataHelper();
+  //               listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+  //               listOfSurvey.listOfSurveys.push(surveyItem);
+  //               tempData.push(listOfSurvey);
+  //               added = true;
+  //             }
+  //           }
+  //         });
+  //         this.listOfSurveyDataHelper = tempData;
+  //         this.cdr.detectChanges();
+  //       });
+  //     }, responseError => {
+  //       this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+  //         if (event !== null) {
+  //           event.target.complete();
+  //         }
+  //         const error: ErrorModel = responseError.error;
+  //         this.utils.errorSnackBar(error.message[0].messages[0].message);
+  //       });
+  //     });
+  //   });
+  // }
 
   openAddressOnMap(address: string) {
     this.launchNavigator.navigate(address, this.options);
@@ -302,17 +416,17 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
   }
 
-  getSurveys(event: CustomEvent) {
-    let showLoader = true;
-    if (event != null && event !== undefined) {
-      showLoader = false;
-    }
-    if (this.storage.getUser().role.id === ROLES.Surveyor) {
-      this.getSurveyorSurveys(event, showLoader);
-    } else {
-      this.getSurvey(event, showLoader);
-    }
-  }
+  // getSurveys(event: CustomEvent) {
+  //   let showLoader = true;
+  //   if (event != null && event !== undefined) {
+  //     showLoader = false;
+  //   }
+  //   if (this.storage.getUser().role.id === ROLES.Surveyor) {
+  //     this.getSurveyorSurveys(event, showLoader);
+  //   } else {
+  //     this.getSurvey(event, showLoader);
+  //   }
+  // }
 
 }
 
