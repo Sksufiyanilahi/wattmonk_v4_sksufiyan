@@ -1,0 +1,102 @@
+<ion-content style="position: relative;">
+  <!-- <ion-header class="ion-no-border white-bg" style="position: relative;">
+      <ion-toolbar> -->
+  <ion-grid>
+      <ion-row class="ion-align-items-center">
+          <ion-col *ngIf="showHome === true">
+              <h1 class="ion-no-padding ion-no-margin home">Search</h1>
+          </ion-col>
+          <ion-col *ngIf="showSearchBar === true">
+              <ion-searchbar debounce="0" placeholder="search" (ionClear)="showHom()" [(ngModel)]="searchbarElement"
+                             (ionChange)="searchDesginAndSurvey($event)" class="custom"></ion-searchbar>
+          </ion-col>
+          <ion-col size="auto" *ngIf="showHome === true">
+              <div class="notification-padding" (click)="onClick()">
+                  <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
+              </div>
+          </ion-col>
+          <!-- <ion-col size="auto" style="position: relative;">
+              <div class="notification-padding" [routerLink]="['/profile']" routerDirection="forward">
+                  <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
+                
+              </div>
+          </ion-col> -->
+      </ion-row>
+  </ion-grid>
+  <!-- </ion-toolbar> -->
+  <!-- </ion-header> -->
+  <ion-tabs style="margin-top: 52px;">
+      <ion-tab-bar slot="top" class="ion-no-border">
+          <ion-tab-button tab="design" *ngIf="isUserDesigner">
+              <ion-label>Designs</ion-label>
+          </ion-tab-button>
+          <ion-tab-button tab="survey" *ngIf="isUserSurveyor">
+              <ion-label>Surveys</ion-label>
+          </ion-tab-button>
+      </ion-tab-bar>
+  </ion-tabs>
+  <ion-grid style="position: absolute;">
+      <div class="searchbar_div">
+          <ion-grid *ngIf="searchDesginItem && searchDesginItem.length !== 0">
+              <ion-row *ngFor="let searchitem of searchDesginItem;" (click)="getdesigndata(searchitem)">
+                  <ion-col size="2">
+                      <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
+                  </ion-col>
+                  <ion-col size="10" style="margin-top: 6px;">
+                      <div style="display: flex; justify-content: space-between;">
+                          <span class="history-name">{{searchitem.name}}</span>
+                          <span class="history-add">{{searchitem.created_at | date:'dd/MM/yyyy'}}</span>
+                      </div>
+                      <div>
+                            <span class="history-add">
+                              {{searchitem.address}}
+                            </span>
+                      </div>
+                      <!-- <div>
+                            <span class="assign">
+                             desgined assign to.....
+                            </span>
+                      </div> -->
+                  </ion-col>
+              </ion-row>
+          </ion-grid>
+          <ion-grid *ngIf="(searchSurveyItem && searchSurveyItem.length !== 0)">
+              <ion-row *ngFor="let searchitem of searchSurveyItem" (click)="getdesigndata(searchitem)">
+                  <ion-col size="2">
+                      <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
+                  </ion-col>
+                  <ion-col size="10" style="margin-top: 6px;">
+                      <div style="display: flex; justify-content: space-between;">
+                          <span class="history-name">{{searchitem.name}}</span>
+                          <span class="history-add">{{searchitem.created_at | date:'dd/MM/yyyy'}}</span>
+                      </div>
+                      <div>
+                            <span class="history-add">
+                              {{searchitem.address}}
+                            </span>
+                      </div>
+                      <!-- <div>
+                            <span class="assign">
+                             desgined assign to.....
+                            </span>
+                      </div> -->
+                  </ion-col>
+              </ion-row>
+          </ion-grid>
+      </div>
+      <div class="searchbar_div nodata_div">
+          <ng-template #noDesignandSurvey>
+              <ion-grid
+                      *ngIf="searchbarElement !== '' && (searchSurveyItem && searchSurveyItem.length === 0) && (searchDesginItem && searchDesginItem.length === 0)">
+                  <div class="h-100 d-flex flex-column align-center justify-center">
+                      <span>No desgin or survey found</span>
+                  </div>
+              </ion-grid>
+          </ng-template>
+      </div>
+  </ion-grid>
+
+</ion-content>
+
+
+

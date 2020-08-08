@@ -6,12 +6,11 @@
             <ion-col *ngIf="showHome === true">
                 <h1 class="ion-no-padding ion-no-margin home">Home</h1>
             </ion-col>
-            <ion-col *ngIf="showSearchBar === true">
-                <ion-searchbar debounce="0" placeholder="home" (ionClear)="showHom()" [(ngModel)]="searchbarElement"
-                               (ionChange)="searchDesginAndSurvey($event)" class="custom"></ion-searchbar>
-            </ion-col>
+            <!-- <ion-col *ngIf="showSearchBar === true" >
+                <ion-searchbar debounce="0" placeholder="home" class="custom"></ion-searchbar>
+            </ion-col> -->
             <ion-col size="auto" *ngIf="showHome === true">
-                <div class="notification-padding" (click)="onClick()">
+                <div class="notification-padding" (click)="searchbar()">
                     <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
                 </div>
             </ion-col>
@@ -150,5 +149,4 @@
     </div>
 
 </ion-footer>
-<router-outlet></router-outlet>
 

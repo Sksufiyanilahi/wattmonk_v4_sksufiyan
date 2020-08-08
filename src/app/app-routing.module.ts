@@ -84,7 +84,11 @@ const routes: Routes = [
   {
     path: 'designoverview',
     loadChildren: () => import('./designoverview/designoverview.module').then( m => m.DesignoverviewPageModule)
+  },  {
+    path: 'searchbar',
+    loadChildren: () => import('./searchbar/searchbar.module').then( m => m.SearchbarPageModule)
   }
+
 
 
 ];

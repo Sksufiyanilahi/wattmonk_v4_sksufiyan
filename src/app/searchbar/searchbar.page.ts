@@ -16,14 +16,12 @@ import { Router } from '@angular/router';
 import { ROLES } from '../contants';
 
 @Component({
-  selector: 'app-homepage',
-  templateUrl: './homepage.page.html',
-  styleUrls: ['./homepage.page.scss'],
+  selector: 'app-searchbar',
+  templateUrl: './searchbar.page.html',
+  styleUrls: ['./searchbar.page.scss'],
 })
-export class HomepagePage implements OnInit, OnDestroy {
+export class SearchbarPage implements OnInit {
   @Output() ionInput = new EventEmitter();
-
-
   searchQuery = '';
   searchbarElement = '';
   items: string[];
@@ -44,7 +42,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   searchSurveyItem: [] = [];
 
   private subscription: Subscription;
-  drawerState = DrawerState.Docked;
+  // drawerState = DrawerState.Docked;
   name: any;
   userRole: any;
 
@@ -60,80 +58,47 @@ export class HomepagePage implements OnInit, OnDestroy {
     private geolocation: Geolocation,
     private toastController: ToastController,
     public route: Router
-  ) {
-    // this.initializeItems();
-  }
+  ) { }
 
   ngOnInit() {
-    this.setupCometChatUser();
-    this.requestLocationPermission();
-    this.updateUserPushToken();
-    this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
-      this.showFooter = value;
-    });
+    // this.setupCometChatUser();
+    // this.requestLocationPermission();
+    // this.updateUserPushToken();
+    // this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
+    //   this.showFooter = value;
+    // });
 
     if (this.storage.getUser().role.id === ROLES.Surveyor) {
       // surveyor will only see survey tab
       this.isUserSurveyor = true;
       this.isUserDesigner = false;
-      this.route.navigate(['homepage/survey']);
+      this.route.navigate(['searchbar/survey']);
 
     } else if (this.storage.getUser().role.id === ROLES.Designer) {
       // designer will only see design tab
       this.isUserSurveyor = false;
       this.isUserDesigner = true;
-      this.route.navigate(['homepage/design']);
+      this.route.navigate(['searchbar/design']);
 
     } else if (this.storage.getUser().role.id === ROLES.BD || this.storage.getUser().role.id === ROLES.Admin || this.storage.getUser().role.id === ROLES.ContractorAdmin) {
       // admin will see both tabs
       this.isUserSurveyor = true;
       this.isUserDesigner = true;
-      this.route.navigate(['homepage/design']);
+      this.route.navigate(['searchbar/design']);
     }
   }
 
-  updateUserPushToken(){
-    this.apiService.updateUser(this.storage.getUserID(), {"pushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
-    }, (error) => {
-    });
-  }
+ 
 
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    // this.subscription.unsubscribe();
   }
 
-  initializeItems() {
-    this.items = [
-      'Amsterdam',
-      'Bogota'
-    ];
-  }
 
-  setupCometChatUser() {
-    const user = new CometChat.User(this.storage.getUserID());
-    user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
-    CometChat.createUser(user, COMET_CHAT_AUTH_KEY).then(
-      (user) => {
-        console.log('user created', user);
-      }, error => {
-        console.log('error', error);
-      }
-    );
-    CometChat.login(this.storage.getUserID(), COMET_CHAT_AUTH_KEY).then(
-      (user) => {
-        console.log('Login Successful:', { user });
-      },
-      error => {
-        console.log('Login failed with exception:', { error });
-      }
-    );
 
-  }
 
   getItems(ev: any) {
-    // Reset items back to all of the items
-    this.initializeItems();
 
     // set val to the value of the searchbar
     const val = ev.target.value;
@@ -153,20 +118,21 @@ export class HomepagePage implements OnInit, OnDestroy {
 
     if (this.searchbarElement !== '') {
       this.apiService.searchAllDesgin(this.searchbarElement).subscribe((searchModel: any) => {
-        // console.log(searchModel);
-        this.searchDesginItem = [];
-        this.searchSurveyItem = [];
+        console.log(searchModel);
+        // console.log(searchModel.design);
+        // this.searchDesginItem = [];
+        // this.searchSurveyItem = [];
         if (event.target.value !== '') {
 
-          searchModel.filter((element: any) => {
-            if (element.type == 'design') {
-              this.searchDesginItem = searchModel;
-              // console.log(this.searchDesginItem);
-
-            } else {    
-                this.searchSurveyItem = searchModel;
+          // searchModel.filter((element: any) => {
+            // if (this == 'design') {
+            if(this.route.url=='/searchbar/design'){
+              this.searchDesginItem = searchModel.design;
+            }else{
+              this.searchSurveyItem = searchModel.survey;
             }
-          });
+            //     // console.log(this.searchDesginItem);
+          // });
           console.log(this.searchDesginItem);
         } else {
           this.searchDesginItem = [];
@@ -176,21 +142,21 @@ export class HomepagePage implements OnInit, OnDestroy {
         console.log(error);
       });
     } else {
-      this.route.navigate(['homepage/design']);
+      this.route.navigate(['searchbar/design']);
     }
 
   }
 
   getdesigndata(serchTermData: any = { 'type': '' }) {
-    console.log(serchTermData.name);
+    console.log(serchTermData);
     this.name = serchTermData.name;
     this.searchbarElement = this.name;
-    if (serchTermData.type == 'design') {
-      this.route.navigate(['homepage/design'], { queryParams: { serchTerm: serchTermData.id } });
-    } else if (serchTermData.type == 'survey') {
-      this.route.navigate(['homepage/survey'], { queryParams: { serchTerm: serchTermData.id } });
+    if (this.route.url == '/searchbar/design') {
+      this.route.navigate(['searchbar/design'], { queryParams: { serchTerm: serchTermData.id } });
+    } else if (this.route.url == '/searchbar/survey') {
+      this.route.navigate(['/searchbar/survey'], { queryParams: { serchTerm: serchTermData.id } });
     } else {
-      this.route.navigate(['homepage/design']);
+      this.route.navigate(['searchbar/design']);
     }
     this.searchDesginItem = [];
     this.searchSurveyItem = [];
@@ -374,7 +340,7 @@ export class HomepagePage implements OnInit, OnDestroy {
       if (this.showSearchBar === true) {
         this.showSearchBar = false;
       } else {
-        (navigator as any).app.exitApp();
+        // (navigator as any).app.exitApp();
       }
     });
   }
@@ -397,5 +363,6 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.showHome = false;
     this.showSearchBar = true;
   }
+
 
 }

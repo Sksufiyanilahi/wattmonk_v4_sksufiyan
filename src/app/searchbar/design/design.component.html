@@ -1,0 +1,74 @@
+<ion-content (click)="close()" style="padding-bottom: 250px;">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+      <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
+      <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index" class="ion-margin-top">
+          <ion-col size="12">
+              <span class="ion-padding" *ngIf="today === item.date">
+                  Today
+                </span>
+              <span class="ion-padding" *ngIf="today !== item.date">
+                  {{item.date | date: 'dd MMM yyyy'}}
+              </span>
+          </ion-col>
+          <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="6">
+              <div class="ion-padding custom-card" style="height: 100%;"
+                   routerDirection="forward">
+                  <span class="customer-name" [routerLink]="['/design-details/',designData.id]"
+                        routerDirection="forward">{{designData.name}}</span>
+                  <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
+                        routerDirection="forward">{{designData.email}}</span>
+                  <span class="customer-address z-100"
+                        (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
+                  <span class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                        *ngIf="(designData.assignedto === null || designData.assignedto === undefined) && roleType!=='design'">Assign</span>
+                  <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]">
+                      {{designData.created_at | date: 'hh:mm a'}}
+                  </span>
+              </div>
+
+          </ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col size="12" style="height: 100px;">
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+
+  <div *ngIf="listOfDesignDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+      <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+  </div>
+
+</ion-content>
+
+<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="400" draggable="false" disableDrag="true"
+                 shouldBounce="true" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
+  <form [formGroup]="assignForm">
+      <ion-grid class="drawer">
+          <ion-row>
+              <ion-col size="12">
+                  <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
+                                     formControlName="assignedto"></app-user-selector>
+              </ion-col>
+          </ion-row>
+          <ion-row style="margin-left: 8px;">
+              <ion-col size="12">
+                  <span class="input-placeholder">comments</span>
+              </ion-col>
+              <ion-col size="12" style="padding-top: 0px;">
+                  <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                formControlName="comment"></ion-textarea>
+              </ion-col>
+          </ion-row>
+          <ion-row style="justify-content: flex-end;">
+              <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
+                  <ion-button class="buttom-drawer-button" (click)="assignToDesigner()">
+                      Confirm
+                  </ion-button>
+              </ion-col>
+          </ion-row>
+      </ion-grid>
+  </form>
+
+</ion-bottom-drawer>
