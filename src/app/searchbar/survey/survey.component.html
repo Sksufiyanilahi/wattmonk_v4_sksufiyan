@@ -16,6 +16,9 @@
               <div class="ion-padding custom-card" style="height: 100%;">
                   <span class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
                         routerDirection="forward">{{surveyData.name}}</span>
+                        <span style="float: right;" class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
+                            {{surveyData.datetime | date: 'hh:mm a'}}
+                        </span>
                   <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
                         routerDirection="forward">{{surveyData.email}}</span>
                   <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
@@ -32,13 +35,21 @@
                       <ion-col></ion-col>
                       <ion-col size="auto" class="ion-no-margin ion-no-padding"
                                *ngIf="surveyData.assignedto === null || surveyData.assignedto === undefined">
-                          <span class="ion-text-end action-button-color"
-                                (click)="openSurveyors(surveyData.id)">Assign</span>
+                               <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
+                               >Assign</span>
+                               <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
+                               >Decline</span>
+                               <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
+                               >Accept</span>
+                               <span *ngIf="surveyData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
+                               >Reassign</span>
+                               <span *ngIf="surveyData.status == 'reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
+                               >Deliver</span>
                       </ion-col>
                   </ion-row>
-                  <span class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
+                  <!-- <span class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                       {{surveyData.datetime | date: 'hh:mm a'}}
-                  </span>
+                  </span> -->
 
               </div>
 

@@ -1,17 +1,17 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { DesginDataModel } from '../../model/design.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
 import { StorageService } from 'src/app/storage.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DrawerState } from 'ion-bottom-drawer';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from '../../model/assignee.model';
 import { UserRoles } from '../../model/constants';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { takeUntil, take } from 'rxjs/operators';
 
 @Component({
@@ -38,6 +38,9 @@ export class DesignComponent implements OnInit {
   showBottomDraw: boolean = false;
   roleType: any;
   myFiles: string[] = [];  
+  @Input()
+  parentSubject:Subject<any>;
+  isRequest= false;
 
   constructor(
     private utils: UtilitiesService,
@@ -66,16 +69,19 @@ export class DesignComponent implements OnInit {
 
 
   ngOnInit() {
+    
+    // this.parentSubject.subscribe(event=>{
+    //   this.filterData(event.serchTermData.id);
+    // })
     // this.getDesign(event);
     this.routeSubscription = this.router.events.subscribe((event) => {
-      debugger;
       console.log("//",event);
       console.log(this.router.url.indexOf('page'));
       if (event instanceof NavigationEnd) {
         console.log(event.url);
         
         // Trick the Router into believing it's last link wasn't previously loaded
-        if (this.router.url.indexOf('page') > -1) {
+        if (this.router.url.indexOf('page') >= -1) {
           this.router.navigated = false;
           let data = this.route.queryParams.subscribe((_res: any) => {
             console.log('Serach Term', _res);
@@ -85,8 +91,9 @@ export class DesignComponent implements OnInit {
               this.filterData(_res.serchTerm);
             } else {
               // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-                debugger;
-                this.getDesign(null, true);
+           
+                  this.getDesign(null, false);
+                
               // });
             }
           });
@@ -137,7 +144,7 @@ export class DesignComponent implements OnInit {
   }
 
   getDesign(event, showLoader?: boolean) {
-
+this.isRequest= true;
     this.listOfDesignsData = [];
     this.listOfDesignDataHelper = [];
     

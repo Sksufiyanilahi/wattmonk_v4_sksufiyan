@@ -60,7 +60,8 @@ export class SurveyComponent implements OnInit {
   }
 
   ionViewDidEnter() {
-    this.routeSubscription.unsubscribe();
+    // this.routeSubscription.unsubscribe();
+    this.getSurveys(null);
   }
 
   // ngOnInit() {
@@ -69,12 +70,16 @@ export class SurveyComponent implements OnInit {
   //   });
   // }
   ngOnInit() {
-    debugger;
+  
     this.filterData(this.filterDataArray);
     this.routeSubscription = this.router.events.subscribe((event) => {
+      console.log("//",event);
+      console.log(this.router.url.indexOf('page'));
       if (event instanceof NavigationEnd) {
+        console.log(event.url);
+        
         // Trick the Router into believing it's last link wasn't previously loaded
-        if (this.router.url.indexOf('page') > -1) {
+        if (this.router.url.indexOf('page') >= -1) {
           this.router.navigated = false;
           let data = this.route.queryParams.subscribe((_res: any) => {
             console.log('Serach Term', _res);
@@ -83,9 +88,9 @@ export class SurveyComponent implements OnInit {
 
               this.filterData(_res.serchTerm);
             } else {
-              // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-                // debugger;
-                this.getSurveys(null);
+              // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+                // this.getSurveys(null);
+                
               // });
             }
           });
@@ -112,8 +117,7 @@ export class SurveyComponent implements OnInit {
     //     }
     //   }
     // });
-    this.getSurveys(null);
-    console.log(this.router.url);
+    // this.getSurveys(null);
     
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
 import { UtilitiesService } from '../utilities.service';
 import { ApiService } from '../api.service';
 import { DatePipe } from '@angular/common';
@@ -8,19 +8,22 @@ import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
 import { ROLES } from '../contants';
+import { DesignComponent } from '../homepage/design/design.component';
 
 @Component({
   selector: 'app-searchbar',
   templateUrl: './searchbar.page.html',
-  styleUrls: ['./searchbar.page.scss'],
+  styleUrls: ['./searchbar.page.scss'],  
+  
 })
 export class SearchbarPage implements OnInit {
+  parentSubject:Subject<any> = new Subject();
   @Output() ionInput = new EventEmitter();
   searchQuery = '';
   searchbarElement = '';
@@ -45,6 +48,9 @@ export class SearchbarPage implements OnInit {
   // drawerState = DrawerState.Docked;
   name: any;
   userRole: any;
+  pageType:string='';
+ // @Input() parentApi: DesignComponent
+  @ViewChild(DesignComponent,{static : false}) child:DesignComponent;
 
   constructor(
     private utilities: UtilitiesService,
@@ -87,6 +93,7 @@ export class SearchbarPage implements OnInit {
       this.route.navigate(['searchbar/design']);
     }
   }
+ 
 
  
 
@@ -131,9 +138,9 @@ export class SearchbarPage implements OnInit {
             }else{
               this.searchSurveyItem = searchModel.survey;
             }
-            //     // console.log(this.searchDesginItem);
+                console.log(this.searchDesginItem);
           // });
-          console.log(this.searchDesginItem);
+          console.log(this.searchSurveyItem);
         } else {
           this.searchDesginItem = [];
           this.searchSurveyItem = [];
@@ -148,15 +155,26 @@ export class SearchbarPage implements OnInit {
   }
 
   getdesigndata(serchTermData: any = { 'type': '' }) {
+    debugger;
     console.log(serchTermData);
-    this.name = serchTermData.name;
+    this.name = serchTermData.name==undefined ? '' :serchTermData.name ;
     this.searchbarElement = this.name;
     if (this.route.url == '/searchbar/design') {
-      this.route.navigate(['searchbar/design'], { queryParams: { serchTerm: serchTermData.id } });
+      this.pageType='Design';
+      // this.parentSubject.next(serchTermData.id);
+     this.route.navigate(['searchbar/design'], { queryParams: { serchTerm: serchTermData.id } });
     } else if (this.route.url == '/searchbar/survey') {
-      this.route.navigate(['/searchbar/survey'], { queryParams: { serchTerm: serchTermData.id } });
-    } else {
-      this.route.navigate(['searchbar/design']);
+      this.pageType='Survey';
+      // this.parentSubject.next(serchTermData.id);
+     this.route.navigate(['/searchbar/survey'], { queryParams: { serchTerm: serchTermData.id } });
+    } 
+    else {
+
+      if(this.pageType == 'Survey'){
+        this.route.navigate(['searchbar/survey']);
+      }else if(this.pageType == 'Design'){
+        this.route.navigate(['searchbar/design']);
+      }
     }
     this.searchDesginItem = [];
     this.searchSurveyItem = [];
@@ -351,6 +369,8 @@ export class SearchbarPage implements OnInit {
   }
 
   showHom() {
+    // this.someEvent.emit('cancle');
+   
     this.showHome = true;
     this.showSearchBar = false;
     this.searchSurveyItem = [];

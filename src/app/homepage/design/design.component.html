@@ -36,10 +36,9 @@
                     <div class="ion-padding custom-card" style="height: 100%;">
                         <span class="customer-name" [routerLink]="['/design-details/',designData.id]"
                                 routerDirection="forward">{{designData.name}} </span>
-                                <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
-                                {{designData.deliverydate | date: 'hh:mm a'}}
-                           
-                    </span> -->
+                                <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]">
+                                    {{designData.created_at | date: 'hh:mm a'}}
+                                </span>
                         <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
                                 routerDirection="forward">{{designData.email}}</span>
                         <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
@@ -56,9 +55,25 @@
                             </ion-col>
                         </ion-row>
                         <ion-row class="ion-no-margin ion-no-margin">
-                            <ion-col>
-                                <span class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
-                                *ngIf="(designData.assignedto === null || designData.assignedto === undefined) && roleType!=='design'">Assign</span>
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
+                                <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                >Assign</span>
+                                <span *ngIf="designData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                >Decline</span>
+                                <span *ngIf="designData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                >Accept</span>
+                                <span *ngIf="designData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                >Reassign</span>
+                            </ion-col>
+
+
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=designcompleted'">
+                                <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                >Assign Review</span>
+                            </ion-col>
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
+                                <span *ngIf="designData.status == 'reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                >Deliver</span>
                             </ion-col>
                             <!-- <ion-col class="ion-no-margin ion-no-padding">
                                 <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + designData.id + '/' + designData.jobtype + '/' + designData.latitude + '/' + designData.longitude]"
@@ -68,10 +83,10 @@
                             </ion-col> -->
                         </ion-row>
                         <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
-                          <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
+                          <!-- <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
                                 {{designData.deliverydate | date: 'hh:mm a'}}
                            
-                    </span>
+                    </span> -->
                     </div>
                 </ion-col>
             </ion-row>
