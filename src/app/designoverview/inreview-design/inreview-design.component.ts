@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DesginDataModel } from 'src/app/model/design.model';
-import { DesginDataHelper } from 'src/app/homepage/Design/Design.component';
 import { Subscription } from 'rxjs';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DatePipe } from '@angular/common';
@@ -9,6 +8,7 @@ import { ApiService } from 'src/app/api.service';
 import { ErrorModel } from 'src/app/model/error.model';
 // import { DesignStorageModel } from 'src/app/model/Design-storage.model';
 import { Storage } from '@ionic/storage';
+import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 
 @Component({
   selector: 'app-inreview-design',

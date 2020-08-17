@@ -13,6 +13,7 @@ import { AssigneeModel } from '../../model/assignee.model';
 import { UserRoles } from '../../model/constants';
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { takeUntil, take } from 'rxjs/operators';
+import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 
 @Component({
   selector: 'app-design',
@@ -304,11 +305,11 @@ this.isRequest= true;
 }
 
 
-export class DesginDataHelper {
-  listOfDesigns: DesginDataModel[];
-  date: any;
+// export class DesginDataHelper {
+//   listOfDesigns: DesginDataModel[];
+//   date: any;
 
-  constructor() {
-    this.listOfDesigns = [];
-  }
-}
+//   constructor() {
+//     this.listOfDesigns = [];
+//   }
+// }
