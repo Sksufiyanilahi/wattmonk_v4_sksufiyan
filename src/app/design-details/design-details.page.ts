@@ -12,6 +12,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import {NgxImageCompressService} from 'ngx-image-compress';
 import { CountdownTimerService, countDownTimerConfigModel, countDownTimerTexts } from 'ngx-timer';
+import { User } from '../model/user.model';
 
 @Component({
   selector: 'app-design-details',
@@ -38,7 +39,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   targetLength: any;
   image: string;
   timerConfig: any;
-  user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
+  user: User;
+  // user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
 
   constructor(
