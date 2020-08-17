@@ -190,7 +190,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
-    this.routeSubscription.unsubscribe();
+    // this.routeSubscription.unsubscribe();
   }
 
   // filterData(records : DesginDataModel[]) {
