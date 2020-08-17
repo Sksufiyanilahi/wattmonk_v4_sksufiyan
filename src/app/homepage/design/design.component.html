@@ -33,12 +33,13 @@
                         </span>
                 </ion-col>
                 <ion-col *ngFor="let designData of item.listOfDesigns;let i = index" size="6">
-                    <div class="ion-padding custom-card" style="height: 100%;">
-                        <span class="customer-name" [routerLink]="['/design-details/',designData.id]"
-                                routerDirection="forward">{{designData.name}} </span>
-                                <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]">
-                                    {{designData.created_at | date: 'hh:mm a'}}
-                                </span>
+                    <div class="ion-no-padding custom-card" style="height: 100%;">
+                        <p class="customer-name" [routerLink]="['/design-details/',designData.id]"
+                        routerDirection="forward">{{designData.name}}
+                        <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
+                          {{designData.deliverydate | date: 'hh:mm a'}}
+                      </span>
+              </p>
                         <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
                                 routerDirection="forward">{{designData.email}}</span>
                         <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
@@ -47,8 +48,8 @@
                                 (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
         
                         <ion-row style="margin-bottom: 8px;">
-                            <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
-                            <!-- <span class="chipdetail" style="background-color: #95afc0;" >{{designData.formattedjobtype}}</span> -->
+                            <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
+                            <span class="chipdetail" style="background-color: #95afc0;" >{{designData?.formattedjobtype}}</span>
                             <ion-col>    
                                 <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'">Failed</span>
                                 <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'">Passed</span>
@@ -58,11 +59,11 @@
                             <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
                                 <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
                                 >Assign</span>
-                                <span *ngIf="designData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                <span *ngIf="designData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="decline(designData.id)"
                                 >Decline</span>
-                                <span *ngIf="designData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                <span *ngIf="designData.status == 'outsourced'" style="float:left !important;" class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')"
                                 >Accept</span>
-                                <span *ngIf="designData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                <span *ngIf="designData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')"
                                 >Reassign</span>
                             </ion-col>
 
@@ -82,7 +83,7 @@
                                 </ion-button>
                             </ion-col> -->
                         </ion-row>
-                        <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
+                        <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
                           <!-- <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
                                 {{designData.deliverydate | date: 'hh:mm a'}}
                            

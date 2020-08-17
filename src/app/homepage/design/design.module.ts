@@ -6,10 +6,12 @@ import { PendingComponent } from './pending/pending.component';
 
 
 @NgModule({
+ 
   declarations: [],
   imports: [
     CommonModule,
     DesignRoutingModule
+    
   ]
 })
 export class DesignModule { }

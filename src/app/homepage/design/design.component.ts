@@ -14,6 +14,8 @@ import { UserRoles } from '../../model/constants';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { takeUntil, take } from 'rxjs/operators';
 import {Storage} from '@ionic/storage';
+import { ModalController } from '@ionic/angular';
+import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 
 @Component({
   selector: 'app-design',
@@ -54,7 +56,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private launchNavigator: LaunchNavigator,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public modalController: ModalController
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -403,8 +406,31 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
     this.fetchPendingDesigns(event, showLoader);
   }
-}
 
+  accept(id,data:string){
+
+    let status={
+      status:data
+    }
+    this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
+      this.getDesigns(null);
+    })
+  }
+
+
+async decline(){
+  const modal = await this.modalController.create({
+    component: DeclinepagePage,
+    cssClass: 'my-custom-class',
+    componentProps: {
+      'firstName': 'Douglas',
+      'lastName': 'Adams',
+      'middleInitial': 'N'
+    }
+  });
+  return await modal.present();
+}
+}
 
 export class DesginDataHelper {
   listOfDesigns: DesginDataModel[];

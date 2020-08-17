@@ -19,8 +19,11 @@ import { PendingComponent } from './design/pending/pending.component';
 import { CompletedComponent } from './design/completed/completed.component';
 import { DeliveredComponent } from './design/delivered/delivered.component';
 import { InreviewComponent } from './design/inreview/inreview.component';
+import { DeclinepagePageModule } from '../declinepage/declinepage.module';
+import { DeclinepagePage } from '../declinepage/declinepage.page';
 
 @NgModule({
+  entryComponents:[DeclinepagePage],
   imports: [
     CommonModule,
     FormsModule,
@@ -29,6 +32,7 @@ import { InreviewComponent } from './design/inreview/inreview.component';
     IonBottomDrawerModule,
     ReactiveFormsModule,
     UtilitiesModule,
+    DeclinepagePageModule
   ],
   declarations: [HomepagePage, SurveyComponent,DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent],
   providers: [

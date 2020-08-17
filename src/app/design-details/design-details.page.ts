@@ -38,6 +38,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   targetLength: any;
   image: string;
   timerConfig: any;
+  user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
 
   constructor(
@@ -63,6 +64,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   ngOnInit() {
     console.log(this.imageName);
     // debugger;
+    this.user=this.storage.getUser();
+    console.log(this.user);
+    
     this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getDesignDetails();
@@ -84,7 +88,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
          this.timerConfig.timerTexts.hourText = " :"; //default - hh
          this.timerConfig.timerTexts.minuteText = " :"; //default - mm
          this.timerConfig.timerTexts.secondsText = " "; //default - ss
-    debugger;
          if (this.design.status == "designassigned"){
           let cdate = new Date(this.design.designstarttime);
           console.log(cdate);

@@ -2,14 +2,17 @@
   display: flex;
   flex-direction: column;
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 4px !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+  padding: 8px 12px;
 }
 
 .customer-name {
-  font-size: 1.2em;
+  font-size: 1em;
   color: #434343;
   font-weight: bold;
+  display:table;
+  margin: 0px;
 }
 
 .customer-email {
@@ -35,4 +38,15 @@
 
 .timestamp {
   font-size: 0.7em;
+}
+
+.chipdetail{
+  display: inline;
+  vertical-align: middle;
+  background-color: #95afc0;
+  font-size: 0.6em;
+  padding: 4px 10px;
+  border-radius: 10px;
+  text-align: center;
+  color: #fff;
 }

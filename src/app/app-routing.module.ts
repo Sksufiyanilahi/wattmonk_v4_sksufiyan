@@ -87,6 +87,10 @@ const routes: Routes = [
   },  {
     path: 'searchbar',
     loadChildren: () => import('./searchbar/searchbar.module').then( m => m.SearchbarPageModule)
+  },
+  {
+    path: 'declinepage',
+    loadChildren: () => import('./declinepage/declinepage.module').then( m => m.DeclinepagePageModule)
   }
 
 

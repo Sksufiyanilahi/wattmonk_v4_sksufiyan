@@ -198,6 +198,7 @@ uploadcontrolvalidation(){
         this.utils.hideLoading();
         debugger;
         this.design = result;
+      let prelimdesign=   this.design.prelimdesign ==null ? '' : this.design.prelimdesign.name  + this.design.prelimdesign.ext;
         console.log(this.design);
         this.desginForm.patchValue({
           name: this.design.name,
@@ -210,7 +211,7 @@ uploadcontrolvalidation(){
           architecturaldesign:this.design.architecturaldesign,
           // jobtype: this.design.jobtype,
           tiltofgroundmountingsystem: this.design.tiltofgroundmountingsystem,
-          comments: this.design.comments[0].message,
+          comments: this.design.comments==''? '': this.design.comments[0].message,
           projecttype: this.design.projecttype,
           latitude: this.design.latitude,
           longitude: this.design.longitude,
@@ -219,7 +220,7 @@ uploadcontrolvalidation(){
           city: this.design.city,
           postalcode:this.design.postalcode,
           newconstruction: this.design.newconstruction + '',
-          prelimdesign:this.design.prelimdesign.name + this.design.prelimdesign.ext
+          prelimdesign:prelimdesign
         });
         this.utils.setStaticAddress(this.design.address);
 

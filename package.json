@@ -31,6 +31,7 @@
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/date-picker": "^5.23.0",
     "@ionic-native/diagnostic": "^5.24.0",
+    "@ionic-native/dialogs": "^5.28.0",
     "@ionic-native/file": "^5.23.0",
     "@ionic-native/file-chooser": "^5.25.0",
     "@ionic-native/file-transfer": "^5.25.0",
