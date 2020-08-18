@@ -172,6 +172,18 @@ export class ApiService {
 
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
+  uploadDeclineImage(designId: number, key: string, blob: Blob, fileName: string) {
+    const data = new FormData();
+    data.append('files', blob, fileName);
+    data.append('path', 'designs/' + designId);
+    data.append('refId', designId + '');
+    data.append('ref', 'design');
+    data.append('field', key);
+
+    console.log("file upload data---"+data);
+
+    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
+  }
   uploaddesign(data) {
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }

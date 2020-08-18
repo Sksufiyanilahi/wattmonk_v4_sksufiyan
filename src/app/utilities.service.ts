@@ -258,5 +258,28 @@ export class UtilitiesService {
     return new Blob(byteArrays, { type: contentType });
   }
 
+  b64tBlob(b64Data) {
+    let contentType ='image/jpg';
+    let sliceSize = 512;    
+    b64Data = b64Data.replace(/data\:image\/(jpeg|jpg|png)\;base64\,/gi,'');    
+     let byteCharacters = atob(b64Data);
+    let byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+      var byteNumbers = new Array(slice.length);
+
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    return new Blob(byteArrays, { type: contentType });
+  }
+
 
 }

@@ -20,6 +20,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { Firebase } from '@ionic-native/firebase/ngx';
 import {NgxImageCompressService} from 'ngx-image-compress';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -42,7 +43,8 @@ import {NgxImageCompressService} from 'ngx-image-compress';
     AuthGuardService,
     Geolocation,
     Firebase,
-    NgxImageCompressService
+    NgxImageCompressService,
+    Camera
     ],
   exports: [
     UtilitiesModule

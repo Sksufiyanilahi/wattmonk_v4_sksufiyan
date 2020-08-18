@@ -63,7 +63,7 @@
                                 >Decline</span>
                                 <span *ngIf="designData.status == 'outsourced'" style="float:left !important;" class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')"
                                 >Accept</span>
-                                <span *ngIf="designData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')"
+                                <span *ngIf="designData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="accept(designData.id,'reviewassigned')"
                                 >Reassign</span>
                             </ion-col>
 

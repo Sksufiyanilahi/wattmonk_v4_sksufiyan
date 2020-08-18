@@ -415,16 +415,23 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
 
-async decline(){
+async decline(id){
   const modal = await this.modalController.create({
     component: DeclinepagePage,
-    cssClass: 'my-custom-class',
+    // cssClass: 'cssclass',
     componentProps: {
-      'firstName': 'Douglas',
-      'lastName': 'Adams',
-      'middleInitial': 'N'
-    }
+      id:id
+    },
   });
+  modal.onDidDismiss().then((data) => {
+    debugger;
+    console.log(data)
+    this.getDesigns(null)
+});
+  // modal.dismiss(() => {
+  //   debugger;
+  //   this.getDesigns(null);
+  // });
   return await modal.present();
 }
 }
