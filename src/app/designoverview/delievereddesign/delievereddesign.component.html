@@ -12,13 +12,15 @@
                       {{item.date | date: 'dd MMM yyyy'}}
                 </span>
         </ion-col>
-        <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="6">
+        <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name" [routerLink]="['/design-details/',designData.id]"
                       routerDirection="forward">{{designData.name}}
                       <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span>
+                    <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'">Delivered</span>
+                    <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
             </p>
                 <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
                       routerDirection="forward">{{designData.email}}</span>

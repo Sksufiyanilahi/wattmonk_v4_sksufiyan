@@ -9,6 +9,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 // import { DesignStorageModel } from 'src/app/model/Design-storage.model';
 import { Storage } from '@ionic/storage';
 import { DesginDataHelper } from 'src/app/homepage/design/design.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-inreview-design',
@@ -27,6 +28,7 @@ export class InreviewDesignComponent implements OnInit {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+  overdue: number;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -93,8 +95,10 @@ export class InreviewDesignComponent implements OnInit {
     const tempData: DesginDataHelper[] = [];
           this.listOfDesigns.forEach((designItem:any) => {
             if (tempData.length === 0) {
+              this.sDatePassed(designItem.deliverydate);
               const listOfDesign = new DesginDataHelper();
               listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+              listOfDesign.lateby = this.overdue;
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
             } else {
@@ -103,13 +107,16 @@ export class InreviewDesignComponent implements OnInit {
                 if (!added) {
                   if (DesignList.date === this.datePipe.transform(designItem.deliverydate, 'M/d/yy')) {
                     DesignList.listOfDesigns.push(designItem);
+                    this.sDatePassed(designItem.deliverydate);
                     added = true;
                   }
                 }
               });
               if (!added) {
+                this.sDatePassed(designItem.deliverydate);
                 const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.datetime, 'M/d/yy');
+                listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+                listOfDesign.lateby = this.overdue;
                 listOfDesign.listOfDesigns.push(designItem);
                 tempData.push(listOfDesign);
                 added = true;
@@ -119,7 +126,7 @@ export class InreviewDesignComponent implements OnInit {
           this.listOfDesignsHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
-            return dateA - dateB;
+            return dateB - dateA;
           });
           this.cdr.detectChanges();
   }
@@ -138,6 +145,13 @@ export class InreviewDesignComponent implements OnInit {
     });
 
     return records;
+  }
+
+  sDatePassed(datestring: string){
+    var checkdate = moment(datestring, "YYYYMMDD");
+    var todaydate = moment(new Date(), "YYYYMMDD");
+    var lateby = todaydate.diff(checkdate, "days");
+    this.overdue = lateby;  
   }
 
 

@@ -10,6 +10,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 // import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-newdesign',
@@ -29,6 +30,7 @@ export class NewdesignComponent implements OnInit {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+  overdue: number;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -110,8 +112,10 @@ console.log(this.currentDate.toISOString());
     const tempData: DesginDataHelper[] = [];
           this.listOfDesignData.forEach((designItem) => {
             if (tempData.length === 0) {
+              this.sDatePassed(designItem.deliverydate);
               const listOfDesigns = new DesginDataHelper();
               listOfDesigns.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+              listOfDesigns.lateby = this.overdue;
               listOfDesigns.listOfDesigns.push(designItem);
               tempData.push(listOfDesigns);
             } else {
@@ -120,13 +124,16 @@ console.log(this.currentDate.toISOString());
                 if (!added) {
                   if (designList.date === this.datePipe.transform(designList.deliverydate, 'M/d/yy')) {
                     designList.listOfDesigns.push(designList);
+                    this.sDatePassed(designItem.deliverydate);
                     added = true;
                   }
                 }
               });
               if (!added) {
+                this.sDatePassed(designItem.deliverydate);
                 const listOfDesigns = new DesginDataHelper();
                 listOfDesigns.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+                listOfDesigns.lateby = this.overdue;
                 listOfDesigns.listOfDesigns.push(designItem);
                 tempData.push(listOfDesigns);
                 added = true;
@@ -136,7 +143,7 @@ console.log(this.currentDate.toISOString());
           this.listOfDesignDataHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
-            return dateA - dateB;
+            return dateB - dateA;
           });
           this.cdr.detectChanges();
   }
@@ -155,6 +162,13 @@ console.log(this.currentDate.toISOString());
     });
 
     return records;
+  }
+
+  sDatePassed(datestring: string){
+    var checkdate = moment(datestring, "YYYYMMDD");
+    var todaydate = moment(new Date(), "YYYYMMDD");
+    var lateby = todaydate.diff(checkdate, "days");
+    this.overdue = lateby;  
   }
 
 }

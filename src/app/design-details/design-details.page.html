@@ -192,9 +192,9 @@
 
         <ion-row *ngIf="(design.status=='designassigned' || design.status=='reviewfailed') else showimageName">
             <ion-col><span class="model-type">Prelim Design</span></ion-col>
-            <ion-col size="auto">
+            <ion-col size="auto" style="text-align: right !important;">
                 <input type="file" *ngIf="imageName.length==0"  (change)="prelimfiles($event)"/>
-                <span class="model-name">{{imageName}}</span>
+                <span class="model-name" >{{imageName}}</span>
                 <button *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()">Remove</button>
                 <button *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')">Upload</button>
             </ion-col>
@@ -202,7 +202,7 @@
         <ng-template #showimageName>
             <ion-col><span class="model-type">Prelim Design</span></ion-col>
             <ion-col size="auto">
-                <span class="model-name">{{imageName}}</span>
+                <span class="model-name" (click)="showDesignImage()">{{imageName}}</span>
             </ion-col>
         </ng-template>
 

@@ -62,7 +62,8 @@ export class DeclinepagePage implements OnInit {
 
   cancel(){
     this.modalCtrl.dismiss({
-      'dismissed': true
+      'dismissed': true,
+      cancel:'cancel'
     });
   }
 

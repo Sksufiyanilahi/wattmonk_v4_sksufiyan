@@ -13,6 +13,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import {Storage} from '@ionic/storage';
 import { ModalController } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-design',
@@ -38,11 +39,13 @@ export class DesignComponent implements OnInit, OnDestroy {
   showBottomDraw: boolean = false;
   roleType: any;
   myFiles: string[] = [];  
-  segments:any='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+  segments:any='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
   listOfDesigns: DesginDataModel[];
   private DesignRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
   listOfDesignsHelper: any[];
+  overdue:any;
+  todaysdate: string;
 
   constructor(
     private utils: UtilitiesService,
@@ -59,6 +62,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
+    this.todaysdate = datePipe.transform(latestDate, 'yyyy-MM-dd');
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
@@ -68,6 +72,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   ionViewDidEnter() {
     // this.routeSubscription.unsubscribe();
+    
   }
   segmentChanged(event){
     console.log((event.target.value));
@@ -153,27 +158,48 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   formatDesignData(records : DesginDataModel[]){
+    this.overdue=[];
     this.listOfDesigns = this.fillinDynamicData(records);
+    console.log(this.listOfDesigns);
+    
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesigns.forEach((designItem:any) => {
+          this.listOfDesigns.forEach((designItem:any,i) => { 
+            console.log(i);
+            
             if (tempData.length === 0) {
+              this.sDatePassed(designItem.deliverydate,i);
               const listOfDesign = new DesginDataHelper();
               listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+                listOfDesign.lateby = this.overdue;
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
+              console.log(tempData);
+              
+              debugger;
             } else {
+             
               let added = false;
               tempData.forEach((DesignList) => {
+                // DesignList['listOfDesigns'].forEach(element=>{
+                  
+                //   console.log(element.deliverydate,":::::::::::::");
+                  
+                //   this.sDatePassed(element.deliverydate);
+                // })
                 if (!added) {
                   if (DesignList.date === this.datePipe.transform(designItem.deliverydate, 'M/d/yy')) {
                     DesignList.listOfDesigns.push(designItem);
+                    this.sDatePassed(designItem.deliverydate,i);
                     added = true;
                   }
                 }
               });
               if (!added) {
+                debugger;
+                this.sDatePassed(designItem.deliverydate,i);
                 const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.datetime, 'M/d/yy');
+                listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+                listOfDesign.lateby = this.overdue;
                 listOfDesign.listOfDesigns.push(designItem);
                 tempData.push(listOfDesign);
                 added = true;
@@ -183,7 +209,7 @@ export class DesignComponent implements OnInit, OnDestroy {
           this.listOfDesignsHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
-            return dateA - dateB;
+            return dateB - dateA;
           });
           this.cdr.detectChanges();
   }
@@ -424,9 +450,11 @@ async decline(id){
     },
   });
   modal.onDidDismiss().then((data) => {
-    debugger;
     console.log(data)
-    this.getDesigns(null)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
+    }
 });
   // modal.dismiss(() => {
   //   debugger;
@@ -434,13 +462,22 @@ async decline(id){
   // });
   return await modal.present();
 }
+
+sDatePassed(datestring: string,i){
+  var checkdate = moment(datestring, "YYYYMMDD");
+  var todaydate = moment(new Date(), "YYYYMMDD");
+  var lateby = todaydate.diff(checkdate, "days");
+  this.overdue = lateby;  
+}
 }
 
 export class DesginDataHelper {
   listOfDesigns: DesginDataModel[];
   date: any;
+  lateby:any;
 
   constructor() {
     this.listOfDesigns = [];
   }
+  
 }

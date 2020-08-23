@@ -1,3 +1,11 @@
 ._padding{
     padding:12px;
 }
+
+
+.modal-wrapper.sc-ion-modal-md {
+    -webkit-transform: translate3d(0, 40px, 0) !important;
+    transform: translate3d(0, 40px, 0) !important;
+    opacity: 0.01 !important;
+    height: 50% !important;
+}

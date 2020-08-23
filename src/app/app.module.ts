@@ -21,6 +21,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Firebase } from '@ionic-native/firebase/ngx';
 import {NgxImageCompressService} from 'ngx-image-compress';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -44,7 +45,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
     Geolocation,
     Firebase,
     NgxImageCompressService,
-    Camera
+    Camera,
+    InAppBrowser
     ],
   exports: [
     UtilitiesModule

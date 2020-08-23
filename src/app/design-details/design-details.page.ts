@@ -13,6 +13,7 @@ import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-na
 import {NgxImageCompressService} from 'ngx-image-compress';
 import { CountdownTimerService, countDownTimerConfigModel, countDownTimerTexts } from 'ngx-timer';
 import { User } from '../model/user.model';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-design-details',
@@ -54,7 +55,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private launchNavigator: LaunchNavigator,
     private toastController: ToastController,
     private imageCompress: NgxImageCompressService,
-    private countdownservice: CountdownTimerService
+    private countdownservice: CountdownTimerService,
+    private iab: InAppBrowser
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
@@ -75,6 +77,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.getAssignees();
     });
      ​
+  }
+  showDesignImage(){
+    const browser = this.iab.create(this.design.prelimdesign.url);
   }
 
 
