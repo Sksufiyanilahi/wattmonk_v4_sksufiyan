@@ -214,4 +214,8 @@ export class ApiService {
   deletePrelimImage(id){
     return this.http.delete(BaseUrl + "upload/files/" + id,{ headers: this.headers });
   }
+
+  rechargePost(data){
+    return this.http.post(BaseUrl + "recharges/" ,data, { headers: this.headers });
+  }
 }

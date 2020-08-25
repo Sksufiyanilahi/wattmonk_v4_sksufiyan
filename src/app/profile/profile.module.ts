@@ -9,13 +9,17 @@ import { ProfilePageRoutingModule } from './profile-routing.module';
 import { ProfilePage } from './profile.page';
 import { ProfileNotificationComponent } from './profile-notification/profile-notification.component';
 import { ProfileHistoryComponent } from './profile-history/profile-history.component';
+import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.module';
+import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
 
 @NgModule({
+  // entryComponents:[PaymentgatewayPage],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ProfilePageRoutingModule
+    ProfilePageRoutingModule,
+    PaymentgatewayPageModule
   ],
   declarations: [ProfilePage,ProfileNotificationComponent,ProfileHistoryComponent]
 })

@@ -20,6 +20,10 @@
   color: #8B8B8B;
   font-size: 20px;
 }
+.profile-amount{
+  color: #8B8B8B;
+  font-size: 20px;
+}
 
 .profile-email{
   color: #7B7B7B;
@@ -67,6 +71,13 @@ ion-tab-button {
 
 ._color{
   color: #6e6e6e;
+}
+
+.my-custom-modal-css .modal-wrapper {
+  height: 20%;
+  top: 80%;
+  position: absolute; 
+  display: block;  
 }
 
 

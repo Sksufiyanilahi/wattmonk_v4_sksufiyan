@@ -444,7 +444,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 async decline(id){
   const modal = await this.modalController.create({
     component: DeclinepagePage,
-    // cssClass: 'cssclass',
+    cssClass: 'my-custom-modal-css',
     componentProps: {
       id:id
     },

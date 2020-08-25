@@ -91,6 +91,10 @@ const routes: Routes = [
   {
     path: 'declinepage',
     loadChildren: () => import('./declinepage/declinepage.module').then( m => m.DeclinepagePageModule)
+  },
+  {
+    path: 'paymentgateway',
+    loadChildren: () => import('./paymentgateway/paymentgateway.module').then( m => m.PaymentgatewayPageModule)
   }
 
 

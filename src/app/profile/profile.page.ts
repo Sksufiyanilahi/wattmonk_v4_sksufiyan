@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController, ModalController } from '@ionic/angular';
 import { StorageService } from '../storage.service';
 import { ApiService } from '../api.service';
 import { Storage } from '@ionic/storage';
@@ -7,6 +7,8 @@ import { SurveyStorageModel } from '../model/survey-storage.model';
 import { ImageUploadModel } from '../model/constants';
 import { UtilitiesService } from '../utilities.service';
 import { User } from '../model/user.model';
+import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.module';
+import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
 
 @Component({
   selector: 'app-profile',
@@ -30,7 +32,8 @@ export class ProfilePage implements OnInit {
     private storage: StorageService,
     private deviceStorage: Storage,
     private utilities: UtilitiesService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    public modalController: ModalController
   ) {
   }
 
@@ -169,5 +172,9 @@ export class ProfilePage implements OnInit {
       this.listOfSurveysToSave.splice(0, 1);
       this.uploadAllSurveys();
     }
+  }
+
+  async addPoints(){
+    this.navController.navigateForward('/paymentgateway');
   }
 }

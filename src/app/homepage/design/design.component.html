@@ -67,10 +67,16 @@
                             <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined'">
                                 <span *ngIf="designData.status == 'created'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
                                 >Assign</span>
-                                <span *ngIf="designData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="decline(designData.id)"
-                                >Decline</span>
-                                <span *ngIf="designData.status == 'outsourced'" style="float:left !important;" class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')"
-                                >Accept</span>
+                                <span style="float: right;">
+
+                                    <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')">
+                                       Accept
+                                    </ion-col>
+                                    <ion-col size="4" *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(designData.id)">
+                                    Decline
+                                    </ion-col>
+                                </span>
+                              
                                 <span *ngIf="designData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
                                 >Reassign</span>
                             </ion-col>

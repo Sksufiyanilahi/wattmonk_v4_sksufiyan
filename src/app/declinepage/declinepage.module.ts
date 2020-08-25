@@ -15,6 +15,6 @@ import { DeclinepagePage } from './declinepage.page';
     IonicModule,
     DeclinepagePageRoutingModule
   ],
-  declarations: [DeclinepagePage]
+  declarations: []
 })
 export class DeclinepagePageModule {}

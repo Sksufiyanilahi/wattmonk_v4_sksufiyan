@@ -257,4 +257,11 @@ ion-item {
   flex: 1;
 }
 
+.my-custom-modal-css .modal-wrapper {
+  height: 60%;
+  width:80%;
+  // top: 80%;
+  position: absolute; 
+  display: block;  
+}
 

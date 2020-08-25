@@ -2,6 +2,7 @@ export class User {
   id: number;
   username: string;
   email: string;
+  amount:number;
   provider: string;
   confirmed: boolean;
   blocked: boolean;

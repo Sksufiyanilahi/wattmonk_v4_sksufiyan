@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add points</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-padding ion-margin-top">
+    <ion-row class="ion-margin-top">
+      <ion-col size="12">
+        <!-- <form [formGroup]="initialamount" novalidate (ngSubmit)="addamount()"> -->
+          <ion-grid>
+            <ion-row class="ion-margin-top">
+              <ion-col>
+                <ion-input type="number" placeholder="Enter amount" class="form-control" autocomplete="off" [(ngModel)]="amount"></ion-input>
+                <div class="error_div">
+                  <div *ngIf="initialamount.get('amount').value === undefined && initialamount.get('amount').dirty || initialamount.get('amount').value === null && initialamount.get('amount').dirty " >
+                      <span class="error">{{'Please enter the amount.'}}</span>
+                  </div>      
+                  <div *ngIf="initialamount.get('amount').value === 0 && initialamount.get('amount').dirty" >
+                      <span class="error">{{"Value should be greater than 0"}}</span>
+                  </div>      
+              </div>  
+              </ion-col>
+              <ion-col>
+             
+                <!-- <ion-button type="submit">Add points</ion-button> -->
+              </ion-col>
+            </ion-row>
+            <ion-row style="margin-top: 20px;">
+              <ion-col>
+                <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        <!-- </form> -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
