@@ -3,10 +3,10 @@ import { FIELD_REQUIRED } from '../model/constants';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
-import {
-  IPayPalConfig,
-  ICreateOrderRequest 
-} from 'ngx-paypal';
+// import {
+//   IPayPalConfig,
+//   ICreateOrderRequest 
+// } from 'ngx-paypal';
 
 @Component({
   selector: 'app-paymentgateway',
@@ -14,7 +14,7 @@ import {
   styleUrls: ['./paymentgateway.page.scss'],
 })
 export class PaymentgatewayPage implements OnInit {
-  public payPalConfig ? : IPayPalConfig
+  // public payPalConfig ? : IPayPalConfig
   // amountError = INVALID_EMAIL_MESSAGE;
   fieldRequired = FIELD_REQUIRED;
   initialamount: FormGroup;
@@ -33,7 +33,7 @@ export class PaymentgatewayPage implements OnInit {
   }
 
   ngOnInit() {
-    this.initConfig();
+    // this.initConfig();
     this.user= this.storageService.getUser();
 
   }
@@ -58,71 +58,71 @@ export class PaymentgatewayPage implements OnInit {
       }
       }
 
-      private initConfig(): void {
-        // let enteredAmount = JSON.stringify(this.amount);
+      // private initConfig(): void {
+      //   // let enteredAmount = JSON.stringify(this.amount);
         
-        console.log(this.amount);
+      //   console.log(this.amount);
         
-        this.payPalConfig = {
-        currency: 'INR',
-        clientId: 'AVbuzL02W8su4HV5UHcuV4C7j1mdxpCq_qZZLSvYtxcvNxQ21FOgWPy1DLYYGzSMpWH9QGib08iewXY6',
-        createOrderOnClient: (data) => <ICreateOrderRequest>{
-          intent: 'CAPTURE',
-          purchase_units: [
-            {
-              amount: {
-                currency_code: 'INR',
-                value: this.amount,
-                breakdown: {
-                  item_total: {
-                    currency_code: 'INR',
-                    value: this.amount
-                  }
-                }
-              },
-              items: [
-                {
-                  name: 'Enterprise Subscription',
-                  quantity: '1',
-                  category: 'DIGITAL_GOODS',
-                  unit_amount: {
-                    currency_code: 'INR',
-                    value: this.amount,
-                  },
-                }
-              ]
-            }
-          ]
-        },
-        advanced: {
-          commit: 'true'
-        },
-        style: {
-          label: 'paypal',
-          layout: 'vertical'
-        },
-        onApprove: (data, actions) => {
-          console.log('onApprove - transaction was approved, but not authorized', data, actions);
-          actions.order.get().then(details => {
-            console.log('onApprove - you can get full order details inside onApprove: ', details);
-          });
-        },
-        onClientAuthorization: (data) => {
-          console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
-          this.showSuccess = true;
-          this.addamount();
+      //   this.payPalConfig = {
+      //   currency: 'INR',
+      //   clientId: 'AVbuzL02W8su4HV5UHcuV4C7j1mdxpCq_qZZLSvYtxcvNxQ21FOgWPy1DLYYGzSMpWH9QGib08iewXY6',
+      //   createOrderOnClient: (data) => <ICreateOrderRequest>{
+      //     intent: 'CAPTURE',
+      //     purchase_units: [
+      //       {
+      //         amount: {
+      //           currency_code: 'INR',
+      //           value: this.amount,
+      //           breakdown: {
+      //             item_total: {
+      //               currency_code: 'INR',
+      //               value: this.amount
+      //             }
+      //           }
+      //         },
+      //         items: [
+      //           {
+      //             name: 'Enterprise Subscription',
+      //             quantity: '1',
+      //             category: 'DIGITAL_GOODS',
+      //             unit_amount: {
+      //               currency_code: 'INR',
+      //               value: this.amount,
+      //             },
+      //           }
+      //         ]
+      //       }
+      //     ]
+      //   },
+      //   advanced: {
+      //     commit: 'true'
+      //   },
+      //   style: {
+      //     label: 'paypal',
+      //     layout: 'vertical'
+      //   },
+      //   onApprove: (data, actions) => {
+      //     console.log('onApprove - transaction was approved, but not authorized', data, actions);
+      //     actions.order.get().then(details => {
+      //       console.log('onApprove - you can get full order details inside onApprove: ', details);
+      //     });
+      //   },
+      //   onClientAuthorization: (data) => {
+      //     console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+      //     this.showSuccess = true;
+      //     this.addamount();
           
-        },
-        onCancel: (data, actions) => {
-          console.log('OnCancel', data, actions);
-        },
-        onError: err => {
-          console.log('OnError', err);
-        },
-        onClick: (data, actions) => {
-          console.log('onClick', data, actions);
-        },
-      };
-      }
+      //   },
+      //   onCancel: (data, actions) => {
+      //     console.log('OnCancel', data, actions);
+      //   },
+      //   onError: err => {
+      //     console.log('OnError', err);
+      //   },
+      //   onClick: (data, actions) => {
+      //     console.log('onClick', data, actions);
+      //   },
+      // };
+      // }
 
 }

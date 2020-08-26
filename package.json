@@ -81,7 +81,7 @@
     "jquery-ui": "^1.12.1",
     "moment": "^2.27.0",
     "ngx-image-compress": "^8.0.4",
-    "ngx-paypal": "^6.1.0",
+    "ngx-paypal": "^4.0.2",
     "ngx-pinch-zoom": "^2.4.4",
     "ngx-timer": "^1.0.6",
     "recursive-readdir": "^2.2.2",
