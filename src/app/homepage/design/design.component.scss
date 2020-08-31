@@ -26,8 +26,8 @@
 }
 
 .customer-address {
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin-top: 4px;
+  margin-bottom: 6px;
   font-size: 0.8em;
   color: #4272B9;
 }
@@ -78,6 +78,17 @@ ion-bottom-drawer {
   ion-content {
     --background: #F3F3F3 !important;
   }
+
+  
 }
+    .segment-btn{
+      font-size: 10px !important;
+    }
+
+    .latebystyle{
+      float: right; 
+      font-size: 10px;
+      color: #3C78DB;
+    }
 
 

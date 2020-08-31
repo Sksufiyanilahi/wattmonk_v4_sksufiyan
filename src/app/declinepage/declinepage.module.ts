@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { DeclinepagePageRoutingModule } from './declinepage-routing.module';
 
 import { DeclinepagePage } from './declinepage.page';
+// import { Chooser } from '@ionic-native/chooser/ngx';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { DeclinepagePage } from './declinepage.page';
     IonicModule,
     DeclinepagePageRoutingModule
   ],
-  declarations: []
+  declarations: [],
+  // providers:[Chooser]
 })
 export class DeclinepagePageModule {}

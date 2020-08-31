@@ -57,6 +57,7 @@ export class SurveyDataModel {
   isoverdue : boolean;
   formattedjobtype : string;
   solarpanelsimages:Image[];
+  lateby:any;
 }
 
 

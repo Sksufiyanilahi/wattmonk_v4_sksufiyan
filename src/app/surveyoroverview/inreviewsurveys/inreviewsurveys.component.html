@@ -12,7 +12,7 @@
                       {{item.date | date: 'dd MMM yyyy'}}
                 </span>
         </ion-col>
-        <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
+        <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
                       routerDirection="forward">{{surveyData.name}}
@@ -27,7 +27,7 @@
                 <span class="customer-address z-100"
                       (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
 
-                <ion-row style="margin-bottom: 8px;">
+                <ion-row style="margin-bottom: 8px;" [routerLink]="['/survey-detail/',surveyData.id]">
                     <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
                     <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
                       <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.status == 'reviewfailed'">Failed</span>

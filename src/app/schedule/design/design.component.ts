@@ -14,6 +14,8 @@ import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute } from '@angular/router';
 import { DesginDataModel, DesignModel } from '../../model/design.model';
+import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
+import { File } from '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-design',
@@ -47,6 +49,16 @@ export class DesignComponent implements OnInit, OnDestroy {
   prelimFiles: string[]=[];
  imageName:any;
 
+ options: CameraOptions = {
+  quality: 30,
+  targetWidth:600,
+  targetHeight:300,
+  sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+  destinationType: this.camera.DestinationType.DATA_URL,
+  encodingType: this.camera.EncodingType.PNG,
+  mediaType: this.camera.MediaType.PICTURE
+}
+
   constructor(
     private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -54,6 +66,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private navController: NavController,
     private storage: StorageService,
     private route: ActivatedRoute,
+    private camera: Camera,
+    private file: File
   ) {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.desginForm = this.formBuilder.group({
@@ -544,5 +558,23 @@ uploadcontrolvalidation(){
       console.log(res); 
       
     })
+  }
+
+  // pickarchitecturaldesign(){
+  //   this.camera.getPicture(this.options).then((imageData) => {
+  //     let base64Image = 'data:image/jpeg;base64,' + imageData;
+  //     let blob = this.utils.b64tBlob(base64Image);
+  //     let filename = Date.now().toString() + '.png';
+  //     this.utils.showLoading('Uploading').then(()=>{
+  //       this.apiService.uploaddesign(designId, key, blob, filename).subscribe(()=>{
+
+  //       })
+  //     })
+  //   })
+
+  // }
+
+  pickprelimdesign(){
+
   }
 }

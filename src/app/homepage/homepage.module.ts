@@ -20,6 +20,8 @@ import { CompletedComponent } from './design/completed/completed.component';
 import { DeliveredComponent } from './design/delivered/delivered.component';
 import { InreviewComponent } from './design/inreview/inreview.component';
 import { DeclinepagePage } from '../declinepage/declinepage.page';
+import { Chooser } from '@ionic-native/chooser/ngx';
+import { File } from '@ionic-native/file/ngx';
 
 @NgModule({
   entryComponents:[DeclinepagePage],
@@ -37,7 +39,9 @@ import { DeclinepagePage } from '../declinepage/declinepage.page';
     DatePipe,
     Diagnostic,
     NativeGeocoder,
-    LaunchNavigator
+    LaunchNavigator,
+    Chooser,
+    File
   ]
 })
 export class HomepagePageModule {

@@ -6,23 +6,27 @@
 
 <ion-content>
   <ion-grid>
-  <h4 style="font-weight: bold;margin-bottom:0px !important">Confirm</h4>
+  <h4 style="font-weight: bold;margin-bottom:0px !important;padding: 10px;">Are you sure?</h4>
       <ion-row>
         <ion-col>
-          <h6 style="margin-top:0px;">Decline the design Request</h6>
+          <h6 style="margin-top:0px;padding: 2px;">Please specify the reason</h6>
           <textarea placeholder="Reason*" [(ngModel)]="reason" (input)="detectchange()" style="width: 100%;" required></textarea>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
-          <h6 style="margin:0px 0 0px 0;">Upload Attachment</h6>
-          <ion-input type="text" [(ngModel)]="filename" readonly (click)="selectAttachment()" style="border-bottom:1px solid grey"  ></ion-input>
+          <h6 style="margin:0px 0 0px 0;">Attachment</h6>
+        
+            <ion-input type="text" placeholder="Select Attachment" [(ngModel)]="filename" readonly (click)="selectAttachment()" style="border-bottom:1px solid grey"  > <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon></ion-input>
+           
+         <small *ngIf="exceedfileSize > 0" style="color:red">File size should not be greater than 25MB.</small>
         </ion-col>
       </ion-row>
-
-      <ion-button (click)="cancel()">Cancel</ion-button>
-      <ion-button (click)="submit()" [disabled]="enableDisable">Submit</ion-button>
-  </ion-grid>
+    </ion-grid>
+    <footer style="text-align: right;margin:12px;">
+      <ion-button fill="clear" (click)="cancel()">Cancel</ion-button>
+      <ion-button fill="clear" (click)="submit()" [disabled]="enableDisable">Submit</ion-button>
+    </footer>
   <!-- <div class=_padding>
     <p>Decline the design Request</p>
     <textarea placeholder="Reason*" style="width: 100%;"></textarea>

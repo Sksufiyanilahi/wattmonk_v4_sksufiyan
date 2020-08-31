@@ -1,6 +1,5 @@
 <ion-content class="ion-padding-start ion-padding-end ion-padding-bottom" style="height:650px">
-  
-    <form [formGroup]="desginForm" novalidate>
+    <form [formGroup]="desginForm" novalidate style="overflow:scroll">
         <ion-grid style="position: relative;margin-top: 30px;">
             <!-- <ion-row *ngIf="address !== ''">
                 <ion-col>
@@ -17,7 +16,8 @@
             <ion-row >
                 <ion-col>
                     <ion-item class="ion-no-padding">
-                        <ion-input class="form_input" placeholder="name*" autocapitalize="words"
+                        <ion-label position="floating">name*</ion-label>
+                        <ion-input type="text" class="form_input" autocapitalize="words"
                                    formControlName="name"></ion-input>
                     </ion-item>
                 </ion-col>
@@ -25,7 +25,8 @@
             <ion-row class="ion-align-items-center ion-justify-content-center">
                 <ion-col>
                     <ion-item class="ion-no-padding">
-                        <ion-input class="form_input" type="email" placeholder="email*" autocapitalize="none" autocomplete="off"
+                        <ion-label position="floating">email*</ion-label>
+                        <ion-input class="form_input" type="email" autocapitalize="none" autocomplete="off"
                                    formControlName="email"></ion-input>
                     </ion-item>
                     <div style="height: 5px;">
@@ -41,7 +42,8 @@
             <ion-row class="ion-align-items-center ion-justify-content-center">
                 <ion-col>
                     <ion-item class="ion-no-padding">
-                        <ion-input class="form_input"  type="number" placeholder="monthly bill*"
+                        <ion-label position="floating">monthly bill*</ion-label>
+                        <ion-input class="form_input"  type="number"
                                    formControlName="monthlybill"></ion-input>
                     </ion-item>
                 </ion-col>
@@ -61,10 +63,12 @@
 
             <ion-row>
                 <ion-col size="6">
+                    <!-- <ion-label position="floating">module make*</ion-label> -->
                     <app-auto-complete [dataList]="listOfSolarMake" placeholder="module make*"
                                        formControlName="solarmake"></app-auto-complete>
                 </ion-col>
                 <ion-col size="6">
+                    <!-- <ion-label position="floating">module model*</ion-label> -->
                     <app-auto-complete [dataList]="listOfSolarMade" placeholder="module model*"
                                        formControlName="solarmodel"></app-auto-complete>
 
@@ -73,11 +77,13 @@
 
             <ion-row>
                 <ion-col size="6">
+                    <!-- <ion-label position="floating">inverter make*</ion-label> -->
                     <app-auto-complete [dataList]="listOfInverterMake" placeholder="inverter make*"
                                        formControlName="invertermake"></app-auto-complete>
                 </ion-col>
                 <ion-col size="6">
-                    <app-auto-complete [dataList]="listOfInverterMade" placeholder="inverter model*"
+                    <!-- <ion-label position="floating">invertor model*</ion-label> -->
+                    <app-auto-complete [dataList]="listOfInverterMade" placeholder="invertor model*"
                                        formControlName="invertermodel"></app-auto-complete>
                 </ion-col>
             </ion-row>
@@ -85,8 +91,9 @@
             <ion-row class="ion-align-items-center ion-justify-content-center">
                 <ion-col size="6">
                     <ion-item class="ion-no-padding">
-                        <ion-label style="display: none;">Project Type</ion-label>
-                        <ion-select class="form_input" placeholder="project type" ok-text=""
+                        <!-- <ion-label style="display: none;">Project Type</ion-label> -->
+                        <!-- <ion-label position="floating">project type</ion-label> -->
+                        <ion-select class="form_input" ok-text="" placeholder="project type"
                                     cancel-text=""
                                     formControlName="projecttype" interface="popover">
                             <ion-select-option value="residential">Residential</ion-select-option>
@@ -111,9 +118,10 @@
                 </ion-col> -->
                 <ion-col size="6">
                     <ion-item class="ion-no-padding">
-                        <ion-label style="display: none;">New construction</ion-label>
-                        <ion-select  (ionChange)="showUpload($event)" class="form_input select_div"
-                                    placeholder="new construction" ok-text=""
+                        <!-- <ion-label style="display: none;">New construction</ion-label> -->
+                        <!-- <ion-label position="floating">new construction</ion-label> -->
+                        <ion-select  (ionChange)="showUpload($event)" class="form_input select_div" placeholder="new construction"
+                                     ok-text=""
                                     cancel-text=""
                                     formControlName="newconstruction" interface="popover">
                             <ion-select-option value="true">Yes</ion-select-option>
@@ -128,7 +136,8 @@
                 <ion-col size="12">
                     <ion-item class="ion-no-padding">
                         <ion-label style="display: none;">Mounting Type</ion-label>
-                        <ion-select class="form_input select_div" (ionChange)="eventcheck($event)"  placeholder="mounting type"
+                        <!-- <ion-label position="floating">mounting type</ion-label> -->
+                        <ion-select class="form_input select_div" (ionChange)="eventcheck($event)" placeholder="mounting type"
                                     ok-text="" cancel-text=""
                                     formControlName="mountingtype" interface="popover">
                             <ion-select-option value="roof">Roof</ion-select-option>
@@ -144,7 +153,8 @@
                 <ion-col size="6" *ngIf='(showValue=="roof" ||showValue== "both")'>
                     <ion-item class="ion-no-padding">
                         <ion-label style="display: none;">Roof Type</ion-label>
-                        <ion-select class="form_input select_div" placeholder="roof type"
+                        <ion-label position="floating">roof type</ion-label>
+                        <ion-select class="form_input select_div"
                                     ok-text="" cancel-text=""
                                     formControlName="rooftype" interface="popover">
                             <ion-select-option value="flat">Flat</ion-select-option>
@@ -155,7 +165,8 @@
                 </ion-col>
                 <ion-col size="6" *ngIf='(showValue=="ground" || showValue=="both")'>
                         <ion-item class="ion-no-padding">
-                            <ion-input class="form_input"  type="text" placeholder="tilt for ground mount system*" formControlName="tiltofgroundmountingsystem"></ion-input>
+                            <ion-label position="floating">tilt for ground mount system</ion-label>
+                            <ion-input class="form_input"  type="text" formControlName="tiltofgroundmountingsystem"></ion-input>
                         </ion-item>
                 </ion-col>
             </ion-row>
@@ -165,7 +176,8 @@
                     <ion-item class="ion-no-padding">
                         <!-- <ion-input class="form_input" type="file" placeholder="Upload Architectural design" 
                               (ionChange)="files($event)"  multiple></ion-input> -->
-                              <input type="file" (change)="files($event)" formControlName="architecturaldesign" placeholder="Upload Architectural design" multiple/>
+                              <ion-label position="floating">architectural design</ion-label>
+                              <ion-input type="file"  class="form_input"  (change)="files($event)" style="margin-top: 12px;" formControlName="architecturaldesign" placeholder="Upload Architectural design" multiple></ion-input>
                     </ion-item>
                 </ion-col>
                
@@ -174,7 +186,8 @@
             <ion-row>
                 <ion-col size="12">
                     <ion-item class="ion-no-padding">
-                        <ion-input class="form_input"  type="file" placeholder="Upload prelim Design" formControlName="prelimdesign"></ion-input>
+                        <ion-label position="floating">prelim design</ion-label>
+                        <ion-input class="form_input"  type="file" formControlName="prelimdesign"></ion-input>
                     </ion-item>
                
                 </ion-col>
@@ -192,8 +205,8 @@
 
             <ion-row class="ion-margin-top">
                 <ion-col>
-                    <ion-item class="ion-no-padding no-border" lines="none">
-                        <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
+                    <ion-item class=" ion-no-padding no-border" lines="none" style="padding: 30px 0px;">
+                        <app-user-selector style="overflow:scroll;" placeholder="assign" [assignees]="listOfAssignees"
                                            formControlName="assignedto"></app-user-selector>
                     </ion-item>
                 </ion-col>

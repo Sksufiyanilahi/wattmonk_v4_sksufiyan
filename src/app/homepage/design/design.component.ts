@@ -14,6 +14,7 @@ import {Storage} from '@ionic/storage';
 import { ModalController } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-design',
@@ -46,6 +47,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   listOfDesignsHelper: any[];
   overdue:any;
   todaysdate: string;
+  userData: any;
 
   constructor(
     private utils: UtilitiesService,
@@ -57,7 +59,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private storageService:StorageService
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -75,7 +78,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     
   }
   segmentChanged(event){
+    debugger;
     console.log((event.target.value));
+    this.pending(event.target.value);
     this.segments = event.target.value;
     this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
       this.getDesigns(null);
@@ -90,6 +95,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userData = this.storageService.getUser();
+    console.log(this.userData);
+    
     // this.router.navigate(['homepage/design/pending']);
     // this.routeSubscription = this.router.events.subscribe((event) => {
     //   if (event instanceof NavigationEnd) {
@@ -361,6 +369,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   assignToDesigner() {
+    debugger;
     if (this.assignForm.status === 'INVALID') {
       this.utils.errorSnackBar('Please select a designer');
     } else {
@@ -381,7 +390,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   openDesigners(id: number) {
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
-        this.apiService.getSurveyors().subscribe(assignees => {
+        this.apiService.getDesigners().subscribe(assignees => {
           this.utils.hideLoading().then(() => {
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
@@ -469,6 +478,19 @@ sDatePassed(datestring: string,i){
   var lateby = todaydate.diff(checkdate, "days");
   this.overdue = lateby;  
 }
+
+
+
+pending(value){
+  debugger;
+  if(this.userData.role.type=='SuperAdmin'){
+      value= "requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined"
+  }else{
+    value= "requesttype=prelim&status=created&status=outsourced&status=requestaccepted"
+  }
+}
+
+
 }
 
 export class DesginDataHelper {

@@ -51,8 +51,8 @@ export class ProfilePage implements OnInit {
   async logout() {
     this.enableDisable= true;
     const toast = await this.toastController.create({
-      header: 'Logout?',
-      message: 'Any unsynced survey data will be lost',
+      header: 'Please confirm',
+      message: 'Are you sure you want to logout?',
       cssClass: 'my-custom-class',
       buttons: [
         {

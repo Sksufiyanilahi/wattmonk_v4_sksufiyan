@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
+import { UtilitiesService } from 'src/app/utilities.service';
 
 @Component({
   selector: 'app-profile-notification',
@@ -8,9 +9,11 @@ import { ApiService } from 'src/app/api.service';
 })
 export class ProfileNotificationComponent implements OnInit {
   notification: Object;
+  showLoader:boolean= false;
 
   constructor(
-    private apiservice:ApiService
+    private apiservice:ApiService,
+    private utilities:UtilitiesService
   ) { }
 
   ngOnInit() {
@@ -19,11 +22,13 @@ export class ProfileNotificationComponent implements OnInit {
   }
 
     getNotification(){
-      this.apiservice.profileNotification().subscribe(res=>{
-        this.notification = res;
-        console.log(this.notification);
-        
-      })
+
+        this.apiservice.profileNotification().subscribe(res=>{
+            this.notification = res;
+            this.showLoader=true;
+            console.log(this.notification);
+        })
+
     }
 
 }

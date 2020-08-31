@@ -1,19 +1,19 @@
 <ion-content>
     <ion-segment scrollable (ionChange)="segmentChanged($event)" value="status=created&status=outsourced&status=requestaccepted">
         <ion-segment-button value="status=created&status=outsourced&status=requestaccepted">
-          <ion-label>Pending</ion-label>
+          <ion-label class="segment-btn">Pending</ion-label>
         </ion-segment-button>
         <ion-segment-button value="status=surveyassigned&status=surveyinprocess">
-          <ion-label>In Progress</ion-label>
+          <ion-label class="segment-btn">In Progress</ion-label>
         </ion-segment-button>
         <ion-segment-button value="status=surveycompleted">
-          <ion-label>Completed</ion-label>
+          <ion-label class="segment-btn">Completed</ion-label>
         </ion-segment-button>
         <ion-segment-button value="status=reviewassigned&status=reviewpassed&status=reviewfailed">
-          <ion-label>Review</ion-label>
+          <ion-label class="segment-btn">Review</ion-label>
         </ion-segment-button>
         <ion-segment-button value="status=delivered">
-          <ion-label>Delivered</ion-label>
+          <ion-label class="segment-btn">Delivered</ion-label>
         </ion-segment-button>
       </ion-segment>
     <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
@@ -31,7 +31,7 @@
                                   {{item.date | date: 'dd MMM yyyy'}}
                             </span>
                     </ion-col>
-                    <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="6">
+                    <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
                         <div class="ion-no-padding custom-card" style="height: 100%;">
                             <p class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
                             routerDirection="forward">{{surveyData.name}}

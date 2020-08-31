@@ -10,6 +10,8 @@ import { UtilitiesModule } from '../utilities/utilities.module';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { NumberOnlyDirective } from './number.directive';
+import { Camera } from '@ionic-native/Camera/ngx';
+import { File } from '@ionic-native/file/ngx';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { NumberOnlyDirective } from './number.directive';
   ],
   providers: [
     Diagnostic,
-    NativeGeocoder
+    NativeGeocoder,
+    Camera,
+    File
   ]
 })
 export class SchedulePageModule {}

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { DesignRoutingModule } from './design-routing.module';
 import { PendingComponent } from './pending/pending.component';
+// import { Chooser } from '@ionic-native/chooser/ngx';
 
 
 @NgModule({
@@ -12,6 +13,7 @@ import { PendingComponent } from './pending/pending.component';
     CommonModule,
     DesignRoutingModule
     
-  ]
+  ],
+  // providers:[Chooser]
 })
 export class DesignModule { }

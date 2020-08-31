@@ -1,20 +1,20 @@
 <ion-content (click)="close()" style="padding-bottom: 250px;">
 
-    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined">
-        <ion-segment-button value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined">
-          <ion-label>Pending</ion-label>
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
+        <ion-segment-button *ngIf="userData.role.type !=='SuperAdmin'"  value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
+          <ion-label class="segment-btn">Pending</ion-label>
         </ion-segment-button>
         <ion-segment-button value="requesttype=prelim&status=designassigned">
-          <ion-label>In Designing</ion-label>
+          <ion-label class="segment-btn">In Designing</ion-label>
         </ion-segment-button>
         <ion-segment-button value="requesttype=prelim&status=designcompleted">
-          <ion-label>Completed</ion-label>
+          <ion-label class="segment-btn">Completed</ion-label>
         </ion-segment-button>
         <ion-segment-button value="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed">
-          <ion-label>Review</ion-label>
+          <ion-label class="segment-btn"> In Review</ion-label>
         </ion-segment-button>
         <ion-segment-button value="requesttype=prelim&status=delivered">
-          <ion-label>Delivered</ion-label>
+          <ion-label class="segment-btn">Delivered</ion-label>
         </ion-segment-button>
       </ion-segment>
       <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
@@ -33,12 +33,12 @@
                         </span>
                 </ion-col>
                 <ion-col *ngFor="let designData of item.listOfDesigns;let j = index" size="12">
-                    <div class="ion-no-padding custom-card" style="height: 100%;">
+                    <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
                         <p class="customer-name" [routerLink]="['/design-details/',designData.id]"
                         routerDirection="forward">{{designData.name}}
-                        <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
+                        <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
                           {{designData.deliverydate | date: 'hh:mm a'}}
-                      </span>
+                      </span> -->
                       <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'">Declined</span>
                       <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
                       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'requestaccepted'">Accepted</span>
@@ -47,16 +47,20 @@
                       <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'">Unassigned</span>
                       <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'">Design Assigned</span>
                       <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'">In Review</span>
-                      <span class="chipdetail" *ngIf="designData.status == 'outsourced'" style="background-color: #95afc0;" >Waiting for acceptance</span>
+                      <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;" >Waiting for acceptance</span>
               </p>
-                        <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
-                                routerDirection="forward">{{designData.email}}</span>
+              <p style="margin:0px">
+                  <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
+                          routerDirection="forward">{{designData.email}}</span>
+                          <span *ngIf="item.lateby > 1" class="latebystyle"><strong>Late by {{item.lateby}} days</strong></span>
+                          <span *ngIf="item.lateby == 1" class="latebystyle"><strong>Late by a day</strong></span>
+              </p>
                         <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                             <span class="customer-phone">{{designData.phonenumber}}</span></a>
                         <span class="customer-address z-100"
                                 (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
         
-                        <ion-row style="margin-bottom: 8px;">
+                        <ion-row style="margin-bottom: 8px;" [routerLink]="['/design-details/',designData.id]">
                             <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
                             <span class="chipdetail" style="background-color: #95afc0;" >{{designData?.formattedjobtype}}</span>
                             <ion-col>     
@@ -65,7 +69,7 @@
                         </ion-row>
                         <ion-row class="ion-no-margin ion-no-margin">
                             <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined'">
-                                <span *ngIf="designData.status == 'created'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
                                 >Assign</span>
                                 <span style="float: right;">
 
@@ -102,7 +106,7 @@
                                 {{designData.deliverydate | date: 'hh:mm a'}}
                            
                     </span> -->
-                    </div>
+                </ion-card>
                 </ion-col>
             </ion-row>
             <ion-row>

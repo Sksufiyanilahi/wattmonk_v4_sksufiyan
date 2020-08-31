@@ -433,6 +433,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 export class SurveyDataHelper {
   listOfSurveys: SurveyDataModel[];
   date: any;
+  lateby:any;
 
   constructor() {
     this.listOfSurveys = [];
