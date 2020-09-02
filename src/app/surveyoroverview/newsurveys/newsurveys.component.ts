@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { SurveyDataModel } from 'src/app/model/survey.model';
 import { SurveyDataHelper } from 'src/app/homepage/survey/survey.component';
 import { Subscription } from 'rxjs';
@@ -10,6 +10,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
+import { IonContent } from '@ionic/angular';
 
 @Component({
   selector: 'app-newsurveys',
@@ -17,7 +18,7 @@ import * as moment from 'moment';
   styleUrls: ['./newsurveys.component.scss'],
 })
 export class NewsurveysComponent implements OnInit {
- 
+  @ViewChild(IonContent, { static: false }) content: IonContent;
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
@@ -35,6 +36,7 @@ export class NewsurveysComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
+    private el:ElementRef,
     private apiService: ApiService) {
       
     }
@@ -47,6 +49,13 @@ export class NewsurveysComponent implements OnInit {
       console.log('message received! ', r);
       this.getSurveys();
     });
+  }
+  scrollTo(offsetTop,date) {
+    setTimeout(() => {
+      let sectionOffset = this.el.nativeElement.getElementsByTagName('ion-grid')[date].offsetTop;
+      console.log("sectionOffset == ", sectionOffset);
+      this.content.scrollToPoint(0, sectionOffset, 1000);
+    }, 500);
   }
 
 
