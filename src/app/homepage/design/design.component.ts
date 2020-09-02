@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { DesginDataModel } from '../../model/design.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
@@ -22,6 +22,8 @@ import { StorageService } from 'src/app/storage.service';
   styleUrls: ['./design.component.scss'],
 })
 export class DesignComponent implements OnInit, OnDestroy {
+
+
 
   listOfDesignDataHelper: DesginDataHelper[] = [];
   listOfDesignsData: DesginDataModel[] = [];
@@ -48,6 +50,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   overdue:any;
   todaysdate: string;
   userData: any;
+  designerData: any;
+  assigneeData: any;
+  selectedDesigner: any;
 
   constructor(
     private utils: UtilitiesService,
@@ -369,25 +374,68 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   assignToDesigner() {
-    debugger;
+      console.log(this.designerData.createdby.id);
+      
     if (this.assignForm.status === 'INVALID') {
       this.utils.errorSnackBar('Please select a designer');
     } else {
-      this.apiService.updateDesignForm(this.assignForm.value, this.designId).subscribe((value) => {
-        console.log('reach ', value);
-        this.utils.showSnackBar('Design request has been assigned to' + ' ' + value.name + ' ' + 'successfully');
-        this.dismissBottomSheet();
-        this.showBottomDraw = false;
-        this.utils.setHomepageDesignRefresh(true);
+      
+     
+      var designstarttime = new Date();
+    var additonalhours = 0;
+    if(this.designerData.requesttype == "prelim"){
+      additonalhours = this.selectedDesigner.jobcount * 2;
+      designstarttime.setHours( designstarttime.getHours() + additonalhours );
+    }else{
+      additonalhours = this.selectedDesigner.jobcount * 6;
+      designstarttime.setHours( designstarttime.getHours() + additonalhours );
+    }
+    var postData = {};
+    if (this.designerData.createdby.id == this.userData.id) {
+      if (this.selectedDesigner.company == this.userData.company) {
+        postData = {
+          designassignedto: this.selectedDesigner.id,
+          isoutsourced: "false",
+          status: "designassigned",
+          designstarttime: designstarttime
+        };
+      } else {
+        postData = {
+          outsourcedto: this.selectedDesigner.id,
+          isoutsourced: "true",
+          status: "outsourced"
+        };
+      }
+    } else {
+      postData = {
+        designassignedto: this.selectedDesigner.id,
+        status: "designassigned",
+        designstarttime: designstarttime
+      };
+    }
+    this.utils.showLoading('Please Wait').then(()=>{
+      this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
+        this.utils.hideLoading().then(()=>{
+          debugger; 
+          console.log('reach ', value);
+          this.utils.showSnackBar('Design request has been assigned to' + ' ' + value.name + ' ' + 'successfully');
+          this.dismissBottomSheet();
+          this.showBottomDraw = false;
+          this.utils.setHomepageDesignRefresh(true);
+        })
       }, (error) => {
+        this.utils.hideLoading();
         this.dismissBottomSheet();
         this.showBottomDraw = false;
       });
+    })
     }
 
   }
 
-  openDesigners(id: number) {
+  openDesigners(id: number,designData) {
+    console.log(designData);
+    this.designerData = designData;
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
         this.apiService.getDesigners().subscribe(assignees => {
@@ -488,6 +536,11 @@ pending(value){
   }else{
     value= "requesttype=prelim&status=created&status=outsourced&status=requestaccepted"
   }
+}
+
+getassignedata(asssignedata){
+  this.selectedDesigner = asssignedata;
+  
 }
 
 

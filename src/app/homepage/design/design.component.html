@@ -69,7 +69,7 @@
                         </ion-row>
                         <ion-row class="ion-no-margin ion-no-margin">
                             <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined'">
-                                <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
                                 >Assign</span>
                                 <span style="float: right;">
 
@@ -127,7 +127,7 @@
         <ion-grid class="drawer">
             <ion-row>
                 <ion-col size="12">
-                    <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
+                    <app-user-selector (assigneeData)=getassignedata($event) placeholder="assign" [assignees]="listOfAssignees"
                                        formControlName="assignedto"></app-user-selector>
                 </ion-col>
             </ion-row>

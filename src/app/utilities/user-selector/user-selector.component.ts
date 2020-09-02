@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { AssigneeModel } from '../../model/assignee.model';
 
@@ -24,8 +24,10 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
   @Input() assignees: AssigneeModel[] = [];
   @Input() placeholder = 'assign to';
   @Input() required = false;
+  @Output() assigneeData = new EventEmitter<AssigneeModel>();
   private onChange: (assignee: number) => void;
   selectedUserId = null;
+  // assignee: AssigneeModel;
 
   constructor() {
   }
@@ -59,14 +61,18 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
   }
 
   selectAssignee(assignee: AssigneeModel) {
+    this.assigneeData.emit(assignee);
     this.assignees.forEach((item) => {
       item.selected = false;
+     
     });
     if (assignee.id === this.selectedUserId) {
       this.selectedUserId = null;
       this.onChange(null);
     } else {
       assignee.selected = true;
+      console.log(assignee);
+      
       this.selectedUserId = assignee.id;
       this.onChange(assignee.id);
     }

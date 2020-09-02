@@ -50,7 +50,8 @@
                                     <ion-input type="password" class="password_input" [type]="getType()" placeholder="your password" formControlName="password">
                                     </ion-input>
                                     <div class="eye_box">
-                                        <ion-icon name="eye" (click)="toggleTextPassword()" slot="end"></ion-icon>
+                                        <ion-icon name="eye" *ngIf="!this.isActiveToggleTextPassword" (click)="toggleTextPassword()" slot="end"></ion-icon>
+                                        <ion-icon name="eye-off" *ngIf="this.isActiveToggleTextPassword" (click)="toggleTextPassword()" slot="end"></ion-icon>
                                     </div>
                                 </div>
                                 <div class="error_div">

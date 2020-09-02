@@ -58,6 +58,8 @@ export class SurveyDataModel {
   formattedjobtype : string;
   solarpanelsimages:Image[];
   lateby:any;
+  city:string;
+  state:string;
 }
 
 

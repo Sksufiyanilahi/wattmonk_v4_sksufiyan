@@ -36,8 +36,12 @@ export class NewsurveysComponent implements OnInit {
     private utils: UtilitiesService,
     private storage: Storage,
     private apiService: ApiService) {
-    const latestDate = new Date();
-    this.today = datePipe.transform(latestDate, 'M/dd/yy');
+      
+    }
+    
+    ngOnInit() {
+      const latestDate = new Date();
+    this.today = this.datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
     this.apiService._OnMessageReceivedSubject.subscribe((r) => {
       console.log('message received! ', r);
@@ -45,14 +49,9 @@ export class NewsurveysComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
- console.log("ngoninit"); 
-  }
 
-
-  ionViewDidEnter(event){
+  ionViewDidEnter(){
     
-    this.getSurveys(event);
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
       this.getSurveys(null);
     });
@@ -76,24 +75,29 @@ export class NewsurveysComponent implements OnInit {
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
-      this.apiService.getSurveyorSurveys("status=surveyassigned&status=surveyinprocess").subscribe(response => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
-          this.formatSurveyData(response);
-          if (event !== null) {
-            event.target.complete();
-          }
-        });
-      }, responseError => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          if (event !== null) {
-            event.target.complete();
-          }
-          const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      this.utils.showLoading('Getting Surveys').then(()=>{
+        this.apiService.getSurveyorSurveys("status=surveyassigned&status=surveyinprocess").subscribe(response => {
+          this.utils.hideLoading().then(()=>{
+            this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+              console.log(response);
+              this.formatSurveyData(response);
+              if (event !== null) {
+                event.target.complete();
+              }
+            });
+          })
+        }, responseError => {
+          this.utils.hideLoading();
+          this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+            if (event !== null) {
+              event.target.complete();
+            }
+            const error: ErrorModel = responseError.error;
+            this.utils.errorSnackBar(error.message[0].messages[0].message);
+          });
         });
       });
-    });
+      })
   }
 
   openAddressOnMap(address: string) {
@@ -102,36 +106,39 @@ export class NewsurveysComponent implements OnInit {
 
   formatSurveyData(records : SurveyDataModel[]){
     this.listOfSurveyData = this.fillinDynamicData(records);
-    console.log(this.listOfSurveyData);
     
     const tempData: SurveyDataHelper[] = [];
           this.listOfSurveyData.forEach((surveyItem,i) => {
+            this.sDatePassed(surveyItem.datetime,i);
+            surveyItem.lateby = this.overdue;
             if (tempData.length === 0) {
-              this.sDatePassed(surveyItem.datetime,i);
               const listOfSurvey = new SurveyDataHelper();
-              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
-              surveyItem.lateby = this.overdue;
+              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
               listOfSurvey.listOfSurveys.push(surveyItem);
               tempData.push(listOfSurvey);
+              console.log(tempData);
+              
             } else {
               let added = false;
               tempData.forEach((surveyList) => {
                 if (!added) {
-                  this.sDatePassed(surveyItem.datetime,i);
-                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/d/yy')) {
+                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/dd/yy')) {
                     surveyList.listOfSurveys.push(surveyItem);
-                    this.sDatePassed(surveyItem.datetime,i);
                     added = true;
+                    console.log(surveyList.listOfSurveys);
+                    
                   }
                 }
               });
               if (!added) {
+              
                 const listOfSurvey = new SurveyDataHelper();
-                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
-                listOfSurvey.lateby = this.overdue;
+                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
                 listOfSurvey.listOfSurveys.push(surveyItem);
                 tempData.push(listOfSurvey);
                 added = true;
+                console.log(tempData);
+                
               }
             }
           });
@@ -164,6 +171,7 @@ export class NewsurveysComponent implements OnInit {
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
+    debugger;
     console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
     
   }
