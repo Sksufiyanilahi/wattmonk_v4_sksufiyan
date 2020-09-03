@@ -16,6 +16,7 @@ import { StorageService } from 'src/app/storage.service';
 import { ROLES } from 'src/app/contants';
 import {Storage} from '@ionic/storage';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-survey',
@@ -41,6 +42,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   routeSubscription: Subscription;
   filterDataArray: SurveyDataModel[];
   segments:any='status=created&status=outsourced&status=requestaccepted';
+  overdue: number;
 
   constructor(
     private utils: UtilitiesService,
@@ -78,9 +80,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     });
   }
 
-  ionViewDidEnter(event) {
-    this.getSurveys(event);
-   
+  ionViewDidEnter() {
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
       this.getSurveys(null);
     });
@@ -148,7 +148,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     if (event != null && event !== undefined) {
       showLoader = false;
     }
-    this.fetchPendingSurveys(event);
+    this.fetchPendingSurveys(event,showLoader);
   }
 
   fetchPendingSurveys(event?, showLoader?: boolean) {
@@ -213,17 +213,19 @@ export class SurveyComponent implements OnInit, OnDestroy {
     console.log(this.listOfSurveyData);
     
     const tempData: SurveyDataHelper[] = [];
-          this.listOfSurveyData.forEach((surveyItem) => {
+          this.listOfSurveyData.forEach((surveyItem,i) => {
+            this.sDatePassed(surveyItem.datetime,i);
+            surveyItem.lateby = this.overdue;
             if (tempData.length === 0) {
               const listOfSurvey = new SurveyDataHelper();
-              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
               listOfSurvey.listOfSurveys.push(surveyItem);
               tempData.push(listOfSurvey);
             } else {
               let added = false;
               tempData.forEach((surveyList) => {
                 if (!added) {
-                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/d/yy')) {
+                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/dd/yy')) {
                     surveyList.listOfSurveys.push(surveyItem);
                     added = true;
                   }
@@ -231,7 +233,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
               });
               if (!added) {
                 const listOfSurvey = new SurveyDataHelper();
-                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
                 listOfSurvey.listOfSurveys.push(surveyItem);
                 tempData.push(listOfSurvey);
                 added = true;
@@ -241,7 +243,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
-            return dateA - dateB;
+            return dateB - dateA;
           });
           this.cdr.detectChanges();
   }
@@ -427,6 +429,16 @@ export class SurveyComponent implements OnInit, OnDestroy {
   //     this.getSurvey(event, showLoader);
   //   }
   // }
+
+  sDatePassed(datestring: any,i){
+    var checkdate = moment(datestring, "YYYYMMDD");
+    var todaydate = moment(new Date(), "YYYYMMDD");
+    var lateby = todaydate.diff(checkdate, "days");
+    this.overdue = lateby;  
+    debugger;
+    console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
+    
+  }
 
 }
 

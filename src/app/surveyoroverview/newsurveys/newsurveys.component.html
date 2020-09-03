@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content [scrollEvents]="true">
   <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull down to refresh" refreshingSpinner="lines"></ion-refresher-content>
   </ion-refresher>

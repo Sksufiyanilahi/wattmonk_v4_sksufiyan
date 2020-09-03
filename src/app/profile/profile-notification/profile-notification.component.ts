@@ -8,7 +8,7 @@ import { UtilitiesService } from 'src/app/utilities.service';
   styleUrls: ['./profile-notification.component.scss'],
 })
 export class ProfileNotificationComponent implements OnInit {
-  notification: Object;
+  notification: any=[];
   showLoader:boolean= false;
 
   constructor(
@@ -27,6 +27,7 @@ export class ProfileNotificationComponent implements OnInit {
             this.notification = res;
             this.showLoader=true;
             console.log(this.notification);
+          
         })
 
     }
