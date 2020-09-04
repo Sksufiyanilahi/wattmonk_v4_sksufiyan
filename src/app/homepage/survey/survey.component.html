@@ -21,7 +21,7 @@
     </ion-refresher>
     
        
-            <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0" style="margin-top: 40px;">
+            <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
                 <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
                     <ion-col size="12" class="ion-margin-top">
                             <span class="ion-padding" *ngIf="today === item.date">
@@ -61,7 +61,7 @@
                                 </ion-row>
                             <ion-row class="ion-no-margin">
                                 <ion-col></ion-col>
-                                <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date">
+                                <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type !=='wattmonkadmins'">
                                          <ion-button  class="ion-no-margin ion-no-padding" fill="clear" 
                                          [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                          routerDirection="forward">
@@ -73,10 +73,19 @@
                         <ion-col *ngIf="segments=='status=created&status=outsourced&status=requestaccepted'" size="auto" class="ion-no-margin ion-no-padding">
                                     <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
                         >Assign</span>
-                        <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
+                        <!-- <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
                         >Decline</span>
                         <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
-                        >Accept</span>
+                        >Accept</span> -->
+                        <span style="float: right;">
+
+                            <ion-col size="8"  *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)">
+                               Accept
+                            </ion-col>
+                            <ion-col size="4" *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)">
+                            Decline
+                            </ion-col>
+                        </span>
                         <span *ngIf="surveyData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
                         >Reassign</span>
                         </ion-col>

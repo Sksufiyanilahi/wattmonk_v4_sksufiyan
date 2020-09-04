@@ -43,6 +43,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   filterDataArray: SurveyDataModel[];
   segments:any='status=created&status=outsourced&status=requestaccepted';
   overdue: number;
+  userData: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
   constructor(
     private utils: UtilitiesService,
@@ -54,7 +55,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute,
-    private storage: Storage
+    private storage: Storage,
+    private storageService:StorageService
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -82,11 +84,13 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
   ionViewDidEnter() {
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+      debugger;
       this.getSurveys(null);
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+        debugger;
         this.formatSurveyData(this.listOfSurveyData);
       }
     });
@@ -95,6 +99,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.userData = this.storageService.getUser();
+    console.log(this.userData);
+    
     // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
     //   this.getSurvey();
     // });
