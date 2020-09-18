@@ -16,9 +16,9 @@
             <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name" [routerLink]="['/design-details/',designData.id]"
                       routerDirection="forward">{{designData.name}}
-                      <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
+                      <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
                         {{designData.deliverydate | date: 'hh:mm a'}}
-                    </span>
+                    </span> -->
                     <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'">In Review</span>
                     <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
             </p>
@@ -29,7 +29,7 @@
                 <span class="customer-address z-100"
                       (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
 
-                <ion-row style="margin-bottom: 8px;">
+                <ion-row style="margin-bottom: 8px;" [routerLink]="['/design-details/',designData.id]" >
                     <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
                     <span class="chipdetail" style="background-color: #95afc0;" >{{designData.formattedjobtype}}</span>
                       <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'">Failed</span>

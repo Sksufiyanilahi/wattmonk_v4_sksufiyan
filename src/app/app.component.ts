@@ -10,6 +10,7 @@ import { UtilitiesService } from './utilities.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_APP_ID, COMET_CHAT_REGION } from './model/constants';
 import { Firebase } from '@ionic-native/firebase/ngx';
+import { NetworkdetectService } from './networkdetect.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,8 @@ import { Firebase } from '@ionic-native/firebase/ngx';
 })
 export class AppComponent {
   user: any;
+  public onlineOffline: boolean = navigator.onLine;
+  netSwitch: boolean;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -27,27 +30,61 @@ export class AppComponent {
     // private fcm: FCM,
     private apiservice: ApiService,
     private utilitiesService: UtilitiesService,
-    private firebase: Firebase
+    private firebase: Firebase,
+    private utilities:UtilitiesService,
+    private network:NetworkdetectService
   ) {
     this.initializeApp();
+    if (!navigator.onLine) {
+      // this.utilities.showSnackBar('No internet connection');
+      //Do task when no internet connection
+      }
+      window.addEventListener('online', () => {
+        //Do task when internet connection returns
+        });
+
+        window.addEventListener('offline', () => {
+          //Do task when no internet connection
+          setTimeout(()=>{
+            this.utilities.errorSnackBar('No internet connection');
+          },2000)
+          });
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
+      setTimeout(()=>{
+        this.splashScreen.hide();
+      },1000)
+      this.getFcmToken();
       if(this.platform.is('ios')){
         this.statusBar.overlaysWebView(false);
-        // this.statusBar.styleDefault();
-        this.statusBar.backgroundColorByHexString("#666666");
-      }else if(this.platform.is('android')){
+        this.statusBar.backgroundColorByHexString("#fffff");
         this.statusBar.styleDefault();
+      }else if(this.platform.is('android')){
+        this.statusBar.overlaysWebView(false);
+        this.statusBar.styleDefault();
+        this.statusBar.backgroundColorByHexString("#fffff");
         this.statusBar.styleLightContent();
       }else{
       }
-      this.splashScreen.hide();
-      this.getFcmToken();
+      
       this.getNotification();
       this.setupCometChat();
     });
+  
+  }
+
+  ngOnInit() {
+    this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      console.log(this.netSwitch);
+      
+    })
+
+this.network.networkDisconnect();
+this.network.networkConnect();
+ 
     if (this.storageService.isUserPresent()) {
       this.apiservice.refreshHeader();
       this.user= JSON.parse(localStorage.getItem('user'));
@@ -60,9 +97,11 @@ export class AppComponent {
           this.navController.navigateRoot('homepage');
         }
     }
+    
   }
 
   getFcmToken() {
+    debugger;
   this.firebase.getToken()
   .then(token => {
     console.log(`The token is ${token}`)

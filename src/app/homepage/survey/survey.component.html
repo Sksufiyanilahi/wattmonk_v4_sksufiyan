@@ -52,9 +52,9 @@
                 </p>
                             <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
                                 <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
-                            <span class="customer-address z-100"
+                            <span class="customer-address z-100 m-0"
                                   (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
-                                  <ion-row style="margin-bottom: 8px;"  [routerLink]="['/survey-detail/',surveyData.id]">
+                                  <ion-row style="margin-bottom: 8px;"  [routerLink]="['/survey-detail/',surveyData.id]" class="m-0">
                                     <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
                                     <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
                                    
@@ -62,7 +62,7 @@
                             <ion-row class="ion-no-margin">
                                 <ion-col></ion-col>
                                 <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type !=='wattmonkadmins'">
-                                         <ion-button  class="ion-no-margin ion-no-padding" fill="clear" 
+                                         <ion-button  class="ion-no-margin ion-no-padding z-100" fill="clear" 
                                          [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                          routerDirection="forward">
                                          Start Survey
@@ -70,8 +70,8 @@
                                     <!-- <span class="ion-text-end action-button-color" >Start Survey</span> -->
                                 </ion-col>
                         <!-- <ion-col></ion-col> -->
-                        <ion-col *ngIf="segments=='status=created&status=outsourced&status=requestaccepted'" size="auto" class="ion-no-margin ion-no-padding">
-                                    <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
+                        <ion-col *ngIf="segments=='status=created&status=outsourced&status=requestaccepted'" size="auto" class="ion-no-margin ion-no-padding" style="margin-bottom: 5px;">
+                                    <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)"
                         >Assign</span>
                         <!-- <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
                         >Decline</span>
@@ -79,28 +79,28 @@
                         >Accept</span> -->
                         <span style="float: right;">
 
-                            <ion-col size="8"  *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)">
+                            <ion-col size="8"  *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)">
                                Accept
                             </ion-col>
-                            <ion-col size="4" *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)">
+                            <ion-col size="4" *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)">
                             Decline
                             </ion-col>
                         </span>
-                        <span *ngIf="surveyData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
+                        <span *ngIf="surveyData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)"
                         >Reassign</span>
                         </ion-col>
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
-                                    *ngIf="segments=='status=surveycompleted'">
-                            <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" class="ion-text-end action-button-color"
+                                    *ngIf="segments=='status=surveycompleted'" style="margin-bottom: 5px;">
+                            <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" class="ion-text-end action-button-color z-100"
                                     (click)="openSurveyors(surveyData.id)">Assign Review</span>
                         </ion-col>
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
                                     *ngIf="surveyData.status == 'reviewpassed'">
-                            <span class="ion-text-end action-button-color"
+                            <span class="ion-text-end action-button-color z-100"
                                     (click)="openSurveyors(surveyData.id)">Deliver</span>
                         </ion-col>
                     </ion-row>
-                    <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
+                    <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
                             <!-- <span class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                                 {{surveyData.datetime | date: 'hh:mm a'}}
                             </span> -->
@@ -116,6 +116,9 @@
             </ion-grid>
         
             <div *ngIf="listOfSurveyDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+                <div *ngIf="!netSwitch">
+                    No internet Connection
+                </div>
                 <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
             </div>
    
@@ -132,9 +135,9 @@
                                        formControlName="assignedto"></app-user-selector>
                 </ion-col>
             </ion-row>
-            <ion-row>
-                <ion-col size="auto">
-                    <ion-button class="buttom-drawer-button" (click)="assignToSurveyor()">
+            <ion-row style="justify-content: flex-end;">
+                <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
+                    <ion-button class="buttom-drawer-button"  fill="clear" (click)="assignToSurveyor()" >
                         Confirm
                     </ion-button>
                 </ion-col>

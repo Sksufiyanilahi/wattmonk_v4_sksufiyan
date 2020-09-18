@@ -1,5 +1,5 @@
-<ion-content>
-    <ion-grid>
+<!-- <ion-content scroll="false"> -->
+    <!-- <ion-grid style="overflow:hidden;" scroll="false"> -->
         <ion-row class="ion-align-items-center ion-padding-start">
             <ion-col>
                 <h1 class="ion-no-padding ion-no-margin" *ngIf="!tabsDisabled">Schedule</h1>
@@ -35,9 +35,9 @@
                 </span>
             </ion-col>
         </ion-row> -->
-    </ion-grid>
+    <!-- </ion-grid> -->
 
-    <ion-grid class="ion-margin-start ion-margin-end">
+    <!-- <ion-grid class="ion-margin-start ion-margin-end" style="overflow:hidden;" scroll="false"> -->
         <ion-segment mode="ios" class="segments" (ionChange)="segmentChanged($event)" [value]="currentTab"
             [disabled]="tabsDisabled">
             <ion-segment-button value="design">
@@ -47,10 +47,10 @@
                 <ion-label>Survey</ion-label>
             </ion-segment-button>
         </ion-segment>
-    </ion-grid>
-    <ion-content>
-        <ion-tabs #tabs>
-            <ion-tab-bar slot="top" style="display:none;">
+    <!-- </ion-grid> -->
+    <ion-content style="overflow:hidden" scroll="false" >
+        <ion-tabs #tabs tyle="overflow:hidden">
+            <ion-tab-bar slot="top" style="display:none;" >
                 <ion-tab-button tab="design">
                     <ion-label>Design</ion-label>
                 </ion-tab-button>
@@ -60,7 +60,7 @@
                 </ion-tab-button>
             </ion-tab-bar>
         </ion-tabs>
-        <ion-grid>
+        <ion-grid style="margin-top:10px">
             <ion-row class="ion-padding-start ion-padding-end mrT">
                 <ion-col *ngIf="address == ''" size="9">
                     <!-- <span class="address-text"> -->
@@ -82,7 +82,7 @@
 
         </ion-grid>
     </ion-content>
-</ion-content>
+<!-- </ion-content> -->
 
 <ion-footer class="ion-no-border white-bg">
     <ion-grid *ngIf="currentTab === 'design'">
@@ -99,7 +99,7 @@
                 <ion-button class="action-button-color" fill="clear" (click)="saveSurveyForm()">Done</ion-button>
             </ion-col>
             <ion-col></ion-col>
-            <ion-col size="auto">
+            <ion-col size="auto" *ngIf="userdata.role.type !=='wattmonkadmins'">
                 <ion-button class="action-button-color" fill="clear" (click)="startSurvey()">Start Survey</ion-button>
             </ion-col>
         </ion-row>

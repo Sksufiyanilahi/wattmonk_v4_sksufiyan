@@ -68,7 +68,7 @@
                             </ion-col>
                         </ion-row>
                         <ion-row class="ion-no-margin ion-no-margin">
-                            <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined'">
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
                                 <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
                                 >Assign</span>
                                 <span style="float: right;">
@@ -87,7 +87,7 @@
 
 
                             <ion-col *ngIf="segments=='requesttype=prelim&status=designcompleted'">
-                                <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
                                 >Assign Review</span>
                             </ion-col>
                             <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
@@ -101,7 +101,7 @@
                                 </ion-button>
                             </ion-col> -->
                         </ion-row>
-                        <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
+                        <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
                           <!-- <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
                                 {{designData.deliverydate | date: 'hh:mm a'}}
                            
@@ -111,13 +111,19 @@
             </ion-row>
             <ion-row>
                 <ion-col size="12" style="height: 100px;">
+                
                 </ion-col>
             </ion-row>
         </ion-grid>
-        
-        <div *ngIf="listOfDesignsHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+       
+        <div *ngIf="listOfDesignsHelper.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
+                <div *ngIf="!netSwitch">
+                    No internet Connection
+                </div>
+                
             <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
         </div>
+       
 
 </ion-content>
 
@@ -142,8 +148,13 @@
             </ion-row>
             <ion-row style="justify-content: flex-end;">
                 <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
-                    <ion-button class="buttom-drawer-button" (click)="assignToDesigner()">
+                    <ion-button class="buttom-drawer-button" fill="clear" (click)="assignToDesigner()">
                         Confirm
+                    </ion-button>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
+                        Cancel
                     </ion-button>
                 </ion-col>
             </ion-row>
@@ -152,4 +163,4 @@
 
 </ion-bottom-drawer>
 
-<router-outlet></router-outlet>
+<!-- <router-outlet></router-outlet> -->

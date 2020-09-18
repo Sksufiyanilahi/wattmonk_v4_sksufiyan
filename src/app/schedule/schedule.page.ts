@@ -5,10 +5,12 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd, RoutesRecognized, NavigationStart } from '@angular/router';
 import { ScheduleFormEvent } from '../model/constants';
 import { Subscription } from 'rxjs';
 import { AddressModel } from '../model/address.model';
+import { filter, pairwise } from 'rxjs/operators';
+import { User } from '../model/user.model';
 
 @Component({
   selector: 'app-schedule',
@@ -33,6 +35,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   locationAllowed = false;
   gpsActive = false;
   private subscription: Subscription;
+  userdata:any;
 
   constructor(
     private navController: NavController,
@@ -44,8 +47,11 @@ export class SchedulePage implements OnInit, OnDestroy {
     private utilities: UtilitiesService,
     private router: Router,
     private alertController: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
   ) {
+  
+    
+      
     const url = this.router.url;
     const splittedUrl = url.split('/');
     console.log(splittedUrl);
@@ -54,7 +60,9 @@ export class SchedulePage implements OnInit, OnDestroy {
 
   }
 
- async ngOnInit() {
+ngOnInit() {
+   debugger;
+   this.userdata = this.storage.getUser();
     this.requestLocationPermission();
     if (this.tabsDisabled) {
       this.subscription = this.utilities.getStaticAddress().subscribe((address) => {
@@ -63,6 +71,7 @@ export class SchedulePage implements OnInit, OnDestroy {
       });
     } else {
       // await this.getGeoLocation();
+      debugger;
       this.subscription = this.utilities.getAddressObservable().subscribe((address) => {
         console.log(address);
         this.address = address.address;
@@ -89,20 +98,32 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
   getGeoLocation() {
-    this.utilities.showLoading('Getting Location');
-    this.geolocation.getCurrentPosition().then((resp) => {
-      console.log('resp',resp);
+    debugger;
+    this.utilities.showLoading('Getting Location').then(()=>{
+          setTimeout(()=>{
+            this.utilities.hideLoading();
+          },1000)
+      this.geolocation.getCurrentPosition().then((resp) => {
+        this.utilities.hideLoading();
+        // .then(()=>{
+          console.log('resp',resp);
+          this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
+          this.utilities.hideLoading();
+        // });
+      }).catch((error) => {
+        this.utilities.hideLoading();
+        this.utilities.errorSnackBar('Unable to get location');
+        
+        console.log('Error getting location', error);
+        this.showNoLocation();
+      });
+    },err=>{
       this.utilities.hideLoading();
-      this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
-    }).catch((error) => {
-      this.utilities.errorSnackBar('Unable to get location');
-      
-      console.log('Error getting location', error);
-      this.showNoLocation();
     });
   }
 
   async  showNoLocation() {
+    debugger;
     const toast = await this.toastController.create({
       header: 'Error',
       message: 'Unable to get location',
@@ -140,10 +161,12 @@ export class SchedulePage implements OnInit, OnDestroy {
 
 
   getGeoEncoder(latitude, longitude) {
-    this.utilities.hideLoading().then((success) => {
-        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
-          .then((result: NativeGeocoderResult[]) => {
-            console.log(result);
+    debugger;
+    // this.utilities.hideLoading().then((success) => {
+      this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+      .then((result: NativeGeocoderResult[]) => {
+        console.log(result);
+        this.utilities.hideLoading();
             const address: AddressModel = {
               address: this.generateAddress(result[0]),
               lat: latitude,
@@ -157,12 +180,13 @@ export class SchedulePage implements OnInit, OnDestroy {
           })
           .catch((error: any) => {
             this.showNoLocation();
+            this.utilities.hideLoading();
             alert('Error getting location' + JSON.stringify(error));
           });
-      }, (error) => {
+      // }, (error) => {
 
-      }
-    );
+      // }
+    // );
   }
 
   generateAddress(addressObj) {
@@ -181,6 +205,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
   requestLocationPermission() {
+    debugger;
     this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
       console.log(mode);
       switch (mode) {
@@ -252,6 +277,7 @@ export class SchedulePage implements OnInit, OnDestroy {
       this.getGeoLocation();
     } else {
       this.diagnostic.isGpsLocationEnabled().then((status) => {
+        debugger;
         if (status === true) {
           this.getGeoLocation();
           // this.utilities.showLoading('Getting Location').then(() => {
@@ -288,7 +314,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
   changeLocationSettings() {
-
+    debugger;
     this.diagnostic.switchToLocationSettings();
     this.diagnostic.registerLocationStateChangeHandler((state) => {
       if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) ||

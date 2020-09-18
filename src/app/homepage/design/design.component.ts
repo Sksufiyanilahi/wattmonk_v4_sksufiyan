@@ -4,17 +4,19 @@ import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subscription,BehaviorSubject } from 'rxjs';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DrawerState } from 'ion-bottom-drawer';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from '../../model/assignee.model';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
 import {Storage} from '@ionic/storage';
 import { ModalController } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
+import { NetworkdetectService } from 'src/app/networkdetect.service';
+
 
 @Component({
   selector: 'app-design',
@@ -22,8 +24,6 @@ import { StorageService } from 'src/app/storage.service';
   styleUrls: ['./design.component.scss'],
 })
 export class DesignComponent implements OnInit, OnDestroy {
-
-
 
   listOfDesignDataHelper: DesginDataHelper[] = [];
   listOfDesignsData: DesginDataModel[] = [];
@@ -42,7 +42,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   showBottomDraw: boolean = false;
   roleType: any;
   myFiles: string[] = [];  
-  segments:any='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
+  segments:any='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
   listOfDesigns: DesginDataModel[];
   private DesignRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
@@ -53,6 +53,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   designerData: any;
   assigneeData: any;
   selectedDesigner: any;
+  netSwitch: boolean;
 
   constructor(
     private utils: UtilitiesService,
@@ -65,7 +66,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     public modalController: ModalController,
-    private storageService:StorageService
+    private storageService:StorageService,
+    private network:NetworkdetectService
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -79,9 +81,18 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
-    // this.routeSubscription.unsubscribe();
+    this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      console.log(this.netSwitch);
+      
+    })
+
+this.network.networkDisconnect();
+this.network.networkConnect();
     
   }
+
+
   segmentChanged(event){
     debugger;
     console.log((event.target.value));
@@ -138,6 +149,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   getDesigns(event: CustomEvent) {
+    debugger;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -413,7 +425,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         designstarttime: designstarttime
       };
     }
-    this.utils.showLoading('Please Wait').then(()=>{
+    this.utils.showLoading('Assigning').then(()=>{
       this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
         this.utils.hideLoading().then(()=>{
           debugger; 

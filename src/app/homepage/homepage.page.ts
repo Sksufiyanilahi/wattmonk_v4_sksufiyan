@@ -14,6 +14,7 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
 import { ROLES } from '../contants';
+import { NetworkdetectService } from '../networkdetect.service';
 
 @Component({
   selector: 'app-homepage',
@@ -47,6 +48,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   drawerState = DrawerState.Docked;
   name: any;
   userRole: any;
+  netSwitch: any;
 
   constructor(
     private utilities: UtilitiesService,
@@ -59,9 +61,11 @@ export class HomepagePage implements OnInit, OnDestroy {
     private alertController: AlertController,
     private geolocation: Geolocation,
     private toastController: ToastController,
-    public route: Router
+    public route: Router,
+    private network:NetworkdetectService
   ) {
     // this.initializeItems();
+    this.scheduledPage();
   }
 
   ngOnInit() {
@@ -370,6 +374,14 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
+    this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      console.log(this.netSwitch);
+      
+    })
+
+this.network.networkDisconnect();
+this.network.networkConnect();
     this.subscription = this.platform.backButton.subscribe(() => {
       if (this.showSearchBar === true) {
         this.showSearchBar = false;
@@ -382,6 +394,14 @@ export class HomepagePage implements OnInit, OnDestroy {
   ionViewWillLeave() {
     this.subscription.unsubscribe();
 
+  }
+  scheduledPage(){
+    debugger;
+    if(this.route.url=='/homepage/design'){
+      this.route.navigate(['/schedule/design'])
+    }else{
+      this.route.navigate(['/schedule/survey'])
+    }
   }
 
   showHom() {

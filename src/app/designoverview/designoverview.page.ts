@@ -5,6 +5,7 @@ import { COMET_CHAT_AUTH_KEY, COMET_CHAT_APP_ID, COMET_CHAT_REGION } from '../mo
 import { ApiService } from '../api.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { TokenType } from '@angular/compiler/src/ml_parser/lexer';
 
 @Component({
   selector: 'app-designoverview',
@@ -49,7 +50,15 @@ export class DesignoverviewPage implements OnInit {
   }
 
   updateUserPushToken(){
-    this.apiService.updateUser(this.storage.getUserID(), {"pushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
+    debugger;
+  let token=   localStorage.getItem('pushtoken');
+  console.log(token);
+  let userid= this.storage.getUserID();
+  let tokendata={
+    pushtokens:token
+  }
+    this.apiService.updateUser(userid, {"pushtokens":token}).subscribe((data) => {
+      debugger;
     console.log(data, "fcm data");
     
     }, (error) => {

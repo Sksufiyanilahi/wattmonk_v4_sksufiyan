@@ -20,13 +20,13 @@
                     </ion-row>
                 </ion-grid>
             </ion-col>
-            <ion-col size="1" *ngIf="design.status !='requestaccepted'">
+            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer'">
                 <ion-button fill="clear" size="small" class="ion-no-padding"
                     [routerLink]="['/schedule/design/',designId]" routerDirection="forward">
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
-            <ion-col size="1" *ngIf="design.status !='requestaccepted'" style="float:right">
+            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer'" style="float:right">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()">
                     <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
                 </ion-button>
@@ -165,14 +165,14 @@
         </ion-row>
 
         <ion-row *ngIf="design.comments || design.comments !==null  " class="ion-no-padding ion-margin-top">
-            <ion-col size="6" class="ion-no-padding">
+            <ion-col size="6">
                 <span class="models font">comments</span>
             </ion-col>
             <!-- <div> -->
 
             <ion-col size="6" *ngFor="let comment of design.comments" class="ion-no-padding">
-                <p class="comment" style="text-align: right;">{{comment?.message}}</p>
-                <p class="comment-by" style="text-align: right;">Posted by {{comment.createdby?.firstname}}
+                <p class="comment font" style="text-align: right;margin:0px">{{comment?.message}}</p>
+                <p class="comment-by" style="text-align: right;margin-top:0px">Posted by {{comment.createdby?.firstname}}
                     {{comment.createdby?.lastname}}</p>
             </ion-col>
             <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
@@ -189,24 +189,25 @@
                 <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
             </ion-col>
         </ion-row>
-        <ng-template *ngIf="user.role.type=='designer'">
+        <div *ngIf="user.role.type=='designer'">
 
             <ion-row *ngIf="(design.status=='designassigned' || design.status=='reviewfailed'); else showimageName">
                 <ion-col><span class="model-type font">Prelim Design</span></ion-col>
                 <ion-col size="auto" style="text-align: right !important;">
                     <input type="file" *ngIf="imageName.length==0"  (change)="prelimfiles($event)"/>
-                    <span class="model-name font" >{{imageName}}</span>
-                    <button *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()">Remove</button>
-                    <button *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')">Upload</button>
+                    <div class="model-name font flx" >{{imageName}}
+                    <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon>
+                    <ion-icon name="cloud-upload-outline" *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')" style="font-size: 20px;margin-left: 10px;color:green"></ion-icon>
+                </div>
                 </ion-col>
             </ion-row>
             <ng-template #showimageName>
                 <ion-col><span class="model-type font">Prelim Design</span></ion-col>
                 <ion-col size="auto">
-                    <span class="model-name font" (click)="showDesignImage()">{{imageName}}</span>
+                    <span class="model-name font" style="float:right" (click)="showDesignImage()">{{imageName}}</span>
                 </ion-col>
             </ng-template>
-        </ng-template>
+        </div>
 
         <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
             *ngIf="assigned">

@@ -16,12 +16,13 @@ import { AssigneeModel } from './model/assignee.model';
 import { SearchModel } from './model/search.model';
 import { BaseUrl } from './contants';
 import { GOOGLE_API_KEY } from './model/constants';
+import { UtilitiesService } from './utilities.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-
+  public onlineOffline: boolean = navigator.onLine;
   headers: HttpHeaders;
   uploadHeaders: HttpHeaders;
   private parentId = '';
@@ -30,8 +31,22 @@ export class ApiService {
   public _OnMessageReceivedSubject: Subject<string>;
   constructor(
     private http: HttpClient,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private utilities:UtilitiesService
   ) {
+    debugger;
+    if (!navigator.onLine) {
+      // this.utilities.showSnackBar('No internet connection');
+      //Do task when no internet connection
+      }
+      window.addEventListener('online', () => {
+        //Do task when internet connection returns
+        });
+
+        window.addEventListener('offline', () => {
+          //Do task when no internet connection
+          this.utilities.errorSnackBar('No internet connection');
+          });
     this.resetHeaders();
     this._OnMessageReceivedSubject = new Subject<string>();
   }

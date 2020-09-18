@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { UtilitiesService } from '../utilities.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DesginDataModel } from '../model/design.model';
 import { UserRoles } from '../model/constants';
 import { AssigneeModel } from '../model/assignee.model';
@@ -56,12 +56,14 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private toastController: ToastController,
     private imageCompress: NgxImageCompressService,
     private countdownservice: CountdownTimerService,
-    private iab: InAppBrowser
+    private iab: InAppBrowser,
+    private router:Router
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
       designassignedto: new FormControl('', [Validators.required]),
-      status: new FormControl('designassigned')
+      status: new FormControl('designassigned'),
+      comment:new FormControl('')
     });
   }
 
@@ -74,12 +76,11 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getDesignDetails();
-      this.getAssignees();
     });
      ​
   }
   showDesignImage(){
-    const browser = this.iab.create(this.design.prelimdesign.url);
+    const browser = this.iab.create(this.design.prelimdesign.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
 
 
@@ -118,6 +119,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   getDesignDetails() {
+    this.getAssignees();
+
     this.utilities.showLoading('Getting Design Details').then((success) => {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
@@ -265,18 +268,38 @@ let localUrl = event.target.result;
 }
 reader.readAsDataURL(event.target.files[0]);
 }
+ b64toBlob = (b64Data, contentType='', sliceSize=512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, {type: contentType});
+  return blob;
+}
 
 
   uploadpreliumdesign(designId?: number, key?: string){
     // const blob = this.utilities.getBlobFromImageData(this.prelimFiles);
     // console.log(blob);
-     let blob= this.utilities.b64toBlob(this.image);
-      console.log(blob);
+    //  let blob= this.utilities.b64toBlob(this.image);
+    //   console.log(blob);
       
     // console.log(typeof(this.prelimFiles[0]));
     const imageData = new FormData();
     for(var i=0; i< this.prelimFiles.length;i++){
-      imageData.append("files",blob,this.prelimFiles[i].name);
+      imageData.append("files",this.prelimFiles[i]);
       // if(i ==0){
         imageData.append('path', 'design/' + designId);
         imageData.append('refId', designId + '');
@@ -284,13 +307,20 @@ reader.readAsDataURL(event.target.files[0]);
         imageData.append('field', key);
       // }
     } 
-      this.utilities.showLoading('Uploading image').then(()=>{
+      this.utilities.showLoading('Uploading').then(()=>{
         this.apiService.uploaddesign(imageData).subscribe(res=>{
           this.utilities.hideLoading().then(()=>{
             console.log(res); 
             this.imagebox= false;
             // this.getDesignDetails();
+            this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res)=>{
+              this.utilities.getDesignDetailsRefresh();
+              console.log(res,">>");
+              
+            })
             this.navController.pop();
+            this.router.navigate(['designoverview/completeddesigns'])
+           
           })
         },err=>{
           this.utilities.hideLoading().then(()=>{

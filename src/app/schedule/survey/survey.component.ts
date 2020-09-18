@@ -158,7 +158,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.showSnackBar('Survey has been updated');
-              this.navController.pop();
+              this.navController.navigateRoot('homepage/survey');
               this.utilities.setSurveyDetailsRefresh(true);
             });
           });
@@ -177,8 +177,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
               this.utilities.hideLoading().then(() => {
                 modal.present();
                 modal.onWillDismiss().then((dismissed) => {
-                  this.navController.pop();
-                  // this.utilities.sethomepageSurveyRefresh(true);
+                  this.navController.navigateRoot('homepage/survey');
+                  this.utilities.sethomepageSurveyRefresh(true);
 
                 });
               });

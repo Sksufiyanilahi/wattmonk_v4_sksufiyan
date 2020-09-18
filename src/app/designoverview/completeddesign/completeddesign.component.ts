@@ -69,7 +69,7 @@ export class CompleteddesignComponent implements OnInit {
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("status=surveycompleted").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("status=designcompleted").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           this.formatDesignData(response);

@@ -26,6 +26,7 @@ import {
 import { INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../model/constants';
 import { Router } from '@angular/router';
 import { ROLES } from '../contants';
+import { NetworkdetectService } from '../networkdetect.service';
 
 @Component({
   selector: 'app-login',
@@ -41,6 +42,7 @@ export class LoginPage implements OnInit {
   emailError = INVALID_EMAIL_MESSAGE;
   fieldRequired = FIELD_REQUIRED;
   isLoggedInOnce = false;
+  netSwitch: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,6 +50,7 @@ export class LoginPage implements OnInit {
     private apiService: ApiService,
     private storageService: StorageService,
     private router: Router,
+    private network:NetworkdetectService,
     private navController: NavController) {
     this.isLoggedInOnce = this.storageService.isLoggedInOnce();
   }
@@ -62,62 +65,88 @@ export class LoginPage implements OnInit {
 
   }
 
+  ionViewDidEnter(){
+    this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      console.log(this.netSwitch);
+      
+    })
+
+this.network.networkDisconnect();
+this.network.networkConnect();
+  }
+
   login() {
-    console.log(this.loginForm);
-    if (this.loginForm.status === 'VALID') {
-      this.utils.showLoading('Logging In').then(() => {
-        this.apiService.login(this.loginForm.value).subscribe(response => {
-          this.utils.hideLoading().then(() => {
-            console.log('Res', response);
-            if (response.user.role.id == ROLES.Surveyor) {
-              this.storageService.setUserName(this.loginForm.get('identifier').value);
-              this.storageService.setPassword(this.loginForm.get('password').value);
-              this.storageService.setUser(response.user, response.jwt);
-              this.apiService.refreshHeader();
-              if (response.user.isdefaultpassword) {
-                this.navController.navigateRoot(['changepassword'])
-              } else {
-                // this.navController.navigateRoot(['homepage']);
-                this.navController.navigateRoot(['surveyoroverview']);
+    if(!this.netSwitch){
+      this.utils.errorSnackBar('No internet connection');
+    }else{
+      console.log(this.loginForm);
+      if (this.loginForm.status === 'VALID') {
+        this.utils.showLoading('Logging In').then(() => {
+          this.apiService.login(this.loginForm.value).subscribe(response => {
+            this.utils.hideLoading().then(() => {
+              console.log('Res', response);
+              if (response.user.role.id == ROLES.Surveyor) {
+                this.storageService.setUserName(this.loginForm.get('identifier').value);
+                this.storageService.setPassword(this.loginForm.get('password').value);
+                
+                // this.storageService.setUser(response.user, response.jwt);
+             
+                if (response.user.isdefaultpassword) {
+                  this.storageService.setJWTToken(response.jwt);
+                  this.apiService.refreshHeader();
+                  this.navController.navigateRoot(['changepassword'])
+                } else {
+                  this.storageService.setUser(response.user, response.jwt);
+                  this.apiService.refreshHeader();
+                  // this.navController.navigateRoot(['homepage']);
+                  this.navController.navigateRoot(['surveyoroverview']);
+                }
+              } else if(response.user.role.id == ROLES.Designer){
+                // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
+                this.storageService.setUserName(this.loginForm.get('identifier').value);
+                this.storageService.setPassword(this.loginForm.get('password').value);
+                
+                
+                if (response.user.isdefaultpassword) {
+                  this.storageService.setJWTToken(response.jwt);
+                  this.apiService.refreshHeader();
+                  this.navController.navigateRoot(['changepassword'])
+                } else {
+                  this.storageService.setUser(response.user, response.jwt);
+                  this.apiService.refreshHeader();
+                  this.navController.navigateRoot(['designoverview']);
+                }
+              }else{
+                 // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
+                 this.storageService.setUserName(this.loginForm.get('identifier').value);
+                 this.storageService.setPassword(this.loginForm.get('password').value);
+                 this.storageService.setUser(response.user, response.jwt);
+                 this.apiService.refreshHeader();
+                 if (response.user.isdefaultpassword) {
+                  this.storageService.setJWTToken(response.jwt);
+                  this.apiService.refreshHeader();
+                   this.navController.navigateRoot(['changepassword'])
+                 } else {
+                   this.navController.navigateRoot(['homepage']);
+                 }
               }
-            } else if(response.user.role.id == ROLES.Designer){
-              // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
-              this.storageService.setUserName(this.loginForm.get('identifier').value);
-              this.storageService.setPassword(this.loginForm.get('password').value);
-              this.storageService.setUser(response.user, response.jwt);
-              this.apiService.refreshHeader();
-              if (response.user.isdefaultpassword) {
-                this.navController.navigateRoot(['changepassword'])
-              } else {
-                this.navController.navigateRoot(['designoverview']);
-              }
-            }else{
-               // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
-               this.storageService.setUserName(this.loginForm.get('identifier').value);
-               this.storageService.setPassword(this.loginForm.get('password').value);
-               this.storageService.setUser(response.user, response.jwt);
-               this.apiService.refreshHeader();
-               if (response.user.isdefaultpassword) {
-                 this.navController.navigateRoot(['changepassword'])
-               } else {
-                 this.navController.navigateRoot(['homepage']);
-               }
-            }
+            });
+          }, responseError => {
+            this.utils.hideLoading().then(() => {
+              this.apiService.resetHeaders();
+              const error: ErrorModel = responseError.error;
+              // this.utils.errorSnackBar(error);
+              this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
+            });
+  
           });
-        }, responseError => {
-          this.utils.hideLoading().then(() => {
-            this.apiService.resetHeaders();
-            const error: ErrorModel = responseError.error;
-            // this.utils.errorSnackBar(error);
-            this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
-          });
-
         });
-      });
-
-    } else {
-      this.apiService.resetHeaders();
-      this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
+  
+      } else {
+        this.apiService.resetHeaders();
+        this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
+      }
     }
   }
 

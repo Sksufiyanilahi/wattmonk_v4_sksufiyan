@@ -22,6 +22,7 @@ import { Firebase } from '@ionic-native/firebase/ngx';
 import {NgxImageCompressService} from 'ngx-image-compress';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Network } from '@ionic-native/network/ngx';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -46,7 +47,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
     Firebase,
     NgxImageCompressService,
     Camera,
-    InAppBrowser
+    InAppBrowser,
+    Network
     ],
   exports: [
     UtilitiesModule

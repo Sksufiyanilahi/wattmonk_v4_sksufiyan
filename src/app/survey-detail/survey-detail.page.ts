@@ -91,6 +91,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   getSurveyDetails() {
+    debugger;
     this.utilities.showLoading('Getting Survey Details').then((success) => {
       this.apiService.getSurveyDetail(this.surveyId).subscribe((result) => {
         this.utilities.hideLoading().then(() => {
@@ -173,10 +174,11 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   deleteSurveyFromServer() {
     this.utilities.showLoading('Deleting Survey').then((success) => {
       this.apiService.deleteSurvey(this.surveyId).subscribe((result) => {
-        this.utilities.hideLoading();
-        this.utilities.showSnackBar('Survey deleted successfully');
-        this.navController.pop();
-        this.utilities.sethomepageSurveyRefresh(true);
+        this.utilities.hideLoading().then(()=>{
+          this.utilities.showSnackBar('Survey deleted successfully');
+          this.navController.pop();
+          this.utilities.sethomepageSurveyRefresh(true);
+        });
       }, (error) => {
         this.utilities.hideLoading().then(() => {
           this.utilities.errorSnackBar('Some Error Occurred');

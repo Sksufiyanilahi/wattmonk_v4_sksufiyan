@@ -17,6 +17,7 @@ import { ROLES } from 'src/app/contants';
 import {Storage} from '@ionic/storage';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import * as moment from 'moment';
+import { NetworkdetectService } from 'src/app/networkdetect.service';
 
 @Component({
   selector: 'app-survey',
@@ -43,7 +44,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
   filterDataArray: SurveyDataModel[];
   segments:any='status=created&status=outsourced&status=requestaccepted';
   overdue: number;
-  userData: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
+  userData: User;
+  netSwitch: any;
 
   constructor(
     private utils: UtilitiesService,
@@ -56,7 +58,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private storage: Storage,
-    private storageService:StorageService
+    private storageService:StorageService,
+    private network:NetworkdetectService
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -83,14 +86,20 @@ export class SurveyComponent implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
+    this.network.networkDisconnect();
+this.network.networkConnect();
+    this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      console.log(this.netSwitch);
+      
+    })
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-      debugger;
+
       this.getSurveys(null);
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-        debugger;
         this.formatSurveyData(this.listOfSurveyData);
       }
     });
