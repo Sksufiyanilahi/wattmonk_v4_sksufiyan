@@ -58,6 +58,11 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
+    path: 'activity/:id',
+    loadChildren: () => import('./activity-details/activity-details.module').then(m => m.ActivityDetailsPageModule),
+    canActivate: [AuthGuardService]
+  },
+  {
     path: 'message',
     loadChildren: () => import('./message/message.module').then( m => m.MessagePageModule),
     canActivate: [AuthGuardService]
@@ -84,7 +89,8 @@ const routes: Routes = [
   {
     path: 'designoverview',
     loadChildren: () => import('./designoverview/designoverview.module').then( m => m.DesignoverviewPageModule)
-  },  {
+  },
+  {
     path: 'searchbar',
     loadChildren: () => import('./searchbar/searchbar.module').then( m => m.SearchbarPageModule)
   },
@@ -95,7 +101,12 @@ const routes: Routes = [
   {
     path: 'paymentgateway',
     loadChildren: () => import('./paymentgateway/paymentgateway.module').then( m => m.PaymentgatewayPageModule)
+  },
+  {
+    path: 'activity-details',
+    loadChildren: () => import('./activity-details/activity-details.module').then( m => m.ActivityDetailsPageModule)
   }
+
 
 
 

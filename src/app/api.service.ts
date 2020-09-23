@@ -233,4 +233,8 @@ export class ApiService {
   rechargePost(data){
     return this.http.post(BaseUrl + "recharges/" ,data, { headers: this.headers });
   }
+
+  activityDetails(designid){
+    return this.http.get(BaseUrl+ "designs/" + designid, { headers: this.headers});
+  }
 }
