@@ -22,8 +22,12 @@
                     <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'designcompleted'">Designing Completed</span>
                     <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
             </p>
-                <span class="customer-email" [routerLink]="['/survey-detail/',designData.id]"
+            <p style="margin:0px">
+                <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
                       routerDirection="forward">{{designData.email}}</span>
+                      <span *ngIf="item.lateby > 1" class="latebystyle" style="float: right;"><strong>Late by {{item.lateby}} days</strong></span>
+                      <span *ngIf="item.lateby == 1" class="latebystyle" style="float: right;"><strong>Late by a day</strong></span>
+            </p>
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{designData.phonenumber}}</span></a>
                 <span class="customer-address z-100"

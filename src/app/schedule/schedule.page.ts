@@ -99,10 +99,10 @@ ngOnInit() {
 
   getGeoLocation() {
     debugger;
-    this.utilities.showLoading('Getting Location').then(()=>{
-          setTimeout(()=>{
-            this.utilities.hideLoading();
-          },1000)
+    // this.utilities.showLoading('Getting Location').then(()=>{
+          // setTimeout(()=>{
+          //   this.utilities.hideLoading();
+          // },1000)
       this.geolocation.getCurrentPosition().then((resp) => {
         this.utilities.hideLoading();
         // .then(()=>{
@@ -110,6 +110,9 @@ ngOnInit() {
           this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
           this.utilities.hideLoading();
         // });
+      },err=>{
+        this.utilities.hideLoading();
+        this.utilities.errorSnackBar('Unable to get location');
       }).catch((error) => {
         this.utilities.hideLoading();
         this.utilities.errorSnackBar('Unable to get location');
@@ -117,9 +120,9 @@ ngOnInit() {
         console.log('Error getting location', error);
         this.showNoLocation();
       });
-    },err=>{
-      this.utilities.hideLoading();
-    });
+    // },err=>{
+    //   this.utilities.hideLoading();
+    // });
   }
 
   async  showNoLocation() {
@@ -163,6 +166,7 @@ ngOnInit() {
   getGeoEncoder(latitude, longitude) {
     debugger;
     // this.utilities.hideLoading().then((success) => {
+          this.utilities.showLoading('Getting Location').then(()=>{
       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
       .then((result: NativeGeocoderResult[]) => {
         console.log(result);
@@ -183,6 +187,7 @@ ngOnInit() {
             this.utilities.hideLoading();
             alert('Error getting location' + JSON.stringify(error));
           });
+        });
       // }, (error) => {
 
       // }

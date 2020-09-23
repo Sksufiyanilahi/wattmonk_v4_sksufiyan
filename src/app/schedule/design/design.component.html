@@ -93,7 +93,7 @@
                     <ion-item class="ion-no-padding">
                         <!-- <ion-label style="display: none;">Project Type</ion-label> -->
                         <!-- <ion-label position="floating">project type</ion-label> -->
-                        <ion-select class="form_input" ok-text="" placeholder="project type"
+                        <ion-select class="form_input" ok-text="" placeholder="project type*"
                                     cancel-text=""
                                     formControlName="projecttype" interface="popover">
                             <ion-select-option value="residential">Residential</ion-select-option>
@@ -120,7 +120,7 @@
                     <ion-item class="ion-no-padding">
                         <!-- <ion-label style="display: none;">New construction</ion-label> -->
                         <!-- <ion-label position="floating">new construction</ion-label> -->
-                        <ion-select  (ionChange)="showUpload($event)" class="form_input select_div" placeholder="new construction"
+                        <ion-select  (ionChange)="showUpload($event)" class="form_input select_div" placeholder="new construction*"
                                      ok-text=""
                                     cancel-text=""
                                     formControlName="newconstruction" interface="popover">
@@ -135,7 +135,7 @@
            
                 <ion-col size="12">
                     <ion-item class="ion-no-padding">
-                        <ion-label style="display: none;">Mounting Type</ion-label>
+                        <ion-label style="display: none;">Mounting Type*</ion-label>
                         <!-- <ion-label position="floating">mounting type</ion-label> -->
                         <ion-select class="form_input select_div" (ionChange)="eventcheck($event)" placeholder="mounting type"
                                     ok-text="" cancel-text=""
@@ -153,7 +153,7 @@
                 <ion-col size="6" *ngIf='(showValue=="roof" ||showValue== "both")'>
                     <ion-item class="ion-no-padding">
                         <ion-label style="display: none;">Roof Type</ion-label>
-                        <ion-label position="floating">roof type</ion-label>
+                        <ion-label position="floating">roof type*</ion-label>
                         <ion-select class="form_input select_div"
                                     ok-text="" cancel-text=""
                                     formControlName="rooftype" interface="popover">
@@ -165,7 +165,7 @@
                 </ion-col>
                 <ion-col size="6" *ngIf='(showValue=="ground" || showValue=="both")'>
                         <ion-item class="ion-no-padding">
-                            <ion-label position="floating">tilt for ground mount system</ion-label>
+                            <ion-label position="floating">tilt for ground mount system*</ion-label>
                             <ion-input class="form_input"  type="number" formControlName="tiltofgroundmountingsystem"></ion-input>
                         </ion-item>
                 </ion-col>
@@ -176,7 +176,7 @@
                     <ion-item class="ion-no-padding">
                         <!-- <ion-input class="form_input" type="file" placeholder="Upload Architectural design" 
                               (ionChange)="files($event)"  multiple></ion-input> -->
-                              <ion-label position="floating">architectural design</ion-label>
+                              <ion-label position="floating">architectural design*</ion-label>
                               <ion-input type="file"  class="form_input"  (change)="files($event)" style="margin-top: 12px;" formControlName="architecturaldesign" placeholder="Upload Architectural design" multiple></ion-input>
                     </ion-item>
                 </ion-col>
@@ -187,7 +187,7 @@
                 <ion-col size="12">
                     <ion-item class="ion-no-padding">
                         <ion-label position="floating">Attachment</ion-label>
-                        <ion-input class="form_input"  type="file" formControlName="prelimdesign" (change)="prelimfiles($event)" multiple></ion-input>
+                        <ion-input class="form_input"  type="file" formControlName="attachments" (change)="prelimfiles($event)" multiple></ion-input>
                     </ion-item>
                
                 </ion-col>

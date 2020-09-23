@@ -97,7 +97,7 @@ export class InreviewDesignComponent implements OnInit {
             if (tempData.length === 0) {
               this.sDatePassed(designItem.deliverydate);
               const listOfDesign = new DesginDataHelper();
-              listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+              listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
               listOfDesign.lateby = this.overdue;
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
@@ -105,7 +105,7 @@ export class InreviewDesignComponent implements OnInit {
               let added = false;
               tempData.forEach((DesignList) => {
                 if (!added) {
-                  if (DesignList.date === this.datePipe.transform(designItem.deliverydate, 'M/d/yy')) {
+                  if (DesignList.date === this.datePipe.transform(designItem.deliverydate, 'M/dd/yy')) {
                     DesignList.listOfDesigns.push(designItem);
                     this.sDatePassed(designItem.deliverydate);
                     added = true;
@@ -115,7 +115,7 @@ export class InreviewDesignComponent implements OnInit {
               if (!added) {
                 this.sDatePassed(designItem.deliverydate);
                 const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+                listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
                 listOfDesign.lateby = this.overdue;
                 listOfDesign.listOfDesigns.push(designItem);
                 tempData.push(listOfDesign);

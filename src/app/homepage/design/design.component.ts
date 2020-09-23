@@ -98,15 +98,15 @@ this.network.networkConnect();
     console.log((event.target.value));
     this.pending(event.target.value);
     this.segments = event.target.value;
-    this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+    // this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
       this.getDesigns(null);
-    });
+    // });
 
-    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
-        this.formatDesignData(this.listOfDesigns);
-      }
-    });
+    // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+    //   if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
+    //     this.formatDesignData(this.listOfDesigns);
+    //   }
+    // });
     
   }
 

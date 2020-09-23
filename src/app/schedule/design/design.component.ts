@@ -80,13 +80,13 @@ export class DesignComponent implements OnInit, OnDestroy {
       solarmodel: new FormControl('', [Validators.required]),
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
-      monthlybill: new FormControl(''),
+      monthlybill: new FormControl('',[Validators.required]),
       address: new FormControl('',[Validators.required]),
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
       rooftype: new FormControl(''),
-      prelimdesign: new FormControl(''),
-      architecturaldesign: new FormControl(''),
+      prelimdesign: new FormControl(null),
+      architecturaldesign: new FormControl([],[Validators.required]),
       tiltofgroundmountingsystem: new FormControl(''),
       mountingtype: new FormControl('', [Validators.required]),
       // jobtype: new FormControl('', [Validators.required]),
@@ -101,12 +101,13 @@ export class DesignComponent implements OnInit, OnDestroy {
       state: new FormControl(''),
       city: new FormControl(''),
       postalcode: new FormControl(''),
-      status: new FormControl('created')
+      status: new FormControl('created'),
+      attachments:new FormControl([])
       // uploadbox:new FormControl('')
     });
 
     this.designId = +this.route.snapshot.paramMap.get('id');
-
+    this.getAssignees();
   }
 
   ngOnInit() {
@@ -133,20 +134,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        // this.desginForm.get('address').setValue('fffff');
-        // this.desginForm.get('latitude').setValue('444444444444');
-        // this.desginForm.get('longitude').setValue('555555555');
-        // this.desginForm.get('country').setValue('india');
-        // this.desginForm.get('city').setValue('Lucknow');
-        // this.desginForm.get('state').setValue('UP');
-        // this.desginForm.get('postalcode').setValue('3232343');
-        this.desginForm.get('address').setValue(address.address);
-        this.desginForm.get('latitude').setValue(address.lat);
-        this.desginForm.get('longitude').setValue(address.long);
-        this.desginForm.get('country').setValue(address.country);
-        this.desginForm.get('city').setValue(address.city);
-        this.desginForm.get('state').setValue(address.state);
-        this.desginForm.get('postalcode').setValue(address.postalcode);
+        this.desginForm.get('address').setValue('fffff');
+        this.desginForm.get('latitude').setValue('444444444444');
+        this.desginForm.get('longitude').setValue('555555555');
+        this.desginForm.get('country').setValue('india');
+        this.desginForm.get('city').setValue('Lucknow');
+        this.desginForm.get('state').setValue('UP');
+        this.desginForm.get('postalcode').setValue('3232343');
+        // this.desginForm.get('address').setValue(address.address);
+        // this.desginForm.get('latitude').setValue(address.lat);
+        // this.desginForm.get('longitude').setValue(address.long);
+        // this.desginForm.get('country').setValue(address.country);
+        // this.desginForm.get('city').setValue(address.city);
+        // this.desginForm.get('state').setValue(address.state);
+        // this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -224,7 +225,6 @@ getDesignDetails() {
         await this.utils.hideLoading().then(()=>{
 
           this.design = result;
-        let prelimdesign=   this.design.prelimdesign ==null ? '' : this.design.prelimdesign.name  + this.design.prelimdesign.ext;
           console.log(this.design);
           this.desginForm.patchValue({
             name: this.design.name,
@@ -246,7 +246,8 @@ getDesignDetails() {
             city: this.design.city,
             postalcode:this.design.postalcode,
             newconstruction: this.design.newconstruction + '',
-            prelimdesign:prelimdesign
+            prelimdesign:null,
+            attachments:this.design.attachments
           });
           this.utils.setStaticAddress(this.design.address);
   
@@ -258,7 +259,7 @@ getDesignDetails() {
         setTimeout(()=>{
           this.getSolarMakeForForm();
           this.getInverterMakeForForm();
-        },1000)
+        },500)
         });
       
       }, (error) => {
@@ -357,11 +358,11 @@ getDesignDetails() {
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
               debugger;
-              this.utils.showSnackBar('Desgin have been saved');
               this.uploaarchitecturedesign(response.id,'architecturaldesign');
               this.uploadpreliumdesign(response.id,'attachments')
-              this.navController.navigateRoot('homepage');
+              this.utils.showSnackBar('Design have been saved');
               this.utils.setHomepageDesignRefresh(true);
+              this.navController.pop();
               // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
               //   modal.present();
               //   modal.onWillDismiss().then((dismissed) => {
@@ -383,10 +384,11 @@ getDesignDetails() {
             this.utils.hideLoading().then(() => {
               debugger;
               console.log('Res', response);
-              this.utils.showSnackBar('Desgin have been updated');
               this.uploaarchitecturedesign(response.id,'architecturaldesign');
               this.uploadpreliumdesign(response.id,'attachments')
+              this.utils.showSnackBar('Design have been updated');
               this.utils.setDesignDetailsRefresh(true);
+              this.navController.pop();
               
       
             });
@@ -402,7 +404,46 @@ getDesignDetails() {
       });
 
     } else {
-      this.utils.errorSnackBar('Invalid form detail');
+      if(this.desginForm.value.name==''){
+
+        this.utils.errorSnackBar('Please fill the name.');
+      }
+      else if(this.desginForm.value.email==''){
+        this.utils.errorSnackBar('Please fill the email.');
+      }
+      else if(this.desginForm.value.monthlybill==''){
+        this.utils.errorSnackBar('Please fill the monthlybill.');
+      }
+      else if(this.desginForm.value.solarmake==''){
+        this.utils.errorSnackBar('Please fill the module make.');
+      }
+      else if(this.desginForm.value.solarmodel==''){
+        this.utils.errorSnackBar('Please fill the module model.');
+      }
+      else if(this.desginForm.value.invertermake==''){
+        this.utils.errorSnackBar('Please fill the inverter make.');
+      }
+      else if(this.desginForm.value.invertermodel==''){
+        this.utils.errorSnackBar('Please fill the inverter model.');
+      }
+      else if(this.desginForm.value.mountingtype==''){
+        this.utils.errorSnackBar('Please fill the mounting type.');
+      }
+      else if(this.desginForm.value.projecttype==''){
+        this.utils.errorSnackBar('Please fill the project type.');
+      }
+      else if(this.desginForm.value.tiltofgroundmountingsystem==''){
+        this.utils.errorSnackBar('Please fill the tilt for ground mount.');
+      }
+      else if(this.desginForm.value.rooftype==''){
+        this.utils.errorSnackBar('Please fill the rooftype.');
+      }
+      else if(this.desginForm.value.architecturaldesign==''){
+        this.utils.errorSnackBar('Please attach architectural design.');
+      }
+      else{
+        this.utils.errorSnackBar('Address not found. Make sure location is on on device.');
+      }
     }
   }
 
@@ -467,7 +508,6 @@ ioniViewDidEnter(){
 
 }
   getSolarMake() {
-    this.getAssignees();
     this.getInverterMake();
 
     this.apiService.getSolarMake().subscribe(response => {
