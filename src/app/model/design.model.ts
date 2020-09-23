@@ -121,6 +121,9 @@ export class PrelimDesign{
   updated_at:string;
 
 }
-
+ export class activities{
+   id:number;
+   activity:string
+ }
 
 

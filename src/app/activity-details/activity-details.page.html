@@ -1,0 +1,54 @@
+<ion-header  class="ion-no-border white-bg">
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
+      <ion-row  >
+    <ion-col size="1">
+    <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+        <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+    </ion-button> 
+</ion-col>
+<ion-col class="ion-text-center" size="9" style="padding-left: 27px; text-align: center;">
+  <ion-grid class="ion-align-items-center ion-justify-content-center">
+      <ion-row class="ion-align-items-center ion-justify-content-center">
+          <span class="survey-name ion-text-center" style="font-size:x-large; text-align: center;">{{activity_details?.name}}</span>
+      </ion-row>
+     
+  </ion-grid>
+</ion-col>
+
+</ion-row>
+</ion-grid> <ion-grid class="position-relative ion-no-padding">
+  <ion-row class="ion-no-padding border-header header-half-height">
+  </ion-row>
+  <ion-row class="ion-no-padding header-half-height">
+
+  </ion-row>
+
+<ion-row class="ion-no-padding position-absolute header-icon-position full-width">
+<ion-col class="flex-center">
+
+  <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
+</ion-col></ion-row></ion-grid>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content><p style="text-align: center; font-size:large; color:black; border:none;margin-bottom:0px ;"> Activities</p>
+ <p  style="text-align: center; margin-top: 0px;"><span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'requestdeclined'">Declined</span>
+ <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="activity_details?.deliverydate > 0">Overdue</span>
+ <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'requestaccepted'">Accepted</span>
+ <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'delivered'">Delivered</span>
+ <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'designcompleted'">Completed</span>
+ <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'created'">Unassigned</span>
+ <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'designassigned'">Design Assigned</span>
+ <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'reviewassigned'">In Review</span>
+ <span class="chipdetail" *ngIf="activity_details?.isoutsourced == 'true'" style="background-color: #95AFC0;" >Waiting for acceptance</span>
+</p>
+  <ion-card  *ngFor="let activities of activity_details?.activities" class="custom-card"  >
+  <span style="float: left; font-size: smaller;">{{activities.created_at | date: 'dd MMM yyyy'}}</span><br><br>
+  <span style="font-size:medium; float:left; color: black;">{{activities.activity}}</span><br><br>
+<span style="float: right !important; font-size: small; font-style: italic;">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
+
+</ion-card>
+</ion-content>
