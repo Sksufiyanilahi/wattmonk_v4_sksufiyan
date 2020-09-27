@@ -42,6 +42,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   timerConfig: any;
   user: User;
   commentsForm: FormGroup;
+  browser: any;
   // user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
 
@@ -87,6 +88,15 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
   showDesignImage(){
     const browser = this.iab.create(this.design.prelimdesign.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  }
+
+  showurl(i,value){
+    if(value=='attachments'){
+      this.browser = this.iab.create(this.design.attachments[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+    }else{
+      this.browser = this.iab.create(this.design.architecturaldesign[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+    }
+ 
   }
 
   updatecomments(){

@@ -111,11 +111,11 @@ console.log(this.currentDate.toISOString());
     console.log(this.listOfDesignData);
     
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesignData.forEach((designItem) => {
+          this.listOfDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
-              this.sDatePassed(designItem.deliverydate);
+              this.sDatePassed(designItem.updated_at);
               const listOfDesigns = new DesginDataHelper();
-              listOfDesigns.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
+              listOfDesigns.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
               listOfDesigns.lateby = this.overdue;
               listOfDesigns.listOfDesigns.push(designItem);
               tempData.push(listOfDesigns);
@@ -123,17 +123,17 @@ console.log(this.currentDate.toISOString());
               let added = false;
               tempData.forEach((designList:any) => {
                 if (!added) {
-                  if (designList.date === this.datePipe.transform(designItem.deliverydate, 'M/dd/yy')) {
+                  if (designList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
                     designList.listOfDesigns.push(designItem);
-                    this.sDatePassed(designItem.deliverydate);
+                    this.sDatePassed(designItem.updated_at);
                     added = true;
                   }
                 }
               });
               if (!added) {
-                this.sDatePassed(designItem.deliverydate);
+                this.sDatePassed(designItem.updated_at);
                 const listOfDesigns = new DesginDataHelper();
-                listOfDesigns.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
+                listOfDesigns.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
                 listOfDesigns.lateby = this.overdue;
                 listOfDesigns.listOfDesigns.push(designItem);
                 tempData.push(listOfDesigns);

@@ -95,9 +95,9 @@ export class InreviewDesignComponent implements OnInit {
     const tempData: DesginDataHelper[] = [];
           this.listOfDesigns.forEach((designItem:any) => {
             if (tempData.length === 0) {
-              this.sDatePassed(designItem.deliverydate);
+              this.sDatePassed(designItem.updated_at);
               const listOfDesign = new DesginDataHelper();
-              listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
+              listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
               listOfDesign.lateby = this.overdue;
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
@@ -105,17 +105,17 @@ export class InreviewDesignComponent implements OnInit {
               let added = false;
               tempData.forEach((DesignList) => {
                 if (!added) {
-                  if (DesignList.date === this.datePipe.transform(designItem.deliverydate, 'M/dd/yy')) {
+                  if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
                     DesignList.listOfDesigns.push(designItem);
-                    this.sDatePassed(designItem.deliverydate);
+                    this.sDatePassed(designItem.updated_at);
                     added = true;
                   }
                 }
               });
               if (!added) {
-                this.sDatePassed(designItem.deliverydate);
+                this.sDatePassed(designItem.updated_at);
                 const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
+                listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
                 listOfDesign.lateby = this.overdue;
                 listOfDesign.listOfDesigns.push(designItem);
                 tempData.push(listOfDesign);

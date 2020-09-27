@@ -65,7 +65,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
     this.assignForm = this.formBuilder.group({
-      assignedto: new FormControl('', [Validators.required]),
+      assignedto: new FormControl(0, [Validators.required]),
       status: new FormControl('surveyassigned', [Validators.required])
     });
   }

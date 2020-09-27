@@ -42,7 +42,7 @@
             <ion-row class="ion-align-items-center ion-justify-content-center">
                 <ion-col>
                     <ion-item class="ion-no-padding">
-                        <ion-label position="floating">monthly bill*</ion-label>
+                        <ion-label position="floating">annual units (Kwh)*</ion-label>
                         <ion-input class="form_input"  type="number"
                                    formControlName="monthlybill"></ion-input>
                     </ion-item>
@@ -64,12 +64,12 @@
             <ion-row>
                 <ion-col size="6">
                     <!-- <ion-label position="floating">module make*</ion-label> -->
-                    <app-auto-complete [dataList]="listOfSolarMake" placeholder="module make*"
+                    <app-auto-complete style="font-size: 14px;" [dataList]="listOfSolarMake" placeholder="module make*"
                                        formControlName="solarmake"></app-auto-complete>
                 </ion-col>
                 <ion-col size="6">
                     <!-- <ion-label position="floating">module model*</ion-label> -->
-                    <app-auto-complete [dataList]="listOfSolarMade" placeholder="module model*"
+                    <app-auto-complete style="font-size: 14px;"  [dataList]="listOfSolarMade" placeholder="module model*"
                                        formControlName="solarmodel"></app-auto-complete>
 
                 </ion-col>
@@ -78,12 +78,12 @@
             <ion-row>
                 <ion-col size="6">
                     <!-- <ion-label position="floating">inverter make*</ion-label> -->
-                    <app-auto-complete [dataList]="listOfInverterMake" placeholder="inverter make*"
+                    <app-auto-complete style="font-size: 14px;" [dataList]="listOfInverterMake" placeholder="inverter make*"
                                        formControlName="invertermake"></app-auto-complete>
                 </ion-col>
                 <ion-col size="6">
                     <!-- <ion-label position="floating">invertor model*</ion-label> -->
-                    <app-auto-complete [dataList]="listOfInverterMade" placeholder="invertor model*"
+                    <app-auto-complete style="font-size: 10px;" [dataList]="listOfInverterMade" placeholder="invertor model*"
                                        formControlName="invertermodel"></app-auto-complete>
                 </ion-col>
             </ion-row>
@@ -178,7 +178,20 @@
                               (ionChange)="files($event)"  multiple></ion-input> -->
                               <ion-label position="floating">architectural design*</ion-label>
                               <ion-input type="file"  class="form_input"  (change)="files($event)" style="margin-top: 12px;" formControlName="architecturaldesign" placeholder="Upload Architectural design" multiple></ion-input>
-                    </ion-item>
+                            </ion-item>
+                              <ng-template *ngIf="design.architecturaldesign !=''">
+                                  <ion-item>
+                                    <ion-label position="floating">architectural design*</ion-label>
+                                  
+                                      <!-- <div *ngFor="let arc of design.architecturaldesign">
+                                         
+                                            {{arc.name}}{{arc.ext}}
+                                        
+                                          
+                                      </div> -->
+                                  </ion-item>
+                              </ng-template>
+                  
                 </ion-col>
                
             </ion-row>

@@ -96,11 +96,11 @@ export class CompleteddesignComponent implements OnInit {
   formatDesignData(records : DesginDataModel[]){
     this.listOfDesignData = this.fillinDynamicData(records);
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesignData.forEach((designItem) => {
+          this.listOfDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
-              this.sDatePassed(designItem.deliverydate);
+              this.sDatePassed(designItem.updated_at);
               const listOfDesign = new DesginDataHelper();
-              listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+              listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
               listOfDesign.lateby = this.overdue;
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
@@ -108,17 +108,17 @@ export class CompleteddesignComponent implements OnInit {
               let added = false;
               tempData.forEach((surveyList) => {
                 if (!added) {
-                  if (surveyList.date === this.datePipe.transform(designItem.deliverydate, 'M/d/yy')) {
+                  if (surveyList.date === this.datePipe.transform(designItem.updated_at, 'M/d/yy')) {
                     surveyList.listOfDesigns.push(designItem);
-                    this.sDatePassed(designItem.deliverydate);
+                    this.sDatePassed(designItem.updated_at);
                     added = true;
                   }
                 }
               });
               if (!added) {
-                this.sDatePassed(designItem.deliverydate);
+                this.sDatePassed(designItem.updated_at);
                 const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+                listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
                 listOfDesign.lateby = this.overdue;
                 listOfDesign.listOfDesigns.push(designItem);
                 tempData.push(listOfDesign);
