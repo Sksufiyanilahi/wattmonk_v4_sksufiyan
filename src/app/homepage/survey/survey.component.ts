@@ -44,7 +44,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   filterDataArray: SurveyDataModel[];
   segments:any='status=created&status=outsourced&status=requestaccepted';
   overdue: number;
-  userData: User;
+  userData: any;
   netSwitch: any;
 
   constructor(
