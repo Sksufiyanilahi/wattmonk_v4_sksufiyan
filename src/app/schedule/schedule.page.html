@@ -89,14 +89,14 @@
         <ion-row>
             <ion-col></ion-col>
             <ion-col size="auto">
-                <ion-button class="action-button-color" fill="clear" (click)="saveDesignForm()">Done</ion-button>
+                <ion-button class="action-button-color" fill="clear" (click)="saveDesignForm()">Save</ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>
     <ion-grid *ngIf="currentTab === 'survey'">
         <ion-row>
             <ion-col size="auto">
-                <ion-button class="action-button-color" fill="clear" (click)="saveSurveyForm()">Done</ion-button>
+                <ion-button class="action-button-color" fill="clear" (click)="saveSurveyForm()">Save</ion-button>
             </ion-col>
             <ion-col></ion-col>
             <ion-col size="auto" *ngIf="userdata.role.type !=='wattmonkadmins'">

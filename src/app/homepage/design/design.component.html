@@ -2,7 +2,7 @@
 
     <ion-segment scrollable (ionChange)="segmentChanged($event)" value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
         <ion-segment-button *ngIf="userData.role.type !=='SuperAdmin'"  value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
-          <ion-label class="segment-btn">Pending</ion-label>
+          <ion-label class="segment-btn">New Designs</ion-label>
         </ion-segment-button>
         <ion-segment-button value="requesttype=prelim&status=designassigned">
           <ion-label class="segment-btn">In Designing</ion-label>

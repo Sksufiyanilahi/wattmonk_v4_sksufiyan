@@ -80,7 +80,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       solarmodel: new FormControl('', [Validators.required]),
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
-      monthlybill: new FormControl('',[Validators.required]),
+      monthlybill: new FormControl('',[Validators.required,Validators.min(0)]),
       address: new FormControl('',[Validators.required]),
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
@@ -110,8 +110,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.getAssignees();
   }
 
+  numberfield(event){
+    console.log(event);
+    
+  }
+
   ngOnInit() {
-   debugger;
     this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {
@@ -126,6 +130,10 @@ export class DesignComponent implements OnInit, OnDestroy {
 
     } else {
       this.desginForm.get('solarmake').valueChanges.subscribe(val => {
+        console.log(val);
+        this.desginForm.patchValue({
+          solarmake:val
+        })
         this.getSolarMade();
       });
       this.desginForm.get('invertermake').valueChanges.subscribe(val => {
@@ -134,20 +142,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        // this.desginForm.get('address').setValue('fffff');
-        // this.desginForm.get('latitude').setValue('444444444444');
-        // this.desginForm.get('longitude').setValue('555555555');
-        // this.desginForm.get('country').setValue('india');
-        // this.desginForm.get('city').setValue('Lucknow');
-        // this.desginForm.get('state').setValue('UP');
-        // this.desginForm.get('postalcode').setValue('3232343');
-        this.desginForm.get('address').setValue(address.address);
-        this.desginForm.get('latitude').setValue(address.lat);
-        this.desginForm.get('longitude').setValue(address.long);
-        this.desginForm.get('country').setValue(address.country);
-        this.desginForm.get('city').setValue(address.city);
-        this.desginForm.get('state').setValue(address.state);
-        this.desginForm.get('postalcode').setValue(address.postalcode);
+        this.desginForm.get('address').setValue('fffff');
+        this.desginForm.get('latitude').setValue('444444444444');
+        this.desginForm.get('longitude').setValue('555555555');
+        this.desginForm.get('country').setValue('india');
+        this.desginForm.get('city').setValue('Lucknow');
+        this.desginForm.get('state').setValue('UP');
+        this.desginForm.get('postalcode').setValue(3232343);
+        // this.desginForm.get('address').setValue(address.address);
+        // this.desginForm.get('latitude').setValue(address.lat);
+        // this.desginForm.get('longitude').setValue(address.long);
+        // this.desginForm.get('country').setValue(address.country);
+        // this.desginForm.get('city').setValue(address.city);
+        // this.desginForm.get('state').setValue(address.state);
+        // this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -180,7 +188,7 @@ formControlValueChanged() {
               roofcontrol.clearValidators();
               roofcontrol.reset();
           }else if(mode ==='both'){
-            tiltControl.setValidators([Validators.required]);
+            tiltControl.setValidators([Validators.required,,Validators.min(0)]);
             roofcontrol.setValidators([Validators.required]);
           }
           else if (mode === 'roof') {
@@ -353,8 +361,6 @@ getDesignDetails() {
 
   addForm() {
     console.log('Reach', this.desginForm.value);
-   
-  debugger;
     if (this.desginForm.status === 'VALID') {
       this.utils.showLoading('Saving').then(() => {
         if (this.designId === 0) {
@@ -486,8 +492,7 @@ getDesignDetails() {
   }
 
   getSolarMade() {
-    debugger;
-    this.utils.showLoading('Getting module models').then((success) => {
+    // this.utils.showLoading('Getting module models').then((success) => {
       this.apiService.getSolarMade(this.desginForm.get('solarmake').value).subscribe(response => {
         this.utils.hideLoading().then(()=>{
           console.log(response);
@@ -501,9 +506,9 @@ getDesignDetails() {
         const error: ErrorModel = responseError.error;
         this.utils.errorSnackBar(error.message[0].messages[0].message);
       });
-    }, (error) => {
+    // }, (error) => {
 
-    });
+    // });
 
 
   }
@@ -516,6 +521,7 @@ ioniViewDidEnter(){
 
     this.apiService.getSolarMake().subscribe(response => {
       this.listOfSolarMake = response;
+      
     }, responseError => {
       const error: ErrorModel = responseError.error;
       console.log(error);

@@ -43,9 +43,15 @@
                 <ion-col>
                     <ion-item class="ion-no-padding">
                         <ion-label position="floating">annual units (Kwh)*</ion-label>
-                        <ion-input class="form_input"  type="number"
+                        <ion-input class="form_input"  type="number" (ionInput)="numberfield($event)"
                                    formControlName="monthlybill"></ion-input>
                     </ion-item>
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('monthlybill').dirty && desginForm.get('monthlybill').hasError('min')">
+                            <span class="error">{{"Annual units should not be negative"}}</span>
+                        </div>
+                      
+                    </div>
                 </ion-col>
             </ion-row>
 
@@ -78,7 +84,7 @@
             <ion-row>
                 <ion-col size="6">
                     <!-- <ion-label position="floating">inverter make*</ion-label> -->
-                    <app-auto-complete style="font-size: 14px;" [dataList]="listOfInverterMake" placeholder="inverter make*"
+                    <app-auto-complete style="font-size: 12px;" [dataList]="listOfInverterMake" placeholder="inverter make*"
                                        formControlName="invertermake"></app-auto-complete>
                 </ion-col>
                 <ion-col size="6">
@@ -165,9 +171,15 @@
                 </ion-col>
                 <ion-col size="6" *ngIf='(showValue=="ground" || showValue=="both")'>
                         <ion-item class="ion-no-padding">
-                            <ion-label position="floating">tilt for ground mount system*</ion-label>
+                            <ion-label position="floating" style="font-size: 12px;">tilt for ground mount*</ion-label>
                             <ion-input class="form_input"  type="number" formControlName="tiltofgroundmountingsystem"></ion-input>
                         </ion-item>
+                        <div style="height: 5px;">
+                            <div *ngIf="desginForm.get('tiltofgroundmountingsystem').dirty && desginForm.get('tiltofgroundmountingsystem').hasError('min')">
+                                <span class="error">{{"Tilt for ground mount should not be negative"}}</span>
+                            </div>
+                          
+                        </div>
                 </ion-col>
             </ion-row>
               <!--upload box-->

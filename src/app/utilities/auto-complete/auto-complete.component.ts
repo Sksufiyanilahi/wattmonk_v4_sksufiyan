@@ -24,7 +24,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   @Input() placeholder = '';
   @Input() mode = 'id'; //id or object
 
-  private onChange: (data: number) => void;
+  private onChange: (data: any) => void;
   selectedOption: any;
   showSuggestions: false;
   sortedList: any[] = [];
@@ -94,7 +94,13 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
     if (this.sortedList.length === 1) {
       if (this.sortedList[0].name.toLowerCase() === event.detail.value.toLowerCase()) {
         this.sortedList = [];
+       
       }
+    }
+    else{
+      this.selectedDataName= event.detail.value;
+      // event.detail.value = this.selectedDataName;
+      this.onChange(this.selectedDataName);
     }
   }
 
@@ -114,6 +120,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   onFocus(event: CustomEvent) {
+    // this.selectedDataName= event.detail.value;
     console.log(event);
     this.sortedList = this.dataList.filter((item) => {
       return (item.name.toLowerCase().indexOf(this.selectedDataName) > -1);

@@ -108,7 +108,8 @@ this.network.networkConnect();
     localStorage.setItem('pushtoken', token);
   })
   .catch(error => {
-   console.error('Error getting token', error)});
+  //  console.error('Error getting token', error)
+  });
   }
 
   getNotification() {

@@ -100,27 +100,31 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   updatecomments(){
-console.log(this.commentsForm);
-debugger;
-    this.utilities.showLoading('Submitting').then(()=>{
+    if (this.commentsForm.status === 'INVALID') {
+      this.utilities.errorSnackBar('Please select prelim design');
+      return false;
+    }else{
       
-      this.apiService.updateDesignForm(this.commentsForm.value,this.designId).subscribe((success)=>{
-        this.uploadpreliumdesign(this.designId,'prelimdesign');
-        this.utilities.hideLoading().then(() => {
-          console.log("suc",success);
-          this.setData(success);
-          // this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
-          // this.utilities.setHomepageDesignRefresh(true);
-          this.utilities.getDesignDetailsRefresh();
-          this.router.navigate(['designoverview/completeddesigns'])
-          // this.navController.navigateRoot(['homepage']);
+      this.utilities.showLoading('Submitting').then(()=>{
+        
+        this.apiService.updateDesignForm(this.commentsForm.value,this.designId).subscribe((success)=>{
+          this.uploadpreliumdesign(this.designId,'prelimdesign');
+          this.utilities.hideLoading().then(() => {
+            console.log("suc",success);
+            this.setData(success);
+            // this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
+            // this.utilities.setHomepageDesignRefresh(true);
+            this.utilities.getDesignDetailsRefresh();
+            this.router.navigate(['designoverview/completeddesigns'])
+            // this.navController.navigateRoot(['homepage']);
+          });
+        },(error) => {
+          this.utilities.hideLoading().then(() => {
+            this.utilities.errorSnackBar('Some Error Occurred');
+          });
         });
-      },(error) => {
-        this.utilities.hideLoading().then(() => {
-          this.utilities.errorSnackBar('Some Error Occurred');
-        });
-      });
-    })
+      })
+    }
   }
 
 
@@ -333,9 +337,8 @@ reader.readAsDataURL(event.target.files[0]);
 
 
   uploadpreliumdesign(designId?: number, key?: string){
-    if (this.commentsForm.status === 'INVALID') {
-      this.utilities.errorSnackBar('Please select prelim design');
-    }else{
+
+    // else{
 
       // const blob = this.utilities.getBlobFromImageData(this.prelimFiles);
       // console.log(blob);
@@ -376,7 +379,7 @@ reader.readAsDataURL(event.target.files[0]);
             })
           })
         // })
-    }
+    // }
   }
 
 }

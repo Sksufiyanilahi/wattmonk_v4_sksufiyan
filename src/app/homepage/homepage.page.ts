@@ -65,7 +65,7 @@ export class HomepagePage implements OnInit, OnDestroy {
     private network:NetworkdetectService
   ) {
     // this.initializeItems();
-    this.scheduledPage();
+    // this.scheduledPage();
   }
 
   ngOnInit() {
@@ -75,7 +75,7 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
-
+    debugger;
     if (this.storage.getUser().role.id === ROLES.Surveyor) {
       // surveyor will only see survey tab
       this.isUserSurveyor = true;
