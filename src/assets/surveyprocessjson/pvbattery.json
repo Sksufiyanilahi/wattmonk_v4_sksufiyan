@@ -170,7 +170,7 @@
                         "shotinfo":"Capture roof from all angles",
                         "questioninfo":"Provide type of roof.",
                         "shotstatus": false,
-                        "promptquestion": true,
+                        "promptquestion": false,
                         "question" : "What is the type of roof?",
                         "actions" : ["flat","pitch","both"],
                         "result" : "",
