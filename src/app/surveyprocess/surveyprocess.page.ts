@@ -985,8 +985,8 @@ export class SurveyprocessPage implements OnInit {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
           var nextvisibleitemfound = false;
           for (let index = this.selectedsubmenuindex; index < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1; index++) {
-            const element = this.mainmenuitems[this.selectedmainmenuindex].children[index];
-            if (element.isvisible) {
+            const element = this.mainmenuitems[this.selectedmainmenuindex].children[index + 1];
+            if (element.isvisible && !nextvisibleitemfound) {
               nextvisibleitemfound = true;
               this.selectedsubmenuindex = index + 1;
               this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
@@ -1001,11 +1001,11 @@ export class SurveyprocessPage implements OnInit {
               this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
               this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
               var nextvisiblemainitemfound = false;
-              for (let index = this.selectedmainmenuindex + 1; index < this.mainmenuitems.length - 1; index++) {
-                const element = this.mainmenuitems[index];
-                if (element.isvisible) {
+              for (let index = this.selectedmainmenuindex; index < this.mainmenuitems.length - 1; index++) {
+                const element = this.mainmenuitems[index + 1];
+                if (element.isvisible && !nextvisiblemainitemfound) {
                   nextvisiblemainitemfound = true;
-                  this.selectedmainmenuindex = index;
+                  this.selectedmainmenuindex = index + 1;
                   this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
                   this.selectedshotindex = 0;
                   this.selectedsubmenuindex = 0;
@@ -1022,11 +1022,11 @@ export class SurveyprocessPage implements OnInit {
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
             this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
             var nextvisiblemainitemfound = false;
-            for (let index = this.selectedmainmenuindex + 1; index < this.mainmenuitems.length - 1; index++) {
-              const element = this.mainmenuitems[index];
-              if (element.isvisible) {
+            for (let index = this.selectedmainmenuindex; index < this.mainmenuitems.length - 1; index++) {
+              const element = this.mainmenuitems[index + 1];
+              if (element.isvisible && !nextvisiblemainitemfound) {
                 nextvisiblemainitemfound = true;
-                this.selectedmainmenuindex = index;
+                this.selectedmainmenuindex = index + 1;
                 this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
                 this.selectedshotindex = 0;
                 this.selectedsubmenuindex = 0;
