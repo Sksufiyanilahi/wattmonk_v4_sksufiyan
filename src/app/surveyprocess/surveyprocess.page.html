@@ -471,6 +471,88 @@
       </ion-row>
     </ion-grid>
   </form>
+  <form [formGroup]="activeForm" class="white-bg" *ngIf="surveytype === 'pvbattery'">
+    <p class="formheader">Additional Information</p>
+    <ion-grid class="ion-padding">
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Utility*</ion-label>
+          <app-auto-complete [dataList]="utilities" mode="object" formControlName="utility" #utility></app-auto-complete>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Battery backup*</ion-label>
+          <ion-radio-group formControlName="batterybackup">
+            <ion-item>
+              <ion-label>Partial</ion-label>
+              <ion-radio slot="start" value="partial"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Whole</ion-label>
+              <ion-radio slot="start" value="whole"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Interconnection*</ion-label>
+          <ion-radio-group formControlName="interconnection">
+            <ion-item>
+              <ion-label>Backfed</ion-label>
+              <ion-radio slot="start" value="backfed"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Dreate main breaker</ion-label>
+              <ion-radio slot="start" value="dreatemainbreaker"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>SST with CT</ion-label>
+              <ion-radio slot="start" value="sstwithct"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Load Side Tap</ion-label>
+              <ion-radio slot="start" value="loadsidetap"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>SST with location of SST</ion-label>
+              <ion-radio slot="start" value="sstwithlocationofsst"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Service feed source*</ion-label>
+          <ion-radio-group formControlName="servicefeedsource">
+            <ion-item>
+              <ion-label>Overhead</ion-label>
+              <ion-radio slot="start" value="overhead"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Underground</ion-label>
+              <ion-radio slot="start" value="underground"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Additional notes</ion-label>
+          <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="additionalnotes">
+          </ion-textarea>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col><ion-button class="action-button-color" fill="clear" (click)="handleFormBack()">Back</ion-button></ion-col>
+        <ion-col size="auto">
+          <ion-button class="action-button-color" fill="clear" (click)="handleCompleteSurveyDataSubmission()">Submit
+            Survey</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>
 
 <ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.MAP" [forceOverscroll]="false">

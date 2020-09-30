@@ -192,6 +192,7 @@ export class SurveyprocessPage implements OnInit {
   solarmakes: SolarMake[] = [];
   solarmodels: SolarMadeModel[] = [];
   roofmaterials: RoofMaterial[] = [];
+  selectedroofmaterialid: number;
 
   galleryshots: CAPTUREDSHOT[];
 
@@ -398,7 +399,8 @@ export class SurveyprocessPage implements OnInit {
         mountingtype: new FormControl('', [Validators.required]),
         rooftype: new FormControl('', [Validators.required]),
         roofmaterial: new FormControl('', [Validators.required]),
-        shotname: new FormControl('', [])
+        shotname: new FormControl('', []),
+        additionalnotes: new FormControl('', [])
       });
 
       this.activeForm = this.pvbatteryForm;
@@ -432,6 +434,19 @@ export class SurveyprocessPage implements OnInit {
           });
 
           this.isdataloaded = true;
+
+          var mountingtypecontrol = this.activeForm.get("rooftype");
+      if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "pitch") {
+        this.mainmenuitems[2].isvisible = true;
+        this.activeForm.get("framing").setValidators([Validators.required]);
+        this.activeForm.get("framingsize").setValidators([Validators.required]);
+        this.activeForm.get("distancebetweentworafts").setValidators([Validators.required]);
+      } else {
+        this.mainmenuitems[2].isvisible = false;
+        this.activeForm.get("framing").clearValidators();
+        this.activeForm.get("framingsize").clearValidators();
+        this.activeForm.get("distancebetweentworafts").clearValidators();
+      }
 
           this.handleViewModeSwitch();
         } else {
@@ -838,8 +853,14 @@ export class SurveyprocessPage implements OnInit {
       var mountingtypecontrol = this.activeForm.get("rooftype");
       if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "pitch") {
         this.mainmenuitems[2].isvisible = true;
+        this.activeForm.get("framing").setValidators([Validators.required]);
+        this.activeForm.get("framingsize").setValidators([Validators.required]);
+        this.activeForm.get("distancebetweentworafts").setValidators([Validators.required]);
       } else {
         this.mainmenuitems[2].isvisible = false;
+        this.activeForm.get("framing").clearValidators();
+        this.activeForm.get("framingsize").clearValidators();
+        this.activeForm.get("distancebetweentworafts").clearValidators();
       }
     }
 
@@ -1186,14 +1207,14 @@ export class SurveyprocessPage implements OnInit {
     this.utilitieservice.setDataRefresh(true);
 
     var isutilitymanualinput = false;
-    if (this.batteryForm.get("utility").value == null || this.batteryForm.get("utility").value == "") {
+    if (this.activeForm.get("utility").value == null || this.activeForm.get("utility").value == "") {
       if (this.utility.manualinput != "") {
         isutilitymanualinput = true;
-        this.batteryForm.get("utility").setValue(this.utility.manualinput);
+        this.activeForm.get("utility").setValue(this.utility.manualinput);
       }
     }
 
-    if (this.batteryForm.status == 'INVALID') {
+    if (this.activeForm.status == 'INVALID') {
       this.displayIncompleteFormAlert();
     } else {
       this.markMainMenuCompletion();
@@ -1211,15 +1232,23 @@ export class SurveyprocessPage implements OnInit {
             }
             this.apiService.addUtility(data).subscribe((data) => {
               this.selectedutilityid = data.id;
-              this.saveFormData();
+              if(this.surveytype == "battery"){
+                this.saveFormData();
+              }else if(this.surveytype == "pvbattery"){
+                this.savePVBatteryFormData();
+              }
             }, (error) => {
               this.utilitieservice.hideLoading().then(() => {
                 this.utilitieservice.errorSnackBar(JSON.stringify(error));
               });
             });
           } else {
-            this.selectedutilityid = this.batteryForm.get("utility").value.id;
-            this.saveFormData();
+            this.selectedutilityid = this.activeForm.get("utility").value.id;
+            if(this.surveytype == "battery"){
+              this.saveFormData();
+            }else if(this.surveytype == "pvbattery"){
+              this.savePVBatteryFormData();
+            }
           }
         });
       } else {
@@ -1269,10 +1298,49 @@ export class SurveyprocessPage implements OnInit {
     });
   }
 
+  savePVBatteryFormData() {
+    const data = {
+      msplocation: this.activeForm.get("msplocation").value,
+      msprating: parseInt(this.activeForm.get("msprating").value),
+      mainbreakersize: parseInt(this.activeForm.get("mainbreakersize").value),
+      mspbreaker: this.activeForm.get("mspbreaker").value,
+      utilitymeter: this.activeForm.get("utilitymeter").value,
+      framing: this.activeForm.get("framing").value,
+      framingsize: this.activeForm.get("framingsize").value,
+      distancebetweentworafts: this.activeForm.get("distancebetweentworafts").value,
+      utility: this.selectedutilityid,
+      batterybackup: this.activeForm.get("batterybackup").value,
+      servicefeedsource: this.activeForm.get("servicefeedsource").value,
+      interconnection: this.activeForm.get("interconnection").value,
+      mountingtype: this.activeForm.get("mountingtype").value,
+      rooftype: this.activeForm.get("rooftype").value,
+      roofmaterial: this.activeForm.get("roofmaterial").value.id,
+      additionalnotes: this.activeForm.get("additionalnotes").value,
+      status: 'surveycompleted'
+    }
+    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.insomnia.keepAwake()
+          .then(
+            () => {
+              console.log('success')
+            },
+            () => console.log('error')
+          );
+        this.uploadImagesToServer();
+
+      });
+    }, (error) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.utilitieservice.errorSnackBar(JSON.stringify(error));
+      });
+    });
+  }
+
   async displayIncompleteFormAlert() {
     let error = '';
-    Object.keys(this.batteryForm.controls).forEach((key: string) => {
-      const control: AbstractControl = this.batteryForm.get(key);
+    Object.keys(this.activeForm.controls).forEach((key: string) => {
+      const control: AbstractControl = this.activeForm.get(key);
       if (control.invalid) {
         if (error !== '') {
           error = error + '<br/>';
@@ -1391,6 +1459,8 @@ export class SurveyprocessPage implements OnInit {
       this.cameraPreview.stopCamera();
       if (this.surveytype == 'battery') {
         this.getSolarMakes();
+      }else if (this.surveytype == 'pvbattery'){
+        this.getUtilities();
       }
     } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP) {
       this.cameraPreview.stopCamera();
