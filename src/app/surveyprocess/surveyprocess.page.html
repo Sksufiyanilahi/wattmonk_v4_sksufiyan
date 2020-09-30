@@ -155,7 +155,7 @@
       </ion-col>
     </ion-row>
 
-    <!-- Row for input questions -->
+    <!-- Row for input number questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
       *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_NUMBER">
       <ion-col size="12">
@@ -175,6 +175,32 @@
         </form>
         <ion-row class="ion-float-right">
           <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
+            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
+          </ion-button>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
+    <!-- Row for input text questions -->
+    <ion-row class="questionaireview-row ion-padding-horizontal"
+      *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_TEXT">
+      <ion-col size="12">
+        <p>
+          {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+        </p>
+        <form [formGroup]="activeForm" novalidate>
+          <ion-input class="form-control" autocomplete="off"
+            formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
+          </ion-input>
+          <div class="error_div">
+            <div
+              *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+              <span class="error">Field input is required.</span>
+            </div>
+          </div>
+        </form>
+        <ion-row class="ion-float-right">
+          <ion-button fill="clear" size="small" (click)="handleInputTextSubmission(activeForm)">
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
           </ion-button>
         </ion-row>

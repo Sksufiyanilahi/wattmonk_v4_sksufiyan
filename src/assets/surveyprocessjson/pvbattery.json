@@ -274,7 +274,7 @@
                         "actions" : ["Confirm"],
                         "result" : "",
                         "questionstatus": false,
-                        "questiontype": 2,
+                        "questiontype": 7,
                         "inputformcontrol" : "framingsize",
                         "imagekey":"atticimages",
                         "imagename":"atticimage"

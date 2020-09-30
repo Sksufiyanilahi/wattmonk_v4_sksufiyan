@@ -88,6 +88,7 @@ export enum QUESTIONTYPE {
   INPUT_INVERTER_AUTOCOMPLETE = 4,
   INPUT_SHOT_NAME = 5,
   INPUT_ROOF_MATERIAL_AUTOCOMPLETE = 6,
+  INPUT_TEXT = 7
 }
 
 export enum VIEWMODE {
@@ -435,18 +436,8 @@ export class SurveyprocessPage implements OnInit {
 
           this.isdataloaded = true;
 
-          var mountingtypecontrol = this.activeForm.get("rooftype");
-      if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "pitch") {
-        this.mainmenuitems[2].isvisible = true;
-        this.activeForm.get("framing").setValidators([Validators.required]);
-        this.activeForm.get("framingsize").setValidators([Validators.required]);
-        this.activeForm.get("distancebetweentworafts").setValidators([Validators.required]);
-      } else {
-        this.mainmenuitems[2].isvisible = false;
-        this.activeForm.get("framing").clearValidators();
-        this.activeForm.get("framingsize").clearValidators();
-        this.activeForm.get("distancebetweentworafts").clearValidators();
-      }
+          this.handleAtticSectionVisibility();
+          this.handleGroundShotsVisibility();
 
           this.handleViewModeSwitch();
         } else {
@@ -843,31 +834,69 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
 
     if (this.surveytype == "pvbattery" && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 0) {
-      var mountingtypecontrol = this.activeForm.get("mountingtype");
-      if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "ground") {
-        this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = true;
-      } else {
-        this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = false;
-      }
+      this.handleGroundShotsVisibility();
     } else if (this.surveytype == "pvbattery" && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 1) {
-      var mountingtypecontrol = this.activeForm.get("rooftype");
-      if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "pitch") {
-        this.mainmenuitems[2].isvisible = true;
-        this.activeForm.get("framing").setValidators([Validators.required]);
-        this.activeForm.get("framingsize").setValidators([Validators.required]);
-        this.activeForm.get("distancebetweentworafts").setValidators([Validators.required]);
-      } else {
-        this.mainmenuitems[2].isvisible = false;
-        this.activeForm.get("framing").clearValidators();
-        this.activeForm.get("framingsize").clearValidators();
-        this.activeForm.get("distancebetweentworafts").clearValidators();
-      }
+      this.handleAtticSectionVisibility();
     }
 
     this.handleMenuSwitch();
   }
 
+  handleGroundShotsVisibility(){
+    var mountingtypecontrol = this.activeForm.get("mountingtype");
+    if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "ground") {
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].ispending = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].ispending = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].shotstatus = false;
+    } else {
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].shotstatus = true;
+    }
+  }
+
+  handleAtticSectionVisibility(){
+    var mountingtypecontrol = this.activeForm.get("rooftype");
+      if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "pitch") {
+        this.mainmenuitems[2].isvisible = true;
+        this.mainmenuitems[2].ispending = true;
+        this.mainmenuitems[2].children[0].ispending = true;
+        this.mainmenuitems[2].children[0].shots.forEach(element => {
+          element.ispending = true;
+          element.questionstatus = false;
+          element.shotstatus = false;
+        });
+        this.activeForm.get("framing").setValidators([Validators.required]);
+        this.activeForm.get("framingsize").setValidators([Validators.required]);
+        this.activeForm.get("distancebetweentworafts").setValidators([Validators.required]);
+      } else {
+        this.mainmenuitems[2].isvisible = false;
+        this.mainmenuitems[2].ispending = false;
+        this.mainmenuitems[2].children[0].ispending = false;
+        this.mainmenuitems[2].children[0].shots.forEach(element => {
+          element.ispending = false;
+          element.questionstatus = true;
+          element.shotstatus = true;
+        });
+        this.activeForm.get("framing").clearValidators();
+        this.activeForm.get("framingsize").clearValidators();
+        this.activeForm.get("distancebetweentworafts").clearValidators();
+      }
+  }
+
   handleInputSubmission(form: FormGroup) {
+    var control = form.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol);
+    if (control.value != "") {
+      this.handleAnswerSubmission(control.value);
+    } else {
+      control.markAsTouched();
+      control.markAsDirty();
+    }
+  }
+
+  handleInputTextSubmission(form: FormGroup) {
     var control = form.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol);
     if (control.value != "") {
       this.handleAnswerSubmission(control.value);
