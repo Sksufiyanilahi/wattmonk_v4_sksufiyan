@@ -887,6 +887,7 @@ export class SurveyprocessPage implements OnInit {
   handleRoofMaterialSubmission() {
     var roofmaterialcontrol = this.activeForm.get("roofmaterial");
     if (roofmaterialcontrol.value != "") {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
       this.handleMenuSwitch();
