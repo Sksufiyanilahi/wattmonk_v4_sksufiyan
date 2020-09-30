@@ -984,11 +984,11 @@ export class SurveyprocessPage implements OnInit {
         if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
           var nextvisibleitemfound = false;
-          for (let index = this.selectedsubmenuindex + 1; index < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1; index++) {
+          for (let index = this.selectedsubmenuindex; index < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1; index++) {
             const element = this.mainmenuitems[this.selectedmainmenuindex].children[index];
             if (element.isvisible) {
               nextvisibleitemfound = true;
-              this.selectedsubmenuindex = index;
+              this.selectedsubmenuindex = index + 1;
               this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
               this.selectedshotindex = 0;
               this.scrollToSubmenuElement(this.selectedsubmenuindex);
