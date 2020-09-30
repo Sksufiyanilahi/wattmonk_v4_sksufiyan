@@ -3,6 +3,7 @@
         "name":"Electricals",
         "isactive": true,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
@@ -133,6 +134,7 @@
         "name": "Roof",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
@@ -231,6 +233,7 @@
         "name": "Attic",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
@@ -300,6 +303,7 @@
         "name": "Appliances",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
@@ -337,6 +341,7 @@
         "name": "Marking",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 2,
         "children":[]
     },
@@ -344,6 +349,7 @@
         "name": "Details",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 1,
         "children":[]
     }

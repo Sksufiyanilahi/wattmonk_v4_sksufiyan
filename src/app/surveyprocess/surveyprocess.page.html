@@ -50,9 +50,11 @@
           </ion-row>
           <ion-row class="mainbuttons ion-justify-content-center mainbuttonscontainer">
             <div #mainscroll class="scroll" scrollX="true">
+              <ng-container *ngFor="let button of mainmenuitems; let i = index">
               <ion-button id="mainmenu{{i}}" fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']"
-                *ngFor="let button of mainmenuitems; let i = index" (click)="toggleMainMenuSelection(i)">{{button.name}}
+              *ngIf="button.isvisible" (click)="toggleMainMenuSelection(i)">{{button.name}}
               </ion-button>
+            </ng-container>
             </div>
           </ion-row>
           <ion-row>
