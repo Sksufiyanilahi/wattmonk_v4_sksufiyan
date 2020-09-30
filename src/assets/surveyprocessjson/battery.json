@@ -3,12 +3,14 @@
         "name":"Electricals",
         "isactive": true,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
                 "name":"MSP",
                 "isactive": true,
                 "ispending": true,
+                "isvisible": true,
                 "checkexistence":false,
                 "isexistencechecked":false,
                 "inputformcontrol": "",
@@ -85,6 +87,7 @@
                 "name":"Utility Meter",
                 "ispending": true,
                 "isactive": false,
+                "isvisible": true,
                 "checkexistence":false,
                 "isexistencechecked":false,
                 "inputformcontrol": "",
@@ -129,6 +132,7 @@
                 "name":"PV Inverter",
                 "ispending": true,
                 "isactive": false,
+                "isvisible": true,
                 "checkexistence":false,
                 "isexistencechecked":false,
                 "inputformcontrol": "",
@@ -173,6 +177,7 @@
                 "name":"PV Meter",
                 "ispending": true,
                 "isactive": false,
+                "isvisible": true,
                 "checkexistence":true,
                 "isexistencechecked":false,
                 "inputformcontrol": "pvmeter",
@@ -201,6 +206,7 @@
                 "name":"AC Disconnect",
                 "ispending": true,
                 "isactive": false,
+                "isvisible": true,
                 "checkexistence":true,
                 "isexistencechecked":false,
                 "inputformcontrol": "acdisconnect",
@@ -247,12 +253,14 @@
         "name": "Solar",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
                 "name":"Panels",
                 "isactive": false,
                 "ispending": true,
+                "isvisible": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
                 "inputformcontrol": "",
@@ -283,12 +291,14 @@
         "name": "Roof",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
                 "name":"Roof Area",
                 "isactive": false,
                 "ispending": true,
+                "isvisible": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
                 "inputformcontrol": "",
@@ -319,12 +329,14 @@
         "name": "Appliances",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
                 "name":"Heavy Load Appliances",
                 "isactive": false,
                 "ispending": true,
+                "isvisible": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
                 "inputformcontrol": "",
@@ -355,6 +367,7 @@
         "name": "Marking",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 2,
         "children":[]
     },
@@ -362,6 +375,7 @@
         "name": "Details",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 1,
         "children":[]
     }
