@@ -34,6 +34,7 @@ export interface CHILDREN {
   name: string;
   isactive: boolean;
   ispending: boolean;
+  isvisible: boolean;
   checkexistence: boolean;
   isexistencechecked: boolean,
   inputformcontrol: string;
@@ -822,6 +823,16 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result = result;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+
+    if(this.surveytype == "pvbattery" && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 0){
+      var mountingtypecontrol = this.activeForm.get("mountingtype");
+      if(mountingtypecontrol.value == "both" || mountingtypecontrol.value == "ground"){
+        this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = true;
+      }else{
+        this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = false;
+      }
+    }
+
     this.handleMenuSwitch();
   }
 
@@ -964,10 +975,32 @@ export class SurveyprocessPage implements OnInit {
       } else {
         if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-          this.selectedsubmenuindex += 1;
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-          this.selectedshotindex = 0;
-          this.scrollToSubmenuElement(this.selectedsubmenuindex);
+          var nextvisibleitemfound = false;
+          for (let index = this.selectedsubmenuindex + 1; index < this.mainmenuitems[this.selectedmainmenuindex].children.length -1; index++) {
+            const element = this.mainmenuitems[this.selectedmainmenuindex].children[index];
+            if(element.isvisible){
+              nextvisibleitemfound = true;
+              this.selectedsubmenuindex = index;
+              this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+              this.selectedshotindex = 0;
+              this.scrollToSubmenuElement(this.selectedsubmenuindex);
+            }
+          }
+
+          if(!nextvisibleitemfound){
+            if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
+              //Unset previous menu and select new one
+              this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+              this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+              this.selectedmainmenuindex += 1;
+              this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+              this.selectedshotindex = 0;
+              this.selectedsubmenuindex = 0;
+              this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+              this.scrollToMainmenuElement(this.selectedmainmenuindex);
+              this.handleViewModeSwitch();
+            }
+          }
         } else {
           if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
             //Unset previous menu and select new one
