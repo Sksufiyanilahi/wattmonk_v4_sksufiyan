@@ -388,7 +388,10 @@ export class SurveyprocessPage implements OnInit {
         utility: new FormControl('', [Validators.required]),
         batterybackup: new FormControl('', [Validators.required]),
         servicefeedsource: new FormControl('', [Validators.required]),
-        interconnection: new FormControl('', [Validators.required])
+        interconnection: new FormControl('', [Validators.required]),
+        mountingtype: new FormControl('', [Validators.required]),
+        rooftype: new FormControl('', [Validators.required]),
+        roofmaterial: new FormControl('', [Validators.required])
       });
 
       this.activeForm = this.pvbatteryForm;
