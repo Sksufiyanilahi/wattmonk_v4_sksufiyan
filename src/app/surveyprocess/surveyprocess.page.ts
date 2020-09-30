@@ -390,6 +390,7 @@ export class SurveyprocessPage implements OnInit {
         utilitymeter: new FormControl('', [Validators.required]),
         framing: new FormControl('', [Validators.required]),
         framingsize: new FormControl('', [Validators.required]),
+        distancebetweentworafts: new FormControl('', [Validators.required]),
         utility: new FormControl('', [Validators.required]),
         batterybackup: new FormControl('', [Validators.required]),
         servicefeedsource: new FormControl('', [Validators.required]),
