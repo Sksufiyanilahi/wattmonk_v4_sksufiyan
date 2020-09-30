@@ -20,6 +20,7 @@ import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.
 import { StorageService } from '../storage.service';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 import * as domtoimage from 'dom-to-image';
+import { RoofMaterial } from '../model/roofmaterial.model';
 
 export interface MAINMENU {
   name: string;
@@ -122,6 +123,7 @@ export class SurveyprocessPage implements OnInit {
   @ViewChild('screen', { static: false }) screen: ElementRef;
   @ViewChild('slides', { static: false }) slider: IonSlides;
   @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
+  @ViewChild('roofmaterial', { static: false }) roofmaterial: AutoCompleteComponent;
   @ViewChild('mainscroll', { static: false }) mainscroll: any;
   @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
 
@@ -187,6 +189,7 @@ export class SurveyprocessPage implements OnInit {
   invertermakes: InverterMakeModel[] = [];
   solarmakes: SolarMake[] = [];
   solarmodels: SolarMadeModel[] = [];
+  roofmaterials: RoofMaterial[] = [];
 
   galleryshots: CAPTUREDSHOT[];
 
@@ -510,6 +513,23 @@ export class SurveyprocessPage implements OnInit {
     });
   }
 
+  getRoofMaterials() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getRoofMaterials().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.roofmaterials = response;
+          this.changedetectorref.detectChanges();
+        });
+
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
   getInverterModels(selectedmakeid: string) {
     this.utilitieservice.showLoading('Getting inverter models').then((success) => {
       this.apiService.getInverterMade(selectedmakeid).subscribe(response => {
@@ -767,6 +787,8 @@ export class SurveyprocessPage implements OnInit {
               this.getUtilities();
             } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
               this.getInverterMakes();
+            } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
+              this.getRoofMaterials();
             }
           }else{
             this.markShotCompletion(this.selectedshotindex);
@@ -859,6 +881,18 @@ export class SurveyprocessPage implements OnInit {
     } else {
       utilitycontrol.markAsTouched();
       utilitycontrol.markAsDirty();
+    }
+  }
+
+  handleRoofMaterialSubmission() {
+    var roofmaterialcontrol = this.activeForm.get("roofmaterial");
+    if (roofmaterialcontrol.value != "") {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+      this.handleMenuSwitch();
+    } else {
+      roofmaterialcontrol.markAsTouched();
+      roofmaterialcontrol.markAsDirty();
     }
   }
 
