@@ -321,7 +321,7 @@
                         "isactive": false,
                         "ispending": true,
                         "shotinfo":"Capture all appliances of higher load",
-                        "questioninfo":"",
+                        "questioninfo":"Provide name of each appliance with heavy load.",
                         "shotstatus": false,
                         "promptquestion": false,
                         "question" : "Name of the appliance?",
