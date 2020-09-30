@@ -436,9 +436,6 @@ export class SurveyprocessPage implements OnInit {
 
           this.isdataloaded = true;
 
-          this.handleAtticSectionVisibility();
-          this.handleGroundShotsVisibility();
-
           this.handleViewModeSwitch();
         } else {
           this.http
