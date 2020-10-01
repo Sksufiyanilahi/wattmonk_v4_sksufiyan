@@ -3,6 +3,7 @@
         "name":"Electricals",
         "isactive": true,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
@@ -85,6 +86,7 @@
                 "name":"Existing Sub Panel",
                 "isactive": true,
                 "ispending": true,
+                "isvisible": true,
                 "checkexistence":true,
                 "isexistencechecked":false,
                 "inputformcontrol": "",
@@ -161,6 +163,7 @@
                 "name":"Utility Meter",
                 "ispending": true,
                 "isactive": false,
+                "isvisible": true,
                 "checkexistence":false,
                 "isexistencechecked":false,
                 "inputformcontrol": "",
@@ -207,12 +210,14 @@
         "name": "Roof",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
                 "name":"Roof Photos",
                 "isactive": false,
                 "ispending": true,
+                "isvisible": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
                 "inputformcontrol": "",
@@ -241,6 +246,7 @@
                 "name":"Roof Dimensions",
                 "isactive": false,
                 "ispending": true,
+                "isvisible": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
                 "inputformcontrol": "",
@@ -269,6 +275,7 @@
                 "name":"Obstacles Photos",
                 "isactive": false,
                 "ispending": true,
+                "isvisible": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
                 "inputformcontrol": "",
@@ -297,6 +304,7 @@
                 "name":"Obstacles Dimensiones",
                 "isactive": false,
                 "ispending": true,
+                "isvisible": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
                 "inputformcontrol": "",
@@ -327,12 +335,14 @@
         "name": "Attic",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
                 "name":"Attic Photos",
                 "isactive": false,
                 "ispending": true,
+                "isvisible": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
                 "inputformcontrol": "",
@@ -347,11 +357,11 @@
                         "shotstatus": false,
                         "promptquestion": false,
                         "question" : "What is the type of frame?",
-                        "actions" : ["Truss", "Rafter"],
+                        "actions" : ["truss", "rafter"],
                         "result" : "",
                         "questionstatus": false,
                         "questiontype": 1,
-                        "inputformcontrol" : "typeofframe",
+                        "inputformcontrol" : "framing",
                         "imagekey":"atticimages",
                         "imagename":"atticimage"
                     },
@@ -366,8 +376,8 @@
                         "actions" : ["Confirm"],
                         "result" : "",
                         "questionstatus": false,
-                        "questiontype": 2,
-                        "inputformcontrol" : "sizeofraft",
+                        "questiontype": 7,
+                        "inputformcontrol" : "framingsize",
                         "imagekey":"atticimages",
                         "imagename":"atticimage"
                     },
@@ -383,7 +393,7 @@
                         "result" : "",
                         "questionstatus": false,
                         "questiontype": 2,
-                        "inputformcontrol" : "distancebetweenrafts",
+                        "inputformcontrol" : "distancebetweentworafts",
                         "imagekey":"atticimages",
                         "imagename":"atticimage"
                     }
@@ -395,6 +405,7 @@
         "name": "Appliances",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 0,
         "children":[
             {
@@ -431,6 +442,7 @@
         "name": "Details",
         "isactive": false,
         "ispending": true,
+        "isvisible": true,
         "viewmode": 1,
         "children":[]
     }
