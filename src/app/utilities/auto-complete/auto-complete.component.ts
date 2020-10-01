@@ -83,24 +83,27 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
 
   }
 
-  onValueChanged(event: CustomEvent) {
+  onValueChanged(event) {
     console.log('value changed');
     console.log(this.dataList);
     this.manualinput = event.detail.value;
-    this.selectedDataName = event.detail.value;
     this.sortedList = this.dataList.filter((item) => {
+      debugger;
       return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
     });
     if (this.sortedList.length === 1) {
+      debugger;
       if (this.sortedList[0].name.toLowerCase() === event.detail.value.toLowerCase()) {
+        this.onChange(event.target.value);
         this.sortedList = [];
        
       }
     }
     else{
       this.selectedDataName= event.detail.value;
+      debugger;
       // event.detail.value = this.selectedDataName;
-      this.onChange(this.selectedDataName);
+      this.onChange(event.target.value);
     }
   }
 

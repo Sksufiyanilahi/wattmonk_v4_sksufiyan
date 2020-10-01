@@ -69,6 +69,9 @@ export class ApiService {
   getSolarMake() {
     return this.http.get<SolarMake[]>(BaseUrl + '/modulemakes', { headers: this.headers });
   }
+  postSolarMake(data){
+    return this.http.post<SolarMake[]>(BaseUrl + '/modulemakes',data, { headers: this.headers });
+  }
 
   getRoofMaterial() {
     return this.http.get<SolarMake[]>(BaseUrl + '/roofmaterials', { headers: this.headers });
@@ -78,8 +81,21 @@ export class ApiService {
     return this.http.get<SolarMadeModel[]>(BaseUrl + '/modulemodels?modulemake.id_eq=' + id, { headers: this.headers });
   }
 
+  postSolarMade(data){
+    return this.http.post<SolarMadeModel[]>(BaseUrl + '/modulemodels' ,data, { headers: this.headers });
+  }
+
   getInverterMake() {
     return this.http.get<InverterMakeModel[]>(BaseUrl + '/invertermakes', { headers: this.headers });
+  }
+
+  postInverterMake(data){
+    return this.http.post<InverterMakeModel[]>(BaseUrl + '/invertermakes',data, { headers: this.headers });
+  }
+
+  postInverterMade(data){
+    return this.http.post<InverterMadeModel[]>(BaseUrl + '/invertermodels', data,{ headers: this.headers });
+
   }
 
   getUtilities() {

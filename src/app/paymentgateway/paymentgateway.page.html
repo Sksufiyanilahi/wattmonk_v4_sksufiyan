@@ -1,39 +1,49 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Add points</ion-title>
+    <ion-title>Order Design</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid class="ion-padding ion-margin-top">
-    <ion-row class="ion-margin-top">
-      <ion-col size="12">
-        <!-- <form [formGroup]="initialamount" novalidate (ngSubmit)="addamount()"> -->
-          <ion-grid>
-            <ion-row class="ion-margin-top">
-              <ion-col>
-                <ion-input type="number" placeholder="Enter amount" class="form-control" autocomplete="off" [(ngModel)]="amount"></ion-input>
-                <div class="error_div">
-                  <div *ngIf="initialamount.get('amount').value === undefined && initialamount.get('amount').dirty || initialamount.get('amount').value === null && initialamount.get('amount').dirty " >
-                      <span class="error">{{'Please enter the amount.'}}</span>
-                  </div>      
-                  <div *ngIf="initialamount.get('amount').value === 0 && initialamount.get('amount').dirty" >
-                      <span class="error">{{"Value should be greater than 0"}}</span>
-                  </div>      
-              </div>  
-              </ion-col>
-              <ion-col>
-             
-                <!-- <ion-button type="submit">Add points</ion-button> -->
-              </ion-col>
-            </ion-row>
-            <ion-row style="margin-top: 20px;">
-              <ion-col>
-                <!-- <ngx-paypal [config]="payPalConfig"></ngx-paypal> -->
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        <!-- </form> -->
+  <ion-list>
+    <ion-radio-group value="buford" mode="md">
+      <ion-list-header>
+        <ion-label>Select priority for delivering design</ion-label>
+      </ion-list-header>
+  
+      <ion-item>
+        <ion-label>0-8 hrs</ion-label>
+        <ion-radio slot="start" value="biff"></ion-radio>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>8-12 hrs</ion-label>
+        <ion-radio slot="start" value="griff"></ion-radio>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label>12-24hrs</ion-label>
+        <ion-radio slot="start" value="busford"></ion-radio>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label>more than 24hrs</ion-label>
+        <ion-radio slot="start" value="buford"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4">
+        <ion-button color="primary">Add money</ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button color="warning">Pay with wallet</ion-button>
+      </ion-col>
+      <ion-col size="4" >
+        <ion-button color="light">Pay with card</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
