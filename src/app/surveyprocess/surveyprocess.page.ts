@@ -83,7 +83,8 @@ export enum QUESTIONTYPE {
   INPUT_NUMBER = 2,
   INPUT_UTILITIES_AUTOCOMPLETE = 3,
   INPUT_INVERTER_AUTOCOMPLETE = 4,
-  INPUT_SHOT_NAME = 5
+  INPUT_SHOT_NAME = 5,
+  INPUT_ROOF_MATERIAL_AUTOCOMPLETE = 6,
 }
 
 export enum VIEWMODE {
@@ -170,6 +171,8 @@ export class SurveyprocessPage implements OnInit {
   // googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=19&maptype=satellite&size=1200x1600&scale=2&key=' + GOOGLE_API_KEY;
 
   batteryForm: FormGroup;
+  pvbatteryForm: FormGroup;
+  pvForm: FormGroup;
   activeForm: FormGroup;
 
   totalpercent = 0;
@@ -372,6 +375,74 @@ export class SurveyprocessPage implements OnInit {
       });
 
       this.getSiteLocationGoogleImageFromService();
+    }else if(this.surveytype == "pvbattery"){
+      this.totalstepcount = 13;
+      this.pvbatteryForm = new FormGroup({
+        msplocation: new FormControl('', [Validators.required]),
+        msprating: new FormControl('', [Validators.required]),
+        mainbreakersize: new FormControl('', [Validators.required]),
+        mspbreaker: new FormControl('', [Validators.required]),
+        utilitymeter: new FormControl('', [Validators.required]),
+        framing: new FormControl('', [Validators.required]),
+        framingsize: new FormControl('', [Validators.required]),
+        utility: new FormControl('', [Validators.required]),
+        batterybackup: new FormControl('', [Validators.required]),
+        servicefeedsource: new FormControl('', [Validators.required]),
+        interconnection: new FormControl('', [Validators.required])
+      });
+
+      this.activeForm = this.pvbatteryForm;
+
+      // this.storage.clear();
+      this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
+        console.log(data);
+        if (data) {
+          this.mainmenuitems = data.menuitems;
+          this.totalpercent = data.currentprogress;
+          this.selectedmainmenuindex = data.selectedmainmenuindex;
+          this.selectedsubmenuindex = data.selectedsubmenuindex;
+          this.selectedshotindex = data.selectedshotindex;
+          this.shotcompletecount = data.shotcompletecount;
+          this.previousmainmenuindex = data.previousmainmenuindex;
+          this.previoussubmenuindex = data.previoussubmenuindex;
+          this.previousshotindex = data.previousshotindex;
+
+          this.surveyid = data.surveyid;
+          this.surveytype = data.surveytype;
+          this.surveycity = data.city;
+          this.surveystate = data.state;
+          this.latitude = data.latitude;
+          this.longitude = data.longitude;
+
+          // restore form
+          Object.keys(data.formdata).forEach((key: string) => {
+            let control: AbstractControl = null;
+            control = this.activeForm.get(key);
+            control.setValue(data.formdata[key]);
+          });
+
+          this.isdataloaded = true;
+
+          this.handleViewModeSwitch();
+        } else {
+          this.http
+            .get("assets/surveyprocessjson/pvbattery.json")
+            .subscribe((data) => {
+              this.mainmenuitems = JSON.parse(JSON.stringify(data));
+              this.isdataloaded = true;
+
+              this.mainmenuitems.forEach(element => {
+                if (element.isactive) {
+                  this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+                }
+              });
+            });
+        }
+      });
+
+      this.getSiteLocationGoogleImageFromService();
+    }else if(this.surveytype == "pv"){
+
     }
   }
 

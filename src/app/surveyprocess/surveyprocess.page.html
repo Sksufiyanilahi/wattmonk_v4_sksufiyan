@@ -165,7 +165,7 @@
           </ion-input>
           <div class="error_div">
             <div
-              *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && batteryForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+              *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
               <span class="error">Field input is required.</span>
             </div>
           </div>
@@ -344,6 +344,86 @@
             </ion-item>
           </ion-radio-group>
         </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Additional notes</ion-label>
+          <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="additionalnotes">
+          </ion-textarea>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col><ion-button class="action-button-color" fill="clear" (click)="handleFormBack()">Back</ion-button></ion-col>
+        <ion-col size="auto">
+          <ion-button class="action-button-color" fill="clear" (click)="handleCompleteSurveyDataSubmission()">Submit
+            Survey</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+  <form [formGroup]="activeForm" class="white-bg" *ngIf="surveytype === 'pv'">
+    <p class="formheader">Additional Information</p>
+    <ion-grid class="ion-padding">
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Type of Roof Material*</ion-label>
+          <app-auto-complete [dataList]="roofmaterials" mode="object" formControlName="roofmaterial" #roofmaterial></app-auto-complete>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Service feed source*</ion-label>
+          <ion-radio-group formControlName="servicefeedsource">
+            <ion-item>
+              <ion-label>Overhead</ion-label>
+              <ion-radio slot="start" value="overhead"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Underground</ion-label>
+              <ion-radio slot="start" value="underground"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Any Existing Solar System*</ion-label>
+          <ion-radio-group formControlName="existingsolarsystem">
+            <ion-item>
+              <ion-label>Yes</ion-label>
+              <ion-radio slot="start" value="true"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>No</ion-label>
+              <ion-radio slot="start" value="false"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="existingsolarsystem">
+        <ion-col>
+          <ion-label position="fixed">Details Of Existing System</ion-label>
+          <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="detailsofexisitingsystem">
+          </ion-textarea>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Is It Newly Constructed?*</ion-label>
+          <ion-radio-group formControlName="newconstruction">
+            <ion-item>
+              <ion-label>Yes</ion-label>
+              <ion-radio slot="start" value="true"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>No</ion-label>
+              <ion-radio slot="start" value="false"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf='newconstruction'>
+        
       </ion-row>
       <ion-row>
         <ion-col>
