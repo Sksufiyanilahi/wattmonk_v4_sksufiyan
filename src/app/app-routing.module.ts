@@ -105,7 +105,11 @@ const routes: Routes = [
   {
     path: 'activity-details',
     loadChildren: () => import('./activity-details/activity-details.module').then( m => m.ActivityDetailsPageModule)
+  },  {
+    path: 'stripe',
+    loadChildren: () => import('./stripe/stripe.module').then( m => m.StripePageModule)
   }
+
 
 
 

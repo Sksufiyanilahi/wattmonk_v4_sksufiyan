@@ -17,6 +17,8 @@ import { SearchModel } from './model/search.model';
 import { BaseUrl } from './contants';
 import { GOOGLE_API_KEY } from './model/constants';
 import { UtilitiesService } from './utilities.service';
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +31,10 @@ export class ApiService {
   private userId = '';
   public searchbarElement: string = '';
   public _OnMessageReceivedSubject: Subject<string>;
+
+  public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
+
+
   constructor(
     private http: HttpClient,
     private storageService: StorageService,
@@ -188,7 +194,7 @@ export class ApiService {
   }
 
   getDesigners(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId + '&parentcompany=' + this.storageService.getUser().company, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId, { headers: this.headers });
   }
 
   uploadImage(surveyId: number, key: string, blob: Blob, fileName: string) {
@@ -252,5 +258,9 @@ export class ApiService {
 
   activityDetails(designid){
     return this.http.get(BaseUrl+ "designs/" + designid, { headers: this.headers});
+  }
+
+  publishSolarMake(value){
+    this.solarMakeValue.next(value);
   }
 }

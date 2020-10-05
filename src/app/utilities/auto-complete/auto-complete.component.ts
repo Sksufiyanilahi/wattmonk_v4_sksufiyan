@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
+import { ApiService } from 'src/app/api.service';
 
 @Component({
   selector: 'app-auto-complete',
@@ -32,7 +33,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   selectedDataName = '';
   manualinput = '';
 
-  constructor() {
+  constructor(public apiService:ApiService) {
   }
 
   registerOnChange(fn: any): void {
@@ -83,10 +84,13 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
 
   }
 
+
   onValueChanged(event) {
-    console.log('value changed');
+    console.log('value changed', event);
     console.log(this.dataList);
     this.manualinput = event.detail.value;
+    this.selectedDataName = event.detail.value;
+    console.log(this.selectedDataName);
     this.sortedList = this.dataList.filter((item) => {
       debugger;
       return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
@@ -94,7 +98,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
     if (this.sortedList.length === 1) {
       debugger;
       if (this.sortedList[0].name.toLowerCase() === event.detail.value.toLowerCase()) {
-        this.onChange(event.target.value);
+        // this.onChange(event.target.value);
         this.sortedList = [];
        
       }
@@ -103,7 +107,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
       this.selectedDataName= event.detail.value;
       debugger;
       // event.detail.value = this.selectedDataName;
-      this.onChange(event.target.value);
+      // this.onChange(event.target.value);
     }
   }
 
@@ -136,7 +140,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   onBlur(event: CustomEvent) {
-    console.log(event);
+    console.log(event , '11112');
     setTimeout(() => {
       this.sortedList = [];
     }, 100);

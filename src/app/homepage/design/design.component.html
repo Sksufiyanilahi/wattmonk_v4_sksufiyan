@@ -1,23 +1,23 @@
 <ion-content (click)="close()" style="padding-bottom: 250px;">
 
-    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
-        <ion-segment-button *ngIf="userData.role.type !=='SuperAdmin'"  value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="newDesign">
+        <ion-segment-button *ngIf="userData.role.type !=='SuperAdmin'"  value="newDesign">
           <ion-label class="segment-btn">New Designs</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=designassigned">
+        <ion-segment-button value="InDesign">
           <ion-label class="segment-btn">In Designing</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=designcompleted">
+        <ion-segment-button value="completed">
           <ion-label class="segment-btn">Completed</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed">
+        <ion-segment-button value="InReview">
           <ion-label class="segment-btn"> In Review</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=delivered">
+        <ion-segment-button value="delivered">
           <ion-label class="segment-btn">Delivered</ion-label>
         </ion-segment-button>
       </ion-segment>
-      <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+      <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">    
           <ion-refresher-content></ion-refresher-content>
         </ion-refresher>
                    

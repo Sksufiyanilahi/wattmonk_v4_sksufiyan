@@ -209,12 +209,15 @@
             </ion-row>
 
             <ion-row>
-                <ion-col size="12">
+                <ion-col size="11">
                     <ion-item class="ion-no-padding">
                         <ion-label position="floating">Attachment</ion-label>
-                        <ion-input class="form_input"  type="file" formControlName="attachments" (change)="prelimfiles($event)" multiple></ion-input>
-                    </ion-item>
-               
+                        <ion-input style="font-size:12px" class="form_input"  #myinput type="file" formControlName="attachments" (change)="prelimfiles($event)" multiple>
+                        </ion-input>
+                    </ion-item>    
+                </ion-col>
+                <ion-col size="1" style="display: flex;align-items: flex-end;">
+                    <ion-icon name="close-circle-outline" *ngIf="myinput.value !=''" (click)="myinput.value=''"></ion-icon>
                 </ion-col>
             </ion-row>
 

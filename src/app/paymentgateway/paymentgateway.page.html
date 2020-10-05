@@ -6,35 +6,56 @@
 
 <ion-content>
   <ion-list>
-    <ion-radio-group value="buford" mode="md">
+    <ion-radio-group value="24"  mode="md" (ionChange)="select($event)">
       <ion-list-header>
         <ion-label>Select priority for delivering design</ion-label>
       </ion-list-header>
   
       <ion-item>
         <ion-label>0-8 hrs</ion-label>
-        <ion-radio slot="start" value="biff"></ion-radio>
+        <ion-radio slot="start" value="50"></ion-radio>
       </ion-item>
   
       <ion-item>
         <ion-label>8-12 hrs</ion-label>
-        <ion-radio slot="start" value="griff"></ion-radio>
+        <ion-radio slot="start" value="36"></ion-radio>
       </ion-item>
   
       <ion-item>
-        <ion-label>12-24hrs</ion-label>
-        <ion-radio slot="start" value="busford"></ion-radio>
+        <ion-label>12-18hrs</ion-label>
+        <ion-radio slot="start" value="30"></ion-radio>
       </ion-item>
 
 
       <ion-item>
-        <ion-label>more than 24hrs</ion-label>
-        <ion-radio slot="start" value="buford"></ion-radio>
+        <ion-label>18-24hrs</ion-label>
+        <ion-radio slot="start" value="24"></ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>
 
   <ion-grid>
+    <ion-row ion-padding>
+      <ion-col size="3.5">
+        <ion-label>Left amount</ion-label>
+          <p style="text-align: center;font-size: 13px;">{{user.amount}}</p>
+      </ion-col>
+      <ion-col size="0.5" style="display: flex;align-items: flex-end;">
+
+          <p style="text-align: center;font-size: 13px;">+</p>
+      </ion-col>
+      <ion-col size="4">
+        <ion-label>Design amount</ion-label>
+        <p style="text-align: center;font-size: 13px;">{{value}}</p>
+      </ion-col>
+      <ion-col size="4">
+        <ion-label>Total cost</ion-label>
+        <p style="text-align: center;font-size: 13px;">{{user.amount + value}}</p>
+      </ion-col>
+      
+        
+
+    </ion-row>
     <ion-row>
       <ion-col size="4">
         <ion-button color="primary">Add money</ion-button>
@@ -47,5 +68,9 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  
+
+ 
 
 </ion-content>

@@ -42,7 +42,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   showBottomDraw: boolean = false;
   roleType: any;
   myFiles: string[] = [];  
-  segments:any='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+  segments:any;
   listOfDesigns: DesginDataModel[];
   private DesignRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
@@ -69,6 +69,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     private storageService:StorageService,
     private network:NetworkdetectService
   ) {
+    this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -91,15 +92,35 @@ this.network.networkDisconnect();
 this.network.networkConnect();
     
   }
-
-
   segmentChanged(event){
-    ;
-    console.log((event.target.value));
-    this.pending(event.target.value);
-    this.segments = event.target.value;
-    // this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+    if(this.userData.role.type=='wattmonkadmins'){
+      if(event.target.value=='newDesign'){
+        this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+        // return this.segments;
+      }
+      else if(event.target.value=='InDesign'){
+        this.segments ="requesttype=prelim&status=designassigned";
+        // return this.segments;
+      }
+      else if(event.target.value=='completed'){
+        this.segments ="requesttype=prelim&status=designcompleted";
+        // return this.segments;
+      }
+      else if(event.target.value=='InReview'){
+        this.segments ="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed";
+        // return this.segments;
+      }
+      else if(event.target.value=='delivered'){
+        this.segments ="requesttype=prelim&status=delivered";
+      }
       this.getDesigns(null);
+      // return this.segments;
+  
+    }
+    // this.getsegmentdata(event.target.value);
+    console.log((event.target.value));
+    // this.segments = event.target.value;
+    // this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
     // });
 
     // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {

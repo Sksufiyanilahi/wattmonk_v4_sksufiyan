@@ -16,7 +16,6 @@ import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd } from '@angula
 import { DesginDataModel, DesignModel } from '../../model/design.model';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
-import { pairwise, filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-design',
@@ -59,6 +58,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   encodingType: this.camera.EncodingType.PNG,
   mediaType: this.camera.MediaType.PICTURE
 }
+  fileName: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -145,6 +145,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.desginForm.get('city').setValue('Lucknow');
         this.desginForm.get('state').setValue('UP');
         this.desginForm.get('postalcode').setValue(3232343);
+        this.desginForm.get('solarmake').setValue(3232343);
         // this.desginForm.get('address').setValue(address.address);
         // this.desginForm.get('latitude').setValue(address.lat);
         // this.desginForm.get('longitude').setValue(address.long);
@@ -227,9 +228,9 @@ getDesignDetails() {
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
-            
+            debugger;
           this.design = result;
-          console.log(this.design);
+          console.log(this.design.attachments);
           this.desginForm.patchValue({
             name: this.design.name,
             email: this.design.email,
@@ -251,7 +252,7 @@ getDesignDetails() {
             postalcode:this.design.postalcode,
             newconstruction: this.design.newconstruction + '',
             prelimdesign:null,
-            attachments:this.design.attachments,
+            attachments:this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length,
             solarmake:this.design.solarmake,
             solarmodel:this.design.solarmodel,
             invertermake:this.design.invertermake,
@@ -588,7 +589,7 @@ getDesignDetails() {
   }
 
   getSolarMade() {
-    // this.utils.showLoading('Getting module models').then((success) => {
+    this.utils.showLoading('Getting module models').then((success) => {
       this.apiService.getSolarMade(this.desginForm.get('solarmake').value).subscribe(response => {
         this.utils.hideLoading().then(()=>{
           console.log(response);
@@ -604,7 +605,7 @@ getDesignDetails() {
       });
     // }, (error) => {
 
-    // });
+    });
 
 
   }
@@ -627,7 +628,7 @@ ioniViewDidEnter(){
 
   getInverterMade() {
     console.log(this.desginForm.get('invertermake').value);
-    // this.utils.showLoading('Getting inverter models').then((success) => {
+    this.utils.showLoading('Getting inverter models').then((success) => {
       this.apiService.getInverterMade(this.desginForm.get('invertermake').value).subscribe(response => {
         this.utils.hideLoading().then(()=>{
           console.log(response);
@@ -643,7 +644,7 @@ ioniViewDidEnter(){
       });
     // }, (reject) => {
 
-    // });
+    });
 
   }
 
@@ -691,7 +692,17 @@ ioniViewDidEnter(){
     for(var i=0; i< event.target.files.length;i++){
       this.prelimFiles.push(event.target.files[i]) 
     }
-    console.log(this.prelimFiles);
+    if(this.prelimFiles.length==1){
+      this.fileName= event.target.files[0].name;
+      console.log(this.fileName);
+      
+    }else if(this.prelimFiles.length >1){
+      this.fileName= this.prelimFiles.length;
+    }else{
+      this.fileName='';
+    }
+  
+   
   }
   
 
@@ -748,7 +759,4 @@ ioniViewDidEnter(){
 
   // }
 
-  pickprelimdesign(){
-
-  }
 }
