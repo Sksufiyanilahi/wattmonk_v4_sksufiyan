@@ -10,7 +10,6 @@
                 "name":"MSP",
                 "isactive": true,
                 "ispending": true,
-                "isvisible": true,
                 "checkexistence":false,
                 "isexistencechecked":false,
                 "inputformcontrol": "",
@@ -84,6 +83,83 @@
                 ]
             },
             {
+                "name":"Existing Sub Panel",
+                "isactive": true,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence":true,
+                "isexistencechecked":false,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": true,
+                        "ispending": true,
+                        "shotinfo":"Capture Long Shot",
+                        "questioninfo":"Provide Sub Panel Location",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Sub Panel is located inside or outside the building?",
+                        "actions" : ["inside","outside"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "subpanellocation",
+                        "imagekey":"existingsubpanelimages",
+                        "imagename":"subpanellongshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide Sub Panel Rating",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Sub Panel Rating?",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "subpanelrating",
+                        "imagekey":"existingsubpanelimages",
+                        "imagename":"subpanelzoomshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Open Sub Panel Shutter & Capture Zoom Shot",
+                        "questioninfo":"Provide Sub Panel Main Breaker Size",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Sub Panel Main Breaker Size",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "subpanelmainbreakersize",
+                        "imagekey":"existingsubpanelimages",
+                        "imagename":"subpanelopenshutterzoomshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Open Sub Panel Inside Cover & Capture Zoom Shot",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"existingsubpanelimages",
+                        "imagename":"subpanelwithoutcovershot"
+                    }
+                ]
+            },
+            {
                 "name":"Utility Meter",
                 "ispending": true,
                 "isactive": false,
@@ -127,163 +203,6 @@
                         "imagename":"umzoomshoturl"
                     }
                 ]
-            },
-            {
-                "name":"PV Inverter",
-                "ispending": true,
-                "isactive": false,
-                "isvisible": true,
-                "checkexistence":false,
-                "isexistencechecked":false,
-                "inputformcontrol": "",
-                "allowmultipleshots": false,
-                "capturedshots": [],
-                "shots":[
-                    {
-                        "isactive": false,
-                        "ispending": true,
-                        "shotinfo":"Capture Wide Angle Shot",
-                        "questioninfo":"Provide Inverter Location",
-                        "shotstatus": false,
-                        "promptquestion": false,
-                        "question" : "PV Inverter is located inside or outside?",
-                        "actions" : ["inside","outside"],
-                        "result" : "",
-                        "questionstatus": false,
-                        "questiontype": 1,
-                        "inputformcontrol" : "pvinverterlocation",
-                        "imagekey":"pvinverterimages",
-                        "imagename":"pvinverterwideshoturl"
-                    },
-                    {
-                        "isactive": false,
-                        "ispending": true,
-                        "shotinfo":"Capture Zoom Shot",
-                        "questioninfo":"Provide Inverter Details",
-                        "shotstatus": false,
-                        "promptquestion": false,
-                        "question" : "PV Inverter Make & Model?",
-                        "actions" : ["confirm"],
-                        "result" : "",
-                        "questionstatus": false,
-                        "questiontype": 4,
-                        "inputformcontrol" : "",
-                        "imagekey":"pvinverterimages",
-                        "imagename":"pvinverterzoomshoturl"
-                    }
-                ]
-            },
-            {
-                "name":"PV Meter",
-                "ispending": true,
-                "isactive": false,
-                "isvisible": true,
-                "checkexistence":true,
-                "isexistencechecked":false,
-                "inputformcontrol": "pvmeter",
-                "allowmultipleshots": false,
-                "capturedshots": [],
-                "shots":[
-                    {
-                        "isactive": false,
-                        "ispending": true,
-                        "shotinfo":"Capture Wide Angle Shot",
-                        "questioninfo":"",
-                        "shotstatus": false,
-                        "promptquestion": false,
-                        "question" : "",
-                        "actions" : [],
-                        "result" : "",
-                        "questionstatus": false,
-                        "questiontype": 0,
-                        "inputformcontrol" : "",
-                        "imagekey":"pvmeterimages",
-                        "imagename":"pvmeterwideshoturl"
-                    }
-                ]
-            },
-            {
-                "name":"AC Disconnect",
-                "ispending": true,
-                "isactive": false,
-                "isvisible": true,
-                "checkexistence":true,
-                "isexistencechecked":false,
-                "inputformcontrol": "acdisconnect",
-                "allowmultipleshots": false,
-                "capturedshots": [],
-                "shots":[
-                    {
-                        "isactive": false,
-                        "ispending": true,
-                        "shotinfo":"Capture Wide Angle Shot",
-                        "questioninfo":"",
-                        "shotstatus": false,
-                        "promptquestion": false,
-                        "question" : "",
-                        "actions" : [],
-                        "result" : "",
-                        "questionstatus": false,
-                        "questiontype": 0,
-                        "inputformcontrol" : "",
-                        "imagekey":"acdisconnectimages",
-                        "imagename":"acdisconnectwideshoturl"
-                    },
-                    {
-                        "isactive": false,
-                        "ispending": true,
-                        "shotinfo":"Capture Zoom Shot",
-                        "questioninfo":"",
-                        "shotstatus": false,
-                        "promptquestion": false,
-                        "question" : "",
-                        "actions" : [],
-                        "result" : "",
-                        "questionstatus": false,
-                        "questiontype": 0,
-                        "inputformcontrol" : "",
-                        "imagekey":"acdisconnectimages",
-                        "imagename":"acdisconnectzoomshoturl"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "name": "Solar",
-        "isactive": false,
-        "ispending": true,
-        "isvisible": true,
-        "viewmode": 0,
-        "children":[
-            {
-                "name":"Panels",
-                "isactive": false,
-                "ispending": true,
-                "isvisible": true,
-                "checkexistence": false,
-                "isexistencechecked": false,
-                "inputformcontrol": "",
-                "allowmultipleshots": true,
-                "capturedshots": [],
-                "shots":[
-                    {
-                        "isactive": false,
-                        "ispending": true,
-                        "shotinfo":"Capture Wide angle shot",
-                        "questioninfo":"Provide Number of modules installed",
-                        "shotstatus": false,
-                        "promptquestion": false,
-                        "question" : "Number of moduled installed?",
-                        "actions" : ["confirm"],
-                        "result" : "",
-                        "questionstatus": false,
-                        "questiontype": 2,
-                        "inputformcontrol" : "numberofmodules",
-                        "imagekey":"solarpanelsimages",
-                        "imagename":"modulewideshoturl"
-                    }
-                ]
             }
         ]
     },
@@ -295,7 +214,7 @@
         "viewmode": 0,
         "children":[
             {
-                "name":"Roof Area",
+                "name":"Roof Photos",
                 "isactive": false,
                 "ispending": true,
                 "isvisible": true,
@@ -319,7 +238,164 @@
                         "questiontype": 0,
                         "inputformcontrol" : "",
                         "imagekey":"roofimages",
-                        "imagename":"roof"
+                        "imagename":"roofphoto"
+                    }
+                ]
+            },
+            {
+                "name":"Roof Dimensions",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture roof dimensions",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"roofdimensionimages",
+                        "imagename":"roofdimension"
+                    }
+                ]
+            },
+            {
+                "name":"Obstacles Photos",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture obstacles photos",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"obstaclesimages",
+                        "imagename":"obstacle"
+                    }
+                ]
+            },
+            {
+                "name":"Obstacles Dimensiones",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture obstacles dimensions",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"obstaclesdimensionsimages",
+                        "imagename":"obstacledimension"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Attic",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children":[
+            {
+                "name":"Attic Photos",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"Provide Type of Frame Details",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "What is the type of frame?",
+                        "actions" : ["truss", "rafter"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "framing",
+                        "imagekey":"atticimages",
+                        "imagename":"atticimage"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide Size Details",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "What's the size of the raft (thickness x width)?",
+                        "actions" : ["Confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 7,
+                        "inputformcontrol" : "framingsize",
+                        "imagekey":"atticimages",
+                        "imagename":"atticimage"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Required Shot",
+                        "questioninfo":"Provide Spacing Details",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "What's the distance between two rafts?",
+                        "actions" : ["Confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "distancebetweentworafts",
+                        "imagekey":"atticimages",
+                        "imagename":"atticimage"
                     }
                 ]
             }
@@ -336,7 +412,6 @@
                 "name":"Heavy Load Appliances",
                 "isactive": false,
                 "ispending": true,
-                "isvisible": true,
                 "checkexistence": false,
                 "isexistencechecked": false,
                 "inputformcontrol": "",
@@ -362,14 +437,6 @@
                 ]
             }
         ]
-    },
-    {
-        "name": "Marking",
-        "isactive": false,
-        "ispending": true,
-        "isvisible": true,
-        "viewmode": 2,
-        "children":[]
     },
     {
         "name": "Details",
