@@ -20,13 +20,13 @@
                     </ion-row>
                 </ion-grid>
             </ion-col>
-            <ion-col size="1" *ngIf="design.status !='requestaccepted'  && design.status !='delivered'  && design.status !='reviewassigned' && user.role.type != 'designer'">
+            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector'">
                 <ion-button fill="clear" size="small" class="ion-no-padding"
                     [routerLink]="['/schedule/design/',designId]" routerDirection="forward">
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
-            <ion-col size="1" *ngIf="design.status !='requestaccepted' && design.status !='delivered' && design.status !='reviewassigned' && user.role.type != 'designer'" style="float:right">
+            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector'" style="float:right">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()">
                     <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
                 </ion-button>
@@ -203,7 +203,7 @@
                 <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
             </ion-col>
         </ion-row>
-        <div *ngIf="user.role.type=='designer'">
+        <div *ngIf="user.role.type=='designer'  || user.role.type=='qcinspector' ">
             <form novalidate [formGroup]="commentsForm">
 
             <ion-row *ngIf="(design.status=='designassigned' || design.status=='reviewfailed'); else showimageName">
@@ -253,6 +253,8 @@
                 </div>
             </ion-col>
         </ion-row>
+
+        <ion-button class="ion-no-padding"> </ion-button>
 
         <ion-row class="ion-no-padding ion-margin-top" *ngIf="design && design.type !=='design'">
             <ion-col size="12">

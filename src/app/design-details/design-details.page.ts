@@ -79,6 +79,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     this.user=this.storage.getUser();
     console.log(this.user);
     
+    
     this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getDesignDetails();
@@ -237,6 +238,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   getAssignees() {
+    
     this.apiService.getDesigners().subscribe(assignees => {
       this.listOfAssignees = [];
       assignees.forEach(item => this.listOfAssignees.push(item));

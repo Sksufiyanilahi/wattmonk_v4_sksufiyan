@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../storage.service';
-
 // import {
 //   IPayPalConfig,
 //   ICreateOrderRequest 

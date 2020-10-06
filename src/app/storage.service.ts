@@ -51,10 +51,15 @@ export class StorageService {
 
   setJWTToken(token: string) {
     localStorage.setItem('token', token);
+    //console.log(token);
   }
 
   getJWTToken() {
+    
     return localStorage.getItem('token');
+    
+    
+
   }
 
   isLocationAllowedOnIOS(): boolean {
