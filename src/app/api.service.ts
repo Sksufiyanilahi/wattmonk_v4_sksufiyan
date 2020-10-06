@@ -137,6 +137,9 @@ export class ApiService {
   getDesignSurveys(search : string) {
     return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search, { headers: this.headers });
   }
+  getAnalystDesign(search :string){
+    return this.http.get<DesginDataModel[]>(BaseUrl+'/userdesign?id='+this.userId+'&'+search,{headers:this.headers});
+  }
 
   refreshHeader() {
     this.headers = new HttpHeaders({
@@ -145,6 +148,7 @@ export class ApiService {
     });
     this.uploadHeaders = new HttpHeaders({
       Authorization: 'Bearer ' + this.storageService.getJWTToken()
+    
     });
     this.parentId = this.storageService.getParentId();
     this.userId = this.storageService.getUserID();
@@ -164,7 +168,7 @@ export class ApiService {
   }
 
   getSurveyors(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId + '&parentcompany=' + this.storageService.getUser().company, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId, { headers: this.headers });
   }
 
   searchAllDesgin(searchterm): Observable<SearchModel> {
@@ -172,7 +176,7 @@ export class ApiService {
   }
 
   getDesigners(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId + '&parentcompany=' + this.storageService.getUser().company, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId, { headers: this.headers });
   }
 
   uploadImage(surveyId: number, key: string, blob: Blob, fileName: string) {

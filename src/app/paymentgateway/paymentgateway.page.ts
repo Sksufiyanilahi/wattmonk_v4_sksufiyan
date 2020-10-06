@@ -3,6 +3,7 @@ import { FIELD_REQUIRED } from '../model/constants';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
+import { NavController } from '@ionic/angular';
 // import {
 //   IPayPalConfig,
 //   ICreateOrderRequest 
@@ -24,7 +25,7 @@ export class PaymentgatewayPage implements OnInit {
 
   constructor( private formBuilder: FormBuilder,
     private apiService:ApiService,
-    private storageService:StorageService
+    private storageService:StorageService, private navController:NavController
     ) { 
     this.initialamount = this.formBuilder.group({
       amount: new FormControl('', [Validators.required])
@@ -56,6 +57,10 @@ export class PaymentgatewayPage implements OnInit {
           
         })
       }
+      }
+      routerLink()
+      {
+        this.navController.navigateRoot('add-money');
       }
 
       // private initConfig(): void {

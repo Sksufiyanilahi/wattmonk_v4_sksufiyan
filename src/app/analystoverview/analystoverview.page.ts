@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { UtilitiesService } from '../utilities.service';
 import { ApiService } from '../api.service';
 import { DatePipe } from '@angular/common';
@@ -15,21 +15,26 @@ import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
 import { ROLES } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
+import { FindValueSubscriber } from 'rxjs/internal/operators/find';
+
+
 
 @Component({
-  selector: 'app-homepage',
-  templateUrl: './homepage.page.html',
-  styleUrls: ['./homepage.page.scss'],
+  selector: 'app-analystoverview',
+  templateUrl: './analystoverview.page.html',
+  styleUrls: ['./analystoverview.page.scss'],
 })
-export class HomepagePage implements OnInit, OnDestroy {
+export class AnalystoverviewPage implements OnInit, OnDestroy{
   @Output() ionInput = new EventEmitter();
 
 
   searchQuery = '';
   searchbarElement = '';
   items: string[];
-  isUserSurveyor = false;
-  isUserDesigner = false;
+  
+  //isUserSurveyor = false ;
+  //isUserDesigner= false ;
+  isUserAnalyst = false;
 
   showSearchBar = false;
   showHome = true;
@@ -50,8 +55,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   userRole: any;
   netSwitch: any;
 
-  constructor(
-    private utilities: UtilitiesService,
+  constructor(private utilities: UtilitiesService,
     private apiService: ApiService,
     private nativeGeocoder: NativeGeocoder,
     private platform: Platform,
@@ -62,21 +66,19 @@ export class HomepagePage implements OnInit, OnDestroy {
     private geolocation: Geolocation,
     private toastController: ToastController,
     public route: Router,
-    private network:NetworkdetectService
-  ) {
-    // this.initializeItems();
-    //this.scheduledPage();
+    private network:NetworkdetectService){
+     
   }
+     
 
-  ngOnInit() {
-    this.setupCometChatUser();
+  ngOnInit() { this.setupCometChatUser();
     this.requestLocationPermission();
     this.updateUserPushToken();
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
 
-    if (this.storage.getUser().role.id === ROLES.Surveyor) {
+   /* if (this.storage.getUser().role.id === ROLES.Surveyor) {
       // surveyor will only see survey tab
       this.isUserSurveyor = true;
       this.isUserDesigner = false;
@@ -93,7 +95,23 @@ export class HomepagePage implements OnInit, OnDestroy {
       this.isUserSurveyor = true;
       this.isUserDesigner = true;
       this.route.navigate(['homepage/design']);
+    } else if (this.storage.getUser().role.id === ROLES.Analyst){
+      this.isUserAnalyst = true;
+      
+      this.route.navigate(['homepage/design']);
+    }*/
+
+    
+    if (this.storage.getUser().role.id === ROLES.Analyst)
+    {
+     this.isUserAnalyst = true;
+     // this.isUserSurveyor = true;
+      //this.isUserDesigner = true;
+      
+      
+      this.route.navigate(['analystoverview/design']);
     }
+    
   }
 
   updateUserPushToken(){
@@ -417,5 +435,4 @@ this.network.networkConnect();
     this.showHome = false;
     this.showSearchBar = true;
   }
-
 }
