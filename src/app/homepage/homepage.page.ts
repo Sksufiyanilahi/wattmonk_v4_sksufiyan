@@ -75,7 +75,6 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
-    debugger;
     if (this.storage.getUser().role.id === ROLES.Surveyor) {
       // surveyor will only see survey tab
       this.isUserSurveyor = true;
@@ -396,7 +395,6 @@ this.network.networkConnect();
 
   }
   scheduledPage(){
-    debugger;
     if(this.route.url=='/homepage/design'){
       this.route.navigate(['/schedule/design'])
     }else{

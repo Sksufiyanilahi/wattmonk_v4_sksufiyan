@@ -19,6 +19,7 @@ import { GOOGLE_API_KEY } from './model/constants';
 import { UtilitiesService } from './utilities.service';
 import { BehaviorSubject } from 'rxjs';
 
+import { RoofMaterial } from './model/roofmaterial.model';
 
 @Injectable({
   providedIn: 'root'
@@ -109,6 +110,10 @@ export class ApiService {
 
   addUtility(data: any): Observable<InverterMakeModel> {
     return this.http.post<InverterMakeModel>(BaseUrl + '/utilities', data, { headers: this.headers });
+  }
+
+  getRoofMaterials() {
+    return this.http.get<RoofMaterial[]>(BaseUrl + '/roofmaterials', { headers: this.headers });
   }
 
   getInverterMade(id): Observable<InverterMadeModel[]> {

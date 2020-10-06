@@ -61,7 +61,6 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
 ngOnInit() {
-   debugger;
    this.userdata = this.storage.getUser();
     this.requestLocationPermission();
     if (this.tabsDisabled) {
@@ -71,7 +70,6 @@ ngOnInit() {
       });
     } else {
       // await this.getGeoLocation();
-      debugger;
       this.subscription = this.utilities.getAddressObservable().subscribe((address) => {
         console.log(address);
         this.address = address.address;
@@ -82,7 +80,6 @@ ngOnInit() {
   }
 
   goBack() {
-    debugger;
     this.navController.pop();
   }
 
@@ -98,7 +95,6 @@ ngOnInit() {
   }
 
   getGeoLocation() {
-    debugger;
     // this.utilities.showLoading('Getting Location').then(()=>{
           // setTimeout(()=>{
           //   this.utilities.hideLoading();
@@ -126,7 +122,6 @@ ngOnInit() {
   }
 
   async  showNoLocation() {
-    debugger;
     const toast = await this.toastController.create({
       header: 'Error',
       message: 'Unable to get location',
@@ -164,7 +159,6 @@ ngOnInit() {
 
 
   getGeoEncoder(latitude, longitude) {
-    debugger;
     // this.utilities.hideLoading().then((success) => {
           this.utilities.showLoading('Getting Location').then(()=>{
       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
@@ -210,7 +204,6 @@ ngOnInit() {
   }
 
   requestLocationPermission() {
-    debugger;
     this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
       console.log(mode);
       switch (mode) {
@@ -282,7 +275,6 @@ ngOnInit() {
       this.getGeoLocation();
     } else {
       this.diagnostic.isGpsLocationEnabled().then((status) => {
-        debugger;
         if (status === true) {
           this.getGeoLocation();
           // this.utilities.showLoading('Getting Location').then(() => {
@@ -319,7 +311,6 @@ ngOnInit() {
   }
 
   changeLocationSettings() {
-    debugger;
     this.diagnostic.switchToLocationSettings();
     this.diagnostic.registerLocationStateChangeHandler((state) => {
       if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) ||

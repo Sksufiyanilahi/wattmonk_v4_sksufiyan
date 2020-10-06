@@ -108,7 +108,6 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
-    debugger;
     this.userData = this.storageService.getUser();
     console.log(this.userData);
     
@@ -177,7 +176,6 @@ this.network.networkConnect();
           console.log(response);
           this.formatSurveyData(response);
           if (event !== null) {
-            debugger;
             event.target.complete();
           }
         });
@@ -453,7 +451,6 @@ this.network.networkConnect();
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
-    debugger;
     console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
     
   }

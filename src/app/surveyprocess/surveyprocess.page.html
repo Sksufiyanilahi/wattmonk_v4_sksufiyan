@@ -32,10 +32,11 @@
         <ion-col size="12" class="actionareacol translucent-background">
           <ion-row class="childbuttons ion-justify-content-center mainbuttonscontainer">
             <div #submenuscroll class="scroll" scrollX="true">
-              <ion-button id="submenu{{i}}" fill="clear"
+              <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
+              <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear"
                 [ngClass]="{'completed-inactive' : !button.ispending && !button.isactive, 'completed' : !button.ispending && button.isactive, 'active' : button.ispending && button.isactive, 'normal' : button.ispending && !button.isactive}"
-                *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index"
                 (click)="toggleSubMenuSelection(i)">{{button.name}}</ion-button>
+              </ng-container>
             </div>
           </ion-row>
           <ion-row class="ion-justify-content-center">
@@ -49,9 +50,11 @@
           </ion-row>
           <ion-row class="mainbuttons ion-justify-content-center mainbuttonscontainer">
             <div #mainscroll class="scroll" scrollX="true">
+              <ng-container *ngFor="let button of mainmenuitems; let i = index">
               <ion-button id="mainmenu{{i}}" fill="clear" [ngClass]="[ button.isactive ? 'active' : 'normal']"
-                *ngFor="let button of mainmenuitems; let i = index" (click)="toggleMainMenuSelection(i)">{{button.name}}
+              *ngIf="button.isvisible" (click)="toggleMainMenuSelection(i)">{{button.name}}
               </ion-button>
+            </ng-container>
             </div>
           </ion-row>
           <ion-row>
@@ -152,7 +155,7 @@
       </ion-col>
     </ion-row>
 
-    <!-- Row for input questions -->
+    <!-- Row for input number questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
       *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_NUMBER">
       <ion-col size="12">
@@ -172,6 +175,32 @@
         </form>
         <ion-row class="ion-float-right">
           <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
+            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
+          </ion-button>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
+    <!-- Row for input text questions -->
+    <ion-row class="questionaireview-row ion-padding-horizontal"
+      *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_TEXT">
+      <ion-col size="12">
+        <p>
+          {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+        </p>
+        <form [formGroup]="activeForm" novalidate>
+          <ion-input class="form-control" autocomplete="off"
+            formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
+          </ion-input>
+          <div class="error_div">
+            <div
+              *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+              <span class="error">Field input is required.</span>
+            </div>
+          </div>
+        </form>
+        <ion-row class="ion-float-right">
+          <ion-button fill="clear" size="small" (click)="handleInputTextSubmission(activeForm)">
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
           </ion-button>
         </ion-row>
@@ -225,6 +254,33 @@
         </form>
         <ion-row class="ion-float-right">
           <ion-button fill="clear" size="small" (click)="handleUtilitySubmission()">
+            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
+          </ion-button>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
+    <!-- Row for roof materials questions -->
+    <ion-row class="questionaireview-row ion-padding-horizontal"
+      *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_ROOF_MATERIAL_AUTOCOMPLETE">
+      <ion-col size="12">
+        <p>
+          {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+        </p>
+        <form [formGroup]="activeForm" novalidate>
+          <app-auto-complete [dataList]="roofmaterials" class="form-control" mode="object"
+            formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}"
+            #make>
+          </app-auto-complete>
+          <div class="error_div">
+            <div
+              *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+              <span class="error">Field input is required.</span>
+            </div>
+          </div>
+        </form>
+        <ion-row class="ion-float-right">
+          <ion-button fill="clear" size="small" (click)="handleRoofMaterialSubmission()">
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
           </ion-button>
         </ion-row>
@@ -424,6 +480,88 @@
       </ion-row>
       <ion-row *ngIf='newconstruction'>
         
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Additional notes</ion-label>
+          <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="additionalnotes">
+          </ion-textarea>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col><ion-button class="action-button-color" fill="clear" (click)="handleFormBack()">Back</ion-button></ion-col>
+        <ion-col size="auto">
+          <ion-button class="action-button-color" fill="clear" (click)="handleCompleteSurveyDataSubmission()">Submit
+            Survey</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+  <form [formGroup]="activeForm" class="white-bg" *ngIf="surveytype === 'pvbattery'">
+    <p class="formheader">Additional Information</p>
+    <ion-grid class="ion-padding">
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Utility*</ion-label>
+          <app-auto-complete [dataList]="utilities" mode="object" formControlName="utility" #utility></app-auto-complete>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Battery backup*</ion-label>
+          <ion-radio-group formControlName="batterybackup">
+            <ion-item>
+              <ion-label>Partial</ion-label>
+              <ion-radio slot="start" value="partial"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Whole</ion-label>
+              <ion-radio slot="start" value="whole"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Interconnection*</ion-label>
+          <ion-radio-group formControlName="interconnection">
+            <ion-item>
+              <ion-label>Backfed</ion-label>
+              <ion-radio slot="start" value="backfed"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Dreate main breaker</ion-label>
+              <ion-radio slot="start" value="dreatemainbreaker"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>SST with CT</ion-label>
+              <ion-radio slot="start" value="sstwithct"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Load Side Tap</ion-label>
+              <ion-radio slot="start" value="loadsidetap"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>SST with location of SST</ion-label>
+              <ion-radio slot="start" value="sstwithlocationofsst"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-label position="fixed">Service feed source*</ion-label>
+          <ion-radio-group formControlName="servicefeedsource">
+            <ion-item>
+              <ion-label>Overhead</ion-label>
+              <ion-radio slot="start" value="overhead"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>Underground</ion-label>
+              <ion-radio slot="start" value="underground"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
