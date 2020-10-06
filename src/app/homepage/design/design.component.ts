@@ -402,16 +402,29 @@ this.network.networkConnect();
       additonalhours = this.selectedDesigner.jobcount * 6;
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
     }
+    console.log(this.selectedDesigner);
     var postData = {};
     if (this.designerData.createdby.id == this.userData.id) {
       if (this.selectedDesigner.company == this.userData.company) {
-        postData = {
+        if(this.selectedDesigner.role.type=="qcinspector"){
+          postData = {
+            designassignedto: this.selectedDesigner.id,
+            isoutsourced: "false",
+            status: "reviewassigned",
+            designstarttime: designstarttime
+          }; 
+        }
+       if(this.selectedDesigner.role.type=="designer") { postData = {
           designassignedto: this.selectedDesigner.id,
           isoutsourced: "false",
           status: "designassigned",
           designstarttime: designstarttime
-        };
-      } else {
+        }; 
+        
+      }
+      
+      }
+      else {
         postData = {
           outsourcedto: this.selectedDesigner.id,
           isoutsourced: "true",
@@ -419,11 +432,18 @@ this.network.networkConnect();
         };
       }
     } else {
-      postData = {
+      if(this.selectedDesigner.role.type=="designer"){ postData = {
         designassignedto: this.selectedDesigner.id,
         status: "designassigned",
         designstarttime: designstarttime
-      };
+      };}
+      if(this.selectedDesigner.role.type=="qcinspector"){
+        postData = {
+          designassignedto: this.selectedDesigner.id,
+          status: "reviewassigned",
+          designstarttime: designstarttime
+        };
+      }
     }
     this.utils.showLoading('Assigning').then(()=>{
       this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
@@ -445,12 +465,53 @@ this.network.networkConnect();
 
   }
 
+
+ 
+
   openDesigners(id: number,designData) {
-    console.log(designData);
+    console.log("this is",designData);
     this.designerData = designData;
+    
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
         this.apiService.getDesigners().subscribe(assignees => {
+          this.utils.hideLoading().then(() => {
+            this.listOfAssignees = [];
+            // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+            assignees.forEach(item => this.listOfAssignees.push(item));
+            console.log(this.listOfAssignees);
+            this.showBottomDraw = true;
+            this.designId = id;
+            this.utils.setBottomBarHomepage(false);
+            this.drawerState = DrawerState.Docked;
+            this.assignForm.patchValue({
+              assignedto: 0
+            });
+          });
+        }, (error) => {
+          this.utils.hideLoading().then(() => {
+            this.utils.errorSnackBar('Some error occurred. Please try again later');
+          });
+        });
+      });
+
+    } else {
+      this.designId = id;
+      this.utils.setBottomBarHomepage(false);
+      this.drawerState = DrawerState.Docked;
+      this.assignForm.patchValue({
+        assignedto: 0
+      });
+    }
+  }
+
+  openAnalysts(id: number,designData) {
+    console.log("this is",designData);
+    this.designerData = designData;
+    
+    if (this.listOfAssignees.length === 0) {
+      this.utils.showLoading('Getting Analysts').then(() => {
+        this.apiService.getAnalysts().subscribe(assignees => {
           this.utils.hideLoading().then(() => {
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));

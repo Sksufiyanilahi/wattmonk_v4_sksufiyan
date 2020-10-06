@@ -201,7 +201,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   searchbar(){
-    this.route.navigate(['/searchbar/design']);
+    this.route.navigate(['/search-bar1']);
   }
 
   requestLocationPermission() {

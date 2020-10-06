@@ -25,10 +25,14 @@
 
   </ion-row>
 
-<ion-row class="ion-no-padding position-absolute header-icon-position full-width">
-<ion-col class="flex-center">
+<ion-row  class="ion-no-padding position-absolute header-icon-position full-width">
+<ion-col class="flex-center" *ngIf="activity_details?.type=='design'">
 
   <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
+</ion-col>
+<ion-col class="flex-center" *ngIf="activity_details?.type=='survey'">
+
+  <ion-img src="/assets/images/survey.svg" class="header-icon"></ion-img>
 </ion-col></ion-row></ion-grid>
 
   </ion-toolbar>
@@ -44,6 +48,9 @@
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'designassigned'">Design Assigned</span>
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'reviewassigned'">In Review</span>
  <span class="chipdetail" *ngIf="activity_details?.isoutsourced == 'true'" style="background-color: #95AFC0;" >Waiting for acceptance</span>
+ <span *ngIf="activity_details?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;">
+  pending
+</span>
 </p>
   <ion-card  *ngFor="let activities of activity_details?.activities" class="custom-card"  >
   <span style="float: left; font-size: smaller;">{{activities.created_at | date: 'dd MMM yyyy'}}</span><br><br>

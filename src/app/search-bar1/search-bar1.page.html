@@ -1,0 +1,167 @@
+<ion-header class="ion-no-border grey-bg;">  <ion-toolbar>
+    <ion-title ></ion-title>
+    <ion-col size="1">
+      <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+          <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img></ion-button></ion-col>
+          <ion-col  size="9" style="text-align:center;font-size: x-large;position: absolute;;">Search</ion-col>
+     
+ <ion-button style="float: right;" fill="clear" ><ion-icon name="reorder-four-outline"></ion-icon><ion-select value="both" (ionChange)="searchfor($event)" style="padding-left: 0px;" interface="popover"  [(ngModel)]="Type">
+   <ion-select-option  #d name="Designs" value="design" >Designs</ion-select-option>
+   <ion-select-option #s  name="Surveys" value="survey">Surveys</ion-select-option>
+   <ion-select-option  value="both">Both</ion-select-option>
+ </ion-select></ion-button>
+ 
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+<ion-searchbar class="searchStyle" debounce="0" placeholder="Search Here" (ionClear)="showHome()" (ionChange)="searchfor($event)" [(ngModel)]="searchElement"></ion-searchbar>
+<ion-card *ngFor="let search of SortedModel" class="custom-card">
+   <p *ngIf="search?.type=='design'">
+    <span style="float: left;font-size: medium;color: black;font-size: medium;font-weight: 100; "  [routerLink]="['/design-details/',search?.id]">{{search?.name}}</span>
+    <span class="chipdetail" style="background-color:rgb(228, 77, 102);"  [routerLink]="['/design-details/',search?.id]" >design</span>
+    <span class="chipdetail" style="background-color:rgb(228, 77, 102);"  [routerLink]="['/design-details/',search?.id]">{{search?.requesttype}}</span>
+    <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="search?.status == 'requestdeclined'"  [routerLink]="['/design-details/',search?.id]">Declined</span>
+    <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="search?.deliverydate > 0"  [routerLink]="['/design-details/',search?.id]">Overdue</span>
+    <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'requestaccepted'"  [routerLink]="['/design-details/',search?.id]">Accepted</span>
+    <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'delivered'"  [routerLink]="['/design-details/',search?.id]">Delivered</span>
+    <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'designcompleted'"  [routerLink]="['/design-details/',search?.id]">Completed</span>
+    <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search?.status == 'created'"  [routerLink]="['/design-details/',search?.id]">Unassigned</span>
+    <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="search?.status == 'designassigned'"  [routerLink]="['/design-details/',search?.id]">Design Assigned</span>
+    <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="search?.status == 'reviewassigned'"  [routerLink]="['/design-details/',search?.id]">In Review</span>
+    <span class="chipdetail" *ngIf="search?.isoutsourced == 'true'" style="background-color: #95AFC0;"  [routerLink]="['/design-details/',search?.id]">Waiting for acceptance</span>
+    <span *ngIf="search?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;"  [routerLink]="['/design-details/',search?.id]">
+     pending
+   </span>
+   <span fill="clear" background-border="clear" [routerLink]="['/','activity',search?.id,'design']" style="float: right;"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+   <br><br>
+     <span style="float:left;font-size: smaller;">{{search?.email}}</span><br>
+     <span style="float:left;text-align:left;font-size: smaller;"> {{search?.address}}</span><br>
+     <span style="font-size:small ;float:right;font-style: italic;"> {{search?.updated_at|date: 'dd MMM yyyy'}}</span><br>
+     <span class="chipdetail" style="background-color: #95afc0;"  [routerLink]="['/design-details/',search?.id]">{{search?.company}}</span>
+     <span class="chipdetail" style="background-color: #95afc0;"  [routerLink]="['/design-details/',search?.id]">{{search?.requesttype}}</span>
+     <span class="chipdetail" style="background-color: #95afc0;"  [routerLink]="['/design-details/',search?.id]">{{search?.formattedjobtype}}</span>
+     <span class="chipdetail" style="background-color: #95afc0;"  [routerLink]="['/design-details/',search?.id]">{{search?.source}}</span>
+     <ion-row class="ion-no-margin ion-no-margin">
+      <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
+          <span *ngIf="search?.status == 'created' || search?.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id,search)"
+          >Assign</span>
+          <span style="float: right;">
+
+              <ion-col size="8"  *ngIf="search?.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(search?.id,'requestaccepted')">
+                 Accept
+              </ion-col>
+              <ion-col size="4" *ngIf="search?.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(search?.id)">
+              Decline
+              </ion-col>
+          </span>
+        
+          <span *ngIf="search?.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id)"
+          >Reassign</span>
+      </ion-col>
+
+
+      <ion-col *ngIf="search?.requesttype=='prelim'&& search?.status=='designcompleted'">
+          <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id)"
+          >Assign Review</span>
+      </ion-col>
+      <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
+          <span *ngIf="search?.status == 'reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id)"
+          >Deliver</span>
+      </ion-col>
+      
+  </ion-row>
+     
+    </p>
+    <p *ngIf="search?.type=='survey'">
+      <span style="float: left;font-size: medium;color: black;font-size: medium;font-weight: 100; ">{{search?.name}}</span>
+      <span class="chipdetail" style="background-color:rgb(228, 77, 102);"  [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">survey</span>
+      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="search?.status == 'requestdeclined'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Declined</span>
+      <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="search?.deliverydate > 0" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Overdue</span>
+      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'requestaccepted'"
+      [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Accepted</span>
+      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'delivered'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Delivered</span>
+      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'designcompleted'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Completed</span>
+      <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search?.status == 'created'"  [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Unassigned</span>
+      <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="search?.status == 'designassigned'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Design Assigned</span>
+      <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="search?.status == 'reviewassigned'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">In Review</span>
+      <span class="chipdetail" *ngIf="search?.isoutsourced == 'true'" style="background-color: #95AFC0;" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward" >Waiting for acceptance</span>
+      <span *ngIf="search?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">
+       pending
+     </span>
+     <span fill="clear" background-border="clear" [routerLink]="['/','activity',search?.id,'survey']" style="float: right;"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span><br><br>
+       <span style="float:left;font-size: smaller;">{{search?.email}}</span><br>
+       <span style="float:left;font-size: smaller;"> {{search?.address}}</span><br>
+       <span style="font-size:small ;float:right;font-style: italic;">{{search?.updated_at|date: 'dd MMM yyyy'}}</span><br>
+       <span class="chipdetail" style="background-color: #95afc0;"[routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">{{search?.company}}</span>
+       <span class="chipdetail" style="background-color: #95afc0;"[routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">{{search?.formattedjobtype}}</span>
+       <span class="chipdetail" style="background-color: #95afc0;"[routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">{{search?.source}}</span>
+       <ion-row class="ion-no-margin ion-no-margin">
+        <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
+            <span *ngIf="search?.status == 'created' || search?.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id,search)"
+            >Assign</span>
+            <span style="float: right;">
+
+                <ion-col size="8"  *ngIf="search?.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(search?.id,'requestaccepted')">
+                   Accept
+                </ion-col>
+                <ion-col size="4" *ngIf="search?.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(search?.id)">
+                Decline
+                </ion-col>
+            </span>
+          
+            <span *ngIf="search?.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id)"
+            >Reassign</span>
+        </ion-col>
+
+
+        <ion-col *ngIf="search?.requesttype=='prelim'&& search?.status=='designcompleted'">
+            <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id)"
+            >Assign Review</span>
+        </ion-col>
+        <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
+            <span *ngIf="search?.status == 'reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id)"
+            >Deliver</span>
+        </ion-col>
+        
+    </ion-row>
+      </p>
+     
+</ion-card>
+
+</ion-content>
+<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="400" draggable="false" disableDrag="true"
+                   shouldBounce="true" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
+    <form [formGroup]="assignForm">
+        <ion-grid class="drawer">
+            <ion-row>
+                <ion-col size="12">
+                    <app-user-selector (assigneeData)=getassignedata($event) placeholder="assign" [assignees]="listOfAssignees"
+                                       formControlName="assignedto"></app-user-selector>
+                </ion-col>
+            </ion-row>
+            <ion-row style="margin-left: 8px;">
+                <ion-col size="12">
+                    <span class="input-placeholder">comments</span>
+                </ion-col>
+                <ion-col size="12" style="padding-top: 0px;">
+                    <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                  formControlName="comment"></ion-textarea>
+                </ion-col>
+            </ion-row>
+            <ion-row style="justify-content: flex-end;">
+                <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
+                    <ion-button class="buttom-drawer-button" fill="clear" (click)="assignToDesigner()">
+                        Confirm
+                    </ion-button>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
+                        Cancel
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+
+</ion-bottom-drawer>

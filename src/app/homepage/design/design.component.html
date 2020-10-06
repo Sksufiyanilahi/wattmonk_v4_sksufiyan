@@ -49,7 +49,7 @@
                       <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/design-details/',designData.id]">Design Assigned</span>
                       <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/design-details/',designData.id]">In Review</span>
                       <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;" [routerLink]="['/design-details/',designData.id]">Waiting for acceptance</span>
-                      <span fill="clear" background-border="clear" [routerLink]="['/activity/',designData.id]" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+                      <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
               </p>
               
               <p style="margin:0px">
@@ -90,7 +90,7 @@
 
 
                             <ion-col *ngIf="segments=='requesttype=prelim&status=designcompleted'">
-                                <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                                 >Assign Review</span>
                             </ion-col>
                             <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">

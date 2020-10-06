@@ -12,21 +12,28 @@ import { DatePipe } from '@angular/common';
 })
 export class ActivityDetailsPage implements OnInit {
 activity_details:{}
-designId:Number;
-
+designId;
+name;
 
   constructor(private apiservice: ApiService, private route: ActivatedRoute,
     private navController: NavController
     ) {
-    this.designId = +this.route.snapshot.paramMap.get('id');
+    this.route.paramMap.subscribe( params =>{ this.designId=params.get('id');
+  this.name=params.get('name')});
    }
 
   ngOnInit() {
-this.apiservice.activityDetails(this.designId).subscribe(response =>{this.activity_details=response;
+    if(this.name=="design"){
+           this.apiservice.design_activityDetails(this.designId).subscribe(response =>{this.activity_details=response;
   ;
   
-  console.log("inside this",this.activity_details);});
-
+     console.log("inside this",this.activity_details);});}
+    if(this.name=="survey"){
+      this.apiservice.survey_activityDetails(this.designId).subscribe(response =>{this.activity_details=response;
+        ;
+        
+           console.log("inside this",this.activity_details);});
+    }
 
   }
   

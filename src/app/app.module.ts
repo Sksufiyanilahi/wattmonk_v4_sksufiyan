@@ -23,6 +23,7 @@ import {NgxImageCompressService} from 'ngx-image-compress';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { Stripe } from '@ionic-native/stripe/ngx';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -48,7 +49,8 @@ import { Network } from '@ionic-native/network/ngx';
     NgxImageCompressService,
     Camera,
     InAppBrowser,
-    Network
+    Network,
+    Stripe
     ],
   exports: [
     UtilitiesModule

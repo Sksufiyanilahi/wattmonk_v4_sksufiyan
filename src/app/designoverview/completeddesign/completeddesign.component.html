@@ -14,14 +14,16 @@
         </ion-col>
         <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;">
-                <p class="customer-name" [routerLink]="['/design-details/',designData.id]"
-                      routerDirection="forward">{{designData.name}}
+                <p class="customer-name" >{{designData.name}}
                       <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',designData.id]" routerDirection="forward">
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
-                    <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'designcompleted'">Designing Completed</span>
-                    <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
-            </p>
+                    <span [routerLink]="['/design-details/',designData.id]"
+                    routerDirection="forward" class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'designcompleted'">Designing Completed</span>
+                    <span [routerLink]="['/design-details/',designData.id]"
+                    routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
+                    <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>           
+                </p>
                 <span class="customer-email" [routerLink]="['/survey-detail/',designData.id]"
                       routerDirection="forward">{{designData.email}}</span>
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">

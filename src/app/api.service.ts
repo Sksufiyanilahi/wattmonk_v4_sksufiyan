@@ -164,15 +164,19 @@ export class ApiService {
   }
 
   getSurveyors(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId + '&parentcompany=' + this.storageService.getUser().company, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=', { headers: this.headers });
+  }
+
+  getAnalysts(): Observable<AssigneeModel[]> {
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/analysts?parent_eq=' + this.parentId , { headers: this.headers });
   }
 
   searchAllDesgin(searchterm): Observable<SearchModel> {
-    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm, { headers: this.headers });
+    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm , { headers: this.headers });
   }
 
   getDesigners(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId + '&parentcompany=' + this.storageService.getUser().company, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId, { headers: this.headers });
   }
 
   uploadImage(surveyId: number, key: string, blob: Blob, fileName: string) {
@@ -234,7 +238,11 @@ export class ApiService {
     return this.http.post(BaseUrl + "recharges/" ,data, { headers: this.headers });
   }
 
-  activityDetails(designid){
+  design_activityDetails(designid){
     return this.http.get(BaseUrl+ "designs/" + designid, { headers: this.headers});
+  }
+
+  survey_activityDetails(surveyid){
+    return this.http.get(BaseUrl+ "surveys/" + surveyid, { headers: this.headers});
   }
 }

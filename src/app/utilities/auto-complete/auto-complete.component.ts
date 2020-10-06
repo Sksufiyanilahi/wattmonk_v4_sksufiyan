@@ -95,6 +95,9 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
         this.sortedList = [];
       }
     }
+    if(this.sortedList.length===0){
+      
+    }
   }
 
   selectOption(data: any) {
