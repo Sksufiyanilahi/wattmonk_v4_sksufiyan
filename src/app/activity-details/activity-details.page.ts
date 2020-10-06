@@ -44,7 +44,6 @@ designId:Number;
   }
 
   isDatePassed(datestring: string){
-    debugger;
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");

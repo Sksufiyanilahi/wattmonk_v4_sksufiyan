@@ -76,7 +76,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log(this.imageName);
-    // debugger;
     this.user=this.storage.getUser();
     console.log(this.user);
     
@@ -188,7 +187,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   setData(result: DesginDataModel) {
-    debugger;
     this.design = result;
     console.log(this.design,">>>>>>>>>>>>>>>>");
     this.imageName= result.prelimdesign==null ? '' : result.prelimdesign.name + result.prelimdesign.ext;

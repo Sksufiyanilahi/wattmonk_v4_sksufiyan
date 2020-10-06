@@ -128,7 +128,7 @@ this.network.networkConnect();
                   this.apiService.refreshHeader();
                    this.navController.navigateRoot(['changepassword'])
                  } else {
-                   this.navController.navigateRoot(['paymentgateway']);
+                   this.navController.navigateRoot(['homepage']);
                  }
               }
             });

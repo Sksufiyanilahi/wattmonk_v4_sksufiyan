@@ -91,7 +91,6 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   getSurveyDetails() {
-    debugger;
     this.utilities.showLoading('Getting Survey Details').then((success) => {
       this.apiService.getSurveyDetail(this.surveyId).subscribe((result) => {
         this.utilities.hideLoading().then(() => {

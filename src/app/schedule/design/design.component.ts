@@ -138,21 +138,21 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        this.desginForm.get('address').setValue('fffff');
-        this.desginForm.get('latitude').setValue('444444444444');
-        this.desginForm.get('longitude').setValue('555555555');
-        this.desginForm.get('country').setValue('india');
-        this.desginForm.get('city').setValue('Lucknow');
-        this.desginForm.get('state').setValue('UP');
-        this.desginForm.get('postalcode').setValue(3232343);
-        this.desginForm.get('solarmake').setValue(3232343);
-        // this.desginForm.get('address').setValue(address.address);
-        // this.desginForm.get('latitude').setValue(address.lat);
-        // this.desginForm.get('longitude').setValue(address.long);
-        // this.desginForm.get('country').setValue(address.country);
-        // this.desginForm.get('city').setValue(address.city);
-        // this.desginForm.get('state').setValue(address.state);
-        // this.desginForm.get('postalcode').setValue(address.postalcode);
+        // this.desginForm.get('address').setValue('fffff');
+        // this.desginForm.get('latitude').setValue('444444444444');
+        // this.desginForm.get('longitude').setValue('555555555');
+        // this.desginForm.get('country').setValue('india');
+        // this.desginForm.get('city').setValue('Lucknow');
+        // this.desginForm.get('state').setValue('UP');
+        // this.desginForm.get('postalcode').setValue(3232343);
+        // this.desginForm.get('solarmake').setValue(3232343);
+        this.desginForm.get('address').setValue(address.address);
+        this.desginForm.get('latitude').setValue(address.lat);
+        this.desginForm.get('longitude').setValue(address.long);
+        this.desginForm.get('country').setValue(address.country);
+        this.desginForm.get('city').setValue(address.city);
+        this.desginForm.get('state').setValue(address.state);
+        this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -228,7 +228,6 @@ getDesignDetails() {
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
-            debugger;
           this.design = result;
           console.log(this.design.attachments);
           this.desginForm.patchValue({
@@ -461,14 +460,13 @@ getDesignDetails() {
 
 
           this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+            this.uploaarchitecturedesign(response.id,'architecturaldesign');
+            this.uploadpreliumdesign(response.id,'attachments')
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
-              debugger;
-              this.uploaarchitecturedesign(response.id,'architecturaldesign');
-              this.uploadpreliumdesign(response.id,'attachments')
-              this.router.navigate(['/paymentgateway'])
+              this.router.navigate(['/homepage'])
               // this.utils.showSnackBar('Design have been saved');
-              // this.utils.setHomepageDesignRefresh(true);
+              this.utils.setHomepageDesignRefresh(true);
               // this.navController.pop();
               // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
               //   modal.present();
@@ -486,13 +484,11 @@ getDesignDetails() {
          
 
         } else {
-          debugger;
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
+            this.uploaarchitecturedesign(response.id,'architecturaldesign');
+            this.uploadpreliumdesign(response.id,'attachments')
             this.utils.hideLoading().then(() => {
-              debugger;
               console.log('Res', response);
-              this.uploaarchitecturedesign(response.id,'architecturaldesign');
-              this.uploadpreliumdesign(response.id,'attachments')
               this.utils.showSnackBar('Design have been updated');
               this.utils.setDesignDetailsRefresh(true);
               this.navController.pop();
@@ -579,7 +575,6 @@ getDesignDetails() {
 
 
   getAssignees() {
-    debugger;
     this.apiService.getDesigners().subscribe(assignees => {
       this.listOfAssignees = [];
       // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
@@ -687,7 +682,6 @@ ioniViewDidEnter(){
   }
 
   prelimfiles(event){
-    debugger;
     console.log(event.target.files);
     for(var i=0; i< event.target.files.length;i++){
       this.prelimFiles.push(event.target.files[i]) 
@@ -718,7 +712,6 @@ ioniViewDidEnter(){
         imageData.append('field', key);
       }
     } 
-    debugger;
     this.apiService.uploaddesign(imageData).subscribe(res=>{
       console.log(res); 
       
@@ -742,6 +735,10 @@ ioniViewDidEnter(){
     this.apiService.uploaddesign(imageData).subscribe(res=>{
       console.log(res); 
       
+    }, responseError => {
+      this.utils.hideLoading();
+      const error: ErrorModel = responseError.error;
+      this.utils.errorSnackBar(error.message[0].messages[0].message);
     })
   }
 

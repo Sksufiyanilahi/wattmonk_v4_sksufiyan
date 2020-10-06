@@ -40,7 +40,6 @@ export class ApiService {
     private storageService: StorageService,
     private utilities:UtilitiesService
   ) {
-    debugger;
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
       //Do task when no internet connection

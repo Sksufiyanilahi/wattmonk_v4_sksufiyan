@@ -116,6 +116,27 @@ this.network.networkConnect();
       this.getDesigns(null);
       // return this.segments;
   
+    }else if(this.userData.role.type=='clientsuperadmin'){
+      if(event.target.value=='newDesign'){
+        this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
+        // return this.segments;
+      }
+      else if(event.target.value=='InDesign'){
+        this.segments ="requesttype=prelim&status=designassigned";
+        // return this.segments;
+      }
+      else if(event.target.value=='completed'){
+        this.segments ="requesttype=prelim&status=designcompleted";
+        // return this.segments;
+      }
+      else if(event.target.value=='InReview'){
+        this.segments ="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed";
+        // return this.segments;
+      }
+      else if(event.target.value=='delivered'){
+        this.segments ="requesttype=prelim&status=delivered";
+      }
+      this.getDesigns(null);
     }
     // this.getsegmentdata(event.target.value);
     console.log((event.target.value));

@@ -71,7 +71,6 @@ getnewType() {
 
    if (this.changepassword.status === 'VALID') {
       console.log(this.changepassword.value);
-      debugger;
      this.utils.showLoading('Resetting password').then(() => {
        this.apiService.changepassword(data).subscribe((response:any) => {
          console.log(response);

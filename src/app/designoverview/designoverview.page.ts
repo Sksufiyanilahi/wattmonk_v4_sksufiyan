@@ -50,7 +50,6 @@ export class DesignoverviewPage implements OnInit {
   }
 
   updateUserPushToken(){
-    debugger;
   let token=   localStorage.getItem('pushtoken');
   console.log(token);
   let userid= this.storage.getUserID();
@@ -58,7 +57,6 @@ export class DesignoverviewPage implements OnInit {
     pushtokens:token
   }
     this.apiService.updateUser(userid, {"pushtokens":token}).subscribe((data) => {
-      debugger;
     console.log(data, "fcm data");
     
     }, (error) => {

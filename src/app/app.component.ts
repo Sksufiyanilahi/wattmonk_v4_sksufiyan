@@ -101,7 +101,6 @@ this.network.networkConnect();
   }
 
   getFcmToken() {
-    debugger;
   this.firebase.getToken()
   .then(token => {
     console.log(`The token is ${token}`)
