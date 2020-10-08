@@ -20,11 +20,13 @@ import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.
 import { StorageService } from '../storage.service';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 import * as domtoimage from 'dom-to-image';
+import { RoofMaterial } from '../model/roofmaterial.model';
 
 export interface MAINMENU {
   name: string;
   isactive: boolean;
   ispending: boolean;
+  isvisible: boolean;
   viewmode: number;
   children: CHILDREN[];
 }
@@ -33,6 +35,7 @@ export interface CHILDREN {
   name: string;
   isactive: boolean;
   ispending: boolean;
+  isvisible: boolean;
   checkexistence: boolean;
   isexistencechecked: boolean,
   inputformcontrol: string;
@@ -83,7 +86,9 @@ export enum QUESTIONTYPE {
   INPUT_NUMBER = 2,
   INPUT_UTILITIES_AUTOCOMPLETE = 3,
   INPUT_INVERTER_AUTOCOMPLETE = 4,
-  INPUT_SHOT_NAME = 5
+  INPUT_SHOT_NAME = 5,
+  INPUT_ROOF_MATERIAL_AUTOCOMPLETE = 6,
+  INPUT_TEXT = 7
 }
 
 export enum VIEWMODE {
@@ -121,6 +126,7 @@ export class SurveyprocessPage implements OnInit {
   @ViewChild('screen', { static: false }) screen: ElementRef;
   @ViewChild('slides', { static: false }) slider: IonSlides;
   @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
+  @ViewChild('roofmaterial', { static: false }) roofmaterial: AutoCompleteComponent;
   @ViewChild('mainscroll', { static: false }) mainscroll: any;
   @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
 
@@ -170,6 +176,8 @@ export class SurveyprocessPage implements OnInit {
   // googleimageurl = 'https://maps.googleapis.com/maps/api/staticmap?zoom=19&maptype=satellite&size=1200x1600&scale=2&key=' + GOOGLE_API_KEY;
 
   batteryForm: FormGroup;
+  pvbatteryForm: FormGroup;
+  pvForm: FormGroup;
   activeForm: FormGroup;
 
   totalpercent = 0;
@@ -184,6 +192,8 @@ export class SurveyprocessPage implements OnInit {
   invertermakes: InverterMakeModel[] = [];
   solarmakes: SolarMake[] = [];
   solarmodels: SolarMadeModel[] = [];
+  roofmaterials: RoofMaterial[] = [];
+  selectedroofmaterialid: number;
 
   galleryshots: CAPTUREDSHOT[];
 
@@ -372,6 +382,80 @@ export class SurveyprocessPage implements OnInit {
       });
 
       this.getSiteLocationGoogleImageFromService();
+    } else if (this.surveytype == "pvbattery") {
+      this.totalstepcount = 13;
+      this.pvbatteryForm = new FormGroup({
+        msplocation: new FormControl('', [Validators.required]),
+        msprating: new FormControl('', [Validators.required]),
+        mainbreakersize: new FormControl('', [Validators.required]),
+        mspbreaker: new FormControl('', [Validators.required]),
+        utilitymeter: new FormControl('', [Validators.required]),
+        framing: new FormControl('', [Validators.required]),
+        framingsize: new FormControl('', [Validators.required]),
+        distancebetweentworafts: new FormControl('', [Validators.required]),
+        utility: new FormControl('', [Validators.required]),
+        batterybackup: new FormControl('', [Validators.required]),
+        servicefeedsource: new FormControl('', [Validators.required]),
+        interconnection: new FormControl('', [Validators.required]),
+        mountingtype: new FormControl('', [Validators.required]),
+        rooftype: new FormControl('', [Validators.required]),
+        roofmaterial: new FormControl('', [Validators.required]),
+        shotname: new FormControl('', []),
+        additionalnotes: new FormControl('', [])
+      });
+
+      this.activeForm = this.pvbatteryForm;
+
+      // this.storage.clear();
+      this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
+        console.log(data);
+        if (data) {
+          this.mainmenuitems = data.menuitems;
+          this.totalpercent = data.currentprogress;
+          this.selectedmainmenuindex = data.selectedmainmenuindex;
+          this.selectedsubmenuindex = data.selectedsubmenuindex;
+          this.selectedshotindex = data.selectedshotindex;
+          this.shotcompletecount = data.shotcompletecount;
+          this.previousmainmenuindex = data.previousmainmenuindex;
+          this.previoussubmenuindex = data.previoussubmenuindex;
+          this.previousshotindex = data.previousshotindex;
+
+          this.surveyid = data.surveyid;
+          this.surveytype = data.surveytype;
+          this.surveycity = data.city;
+          this.surveystate = data.state;
+          this.latitude = data.latitude;
+          this.longitude = data.longitude;
+
+          // restore form
+          Object.keys(data.formdata).forEach((key: string) => {
+            let control: AbstractControl = null;
+            control = this.activeForm.get(key);
+            control.setValue(data.formdata[key]);
+          });
+
+          this.isdataloaded = true;
+
+          this.handleViewModeSwitch();
+        } else {
+          this.http
+            .get("assets/surveyprocessjson/pvbattery.json")
+            .subscribe((data) => {
+              this.mainmenuitems = JSON.parse(JSON.stringify(data));
+              this.isdataloaded = true;
+
+              this.mainmenuitems.forEach(element => {
+                if (element.isactive) {
+                  this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+                }
+              });
+            });
+        }
+      });
+
+      this.getSiteLocationGoogleImageFromService();
+    } else if (this.surveytype == "pv") {
+
     }
   }
 
@@ -432,6 +516,23 @@ export class SurveyprocessPage implements OnInit {
           this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
         });
 
+      });
+    });
+  }
+
+  getRoofMaterials() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getRoofMaterials().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.roofmaterials = response;
+          this.changedetectorref.detectChanges();
+        });
+
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
       });
     });
   }
@@ -693,8 +794,10 @@ export class SurveyprocessPage implements OnInit {
               this.getUtilities();
             } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
               this.getInverterMakes();
+            } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
+              this.getRoofMaterials();
             }
-          }else{
+          } else {
             this.markShotCompletion(this.selectedshotindex);
           }
         } else {
@@ -726,10 +829,71 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result = result;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+
+    if (this.surveytype == "pvbattery" && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 0) {
+      this.handleGroundShotsVisibility();
+    } else if (this.surveytype == "pvbattery" && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 1) {
+      this.handleAtticSectionVisibility();
+    }
+
     this.handleMenuSwitch();
   }
 
+  handleGroundShotsVisibility(){
+    var mountingtypecontrol = this.activeForm.get("mountingtype");
+    if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "ground") {
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].ispending = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].ispending = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].shotstatus = false;
+    } else {
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].shotstatus = true;
+    }
+  }
+
+  handleAtticSectionVisibility(){
+    var mountingtypecontrol = this.activeForm.get("rooftype");
+      if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "pitch") {
+        this.mainmenuitems[2].isvisible = true;
+        this.mainmenuitems[2].ispending = true;
+        this.mainmenuitems[2].children[0].ispending = true;
+        this.mainmenuitems[2].children[0].shots.forEach(element => {
+          element.ispending = true;
+          element.questionstatus = false;
+          element.shotstatus = false;
+        });
+        this.activeForm.get("framing").setValidators([Validators.required]);
+        this.activeForm.get("framingsize").setValidators([Validators.required]);
+        this.activeForm.get("distancebetweentworafts").setValidators([Validators.required]);
+      } else {
+        this.mainmenuitems[2].isvisible = false;
+        this.mainmenuitems[2].ispending = false;
+        this.mainmenuitems[2].children[0].ispending = false;
+        this.mainmenuitems[2].children[0].shots.forEach(element => {
+          element.ispending = false;
+          element.questionstatus = true;
+          element.shotstatus = true;
+        });
+        this.activeForm.get("framing").clearValidators();
+        this.activeForm.get("framingsize").clearValidators();
+        this.activeForm.get("distancebetweentworafts").clearValidators();
+      }
+  }
+
   handleInputSubmission(form: FormGroup) {
+    var control = form.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol);
+    if (control.value != "") {
+      this.handleAnswerSubmission(control.value);
+    } else {
+      control.markAsTouched();
+      control.markAsDirty();
+    }
+  }
+
+  handleInputTextSubmission(form: FormGroup) {
     var control = form.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol);
     if (control.value != "") {
       this.handleAnswerSubmission(control.value);
@@ -785,6 +949,19 @@ export class SurveyprocessPage implements OnInit {
     } else {
       utilitycontrol.markAsTouched();
       utilitycontrol.markAsDirty();
+    }
+  }
+
+  handleRoofMaterialSubmission() {
+    var roofmaterialcontrol = this.activeForm.get("roofmaterial");
+    if (roofmaterialcontrol.value != "") {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+      this.handleMenuSwitch();
+    } else {
+      roofmaterialcontrol.markAsTouched();
+      roofmaterialcontrol.markAsDirty();
     }
   }
 
@@ -855,22 +1032,62 @@ export class SurveyprocessPage implements OnInit {
       } else {
         if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-          this.selectedsubmenuindex += 1;
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-          this.selectedshotindex = 0;
-          this.scrollToSubmenuElement(this.selectedsubmenuindex);
+          var nextvisibleitemfound = false;
+          for (let index = this.selectedsubmenuindex; index < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1; index++) {
+            const element = this.mainmenuitems[this.selectedmainmenuindex].children[index + 1];
+            if (element.isvisible && !nextvisibleitemfound) {
+              nextvisibleitemfound = true;
+              this.selectedsubmenuindex = index + 1;
+              this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+              this.selectedshotindex = 0;
+              this.scrollToSubmenuElement(this.selectedsubmenuindex);
+            }
+          }
+
+          if (!nextvisibleitemfound) {
+            if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
+              //Unset previous menu and select new one
+              this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+              this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+              var nextvisiblemainitemfound = false;
+              for (let index = this.selectedmainmenuindex; index < this.mainmenuitems.length - 1; index++) {
+                const element = this.mainmenuitems[index + 1];
+                if (element.isvisible && !nextvisiblemainitemfound) {
+                  nextvisiblemainitemfound = true;
+                  this.selectedmainmenuindex = index + 1;
+                  this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+                  this.selectedshotindex = 0;
+                  this.selectedsubmenuindex = 0;
+                  this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                  this.scrollToMainmenuElement(this.selectedmainmenuindex);
+                  this.handleViewModeSwitch();
+                }
+              }
+            }
+          }
         } else {
           if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
             //Unset previous menu and select new one
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
             this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-            this.selectedmainmenuindex += 1;
-            this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-            this.selectedshotindex = 0;
-            this.selectedsubmenuindex = 0;
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-            this.scrollToMainmenuElement(this.selectedmainmenuindex);
-            this.handleViewModeSwitch();
+            var nextvisiblemainitemfound = false;
+            for (let index = this.selectedmainmenuindex; index < this.mainmenuitems.length - 1; index++) {
+              const element = this.mainmenuitems[index + 1];
+              if (element.isvisible && !nextvisiblemainitemfound) {
+                nextvisiblemainitemfound = true;
+                this.selectedmainmenuindex = index + 1;
+                this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+                this.selectedshotindex = 0;
+                this.selectedsubmenuindex = 0;
+                this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                this.scrollToMainmenuElement(this.selectedmainmenuindex);
+                this.handleViewModeSwitch();
+              }
+            }
+
+            if (!nextvisiblemainitemfound) {
+
+            }
           }
         }
       }
@@ -884,20 +1101,20 @@ export class SurveyprocessPage implements OnInit {
   }
 
   scrollToSubmenuElement(index) {
-    var el = document.getElementById("submenu"+index);
+    var el = document.getElementById("submenu" + index);
     var rect = el.getBoundingClientRect();
     // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
 
     this.submenuscroll.nativeElement.scrollLeft = rect.left;
-}
+  }
 
-scrollToMainmenuElement(index) {
-  var el = document.getElementById("mainmenu"+index);
-  var rect = el.getBoundingClientRect();
-  // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
+  scrollToMainmenuElement(index) {
+    var el = document.getElementById("mainmenu" + index);
+    var rect = el.getBoundingClientRect();
+    // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
 
-  this.mainscroll.nativeElement.scrollLeft = rect.left;
-}
+    this.mainscroll.nativeElement.scrollLeft = rect.left;
+  }
 
   markShotCompletion(index) {
     if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
@@ -1014,16 +1231,16 @@ scrollToMainmenuElement(index) {
     data.saved = true;
     this.storage.set(this.surveyid + '', data);
     this.utilitieservice.setDataRefresh(true);
-    
+
     var isutilitymanualinput = false;
-    if (this.batteryForm.get("utility").value == null || this.batteryForm.get("utility").value == ""){
-      if(this.utility.manualinput != ""){
+    if (this.activeForm.get("utility").value == null || this.activeForm.get("utility").value == "") {
+      if (this.utility.manualinput != "") {
         isutilitymanualinput = true;
-        this.batteryForm.get("utility").setValue(this.utility.manualinput);
+        this.activeForm.get("utility").setValue(this.utility.manualinput);
       }
     }
 
-    if (this.batteryForm.status == 'INVALID') {
+    if (this.activeForm.status == 'INVALID') {
       this.displayIncompleteFormAlert();
     } else {
       this.markMainMenuCompletion();
@@ -1041,15 +1258,23 @@ scrollToMainmenuElement(index) {
             }
             this.apiService.addUtility(data).subscribe((data) => {
               this.selectedutilityid = data.id;
-              this.saveFormData();
+              if(this.surveytype == "battery"){
+                this.saveFormData();
+              }else if(this.surveytype == "pvbattery"){
+                this.savePVBatteryFormData();
+              }
             }, (error) => {
               this.utilitieservice.hideLoading().then(() => {
                 this.utilitieservice.errorSnackBar(JSON.stringify(error));
               });
             });
           } else {
-            this.selectedutilityid = this.batteryForm.get("utility").value.id;
-            this.saveFormData();
+            this.selectedutilityid = this.activeForm.get("utility").value.id;
+            if(this.surveytype == "battery"){
+              this.saveFormData();
+            }else if(this.surveytype == "pvbattery"){
+              this.savePVBatteryFormData();
+            }
           }
         });
       } else {
@@ -1099,16 +1324,55 @@ scrollToMainmenuElement(index) {
     });
   }
 
+  savePVBatteryFormData() {
+    const data = {
+      msplocation: this.activeForm.get("msplocation").value,
+      msprating: parseInt(this.activeForm.get("msprating").value),
+      mainbreakersize: parseInt(this.activeForm.get("mainbreakersize").value),
+      mspbreaker: this.activeForm.get("mspbreaker").value,
+      utilitymeter: this.activeForm.get("utilitymeter").value,
+      framing: this.activeForm.get("framing").value,
+      framingsize: this.activeForm.get("framingsize").value,
+      distancebetweentworafts: this.activeForm.get("distancebetweentworafts").value,
+      utility: this.selectedutilityid,
+      batterybackup: this.activeForm.get("batterybackup").value,
+      servicefeedsource: this.activeForm.get("servicefeedsource").value,
+      interconnection: this.activeForm.get("interconnection").value,
+      mountingtype: this.activeForm.get("mountingtype").value,
+      rooftype: this.activeForm.get("rooftype").value,
+      roofmaterial: this.activeForm.get("roofmaterial").value.id,
+      additionalnotes: this.activeForm.get("additionalnotes").value,
+      status: 'surveycompleted'
+    }
+    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.insomnia.keepAwake()
+          .then(
+            () => {
+              console.log('success')
+            },
+            () => console.log('error')
+          );
+        this.uploadImagesToServer();
+
+      });
+    }, (error) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.utilitieservice.errorSnackBar(JSON.stringify(error));
+      });
+    });
+  }
+
   async displayIncompleteFormAlert() {
     let error = '';
-    Object.keys(this.batteryForm.controls).forEach((key: string) => {
-      const control: AbstractControl = this.batteryForm.get(key);
+    Object.keys(this.activeForm.controls).forEach((key: string) => {
+      const control: AbstractControl = this.activeForm.get(key);
       if (control.invalid) {
         if (error !== '') {
           error = error + '<br/>';
         }
         if (control.errors.required === true) {
-          error = error + "Input for field "+key+ ' is missing.';
+          error = error + "Input for field " + key + ' is missing.';
         }
         if (control.errors.email === true) {
           error = error + 'Invalid email';
@@ -1221,6 +1485,8 @@ scrollToMainmenuElement(index) {
       this.cameraPreview.stopCamera();
       if (this.surveytype == 'battery') {
         this.getSolarMakes();
+      }else if (this.surveytype == 'pvbattery'){
+        this.getUtilities();
       }
     } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP) {
       this.cameraPreview.stopCamera();
@@ -1323,22 +1589,22 @@ scrollToMainmenuElement(index) {
         this.selectedshotindex = this.previousshotindex;
         this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
       });
-    }else{
+    } else {
       domtoimage.toPng(canvasarea)
-      .then((dataUrl) => {
-        this.equipmentscanvasimage = dataUrl;
-        this.updateProgressStatus();
-        this.markShotCompletion(this.selectedshotindex);
-        this.startCameraAfterPermission();
-        this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-        this.selectedmainmenuindex = this.previousmainmenuindex;
-        this.selectedsubmenuindex = this.previoussubmenuindex;
-        this.selectedshotindex = this.previousshotindex;
-        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-      })
-      .catch((error) => {
-        console.error('oops, something went wrong!', error);
-      });
+        .then((dataUrl) => {
+          this.equipmentscanvasimage = dataUrl;
+          this.updateProgressStatus();
+          this.markShotCompletion(this.selectedshotindex);
+          this.startCameraAfterPermission();
+          this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+          this.selectedmainmenuindex = this.previousmainmenuindex;
+          this.selectedsubmenuindex = this.previoussubmenuindex;
+          this.selectedshotindex = this.previousshotindex;
+          this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+        })
+        .catch((error) => {
+          console.error('oops, something went wrong!', error);
+        });
     }
   }
 
@@ -1360,21 +1626,21 @@ scrollToMainmenuElement(index) {
   }
 
   handleShotDelete() {
-    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0){
-      if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 1){
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0) {
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 1) {
         this.sliderIndex = 0;
       }
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.splice(this.sliderIndex, 1);
       this.slideDidChange();
     }
-    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 0){
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 0) {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = false;
-      if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == QUESTIONTYPE.NONE){
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == QUESTIONTYPE.NONE) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = false;
       }
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
-      
+
       this.handleGalleryBack();
     }
   }

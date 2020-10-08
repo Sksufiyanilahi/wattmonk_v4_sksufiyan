@@ -110,6 +110,7 @@ export class DesginDataModel {
   status:string;
   reviewstarttime:any;
   designstarttime:any;
+  attachments:any=[];
 }
 
 export class PrelimDesign{

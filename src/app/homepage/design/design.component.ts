@@ -11,7 +11,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AssigneeModel } from '../../model/assignee.model';
 import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
 import {Storage} from '@ionic/storage';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
@@ -37,12 +37,12 @@ export class DesignComponent implements OnInit, OnDestroy {
   drawerState = DrawerState.Bottom;
   assignForm: FormGroup;
   listOfAssignees: AssigneeModel[] = [];
-
+  listOfAssignees2: AssigneeModel[] = [];
   designId = 0;
   showBottomDraw: boolean = false;
   roleType: any;
   myFiles: string[] = [];  
-  segments:any='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+  segments:any;
   listOfDesigns: DesginDataModel[];
   private DesignRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
@@ -67,14 +67,16 @@ export class DesignComponent implements OnInit, OnDestroy {
     private router: Router,
     public modalController: ModalController,
     private storageService:StorageService,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    public alertController: AlertController
   ) {
+    this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
     this.todaysdate = datePipe.transform(latestDate, 'yyyy-MM-dd');
     this.assignForm = this.formBuilder.group({
-      assignedto: new FormControl('', [Validators.required]),
+      assignedto: new FormControl(0, [Validators.required]),
       comment: new FormControl('')
     });
 
@@ -91,22 +93,63 @@ this.network.networkDisconnect();
 this.network.networkConnect();
     
   }
-
-
   segmentChanged(event){
-    debugger;
-    console.log((event.target.value));
-    this.pending(event.target.value);
-    this.segments = event.target.value;
-    this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-      this.getDesigns(null);
-    });
-
-    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
-        this.formatDesignData(this.listOfDesigns);
+    if(this.userData.role.type=='wattmonkadmins'){
+      if(event.target.value=='newDesign'){
+        this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+        // return this.segments;
       }
-    });
+      else if(event.target.value=='InDesign'){
+        this.segments ="requesttype=prelim&status=designassigned";
+        // return this.segments;
+      }
+      else if(event.target.value=='completed'){
+        this.segments ="requesttype=prelim&status=designcompleted";
+        // return this.segments;
+      }
+      else if(event.target.value=='InReview'){
+        this.segments ="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed";
+        // return this.segments;
+      }
+      else if(event.target.value=='delivered'){
+        this.segments ="requesttype=prelim&status=delivered";
+      }
+      this.getDesigns(null);
+      // return this.segments;
+  
+    }else if(this.userData.role.type=='clientsuperadmin'){
+      if(event.target.value=='newDesign'){
+        this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
+        // return this.segments;
+      }
+      else if(event.target.value=='InDesign'){
+        this.segments ="requesttype=prelim&status=designassigned";
+        // return this.segments;
+      }
+      else if(event.target.value=='completed'){
+        this.segments ="requesttype=prelim&status=designcompleted";
+        // return this.segments;
+      }
+      else if(event.target.value=='InReview'){
+        this.segments ="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed";
+        // return this.segments;
+      }
+      else if(event.target.value=='delivered'){
+        this.segments ="requesttype=prelim&status=delivered";
+      }
+      this.getDesigns(null);
+    }
+    // this.getsegmentdata(event.target.value);
+    console.log((event.target.value));
+    // this.segments = event.target.value;
+    // this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+    // });
+
+    // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+    //   if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
+    //     this.formatDesignData(this.listOfDesigns);
+    //   }
+    // });
     
   }
 
@@ -128,7 +171,7 @@ this.network.networkConnect();
     //           this.filterData(_res.serchTerm);
     //         } else {
     //           // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-    //             // debugger;
+    //             // ;
     //             this.getDesign(null, true);
     //           // });
     //         }
@@ -149,7 +192,7 @@ this.network.networkConnect();
   }
 
   getDesigns(event: CustomEvent) {
-    debugger;
+    ;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -192,15 +235,15 @@ this.network.networkConnect();
             console.log(i);
             
             if (tempData.length === 0) {
-              this.sDatePassed(designItem.deliverydate,i);
+              this.sDatePassed(designItem.updated_at,i);
               const listOfDesign = new DesginDataHelper();
-              listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
+              listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
                 listOfDesign.lateby = this.overdue;
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
               console.log(tempData);
               
-              debugger;
+              ;
             } else {
              
               let added = false;
@@ -212,18 +255,18 @@ this.network.networkConnect();
                 //   this.sDatePassed(element.deliverydate);
                 // })
                 if (!added) {
-                  if (DesignList.date === this.datePipe.transform(designItem.deliverydate, 'M/dd/yy')) {
+                  if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
                     DesignList.listOfDesigns.push(designItem);
-                    this.sDatePassed(designItem.deliverydate,i);
+                    this.sDatePassed(designItem.updated_at,i);
                     added = true;
                   }
                 }
               });
               if (!added) {
-                debugger;
-                this.sDatePassed(designItem.deliverydate,i);
+                ;
+                this.sDatePassed(designItem.updated_at,i);
                 const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
+                listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
                 listOfDesign.lateby = this.overdue;
                 listOfDesign.listOfDesigns.push(designItem);
                 tempData.push(listOfDesign);
@@ -252,14 +295,14 @@ this.network.networkConnect();
   //   this.listOfDesigns.forEach((desginItem) => {
   //     if (tempData.length === 0) {
   //       const listOfDesign = new DesginDataHelper();
-  //       listOfDesign.date = this.datePipe.transform(desginItem.created_at, 'M/d/yy');
+  //       listOfDesign.date = this.datePipe.transform(desginItem.updated_at, 'M/d/yy');
   //       listOfDesign.listOfDesigns.push(desginItem);
   //       tempData.push(listOfDesign);
   //     } else {
   //       let added = false;
   //       tempData.forEach((desginList) => {
   //         if (!added) {
-  //           if (desginList.date === this.datePipe.transform(desginItem.created_at, 'M/d/yy')) {
+  //           if (desginList.date === this.datePipe.transform(desginItem.updated_at, 'M/d/yy')) {
   //             desginList.listOfDesigns.push(desginItem);
   //             added = true;
   //           }
@@ -267,7 +310,7 @@ this.network.networkConnect();
   //       });
   //       if (!added) {
   //         const listOfDesign = new DesginDataHelper();
-  //         listOfDesign.date = this.datePipe.transform(desginItem.created_at, 'M/d/yy');
+  //         listOfDesign.date = this.datePipe.transform(desginItem.updated_at, 'M/d/yy');
   //         listOfDesign.listOfDesigns.push(desginItem);
   //         tempData.push(listOfDesign);
   //         added = true;
@@ -302,10 +345,10 @@ this.network.networkConnect();
   //   this.listOfDesignDataHelper = [];
     
   //   this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting designs').then((success) => {
-  //     // debugger;
+  //     // ;
   //     this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
   //       this.utils.hideLoadingWithPullRefreshSupport(showLoader).then((loaderHidden) => {
-  //         // debugger;
+  //         // ;
   //         if (event !== null) {
   //           event.target.complete();
   //         }
@@ -320,14 +363,14 @@ this.network.networkConnect();
   //         this.listOfDesignsData.forEach((desginItem) => {
   //           if (tempData.length === 0) {
   //             const listOfDesign = new DesginDataHelper();
-  //             listOfDesign.date = this.datePipe.transform(desginItem.created_at, 'M/d/yy');
+  //             listOfDesign.date = this.datePipe.transform(desginItem.updated_at, 'M/d/yy');
   //             listOfDesign.listOfDesigns.push(desginItem);
   //             tempData.push(listOfDesign);
   //           } else {
   //             let added = false;
   //             tempData.forEach((desginList) => {
   //               if (!added) {
-  //                 if (desginList.date === this.datePipe.transform(desginItem.created_at, 'M/d/yy')) {
+  //                 if (desginList.date === this.datePipe.transform(desginItem.updated_at, 'M/d/yy')) {
   //                   desginList.listOfDesigns.push(desginItem);
   //                   added = true;
   //                 }
@@ -335,7 +378,7 @@ this.network.networkConnect();
   //             });
   //             if (!added) {
   //               const listOfDesign = new DesginDataHelper();
-  //               listOfDesign.date = this.datePipe.transform(desginItem.created_at, 'M/d/yy');
+  //               listOfDesign.date = this.datePipe.transform(desginItem.updated_at, 'M/d/yy');
   //               listOfDesign.listOfDesigns.push(desginItem);
   //               tempData.push(listOfDesign);
   //               added = true;
@@ -383,11 +426,13 @@ this.network.networkConnect();
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
+    this.listOfAssignees=[];
+    console.log("this works",this.listOfAssignees)
   }
 
   assignToDesigner() {
       console.log(this.designerData.createdby.id);
-      
+      ;
     if (this.assignForm.status === 'INVALID') {
       this.utils.errorSnackBar('Please select a designer');
     } else {
@@ -448,7 +493,7 @@ this.network.networkConnect();
     this.utils.showLoading('Assigning').then(()=>{
       this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
         this.utils.hideLoading().then(()=>{
-          debugger; 
+          ; 
           console.log('reach ', value);
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + value.name + ' ' + 'successfully');
           this.dismissBottomSheet();
@@ -552,6 +597,62 @@ this.network.networkConnect();
     }
   }
 
+
+
+
+  async openreviewPassed(id,designData){ 
+    this.designId=id
+    const alert = await this.alertController.create({
+      cssClass: 'alertClass',
+      header: 'Confirm!',
+      message:'Would you like to  Add Comments!!',
+      inputs:
+       [ {name:'comment',
+       id:'comment',
+          type:'textarea',
+        placeholder:'Enter Comment'}
+        ] ,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'deliver',
+          handler: (alertData) => {
+            var postData= {};
+            postData = {
+              status: "delivered",
+              comments: alertData.comment ,
+               };
+               console.log(postData);
+               this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
+                this.utils.hideLoading().then(()=>{
+                  ; 
+                  console.log('reach ', value);
+                 this.utils.showSnackBar('Design request has been delivered successfully');
+                 
+                  this.utils.setHomepageDesignRefresh(true);
+                })
+              }, (error) => {
+                this.utils.hideLoading();
+                ;
+              });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  
+     
+    
+  }
+
+
   refreshDesigns(event: CustomEvent) {
     let showLoader = true;
     if (event !== null && event !== undefined) {
@@ -587,7 +688,7 @@ async decline(id){
     }
 });
   // modal.dismiss(() => {
-  //   debugger;
+  //   ;
   //   this.getDesigns(null);
   // });
   return await modal.present();
@@ -598,12 +699,13 @@ sDatePassed(datestring: string,i){
   var todaydate = moment(new Date(), "YYYYMMDD");
   var lateby = todaydate.diff(checkdate, "days");
   this.overdue = lateby;  
+  
 }
 
 
 
 pending(value){
-  debugger;
+  ;
   if(this.userData.role.type=='SuperAdmin'){
       value= "requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined"
   }else{

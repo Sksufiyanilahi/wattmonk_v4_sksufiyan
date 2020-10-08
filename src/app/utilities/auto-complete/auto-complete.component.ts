@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
+import { ApiService } from 'src/app/api.service';
 
 @Component({
   selector: 'app-auto-complete',
@@ -24,7 +25,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   @Input() placeholder = '';
   @Input() mode = 'id'; //id or object
 
-  private onChange: (data: number) => void;
+  private onChange: (data: any) => void;
   selectedOption: any;
   showSuggestions: false;
   sortedList: any[] = [];
@@ -32,7 +33,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   selectedDataName = '';
   manualinput = '';
 
-  constructor() {
+  constructor(public apiService:ApiService) {
   }
 
   registerOnChange(fn: any): void {
@@ -83,20 +84,27 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
 
   }
 
-  onValueChanged(event: CustomEvent) {
-    console.log('value changed');
+
+  onValueChanged(event) {
+    console.log('value changed', event);
     console.log(this.dataList);
     this.manualinput = event.detail.value;
+    this.selectedDataName = event.detail.value;
+    console.log(this.selectedDataName);
     this.sortedList = this.dataList.filter((item) => {
       return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
     });
     if (this.sortedList.length === 1) {
       if (this.sortedList[0].name.toLowerCase() === event.detail.value.toLowerCase()) {
+        // this.onChange(event.target.value);
         this.sortedList = [];
+       
       }
     }
-    if(this.sortedList.length===0){
-      
+    else{
+      this.selectedDataName= event.detail.value;
+      // event.detail.value = this.selectedDataName;
+      // this.onChange(event.target.value);
     }
   }
 
@@ -116,6 +124,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   onFocus(event: CustomEvent) {
+    // this.selectedDataName= event.detail.value;
     console.log(event);
     this.sortedList = this.dataList.filter((item) => {
       return (item.name.toLowerCase().indexOf(this.selectedDataName) > -1);
@@ -128,7 +137,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   onBlur(event: CustomEvent) {
-    console.log(event);
+    console.log(event , '11112');
     setTimeout(() => {
       this.sortedList = [];
     }, 100);

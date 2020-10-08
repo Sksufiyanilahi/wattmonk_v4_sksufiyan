@@ -26,6 +26,9 @@
                 </p>
                 <span class="customer-email" [routerLink]="['/survey-detail/',designData.id]"
                       routerDirection="forward">{{designData.email}}</span>
+                      <span *ngIf="item.lateby > 1" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{item.lateby}} days</strong></span>
+                      <span *ngIf="item.lateby == 1" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by a day</strong></span>
+            </p>
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{designData.phonenumber}}</span></a>
                 <span class="customer-address z-100"

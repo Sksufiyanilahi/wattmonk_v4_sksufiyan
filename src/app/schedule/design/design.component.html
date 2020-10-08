@@ -42,10 +42,16 @@
             <ion-row class="ion-align-items-center ion-justify-content-center">
                 <ion-col>
                     <ion-item class="ion-no-padding">
-                        <ion-label position="floating">monthly bill*</ion-label>
-                        <ion-input class="form_input"  type="number"
+                        <ion-label position="floating">annual units (Kwh)*</ion-label>
+                        <ion-input class="form_input"  type="number" (ionInput)="numberfield($event)"
                                    formControlName="monthlybill"></ion-input>
                     </ion-item>
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('monthlybill').dirty && desginForm.get('monthlybill').hasError('min')">
+                            <span class="error">{{"Annual units should not be negative"}}</span>
+                        </div>
+                      
+                    </div>
                 </ion-col>
             </ion-row>
 
@@ -64,12 +70,12 @@
             <ion-row>
                 <ion-col size="6">
                     <!-- <ion-label position="floating">module make*</ion-label> -->
-                    <app-auto-complete [dataList]="listOfSolarMake" placeholder="module make*"
-                                       formControlName="solarmake"></app-auto-complete>
+                    <app-auto-complete style="font-size: 14px;" [dataList]="listOfSolarMake" placeholder="module make*"
+                                      formControlName="solarmake"></app-auto-complete>
                 </ion-col>
                 <ion-col size="6">
                     <!-- <ion-label position="floating">module model*</ion-label> -->
-                    <app-auto-complete [dataList]="listOfSolarMade" placeholder="module model*"
+                    <app-auto-complete style="font-size: 14px;"  [dataList]="listOfSolarMade" placeholder="module model*"
                                        formControlName="solarmodel"></app-auto-complete>
 
                 </ion-col>
@@ -78,12 +84,12 @@
             <ion-row>
                 <ion-col size="6">
                     <!-- <ion-label position="floating">inverter make*</ion-label> -->
-                    <app-auto-complete [dataList]="listOfInverterMake" placeholder="inverter make*"
+                    <app-auto-complete style="font-size: 12px;" [dataList]="listOfInverterMake" placeholder="inverter make*"
                                        formControlName="invertermake"></app-auto-complete>
                 </ion-col>
                 <ion-col size="6">
                     <!-- <ion-label position="floating">invertor model*</ion-label> -->
-                    <app-auto-complete [dataList]="listOfInverterMade" placeholder="invertor model*"
+                    <app-auto-complete style="font-size: 10px;" [dataList]="listOfInverterMade" placeholder="invertor model*"
                                        formControlName="invertermodel"></app-auto-complete>
                 </ion-col>
             </ion-row>
@@ -93,7 +99,7 @@
                     <ion-item class="ion-no-padding">
                         <!-- <ion-label style="display: none;">Project Type</ion-label> -->
                         <!-- <ion-label position="floating">project type</ion-label> -->
-                        <ion-select class="form_input" ok-text="" placeholder="project type"
+                        <ion-select class="form_input" ok-text="" placeholder="project type*"
                                     cancel-text=""
                                     formControlName="projecttype" interface="popover">
                             <ion-select-option value="residential">Residential</ion-select-option>
@@ -120,7 +126,7 @@
                     <ion-item class="ion-no-padding">
                         <!-- <ion-label style="display: none;">New construction</ion-label> -->
                         <!-- <ion-label position="floating">new construction</ion-label> -->
-                        <ion-select  (ionChange)="showUpload($event)" class="form_input select_div" placeholder="new construction"
+                        <ion-select  (ionChange)="showUpload($event)" class="form_input select_div" placeholder="new construction*"
                                      ok-text=""
                                     cancel-text=""
                                     formControlName="newconstruction" interface="popover">
@@ -135,7 +141,7 @@
            
                 <ion-col size="12">
                     <ion-item class="ion-no-padding">
-                        <ion-label style="display: none;">Mounting Type</ion-label>
+                        <ion-label style="display: none;">Mounting Type*</ion-label>
                         <!-- <ion-label position="floating">mounting type</ion-label> -->
                         <ion-select class="form_input select_div" (ionChange)="eventcheck($event)" placeholder="mounting type"
                                     ok-text="" cancel-text=""
@@ -153,7 +159,7 @@
                 <ion-col size="6" *ngIf='(showValue=="roof" ||showValue== "both")'>
                     <ion-item class="ion-no-padding">
                         <ion-label style="display: none;">Roof Type</ion-label>
-                        <ion-label position="floating">roof type</ion-label>
+                        <ion-label position="floating">roof type*</ion-label>
                         <ion-select class="form_input select_div"
                                     ok-text="" cancel-text=""
                                     formControlName="rooftype" interface="popover">
@@ -165,31 +171,53 @@
                 </ion-col>
                 <ion-col size="6" *ngIf='(showValue=="ground" || showValue=="both")'>
                         <ion-item class="ion-no-padding">
-                            <ion-label position="floating">tilt for ground mount system</ion-label>
+                            <ion-label position="floating" style="font-size: 12px;">tilt for ground mount*</ion-label>
                             <ion-input class="form_input"  type="number" formControlName="tiltofgroundmountingsystem"></ion-input>
                         </ion-item>
+                        <div style="height: 5px;">
+                            <div *ngIf="desginForm.get('tiltofgroundmountingsystem').dirty && desginForm.get('tiltofgroundmountingsystem').hasError('min')">
+                                <span class="error">{{"Tilt for ground mount should not be negative"}}</span>
+                            </div>
+                          
+                        </div>
                 </ion-col>
             </ion-row>
               <!--upload box-->
-              <ion-row *ngIf='uploadbox=="true"'>
+  <ion-row *ngIf='uploadbox=="true"'>
                 <ion-col size="12">
                     <ion-item class="ion-no-padding">
                         <!-- <ion-input class="form_input" type="file" placeholder="Upload Architectural design" 
                               (ionChange)="files($event)"  multiple></ion-input> -->
-                              <ion-label position="floating">architectural design</ion-label>
+                              <ion-label position="floating">architectural design*</ion-label>
                               <ion-input type="file"  class="form_input"  (change)="files($event)" style="margin-top: 12px;" formControlName="architecturaldesign" placeholder="Upload Architectural design" multiple></ion-input>
-                    </ion-item>
+                            </ion-item>
+                              <ng-template *ngIf="design.architecturaldesign !=''">
+                                  <ion-item>
+                                    <ion-label position="floating">architectural design*</ion-label>
+                                  
+                                      <!-- <div *ngFor="let arc of design.architecturaldesign">
+                                         
+                                            {{arc.name}}{{arc.ext}}
+                                        
+                                          
+                                      </div> -->
+                                  </ion-item>
+                              </ng-template>
+                  
                 </ion-col>
                
             </ion-row>
 
             <ion-row>
-                <ion-col size="12">
+                <ion-col size="11">
                     <ion-item class="ion-no-padding">
                         <ion-label position="floating">Attachment</ion-label>
-                        <ion-input class="form_input"  type="file" formControlName="prelimdesign" (change)="prelimfiles($event)" multiple></ion-input>
-                    </ion-item>
-               
+                        <ion-input style="font-size:12px" class="form_input"  #myinput type="file" formControlName="attachments" (change)="prelimfiles($event)" multiple>
+                        </ion-input>
+                    </ion-item>    
+                </ion-col>
+                <ion-col size="1" style="display: flex;align-items: flex-end;">
+                    <ion-icon name="close-circle-outline" *ngIf="myinput.value !=''" (click)="myinput.value=''"></ion-icon>
                 </ion-col>
             </ion-row>
 

@@ -155,7 +155,6 @@ export class SearchbarPage implements OnInit {
   }
 
   getdesigndata(serchTermData: any = { 'type': '' }) {
-    debugger;
     console.log(serchTermData);
     this.name = serchTermData.name==undefined ? '' :serchTermData.name ;
     this.searchbarElement = this.name;

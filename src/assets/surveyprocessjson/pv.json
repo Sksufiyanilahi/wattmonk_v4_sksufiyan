@@ -1,0 +1,449 @@
+[
+    {
+        "name":"Electricals",
+        "isactive": true,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children":[
+            {
+                "name":"MSP",
+                "isactive": true,
+                "ispending": true,
+                "checkexistence":false,
+                "isexistencechecked":false,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": true,
+                        "ispending": true,
+                        "shotinfo":"Capture Long Shot",
+                        "questioninfo":"Provide MSP Location",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "MSP is located inside or outside the building?",
+                        "actions" : ["inside","outside"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "msplocation",
+                        "imagekey":"mspimages",
+                        "imagename":"msplongshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide MSP Rating",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "MSP/BUS Rating?",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "msprating",
+                        "imagekey":"mspimages",
+                        "imagename":"mspzoomshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Open MSP Shutter & Capture Zoom Shot",
+                        "questioninfo":"Provide Main Breaker Size",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Main Breaker Size",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "mainbreakersize",
+                        "imagekey":"mspimages",
+                        "imagename":"mspopenshutterzoomshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Open MSP Inside Cover & Capture Zoom Shot",
+                        "questioninfo":"Provide Main breaker location in MSP",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Main breaker location in MSP?",
+                        "actions" : ["top","bottom","center"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "mspbreaker",
+                        "imagekey":"mspimages",
+                        "imagename":"mspwithoutcovershot"
+                    }
+                ]
+            },
+            {
+                "name":"Existing Sub Panel",
+                "isactive": true,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence":true,
+                "isexistencechecked":false,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": true,
+                        "ispending": true,
+                        "shotinfo":"Capture Long Shot",
+                        "questioninfo":"Provide Sub Panel Location",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Sub Panel is located inside or outside the building?",
+                        "actions" : ["inside","outside"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "subpanellocation",
+                        "imagekey":"existingsubpanelimages",
+                        "imagename":"subpanellongshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide Sub Panel Rating",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Sub Panel Rating?",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "subpanelrating",
+                        "imagekey":"existingsubpanelimages",
+                        "imagename":"subpanelzoomshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Open Sub Panel Shutter & Capture Zoom Shot",
+                        "questioninfo":"Provide Sub Panel Main Breaker Size",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Sub Panel Main Breaker Size",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "subpanelmainbreakersize",
+                        "imagekey":"existingsubpanelimages",
+                        "imagename":"subpanelopenshutterzoomshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Open Sub Panel Inside Cover & Capture Zoom Shot",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"existingsubpanelimages",
+                        "imagename":"subpanelwithoutcovershot"
+                    }
+                ]
+            },
+            {
+                "name":"Utility Meter",
+                "ispending": true,
+                "isactive": false,
+                "isvisible": true,
+                "checkexistence":false,
+                "isexistencechecked":false,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"Provide Utility Meter",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Utility meter is attached or detached with MSP?",
+                        "actions" : ["attach","detach"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "utilitymeter",
+                        "imagekey":"utilitymeterimages",
+                        "imagename":"umwideshoturl"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"utilitymeterimages",
+                        "imagename":"umzoomshoturl"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Roof",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children":[
+            {
+                "name":"Roof Photos",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture roof from all angles",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"roofimages",
+                        "imagename":"roofphoto"
+                    }
+                ]
+            },
+            {
+                "name":"Roof Dimensions",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture roof dimensions",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"roofdimensionimages",
+                        "imagename":"roofdimension"
+                    }
+                ]
+            },
+            {
+                "name":"Obstacles Photos",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture obstacles photos",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"obstaclesimages",
+                        "imagename":"obstacle"
+                    }
+                ]
+            },
+            {
+                "name":"Obstacles Dimensiones",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture obstacles dimensions",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"obstaclesdimensionsimages",
+                        "imagename":"obstacledimension"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Attic",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children":[
+            {
+                "name":"Attic Photos",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"Provide Type of Frame Details",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "What is the type of frame?",
+                        "actions" : ["truss", "rafter"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "framing",
+                        "imagekey":"atticimages",
+                        "imagename":"atticimage"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide Size Details",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "What's the size of the raft (thickness x width)?",
+                        "actions" : ["Confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 7,
+                        "inputformcontrol" : "framingsize",
+                        "imagekey":"atticimages",
+                        "imagename":"atticimage"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Required Shot",
+                        "questioninfo":"Provide Spacing Details",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "What's the distance between two rafts?",
+                        "actions" : ["Confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "distancebetweentworafts",
+                        "imagekey":"atticimages",
+                        "imagename":"atticimage"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Appliances",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children":[
+            {
+                "name":"Heavy Load Appliances",
+                "isactive": false,
+                "ispending": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture all appliances of higher load",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Name of the appliance?",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 5,
+                        "inputformcontrol" : "",
+                        "imagekey":"appliancesimages",
+                        "imagename":"appliances"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Details",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 1,
+        "children":[]
+    }
+]

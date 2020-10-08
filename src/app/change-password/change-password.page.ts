@@ -71,7 +71,6 @@ getnewType() {
 
    if (this.changepassword.status === 'VALID') {
       console.log(this.changepassword.value);
-      debugger;
      this.utils.showLoading('Resetting password').then(() => {
        this.apiService.changepassword(data).subscribe((response:any) => {
          console.log(response);
@@ -79,7 +78,8 @@ getnewType() {
           isdefaultpassword:false
          }
          this.utils.hideLoading().then(() => {
-           this.utils.showSuccessModal('User password changed successfully!').then((modal) => {
+           this.utils.showSnackBar('Your password has been changed successfully!');
+          //  this.utils.showSuccessModal('User password changed successfully!').then((modal) => {
             //  this.apiService.updateresetpassword(response.user.id,postdata).subscribe(res=>{
              
             //   console.log(res,"ressss");
@@ -88,17 +88,17 @@ getnewType() {
             //       console.log(err,"errr");
                   
             //  })
-             modal.present();
-             modal.onWillDismiss().then((dismissed) => {
+            //  modal.present();
+            //  modal.onWillDismiss().then((dismissed) => {
               // this.goBack();
               this.storage.logout();
               this.deviceStorage.clear();
               this.navController.navigateBack('login');
-             });
-           }, (responseError) => {
-            const error: ErrorModel = responseError.error;
-            this.utils.errorSnackBar(error.message[0].messages[0].message);
-           });
+            //  });
+          //  }, (responseError) => {
+          //   const error: ErrorModel = responseError.error;
+          //   this.utils.errorSnackBar(error.message[0].messages[0].message);
+          //  });
           
          });
        }, (responseError) => {

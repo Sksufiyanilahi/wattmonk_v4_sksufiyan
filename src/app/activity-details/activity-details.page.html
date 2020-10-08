@@ -40,7 +40,7 @@
 
 <ion-content><p style="text-align: center; font-size:large; color:black; border:none;margin-bottom:0px ;"> Activities</p>
  <p  style="text-align: center; margin-top: 0px;"><span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'requestdeclined'">Declined</span>
- <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="activity_details?.deliverydate > 0">Overdue</span>
+ <!-- <span class="chipdetail" style="background-color: rgb(246, 104, 10);" >--------{{isDatePassed()}}Overdue</span> -->
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'requestaccepted'">Accepted</span>
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'delivered'">Delivered</span>
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'designcompleted'">Completed</span>
@@ -53,7 +53,7 @@
 </span>
 </p>
   <ion-card  *ngFor="let activities of activity_details?.activities" class="custom-card"  >
-  <span style="float: left; font-size: smaller;">{{activities.created_at | date: 'dd MMM yyyy'}}</span><br><br>
+  <span style="float: left; font-size: smaller;">{{activities.updated_at | date: 'dd MMM yyyy'}}</span><br><br>
   <span style="font-size:medium; float:left; color: black;">{{activities.activity}}</span><br><br>
 <span style="float: right !important; font-size: small; font-style: italic;">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
 

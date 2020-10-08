@@ -29,6 +29,7 @@ export class UtilitiesService {
   surveyDetailsRefresh = new BehaviorSubject<boolean>(false);
   designDetailsRefresh = new BehaviorSubject<boolean>(false);
   showBottomBarHomepage = new BehaviorSubject<boolean>(true);
+  uploadfile = new BehaviorSubject<string>('');
 
   dataRefresh = new BehaviorSubject<boolean>(false);
 

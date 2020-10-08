@@ -19,9 +19,18 @@
                         {{surveyData.datetime | date: 'hh:mm a'}}
                     </span>
                     <span fill="clear" background-border="clear" [routerLink]="['/','activity',surveyData.id,'survey']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+                    <span *ngIf="surveyData.status=='reviewassigned'" class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
+                        In review
+                    </span>
+                    <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span>
             </p>
+            <p style="margin:0px">
+
                 <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
                       routerDirection="forward">{{surveyData.email}}</span>
+                      <span *ngIf="surveyData.lateby > 1" class="latebystyle" style="font-size: 10px;"><strong>Late by {{surveyData.lateby}} days</strong></span>
+                      <span *ngIf="surveyData.lateby == 1" class="latebystyle" style="font-size: 10px;"><strong>Late by a day</strong></span>
+            </p>
                 <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
                 <span class="customer-address z-100"

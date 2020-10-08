@@ -60,6 +60,8 @@ export class SurveyDataModel {
   lateby:any;
   city:string;
   state:string;
+  country:string;
+  postalcode:number;
 }
 
 

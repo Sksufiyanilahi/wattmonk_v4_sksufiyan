@@ -65,24 +65,24 @@ export class SurveyComponent implements OnInit, OnDestroy {
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
     this.assignForm = this.formBuilder.group({
-      assignedto: new FormControl('', [Validators.required]),
+      assignedto: new FormControl(0, [Validators.required]),
       status: new FormControl('surveyassigned', [Validators.required])
     });
   }
 
-  segmentChanged(event){
+  segmentChanged(event?){
     this.segments= event.target.value;
-    this.getSurveys(event);
+    // this.getSurveys(event);
 
-    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+    // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
       this.getSurveys(null);
-    });
+    // });
 
-    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-        this.formatSurveyData(this.listOfSurveyData);
-      }
-    });
+    // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+    //   if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+    //     this.formatSurveyData(this.listOfSurveyData);
+    //   }
+    // });
   }
 
   ionViewDidEnter() {
@@ -93,16 +93,16 @@ this.network.networkConnect();
       console.log(this.netSwitch);
       
     })
-    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+    // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
 
-      this.getSurveys(null);
-    });
+    //   this.getSurveys(null);
+    // });
 
-    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-        this.formatSurveyData(this.listOfSurveyData);
-      }
-    });
+    // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+    //   if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+    //     this.formatSurveyData(this.listOfSurveyData);
+    //   }
+    // });
     // debugger;
     // this.routeSubscription.unsubscribe();
   }
@@ -111,9 +111,9 @@ this.network.networkConnect();
     this.userData = this.storageService.getUser();
     console.log(this.userData);
     
-    // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-    //   this.getSurvey();
-    // });
+    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+      this.getSurveys(null);
+    });
   }
   // ngOnInit() {
   //   // this.filterData(this.filterDataArray);
@@ -167,7 +167,7 @@ this.network.networkConnect();
     this.fetchPendingSurveys(event,showLoader);
   }
 
-  fetchPendingSurveys(event?, showLoader?: boolean) {
+  fetchPendingSurveys(event, showLoader: boolean) {
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
@@ -451,7 +451,6 @@ this.network.networkConnect();
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
-    debugger;
     console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
     
   }

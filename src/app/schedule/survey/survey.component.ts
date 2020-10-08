@@ -89,7 +89,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
         // this.surveyForm.get('country').setValue('India');
         // this.surveyForm.get('city').setValue('delhi');
         // this.surveyForm.get('state').setValue('up');
-        // this.surveyForm.get('postalcode').setValue('222222222');
+        // this.surveyForm.get('postalcode').setValue(777777777);
         this.surveyForm.get('address').setValue(address.address);
         this.surveyForm.get('latitude').setValue(address.lat);
         this.surveyForm.get('longitude').setValue(address.long);
@@ -110,6 +110,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
     this.getAssignees();
   }
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -151,15 +152,30 @@ export class SurveyComponent implements OnInit, OnDestroy {
   saveSurvey() {
     if (this.surveyForm.status === 'INVALID') {
       console.log(this.surveyForm.value);
-      this.utilities.errorSnackBar('Invalid form detail');
+      if(this.surveyForm.value.name==''){
+        this.utilities.errorSnackBar('Please enter name.');
+      }
+      else if(this.surveyForm.value.email==''){
+        this.utilities.errorSnackBar('Please enter email.');
+      }
+      else if(this.surveyForm.value.phonenumber==''){
+        this.utilities.errorSnackBar('Please enter phone number.');
+      }
+      else if(this.surveyForm.value.jobtype==''){
+        this.utilities.errorSnackBar('Please enter job type.');
+      }
+      else {
+        this.utilities.errorSnackBar('Address not found. Make sure your location is on in device.');
+      }
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
         if (this.surveyId !== 0) {
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.showSnackBar('Survey has been updated');
-              this.navController.navigateRoot('homepage/survey');
               this.utilities.setSurveyDetailsRefresh(true);
+              // this.navController.navigateRoot('homepage/survey');
+              this.navController.pop();
             });
           });
 
@@ -174,14 +190,15 @@ export class SurveyComponent implements OnInit, OnDestroy {
           console.log(this.surveyForm.value);
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
-              this.utilities.hideLoading().then(() => {
+              this.utilities.hideLoading();
+              // this.navController.pop();
                 modal.present();
                 modal.onWillDismiss().then((dismissed) => {
-                  this.navController.navigateRoot('homepage/survey');
                   this.utilities.sethomepageSurveyRefresh(true);
+                  this.navController.navigateRoot('homepage/survey');
 
                 });
-              });
+              // });
             });
 
           });
@@ -235,10 +252,16 @@ export class SurveyComponent implements OnInit, OnDestroy {
             jobtype: this.survey.jobtype,
             phonenumber: this.survey.phonenumber,
             datetime: date.getTime(),
-            comments: this.survey.comments,
+            comments: this.survey.comments[0].message,
             address: this.survey.address,
             source: this.survey.source,
-            createdby: this.survey.createdby.id
+            createdby: this.survey.createdby.id,
+            latitude: this.survey.latitude,
+            longitude: this.survey.longitude,
+            country: this.survey.country,
+            state: this.survey.state,
+            city: this.survey.city,
+            postalcode:this.survey.postalcode,
           });
           if (this.survey.assignedto !== null && this.survey.assignedto !== undefined) {
             this.surveyForm.patchValue({

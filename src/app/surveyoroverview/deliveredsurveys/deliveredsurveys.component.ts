@@ -9,6 +9,7 @@ import { ApiService } from 'src/app/api.service';
 import { ErrorModel } from 'src/app/model/error.model';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-deliveredsurveys',
@@ -27,6 +28,7 @@ export class DeliveredsurveysComponent implements OnInit {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+  overdue: number;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -92,7 +94,9 @@ export class DeliveredsurveysComponent implements OnInit {
   formatSurveyData(records : SurveyDataModel[]){
     this.listOfSurveyData = this.fillinDynamicData(records);
     const tempData: SurveyDataHelper[] = [];
-          this.listOfSurveyData.forEach((surveyItem) => {
+          this.listOfSurveyData.forEach((surveyItem,i) => {
+            this.sDatePassed(surveyItem.datetime,i);
+            surveyItem.lateby = this.overdue;
             if (tempData.length === 0) {
               const listOfSurvey = new SurveyDataHelper();
               listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
@@ -139,6 +143,15 @@ export class DeliveredsurveysComponent implements OnInit {
     });
 
     return records;
+  }
+
+  sDatePassed(datestring: any,i){
+    var checkdate = moment(datestring, "YYYYMMDD");
+    var todaydate = moment(new Date(), "YYYYMMDD");
+    var lateby = todaydate.diff(checkdate, "days");
+    this.overdue = lateby;  
+    console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
+    
   }
 
 }

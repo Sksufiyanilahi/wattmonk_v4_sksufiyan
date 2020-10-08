@@ -1,23 +1,23 @@
 <ion-content (click)="close()" style="padding-bottom: 250px;">
 
-    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
-        <ion-segment-button *ngIf="userData.role.type !=='SuperAdmin'"  value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
-          <ion-label class="segment-btn">Pending</ion-label>
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="newDesign">
+        <ion-segment-button value="newDesign">
+          <ion-label class="segment-btn">New Designs</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=designassigned">
+        <ion-segment-button value="InDesign">
           <ion-label class="segment-btn">In Designing</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=designcompleted">
+        <ion-segment-button value="completed">
           <ion-label class="segment-btn">Completed</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed">
+        <ion-segment-button value="InReview">
           <ion-label class="segment-btn"> In Review</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=delivered">
+        <ion-segment-button value="delivered">
           <ion-label class="segment-btn">Delivered</ion-label>
         </ion-segment-button>
       </ion-segment>
-      <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+      <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">    
           <ion-refresher-content></ion-refresher-content>
         </ion-refresher>
                    
@@ -41,8 +41,10 @@
                       </span> -->
                       
                       <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'"  [routerLink]="['/design-details/',designData.id]">Declined</span>
+                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  [routerLink]="['/design-details/',designData.id]">Review Failed</span>
                       <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0" [routerLink]="['/design-details/',designData.id]">Overdue</span>
                       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'requestaccepted'" [routerLink]="['/design-details/',designData.id]">Accepted</span>
+                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/design-details/',designData.id]">Review Passed</span>
                       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'" [routerLink]="['/design-details/',designData.id]">Delivered</span>
                       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/design-details/',designData.id]">Completed</span>
                       <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/design-details/',designData.id]">Unassigned</span>
@@ -72,16 +74,17 @@
                         </ion-row>
                         <ion-row class="ion-no-margin ion-no-margin">
                             <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
-                                <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
+                                <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted' || designData.status=='requestdeclined'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
                                 >Assign</span>
                                 <span style="float: right;">
-
-                                    <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')">
-                                       Accept
-                                    </ion-col>
-                                    <ion-col size="4" *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(designData.id)">
-                                    Decline
-                                    </ion-col>
+                                    <ng-container *ngIf="userData.role.type !=='clientsuperadmin'"> 
+                                        <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')">
+                                           Accept
+                                        </ion-col>
+                                        <ion-col size="4" *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(designData.id)">
+                                        On Hold
+                                        </ion-col>
+                                    </ng-container>
                                 </span>
                               
                                 <span *ngIf="designData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
@@ -93,8 +96,8 @@
                                 <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                                 >Assign Review</span>
                             </ion-col>
-                            <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
-                                <span *ngIf="designData.status == 'reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed'">
+                                <span *ngIf="designData.status =='reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData)"
                                 >Deliver</span>
                             </ion-col>
                             <!-- <ion-col class="ion-no-margin ion-no-padding">
@@ -135,9 +138,10 @@
     <form [formGroup]="assignForm">
         <ion-grid class="drawer">
             <ion-row>
-                <ion-col size="12">
-                    <app-user-selector (assigneeData)=getassignedata($event) placeholder="assign" [assignees]="listOfAssignees"
+               <ion-col size="12">
+                    <app-user-selector  (assigneeData)=getassignedata($event) placeholder="assign" [assignees]="listOfAssignees"
                                        formControlName="assignedto"></app-user-selector>
+                   
                 </ion-col>
             </ion-row>
             <ion-row style="margin-left: 8px;">

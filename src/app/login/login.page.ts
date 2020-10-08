@@ -117,7 +117,25 @@ this.network.networkConnect();
                   this.apiService.refreshHeader();
                   this.navController.navigateRoot(['designoverview']);
                 }
-              }else{
+              }
+             
+              else if(response.user.role.id == ROLES.Analyst)
+              {
+                 this.storageService.setUserName(this.loginForm.get('identifier').value);
+                  this.storageService.setPassword(this.loginForm.get('password').value);
+
+                  if(response.user.isdefaultpassword){
+                      this.storageService.setJWTToken(response.jwt);
+                      this.apiService.refreshHeader();
+                      this.navController.navigateRoot(['changepassword'])
+                  } else{
+                    this.storageService.setUser(response.user, response.jwt);
+                    this.apiService.refreshHeader();
+                    this.navController.navigateRoot(['analystoverview']);
+                  }
+              }
+              else{
+                
                  // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
                  this.storageService.setUserName(this.loginForm.get('identifier').value);
                  this.storageService.setPassword(this.loginForm.get('password').value);

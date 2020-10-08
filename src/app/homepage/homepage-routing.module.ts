@@ -16,7 +16,6 @@ const routes: Routes = [
         path:'design',
         component:DesignComponent
       },
-     
       {
         path: 'survey',
         component: SurveyComponent

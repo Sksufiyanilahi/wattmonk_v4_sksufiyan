@@ -11,6 +11,7 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_APP_ID, COMET_CHAT_REGION } from './model/constants';
 import { Firebase } from '@ionic-native/firebase/ngx';
 import { NetworkdetectService } from './networkdetect.service';
+import { ROLES } from './contants';
 
 @Component({
   selector: 'app-root',
@@ -89,11 +90,18 @@ this.network.networkConnect();
       this.apiservice.refreshHeader();
       this.user= JSON.parse(localStorage.getItem('user'));
       // console.log("???",this.user.role);
+      console.log(this.user.role.type);
+      
         if(this.user.role.type=='surveyors'){
           this.navController.navigateRoot('surveyoroverview');
         }else if(this.user.role.type=='designer'){
           this.navController.navigateRoot('designoverview');
-        }else{
+        }else if(this.user.role.type==='qcinspector'){
+          console.log(this.user.role.type);
+          this.navController.navigateRoot('analystoverview');
+          
+        }
+        else{
           this.navController.navigateRoot('homepage');
         }
     }
@@ -101,14 +109,14 @@ this.network.networkConnect();
   }
 
   getFcmToken() {
-    debugger;
   this.firebase.getToken()
   .then(token => {
     console.log(`The token is ${token}`)
     localStorage.setItem('pushtoken', token);
   })
   .catch(error => {
-   console.error('Error getting token', error)});
+  //  console.error('Error getting token', error)
+  });
   }
 
   getNotification() {

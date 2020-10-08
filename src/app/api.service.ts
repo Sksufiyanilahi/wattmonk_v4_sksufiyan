@@ -17,6 +17,9 @@ import { SearchModel } from './model/search.model';
 import { BaseUrl } from './contants';
 import { GOOGLE_API_KEY } from './model/constants';
 import { UtilitiesService } from './utilities.service';
+import { BehaviorSubject } from 'rxjs';
+
+import { RoofMaterial } from './model/roofmaterial.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +32,15 @@ export class ApiService {
   private userId = '';
   public searchbarElement: string = '';
   public _OnMessageReceivedSubject: Subject<string>;
+
+  public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
+
+
   constructor(
     private http: HttpClient,
     private storageService: StorageService,
     private utilities:UtilitiesService
   ) {
-    debugger;
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
       //Do task when no internet connection
@@ -69,6 +75,9 @@ export class ApiService {
   getSolarMake() {
     return this.http.get<SolarMake[]>(BaseUrl + '/modulemakes', { headers: this.headers });
   }
+  postSolarMake(data){
+    return this.http.post<SolarMake[]>(BaseUrl + '/modulemakes',data, { headers: this.headers });
+  }
 
   getRoofMaterial() {
     return this.http.get<SolarMake[]>(BaseUrl + '/roofmaterials', { headers: this.headers });
@@ -78,8 +87,21 @@ export class ApiService {
     return this.http.get<SolarMadeModel[]>(BaseUrl + '/modulemodels?modulemake.id_eq=' + id, { headers: this.headers });
   }
 
+  postSolarMade(data){
+    return this.http.post<SolarMadeModel[]>(BaseUrl + '/modulemodels' ,data, { headers: this.headers });
+  }
+
   getInverterMake() {
     return this.http.get<InverterMakeModel[]>(BaseUrl + '/invertermakes', { headers: this.headers });
+  }
+
+  postInverterMake(data){
+    return this.http.post<InverterMakeModel[]>(BaseUrl + '/invertermakes',data, { headers: this.headers });
+  }
+
+  postInverterMade(data){
+    return this.http.post<InverterMadeModel[]>(BaseUrl + '/invertermodels', data,{ headers: this.headers });
+
   }
 
   getUtilities() {
@@ -88,6 +110,10 @@ export class ApiService {
 
   addUtility(data: any): Observable<InverterMakeModel> {
     return this.http.post<InverterMakeModel>(BaseUrl + '/utilities', data, { headers: this.headers });
+  }
+
+  getRoofMaterials() {
+    return this.http.get<RoofMaterial[]>(BaseUrl + '/roofmaterials', { headers: this.headers });
   }
 
   getInverterMade(id): Observable<InverterMadeModel[]> {
@@ -137,6 +163,9 @@ export class ApiService {
   getDesignSurveys(search : string) {
     return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search, { headers: this.headers });
   }
+  getAnalystDesign(search :string){
+    return this.http.get<DesginDataModel[]>(BaseUrl+'/userdesign?id='+this.userId+'&'+search,{headers:this.headers});
+  }
 
   refreshHeader() {
     this.headers = new HttpHeaders({
@@ -145,6 +174,7 @@ export class ApiService {
     });
     this.uploadHeaders = new HttpHeaders({
       Authorization: 'Bearer ' + this.storageService.getJWTToken()
+    
     });
     this.parentId = this.storageService.getParentId();
     this.userId = this.storageService.getUserID();
@@ -172,7 +202,7 @@ export class ApiService {
   }
 
   searchAllDesgin(searchterm): Observable<SearchModel> {
-    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm , { headers: this.headers });
+    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm + '&userid=' + this.userId, { headers: this.headers });
   }
 
   getDesigners(): Observable<AssigneeModel[]> {
@@ -244,5 +274,8 @@ export class ApiService {
 
   survey_activityDetails(surveyid){
     return this.http.get(BaseUrl+ "surveys/" + surveyid, { headers: this.headers});
+  }
+  publishSolarMake(value){
+    this.solarMakeValue.next(value);
   }
 }

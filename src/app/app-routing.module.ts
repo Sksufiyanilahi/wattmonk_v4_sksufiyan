@@ -109,18 +109,23 @@ const routes: Routes = [
   {
     path: 'search-bar1',
     loadChildren: () => import('./search-bar1/search-bar1.module').then( m => m.SearchBar1PageModule)
+  },{
+    path: 'stripe',
+    loadChildren: () => import('./stripe/stripe.module').then( m => m.StripePageModule)
+  },
+  {
+    path: 'activity-details',
+    loadChildren: () => import('./activity-details/activity-details.module').then( m => m.ActivityDetailsPageModule)
+  },
+  {
+    path: 'analystoverview',
+    loadChildren: () => import('./analystoverview/analystoverview.module').then( m => m.AnalystoverviewPageModule)
   },
   {
     path: 'add-money',
     loadChildren: () => import('./add-money/add-money.module').then( m => m.AddMoneyPageModule)
   }
-
-
-
-
-
 ];
-
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })

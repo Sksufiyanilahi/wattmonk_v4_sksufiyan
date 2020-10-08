@@ -41,6 +41,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   image: string;
   timerConfig: any;
   user: User;
+  commentsForm: FormGroup;
+  browser: any;
   // user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
 
@@ -63,15 +65,20 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     this.assigneeForm = this.formBuilder.group({
       designassignedto: new FormControl('', [Validators.required]),
       status: new FormControl('designassigned'),
-      comment:new FormControl('')
     });
+
+    this.commentsForm = this.formBuilder.group({
+      comments:new FormControl(''),
+      status: new FormControl('designcompleted'),
+      prelimdesign:new FormControl(null,[Validators.required])
+    })
   }
 
   ngOnInit() {
     console.log(this.imageName);
-    // debugger;
     this.user=this.storage.getUser();
     console.log(this.user);
+    
     
     this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
@@ -81,6 +88,43 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
   showDesignImage(){
     const browser = this.iab.create(this.design.prelimdesign.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  }
+
+  showurl(i,value){
+    if(value=='attachments'){
+      this.browser = this.iab.create(this.design.attachments[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+    }else{
+      this.browser = this.iab.create(this.design.architecturaldesign[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+    }
+ 
+  }
+
+  updatecomments(){
+    if (this.commentsForm.status === 'INVALID') {
+      this.utilities.errorSnackBar('Please select prelim design');
+      return false;
+    }else{
+      
+      this.utilities.showLoading('Submitting').then(()=>{
+        
+        this.apiService.updateDesignForm(this.commentsForm.value,this.designId).subscribe((success)=>{
+          this.uploadpreliumdesign(this.designId,'prelimdesign');
+          this.utilities.hideLoading().then(() => {
+            console.log("suc",success);
+            this.setData(success);
+            // this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
+            // this.utilities.setHomepageDesignRefresh(true);
+            this.utilities.getDesignDetailsRefresh();
+            this.router.navigate(['designoverview/completeddesigns'])
+            // this.navController.navigateRoot(['homepage']);
+          });
+        },(error) => {
+          this.utilities.hideLoading().then(() => {
+            this.utilities.errorSnackBar('Some Error Occurred');
+          });
+        });
+      })
+    }
   }
 
 
@@ -106,6 +150,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
           let cdate = new Date(this.design.reviewstarttime);
           cdate.setMinutes(cdate.getMinutes() + 15);
           this.countdownservice.startTimer(cdate);
+        }else if(this.design.status=='designcompleted'){
+          this.countdownservice.stopTimer();
         }
 
   }
@@ -142,7 +188,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   setData(result: DesginDataModel) {
-    debugger;
     this.design = result;
     console.log(this.design,">>>>>>>>>>>>>>>>");
     this.imageName= result.prelimdesign==null ? '' : result.prelimdesign.name + result.prelimdesign.ext;
@@ -193,6 +238,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   getAssignees() {
+    
     this.apiService.getDesigners().subscribe(assignees => {
       this.listOfAssignees = [];
       assignees.forEach(item => this.listOfAssignees.push(item));
@@ -291,44 +337,49 @@ reader.readAsDataURL(event.target.files[0]);
 
 
   uploadpreliumdesign(designId?: number, key?: string){
-    // const blob = this.utilities.getBlobFromImageData(this.prelimFiles);
-    // console.log(blob);
-    //  let blob= this.utilities.b64toBlob(this.image);
-    //   console.log(blob);
-      
-    // console.log(typeof(this.prelimFiles[0]));
-    const imageData = new FormData();
-    for(var i=0; i< this.prelimFiles.length;i++){
-      imageData.append("files",this.prelimFiles[i]);
-      // if(i ==0){
-        imageData.append('path', 'design/' + designId);
-        imageData.append('refId', designId + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-      // }
-    } 
-      this.utilities.showLoading('Uploading').then(()=>{
-        this.apiService.uploaddesign(imageData).subscribe(res=>{
-          this.utilities.hideLoading().then(()=>{
-            console.log(res); 
-            this.imagebox= false;
-            // this.getDesignDetails();
-            this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res)=>{
-              this.utilities.getDesignDetailsRefresh();
-              console.log(res,">>");
+
+    // else{
+
+      // const blob = this.utilities.getBlobFromImageData(this.prelimFiles);
+      // console.log(blob);
+      //  let blob= this.utilities.b64toBlob(this.image);
+      //   console.log(blob);
+        
+      // console.log(typeof(this.prelimFiles[0]));
+      const imageData = new FormData();
+      for(var i=0; i< this.prelimFiles.length;i++){
+        imageData.append("files",this.prelimFiles[i]);
+        // if(i ==0){
+          imageData.append('path', 'design/' + designId);
+          imageData.append('refId', designId + '');
+          imageData.append('ref', 'design');
+          imageData.append('field', key);
+        // }
+      } 
+       
+          this.apiService.uploaddesign(imageData).subscribe(res=>{
+            this.utilities.hideLoading().then(()=>{
+              console.log(res); 
+              this.imagebox= false;
+              // this.getDesignDetails();
+              // this.updatecomments();
+              // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res)=>{
+              //   this.utilities.getDesignDetailsRefresh();
+              //   console.log(res,">>");
+                
+              // })
+     
+            
+             
+            })
+          },err=>{
+            this.utilities.hideLoading().then(()=>{
+              console.log(err);
               
             })
-            this.navController.pop();
-            this.router.navigate(['designoverview/completeddesigns'])
-           
           })
-        },err=>{
-          this.utilities.hideLoading().then(()=>{
-            console.log(err);
-            
-          })
-        })
-      })
+        // })
+    // }
   }
 
 }

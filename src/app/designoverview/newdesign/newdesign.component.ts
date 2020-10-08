@@ -30,7 +30,7 @@ export class NewdesignComponent implements OnInit {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
-  overdue: number;
+  overdue: any;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -106,15 +106,16 @@ console.log(this.currentDate.toISOString());
   }
 
   formatDesignData(records : DesginDataModel[]){
+    this.overdue=[];
     this.listOfDesignData = this.fillinDynamicData(records);
     console.log(this.listOfDesignData);
     
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesignData.forEach((designItem) => {
+          this.listOfDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
-              this.sDatePassed(designItem.deliverydate);
+              this.sDatePassed(designItem.updated_at);
               const listOfDesigns = new DesginDataHelper();
-              listOfDesigns.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+              listOfDesigns.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
               listOfDesigns.lateby = this.overdue;
               listOfDesigns.listOfDesigns.push(designItem);
               tempData.push(listOfDesigns);
@@ -122,17 +123,17 @@ console.log(this.currentDate.toISOString());
               let added = false;
               tempData.forEach((designList:any) => {
                 if (!added) {
-                  if (designList.date === this.datePipe.transform(designList.deliverydate, 'M/d/yy')) {
-                    designList.listOfDesigns.push(designList);
-                    this.sDatePassed(designItem.deliverydate);
+                  if (designList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
+                    designList.listOfDesigns.push(designItem);
+                    this.sDatePassed(designItem.updated_at);
                     added = true;
                   }
                 }
               });
               if (!added) {
-                this.sDatePassed(designItem.deliverydate);
+                this.sDatePassed(designItem.updated_at);
                 const listOfDesigns = new DesginDataHelper();
-                listOfDesigns.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+                listOfDesigns.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
                 listOfDesigns.lateby = this.overdue;
                 listOfDesigns.listOfDesigns.push(designItem);
                 tempData.push(listOfDesigns);

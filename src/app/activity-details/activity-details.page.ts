@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DesignModel, activities } from '../model/design.model';
 import { NavController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-activity-details',
@@ -11,12 +12,13 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./activity-details.page.scss'],
 })
 export class ActivityDetailsPage implements OnInit {
-activity_details:{}
-designId;
-name;
+activity_details:any;
+designId:any;
+  name: string;
+
 
   constructor(private apiservice: ApiService, private route: ActivatedRoute,
-    private navController: NavController
+    private navController: NavController,private datepipe:DatePipe
     ) {
     this.route.paramMap.subscribe( params =>{ this.designId=params.get('id');
   this.name=params.get('name')});
@@ -40,5 +42,19 @@ name;
   goBack() {
     this.navController.pop();
   }
+
+  isDatePassed(datestring: string){
+    var checkdate = moment(datestring, "YYYYMMDD");
+    var todaydate = moment(new Date(), "YYYYMMDD");
+    var lateby = todaydate.diff(checkdate, "days");
+    if (lateby > 0){
+      return lateby;
+    }else{
+      return false;
+    }
+  }
+
+ 
+  
 
 }

@@ -180,7 +180,6 @@ export class NewsurveysComponent implements OnInit {
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
-    debugger;
     console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
     
   }

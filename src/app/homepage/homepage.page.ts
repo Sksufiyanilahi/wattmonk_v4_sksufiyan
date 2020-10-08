@@ -65,7 +65,7 @@ export class HomepagePage implements OnInit, OnDestroy {
     private network:NetworkdetectService
   ) {
     // this.initializeItems();
-    this.scheduledPage();
+    //this.scheduledPage();
   }
 
   ngOnInit() {
@@ -75,7 +75,6 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
-
     if (this.storage.getUser().role.id === ROLES.Surveyor) {
       // surveyor will only see survey tab
       this.isUserSurveyor = true;
@@ -88,7 +87,7 @@ export class HomepagePage implements OnInit, OnDestroy {
       this.isUserDesigner = true;
       this.route.navigate(['homepage/design']);
 
-    } else if (this.storage.getUser().role.id === ROLES.BD || this.storage.getUser().role.id === ROLES.Admin || this.storage.getUser().role.id === ROLES.ContractorAdmin || this.storage.getUser().role.id === ROLES.ContractorSuperAdmin) {
+    } else if (this.storage.getUser().role.id === ROLES.BD || this.storage.getUser().role.id === ROLES.Admin || this.storage.getUser().role.id === ROLES.ContractorAdmin || this.storage.getUser().role.id === ROLES.ContractorSuperAdmin || this.storage.getUser().role.id === ROLES.SuperAdmin) {
       // admin will see both tabs
       this.isUserSurveyor = true;
       this.isUserDesigner = true;
@@ -396,7 +395,6 @@ this.network.networkConnect();
 
   }
   scheduledPage(){
-    debugger;
     if(this.route.url=='/homepage/design'){
       this.route.navigate(['/schedule/design'])
     }else{

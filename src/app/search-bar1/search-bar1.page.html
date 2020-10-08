@@ -24,8 +24,10 @@
     <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="search?.status == 'requestdeclined'"  [routerLink]="['/design-details/',search?.id]">Declined</span>
     <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="search?.deliverydate > 0"  [routerLink]="['/design-details/',search?.id]">Overdue</span>
     <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'requestaccepted'"  [routerLink]="['/design-details/',search?.id]">Accepted</span>
+    <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'reviewpassed'"  [routerLink]="['/design-details/',search?.id]">Review Passed</span>
     <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'delivered'"  [routerLink]="['/design-details/',search?.id]">Delivered</span>
     <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'designcompleted'"  [routerLink]="['/design-details/',search?.id]">Completed</span>
+    <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'reviewfailed'"  [routerLink]="['/design-details/',search?.id]">Review Failed</span>
     <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search?.status == 'created'"  [routerLink]="['/design-details/',search?.id]">Unassigned</span>
     <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="search?.status == 'designassigned'"  [routerLink]="['/design-details/',search?.id]">Design Assigned</span>
     <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="search?.status == 'reviewassigned'"  [routerLink]="['/design-details/',search?.id]">In Review</span>
@@ -80,6 +82,7 @@
       <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="search?.deliverydate > 0" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Overdue</span>
       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'requestaccepted'"
       [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Accepted</span>
+      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'reviewpassed'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Review Passed</span>
       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'delivered'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Delivered</span>
       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'designcompleted'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Completed</span>
       <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search?.status == 'created'"  [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Unassigned</span>
@@ -116,11 +119,11 @@
 
 
         <ion-col *ngIf="search?.requesttype=='prelim'&& search?.status=='designcompleted'">
-            <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id)"
+            <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(search?.id,search)"
             >Assign Review</span>
         </ion-col>
-        <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
-            <span *ngIf="search?.status == 'reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id)"
+        <ion-col *ngIf="search?.requesttype=='prelim' && search?.status=='reviewpassed'">
+            <span *ngIf="search?.status == 'reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(search?.id,search)"
             >Deliver</span>
         </ion-col>
         
