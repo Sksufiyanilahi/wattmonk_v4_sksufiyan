@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from 'src/app/model/assignee.model';
 import { SolarMake } from 'src/app/model/solar-make.model';
@@ -16,6 +16,7 @@ import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd } from '@angula
 import { DesginDataModel, DesignModel } from '../../model/design.model';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { AutoCompleteComponent } from 'src/app/utilities/auto-complete/auto-complete.component';
 
 @Component({
   selector: 'app-design',
@@ -23,6 +24,7 @@ import { File } from '@ionic-native/file/ngx';
   styleUrls: ['./design.component.scss'],
 })
 export class DesignComponent implements OnInit, OnDestroy {
+
 
   desginForm: FormGroup;
 
@@ -59,6 +61,17 @@ export class DesignComponent implements OnInit, OnDestroy {
   mediaType: this.camera.MediaType.PICTURE
 }
   fileName: any;
+  moduledata: any;
+  // solarmake:string='solarmake';
+  // solarmade:string='solarmade';
+  // invertermake:string='invertermake';
+  // invertermade:string='invertermade';
+  filterrecord: SolarMake[];
+  modulename: any;
+  solarmake: string;
+  solarmade: string;
+  invertermake: string;
+  invertermade: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -115,7 +128,38 @@ export class DesignComponent implements OnInit, OnDestroy {
     
   }
 
+  getmodulename(event){
+   
+      this.modulename= event;
+      console.log(this.modulename);
+      
+  }
+
+
+  // logScrolling(e){
+
+  // }
+
+  // record(){
+  //   this.filterrecord= this.listOfSolarMake.filter(x=>
+  // }
+
   ngOnInit() {
+   
+    
+    this.utils.manualInput.subscribe(data=>{
+        if(this.modulename=='solarmake'){
+          this.solarmake=data;
+        }else if(this.modulename=='solarmade'){
+        this.solarmade=data;
+        }else if(this.modulename=='invertermake'){
+          this.invertermake = data;
+        }else if(this.modulename=='invertermade'){
+          this.invertermade= data; 
+        }
+        
+      
+    })
     this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {
@@ -138,21 +182,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        // this.desginForm.get('address').setValue('fffff');
-        // this.desginForm.get('latitude').setValue('444444444444');
-        // this.desginForm.get('longitude').setValue('555555555');
-        // this.desginForm.get('country').setValue('india');
-        // this.desginForm.get('city').setValue('Lucknow');
-        // this.desginForm.get('state').setValue('UP');
-        // this.desginForm.get('postalcode').setValue(3232343);
-        // this.desginForm.get('solarmake').setValue(3232343);
-        this.desginForm.get('address').setValue(address.address);
-        this.desginForm.get('latitude').setValue(address.lat);
-        this.desginForm.get('longitude').setValue(address.long);
-        this.desginForm.get('country').setValue(address.country);
-        this.desginForm.get('city').setValue(address.city);
-        this.desginForm.get('state').setValue(address.state);
-        this.desginForm.get('postalcode').setValue(address.postalcode);
+        this.desginForm.get('address').setValue('fffff');
+        this.desginForm.get('latitude').setValue('444444444444');
+        this.desginForm.get('longitude').setValue('555555555');
+        this.desginForm.get('country').setValue('india');
+        this.desginForm.get('city').setValue('Lucknow');
+        this.desginForm.get('state').setValue('UP');
+        this.desginForm.get('postalcode').setValue(3232343);
+        // this.desginForm.get('address').setValue(address.address);
+        // this.desginForm.get('latitude').setValue(address.lat);
+        // this.desginForm.get('longitude').setValue(address.long);
+        // this.desginForm.get('country').setValue(address.country);
+        // this.desginForm.get('city').setValue(address.city);
+        // this.desginForm.get('state').setValue(address.state);
+        // this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -357,14 +400,14 @@ getDesignDetails() {
 
   saveModuleMake(){
   const found= this.listOfSolarMake.some((el:any)=>
-    el.name=== this.desginForm.get('solarmake').value
+    el.name=== this.solarmake
 );
 
   console.log(found);
   
     if(!found){
       let data={
-        name:this.desginForm.get('solarmake').value
+        name:this.solarmake
       }
       this.apiService.postSolarMake(data).subscribe((response:any)=>{
         this.desginForm.patchValue({
@@ -382,14 +425,14 @@ getDesignDetails() {
   }
 
   saveModuleModel(){
-    const ismakefound  =this.listOfSolarMake.some(el=>el.name===this.desginForm.get('solarmake').value);
-    const found= this.listOfSolarMake.some((el:any)=>
-      el.name=== this.desginForm.get('solarmake').value
+    const ismakefound  =this.listOfSolarMake.some(el=>el.name===this.solarmake);
+    const found= this.listOfSolarMade.some((el:any)=>
+      el.name=== this.solarmade
     );
 
     if(!ismakefound || !found){
       let data={
-        solarmade:this.desginForm.get('solarmade').value,
+        solarmade:this.solarmade,
         solarmake:this.design.solarmake.id
       }
       this.apiService.postSolarMade(data).subscribe((response:any)=>{
@@ -405,10 +448,10 @@ getDesignDetails() {
   }
 
   saveInvertermake(){
-    const found = this.listOfInverterMake.some(el=>el.name===this.desginForm.get('invertermake').value);
+    const found = this.listOfInverterMake.some(el=>el.name===this.invertermake);
     if(!found){
       let data={
-        invertermake:this.desginForm.get('invertermake').value
+        invertermake:this.invertermake
       }
       this.apiService.postInverterMake(data).subscribe((response:any)=>{
         this.desginForm.patchValue({
@@ -423,12 +466,12 @@ getDesignDetails() {
   }
 
   saveInverterMade(){
-    const ismakefound= this.listOfInverterMake.some(el=>el.name===this.desginForm.get('invetermake').value);
-    const found = this.listOfInverterMade.some(el=>el.name===this.desginForm.get('invertermade').value)
+    const ismakefound= this.listOfInverterMake.some(el=>el.name===this.invertermake);
+    const found = this.listOfInverterMade.some(el=>el.name===this.invertermade)
 
     if(!ismakefound || !found){
       let data={
-        invertermade:this.desginForm.get('invertermade').value,
+        invertermade:this.invertermade,
         invertermake:this.design.invertermake.id
       }
       this.apiService.postInverterMade(data).subscribe((response:any)=>{
@@ -444,7 +487,11 @@ getDesignDetails() {
   }
 
   addForm() {
+  
+  
+   
     console.log('Reach', this.desginForm.value);
+
     // debugger;
     // this.saveModuleMake();
     this.submitform();
