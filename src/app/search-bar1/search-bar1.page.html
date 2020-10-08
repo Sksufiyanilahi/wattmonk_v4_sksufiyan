@@ -5,10 +5,10 @@
           <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img></ion-button></ion-col>
           <ion-col  size="9" style="text-align:center;font-size: x-large;position: absolute;;">Search</ion-col>
      
- <ion-button style="float: right;" fill="clear" ><ion-icon name="reorder-four-outline"></ion-icon><ion-select value="both" (ionChange)="searchfor($event)" style="padding-left: 0px;" interface="popover"  [(ngModel)]="Type">
-   <ion-select-option  #d name="Designs" value="design" >Designs</ion-select-option>
-   <ion-select-option #s  name="Surveys" value="survey">Surveys</ion-select-option>
-   <ion-select-option  value="both">Both</ion-select-option>
+ <ion-button style="float: right;" fill="clear" ><ion-icon name="filter-outline"></ion-icon>&nbsp;<ion-select value="both" (ionChange)="searchfor($event)" style="padding-left: 0px;text-transform: none;" interface="popover"  [(ngModel)]="Type">
+   <ion-select-option  #d name="Designs" value="design" >{{'Designs' | lowercase}}</ion-select-option>
+   <ion-select-option #s  name="Surveys" value="survey">{{'Surveys' | lowercase}}</ion-select-option>
+   <ion-select-option  value="both">{{'Both' | lowercase}}</ion-select-option>
  </ion-select></ion-button>
  
   </ion-toolbar>
