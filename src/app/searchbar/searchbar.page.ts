@@ -124,7 +124,7 @@ export class SearchbarPage implements OnInit {
 
 
     if (this.searchbarElement !== '') {
-      this.apiService.searchAllDesgin(this.searchbarElement).subscribe((searchModel: any) => {
+      this.apiService.searchAllDesgin(this.searchbarElement,).subscribe((searchModel: any) => {
         console.log(searchModel);
         // console.log(searchModel.design);
         // this.searchDesginItem = [];

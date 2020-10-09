@@ -103,10 +103,13 @@ const routes: Routes = [
     loadChildren: () => import('./paymentgateway/paymentgateway.module').then( m => m.PaymentgatewayPageModule)
   },
   {
-    path: 'activity-details',
+    path: 'activity/:id/:name',
     loadChildren: () => import('./activity-details/activity-details.module').then( m => m.ActivityDetailsPageModule)
   },
   {
+    path: 'search-bar1',
+    loadChildren: () => import('./search-bar1/search-bar1.module').then( m => m.SearchBar1PageModule)
+  },{
     path: 'stripe',
     loadChildren: () => import('./stripe/stripe.module').then( m => m.StripePageModule)
   },

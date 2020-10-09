@@ -20,13 +20,13 @@
                     </ion-row>
                 </ion-grid>
             </ion-col>
-            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector'">
+            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector' && design.status !='designcompleted'">
                 <ion-button fill="clear" size="small" class="ion-no-padding"
                     [routerLink]="['/schedule/design/',designId]" routerDirection="forward">
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
-            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector'" style="float:right">
+            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector' && design.status !='designcompleted'" style="float:right">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()">
                     <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
                 </ion-button>
@@ -228,33 +228,32 @@
                 </form>
             <ng-template #showimageName>
                 <ion-col><span class="model-type font">Prelim Design</span></ion-col>
-                <ion-col size="auto">
-                    <span class="model-name font" style="float:right" (click)="showDesignImage()">{{imageName}}</span>
+                <ion-col size="auto"  style="float: right;">
+                    <span class="model-name font" style="text-align:right;" (click)="showDesignImage()">{{imageName}}</span>
                         <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 " (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
                 </ion-col>
             </ng-template>
         </div>
 
         <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
-            *ngIf="assigned">
-            <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned
-                    to</span></ion-col>
-            <ion-col size="auto">
-                <div class="selected d-flex">
-                    <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"
-                        [src]="design.designassignedto.contractorlogo.logo.url" class="assignee-image" />
-                    <div *ngIf="!design.designassignedto.contractorlogo || !design.designassignedto.contractorlogo.logo"
-                        class="assignee-image d-flex flex-row align-center justify-center">
-                        <div class="name_div">
-                            <span
-                                style="text-transform: capitalize;">{{design.designassignedto.firstname.substring(0, 1)}}{{design.designassignedto.lastname.substring(0, 1)}}</span>
-                        </div>
+        *ngIf="assigned">
+        <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned
+                to</span></ion-col>
+        <ion-col size="auto">
+            <div class="selected d-flex">
+                <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"
+                    [src]="design.designassignedto.contractorlogo.logo.url" class="assignee-image" />
+                <div *ngIf="!design.designassignedto.contractorlogo || !design.designassignedto.contractorlogo.logo"
+                    class="assignee-image d-flex flex-row align-center justify-center">
+                    <div class="name_div">
+                        <span
+                            style="text-transform: capitalize;">{{design.designassignedto.firstname.substring(0, 1)}}{{design.designassignedto.lastname.substring(0, 1)}}</span>
                     </div>
                 </div>
-            </ion-col>
-        </ion-row>
+            </div>
+        </ion-col>
+    </ion-row>
 
-        <ion-button class="ion-no-padding"> </ion-button>
 
         <ion-row class="ion-no-padding ion-margin-top" *ngIf="design && design.type !=='design'">
             <ion-col size="12">
@@ -276,6 +275,22 @@
                     <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
                                   formControlName="comments"></ion-textarea>
                 </ion-col>
+                </form>
+        </ion-row>
+
+        <!-- For Analyst -->
+        <ion-row class="ion-no-padding ion-margin-top" *ngIf="user.role.type=='qcinspector' && design && design.status =='reviewassigned'">
+
+            <form  [formGroup]="reviewIssuesForm" style="width:100%">
+                
+                    <ion-col size="12" class="ion-no-padding">
+                        <span class="input-placeholder">Issues*</span>
+                    </ion-col>
+                    <ion-col size="12" class="ion-no-padding">
+                        <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                      formControlName="reviewIssues" ></ion-textarea>
+                    </ion-col>
+                
                 </form>
         </ion-row>
     </ion-grid>
@@ -301,3 +316,16 @@
     </ion-grid>
 
 </ion-footer>
+<ion-footer *ngIf="(user.role.type=='qcinspector' && design && design.status=='reviewassigned') " class="ion-no-border white-bg">
+    <ion-grid>
+        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+            <ion-col size="auto">
+                <ion-button class="action-button-color" fill="clear" style="float: left;" (click)="reportDesignReviewFailure()">Failed</ion-button>
+                <ion-button class="action-button-color" fill="clear" style="float: right ;" (click)="reportDesignReviewSuccess()">Passed</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-footer>
+
+

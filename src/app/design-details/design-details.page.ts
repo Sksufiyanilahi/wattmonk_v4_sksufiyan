@@ -15,6 +15,7 @@ import { CountdownTimerService, countDownTimerConfigModel, countDownTimerTexts }
 import { User } from '../model/user.model';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
+
 @Component({
   selector: 'app-design-details',
   templateUrl: './design-details.page.html',
@@ -31,6 +32,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   refreshDataOnPreviousPage = 0;
   imageName:string[]=[];
   imagebox :boolean=false;
+  reviewenddatetime:number;
+  reviewstartdatetime : number;
+  reviewIssues='';
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -42,6 +46,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   timerConfig: any;
   user: User;
   commentsForm: FormGroup;
+  reviewIssuesForm: FormGroup; 
+  //reviewIssues= new FormControl('', Validators.required);
   browser: any;
   // user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
@@ -59,7 +65,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private imageCompress: NgxImageCompressService,
     private countdownservice: CountdownTimerService,
     private iab: InAppBrowser,
-    private router:Router
+    private router:Router,
+  
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
@@ -72,7 +79,14 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       status: new FormControl('designcompleted'),
       prelimdesign:new FormControl(null,[Validators.required])
     })
+
+    this.reviewIssuesForm = this.formBuilder.group({
+     reviewIssues: new FormControl('',[Validators.required])
+    })
+
+    
   }
+  
 
   ngOnInit() {
     console.log(this.imageName);
@@ -381,5 +395,86 @@ reader.readAsDataURL(event.target.files[0]);
         // })
     // }
   }
+
+  reportDesignReviewFailure(){
+    //console.log("Value is" + this.reviewIssuesForm.value);
+    if(this.reviewIssuesForm.valid){  
+    this.countdownservice.stopTimer();
+        let cdate = Date.now();
+        this.reviewenddatetime = cdate;
+       const postData = {
+        status: "reviewfailed",
+       reviewissues : this.reviewIssuesForm.get('reviewIssues').value,
+        reviewstarttime : this.design.reviewstarttime,
+        reviewendtime : this.reviewenddatetime,
+        
+      };
+
+    
+      console.log("this is" + this.design.reviewstarttime);
+
+     // console.log("this is"+ this.reviewstartdatetime);
+      this.apiService.editDesign(
+          this.design.id,
+          postData
+        )
+        .subscribe(
+          response => {
+            this.utilities.showSnackBar("Prelim design status has been updated successfully.");
+            this.utilities.setHomepageDesignRefresh(true);
+            this.navController.navigateRoot(['analystoverview/design']);
+            //this.data.triggerEditEvent = false;
+            //this.dialogRef.close(this.data);
+          },
+          error => {
+            this.utilities.errorSnackBar(
+              
+              "Error"
+            );
+          }
+        );
+    }else{
+      this.utilities.errorSnackBar("Please enter issues");
+      this.reviewIssuesForm.markAsTouched();
+      this.reviewIssuesForm.markAsDirty();
+    }
+  }
+
+  reportDesignReviewSuccess(){
+      this.countdownservice.stopTimer();
+        let cdate = Date.now();
+        this.reviewenddatetime = cdate;
+      const postData = {
+        status: "reviewpassed",
+        reviewIssues : this.reviewIssuesForm.get('reviewIssues').value,
+        reviewstarttime : this.reviewstartdatetime,
+        reviewendtime : this.reviewenddatetime
+      };
+      this.apiService
+      .editDesign(
+        this.design.id,
+        postData
+      )
+      .subscribe(
+        response => {
+          this.utilities.showSnackBar("Prelim design status has been updated successfully.");
+          this.utilities.setHomepageDesignRefresh(true);
+          this.navController.navigateRoot(['analystoverview/design']);
+         // this.triggerEditEvent = false;
+          //this.dialogRef.close(this.data);
+        },
+        error => {
+          this.utilities.errorSnackBar(
+            "Error"
+          );
+        }
+      );
+  ​
+     
+          
+        
+  }
+
+  
 
 }

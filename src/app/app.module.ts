@@ -25,7 +25,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Stripe } from '@ionic-native/stripe/ngx';
 
-
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
   entryComponents: [SuccessModalComponent],

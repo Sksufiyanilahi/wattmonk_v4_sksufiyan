@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../storage.service';
+import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
+
 // import {
 //   IPayPalConfig,
 //   ICreateOrderRequest 
@@ -15,14 +18,18 @@ export class PaymentgatewayPage implements OnInit {
   user: any;
  
 
-  constructor(private storage:StorageService
-    ) { 
+  constructor(private storage:StorageService,
+    private navController:NavController) { 
    
   }
 
   ngOnInit() {
     this.user= this.storage.getUser();
 
+  }
+  routerLink()
+  {
+    this.navController.navigateRoot('add-money');
   }
 
   select(e){

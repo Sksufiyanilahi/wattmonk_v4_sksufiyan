@@ -77,30 +77,6 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
-
-   /* if (this.storage.getUser().role.id === ROLES.Surveyor) {
-      // surveyor will only see survey tab
-      this.isUserSurveyor = true;
-      this.isUserDesigner = false;
-      this.route.navigate(['homepage/survey']);
-
-    } else if (this.storage.getUser().role.id === ROLES.Designer) {
-      // designer will only see design tab
-      this.isUserSurveyor = false;
-      this.isUserDesigner = true;
-      this.route.navigate(['homepage/design']);
-
-    } else if (this.storage.getUser().role.id === ROLES.BD || this.storage.getUser().role.id === ROLES.Admin || this.storage.getUser().role.id === ROLES.ContractorAdmin || this.storage.getUser().role.id === ROLES.ContractorSuperAdmin) {
-      // admin will see both tabs
-      this.isUserSurveyor = true;
-      this.isUserDesigner = true;
-      this.route.navigate(['homepage/design']);
-    } else if (this.storage.getUser().role.id === ROLES.Analyst){
-      this.isUserAnalyst = true;
-      
-      this.route.navigate(['homepage/design']);
-    }*/
-
     
     if (this.storage.getUser().role.id === ROLES.Analyst)
     {
@@ -115,7 +91,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   }
 
   updateUserPushToken(){
-    this.apiService.updateUser(this.storage.getUserID(), {"pushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
+    this.apiService.pushtoken(this.storage.getUserID(), {"newpushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
     }, (error) => {
     });
   }
@@ -414,8 +390,8 @@ this.network.networkConnect();
 
   }
   scheduledPage(){
-    debugger;
-    if(this.route.url=='/homepage/design'){
+    
+    if(this.route.url=='/analystoverview/design'){
       this.route.navigate(['/schedule/design'])
     }else{
       this.route.navigate(['/schedule/survey'])

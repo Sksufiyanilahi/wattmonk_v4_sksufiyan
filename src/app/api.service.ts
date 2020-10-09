@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { LoginModel } from './model/login.model';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { StorageService } from './storage.service';
 import { SolarMake } from './model/solar-make.model';
 import { SolarMadeModel } from './model/solar-made.model';
@@ -18,8 +19,11 @@ import { BaseUrl } from './contants';
 import { GOOGLE_API_KEY } from './model/constants';
 import { UtilitiesService } from './utilities.service';
 import { BehaviorSubject } from 'rxjs';
+import { DesignModel } from 'src/app/model/design.model'
 
 import { RoofMaterial } from './model/roofmaterial.model';
+import { map, catchError } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -28,10 +32,12 @@ export class ApiService {
   public onlineOffline: boolean = navigator.onLine;
   headers: HttpHeaders;
   uploadHeaders: HttpHeaders;
+  httpWithoutLoader: HttpClient;
   private parentId = '';
   private userId = '';
   public searchbarElement: string = '';
   public _OnMessageReceivedSubject: Subject<string>;
+  public design : Observable<DesignModel>;
 
   public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
 
@@ -194,11 +200,15 @@ export class ApiService {
   }
 
   getSurveyors(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=', { headers: this.headers });
+  }
+
+  getAnalysts(): Observable<AssigneeModel[]> {
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/analysts?parent_eq=' + this.parentId , { headers: this.headers });
   }
 
   searchAllDesgin(searchterm): Observable<SearchModel> {
-    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm, { headers: this.headers });
+    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm + '&userid=' + this.userId, { headers: this.headers });
   }
 
   getDesigners(): Observable<AssigneeModel[]> {
@@ -264,11 +274,40 @@ export class ApiService {
     return this.http.post(BaseUrl + "recharges/" ,data, { headers: this.headers });
   }
 
-  activityDetails(designid){
+  design_activityDetails(designid){
     return this.http.get(BaseUrl+ "designs/" + designid, { headers: this.headers});
   }
 
+  survey_activityDetails(surveyid){
+    return this.http.get(BaseUrl+ "surveys/" + surveyid, { headers: this.headers});
+  }
   publishSolarMake(value){
     this.solarMakeValue.next(value);
   }
+
+  editDesign(id, inputData): Observable<DesignModel>{
+   
+    return this.http
+    .put<DesignModel>(BaseUrl + "designs/"+ id, inputData, {
+      
+      observe: "response"
+    })
+    .pipe(
+      map(value => {
+        const member: DesignModel = value.body;
+        return member;
+      }),
+      catchError((err: HttpErrorResponse) => {
+        console.log(err);
+        //   this.utils.showApiError(err.error.message);
+        return throwError(err.error.message);
+      })
+    );
+  }
+
+  pushtoken(id,data){
+    return this.http.put(BaseUrl + '/users/pushtokens/'+ id, data, { headers: this.uploadHeaders } );
+  }
+
+  
 }

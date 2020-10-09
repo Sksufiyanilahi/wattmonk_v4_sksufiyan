@@ -96,7 +96,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   updateUserPushToken(){
-    this.apiService.updateUser(this.storage.getUserID(), {"pushtokens":localStorage.getItem("pushtoken")}).subscribe((data) => {
+    this.apiService.pushtoken(this.storage.getUserID(), {"newpushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
     }, (error) => {
     });
   }
@@ -200,7 +200,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   searchbar(){
-    this.route.navigate(['/searchbar/design']);
+    this.route.navigate(['/search-bar1']);
   }
 
   requestLocationPermission() {

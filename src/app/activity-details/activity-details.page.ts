@@ -13,29 +13,29 @@ import * as moment from 'moment';
 })
 export class ActivityDetailsPage implements OnInit {
 activity_details:any;
-designId:Number;
+designId:any;
+  name: string;
 
 
   constructor(private apiservice: ApiService, private route: ActivatedRoute,
     private navController: NavController,private datepipe:DatePipe
     ) {
-    this.designId = +this.route.snapshot.paramMap.get('id');    
+    this.route.paramMap.subscribe( params =>{ this.designId=params.get('id');
+  this.name=params.get('name')});
    }
 
   ngOnInit() {
- 
-    this.activityDetail();
-    this.apiservice.activityDetails(this.designId).subscribe((response:any)=>{this.activity_details=response;
-      console.log(this.activity_details);
-      
-      if(this.activity_details.deliverydate !==undefined || this.activity_details !==null){
-        // this.isDatePassed(this.activity_details.deliverydate);
-      }
-     });
-
-  }
-
-  activityDetail(){
+    if(this.name=="design"){
+           this.apiservice.design_activityDetails(this.designId).subscribe(response =>{this.activity_details=response;
+  ;
+  
+     console.log("inside this",this.activity_details);});}
+    if(this.name=="survey"){
+      this.apiservice.survey_activityDetails(this.designId).subscribe(response =>{this.activity_details=response;
+        ;
+        
+           console.log("inside this",this.activity_details);});
+    }
 
   }
   

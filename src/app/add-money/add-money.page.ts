@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Stripe } from '@ionic-native/stripe/ngx';
 import { NgForm } from '@angular/forms';
+import { Stripe } from '@ionic-native/stripe/ngx';
+
 @Component({
   selector: 'app-add-money',
   templateUrl: './add-money.page.html',
@@ -29,6 +30,5 @@ export class AddMoneyPage implements OnInit {
 
     this.stripe.createCardToken(card).then(token => alert(token.id)).catch(error => alert(error));
   }
-
 
 }

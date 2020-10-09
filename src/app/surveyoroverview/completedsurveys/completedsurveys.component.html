@@ -14,11 +14,11 @@
         </ion-col>
         <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;">
-                <p class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
-                      routerDirection="forward">{{surveyData.name}}
+                <p class="customer-name" >{{surveyData.name}}
                       <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                         {{surveyData.datetime | date: 'hh:mm a'}}
                     </span>
+                    <span fill="clear" background-border="clear" [routerLink]="['/','activity',surveyData.id,'survey']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
                     <span *ngIf="surveyData.status=='surveycompleted'" class="chipdetail" style="background-color: rgb(109, 187, 26);" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                         completed
                     </span>

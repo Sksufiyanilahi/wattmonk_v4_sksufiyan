@@ -56,7 +56,7 @@ export class DesignoverviewPage implements OnInit {
   let tokendata={
     pushtokens:token
   }
-    this.apiService.updateUser(userid, {"pushtokens":token}).subscribe((data) => {
+    this.apiService.pushtoken(userid, {"newpushtoken":token}).subscribe((data) => {
     console.log(data, "fcm data");
     
     }, (error) => {

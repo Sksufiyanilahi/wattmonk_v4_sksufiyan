@@ -11,7 +11,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AssigneeModel } from '../../model/assignee.model';
 import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
 import {Storage} from '@ionic/storage';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
@@ -37,7 +37,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   drawerState = DrawerState.Bottom;
   assignForm: FormGroup;
   listOfAssignees: AssigneeModel[] = [];
-
+  listOfAssignees2: AssigneeModel[] = [];
   designId = 0;
   showBottomDraw: boolean = false;
   roleType: any;
@@ -67,7 +67,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private router: Router,
     public modalController: ModalController,
     private storageService:StorageService,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    public alertController: AlertController
   ) {
     this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
     const latestDate = new Date();
@@ -425,6 +426,8 @@ this.network.networkConnect();
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
+    this.listOfAssignees=[];
+    console.log("this works",this.listOfAssignees)
   }
 
   assignToDesigner() {
@@ -444,16 +447,29 @@ this.network.networkConnect();
       additonalhours = this.selectedDesigner.jobcount * 6;
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
     }
+    console.log(this.selectedDesigner);
     var postData = {};
     if (this.designerData.createdby.id == this.userData.id) {
       if (this.selectedDesigner.company == this.userData.company) {
-        postData = {
+        if(this.selectedDesigner.role.type=="qcinspector"){
+          postData = {
+            designassignedto: this.selectedDesigner.id,
+            isoutsourced: "false",
+            status: "reviewassigned",
+            designstarttime: designstarttime
+          }; 
+        }
+       if(this.selectedDesigner.role.type=="designer") { postData = {
           designassignedto: this.selectedDesigner.id,
           isoutsourced: "false",
           status: "designassigned",
           designstarttime: designstarttime
-        };
-      } else {
+        }; 
+        
+      }
+      
+      }
+      else {
         postData = {
           outsourcedto: this.selectedDesigner.id,
           isoutsourced: "true",
@@ -461,11 +477,18 @@ this.network.networkConnect();
         };
       }
     } else {
-      postData = {
+      if(this.selectedDesigner.role.type=="designer"){ postData = {
         designassignedto: this.selectedDesigner.id,
         status: "designassigned",
         designstarttime: designstarttime
-      };
+      };}
+      if(this.selectedDesigner.role.type=="qcinspector"){
+        postData = {
+          designassignedto: this.selectedDesigner.id,
+          status: "reviewassigned",
+          designstarttime: designstarttime
+        };
+      }
     }
     this.utils.showLoading('Assigning').then(()=>{
       this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
@@ -487,12 +510,53 @@ this.network.networkConnect();
 
   }
 
+
+ 
+
   openDesigners(id: number,designData) {
-    console.log(designData);
+    console.log("this is",designData);
     this.designerData = designData;
+    
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
         this.apiService.getDesigners().subscribe(assignees => {
+          this.utils.hideLoading().then(() => {
+            this.listOfAssignees = [];
+            // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+            assignees.forEach(item => this.listOfAssignees.push(item));
+            console.log(this.listOfAssignees);
+            this.showBottomDraw = true;
+            this.designId = id;
+            this.utils.setBottomBarHomepage(false);
+            this.drawerState = DrawerState.Docked;
+            this.assignForm.patchValue({
+              assignedto: 0
+            });
+          });
+        }, (error) => {
+          this.utils.hideLoading().then(() => {
+            this.utils.errorSnackBar('Some error occurred. Please try again later');
+          });
+        });
+      });
+
+    } else {
+      this.designId = id;
+      this.utils.setBottomBarHomepage(false);
+      this.drawerState = DrawerState.Docked;
+      this.assignForm.patchValue({
+        assignedto: 0
+      });
+    }
+  }
+
+  openAnalysts(id: number,designData) {
+    console.log("this is",designData);
+    this.designerData = designData;
+    
+    if (this.listOfAssignees.length === 0) {
+      this.utils.showLoading('Getting Analysts').then(() => {
+        this.apiService.getAnalysts().subscribe(assignees => {
           this.utils.hideLoading().then(() => {
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
@@ -532,6 +596,62 @@ this.network.networkConnect();
       this.showBottomDraw = true;
     }
   }
+
+
+
+
+  async openreviewPassed(id,designData){ 
+    this.designId=id
+    const alert = await this.alertController.create({
+      cssClass: 'alertClass',
+      header: 'Confirm!',
+      message:'Would you like to  Add Comments!!',
+      inputs:
+       [ {name:'comment',
+       id:'comment',
+          type:'textarea',
+        placeholder:'Enter Comment'}
+        ] ,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'deliver',
+          handler: (alertData) => {
+            var postData= {};
+            postData = {
+              status: "delivered",
+              comments: alertData.comment ,
+               };
+               console.log(postData);
+               this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
+                this.utils.hideLoading().then(()=>{
+                  ; 
+                  console.log('reach ', value);
+                 this.utils.showSnackBar('Design request has been delivered successfully');
+                 
+                  this.utils.setHomepageDesignRefresh(true);
+                })
+              }, (error) => {
+                this.utils.hideLoading();
+                ;
+              });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  
+     
+    
+  }
+
 
   refreshDesigns(event: CustomEvent) {
     let showLoader = true;
