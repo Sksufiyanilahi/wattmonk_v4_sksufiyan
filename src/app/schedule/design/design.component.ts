@@ -72,6 +72,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   solarmade: string;
   invertermake: string;
   invertermade: string;
+  onFormSubmit:boolean=true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -173,12 +174,17 @@ export class DesignComponent implements OnInit, OnDestroy {
       },1000)
 
     } else {
-      this.desginForm.get('solarmake').valueChanges.subscribe(val => {
-        this.getSolarMade();
-      });
-      this.desginForm.get('invertermake').valueChanges.subscribe(val => {
-        this.getInverterMade();
-      });
+      debugger;
+      if(this.onFormSubmit){
+        debugger;
+        this.desginForm.get('solarmake').valueChanges.subscribe(val => {
+          debugger;
+          this.getSolarMade();
+        });
+        this.desginForm.get('invertermake').valueChanges.subscribe(val => {
+          this.getInverterMade();
+        });
+      }
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
@@ -334,9 +340,11 @@ getDesignDetails() {
               solarmake: this.design.solarmake.id,
               solarmodel: this.design.solarmodel.id
             });
-            this.desginForm.get('solarmake').valueChanges.subscribe(val => {
-              this.getSolarMade();
-            });
+            if(this.onFormSubmit){
+              this.desginForm.get('solarmake').valueChanges.subscribe(val => {
+                this.getSolarMade();
+              });
+            }
           }, 500);
         // });
       }, solarResponseError => {
@@ -373,9 +381,12 @@ getDesignDetails() {
             invertermake: this.design.invertermake.id,
             invertermodel: this.design.invertermodel.id
           });
-          this.desginForm.get('invertermake').valueChanges.subscribe(val => {
-            this.getInverterMade();
-          });
+          if(this.onFormSubmit){
+            debugger;
+            this.desginForm.get('invertermake').valueChanges.subscribe(val => {
+              this.getInverterMade();
+            });
+          }
         }, 500);
 
 
@@ -406,13 +417,14 @@ getDesignDetails() {
   console.log(found);
   
     if(!found){
-      let data={
+      let solarmakedata={
         name:this.solarmake
       }
-      this.apiService.postSolarMake(data).subscribe((response:any)=>{
+      this.apiService.postSolarMake(solarmakedata).subscribe((response:any)=>{
         this.desginForm.patchValue({
           solarmake:response.id
         })
+        debugger;
         this.saveModuleModel();
       },err=>{
         console.log(err,'err in savemodulemake');
@@ -425,17 +437,21 @@ getDesignDetails() {
   }
 
   saveModuleModel(){
+    debugger;
     const ismakefound  =this.listOfSolarMake.some(el=>el.name===this.solarmake);
     const found= this.listOfSolarMade.some((el:any)=>
       el.name=== this.solarmade
     );
 
     if(!ismakefound || !found){
-      let data={
+      let solarmadedata={
         solarmade:this.solarmade,
-        solarmake:this.design.solarmake.id
+        solarmake:this.desginForm.get('solarmake').value
       }
-      this.apiService.postSolarMade(data).subscribe((response:any)=>{
+      console.log(solarmadedata);
+      
+      this.apiService.postSolarMade(solarmadedata).subscribe((response:any)=>{
+        debugger;
         this.desginForm.patchValue({
           solarmade:response.id
 
@@ -448,15 +464,17 @@ getDesignDetails() {
   }
 
   saveInvertermake(){
+    debugger;
     const found = this.listOfInverterMake.some(el=>el.name===this.invertermake);
     if(!found){
-      let data={
+      let invertermakedata={
         invertermake:this.invertermake
       }
-      this.apiService.postInverterMake(data).subscribe((response:any)=>{
+      this.apiService.postInverterMake(invertermakedata).subscribe((response:any)=>{
         this.desginForm.patchValue({
           invertermake:response.id
         })
+        debugger;
         this.saveInverterMade();
       })
     }else{
@@ -466,35 +484,40 @@ getDesignDetails() {
   }
 
   saveInverterMade(){
+    debugger;
     const ismakefound= this.listOfInverterMake.some(el=>el.name===this.invertermake);
     const found = this.listOfInverterMade.some(el=>el.name===this.invertermade)
 
     if(!ismakefound || !found){
-      let data={
+      let invertermadedata={
         invertermade:this.invertermade,
-        invertermake:this.design.invertermake.id
+        invertermake:this.desginForm.get('invertermake').value
       }
-      this.apiService.postInverterMade(data).subscribe((response:any)=>{
+      console.log(invertermadedata);
+      
+      this.apiService.postInverterMade(invertermadedata).subscribe((response:any)=>{
           this.desginForm.patchValue({
             invertermade:response.id
           })
+          debugger;
           this.submitform();
       })
     }else{
+      debugger;
       this.submitform();
     }
 
   }
 
   addForm() {
-  
-  
+  this.onFormSubmit=false;
+  this.saveModuleMake();
    
     console.log('Reach', this.desginForm.value);
 
     // debugger;
     // this.saveModuleMake();
-    this.submitform();
+    // this.submitform();
 
   }
 

@@ -94,7 +94,7 @@ this.network.networkConnect();
     
   }
   segmentChanged(event){
-    if(this.userData.role.type=='wattmonkadmins'){
+    if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
         // return this.segments;
@@ -117,7 +117,7 @@ this.network.networkConnect();
       this.getDesigns(null);
       // return this.segments;
   
-    }else if(this.userData.role.type=='clientsuperadmin'){
+    }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
         // return this.segments;

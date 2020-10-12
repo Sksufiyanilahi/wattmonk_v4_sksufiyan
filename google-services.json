@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "915613059391",
-    "firebase_url": "https://livewattmonk.firebaseio.com",
-    "project_id": "livewattmonk",
-    "storage_bucket": "livewattmonk.appspot.com"
+    "project_number": "83079810091",
+    "firebase_url": "https://nile-ced7c.firebaseio.com",
+    "project_id": "nile-ced7c",
+    "storage_bucket": "nile-ced7c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:915613059391:android:dadde2e9c0cab404abeb8a",
+        "mobilesdk_app_id": "1:83079810091:android:8bc2755298dc263dba6e6e",
         "android_client_info": {
-          "package_name": "com.watt.monk"
+          "package_name": "com.dating.app.com"
         }
       },
       "oauth_client": [
         {
-          "client_id": "915613059391-r5vmloi9rgic73pjqhvuvr2p37puohi7.apps.googleusercontent.com",
+          "client_id": "83079810091-gakn568qshp0jpgno1n6ej6k1iiol0b5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCOpZojKGuAA30Jsbo3qDxCbRkBWSw7A0E"
+          "current_key": "AIzaSyBNC_7CAOVCg6hgKl_UmdQWcDDOTANZSyg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "915613059391-r5vmloi9rgic73pjqhvuvr2p37puohi7.apps.googleusercontent.com",
+              "client_id": "83079810091-gakn568qshp0jpgno1n6ej6k1iiol0b5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

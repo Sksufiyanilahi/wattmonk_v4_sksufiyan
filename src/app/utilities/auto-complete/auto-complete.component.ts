@@ -66,10 +66,12 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
           selectedData = item;
         }
       });
-
+      debugger;
+      if(selectedData){
       this.sortedList = this.dataList.filter((item) => {
         return (item.name.toLowerCase().indexOf(selectedData.name.toLowerCase()) > -1);
       });
+    }
       if (this.sortedList.length === 1) {
         if (this.sortedList[0].name.toLowerCase() === selectedData.name.toLowerCase()) {
           this.sortedList = [];
@@ -95,8 +97,11 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
     this.utility.manualInput.next(this.manualinput);
     // this.selectedDataName = event.detail.value;
     console.log(this.selectedDataName);
+    
     this.sortedList = this.dataList.filter((item) => {
-      return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
+      if(item.name !==null){
+        return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
+      }
     });
     if (this.sortedList.length === 1) {
       if (this.sortedList[0].name.toLowerCase() === event.detail.value.toLowerCase()) {
@@ -129,7 +134,10 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   onFocus(event: CustomEvent) {
    this.modulename.emit(this.name);
     this.sortedList = this.dataList.filter((item) => {
-      return (item.name.toLowerCase().indexOf(this.selectedDataName) > -1);
+      console.log(item);
+        if(item.name !== null){
+          return (item.name.toLowerCase().indexOf(this.selectedDataName) > -1);
+        }
     });
     if (this.sortedList.length === 1) {
       this.selectedDataName = this.sortedList[0].name;
