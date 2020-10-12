@@ -174,11 +174,8 @@ export class DesignComponent implements OnInit, OnDestroy {
       },1000)
 
     } else {
-      debugger;
       if(this.onFormSubmit){
-        debugger;
         this.desginForm.get('solarmake').valueChanges.subscribe(val => {
-          debugger;
           this.getSolarMade();
         });
         this.desginForm.get('invertermake').valueChanges.subscribe(val => {
@@ -382,7 +379,6 @@ getDesignDetails() {
             invertermodel: this.design.invertermodel.id
           });
           if(this.onFormSubmit){
-            debugger;
             this.desginForm.get('invertermake').valueChanges.subscribe(val => {
               this.getInverterMade();
             });
@@ -424,7 +420,6 @@ getDesignDetails() {
         this.desginForm.patchValue({
           solarmake:response.id
         })
-        debugger;
         this.saveModuleModel();
       },err=>{
         console.log(err,'err in savemodulemake');
@@ -437,7 +432,6 @@ getDesignDetails() {
   }
 
   saveModuleModel(){
-    debugger;
     const ismakefound  =this.listOfSolarMake.some(el=>el.name===this.solarmake);
     const found= this.listOfSolarMade.some((el:any)=>
       el.name=== this.solarmade
@@ -451,7 +445,6 @@ getDesignDetails() {
       console.log(solarmadedata);
       
       this.apiService.postSolarMade(solarmadedata).subscribe((response:any)=>{
-        debugger;
         this.desginForm.patchValue({
           solarmade:response.id
 
@@ -464,7 +457,6 @@ getDesignDetails() {
   }
 
   saveInvertermake(){
-    debugger;
     const found = this.listOfInverterMake.some(el=>el.name===this.invertermake);
     if(!found){
       let invertermakedata={
@@ -474,7 +466,6 @@ getDesignDetails() {
         this.desginForm.patchValue({
           invertermake:response.id
         })
-        debugger;
         this.saveInverterMade();
       })
     }else{
@@ -484,7 +475,6 @@ getDesignDetails() {
   }
 
   saveInverterMade(){
-    debugger;
     const ismakefound= this.listOfInverterMake.some(el=>el.name===this.invertermake);
     const found = this.listOfInverterMade.some(el=>el.name===this.invertermade)
 
@@ -499,11 +489,9 @@ getDesignDetails() {
           this.desginForm.patchValue({
             invertermade:response.id
           })
-          debugger;
           this.submitform();
       })
     }else{
-      debugger;
       this.submitform();
     }
 

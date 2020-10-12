@@ -66,7 +66,6 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
           selectedData = item;
         }
       });
-      debugger;
       if(selectedData){
       this.sortedList = this.dataList.filter((item) => {
         return (item.name.toLowerCase().indexOf(selectedData.name.toLowerCase()) > -1);
