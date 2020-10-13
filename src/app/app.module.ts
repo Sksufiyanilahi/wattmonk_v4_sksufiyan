@@ -24,6 +24,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Stripe } from '@ionic-native/stripe/ngx';
+// import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -50,7 +51,8 @@ import { Stripe } from '@ionic-native/stripe/ngx';
     Camera,
     InAppBrowser,
     Network,
-    Stripe
+    Stripe,
+    // SocialSharing
     ],
   exports: [
     UtilitiesModule

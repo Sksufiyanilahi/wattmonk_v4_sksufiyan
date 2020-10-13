@@ -16,6 +16,7 @@ import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
+// import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 
 @Component({
@@ -68,7 +69,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     public modalController: ModalController,
     private storageService:StorageService,
     private network:NetworkdetectService,
-    public alertController: AlertController
+    public alertController: AlertController,
+    // private socialSharing:SocialSharing
+ 
   ) {
     this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
     const latestDate = new Date();
@@ -728,6 +731,10 @@ export class DesginDataHelper {
 
   constructor() {
     this.listOfDesigns = [];
+  }
+
+  shareDesign(){
+    
   }
   
 }

@@ -24,6 +24,7 @@ import { Chooser } from '@ionic-native/chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Network } from '@ionic-native/network/ngx';
 
+
 @NgModule({
   entryComponents:[DeclinepagePage],
   imports: [
