@@ -71,7 +71,7 @@
             <ion-col size="6">
                 <!-- <ion-label position="floating">module make*</ion-label> -->
                 <app-auto-complete style="font-size: 14px;" [dataList]="listOfSolarMake" placeholder="module make*"
-              formControlName="solarmake" [name]="'solarmake'" (modulename)="getmodulename($event)"></app-auto-complete>
+              formControlName="solarmake" [name]="'solarmake'"  (modulename)="getmodulename($event)"></app-auto-complete>
             </ion-col>
             <ion-col size="6">
                 <!-- <ion-label position="floating">module model*</ion-label> -->
@@ -208,22 +208,24 @@
     
 </ion-row>
 
-        <ion-row>
-            <ion-col size="11">
-                <ion-item class="ion-no-padding">
-                    <ion-label position="floating">Attachment</ion-label>
-                    <ion-input style="font-size:12px" class="form_input"  #myinput type="file" formControlName="attachments" (change)="prelimfiles($event)" multiple>
-                    </ion-input>
-                </ion-item>    
-            </ion-col>
-            <ion-col size="1" style="display: flex;align-items: flex-end;">
-                <ion-icon name="close-circle-outline" *ngIf="myinput.value !=''" (click)="myinput.value=''"></ion-icon>
-            </ion-col>
-        </ion-row>
+            <ion-row>
+                <ion-col size="11">
+                    <ion-item class="ion-no-padding">
+                        <ion-label position="floating">Attachment</ion-label>
+                       <p  *ngFor="let attachment of attachmentData"> <ion-row style="display:flex;align-items: flex-end;top: 10px;padding: 0px;" ><ion-col><ion-label *ngIf="attachment.value!=''" position="floating" (change)="submitform()">{{attachment?.name}}</ion-label></ion-col>
+                       <ion-col style="display:flex;align-items: flex-end;top: 10px;padding: 0px;"> <ion-icon name="close-circle-outline" *ngIf="attachment.name!=''" (click)="attachment.name=''"></ion-icon></ion-col></ion-row></p>
+                        
+                       <ion-input style="font-size:12px" class="form_input"  #myinput type="file" formControlName="attachments" (change)="prelimfiles($event)" multiple>
+                        </ion-input>
+                    </ion-item>    
+                </ion-col>
+                <ion-col size="1" style="display: flex;align-items: flex-end;">
+                     <ion-icon name="close-circle-outline" *ngIf="myinput.value !=''" (click)="myinput.value=''"></ion-icon>  
+                </ion-col>
+            </ion-row>
 
         <ion-row class="ion-margin-top">
             <ion-col size="12" class="ion-no-padding">
-                <span class="input-placeholder">comments</span>
             </ion-col>
             <ion-col size="12" class="ion-no-padding">
                 <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"

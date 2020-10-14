@@ -24,12 +24,11 @@
                     routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
                     <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
                 </p>
-                <p style="margin:0px">
-                <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
+               <p> <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
                       routerDirection="forward">{{designData.email}}</span>
                       <span *ngIf="item.lateby > 1" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{item.lateby}} days</strong></span>
                       <span *ngIf="item.lateby == 1" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by a day</strong></span>
-            </p>
+                    </p>
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{designData.phonenumber}}</span></a>
                 <span style="margin:0px" class="customer-address z-100"

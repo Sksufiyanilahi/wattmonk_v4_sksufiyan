@@ -124,7 +124,12 @@ const routes: Routes = [
   {
     path: 'add-money',
     loadChildren: () => import('./add-money/add-money.module').then( m => m.AddMoneyPageModule)
+  },
+  {
+    path: 'email-model',
+    loadChildren: () => import('./email-model/email-model.module').then( m => m.EmailModelPageModule)
   }
+
 ];
 @NgModule({
   imports: [

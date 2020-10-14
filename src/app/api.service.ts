@@ -23,6 +23,8 @@ import { DesignModel } from 'src/app/model/design.model'
 
 import { RoofMaterial } from './model/roofmaterial.model';
 import { map, catchError } from 'rxjs/operators';
+import { User} from 'src/app/model/user.model'
+import { AuthGuardService } from './auth-guard.service';
 
 
 @Injectable({
@@ -45,7 +47,8 @@ export class ApiService {
   constructor(
     private http: HttpClient,
     private storageService: StorageService,
-    private utilities:UtilitiesService
+    private utilities:UtilitiesService,
+    private auth: AuthGuardService
   ) {
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
@@ -309,5 +312,21 @@ export class ApiService {
     return this.http.put(BaseUrl + '/users/pushtokens/'+ id, data, { headers: this.uploadHeaders } );
   }
 
+  getTeamData(): Observable<User[]> {
+    return this.http.get<User[]>(BaseUrl + "/users?_sort=created_at:desc&parent="+this.parentId+"&id_ne="+this.parentId, {
+      headers: this.headers,
+      observe: "response"
+    })
+    .pipe(
+      map(value => {
+        const members: User[] = value.body;
+        return members;
+      }),
+      catchError((err: HttpErrorResponse) => {
+        return throwError(err.error.message);
+      })
+    );
+  
+    }
   
 }

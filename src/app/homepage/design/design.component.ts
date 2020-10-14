@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
-import { DesginDataModel } from '../../model/design.model';
+import { DesginDataModel, PrelimDesign } from '../../model/design.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
@@ -16,6 +16,10 @@ import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
+import{SocialSharing} from '@ionic-native/social-sharing/ngx';
+import { Dialogs } from '@ionic-native/dialogs/ngx';
+import { EmailSelectorComponent } from 'src/app/utilities/email-selector/email-selector.component'
+import { EmailModelPage } from 'src/app/email-model/email-model.page';
 
 
 @Component({
@@ -54,6 +58,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   assigneeData: any;
   selectedDesigner: any;
   netSwitch: boolean;
+  
 
   constructor(
     private utils: UtilitiesService,
@@ -68,7 +73,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     public modalController: ModalController,
     private storageService:StorageService,
     private network:NetworkdetectService,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private socialsharing: SocialSharing
   ) {
     this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
     const latestDate = new Date();
@@ -192,7 +198,7 @@ this.network.networkConnect();
   }
 
   getDesigns(event: CustomEvent) {
-    ;
+    
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -718,7 +724,28 @@ getassignedata(asssignedata){
   
 }
 
+shareWhatsapp(designData){
+  this.socialsharing.share(designData.PrelimDesign.url);
+}
 
+ async shareViaEmails(id){
+  const modal = await this.modalController.create({
+    component: EmailModelPage,
+    cssClass: 'my-custom-modal-css',
+    componentProps: {
+      id:id
+    },
+    
+  });
+  modal.onDidDismiss().then((data) => {
+    console.log(data)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
+    }
+});
+    return await modal.present();
+ }
 }
 
 export class DesginDataHelper {

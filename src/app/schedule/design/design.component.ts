@@ -35,7 +35,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   listOfInverterMade: InverterMadeModel[] = [];
   listOfInverterMake: InverterMakeModel[] = [];
-
+  attachmentData:any;
   private subscription: Subscription;
   private addressSubscription: Subscription;
 
@@ -50,6 +50,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   archFiles: string[]=[];
   prelimFiles: string[]=[];
  imageName:any;
+  //attachmentName = this.desginForm.get('attachments').value;
 
  options: CameraOptions = {
   quality: 30,
@@ -73,6 +74,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   invertermake: string;
   invertermade: string;
   onFormSubmit:boolean=true;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -116,7 +118,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       city: new FormControl(''),
       postalcode: new FormControl(''),
       status: new FormControl('created'),
-      attachments:new FormControl([])
+      attachments: new FormControl([])
       // uploadbox:new FormControl('')
     });
 
@@ -165,6 +167,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {
         this.addForm();
+      
       }
     });
 
@@ -174,31 +177,31 @@ export class DesignComponent implements OnInit, OnDestroy {
       },1000)
 
     } else {
-      if(this.onFormSubmit){
+     // if(this.onFormSubmit){
         this.desginForm.get('solarmake').valueChanges.subscribe(val => {
           this.getSolarMade();
         });
         this.desginForm.get('invertermake').valueChanges.subscribe(val => {
           this.getInverterMade();
         });
-      }
+     // }
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        // this.desginForm.get('address').setValue('fffff');
-        // this.desginForm.get('latitude').setValue('444444444444');
-        // this.desginForm.get('longitude').setValue('555555555');
-        // this.desginForm.get('country').setValue('india');
-        // this.desginForm.get('city').setValue('Lucknow');
-        // this.desginForm.get('state').setValue('UP');
-        // this.desginForm.get('postalcode').setValue(3232343);
-        this.desginForm.get('address').setValue(address.address);
-        this.desginForm.get('latitude').setValue(address.lat);
-        this.desginForm.get('longitude').setValue(address.long);
-        this.desginForm.get('country').setValue(address.country);
-        this.desginForm.get('city').setValue(address.city);
-        this.desginForm.get('state').setValue(address.state);
-        this.desginForm.get('postalcode').setValue(address.postalcode);
+         this.desginForm.get('address').setValue('fffff');
+         this.desginForm.get('latitude').setValue('444444444444');
+         this.desginForm.get('longitude').setValue('555555555');
+         this.desginForm.get('country').setValue('india');
+         this.desginForm.get('city').setValue('Lucknow');
+         this.desginForm.get('state').setValue('UP');
+         this.desginForm.get('postalcode').setValue(3232343);
+        //this.desginForm.get('address').setValue(address.address);
+        //this.desginForm.get('latitude').setValue(address.lat);
+        //this.desginForm.get('longitude').setValue(address.long);
+        //this.desginForm.get('country').setValue(address.country);
+       // this.desginForm.get('city').setValue(address.city);
+       // this.desginForm.get('state').setValue(address.state);
+       // this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -271,11 +274,13 @@ uploadcontrolvalidation(){
   }
 
 getDesignDetails() {
+  
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
           this.design = result;
-          console.log(this.design.attachments);
+       this.attachmentData=this.design.attachments;
+          console.log("hello",this.design.attachments);
           this.desginForm.patchValue({
             name: this.design.name,
             email: this.design.email,
@@ -297,14 +302,17 @@ getDesignDetails() {
             postalcode:this.design.postalcode,
             newconstruction: this.design.newconstruction + '',
             prelimdesign:null,
-            attachments:this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length,
+            //attachments:this.design.attachments,
+            
+            attachments:this.design.attachments,
             solarmake:this.design.solarmake,
             solarmodel:this.design.solarmodel,
             invertermake:this.design.invertermake,
             invertermodel:this.design.invertermodel
           });
+          //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
-  
+        //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
           if (this.design.assignedto !== null && this.design.assignedto !== undefined) {
             this.desginForm.patchValue({
               assignedto: this.design.assignedto.id
@@ -337,11 +345,11 @@ getDesignDetails() {
               solarmake: this.design.solarmake.id,
               solarmodel: this.design.solarmodel.id
             });
-            if(this.onFormSubmit){
+           // if(this.onFormSubmit){
               this.desginForm.get('solarmake').valueChanges.subscribe(val => {
                 this.getSolarMade();
               });
-            }
+           // }
           }, 500);
         // });
       }, solarResponseError => {
@@ -378,11 +386,11 @@ getDesignDetails() {
             invertermake: this.design.invertermake.id,
             invertermodel: this.design.invertermodel.id
           });
-          if(this.onFormSubmit){
+          //if(this.onFormSubmit){
             this.desginForm.get('invertermake').valueChanges.subscribe(val => {
               this.getInverterMade();
             });
-          }
+         // }
         }, 500);
 
 
@@ -498,14 +506,14 @@ getDesignDetails() {
   }
 
   addForm() {
-  this.onFormSubmit=false;
-  this.saveModuleMake();
+ // this.onFormSubmit=false;
+  //this.saveModuleMake();
    
     console.log('Reach', this.desginForm.value);
 
     // debugger;
     // this.saveModuleMake();
-    // this.submitform();
+     this.submitform();
 
   }
 

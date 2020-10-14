@@ -23,9 +23,10 @@ import { DeclinepagePage } from '../declinepage/declinepage.page';
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { EmailModelPage } from '../email-model/email-model.page';
 
 @NgModule({
-  entryComponents:[DeclinepagePage],
+  entryComponents:[DeclinepagePage, EmailModelPage],
   imports: [
     CommonModule,
     FormsModule,
@@ -35,7 +36,7 @@ import { Network } from '@ionic-native/network/ngx';
     ReactiveFormsModule,
     UtilitiesModule
   ],
-  declarations: [HomepagePage, SurveyComponent,DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent,DeclinepagePage],
+  declarations: [HomepagePage, SurveyComponent,DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent,DeclinepagePage,EmailModelPage],
   providers: [
     DatePipe,
     Diagnostic,

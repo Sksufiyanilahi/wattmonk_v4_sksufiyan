@@ -107,7 +107,7 @@ export class DelievereddesignComponent implements OnInit {
               tempData.forEach((designList:any) => {
                 if (!added) {
                   if (designList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
-                    designList.listOfSurveys.push(designItem);
+                    designList.listOfDesigns.push(designItem);
                     this.sDatePassed(designItem.updated_at);
                     added = true;
                   }

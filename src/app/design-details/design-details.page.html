@@ -20,13 +20,13 @@
                     </ion-row>
                 </ion-grid>
             </ion-col>
-            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector' && design.status !='designcompleted'">
+            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector' && design.status !='designcompleted' && (user.role.type=='clientsuperadmin' && design.status=='created')">
                 <ion-button fill="clear" size="small" class="ion-no-padding"
                     [routerLink]="['/schedule/design/',designId]" routerDirection="forward">
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
-            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector' && design.status !='designcompleted'" style="float:right">
+            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector' && design.status !='designcompleted' && (user.role.type=='clientsuperadmin' && design.status=='created')" style="float:right">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()">
                     <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
                 </ion-button>
@@ -203,10 +203,10 @@
                 <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
             </ion-col>
         </ion-row>
-        <div *ngIf="user.role.type=='designer'  || user.role.type=='qcinspector' ">
+        <div *ngIf="user.role.type=='designer'  || user.role.type=='qcinspector' || (user.role.type=='clientsuperadmin' && design.status=='delivered')">
             <form novalidate [formGroup]="commentsForm">
 
-            <ion-row *ngIf="(design.status=='designassigned' || design.status=='reviewfailed'); else showimageName">
+            <ion-row *ngIf="(design.status=='designassigned' || design.status=='reviewfailed'); else showimageName ">
                 <!-- <span> -->
 
                         <ion-col size="3" class="model-type font">
@@ -226,7 +226,7 @@
                         <!-- </span> -->
                     </ion-row>
                 </form>
-            <ng-template #showimageName>
+            <ng-template #showimageName >
                 <ion-col><span class="model-type font">Prelim Design</span></ion-col>
                 <ion-col size="auto"  style="float: right;">
                     <span class="model-name font" style="text-align:right;" (click)="showDesignImage()">{{imageName}}</span>

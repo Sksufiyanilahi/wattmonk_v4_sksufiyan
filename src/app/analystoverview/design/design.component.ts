@@ -16,6 +16,7 @@ import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 @Component({
   selector: 'app-design',
@@ -64,7 +65,8 @@ export class DesignComponent implements OnInit {
     private router: Router,
     public modalController: ModalController,
     private storageService:StorageService,
-    private network:NetworkdetectService) { 
+    private network:NetworkdetectService,
+    private social: SocialSharing) { 
       this.segments ='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed';
       const latestDate = new Date();
       this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -564,8 +566,10 @@ getassignedata(asssignedata){
   
 }
 
-
 }
+
+
+
 
 export class DesginDataHelper {
   listOfDesigns: DesginDataModel[];

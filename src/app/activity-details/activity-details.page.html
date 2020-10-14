@@ -42,6 +42,8 @@
  <p  style="text-align: center; margin-top: 0px;"><span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'requestdeclined'">Declined</span>
  <!-- <span class="chipdetail" style="background-color: rgb(246, 104, 10);" >--------{{isDatePassed()}}Overdue</span> -->
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'requestaccepted'">Accepted</span>
+ <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'reviewfailed'" >Review Failed</span>
+ <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'reviewpassed'">Review Passed</span>
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'delivered'">Delivered</span>
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'designcompleted'">Completed</span>
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'created'">Unassigned</span>
