@@ -30,6 +30,7 @@ export class EmailModelPage implements OnInit {
   emailArray;
   design : DesignModel;
   id:any;
+  data:any;
   
   constructor(
     private util:UtilitiesService,
@@ -61,12 +62,14 @@ export class EmailModelPage implements OnInit {
 
   ngOnInit() {
     this.id= this.nav.get('id');
+    this.data=this.nav.get('designData');
+    console.log("hello",this.data);
     this.api.getTeamData().subscribe(
       response => {
       
         this.teamMember=response;
         this.example=response;
-        this.example.push(this.design);
+        
         this.TeamData=this.example  ;
       })
   }
@@ -75,8 +78,8 @@ export class EmailModelPage implements OnInit {
  // }
  selectAll(event) {
    debugger;
-    const checked = event.target.checked;
-    this.TeamData.forEach(item => item.checked = checked);
+    const Checked = event.target.checked;
+    this.TeamData.forEach(item => item.Checked = Checked);
   }
   
  SendMail(){
@@ -86,7 +89,7 @@ export class EmailModelPage implements OnInit {
     this.selectedEmails.push(element)
   })
 
-  this.bodyData= this.TeamData.filter(item=> item.checked);
+  this.bodyData= this.TeamData.filter(item=> item.Checked);
     this.bodyData.forEach(element => {
      
       this.selectedEmails.push(element.email)

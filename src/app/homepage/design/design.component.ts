@@ -730,12 +730,13 @@ shareWhatsapp(designData){
   this.socialsharing.share(designData.PrelimDesign.url);
 }
 
- async shareViaEmails(id){
+ async shareViaEmails(id,designData){
   const modal = await this.modalController.create({
     component: EmailModelPage,
     cssClass: 'my-custom-modal-css',
     componentProps: {
-      id:id
+      id:id,
+      designData:designData
     },
     
   });
