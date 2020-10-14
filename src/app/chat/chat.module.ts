@@ -9,7 +9,7 @@ import { ChatPageRoutingModule } from './chat-routing.module';
 import { ChatPage } from './chat.page';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { Chooser } from '@ionic-native/chooser/ngx';
-import { ImagePicker } from '@ionic-native/image-picker/ngx';
+// import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @NgModule({
@@ -23,7 +23,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
   providers: [
     Chooser,
     InAppBrowser,
-    ImagePicker
+    // ImagePicker
   ]
 })
 export class ChatPageModule {
