@@ -10,11 +10,11 @@
   <ion-list>
   <ion-item
    *ngFor="let item of example; let i = index ">
-      <!-- <input type="checkbox" [(ngModel)]="item">&nbsp;  -->
+      <!-- <input type="checkbox" [(ngModel)]="item.Checked">&nbsp;  -->
       <p class="listitem1">{{item?.firstname}}</p>
       <p class="listitem1">{{item?.lastname}}</p>
       <p class="listitem1">({{item?.email}})</p>
-      <ion-checkbox slot="start" [(ngModel)]="item.isChecked" ></ion-checkbox>
+      <ion-checkbox slot="start" [(ngModel)]="item.Checked" ></ion-checkbox>
       
   
   </ion-item>

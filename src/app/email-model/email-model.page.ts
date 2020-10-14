@@ -39,6 +39,7 @@ export class EmailModelPage implements OnInit {
     private modalctrl: ModalController,
     private nav:NavParams,
   ){
+
   }
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
     throw new Error("Method not implemented.");
@@ -66,17 +67,17 @@ export class EmailModelPage implements OnInit {
       
         this.teamMember=response;
         this.example=response;
-        this.example.push(this.design);
-        this.TeamData=this.example  ;
+        // this.example.push(this.design);
+        this.TeamData=this.example;
       })
   }
   //onCloseClick(){
    // this.dialogRef.close(this.data);
  // }
  selectAll(event) {
-   debugger;
-    const checked = event.target.checked;
-    this.TeamData.forEach(item => item.checked = checked);
+  
+    const checked = event.target.Checked;
+    this.TeamData.forEach(item => item.Checked = checked);
   }
   
  SendMail(){
@@ -91,7 +92,7 @@ export class EmailModelPage implements OnInit {
      
       this.selectedEmails.push(element.email)
     });
-    this.selectedEmails.push()
+  
     console.log(this.selectedEmails)
   let body= {emails:this.selectedEmails,
   id:this.id}
@@ -121,6 +122,11 @@ export class EmailModelPage implements OnInit {
     'dismissed': true,
     cancel:'cancel'
   });
+}
+
+checkedData(event){
+console.log(event.target.checked);
+
 }
 
 }
