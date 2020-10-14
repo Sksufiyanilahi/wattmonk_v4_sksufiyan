@@ -14,6 +14,6 @@ import { PendingComponent } from './pending/pending.component';
     DesignRoutingModule
     
   ],
-  // providers:[Chooser]
+  // providers:[]
 })
 export class DesignModule { }

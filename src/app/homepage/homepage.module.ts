@@ -25,6 +25,7 @@ import { File } from '@ionic-native/file/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { EmailModelPage } from '../email-model/email-model.page';
 
+
 @NgModule({
   entryComponents:[DeclinepagePage, EmailModelPage],
   imports: [

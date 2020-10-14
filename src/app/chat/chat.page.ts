@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController, NavController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { Chooser } from '@ionic-native/chooser/ngx';
-import { ImagePicker } from '@ionic-native/image-picker/ngx';
+// import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController } from '@ionic/angular';
 import BaseMessage = CometChat.BaseMessage;
@@ -44,7 +44,7 @@ export class ChatPage implements OnInit {
     private chooser: Chooser,
     private iab: InAppBrowser,
     public actionSheetController: ActionSheetController,
-    private imagePicker: ImagePicker,
+    // private imagePicker: ImagePicker,
     public modalController: ModalController
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -410,25 +410,25 @@ export class ChatPage implements OnInit {
   }
 
   ImagePicker() {
-    const options = {
-      outputType: 1
-    };
-    this.imagePicker.getPictures(options)
-      .then((results) => {
-        results[0] = 'data:image/jpeg;base64,' + results[0];
-        const blob_nw = this.dataURItoBlob(results[0]);
-        const date = new Date();
-        const file = {
-          file: blob_nw,
-          type: 'image/jpeg',
-          name: 'temp_img' + date.getTime()
-        };
+    // const options = {
+    //   outputType: 1
+    // };
+    // this.imagePicker.getPictures(options)
+    //   .then((results) => {
+    //     results[0] = 'data:image/jpeg;base64,' + results[0];
+    //     const blob_nw = this.dataURItoBlob(results[0]);
+    //     const date = new Date();
+    //     const file = {
+    //       file: blob_nw,
+    //       type: 'image/jpeg',
+    //       name: 'temp_img' + date.getTime()
+    //     };
 
-        this.messageMedia = file;
-        this.sendMediaMessage();
-      }, (err) => {
-        console.log(err);
-      });
+    //     this.messageMedia = file;
+    //     this.sendMediaMessage();
+    //   }, (err) => {
+    //     console.log(err);
+    //   });
   }
 
   dataURItoBlob(dataURI) {

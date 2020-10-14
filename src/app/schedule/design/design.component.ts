@@ -74,6 +74,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   invertermake: string;
   invertermade: string;
   onFormSubmit:boolean=true;
+  solarMakeDisposable: Subscription;
 
 
   constructor(
@@ -148,11 +149,18 @@ export class DesignComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit() {
-   
-    
+
     this.utils.manualInput.subscribe(data=>{
         if(this.modulename=='solarmake'){
           this.solarmake=data;
+          // this.solarMakeDisposable.unsubscribe();
+          // this.desginForm.patchValue({
+          //   solarmake:data
+          // });
+          // this.solarMakeDisposable = this.desginForm.get('solarmake').valueChanges.subscribe(val => {
+          //   this.getSolarMade();
+          // });
+          
         }else if(this.modulename=='solarmade'){
         this.solarmade=data;
         }else if(this.modulename=='invertermake'){
@@ -177,31 +185,31 @@ export class DesignComponent implements OnInit, OnDestroy {
       },1000)
 
     } else {
-     // if(this.onFormSubmit){
-        this.desginForm.get('solarmake').valueChanges.subscribe(val => {
+      // if(this.onFormSubmit){
+        this.solarMakeDisposable = this.desginForm.get('solarmake').valueChanges.subscribe(val => {
           this.getSolarMade();
         });
         this.desginForm.get('invertermake').valueChanges.subscribe(val => {
           this.getInverterMade();
         });
-     // }
+      // }
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-         this.desginForm.get('address').setValue('fffff');
-         this.desginForm.get('latitude').setValue('444444444444');
-         this.desginForm.get('longitude').setValue('555555555');
-         this.desginForm.get('country').setValue('india');
-         this.desginForm.get('city').setValue('Lucknow');
-         this.desginForm.get('state').setValue('UP');
-         this.desginForm.get('postalcode').setValue(3232343);
-        //this.desginForm.get('address').setValue(address.address);
-        //this.desginForm.get('latitude').setValue(address.lat);
-        //this.desginForm.get('longitude').setValue(address.long);
-        //this.desginForm.get('country').setValue(address.country);
-       // this.desginForm.get('city').setValue(address.city);
-       // this.desginForm.get('state').setValue(address.state);
-       // this.desginForm.get('postalcode').setValue(address.postalcode);
+        this.desginForm.get('address').setValue('fffff');
+        this.desginForm.get('latitude').setValue('444444444444');
+        this.desginForm.get('longitude').setValue('555555555');
+        this.desginForm.get('country').setValue('india');
+        this.desginForm.get('city').setValue('Lucknow');
+        this.desginForm.get('state').setValue('UP');
+        this.desginForm.get('postalcode').setValue(3232343);
+        // this.desginForm.get('address').setValue(address.address);
+        // this.desginForm.get('latitude').setValue(address.lat);
+        // this.desginForm.get('longitude').setValue(address.long);
+        // this.desginForm.get('country').setValue(address.country);
+        // this.desginForm.get('city').setValue(address.city);
+        // this.desginForm.get('state').setValue(address.state);
+        // this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -345,11 +353,11 @@ getDesignDetails() {
               solarmake: this.design.solarmake.id,
               solarmodel: this.design.solarmodel.id
             });
-           // if(this.onFormSubmit){
+            // if(this.onFormSubmit){
               this.desginForm.get('solarmake').valueChanges.subscribe(val => {
                 this.getSolarMade();
               });
-           // }
+            // }
           }, 500);
         // });
       }, solarResponseError => {
@@ -386,11 +394,11 @@ getDesignDetails() {
             invertermake: this.design.invertermake.id,
             invertermodel: this.design.invertermodel.id
           });
-          //if(this.onFormSubmit){
+          // if(this.onFormSubmit){
             this.desginForm.get('invertermake').valueChanges.subscribe(val => {
               this.getInverterMade();
             });
-         // }
+          // }
         }, 500);
 
 
@@ -460,7 +468,7 @@ getDesignDetails() {
         this.saveInvertermake();
       })
     }else{
-      this.saveInverterMade();
+      this.saveInvertermake();
     }
   }
 
@@ -506,14 +514,14 @@ getDesignDetails() {
   }
 
   addForm() {
- // this.onFormSubmit=false;
-  //this.saveModuleMake();
-   
+  this.onFormSubmit=false;
+  // this.saveModuleMake();
+   debugger;
     console.log('Reach', this.desginForm.value);
 
     // debugger;
     // this.saveModuleMake();
-     this.submitform();
+    this.submitform();
 
   }
 

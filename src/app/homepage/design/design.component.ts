@@ -82,7 +82,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     console.log('date', this.today);
     this.todaysdate = datePipe.transform(latestDate, 'yyyy-MM-dd');
     this.assignForm = this.formBuilder.group({
-      assignedto: new FormControl(0, [Validators.required]),
+      assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
     });
 
@@ -447,10 +447,12 @@ this.network.networkConnect();
       var designstarttime = new Date();
     var additonalhours = 0;
     if(this.designerData.requesttype == "prelim"){
-      additonalhours = this.selectedDesigner.jobcount * 2;
+      console.log(parseInt(this.selectedDesigner.jobcount) );
+      additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
+      
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
     }else{
-      additonalhours = this.selectedDesigner.jobcount * 6;
+      additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
     }
     console.log(this.selectedDesigner);
@@ -536,7 +538,7 @@ this.network.networkConnect();
             this.utils.setBottomBarHomepage(false);
             this.drawerState = DrawerState.Docked;
             this.assignForm.patchValue({
-              assignedto: 0
+              assignedto: ''
             });
           });
         }, (error) => {
@@ -551,7 +553,7 @@ this.network.networkConnect();
       this.utils.setBottomBarHomepage(false);
       this.drawerState = DrawerState.Docked;
       this.assignForm.patchValue({
-        assignedto: 0
+        assignedto: ''
       });
     }
   }
@@ -573,7 +575,7 @@ this.network.networkConnect();
             this.utils.setBottomBarHomepage(false);
             this.drawerState = DrawerState.Docked;
             this.assignForm.patchValue({
-              assignedto: 0
+              assignedto: ''
             });
           });
         }, (error) => {
@@ -588,7 +590,7 @@ this.network.networkConnect();
       this.utils.setBottomBarHomepage(false);
       this.drawerState = DrawerState.Docked;
       this.assignForm.patchValue({
-        assignedto: 0
+        assignedto: ''
       });
     }
   }
@@ -755,6 +757,10 @@ export class DesginDataHelper {
 
   constructor() {
     this.listOfDesigns = [];
+  }
+
+  shareDesign(){
+    
   }
   
 }
