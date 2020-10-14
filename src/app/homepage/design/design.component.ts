@@ -687,6 +687,7 @@ async decline(id){
     componentProps: {
       id:id
     },
+    backdropDismiss:false
   });
   modal.onDidDismiss().then((data) => {
     console.log(data)
@@ -727,15 +728,16 @@ getassignedata(asssignedata){
 }
 
 shareWhatsapp(designData){
-  this.socialsharing.share(designData.PrelimDesign.url);
+  this.socialsharing.share(designData.prelimdesign.url);
 }
 
- async shareViaEmails(id){
+ async shareViaEmails(id,designData){
   const modal = await this.modalController.create({
     component: EmailModelPage,
-    cssClass: 'my-custom-modal-css',
+    cssClass: 'email-modal-css',
     componentProps: {
-      id:id
+      id:id,
+      designData:designData
     },
     
   });

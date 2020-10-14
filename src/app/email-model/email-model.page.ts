@@ -30,6 +30,7 @@ export class EmailModelPage implements OnInit {
   emailArray;
   design : DesignModel;
   id:any;
+  data:any;
   
   constructor(
     private util:UtilitiesService,
@@ -37,9 +38,9 @@ export class EmailModelPage implements OnInit {
     private storage : StorageService,
     private api : ApiService,
     private modalctrl: ModalController,
-    private nav:NavParams,
+    private nav:NavParams
   ){
-
+    this.getTeamData();
   }
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
     throw new Error("Method not implemented.");
@@ -62,22 +63,31 @@ export class EmailModelPage implements OnInit {
 
   ngOnInit() {
     this.id= this.nav.get('id');
-    this.api.getTeamData().subscribe(
-      response => {
-      
-        this.teamMember=response;
-        this.example=response;
-        // this.example.push(this.design);
-        this.TeamData=this.example;
-      })
+    this.data=this.nav.get('designData');
+    console.log("hello",this.data);
+   
+  }
+
+  getTeamData(){
+    this.util.showLoading('Loading emails').then(()=>{
+
+      this.api.getTeamData().subscribe(
+        response => {
+          this.util.hideLoading().then(()=>{
+            this.teamMember=response;
+            this.example=response;
+            this.TeamData=this.example  ;
+          })
+        })
+    })
   }
   //onCloseClick(){
    // this.dialogRef.close(this.data);
  // }
  selectAll(event) {
-  
-    const checked = event.target.Checked;
-    this.TeamData.forEach(item => item.Checked = checked);
+   debugger;
+    const Checked = event.target.checked;
+    this.TeamData.forEach(item => item.Checked = Checked);
   }
   
  SendMail(){
@@ -87,7 +97,7 @@ export class EmailModelPage implements OnInit {
     this.selectedEmails.push(element)
   })
 
-  this.bodyData= this.TeamData.filter(item=> item.checked);
+  this.bodyData= this.TeamData.filter(item=> item.Checked);
     this.bodyData.forEach(element => {
      
       this.selectedEmails.push(element.email)
@@ -104,6 +114,9 @@ export class EmailModelPage implements OnInit {
      this.resp=response
      if(this.resp.status=='success'){
         this.util.showSnackBar("Email Sent  Successfully");
+        this.modalctrl.dismiss({
+          'dismissed': true
+        });
        // this.dialogRef.close( );
      }
     
