@@ -128,6 +128,7 @@ export class EmailModelPage implements OnInit {
     );
     
   })
+   this.selectedEmails=[]
   
  }
  cancel(){

@@ -15,6 +15,6 @@ import { EmailModelPage } from './email-model.page';
     IonicModule,
     EmailModelPageRoutingModule
   ],
-  declarations: [EmailModelPage]
+  declarations: []
 })
 export class EmailModelPageModule {}

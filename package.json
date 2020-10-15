@@ -76,7 +76,6 @@
     "cordova-plugin-nativegeocoder": "^3.2.2",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-plugin-stripe": "^1.5.3",
-    "cordova-plugin-telerik-imagepicker": "^2.3.3",
     "cordova-res": "^0.15.1",
     "cordova-sqlite-storage": "^5.0.0",
     "cordova.plugins.diagnostic": "^5.0.1",
@@ -163,9 +162,6 @@
       "cordova-plugin-filechooser": {},
       "cordova-plugin-chooser": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-telerik-imagepicker": {
-        "PHOTO_LIBRARY_USAGE_DESCRIPTION": " "
-      },
       "cordova-plugin-camera": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },

@@ -291,6 +291,9 @@ this.network.networkConnect();
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
+    
+  this.dataRefreshSubscription.unsubscribe();
+  this.DesignRefreshSubscription.unsubscribe();
   }
 
   // filterData(records : DesginDataModel[]) {
