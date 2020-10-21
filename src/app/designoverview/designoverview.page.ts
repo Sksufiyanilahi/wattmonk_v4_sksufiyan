@@ -6,6 +6,9 @@ import { ApiService } from '../api.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { TokenType } from '@angular/compiler/src/ml_parser/lexer';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { EmailModelPage } from 'src/app/email-model/email-model.page';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-designoverview',
@@ -18,7 +21,9 @@ export class DesignoverviewPage implements OnInit {
 
   constructor(public route: Router,
     private storage: StorageService,
-    private apiService: ApiService) { }
+    public modalController: ModalController,
+    private apiService: ApiService,
+    private socialSharing:SocialSharing) { }
 
   ngOnInit() {
     this.setupCometChatUser();
@@ -62,5 +67,38 @@ export class DesignoverviewPage implements OnInit {
     }, (error) => {
     });
   }
+  
+  getDesigns(event: CustomEvent) {
+    
+    let showLoader = true;
+    if (event != null && event !== undefined) {
+      showLoader = false;
+    }
+   
+  }
+
+shareWhatsapp(designData){
+  this.socialSharing.share(designData.prelimdesign.url);
+}
+
+ async shareViaEmails(id,designData){
+  const modal = await this.modalController.create({
+    component: EmailModelPage,
+    cssClass: 'email-modal-css',
+    componentProps: {
+      id:id,
+      designData:designData
+    },
+    
+  });
+  modal.onDidDismiss().then((data) => {
+    console.log(data)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
+    }
+});
+    return await modal.present();
+ }
 
 }

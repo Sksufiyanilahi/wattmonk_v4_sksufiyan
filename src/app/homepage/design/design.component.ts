@@ -436,7 +436,7 @@ this.network.networkConnect();
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
     this.listOfAssignees=[];
-    console.log("this works",this.listOfAssignees)
+   // console.log("this works",this.listOfAssignees)
   }
 
   assignToDesigner() {
@@ -448,6 +448,7 @@ this.network.networkConnect();
       
      
       var designstarttime = new Date();
+      var milisecond = designstarttime.getTime();
     var additonalhours = 0;
     if(this.designerData.requesttype == "prelim"){
       console.log(parseInt(this.selectedDesigner.jobcount) );
@@ -464,10 +465,9 @@ this.network.networkConnect();
       if (this.selectedDesigner.company == this.userData.company) {
         if(this.selectedDesigner.role.type=="qcinspector"){
           postData = {
-            designassignedto: this.selectedDesigner.id,
-            isoutsourced: "false",
+            reviewassignedto: this.selectedDesigner.id,
             status: "reviewassigned",
-            designstarttime: designstarttime
+            reviewstarttime: milisecond
           }; 
         }
        if(this.selectedDesigner.role.type=="designer") { postData = {
@@ -495,9 +495,9 @@ this.network.networkConnect();
       };}
       if(this.selectedDesigner.role.type=="qcinspector"){
         postData = {
-          designassignedto: this.selectedDesigner.id,
+          reviewassignedto: this.selectedDesigner.id,
           status: "reviewassigned",
-          designstarttime: designstarttime
+          reviewstarttime: milisecond
         };
       }
     }
@@ -506,7 +506,8 @@ this.network.networkConnect();
         this.utils.hideLoading().then(()=>{
           ; 
           console.log('reach ', value);
-          this.utils.showSnackBar('Design request has been assigned to' + ' ' + value.name + ' ' + 'successfully');
+         
+          this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
           this.dismissBottomSheet();
           this.showBottomDraw = false;
           this.utils.setHomepageDesignRefresh(true);
@@ -635,10 +636,16 @@ this.network.networkConnect();
           text: 'deliver',
           handler: (alertData) => {
             var postData= {};
-            postData = {
+            if(alertData.comment!=""){
+             postData = {
               status: "delivered",
               comments: alertData.comment ,
-               };
+               };}
+               else{
+                postData = {
+                  status: "delivered",
+                   };
+               }
                console.log(postData);
                this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
@@ -727,6 +734,7 @@ pending(value){
 
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
+  console.log("dholak is",this.selectedDesigner);
   
 }
 

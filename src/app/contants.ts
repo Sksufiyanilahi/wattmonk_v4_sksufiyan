@@ -6,13 +6,13 @@
 //     API_KEY: '5cafae1939d4fc620698c50ae3f25e727fc90213'
 // }
 
-//Test Server
-// export const BaseUrl = 'https://testorbit.wattmonk.com/api';
-// export const COMETCHAT_CONSTANTS = {
-//     APP_ID: '22738c62a78b107',
-//     REGION: 'US',
-//     API_KEY: '3afc04a7495edb03f4c7c802096a954faf7e3a27'
-// }
+// Test Server
+ /*export const BaseUrl = 'https://testorbit.wattmonk.com/api';
+ export const COMETCHAT_CONSTANTS = {
+     APP_ID: '22738c62a78b107',
+     REGION: 'US',
+     API_KEY: '3afc04a7495edb03f4c7c802096a954faf7e3a27'
+ }*/
 
 //Development Server
 export const BaseUrl = 'https://devspace.wattmonk.com/api';

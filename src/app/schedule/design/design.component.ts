@@ -9,7 +9,7 @@ import { SolarMadeModel } from 'src/app/model/solar-made.model';
 import { InverterMakeModel } from 'src/app/model/inverter-make.model';
 import { NavController } from '@ionic/angular';
 import { InverterMadeModel } from 'src/app/model/inverter-made.model';
-import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../../model/constants';
+import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE } from '../../model/constants';
 import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd } from '@angular/router';
@@ -40,6 +40,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   private addressSubscription: Subscription;
 
   emailError = INVALID_EMAIL_MESSAGE;
+  nameError = INVALID_NAME_MESSAGE;
+
   fieldRequired = FIELD_REQUIRED;
 
   designId = 0;
@@ -90,8 +92,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   ) {
   
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     this.desginForm = this.formBuilder.group({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       solarmake: new FormControl('', [Validators.required]),
       solarmodel: new FormControl('', [Validators.required]),
@@ -196,20 +199,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        //this.desginForm.get('address').setValue('fffff');
-        //this.desginForm.get('latitude').setValue('444444444444');
-        //this.desginForm.get('longitude').setValue('555555555');
-        //this.desginForm.get('country').setValue('india');
-        //this.desginForm.get('city').setValue('Lucknow');
-        //this.desginForm.get('state').setValue('UP');
-        //this.desginForm.get('postalcode').setValue(3232343);
-         this.desginForm.get('address').setValue(address.address);
-         this.desginForm.get('latitude').setValue(address.lat);
-         this.desginForm.get('longitude').setValue(address.long);
-         this.desginForm.get('country').setValue(address.country);
-         this.desginForm.get('city').setValue(address.city);
-         this.desginForm.get('state').setValue(address.state);
-         this.desginForm.get('postalcode').setValue(address.postalcode);
+        this.desginForm.get('address').setValue('fffff');
+        this.desginForm.get('latitude').setValue('444444444444');
+        this.desginForm.get('longitude').setValue('555555555');
+        this.desginForm.get('country').setValue('india');
+        this.desginForm.get('city').setValue('Lucknow');
+        this.desginForm.get('state').setValue('UP');
+        this.desginForm.get('postalcode').setValue(3232343);
+        //  this.desginForm.get('address').setValue(address.address);
+        //  this.desginForm.get('latitude').setValue(address.lat);
+        //  this.desginForm.get('longitude').setValue(address.long);
+        //  this.desginForm.get('country').setValue(address.country);
+        //  this.desginForm.get('city').setValue(address.city);
+        //  this.desginForm.get('state').setValue(address.state);
+        //  this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');

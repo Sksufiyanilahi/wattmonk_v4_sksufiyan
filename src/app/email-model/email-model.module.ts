@@ -9,12 +9,13 @@ import { EmailModelPageRoutingModule } from './email-model-routing.module';
 import { EmailModelPage } from './email-model.page';
 
 @NgModule({
+  entryComponents:[EmailModelPage],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     EmailModelPageRoutingModule
   ],
-  declarations: []
+  declarations: [EmailModelPage]
 })
 export class EmailModelPageModule {}

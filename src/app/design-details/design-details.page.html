@@ -225,9 +225,27 @@
                             
                         <!-- </span> -->
                     </ion-row>
+                    <div *ngIf="user.role.type=='qcinspector' && design.status=='reviewassigned'">
+                        <ion-row *ngIf="isSelfUpdate" style="width: max-content;">
+                             <!-- <span> -->
+                                         <ion-col size="9" class="model-name font flx" style="justify-content: flex-end;">
+                                          
+             
+                                             <ion-input type="file" readonly (change)="prelimupdate($event)" style="border-bottom:1px solid grey; width: max-content; flex: auto;" multiple="false"> <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon></ion-input>
+                                         
+                                                
+                                             
+                                             
+                                             
+                                         </ion-col>
+                                         
+                                     <!-- </span> --> 
+                                 </ion-row>
+                             </div>
                 </form>
             <ng-template #showimageName >
                 <ion-col><span class="model-type font">Prelim Design</span></ion-col>
+                <ion-button size="3" style="width:72px;height: 20px;font-size: x-small;float: right;" *ngIf="user.role.type=='qcinspector' && design.status=='reviewassigned'" (click)="isSelfUpdate = !isSelfUpdate">Self Update</ion-button>
                 <ion-col size="auto"  style="float: right;">
                     <span class="model-name font" style="text-align:right;" (click)="showDesignImage()">{{imageName}}</span>
                         <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 " (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
@@ -321,7 +339,7 @@
         <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
             <ion-col size="auto">
                 <ion-button class="action-button-color" fill="clear" style="float: left;" (click)="reportDesignReviewFailure()">Failed</ion-button>
-                <ion-button class="action-button-color" fill="clear" style="float: right ;" (click)="reportDesignReviewSuccess()">Passed</ion-button>
+                <ion-button class="action-button-color" fill="clear" style="float: right ;" (click)="designReviewSuccess()">Passed</ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>

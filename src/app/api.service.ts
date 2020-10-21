@@ -42,6 +42,7 @@ export class ApiService {
   public design : Observable<DesignModel>;
 
   public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  version = new BehaviorSubject<string>('');
 
 
   constructor(
@@ -50,6 +51,7 @@ export class ApiService {
     private utilities:UtilitiesService,
     private auth: AuthGuardService
   ) {
+    this.getUpgradeMessage();
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
       //Do task when no internet connection
@@ -203,7 +205,7 @@ export class ApiService {
   }
 
   getSurveyors(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=', { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId, { headers: this.headers });
   }
 
   getAnalysts(): Observable<AssigneeModel[]> {
@@ -327,6 +329,29 @@ export class ApiService {
       })
     );
   
+    }
+
+    update_message(){
+      return this.http.get(BaseUrl + 'platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app', {
+        headers: this.headers,
+        observe: "response"
+      })
+      .pipe(
+        map(value => {
+          const data = value.body;
+          return data;
+        }),
+        catchError((err: HttpErrorResponse) => {
+          return throwError(err.error.message);
+        })
+      );
+    }
+
+    getUpgradeMessage(){
+      this.update_message().subscribe(res=>{
+        console.log(res);
+        this.version.next(res[0].appversion);
+      })
     }
   
 }

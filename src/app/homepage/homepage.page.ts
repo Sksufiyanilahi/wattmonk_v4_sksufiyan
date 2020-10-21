@@ -15,6 +15,8 @@ import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
 import { ROLES } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
+import { environment } from 'src/environments/environment';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-homepage',
@@ -22,6 +24,7 @@ import { NetworkdetectService } from '../networkdetect.service';
   styleUrls: ['./homepage.page.scss'],
 })
 export class HomepagePage implements OnInit, OnDestroy {
+  private version = environment.version;
   @Output() ionInput = new EventEmitter();
 
 
@@ -49,6 +52,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   name: any;
   userRole: any;
   netSwitch: any;
+  update_version: string;
 
   constructor(
     private utilities: UtilitiesService,
@@ -62,13 +66,17 @@ export class HomepagePage implements OnInit, OnDestroy {
     private geolocation: Geolocation,
     private toastController: ToastController,
     public route: Router,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    private iab:InAppBrowser
   ) {
     // this.initializeItems();
     //this.scheduledPage();
   }
 
   ngOnInit() {
+    this.apiService.version.subscribe(versionInfo=>{
+    this.update_version = versionInfo;
+  })
     this.setupCometChatUser();
     this.requestLocationPermission();
     this.updateUserPushToken();
@@ -373,6 +381,20 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
+    if(this.version.toString() !== this.update_version){
+        
+      setTimeout(()=>{
+    
+        this.utilities.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
+          text:'Ok',
+        
+          handler:()=>{
+            this.iab.create('https://play.google.com/store/apps/details?id=net.one97.paytm',"_system");
+           this.ionViewDidEnter();
+          }
+        }]);
+      },2000)
+    }
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);

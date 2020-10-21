@@ -98,7 +98,9 @@
                             </ion-col>
                             <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed'">
                                 <span *ngIf="designData.status =='reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData)"
-                                >Deliver</span>
+                                >  &nbsp; Deliver</span>
+                                <span *ngIf="designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                                >Reassign Review</span>
                             </ion-col>
                          
                             <ion-col *ngIf="segments=='requesttype=prelim&status=delivered'">

@@ -24,6 +24,8 @@ import { Chooser } from '@ionic-native/chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { EmailModelPage } from '../email-model/email-model.page';
+import { EmailModelPageModule } from '../email-model/email-model.module';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -35,9 +37,10 @@ import { EmailModelPage } from '../email-model/email-model.page';
     HomepagePageRoutingModule,
     IonBottomDrawerModule,
     ReactiveFormsModule,
-    UtilitiesModule
+    UtilitiesModule,
+    SharedModule
   ],
-  declarations: [HomepagePage, SurveyComponent,DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent,DeclinepagePage,EmailModelPage],
+  declarations: [HomepagePage, SurveyComponent,DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent],
   providers: [
     DatePipe,
     Diagnostic,

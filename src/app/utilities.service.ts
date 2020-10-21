@@ -282,6 +282,17 @@ export class UtilitiesService {
 
     return new Blob(byteArrays, { type: contentType });
   }
+
+   async showAlertBox(header,message,button?){
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: button,
+      backdropDismiss: false
+    });
+
+    await alert.present();
+  }
   
 
 

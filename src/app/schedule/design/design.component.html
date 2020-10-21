@@ -20,6 +20,14 @@
                     <ion-input type="text" class="form_input" autocapitalize="words"
                                 formControlName="name"></ion-input>
                 </ion-item>
+                <div style="height: 5px;">
+                    <div *ngIf="desginForm.get('name').hasError('pattern') && desginForm.get('name').dirty">
+                        <span class="error">{{nameError}}</span>
+                    </div>
+                    <div *ngIf="desginForm.get('name').value === '' && desginForm.get('name').dirty">
+                        <span class="error">{{fieldRequired}}</span>
+                    </div>
+                </div>
             </ion-col>
         </ion-row>
         <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -226,14 +234,13 @@
             </ion-row>
 
         <ion-row class="ion-margin-top">
-            <ion-col size="12" class="ion-no-padding">
-            </ion-col>
+            <ion-label position="floating">Comments</ion-label>
             <ion-col size="12" class="ion-no-padding">
                 <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
                                 formControlName="comments"></ion-textarea>
             </ion-col>
         </ion-row>
-
+<!-- 
         <ion-row class="ion-margin-top">
             <ion-col>
                 <ion-item class=" ion-no-padding no-border" lines="none" style="padding: 30px 0px;">
@@ -241,7 +248,7 @@
                                         formControlName="assignedto"></app-user-selector>
                 </ion-item>
             </ion-col>
-        </ion-row>
+        </ion-row> -->
     </ion-grid>
 </form>
 

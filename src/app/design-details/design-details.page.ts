@@ -35,6 +35,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   reviewenddatetime:number;
   reviewstartdatetime : number;
   reviewIssues='';
+  isSelfUpdate: false;
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -349,6 +350,59 @@ reader.readAsDataURL(event.target.files[0]);
   return blob;
 }
 
+prelimupdate(event){
+  //console.log(this.imageName);
+  //console.log(event.target.files);
+  // for(var i=0; i< event.target.files.length;i++){
+    // this.prelimFiles.push(event.target.files) 
+    this.prelimFiles= event.target.files;
+    //this.imageName= event.target.files[0].name;
+    //this.imagebox= true;
+  // }
+  //console.log(this.prelimFiles);
+  
+    this.targetLength= event.target.files.length;
+
+
+
+    var reader = new FileReader();
+reader.onload = (event: any) => {
+var orientation = -1;
+let localUrl = event.target.result;
+// this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
+// console.log(res,">><><><");
+// this.image= res;  
+this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
+  result => {
+    this.image = result;
+    console.warn('Size in bytes is now:', this.imageCompress.byteCount(result));
+  }
+);
+
+// })
+}
+reader.readAsDataURL(event.target.files[0]);
+}
+b64toBlobb = (b64Data, contentType='', sliceSize=512) => {
+const byteCharacters = atob(b64Data);
+const byteArrays = [];
+
+for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+
+    byteArrays.push(byteArray);
+}
+
+const blob = new Blob(byteArrays, {type: contentType});
+return blob;
+}
 
   uploadpreliumdesign(designId?: number, key?: string){
 
@@ -382,6 +436,7 @@ reader.readAsDataURL(event.target.files[0]);
               //   console.log(res,">>");
                 
               // })
+              this.reportDesignReviewSuccess();
      
             
              
@@ -405,7 +460,7 @@ reader.readAsDataURL(event.target.files[0]);
        const postData = {
         status: "reviewfailed",
        reviewissues : this.reviewIssuesForm.get('reviewIssues').value,
-        reviewstarttime : this.design.reviewstarttime,
+        reviewstarttime : this.reviewstartdatetime,
         reviewendtime : this.reviewenddatetime,
         
       };
@@ -437,6 +492,22 @@ reader.readAsDataURL(event.target.files[0]);
       this.utilities.errorSnackBar("Please enter issues");
       this.reviewIssuesForm.markAsTouched();
       this.reviewIssuesForm.markAsDirty();
+    }
+  }
+
+
+  designReviewSuccess(){
+    
+    if(this.isSelfUpdate && this.prelimFiles.length > 0)
+    {
+      this.uploadpreliumdesign(this.designId,'prelimdesign' );
+      
+      
+    }else if(this.isSelfUpdate && this.prelimFiles.length == 0)
+    {
+      this.utilities.errorSnackBar("error");
+    }else{
+      this.reportDesignReviewSuccess();
     }
   }
 

@@ -83,20 +83,20 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.getSurveyDetails();
     } else {
       this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
-        // this.surveyForm.get('address').setValue("sdck");
-        // this.surveyForm.get('latitude').setValue('1111111');
-        // this.surveyForm.get('longitude').setValue('222222222');
-        // this.surveyForm.get('country').setValue('India');
-        // this.surveyForm.get('city').setValue('delhi');
-        // this.surveyForm.get('state').setValue('up');
-        // this.surveyForm.get('postalcode').setValue(777777777);
-        this.surveyForm.get('address').setValue(address.address);
-        this.surveyForm.get('latitude').setValue(address.lat);
-        this.surveyForm.get('longitude').setValue(address.long);
-        this.surveyForm.get('country').setValue(address.country);
-        this.surveyForm.get('city').setValue(address.city);
-        this.surveyForm.get('state').setValue(address.state);
-        this.surveyForm.get('postalcode').setValue(address.postalcode);
+         this.surveyForm.get('address').setValue("sdck");
+         this.surveyForm.get('latitude').setValue('1111111');
+         this.surveyForm.get('longitude').setValue('222222222');
+         this.surveyForm.get('country').setValue('India');
+         this.surveyForm.get('city').setValue('delhi');
+        this.surveyForm.get('state').setValue('up');
+         this.surveyForm.get('postalcode').setValue(777777777);
+       // this.surveyForm.get('address').setValue(address.address);
+        //this.surveyForm.get('latitude').setValue(address.lat);
+        //this.surveyForm.get('longitude').setValue(address.long);
+       // this.surveyForm.get('country').setValue(address.country);
+        //this.surveyForm.get('city').setValue(address.city);
+        //this.surveyForm.get('state').setValue(address.state);
+        //this.surveyForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.surveyForm.get('address').setValue('');
         this.surveyForm.get('latitude').setValue('');

@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { EmailModelPage } from 'src/app/email-model/email-model.page';
 
 @Component({
   selector: 'app-design',
@@ -66,6 +67,7 @@ export class DesignComponent implements OnInit {
     public modalController: ModalController,
     private storageService:StorageService,
     private network:NetworkdetectService,
+    private socialsharing: SocialSharing,
     private social: SocialSharing) { 
       this.segments ='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed';
       const latestDate = new Date();
@@ -253,6 +255,8 @@ this.network.networkConnect();
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+  this.DesignRefreshSubscription.unsubscribe();
   }
 
   // filterData(records : DesginDataModel[]) {
@@ -565,6 +569,30 @@ getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
   
 }
+
+shareWhatsapp(designData){
+  this.socialsharing.share(designData.prelimdesign.url);
+}
+
+ async shareViaEmails(id,designData){
+  const modal = await this.modalController.create({
+    component: EmailModelPage,
+    cssClass: 'email-modal-css',
+    componentProps: {
+      id:id,
+      designData:designData
+    },
+    
+  });
+  modal.onDidDismiss().then((data) => {
+    console.log(data)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
+    }
+});
+    return await modal.present();
+ }
 
 }
 
