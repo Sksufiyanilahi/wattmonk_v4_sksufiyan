@@ -3,7 +3,7 @@ import { ApiService } from '../api.service';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { UtilitiesService } from '../utilities.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DesginDataModel } from '../model/design.model';
+import { DesginDataModel, PrelimDesign } from '../model/design.model';
 import { UserRoles } from '../model/constants';
 import { AssigneeModel } from '../model/assignee.model';
 import { StorageService } from '../storage.service';
@@ -240,8 +240,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.apiService.deleteDesign(this.designId).subscribe((result) => {
         console.log('result', result);
         this.utilities.hideLoading().then(() => {
-          this.utilities.showSnackBar('Desgin deleted successfully');
+          this.utilities.showSnackBar(this.design.name+" "+'has been deleted successfully');
           this.navController.pop();
+          this.utilities.setHomepageDesignRefresh(true);
         });
       }, (error) => {
         this.utilities.hideLoading().then(() => {
@@ -297,6 +298,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   prelimfiles(event){
+    
+    
     console.log(this.imageName);
     console.log(event.target.files);
     // for(var i=0; i< event.target.files.length;i++){
@@ -312,24 +315,24 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
 
       var reader = new FileReader();
-reader.onload = (event: any) => {
-  var orientation = -1;
-let localUrl = event.target.result;
-// this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
-  // console.log(res,">><><><");
-  // this.image= res;  
-  this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
+      reader.onload = (event: any) => {
+      var orientation = -1;
+      let localUrl = event.target.result;
+        // this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
+       // console.log(res,">><><><");
+        // this.image= res;  
+    this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
     result => {
       this.image = result;
       console.warn('Size in bytes is now:', this.imageCompress.byteCount(result));
     }
-  );
-  
-// })
-}
-reader.readAsDataURL(event.target.files[0]);
-}
- b64toBlob = (b64Data, contentType='', sliceSize=512) => {
+    );
+
+    // })
+      }
+    reader.readAsDataURL(event.target.files[0]);
+      }
+   b64toBlob = (b64Data, contentType='', sliceSize=512) => {
   const byteCharacters = atob(b64Data);
   const byteArrays = [];
 
@@ -348,6 +351,18 @@ reader.readAsDataURL(event.target.files[0]);
 
   const blob = new Blob(byteArrays, {type: contentType});
   return blob;
+}
+
+remove(){
+  
+    this.prelimFiles=[];
+    this.imageName= [];
+    this.imagebox= false;
+    console.log(this.prelimFiles);
+    console.log(this.imageName);
+    this.commentsForm.get('prelimdesign').setValue('');
+
+
 }
 
 prelimupdate(event){
@@ -436,12 +451,19 @@ return blob;
               //   console.log(res,">>");
                 
               // })
-              this.reportDesignReviewSuccess();
+              if(this.isSelfUpdate){
+                this.reportDesignReviewSuccess();
+              }else{
+                this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res) =>{
+              this.utilities.getDesignDetailsRefresh();
+              
+              
      
             
-             
-            })
-          },err=>{
+              
+            });
+          }
+      },err=>{
             this.utilities.hideLoading().then(()=>{
               console.log(err);
               
@@ -449,7 +471,9 @@ return blob;
           })
         // })
     // }
-  }
+  })
+}
+
 
   reportDesignReviewFailure(){
     //console.log("Value is" + this.reviewIssuesForm.value);
@@ -505,7 +529,7 @@ return blob;
       
     }else if(this.isSelfUpdate && this.prelimFiles.length == 0)
     {
-      this.utilities.errorSnackBar("error");
+      this.utilities.errorSnackBar("Please attach file");
     }else{
       this.reportDesignReviewSuccess();
     }

@@ -49,7 +49,7 @@
         </ion-segment>
     <!-- </ion-grid> -->
     <ion-content style="overflow:hidden" scroll="false" >
-        <ion-tabs #tabs tyle="overflow:hidden">
+        <ion-tabs #tabs style="overflow:hidden">
             <ion-tab-bar slot="top" style="display:none;" >
                 <ion-tab-button tab="design">
                     <ion-label>Design</ion-label>
@@ -60,21 +60,23 @@
                 </ion-tab-button>
             </ion-tab-bar>
         </ion-tabs>
-        <ion-grid style="margin-top:10px">
-            <ion-row class="ion-padding-start ion-padding-end mrT">
-                <ion-col size="9">
+        <ion-grid>
+            <ion-row class="ion-padding-start ion-padding-end mrT"  style="background: #ffffff;">
+                <ion-col size="9"  style="background: #ffffff;">
+                    <p></p>
                     <!-- <span class="address-text"> -->
                     {{address == "" ? "No Address Found" : address}}
                     <!-- </span> -->
                 </ion-col>
               
                 <ion-col class="ion-text-end" *ngIf="!tabsDisabled" size="3">
+                    <p></p>
                     <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
                         Change
                     </span>
                 </ion-col>
                 <ion-col class="ion-text-end" *ngIf="tabsDisabled" size="3">
-                    <span class="edit_span">
+                    <span  [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
                         Change
                     </span>
                 </ion-col>
@@ -89,7 +91,8 @@
         <ion-row>
             <ion-col></ion-col>
             <ion-col size="auto">
-                <ion-button class="action-button-color" fill="clear" (click)="saveDesignForm()">Order Prelim Design</ion-button>
+                <ion-button class="action-button-color" fill="clear" (click)="saveDesignForm()">Save</ion-button>
+                <ion-button class="action-button-color" *ngIf="userdata.role.type=='clientsuperadmin'" fill="clear" (click)="sendDesignForm()">Send to Wattmonk</ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>

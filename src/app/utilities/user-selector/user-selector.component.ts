@@ -27,11 +27,18 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
   @Output() assigneeData = new EventEmitter<AssigneeModel>();
   private onChange: (assignee: number) => void;
   selectedUserId = null;
+  @Input() reviewAssigned:AssigneeModel;
   // assignee: AssigneeModel;
 
   constructor() {
+   
   }
-
+ngOnInit(){
+  if(this.reviewAssigned!=null){
+   this.selectAssignee(this.reviewAssigned);
+    console.log("ghello");
+  }
+}
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
@@ -57,10 +64,13 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
         error: 'Assignee is required'
       };
     }
+    console.log(this.reviewAssigned);
     return null;
+    
   }
 
   selectAssignee(assignee: AssigneeModel) {
+    console.log("this is",assignee)
     this.assigneeData.emit(assignee);
     this.assignees.forEach((item) => {
       item.selected = false;

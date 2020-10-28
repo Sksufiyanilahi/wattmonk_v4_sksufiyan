@@ -51,8 +51,8 @@
             <ion-col>
                 <ion-item class="ion-no-padding">
                     <ion-label position="floating">annual units (Kwh)*</ion-label>
-                    <ion-input class="form_input"  type="number" (ionInput)="numberfield($event)"
-                                formControlName="monthlybill"></ion-input>
+                    <ion-input class="form_input"  type="tel" (ionInput)="numberfield($event)"
+                                formControlName="monthlybill" maxLength="5"></ion-input>
                 </ion-item>
                 <div style="height: 5px;">
                     <div *ngIf="desginForm.get('monthlybill').dirty && desginForm.get('monthlybill').hasError('min')">
@@ -138,9 +138,9 @@
                     <ion-select  (ionChange)="showUpload($event)" class="form_input select_div" placeholder="new construction*"
                                     ok-text=""
                                 cancel-text=""
-                                formControlName="newconstruction" interface="popover">
+                                formControlName="newconstruction" interface="popover"  >
                         <ion-select-option value="true">Yes</ion-select-option>
-                        <ion-select-option value="false">No</ion-select-option>
+                        <ion-select-option  value="false">No</ion-select-option>
                     </ion-select>
                 </ion-item>
             </ion-col>
@@ -181,7 +181,7 @@
             <ion-col size="6" *ngIf='(showValue=="ground" || showValue=="both")'>
                     <ion-item class="ion-no-padding">
                         <ion-label position="floating" style="font-size: 12px;">tilt for ground mount*</ion-label>
-                        <ion-input class="form_input"  type="number" formControlName="tiltofgroundmountingsystem"></ion-input>
+                        <ion-input class="form_input"  type="tel" formControlName="tiltofgroundmountingsystem" maxlength="5"></ion-input>
                     </ion-item>
                     <div style="height: 5px;">
                         <div *ngIf="desginForm.get('tiltofgroundmountingsystem').dirty && desginForm.get('tiltofgroundmountingsystem').hasError('min')">
@@ -234,8 +234,8 @@
             </ion-row>
 
         <ion-row class="ion-margin-top">
-            <ion-label position="floating">Comments</ion-label>
-            <ion-col size="12" class="ion-no-padding">
+            <ion-label position="floating">Comments</ion-label></ion-row>
+           <ion-row class="ion-margin-top"> <ion-col size="12" class="ion-no-padding">
                 <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
                                 formControlName="comments"></ion-textarea>
             </ion-col>

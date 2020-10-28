@@ -156,5 +156,12 @@ export class CompleteddesignComponent implements OnInit {
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
   }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.designRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    this.cdr.detach();
+  }
 
 }

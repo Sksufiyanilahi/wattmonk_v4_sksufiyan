@@ -77,6 +77,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   invertermade: string;
   onFormSubmit:boolean=true;
   solarMakeDisposable: Subscription;
+  send:any;
+  value:number;
 
 
   constructor(
@@ -91,7 +93,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     private router:Router
   ) {
   
-    const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     this.desginForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
@@ -111,7 +113,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       mountingtype: new FormControl('', [Validators.required]),
       // jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
-      newconstruction: new FormControl(''),
+      newconstruction: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim'),
@@ -176,7 +178,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     })
     this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
-      if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {
+      if (event === ScheduleFormEvent.SAVE_DESIGN_FORM || event === ScheduleFormEvent.SEND_DESIGN_FORM) {
+        this.send=event;
         this.addForm();
       
       }
@@ -199,20 +202,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        this.desginForm.get('address').setValue('fffff');
-        this.desginForm.get('latitude').setValue('444444444444');
-        this.desginForm.get('longitude').setValue('555555555');
-        this.desginForm.get('country').setValue('india');
-        this.desginForm.get('city').setValue('Lucknow');
-        this.desginForm.get('state').setValue('UP');
-        this.desginForm.get('postalcode').setValue(3232343);
-        //  this.desginForm.get('address').setValue(address.address);
-        //  this.desginForm.get('latitude').setValue(address.lat);
-        //  this.desginForm.get('longitude').setValue(address.long);
-        //  this.desginForm.get('country').setValue(address.country);
-        //  this.desginForm.get('city').setValue(address.city);
-        //  this.desginForm.get('state').setValue(address.state);
-        //  this.desginForm.get('postalcode').setValue(address.postalcode);
+        //this.desginForm.get('address').setValue('fffff');
+        //this.desginForm.get('latitude').setValue('444444444444');
+        //this.desginForm.get('longitude').setValue('555555555');
+        //this.desginForm.get('country').setValue('india');
+        //this.desginForm.get('city').setValue('Lucknow');
+        //this.desginForm.get('state').setValue('UP');
+        //this.desginForm.get('postalcode').setValue(3232343);
+          this.desginForm.get('address').setValue(address.address);
+          this.desginForm.get('latitude').setValue(address.lat);
+          this.desginForm.get('longitude').setValue(address.long);
+          this.desginForm.get('country').setValue(address.country);
+        this.desginForm.get('city').setValue(address.city);
+          this.desginForm.get('state').setValue(address.state);
+          this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -535,30 +538,55 @@ getDesignDetails() {
 
         if (this.designId === 0) {
 
-
-          this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
-            this.uploaarchitecturedesign(response.id,'architecturaldesign');
-            this.uploadpreliumdesign(response.id,'attachments')
-            this.utils.hideLoading().then(() => {
-              console.log('Res', response);
-              this.router.navigate(['/homepage'])
-              // this.utils.showSnackBar('Design have been saved');
-              this.utils.setHomepageDesignRefresh(true);
-              // this.navController.pop();
-              // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-              //   modal.present();
-              //   modal.onWillDismiss().then((dismissed) => {
-                  // this.utils.setHomepageDesignRefresh(true);
-              //     this.navController.pop();
-              //   });
-              // });
-            });
-          }, responseError => {
-            this.utils.hideLoading();
-              const error: ErrorModel = responseError.error;
-              this.utils.errorSnackBar(error.message);
-            });
-         
+          if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
+            this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+              this.uploaarchitecturedesign(response.id,'architecturaldesign');
+              this.uploadpreliumdesign(response.id,'attachments')
+              this.utils.hideLoading().then(() => {
+                console.log('Res', response);
+                this.router.navigate(['/homepage'])
+                // this.utils.showSnackBar('Design have been saved');
+                this.utils.setHomepageDesignRefresh(true);
+                // this.navController.pop();
+                // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+                //   modal.present();
+                //   modal.onWillDismiss().then((dismissed) => {
+                    // this.utils.setHomepageDesignRefresh(true);
+                //     this.navController.pop();
+                //   });
+                // });
+              
+              });
+            }, responseError => {
+              this.utils.hideLoading();
+                const error: ErrorModel = responseError.error;
+                this.utils.errorSnackBar(error.message);
+              });
+           
+            }
+            else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
+              this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+                this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                this.uploadpreliumdesign(response.id,'attachments')
+                
+                this.utils.hideLoading().then(() => {
+                  this.value = response.id;
+                  this.sendtowattmonk();
+                 // console.log('Res', response);
+                 // this.router.navigate(['/homepage'])
+                  // this.utils.showSnackBar('Design have been saved');
+                 // this.utils.setHomepageDesignRefresh(true);
+                 
+                  
+                });
+              }
+            , responseError => {
+                this.utils.hideLoading();
+                  const error: ErrorModel = responseError.error;
+                  this.utils.errorSnackBar(error.message);
+                });
+              }
+          
 
         } else {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
@@ -617,6 +645,9 @@ getDesignDetails() {
       }
       else if(this.desginForm.value.rooftype==''){
         this.utils.errorSnackBar('Please fill the rooftype.');
+      }
+      else if(this.desginForm.value.newconstruction==''){
+        this.utils.errorSnackBar('Please select construction type');
       }
       else if(this.desginForm.value.architecturaldesign==''){
         this.utils.errorSnackBar('Please attach architectural design.');
@@ -833,4 +864,30 @@ ioniViewDidEnter(){
 
   // }
 
+  sendtowattmonk(){
+    var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+    const postData = {
+      outsourcedto: 232,
+        isoutsourced: "true",
+        status: "outsourced",
+        designacceptancestarttime: designacceptancestarttime
+      };
+  
+      this.utils.showLoading('Assigning').then(()=>{
+        debugger;
+        this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
+          this.utils.hideLoading().then(()=>{
+            ; 
+            console.log('reach ', value);
+           
+            this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
+            this.router.navigate(['/homepage'])
+            this.utils.setHomepageDesignRefresh(true);
+          })
+        }, (error) => {
+          this.utils.hideLoading();
+        });
+      })
+  }
 }

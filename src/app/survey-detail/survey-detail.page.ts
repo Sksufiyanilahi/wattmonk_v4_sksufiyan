@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { ROLES } from '../contants';
 import { ModalPageComponent } from './modal-page/modal-page.component';
+import { User } from '../model/user.model';
 
 @Component({
   selector: 'app-survey-detail',
@@ -33,6 +34,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   listOfAssignees: AssigneeModel[] = [];
   drawerState = DrawerState.Bottom;
   date: Date;
+  user:User;
   rescheduleForm: FormGroup;
   assigned = false;
   assigneeForm: FormGroup;

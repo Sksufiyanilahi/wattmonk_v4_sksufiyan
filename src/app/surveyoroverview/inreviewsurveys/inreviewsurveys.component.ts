@@ -152,5 +152,12 @@ export class InreviewsurveysComponent implements OnInit {
     console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
     
   }
+  ngOnDestroy(): void {
+    // this.refreshSubscription.unsubscribe();
+     // this.routeSubscription.unsubscribe();
+     this.dataRefreshSubscription.unsubscribe();
+   this.surveyRefreshSubscription.unsubscribe();
+   this.cdr.detach();
+   }
 
 }

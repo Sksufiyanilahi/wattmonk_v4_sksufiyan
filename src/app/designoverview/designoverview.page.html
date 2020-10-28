@@ -1,12 +1,45 @@
-<ion-header>
+<!--<ion-header>
   <ion-toolbar>
-    <ion-title>Home</ion-title>
-  </ion-toolbar>
-</ion-header>
+    <ion-title>Home
+      <div style="float: right;display: flex; width:30%">
+     <div ><ion-img src="/assets/images/icons8-search.svg" class="notification-icon" ></ion-img></div>
+     <div  style="float: right;" [routerLink]="['/profile']" routerDirection="forward">
+      <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
+       <span class="badge">
+                  4
+              </span> 
+  </div></div>
+    </ion-title>
+    </ion-toolbar>
+  
+</ion-header>-->
 
-<ion-content [forceOverscroll]="false">
+<ion-content [forceOverscroll]="false" style="position: relative;">
+  <ion-grid>
+    <ion-row class="ion-align-items-center">
+        <ion-col>
+            <h1 class="ion-no-padding ion-no-margin home">Home</h1>
+        </ion-col>
+        <!-- <ion-col *ngIf="showSearchBar === true" >
+            <ion-searchbar debounce="0" placeholder="home" class="custom"></ion-searchbar>
+        </ion-col> -->
+        <ion-col size="auto">
+            <div class="notification-padding" (click)="searchbar()">
+                <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
+            </div>
+        </ion-col>
+        <ion-col size="auto" style="position: relative;">
+            <div class="notification-padding" [routerLink]="['/profile']" routerDirection="forward">
+                <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
+                <!-- <span class="badge">
+                            4
+                        </span> -->
+            </div>
+        </ion-col>
+    </ion-row>
+</ion-grid>
   <ion-tabs>
-    <ion-tab-bar slot="top">
+    <ion-tab-bar slot="top" style="margin-top: 52px;">
       <ion-tab-button tab="newdesigns">
         <ion-label class="font">In Designing</ion-label>
       </ion-tab-button>

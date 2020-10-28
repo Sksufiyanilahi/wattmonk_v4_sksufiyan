@@ -179,6 +179,7 @@ this.network.networkConnect();
   fetchPendingSurveys(event, showLoader: boolean) {
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
+    console.log("data",this.segments);
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
       this.apiService.getSurveyorSurveys(this.segments).subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
@@ -407,80 +408,91 @@ this.network.networkConnect();
   }
 
   assignToSurveyor() {
-    if (this.assignForm.status === 'INVALID') {
+    console.log(this.surveyData.createdby.id);
+      
+    if(this.assignForm.status === 'INVALID' && (this.surveyData.status === 'reviewassigned' || this.surveyData.status === 'reviewfailed' || this.surveyData.status === 'reviewpassed')){
+      this.utils.errorSnackBar('Please select a analyst');
+    }
+    else if (this.assignForm.status === 'INVALID' && this.surveyData.status === 'requestaccepted') {
       this.utils.errorSnackBar('Please select a surveyor');
     } else {
-      var designstarttime = new Date();
-      var milisecond = designstarttime.getTime();
-      var additonalhours = 0;
-      if(this.surveyData.requesttype == "prelim"){
-        console.log(parseInt(this.selectedDesigner.jobcount) );
-        additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
-        
-        designstarttime.setHours( designstarttime.getHours() + additonalhours );
-      }else{
-        additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
-        designstarttime.setHours( designstarttime.getHours() + additonalhours );
-      }
-      console.log(this.selectedDesigner);
-      var postData = {};
-      if (this.surveyData.createdby.id == this.userData.id) {
-        if (this.selectedDesigner.company == this.userData.company) {
-          if(this.selectedDesigner.role.type=="qcinspector"){
-            postData = {
-              reviewassignedto: this.selectedDesigner.id,
-              status: "reviewassigned",
-              reviewstarttime: milisecond
-            }; 
-          }
-         if(this.selectedDesigner.role.type=="surveyor") { postData = {
-            designassignedto: this.selectedDesigner.id,
-            isoutsourced: "false",
-            status: "surveyassigned",
-            designstarttime: designstarttime
-          }; 
-          
-        }
-        
-        }
-        else {
-          postData = {
-            outsourcedto: this.selectedDesigner.id,
-            isoutsourced: "true",
-            status: "outsourced"
-          };
-        }
-      } else {
-        if(this.selectedDesigner.role.type=="surveyor"){ postData = {
-          designassignedto: this.selectedDesigner.id,
-          status: "surveyassigned",
-          designstarttime: designstarttime
-        };}
+      
+     
+      var surveystarttime = new Date();
+      var milisecond = surveystarttime.getTime();
+    var additonalhours = 0;
+    if(this.surveyData.requesttype == "prelim"){
+      console.log(parseInt(this.selectedDesigner.jobcount) );
+      additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
+      
+      surveystarttime.setHours( surveystarttime.getHours() + additonalhours );
+    }else{
+      additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
+      surveystarttime.setHours( surveystarttime.getHours() + additonalhours );
+    }
+    console.log(this.selectedDesigner);
+    var postData = {};
+    if (this.surveyData.createdby.id == this.userData.id) {
+      if (this.selectedDesigner.company == this.userData.company) {
         if(this.selectedDesigner.role.type=="qcinspector"){
           postData = {
             reviewassignedto: this.selectedDesigner.id,
             status: "reviewassigned",
             reviewstarttime: milisecond
-          };
+          }; 
         }
+       if(this.selectedDesigner.role.type=="surveyors") { postData = {
+          assignedto: this.selectedDesigner.id,
+          isoutsourced: "false",
+          status: "surveyassigned",
+          surveystarttime: surveystarttime
+        }; 
+        
       }
-      this.utils.showLoading('Assigning').then(()=>{
-        this.apiService.updateSurveyForm(postData, this.surveyId).subscribe((value) => {
-          this.utils.hideLoading().then(()=>{
-            ; 
-            console.log('reach ', value);
-            this.utils.showSnackBar('Survey request has been assigned to' + ' ' + this.selectedDesigner.firstname + ' ' +this.selectedDesigner.lastname +' ' +'successfully');
-            this.dismissBottomSheet();
-            this.showBottomDraw = false;
-            this.utils.setHomepageDesignRefresh(true);
-          })
-        }, (error) => {
-          this.utils.hideLoading();
+      
+      }
+      else {
+        postData = {
+          outsourcedto: this.selectedDesigner.id,
+          isoutsourced: "true",
+          status: "outsourced"
+        };
+      }
+    } else {
+      if(this.selectedDesigner.role.type=="surveyors"){ postData = {
+        assignedto: this.selectedDesigner.id,
+        status: "surveyassigned",
+        surveystarttime: surveystarttime
+      };}
+      if(this.selectedDesigner.role.type=="qcinspector"){
+        postData = {
+          reviewassignedto: this.selectedDesigner.id,
+          status: "reviewassigned",
+          reviewstarttime: milisecond
+        };
+      }
+    }
+    this.utils.showLoading('Assigning').then(()=>{
+      this.apiService.updateSurveyForm(postData, this.surveyId).subscribe((value) => {
+        this.utils.hideLoading().then(()=>{
+          ; 
+          console.log('reach ', value);
+         
+          this.utils.showSnackBar('Survey request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
+         
           this.dismissBottomSheet();
           this.showBottomDraw = false;
-        });
-      })
-      }
+          this.utils.sethomepageSurveyRefresh(true);
+          
+        })
+      }, (error) => {
+        this.utils.hideLoading();
+        this.dismissBottomSheet();
+        this.showBottomDraw = false;
+      });
+    })
+    }
+
 
   }
 
@@ -643,7 +655,7 @@ this.network.networkConnect();
      
     
   }
-  hareWhatsapp(designData){
+    shareWhatsapp(designData){
     this.socialsharing.share(designData.prelimdesign.url);
   }
   

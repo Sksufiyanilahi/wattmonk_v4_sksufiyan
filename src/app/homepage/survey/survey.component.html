@@ -32,7 +32,7 @@
                             </span>
                     </ion-col>
                     <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
-                        <div class="ion-no-padding custom-card" style="height: 100%;">
+                        <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
                             <p class="customer-name">{{surveyData.name}}
                             <span  [routerLink]="['/survey-detail/',surveyData.id]"
                             routerDirection="forward" class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',surveyData.id]" routerDirection="forward">
@@ -58,13 +58,13 @@
                             <span class="customer-address z-100 m-0"
                                   (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
                                   <ion-row style="margin-bottom: 8px;"  [routerLink]="['/survey-detail/',surveyData.id]" class="m-0">
-                                    <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                                    <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
+                                    
+                                    <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.source}}</span>
                                    
                                 </ion-row>
                             <ion-row class="ion-no-margin">
                                 <ion-col></ion-col>
-                                <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type !=='wattmonkadmins'">
+                                <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type =='surveyor'">
                                          <ion-button  class="ion-no-margin ion-no-padding z-100" fill="clear" 
                                          [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                          routerDirection="forward">
@@ -93,6 +93,11 @@
                         >Reassign</span>
                         </ion-col>
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
+                        *ngIf="segments=='status=surveyassigned&status=surveyinprocess'" style="margin-bottom: 5px;">
+                <span class="ion-text-end action-button-color z-100"
+                (click)="openSurveyors(surveyData.id)">Reassign</span>
+            </ion-col>
+                        <ion-col size="auto" class="ion-no-margin ion-no-padding"
                                     *ngIf="segments=='status=surveycompleted'" style="margin-bottom: 5px;">
                             <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" class="ion-text-end action-button-color z-100"
                                     (click)="openAnalysts(surveyData.id,surveyData)">Assign Review</span>
@@ -115,7 +120,7 @@
                                 {{surveyData.datetime | date: 'hh:mm a'}}
                             </span> -->
         
-                        </div>
+                        </ion-card>
         
                     </ion-col>
                 </ion-row>

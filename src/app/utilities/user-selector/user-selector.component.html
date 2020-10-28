@@ -6,7 +6,7 @@
       <div *ngFor="let assignee of assignees" class="assignee-margin " (click)="selectAssignee(assignee)">
         
         <div class="selected d-flex"
-             [class.selected]="assignee.selected" [class.normal]="!assignee.selected">
+             [class.selected]="assignee.selected" [class.normal]="!assignee.selected ">
              <ion-badge class="badge" style="z-index:999">{{assignee?.jobcount}}</ion-badge>
           <img *ngIf="assignee.contractorlogo && assignee.contractorlogo.logo" [src]="assignee.contractorlogo.logo.url" class="assignee-image"/>
           <div *ngIf="!assignee.contractorlogo || !assignee.contractorlogo.logo" class="assignee-image d-flex flex-row align-center justify-center">
@@ -16,7 +16,7 @@
             </div>
           </div>
         </div>
-        <small style="font-size: 8px;">{{assignee?.firstname}} <br />{{assignee?.lastname}}</small>
+        <small style="font-size: 8px;">{{assignee?.firstname=='Ankit' ? 'Wattmonk' : assignee?.firstname}} <br />{{assignee?.lastname=="Sheoran" ? '' : assignee?.lastname}}</small>
       </div>
     </div>
   </div>

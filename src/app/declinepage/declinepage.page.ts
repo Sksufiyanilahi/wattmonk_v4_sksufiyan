@@ -120,7 +120,7 @@ export class DeclinepagePage implements OnInit {
 
   submit(){
 
-    if(this.exceedfileSize < 1048576){
+    if(this.exceedfileSize < 1048576 && this.exceedfileSize!=0){
       this.uploadFile();
        
     
@@ -151,7 +151,7 @@ export class DeclinepagePage implements OnInit {
 
   uploadFile(){
     this.utilities.showLoading('Uploading').then(()=>{
-      this.apiservice.uploadDeclineImage(this.id,'prelimdesign',this.blob,this.filename).subscribe((res:any)=>{
+      this.apiservice.uploadDeclineImage(this.id,'requestdeclineattachment',this.blob,this.filename).subscribe((res:any)=>{
         this.utilities.hideLoading().then(()=>{
              
               let data={

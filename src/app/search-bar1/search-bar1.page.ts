@@ -150,6 +150,7 @@ this.DesignModel=this.sample1;
   openDesigners(id: number,designData) {
     console.log(designData);
     this.designerData = designData;
+    this.SearchData=designData;
     console.log(designData);
     if (this.listOfAssignees.length === 0) {
   
@@ -350,14 +351,15 @@ this.DesignModel=this.sample1;
   }
 
  accept(id,data:string){
-
+  let event=null
     let status={
       status:data
     }
     this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
       
-    })
-    this.utils.setHomepageDesignRefresh(true);
+    }) 
+    this.searchfor(event);
+    
   }
 
 
@@ -561,12 +563,13 @@ if(this.selectedDesigner.role.type=="surveyor"){
   this.assignToSurveyor();
 }
 if(this.selectedDesigner.role.type=="qcinspector"){
+ console.log(this.SearchData)
   if(this.SearchData.type=="design"){
   this.assignToDesigner();}
   if(this.SearchData.type=="survey"){
     this.assignToSurveyor();}
 }
-this.SearchData="";
+
 }
 
 

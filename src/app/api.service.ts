@@ -264,7 +264,7 @@ export class ApiService {
   }
 
   profileNotification(){
-    return this.http.get(BaseUrl + '/notifications/user/' + this.userId,{ headers: this.headers })
+    return this.http.get(BaseUrl + '/notifications?user=' + this.userId + "&_sort=updated_at:DESC",{ headers: this.headers })
   }
   getGoogleImage(lat:number, lng:number): Observable<Blob> {
     var imageurl = "https://maps.googleapis.com/maps/api/staticmap?zoom=19&size=1200x1600&scale=4&maptype=satellite&center=" + lat + ","+ lng + "&key=" + GOOGLE_API_KEY;

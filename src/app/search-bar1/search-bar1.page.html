@@ -67,7 +67,7 @@
 
 
       <ion-col *ngIf="search?.requesttype=='prelim'&& search?.status=='designcompleted'">
-          <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(search?.id)"
+          <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(search?.id,search)"
           >Assign Review</span>
       </ion-col>
       <ion-col *ngIf="search?.status == 'reviewpassed' || search?.status == 'reviewfailed'|| search?.status == 'reviewassigned'">
@@ -152,7 +152,7 @@
 </ion-card>
 
 </ion-content>
-<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="400" draggable="false" disableDrag="true"
+<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
                    shouldBounce="true" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
     <form [formGroup]="assignForm">
         <ion-grid class="drawer">
@@ -162,7 +162,7 @@
                                        formControlName="assignedto"></app-user-selector>
                 </ion-col>
             </ion-row>
-            <ion-row style="margin-left: 8px;">
+           <!-- <ion-row style="margin-left: 8px;">
                 <ion-col size="12">
                     <span class="input-placeholder">comments</span>
                 </ion-col>
@@ -170,7 +170,7 @@
                     <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
                                   formControlName="comment"></ion-textarea>
                 </ion-col>
-            </ion-row>
+            </ion-row>-->
             <ion-row style="justify-content: flex-end;">
                 <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
                     <ion-button class="buttom-drawer-button" fill="clear" (click)="assign()">

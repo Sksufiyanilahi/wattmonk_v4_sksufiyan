@@ -27,7 +27,7 @@ export class ProfileNotificationComponent implements OnInit {
             this.notification = res;
             this.showLoader=true;
             console.log(this.notification);
-          
+            console.log(this.notification.length);
         })
 
     }

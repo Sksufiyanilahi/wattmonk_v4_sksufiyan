@@ -90,10 +90,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
          this.surveyForm.get('city').setValue('delhi');
         this.surveyForm.get('state').setValue('up');
          this.surveyForm.get('postalcode').setValue(777777777);
-       // this.surveyForm.get('address').setValue(address.address);
+       //this.surveyForm.get('address').setValue(address.address);
         //this.surveyForm.get('latitude').setValue(address.lat);
         //this.surveyForm.get('longitude').setValue(address.long);
-       // this.surveyForm.get('country').setValue(address.country);
+        //this.surveyForm.get('country').setValue(address.country);
         //this.surveyForm.get('city').setValue(address.city);
         //this.surveyForm.get('state').setValue(address.state);
         //this.surveyForm.get('postalcode').setValue(address.postalcode);
@@ -188,6 +188,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             this.surveyForm.get('status').setValue('surveyassigned');
           }
           console.log(this.surveyForm.value);
+          debugger;
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
               this.utilities.hideLoading();

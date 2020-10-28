@@ -52,6 +52,13 @@ export class InreviewDesignComponent implements OnInit {
       }
     });
   }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.DesignRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    this.cdr.detach();
+  }
 
   getDesigns(event: CustomEvent) {
     let showLoader = true;

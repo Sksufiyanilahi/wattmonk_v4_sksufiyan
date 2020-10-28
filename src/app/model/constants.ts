@@ -5,7 +5,8 @@ export enum ScheduleFormEvent {
   NO_EVENT = 0,
   SAVE_DESIGN_FORM = 1,
   SAVE_SURVEY_FORM = 2,
-  START_SURVEY = 3
+  START_SURVEY = 3,
+  SEND_DESIGN_FORM = 4
 }
 
 export enum UserRoles {

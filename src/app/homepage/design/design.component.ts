@@ -58,6 +58,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   assigneeData: any;
   selectedDesigner: any;
   netSwitch: boolean;
+ reviewAssignedTo:any;
   
 
   constructor(
@@ -76,7 +77,13 @@ export class DesignComponent implements OnInit, OnDestroy {
     public alertController: AlertController,
     private socialsharing: SocialSharing
   ) {
-    this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+    this.userData = this.storageService.getUser();
+
+    if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
+      this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+    }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin'){
+      this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
+    }
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -100,6 +107,7 @@ this.network.networkConnect();
     
   }
   segmentChanged(event){
+   
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
@@ -160,7 +168,7 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
-    this.userData = this.storageService.getUser();
+    // this.userData = this.storageService.getUser();
     console.log(this.userData);
     
     // this.router.navigate(['homepage/design/pending']);
@@ -435,14 +443,19 @@ this.network.networkConnect();
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
+    this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
+
    // console.log("this works",this.listOfAssignees)
   }
 
   assignToDesigner() {
       console.log(this.designerData.createdby.id);
-      ;
-    if (this.assignForm.status === 'INVALID') {
+      
+    if(this.assignForm.status === 'INVALID' && (this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
+      this.utils.errorSnackBar('Please select a analyst');
+    }
+    else if (this.assignForm.status === 'INVALID' && this.designerData.status === 'requestedaccepted') {
       this.utils.errorSnackBar('Please select a designer');
     } else {
       
@@ -508,9 +521,11 @@ this.network.networkConnect();
           console.log('reach ', value);
          
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
+         
           this.dismissBottomSheet();
           this.showBottomDraw = false;
           this.utils.setHomepageDesignRefresh(true);
+          
         })
       }, (error) => {
         this.utils.hideLoading();
@@ -565,6 +580,7 @@ this.network.networkConnect();
   openAnalysts(id: number,designData) {
     console.log("this is",designData);
     this.designerData = designData;
+    this.reviewAssignedTo=designData.reviewassignedto;
     
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Analysts').then(() => {
@@ -685,7 +701,7 @@ this.network.networkConnect();
       status:data
     }
     this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
-      this.getDesigns(null);
+      this.utils.setHomepageDesignRefresh(true);
     })
   }
 

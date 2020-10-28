@@ -381,7 +381,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
-    if(this.version.toString() !== this.update_version){
+    if(this.version !== this.update_version && this.update_version !==''){
         
       setTimeout(()=>{
     

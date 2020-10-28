@@ -257,6 +257,7 @@ this.network.networkConnect();
     // this.routeSubscription.unsubscribe();
     this.dataRefreshSubscription.unsubscribe();
   this.DesignRefreshSubscription.unsubscribe();
+  this.cdr.detach();
   }
 
   // filterData(records : DesginDataModel[]) {
@@ -593,6 +594,7 @@ shareWhatsapp(designData){
 });
     return await modal.present();
  }
+
 
 }
 

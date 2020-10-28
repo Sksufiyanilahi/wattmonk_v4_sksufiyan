@@ -53,6 +53,13 @@ console.log(this.currentDate.toISOString());
 
  
   }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.designRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    this.cdr.detach();
+  }
 
 
   ionViewDidEnter(event){
