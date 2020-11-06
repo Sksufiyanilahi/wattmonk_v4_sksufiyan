@@ -15,7 +15,7 @@ import { DesginDataModel } from './model/design.model';
 import { InverterMadeModel } from './model/inverter-made.model';
 import { AssigneeModel } from './model/assignee.model';
 import { SearchModel } from './model/search.model';
-import { BaseUrl } from './contants';
+import { BaseUrl,PlatformUpdateUrl } from './contants';
 import { GOOGLE_API_KEY } from './model/constants';
 import { UtilitiesService } from './utilities.service';
 import { BehaviorSubject } from 'rxjs';
@@ -42,6 +42,7 @@ export class ApiService {
   public design : Observable<DesignModel>;
 
   public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  version = new BehaviorSubject<string>('');
 
 
   constructor(
@@ -50,6 +51,7 @@ export class ApiService {
     private utilities:UtilitiesService,
     private auth: AuthGuardService
   ) {
+    this.getUpgradeMessage();
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
       //Do task when no internet connection
@@ -175,7 +177,9 @@ export class ApiService {
   getAnalystDesign(search :string){
     return this.http.get<DesginDataModel[]>(BaseUrl+'/userdesign?id='+this.userId+'&'+search,{headers:this.headers});
   }
-
+  getProfileDetails(){
+    return this.http.get<DesginDataModel[]>(BaseUrl+'/users/me',{headers:this.headers});
+  }
   refreshHeader() {
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -203,7 +207,7 @@ export class ApiService {
   }
 
   getSurveyors(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=', { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId, { headers: this.headers });
   }
 
   getAnalysts(): Observable<AssigneeModel[]> {
@@ -260,10 +264,17 @@ export class ApiService {
   updateUser(id, data){
     return this.http.put(BaseUrl + '/users/'+ id, data, { headers: this.uploadHeaders } );
   }
-
-  profileNotification(){
-    return this.http.get(BaseUrl + '/notifications/user/' + this.userId,{ headers: this.headers })
+  getCountOfUnreadNotifications(){
+    return this.http.get(BaseUrl+ "/Notifications/count?user=" + this.userId + "&status=unread", { headers: this.headers});
   }
+  profileNotification(){
+    return this.http.get(BaseUrl + '/notifications?user=' + this.userId + "&_sort=updated_at:DESC",{ headers: this.headers })
+  }
+
+  updateNotification(id,status){
+    return this.http.put(BaseUrl + '/notifications/' + id,status,{ headers: this.headers })
+  }
+
   getGoogleImage(lat:number, lng:number): Observable<Blob> {
     var imageurl = "https://maps.googleapis.com/maps/api/staticmap?zoom=19&size=1200x1600&scale=4&maptype=satellite&center=" + lat + ","+ lng + "&key=" + GOOGLE_API_KEY;
     return this.http.get(imageurl, { responseType: 'blob' });
@@ -280,7 +291,9 @@ export class ApiService {
   design_activityDetails(designid){
     return this.http.get(BaseUrl+ "designs/" + designid, { headers: this.headers});
   }
-
+  createPayment(data){
+    return this.http.post(BaseUrl + '/createpayment',data,{ headers: this.uploadHeaders });
+  }
   survey_activityDetails(surveyid){
     return this.http.get(BaseUrl+ "surveys/" + surveyid, { headers: this.headers});
   }
@@ -288,24 +301,14 @@ export class ApiService {
     this.solarMakeValue.next(value);
   }
 
-  editDesign(id, inputData): Observable<DesignModel>{
+  editDesign(id:number, inputData:any): Observable<DesignModel>{
    
     return this.http
-    .put<DesignModel>(BaseUrl + "designs/"+ id, inputData, {
+    .put<DesignModel>(BaseUrl + "designs/"+ id, JSON.stringify(inputData), {
+      headers: this.headers,
       
-      observe: "response"
     })
-    .pipe(
-      map(value => {
-        const member: DesignModel = value.body;
-        return member;
-      }),
-      catchError((err: HttpErrorResponse) => {
-        console.log(err);
-        //   this.utils.showApiError(err.error.message);
-        return throwError(err.error.message);
-      })
-    );
+  
   }
 
   pushtoken(id,data){
@@ -315,18 +318,25 @@ export class ApiService {
   getTeamData(): Observable<User[]> {
     return this.http.get<User[]>(BaseUrl + "/users?_sort=created_at:desc&parent="+this.parentId+"&id_ne="+this.parentId, {
       headers: this.headers,
-      observe: "response"
+   
     })
-    .pipe(
-      map(value => {
-        const members: User[] = value.body;
-        return members;
-      }),
-      catchError((err: HttpErrorResponse) => {
-        return throwError(err.error.message);
-      })
-    );
+   
   
+    }
+
+    update_message(){
+      return this.http.get(PlatformUpdateUrl + 'platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app', {
+        headers: this.headers,
+      
+      })
+    
+    }
+
+    getUpgradeMessage(){
+      this.update_message().subscribe(res=>{
+        console.log(res);
+        this.version.next(res[0].appversion);
+      })
     }
   
 }

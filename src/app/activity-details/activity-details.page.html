@@ -49,7 +49,7 @@
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'created'">Unassigned</span>
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'designassigned'">Design Assigned</span>
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'reviewassigned'">In Review</span>
- <span class="chipdetail" *ngIf="activity_details?.isoutsourced == 'true'" style="background-color: #95AFC0;" >Waiting for acceptance</span>
+ <span class="chipdetail" *ngIf="activity_details?.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;">Waiting for acceptance</span>
  <span *ngIf="activity_details?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;">
   pending
 </span>
@@ -57,7 +57,7 @@
   <ion-card  *ngFor="let activities of activity_details?.activities" class="custom-card"  >
   <span style="float: left; font-size: smaller;">{{activities.updated_at | date: 'dd MMM yyyy'}}</span><br><br>
   <span style="font-size:medium; float:left; color: black;">{{activities.activity}}</span><br><br>
-<span style="float: right !important; font-size: small; font-style: italic;">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
+<span style="float: right !important; font-size: small; font-style: italic;" *ngIf="activities.performer!=null">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
 
 </ion-card>
 </ion-content>

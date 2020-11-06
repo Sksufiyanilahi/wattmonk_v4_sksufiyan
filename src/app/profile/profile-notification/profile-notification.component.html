@@ -1,7 +1,7 @@
 <ion-content style="--background: #e9f1ff;">
    <ion-grid style="text-align: center;">
        <ion-spinner name="dots" *ngIf="!showLoader"></ion-spinner>
-    <ion-row *ngIf="notification.length >0;else noNotification">
+    <ion-row *ngIf="notification.length>0;else noNotification">
       <ion-col class="padding_adjust">
         <ion-item lines="none" style="--background: #e9f1ff;" *ngFor="let notifications of notification">
           <ion-img class="profile-icon" src="/assets/images/icons8-checked.svg"></ion-img>
@@ -12,12 +12,12 @@
         </ion-item>
       </ion-col>
     </ion-row>
-        <ng-template #noNotification>
-          <ion-row>
-            <ion-col style="text-align: center;margin-top: 50%;"> 
-              No Notification Found
-            </ion-col>
-          </ion-row>
-        </ng-template>
+    <ng-template #noNotification>
+      <ion-row>
+        <ion-col *ngIf="disableContent" style="text-align: center;margin-top: 50%;"> 
+          No Notification Found
+        </ion-col>
+      </ion-row>
+    </ng-template>
   </ion-grid>
 </ion-content>

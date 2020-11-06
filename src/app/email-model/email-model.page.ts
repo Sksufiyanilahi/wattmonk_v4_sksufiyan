@@ -119,17 +119,21 @@ export class EmailModelPage implements OnInit {
         });
        // this.dialogRef.close( );
      }
-    
+     this.selectedEmails=[]; 
    },
    error => {
    
     this.util.errorSnackBar(
       "Something went wrong. Please try again."
     );
-    
-  })
-  
- }
+    this.selectedEmails=[];
+      }
+      )
+   
+      
+  }
+
+
  cancel(){
   this.modalctrl.dismiss({
     'dismissed': true,

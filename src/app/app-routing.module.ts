@@ -128,7 +128,11 @@ const routes: Routes = [
   {
     path: 'email-model',
     loadChildren: () => import('./email-model/email-model.module').then( m => m.EmailModelPageModule)
+  },  {
+    path: 'resendpagedialog',
+    loadChildren: () => import('./resendpagedialog/resendpagedialog.module').then( m => m.ResendpagedialogPageModule)
   }
+
 
 ];
 @NgModule({

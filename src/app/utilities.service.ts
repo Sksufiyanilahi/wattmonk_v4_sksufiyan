@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
 import { AddressModel } from './model/address.model';
 import { AssigneeModel } from './model/assignee.model';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class UtilitiesService {
     public loadingController: LoadingController,
     private toastController: ToastController,
     private alertController: AlertController,
-    private modalController: ModalController
+    private modalController: ModalController,
   ) {
   }
 
@@ -237,6 +238,19 @@ export class UtilitiesService {
     }
   }
 
+  getRemainingTime(endtime:string){
+    var now = new Date();
+    var t = Date.parse(endtime) - Date.parse(now.toString());
+    var minutes = Math.floor( (t/1000/60) % 60 );
+    var hours = Math.floor( (t/(1000*60*60)) % 24 );
+    if (hours > 0 || minutes > 0){
+      return "" + hours + "h : " + minutes + "m";
+    }else{
+      return "0h : 0m";
+    }
+  }
+
+
   b64toBlob(b64Data) {
     let contentType = b64Data.split(',')[0].split(':')[1].split(';')[0] || '';
     var sliceSize = 256;
@@ -282,7 +296,65 @@ export class UtilitiesService {
 
     return new Blob(byteArrays, { type: contentType });
   }
+
+   async showAlertBox(header,message,button?){
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: button,
+      backdropDismiss: false
+    });
+
+    await alert.present();
+  }
+
+  isDatePassed(datestring: string){
+    var checkdate = moment(datestring, "YYYYMMDD");
+    var todaydate = moment(new Date(), "YYYYMMDD");
+    var lateby = todaydate.diff(checkdate, "days");
+    if (lateby > 0){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  getTheLatebyString(datestring: string) {
+    var start = moment(datestring, "YYYYMMDD");
+    var end = moment(new Date(), "YYYYMMDD");
+    var lateby = end.diff(start, "days");
+    if(lateby == 0){
+      return "few minutes";
+    }else if (lateby == 1)
+      return "a day";
+    else if (lateby < 30)
+      return lateby + " days";
+    else if (lateby == 30)
+      return "a month";
+    else if (lateby > 30 && lateby < 365)
+      return lateby + " months";
+    else if (lateby == 365)
+      return "an year";
+      else{
+        return lateby + " years";
+      }
+  }
+
+  // getNotificationCount(){
+  //   this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+  //     console.log("count",count);
+  //     // this.unreadCount.next(count);
+  //   });
+
+    // this.unreadCount.subscribe(data=>{
+    //   this.count = data;
+    // })
+  }
+
+  // getcount(){
+  //   return this.unreadCount.next(count);
+  // }
   
 
 
-}
+

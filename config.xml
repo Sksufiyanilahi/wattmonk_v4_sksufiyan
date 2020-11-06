@@ -126,4 +126,5 @@
     <allow-navigation href="http://192.168.1.32:8100" sessionid="507306ab" />
     <allow-navigation href="http://172.20.10.5:8100" sessionid="ce0bf415" />
     <allow-navigation href="http://localhost:8101" sessionid="211145a7" />
+    <allow-navigation href="http://localhost:8102" sessionid="748a10d5" />
 </widget>

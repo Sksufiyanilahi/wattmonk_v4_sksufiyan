@@ -121,26 +121,26 @@
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
   <div class="position-relative">
-      <ion-fab horizontal="center" class="fab-position position-absolute" *ngIf="isUserAnalyst ">
+     <!-- <ion-fab horizontal="center" class="fab-position position-absolute" *ngIf="isUserAnalyst ">
           <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md">
               <ion-icon name="add"></ion-icon>
           </ion-fab-button>
-      </ion-fab>
+      </ion-fab>-->
       <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
           <ion-row>
-              <ion-col size="4" [routerLink]="['/analystoverview/design']">
+              <ion-col size="6" [routerLink]="['/analystoverview/design']">
                   <div class="tab"  style="cursor: pointer;">
                       <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>
                       <span class="tabText">Home</span>
                   </div>
               </ion-col>
-              <ion-col size="4" [routerLink]="['/message']">
+              <!--<ion-col size="4" [routerLink]="['/message']">
                   <div class="tab" style="cursor: pointer;">
                       <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
                       <span class="tabText">Messages</span>
                   </div>
-              </ion-col>
-              <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
+              </ion-col>-->
+              <ion-col size="6" [routerLink]="['/profile']" routerDirection="forward">
                   <div class="tab" style="cursor:pointer">
                       <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
                       <span class="tabText">Profile</span>

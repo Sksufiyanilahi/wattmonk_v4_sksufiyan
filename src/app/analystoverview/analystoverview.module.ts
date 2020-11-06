@@ -23,6 +23,9 @@ import { DeclinepagePage } from '../declinepage/declinepage.page';
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { SharedModule } from '../shared/shared.module';
+import { EmailModelPageModule } from '../email-model/email-model.module';
+import { EmailModelPage } from '../email-model/email-model.page';
 
 
 
@@ -35,9 +38,10 @@ import { Network } from '@ionic-native/network/ngx';
     AnalystoverviewPageRoutingModule,
     IonBottomDrawerModule,
     ReactiveFormsModule,
-    UtilitiesModule
+    UtilitiesModule,
+    SharedModule
   ],
-  declarations: [AnalystoverviewPage, SurveyComponent, DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent],
+  declarations: [AnalystoverviewPage,SurveyComponent, DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent],
   providers: [
     DatePipe,
     Diagnostic,

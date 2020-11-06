@@ -3,7 +3,7 @@
         <ion-row>
             <ion-col size="2">
                 <!-- <ion-button  (click)="goBack()" style="width: 55px !important; height:20px !important"> -->
-                  <ion-button fill="clear" (click)="goBack()">
+                  <ion-button fill="clear" (click)="goBack()" [disabled]='enableDisable'>
                     <ion-img fill="clear" src="assets/images/back.svg" class="action-icon"></ion-img>
                   </ion-button>
                 <!-- </ion-button> -->
@@ -33,13 +33,13 @@
         <ion-row>
             <ion-col size="12" class="ion-no-padding">
                 <div style="text-align: center">
-                    <span class="profile-name">{{user.firstname}} {{user.lastname}}</span>
+                    <span class="profile-name">{{profile?.firstname}} {{profile?.lastname}}</span>
                 </div>
             </ion-col>
 
             <ion-col size="12" class="ion-no-padding">
                 <div style="text-align: center">
-                    <span class="profile-email">{{user.email}}</span>
+                    <span class="profile-email">{{profile?.email}}</span>
                 </div>
             </ion-col>
             <ion-col size="12" class="ion-no-padding">
@@ -50,6 +50,14 @@
                     </ng-template>
                 </div>
             </ion-col>
+           <!-- <ion-col size="12" class="ion-no-padding">
+              <div style="text-align: center">
+                <span>$ {{profile?.amount}}</span><br>
+                 <ion-label>Wallet</ion-label>
+              </div>
+          </ion-col> 
+
+          <ion-button (click)='AddWallet("id")'>Add money</ion-button> --> 
             <!-- <ion-col size="12" class="ion-no-padding">
                 <div style="text-align: center">
                     <span class="profile-amount">Total points: {{user.amount}}</span>
@@ -98,9 +106,9 @@
         </ion-row> -->
     </ion-grid>
     <ion-content style="--background: #FEF8F8;">
-        <ion-tabs style="
+         <ion-tabs style="
   position: inherit;">
-            <ion-tab-bar slot="top" class="ion-no-border" class="profile-tab">
+           <ion-tab-bar slot="top" class="ion-no-border" class="profile-tab">
                 <ion-tab-button tab="profile-notification">
                     <ion-label style="font-size: 16px;color:#4272B9">Notifications</ion-label>
                 </ion-tab-button>

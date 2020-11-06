@@ -5,6 +5,7 @@ import { DesignModel, activities } from '../model/design.model';
 import { NavController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-activity-details',
@@ -15,9 +16,11 @@ export class ActivityDetailsPage implements OnInit {
 activity_details:any;
 designId:any;
   name: string;
+  userData:any
 
 
   constructor(private apiservice: ApiService, private route: ActivatedRoute,
+    private storageService:StorageService,
     private navController: NavController,private datepipe:DatePipe
     ) {
     this.route.paramMap.subscribe( params =>{ this.designId=params.get('id');
@@ -25,6 +28,9 @@ designId:any;
    }
 
   ngOnInit() {
+    this.userData = this.storageService.getUser();
+    console.log(this.userData);
+
     if(this.name=="design"){
            this.apiservice.design_activityDetails(this.designId).subscribe(response =>{this.activity_details=response;
   ;

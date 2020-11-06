@@ -20,6 +20,7 @@ import{SocialSharing} from '@ionic-native/social-sharing/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { EmailSelectorComponent } from 'src/app/utilities/email-selector/email-selector.component'
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
+import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 
 
 @Component({
@@ -43,6 +44,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   listOfAssignees: AssigneeModel[] = [];
   listOfAssignees2: AssigneeModel[] = [];
   designId = 0;
+  disableAccept="true"
   showBottomDraw: boolean = false;
   roleType: any;
   myFiles: string[] = [];  
@@ -58,6 +60,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   assigneeData: any;
   selectedDesigner: any;
   netSwitch: boolean;
+ reviewAssignedTo:any;
   
 
   constructor(
@@ -76,7 +79,13 @@ export class DesignComponent implements OnInit, OnDestroy {
     public alertController: AlertController,
     private socialsharing: SocialSharing
   ) {
-    this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+    this.userData = this.storageService.getUser();
+
+    if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
+      this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+    }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin'){
+      this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
+    }
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -100,6 +109,7 @@ this.network.networkConnect();
     
   }
   segmentChanged(event){
+   
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
@@ -160,7 +170,7 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
-    this.userData = this.storageService.getUser();
+    // this.userData = this.storageService.getUser();
     console.log(this.userData);
     
     // this.router.navigate(['homepage/design/pending']);
@@ -193,6 +203,7 @@ this.network.networkConnect();
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
         this.formatDesignData(this.listOfDesigns);
+        
       }
     });
   }
@@ -206,7 +217,21 @@ this.network.networkConnect();
     this.fetchPendingDesigns(event, showLoader);
   }
 
-  fetchPendingDesigns(event, showLoader: boolean) {
+     accept(id,data:string){
+   
+       let status={
+        status:data
+      }
+      this.utils.showLoading("accepting").then(()=>{
+         this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
+           this.utils.hideLoading().then(()=>{
+            this.utils.setHomepageDesignRefresh(true);})})
+          })
+           
+       }
+      
+
+   fetchPendingDesigns(event, showLoader: boolean) {
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
@@ -234,22 +259,22 @@ this.network.networkConnect();
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
     this.listOfDesigns = this.fillinDynamicData(records);
+
     console.log(this.listOfDesigns);
     
     const tempData: DesginDataHelper[] = [];
           this.listOfDesigns.forEach((designItem:any,i) => { 
             console.log(i);
-            
+            designItem.lateby = this.utils.getTheLatebyString(designItem.deliverydate)
             if (tempData.length === 0) {
-              this.sDatePassed(designItem.updated_at,i);
               const listOfDesign = new DesginDataHelper();
               listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
               console.log(tempData);
               
-              ;
+              
+;
             } else {
              
               let added = false;
@@ -263,17 +288,16 @@ this.network.networkConnect();
                 if (!added) {
                   if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
                     DesignList.listOfDesigns.push(designItem);
-                    this.sDatePassed(designItem.updated_at,i);
+                    // this.sDatePassed(designItem.updated_at,i);
                     added = true;
                   }
                 }
               });
               if (!added) {
                 ;
-                this.sDatePassed(designItem.updated_at,i);
+                // this.sDatePassed(designItem.updated_at,i);
                 const listOfDesign = new DesginDataHelper();
                 listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
                 listOfDesign.listOfDesigns.push(designItem);
                 tempData.push(listOfDesign);
                 added = true;
@@ -291,6 +315,9 @@ this.network.networkConnect();
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
+    
+  this.dataRefreshSubscription.unsubscribe();
+  this.DesignRefreshSubscription.unsubscribe();
   }
 
   // filterData(records : DesginDataModel[]) {
@@ -330,8 +357,19 @@ this.network.networkConnect();
   // }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
-    records.forEach(element => {
+    records.forEach((element:any) => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.deliverydate);
+      }else{
+        element.isoverdue = false;
+      }
+      element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
+      var acceptancedate = new Date(element.designacceptancestarttime);
+      element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      var indesigndate = new Date(element.designstarttime);
+      indesigndate.setHours(indesigndate.getHours() + 2); 
+      element.designremainingtime = this.utils.getRemainingTime(indesigndate.toString());
       this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
         if (data) {
@@ -340,6 +378,39 @@ this.network.networkConnect();
           element.totalpercent = 0;
         }
       });
+       //Setting acceptance timer
+    if(element.status == "outsourced"){
+        var acceptancedate = new Date(element.designacceptancestarttime);
+        element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      // }
+
+      if(element.designacceptanceremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
+
+    //Setting design timer
+    if(element.status == "designassigned" || element.status == "designcompleted"){
+        var acceptancedate = new Date(element.designstarttime);
+        acceptancedate.setHours(acceptancedate.getHours() + 2);
+        element.designremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      // }
+      if(element.designremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
+
+    //Setting review timer
+    if(element.status == "reviewassigned" || element.status == "reviewpassed" || element.status == "reviewfailed"){
+        var reviewdate = new Date(element.reviewstarttime);
+        reviewdate.setMinutes(reviewdate.getMinutes() + 15);
+        element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+      // }
+      if(element.reviewremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
+
     });
 
     return records;
@@ -432,19 +503,33 @@ this.network.networkConnect();
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
+    this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
-    console.log("this works",this.listOfAssignees)
+
+   // console.log("this works",this.listOfAssignees)
   }
 
   assignToDesigner() {
       console.log(this.designerData.createdby.id);
-      ;
-    if (this.assignForm.status === 'INVALID') {
-      this.utils.errorSnackBar('Please select a designer');
-    } else {
+      
+    if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
+      this.utils.errorSnackBar('Please select a analyst');
+    }
+    else if (this.assignForm.status === 'INVALID' && ( this.designerData.status === 'created'|| this.designerData.status === 'requestaccepted'|| this.designerData.status === 'designassigned')) {
+      if(this.userData.role.type=='clientsuperadmin'){
+        this.utils.errorSnackBar('Please select the wattmonk admin');
+      }
+      else{this.utils.errorSnackBar('Please select a designer');}
+    } 
+    else if( this.reviewAssignedTo!=null && (this.selectedDesigner.id==this.reviewAssignedTo.id)){
+      this.utils.errorSnackBar("This design request has been already assigned to"+" "+this.selectedDesigner.firstname+" "+this.selectedDesigner.lastname)
+
+    }
+    else {
       
      
       var designstarttime = new Date();
+      var milisecond = designstarttime.getTime();
     var additonalhours = 0;
     if(this.designerData.requesttype == "prelim"){
       console.log(parseInt(this.selectedDesigner.jobcount) );
@@ -461,10 +546,9 @@ this.network.networkConnect();
       if (this.selectedDesigner.company == this.userData.company) {
         if(this.selectedDesigner.role.type=="qcinspector"){
           postData = {
-            designassignedto: this.selectedDesigner.id,
-            isoutsourced: "false",
+            reviewassignedto: this.selectedDesigner.id,
             status: "reviewassigned",
-            designstarttime: designstarttime
+            reviewstarttime: milisecond
           }; 
         }
        if(this.selectedDesigner.role.type=="designer") { postData = {
@@ -478,10 +562,13 @@ this.network.networkConnect();
       
       }
       else {
+        var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
         postData = {
           outsourcedto: this.selectedDesigner.id,
           isoutsourced: "true",
-          status: "outsourced"
+          status: "outsourced",
+          designacceptancestarttime: designacceptancestarttime
         };
       }
     } else {
@@ -492,9 +579,9 @@ this.network.networkConnect();
       };}
       if(this.selectedDesigner.role.type=="qcinspector"){
         postData = {
-          designassignedto: this.selectedDesigner.id,
+          reviewassignedto: this.selectedDesigner.id,
           status: "reviewassigned",
-          designstarttime: designstarttime
+          reviewstarttime: milisecond
         };
       }
     }
@@ -503,10 +590,17 @@ this.network.networkConnect();
         this.utils.hideLoading().then(()=>{
           ; 
           console.log('reach ', value);
-          this.utils.showSnackBar('Design request has been assigned to' + ' ' + value.name + ' ' + 'successfully');
+         
+          if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
+         {
+          this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+         }else{
+          this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
+         }
           this.dismissBottomSheet();
           this.showBottomDraw = false;
           this.utils.setHomepageDesignRefresh(true);
+          
         })
       }, (error) => {
         this.utils.hideLoading();
@@ -524,6 +618,7 @@ this.network.networkConnect();
   openDesigners(id: number,designData) {
     console.log("this is",designData);
     this.designerData = designData;
+    this.reviewAssignedTo=designData.designassignedto;
     
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
@@ -561,6 +656,7 @@ this.network.networkConnect();
   openAnalysts(id: number,designData) {
     console.log("this is",designData);
     this.designerData = designData;
+    this.reviewAssignedTo=designData.reviewassignedto;
     
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Analysts').then(() => {
@@ -632,10 +728,16 @@ this.network.networkConnect();
           text: 'deliver',
           handler: (alertData) => {
             var postData= {};
-            postData = {
+            if(alertData.comment!=""){
+             postData = {
               status: "delivered",
               comments: alertData.comment ,
-               };
+               };}
+               else{
+                postData = {
+                  status: "delivered",
+                   };
+               }
                console.log(postData);
                this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
@@ -669,15 +771,7 @@ this.network.networkConnect();
     this.fetchPendingDesigns(event, showLoader);
   }
 
-  accept(id,data:string){
-
-    let status={
-      status:data
-    }
-    this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
-      this.getDesigns(null);
-    })
-  }
+ 
 
 
 async decline(id){
@@ -686,6 +780,31 @@ async decline(id){
     cssClass: 'my-custom-modal-css',
     componentProps: {
       id:id
+    },
+    backdropDismiss:false
+  });
+  modal.onDidDismiss().then((data) => {
+    console.log(data)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
+    }
+});
+  // modal.dismiss(() => {
+  //   ;
+  //   this.getDesigns(null);
+  // });
+  return await modal.present();
+}
+
+
+async Resend(id){
+  const modal = await this.modalController.create({
+    component: ResendpagedialogPage,
+    cssClass: 'my-custom-modal-css',
+    componentProps: {
+      id:id
+    
     },
     backdropDismiss:false
   });
@@ -724,6 +843,7 @@ pending(value){
 
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
+  console.log("dholak is",this.selectedDesigner);
   
 }
 

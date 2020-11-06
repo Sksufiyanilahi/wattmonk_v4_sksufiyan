@@ -9,11 +9,11 @@ import { SolarMadeModel } from 'src/app/model/solar-made.model';
 import { InverterMakeModel } from 'src/app/model/inverter-make.model';
 import { NavController } from '@ionic/angular';
 import { InverterMadeModel } from 'src/app/model/inverter-made.model';
-import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../../model/constants';
+import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE, INVALID_ANNUAL_UNIT, INVALID_TILT_FOR_GROUND_MOUNT } from '../../model/constants';
 import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd } from '@angular/router';
-import { DesginDataModel, DesignModel } from '../../model/design.model';
+import {  DesginDataModel, DesignModel } from '../../model/design.model';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { AutoCompleteComponent } from 'src/app/utilities/auto-complete/auto-complete.component';
@@ -40,6 +40,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   private addressSubscription: Subscription;
 
   emailError = INVALID_EMAIL_MESSAGE;
+  nameError = INVALID_NAME_MESSAGE;
+  annualunitError = INVALID_ANNUAL_UNIT;
+  tiltforgroundError = INVALID_TILT_FOR_GROUND_MOUNT;
+
   fieldRequired = FIELD_REQUIRED;
 
   designId = 0;
@@ -75,6 +79,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   invertermade: string;
   onFormSubmit:boolean=true;
   solarMakeDisposable: Subscription;
+  send:any;
+  value:number;
+  architecturalData:any;
+  fieldDisabled = false;
 
 
   constructor(
@@ -89,26 +97,28 @@ export class DesignComponent implements OnInit, OnDestroy {
     private router:Router
   ) {
   
-    const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
+    const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
+    const NUMBERPATTERN = '^[0-9]*$';
     this.desginForm = this.formBuilder.group({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       solarmake: new FormControl('', [Validators.required]),
       solarmodel: new FormControl('', [Validators.required]),
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
-      monthlybill: new FormControl('',[Validators.required,Validators.min(0)]),
+      monthlybill: new FormControl('',[Validators.required,Validators.min(0),Validators.pattern(NUMBERPATTERN)]),
       address: new FormControl('',[Validators.required]),
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
       rooftype: new FormControl(''),
       prelimdesign: new FormControl(null),
-      architecturaldesign: new FormControl([],[Validators.required]),
+      architecturaldesign: this.formBuilder.array([new FormControl(null)],[Validators.required]),
       tiltofgroundmountingsystem: new FormControl(''),
       mountingtype: new FormControl('', [Validators.required]),
       // jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
-      newconstruction: new FormControl(''),
+      newconstruction: new FormControl('false'),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim'),
@@ -132,12 +142,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     
   }
 
-  getmodulename(event){
+  // getmodulename(event){
    
-      this.modulename= event;
-      console.log(this.modulename);
+  //     this.modulename= event;
+  //     console.log(this.modulename);
       
-  }
+  // }
 
 
   // logScrolling(e){
@@ -149,10 +159,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit() {
-
-    this.utils.manualInput.subscribe(data=>{
-        if(this.modulename=='solarmake'){
-          this.solarmake=data;
+      this.fieldDisabled=false;
+    // this.utils.manualInput.subscribe(data=>{
+    //     if(this.modulename=='solarmake'){
+    //       this.solarmake=data;
           // this.solarMakeDisposable.unsubscribe();
           // this.desginForm.patchValue({
           //   solarmake:data
@@ -161,19 +171,20 @@ export class DesignComponent implements OnInit, OnDestroy {
           //   this.getSolarMade();
           // });
           
-        }else if(this.modulename=='solarmade'){
-        this.solarmade=data;
-        }else if(this.modulename=='invertermake'){
-          this.invertermake = data;
-        }else if(this.modulename=='invertermade'){
-          this.invertermade= data; 
-        }
+        // }else if(this.modulename=='solarmade'){
+        // this.solarmade=data;
+        // }else if(this.modulename=='invertermake'){
+        //   this.invertermake = data;
+        // }else if(this.modulename=='invertermade'){
+        //   this.invertermade= data; 
+        // }
         
       
-    })
+    // })
     this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
-      if (event === ScheduleFormEvent.SAVE_DESIGN_FORM) {
+      if (event === ScheduleFormEvent.SAVE_DESIGN_FORM || event === ScheduleFormEvent.SEND_DESIGN_FORM) {
+        this.send=event;
         this.addForm();
       
       }
@@ -196,20 +207,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        this.desginForm.get('address').setValue('fffff');
-        this.desginForm.get('latitude').setValue('444444444444');
-        this.desginForm.get('longitude').setValue('555555555');
-        this.desginForm.get('country').setValue('india');
-        this.desginForm.get('city').setValue('Lucknow');
-        this.desginForm.get('state').setValue('UP');
-        this.desginForm.get('postalcode').setValue(3232343);
-        // this.desginForm.get('address').setValue(address.address);
-        // this.desginForm.get('latitude').setValue(address.lat);
-        // this.desginForm.get('longitude').setValue(address.long);
-        // this.desginForm.get('country').setValue(address.country);
-        // this.desginForm.get('city').setValue(address.city);
-        // this.desginForm.get('state').setValue(address.state);
-        // this.desginForm.get('postalcode').setValue(address.postalcode);
+       // this.desginForm.get('address').setValue('fffff');
+        //this.desginForm.get('latitude').setValue('444444444444');
+        //this.desginForm.get('longitude').setValue('555555555');
+        //this.desginForm.get('country').setValue('india');
+        //this.desginForm.get('city').setValue('Lucknow');
+        //this.desginForm.get('state').setValue('UP');
+        //this.desginForm.get('postalcode').setValue(3232343);
+           this.desginForm.get('address').setValue(address.address);
+           this.desginForm.get('latitude').setValue(address.lat);
+           this.desginForm.get('longitude').setValue(address.long);
+           this.desginForm.get('country').setValue(address.country);
+         this.desginForm.get('city').setValue(address.city);
+           this.desginForm.get('state').setValue(address.state);
+           this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -232,17 +243,18 @@ this.uploadcontrolvalidation();
   }
   
 formControlValueChanged() {
+  const NUMBERPATTERN = '^[0-9]*$';
   const tiltControl = this.desginForm.get('tiltofgroundmountingsystem');
   const roofcontrol = this.desginForm.get('rooftype');
   this.desginForm.get('mountingtype').valueChanges.subscribe(
       (mode: string) => {
           console.log(mode);
           if (mode === 'ground') {
-              tiltControl.setValidators([Validators.required]);
+              tiltControl.setValidators([Validators.required,Validators.pattern(NUMBERPATTERN)]);
               roofcontrol.clearValidators();
               roofcontrol.reset();
           }else if(mode ==='both'){
-            tiltControl.setValidators([Validators.required,,Validators.min(0)]);
+            tiltControl.setValidators([Validators.required,,Validators.min(0), Validators.pattern(NUMBERPATTERN)]);
             roofcontrol.setValidators([Validators.required]);
           }
           else if (mode === 'roof') {
@@ -287,7 +299,10 @@ getDesignDetails() {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
           this.design = result;
+          console.log(this.design);
+          this.fieldDisabled=true;
        this.attachmentData=this.design.attachments;
+       this.architecturalData = this.design.architecturaldesign;
           console.log("hello",this.design.attachments);
           this.desginForm.patchValue({
             name: this.design.name,
@@ -513,6 +528,25 @@ getDesignDetails() {
 
   }
 
+remove(index:number){
+  this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+    this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+  this.utils.hideLoading().then(()=>{
+    this.utils.showSnackBar('File deleted successfully');
+    this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
+    this.utils.setHomepageDesignRefresh(true);
+  });
+  },
+(error)=>{
+  this.utils.hideLoading().then(()=> {
+    this.utils.errorSnackBar('some Error Occured');
+  });
+
+});
+});
+
+}
+
   addForm() {
   this.onFormSubmit=false;
   // this.saveModuleMake();
@@ -532,30 +566,55 @@ getDesignDetails() {
 
         if (this.designId === 0) {
 
-
-          this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
-            this.uploaarchitecturedesign(response.id,'architecturaldesign');
-            this.uploadpreliumdesign(response.id,'attachments')
-            this.utils.hideLoading().then(() => {
-              console.log('Res', response);
-              this.router.navigate(['/homepage'])
-              // this.utils.showSnackBar('Design have been saved');
-              this.utils.setHomepageDesignRefresh(true);
-              // this.navController.pop();
-              // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-              //   modal.present();
-              //   modal.onWillDismiss().then((dismissed) => {
-                  // this.utils.setHomepageDesignRefresh(true);
-              //     this.navController.pop();
-              //   });
-              // });
-            });
-          }, responseError => {
-            this.utils.hideLoading();
-              const error: ErrorModel = responseError.error;
-              this.utils.errorSnackBar(error.message);
-            });
-         
+          if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
+            this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+              this.uploaarchitecturedesign(response.id,'architecturaldesign');
+              this.uploadpreliumdesign(response.id,'attachments')
+              this.utils.hideLoading().then(() => {
+                console.log('Res', response);
+                this.router.navigate(['/homepage'])
+                // this.utils.showSnackBar('Design have been saved');
+                this.utils.setHomepageDesignRefresh(true);
+                // this.navController.pop();
+                // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+                //   modal.present();
+                //   modal.onWillDismiss().then((dismissed) => {
+                    // this.utils.setHomepageDesignRefresh(true);
+                //     this.navController.pop();
+                //   });
+                // });
+              
+              });
+            }, responseError => {
+              this.utils.hideLoading();
+                const error: ErrorModel = responseError.error;
+                this.utils.errorSnackBar(error.message);
+              });
+           
+            }
+            else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
+              this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+                this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                this.uploadpreliumdesign(response.id,'attachments')
+                
+                this.utils.hideLoading().then(() => {
+                  this.value = response.id;
+                  this.sendtowattmonk();
+                 // console.log('Res', response);
+                 // this.router.navigate(['/homepage'])
+                  // this.utils.showSnackBar('Design have been saved');
+                 // this.utils.setHomepageDesignRefresh(true);
+                 
+                  
+                });
+              }
+            , responseError => {
+                this.utils.hideLoading();
+                  const error: ErrorModel = responseError.error;
+                  this.utils.errorSnackBar(error.message);
+                });
+              }
+          
 
         } else {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
@@ -615,7 +674,9 @@ getDesignDetails() {
       else if(this.desginForm.value.rooftype==''){
         this.utils.errorSnackBar('Please fill the rooftype.');
       }
-      else if(this.desginForm.value.architecturaldesign==''){
+     
+      
+      else if(this.desginForm.value.architecturaldesign==[]){
         this.utils.errorSnackBar('Please attach architectural design.');
       }
       else{
@@ -830,4 +891,36 @@ ioniViewDidEnter(){
 
   // }
 
+  removeArc(i) {
+    this.archFiles.splice(this.archFiles.indexOf(i), 1);
+  }
+  removePrelim(i) {
+    this.prelimFiles.splice(this.prelimFiles.indexOf(i), 1);
+  }
+  sendtowattmonk(){
+    var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+    const postData = {
+      outsourcedto: 232,
+        isoutsourced: "true",
+        status: "outsourced",
+        designacceptancestarttime: designacceptancestarttime
+      };
+  
+      this.utils.showLoading('Assigning').then(()=>{
+        debugger;
+        this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
+          this.utils.hideLoading().then(()=>{
+            ; 
+            console.log('reach ', value);
+           
+            this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
+            this.router.navigate(['/homepage'])
+            this.utils.setHomepageDesignRefresh(true);
+          })
+        }, (error) => {
+          this.utils.hideLoading();
+        });
+      })
+  }
 }

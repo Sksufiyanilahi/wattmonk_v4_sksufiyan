@@ -9,6 +9,7 @@ import { AddMoneyPageRoutingModule } from './add-money-routing.module';
 import { AddMoneyPage } from './add-money.page';
 
 @NgModule({
+  entryComponents:[],
   imports: [
     CommonModule,
     FormsModule,

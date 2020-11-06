@@ -52,3 +52,24 @@ ion-tab-button[aria-selected=true] {
 .font{
     font-size: 10px;
 }
+
+.notification-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.home{
+    font-size: 22px;
+    margin-left: 6px;
+}
+
+.notification-badge {
+    font-size: 10px;
+    margin-left: -15px;
+    margin-top: -20px;
+}
+
+.notification-padding {
+    position: relative;
+    padding: 8px;
+}
