@@ -575,9 +575,7 @@ else if(this.selectedDesigner.role.type=="surveyor"){
   if(this.SearchData.type=="survey"){
     this.assignToSurveyor();}
 }}
-
 }
-
 
 shareWhatsapp(designData){
   this.socialsharing.share(designData.prelimdesign.url);
