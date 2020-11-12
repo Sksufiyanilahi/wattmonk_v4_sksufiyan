@@ -15,11 +15,11 @@
                 </div>
             </ion-col>
             <ion-col size="auto" style="position: relative;">
-                <div class="notification-padding" [routerLink]="['/profile']" routerDirection="forward">
+                <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward" (click)="setzero()">
                     <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
-                    <!-- <span class="badge">
-                                4
-                            </span> -->
+                   <span class="badge" *ngIf="unreadCount > 0">
+                                {{unreadCount}}
+                            </span> 
                 </div>
             </ion-col>
         </ion-row>

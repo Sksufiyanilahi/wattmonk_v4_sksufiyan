@@ -477,9 +477,12 @@ assignToSurveyor(){
   assignToDesigner() {
     console.log(this.designerData.createdby.id);
     
-  if (this.assignForm.status === 'INVALID') {
-    this.utils.errorSnackBar('Please select a designer');
-  } else {
+    if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
+      this.utils.errorSnackBar('Please select a analyst');
+    }
+    else if (this.assignForm.status === 'INVALID' && ( this.designerData.status === 'created'|| this.designerData.status === 'requestaccepted'|| this.designerData.status === 'designassigned')) {
+      this.utils.errorSnackBar('Please select a designer');
+    } else {
     
    
     var designstarttime = new Date();
@@ -555,20 +558,23 @@ assignToSurveyor(){
 
 //method for bottom drawer confirm
 assign(){
+  if(this.assignForm.status=='INVALID'){
+    this.utils.errorSnackBar('Please select a analyst');
+  }
   
-  if(this.selectedDesigner.role.type=="designer"){
+  else{if(this.selectedDesigner.role.type=="designer"){
     this.assignToDesigner();
   }
-if(this.selectedDesigner.role.type=="surveyor"){
+else if(this.selectedDesigner.role.type=="surveyor"){
   this.assignToSurveyor();
 }
-if(this.selectedDesigner.role.type=="qcinspector"){
+ else if(this.selectedDesigner.role.type=="qcinspector"){
  console.log(this.SearchData)
   if(this.SearchData.type=="design"){
   this.assignToDesigner();}
   if(this.SearchData.type=="survey"){
     this.assignToSurveyor();}
-}
+}}
 
 }
 

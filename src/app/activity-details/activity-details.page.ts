@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { StorageService } from '../storage.service';
 
+
 @Component({
   selector: 'app-activity-details',
   templateUrl: './activity-details.page.html',
@@ -21,7 +22,7 @@ designId:any;
 
   constructor(private apiservice: ApiService, private route: ActivatedRoute,
     private storageService:StorageService,
-    private navController: NavController,private datepipe:DatePipe
+    private navController: NavController,private datepipe:DatePipe,
     ) {
     this.route.paramMap.subscribe( params =>{ this.designId=params.get('id');
   this.name=params.get('name')});

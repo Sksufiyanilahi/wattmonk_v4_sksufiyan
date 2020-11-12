@@ -14,7 +14,7 @@
   
 </ion-header>-->
 
-<ion-content [forceOverscroll]="false" style="position: relative;">
+<ion-content style="position: relative;">
   <ion-grid>
     <ion-row class="ion-align-items-center">
         <ion-col>
@@ -28,7 +28,7 @@
                 <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
             </div>
         </ion-col>
-        <ion-col size="auto" style="position: relative;">
+        <ion-col size="auto">
             <div class="notification-padding" [routerLink]="['/profile']" routerDirection="forward">
                 <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
                 <!-- <span class="badge">
@@ -37,9 +37,9 @@
             </div>
         </ion-col>
     </ion-row>
-</ion-grid>
-  <ion-tabs>
-    <ion-tab-bar slot="top" style="margin-top: 52px;">
+  </ion-grid>
+  <ion-tabs style="margin-top: 52px;">
+    <ion-tab-bar slot="top">
       <ion-tab-button tab="newdesigns">
         <ion-label class="font">In Designing</ion-label>
       </ion-tab-button>

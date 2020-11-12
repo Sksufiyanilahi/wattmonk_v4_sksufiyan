@@ -2,7 +2,7 @@
     <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
         <ion-row>
             <ion-col size="1">
-                <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+                <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()" [disabled]=enableDisable>
                     <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
@@ -20,14 +20,14 @@
                     </ion-row>
                 </ion-grid>
             </ion-col>
-            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector' && design.status !='designcompleted' && (user.role.type=='clientsuperadmin' && design.status=='created') || (user.role.type=='wattmonkadmins' && design.status=='created')">
+            <ion-col size="1" *ngIf="design.createdby.id == user.id && (design.status == 'created' || design.status == 'requestdeclined')">
                 <ion-button fill="clear" size="small" class="ion-no-padding"
-                    [routerLink]="['/schedule/design/',designId]" routerDirection="forward">
+                    [routerLink]="['/schedule/design/',designId]" routerDirection="forward" [disabled]=enableDisable>
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
-            <ion-col size="1" *ngIf="design.status !='requestaccepted' && user.role.type != 'designer' && user.role.type != 'qcinspector' && design.status !='designcompleted' && (user.role.type=='clientsuperadmin' && design.status=='created') || (user.role.type=='wattmonkadmins' && design.status=='created')" style="float:right">
-                <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()">
+            <ion-col size="1" *ngIf="design.createdby.id == user.id && (design.status == 'created' || design.status == 'requestdeclined')">
+                <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()" [disabled]=enableDisable>
                     <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
@@ -64,7 +64,7 @@
                         <ion-col><span class="data-header font">annual units</span></ion-col>
                     </ion-row>
                     <ion-row>
-                        <ion-col class="font"><span>{{design?.monthlybill}} kWhn</span></ion-col>
+                        <ion-col class="font"><span>{{design?.monthlybill}} kWh</span></ion-col>
                     </ion-row>
                 </ion-grid>
 
@@ -225,10 +225,10 @@
                 <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
             </ion-col>
         </ion-row>
-        <div *ngIf="user.role.type=='designer'  || user.role.type=='qcinspector' || (user.role.type=='clientsuperadmin' && design.status=='delivered')">
+        <div *ngIf="(user.role.type!='clientsuperadmin' || (user.role.type==='clientsuperadmin' && design.status==='delivered'))&& (design.prelimdesign!=null || user.role.type=='designer')">
             <form novalidate [formGroup]="commentsForm">
 
-            <ion-row *ngIf="(design.status=='designassigned' || design.status=='reviewfailed'); else showimageName ">
+            <ion-row *ngIf="(design.status=='designassigned' || design.status=='reviewfailed') && user.role.type=='designer'  ; else showimageName ">
                 <!-- <span> -->
 
                         <ion-col size="3" class="model-type font">
@@ -239,7 +239,7 @@
 
                                   <input type="file" *ngIf="imageName.length==0"  (change)="prelimfiles($event)" formControlName="prelimdesign" style="width: 76px;"/>
                                    {{imageName}}&nbsp;
-                                   <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0" (click)="remove()"></ion-icon>
+                                   <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 && user.role.type!='qcinspector'" (click)="remove()"></ion-icon>
                                 <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
                                 <!-- <ion-icon name="cloud-upload-outline" *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')" style="font-size: 20px;margin-left: 10px;color:green"></ion-icon> -->
                             
@@ -273,10 +273,29 @@
                         <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 " (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
                 </ion-col>
             </ng-template></div>
+            <ion-row *ngIf="design.isinrevisionstate" class="ion-no-padding ion-margin-top">
+            <ion-col size="6"  >
+                <span class="models font">Revision Comments</span></ion-col>
+                <ion-col size="6"  class="ion-no-padding">
+                    <div>
+                        <p class="comment font" style="text-align: right;margin:0px">{{design.revisioncomments}}</p>
+                    
+                    </div>
+                   
+                   </ion-col>
+            </ion-row>
+              <ion-row *ngIf="design.isinrevisionstate && design.revisionattachments.length > 0">
+             <ion-col > <span class="model-type font">Revision Attachments</span></ion-col>
+             <ion-col size="6"  style="float: right;" *ngFor="let attachmentfile of design.revisionattachments">
+              
+                <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ? (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}{{attachmentfile.ext}}</span>
+              </ion-col>
+              
+            </ion-row>
         
 
         <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
-        *ngIf="assigned">
+        *ngIf="design.status=='designassigned'||design.status=='designcompleted'">
         <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned
                 to</span></ion-col>
         <ion-col size="auto">
@@ -293,6 +312,26 @@
             </div>
         </ion-col>
     </ion-row>
+
+
+    <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
+    *ngIf="design.status=='reviewassigned'||design.status=='delivered'|| design.status=='reviewpassed'||design.status=='reviewfailed'">
+    <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned
+            to</span></ion-col>
+    <ion-col size="auto">
+        <div class="selected d-flex">
+            <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"
+                [src]="design.designassignedto.contractorlogo.logo.url" class="assignee-image" />
+            <div *ngIf="!design.designassignedto.contractorlogo || !design.designassignedto.contractorlogo.logo"
+                class="assignee-image d-flex flex-row align-center justify-center">
+                <div class="name_div">
+                    <span
+                        style="text-transform: capitalize;">{{design.reviewassignedto.firstname.substring(0, 1)}}{{design.reviewassignedto.lastname.substring(0, 1)}}</span>
+                </div>
+            </div>
+        </div>
+    </ion-col>
+</ion-row>
 
 
         <ion-row class="ion-no-padding ion-margin-top" *ngIf="design && design.type !=='design'">

@@ -20,6 +20,8 @@ import{SocialSharing} from '@ionic-native/social-sharing/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { EmailSelectorComponent } from 'src/app/utilities/email-selector/email-selector.component'
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
+import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
+import { PaymentModalPage } from 'src/app/payment-modal/payment-modal.page';
 
 
 @Component({
@@ -43,6 +45,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   listOfAssignees: AssigneeModel[] = [];
   listOfAssignees2: AssigneeModel[] = [];
   designId = 0;
+  disableAccept="true"
   showBottomDraw: boolean = false;
   roleType: any;
   myFiles: string[] = [];  
@@ -75,7 +78,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private storageService:StorageService,
     private network:NetworkdetectService,
     public alertController: AlertController,
-    private socialsharing: SocialSharing
+    private socialsharing: SocialSharing,
+
   ) {
     this.userData = this.storageService.getUser();
 
@@ -201,6 +205,7 @@ this.network.networkConnect();
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
         this.formatDesignData(this.listOfDesigns);
+        
       }
     });
   }
@@ -214,7 +219,21 @@ this.network.networkConnect();
     this.fetchPendingDesigns(event, showLoader);
   }
 
-  fetchPendingDesigns(event, showLoader: boolean) {
+     accept(id,data:string){
+   
+       let status={
+        status:data
+      }
+      this.utils.showLoading("accepting").then(()=>{
+         this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
+           this.utils.hideLoading().then(()=>{
+            this.utils.setHomepageDesignRefresh(true);})})
+          })
+           
+       }
+      
+
+   fetchPendingDesigns(event, showLoader: boolean) {
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
@@ -242,6 +261,7 @@ this.network.networkConnect();
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
     this.listOfDesigns = this.fillinDynamicData(records);
+
     console.log(this.listOfDesigns);
     
     const tempData: DesginDataHelper[] = [];
@@ -257,7 +277,8 @@ this.network.networkConnect();
               tempData.push(listOfDesign);
               console.log(tempData);
               
-              ;
+              
+;
             } else {
              
               let added = false;
@@ -343,6 +364,11 @@ this.network.networkConnect();
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
+      var acceptancedate = new Date(element.designacceptancestarttime);
+      element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      var indesigndate = new Date(element.designstarttime);
+      indesigndate.setHours(indesigndate.getHours() + 2); 
+      element.designremainingtime = this.utils.getRemainingTime(indesigndate.toString());
       this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
         if (data) {
@@ -452,12 +478,20 @@ this.network.networkConnect();
   assignToDesigner() {
       console.log(this.designerData.createdby.id);
       
-    if(this.assignForm.status === 'INVALID' && (this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
+    if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
       this.utils.errorSnackBar('Please select a analyst');
     }
-    else if (this.assignForm.status === 'INVALID' && this.designerData.status === 'requestedaccepted') {
-      this.utils.errorSnackBar('Please select a designer');
-    } else {
+    else if (this.assignForm.status === 'INVALID' && ( this.designerData.status === 'created'|| this.designerData.status === 'requestaccepted'|| this.designerData.status === 'designassigned')) {
+      if(this.userData.role.type=='clientsuperadmin'){
+        this.utils.errorSnackBar('Please select the wattmonk admin');
+      }
+      else{this.utils.errorSnackBar('Please select a designer');}
+    } 
+    else if( this.reviewAssignedTo!=null && (this.selectedDesigner.id==this.reviewAssignedTo.id)){
+      this.utils.errorSnackBar("This design request has been already assigned to"+" "+this.selectedDesigner.firstname+" "+this.selectedDesigner.lastname)
+
+    }
+    else {
       
      
       var designstarttime = new Date();
@@ -485,6 +519,7 @@ this.network.networkConnect();
         }
        if(this.selectedDesigner.role.type=="designer") { postData = {
           designassignedto: this.selectedDesigner.id,
+          
           isoutsourced: "false",
           status: "designassigned",
           designstarttime: designstarttime
@@ -494,10 +529,13 @@ this.network.networkConnect();
       
       }
       else {
+        var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
         postData = {
           outsourcedto: this.selectedDesigner.id,
           isoutsourced: "true",
-          status: "outsourced"
+          status: "outsourced",
+          designacceptancestarttime: designacceptancestarttime
         };
       }
     } else {
@@ -520,8 +558,12 @@ this.network.networkConnect();
           ; 
           console.log('reach ', value);
          
+          if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
+         {
+          this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+         }else{
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
-         
+         }
           this.dismissBottomSheet();
           this.showBottomDraw = false;
           this.utils.setHomepageDesignRefresh(true);
@@ -543,8 +585,13 @@ this.network.networkConnect();
   openDesigners(id: number,designData) {
     console.log("this is",designData);
     this.designerData = designData;
+    this.reviewAssignedTo=designData.designassignedto;
+    if(this.userData.role.type=='clientsuperadmin'){
+      this.router.navigate(["payment-modal",{id:id,designData:this.designerData}])
+      
+    }
     
-    if (this.listOfAssignees.length === 0) {
+   else{ if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
         this.apiService.getDesigners().subscribe(assignees => {
           this.utils.hideLoading().then(() => {
@@ -574,7 +621,7 @@ this.network.networkConnect();
       this.assignForm.patchValue({
         assignedto: ''
       });
-    }
+    }}
   }
 
   openAnalysts(id: number,designData) {
@@ -695,14 +742,30 @@ this.network.networkConnect();
     this.fetchPendingDesigns(event, showLoader);
   }
 
-  accept(id,data:string){
-
-    let status={
-      status:data
+  async OpenPaymentmodal(id){
+    
+  const modal = await this.modalController.create({
+    component: PaymentModalPage,
+    cssClass: 'my-custom-modal-css',
+    componentProps: {
+      id:id,
+      designData:this.designerData
+    },
+    backdropDismiss:false
+  });
+  modal.onDidDismiss().then((data) => {
+    console.log(data)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
     }
-    this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
-      this.utils.setHomepageDesignRefresh(true);
-    })
+});
+  // modal.dismiss(() => {
+  //   ;
+  //   this.getDesigns(null);
+  // });
+  return await modal.present();
+
   }
 
 
@@ -712,6 +775,31 @@ async decline(id){
     cssClass: 'my-custom-modal-css',
     componentProps: {
       id:id
+    },
+    backdropDismiss:false
+  });
+  modal.onDidDismiss().then((data) => {
+    console.log(data)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
+    }
+});
+  // modal.dismiss(() => {
+  //   ;
+  //   this.getDesigns(null);
+  // });
+  return await modal.present();
+}
+
+
+async Resend(id){
+  const modal = await this.modalController.create({
+    component: ResendpagedialogPage,
+    cssClass: 'my-custom-modal-css',
+    componentProps: {
+      id:id
+    
     },
     backdropDismiss:false
   });

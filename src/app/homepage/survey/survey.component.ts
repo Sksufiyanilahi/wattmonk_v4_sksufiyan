@@ -20,6 +20,7 @@ import * as moment from 'moment';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import{SocialSharing} from '@ionic-native/social-sharing/ngx';
+import { User } from 'src/app/model/user.model';
 
 @Component({
   selector: 'app-survey',
@@ -50,7 +51,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   filterDataArray: SurveyDataModel[];
   segments:any='status=created&status=outsourced&status=requestaccepted';
   overdue: number;
-  userData: any;
+  userData: User;
   netSwitch: any;
 
   constructor(
@@ -655,6 +656,17 @@ this.network.networkConnect();
      
     
   }
+
+  close() {
+    if (this.showBottomDraw === true) {
+      this.showBottomDraw = false;
+      this.drawerState = DrawerState.Bottom;
+      this.utils.setBottomBarHomepage(true);
+    } else {
+      this.showBottomDraw = true;
+    }
+  }
+
     shareWhatsapp(designData){
     this.socialsharing.share(designData.prelimdesign.url);
   }

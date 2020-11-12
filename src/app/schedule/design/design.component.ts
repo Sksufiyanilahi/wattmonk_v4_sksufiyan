@@ -9,11 +9,11 @@ import { SolarMadeModel } from 'src/app/model/solar-made.model';
 import { InverterMakeModel } from 'src/app/model/inverter-make.model';
 import { NavController } from '@ionic/angular';
 import { InverterMadeModel } from 'src/app/model/inverter-made.model';
-import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE } from '../../model/constants';
+import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE, INVALID_ANNUAL_UNIT, INVALID_TILT_FOR_GROUND_MOUNT } from '../../model/constants';
 import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd } from '@angular/router';
-import { DesginDataModel, DesignModel } from '../../model/design.model';
+import {  DesginDataModel, DesignModel } from '../../model/design.model';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { AutoCompleteComponent } from 'src/app/utilities/auto-complete/auto-complete.component';
@@ -41,6 +41,8 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   emailError = INVALID_EMAIL_MESSAGE;
   nameError = INVALID_NAME_MESSAGE;
+  annualunitError = INVALID_ANNUAL_UNIT;
+  tiltforgroundError = INVALID_TILT_FOR_GROUND_MOUNT;
 
   fieldRequired = FIELD_REQUIRED;
 
@@ -79,6 +81,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   solarMakeDisposable: Subscription;
   send:any;
   value:number;
+  architecturalData:any;
+  fieldDisabled = false;
 
 
   constructor(
@@ -108,12 +112,12 @@ export class DesignComponent implements OnInit, OnDestroy {
       assignedto: new FormControl(''),
       rooftype: new FormControl(''),
       prelimdesign: new FormControl(null),
-      architecturaldesign: new FormControl([],[Validators.required]),
+      architecturaldesign: this.formBuilder.array([new FormControl(null)],[Validators.required]),
       tiltofgroundmountingsystem: new FormControl(''),
       mountingtype: new FormControl('', [Validators.required]),
       // jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
-      newconstruction: new FormControl('', [Validators.required]),
+      newconstruction: new FormControl('false'),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim'),
@@ -137,12 +141,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     
   }
 
-  getmodulename(event){
+  // getmodulename(event){
    
-      this.modulename= event;
-      console.log(this.modulename);
+  //     this.modulename= event;
+  //     console.log(this.modulename);
       
-  }
+  // }
 
 
   // logScrolling(e){
@@ -154,10 +158,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   // }
 
   ngOnInit() {
-
-    this.utils.manualInput.subscribe(data=>{
-        if(this.modulename=='solarmake'){
-          this.solarmake=data;
+      this.fieldDisabled=false;
+    // this.utils.manualInput.subscribe(data=>{
+    //     if(this.modulename=='solarmake'){
+    //       this.solarmake=data;
           // this.solarMakeDisposable.unsubscribe();
           // this.desginForm.patchValue({
           //   solarmake:data
@@ -166,22 +170,25 @@ export class DesignComponent implements OnInit, OnDestroy {
           //   this.getSolarMade();
           // });
           
-        }else if(this.modulename=='solarmade'){
-        this.solarmade=data;
-        }else if(this.modulename=='invertermake'){
-          this.invertermake = data;
-        }else if(this.modulename=='invertermade'){
-          this.invertermade= data; 
-        }
+        // }else if(this.modulename=='solarmade'){
+        // this.solarmade=data;
+        // }else if(this.modulename=='invertermake'){
+        //   this.invertermake = data;
+        // }else if(this.modulename=='invertermade'){
+        //   this.invertermade= data; 
+        // }
         
       
-    })
+    // })
     this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_DESIGN_FORM || event === ScheduleFormEvent.SEND_DESIGN_FORM) {
         this.send=event;
         this.addForm();
       
+      }
+      if(event===ScheduleFormEvent.PAY_EVENT){
+        this.Pay();
       }
     });
 
@@ -202,20 +209,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        //this.desginForm.get('address').setValue('fffff');
+       // this.desginForm.get('address').setValue('fffff');
         //this.desginForm.get('latitude').setValue('444444444444');
         //this.desginForm.get('longitude').setValue('555555555');
         //this.desginForm.get('country').setValue('india');
         //this.desginForm.get('city').setValue('Lucknow');
         //this.desginForm.get('state').setValue('UP');
         //this.desginForm.get('postalcode').setValue(3232343);
-          this.desginForm.get('address').setValue(address.address);
-          this.desginForm.get('latitude').setValue(address.lat);
-          this.desginForm.get('longitude').setValue(address.long);
-          this.desginForm.get('country').setValue(address.country);
-        this.desginForm.get('city').setValue(address.city);
-          this.desginForm.get('state').setValue(address.state);
-          this.desginForm.get('postalcode').setValue(address.postalcode);
+           this.desginForm.get('address').setValue(address.address);
+           this.desginForm.get('latitude').setValue(address.lat);
+           this.desginForm.get('longitude').setValue(address.long);
+           this.desginForm.get('country').setValue(address.country);
+         this.desginForm.get('city').setValue(address.city);
+           this.desginForm.get('state').setValue(address.state);
+           this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -293,7 +300,10 @@ getDesignDetails() {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
           this.design = result;
+          console.log(this.design);
+          this.fieldDisabled=true;
        this.attachmentData=this.design.attachments;
+       this.architecturalData = this.design.architecturaldesign;
           console.log("hello",this.design.attachments);
           this.desginForm.patchValue({
             name: this.design.name,
@@ -519,6 +529,25 @@ getDesignDetails() {
 
   }
 
+remove(index:number){
+  this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+    this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+  this.utils.hideLoading().then(()=>{
+    this.utils.showSnackBar('File deleted successfully');
+    this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
+    this.utils.setHomepageDesignRefresh(true);
+  });
+  },
+(error)=>{
+  this.utils.hideLoading().then(()=> {
+    this.utils.errorSnackBar('some Error Occured');
+  });
+
+});
+});
+
+}
+
   addForm() {
   this.onFormSubmit=false;
   // this.saveModuleMake();
@@ -566,7 +595,8 @@ getDesignDetails() {
             }
             else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
               this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
-                this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                console.log(response.id);
+               this.uploaarchitecturedesign(response.id,'architecturaldesign');
                 this.uploadpreliumdesign(response.id,'attachments')
                 
                 this.utils.hideLoading().then(() => {
@@ -588,7 +618,8 @@ getDesignDetails() {
               }
           
 
-        } else {
+        } else 
+       
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.uploaarchitecturedesign(response.id,'architecturaldesign');
             this.uploadpreliumdesign(response.id,'attachments')
@@ -600,7 +631,8 @@ getDesignDetails() {
               
       
             });
-          }, responseError => {
+          },
+           responseError => {
             this.utils.hideLoading().then(() => {
               const error: ErrorModel = responseError.error;
               this.utils.errorSnackBar(error.message[0].messages[0].message);
@@ -608,8 +640,8 @@ getDesignDetails() {
 
           });
         }
-
-      });
+      
+      );
 
     } else {
       if(this.desginForm.value.name==''){
@@ -646,10 +678,9 @@ getDesignDetails() {
       else if(this.desginForm.value.rooftype==''){
         this.utils.errorSnackBar('Please fill the rooftype.');
       }
-      else if(this.desginForm.value.newconstruction==''){
-        this.utils.errorSnackBar('Please select construction type');
-      }
-      else if(this.desginForm.value.architecturaldesign==''){
+     
+      
+      else if(this.desginForm.value.architecturaldesign==[]){
         this.utils.errorSnackBar('Please attach architectural design.');
       }
       else{
@@ -864,6 +895,12 @@ ioniViewDidEnter(){
 
   // }
 
+  removeArc(i) {
+    this.archFiles.splice(this.archFiles.indexOf(i), 1);
+  }
+  removePrelim(i) {
+    this.prelimFiles.splice(this.prelimFiles.indexOf(i), 1);
+  }
   sendtowattmonk(){
     var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
@@ -875,7 +912,7 @@ ioniViewDidEnter(){
       };
   
       this.utils.showLoading('Assigning').then(()=>{
-        debugger;
+      
         this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
           this.utils.hideLoading().then(()=>{
             ; 
@@ -890,4 +927,55 @@ ioniViewDidEnter(){
         });
       })
   }
+
+  Pay()
+  {
+    if (this.desginForm.status === 'VALID') {
+    this.router.navigate(["payment-modal"]);
+    }else {
+      if(this.desginForm.value.name==''){
+
+        this.utils.errorSnackBar('Please fill the name.');
+      }
+      else if(this.desginForm.value.email==''){
+        this.utils.errorSnackBar('Please fill the email.');
+      }
+      else if(this.desginForm.value.monthlybill==''){
+        this.utils.errorSnackBar('Please fill the annual units.');
+      }
+      else if(this.desginForm.value.solarmake==''){
+        this.utils.errorSnackBar('Please fill the module make.');
+      }
+      else if(this.desginForm.value.solarmodel==''){
+        this.utils.errorSnackBar('Please fill the module model.');
+      }
+      else if(this.desginForm.value.invertermake==''){
+        this.utils.errorSnackBar('Please fill the inverter make.');
+      }
+      else if(this.desginForm.value.invertermodel==''){
+        this.utils.errorSnackBar('Please fill the inverter model.');
+      }
+      else if(this.desginForm.value.mountingtype==''){
+        this.utils.errorSnackBar('Please fill the mounting type.');
+      }
+      else if(this.desginForm.value.projecttype==''){
+        this.utils.errorSnackBar('Please fill the project type.');
+      }
+      else if(this.desginForm.value.tiltofgroundmountingsystem==''){
+        this.utils.errorSnackBar('Please fill the tilt for ground mount.');
+      }
+      else if(this.desginForm.value.rooftype==''){
+        this.utils.errorSnackBar('Please fill the rooftype.');
+      }
+     
+      
+      else if(this.desginForm.value.architecturaldesign==[]){
+        this.utils.errorSnackBar('Please attach architectural design.');
+      }
+      else{
+        this.utils.errorSnackBar('Address not found. Make sure location is on on device.');
+      }
+    }
+  }
 }
+

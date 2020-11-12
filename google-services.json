@@ -1,35 +1,42 @@
 {
   "project_info": {
-    "project_number": "915613059391",
-    "firebase_url": "https://livewattmonk.firebaseio.com",
-    "project_id": "livewattmonk",
-    "storage_bucket": "livewattmonk.appspot.com"
+    "project_number": "554801985112",
+    "firebase_url": "https://wattmonk-273002.firebaseio.com",
+    "project_id": "wattmonk-273002",
+    "storage_bucket": "wattmonk-273002.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:915613059391:android:dadde2e9c0cab404abeb8a",
+        "mobilesdk_app_id": "1:554801985112:android:0331981a6db85ed5e53c2d",
         "android_client_info": {
           "package_name": "com.watt.monk"
         }
       },
       "oauth_client": [
         {
-          "client_id": "915613059391-r5vmloi9rgic73pjqhvuvr2p37puohi7.apps.googleusercontent.com",
+          "client_id": "554801985112-ua7cm2057oika2p03q8ne8ompor5cnql.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCOpZojKGuAA30Jsbo3qDxCbRkBWSw7A0E"
+          "current_key": "AIzaSyBPhAOU1D1AO41bI31nfn_PCiwjQmKNFH8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "915613059391-r5vmloi9rgic73pjqhvuvr2p37puohi7.apps.googleusercontent.com",
+              "client_id": "554801985112-kihodpb1ql760iltqeion887inqe7amu.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "554801985112-nijh19mkub3rufm3d4kmrmltq32u5815.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.watt.monk"
+              }
             }
           ]
         }

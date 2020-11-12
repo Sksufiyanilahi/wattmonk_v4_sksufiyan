@@ -10,6 +10,7 @@ import { UtilitiesService } from 'src/app/utilities.service';
 export class ProfileNotificationComponent implements OnInit {
   notification: any=[];
   showLoader:boolean= false;
+  disableContent:boolean=false;
 
   constructor(
     private apiservice:ApiService,
@@ -28,6 +29,9 @@ export class ProfileNotificationComponent implements OnInit {
             this.showLoader=true;
             console.log(this.notification);
             console.log(this.notification.length);
+            if(res !==[]){
+              this.disableContent=true;
+            }
         })
 
     }

@@ -26,10 +26,11 @@ import { Network } from '@ionic-native/network/ngx';
 import { EmailModelPage } from '../email-model/email-model.page';
 import { EmailModelPageModule } from '../email-model/email-model.module';
 import { SharedModule } from '../shared/shared.module';
+import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 
 
 @NgModule({
-  entryComponents:[DeclinepagePage, EmailModelPage],
+  entryComponents:[DeclinepagePage, EmailModelPage, ResendpagedialogPage],
   imports: [
     CommonModule,
     FormsModule,
@@ -40,7 +41,7 @@ import { SharedModule } from '../shared/shared.module';
     UtilitiesModule,
     SharedModule
   ],
-  declarations: [HomepagePage, SurveyComponent,DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent],
+  declarations: [HomepagePage, SurveyComponent,DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent,ResendpagedialogPage],
   providers: [
     DatePipe,
     Diagnostic,

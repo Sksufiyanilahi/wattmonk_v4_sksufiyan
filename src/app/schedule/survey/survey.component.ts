@@ -91,7 +91,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.surveyForm.get('state').setValue('up');
          this.surveyForm.get('postalcode').setValue(777777777);
        //this.surveyForm.get('address').setValue(address.address);
-        //this.surveyForm.get('latitude').setValue(address.lat);
+       // this.surveyForm.get('latitude').setValue(address.lat);
         //this.surveyForm.get('longitude').setValue(address.long);
         //this.surveyForm.get('country').setValue(address.country);
         //this.surveyForm.get('city').setValue(address.city);
@@ -253,7 +253,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             jobtype: this.survey.jobtype,
             phonenumber: this.survey.phonenumber,
             datetime: date.getTime(),
-            comments: this.survey.comments[0].message,
+            comments: this.survey.comments==[] ? this.survey.comments : this.survey.comments[0].message,
             address: this.survey.address,
             source: this.survey.source,
             createdby: this.survey.createdby.id,

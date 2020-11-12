@@ -38,7 +38,7 @@ export class UtilitiesService {
     public loadingController: LoadingController,
     private toastController: ToastController,
     private alertController: AlertController,
-    private modalController: ModalController
+    private modalController: ModalController,
   ) {
   }
 
@@ -103,8 +103,10 @@ export class UtilitiesService {
   }
 
   setScheduleFormEvent(event: ScheduleFormEvent) {
+   
     this.saveScheduleForm.next(event);
     this.saveScheduleForm.next(ScheduleFormEvent.NO_EVENT);
+    
   }
 
   async showLoading(message?: string) {
@@ -237,6 +239,19 @@ export class UtilitiesService {
     }
   }
 
+  getRemainingTime(endtime:string){
+    var now = new Date();
+    var t = Date.parse(endtime) - Date.parse(now.toString());
+    var minutes = Math.floor( (t/1000/60) % 60 );
+    var hours = Math.floor( (t/(1000*60*60)) % 24 );
+    if (hours > 0 || minutes > 0){
+      return "" + hours + "h : " + minutes + "m";
+    }else{
+      return "0h : 0m";
+    }
+  }
+
+
   b64toBlob(b64Data) {
     let contentType = b64Data.split(',')[0].split(':')[1].split(';')[0] || '';
     var sliceSize = 256;
@@ -293,7 +308,23 @@ export class UtilitiesService {
 
     await alert.present();
   }
+
+ 
+  // getNotificationCount(){
+  //   this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+  //     console.log("count",count);
+  //     // this.unreadCount.next(count);
+  //   });
+
+    // this.unreadCount.subscribe(data=>{
+    //   this.count = data;
+    // })
+  }
+
+  // getcount(){
+  //   return this.unreadCount.next(count);
+  // }
   
 
 
-}
+

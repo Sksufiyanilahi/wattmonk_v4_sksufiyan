@@ -20,14 +20,14 @@
                     </ion-row>
                 </ion-grid>
             </ion-col> -->
-            <ion-col  *ngIf="survey.status !='requestaccepted' && user?.role.type != 'surveyor' && user?.role.type != 'qcinspector' && survey.status !='surveycompleted' && (user?.role.type=='clientsuperadmin' && survey.status=='created') || (user?.role.type=='wattmonkadmins' && survey.status=='created')" size="2"  style="text-align: right !important;">
+            <ion-col  size="2" *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined')" style="text-align: right !important;">
                 <ion-button fill="clear" size="small" class="ion-no-padding"
                             [routerLink]="['/schedule/survey/',surveyId]"
                             routerDirection="forward">
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
-            <ion-col  *ngIf="survey.status !='requestaccepted' && user?.role.type != 'surveyor' && user?.role.type != 'qcinspector' && survey.status !='surveycompleted' && (user?.role.type=='clientsuperadmin' && survey.status=='created') || (user?.role.type=='wattmonkadmins' && survey.status=='created')" size="2"  style="text-align: right !important;" 
+            <ion-col size="2" *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined')" style="text-align: right !important;" 
             size="2" >
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteSurvey()">
                     <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>

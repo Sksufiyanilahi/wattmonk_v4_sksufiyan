@@ -12,12 +12,12 @@
         </ion-item>
       </ion-col>
     </ion-row>
-        <ng-template #noNotification>
-          <ion-row>
-            <ion-col *ngIf="notification.length==0" style="text-align: center;margin-top: 50%;"> 
-              No Notification Found
-            </ion-col>
-          </ion-row>
-        </ng-template>
+    <ng-template #noNotification>
+      <ion-row>
+        <ion-col *ngIf="disableContent" style="text-align: center;margin-top: 50%;"> 
+          No Notification Found
+        </ion-col>
+      </ion-row>
+    </ng-template>
   </ion-grid>
 </ion-content>

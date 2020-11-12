@@ -6,7 +6,8 @@ export enum ScheduleFormEvent {
   SAVE_DESIGN_FORM = 1,
   SAVE_SURVEY_FORM = 2,
   START_SURVEY = 3,
-  SEND_DESIGN_FORM = 4
+  SEND_DESIGN_FORM = 4,
+  PAY_EVENT=5
 }
 
 export enum UserRoles {
@@ -28,7 +29,9 @@ export enum MapPageType {
 
 export const INVALID_EMAIL_MESSAGE = 'Invalid Email';
 export const FIELD_REQUIRED = 'This field is required';
-export const INVALID_NAME_MESSAGE='Invalid Name'
+export const INVALID_NAME_MESSAGE='Invalid Name';
+export const INVALID_ANNUAL_UNIT = 'Invalid Annual Unit';
+export const INVALID_TILT_FOR_GROUND_MOUNT = 'Invalid Value'
 
 export const COMET_CHAT_APP_ID = '190385dcec51285';
 export const COMET_CHAT_AUTH_KEY = '5cafae1939d4fc620698c50ae3f25e727fc90213';

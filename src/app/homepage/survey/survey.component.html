@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content   (click)="close()" style="padding-bottom: 250px;">
     <ion-segment scrollable (ionChange)="segmentChanged($event)" value="status=created&status=outsourced&status=requestaccepted">
         <ion-segment-button value="status=created&status=outsourced&status=requestaccepted">
           <ion-label class="segment-btn">Pending</ion-label>
@@ -73,21 +73,21 @@
                                     <!-- <span class="ion-text-end action-button-color" >Start Survey</span> -->
                                 </ion-col>
                         <!-- <ion-col></ion-col> -->
-                        <ion-col *ngIf="segments=='status=created&status=outsourced&status=requestaccepted'" size="auto" class="ion-no-margin ion-no-padding" style="margin-bottom: 5px;">
-                                    <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id,surveyData)"
+                        <ion-col  size="auto" class="ion-no-margin ion-no-padding" style="margin-bottom: 5px;">
+                                    <span *ngIf="surveyData.status == 'created' || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'" style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id,surveyData)"
                         >Assign</span>
                         <!-- <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
                         >Decline</span>
                         <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
                         >Accept</span> -->
                         <span style="float: right;">
-
+                            <ng-container *ngIf="userData.role.type !=='clientsuperadmin'"> 
                             <ion-col size="8"  *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)">
                                Accept
                             </ion-col>
                             <ion-col size="4" *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)">
                             Decline
-                            </ion-col>
+                            </ion-col></ng-container>
                         </span>
                         <span *ngIf="surveyData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)"
                         >Reassign</span>

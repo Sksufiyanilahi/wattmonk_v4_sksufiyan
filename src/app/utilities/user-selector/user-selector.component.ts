@@ -19,7 +19,7 @@ import { AssigneeModel } from '../../model/assignee.model';
     }
   ]
 })
-export class UserSelectorComponent implements ControlValueAccessor, Validator {
+export class UserSelectorComponent implements ControlValueAccessor, Validator ,OnInit{
 
   @Input() assignees: AssigneeModel[] = [];
   @Input() placeholder = 'assign to';
@@ -27,17 +27,17 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
   @Output() assigneeData = new EventEmitter<AssigneeModel>();
   private onChange: (assignee: number) => void;
   selectedUserId = null;
-  @Input() reviewAssigned:AssigneeModel;
+  @Input() reviewAssigned:any;
   // assignee: AssigneeModel;
 
   constructor() {
    
   }
 ngOnInit(){
-  if(this.reviewAssigned!=null){
-   this.selectAssignee(this.reviewAssigned);
-    console.log("ghello");
-  }
+  
+    
+    
+
 }
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -55,6 +55,8 @@ ngOnInit(){
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
+   
+   
     if (this.required) {
       console.log(this.selectedUserId);
       if (this.selectedUserId !== null) {
@@ -76,6 +78,7 @@ ngOnInit(){
       item.selected = false;
      
     });
+    
     if (assignee.id === this.selectedUserId) {
       this.selectedUserId = null;
       this.onChange(null);

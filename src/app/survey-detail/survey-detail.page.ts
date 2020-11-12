@@ -78,6 +78,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.user=this.storage.getUser();
+    console.log(this.user);
     this.dataSubscription = this.utilities.getSurveyDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getSurveyDetails();

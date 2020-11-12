@@ -26,6 +26,8 @@ export class DesignoverviewPage implements OnInit {
   update_version: string;
   netSwitch:any;
   showSearchBar = false;
+  //showSearchBar = false;
+  
 
   constructor(public route: Router,
     private storage: StorageService,
@@ -96,6 +98,11 @@ shareWhatsapp(designData){
   this.socialSharing.share(designData.prelimdesign.url);
 }
 
+searchbar(){
+  console.log("oh ma go turu lob");
+  this.route.navigate(['/search-bar1']);
+}
+
  async shareViaEmails(id,designData){
   const modal = await this.modalController.create({
     component: EmailModelPage,
@@ -125,7 +132,7 @@ shareWhatsapp(designData){
         text:'Ok',
       
         handler:()=>{
-          this.iab.create('https://play.google.com/store/apps/details?id=net.one97.paytm',"_system");
+          this.iab.create('https://play.google.com/store/apps/details?id=com.watt.monk',"_system");
          this.ionViewDidEnter();
         }
       }]);
@@ -147,6 +154,5 @@ this.network.networkConnect();
     }
   });
 }
-
 
 }

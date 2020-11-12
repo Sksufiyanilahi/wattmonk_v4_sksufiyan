@@ -8,7 +8,7 @@ import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
@@ -39,6 +39,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 
   showFooter = true;
   // Geocoder configuration
+  unreadCount;
   geoEncoderOptions: NativeGeocoderOptions = {
     useLocale: true,
     maxResults: 5
@@ -53,6 +54,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   userRole: any;
   netSwitch: any;
   update_version: string;
+  count: any;
 
   constructor(
     private utilities: UtilitiesService,
@@ -73,13 +75,23 @@ export class HomepagePage implements OnInit, OnDestroy {
     //this.scheduledPage();
   }
 
+  getNotificationCount(){
+    this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+      console.log("count",count);
+     this.unreadCount= count;
+    });
+
+   
+  }
+
   ngOnInit() {
-    this.apiService.version.subscribe(versionInfo=>{
-    this.update_version = versionInfo;
-  })
-    this.setupCometChatUser();
-    this.requestLocationPermission();
-    this.updateUserPushToken();
+     this.apiService.version.subscribe(versionInfo=>{
+      this.update_version = versionInfo;
+       });
+       this.getNotificationCount();
+           this.setupCometChatUser();
+           this.requestLocationPermission();
+            this.updateUserPushToken();
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
@@ -101,6 +113,7 @@ export class HomepagePage implements OnInit, OnDestroy {
       this.isUserDesigner = true;
       this.route.navigate(['homepage/design']);
     }
+    
   }
 
   updateUserPushToken(){
@@ -389,7 +402,7 @@ export class HomepagePage implements OnInit, OnDestroy {
           text:'Ok',
         
           handler:()=>{
-            this.iab.create('https://play.google.com/store/apps/details?id=net.one97.paytm',"_system");
+            this.iab.create('https://play.google.com/store/apps/details?id=com.watt.monk',"_system");
            this.ionViewDidEnter();
           }
         }]);
@@ -410,6 +423,10 @@ this.network.networkConnect();
         (navigator as any).app.exitApp();
       }
     });
+  }
+
+  setzero(){
+    this.unreadCount= 0;
   }
 
   ionViewWillLeave() {

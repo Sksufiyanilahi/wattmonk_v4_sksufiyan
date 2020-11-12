@@ -353,6 +353,6 @@ ngOnInit() {
   }
 
   sendDesignForm(){
-    this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
+     this.utilities.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
   }
 }

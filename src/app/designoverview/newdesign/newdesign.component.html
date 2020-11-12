@@ -22,6 +22,7 @@
                     routerDirection="forward" class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'">Design Assigned</span>
                     <span [routerLink]="['/design-details/',designData.id]"
                     routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
+                    <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>
                     <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
                 </p>
                <p> <span class="customer-email" [routerLink]="['/design-details/',designData.id]"

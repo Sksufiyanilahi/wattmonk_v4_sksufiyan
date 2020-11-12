@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EmailModelPageModule } from '../email-model/email-model.module';
 import { EmailModelPage } from '../email-model/email-model.page';
 import {DeclinepagePageModule } from '../declinepage/declinepage.module';
+import { PaymentModalPageModule } from '../payment-modal/payment-modal.module';
 
 
 @NgModule({
@@ -10,11 +11,13 @@ import {DeclinepagePageModule } from '../declinepage/declinepage.module';
   imports: [
     CommonModule,
     EmailModelPageModule,
-    DeclinepagePageModule 
+    DeclinepagePageModule,
+    PaymentModalPageModule 
   ],
   exports:[
     EmailModelPageModule,
-    DeclinepagePageModule 
+    DeclinepagePageModule ,
+    PaymentModalPageModule 
   ]
 })
 export class SharedModule { }

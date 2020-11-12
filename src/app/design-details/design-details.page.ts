@@ -36,6 +36,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   reviewstartdatetime : number;
   reviewIssues='';
   isSelfUpdate: false;
+  enableDisable:boolean=false;
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -90,6 +91,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   
 
   ngOnInit() {
+    this.enableDisable= false;
     console.log(this.imageName);
     this.user=this.storage.getUser();
     console.log(this.user);
@@ -104,7 +106,10 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   showDesignImage(){
     const browser = this.iab.create(this.design.prelimdesign.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
-
+  showRevisionImage(attachmentFile:any){
+    console.log(attachmentFile)
+    const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  }
   showurl(i,value){
     if(value=='attachments'){
       this.browser = this.iab.create(this.design.attachments[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
@@ -205,8 +210,11 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   setData(result: DesginDataModel) {
     this.design = result;
     console.log(this.design,">>>>>>>>>>>>>>>>");
+    if(this.design.isinrevisionstate && this.design.status=='designassigned'){
+      this.imageName=[];
+    }else{
     this.imageName= result.prelimdesign==null ? '' : result.prelimdesign.name + result.prelimdesign.ext;
-    console.log(this.imageName)
+    console.log(this.imageName);}
     
     if (this.design.newconstruction == true) {
       this.design.newconstruction = 'Yes';
@@ -217,6 +225,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   async deleteDesign() {
+    this.enableDisable= true;
     const toast = await this.toastController.create({
       header: 'Delete Design',
       message: 'Are you sure you want to delete this design?',
@@ -228,7 +237,10 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
             this.deleteDesignFromServer();
           }
         }, {
-          text: 'No'
+          text: 'No',
+          handler: () => {
+            this.enableDisable=false;
+          }
         }
       ]
     });

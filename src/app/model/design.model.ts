@@ -110,7 +110,13 @@ export class DesginDataModel {
   status:string;
   reviewstarttime:any;
   designstarttime:any;
+  designacceptancestarttime:any;
+  designacceptanceremainingtime:any;
   attachments:any=[];
+
+  designremainingtime:any;
+  isinrevisionstate: any;
+  revisionattachments: any;
 }
 
 export class PrelimDesign{
@@ -125,5 +131,9 @@ export class PrelimDesign{
    id:number;
    activity:string
  }
+ export class arcFile{
+  name:string;
+  type:string;
+}
 
 
