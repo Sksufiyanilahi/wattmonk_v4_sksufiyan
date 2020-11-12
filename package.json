@@ -177,17 +177,12 @@
       "cordova-plugin-x-socialsharing": {},
       "cordova-plugin-dialogs": {},
       "cordova-plugin-androidx-adapter": {},
-<<<<<<< HEAD
-      "cordova-plugin-firebase": {},
-      "cordova-plugin-androidx": {}
-=======
       "cordova-plugin-app-version": {},
       "cordova-plugin-firebase": {},
       "cordova-plugin-androidx": {},
       "cordova-plugin-telerik-imagepicker": {
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": " "
       }
->>>>>>> d119a7b8dda9f0779321ea71bcbbf981c76d4e01
     },
     "platforms": [
       "ios",
