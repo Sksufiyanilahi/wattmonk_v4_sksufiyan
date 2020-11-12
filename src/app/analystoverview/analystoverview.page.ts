@@ -57,6 +57,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   userRole: any;
   netSwitch: any;
   update_version:string;
+  unreadCount: any;
 
   constructor(private utilities: UtilitiesService,
     private apiService: ApiService,
@@ -73,12 +74,21 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
     private iab: InAppBrowser){
      
   }
+  getNotificationCount(){
+    this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+      console.log("count",count);
+     this.unreadCount= count;
+    });
+
+   
+  }
      
 
   ngOnInit() { 
     this.apiService.version.subscribe(versionInfo=>{
       this.update_version = versionInfo;
     })
+    this.getNotificationCount();
     this.setupCometChatUser();
     this.requestLocationPermission();
     this.updateUserPushToken();
@@ -102,6 +112,10 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
     this.apiService.pushtoken(this.storage.getUserID(), {"newpushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
     }, (error) => {
     });
+  }
+
+  setzero(){
+    this.unreadCount= 0;
   }
 
 

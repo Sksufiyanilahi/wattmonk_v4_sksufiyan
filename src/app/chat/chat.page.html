@@ -9,8 +9,8 @@
             <div class="Inline"><img
                     src="{{currentData.avatar || 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?resize=256%2C256&quality=100&ssl=1' }}"
                     class="circular"></div>
-            <div class="Inline"><span style="padding:5px;">{{currentData.name}}</span></div>
-            <p style="margin: 0px; font-size: small; padding-bottom: 2px;">{{currentUserStatus}}</p>
+            <div class="Inline"><span style="padding:5px;font-size: 9px;">{{currentData.name}}</span></div>
+            <!-- <p style="margin: 0px; font-size: small; padding-bottom: 2px;">{{currentUserStatus}}</p> -->
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -40,7 +40,7 @@
                 <span [class]="message.sender.uid === currentData.uid ? 'message me' : 'message you'"
                       *ngIf="message.type == 'file'">
                 				{{message.sender.name}} has sent you a file, you can download it<span
-                        style="font-weight: bold; font-style: italic;"> here.</span>
+                        style="font-weight: bold; font-style: italic;" (click)="openLink(message.data.url)"> here.</span>
                 			</span>
 
                 <span class="imgSpan">

@@ -268,7 +268,7 @@ export class ApiService {
     return this.http.get(BaseUrl+ "/Notifications/count?user=" + this.userId + "&status=unread", { headers: this.headers});
   }
   profileNotification(){
-    return this.http.get(BaseUrl + '/notifications?user=' + this.userId + "&_sort=updated_at:DESC",{ headers: this.headers })
+    return this.http.get(BaseUrl + '/notifications?user=' + this.userId + "&_sort=created_at:DESC",{ headers: this.headers })
   }
 
   updateNotification(id,status){
@@ -311,7 +311,7 @@ export class ApiService {
   editDesign(id:number, inputData:any): Observable<DesignModel>{
    
     return this.http
-    .put<DesignModel>(BaseUrl + "designs/"+ id, JSON.stringify(inputData), {
+    .put<DesignModel>(BaseUrl + "/designs/"+ id, JSON.stringify(inputData), {
       headers: this.headers,
       
     })
@@ -332,11 +332,12 @@ export class ApiService {
     }
 
     update_message(){
-      return this.http.get(PlatformUpdateUrl + 'platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app', {
-        headers: this.headers,
-      
-      })
-    
+      this.headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.storageService.getJWTToken()
+      });
+      console.log(this.headers);
+      return this.http.get(BaseUrl + '/platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app',{ headers: this.headers})  
     }
 
     getUpgradeMessage(){

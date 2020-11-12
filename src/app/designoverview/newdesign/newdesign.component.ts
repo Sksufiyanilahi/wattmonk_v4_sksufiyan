@@ -157,7 +157,13 @@ console.log(this.currentDate.toISOString());
   }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
-    records.forEach(element => {
+    records.forEach((element:any) => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.deliverydate);
+      }else{
+        element.isoverdue = false;
+      }
+      element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
@@ -166,7 +172,10 @@ console.log(this.currentDate.toISOString());
         }else{
           element.totalpercent = 0;
         }
+        this.startAllTimers();
       });
+  
+
     });
 
     return records;
@@ -179,4 +188,12 @@ console.log(this.currentDate.toISOString());
     this.overdue = lateby;  
   }
 
+  startAllTimers(){
+    this.listOfDesignData.forEach(element => {
+    
+      var reviewdate = new Date(element.designstarttime);
+      reviewdate.setHours(reviewdate.getHours() + 2);
+      element.designremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+    });
+  }
 }

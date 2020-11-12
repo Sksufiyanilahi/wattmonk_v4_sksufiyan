@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+              <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+          </ion-button>
+      </ion-buttons>
+      <ion-title *ngIf="currentGroupData">
+          <div class="Inline"><img
+                  src="{{currentGroupData.avatar || 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?resize=256%2C256&quality=100&ssl=1' }}"
+                  class="circular"></div>
+          <div class="Inline"><span style="padding:5px;">{{currentGroupData.name}}</span></div>
+          <p style="margin: 0px; font-size: small; padding-bottom: 2px;">{{currentTypingUserIndicator}}</p>
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding #content [scrollEvents]="true" (ionScrollStart)="logScrollStart()"
+           (ionScroll)="logScrolling($event)" (ionScrollEnd)="logScrollEnd()">
+           <ion-list>
+            <div class="chat" *ngFor="let message of groupMessages">
+              <div [class]="message.sender.uid === loggedInUserData.uid ? 'message you' : 'message me'"><span><b style="
+                font-size: 10px">{{message.sender.name}}:</b></span><br>{{message.text}}</div>
+            </div> 
+            </ion-list>
+</ion-content>
+<ion-footer no-border>
+  <ion-toolbar>
+    <div class="bar bar-footer bar-balanced chat-box-container">
+          <ion-input class="chat-editor-box" placeholder="Type Your Message Here.." type="text" [(ngModel)]="messageText" (ionBlur)="checkBlur()"
+          (ionFocus)="checkFocus()" (ionInput)="checkInput()"></ion-input>
+          <div class="btnSendChatView">
+        <button item-right clear (click)='sendMessage()' class = "btnSendChatView">
+          <ion-icon name="send" class="btnSendChat"></ion-icon>
+        </button>
+        </div>
+    </div>
+  </ion-toolbar>
+</ion-footer>

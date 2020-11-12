@@ -55,12 +55,12 @@
                                 formControlName="monthlybill" maxLength="5"></ion-input>
                 </ion-item>
                 <div style="height: 5px;">
-                    <div *ngIf="desginForm.get('monthlybill').dirty && desginForm.get('monthlybill').hasError('min')">
-                        <span class="error">{{"Annual units should not be negative"}}</span>
+                    <div *ngIf="desginForm.get('monthlybill').dirty && desginForm.get('monthlybill').hasError('pattern')">
+                        <span class="error">{{"Annual units should be a vaid number"}}</span>
                     </div>
-                    <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
+                    <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
                         <span class="error">{{annualunitError}}</span>
-                    </div>
+                    </div> -->
                 </div>
             </ion-col>
         </ion-row>
@@ -87,7 +87,7 @@
             <ion-col size="6">
                 <!-- <ion-label position="floating">module model*</ion-label> -->
                 <app-auto-complete style="font-size: 14px;"  [dataList]="listOfSolarMade" 
-                                    formControlName="solarmodel" ><ion-label position="floating" >Invertor model*</ion-label></app-auto-complete>
+                                    formControlName="solarmodel" ><ion-label position="floating" >Module model*</ion-label></app-auto-complete>
 
             </ion-col>
         </ion-row>
@@ -96,12 +96,12 @@
             <ion-col size="6">
                 <!-- <ion-label position="floating">inverter make*</ion-label> -->
                 <app-auto-complete style="font-size: 12px;" [dataList]="listOfInverterMake" 
-                                    formControlName="invertermake"><ion-label position="floating" >Invertor make*</ion-label></app-auto-complete>
+                                    formControlName="invertermake"><ion-label position="floating" >Inverter make*</ion-label></app-auto-complete>
             </ion-col>
             <ion-col size="6">
                 <!-- <ion-label position="floating">invertor model*</ion-label> -->
                 <app-auto-complete style="font-size: 10px;" [dataList]="listOfInverterMade" 
-                                    formControlName="invertermodel" ><ion-label position="floating" >Invertor model*</ion-label></app-auto-complete>
+                                    formControlName="invertermodel" ><ion-label position="floating" >Inverter model*</ion-label></app-auto-complete>
             </ion-col>
         </ion-row>
 
@@ -191,8 +191,8 @@
                         <ion-input class="form_input"  type="tel" formControlName="tiltofgroundmountingsystem" maxlength="5"></ion-input>
                     </ion-item>
                     <div style="height: 5px;">
-                        <div *ngIf="desginForm.get('tiltofgroundmountingsystem').dirty && desginForm.get('tiltofgroundmountingsystem').hasError('min')">
-                            <span class="error">{{"Tilt for ground mount should not be negative"}}</span>
+                        <div *ngIf="desginForm.get('tiltofgroundmountingsystem').dirty && desginForm.get('tiltofgroundmountingsystem').hasError('pattern')">
+                            <span class="error">{{"It should be a valid number"}}</span>
                         </div>
                         <div *ngIf="desginForm.get('tiltofgroundmountingsystem').hasError('pattern') && desginForm.get('tiltofgroundmountingsystem').dirty">
                             <span class="error">{{tiltforgroundError}}</span>

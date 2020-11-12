@@ -136,8 +136,14 @@ export class CompleteddesignComponent implements OnInit {
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
     records.forEach(element => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.deliverydate);
+      }else{
+        element.isoverdue = false;
+      }
+      element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
-      this.storage.get(''+element.id).then((data) => {
+      this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
         if (data) {
           element.totalpercent = data.currentprogress;

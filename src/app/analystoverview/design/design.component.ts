@@ -195,25 +195,82 @@ this.network.networkConnect();
     });
   }
 
+  // formatDesignData(records : DesginDataModel[]){
+  //   this.overdue=[];
+  //   this.listOfDesigns = this.fillinDynamicData(records);
+  //   console.log(this.listOfDesigns);
+    
+  //   const tempData: DesginDataHelper[] = [];
+  //         this.listOfDesigns.forEach((designItem:any,i) => { 
+  //           console.log(i);
+            
+  //           if (tempData.length === 0) {
+  //             this.sDatePassed(designItem.deliverydate,i);
+  //             const listOfDesign = new DesginDataHelper();
+  //             listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
+  //               listOfDesign.lateby = this.overdue;
+  //             listOfDesign.listOfDesigns.push(designItem);
+  //             tempData.push(listOfDesign);
+  //             console.log(tempData);
+              
+              
+  //           } else {
+             
+  //             let added = false;
+  //             tempData.forEach((DesignList) => {
+  //               // DesignList['listOfDesigns'].forEach(element=>{
+                  
+  //               //   console.log(element.deliverydate,":::::::::::::");
+                  
+  //               //   this.sDatePassed(element.deliverydate);
+  //               // })
+  //               if (!added) {
+  //                 if (DesignList.date === this.datePipe.transform(designItem.deliverydate, 'M/dd/yy')) {
+  //                   DesignList.listOfDesigns.push(designItem);
+  //                   this.sDatePassed(designItem.deliverydate,i);
+  //                   added = true;
+  //                 }
+  //               }
+  //             });
+  //             if (!added) {
+  //               //debugger;
+  //               this.sDatePassed(designItem.deliverydate,i);
+  //               const listOfDesign = new DesginDataHelper();
+  //               listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
+  //               listOfDesign.lateby = this.overdue;
+  //               listOfDesign.listOfDesigns.push(designItem);
+  //               tempData.push(listOfDesign);
+  //               added = true;
+  //             }
+  //           }
+  //         });
+  //         this.listOfDesignsHelper = tempData.sort(function (a, b) {
+  //           var dateA = new Date(a.date).getTime(),
+  //             dateB = new Date(b.date).getTime();
+  //           return dateB - dateA;
+  //         });
+  //         this.cdr.detectChanges();
+  // }
+
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
     this.listOfDesigns = this.fillinDynamicData(records);
+
     console.log(this.listOfDesigns);
     
     const tempData: DesginDataHelper[] = [];
           this.listOfDesigns.forEach((designItem:any,i) => { 
             console.log(i);
-            
+            designItem.lateby = this.utils.getTheLatebyString(designItem.deliverydate)
             if (tempData.length === 0) {
-              this.sDatePassed(designItem.deliverydate,i);
               const listOfDesign = new DesginDataHelper();
-              listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
+              listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
               console.log(tempData);
               
               
+;
             } else {
              
               let added = false;
@@ -225,19 +282,18 @@ this.network.networkConnect();
                 //   this.sDatePassed(element.deliverydate);
                 // })
                 if (!added) {
-                  if (DesignList.date === this.datePipe.transform(designItem.deliverydate, 'M/dd/yy')) {
+                  if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
                     DesignList.listOfDesigns.push(designItem);
-                    this.sDatePassed(designItem.deliverydate,i);
+                    // this.sDatePassed(designItem.updated_at,i);
                     added = true;
                   }
                 }
               });
               if (!added) {
-                //debugger;
-                this.sDatePassed(designItem.deliverydate,i);
+                ;
+                // this.sDatePassed(designItem.updated_at,i);
                 const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
+                listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
                 listOfDesign.listOfDesigns.push(designItem);
                 tempData.push(listOfDesign);
                 added = true;
@@ -297,7 +353,16 @@ this.network.networkConnect();
   // }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
-    records.forEach(element => {
+    records.forEach((element:any) => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.deliverydate);
+      }else{
+        element.isoverdue = false;
+      }
+      var reviewdate = new Date(element.reviewstarttime)
+      reviewdate.setMinutes(reviewdate.getMinutes()+15)
+      element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+      element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       this.storage.get(''+element.id).then((data: any) => {
         console.log(data);

@@ -110,6 +110,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     console.log(attachmentFile)
     const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
+  showreasonImage(attachmentFile:any){
+    const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  }
   showurl(i,value){
     if(value=='attachments'){
       this.browser = this.iab.create(this.design.attachments[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
@@ -124,10 +127,17 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.errorSnackBar('Please select prelim design');
       return false;
     }else{
-      
+      var date= Date.now();
+      const data={
+             status:"designcompleted",
+             designendtime:date,
+             comments:this.commentsForm.get('comments').value
+             
+     }
+
       this.utilities.showLoading('Submitting').then(()=>{
         
-        this.apiService.updateDesignForm(this.commentsForm.value,this.designId).subscribe((success)=>{
+        this.apiService.updateDesignForm(data,this.designId).subscribe((success)=>{
           this.uploadpreliumdesign(this.designId,'prelimdesign');
           this.utilities.hideLoading().then(() => {
             console.log("suc",success);
@@ -553,7 +563,7 @@ return blob;
         this.reviewenddatetime = cdate;
       const postData = {
         status: "reviewpassed",
-        reviewIssues : this.reviewIssuesForm.get('reviewIssues').value,
+        reviewissues : this.reviewIssuesForm.get('reviewIssues').value,
         reviewstarttime : this.reviewstartdatetime,
         reviewendtime : this.reviewenddatetime
       };

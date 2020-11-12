@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import Conversation = CometChat.Conversation;
-import { UtilitiesService } from '../utilities.service';
+import { UtilitiesService } from 'src/app/utilities.service';
+
 
 @Component({
-  selector: 'app-message',
-  templateUrl: './message.page.html',
-  styleUrls: ['./message.page.scss'],
+  selector: 'app-groups',
+  templateUrl: './groups.page.html',
+  styleUrls: ['./groups.page.scss'],
 })
-export class MessagePage implements OnInit {
+export class GroupsPage implements OnInit {
 
   conversations: Conversation[] = [];
   conversationsRequest;
@@ -24,7 +25,7 @@ export class MessagePage implements OnInit {
   ngOnInit() {
     this.conversationsRequest = new CometChat.ConversationsRequestBuilder()
       .setLimit(50)
-      .setConversationType('user')
+      .setConversationType('group')
       .build();
 
     this.loadData(null);
@@ -77,6 +78,7 @@ export class MessagePage implements OnInit {
   }
 
   openConversation(conversation) {
-    this.navController.navigateForward(['chat/' + conversation.getConversationWith().getUid()]);
+    this.navController.navigateForward(['chat/' + conversation.getConversationWith().getGuid(),{'key':'group'}]);
   }
+
 }

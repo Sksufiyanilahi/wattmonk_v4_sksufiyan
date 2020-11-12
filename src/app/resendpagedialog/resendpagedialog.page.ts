@@ -66,7 +66,7 @@ export class ResendpagedialogPage implements OnInit {
             this.exceedfileSize = fileObj.size;
             this.enableDisable =true;
            }else{
-             this.enableDisable = false;
+            //  this.enableDisable = false;
               this.getBase64(fileObj).then(res=>{
                 let base64file= file.dataURI + res;
                 this.blob= this.utilities.b64toBlob(base64file);

@@ -11,7 +11,7 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_APP_ID, COMET_CHAT_REGION } from './model/constants';
 import { Firebase } from '@ionic-native/firebase/ngx';
 import { NetworkdetectService } from './networkdetect.service';
-import { ROLES } from './contants';
+import { ROLES,COMETCHAT_CONSTANTS } from './contants';
 
 @Component({
   selector: 'app-root',
@@ -20,8 +20,12 @@ import { ROLES } from './contants';
 })
 export class AppComponent {
   user: any;
+  ischatuserloggedin = false;
   public onlineOffline: boolean = navigator.onLine;
   netSwitch: boolean;
+  retryattempt = 2;
+  totalcountsforallgroups: number;
+  firebaseToken: string;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -112,6 +116,7 @@ this.network.networkConnect();
   this.firebase.getToken()
   .then(token => {
     console.log(`The token is ${token}`)
+    this.firebaseToken= token;
     localStorage.setItem('pushtoken', token);
   })
   .catch(error => {
@@ -129,15 +134,21 @@ this.network.networkConnect();
   }
 
   setupCometChat() {
-    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMET_CHAT_REGION).build();
-    CometChat.init(COMET_CHAT_APP_ID, appSetting).then(
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
       () => {
         console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+      
+      // }
       },
       error => {
         console.log('Initialization failed with error:', error);
       }
     );
   }
+
+ 
 
 }

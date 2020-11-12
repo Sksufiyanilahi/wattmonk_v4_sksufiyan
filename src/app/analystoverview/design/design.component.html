@@ -69,10 +69,11 @@
                               (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
       
                       <ion-row style="margin-bottom: 8px;" [routerLink]="['/design-details/',designData.id]">
-                          <span class="chipdetail" style="background-color: #95afc0; cursor: pointer;" >Wattmonk</span>
-                          <span class="chipdetail" style="background-color: #95afc0; cursor: pointer;" >{{designData?.formattedjobtype}}</span>
-                          <ion-col>     
-                            
+                          <!-- <span class="chipdetail" style="background-color: #95afc0; cursor: pointer;" >Wattmonk</span> -->
+                          <ion-col>
+                          <span class="chipdetail" style="background-color: #95afc0; cursor: pointer;" >{{designData?.source}}</span></ion-col>
+                          <ion-col *ngIf="designData.status == 'reviewassigned'" style="color: #737373; font-size: 14px;">     
+                            <span style="float: right;">{{designData?.reviewremainingtime}}</span>
                           </ion-col>
                       </ion-row>
 
@@ -143,9 +144,10 @@
       </ion-grid>
      
       <div *ngIf="listOfDesignsHelper.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
-              <div *ngIf="!netSwitch">
+              <!-- <div *ngIf="!netSwitch">
                   No internet Connection
-              </div>
+              </div> -->
+              No designs found
               
           <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
       </div>

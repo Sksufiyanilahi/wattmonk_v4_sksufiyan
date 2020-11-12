@@ -96,9 +96,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     private file: File,
     private router:Router
   ) {
-  
+    var tomorrow=new Date();
+    tomorrow.setDate(tomorrow.getDate()+1);
+    var d_date=tomorrow.toISOString();
     const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
-    const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
+    const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
+    const NUMBERPATTERN = '^[0-9]*$';
     this.desginForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
@@ -106,7 +109,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       solarmodel: new FormControl('', [Validators.required]),
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
-      monthlybill: new FormControl('',[Validators.required,Validators.min(0)]),
+      monthlybill: new FormControl('',[Validators.required,Validators.min(0),Validators.pattern(NUMBERPATTERN)]),
       address: new FormControl('',[Validators.required]),
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
@@ -128,10 +131,11 @@ export class DesignComponent implements OnInit, OnDestroy {
       city: new FormControl(''),
       postalcode: new FormControl(''),
       status: new FormControl('created'),
-      attachments: new FormControl([])
+      attachments: new FormControl([]),
+      deliverydate:new FormControl(d_date,[])
       // uploadbox:new FormControl('')
     });
-
+    
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.getAssignees();
   }
@@ -245,17 +249,18 @@ this.uploadcontrolvalidation();
   }
   
 formControlValueChanged() {
+  const NUMBERPATTERN = '^[0-9]*$';
   const tiltControl = this.desginForm.get('tiltofgroundmountingsystem');
   const roofcontrol = this.desginForm.get('rooftype');
   this.desginForm.get('mountingtype').valueChanges.subscribe(
       (mode: string) => {
           console.log(mode);
           if (mode === 'ground') {
-              tiltControl.setValidators([Validators.required]);
+              tiltControl.setValidators([Validators.required,Validators.pattern(NUMBERPATTERN)]);
               roofcontrol.clearValidators();
               roofcontrol.reset();
           }else if(mode ==='both'){
-            tiltControl.setValidators([Validators.required,,Validators.min(0)]);
+            tiltControl.setValidators([Validators.required,,Validators.min(0), Validators.pattern(NUMBERPATTERN)]);
             roofcontrol.setValidators([Validators.required]);
           }
           else if (mode === 'roof') {
@@ -618,8 +623,8 @@ remove(index:number){
               }
           
 
-        } else 
-       
+        } else {
+          if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.uploaarchitecturedesign(response.id,'architecturaldesign');
             this.uploadpreliumdesign(response.id,'attachments')
@@ -640,8 +645,31 @@ remove(index:number){
 
           });
         }
+        else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
+          this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
+            this.uploaarchitecturedesign(response.id,'architecturaldesign');
+            this.uploadpreliumdesign(response.id,'attachments')
+            this.utils.hideLoading().then(() => {
+              console.log('Res', response);
+              this.value=response.id;
+              
+              this.utils.showSnackBar('Design have been updated');
+              this.sendtowattmonk();
+              
+              
       
-      );
+            });
+          }, responseError => {
+            this.utils.hideLoading().then(() => {
+              const error: ErrorModel = responseError.error;
+              this.utils.errorSnackBar(error.message[0].messages[0].message);
+            });
+
+          });
+        }
+      }
+
+      });
 
     } else {
       if(this.desginForm.value.name==''){

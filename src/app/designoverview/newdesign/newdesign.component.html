@@ -21,23 +21,25 @@
                     <span [routerLink]="['/design-details/',designData.id]"
                     routerDirection="forward" class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'">Design Assigned</span>
                     <span [routerLink]="['/design-details/',designData.id]"
-                    routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
+                    routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue > 0">Overdue</span>
                     <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>
                     <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
                 </p>
-               <p> <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
+               <p style="margin: 0px;"> <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
                       routerDirection="forward">{{designData.email}}</span>
-                      <span *ngIf="item.lateby > 1" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{item.lateby}} days</strong></span>
-                      <span *ngIf="item.lateby == 1" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by a day</strong></span>
-                    </p>
+                      <span *ngIf="designData.isoverdue" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{designData.lateby}}</strong></span>
+                     </p>
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{designData.phonenumber}}</span></a>
                 <span style="margin:0px" class="customer-address z-100"
-                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
+                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
 
                 <ion-row style="margin-bottom: 8px;" [routerLink]="['/design-details/',designData.id]">
-                    <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                    <span class="chipdetail" style="background-color: #95afc0;" >{{designData?.formattedjobtype}}</span>
+                    <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
+                    <span class="chipdetail" style="background-color: #95afc0;" >{{designData?.source}}</span>
+                    <ion-col style="color: #737373; font-size: 14px;">
+                        <span style="float: right;" >{{designData.designremainingtime}}</span>
+                    </ion-col>
                    
                       <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.isoverdue">Overdue</span> -->
                 </ion-row>
@@ -62,6 +64,7 @@
 </ion-grid>
 
 <div *ngIf="listOfDesignDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+    No designs found
     <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
 </div>
 </ion-content>
