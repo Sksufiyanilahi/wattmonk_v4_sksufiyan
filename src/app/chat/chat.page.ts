@@ -3,12 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController, NavController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { Chooser } from '@ionic-native/chooser/ngx';
-// import { ImagePicker } from '@ionic-native/image-picker/ngx';
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController } from '@ionic/angular';
 import BaseMessage = CometChat.BaseMessage;
 import { UtilitiesService } from '../utilities.service';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
+import { File,FileEntry } from '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-chat',
@@ -32,7 +33,7 @@ export class ChatPage implements OnInit {
   currentUserStatus: any;
   loggedInUserData: any = CometChat.getLoggedinUser();
   messageStatus: any;
-  listenerId = 'OneOnOneMessageListners';
+  listenerId = 'GroupMessage';
   showImage = 0;
   imageUrl = '';
 
@@ -44,13 +45,14 @@ export class ChatPage implements OnInit {
     private chooser: Chooser,
     private iab: InAppBrowser,
     public actionSheetController: ActionSheetController,
-    // private imagePicker: ImagePicker,
-    public modalController: ModalController
+    private imagePicker: ImagePicker,
+    public modalController: ModalController,
+    private file:File
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.messagesRequest = new CometChat.MessagesRequestBuilder()
       .setLimit(this.limit)
-      .setUID(this.id)
+      .setGUID(this.id)
       .build();
   }
 
@@ -62,16 +64,16 @@ export class ChatPage implements OnInit {
   }
 
   ngOnInit() {
-    CometChat.getUser(this.id).then(
+    CometChat.getGroup(this.id).then(
       user => {
         console.log('User details fetched for user:', user);
         this.currentData = user;
-        this.currentUserStatus = this.currentData.status;
+        // this.currentUserStatus = this.currentData.status;
         this.loadMessages();
         this.addMessageEventListner();
         // this.addTypingListner();
         // this.addDeliveryReadEventListners();
-        this.addUserEventListner();
+        // this.addUserEventListner();
       },
       error => {
         console.log('User details fetching failed with error:', error);
@@ -109,7 +111,7 @@ export class ChatPage implements OnInit {
 
   addUserEventListner() {
     const listenerID = 'UserEventsListner';
-
+    debugger;
     CometChat.addUserListener(
       listenerID,
       new CometChat.UserListener({
@@ -167,7 +169,7 @@ export class ChatPage implements OnInit {
 
   moveToBottom() {
     console.log('here moving to bottom');
-    this.content.scrollToBottom(1500);
+    this.content.scrollToBottom();
   }
 
   logScrollStart() {
@@ -189,7 +191,6 @@ export class ChatPage implements OnInit {
   addMessageEventListner() {
 
     // var listenerID = "OneOnOneMessage";
-
     CometChat.addMessageListener(this.listenerId, new CometChat.MessageListener({
         onTextMessageReceived: textMessage => {
           console.log('Text message successfully', textMessage);
@@ -254,7 +255,7 @@ export class ChatPage implements OnInit {
 
   addTypingListner() {
 
-    const listenerId = 'OneOnOneTypingListner';
+    const listenerId = 'GroupTypingListner';
 
     CometChat.addMessageListener(listenerId, new CometChat.MessageListener({
       onTypingStarted: (typingIndicator) => {
@@ -280,9 +281,9 @@ export class ChatPage implements OnInit {
     if (this.messageText !== '') {
 
       const messageType = CometChat.MESSAGE_TYPE.TEXT;
-      const receiverType = CometChat.RECEIVER_TYPE.USER;
+      const receiverType = CometChat.RECEIVER_TYPE.GROUP;
 
-      const textMessage = new CometChat.TextMessage(this.currentData.uid, this.messageText, receiverType);
+      const textMessage = new CometChat.TextMessage(this.currentData.guid, this.messageText, receiverType);
 
       CometChat.sendMessage(textMessage).then(
         message => {
@@ -303,8 +304,8 @@ export class ChatPage implements OnInit {
 
   checkBlur() {
     console.log('checkBlur called');
-    const receiverId = this.currentData.uid;
-    const receiverType = CometChat.RECEIVER_TYPE.USER;
+    const receiverId = this.currentData.guid;
+    const receiverType = CometChat.RECEIVER_TYPE.GROUP;
 
     const typingNotification = new CometChat.TypingIndicator(receiverId, receiverType);
     CometChat.endTyping(typingNotification);
@@ -316,8 +317,8 @@ export class ChatPage implements OnInit {
 
   checkInput() {
     console.log('checkInput called');
-    const receiverId = this.currentData.uid;
-    const receiverType = CometChat.RECEIVER_TYPE.USER;
+    const receiverId = this.currentData.guid;
+    const receiverType = CometChat.RECEIVER_TYPE.GROUP;
 
     const typingNotification = new CometChat.TypingIndicator(receiverId, receiverType);
     CometChat.startTyping(typingNotification);
@@ -392,43 +393,88 @@ export class ChatPage implements OnInit {
   }
 
   DocumentPicker() {
-    this.chooser.getFile('all')
+    this.chooser.getFile()
       .then(response => {
+        this.file.resolveLocalFilesystemUrl(response.uri).then((fileentry:FileEntry)=>{
+          fileentry.file(fileObj=>{
+            console.log(fileObj);
+          //   this.blob=fileObj;
+          //  console.log(fileObj.size);
 
-        const blob_nw = this.dataURItoBlob(response.dataURI);
+          //  if(fileObj.size > 1024 * 1024 * 1){
+          //   this.exceedfileSize = fileObj.size;
+          //   this.enableDisable =true;
+          //  }else{
+          //   //  this.enableDisable = false;
+              this.getBase64(fileObj).then(res=>{
+                let base64file= response.dataURI + res;
+                const blob_nw= this.utilities.b64toBlob(base64file);
+                      
+                const file = {
+                  file: blob_nw,
+                  type: response.mediaType,
+                  name: response.name
+                };
+                this.messageMedia = file;
+                console.log(this.messageMedia,"documentpicker");
+                this.sendMediaMessage();
+            });
+            
+          //  }
+           
+          })
+      })
 
-        const file = {
-          file: blob_nw,
-          type: response.mediaType,
-          name: response.name
-        };
+        // const blob_nw = this.dataURItoBlob(response.dataURI);
 
-        this.messageMedia = file;
-        this.sendMediaMessage();
+        // const file = {
+        //   file: blob_nw,
+        //   type: response.mediaType,
+        //   name: response.name
+        // };
+
+      
       })
       .catch(e => console.log(e));
   }
 
-  ImagePicker() {
-    // const options = {
-    //   outputType: 1
-    // };
-    // this.imagePicker.getPictures(options)
-    //   .then((results) => {
-    //     results[0] = 'data:image/jpeg;base64,' + results[0];
-    //     const blob_nw = this.dataURItoBlob(results[0]);
-    //     const date = new Date();
-    //     const file = {
-    //       file: blob_nw,
-    //       type: 'image/jpeg',
-    //       name: 'temp_img' + date.getTime()
-    //     };
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        let encoded = reader.result.toString().replace(/^data:(.*,)?/, '');
+        if ((encoded.length % 4) > 0) {
+          encoded += '='.repeat(4 - (encoded.length % 4));
+        }
+        resolve(encoded);
+      };
+      reader.onerror = error => reject(error);
+    });
+  }
 
-    //     this.messageMedia = file;
-    //     this.sendMediaMessage();
-    //   }, (err) => {
-    //     console.log(err);
-    //   });
+  ImagePicker() {
+    const options = {
+      outputType: 1
+    };
+    this.imagePicker.getPictures(options)
+      .then((results) => {
+        results[0] = 'data:image/jpeg;base64,' + results[0];
+        const blob_nw = this.dataURItoBlob(results[0]);
+        const date = new Date();
+        const file = {
+          file: blob_nw,
+          type: 'image/jpeg',
+          name: 'temp_img' + date.getTime()
+        };
+
+        this.messageMedia = file;
+        console.log(this.messageMedia);
+        
+        this.sendMediaMessage();
+      }, (err) => {
+        console.log(err);
+      });
   }
 
   dataURItoBlob(dataURI) {
@@ -452,10 +498,10 @@ export class ChatPage implements OnInit {
     } else {
       messageType = CometChat.MESSAGE_TYPE.FILE;
     }
-    const receiverType = CometChat.RECEIVER_TYPE.USER;
-    const mediaMessage = new CometChat.MediaMessage(this.currentData.uid, this.messageMedia.file, messageType, receiverType);
+    const receiverType = CometChat.RECEIVER_TYPE.GROUP;
+    const mediaMessage = new CometChat.MediaMessage(this.currentData.guid, this.messageMedia.file, messageType, receiverType);
     console.log('mediaMessage', mediaMessage);
-    CometChat.sendMessage(mediaMessage)
+    CometChat.sendMediaMessage(mediaMessage)
       .then(message => {
           console.log('cometchat send media message', message);
           this.userMessages.push(message);

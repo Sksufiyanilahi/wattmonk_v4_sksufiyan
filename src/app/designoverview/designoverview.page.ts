@@ -26,6 +26,7 @@ export class DesignoverviewPage implements OnInit {
   update_version: string;
   netSwitch:any;
   showSearchBar = false;
+  unreadCount: any;
   //showSearchBar = false;
   
 
@@ -43,6 +44,7 @@ export class DesignoverviewPage implements OnInit {
     this.apiService.version.subscribe(versionInfo=>{
       this.update_version = versionInfo;
     })
+    this.getNotificationCount();
     this.setupCometChatUser();
     this.updateUserPushToken();
     this.route.navigate(['designoverview/newdesigns']);
@@ -153,6 +155,19 @@ this.network.networkConnect();
       (navigator as any).app.exitApp();
     }
   });
+}
+
+getNotificationCount(){
+  this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+    console.log("count",count);
+   this.unreadCount= count;
+  });
+
+ 
+}
+
+setzero(){
+  this.unreadCount= 0;
 }
 
 }

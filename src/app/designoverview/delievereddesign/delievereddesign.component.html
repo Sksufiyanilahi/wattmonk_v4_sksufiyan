@@ -35,11 +35,11 @@
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{designData.phonenumber}}</span></a>
                 <span style="margin:0px" class="customer-address z-100"
-                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
+                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
 
                 <ion-row style="margin-bottom: 8px;" [routerLink]="['/design-details/',designData.id]" >
-                    <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                    <span class="chipdetail" style="background-color: #95afc0;" >{{designData.formattedjobtype}}</span>
+                    <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
+                    <span class="chipdetail" style="background-color: #95afc0;" >{{designData.source}}</span>
                 </ion-row>
                 <ion-row class="ion-no-margin ion-no-margin">
                     <ion-col >
@@ -62,6 +62,7 @@
 </ion-grid>
 
 <div *ngIf="listofDesignDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+    No designs found
     <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
 </div>
 </ion-content>

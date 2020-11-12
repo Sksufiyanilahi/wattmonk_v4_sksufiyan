@@ -220,7 +220,8 @@ this.network.networkConnect();
      accept(id,data:string){
    
        let status={
-        status:data
+        status:data,
+        acknowledgedby : this.userData.id
       }
       this.utils.showLoading("accepting").then(()=>{
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
@@ -779,7 +780,8 @@ async decline(id){
     component: DeclinepagePage,
     cssClass: 'my-custom-modal-css',
     componentProps: {
-      id:id
+      id:id,
+      userData:this.userData.id
     },
     backdropDismiss:false
   });

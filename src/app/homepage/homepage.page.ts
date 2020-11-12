@@ -13,7 +13,7 @@ import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
-import { ROLES } from '../contants';
+import { COMETCHAT_CONSTANTS, ROLES } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -137,14 +137,14 @@ export class HomepagePage implements OnInit, OnDestroy {
   setupCometChatUser() {
     const user = new CometChat.User(this.storage.getUserID());
     user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
-    CometChat.createUser(user, COMET_CHAT_AUTH_KEY).then(
-      (user) => {
-        console.log('user created', user);
-      }, error => {
-        console.log('error', error);
-      }
-    );
-    CometChat.login(this.storage.getUserID(), COMET_CHAT_AUTH_KEY).then(
+    // CometChat.createUser(user, COMETCHAT_CONSTANTS.API_KEY).then(
+    //   (user) => {
+    //     console.log('user created', user);
+    //   }, error => {
+    //     console.log('error', error);
+    //   }
+    // );
+    CometChat.login(this.storage.getUserID(),  COMETCHAT_CONSTANTS.API_KEY).then(
       (user) => {
         console.log('Login Successful:', { user });
       },

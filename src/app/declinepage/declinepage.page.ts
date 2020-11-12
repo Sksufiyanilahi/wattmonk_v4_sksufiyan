@@ -19,6 +19,7 @@ export class DeclinepagePage implements OnInit {
   filename: string;
   enableDisable:boolean=true;
   successmessage: string;
+  userId: any;
 
   constructor(private camera: Camera,
     private modalCtrl:ModalController,
@@ -26,13 +27,14 @@ export class DeclinepagePage implements OnInit {
     private nav:NavParams,
     private utilities:UtilitiesService,
     private chooser: Chooser,
-    private file:File
+    private file:File,
      ) { }
 
   ngOnInit() {
 
     this.id= this.nav.get('id');
     console.log(this.id);
+    this.userId= this.nav.get('userData');
     
   }
 
@@ -134,7 +136,8 @@ export class DeclinepagePage implements OnInit {
         status : 'requestdeclined',
         requestdeclinereason:this.reason,
         outsourcedto : null,
-        isoutsourced : "false"
+        isoutsourced : "false",
+        acknowledgedby : this.userId
         
       }
   

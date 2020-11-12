@@ -44,7 +44,7 @@
                 <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
             </ion-col>
         </ion-row>
-        <ion-row class="ion-no-padding" *ngIf="user.role.type=='designer'">
+        <ion-row class="ion-no-padding" *ngIf="user.role.type=='designer' || user.role.type=='qcinspector'">
             <ion-col class="flex-center">
                 <countdown-timer [countDownTimerConfig]="timerConfig"></countdown-timer>
             </ion-col>
@@ -125,7 +125,7 @@
                         </ion-col>
                     </ion-row>
                     <ion-row class="ion-no-padding font">
-                        <ng-container *ngIf="design.attachments !=[]"> 
+                        <ng-container *ngIf="design.attachments.length > 0"> 
                             <ion-col><span class="model-type font">Attachments</span></ion-col>
                             <ion-col size="auto" >
                                 <div *ngFor="let attachment of design.attachments;let i=index" style="display: flex;justify-content: flex-end;">
@@ -174,6 +174,19 @@
                             <span class="model-name font">{{design?.tiltofgroundmountingsystem}}</span>
                         </ion-col>
                     </ion-row>
+        <ion-row *ngIf="design.status=='requestdeclined'" class="ion-no-padding ion-margin-top">
+            <ion-col size="6"  >
+                <span class="model-type font">Reason</span></ion-col>
+                <ion-col size="6"  class="ion-no-padding">
+                        <p class="model-name font" style="text-align: right;margin:0px">{{design.requestdeclinereason}}</p>
+                    </ion-col>
+            </ion-row>
+                <ion-row *ngIf="design.status=='requestdeclined' && design.requestdeclineattachment.length > 0">
+                <ion-col > <span class="model-type font">Reason Attachment</span></ion-col>
+                <ion-col size="6"  style="float: right;" *ngFor="let attachment of design.requestdeclineattachment">
+                <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showreasonImage(attachment)">{{attachment.name.length > 40 ? (attachment.name | slice: 0:40) + '...' : attachment.name}}{{attachment.ext}}</span>
+                </ion-col>
+            </ion-row>
                 </ion-grid>
             </ion-col>
         </ion-row>
@@ -198,6 +211,9 @@
             <!-- </div> -->
 
         </ion-row>
+
+
+
         <ion-row *ngIf="design.reviewissues || design.reviewissues !==null  " class="ion-no-padding ion-margin-top">
             <ion-col size="6">
                 <span class="models font"> Review Comments</span>
@@ -225,7 +241,7 @@
                 <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
             </ion-col>
         </ion-row>
-        <div *ngIf="(user.role.type!='clientsuperadmin' || (user.role.type==='clientsuperadmin' && design.status==='delivered'))&& design.prelimdesign!=null">
+        <div *ngIf="(user.role.type!='clientsuperadmin' || (user.role.type==='clientsuperadmin' && design.status==='delivered'))&&( design.prelimdesign!=null || user.role.type=='designer')">
             <form novalidate [formGroup]="commentsForm">
 
             <ion-row *ngIf="(design.status=='designassigned' || design.status=='reviewfailed') && user.role.type=='designer'  ; else showimageName ">
@@ -239,7 +255,7 @@
 
                                   <input type="file" *ngIf="imageName.length==0"  (change)="prelimfiles($event)" formControlName="prelimdesign" style="width: 76px;"/>
                                    {{imageName}}&nbsp;
-                                   <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 && design.status!='reviewfailed'" (click)="remove()"></ion-icon>
+                                   <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 && user.role.type !='qcinspector'" (click)="remove()"></ion-icon>
                                 <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
                                 <!-- <ion-icon name="cloud-upload-outline" *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')" style="font-size: 20px;margin-left: 10px;color:green"></ion-icon> -->
                             
@@ -248,7 +264,7 @@
                         <!-- </span> -->
                     </ion-row>
                     <div *ngIf="user.role.type=='qcinspector' && design.status=='reviewassigned'">
-                        <ion-row *ngIf="isSelfUpdate" style="width: max-content;">
+                        <ion-row *ngIf="isSelfUpdate" style="width: 125%">
                              <!-- <span> -->
                                          <ion-col size="9" class="model-name font flx" style="justify-content: flex-end;">
                                           
@@ -267,9 +283,9 @@
                 </form>
                   <ng-template #showimageName >
                 <ion-col><span class="model-type font">Prelim Design</span></ion-col>
-                <ion-button size="3" style="width:72px;height: 20px;font-size: x-small;float: right;" *ngIf="user.role.type=='qcinspector' && design.status=='reviewassigned'" (click)="isSelfUpdate = !isSelfUpdate">Self Update</ion-button>
+                <ion-button size="3" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="user.role.type=='qcinspector' && design.status=='reviewassigned'" (click)="isSelfUpdate = !isSelfUpdate">Self Update</ion-button>
                 <ion-col size="auto"  style="float: right;">
-                    <span class="model-name font" style="text-align:right;color:#3c78d8 !important" (click)="showDesignImage()">{{imageName.length > 40 ? (imageName | slice: 0:40) + '...' : imageName}}</span>
+                    <span class="model-name font" style="text-align:right;color:#3c78d8 !important" (click)="showDesignImage()">{{imageName.length > 40 ? (imageName | slice: 0:40) + '...': imageName}}</span>
                         <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 " (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
                 </ion-col>
             </ng-template></div>

@@ -77,7 +77,7 @@
                            <ion-col style="padding-left:0px" >
                             <span class="chipdetail" style="background-color: #95afc0;" >{{designData?.source}}</span>
                         </ion-col> 
-                        <ion-col *ngIf="designData.status == 'designassigned'">
+                        <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin'">
                                 <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
                                     {{designData.designremainingtime}}</span></ion-col>
                                     <ion-col *ngIf="designData.status == 'outsourced'">
@@ -106,18 +106,20 @@
                            
                               
                             <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
-                                <span (click)="openDesigners(designData.id,designData)" style="float:right !important" class="ion-text-end action-button-color"
+                                <span *ngIf= "(designData.status =='designassigned') && userData.role.type !='clientsuperadmin'" (click)="openDesigners(designData.id,designData)" style="float:right !important" class="ion-text-end action-button-color"
                                 >Reassign</span>
                             </ion-col>
 
                             <ion-col *ngIf="segments=='requesttype=prelim&status=designcompleted'">
-                                <span *ngIf="(designData.isoutsourced=='true' && designData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (designData.isoutsourced=='false' && designData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                                <!-- <span *ngIf="(designData.isoutsourced=='true' && designData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (designData.isoutsourced=='false' && designData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                                >Assign Review</span> -->
+                                <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                                 >Assign Review</span>
                             </ion-col>
                             <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin'">
                                 <span *ngIf="designData.status =='reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData)"
                                 >  &nbsp; Deliver</span>
-                                <span *ngIf="(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')&&((designData.isoutsourced=='true' && designData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (designData.isoutsourced=='false' && designData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin')))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                                <span *ngIf="userData.role.type!='clientsuperadmin' &&(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                                 >Reassign Review</span>
                             </ion-col>
                          

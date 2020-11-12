@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
 import { AddressModel } from './model/address.model';
 import { AssigneeModel } from './model/assignee.model';
 import * as moment from 'moment';
+import { User } from './model/user.model';
+import { LoginModel } from './model/login.model';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,13 +37,26 @@ export class UtilitiesService {
   manualInput= new BehaviorSubject<string>('');
 
   dataRefresh = new BehaviorSubject<boolean>(false);
+  private currentUserSubject: BehaviorSubject<LoginModel>;
+  public currentUser: Observable<LoginModel>;
+  user: any;
 
   constructor(
     public loadingController: LoadingController,
     private toastController: ToastController,
     private alertController: AlertController,
     private modalController: ModalController,
+    private storageService:StorageService
   ) {
+    this.user= this.storageService.getUser();
+    this.currentUserSubject = new BehaviorSubject<LoginModel>(this.user);
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
+
+  
+
+  public get currentUserValue(): LoginModel {
+    return this.currentUserSubject.value;
   }
 
   getAddressObservable(): BehaviorSubject<AddressModel> {
@@ -338,6 +354,8 @@ export class UtilitiesService {
       else{
         return lateby + " years";
       }
+
+     
   }
 
   // getNotificationCount(){

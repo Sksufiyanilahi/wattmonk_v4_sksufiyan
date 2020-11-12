@@ -26,6 +26,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { Stripe } from '@ionic-native/stripe/ngx';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 import { Dialogs} from '@ionic-native/dialogs/ngx';
+import { Keyboard } from '@ionic-native/keyboard/ngx';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -54,7 +55,8 @@ import { Dialogs} from '@ionic-native/dialogs/ngx';
     Network,
     Stripe,
     SocialSharing,
-    Dialogs
+    Dialogs,
+    Keyboard
     ],
   exports: [
     UtilitiesModule

@@ -172,6 +172,7 @@ console.log(this.currentDate.toISOString());
         }else{
           element.totalpercent = 0;
         }
+        this.startAllTimers();
       });
   
 
@@ -187,4 +188,12 @@ console.log(this.currentDate.toISOString());
     this.overdue = lateby;  
   }
 
+  startAllTimers(){
+    this.listOfDesignData.forEach(element => {
+    
+      var reviewdate = new Date(element.designstarttime);
+      reviewdate.setHours(reviewdate.getHours() + 2);
+      element.designremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+    });
+  }
 }

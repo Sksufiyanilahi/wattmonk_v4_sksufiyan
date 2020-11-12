@@ -40,8 +40,10 @@
     "@ionic-native/file-transfer": "5.25.0",
     "@ionic-native/firebase": "^5.29.0",
     "@ionic-native/geolocation": "5.22.0",
+    "@ionic-native/image-picker": "^5.26.0",
     "@ionic-native/in-app-browser": "5.28.0",
     "@ionic-native/insomnia": "5.27.0",
+    "@ionic-native/keyboard": "^5.29.0",
     "@ionic-native/launch-navigator": "5.24.0",
     "@ionic-native/native-geocoder": "5.23.0",
     "@ionic-native/network": "5.28.0",
@@ -79,6 +81,7 @@
     "cordova-plugin-nativegeocoder": "3.2.2",
     "cordova-plugin-network-information": "2.0.2",
     "cordova-plugin-stripe": "1.5.3",
+    "cordova-plugin-telerik-imagepicker": "^2.3.3",
     "cordova-res": "0.15.1",
     "cordova-sqlite-storage": "5.0.0",
     "cordova.plugins.diagnostic": "5.0.1",
@@ -176,7 +179,10 @@
       "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-app-version": {},
       "cordova-plugin-firebase": {},
-      "cordova-plugin-androidx": {}
+      "cordova-plugin-androidx": {},
+      "cordova-plugin-telerik-imagepicker": {
+        "PHOTO_LIBRARY_USAGE_DESCRIPTION": " "
+      }
     },
     "platforms": [
       "ios",

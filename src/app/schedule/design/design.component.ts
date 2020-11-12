@@ -96,7 +96,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     private file: File,
     private router:Router
   ) {
-  
+    var tomorrow=new Date();
+    tomorrow.setDate(tomorrow.getDate()+1);
+    var d_date=tomorrow.toISOString();
     const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
     const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
     const NUMBERPATTERN = '^[0-9]*$';
@@ -129,10 +131,11 @@ export class DesignComponent implements OnInit, OnDestroy {
       city: new FormControl(''),
       postalcode: new FormControl(''),
       status: new FormControl('created'),
-      attachments: new FormControl([])
+      attachments: new FormControl([]),
+      deliverydate:new FormControl(d_date,[])
       // uploadbox:new FormControl('')
     });
-
+    
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.getAssignees();
   }
@@ -617,6 +620,7 @@ remove(index:number){
           
 
         } else {
+          if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.uploaarchitecturedesign(response.id,'architecturaldesign');
             this.uploadpreliumdesign(response.id,'attachments')
@@ -636,6 +640,29 @@ remove(index:number){
 
           });
         }
+        else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
+          this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
+            this.uploaarchitecturedesign(response.id,'architecturaldesign');
+            this.uploadpreliumdesign(response.id,'attachments')
+            this.utils.hideLoading().then(() => {
+              console.log('Res', response);
+              this.value=response.id;
+              
+              this.utils.showSnackBar('Design have been updated');
+              this.sendtowattmonk();
+              
+              
+      
+            });
+          }, responseError => {
+            this.utils.hideLoading().then(() => {
+              const error: ErrorModel = responseError.error;
+              this.utils.errorSnackBar(error.message[0].messages[0].message);
+            });
+
+          });
+        }
+      }
 
       });
 
