@@ -479,7 +479,12 @@
         </ion-col>
       </ion-row>
       <ion-row *ngIf='newconstruction'>
-        
+        <ion-col>
+          <ion-item class="ion-no-padding">
+              <ion-label position="floating">architectural design</ion-label>
+              <ion-input type="file"  class="form_input" (change)="architecturalfiles($event)" style="margin-top: 12px;" formControlName="architecturaldesign" placeholder="Upload Architectural design" multiple></ion-input>
+          </ion-item>
+      </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
