@@ -4,8 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AnalystoverviewPage } from './analystoverview.page';
 import { DesignComponent } from './design/design.component';
 import { SurveyComponent } from './survey/survey.component';
-import { PendingComponent } from './design/pending/pending.component';
-import { InreviewComponent } from '../homepage/design/inreview/inreview.component';
 
 
 const routes: Routes = [

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DesignRoutingModule } from './design-routing.module';
-import { PendingComponent } from './pending/pending.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 // import { Chooser } from '@ionic-native/chooser/ngx';
 
 
@@ -11,7 +11,8 @@ import { PendingComponent } from './pending/pending.component';
   declarations: [],
   imports: [
     CommonModule,
-    DesignRoutingModule
+    DesignRoutingModule,
+    
     
   ],
   // providers:[]

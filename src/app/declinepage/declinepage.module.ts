@@ -10,13 +10,14 @@ import { DeclinepagePage } from './declinepage.page';
 // import { Chooser } from '@ionic-native/chooser/ngx';
 
 @NgModule({
+  entryComponents:[DeclinepagePage],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     DeclinepagePageRoutingModule
   ],
-  declarations: [],
+  declarations: [DeclinepagePage],
   // providers:[Chooser]
 })
 export class DeclinepagePageModule {}

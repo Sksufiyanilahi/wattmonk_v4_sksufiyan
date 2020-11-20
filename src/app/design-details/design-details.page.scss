@@ -53,7 +53,11 @@ ion-header {
   font-size: 15px;
   text-transform: capitalize;
 }
-
+.model-space {
+  font-size: 15px;
+  text-transform: capitalize;
+  float:right;
+}
 .comment {
   font-size: 18px;
 }
@@ -118,6 +122,10 @@ font-size: .7rem;
   display: flex;
   align-items: center;
 }
+
+// input[type="file"]{
+//   visibility:hidden;
+// }
 
 
 

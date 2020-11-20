@@ -9,6 +9,8 @@ import { UtilitiesService } from '../utilities.service';
 import { User } from '../model/user.model';
 import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.module';
 import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
+import { AddMoneyPage } from '../add-money/add-money.page';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -23,7 +25,7 @@ export class ProfilePage implements OnInit {
   surveyIndex = 1;
   listOfSurveysToSave: SurveyStorageModel[] = [];
   enableDisable:boolean=false;
-
+profile:any;
   user: User;
 
   constructor(
@@ -33,7 +35,8 @@ export class ProfilePage implements OnInit {
     private deviceStorage: Storage,
     private utilities: UtilitiesService,
     private toastController: ToastController,
-    public modalController: ModalController
+    public modalController: ModalController,
+    public router:Router
   ) {
   }
 
@@ -41,12 +44,29 @@ export class ProfilePage implements OnInit {
     this.enableDisable= false;
     this.user = this.storage.getUser();
     console.log(this.user);
+    this.getProfileData();
     
   }
-
+  ionViewDidEnter(){
+   this.getProfileData();
+  }
   goBack() {
     this.navController.pop();
   }
+
+getProfileData(){
+this.apiService.getProfileDetails().subscribe(res=>{
+  console.log(res);
+  this.profile=res;
+  console.log(this.profile)
+})
+}
+
+ async AddWallet()
+ {
+   this.router.navigate(['/add-money',{mode:'wallet'}]);
+  
+}
 
   async logout() {
     this.enableDisable= true;

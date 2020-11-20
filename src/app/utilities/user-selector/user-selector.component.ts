@@ -19,7 +19,7 @@ import { AssigneeModel } from '../../model/assignee.model';
     }
   ]
 })
-export class UserSelectorComponent implements ControlValueAccessor, Validator {
+export class UserSelectorComponent implements ControlValueAccessor, Validator ,OnInit{
 
   @Input() assignees: AssigneeModel[] = [];
   @Input() placeholder = 'assign to';
@@ -27,11 +27,18 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
   @Output() assigneeData = new EventEmitter<AssigneeModel>();
   private onChange: (assignee: number) => void;
   selectedUserId = null;
+  @Input() reviewAssigned:any;
   // assignee: AssigneeModel;
 
   constructor() {
+   
   }
+ngOnInit(){
+  
+    
+    
 
+}
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
@@ -48,6 +55,8 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
+   
+   
     if (this.required) {
       console.log(this.selectedUserId);
       if (this.selectedUserId !== null) {
@@ -57,15 +66,19 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator {
         error: 'Assignee is required'
       };
     }
+    console.log(this.reviewAssigned);
     return null;
+    
   }
 
   selectAssignee(assignee: AssigneeModel) {
+    console.log("this is",assignee)
     this.assigneeData.emit(assignee);
     this.assignees.forEach((item) => {
       item.selected = false;
      
     });
+    
     if (assignee.id === this.selectedUserId) {
       this.selectedUserId = null;
       this.onChange(null);

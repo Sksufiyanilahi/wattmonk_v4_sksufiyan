@@ -14,6 +14,7 @@ import { NewdesignComponent } from './newdesign/newdesign.component';
 import { CompleteddesignComponent } from './completeddesign/completeddesign.component';
 import { InreviewDesignComponent } from './inreview-design/inreview-design.component';
 import { DelievereddesignComponent } from './delievereddesign/delievereddesign.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { DelievereddesignComponent } from './delievereddesign/delievereddesign.c
     CommonModule,
     FormsModule,
     IonicModule,
-    DesignoverviewPageRoutingModule
+    DesignoverviewPageRoutingModule,
+    SharedModule
   ],
   declarations: [DesignoverviewPage,NewdesignComponent,CompleteddesignComponent,InreviewDesignComponent,DelievereddesignComponent],
   providers: [

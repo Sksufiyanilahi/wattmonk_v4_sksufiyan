@@ -351,4 +351,8 @@ ngOnInit() {
     console.log('posting value');
     this.utilities.setScheduleFormEvent(ScheduleFormEvent.START_SURVEY);
   }
+
+  sendDesignForm(){
+     this.utilities.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
+  }
 }

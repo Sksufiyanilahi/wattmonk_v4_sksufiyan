@@ -134,8 +134,8 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   onFocus(event: CustomEvent) {
+    this.sortedList=[];
     // this.selectedDataName= event.detail.value;
-    console.log("HELLO",event);
     this.sortedList = this.dataList.filter((item) => {
       // console.log(item);
         if(item.name !== null){

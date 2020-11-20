@@ -184,4 +184,12 @@ export class NewsurveysComponent implements OnInit {
     
   }
 
+  ngOnDestroy(): void {
+    // this.refreshSubscription.unsubscribe();
+     // this.routeSubscription.unsubscribe();
+     this.dataRefreshSubscription.unsubscribe();
+   this.surveyRefreshSubscription.unsubscribe();
+   this.cdr.detach();
+   }
+
 }

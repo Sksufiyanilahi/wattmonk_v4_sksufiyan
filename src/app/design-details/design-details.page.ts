@@ -3,7 +3,7 @@ import { ApiService } from '../api.service';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { UtilitiesService } from '../utilities.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DesginDataModel } from '../model/design.model';
+import { DesginDataModel, PrelimDesign } from '../model/design.model';
 import { UserRoles } from '../model/constants';
 import { AssigneeModel } from '../model/assignee.model';
 import { StorageService } from '../storage.service';
@@ -35,6 +35,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   reviewenddatetime:number;
   reviewstartdatetime : number;
   reviewIssues='';
+  isSelfUpdate: false;
+  isprelimUpdate:false;
+  enableDisable:boolean=false;
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -89,6 +92,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   
 
   ngOnInit() {
+    this.enableDisable= false;
     console.log(this.imageName);
     this.user=this.storage.getUser();
     console.log(this.user);
@@ -103,7 +107,13 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   showDesignImage(){
     const browser = this.iab.create(this.design.prelimdesign.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
-
+  showRevisionImage(attachmentFile:any){
+    console.log(attachmentFile)
+    const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  }
+  showreasonImage(attachmentFile:any){
+    const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  }
   showurl(i,value){
     if(value=='attachments'){
       this.browser = this.iab.create(this.design.attachments[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
@@ -118,10 +128,26 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.errorSnackBar('Please select prelim design');
       return false;
     }else{
-      
+      var data={}
+      var date= Date.now();
+     if(this.isprelimUpdate){
+      data={
+        status:"reviewassigned",
+        designendtime:date,
+        reviewstarttime:date,
+        comments:this.commentsForm.get('comments').value
+      }
+     } else{
+       data={
+             status:"designcompleted",
+             designendtime:date,
+             comments:this.commentsForm.get('comments').value
+             
+     }}
+
       this.utilities.showLoading('Submitting').then(()=>{
         
-        this.apiService.updateDesignForm(this.commentsForm.value,this.designId).subscribe((success)=>{
+        this.apiService.updateDesignForm(data,this.designId).subscribe((success)=>{
           this.uploadpreliumdesign(this.designId,'prelimdesign');
           this.utilities.hideLoading().then(() => {
             console.log("suc",success);
@@ -129,7 +155,15 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
             // this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
             // this.utilities.setHomepageDesignRefresh(true);
             this.utilities.getDesignDetailsRefresh();
-            this.router.navigate(['designoverview/completeddesigns'])
+            if(this.isprelimUpdate){
+              this.utilities.setHomepageDesignRefresh(true);
+              this.router.navigate(['designoverview/inreviewdesigns']);
+              
+            }
+
+            else
+            {this.router.navigate(['designoverview/completeddesigns'])
+          }
             // this.navController.navigateRoot(['homepage']);
           });
         },(error) => {
@@ -204,8 +238,11 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   setData(result: DesginDataModel) {
     this.design = result;
     console.log(this.design,">>>>>>>>>>>>>>>>");
+    if(this.design.isinrevisionstate && this.design.status=='designassigned'){
+      this.imageName=[];
+    }else{
     this.imageName= result.prelimdesign==null ? '' : result.prelimdesign.name + result.prelimdesign.ext;
-    console.log(this.imageName)
+    console.log(this.imageName);}
     
     if (this.design.newconstruction == true) {
       this.design.newconstruction = 'Yes';
@@ -216,6 +253,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   async deleteDesign() {
+    this.enableDisable= true;
     const toast = await this.toastController.create({
       header: 'Delete Design',
       message: 'Are you sure you want to delete this design?',
@@ -227,7 +265,10 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
             this.deleteDesignFromServer();
           }
         }, {
-          text: 'No'
+          text: 'No',
+          handler: () => {
+            this.enableDisable=false;
+          }
         }
       ]
     });
@@ -239,8 +280,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.apiService.deleteDesign(this.designId).subscribe((result) => {
         console.log('result', result);
         this.utilities.hideLoading().then(() => {
-          this.utilities.showSnackBar('Desgin deleted successfully');
+          this.utilities.showSnackBar(this.design.name+" "+'has been deleted successfully');
           this.navController.pop();
+          this.utilities.setHomepageDesignRefresh(true);
         });
       }, (error) => {
         this.utilities.hideLoading().then(() => {
@@ -296,6 +338,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   prelimfiles(event){
+    
+    
     console.log(this.imageName);
     console.log(event.target.files);
     // for(var i=0; i< event.target.files.length;i++){
@@ -311,24 +355,24 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
 
       var reader = new FileReader();
-reader.onload = (event: any) => {
-  var orientation = -1;
-let localUrl = event.target.result;
-// this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
-  // console.log(res,">><><><");
-  // this.image= res;  
-  this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
+      reader.onload = (event: any) => {
+      var orientation = -1;
+      let localUrl = event.target.result;
+        // this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
+       // console.log(res,">><><><");
+        // this.image= res;  
+    this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
     result => {
       this.image = result;
       console.warn('Size in bytes is now:', this.imageCompress.byteCount(result));
     }
-  );
-  
-// })
-}
-reader.readAsDataURL(event.target.files[0]);
-}
- b64toBlob = (b64Data, contentType='', sliceSize=512) => {
+    );
+
+    // })
+      }
+    reader.readAsDataURL(event.target.files[0]);
+      }
+   b64toBlob = (b64Data, contentType='', sliceSize=512) => {
   const byteCharacters = atob(b64Data);
   const byteArrays = [];
 
@@ -349,6 +393,71 @@ reader.readAsDataURL(event.target.files[0]);
   return blob;
 }
 
+remove(){
+  
+    this.prelimFiles=[];
+    this.imageName= [];
+    this.imagebox= false;
+    console.log(this.prelimFiles);
+    console.log(this.imageName);
+    this.commentsForm.get('prelimdesign').setValue('');
+
+
+}
+
+prelimupdate(event){
+  //console.log(this.imageName);
+  //console.log(event.target.files);
+  // for(var i=0; i< event.target.files.length;i++){
+    // this.prelimFiles.push(event.target.files) 
+    this.prelimFiles= event.target.files;
+    //this.imageName= event.target.files[0].name;
+    //this.imagebox= true;
+  // }
+  //console.log(this.prelimFiles);
+  
+    this.targetLength= event.target.files.length;
+
+
+
+    var reader = new FileReader();
+reader.onload = (event: any) => {
+var orientation = -1;
+let localUrl = event.target.result;
+// this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
+// console.log(res,">><><><");
+// this.image= res;  
+this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
+  result => {
+    this.image = result;
+    console.warn('Size in bytes is now:', this.imageCompress.byteCount(result));
+  }
+);
+
+// })
+}
+reader.readAsDataURL(event.target.files[0]);
+}
+b64toBlobb = (b64Data, contentType='', sliceSize=512) => {
+const byteCharacters = atob(b64Data);
+const byteArrays = [];
+
+for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+
+    byteArrays.push(byteArray);
+}
+
+const blob = new Blob(byteArrays, {type: contentType});
+return blob;
+}
 
   uploadpreliumdesign(designId?: number, key?: string){
 
@@ -382,11 +491,19 @@ reader.readAsDataURL(event.target.files[0]);
               //   console.log(res,">>");
                 
               // })
+              if(this.isSelfUpdate){
+                this.reportDesignReviewSuccess();
+              }//else{
+               // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res) =>{
+             // this.utilities.getDesignDetailsRefresh();
+              
+              
      
             
-             
-            })
-          },err=>{
+              
+           // });
+        //  }
+      },err=>{
             this.utilities.hideLoading().then(()=>{
               console.log(err);
               
@@ -394,7 +511,9 @@ reader.readAsDataURL(event.target.files[0]);
           })
         // })
     // }
-  }
+  })
+}
+
 
   reportDesignReviewFailure(){
     //console.log("Value is" + this.reviewIssuesForm.value);
@@ -405,7 +524,7 @@ reader.readAsDataURL(event.target.files[0]);
        const postData = {
         status: "reviewfailed",
        reviewissues : this.reviewIssuesForm.get('reviewIssues').value,
-        reviewstarttime : this.design.reviewstarttime,
+        reviewstarttime : this.reviewstartdatetime,
         reviewendtime : this.reviewenddatetime,
         
       };
@@ -422,7 +541,11 @@ reader.readAsDataURL(event.target.files[0]);
           response => {
             this.utilities.showSnackBar("Prelim design status has been updated successfully.");
             this.utilities.setHomepageDesignRefresh(true);
-            this.navController.navigateRoot(['analystoverview/design']);
+            if(this.user.role.type=='qcinspector'){
+              this.navController.navigateRoot(['analystoverview/design']);}
+              else{
+                this.navController.navigateRoot(['homepage/design']);
+              }
             //this.data.triggerEditEvent = false;
             //this.dialogRef.close(this.data);
           },
@@ -440,13 +563,29 @@ reader.readAsDataURL(event.target.files[0]);
     }
   }
 
+
+  designReviewSuccess(){
+    
+    if(this.isSelfUpdate && this.prelimFiles.length > 0)
+    {
+      this.uploadpreliumdesign(this.designId,'prelimdesign' );
+      
+      
+    }else if(this.isSelfUpdate && this.prelimFiles.length == 0)
+    {
+      this.utilities.errorSnackBar("Please attach file");
+    }else{
+      this.reportDesignReviewSuccess();
+    }
+  }
+
   reportDesignReviewSuccess(){
       this.countdownservice.stopTimer();
         let cdate = Date.now();
         this.reviewenddatetime = cdate;
       const postData = {
         status: "reviewpassed",
-        reviewIssues : this.reviewIssuesForm.get('reviewIssues').value,
+        reviewissues : this.reviewIssuesForm.get('reviewIssues').value,
         reviewstarttime : this.reviewstartdatetime,
         reviewendtime : this.reviewenddatetime
       };
@@ -459,7 +598,11 @@ reader.readAsDataURL(event.target.files[0]);
         response => {
           this.utilities.showSnackBar("Prelim design status has been updated successfully.");
           this.utilities.setHomepageDesignRefresh(true);
-          this.navController.navigateRoot(['analystoverview/design']);
+          if(this.user.role.type=='qcinspector'){
+            this.navController.navigateRoot(['analystoverview/design']);}
+            else{
+              this.navController.navigateRoot(['homepage/design']);
+            }
          // this.triggerEditEvent = false;
           //this.dialogRef.close(this.data);
         },
