@@ -31,11 +31,13 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   assigneeForm: FormGroup;
   refreshDataOnPreviousPage = 0;
   imageName:string[]=[];
+  imageName2:string[]=[];
   imagebox :boolean=false;
   reviewenddatetime:number;
   reviewstartdatetime : number;
   reviewIssues='';
   isSelfUpdate: false;
+  isprelimUpdate:false;
   enableDisable:boolean=false;
 
   options: LaunchNavigatorOptions = {
@@ -128,11 +130,20 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       return false;
     }else{
       var date= Date.now();
-      const data={
-             status:"designcompleted",
+      var data={}
+     if(this.design.status=='reviewfailed'){  data={
+             status:"reviewassigned",
              designendtime:date,
+             reviewstarttime:date,
              comments:this.commentsForm.get('comments').value
              
+     }}else{
+       data={
+        status:"designcompleted",
+        designendtime:date,
+        comments:this.commentsForm.get('comments').value
+        
+}
      }
 
       this.utilities.showLoading('Submitting').then(()=>{
@@ -475,16 +486,15 @@ return blob;
               // })
               if(this.isSelfUpdate){
                 this.reportDesignReviewSuccess();
-              }else{
-                this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res) =>{
-              this.utilities.getDesignDetailsRefresh();
+              }else{ 
+                if(this.design.status=='designassigned'){
+
+           this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res) =>{
               
-              
-     
-            
-              
+        
             });
           }
+          this.utilities.getDesignDetailsRefresh();}
       },err=>{
             this.utilities.hideLoading().then(()=>{
               console.log(err);

@@ -244,7 +244,7 @@
         <div *ngIf="(user.role.type!='clientsuperadmin' || (user.role.type==='clientsuperadmin' && design.status==='delivered'))&&( design.prelimdesign!=null || user.role.type=='designer')">
             <form novalidate [formGroup]="commentsForm">
 
-            <ion-row *ngIf="(design.status=='designassigned' || design.status=='reviewfailed') && user.role.type=='designer'  ; else showimageName ">
+            <ion-row *ngIf="(design.status=='designassigned') && user.role.type=='designer'  ; else showimageName ">
                 <!-- <span> -->
 
                         <ion-col size="3" class="model-type font">
@@ -263,6 +263,24 @@
                             
                         <!-- </span> -->
                     </ion-row>
+                    <div *ngIf="user.role.type=='designer' && design.status=='reviewfailed'">
+                        <ion-row *ngIf="isprelimUpdate" style="width: 125%">
+                             <!-- <span> -->
+                                         <ion-col size="9" class="model-name font flx" style="justify-content: flex-end;">
+                                          
+             
+                                             <ion-input type="file" readonly (change)="prelimupdate($event)" formControlName="prelimdesign" style="border-bottom:1px solid grey; width: max-content; flex: auto;" multiple="false"> <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon></ion-input>
+                                         
+                                                
+                                             
+                                             
+                                             
+                                         </ion-col>
+                                         
+                                     <!-- </span> --> 
+                                 </ion-row>
+                             </div>
+
                     <div *ngIf="user.role.type=='qcinspector' && design.status=='reviewassigned'">
                         <ion-row *ngIf="isSelfUpdate" style="width: 125%">
                              <!-- <span> -->
@@ -282,13 +300,33 @@
                              </div>
                 </form>
                   <ng-template #showimageName >
-                <ion-col><span class="model-type font">Prelim Design</span></ion-col>
+                <ion-col><span class="model-type font"> Prelim Design</span></ion-col>
                 <ion-button size="3" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="user.role.type=='qcinspector' && design.status=='reviewassigned'" (click)="isSelfUpdate = !isSelfUpdate">Self Update</ion-button>
+                <ion-button size="3" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="user.role.type=='designer' && design.status=='reviewfailed'" (click)="isprelimUpdate = !isprelimUpdate">Update</ion-button>
                 <ion-col size="auto"  style="float: right;">
                     <span class="model-name font" style="text-align:right;color:#3c78d8 !important" (click)="showDesignImage()">{{imageName.length > 40 ? (imageName | slice: 0:40) + '...': imageName}}</span>
                         <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 " (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
-                </ion-col>
+                </ion-col> 
             </ng-template></div>
+           <!-- <ion-row *ngIf="(design.status=='reviewfailed') && user.role.type=='designer'">
+                 <span> -->
+
+                       <!-- <ion-col size="4" class="model-type font">
+                          upload Prelim Design
+                        </ion-col>
+                            <ion-col size="9"  class="model-name font flx" style="justify-content: flex-end;">
+                             
+
+                                  <input type="file"  *ngIf="imageName.length==0"  (change)="prelimfiles($event)"  style="width: 76px;"/>
+                                  {{imageName}}&nbsp;
+                                   <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 && user.role.type !='qcinspector'" (click)="remove()"></ion-icon>
+                                 <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
+                                <!-- <ion-icon name="cloud-upload-outline" *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')" style="font-size: 20px;margin-left: 10px;color:green"></ion-icon> -->
+                            
+                           <!-- </ion-col>
+                            
+                       </span> 
+                        </ion-row>-->
             <ion-row *ngIf="design.isinrevisionstate" class="ion-no-padding ion-margin-top">
             <ion-col size="6"  >
                 <span class="models font">Revision Comments</span></ion-col>

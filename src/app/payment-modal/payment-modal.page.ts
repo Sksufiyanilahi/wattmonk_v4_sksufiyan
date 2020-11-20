@@ -17,6 +17,10 @@ user:any
 id:any
 design:any
 count:any
+  freeDesigns: any;
+  servicePrice: any;
+  settingValue:any;
+  freeCharges:any;
   constructor( private storageService:StorageService,
     
     private apiService:ApiService,
@@ -50,8 +54,22 @@ fetchData(){
     console.log(this.user)
     this.apiService.paymentDetail(this.user.id).subscribe(res=>{
       this.count=res;
-      console.log(this.count);
+      console.log("laal",this.count);
     })});
+    this.apiService.prelimCharges().subscribe(res=>{
+      this.servicePrice=res;
+      this.servicePrice.forEach(element => {
+        this.settingValue = element.settingvalue;
+      });
+      console.log("ddd",this.settingValue)
+    })
+    this.apiService.freeCharges().subscribe(res=>{
+      this.freeDesigns=res;
+      this.freeDesigns.forEach(element => {
+        this.freeCharges = element.settingvalue;
+      })
+      console.log("daadd",this.freeCharges);
+    })
     this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
     this.design=params.get('designData')});
 
@@ -91,6 +109,9 @@ confirm(){
   }
 
   cancel(){
+    if(this.id==null){
+      this.utils.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
+    }
     this.navController.pop();
   }
   refreshDesigns(event: CustomEvent) {

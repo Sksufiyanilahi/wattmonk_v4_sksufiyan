@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Stripe } from '@ionic-native/stripe/ngx';
+//import { Stripe } from '@ionic-native/stripe/ngx';
 import { ModalController, NavParams, NavController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { ProfileHistoryComponent } from '../profile/profile-history/profile-history.component';
@@ -9,6 +9,7 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ScheduleFormEvent } from '../model/constants';
+declare var Stripe;
 
 
 @Component({
@@ -20,6 +21,7 @@ export class AddMoneyPage implements OnInit {
  
 card:any
   token:any;
+  stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
  userData:User;
  mode:any;
  designId;
@@ -33,9 +35,10 @@ card:any
     private route:ActivatedRoute ,
     private formBuilder:FormBuilder,
     private navController:NavController,
-    private stripe:Stripe) {
-     // this.amountForm=this.formBuilder.group(
-       // {amount:new FormControl('',[Validators.required])})
+    //private stripe:Stripe
+    ) {
+    this.amountForm=this.formBuilder.group(
+       {amount:new FormControl('',[Validators.required])})
      }
 
   
@@ -43,11 +46,12 @@ card:any
     this.mode= this.route.snapshot.paramMap.get('mode');
    this.designId= this.route.snapshot.paramMap.get('id');
     this.userData = this.storageService.getUser();
+    this.setupStripe();
     console.log(this.mode)
     console.log(this.designId);
     
   }
- /* setupStripe() {
+ setupStripe() {
     let elements = this.stripe.elements();
     var style = {
       base: {
@@ -91,22 +95,24 @@ card:any
           console.log(result);
           this.token=result;
           console.log(this.token.token.id);
+          this.addMoney();
          
         }
       });
     });
-  }}*/
+  }
+
 
   goBack(){
     this.navController.pop();
   }
-  addMoney(form:NgForm)
+  addMoney()
   {
     if(this.mode=='wallet'){
       var data={};
   var rechargeData={};
-    console.log(form.value.cardNo);
-   this.stripe.setPublishableKey('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
+    //console.log(form.value.cardNo);
+  /* this.stripe.setPublishableKey('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
     let card:any= {
       number : form.value.cardNo,
       
@@ -116,16 +122,17 @@ card:any
       amount : form.value.amount,
       
     }
-    console.log(card);
+    console.log(card);*/
  this.utils.showLoading("Adding").then(()=>{
-    this.stripe.createCardToken(card).then(token => {
-      console.log(token);
-      this.token=token.id
+    //this.stripe.createCardToken(card).then(token => {
+     // console.log(token);
+     // this.token=token.id
+     
   data={
-    amount:form.value.amount,
+    amount:this.amountForm.get('amount').value,
     email:this.userData.email,
     paymenttype: "wallet",
-    token: this.token.token.id,
+    token:this.token.token.id,
     user:this.userData.id
   }
   console.log(data);
@@ -135,7 +142,7 @@ card:any
       var dates=new Date();
      console.log(dates)
 rechargeData={
-  amount:form.value.amount,
+  amount:this.amountForm.get('amount').value,
   datetime: dates,
   paymenttype: "wallet",
   type: this.createPayment.paymentstatus,
@@ -146,20 +153,20 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
   this.goBack();
   this.utils.setHomepageDesignRefresh(true);
 });})
-    },error=>{
+    }),error=>{
       console.log("payment was unsuccessful");
      
-    });
-    this.token='';}) .catch(error => console.error(error));
-  })
+    };
+    this.token=''
+  });
   }
  
 
   if(this.mode=='card') {
     var data={};
-   console.log(form.value.cardNo);
-    this.stripe.setPublishableKey('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
-    let card:any= {
+   //console.log(form.value.cardNo);
+   // this.stripe.setPublishableKey('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
+   /* let card:any= {
       number : form.value.cardNo,
       
       expYear : form.value.expYear,
@@ -168,13 +175,13 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
       amount : form.value.amount,
       
     }
-    console.log(card);
+    console.log(card);*/
  this.utils.showLoading("Adding").then(()=>{
-    this.stripe.createCardToken(card).then(token => {
-      console.log(token);
-      this.token=token.id
+   // this.stripe.createCardToken(card).then(token => {
+   //   console.log(token);
+     // this.token=token.id
   data={
-    amount:12,
+    amount:this.amountForm.get('amount').value,
     email:this.userData.email,
     paymenttype: "direct",
     token: this.token.token.id,
@@ -213,11 +220,10 @@ else
 this.router.navigate(['homepage/design']);
 this.utils.setHomepageDesignRefresh(true);}}
     )
-    this.token='';}) .catch(error => console.error(error));
-  });}
+    this.token='';})
   }
   }
   
- 
+}
 
 
