@@ -30,7 +30,7 @@ export class NewdesignComponent implements OnInit {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
-  overdue: number;
+  overdue: any;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -52,6 +52,13 @@ export class NewdesignComponent implements OnInit {
 console.log(this.currentDate.toISOString());
 
  
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.designRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    this.cdr.detach();
   }
 
 
@@ -106,15 +113,16 @@ console.log(this.currentDate.toISOString());
   }
 
   formatDesignData(records : DesginDataModel[]){
+    this.overdue=[];
     this.listOfDesignData = this.fillinDynamicData(records);
     console.log(this.listOfDesignData);
     
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesignData.forEach((designItem) => {
+          this.listOfDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
-              this.sDatePassed(designItem.deliverydate);
+              this.sDatePassed(designItem.updated_at);
               const listOfDesigns = new DesginDataHelper();
-              listOfDesigns.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+              listOfDesigns.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
               listOfDesigns.lateby = this.overdue;
               listOfDesigns.listOfDesigns.push(designItem);
               tempData.push(listOfDesigns);
@@ -122,17 +130,17 @@ console.log(this.currentDate.toISOString());
               let added = false;
               tempData.forEach((designList:any) => {
                 if (!added) {
-                  if (designList.date === this.datePipe.transform(designList.deliverydate, 'M/d/yy')) {
-                    designList.listOfDesigns.push(designList);
-                    this.sDatePassed(designItem.deliverydate);
+                  if (designList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
+                    designList.listOfDesigns.push(designItem);
+                    this.sDatePassed(designItem.updated_at);
                     added = true;
                   }
                 }
               });
               if (!added) {
-                this.sDatePassed(designItem.deliverydate);
+                this.sDatePassed(designItem.updated_at);
                 const listOfDesigns = new DesginDataHelper();
-                listOfDesigns.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+                listOfDesigns.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
                 listOfDesigns.lateby = this.overdue;
                 listOfDesigns.listOfDesigns.push(designItem);
                 tempData.push(listOfDesigns);
@@ -149,7 +157,13 @@ console.log(this.currentDate.toISOString());
   }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
-    records.forEach(element => {
+    records.forEach((element:any) => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.deliverydate);
+      }else{
+        element.isoverdue = false;
+      }
+      element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
@@ -158,7 +172,10 @@ console.log(this.currentDate.toISOString());
         }else{
           element.totalpercent = 0;
         }
+        this.startAllTimers();
       });
+  
+
     });
 
     return records;
@@ -171,4 +188,12 @@ console.log(this.currentDate.toISOString());
     this.overdue = lateby;  
   }
 
+  startAllTimers(){
+    this.listOfDesignData.forEach(element => {
+    
+      var reviewdate = new Date(element.designstarttime);
+      reviewdate.setHours(reviewdate.getHours() + 2);
+      element.designremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+    });
+  }
 }

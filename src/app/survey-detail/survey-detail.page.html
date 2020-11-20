@@ -20,14 +20,15 @@
                     </ion-row>
                 </ion-grid>
             </ion-col> -->
-            <ion-col size="2" *ngIf="iseditable" style="text-align: right !important;">
+            <ion-col  size="2" *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined')" style="text-align: right !important;">
                 <ion-button fill="clear" size="small" class="ion-no-padding"
                             [routerLink]="['/schedule/survey/',surveyId]"
                             routerDirection="forward">
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
                 </ion-button>
             </ion-col>
-            <ion-col size="2" *ngIf="iseditable">
+            <ion-col size="2" *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined')" style="text-align: right !important;" 
+            size="2" >
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteSurvey()">
                     <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
                 </ion-button>
@@ -132,14 +133,18 @@
                         </ion-row>
                
                         <ion-row class="bkg">
-                            <ion-col class="hgt-margin">
+                            <ion-col size="6" class="hgt-margin">
                                 <!-- <ion-item> -->
                                     <label>Comments</label>
                                 <!-- </ion-item> -->
                             </ion-col>
-                        </ion-row>
-                        <ion-row  *ngFor="let comments of survey.comments">
-                            <ion-col>{{comments.message}}</ion-col>
+                        
+                        
+                            <ion-col size="6" *ngFor="let comment of survey.comments">
+                                <p class="comment font" style="text-align:left;margin:0px">{{comment?.message}}</p>
+                                <p class="comment-by" style="text-align:left;margin-top:0px">Posted by {{comment.createdby?.firstname}}
+                                    {{comment.createdby?.lastname}}</p>
+                            </ion-col>
                             <!-- <ion-col style="text-align: right;">{{comments.createdBy.firstname}} &nbsp;{{comments.createdBy.lastname}} </ion-col>
                             <ion-col style="text-align: right;">{{comments.createdBy.updated_at | date:'dd/MM/yyyy'}}</ion-col> -->
                         </ion-row>

@@ -1,23 +1,23 @@
 <ion-content (click)="close()" style="padding-bottom: 250px;">
 
-    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
-        <ion-segment-button *ngIf="userData.role.type !=='SuperAdmin'"  value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">
-          <ion-label class="segment-btn">Pending</ion-label>
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="newDesign">
+        <ion-segment-button value="newDesign">
+          <ion-label class="segment-btn">New Designs</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=designassigned">
+        <ion-segment-button value="InDesign">
           <ion-label class="segment-btn">In Designing</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=designcompleted">
+        <ion-segment-button value="completed">
           <ion-label class="segment-btn">Completed</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed">
+        <ion-segment-button value="InReview">
           <ion-label class="segment-btn"> In Review</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="requesttype=prelim&status=delivered">
+        <ion-segment-button value="delivered">
           <ion-label class="segment-btn">Delivered</ion-label>
         </ion-segment-button>
       </ion-segment>
-      <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+      <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">    
           <ion-refresher-content></ion-refresher-content>
         </ion-refresher>
                    
@@ -40,62 +40,96 @@
                           {{designData.deliverydate | date: 'hh:mm a'}}
                       </span> -->
                       
-                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'"  [routerLink]="['/design-details/',designData.id]">Declined</span>
-                      <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0" [routerLink]="['/design-details/',designData.id]">Overdue</span>
+                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'"  [routerLink]="['/design-details/',designData.id]">On Hold</span>
+                      
+                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  [routerLink]="['/design-details/',designData.id]">Review Failed</span>
+                      <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" [routerLink]="['/design-details/',designData.id]">Overdue</span>
                       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'requestaccepted'" [routerLink]="['/design-details/',designData.id]">Accepted</span>
+                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/design-details/',designData.id]">Review Passed</span>
                       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'" [routerLink]="['/design-details/',designData.id]">Delivered</span>
                       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/design-details/',designData.id]">Completed</span>
                       <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/design-details/',designData.id]">Unassigned</span>
                       <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/design-details/',designData.id]">Design Assigned</span>
                       <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/design-details/',designData.id]">In Review</span>
                       <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;" [routerLink]="['/design-details/',designData.id]">Waiting for acceptance</span>
-                      <span fill="clear" background-border="clear" [routerLink]="['/activity/',designData.id]" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+                      <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>
+                      <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
               </p>
               
               <p style="margin:0px">
                   <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
                           routerDirection="forward">{{designData.email}}</span>
-                          <span *ngIf="item.lateby > 1" class="latebystyle"><strong>Late by {{item.lateby}} days</strong></span>
-                          <span *ngIf="item.lateby == 1" class="latebystyle"><strong>Late by a day</strong></span>
+                          <span *ngIf="designData.isoverdue" class="latebystyle"><strong>Late by {{designData.lateby}}</strong></span>
+                     
               </p>
                         <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                             <span class="customer-phone">{{designData.phonenumber}}</span></a>
                         <span class="customer-address z-100"
-                                (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
+                                (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}
+                                  
+                                     <ion-col>
+                                       
+                                        </ion-col>
+                                  
+                            </span>
         
-                        <ion-row style="margin-bottom: 8px;" [routerLink]="['/design-details/',designData.id]">
-                            <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                            <span class="chipdetail" style="background-color: #95afc0;" >{{designData?.formattedjobtype}}</span>
-                            <ion-col>     
-                              
-                            </ion-col>
+                        <ion-row style="margin-bottom: 0px;" [routerLink]="['/design-details/',designData.id]">
+                           <ion-col style="padding-left:0px" >
+                            <span class="chipdetail" style="background-color: #95afc0;" >{{designData?.source}}</span>
+                        </ion-col> 
+                        <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin'">
+                                <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
+                                    {{designData.designremainingtime}}</span></ion-col>
+                                    <ion-col *ngIf="designData.status == 'outsourced'">
+                                        <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
+                                            {{designData.designacceptanceremainingtime}}</span></ion-col>
                         </ion-row>
+                       
                         <ion-row class="ion-no-margin ion-no-margin">
-                            <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
-                                <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted' || segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined'">
+                                <span *ngIf="designData.status == 'created' || (designData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
                                 >Assign</span>
                                 <span style="float: right;">
-
-                                    <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')">
-                                       Accept
-                                    </ion-col>
-                                    <ion-col size="4" *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(designData.id)">
-                                    Decline
-                                    </ion-col>
+                                    <ng-container *ngIf="userData.role.type !=='clientsuperadmin'"> 
+                                        <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')">
+                                           Accept
+                                        </ion-col>
+                                        <ion-col size="4" *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(designData.id)">
+                                        On Hold
+                                        </ion-col>
+                                    </ng-container>
                                 </span>
                               
-                                <span *ngIf="designData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                <span *ngIf="designData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
+                                >Reassign</span>
+                            </ion-col>
+                           
+                              
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
+                                <span *ngIf= "(designData.status =='designassigned') && userData.role.type !='clientsuperadmin'" (click)="openDesigners(designData.id,designData)" style="float:right !important" class="ion-text-end action-button-color"
                                 >Reassign</span>
                             </ion-col>
 
-
                             <ion-col *ngIf="segments=='requesttype=prelim&status=designcompleted'">
-                                <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
+                                <!-- <span *ngIf="(designData.isoutsourced=='true' && designData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (designData.isoutsourced=='false' && designData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                                >Assign Review</span> -->
+                                <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                                 >Assign Review</span>
                             </ion-col>
-                            <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
-                                <span *ngIf="designData.status == 'reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id)"
-                                >Deliver</span>
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin'">
+                                <span *ngIf="designData.status =='reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData)"
+                                >  &nbsp; Deliver</span>
+                                <span *ngIf="userData.role.type!='clientsuperadmin' &&(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                                >Reassign Review</span>
+                            </ion-col>
+                         
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=delivered'">
+                                <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="shareWhatsapp(designData)">
+                                    <ion-icon name="share-social-outline"></ion-icon></span>&nbsp;
+                                <span style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="shareViaEmails(designData.id,designData)">
+                                    <ion-icon name="mail" ></ion-icon></span>
+                                    <span *ngIf="userData.role.type=='clientsuperadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id)">
+                                        Resend</span>
                             </ion-col>
                             <!-- <ion-col class="ion-no-margin ion-no-padding">
                                 <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + designData.id + '/' + designData.jobtype + '/' + designData.latitude + '/' + designData.longitude]"
@@ -120,9 +154,9 @@
         </ion-grid>
        
         <div *ngIf="listOfDesignsHelper.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
-                <div *ngIf="!netSwitch">
-                    No internet Connection
-                </div>
+                <!-- <div *ngIf="!netSwitch"> -->
+                    No designs found
+                <!-- </div> -->
                 
             <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
         </div>
@@ -130,17 +164,18 @@
 
 </ion-content>
 
-<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="400" draggable="false" disableDrag="true"
+<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
                    shouldBounce="true" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
     <form [formGroup]="assignForm">
         <ion-grid class="drawer">
             <ion-row>
-                <ion-col size="12">
-                    <app-user-selector (assigneeData)=getassignedata($event) placeholder="assign" [assignees]="listOfAssignees"
+               <ion-col size="12">
+                    <app-user-selector  (assigneeData)=getassignedata($event) placeholder="assign" [assignees]="listOfAssignees"  [reviewAssigned]=reviewAssignedTo
                                        formControlName="assignedto"></app-user-selector>
+                   
                 </ion-col>
             </ion-row>
-            <ion-row style="margin-left: 8px;">
+            <!--<ion-row style="margin-left: 8px;">
                 <ion-col size="12">
                     <span class="input-placeholder">comments</span>
                 </ion-col>
@@ -148,7 +183,7 @@
                     <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
                                   formControlName="comment"></ion-textarea>
                 </ion-col>
-            </ion-row>
+            </ion-row>-->
             <ion-row style="justify-content: flex-end;">
                 <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
                     <ion-button class="buttom-drawer-button" fill="clear" (click)="assignToDesigner()">

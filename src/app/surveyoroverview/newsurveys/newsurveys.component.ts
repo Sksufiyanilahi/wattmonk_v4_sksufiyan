@@ -180,9 +180,16 @@ export class NewsurveysComponent implements OnInit {
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
-    debugger;
     console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
     
   }
+
+  ngOnDestroy(): void {
+    // this.refreshSubscription.unsubscribe();
+     // this.routeSubscription.unsubscribe();
+     this.dataRefreshSubscription.unsubscribe();
+   this.surveyRefreshSubscription.unsubscribe();
+   this.cdr.detach();
+   }
 
 }

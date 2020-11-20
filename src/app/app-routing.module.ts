@@ -103,15 +103,43 @@ const routes: Routes = [
     loadChildren: () => import('./paymentgateway/paymentgateway.module').then( m => m.PaymentgatewayPageModule)
   },
   {
+    path: 'activity/:id/:name',
+    loadChildren: () => import('./activity-details/activity-details.module').then( m => m.ActivityDetailsPageModule)
+  },
+  {
+    path: 'search-bar1',
+    loadChildren: () => import('./search-bar1/search-bar1.module').then( m => m.SearchBar1PageModule)
+  },{
+    path: 'stripe',
+    loadChildren: () => import('./stripe/stripe.module').then( m => m.StripePageModule)
+  },
+  {
     path: 'activity-details',
     loadChildren: () => import('./activity-details/activity-details.module').then( m => m.ActivityDetailsPageModule)
+  },
+  {
+    path: 'analystoverview',
+    loadChildren: () => import('./analystoverview/analystoverview.module').then( m => m.AnalystoverviewPageModule)
+  },
+  {
+    path: 'add-money',
+    loadChildren: () => import('./add-money/add-money.module').then( m => m.AddMoneyPageModule)
+  },
+  {
+    path: 'email-model',
+    loadChildren: () => import('./email-model/email-model.module').then( m => m.EmailModelPageModule)
+  },
+  {
+    path: 'resendpagedialog',
+    loadChildren: () => import('./resendpagedialog/resendpagedialog.module').then( m => m.ResendpagedialogPageModule)
+  },
+  {
+    path: 'payment-modal',
+    loadChildren: () => import('./payment-modal/payment-modal.module').then( m => m.PaymentModalPageModule)
   }
 
 
-
-
 ];
-
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })

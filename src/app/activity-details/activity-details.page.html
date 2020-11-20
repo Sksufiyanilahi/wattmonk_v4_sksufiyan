@@ -25,10 +25,14 @@
 
   </ion-row>
 
-<ion-row class="ion-no-padding position-absolute header-icon-position full-width">
-<ion-col class="flex-center">
+<ion-row  class="ion-no-padding position-absolute header-icon-position full-width">
+<ion-col class="flex-center" *ngIf="activity_details?.type=='design'">
 
   <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
+</ion-col>
+<ion-col class="flex-center" *ngIf="activity_details?.type=='survey'">
+
+  <ion-img src="/assets/images/survey.svg" class="header-icon"></ion-img>
 </ion-col></ion-row></ion-grid>
 
   </ion-toolbar>
@@ -36,19 +40,24 @@
 
 <ion-content><p style="text-align: center; font-size:large; color:black; border:none;margin-bottom:0px ;"> Activities</p>
  <p  style="text-align: center; margin-top: 0px;"><span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'requestdeclined'">Declined</span>
- <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="activity_details?.deliverydate > 0">Overdue</span>
+ <!-- <span class="chipdetail" style="background-color: rgb(246, 104, 10);" >--------{{isDatePassed()}}Overdue</span> -->
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'requestaccepted'">Accepted</span>
+ <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'reviewfailed'" >Review Failed</span>
+ <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'reviewpassed'">Review Passed</span>
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'delivered'">Delivered</span>
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'designcompleted'">Completed</span>
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'created'">Unassigned</span>
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'designassigned'">Design Assigned</span>
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'reviewassigned'">In Review</span>
- <span class="chipdetail" *ngIf="activity_details?.isoutsourced == 'true'" style="background-color: #95AFC0;" >Waiting for acceptance</span>
+ <span class="chipdetail" *ngIf="activity_details?.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;">Waiting for acceptance</span>
+ <span *ngIf="activity_details?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;">
+  pending
+</span>
 </p>
   <ion-card  *ngFor="let activities of activity_details?.activities" class="custom-card"  >
-  <span style="float: left; font-size: smaller;">{{activities.created_at | date: 'dd MMM yyyy'}}</span><br><br>
+  <span style="float: left; font-size: smaller;">{{activities.updated_at | date: 'dd MMM yyyy'}}</span><br><br>
   <span style="font-size:medium; float:left; color: black;">{{activities.activity}}</span><br><br>
-<span style="float: right !important; font-size: small; font-style: italic;">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
+<span style="float: right !important; font-size: small; font-style: italic;" *ngIf="activities.performer!=null">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
 
 </ion-card>
 </ion-content>

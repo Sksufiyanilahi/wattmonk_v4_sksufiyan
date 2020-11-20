@@ -6,4 +6,5 @@ export class AssigneeModel {
   contractorlogo: ContractorLogo;
   id: number;
   selected = false;
+  jobcount:number;
 }

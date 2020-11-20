@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { LoginModel } from './model/login.model';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { StorageService } from './storage.service';
 import { SolarMake } from './model/solar-make.model';
 import { SolarMadeModel } from './model/solar-made.model';
@@ -14,10 +15,17 @@ import { DesginDataModel } from './model/design.model';
 import { InverterMadeModel } from './model/inverter-made.model';
 import { AssigneeModel } from './model/assignee.model';
 import { SearchModel } from './model/search.model';
-import { BaseUrl } from './contants';
+import { BaseUrl,PlatformUpdateUrl } from './contants';
 import { GOOGLE_API_KEY } from './model/constants';
 import { UtilitiesService } from './utilities.service';
+import { BehaviorSubject } from 'rxjs';
+import { DesignModel } from 'src/app/model/design.model'
+
 import { RoofMaterial } from './model/roofmaterial.model';
+import { map, catchError } from 'rxjs/operators';
+import { User} from 'src/app/model/user.model'
+import { AuthGuardService } from './auth-guard.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +34,24 @@ export class ApiService {
   public onlineOffline: boolean = navigator.onLine;
   headers: HttpHeaders;
   uploadHeaders: HttpHeaders;
+  httpWithoutLoader: HttpClient;
   private parentId = '';
   private userId = '';
   public searchbarElement: string = '';
   public _OnMessageReceivedSubject: Subject<string>;
+  public design : Observable<DesignModel>;
+
+  public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  version = new BehaviorSubject<string>('');
+
+
   constructor(
     private http: HttpClient,
     private storageService: StorageService,
-    private utilities:UtilitiesService
+    private utilities:UtilitiesService,
+    private auth: AuthGuardService
   ) {
-    debugger;
+    this.getUpgradeMessage();
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
       //Do task when no internet connection
@@ -70,6 +86,9 @@ export class ApiService {
   getSolarMake() {
     return this.http.get<SolarMake[]>(BaseUrl + '/modulemakes', { headers: this.headers });
   }
+  postSolarMake(data){
+    return this.http.post<SolarMake[]>(BaseUrl + '/modulemakes',data, { headers: this.headers });
+  }
 
   getRoofMaterial() {
     return this.http.get<SolarMake[]>(BaseUrl + '/roofmaterials', { headers: this.headers });
@@ -79,8 +98,21 @@ export class ApiService {
     return this.http.get<SolarMadeModel[]>(BaseUrl + '/modulemodels?modulemake.id_eq=' + id, { headers: this.headers });
   }
 
+  postSolarMade(data){
+    return this.http.post<SolarMadeModel[]>(BaseUrl + '/modulemodels' ,data, { headers: this.headers });
+  }
+
   getInverterMake() {
     return this.http.get<InverterMakeModel[]>(BaseUrl + '/invertermakes', { headers: this.headers });
+  }
+
+  postInverterMake(data){
+    return this.http.post<InverterMakeModel[]>(BaseUrl + '/invertermakes',data, { headers: this.headers });
+  }
+
+  postInverterMade(data){
+    return this.http.post<InverterMadeModel[]>(BaseUrl + '/invertermodels', data,{ headers: this.headers });
+
   }
 
   getUtilities() {
@@ -142,7 +174,12 @@ export class ApiService {
   getDesignSurveys(search : string) {
     return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search, { headers: this.headers });
   }
-
+  getAnalystDesign(search :string){
+    return this.http.get<DesginDataModel[]>(BaseUrl+'/userdesign?id='+this.userId+'&'+search,{headers:this.headers});
+  }
+  getProfileDetails(){
+    return this.http.get<DesginDataModel[]>(BaseUrl+'/users/me',{headers:this.headers});
+  }
   refreshHeader() {
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -150,6 +187,7 @@ export class ApiService {
     });
     this.uploadHeaders = new HttpHeaders({
       Authorization: 'Bearer ' + this.storageService.getJWTToken()
+    
     });
     this.parentId = this.storageService.getParentId();
     this.userId = this.storageService.getUserID();
@@ -169,15 +207,19 @@ export class ApiService {
   }
 
   getSurveyors(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId + '&parentcompany=' + this.storageService.getUser().company, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId, { headers: this.headers });
+  }
+
+  getAnalysts(): Observable<AssigneeModel[]> {
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/analysts?parent_eq=' + this.parentId , { headers: this.headers });
   }
 
   searchAllDesgin(searchterm): Observable<SearchModel> {
-    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm, { headers: this.headers });
+    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm + '&userid=' + this.userId, { headers: this.headers });
   }
 
   getDesigners(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId + '&parentcompany=' + this.storageService.getUser().company, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId, { headers: this.headers });
   }
 
   uploadImage(surveyId: number, key: string, blob: Blob, fileName: string) {
@@ -222,10 +264,17 @@ export class ApiService {
   updateUser(id, data){
     return this.http.put(BaseUrl + '/users/'+ id, data, { headers: this.uploadHeaders } );
   }
-
-  profileNotification(){
-    return this.http.get(BaseUrl + '/notifications/user/' + this.userId,{ headers: this.headers })
+  getCountOfUnreadNotifications(){
+    return this.http.get(BaseUrl+ "/Notifications/count?user=" + this.userId + "&status=unread", { headers: this.headers});
   }
+  profileNotification(){
+    return this.http.get(BaseUrl + '/notifications?user=' + this.userId + "&_sort=created_at:DESC",{ headers: this.headers })
+  }
+
+  updateNotification(id,status){
+    return this.http.put(BaseUrl + '/notifications/' + id,status,{ headers: this.headers })
+  }
+
   getGoogleImage(lat:number, lng:number): Observable<Blob> {
     var imageurl = "https://maps.googleapis.com/maps/api/staticmap?zoom=19&size=1200x1600&scale=4&maptype=satellite&center=" + lat + ","+ lng + "&key=" + GOOGLE_API_KEY;
     return this.http.get(imageurl, { responseType: 'blob' });
@@ -239,7 +288,63 @@ export class ApiService {
     return this.http.post(BaseUrl + "recharges/" ,data, { headers: this.headers });
   }
 
-  activityDetails(designid){
+  design_activityDetails(designid){
     return this.http.get(BaseUrl+ "designs/" + designid, { headers: this.headers});
   }
+  createPayment(data){
+    return this.http.post(BaseUrl + '/createpayment',data,{ headers: this.uploadHeaders });
+  }
+  recharges(data){
+    return this.http.post(BaseUrl + '/recharges',data,{ headers: this.uploadHeaders });
+  }
+  paymentDetail(C_id){
+    return this.http.get(BaseUrl+ "/designs/count?createdby= " + C_id, { headers: this.headers});}
+ 
+    survey_activityDetails(surveyid){
+     return this.http.get(BaseUrl+ "surveys/" + surveyid, { headers: this.headers});
+  
+  }
+  publishSolarMake(value){
+    this.solarMakeValue.next(value);
+  }
+
+  editDesign(id:number, inputData:any): Observable<DesignModel>{
+   
+    return this.http
+    .put<DesignModel>(BaseUrl + "/designs/"+ id, JSON.stringify(inputData), {
+      headers: this.headers,
+      
+    })
+  
+  }
+
+  pushtoken(id,data){
+    return this.http.put(BaseUrl + '/users/pushtokens/'+ id, data, { headers: this.uploadHeaders } );
+  }
+
+  getTeamData(): Observable<User[]> {
+    return this.http.get<User[]>(BaseUrl + "/users?_sort=created_at:desc&parent="+this.parentId+"&id_ne="+this.parentId, {
+      headers: this.headers,
+   
+    })
+   
+  
+    }
+
+    update_message(){
+      this.headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.storageService.getJWTToken()
+      });
+      console.log(this.headers);
+      return this.http.get(BaseUrl + '/platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app',{ headers: this.headers})  
+    }
+
+    getUpgradeMessage(){
+      this.update_message().subscribe(res=>{
+        console.log(res);
+        this.version.next(res[0].appversion);
+      })
+    }
+  
 }

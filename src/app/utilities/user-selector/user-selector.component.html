@@ -2,21 +2,28 @@
   <span class="input-placeholder" style="margin-left: 8px;">{{placeholder}}</span>
   <span class="input-placeholder" *ngIf="required">*</span>
   <div scrollX="true" style="margin-top: 4px;">
+
+
     <div class="d-flex flex-row">
+      
       <div *ngFor="let assignee of assignees" class="assignee-margin " (click)="selectAssignee(assignee)">
+
         <div class="selected d-flex"
-             [class.selected]="assignee.selected" [class.normal]="!assignee.selected">
+             [class.selected]="assignee.selected" [class.normal]="!assignee.selected ">
+             <ion-badge class="badge" style="z-index:999">{{assignee?.jobcount}}</ion-badge>
           <img *ngIf="assignee.contractorlogo && assignee.contractorlogo.logo" [src]="assignee.contractorlogo.logo.url" class="assignee-image"/>
           <div *ngIf="!assignee.contractorlogo || !assignee.contractorlogo.logo" class="assignee-image d-flex flex-row align-center justify-center">
             <div class="name_div">
+            
               <span style="text-transform: capitalize;">{{assignee?.firstname?.substring(0, 1) | uppercase}}{{assignee?.lastname?.substring(0, 1) | uppercase}}</span>
             </div>
           </div>
+           </div>
+          <small style="font-size: 8px;">{{assignee?.firstname=='Ankit' ? 'Wattmonk' : assignee?.firstname}} <br />{{assignee?.lastname=="Sheoran" ? '' : assignee?.lastname}}</small>
+         </div>
+        
+         </div>
         </div>
-        <small>{{assignee?.firstname}} {{assignee?.lastname}}</small>
-      </div>
-    </div>
-  </div>
 
 </div>
 

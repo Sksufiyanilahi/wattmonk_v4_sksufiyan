@@ -15,11 +15,11 @@
                 </div>
             </ion-col>
             <ion-col size="auto" style="position: relative;">
-                <div class="notification-padding" [routerLink]="['/profile']" routerDirection="forward">
+                <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward" (click)="setzero()">
                     <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
-                    <!-- <span class="badge">
-                                4
-                            </span> -->
+                   <span class="badge" *ngIf="unreadCount > 0">
+                                {{unreadCount}}
+                            </span> 
                 </div>
             </ion-col>
         </ion-row>
@@ -126,19 +126,19 @@
         </ion-fab>
         <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
             <ion-row>
-                <ion-col size="4">
+                <ion-col size="6">
                     <div class="tab">
                         <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>
                         <span class="tabText">Home</span>
                     </div>
                 </ion-col>
-                <ion-col size="4" [routerLink]="['/message']">
+                <!-- <ion-col size="4" [routerLink]="['/groups']">
                     <div class="tab">
                         <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
                         <span class="tabText">Messages</span>
                     </div>
-                </ion-col>
-                <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
+                </ion-col> -->
+                <ion-col size="6" [routerLink]="['/profile']" routerDirection="forward">
                     <div class="tab">
                         <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
                         <span class="tabText">Profile</span>

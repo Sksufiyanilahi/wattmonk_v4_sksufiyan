@@ -5,7 +5,7 @@ import { SurveyDataModel } from 'src/app/model/survey.model';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController, ModalController } from '@ionic/angular';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DrawerState } from 'ion-bottom-drawer';
 import { AssigneeModel } from '../../model/assignee.model';
@@ -18,6 +18,9 @@ import {Storage} from '@ionic/storage';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import * as moment from 'moment';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
+import { EmailModelPage } from 'src/app/email-model/email-model.page';
+import{SocialSharing} from '@ionic-native/social-sharing/ngx';
+import { User } from 'src/app/model/user.model';
 
 @Component({
   selector: 'app-survey',
@@ -32,23 +35,30 @@ export class SurveyComponent implements OnInit, OnDestroy {
   private dataRefreshSubscription: Subscription;
 
   today: any;
+
   options: LaunchNavigatorOptions = {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
   drawerState = DrawerState.Bottom;
   surveyId = 0;
+  showBottomDraw: boolean = false;
+  surveyData: any;
+  selectedDesigner:any
   assignForm: FormGroup;
   listOfAssignees: AssigneeModel[] = [];
   routeSubscription: Subscription;
   filterDataArray: SurveyDataModel[];
   segments:any='status=created&status=outsourced&status=requestaccepted';
   overdue: number;
-  userData: any;
+  userData: User;
   netSwitch: any;
 
   constructor(
     private utils: UtilitiesService,
+    private alertController:AlertController,
+    private socialsharing: SocialSharing,
+    public modalController: ModalController,
     private apiService: ApiService,
     private datePipe: DatePipe,
     private navController: NavController,
@@ -65,24 +75,24 @@ export class SurveyComponent implements OnInit, OnDestroy {
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
     this.assignForm = this.formBuilder.group({
-      assignedto: new FormControl('', [Validators.required]),
+      assignedto: new FormControl(0, [Validators.required]),
       status: new FormControl('surveyassigned', [Validators.required])
     });
   }
 
-  segmentChanged(event){
+  segmentChanged(event?){
     this.segments= event.target.value;
-    this.getSurveys(event);
+    // this.getSurveys(event);
 
-    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+    // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
       this.getSurveys(null);
-    });
+    // });
 
-    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-        this.formatSurveyData(this.listOfSurveyData);
-      }
-    });
+    // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+    //   if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+    //     this.formatSurveyData(this.listOfSurveyData);
+    //   }
+    // });
   }
 
   ionViewDidEnter() {
@@ -93,16 +103,16 @@ this.network.networkConnect();
       console.log(this.netSwitch);
       
     })
-    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+    // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
 
-      this.getSurveys(null);
-    });
+    //   this.getSurveys(null);
+    // });
 
-    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-        this.formatSurveyData(this.listOfSurveyData);
-      }
-    });
+    // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+    //   if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+    //     this.formatSurveyData(this.listOfSurveyData);
+    //   }
+    // });
     // debugger;
     // this.routeSubscription.unsubscribe();
   }
@@ -111,9 +121,9 @@ this.network.networkConnect();
     this.userData = this.storageService.getUser();
     console.log(this.userData);
     
-    // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-    //   this.getSurvey();
-    // });
+    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+      this.getSurveys(null);
+    });
   }
   // ngOnInit() {
   //   // this.filterData(this.filterDataArray);
@@ -167,9 +177,10 @@ this.network.networkConnect();
     this.fetchPendingSurveys(event,showLoader);
   }
 
-  fetchPendingSurveys(event?, showLoader?: boolean) {
+  fetchPendingSurveys(event, showLoader: boolean) {
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
+    console.log("data",this.segments);
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
       this.apiService.getSurveyorSurveys(this.segments).subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
@@ -398,39 +409,167 @@ this.network.networkConnect();
   }
 
   assignToSurveyor() {
-    if (this.assignForm.status === 'INVALID') {
+    console.log(this.surveyData.createdby.id);
+      
+    if(this.assignForm.status === 'INVALID' && (this.surveyData.status === 'reviewassigned' || this.surveyData.status === 'reviewfailed' || this.surveyData.status === 'reviewpassed')){
+      this.utils.errorSnackBar('Please select a analyst');
+    }
+    else if (this.assignForm.status === 'INVALID' && this.surveyData.status === 'requestaccepted') {
       this.utils.errorSnackBar('Please select a surveyor');
     } else {
-      this.apiService.updateSurveyForm(this.assignForm.value, this.surveyId).subscribe((value) => {
-        this.dismissBottomSheet();
-        this.utils.sethomepageSurveyRefresh(true);
-      }, (error) => {
-        this.dismissBottomSheet();
-      });
+      
+     
+      var surveystarttime = new Date();
+      var milisecond = surveystarttime.getTime();
+    var additonalhours = 0;
+    if(this.surveyData.requesttype == "prelim"){
+      console.log(parseInt(this.selectedDesigner.jobcount) );
+      additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
+      
+      surveystarttime.setHours( surveystarttime.getHours() + additonalhours );
+    }else{
+      additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
+      surveystarttime.setHours( surveystarttime.getHours() + additonalhours );
     }
+    console.log(this.selectedDesigner);
+    var postData = {};
+    if (this.surveyData.createdby.id == this.userData.id) {
+      if (this.selectedDesigner.company == this.userData.company) {
+        if(this.selectedDesigner.role.type=="qcinspector"){
+          postData = {
+            reviewassignedto: this.selectedDesigner.id,
+            status: "reviewassigned",
+            reviewstarttime: milisecond
+          }; 
+        }
+       if(this.selectedDesigner.role.type=="surveyors") { postData = {
+          assignedto: this.selectedDesigner.id,
+          isoutsourced: "false",
+          status: "surveyassigned",
+          surveystarttime: surveystarttime
+        }; 
+        
+      }
+      
+      }
+      else {
+        postData = {
+          outsourcedto: this.selectedDesigner.id,
+          isoutsourced: "true",
+          status: "outsourced"
+        };
+      }
+    } else {
+      if(this.selectedDesigner.role.type=="surveyors"){ postData = {
+        assignedto: this.selectedDesigner.id,
+        status: "surveyassigned",
+        surveystarttime: surveystarttime
+      };}
+      if(this.selectedDesigner.role.type=="qcinspector"){
+        postData = {
+          reviewassignedto: this.selectedDesigner.id,
+          status: "reviewassigned",
+          reviewstarttime: milisecond
+        };
+      }
+    }
+    this.utils.showLoading('Assigning').then(()=>{
+      this.apiService.updateSurveyForm(postData, this.surveyId).subscribe((value) => {
+        this.utils.hideLoading().then(()=>{
+          ; 
+          console.log('reach ', value);
+         
+          this.utils.showSnackBar('Survey request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
+         
+          this.dismissBottomSheet();
+          this.showBottomDraw = false;
+          this.utils.sethomepageSurveyRefresh(true);
+          
+        })
+      }, (error) => {
+        this.utils.hideLoading();
+        this.dismissBottomSheet();
+        this.showBottomDraw = false;
+      });
+    })
+    }
+
 
   }
 
-  openSurveyors(id: number) {
-    this.utils.showLoading('Getting Surveyors').then(() => {
-      this.apiService.getSurveyors().subscribe(assignees => {
-        this.utils.hideLoading().then(() => {
-          this.listOfAssignees = [];
-          assignees.forEach(item => this.listOfAssignees.push(item));
-          this.surveyId = id;
-          this.utils.setBottomBarHomepage(false);
-          this.drawerState = DrawerState.Docked;
-          console.log(this.listOfAssignees);
-          this.assignForm.patchValue({
-            assignedto: 0
+
+  
+  openAnalysts(id:number,surveyData){
+    this.surveyData=surveyData;
+    if (this.listOfAssignees.length === 0) {
+      this.utils.showLoading('Getting Analysts').then(() => {
+        this.apiService.getAnalysts().subscribe(assignees => {
+          this.utils.hideLoading().then(() => {
+            this.listOfAssignees = [];
+            // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+            assignees.forEach(item => this.listOfAssignees.push(item));
+            console.log(this.listOfAssignees);
+            this.showBottomDraw = true;
+            this.surveyId = id;
+            this.utils.setBottomBarHomepage(false);
+            this.drawerState = DrawerState.Docked;
+            this.assignForm.patchValue({
+              assignedto: ''
+            });
+          });
+        }, (error) => {
+          this.utils.hideLoading().then(() => {
+            this.utils.errorSnackBar('Some error occurred. Please try again later');
           });
         });
-      }, (error) => {
-        this.utils.hideLoading().then(() => {
-          this.utils.errorSnackBar('Some error occurred. Please try again later');
+      });
+
+    } else {
+      this.surveyId = id;
+      this.utils.setBottomBarHomepage(false);
+      this.drawerState = DrawerState.Docked;
+      this.assignForm.patchValue({
+        assignedto: ''
+      });
+    }
+  
+    }
+  
+
+  openSurveyors(id: number,surveyData) {
+    this.surveyData=surveyData;
+    if (this.listOfAssignees.length === 0) {
+      this.utils.showLoading('Getting Surveyors').then(() => {
+        this.apiService.getSurveyors().subscribe(assignees => {
+          this.utils.hideLoading().then(() => {
+            this.listOfAssignees = [];
+            // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+            assignees.forEach(item => this.listOfAssignees.push(item));
+            console.log(this.listOfAssignees);
+            this.showBottomDraw = true;
+            this.surveyId = id;
+            this.utils.setBottomBarHomepage(false);
+            this.drawerState = DrawerState.Docked;
+            this.assignForm.patchValue({
+              assignedto: ''
+            });
+          });
+        }, (error) => {
+          this.utils.hideLoading().then(() => {
+            this.utils.errorSnackBar('Some error occurred. Please try again later');
+          });
         });
       });
-    });
+
+    } else {
+      this.surveyId = id;
+      this.utils.setBottomBarHomepage(false);
+      this.drawerState = DrawerState.Docked;
+      this.assignForm.patchValue({
+        assignedto: ''
+      });
+    }
+  
 
   }
 
@@ -451,10 +590,106 @@ this.network.networkConnect();
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
-    debugger;
     console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
     
   }
+  getassignedata(asssignedata){
+    this.selectedDesigner = asssignedata;
+    
+  }
+
+  
+  async openreviewPassed(id,designData){ 
+    this.surveyId=id
+    const alert = await this.alertController.create({
+      cssClass: 'alertClass',
+      header: 'Confirm!',
+      message:'Would you like to  Add Comments!!',
+      inputs:
+       [ {name:'comment',
+       id:'comment',
+          type:'textarea',
+        placeholder:'Enter Comment'}
+        ] ,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'deliver',
+          handler: (alertData) => {
+            var postData= {};
+            if(alertData.comment!=""){
+             postData = {
+              status: "delivered",
+              comments: alertData.comment ,
+               };}
+               else{
+                postData = {
+                  status: "delivered",
+                   };
+               }
+               console.log(postData);
+               this.apiService.updateSurveyForm(postData, this.surveyId).subscribe((value) => {
+                this.utils.hideLoading().then(()=>{
+                  ; 
+                  console.log('reach ', value);
+                 this.utils.showSnackBar('Survey request has been delivered successfully');
+                 
+                  this.utils.setHomepageDesignRefresh(true);
+                })
+              }, (error) => {
+                this.utils.hideLoading();
+                ;
+              });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  
+     
+    
+  }
+
+  close() {
+    if (this.showBottomDraw === true) {
+      this.showBottomDraw = false;
+      this.drawerState = DrawerState.Bottom;
+      this.utils.setBottomBarHomepage(true);
+    } else {
+      this.showBottomDraw = true;
+    }
+  }
+
+    shareWhatsapp(designData){
+    this.socialsharing.share(designData.prelimdesign.url);
+  }
+  
+   async shareViaEmails(id,designData){
+    const modal = await this.modalController.create({
+      component: EmailModelPage,
+      cssClass: 'email-modal-css',
+      componentProps: {
+        id:id,
+        designData:designData
+      },
+      
+    });
+    modal.onDidDismiss().then((data) => {
+      console.log(data)
+      if(data.data.cancel=='cancel'){
+      }else{
+        this.getSurveys(null)
+      }
+  });
+      return await modal.present();
+   }
 
 }
 

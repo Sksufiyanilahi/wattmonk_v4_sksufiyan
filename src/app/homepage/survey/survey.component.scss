@@ -1,7 +1,7 @@
 .custom-card {
-  display: flex;
-  flex-direction: column;
-  background: white;
+  display: flex !important;
+  flex-direction: column !important;
+  background: white !important;
   border-radius: 4px !important;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
   padding: 8px 12px;
@@ -26,8 +26,8 @@
 }
 
 .customer-address {
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin-top: 4px;
+  margin-bottom: 6px;
   font-size: 0.8em;
   color: #4272B9;
 }
@@ -38,6 +38,7 @@
 
 .timestamp {
   font-size: 0.7em;
+ 
 }
 
 .chipdetail{
@@ -50,14 +51,51 @@
   text-align: center;
   color: #fff;
 }
-
-.segment-btn{
-  font-size: 10px !important;
+.cssclass{
+  --max-height :100% !important;
+  // position: absolute;
+  // display: block;
 }
 
-.latebystyle{
-  float: right; 
-  font-size: 10px;
-  color: #3C78DB;
-  text-align: right;
+
+//.drawer {
+//  background: #F3F3F3;
+//  --background: #F3F3F3;
+//}
+//
+//.ion-bottom-drawer-scrollable-content {
+//  background: #F3F3F3 !important;
+//}
+
+ion-bottom-drawer {
+
+  --padding: 0 !important;
+  padding: 0 !important;
+
+  --background: #F3F3F3 !important;
+  background: #F3F3F3 !important;
+
+  ion-content {
+    --background: #F3F3F3 !important;
+  }
+
+  
+}
+    .segment-btn{
+      font-size: 10px !important;
+    }
+
+    .latebystyle{
+      float: right; 
+      font-size: 10px;
+      color: #3C78DB;
+    }
+
+.imagebutton{
+  float:right;
+  margin-top: 0px;
+}
+
+.alertClass{
+  background-color: wheat;
 }

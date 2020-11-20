@@ -14,24 +14,30 @@
         </ion-col>
         <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;">
-                <p class="customer-name" [routerLink]="['/design-details/',designData.id]"
-                      routerDirection="forward">{{designData.name}}
+                <p class="customer-name" >{{designData.name}}
                       <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',designData.id]" routerDirection="forward">
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
-                    <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'designcompleted'">Designing Completed</span>
-                    <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
-            </p>
-                <span class="customer-email" [routerLink]="['/survey-detail/',designData.id]"
+                    <span [routerLink]="['/design-details/',designData.id]"
+                    routerDirection="forward" class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'designcompleted'">Designing Completed</span>
+                    <span [routerLink]="['/design-details/',designData.id]"
+                    routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue">Overdue</span>
+                    <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>
+                    <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>           
+                </p>
+                <p style="margin:0px"><span class="customer-email" [routerLink]="['/survey-detail/',designData.id]"
                       routerDirection="forward">{{designData.email}}</span>
+                      <span *ngIf="designData.isoverdue" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{item.lateby}}</strong></span>
+                      
+            </p>
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{designData.phonenumber}}</span></a>
-                <span class="customer-address z-100"
-                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
+                <span style="margin:0px" class="customer-address z-100"
+                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
 
                 <ion-row style="margin-bottom: 8px;" [routerLink]="['/design-details/',designData.id]" >
-                    <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                    <span class="chipdetail" style="background-color: #95afc0;" >{{designData.formattedjobtype}}</span>
+                    <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
+                    <span class="chipdetail" style="background-color: #95afc0;" >{{designData.source}}</span>
                 </ion-row>
                 <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
             </div>
@@ -44,6 +50,7 @@
 </ion-grid>
 
 <div *ngIf="listOfDesignDataHelper.length===0" class="h-100 d-flex flex-column align-center justify-center">
+    No designs found
     <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
 </div>
 </ion-content>

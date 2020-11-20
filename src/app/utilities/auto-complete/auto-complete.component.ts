@@ -1,5 +1,7 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
+import { ApiService } from 'src/app/api.service';
+import { UtilitiesService } from 'src/app/utilities.service';
 
 @Component({
   selector: 'app-auto-complete',
@@ -23,8 +25,12 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   @Input() dataList: any[];
   @Input() placeholder = '';
   @Input() mode = 'id'; //id or object
+  @Input() name='';
+  @Output() modulename= new EventEmitter();
+ 
 
-  private onChange: (data: number) => void;
+
+  private onChange: (data: any) => void;
   selectedOption: any;
   showSuggestions: false;
   sortedList: any[] = [];
@@ -32,7 +38,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   selectedDataName = '';
   manualinput = '';
 
-  constructor() {
+  constructor(public apiService:ApiService,private utility:UtilitiesService) {
   }
 
   registerOnChange(fn: any): void {
@@ -62,10 +68,11 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
           selectedData = item;
         }
       });
-
+      if(selectedData){
       this.sortedList = this.dataList.filter((item) => {
         return (item.name.toLowerCase().indexOf(selectedData.name.toLowerCase()) > -1);
       });
+    }
       if (this.sortedList.length === 1) {
         if (this.sortedList[0].name.toLowerCase() === selectedData.name.toLowerCase()) {
           this.sortedList = [];
@@ -83,27 +90,41 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
 
   }
 
-  onValueChanged(event: CustomEvent) {
+
+  onValueChanged(event) {
     console.log('value changed');
     console.log(this.dataList);
     this.manualinput = event.detail.value;
+    this.utility.manualInput.next(this.manualinput);
+    // this.selectedDataName = event.detail.value;
+    console.log(this.selectedDataName);
     this.sortedList = this.dataList.filter((item) => {
-      return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
+      if(item.name !==null){
+        return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
+      }
     });
     if (this.sortedList.length === 1) {
       if (this.sortedList[0].name.toLowerCase() === event.detail.value.toLowerCase()) {
+        // this.onChange(event.target.value);
         this.sortedList = [];
+       
       }
+    }
+    else{
+      // this.selectedDataName= event.detail.value;
+      // event.detail.value = this.selectedDataName;
+      // this.onChange(this.selectedDataName);
     }
   }
 
   selectOption(data: any) {
     console.log('data changed');
     this.sortedList = [];
-
     this.selectedOption = data;
     this.selectedDataId = data.id;
     this.selectedDataName = data.name;
+    console.log(data,"KK");
+    
 
     if (this.mode === 'id') {
       this.onChange(data.id);
@@ -113,19 +134,28 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   onFocus(event: CustomEvent) {
-    console.log(event);
+    this.sortedList=[];
+    // this.selectedDataName= event.detail.value;
     this.sortedList = this.dataList.filter((item) => {
-      return (item.name.toLowerCase().indexOf(this.selectedDataName) > -1);
+      // console.log(item);
+        if(item.name !== null){
+          return (item.name.toLowerCase().indexOf(this.selectedDataName) > -1);
+        }
     });
     if (this.sortedList.length === 1) {
-      if (this.sortedList[0].name.toLowerCase() === this.selectedDataName.toLowerCase()) {
+      this.selectedDataName = this.sortedList[0].name;
+      // if (this.mode === 'id') {
+      //   this.onChange(this.sortedList[0].id);
+      // } else {
+        // }
+        if (this.sortedList[0].name.toLowerCase() === this.selectedDataName.toLowerCase()) {
+       
         this.sortedList = [];
       }
     }
   }
 
   onBlur(event: CustomEvent) {
-    console.log(event);
     setTimeout(() => {
       this.sortedList = [];
     }, 100);

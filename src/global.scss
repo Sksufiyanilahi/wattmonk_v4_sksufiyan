@@ -96,8 +96,8 @@
 
 .comment_box {
   border: 1px solid #E1E1E1;
-  height: 80px;
-  margin-top: 10px;
+  height: 60px;
+  // margin-top: 10px;
 }
 
 .form_input {
@@ -264,4 +264,14 @@ ion-item {
   position: absolute; 
   display: block;  
 }
+
+.email-modal-css .modal-wrapper{
+  height: 80%;
+  width:90%;
+  // top: 80%;
+  position: absolute; 
+  display: block;  
+}
+
+
 

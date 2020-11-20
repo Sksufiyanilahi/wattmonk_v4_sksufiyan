@@ -8,6 +8,7 @@ import { PaymentgatewayPageRoutingModule } from './paymentgateway-routing.module
 
 import { PaymentgatewayPage } from './paymentgateway.page';
 import { NgxPayPalModule } from 'ngx-paypal';
+import { Stripe } from '@ionic-native/stripe/ngx';
 
 @NgModule({
   imports: [
@@ -18,6 +19,9 @@ import { NgxPayPalModule } from 'ngx-paypal';
     PaymentgatewayPageRoutingModule,
     NgxPayPalModule
   ],
-  declarations: [PaymentgatewayPage]
+  declarations: [PaymentgatewayPage],
+  providers:[
+    Stripe
+  ]
 })
 export class PaymentgatewayPageModule {}

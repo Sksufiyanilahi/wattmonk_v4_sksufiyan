@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { ROLES } from '../contants';
 import { ModalPageComponent } from './modal-page/modal-page.component';
+import { User } from '../model/user.model';
 
 @Component({
   selector: 'app-survey-detail',
@@ -33,6 +34,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   listOfAssignees: AssigneeModel[] = [];
   drawerState = DrawerState.Bottom;
   date: Date;
+  user:User;
   rescheduleForm: FormGroup;
   assigned = false;
   assigneeForm: FormGroup;
@@ -76,6 +78,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.user=this.storage.getUser();
+    console.log(this.user);
     this.dataSubscription = this.utilities.getSurveyDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getSurveyDetails();
@@ -91,7 +95,6 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   getSurveyDetails() {
-    debugger;
     this.utilities.showLoading('Getting Survey Details').then((success) => {
       this.apiService.getSurveyDetail(this.surveyId).subscribe((result) => {
         this.utilities.hideLoading().then(() => {

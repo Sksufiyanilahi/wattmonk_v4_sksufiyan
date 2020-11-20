@@ -10,7 +10,10 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
 import { DesginDataHelper } from 'src/app/homepage/design/design.component';
+import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import * as moment from 'moment';
+import { ModalController } from '@ionic/angular';
+import{SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 @Component({
   selector: 'app-delievereddesign',
@@ -36,7 +39,10 @@ export class DelievereddesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+    private socialsharing: SocialSharing,
+    public modalController: ModalController,
+    ) {
       console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -53,6 +59,13 @@ export class DelievereddesignComponent implements OnInit {
         this.formatDesignData(this.listofDesignData);
       }
     });
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.designRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    this.cdr.detach();
   }
 
   getDesigns(event: CustomEvent) {
@@ -94,11 +107,11 @@ export class DelievereddesignComponent implements OnInit {
   formatDesignData(records : DesginDataModel[]){
     this.listofDesignData = this.fillinDynamicData(records);
     const tempData: DesginDataHelper[] = [];
-          this.listofDesignData.forEach((designItem) => {
+          this.listofDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
-              this.sDatePassed(designItem.deliverydate);
+              this.sDatePassed(designItem.updated_at);
               const listOfDesign = new DesginDataHelper();
-              listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+              listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
               listOfDesign.lateby = this.overdue;
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
@@ -106,17 +119,17 @@ export class DelievereddesignComponent implements OnInit {
               let added = false;
               tempData.forEach((designList:any) => {
                 if (!added) {
-                  if (designList.date === this.datePipe.transform(designList.deliverydate, 'M/d/yy')) {
-                    designList.listOfSurveys.push(designList);
-                    this.sDatePassed(designItem.deliverydate);
+                  if (designList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
+                    designList.listOfDesigns.push(designItem);
+                    this.sDatePassed(designItem.updated_at);
                     added = true;
                   }
                 }
               });
               if (!added) {
-                this.sDatePassed(designItem.deliverydate);
+                this.sDatePassed(designItem.updated_at);
                 const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/d/yy');
+                listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
                 listOfDesign.lateby = this.overdue;
                 listOfDesign.listOfDesigns.push(designItem);
                 tempData.push(listOfDesign);
@@ -134,8 +147,14 @@ export class DelievereddesignComponent implements OnInit {
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
     records.forEach(element => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.deliverydate);
+      }else{
+        element.isoverdue = false;
+      }
+      element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
-      this.storage.get(''+element.id).then((data) => {
+      this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
         if (data) {
           element.totalpercent = data.currentprogress;
@@ -154,6 +173,28 @@ export class DelievereddesignComponent implements OnInit {
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
   }
-
+  shareWhatsapp(designData){
+    this.socialsharing.share(designData.prelimdesign.url);
+  }
+  
+   async shareViaEmails(id,designData){
+    const modal = await this.modalController.create({
+      component: EmailModelPage,
+      cssClass: 'email-modal-css',
+      componentProps: {
+        id:id,
+        designData:designData
+      },
+      
+    });
+    modal.onDidDismiss().then((data) => {
+      console.log(data)
+      if(data.data.cancel=='cancel'){
+      }else{
+        this.getDesigns(null)
+      }
+  });
+      return await modal.present();
+   }
 
 }

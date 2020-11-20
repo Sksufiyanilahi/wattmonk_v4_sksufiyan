@@ -1,0 +1,50 @@
+
+  <h4 style="font-weight: bold;margin-bottom:0px !important;padding: 10px;">Select the Emails</h4>
+  
+  <ion-content>
+    <ion-list>
+     <ion-item>
+       <ion-label>
+       <input type="checkbox" name="selectall" [value]="TeamData" (change)="selectAll($event)" style="height: 17px;width: 28px;">
+       Select All</ion-label>
+     </ion-item>
+     <ion-list>
+     <ion-item
+      *ngFor="let item of example; let i = index ">
+         <!-- <input type="checkbox" [(ngModel)]="item.Checked">&nbsp;  -->
+         <p class="listitem">{{item?.firstname}}</p>
+         <p class="listitem">{{item?.lastname}}</p>
+         <p class="listitem">({{item?.email}})</p>
+         <ion-checkbox slot="start" [(ngModel)]="item.Checked" ></ion-checkbox>
+         
+     
+     </ion-item>
+     </ion-list>
+   </ion-list>
+   <ion-grid>
+         <ion-row>
+           <ion-col>
+             <h6 style="margin-top:0px;padding: 2px;"></h6>
+             <textarea id="inputemails" placeholder="eg : john@gmail.com" type="emails" multiple style="width: 100%;" ></textarea>
+           </ion-col>
+         </ion-row>
+        <!-- <ion-row>
+           <ion-col>
+             <h6 style="margin:0px 0 0px 0;">Attachment</h6>
+           
+               <ion-input type="text" placeholder="Select Attachment" [(ngModel)]="filename" readonly (click)="selectAttachment()" style="border-bottom:1px solid grey"  > <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon></ion-input>
+              
+            <small *ngIf="exceedfileSize > 0" style="color:red">File size should not be greater than 25MB.</small>
+           </ion-col>
+         </ion-row>-->
+       </ion-grid>
+  </ion-content>
+    <footer style="text-align: right;margin:12px;">
+      <ion-button fill="clear" (click)="cancel()">Cancel</ion-button>
+      <ion-button fill="clear" (click)="SendMail()">Send</ion-button>
+    </footer>
+  <!-- <div class=_padding>
+    <p>Decline the design Request</p>
+    <textarea placeholder="Reason*" style="width: 100%;"></textarea>
+  </div> -->
+

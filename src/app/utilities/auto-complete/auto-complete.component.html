@@ -1,5 +1,6 @@
 <ion-item class="ion-no-padding" #searchBar>
-    <ion-input [placeholder]="placeholder" class="form_input" (ionChange)="onValueChanged($event)" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"
+    <ng-content></ng-content>
+    <ion-input style="font-size: 12px;word-wrap: break-word;" class="form_input" (ionChange)="onValueChanged($event)" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)" 
                [(ngModel)]="selectedDataName"></ion-input>
 </ion-item>
 <ion-grid class="ion-no-padding popup-list"
@@ -7,7 +8,7 @@
     <ion-row *ngFor="let data of sortedList" (click)="selectOption(data)">
         <ion-col size="12">
             <ion-item>
-                <ion-label>{{data.name}}</ion-label>
+                <ion-label style="font-size: 10px;word-wrap: break-word;">{{data.name}}</ion-label>
             </ion-item>
         </ion-col>
     </ion-row>
