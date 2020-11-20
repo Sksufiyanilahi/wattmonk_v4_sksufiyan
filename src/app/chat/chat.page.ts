@@ -395,6 +395,8 @@ export class ChatPage implements OnInit {
   DocumentPicker() {
     this.chooser.getFile()
       .then(response => {
+        console.log(response);
+        
         this.file.resolveLocalFilesystemUrl(response.uri).then((fileentry:FileEntry)=>{
           fileentry.file(fileObj=>{
             console.log(fileObj);
@@ -408,8 +410,8 @@ export class ChatPage implements OnInit {
           //   //  this.enableDisable = false;
               this.getBase64(fileObj).then(res=>{
                 let base64file= response.dataURI + res;
-                const blob_nw= this.utilities.b64toBlob(base64file);
-                      
+                // const blob_nw= this.utilities.b64toBlob(base64file);
+               const blob_nw = this.dataURItoBlob(base64file);
                 const file = {
                   file: blob_nw,
                   type: response.mediaType,
@@ -459,6 +461,8 @@ export class ChatPage implements OnInit {
     };
     this.imagePicker.getPictures(options)
       .then((results) => {
+        console.log(results);
+        
         results[0] = 'data:image/jpeg;base64,' + results[0];
         const blob_nw = this.dataURItoBlob(results[0]);
         const date = new Date();

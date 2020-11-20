@@ -129,11 +129,12 @@ export class ResendpagedialogPage implements OnInit {
       console.log('could not submit');
       
     }else{
-
+      var tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
       var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes()+15);
       let data={
-        deliverydate: null,
+        deliverydate:tomorrow.toISOString(),
         designacceptancestarttime:  designacceptancestarttime,
         isinrevisionstate: "true",
         isoutsourced: "true",

@@ -398,7 +398,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
           text:'Ok',
         
           handler:()=>{
-            this.iab.create('https://play.google.com/store/apps/details?id=com.watt.monk',"_system");
+            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
            this.ionViewDidEnter();
           }
         }]);

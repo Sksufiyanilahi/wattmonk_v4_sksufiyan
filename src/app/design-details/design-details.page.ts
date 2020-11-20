@@ -129,22 +129,23 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.errorSnackBar('Please select prelim design');
       return false;
     }else{
-      var date= Date.now();
       var data={}
-     if(this.design.status=='reviewfailed'){  data={
-             status:"reviewassigned",
+      var date= Date.now();
+     if(this.isprelimUpdate){
+      data={
+        status:"reviewassigned",
+        designendtime:date,
+        reviewstarttime:date,
+        comments:this.commentsForm.get('comments').value
+      }
+     } else{
+       data={
+             status:"designcompleted",
              designendtime:date,
              reviewstarttime:date,
              comments:this.commentsForm.get('comments').value
              
-     }}else{
-       data={
-        status:"designcompleted",
-        designendtime:date,
-        comments:this.commentsForm.get('comments').value
-        
-}
-     }
+     }}
 
       this.utilities.showLoading('Submitting').then(()=>{
         
@@ -156,7 +157,15 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
             // this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
             // this.utilities.setHomepageDesignRefresh(true);
             this.utilities.getDesignDetailsRefresh();
-            this.router.navigate(['designoverview/completeddesigns'])
+            if(this.isprelimUpdate){
+              this.utilities.setHomepageDesignRefresh(true);
+              this.router.navigate(['designoverview/inreviewdesigns']);
+              
+            }
+
+            else
+            {this.router.navigate(['designoverview/completeddesigns'])
+          }
             // this.navController.navigateRoot(['homepage']);
           });
         },(error) => {
@@ -486,15 +495,16 @@ return blob;
               // })
               if(this.isSelfUpdate){
                 this.reportDesignReviewSuccess();
-              }else{ 
-                if(this.design.status=='designassigned'){
-
-           this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res) =>{
+              }//else{
+               // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res) =>{
+             // this.utilities.getDesignDetailsRefresh();
               
-        
-            });
-          }
-          this.utilities.getDesignDetailsRefresh();}
+              
+     
+            
+              
+           // });
+        //  }
       },err=>{
             this.utilities.hideLoading().then(()=>{
               console.log(err);
@@ -533,7 +543,11 @@ return blob;
           response => {
             this.utilities.showSnackBar("Prelim design status has been updated successfully.");
             this.utilities.setHomepageDesignRefresh(true);
-            this.navController.navigateRoot(['analystoverview/design']);
+            if(this.user.role.type=='qcinspector'){
+              this.navController.navigateRoot(['analystoverview/design']);}
+              else{
+                this.navController.navigateRoot(['homepage/design']);
+              }
             //this.data.triggerEditEvent = false;
             //this.dialogRef.close(this.data);
           },
@@ -586,7 +600,11 @@ return blob;
         response => {
           this.utilities.showSnackBar("Prelim design status has been updated successfully.");
           this.utilities.setHomepageDesignRefresh(true);
-          this.navController.navigateRoot(['analystoverview/design']);
+          if(this.user.role.type=='qcinspector'){
+            this.navController.navigateRoot(['analystoverview/design']);}
+            else{
+              this.navController.navigateRoot(['homepage/design']);
+            }
          // this.triggerEditEvent = false;
           //this.dialogRef.close(this.data);
         },

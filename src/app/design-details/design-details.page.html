@@ -44,7 +44,7 @@
                 <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
             </ion-col>
         </ion-row>
-        <ion-row class="ion-no-padding" *ngIf="user.role.type=='designer' || user.role.type=='qcinspector'">
+        <ion-row class="ion-no-padding" *ngIf="user.role.type=='designer' || user.role.type=='qcinspector'||(design.status=='reviewassigned' && design.reviewassignedto.id==user.id)">
             <ion-col class="flex-center">
                 <countdown-timer [countDownTimerConfig]="timerConfig"></countdown-timer>
             </ion-col>
@@ -244,7 +244,7 @@
         <div *ngIf="(user.role.type!='clientsuperadmin' || (user.role.type==='clientsuperadmin' && design.status==='delivered'))&&( design.prelimdesign!=null || user.role.type=='designer')">
             <form novalidate [formGroup]="commentsForm">
 
-            <ion-row *ngIf="(design.status=='designassigned') && user.role.type=='designer'  ; else showimageName ">
+            <ion-row *ngIf="(design.status=='designassigned' ) && user.role.type=='designer'  ; else showimageName ">
                 <!-- <span> -->
 
                         <ion-col size="3" class="model-type font">
@@ -269,7 +269,7 @@
                                          <ion-col size="9" class="model-name font flx" style="justify-content: flex-end;">
                                           
              
-                                             <ion-input type="file" readonly (change)="prelimupdate($event)" formControlName="prelimdesign" style="border-bottom:1px solid grey; width: max-content; flex: auto;" multiple="false"> <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon></ion-input>
+                                             <ion-input type="file" formControlName="prelimdesign" readonly (change)="prelimupdate($event)" style="border-bottom:1px solid grey; width: max-content; flex: auto;" multiple="false"> <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon></ion-input>
                                          
                                                 
                                              
@@ -280,8 +280,7 @@
                                      <!-- </span> --> 
                                  </ion-row>
                              </div>
-
-                    <div *ngIf="user.role.type=='qcinspector' && design.status=='reviewassigned'">
+                    <div *ngIf="(user.role.type=='qcinspector' && design.status=='reviewassigned')||(design.status=='reviewassigned' && design.reviewassignedto.id==user.id)">
                         <ion-row *ngIf="isSelfUpdate" style="width: 125%">
                              <!-- <span> -->
                                          <ion-col size="9" class="model-name font flx" style="justify-content: flex-end;">
@@ -300,9 +299,9 @@
                              </div>
                 </form>
                   <ng-template #showimageName >
-                <ion-col><span class="model-type font"> Prelim Design</span></ion-col>
-                <ion-button size="3" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="user.role.type=='qcinspector' && design.status=='reviewassigned'" (click)="isSelfUpdate = !isSelfUpdate">Self Update</ion-button>
-                <ion-button size="3" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="user.role.type=='designer' && design.status=='reviewfailed'" (click)="isprelimUpdate = !isprelimUpdate">Update</ion-button>
+                <ion-col><span class="model-type font">Prelim Design</span></ion-col>
+                <ion-button size="3" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="(user.role.type=='qcinspector' && design.status=='reviewassigned')||(design.status=='reviewassigned' && design.reviewassignedto.id==user.id)" (click)="isSelfUpdate = !isSelfUpdate">Self Update</ion-button>
+                <ion-button size="2" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="user.role.type=='designer' && design.status=='reviewfailed'" (click)="isprelimUpdate = !isprelimUpdate">Update</ion-button>
                 <ion-col size="auto"  style="float: right;">
                     <span class="model-name font" style="text-align:right;color:#3c78d8 !important" (click)="showDesignImage()">{{imageName.length > 40 ? (imageName | slice: 0:40) + '...': imageName}}</span>
                         <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 " (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
@@ -449,7 +448,7 @@
     </ion-grid>
 
 </ion-footer>
-<ion-footer *ngIf="(user.role.type=='qcinspector' && design && design.status=='reviewassigned') " class="ion-no-border white-bg">
+<ion-footer *ngIf="(user.role.type=='qcinspector' && design && design.status=='reviewassigned')||(design && design.status=='reviewassigned' && design.reviewassignedto.id==user.id)" class="ion-no-border white-bg">
     <ion-grid>
         <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
             <ion-col size="auto">

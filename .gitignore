@@ -30,5 +30,6 @@ npm-debug.log*
 /plugins
 /www
 *.zip
+*.rar
 
 package-lock.json

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from './auth-guard.service';
+import { GroupsPage } from './chat-tabs/groups/groups.page';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -134,9 +135,23 @@ const routes: Routes = [
     loadChildren: () => import('./resendpagedialog/resendpagedialog.module').then( m => m.ResendpagedialogPageModule)
   },
   {
+    path: 'chat-tabs',
+    loadChildren: () => import('./chat-tabs/chat-tabs.module').then( m => m.ChatTabsPageModule)
+  },
+  {
+    path: 'groupchat',
+    loadChildren: () => import('./groupchat/groupchat.module').then( m => m.GroupchatPageModule)
+  },
+  {
+    path: 'groups',
+    loadChildren: () => import('./chat-tabs/groups/groups.module').then( m => m.GroupsPageModule)
+  },
+  {
     path: 'payment-modal',
     loadChildren: () => import('./payment-modal/payment-modal.module').then( m => m.PaymentModalPageModule)
-  }
+  },
+
+
 
 
 ];

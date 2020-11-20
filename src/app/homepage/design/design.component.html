@@ -53,7 +53,10 @@
                       <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/design-details/',designData.id]">In Review</span>
                       <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;" [routerLink]="['/design-details/',designData.id]">Waiting for acceptance</span>
                       <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>
+                      <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+                            *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
                       <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+
               </p>
               
               <p style="margin:0px">
@@ -83,6 +86,9 @@
                                     <ion-col *ngIf="designData.status == 'outsourced'">
                                         <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
                                             {{designData.designacceptanceremainingtime}}</span></ion-col>
+                                            <ion-col *ngIf="designData.status == 'reviewassigned' && designData.reviewassignedto.id==userData.id" style="color: #737373; font-size: 14px;">     
+                                                <span style="float: right;">{{designData.reviewremainingtime}}</span>
+                                              </ion-col>
                         </ion-row>
                        
                         <ion-row class="ion-no-margin ion-no-margin">
@@ -113,6 +119,9 @@
                             <ion-col *ngIf="segments=='requesttype=prelim&status=designcompleted'">
                                 <!-- <span *ngIf="(designData.isoutsourced=='true' && designData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (designData.isoutsourced=='false' && designData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                                 >Assign Review</span> -->
+                                <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="selfAssign(designData.id,designData)"
+                                > &nbsp; Self Assign</span>
+                                
                                 <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                                 >Assign Review</span>
                             </ion-col>

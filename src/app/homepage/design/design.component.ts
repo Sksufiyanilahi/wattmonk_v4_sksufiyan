@@ -362,7 +362,16 @@ this.network.networkConnect();
   // }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
-    records.forEach(element => {
+    records.forEach((element:any) => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.deliverydate);
+      }else{
+        element.isoverdue = false;
+      }
+      var reviewdate = new Date(element.reviewstarttime)
+      reviewdate.setMinutes(reviewdate.getMinutes()+15)
+      element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+      element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       var acceptancedate = new Date(element.designacceptancestarttime);
       element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
@@ -824,6 +833,30 @@ sDatePassed(datestring: string,i){
   this.overdue = lateby;  
   
 }
+
+selfAssign(id,designData){
+  var designstarttime = new Date();
+      var milisecond = designstarttime.getTime();
+  var postData={}
+  postData = {
+    reviewassignedto: this.userData.id,
+    status: "reviewassigned",
+    reviewstarttime: milisecond
+  };
+  this.utils.showLoading('Assigning').then(()=>{
+    this.apiService.updateDesignForm(postData,id).subscribe((value) => {
+      this.utils.hideLoading().then(()=>{
+        ; 
+        console.log('reach ', value);
+      this.utils.showSnackBar('Design request has been assigned to you successfully');
+      this.utils.setHomepageDesignRefresh(true);
+       
+      })
+    }, (error) => {
+      this.utils.hideLoading();
+      
+    });
+})}
 
 
 

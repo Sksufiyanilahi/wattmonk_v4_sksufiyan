@@ -15,10 +15,6 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { IonBottomDrawerModule } from 'ion-bottom-drawer';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { PendingComponent } from './design/pending/pending.component';
-import { CompletedComponent } from './design/completed/completed.component';
-import { DeliveredComponent } from './design/delivered/delivered.component';
-import { InreviewComponent } from './design/inreview/inreview.component';
 import { DeclinepagePage } from '../declinepage/declinepage.page';
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
@@ -41,7 +37,7 @@ import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.
     UtilitiesModule,
     SharedModule
   ],
-  declarations: [HomepagePage, SurveyComponent,DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent,ResendpagedialogPage],
+  declarations: [HomepagePage, SurveyComponent,DesignComponent,ResendpagedialogPage],
   providers: [
     DatePipe,
     Diagnostic,

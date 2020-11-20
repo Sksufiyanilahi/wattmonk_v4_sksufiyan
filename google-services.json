@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:554801985112:android:0331981a6db85ed5e53c2d",
         "android_client_info": {
-          "package_name": "com.watt.monk"
+          "package_name": "com.solar.wattmonk"
         }
       },
       "oauth_client": [
@@ -35,7 +35,7 @@
               "client_id": "554801985112-nijh19mkub3rufm3d4kmrmltq32u5815.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.watt.monk"
+                "bundle_id": "com.solar.wattmonk"
               }
             }
           ]

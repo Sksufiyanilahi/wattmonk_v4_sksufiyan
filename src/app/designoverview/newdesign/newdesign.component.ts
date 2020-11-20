@@ -31,6 +31,7 @@ export class NewdesignComponent implements OnInit {
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
   overdue: any;
+  unsubscribeMessage: Subscription;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -41,7 +42,7 @@ export class NewdesignComponent implements OnInit {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
-    this.apiService._OnMessageReceivedSubject.subscribe((r) => {
+   this.unsubscribeMessage=  this.apiService._OnMessageReceivedSubject.subscribe((r) => {
       console.log('message received! ', r);
       this.getDesigns();
     });
@@ -58,6 +59,7 @@ console.log(this.currentDate.toISOString());
     //Add 'implements OnDestroy' to the class.
     this.designRefreshSubscription.unsubscribe();
     this.dataRefreshSubscription.unsubscribe();
+    this.unsubscribeMessage.unsubscribe();
     this.cdr.detach();
   }
 

@@ -73,3 +73,20 @@ ion-tab-button[aria-selected=true] {
     position: relative;
     padding: 8px;
 }
+
+.badge {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #3c78d8;
+    color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    font-size: 0.6em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid white;
+  }

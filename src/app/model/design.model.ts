@@ -124,6 +124,7 @@ export class DesginDataModel {
   revisioncomments:any;
   requestdeclinereason:any;
   requestdeclineattachment:any;
+  isoutsourced:any;
 }
 
 export class PrelimDesign{
