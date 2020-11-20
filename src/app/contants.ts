@@ -26,6 +26,7 @@
 //   }
 
 //Development Server
+<<<<<<< HEAD
 export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api';
 export const BaseUrl = 'https://devspace.wattmonk.com/api';
 export const COMETCHAT_CONSTANTS = {
@@ -33,6 +34,15 @@ export const COMETCHAT_CONSTANTS = {
    REGION: 'US',
    API_KEY: '83ac811da8283c9e235ab912bf7a6213c207dd4d'
 }
+=======
+// export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api';
+// export const BaseUrl = 'https://devspace.wattmonk.com/api';
+// export const COMETCHAT_CONSTANTS = {
+//    APP_ID: '2145560cac03137',
+//    REGION: 'US',
+//    API_KEY: '83ac811da8283c9e235ab912bf7a6213c207dd4d'
+// }
+>>>>>>> 0cdfd9d81dd9f3aa9ed348f1c06e265f2e69b185
 export enum ROLES {
     SuperAdmin = 4,
     ContractorSuperAdmin = 6,
