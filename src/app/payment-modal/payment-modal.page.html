@@ -30,7 +30,7 @@
     <ion-row >
     <ion-card style="position: relative; width:100%;"><ion-row><ion-col>
       <ion-label style="font-size: larger;">Service Price</ion-label><br>
-      <ion-label style="font-size: x-large;"> $ 12 </ion-label>
+      <ion-label style="font-size: x-large;"> $ {{settingValue}} </ion-label>
     </ion-col>
     <ion-col size="6">
       <ion-label style="font-size: larger;">Amount in Wallet</ion-label><br>
@@ -39,8 +39,8 @@
   </ion-row>
   <ion-row><ion-col>
     <ion-label style="font-size: larger;">Discount</ion-label><br>
-    <ion-label style="font-size: x-large;" *ngIf="count>3;else staticpay">$ 0 </ion-label>
-    <ng-template><ion-label #staticpay style="font-size: x-large;">$ 12</ion-label></ng-template>
+    <ion-label style="font-size: x-large;" *ngIf="count>freeCharges;else staticpay">$ 0 </ion-label>
+    <ng-template #staticpay><ion-label  style="font-size: x-large;">$ {{settingValue}}</ion-label></ng-template>
   </ion-col>
   <ion-col size="6">
     <ion-label style="font-size: larger;">Service Used</ion-label><br>
@@ -49,8 +49,8 @@
 </ion-row>
 <ion-row><ion-col>
   <ion-label style="font-size: larger;">You have to pay</ion-label><br>
-  <ion-label *ngIf="count>3;else stat" style="font-size: x-large;"> $ 12 </ion-label>
-  <ng-template><ion-label #stat style="font-size: x-large;">$ 0</ion-label></ng-template>
+  <ion-label *ngIf="count>freeCharges;else stat" style="font-size: x-large;"> $ 12 </ion-label>
+  <ng-template #stat><ion-label  style="font-size: x-large;">$ 0</ion-label></ng-template>
 </ion-col>
 <ion-col size="6">
   <ion-label style="font-size: larger;">Design Id</ion-label><br>
@@ -60,8 +60,8 @@
   
     </ion-card>
   </ion-row>
-  <ion-button *ngIf="user?.amount>=12" (click)="confirm()" >confirm</ion-button>
-   <ion-button *ngIf="12>user?.amount"  (click)="addWallet('wallet')">Add Money to Wallet</ion-button>
-  <ion-button *ngIf="12>user?.amount" (click)="addWallet('card')" >Pay via card </ion-button> 
+  <ion-button *ngIf="user?.amount>=settingValue" (click)="confirm()" >confirm</ion-button>
+   <ion-button *ngIf="settingValue>user?.amount"  (click)="addWallet('wallet')">Add Money to Wallet</ion-button>
+  <ion-button *ngIf="settingValue>user?.amount" (click)="addWallet('card')" >Pay via card </ion-button> 
   <ion-button (click)="cancel()"> Cancel</ion-button>
     </ion-content>

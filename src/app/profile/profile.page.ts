@@ -62,9 +62,9 @@ this.apiService.getProfileDetails().subscribe(res=>{
 })
 }
 
- async AddWallet()
+AddWallet()
  {
-   this.router.navigate(['/add-money',{mode:'wallet'}]);
+   this.router.navigate(['add-money',{mode:'wallet'}]);
   
 }
 
