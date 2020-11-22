@@ -298,8 +298,15 @@ export class ApiService {
     return this.http.post(BaseUrl + '/recharges',data,{ headers: this.uploadHeaders });
   }
   paymentDetail(C_id){
-    return this.http.get(BaseUrl+ "/designs/count?createdby= " + C_id, { headers: this.headers});}
+    return this.http.get(BaseUrl+ "/designs/count?createdby=" + C_id + "&isoutsourced=true&outsourcedto=232", { headers: this.headers});}
  
+   
+    prelimCharges(){
+      return this.http.get(BaseUrl+ "commonsettings?settingname=prelimdesigncharges", { headers: this.headers});}
+     
+      freeCharges(){
+        return this.http.get(BaseUrl+ "commonsettings?settingname=freedesigns ", { headers: this.headers});}
+   
     survey_activityDetails(surveyid){
      return this.http.get(BaseUrl+ "surveys/" + surveyid, { headers: this.headers});
   

@@ -31,6 +31,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   assigneeForm: FormGroup;
   refreshDataOnPreviousPage = 0;
   imageName:string[]=[];
+  imageName2:string[]=[];
   imagebox :boolean=false;
   reviewenddatetime:number;
   reviewstartdatetime : number;
@@ -141,6 +142,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
        data={
              status:"designcompleted",
              designendtime:date,
+             reviewstarttime:date,
              comments:this.commentsForm.get('comments').value
              
      }}

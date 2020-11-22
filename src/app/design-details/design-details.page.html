@@ -305,8 +305,27 @@
                 <ion-col size="auto"  style="float: right;">
                     <span class="model-name font" style="text-align:right;color:#3c78d8 !important" (click)="showDesignImage()">{{imageName.length > 40 ? (imageName | slice: 0:40) + '...': imageName}}</span>
                         <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 " (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
-                </ion-col>
+                </ion-col> 
             </ng-template></div>
+           <!-- <ion-row *ngIf="(design.status=='reviewfailed') && user.role.type=='designer'">
+                 <span> -->
+
+                       <!-- <ion-col size="4" class="model-type font">
+                          upload Prelim Design
+                        </ion-col>
+                            <ion-col size="9"  class="model-name font flx" style="justify-content: flex-end;">
+                             
+
+                                  <input type="file"  *ngIf="imageName.length==0"  (change)="prelimfiles($event)"  style="width: 76px;"/>
+                                  {{imageName}}&nbsp;
+                                   <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 && user.role.type !='qcinspector'" (click)="remove()"></ion-icon>
+                                 <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
+                                <!-- <ion-icon name="cloud-upload-outline" *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')" style="font-size: 20px;margin-left: 10px;color:green"></ion-icon> -->
+                            
+                           <!-- </ion-col>
+                            
+                       </span> 
+                        </ion-row>-->
             <ion-row *ngIf="design.isinrevisionstate" class="ion-no-padding ion-margin-top">
             <ion-col size="6"  >
                 <span class="models font">Revision Comments</span></ion-col>

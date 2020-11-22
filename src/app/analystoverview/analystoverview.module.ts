@@ -18,12 +18,6 @@ import { Chooser } from '@ionic-native/chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { SharedModule } from '../shared/shared.module';
-<<<<<<< HEAD
-
-=======
-import { EmailModelPageModule } from '../email-model/email-model.module';
-import { EmailModelPage } from '../email-model/email-model.page';
->>>>>>> 0cdfd9d81dd9f3aa9ed348f1c06e265f2e69b185
 
 
 
