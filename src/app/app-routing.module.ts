@@ -149,7 +149,15 @@ const routes: Routes = [
   {
     path: 'payment-modal',
     loadChildren: () => import('./payment-modal/payment-modal.module').then( m => m.PaymentModalPageModule)
+  },  {
+    path: 'statistics',
+    loadChildren: () => import('./statistics/statistics.module').then( m => m.StatisticsPageModule)
   },
+  {
+    path: 'statistics-details',
+    loadChildren: () => import('./statistics-details/statistics-details.module').then( m => m.StatisticsDetailsPageModule)
+  },
+
 
 
 

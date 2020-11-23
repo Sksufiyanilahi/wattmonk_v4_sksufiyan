@@ -27,6 +27,8 @@ import { Stripe } from '@ionic-native/stripe/ngx';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 import { Dialogs} from '@ionic-native/dialogs/ngx';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
+import {ChartsModule} from 'ng2-charts';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -37,7 +39,9 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
     AppRoutingModule,
     HttpClientModule,
     UtilitiesModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    ChartsModule,
+    FormsModule
   ],
   providers: [
     StatusBar,

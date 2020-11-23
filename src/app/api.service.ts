@@ -25,6 +25,9 @@ import { RoofMaterial } from './model/roofmaterial.model';
 import { map, catchError } from 'rxjs/operators';
 import { User} from 'src/app/model/user.model'
 import { AuthGuardService } from './auth-guard.service';
+import { DesignStatistic } from './model/designstats.model';
+import { DesignersStatistics } from './model/designerstats.model';
+import { AnalystStatistics } from './model/analyststats.model';
 
 
 @Injectable({
@@ -353,6 +356,26 @@ export class ApiService {
         this.version.next(res[0].appversion);
       })
     }
+
+    getStatistic(inputData:any):Observable<DesignStatistic[]>{
+ 
+      return this.http.post<DesignStatistic[]>(BaseUrl + '/designanalytics', inputData, { headers: this.headers });
+    }
   
+    getClientSuperadmin(): Observable<User[]> {
+     // return this.http.get<User[]>(BaseUrl + "fetchsuperadmins", {
+     //   headers: this.headers,
+     //   observe: "response"
+     // });
+     return this.http.get<User[]>(BaseUrl + '/fetchsuperadmins',{headers:this.headers});
+    }
+  
+    getDesignersDetails(starttime:string, endtime:string):Observable<DesignersStatistics[]>{
+      return this.http.get<DesignersStatistics[]>(BaseUrl + '/getdesignanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype=prelim', {headers:this.headers});
+    }
+
+    getanalystanalytics(starttime:string, endtime:string):Observable<AnalystStatistics[]>{
+      return this.http.get<AnalystStatistics[]>(BaseUrl + '/getanalystanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype=prelim', { headers: this.headers});
+    }
     
 }
