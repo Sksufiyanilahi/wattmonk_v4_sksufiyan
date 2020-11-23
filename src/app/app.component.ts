@@ -12,6 +12,7 @@ import { COMET_CHAT_APP_ID, COMET_CHAT_REGION } from './model/constants';
 import { Firebase } from '@ionic-native/firebase/ngx';
 import { NetworkdetectService } from './networkdetect.service';
 import { ROLES,COMETCHAT_CONSTANTS } from './contants';
+import { UserData } from './model/userData.model';
 
 @Component({
   selector: 'app-root',
@@ -40,6 +41,8 @@ export class AppComponent {
   retryattempt = 2;
   totalcountsforallgroups: number;
   firebaseToken: string;
+  userData:UserData;
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -98,9 +101,9 @@ export class AppComponent {
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
-      
     })
-
+    
+    
 this.network.networkDisconnect();
 this.network.networkConnect();
  
@@ -128,6 +131,12 @@ this.network.networkConnect();
     if (path !== undefined) {
       this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
     }
+
+    this.apiservice.getUserName().subscribe((res:any)=>{
+      this.userData = res;
+      console.log(res,">>>");
+      
+    })
     
   }
 
