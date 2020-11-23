@@ -451,7 +451,7 @@ this.network.networkConnect();
   scheduledPage(){
     if(this.route.url=='/homepage/design'){
       this.route.navigate(['/schedule/design'])
-    }else{
+    }else if(this.route.url=='/homepage/survey'){
       this.route.navigate(['/schedule/survey'])
     }
   }
