@@ -1,0 +1,27 @@
+.text{
+    word-wrap: break-word;      /* IE 5.5-7 */
+    white-space: pre-wrap;   
+}
+
+.verticalLine {
+    width:1%;
+    height:50px;
+    background:green;
+    margin-top: 0;
+    position: relative;
+    margin-left: 10%;
+  }
+
+  .container {
+    width: 400px;
+    background-color: green;
+    overflow: hidden; 
+    white-space: nowrap;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scroll {
+      overflow: auto;
+    }
+  }

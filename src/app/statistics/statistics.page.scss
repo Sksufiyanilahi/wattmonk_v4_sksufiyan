@@ -1,0 +1,54 @@
+.notification-padding {
+    position: relative;
+    padding: 8px;
+}
+* {
+    font-family: Arial;
+  }
+  
+  h1 {
+    font-size: 16px;
+  }
+
+  .select_div {
+    border-bottom: 1px solid #E1E1E1;
+  }
+ion-tab-bar {
+    --border: none;
+}
+
+  ion-tab-button {
+    font-size: 1em;
+    --color: #9E9E9E;
+    --color-selected: #3c78d8;
+}
+
+ion-tab-button[aria-selected=true] {
+    border-bottom: 3px solid #3c78d8;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+  
+.tabText {
+  margin-left: 8px;
+  font-size: 1em;
+}
+
+.tab-icon {
+  width: 24px;
+  height: 24px;
+}
+.tab {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-bottom: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.titleTab {
+  text-align: center;
+  color: #898989;
+  //     border-bottom: 2px solid #D9726D;
+}

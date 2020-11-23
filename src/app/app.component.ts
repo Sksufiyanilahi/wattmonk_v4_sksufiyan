@@ -19,6 +19,20 @@ import { ROLES,COMETCHAT_CONSTANTS } from './contants';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
+  homeimage:any;
+  public selectedIndex = 0;
+  public appPages = [
+    {
+      title: 'Home',
+      url: '/homepage/design',
+      //icon: 'home'
+    },
+    {
+      title: 'Statistics',
+      url: '/statistics',
+      //icon: 'statistic'
+    }
+  ];
   user: any;
   ischatuserloggedin = false;
   public onlineOffline: boolean = navigator.onLine;
@@ -108,6 +122,11 @@ this.network.networkConnect();
         else{
           this.navController.navigateRoot('homepage');
         }
+    }
+    const path = window.location.pathname.split('/')[1];
+    console.log(path)
+    if (path !== undefined) {
+      this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
     }
     
   }

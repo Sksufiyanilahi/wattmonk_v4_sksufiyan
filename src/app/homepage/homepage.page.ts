@@ -4,7 +4,7 @@ import { ApiService } from '../api.service';
 import { DatePipe } from '@angular/common';
 import { StorageService } from '../storage.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, MenuController, Platform, ToastController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
@@ -59,6 +59,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   constructor(
     private utilities: UtilitiesService,
     private apiService: ApiService,
+    private menu: MenuController,
     private nativeGeocoder: NativeGeocoder,
     private platform: Platform,
     private datePipe: DatePipe,
@@ -132,6 +133,20 @@ export class HomepagePage implements OnInit, OnDestroy {
       'Amsterdam',
       'Bogota'
     ];
+  }
+
+  openFirst() {
+    this.menu.enable(true, 'first');
+    this.menu.open('first');
+  }
+
+  openEnd() {
+    this.menu.open('end');
+  }
+
+  openCustom() {
+    this.menu.enable(true, 'custom');
+    this.menu.open('custom');
   }
 
   setupCometChatUser() {
