@@ -3,7 +3,7 @@
  <ion-split-pane contentId="main-content">
   <ion-menu contentId="main-content" type="overlay">
       <ion-content>
-          <ion-list id="inbox-list">
+       
             <ion-header style="text-align: -webkit-center;">  
               <ion-toolbar style="height: 130px;display: flex;justify-content: center;align-content: center;">
                 <ion-card style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;">{{userData?.firstname.slice(0,1) + userData?.lastname.slice(0,1)}}</ion-card>
@@ -18,9 +18,10 @@
                       <ion-label>{{ p.title }}</ion-label>
                   </ion-item>
               </ion-menu-toggle>-->
+              <ion-list id="inbox-list">
               <ion-menu-toggle auto-hide="false">
-                <ion-item [routerLink]="['/homepage/design']" routerDirection="back">
-                    <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Home</ion-item>
+                <!-- <ion-item [routerLink]="['/homepage/design']" routerDirection="back">
+                    <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Home</ion-item> -->
                   <ion-item [routerLink]="['/homepage/design']" routerDirection="forward">
                    <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>
                   <ion-item [routerLink]="['/homepage/design']" routerDirection="forward">
