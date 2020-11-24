@@ -84,9 +84,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.userData = this.storageService.getUser();
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
-      this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+      this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
     }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin'){
-      this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
+      this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
     }
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
