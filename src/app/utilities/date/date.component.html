@@ -1,0 +1,11 @@
+<div class="d-flex flex-column">
+  <!--<span class="input-placeholder">{{placeholder}}</span>-->
+  <!--<div class="main-background d-flex flex-row align-center justify-center">-->
+    <div (click)="changeDate()">
+    <!--  <span class="year">{{date| date: 'yyyy'}}</span>
+      <span class="month">{{date | date: 'MMM'}}</span>
+      <span class="day">{{date | date: 'dd'}}</span>-->
+      <ion-input type="date" [placeholder]="placeholder" readonly>{{newDate}}</ion-input>
+      
+    </div>
+  </div>

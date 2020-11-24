@@ -1,4 +1,4 @@
-<ion-content (click)="close()" style="padding-bottom: 250px;">
+
 
     <ion-segment scrollable (ionChange)="segmentChanged($event)" value="newDesign">
         <ion-segment-button value="newDesign">
@@ -21,7 +21,7 @@
           <ion-refresher-content></ion-refresher-content>
         </ion-refresher>
                    
-                       
+        <ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;">                   
         <ion-grid *ngIf="listOfDesignsHelper.length !== 0">
             <ion-row *ngFor="let item of listOfDesignsHelper;let i = index">
                 <ion-col size="12" class="ion-margin-top">

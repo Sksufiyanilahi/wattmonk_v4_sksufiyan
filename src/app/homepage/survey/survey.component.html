@@ -1,4 +1,4 @@
-<ion-content   (click)="close()" style="padding-bottom: 250px;">
+
     <ion-segment scrollable (ionChange)="segmentChanged($event)" value="status=created&status=outsourced&status=requestaccepted">
         <ion-segment-button value="status=created&status=outsourced&status=requestaccepted">
           <ion-label class="segment-btn">Pending</ion-label>
@@ -20,7 +20,7 @@
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     
-       
+    <ion-content   (click)="close()" style="padding-bottom: 250px;">
             <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
                 <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
                     <ion-col size="12" class="ion-margin-top">
@@ -131,9 +131,9 @@
             </ion-grid>
         
             <div *ngIf="listOfSurveyDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
-                <div *ngIf="!netSwitch">
-                    No internet Connection
-                </div>
+                <!-- <div *ngIf="!netSwitch"> -->
+                    No Surveys found
+                <!-- </div> -->
                 <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
             </div>
    

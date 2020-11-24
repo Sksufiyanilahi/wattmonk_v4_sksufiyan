@@ -33,7 +33,6 @@ export const COMETCHAT_CONSTANTS = {
    REGION: 'US',
    API_KEY: '83ac811da8283c9e235ab912bf7a6213c207dd4d'
 }
-
 export enum ROLES {
     SuperAdmin = 4,
     ContractorSuperAdmin = 6,

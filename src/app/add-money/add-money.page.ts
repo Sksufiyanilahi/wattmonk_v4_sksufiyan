@@ -38,7 +38,11 @@ card:any
     //private stripe:Stripe
     ) {
     this.amountForm=this.formBuilder.group(
-       {amount:new FormControl('',[Validators.required])})
+       {
+         amount:new FormControl('',[Validators.required]),
+         card:new FormControl('')
+        }
+        )
      }
 
   
@@ -61,7 +65,7 @@ card:any
         fontSmoothing: 'antialiased',
         fontSize: '16px',
         '::placeholder': {
-          color: '#aab7c4'
+          color: '#111'
         }
       },
       invalid: {

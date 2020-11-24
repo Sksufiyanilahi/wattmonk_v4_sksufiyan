@@ -19,8 +19,6 @@ import { File } from '@ionic-native/file/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { SharedModule } from '../shared/shared.module';
 
-
-
 @NgModule({
   
   imports: [

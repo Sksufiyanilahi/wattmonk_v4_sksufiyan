@@ -3,6 +3,11 @@
         <ion-toolbar> -->
     <ion-grid>
         <ion-row class="ion-align-items-center">
+        <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+        <ion-row class="ion-align-items-center">
             <ion-col *ngIf="showHome === true">
                 <h1 class="ion-no-padding ion-no-margin home">Home</h1>
             </ion-col>
@@ -23,16 +28,18 @@
                 </div>
             </ion-col>
         </ion-row>
+    </ion-toolbar>
+    </ion-row>
     </ion-grid>
     <!-- </ion-toolbar> -->
     <!-- </ion-header> -->
-    <ion-tabs style="margin-top: 52px;">
-        <ion-tab-bar slot="top" class="ion-no-border">
+    <ion-tabs style="margin-top: 52px">
+        <ion-tab-bar class="ion-no-border">
             <ion-tab-button tab="design" *ngIf="isUserDesigner">
-                <ion-label>Designs</ion-label>
+                <!-- <ion-label>Designs</ion-label> -->
             </ion-tab-button>
             <ion-tab-button tab="survey" *ngIf="isUserSurveyor">
-                <ion-label>Surveys</ion-label>
+                <!-- <ion-label>Surveys</ion-label> -->
             </ion-tab-button>
         </ion-tab-bar>
     </ion-tabs>
@@ -114,7 +121,6 @@
             </ng-template>
         </div>
     </ion-grid>
-
 </ion-content>
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
@@ -137,7 +143,7 @@
                         <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
                         <span class="tabText">Messages</span>
                     </div>
-                </ion-col>
+                </ion-col> 
                 <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
                     <div class="tab">
                         <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
 import { AddressModel } from './model/address.model';
 import { AssigneeModel } from './model/assignee.model';
@@ -53,7 +53,6 @@ export class UtilitiesService {
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  
 
   public get currentUserValue(): LoginModel {
     return this.currentUserSubject.value;

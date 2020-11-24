@@ -172,6 +172,8 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
+  
+    this.apiService.emitUserNameAndRole(this.userData);
     // this.userData = this.storageService.getUser();
     console.log(this.userData);
     

@@ -4,6 +4,7 @@ import { EmailModelPageModule } from '../email-model/email-model.module';
 import { EmailModelPage } from '../email-model/email-model.page';
 import {DeclinepagePageModule } from '../declinepage/declinepage.module';
 import { PaymentModalPageModule } from '../payment-modal/payment-modal.module';
+import { StatisticsDetailsPageModule } from '../statistics-details/statistics-details.module';
 
 
 @NgModule({
@@ -12,12 +13,14 @@ import { PaymentModalPageModule } from '../payment-modal/payment-modal.module';
     CommonModule,
     EmailModelPageModule,
     DeclinepagePageModule,
-    PaymentModalPageModule 
+    PaymentModalPageModule,
+    StatisticsDetailsPageModule
   ],
   exports:[
     EmailModelPageModule,
     DeclinepagePageModule ,
-    PaymentModalPageModule 
+    PaymentModalPageModule,
+    StatisticsDetailsPageModule
   ]
 })
 export class SharedModule { }
