@@ -3,10 +3,12 @@
  <ion-split-pane contentId="main-content">
   <ion-menu contentId="main-content" type="overlay">
       <ion-content>
-          <ion-list id="inbox-list">
-            <ion-header>  
-            <ion-toolbar>
-              <ion-title>Menu</ion-title>
+       
+            <ion-header style="text-align: -webkit-center;">  
+              <ion-toolbar style="height: 130px;display: flex;justify-content: center;align-content: center;">
+                <ion-card style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;">{{userData?.firstname.slice(0,1) + userData?.lastname.slice(0,1)}}</ion-card>
+              <ion-title ><h4 style="text-align: center;font-weight: bold;margin: 1px;">{{userData?.firstname + userData?.lastname}}</h4></ion-title>
+             <small style="text-align: center;">{{userData?.role.name}} </small> 
             </ion-toolbar>
         </ion-header>
             <!--  <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
@@ -16,9 +18,10 @@
                       <ion-label>{{ p.title }}</ion-label>
                   </ion-item>
               </ion-menu-toggle>-->
+              <ion-list id="inbox-list">
               <ion-menu-toggle auto-hide="false">
-                <ion-item [routerLink]="['/homepage/design']" routerDirection="back">
-                    <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Home</ion-item>
+                <!-- <ion-item [routerLink]="['/homepage/design']" routerDirection="back">
+                    <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Home</ion-item> -->
                   <ion-item [routerLink]="['/homepage/design']" routerDirection="forward">
                    <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>
                   <ion-item [routerLink]="['/permithomepage']" routerDirection="forward">

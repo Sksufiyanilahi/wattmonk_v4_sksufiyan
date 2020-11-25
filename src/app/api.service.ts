@@ -43,6 +43,7 @@ export class ApiService {
   public searchbarElement: string = '';
   public _OnMessageReceivedSubject: Subject<string>;
   public design : Observable<DesignModel>;
+  public showUserName:Subject<any>;
 
   public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
   version = new BehaviorSubject<string>('');
@@ -69,6 +70,7 @@ export class ApiService {
           });
     this.resetHeaders();
     this._OnMessageReceivedSubject = new Subject<string>();
+    this.showUserName= new Subject<any>();
   }
   
  /**
@@ -77,6 +79,18 @@ export class ApiService {
   public emitMessageReceived(msg: string): void {
     this._OnMessageReceivedSubject.next(msg);
   }
+
+  emitUserNameAndRole(data:any){
+    this.showUserName.next(data);
+  }
+
+
+  getUserName():Subject<any>{
+    return this.showUserName;
+  }
+
+
+
   login(data: any): Observable<LoginModel> {
     this.resetHeaders();
     return this.http.post<LoginModel>(BaseUrl + '/auth/local', data, { headers: this.headers });
