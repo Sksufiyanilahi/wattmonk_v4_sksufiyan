@@ -85,81 +85,117 @@ const routes: Routes = [
   },
   {
     path: 'surveyoroverview',
-    loadChildren: () => import('./surveyoroverview/surveyoroverview.module').then( m => m.SurveyoroverviewPageModule)
+    loadChildren: () => import('./surveyoroverview/surveyoroverview.module').then( m => m.SurveyoroverviewPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'designoverview',
-    loadChildren: () => import('./designoverview/designoverview.module').then( m => m.DesignoverviewPageModule)
+    loadChildren: () => import('./designoverview/designoverview.module').then( m => m.DesignoverviewPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'searchbar',
-    loadChildren: () => import('./searchbar/searchbar.module').then( m => m.SearchbarPageModule)
+    loadChildren: () => import('./searchbar/searchbar.module').then( m => m.SearchbarPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'declinepage',
-    loadChildren: () => import('./declinepage/declinepage.module').then( m => m.DeclinepagePageModule)
+    loadChildren: () => import('./declinepage/declinepage.module').then( m => m.DeclinepagePageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'paymentgateway',
-    loadChildren: () => import('./paymentgateway/paymentgateway.module').then( m => m.PaymentgatewayPageModule)
+    loadChildren: () => import('./paymentgateway/paymentgateway.module').then( m => m.PaymentgatewayPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'activity/:id/:name',
-    loadChildren: () => import('./activity-details/activity-details.module').then( m => m.ActivityDetailsPageModule)
+    loadChildren: () => import('./activity-details/activity-details.module').then( m => m.ActivityDetailsPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'search-bar1',
-    loadChildren: () => import('./search-bar1/search-bar1.module').then( m => m.SearchBar1PageModule)
+    loadChildren: () => import('./search-bar1/search-bar1.module').then( m => m.SearchBar1PageModule),
+    canActivate: [AuthGuardService]
   },{
     path: 'stripe',
-    loadChildren: () => import('./stripe/stripe.module').then( m => m.StripePageModule)
+    loadChildren: () => import('./stripe/stripe.module').then( m => m.StripePageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'activity-details',
-    loadChildren: () => import('./activity-details/activity-details.module').then( m => m.ActivityDetailsPageModule)
+    loadChildren: () => import('./activity-details/activity-details.module').then( m => m.ActivityDetailsPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'analystoverview',
-    loadChildren: () => import('./analystoverview/analystoverview.module').then( m => m.AnalystoverviewPageModule)
+    loadChildren: () => import('./analystoverview/analystoverview.module').then( m => m.AnalystoverviewPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'add-money',
-    loadChildren: () => import('./add-money/add-money.module').then( m => m.AddMoneyPageModule)
+    loadChildren: () => import('./add-money/add-money.module').then( m => m.AddMoneyPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'email-model',
-    loadChildren: () => import('./email-model/email-model.module').then( m => m.EmailModelPageModule)
+    loadChildren: () => import('./email-model/email-model.module').then( m => m.EmailModelPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'resendpagedialog',
-    loadChildren: () => import('./resendpagedialog/resendpagedialog.module').then( m => m.ResendpagedialogPageModule)
+    loadChildren: () => import('./resendpagedialog/resendpagedialog.module').then( m => m.ResendpagedialogPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'chat-tabs',
-    loadChildren: () => import('./chat-tabs/chat-tabs.module').then( m => m.ChatTabsPageModule)
+    loadChildren: () => import('./chat-tabs/chat-tabs.module').then( m => m.ChatTabsPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'groupchat',
-    loadChildren: () => import('./groupchat/groupchat.module').then( m => m.GroupchatPageModule)
+    loadChildren: () => import('./groupchat/groupchat.module').then( m => m.GroupchatPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'groups',
-    loadChildren: () => import('./chat-tabs/groups/groups.module').then( m => m.GroupsPageModule)
+    loadChildren: () => import('./chat-tabs/groups/groups.module').then( m => m.GroupsPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'payment-modal',
-    loadChildren: () => import('./payment-modal/payment-modal.module').then( m => m.PaymentModalPageModule)
-  },  {
+    loadChildren: () => import('./payment-modal/payment-modal.module').then( m => m.PaymentModalPageModule),
+    canActivate: [AuthGuardService]
+  },
+  {
     path: 'statistics',
-    loadChildren: () => import('./statistics/statistics.module').then( m => m.StatisticsPageModule)
+    loadChildren: () => import('./statistics/statistics.module').then( m => m.StatisticsPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'statistics-details',
-    loadChildren: () => import('./statistics-details/statistics-details.module').then( m => m.StatisticsDetailsPageModule)
+    loadChildren: () => import('./statistics-details/statistics-details.module').then( m => m.StatisticsDetailsPageModule),
+    canActivate: [AuthGuardService]
   },
   {
-    path: 'permit-design-details',
-    loadChildren: () => import('./permit-design-details/permit-design-details.module').then( m => m.PermitDesignDetailsPageModule)
+    path: 'permit-design-details/:id',
+    loadChildren: () => import('./permit-design-details/permit-design-details.module').then( m => m.PermitDesignDetailsPageModule),
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'permitschedule',
+    loadChildren: () => import('./permitschedule/permitschedule.module').then( m => m.PermitschedulePageModule),
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'permitschedule/:id',
+    loadChildren: () => import('./permitschedule/permitschedule.module').then( m => m.PermitschedulePageModule),
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'permithomepage',
+    loadChildren: () => import('./permithomepage/permithomepage.module').then( m => m.PermithomepagePageModule),
+    canActivate: [AuthGuardService]
   },
 
 

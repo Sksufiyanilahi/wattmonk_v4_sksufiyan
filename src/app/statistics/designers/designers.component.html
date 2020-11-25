@@ -31,12 +31,12 @@
         <ion-item class="ion-no-padding">
       <ion-label position="floating">Select Field</ion-label>
       <ion-select interface='popover' (ionChange)="eventFieldsChange($event)" formControlName="filterFields">
-      <ion-select-option value="Average Completion Time">Avg. Comp. Time</ion-select-option>
-      <ion-select-option value="Average Review Failure">Avg. Review Failure</ion-select-option>
-      <ion-select-option value="Late Designs Completed">Late Designs Completed</ion-select-option>
+      <ion-select-option value="Avg Comp Time">Avg Comp Time</ion-select-option>
+      <ion-select-option value="Avg Review Failure">Avg Review Failure</ion-select-option>
+      <ion-select-option value="Delayed">Delayed</ion-select-option>
       <ion-select-option value="Monthly Rating">Monthly Rating</ion-select-option> 
-      <ion-select-option value="On Time Design Completed">On Time Design Comp.</ion-select-option> 
-      <ion-select-option value="Total Design Created">Total Design Created</ion-select-option> 
+      <ion-select-option value="On Time">On Time</ion-select-option> 
+      <ion-select-option value="Assigned">Assigned</ion-select-option> 
       </ion-select>
     </ion-item></ion-col>
     <ion-col>
@@ -70,22 +70,22 @@
          <ion-col>
          <ion-label style="float: left" class="item-input ion-label"  >{{designers.designer}}</ion-label>
         </ion-col>
-        <ion-col *ngIf="isSelected && fieldChangeValue=='Average Completion Time'">
+        <ion-col *ngIf="isSelected && fieldChangeValue=='Avg Comp Time'">
           <ion-label style="float: right;" class="item-input ion-label">{{designers.avgdesigncompletiontimestamp}}</ion-label>
         </ion-col>
-        <ion-col *ngIf="isSelected && fieldChangeValue=='Average Review Failure'">
+        <ion-col *ngIf="isSelected && fieldChangeValue=='Avg Review Failure'">
           <ion-label style="float: right;" class="item-input ion-label">{{designers.avgreviewfailurecount}}</ion-label>
         </ion-col>
-        <ion-col *ngIf="isSelected && fieldChangeValue=='Late Designs Completed'">
+        <ion-col *ngIf="isSelected && fieldChangeValue=='Delayed'">
           <ion-label style="float: right;" class="item-input ion-label">{{designers.latedesignscompleted}}</ion-label>
         </ion-col>
         <ion-col *ngIf="isSelected && fieldChangeValue=='Monthly Rating'">
           <ion-label style="float: right;" class="item-input ion-label">{{designers.monthlyrating}}</ion-label>
         </ion-col>
-        <ion-col *ngIf="isSelected && fieldChangeValue=='On Time Design Completed'">
+        <ion-col *ngIf="isSelected && fieldChangeValue=='On Time'">
           <ion-label style="float: right;" class="item-input ion-label">{{designers.ontimedesignscompleted}}</ion-label>
         </ion-col>
-        <ion-col *ngIf="isSelected && fieldChangeValue=='Total Design Created'">
+        <ion-col *ngIf="isSelected && fieldChangeValue=='Assigned'">
           <ion-label style="float: right;" class="item-input ion-label">{{designers.totaldesignscreated}}</ion-label>
         </ion-col>
         </ion-item>

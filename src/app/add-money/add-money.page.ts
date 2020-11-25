@@ -185,7 +185,7 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
    //   console.log(token);
      // this.token=token.id
   data={
-    amount:this.amountForm.get('amount').value,
+    amount:12,
     email:this.userData.email,
     paymenttype: "direct",
     token: this.token.token.id,

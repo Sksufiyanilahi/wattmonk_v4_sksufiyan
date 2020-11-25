@@ -126,7 +126,7 @@ this.network.networkConnect();
           
         }
         else{
-          this.navController.navigateRoot('homepage/design');
+          this.navController.navigateRoot('permithomepage');
         }
     }
     const path = window.location.pathname.split('/')[1];

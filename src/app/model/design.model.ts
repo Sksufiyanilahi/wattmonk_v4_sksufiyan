@@ -104,6 +104,7 @@ export class DesginDataModel {
   tiltofgroundmountingsystem:string;
   architecturaldesign:any=[];
   prelimdesign:any;
+  permitdesign:any;
   deliverydate:any;
   formattedjobtype : string;
   totalpercent : number;

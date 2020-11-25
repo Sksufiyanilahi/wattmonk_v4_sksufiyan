@@ -1,46 +1,49 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
-import { DesginDataModel, PrelimDesign } from '../../model/design.model';
-import { ApiService } from 'src/app/api.service';
-import { UtilitiesService } from 'src/app/utilities.service';
-import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
-import { Subscription,BehaviorSubject } from 'rxjs';
-import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
-import { DrawerState } from 'ion-bottom-drawer';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AssigneeModel } from '../../model/assignee.model';
-import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
-import {Storage} from '@ionic/storage';
-import { ModalController, AlertController } from '@ionic/angular';
-import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
-import * as moment from 'moment';
-import { StorageService } from 'src/app/storage.service';
+import { Router } from '@angular/router';
+import { AlertController, ModalController, Platform } from '@ionic/angular';
+import { ApiService } from 'src/app/api.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
+import { StorageService } from 'src/app/storage.service';
+import { UtilitiesService } from 'src/app/utilities.service';
+import {Storage} from '@ionic/storage';
 import{SocialSharing} from '@ionic-native/social-sharing/ngx';
-import { Dialogs } from '@ionic-native/dialogs/ngx';
-import { EmailSelectorComponent } from 'src/app/utilities/email-selector/email-selector.component'
-import { EmailModelPage } from 'src/app/email-model/email-model.page';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
+import { environment } from 'src/environments/environment';
+import { Subscription } from 'rxjs';
+import { DrawerState } from 'ion-bottom-drawer';
+//import { DesginDataHelper } from 'src/app/homepage/design/design.component';
+import { DesginDataModel } from 'src/app/model/design.model';
+import { AssigneeModel } from 'src/app/model/assignee.model';
+import { ErrorModel } from 'src/app/model/error.model';
+import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
-import { PaymentModalPage } from 'src/app/payment-modal/payment-modal.page';
-
+import * as moment from 'moment';
+import { EmailModelPage } from 'src/app/email-model/email-model.page';
 
 @Component({
-  selector: 'app-design',
-  templateUrl: './design.component.html',
-  styleUrls: ['./design.component.scss'],
+  selector: 'app-permitdesign',
+  templateUrl: './permitdesign.component.html',
+  styleUrls: ['./permitdesign.component.scss'],
 })
-export class DesignComponent implements OnInit, OnDestroy {
+export class PermitdesignComponent implements OnInit {
+  
+  drawerState = DrawerState.Bottom;
+  showSearchBar = false;
+  update_version: string;
+  //netSwitch: any;
+  unreadCount;
 
+  
   listOfDesignDataHelper: DesginDataHelper[] = [];
   listOfDesignsData: DesginDataModel[] = [];
-  private refreshSubscription: Subscription;
-  private routeSubscription: Subscription;
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
-  drawerState = DrawerState.Bottom;
   assignForm: FormGroup;
   listOfAssignees: AssigneeModel[] = [];
   listOfAssignees2: AssigneeModel[] = [];
@@ -62,31 +65,26 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectedDesigner: any;
   netSwitch: boolean;
  reviewAssignedTo:any;
-  
-
-  constructor(
-    private utils: UtilitiesService,
-    private apiService: ApiService,
-    private datePipe: DatePipe,
-    private storage: Storage,
-    private cdr: ChangeDetectorRef,
-    private launchNavigator: LaunchNavigator,
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    public modalController: ModalController,
-    private storageService:StorageService,
+ 
+  constructor(private apiService:ApiService,
+    private utils:UtilitiesService,
     private network:NetworkdetectService,
+    private route:Router,
+    private launchNavigator: LaunchNavigator,
+    private datePipe: DatePipe,
+    private cdr: ChangeDetectorRef,
+    private storageservice:StorageService,
+    private storage:Storage,
     public alertController: AlertController,
+    public modalController: ModalController,
     private socialsharing: SocialSharing,
-
-  ) {
-    this.userData = this.storageService.getUser();
+    private formBuilder: FormBuilder) { 
+    this.userData = this.storageservice.getUser();
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
-      this.segments= 'requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
+      this.segments= 'requesttype=permit&status=created&status=outsourced&status=requestaccepted';
     }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin'){
-      this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
+      this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
     }
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -96,9 +94,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
     });
-
   }
-
   ionViewDidEnter() {
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
@@ -110,50 +106,51 @@ this.network.networkDisconnect();
 this.network.networkConnect();
     
   }
+
   segmentChanged(event){
    
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
-        this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+        this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted';
         // return this.segments;
       }
       else if(event.target.value=='InDesign'){
-        this.segments ="requesttype=prelim&status=designassigned";
+        this.segments ="requesttype=permit&status=designassigned";
         // return this.segments;
       }
       else if(event.target.value=='completed'){
-        this.segments ="requesttype=prelim&status=designcompleted";
+        this.segments ="requesttype=permit&status=designcompleted";
         // return this.segments;
       }
       else if(event.target.value=='InReview'){
-        this.segments ="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed";
+        this.segments ="requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed";
         // return this.segments;
       }
       else if(event.target.value=='delivered'){
-        this.segments ="requesttype=prelim&status=delivered";
+        this.segments ="requesttype=permit&status=delivered";
       }
       this.getDesigns(null);
       // return this.segments;
   
     }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin' ){
       if(event.target.value=='newDesign'){
-        this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
+        this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
         // return this.segments;
       }
       else if(event.target.value=='InDesign'){
-        this.segments ="requesttype=prelim&status=designassigned";
+        this.segments ="requesttype=permit&status=designassigned";
         // return this.segments;
       }
       else if(event.target.value=='completed'){
-        this.segments ="requesttype=prelim&status=designcompleted";
+        this.segments ="requesttype=permit&status=designcompleted";
         // return this.segments;
       }
       else if(event.target.value=='InReview'){
-        this.segments ="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed";
+        this.segments ="requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed";
         // return this.segments;
       }
       else if(event.target.value=='delivered'){
-        this.segments ="requesttype=prelim&status=delivered";
+        this.segments ="requesttype=permit&status=delivered";
       }
       this.getDesigns(null);
     }
@@ -172,35 +169,7 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
-  
-    this.apiService.emitUserNameAndRole(this.userData);
-    // this.userData = this.storageService.getUser();
-    console.log(this.userData);
-    
-    // this.router.navigate(['homepage/design/pending']);
-    // this.routeSubscription = this.router.events.subscribe((event) => {
-    //   if (event instanceof NavigationEnd) {
-    //     // Trick the Router into believing it's last link wasn't previously loaded
-    //     if (this.router.url.indexOf('page') > -1) {
-    //       this.router.navigated = false;
-    //       let data = this.route.queryParams.subscribe((_res: any) => {
-    //         console.log('Serach Term', _res);
-    //         if (Object.keys(_res).length !== 0) {
-    //           //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
-
-    //           this.filterData(_res.serchTerm);
-    //         } else {
-    //           // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-    //             // ;
-    //             this.getDesign(null, true);
-    //           // });
-    //         }
-    //       });
-    //     }
-    //   }
-    // });
-
-    this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+    this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
 
@@ -229,7 +198,7 @@ this.network.networkConnect();
       this.utils.showLoading("accepting").then(()=>{
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
            this.utils.hideLoading().then(()=>{
-            this.utils.setHomepageDesignRefresh(true);})})
+            this.utils.setHomepagePermitRefresh(true);})})
           })
            
        }
@@ -378,7 +347,7 @@ this.network.networkConnect();
       var acceptancedate = new Date(element.designacceptancestarttime);
       element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
       var indesigndate = new Date(element.designstarttime);
-      indesigndate.setHours(indesigndate.getHours() + 2); 
+      indesigndate.setHours(indesigndate.getHours() + 6); 
       element.designremainingtime = this.utils.getRemainingTime(indesigndate.toString());
       this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
@@ -388,10 +357,13 @@ this.network.networkConnect();
           element.totalpercent = 0;
         }
       });
+      
     });
 
     return records;
   }
+
+  
 
   // getDesign(event, showLoader: boolean) {
 
@@ -508,7 +480,8 @@ this.network.networkConnect();
       var designstarttime = new Date();
       var milisecond = designstarttime.getTime();
     var additonalhours = 0;
-    if(this.designerData.requesttype == "prelim"){
+    // if(this.designerData.requesttype == "prelim"){
+      if(this.designerData.requesttype == "permit"){
       console.log(parseInt(this.selectedDesigner.jobcount) );
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
       
@@ -577,7 +550,7 @@ this.network.networkConnect();
          }
           this.dismissBottomSheet();
           this.showBottomDraw = false;
-          this.utils.setHomepageDesignRefresh(true);
+          this.utils.setHomepagePermitRefresh(true);
           
         })
       }, (error) => {
@@ -598,7 +571,7 @@ this.network.networkConnect();
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
     if(this.userData.role.type=='clientsuperadmin'){
-      this.router.navigate(["payment-modal",{id:id,designData:this.designerData}])
+      this.route.navigate(["payment-modal",{id:id,designData:this.designerData}])
       
     }
     
@@ -727,7 +700,7 @@ this.network.networkConnect();
                   console.log('reach ', value);
                  this.utils.showSnackBar('Design request has been delivered successfully');
                  
-                  this.utils.setHomepageDesignRefresh(true);
+                  this.utils.setHomepagePermitRefresh(true);
                 })
               }, (error) => {
                 this.utils.hideLoading();
@@ -753,7 +726,7 @@ this.network.networkConnect();
     this.fetchPendingDesigns(event, showLoader);
   }
 
-  async OpenPaymentmodal(id){
+  /*async OpenPaymentmodal(id){
     
   const modal = await this.modalController.create({
     component: PaymentModalPage,
@@ -778,7 +751,7 @@ this.network.networkConnect();
   return await modal.present();
 
   }
-
+*/
 
 async decline(id){
   const modal = await this.modalController.create({
@@ -851,7 +824,7 @@ selfAssign(id,designData){
         ; 
         console.log('reach ', value);
       this.utils.showSnackBar('Design request has been assigned to you successfully');
-      this.utils.setHomepageDesignRefresh(true);
+      this.utils.setHomepagePermitRefresh(true);
        
       })
     }, (error) => {
@@ -865,15 +838,14 @@ selfAssign(id,designData){
 pending(value){
   ;
   if(this.userData.role.type=='SuperAdmin'){
-      value= "requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined"
+      value= "requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined"
   }else{
-    value= "requesttype=prelim&status=created&status=outsourced&status=requestaccepted"
+    value= "requesttype=permit&status=created&status=outsourced&status=requestaccepted"
   }
 }
 
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
-  console.log("dholak is",this.selectedDesigner);
   
 }
 
@@ -914,5 +886,5 @@ export class DesginDataHelper {
   shareDesign(){
     
   }
-  
+
 }

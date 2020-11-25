@@ -146,7 +146,7 @@ this.network.networkConnect();
                   this.apiService.refreshHeader();
                    this.navController.navigateRoot(['changepassword'])
                  } else {
-                   this.navController.navigateRoot(['homepage']);
+                   this.navController.navigateRoot(['permithomepage']);
                  }
               }
             });
