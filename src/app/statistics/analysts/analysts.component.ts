@@ -53,10 +53,24 @@ export class AnalystsComponent implements OnInit {
   }
 
 
+  // getAnalystsPerformer(){
+  //   const date = new Date();
+  //       const starttime=date.getFullYear()+'-01-01T06:30:00.000Z'.toString();
+  //       const endtime = date.getFullYear()+'-12-31T06:30:00.000Z'.toString();
+  
+  //   this.service.getanalystanalytics(starttime, endtime).subscribe(
+  //     response => {
+  //       this.analystsList = response;
+        
+  
+  
+  //     })
+  // }
+
   getAnalystsPerformer(){
     const date = new Date();
         const starttime=date.getFullYear()+'-01-01T06:30:00.000Z'.toString();
-        const endtime = date.getFullYear()+'-12-31T06:30:00.000Z'.toString();
+        const endtime = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+'T06:30:00.000Z'.toString(); //'-12-31T06:30:00.000Z'.toString();
   
     this.service.getanalystanalytics(starttime, endtime).subscribe(
       response => {
@@ -129,46 +143,46 @@ eventSortChange()
   this.sortChangeValue = this.desginForm.get('sort').value;
   console.log(this.sortChangeValue)
   if(this.sortChangeValue=='lowtohigh'){
-  if(this.fieldChangeValue=='Average Completion Time'){
+  if(this.fieldChangeValue=='Avg Comp Time'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => a.avgdesigncompletiontime - b.avgdesigncompletiontime);
    // console.log("Average");
   }
-  else if(this.fieldChangeValue=='Average Review Failure'){
+  else if(this.fieldChangeValue=='Avg Review Failure'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => a.avgreviewfailurecount-b.avgreviewfailurecount);
     console.log("Average Review");
   }
-  else if(this.fieldChangeValue=='Late Designs Completed'){
+  else if(this.fieldChangeValue=='Delayed'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => a.latedesignscompleted-b.latedesignscompleted);
   }
   else if(this.fieldChangeValue=='Monthly Rating'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => a.monthlyrating-b.monthlyrating);
   }
-  else if(this.fieldChangeValue=='On Time Design Completed'){
+  else if(this.fieldChangeValue=='On Time'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => a.ontimedesignscompleted-b.ontimedesignscompleted);
   }
-  else if(this.fieldChangeValue=='Total Design Created'){
+  else if(this.fieldChangeValue=='Assigned'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => a.totaldesignscreated-b.totaldesignscreated);
   }
  //this.designersList = this.designersList.sort((a:any,b:any)  => a.i-b.i);
 }else if(this.sortChangeValue=='hightolow'){
-  if(this.fieldChangeValue=='Average Completion Time'){
+  if(this.fieldChangeValue=='Avg Comp Time'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => b.avgdesigncompletiontime - a.avgdesigncompletiontime);
     console.log("Average");
   }
-  else if(this.fieldChangeValue=='Average Review Failure'){
+  else if(this.fieldChangeValue=='Avg Review Failure'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => b.avgreviewfailurecount-a.avgreviewfailurecount);
     console.log("Average Review");
   }
-  else if(this.fieldChangeValue=='Late Designs Completed'){
+  else if(this.fieldChangeValue=='Delayed'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => b.latedesignscompleted-a.latedesignscompleted);
   }
   else if(this.fieldChangeValue=='Monthly Rating'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => b.monthlyrating-a.monthlyrating);
   }
-  else if(this.fieldChangeValue=='On Time Design Completed'){
+  else if(this.fieldChangeValue=='On Time'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => b.ontimedesignscompleted-a.ontimedesignscompleted);
   }
-  else if(this.fieldChangeValue=='Total Design Created'){
+  else if(this.fieldChangeValue=='Assigned'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => b.totaldesignscreated-a.totaldesignscreated);
   }
 }

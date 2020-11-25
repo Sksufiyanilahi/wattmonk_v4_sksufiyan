@@ -157,6 +157,14 @@ const routes: Routes = [
     path: 'statistics-details',
     loadChildren: () => import('./statistics-details/statistics-details.module').then( m => m.StatisticsDetailsPageModule)
   },
+  {
+    path: 'permitschedule',
+    loadChildren: () => import('./permitschedule/permitschedule.module').then( m => m.PermitschedulePageModule)
+  },
+  {
+    path: 'permithomepage',
+    loadChildren: () => import('./permithomepage/permithomepage.module').then( m => m.PermithomepagePageModule)
+  },
 
 
 
