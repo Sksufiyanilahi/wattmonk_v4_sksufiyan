@@ -29,6 +29,13 @@ import { Dialogs} from '@ionic-native/dialogs/ngx';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import {ChartsModule} from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatCardModule} from '@angular/material/card';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+//import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -41,7 +48,13 @@ import { FormsModule } from '@angular/forms';
     UtilitiesModule,
     IonicStorageModule.forRoot(),
     ChartsModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatCardModule,
+    MatProgressBarModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     StatusBar,

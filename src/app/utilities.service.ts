@@ -30,6 +30,7 @@ export class UtilitiesService {
   saveScheduleForm = new BehaviorSubject<ScheduleFormEvent>(ScheduleFormEvent.NO_EVENT);
   homepageDesignRefresh = new BehaviorSubject<boolean>(false);
   homepageSurveyRefresh = new BehaviorSubject<boolean>(false);
+  homepagePermitRefresh = new BehaviorSubject<boolean>(false);
   surveyDetailsRefresh = new BehaviorSubject<boolean>(false);
   designDetailsRefresh = new BehaviorSubject<boolean>(false);
   showBottomBarHomepage = new BehaviorSubject<boolean>(true);
@@ -73,6 +74,14 @@ export class UtilitiesService {
 
   setHomepageDesignRefresh(refresh: boolean) {
     this.homepageDesignRefresh.next(refresh);
+  }
+
+  getHomepagePermitRefresh(): BehaviorSubject<boolean> {
+    return this.homepagePermitRefresh;
+  }
+
+  setHomepagePermitRefresh(refresh: boolean) {
+    this.homepagePermitRefresh.next(refresh);
   }
 
   getHomepageSurveyRefresh(): BehaviorSubject<boolean> {
