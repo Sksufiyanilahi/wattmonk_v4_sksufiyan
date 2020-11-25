@@ -23,7 +23,7 @@
                 <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward" (click)="setzero()">
                     <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
                    <span class="badge" *ngIf="unreadCount > 0">
-                                {{unreadCount}}
+                                {{unreadCount > 99 ? '99+' : unreadCount }}
                             </span> 
                 </div>
             </ion-col>
