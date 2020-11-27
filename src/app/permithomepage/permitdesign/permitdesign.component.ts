@@ -96,6 +96,7 @@ export class PermitdesignComponent implements OnInit {
     });
   }
   ionViewDidEnter() {
+    this.apiService.emitUserNameAndRole(this.userData);
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);

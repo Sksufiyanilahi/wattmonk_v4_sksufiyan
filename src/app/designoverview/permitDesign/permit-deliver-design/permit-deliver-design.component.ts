@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { SurveyDataModel } from 'src/app/model/survey.model';
+import { DesginDataModel } from 'src/app/model/design.model';
 import { SurveyDataHelper } from 'src/app/homepage/survey/survey.component';
 import { Subscription } from 'rxjs';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
@@ -9,22 +9,23 @@ import { ApiService } from 'src/app/api.service';
 import { ErrorModel } from 'src/app/model/error.model';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
-import { DesginDataModel } from 'src/app/model/design.model';
 import { DesginDataHelper } from 'src/app/homepage/design/design.component';
+import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import * as moment from 'moment';
+import { ModalController } from '@ionic/angular';
+import{SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 @Component({
-  selector: 'app-completeddesign',
-  templateUrl: './completeddesign.component.html',
-  styleUrls: ['./completeddesign.component.scss'],
+  selector: 'app-permit-deliver-design',
+  templateUrl: './permit-deliver-design.component.html',
+  styleUrls: ['./permit-deliver-design.component.scss'],
 })
-export class CompleteddesignComponent implements OnInit {
+export class PermitDeliverDesignComponent implements OnInit {
 
-  listOfDesignData: DesginDataModel[] = [];
-  listOfDesignDataHelper: DesginDataHelper[] = [];
+  listofDesignData: DesginDataModel[] = [];
+  listofDesignDataHelper: DesginDataHelper[] = [];
   private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
-  routeSubscription: Subscription;
 
   today: any;
   options: LaunchNavigatorOptions = {
@@ -38,7 +39,11 @@ export class CompleteddesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+    private socialsharing: SocialSharing,
+    public modalController: ModalController,
+    ) {
+      console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -50,10 +55,17 @@ export class CompleteddesignComponent implements OnInit {
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfDesignData != null && this.listOfDesignData.length > 0){
-        this.formatDesignData(this.listOfDesignData);
+      if(this.listofDesignData != null && this.listofDesignData.length > 0){
+        this.formatDesignData(this.listofDesignData);
       }
     });
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.designRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    this.cdr.detach();
   }
 
   getDesigns(event: CustomEvent) {
@@ -65,11 +77,10 @@ export class CompleteddesignComponent implements OnInit {
   }
 
   fetchPendingDesigns(event, showLoader: boolean) {
-    console.log("inside fetch surveys");
-    this.listOfDesignData = [];
-    this.listOfDesignDataHelper = [];
+    this.listofDesignData = [];
+    this.listofDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("requesttype=prelim&status=designcompleted").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=permit&status=delivered").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           this.formatDesignData(response);
@@ -94,9 +105,9 @@ export class CompleteddesignComponent implements OnInit {
   }
 
   formatDesignData(records : DesginDataModel[]){
-    this.listOfDesignData = this.fillinDynamicData(records);
+    this.listofDesignData = this.fillinDynamicData(records);
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesignData.forEach((designItem:any) => {
+          this.listofDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
               this.sDatePassed(designItem.updated_at);
               const listOfDesign = new DesginDataHelper();
@@ -106,10 +117,10 @@ export class CompleteddesignComponent implements OnInit {
               tempData.push(listOfDesign);
             } else {
               let added = false;
-              tempData.forEach((surveyList) => {
+              tempData.forEach((designList:any) => {
                 if (!added) {
-                  if (surveyList.date === this.datePipe.transform(designItem.updated_at, 'M/d/yy')) {
-                    surveyList.listOfDesigns.push(designItem);
+                  if (designList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
+                    designList.listOfDesigns.push(designItem);
                     this.sDatePassed(designItem.updated_at);
                     added = true;
                   }
@@ -126,7 +137,7 @@ export class CompleteddesignComponent implements OnInit {
               }
             }
           });
-          this.listOfDesignDataHelper = tempData.sort(function (a, b) {
+          this.listofDesignDataHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
@@ -162,12 +173,29 @@ export class CompleteddesignComponent implements OnInit {
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
   }
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    this.designRefreshSubscription.unsubscribe();
-    this.dataRefreshSubscription.unsubscribe();
-    this.cdr.detach();
+  shareWhatsapp(designData){
+    this.socialsharing.share(designData.permitdesign.url);
   }
+  
+   async shareViaEmails(id,designData){
+    const modal = await this.modalController.create({
+      component: EmailModelPage,
+      cssClass: 'email-modal-css',
+      componentProps: {
+        id:id,
+        designData:designData
+      },
+      
+    });
+    modal.onDidDismiss().then((data) => {
+      console.log(data)
+      if(data.data.cancel=='cancel'){
+      }else{
+        this.getDesigns(null)
+      }
+  });
+      return await modal.present();
+   }
+
 
 }

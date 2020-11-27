@@ -3,5 +3,6 @@ export class UserData{
     lastname:string;
     role:{
         name:string;
+        type:string;
     };
 }

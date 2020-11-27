@@ -80,7 +80,7 @@ export class DelievereddesignComponent implements OnInit {
     this.listofDesignData = [];
     this.listofDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("status=delivered").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=prelim&status=delivered").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           this.formatDesignData(response);

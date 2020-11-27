@@ -1,30 +1,27 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { SurveyDataModel } from 'src/app/model/survey.model';
-import { SurveyDataHelper } from 'src/app/homepage/survey/survey.component';
+import { DesginDataModel } from 'src/app/model/design.model';
 import { Subscription } from 'rxjs';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DatePipe } from '@angular/common';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ApiService } from 'src/app/api.service';
 import { ErrorModel } from 'src/app/model/error.model';
-import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
+// import { DesignStorageModel } from 'src/app/model/Design-storage.model';
 import { Storage } from '@ionic/storage';
-import { DesginDataModel } from 'src/app/model/design.model';
 import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-completeddesign',
-  templateUrl: './completeddesign.component.html',
-  styleUrls: ['./completeddesign.component.scss'],
+  selector: 'app-permit-inreview-design',
+  templateUrl: './permit-inreview-design.component.html',
+  styleUrls: ['./permit-inreview-design.component.scss'],
 })
-export class CompleteddesignComponent implements OnInit {
+export class PermitInreviewDesignComponent implements OnInit {
 
-  listOfDesignData: DesginDataModel[] = [];
-  listOfDesignDataHelper: DesginDataHelper[] = [];
-  private designRefreshSubscription: Subscription;
+  listOfDesigns: DesginDataModel[] = [];
+  listOfDesignsHelper: DesginDataHelper[] = [];
+  private DesignRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
-  routeSubscription: Subscription;
 
   today: any;
   options: LaunchNavigatorOptions = {
@@ -45,15 +42,22 @@ export class CompleteddesignComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.designRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+    this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfDesignData != null && this.listOfDesignData.length > 0){
-        this.formatDesignData(this.listOfDesignData);
+      if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
+        this.formatDesignData(this.listOfDesigns);
       }
     });
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.DesignRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    this.cdr.detach();
   }
 
   getDesigns(event: CustomEvent) {
@@ -65,11 +69,11 @@ export class CompleteddesignComponent implements OnInit {
   }
 
   fetchPendingDesigns(event, showLoader: boolean) {
-    console.log("inside fetch surveys");
-    this.listOfDesignData = [];
-    this.listOfDesignDataHelper = [];
+    console.log("inside fetch Designs");
+    this.listOfDesigns = [];
+    this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("requesttype=prelim&status=designcompleted").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           this.formatDesignData(response);
@@ -94,9 +98,9 @@ export class CompleteddesignComponent implements OnInit {
   }
 
   formatDesignData(records : DesginDataModel[]){
-    this.listOfDesignData = this.fillinDynamicData(records);
+    this.listOfDesigns = this.fillinDynamicData(records);
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesignData.forEach((designItem:any) => {
+          this.listOfDesigns.forEach((designItem:any) => {
             if (tempData.length === 0) {
               this.sDatePassed(designItem.updated_at);
               const listOfDesign = new DesginDataHelper();
@@ -106,10 +110,10 @@ export class CompleteddesignComponent implements OnInit {
               tempData.push(listOfDesign);
             } else {
               let added = false;
-              tempData.forEach((surveyList) => {
+              tempData.forEach((DesignList) => {
                 if (!added) {
-                  if (surveyList.date === this.datePipe.transform(designItem.updated_at, 'M/d/yy')) {
-                    surveyList.listOfDesigns.push(designItem);
+                  if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
+                    DesignList.listOfDesigns.push(designItem);
                     this.sDatePassed(designItem.updated_at);
                     added = true;
                   }
@@ -126,7 +130,7 @@ export class CompleteddesignComponent implements OnInit {
               }
             }
           });
-          this.listOfDesignDataHelper = tempData.sort(function (a, b) {
+          this.listOfDesignsHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
@@ -135,7 +139,7 @@ export class CompleteddesignComponent implements OnInit {
   }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
-    records.forEach(element => {
+    records.forEach((element:any) => {
       if(element.status != "delivered"){
         element.isoverdue = this.utils.isDatePassed(element.deliverydate);
       }else{
@@ -162,12 +166,6 @@ export class CompleteddesignComponent implements OnInit {
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
   }
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    this.designRefreshSubscription.unsubscribe();
-    this.dataRefreshSubscription.unsubscribe();
-    this.cdr.detach();
-  }
+
 
 }

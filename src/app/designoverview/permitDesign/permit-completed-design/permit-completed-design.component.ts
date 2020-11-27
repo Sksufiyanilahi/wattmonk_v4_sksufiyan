@@ -14,11 +14,11 @@ import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-completeddesign',
-  templateUrl: './completeddesign.component.html',
-  styleUrls: ['./completeddesign.component.scss'],
+  selector: 'app-permit-completed-design',
+  templateUrl: './permit-completed-design.component.html',
+  styleUrls: ['./permit-completed-design.component.scss'],
 })
-export class CompleteddesignComponent implements OnInit {
+export class PermitCompletedDesignComponent implements OnInit {
 
   listOfDesignData: DesginDataModel[] = [];
   listOfDesignDataHelper: DesginDataHelper[] = [];
@@ -69,7 +69,7 @@ export class CompleteddesignComponent implements OnInit {
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("requesttype=prelim&status=designcompleted").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=permit&status=designcompleted").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           this.formatDesignData(response);
@@ -169,5 +169,6 @@ export class CompleteddesignComponent implements OnInit {
     this.dataRefreshSubscription.unsubscribe();
     this.cdr.detach();
   }
+
 
 }

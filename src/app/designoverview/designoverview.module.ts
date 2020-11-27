@@ -15,6 +15,12 @@ import { CompleteddesignComponent } from './completeddesign/completeddesign.comp
 import { InreviewDesignComponent } from './inreview-design/inreview-design.component';
 import { DelievereddesignComponent } from './delievereddesign/delievereddesign.component';
 import { SharedModule } from '../shared/shared.module';
+import { PermitCompletedDesignComponent } from './permitDesign/permit-completed-design/permit-completed-design.component';
+import { PermitInreviewDesignComponent } from './permitDesign/permit-inreview-design/permit-inreview-design.component';
+import { PermitnewdesignComponent } from './permitDesign/permitnewdesign/permitnewdesign.component';
+import { PermitDeliverDesignComponent } from './permitDesign/permit-deliver-design/permit-deliver-design.component';
+import { PrelimComponent } from './prelim/prelim.component';
+import { PermitComponent } from './permit/permit.component';
 
 
 @NgModule({
@@ -25,7 +31,7 @@ import { SharedModule } from '../shared/shared.module';
     DesignoverviewPageRoutingModule,
     SharedModule
   ],
-  declarations: [DesignoverviewPage,NewdesignComponent,CompleteddesignComponent,InreviewDesignComponent,DelievereddesignComponent],
+  declarations: [DesignoverviewPage,PrelimComponent,PermitComponent],
   providers: [
     DatePipe,
     Diagnostic,

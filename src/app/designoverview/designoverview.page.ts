@@ -4,15 +4,16 @@ import { StorageService } from '../storage.service';
 import { COMET_CHAT_AUTH_KEY, COMET_CHAT_APP_ID, COMET_CHAT_REGION } from '../model/constants';
 import { ApiService } from '../api.service';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TokenType } from '@angular/compiler/src/ml_parser/lexer';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
-import { ModalController, Platform } from '@ionic/angular';
+import { MenuController, ModalController, Platform } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { UtilitiesService } from '../utilities.service';
 import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { UserData } from '../model/userData.model';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class DesignoverviewPage implements OnInit {
   netSwitch:any;
   showSearchBar = false;
   unreadCount: any;
+  userData: UserData
   //showSearchBar = false;
   
 
@@ -38,17 +40,25 @@ export class DesignoverviewPage implements OnInit {
     private utilities: UtilitiesService,
     private network: NetworkdetectService,
     private platform: Platform,
-    private iab:InAppBrowser) { }
+    private iab:InAppBrowser,
+    private router:ActivatedRoute 
+    ) { 
+      let data = localStorage.getItem('type');
+      console.log(data,"dataa");
+    }
 
   ngOnInit() {
+    this.userData = this.storage.getUser();
+    this.apiService.emitUserNameAndRole(this.userData);
     this.apiService.version.subscribe(versionInfo=>{
       this.update_version = versionInfo;
     })
     this.getNotificationCount();
     this.setupCometChatUser();
     this.updateUserPushToken();
-    this.route.navigate(['designoverview/newdesigns']);
+    this.route.navigate(['designoverview/permit']);
   }
+ 
 
   ngOnDestroy() {
   }
@@ -101,7 +111,6 @@ shareWhatsapp(designData){
 }
 
 searchbar(){
-  console.log("oh ma go turu lob");
   this.route.navigate(['/search-bar1']);
 }
 
@@ -126,6 +135,8 @@ searchbar(){
  }
 
  ionViewDidEnter() {
+
+   
   if(this.version !== this.update_version && this.update_version !==''){
       
     setTimeout(()=>{
