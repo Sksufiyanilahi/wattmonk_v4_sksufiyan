@@ -49,6 +49,7 @@ export class NewdesignComponent implements OnInit {
   }
 
   ngOnInit() {
+    localStorage.setItem('type','prelim');
  console.log("ngoninit");
 console.log(this.currentDate.toISOString());
 
@@ -90,7 +91,7 @@ console.log(this.currentDate.toISOString());
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("status=designassigned&status=designinprocess").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=prelim&status=designassigned&status=designinprocess").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           this.formatDesignData(response);

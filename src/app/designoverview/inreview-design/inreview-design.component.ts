@@ -73,7 +73,7 @@ export class InreviewDesignComponent implements OnInit {
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("status=reviewassigned&status=reviewfailed&status=reviewpassed").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           this.formatDesignData(response);
