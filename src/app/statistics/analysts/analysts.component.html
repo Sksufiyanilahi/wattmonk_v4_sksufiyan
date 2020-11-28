@@ -58,7 +58,7 @@
       
     
       
-        <ion-item  *ngFor="let analysts of analystsList;" style="text-align: center; font-size: small;" (click)="details(analysts)">
+        <ion-item  *ngFor="let analysts of analystsList;" style="text-align: center; font-size: small;" (click)="details(analysts, 'analystname')">
            <ion-col>
            <ion-label style="float: left" class="item-input ion-label"  >{{analysts.analyst}}</ion-label>
           </ion-col>

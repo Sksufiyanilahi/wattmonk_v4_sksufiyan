@@ -50,19 +50,19 @@ count:any
   }
 
 fetchData(){
+  this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
+  this.design=params.get('designData')});
+
+
   this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
     console.log(this.user)
     this.apiService.paymentDetail(this.user.id).subscribe(res=>{
       this.count=res;
-      console.log("laal",this.count);
+      console.log(this.count);
+      this.servicecharges();
     })});
-    this.apiService.prelimCharges().subscribe(res=>{
-      this.servicePrice=res;
-      this.servicePrice.forEach(element => {
-        this.settingValue = element.settingvalue;
-      });
-      console.log("ddd",this.settingValue)
-    })
+  
+
     this.apiService.freeCharges().subscribe(res=>{
       this.freeDesigns=res;
       this.freeDesigns.forEach(element => {
@@ -70,19 +70,43 @@ fetchData(){
       })
       console.log("daadd",this.freeCharges);
     })
-    this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
-    this.design=params.get('designData')});
+   
 
     console.log(this.id);
    console.log(this.design);
   
 }
 
+servicecharges(){
+  if(this.design=='prelim'){
+    this.apiService.prelimCharges().subscribe(res=>{
+      this.servicePrice=res;
+      this.servicePrice.forEach(element => {
+        this.settingValue = element.settingvalue;
+      });
+      console.log("ddd",this.settingValue)
+    })}
+    else{
+      this.apiService.permitCharges().subscribe(res=>{
+        this.servicePrice=res;
+        this.servicePrice.forEach(element => {
+          this.settingValue = element.settingvalue;
+        });
+        console.log("ddd",this.settingValue)
+      })
+    }
+}
+
 confirm(){
   if(this.id!=null){
   var postData={};
   var designacceptancestarttime = new Date();
+  if(this.design=='prelim'){
   designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+  }
+  else{
+    designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+  }
     postData = {
       outsourcedto: 232,
       isoutsourced: "true",
@@ -94,23 +118,38 @@ confirm(){
         this.utils.hideLoading().then(()=>
        { this.utils.showSnackBar("Design request has been send to wattmonk successfully")
        this.navController.pop();
+       if(this.design=='prelim'){
        this.utils.setHomepageDesignRefresh(true);
+       }
+       else{
+         this.utils.setHomepagePermitRefresh(true);
+       }
        })
       })
       })}
       else{
+        if(this.design=='prelim'){
         this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
+        }
+        else{
+          this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
+        }
       }
 }
 
   addWallet(value){
     
-    this.router.navigate(['/add-money',{mode:value,id:this.id}])
+    this.router.navigate(['/add-money',{mode:value,id:this.id,serviceAmount:this.settingValue,design:this.design}])
   }
 
   cancel(){
     if(this.id==null){
+      if(this.design ==='prelim'){
       this.utils.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
+      }
+      else{
+        this.utils.setScheduleFormEvent(ScheduleFormEvent.SAVE_PERMIT_FORM);
+      }
     }
     this.navController.pop();
   }

@@ -9,11 +9,15 @@ import { ModalController, NavParams } from '@ionic/angular';
 export class StatisticsDetailsPage implements OnInit {
 
   designers:any;
+  name:any;
   constructor(private nav:NavParams,
               private modalCtrl:ModalController) { }
 
   ngOnInit() {
     this.designers= this.nav.get('designersValue');
+    this.name = this.nav.get('name');
+    //this.name = this.nav.get('name');
+    console.log(this.name);
   }
 
   goBack(){

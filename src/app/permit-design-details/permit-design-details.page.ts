@@ -158,7 +158,7 @@ export class PermitDesignDetailsPage implements OnInit {
             // this.utilities.setHomepageDesignRefresh(true);
             this.utilities.getDesignDetailsRefresh();
             if(this.ispermitUpdate){
-              this.utilities.setHomepageDesignRefresh(true);
+              this.utilities.setHomepagePermitRefresh(true);
               this.router.navigate(['designoverview/inreviewdesigns']);
               
             }
@@ -210,7 +210,7 @@ export class PermitDesignDetailsPage implements OnInit {
   ngOnDestroy(): void {
     this.dataSubscription.unsubscribe();
     if (this.refreshDataOnPreviousPage > 1) {
-      this.utilities.setHomepageDesignRefresh(true);
+      this.utilities.setHomepagePermitRefresh(true);
     }
   }
 
@@ -284,7 +284,7 @@ export class PermitDesignDetailsPage implements OnInit {
         this.utilities.hideLoading().then(() => {
           this.utilities.showSnackBar(this.design.name+" "+'has been deleted successfully');
           this.navController.pop();
-          this.utilities.setHomepageDesignRefresh(true);
+          this.utilities.setHomepagePermitRefresh(true);
         });
       }, (error) => {
         this.utilities.hideLoading().then(() => {
@@ -314,7 +314,7 @@ export class PermitDesignDetailsPage implements OnInit {
             console.log("suc",success);
             this.setData(success);
             this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
-            this.utilities.setHomepageDesignRefresh(true);
+            this.utilities.setHomepagePermitRefresh(true);
             this.navController.navigateRoot(['homepage']);
           });
         }, (error) => {
@@ -542,7 +542,7 @@ return blob;
         .subscribe(
           response => {
             this.utilities.showSnackBar("Permit design status has been updated successfully.");
-            this.utilities.setHomepageDesignRefresh(true);
+            this.utilities.setHomepagePermitRefresh(true);
             if(this.user.role.type=='qcinspector'){
               this.navController.navigateRoot(['analystoverview/design']);}
               else{
@@ -599,7 +599,7 @@ return blob;
       .subscribe(
         response => {
           this.utilities.showSnackBar("permit design status has been updated successfully.");
-          this.utilities.setHomepageDesignRefresh(true);
+          this.utilities.setHomepagePermitRefresh(true);
           if(this.user.role.type=='qcinspector'){
             this.navController.navigateRoot(['analystoverview/design']);}
             else{

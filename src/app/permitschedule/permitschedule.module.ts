@@ -41,6 +41,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 //import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 //import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 @NgModule({
   imports: [
@@ -85,6 +87,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatProgressSpinnerModule,
     MatExpansionModule,
   ],
-  declarations: [PermitschedulePage]
+  declarations: [PermitschedulePage],
+  providers: [
+    Diagnostic,
+    NativeGeocoder,
+  ]
 })
 export class PermitschedulePageModule {}

@@ -936,7 +936,8 @@ ioniViewDidEnter(){
       outsourcedto: 232,
         isoutsourced: "true",
         status: "outsourced",
-        designacceptancestarttime: designacceptancestarttime
+        designacceptancestarttime: designacceptancestarttime,
+        paymenttype:"direct"
       };
   
       this.utils.showLoading('Assigning').then(()=>{
@@ -959,7 +960,7 @@ ioniViewDidEnter(){
   Pay()
   {
     if (this.desginForm.status === 'VALID') {
-    this.router.navigate(["payment-modal"]);
+    this.router.navigate(["payment-modal",{designData:"prelim"}]);
     }else {
       if(this.desginForm.value.name==''){
 

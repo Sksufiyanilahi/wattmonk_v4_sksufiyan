@@ -25,6 +25,8 @@ card:any
  userData:User;
  mode:any;
  designId;
+ serviceAmount:any;
+ design:any;
   createPayment:any
   amountForm:FormGroup;
   constructor(//private stripe:Stripe,
@@ -49,6 +51,9 @@ card:any
     ngOnInit() {
     this.mode= this.route.snapshot.paramMap.get('mode');
    this.designId= this.route.snapshot.paramMap.get('id');
+      this.serviceAmount = this.route.snapshot.paramMap.get('serviceAmount');
+      this.design = this.route.snapshot.paramMap.get('design');
+      
     this.userData = this.storageService.getUser();
     this.setupStripe();
     console.log(this.mode)
@@ -185,7 +190,7 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
    //   console.log(token);
      // this.token=token.id
   data={
-    amount:12,
+    amount:this.serviceAmount,
     email:this.userData.email,
     paymenttype: "direct",
     token: this.token.token.id,
@@ -198,11 +203,21 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
       if(this.createPayment.paymentstatus=='succeeded'){
     this.utils.showSnackBar("payment via card is successfull");
    if(this.designId==="null"){
+     if(this.design==='prelim'){
      this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
+     }
+     else{
+       this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
+     }
    }else{
             var postData={};
             var designacceptancestarttime = new Date();
+            if(this.design=='prelim'){
              designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+            }
+            else{
+              designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+            }
                postData = {
       outsourcedto: 232,
       isoutsourced: "true",
@@ -212,8 +227,14 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
     
       this.apiService.updateDesignForm(postData,this.designId).subscribe(value=>{
         this.utils.showSnackBar("Design request has been send to wattmonk successfully");
+        if(this.design=='prelim'){
        this.router.navigate(['homepage/design']);
        this.utils.setHomepageDesignRefresh(true);
+        }
+        else{
+          this.router.navigate(['permithomepage/permitdesign']);
+          this.utils.setHomepagePermitRefresh(true);
+        }
       
       })}
    

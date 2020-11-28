@@ -65,7 +65,7 @@
       <ion-item class="ion-no-padding" *ngIf="mode=='card'">
         <ion-label position="floating">Amount*</ion-label>
         <ion-input class="form_input" type="number" style="width: 330px;" autocapitalize="none" formControlName ="card" autocomplete="off"
-           value=12 [disabled]=true  ></ion-input>
+         [disabled]=true  >{{serviceAmount}}</ion-input>
     </ion-item>
       
   </ion-col>
