@@ -44,12 +44,12 @@
   </ion-col>
   <ion-col size="6">
     <ion-label style="font-size: larger;">Service Used</ion-label><br>
-    <ion-label style="font-size: x-large;">Prelim design</ion-label>
+    <ion-label style="font-size: x-large;">{{design}} design</ion-label>
   </ion-col>
 </ion-row>
 <ion-row><ion-col>
   <ion-label style="font-size: larger;">You have to pay</ion-label><br>
-  <ion-label *ngIf="count>freeCharges;else stat" style="font-size: x-large;"> $ 12 </ion-label>
+  <ion-label *ngIf="count>freeCharges;else stat" style="font-size: x-large;"> $ {{settingValue}} </ion-label>
   <ng-template #stat><ion-label  style="font-size: x-large;">$ 0</ion-label></ng-template>
 </ion-col>
 <ion-col size="6">

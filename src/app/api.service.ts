@@ -320,6 +320,10 @@ export class ApiService {
    
     prelimCharges(){
       return this.http.get(BaseUrl+ "commonsettings?settingname=prelimdesigncharges", { headers: this.headers});}
+      
+   
+    permitCharges(){
+      return this.http.get(BaseUrl+ "commonsettings?settingname=permitdesigncharges", { headers: this.headers});}
      
       freeCharges(){
         return this.http.get(BaseUrl+ "commonsettings?settingname=freedesigns ", { headers: this.headers});}

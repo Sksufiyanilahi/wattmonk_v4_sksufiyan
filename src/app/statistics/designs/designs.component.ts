@@ -23,6 +23,7 @@ export class DesignsComponent implements OnInit {
   user:User;
   statistic:DesignStatistic[]=[];
   prelimcount:any=[];
+  permitCount:any=[];
   maxDate:Date;
   clientcompany:any=[];
   myDate:string;
@@ -61,7 +62,8 @@ export class DesignsComponent implements OnInit {
     },
   ];
   public barChartData: ChartDataSets[] = [
-    { data: this.prelimcount, label: 'Prelim Design' }
+    { data: this.prelimcount, label: 'Prelim Design'},
+     {data: this.permitCount, label: 'Permit Design' }
     //{ data: [12,23,97,102,34,78,23,54,6], label: 'Permit Design' }
   ];
  
@@ -117,6 +119,7 @@ export class DesignsComponent implements OnInit {
       this.statistic=response;
       this.statistic.forEach(element =>{
         this.prelimcount.push(element.prelim);
+        this.permitCount.push(element.permit);
       })
     }
   )
@@ -182,7 +185,8 @@ export class DesignsComponent implements OnInit {
       endtime = endDate.toISOString();
       
     }
-    this.prelimcount.length=0
+    this.prelimcount.length=0;
+    this.permitCount.length=0;
     const data= {
       "starttime" : starttime,
       "endtime" : endtime,
@@ -194,6 +198,7 @@ export class DesignsComponent implements OnInit {
       this.statistic=response;
       this.statistic.forEach(element =>{
         this.prelimcount.push(element.prelim)
+        this.permitCount.push(element.permit)
       })
      // this.changeDetectorRef.detectChanges();
     }

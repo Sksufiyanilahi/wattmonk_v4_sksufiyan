@@ -103,14 +103,16 @@ export class AnalystsComponent implements OnInit {
     )
   }
 
-  async details(value){
+  async details(value, name){
     let designers = value;
+    let analystName = name;
     const modal = await this.modalController.create({
       component: StatisticsDetailsPage,
       cssClass: 'my-custom-modal-css',
       componentProps: {
        // id:id
-       designersValue:designers
+       designersValue:designers,
+       name:analystName
       },
       backdropDismiss:false
     });

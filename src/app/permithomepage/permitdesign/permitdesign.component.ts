@@ -571,7 +571,7 @@ this.network.networkConnect();
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
     if(this.userData.role.type=='clientsuperadmin'){
-      this.route.navigate(["payment-modal",{id:id,designData:this.designerData}])
+      this.route.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
       
     }
     

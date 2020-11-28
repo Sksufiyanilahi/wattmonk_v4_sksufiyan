@@ -1,22 +1,32 @@
-import { ChangeDetectionStrategy, Component, Injectable, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
 import { AssigneeModel } from '../model/assignee.model';
-import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER } from '../model/constants';
-import { DesignModel } from '../model/design.model';
-import { InverterMadeModel, Invertermake } from '../model/inverter-made.model';
+import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent } from '../model/constants';
+import { DesginDataModel } from '../model/design.model';
+import { Invertermake } from '../model/inverter-made.model';
 import { InverterMakeModel } from '../model/inverter-make.model';
-import { Modulemake, SolarMadeModel } from '../model/solar-made.model';
+import { Modulemake } from '../model/solar-made.model';
 import { SolarMake } from '../model/solar-make.model';
-import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { map, startWith } from "rxjs/operators";
 import { ErrorModel } from '../model/error.model';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { AddressModel } from '../model/address.model';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
+// export interface DesignFormData {
+//   isEditMode: boolean;
+//   isDataUpdated: boolean;
+//   generateAutocad: boolean;
+//   user: User;
+//   design: DesginDataModel;
+// }
 
 @Component({
   selector: 'app-permitschedule',
@@ -27,29 +37,29 @@ import { ErrorModel } from '../model/error.model';
 export class PermitschedulePage implements OnInit {
   desginForm:FormGroup
 
-  //listOfAssignees: AssigneeModel[] = [];
+  listOfAssignees: AssigneeModel[] = [];
 
- // listOfSolarMake: SolarMake[] = [];
- // listOfSolarMade: SolarMadeModel[] = [];
+//  listOfSolarMake: SolarMake[] = [];
+//  listOfSolarMade: SolarMadeModel[] = [];
 
-  //listOfInverterMade: InverterMadeModel[] = [];
- // listOfInverterMake: InverterMakeModel[] = [];
+//   listOfInverterMade: InverterMadeModel[] = [];
+//  listOfInverterMake: InverterMakeModel[] = [];
 
  modulemakes: SolarMake[] = [];
   filteredModuleMakes: Observable<SolarMake[]>;
-  selectedModuleMakeID: number;
+   selectedModuleMakeID: number;
 
   modulemodels: Modulemake[] = [];
   filteredModuleModels: Observable<Modulemake[]>;
-  selectedModuleModelID: number;
+   selectedModuleModelID: number;
 
   invertermakes: InverterMakeModel[] = [];
   filteredInverterMakes: Observable<InverterMakeModel[]>;
-  selectedInverterMakeID: number;
+   selectedInverterMakeID: number;
 
   invertermodels: Invertermake[] = [];
   filteredInverterModels: Observable<Invertermake[]>;
-  selectedInverterModelID: number;
+   selectedInverterModelID: number;
 
   private subscription: Subscription;
   private addressSubscription: Subscription;
@@ -62,26 +72,34 @@ export class PermitschedulePage implements OnInit {
 
   fieldRequired = FIELD_REQUIRED;
   
-  
-  
-
   fileName: any;
   archFiles: string[]=[];
   permitFiles: string[]=[];
   designId=0;
+  design: DesginDataModel = null;
   onFormSubmit:boolean=true;
   address = '';
   showValue: any;
   uploadbox: any;
   value:number;
   formValue:string;
-  
+  fieldDisabled = false;
+  attachmentData:any;
+  architecturalData:any;
+  send:any;
   //user: User
-  
+  isEditMode:boolean=false;
+  //data:DesignFormData;
   
   userdata:any;
 
   solarMakeDisposable: Subscription;
+
+   // Geocoder configuration
+   geoEncoderOptions: NativeGeocoderOptions = {
+    useLocale: true,
+    maxResults: 5
+  };
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -90,6 +108,12 @@ export class PermitschedulePage implements OnInit {
     private storage: StorageService,
     private route: ActivatedRoute,
     private router:Router,
+    private nativeGeocoder: NativeGeocoder,
+    private diagnostic: Diagnostic,
+    private geolocation: Geolocation,
+    private platform: Platform,
+    private toastController: ToastController,
+    //private data: DesignFormData
     ) { 
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
        const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
@@ -143,13 +167,57 @@ export class PermitschedulePage implements OnInit {
   }
 
   ngOnInit() {
+    this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
-    this.addressValue();
-    setTimeout(() => {
+    this.requestLocationPermission();
+    if (this.designId!==0) {
+      this.subscription = this.utils.getStaticAddress().subscribe((address) => {
+        this.address = address;
+        this.storage.setData(this.address);
+      });
+    } else {
+      // await this.getGeoLocation();
+      this.subscription = this.utils.getAddressObservable().subscribe((address) => {
+        console.log(address);
+        this.address = address.address;
+      this.storage.setData(this.address);
+      });
+    }
+
+    this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
+      if (event === ScheduleFormEvent.SAVE_PERMIT_FORM || event === ScheduleFormEvent.SEND_PERMIT_FORM) {
+        this.send=event;
+        this.saveModuleMake();
+      
+      } 
+    });
+
+    
+    //this.addressValue();
+    
+    if (this.designId !== 0) {
+      setTimeout(()=>{
+        this.getDesignDetails();
+      },1000)
+
+    }else{
+      this.addressValue();
+    }
+
+    setTimeout(()=>{
       this.fetchModuleMakesData();
       this.fetchInverterMakesData();
-      
+      if (this.designId !== 0) {
+        this.loadModuleModelsData();
+        this.loadInverterModelsData();
+      }
     });
+    // else{
+    //   this.data.isEditMode=false;
+    // }
+    
+    
+
     this.formControlValueChanged();
     this.uploadcontrolvalidation();
   }
@@ -250,7 +318,7 @@ export class PermitschedulePage implements OnInit {
   fetchModuleMakesData() {
     this.apiService.getSolarMake().subscribe(
       response => {
-
+        console.log("Hiii");
         this.modulemakes = response;
         this.filteredModuleMakes = this.desginForm.get('modulemake').valueChanges.pipe(
           startWith(""),
@@ -268,14 +336,14 @@ export class PermitschedulePage implements OnInit {
     this.desginForm.patchValue({ modulemodel: " " })
     if (_event.isUserInput) {
       this.desginForm.get('modulemodel').setValue("");
-     // if (this.data.isEditMode) {
-     //   this.selectedModuleModelID = null;
-     // }
+     if (this.isEditMode) {
+       this.selectedModuleModelID = null;
+     }
       this.modulemodels = [];
       this.selectedModuleMakeID = make.id;
       this.apiService.getSolarMade(make.id).subscribe(
         response => {
-
+          console.log("Hiii");
           this.modulemodels = response;
           this.filteredModuleModels = this.desginForm.get('modulemodel').valueChanges.pipe(
             startWith(""),
@@ -294,7 +362,7 @@ export class PermitschedulePage implements OnInit {
     this.modulemodels = [];
     this.apiService.getSolarMade(this.selectedModuleMakeID).subscribe(
       response => {
-
+        console.log("Hiii");
         this.modulemodels = response;
         this.filteredModuleModels = this.desginForm.get('modulemodel').valueChanges.pipe(
           startWith(""),
@@ -315,7 +383,7 @@ export class PermitschedulePage implements OnInit {
   fetchInverterMakesData() {
     this.apiService.getInverterMake().subscribe(
       response => {
-
+        console.log("Hiii");
         this.invertermakes = response;
         this.filteredInverterMakes = this.desginForm.get('invertermake').valueChanges.pipe(
           startWith(""),
@@ -333,14 +401,14 @@ export class PermitschedulePage implements OnInit {
     this.desginForm.patchValue({ invertermodel: " " })
     if (_event.isUserInput) {
       this.desginForm.get('invertermodel').setValue("");
-     // if (this.data.isEditMode) {
-     //   this.selectedInverterModelID = null;
-     // }
+     if (this.isEditMode) {
+       this.selectedInverterModelID = null;
+     }
       this.invertermodels = [];
       this.selectedInverterMakeID = make.id;
       this.apiService.getInverterMade(make.id).subscribe(
         response => {
-
+          console.log("Hiii");
           this.invertermodels = response;
           this.filteredInverterModels = this.desginForm.get('invertermodel').valueChanges.pipe(
             startWith(""),
@@ -359,7 +427,7 @@ export class PermitschedulePage implements OnInit {
     this.invertermodels = [];
     this.apiService.getInverterMade(this.selectedInverterMakeID).subscribe(
       response => {
-
+        console.log("Hiii");
         this.invertermodels = response;
         this.filteredInverterModels = this.desginForm.get('invertermodel').valueChanges.pipe(
           startWith(""),
@@ -400,13 +468,13 @@ export class PermitschedulePage implements OnInit {
       this.desginForm.get('city').setValue('Lucknow');
       this.desginForm.get('state').setValue('UP');
       this.desginForm.get('postalcode').setValue(3232343);
-    /* this.desginForm.get('address').setValue(address.address);
-       this.desginForm.get('latitude').setValue(address.lat);
-       this.desginForm.get('longitude').setValue(address.long);
-       this.desginForm.get('country').setValue(address.country);
-     this.desginForm.get('city').setValue(address.city);
-       this.desginForm.get('state').setValue(address.state);
-       this.desginForm.get('postalcode').setValue(address.postalcode);*/
+    //  this.desginForm.get('address').setValue(address.address);
+    //    this.desginForm.get('latitude').setValue(address.lat);
+    //    this.desginForm.get('longitude').setValue(address.long);
+    //    this.desginForm.get('country').setValue(address.country);
+    //  this.desginForm.get('city').setValue(address.city);
+    //    this.desginForm.get('state').setValue(address.state);
+    //    this.desginForm.get('postalcode').setValue(address.postalcode);
   }, (error) => {
     this.desginForm.get('address').setValue('');
     this.desginForm.get('latitude').setValue('');
@@ -422,7 +490,7 @@ export class PermitschedulePage implements OnInit {
   //this.getSolarMake();
 
   }
-  /*getDesignDetails() {
+  getDesignDetails() {
   
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
@@ -438,11 +506,12 @@ export class PermitschedulePage implements OnInit {
             email: this.design.email,
             monthlybill: this.design.monthlybill,
             address: this.design.address,
+            phone:this.design.phonenumber,
             createdby: this.design.createdby,
             rooftype: this.design.rooftype,
             mountingtype:this.design.mountingtype,
             architecturaldesign:this.design.architecturaldesign,
-            // jobtype: this.design.jobtype,
+           jobtype: this.design.jobtype,
             tiltofgroundmountingsystem: this.design.tiltofgroundmountingsystem,
             comments: this.design.comments==''? '': this.design.comments[0].message,
             projecttype: this.design.projecttype,
@@ -457,11 +526,12 @@ export class PermitschedulePage implements OnInit {
             //attachments:this.design.attachments,
             
             attachments:this.design.attachments,
-            solarmake:this.design.solarmake,
-            solarmodel:this.design.solarmodel,
-            invertermake:this.design.invertermake,
-            invertermodel:this.design.invertermodel
+            modulemake:this.design.solarmake.name,
+            modulemodel:this.design.solarmodel.name,
+            invertermake:this.design.invertermake.name,
+            invertermodel:this.design.invertermodel.name
           });
+          console.log("gg",this.design.solarmake.name);
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
         //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
@@ -470,10 +540,22 @@ export class PermitschedulePage implements OnInit {
               assignedto: this.design.assignedto.id
             });
           }
-        setTimeout(()=>{
-          this.getSolarMakeForForm();
-          this.getInverterMakeForForm();
-        },500)
+          
+          // setTimeout(() => {
+          //   this.fetchModuleMakesData();
+          //   this.fetchInverterMakesData();
+          //   if(this.isEditMode){
+          //     console.log("hello")
+          //     this.loadModuleModelsData();
+          //     this.loadInverterModelsData();
+              
+          //   }
+            
+          // });
+        // setTimeout(()=>{
+        //   this.fetchModuleMakesData();
+        //   this.fetchInverterMakesData();
+        // },500)
         });
       
       }, (error) => {
@@ -482,7 +564,7 @@ export class PermitschedulePage implements OnInit {
     });
   }
 
-*/
+
 
 showUpload(e){
   this.uploadbox = e.target.value;
@@ -494,6 +576,7 @@ saveModuleMake() {
   console.log("g",this.desginForm.get("modulemake").value);
   const found = this.modulemakes.some(el => el.name === this.desginForm.get("modulemake").value);
   if (!found) {
+    console.log("hello");
     let solarmadedata={
 
       
@@ -522,7 +605,9 @@ saveModuleMake() {
 
 saveModuleModel() {
   const ismakefound = this.modulemakes.some(el => el.name === this.desginForm.get("modulemake").value);
+  console.log(ismakefound);
   const found = this.modulemodels.some(el => el.name === this.desginForm.get("modulemodel").value);
+ console.log(found);
   if (!ismakefound || !found) {
     let solarmadedata={
       modulemake:this.selectedModuleMakeID,
@@ -552,6 +637,7 @@ saveModuleModel() {
 saveInverterMake() {
   const found = this.invertermakes.some(el => el.name === this.desginForm.get("invertermake").value);
   if (!found) {
+    console.log("Hello");
     let invertermakedata={
       name:this.desginForm.get("invertermake").value
     }
@@ -611,6 +697,7 @@ saveInverterModel() {
     }
   }
 
+
   addForm(e) {
     this.onFormSubmit=false;
     // this.saveModuleMake();
@@ -620,8 +707,13 @@ saveInverterModel() {
   
       // debugger;
       // this.saveModuleMake();
+     
       if(this.desginForm.status=='VALID'){
+        if(this.formValue=='send'){
+        this.router.navigate(['payment-modal',{designData:"permit"}]);
+        }else{
       this.saveModuleMake();
+        }
       }
       else{
         this.error();
@@ -637,7 +729,7 @@ saveInverterModel() {
           tomorrow.setDate(tomorrow.getDate() + 2);
           console.log(this.formValue);
           if (this.designId === 0) {
-            if(this.formValue === 'save'){
+            if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM){
               var data = {name:this.desginForm.get('name').value,  
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
@@ -705,7 +797,7 @@ saveInverterModel() {
              
             
               }
-           else if(this.formValue === 'send'){
+           else if(this.formValue === 'send' || this.send===ScheduleFormEvent.SEND_PERMIT_FORM){
             
               var postData = {name:this.desginForm.get('name').value,  
                           email:this.desginForm.get('email').value,
@@ -738,6 +830,7 @@ saveInverterModel() {
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
+                        paymenttype:"direct"
                         
     
   }
@@ -782,7 +875,40 @@ saveInverterModel() {
             }
           else {
             if(this.formValue==='save'){
-            this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
+              var data = {name:this.desginForm.get('name').value,  
+                          email:this.desginForm.get('email').value,
+                          phonenumber:pnumber.toString(),
+                          address:this.desginForm.get('address').value,
+                          monthlybill:this.desginForm.get('monthlybill').value,
+                          solarmake: this.selectedModuleMakeID,
+                          solarmodel:this.selectedModuleModelID,
+                          invertermake:this.selectedInverterMakeID,
+                          invertermodel:this.selectedInverterModelID,
+                          createdby: this.storage.getUserID(),
+                           //assignedto: this.desginForm.get('assignedto').value,
+                           rooftype: this.desginForm.get('rooftype').value,
+                         //architecturaldesign: this.desginForm.get('architecturaldesign').value,
+                         tiltofgroundmountingsystem: this.desginForm.get('tiltofgroundmountingsystem').value,
+                         mountingtype: this.desginForm.get('mountingtype').value,
+                          jobtype: this.desginForm.get('jobtype').value,
+                          projecttype: this.desginForm.get('projecttype').value,
+                          newconstruction: this.desginForm.get('newconstruction').value,
+                          source: this.desginForm.get('source').value,
+                          comments: this.desginForm.get('comments').value,
+                          requesttype: this.desginForm.get('requesttype').value,
+                          latitude: this.desginForm.get('latitude').value,
+                         longitude: this.desginForm.get('longitude').value,
+                         country: this.desginForm.get('country').value,
+                         state: this.desginForm.get('state').value,
+                        city: this.desginForm.get('city').value,
+                         postalcode: this.desginForm.get('postalcode').value,
+                        status: this.desginForm.get('status').value,
+    //attachments: this.desginForm.get('attachments').value,
+                        deliverydate:tomorrow.toISOString(),
+                        creatorparentid:this.storage.getParentId()
+    
+  }
+            this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
               this.uploaarchitecturedesign(response.id,'architecturaldesign');
               this.uploadAttachmentDesign(response.id,'attachments')
               this.utils.hideLoading().then(() => {
@@ -804,7 +930,41 @@ saveInverterModel() {
           
           }
           else if(this.formValue==='send'){
-            this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
+            var postData = {name:this.desginForm.get('name').value,  
+                          email:this.desginForm.get('email').value,
+                          phonenumber:pnumber.toString(),
+                          address:this.desginForm.get('address').value,
+                          monthlybill:this.desginForm.get('monthlybill').value,
+                          solarmake: this.selectedModuleMakeID,
+                          solarmodel:this.selectedModuleModelID,
+                          invertermake:this.selectedInverterMakeID,
+                          invertermodel:this.selectedInverterModelID,
+                          createdby: this.storage.getUserID(),
+                           //assignedto: this.desginForm.get('assignedto').value,
+                           rooftype: this.desginForm.get('rooftype').value,
+                         //architecturaldesign: this.desginForm.get('architecturaldesign').value,
+                         tiltofgroundmountingsystem: this.desginForm.get('tiltofgroundmountingsystem').value,
+                         mountingtype: this.desginForm.get('mountingtype').value,
+                          jobtype: this.desginForm.get('jobtype').value,
+                          projecttype: this.desginForm.get('projecttype').value,
+                          newconstruction: this.desginForm.get('newconstruction').value,
+                          source: this.desginForm.get('source').value,
+                          comments: this.desginForm.get('comments').value,
+                          requesttype: this.desginForm.get('requesttype').value,
+                          latitude: this.desginForm.get('latitude').value,
+                         longitude: this.desginForm.get('longitude').value,
+                         country: this.desginForm.get('country').value,
+                         state: this.desginForm.get('state').value,
+                        city: this.desginForm.get('city').value,
+                         postalcode: this.desginForm.get('postalcode').value,
+                        status: this.desginForm.get('status').value,
+    //attachments: this.desginForm.get('attachments').value,
+                        deliverydate:tomorrow.toISOString(),
+                        creatorparentid:this.storage.getParentId(),
+                        paymenttype:"direct"
+    
+  }
+            this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
               this.uploaarchitecturedesign(response.id,'architecturaldesign');
               this.uploadAttachmentDesign(response.id,'attachments')
               this.utils.hideLoading().then(() => {
@@ -849,10 +1009,10 @@ saveInverterModel() {
         else if(this.desginForm.value.monthlybill==''){
           this.utils.errorSnackBar('Please fill the annual units.');
         }
-        else if(this.desginForm.value.solarmake==''){
+        else if(this.desginForm.value.modulemake==''){
           this.utils.errorSnackBar('Please fill the module make.');
         }
-        else if(this.desginForm.value.solarmodel==''){
+        else if(this.desginForm.value.modulemodel==''){
           this.utils.errorSnackBar('Please fill the module model.');
         }
         else if(this.desginForm.value.invertermake==''){
@@ -985,12 +1145,13 @@ saveInverterModel() {
 
     sendtowattmonk(){
       var designacceptancestarttime = new Date();
-        designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+        designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
       const postData = {
         outsourcedto: 232,
           isoutsourced: "true",
           status: "outsourced",
-          designacceptancestarttime: designacceptancestarttime
+          designacceptancestarttime: designacceptancestarttime,
+          paymenttype:"direct"
         };
     
         this.utils.showLoading('Assigning').then(()=>{
@@ -1010,5 +1171,256 @@ saveInverterModel() {
         })
     }
     
+    // Location
+
+    ngOnDestroy(): void {
+      this.subscription.unsubscribe();
+      this.utils.setStaticAddress('');
+    }
+  
+    // segmentChanged(event: CustomEvent) {
+    //   console.log(event);
+    //   this.currentTab = event.detail.value;
+    //   this.tabs.select(event.detail.value);
+    // }
+  
+    getGeoLocation() {
+      // this.utilities.showLoading('Getting Location').then(()=>{
+            // setTimeout(()=>{
+            //   this.utilities.hideLoading();
+            // },1000)
+        this.geolocation.getCurrentPosition().then((resp) => {
+          this.utils.hideLoading();
+          // .then(()=>{
+            console.log('resp',resp);
+            this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
+            this.utils.hideLoading();
+          // });
+        },err=>{
+          this.utils.hideLoading();
+          this.utils.errorSnackBar('Unable to get location');
+        }).catch((error) => {
+          this.utils.hideLoading();
+          this.utils.errorSnackBar('Unable to get location');
+          
+          console.log('Error getting location', error);
+          this.showNoLocation();
+        });
+      // },err=>{
+      //   this.utilities.hideLoading();
+      // });
+    }
+  
+    async  showNoLocation() {
+      const toast = await this.toastController.create({
+        header: 'Error',
+        message: 'Unable to get location',
+        cssClass: 'my-custom-class',
+        buttons: [
+          {
+            text: 'OK',
+            handler: () => {
+              this.goBack();
+            }
+          }
+        ]
+      });
+      toast.present();
+    }
+  
+  
+  
+    async showLocationDenied() {
+      const toast = await this.toastController.create({
+        header: 'Error',
+        message: 'Location services denied, please enable them manually',
+        cssClass: 'my-custom-class',
+        buttons: [
+          {
+            text: 'OK',
+            handler: () => {
+              this.goBack();
+            }
+          }
+        ]
+      });
+      toast.present();
+    }
+  
+  
+    getGeoEncoder(latitude, longitude) {
+      // this.utilities.hideLoading().then((success) => {
+            this.utils.showLoading('Getting Location').then(()=>{
+        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+        .then((result: NativeGeocoderResult[]) => {
+          console.log(result);
+          this.utils.hideLoading();
+              const address: AddressModel = {
+                address: this.generateAddress(result[0]),
+                lat: latitude,
+                long: longitude,
+                country:result[0].countryName,
+                state: result[0].administrativeArea,
+                city:result[0].locality,
+                postalcode:result[0].postalCode
+              };
+              this.utils.setAddress(address);
+            })
+            .catch((error: any) => {
+              this.showNoLocation();
+              this.utils.hideLoading();
+              alert('Error getting location' + JSON.stringify(error));
+            });
+          });
+        // }, (error) => {
+  
+        // }
+      // );
+    }
+  
+    generateAddress(addressObj) {
+      const obj = [];
+      let address = '';
+      for (const key in addressObj) {
+        obj.push(addressObj[key]);
+      }
+      obj.reverse();
+      for (const val in obj) {
+        if (obj[val].length) {
+          address += obj[val] + ', ';
+        }
+      }
+      return address.slice(0, -2);
+    }
+  
+    requestLocationPermission() {
+      this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
+        console.log(mode);
+        switch (mode) {
+          case this.diagnostic.permissionStatus.NOT_REQUESTED:
+            this.goBack();
+            break;
+          case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+            this.showLocationDenied();
+            break;
+          case this.diagnostic.permissionStatus.DENIED_ONCE:
+            this.goBack();
+            break;
+          case this.diagnostic.permissionStatus.GRANTED:
+            this.fetchLocation();
+            break;
+          case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+            this.fetchLocation();
+            break;
+          case 'authorized_when_in_use':
+            this.fetchLocation();
+            break;
+        }
+      }, (rejection) => {
+        console.log(rejection);
+        // this.goBack();
+      });
+  
+      // if (this.platform.is('ios')) {
+      //   if (this.storage.isLocationAllowedOnIOS()) {
+      //     this.fetchLocation();
+      //   } else {
+      //     if (!this.storage.isLocationCheckedOnIOS()) {
+      //       this.storage.setLocationCheckedOnIOS(true);
+      //       this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
+      //         switch (mode) {
+      //           case this.diagnostic.permissionStatus.NOT_REQUESTED:
+      //             this.storage.setLocationAllowedOnIOS(false);
+      //             break;
+      //           case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+      //             this.storage.setLocationAllowedOnIOS(false);
+      //             break;
+      //           case this.diagnostic.permissionStatus.GRANTED:
+      //             this.storage.setLocationAllowedOnIOS(true);
+      //             this.fetchLocation();
+      //             break;
+      //           case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+      //             this.storage.setLocationAllowedOnIOS(true);
+      //             this.fetchLocation();
+      //             break;
+      //           case 'authorized_when_in_use':
+      //             this.storage.setLocationAllowedOnIOS(true);
+      //             this.fetchLocation();
+      //             break;
+      //         }
+      //       }, (rejection) => {
+      //         this.locationAllowed = false;
+      //         this.storage.setLocationAllowedOnIOS(false);
+      //       });
+      //     }
+      //   }
+      // } else {
+      //
+      // }
+  
+    }
+  
+    fetchLocation() {
+      if (this.platform.is('ios')) {
+        this.getGeoLocation();
+      } else {
+        this.diagnostic.isGpsLocationEnabled().then((status) => {
+          if (status === true) {
+            this.getGeoLocation();
+            // this.utilities.showLoading('Getting Location').then(() => {
+             
+            // });
+          } else {
+            this.askToChangeSettings();
+          }
+        });
+      }
+  
+    }
+  
+    async askToChangeSettings() {
+      const toast = await this.toastController.create({
+        header: 'Location Disabled',
+        message: 'Please enable location services',
+        cssClass: 'my-custom-class',
+        buttons: [
+          {
+            text: 'OK',
+            handler: () => {
+              this.changeLocationSettings();
+            }
+          }, {
+            text: 'Cancel',
+            handler: () => {
+              this.goBack();
+            }
+          }
+        ]
+      });
+      toast.present();
+    }
+  
+    changeLocationSettings() {
+      this.diagnostic.switchToLocationSettings();
+      this.diagnostic.registerLocationStateChangeHandler((state) => {
+        if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) ||
+          (this.platform.is('ios')) && (state === this.diagnostic.permissionStatus.GRANTED ||
+            state === this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE
+          )) {
+          this.checkLocationAccess();
+        }
+  
+      });
+    }
+  
+    checkLocationAccess() {
+      this.diagnostic.isLocationAuthorized().then((success) => {
+        this.fetchLocation();
+      }, (error) => {
+        this.utils.showSnackBar('GPS Not Allowed');
+      });
+  
+    }
+  
   
 }

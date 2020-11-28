@@ -10,7 +10,9 @@ export enum ScheduleFormEvent {
   PAY_EVENT=5,
   SEND_VALUE = 6,
   SEND_DESIGNERS_VALUE = 7,
-  SEND_ANALYSTS_VALUE = 8
+  SEND_ANALYSTS_VALUE = 8,
+  SEND_PERMIT_FORM =9,
+  SAVE_PERMIT_FORM = 10
 }
 
 export enum UserRoles {
