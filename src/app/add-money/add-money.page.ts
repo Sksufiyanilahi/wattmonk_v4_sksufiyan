@@ -204,9 +204,11 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
     this.utils.showSnackBar("payment via card is successfull");
    if(this.designId==="null"){
      if(this.design==='prelim'){
+       this.utils.setPaymentMode("direct");
      this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
      }
      else{
+       this.utils.setPaymentMode("direct");
        this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
      }
    }else{
