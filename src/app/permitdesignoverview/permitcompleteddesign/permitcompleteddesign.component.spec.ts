@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { PermitCompletedDesignComponent } from './permit-completed-design.component';
+import { PermitcompleteddesignComponent } from './permitcompleteddesign.component';
 
-describe('PermitCompletedDesignComponent', () => {
-  let component: PermitCompletedDesignComponent;
-  let fixture: ComponentFixture<PermitCompletedDesignComponent>;
+describe('PermitcompleteddesignComponent', () => {
+  let component: PermitcompleteddesignComponent;
+  let fixture: ComponentFixture<PermitcompleteddesignComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PermitCompletedDesignComponent ],
+      declarations: [ PermitcompleteddesignComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PermitCompletedDesignComponent);
+    fixture = TestBed.createComponent(PermitcompleteddesignComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

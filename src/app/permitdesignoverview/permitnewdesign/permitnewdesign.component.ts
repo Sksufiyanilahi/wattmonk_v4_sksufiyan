@@ -1,79 +1,97 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { DesginDataModel } from 'src/app/model/design.model';
+import { SurveyDataModel } from 'src/app/model/survey.model';
+import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import { Subscription } from 'rxjs';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DatePipe } from '@angular/common';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ApiService } from 'src/app/api.service';
 import { ErrorModel } from 'src/app/model/error.model';
-// import { DesignStorageModel } from 'src/app/model/Design-storage.model';
+// import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
-import { DesginDataHelper } from 'src/app/homepage/design/design.component';
+import { DesginDataModel } from 'src/app/model/design.model';
 import * as moment from 'moment';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-permit-inreview-design',
-  templateUrl: './permit-inreview-design.component.html',
-  styleUrls: ['./permit-inreview-design.component.scss'],
+  selector: 'app-permitnewdesign',
+  templateUrl: './permitnewdesign.component.html',
+  styleUrls: ['./permitnewdesign.component.scss'],
 })
-export class PermitInreviewDesignComponent implements OnInit {
+export class PermitnewdesignComponent implements OnInit {
 
-  listOfDesigns: DesginDataModel[] = [];
-  listOfDesignsHelper: DesginDataHelper[] = [];
-  private DesignRefreshSubscription: Subscription;
+  listOfDesignData: DesginDataModel[] = [];
+  listOfDesignDataHelper: DesginDataHelper[] = [];
+  private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
+  currentDate:any=new Date()
 
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
-  overdue: number;
+  overdue: any;
+  unsubscribeMessage: Subscription;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+    private router:ActivatedRoute
+    ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
+  //  this.unsubscribeMessage=  this.apiService._OnMessageReceivedSubject.subscribe((r) => {
+  //     console.log('message received! ', r);
+  //     this.getDesigns();
+  //   });
   }
 
   ngOnInit() {
-    this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+  }
+
+
+  
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.designRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    // this.unsubscribeMessage.unsubscribe();
+    this.cdr.detach();
+  }
+
+
+  ionViewDidEnter(){
+    
+    this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
-        this.formatDesignData(this.listOfDesigns);
+      if(this.listOfDesignData != null && this.listOfDesignData.length > 0){
+        this.formatDesignData(this.listOfDesignData);
       }
     });
   }
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    this.DesignRefreshSubscription.unsubscribe();
-    this.dataRefreshSubscription.unsubscribe();
-    this.cdr.detach();
-  }
 
-  getDesigns(event: CustomEvent) {
+  getDesigns(event?: CustomEvent) {
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
     }
-    this.fetchPendingDesigns(event, showLoader);
+    this.fetchPendingDesigns(event);
   }
 
-  fetchPendingDesigns(event, showLoader: boolean) {
-    console.log("inside fetch Designs");
-    this.listOfDesigns = [];
-    this.listOfDesignsHelper = [];
+  fetchPendingDesigns(event?, showLoader?: boolean) {
+    this.listOfDesignData = [];
+    this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=permit&status=designassigned&status=designinprocess").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           this.formatDesignData(response);
@@ -98,22 +116,25 @@ export class PermitInreviewDesignComponent implements OnInit {
   }
 
   formatDesignData(records : DesginDataModel[]){
-    this.listOfDesigns = this.fillinDynamicData(records);
+    this.overdue=[];
+    this.listOfDesignData = this.fillinDynamicData(records);
+    console.log(this.listOfDesignData);
+    
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesigns.forEach((designItem:any) => {
+          this.listOfDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
               this.sDatePassed(designItem.updated_at);
-              const listOfDesign = new DesginDataHelper();
-              listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-              listOfDesign.lateby = this.overdue;
-              listOfDesign.listOfDesigns.push(designItem);
-              tempData.push(listOfDesign);
+              const listOfDesigns = new DesginDataHelper();
+              listOfDesigns.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
+              listOfDesigns.lateby = this.overdue;
+              listOfDesigns.listOfDesigns.push(designItem);
+              tempData.push(listOfDesigns);
             } else {
               let added = false;
-              tempData.forEach((DesignList) => {
+              tempData.forEach((designList:any) => {
                 if (!added) {
-                  if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
-                    DesignList.listOfDesigns.push(designItem);
+                  if (designList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
+                    designList.listOfDesigns.push(designItem);
                     this.sDatePassed(designItem.updated_at);
                     added = true;
                   }
@@ -121,16 +142,16 @@ export class PermitInreviewDesignComponent implements OnInit {
               });
               if (!added) {
                 this.sDatePassed(designItem.updated_at);
-                const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
-                listOfDesign.listOfDesigns.push(designItem);
-                tempData.push(listOfDesign);
+                const listOfDesigns = new DesginDataHelper();
+                listOfDesigns.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
+                listOfDesigns.lateby = this.overdue;
+                listOfDesigns.listOfDesigns.push(designItem);
+                tempData.push(listOfDesigns);
                 added = true;
               }
             }
           });
-          this.listOfDesignsHelper = tempData.sort(function (a, b) {
+          this.listOfDesignDataHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
@@ -154,7 +175,10 @@ export class PermitInreviewDesignComponent implements OnInit {
         }else{
           element.totalpercent = 0;
         }
+        this.startAllTimers();
       });
+  
+
     });
 
     return records;
@@ -167,5 +191,13 @@ export class PermitInreviewDesignComponent implements OnInit {
     this.overdue = lateby;  
   }
 
+  startAllTimers(){
+    this.listOfDesignData.forEach(element => {
+    
+      var reviewdate = new Date(element.designstarttime);
+      reviewdate.setHours(reviewdate.getHours() + 2);
+      element.designremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+    });
+  }
 
 }

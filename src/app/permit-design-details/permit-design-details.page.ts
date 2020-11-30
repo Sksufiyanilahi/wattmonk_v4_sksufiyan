@@ -90,6 +90,12 @@ export class PermitDesignDetailsPage implements OnInit {
 
     
   }
+
+  ionViewDidEnter(){
+ 
+  }
+
+
   
 
   ngOnInit() {
@@ -98,8 +104,10 @@ export class PermitDesignDetailsPage implements OnInit {
     this.user=this.storage.getUser();
     console.log(this.user);
     
+    // console.log("pop after ngoninit");
+    // this.utilities.getHomepagePermitRefresh().subscribe(()=>{})
     
-    this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
+    this.dataSubscription = this.utilities.getPermitDesignDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getDesignDetails();
     });
@@ -156,15 +164,19 @@ export class PermitDesignDetailsPage implements OnInit {
             this.setData(success);
             // this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
             // this.utilities.setHomepageDesignRefresh(true);
-            this.utilities.getDesignDetailsRefresh();
+            this.utilities.getPermitDesignDetailsRefresh();
             if(this.ispermitUpdate){
               this.utilities.setHomepagePermitRefresh(true);
-              this.router.navigate(['designoverview/inreviewdesigns']);
+              this.router.navigate(['permitdesignoverview/permitInreview']);
+             
               
             }
 
             else
-            {this.router.navigate(['designoverview/completeddesigns'])
+            {
+              this.router.navigate(['permitdesignoverview/permitcompleted'])
+              // this.utilities.setHomepagePermitRefresh(true);
+        
           }
             // this.navController.navigateRoot(['homepage']);
           });

@@ -24,11 +24,11 @@
                     <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Home</ion-item> -->
                   <ion-item *ngIf="userData?.role.type !=='designer'" [routerLink]="['/homepage/design']" routerDirection="forward">
                    <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>
-                  <ion-item *ngIf="userData?.role.type=='designer'" [routerLink]="['/designoverview/prelim']" routerDirection="forward">
+                  <ion-item *ngIf="userData?.role.type=='designer'" [routerLink]="['/designoverview/newdesigns']" routerDirection="forward">
                    <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>
                   <ion-item *ngIf="userData?.role.type !=='designer'" [routerLink]="['/permithomepage']" routerDirection="forward">
                    <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Permit</ion-item>
-                  <ion-item *ngIf="userData?.role.type =='designer'" [routerLink]="['/designoverview/permit']" routerDirection="forward">
+                  <ion-item *ngIf="userData?.role.type =='designer'" [routerLink]="['/permitdesignoverview/permitnewdesign']" routerDirection="forward">
                    <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Permit</ion-item>
                   <ion-item *ngIf="userData?.role.type !=='designer'" [routerLink]="['/homepage/survey']" routerDirection="forward">
                    <ion-img src="/assets/images/surveyblack.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Survey</ion-item>

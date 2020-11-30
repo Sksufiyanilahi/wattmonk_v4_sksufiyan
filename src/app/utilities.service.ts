@@ -33,6 +33,7 @@ export class UtilitiesService {
   homepagePermitRefresh = new BehaviorSubject<boolean>(false);
   surveyDetailsRefresh = new BehaviorSubject<boolean>(false);
   designDetailsRefresh = new BehaviorSubject<boolean>(false);
+  permitdesignDetailsRefresh = new BehaviorSubject<boolean>(false);
   showBottomBarHomepage = new BehaviorSubject<boolean>(true);
   uploadfile = new BehaviorSubject<string>('');
   manualInput= new BehaviorSubject<string>('');
@@ -127,9 +128,18 @@ export class UtilitiesService {
   getDesignDetailsRefresh(): BehaviorSubject<boolean> {
     return this.designDetailsRefresh;
   }
+ 
 
   setDesignDetailsRefresh(value: boolean) {
     this.designDetailsRefresh.next(value);
+  }
+
+  getPermitDesignDetailsRefresh(): BehaviorSubject<boolean> {
+    return this.permitdesignDetailsRefresh;
+  }
+
+  setPermitDesignDetailsRefresh(value: boolean) {
+    this.permitdesignDetailsRefresh.next(value);
   }
 
   getScheduleFormEvent(): BehaviorSubject<ScheduleFormEvent> {

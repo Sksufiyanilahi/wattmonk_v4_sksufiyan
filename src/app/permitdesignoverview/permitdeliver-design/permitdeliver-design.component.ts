@@ -1,102 +1,71 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { SurveyDataModel } from 'src/app/model/survey.model';
-import { DesginDataHelper } from 'src/app/homepage/design/design.component';
+import { DesginDataModel } from 'src/app/model/design.model';
+import { SurveyDataHelper } from 'src/app/homepage/survey/survey.component';
 import { Subscription } from 'rxjs';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DatePipe } from '@angular/common';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ApiService } from 'src/app/api.service';
 import { ErrorModel } from 'src/app/model/error.model';
-// import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
+import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
-import { DesginDataModel } from 'src/app/model/design.model';
+import { DesginDataHelper } from 'src/app/homepage/design/design.component';
+import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import * as moment from 'moment';
+import { ModalController } from '@ionic/angular';
+import{SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 @Component({
-  selector: 'app-prelim',
-  templateUrl: './prelim.component.html',
-  styleUrls: ['./prelim.component.scss'],
+  selector: 'app-permitdeliver-design',
+  templateUrl: './permitdeliver-design.component.html',
+  styleUrls: ['./permitdeliver-design.component.scss'],
 })
-export class PrelimComponent implements OnInit {
+export class PermitdeliverDesignComponent implements OnInit {
 
-  listOfDesignData: DesginDataModel[] = [];
-  listOfDesignDataHelper: DesginDataHelper[] = [];
+  listofDesignData: DesginDataModel[] = [];
+  listofDesignDataHelper: DesginDataHelper[] = [];
   private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
-  currentDate:any=new Date()
 
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
-  overdue: any;
-  unsubscribeMessage: Subscription;
-  segments:any="requesttype=prelim&status=designassigned&status=designinprocess";
+  overdue: number;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+    private socialsharing: SocialSharing,
+    public modalController: ModalController,
+    ) {
+      console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
-  //  this.unsubscribeMessage=  this.apiService._OnMessageReceivedSubject.subscribe((r) => {
-  //     console.log('message received! ', r);
-  //     this.getDesigns();
-  //   });
   }
 
   ngOnInit() {
-    this.designRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+    this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfDesignData != null && this.listOfDesignData.length > 0){
-        this.formatDesignData(this.listOfDesignData);
+      if(this.listofDesignData != null && this.listofDesignData.length > 0){
+        this.formatDesignData(this.listofDesignData);
       }
     });
- 
-  }
-
-  segmentChanged(event){
-     if(event.target.value=='InDesign'){
-        this.segments ="requesttype=prelim&status=designassigned&status=designinprocess";
-        // return this.segments;
-      }
-      else if(event.target.value=='completed'){
-        this.segments ="requesttype=prelim&status=designcompleted";
-        // return this.segments;
-      }
-      else if(event.target.value=='InReview'){
-        this.segments ="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed";
-        // return this.segments;
-      }
-      else if(event.target.value=='delivered'){
-        this.segments ="requesttype=prelim&status=delivered";
-      }
-      this.getDesigns(null);
-      // return this.segments;
-  
-   
-    
   }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.designRefreshSubscription.unsubscribe();
     this.dataRefreshSubscription.unsubscribe();
-    // this.unsubscribeMessage.unsubscribe();
     this.cdr.detach();
-  }
-
-
-  ionViewDidEnter(){
-  
-    
   }
 
   getDesigns(event: CustomEvent) {
@@ -104,14 +73,14 @@ export class PrelimComponent implements OnInit {
     if (event != null && event !== undefined) {
       showLoader = false;
     }
-    this.fetchPendingDesigns(event,showLoader);
+    this.fetchPendingDesigns(event, showLoader);
   }
 
-  fetchPendingDesigns(event?, showLoader?: boolean) {
-    this.listOfDesignData = [];
-    this.listOfDesignDataHelper = [];
+  fetchPendingDesigns(event, showLoader: boolean) {
+    this.listofDesignData = [];
+    this.listofDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=permit&status=delivered").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           this.formatDesignData(response);
@@ -136,19 +105,16 @@ export class PrelimComponent implements OnInit {
   }
 
   formatDesignData(records : DesginDataModel[]){
-    this.overdue=[];
-    this.listOfDesignData = this.fillinDynamicData(records);
-    console.log(this.listOfDesignData);
-    
+    this.listofDesignData = this.fillinDynamicData(records);
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesignData.forEach((designItem:any) => {
+          this.listofDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
               this.sDatePassed(designItem.updated_at);
-              const listOfDesigns = new DesginDataHelper();
-              listOfDesigns.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-              listOfDesigns.lateby = this.overdue;
-              listOfDesigns.listOfDesigns.push(designItem);
-              tempData.push(listOfDesigns);
+              const listOfDesign = new DesginDataHelper();
+              listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
+              listOfDesign.lateby = this.overdue;
+              listOfDesign.listOfDesigns.push(designItem);
+              tempData.push(listOfDesign);
             } else {
               let added = false;
               tempData.forEach((designList:any) => {
@@ -162,16 +128,16 @@ export class PrelimComponent implements OnInit {
               });
               if (!added) {
                 this.sDatePassed(designItem.updated_at);
-                const listOfDesigns = new DesginDataHelper();
-                listOfDesigns.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-                listOfDesigns.lateby = this.overdue;
-                listOfDesigns.listOfDesigns.push(designItem);
-                tempData.push(listOfDesigns);
+                const listOfDesign = new DesginDataHelper();
+                listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
+                listOfDesign.lateby = this.overdue;
+                listOfDesign.listOfDesigns.push(designItem);
+                tempData.push(listOfDesign);
                 added = true;
               }
             }
           });
-          this.listOfDesignDataHelper = tempData.sort(function (a, b) {
+          this.listofDesignDataHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
@@ -180,7 +146,7 @@ export class PrelimComponent implements OnInit {
   }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
-    records.forEach((element:any) => {
+    records.forEach(element => {
       if(element.status != "delivered"){
         element.isoverdue = this.utils.isDatePassed(element.deliverydate);
       }else{
@@ -195,10 +161,7 @@ export class PrelimComponent implements OnInit {
         }else{
           element.totalpercent = 0;
         }
-        this.startAllTimers();
       });
-  
-
     });
 
     return records;
@@ -210,14 +173,30 @@ export class PrelimComponent implements OnInit {
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
   }
-
-  startAllTimers(){
-    this.listOfDesignData.forEach(element => {
-    
-      var reviewdate = new Date(element.designstarttime);
-      reviewdate.setHours(reviewdate.getHours() + 2);
-      element.designremainingtime = this.utils.getRemainingTime(reviewdate.toString());
-    });
+  shareWhatsapp(designData){
+    this.socialsharing.share(designData.permitdesign.url);
   }
+  
+   async shareViaEmails(id,designData){
+    const modal = await this.modalController.create({
+      component: EmailModelPage,
+      cssClass: 'email-modal-css',
+      componentProps: {
+        id:id,
+        designData:designData
+      },
+      
+    });
+    modal.onDidDismiss().then((data) => {
+      console.log(data)
+      if(data.data.cancel=='cancel'){
+      }else{
+        this.getDesigns(null)
+      }
+  });
+      return await modal.present();
+   }
+
+
 
 }
