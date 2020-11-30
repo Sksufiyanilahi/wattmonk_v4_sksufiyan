@@ -15,13 +15,13 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
 
-
 @Component({
-  selector: 'app-designoverview',
-  templateUrl: './designoverview.page.html',
-  styleUrls: ['./designoverview.page.scss'],
+  selector: 'app-permitdesignoverview',
+  templateUrl: './permitdesignoverview.page.html',
+  styleUrls: ['./permitdesignoverview.page.scss'],
 })
-export class DesignoverviewPage implements OnInit {
+export class PermitdesignoverviewPage implements OnInit {
+
   private version = environment.version;
   private subscription: Subscription;
   update_version: string;
@@ -56,7 +56,7 @@ export class DesignoverviewPage implements OnInit {
     this.getNotificationCount();
     this.setupCometChatUser();
     this.updateUserPushToken();
-    this.route.navigate(['designoverview/newdesigns']);
+    this.route.navigate(['permitdesignoverview/permitnewdesign']);
   }
  
 
@@ -180,5 +180,4 @@ getNotificationCount(){
 setzero(){
   this.unreadCount= 0;
 }
-
 }

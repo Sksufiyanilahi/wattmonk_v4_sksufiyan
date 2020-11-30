@@ -159,12 +159,16 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
             this.utilities.getDesignDetailsRefresh();
             if(this.isprelimUpdate){
               this.utilities.setHomepageDesignRefresh(true);
-              this.router.navigate(['designoverview/inreviewdesigns']);
+              // this.router.navigate(['designoverview/inreviewdesigns']);
+              this.navController.pop();
               
             }
 
             else
-            {this.router.navigate(['designoverview/completeddesigns'])
+            {
+              this.utilities.setHomepageDesignRefresh(true);
+              //this.router.navigate(['designoverview/completeddesigns'])
+            this.navController.pop();
           }
             // this.navController.navigateRoot(['homepage']);
           });

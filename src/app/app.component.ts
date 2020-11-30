@@ -119,7 +119,7 @@ this.network.networkConnect();
         if(this.user.role.type=='surveyors'){
           this.navController.navigateRoot('surveyoroverview');
         }else if(this.user.role.type=='designer'){
-          this.navController.navigateRoot('designoverview');
+          this.navController.navigateRoot('permitdesignoverview');
         }else if(this.user.role.type==='qcinspector'){
           console.log(this.user.role.type);
           this.navController.navigateRoot('analystoverview');

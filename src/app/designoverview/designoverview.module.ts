@@ -10,17 +10,11 @@ import { DesignoverviewPage } from './designoverview.page';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
+import { SharedModule } from '../shared/shared.module';
 import { NewdesignComponent } from './newdesign/newdesign.component';
 import { CompleteddesignComponent } from './completeddesign/completeddesign.component';
 import { InreviewDesignComponent } from './inreview-design/inreview-design.component';
 import { DelievereddesignComponent } from './delievereddesign/delievereddesign.component';
-import { SharedModule } from '../shared/shared.module';
-import { PermitCompletedDesignComponent } from './permitDesign/permit-completed-design/permit-completed-design.component';
-import { PermitInreviewDesignComponent } from './permitDesign/permit-inreview-design/permit-inreview-design.component';
-import { PermitnewdesignComponent } from './permitDesign/permitnewdesign/permitnewdesign.component';
-import { PermitDeliverDesignComponent } from './permitDesign/permit-deliver-design/permit-deliver-design.component';
-import { PrelimComponent } from './prelim/prelim.component';
-import { PermitComponent } from './permit/permit.component';
 
 
 @NgModule({
@@ -31,7 +25,7 @@ import { PermitComponent } from './permit/permit.component';
     DesignoverviewPageRoutingModule,
     SharedModule
   ],
-  declarations: [DesignoverviewPage,PrelimComponent,PermitComponent],
+  declarations: [DesignoverviewPage,NewdesignComponent,CompleteddesignComponent,InreviewDesignComponent,DelievereddesignComponent],
   providers: [
     DatePipe,
     Diagnostic,
