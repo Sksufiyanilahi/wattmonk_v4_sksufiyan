@@ -937,7 +937,7 @@ ioniViewDidEnter(){
         isoutsourced: "true",
         status: "outsourced",
         designacceptancestarttime: designacceptancestarttime,
-        paymenttype:"direct"
+        paymenttype: this.utils.getPaymentMode().value
       };
   
       this.utils.showLoading('Assigning').then(()=>{
