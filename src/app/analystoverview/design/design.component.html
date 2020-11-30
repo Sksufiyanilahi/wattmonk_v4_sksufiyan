@@ -1,4 +1,4 @@
-<ion-content (click)="close()" style="padding-bottom: 250px;">
+
 
   <!--<ion-segment scrollable (ionChange)="segmentChanged($event)" value="requesttype=prelim&status=created&status=outsourced&status=requestaccepted">-->
     <ion-segment scrollable (ionChange)="segmentChanged($event)" value="InReview" mode="md">
@@ -19,6 +19,7 @@
         <ion-label class="segment-btn">Delivered Designs</ion-label>
       </ion-segment-button>
     </ion-segment>
+    <ion-content (click)="close()" style="padding-bottom: 250px;">
     <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>

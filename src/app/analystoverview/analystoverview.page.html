@@ -27,16 +27,7 @@
   
   <!-- </ion-toolbar> -->
   <!-- </ion-header> -->
-  <ion-tabs style="margin-top: 52px;">
-      <ion-tab-bar slot="top" class="ion-no-border">
-          <ion-tab-button tab="design" *ngIf="isUserAnalyst">
-              <ion-label>Designs</ion-label>
-          </ion-tab-button>
-          <ion-tab-button tab="survey" *ngIf="isUserAnalyst">
-              <ion-label>Surveys</ion-label>
-          </ion-tab-button>
-      </ion-tab-bar>
-  </ion-tabs>
+
 
   <!-- <ion-tabs style="margin-top: 20%;">
       <ion-tab-bar slot="top">
@@ -117,7 +108,16 @@
   </ion-grid>
 
 </ion-content>
-
+<ion-tabs style="margin-top: 52px;">
+    <!-- <ion-tab-bar slot="top" class="ion-no-border">
+        <ion-tab-button tab="design" *ngIf="isUserAnalyst">
+            <ion-label>Designs</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="survey" *ngIf="isUserAnalyst">
+            <ion-label>Surveys</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar> -->
+</ion-tabs>
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
   <div class="position-relative">

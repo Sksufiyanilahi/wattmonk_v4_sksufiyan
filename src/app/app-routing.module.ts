@@ -196,7 +196,11 @@ const routes: Routes = [
     path: 'permithomepage',
     loadChildren: () => import('./permithomepage/permithomepage.module').then( m => m.PermithomepagePageModule),
     canActivate: [AuthGuardService]
+  },  {
+    path: 'permitdesignoverview',
+    loadChildren: () => import('./permitdesignoverview/permitdesignoverview.module').then( m => m.PermitdesignoverviewPageModule)
   },
+
 
 
 

@@ -115,7 +115,7 @@ this.network.networkConnect();
                 } else {
                   this.storageService.setUser(response.user, response.jwt);
                   this.apiService.refreshHeader();
-                  this.navController.navigateRoot(['designoverview']);
+                  this.navController.navigateRoot(['permitdesignoverview']);
                 }
               }
              

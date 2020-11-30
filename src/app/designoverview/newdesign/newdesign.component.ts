@@ -42,10 +42,10 @@ export class NewdesignComponent implements OnInit {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
-   this.unsubscribeMessage=  this.apiService._OnMessageReceivedSubject.subscribe((r) => {
-      console.log('message received! ', r);
-      this.getDesigns();
-    });
+  //  this.unsubscribeMessage=  this.apiService._OnMessageReceivedSubject.subscribe((r) => {
+  //     console.log('message received! ', r);
+  //     this.getDesigns();
+  //   });
   }
 
   ngOnInit() {
@@ -60,14 +60,14 @@ console.log(this.currentDate.toISOString());
     //Add 'implements OnDestroy' to the class.
     this.designRefreshSubscription.unsubscribe();
     this.dataRefreshSubscription.unsubscribe();
-    this.unsubscribeMessage.unsubscribe();
+    // this.unsubscribeMessage.unsubscribe();
     this.cdr.detach();
   }
 
 
-  ionViewDidEnter(event){
+  ionViewDidEnter(){
     
-    this.getDesigns(event);
+  
     this.designRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
