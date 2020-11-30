@@ -3,6 +3,11 @@
       <ion-toolbar> -->
   <ion-grid>
       <ion-row class="ion-align-items-center">
+          <ion-toolbar>
+            <ion-buttons slot="start">
+                <ion-menu-button></ion-menu-button>
+              </ion-buttons>
+              <ion-row class="ion-align-items-center">
           <ion-col *ngIf="showHome === true">
               <h1 class="ion-no-padding ion-no-margin home">Home</h1>
           </ion-col>
@@ -21,21 +26,22 @@
                     {{unreadCount}}
                           </span>
               </div>
-          </ion-col>
-      </ion-row>
+          </ion-col></ion-row>
+        </ion-toolbar>
+        </ion-row>
     </ion-grid>
   
   <!-- </ion-toolbar> -->
   <!-- </ion-header> -->
   <ion-tabs style="margin-top: 52px;">
-      <ion-tab-bar slot="top" class="ion-no-border">
+    <!--  <ion-tab-bar slot="top" class="ion-no-border">
           <ion-tab-button tab="design" *ngIf="isUserAnalyst">
               <ion-label>Designs</ion-label>
           </ion-tab-button>
           <ion-tab-button tab="survey" *ngIf="isUserAnalyst">
               <ion-label>Surveys</ion-label>
           </ion-tab-button>
-      </ion-tab-bar>
+      </ion-tab-bar>-->
   </ion-tabs>
 
   <!-- <ion-tabs style="margin-top: 20%;">

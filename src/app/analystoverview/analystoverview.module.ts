@@ -18,6 +18,8 @@ import { Chooser } from '@ionic-native/chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { SharedModule } from '../shared/shared.module';
+import { PermitdesignComponent } from './permitdesign/permitdesign.component';
+
 
 @NgModule({
   
@@ -31,7 +33,7 @@ import { SharedModule } from '../shared/shared.module';
     UtilitiesModule,
     SharedModule
   ],
-  declarations: [AnalystoverviewPage,SurveyComponent, DesignComponent],
+  declarations: [AnalystoverviewPage,SurveyComponent, DesignComponent,PermitdesignComponent],
   providers: [
     DatePipe,
     Diagnostic,

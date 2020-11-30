@@ -471,6 +471,7 @@ return blob;
       //   console.log(blob);
         
       // console.log(typeof(this.permitFiles[0]));
+      console.log(key);
       const imageData = new FormData();
       for(var i=0; i< this.permitFiles.length;i++){
         imageData.append("files",this.permitFiles[i]);

@@ -137,6 +137,7 @@ this.network.networkConnect();
 
    this.deactivateGetUserData=  this.apiservice.getUserName().subscribe((res:any)=>{
       this.userData = res;
+      console.log(this.userData)
     })
     
   }
