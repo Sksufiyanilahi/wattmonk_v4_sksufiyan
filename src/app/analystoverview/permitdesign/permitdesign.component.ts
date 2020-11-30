@@ -43,7 +43,7 @@ export class PermitdesignComponent implements OnInit { listOfDesignDataHelper: D
   myFiles: string[] = [];  
   segments:any;
   listOfDesigns: DesginDataModel[];
-  private DesignRefreshSubscription: Subscription;
+  private PermitRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
   listOfDesignsHelper: any[];
   overdue:any;
@@ -149,7 +149,7 @@ this.network.networkConnect();
     //   }
     // });
 
-    this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+    this.PermitRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
 
@@ -311,7 +311,7 @@ this.network.networkConnect();
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
     this.dataRefreshSubscription.unsubscribe();
-  this.DesignRefreshSubscription.unsubscribe();
+  this.PermitRefreshSubscription.unsubscribe();
   this.cdr.detach();
   }
 

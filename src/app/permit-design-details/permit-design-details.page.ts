@@ -223,7 +223,7 @@ export class PermitDesignDetailsPage implements OnInit {
     this.dataSubscription.unsubscribe();
     if (this.refreshDataOnPreviousPage > 1) {
       this.utilities.setHomepagePermitRefresh(true);
-    }
+     }
   }
 
   getDesignDetails() {
@@ -557,7 +557,8 @@ return blob;
             this.utilities.showSnackBar("Permit design status has been updated successfully.");
             this.utilities.setHomepagePermitRefresh(true);
             if(this.user.role.type=='qcinspector'){
-              this.navController.navigateRoot(['analystoverview/design']);}
+              this.router.navigate(['analystoverview/permitdesign']);
+              }
               else{
                 this.navController.navigateRoot(['homepage/design']);
               }
@@ -614,7 +615,7 @@ return blob;
           this.utilities.showSnackBar("permit design status has been updated successfully.");
           this.utilities.setHomepagePermitRefresh(true);
           if(this.user.role.type=='qcinspector'){
-            this.navController.navigateRoot(['analystoverview/design']);}
+            this.navController.navigateRoot(['analystoverview/permitdesign']);}
             else{
               this.navController.navigateRoot(['homepage/design']);
             }
