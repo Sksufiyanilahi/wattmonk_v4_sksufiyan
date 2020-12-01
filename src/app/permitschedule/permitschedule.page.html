@@ -1,39 +1,40 @@
 <ion-row>
-  <ion-col style="margin-top: 5px;">
-    <h5 class="ion-no-padding ion-no-margin">Add Permit Design Request</h5>
+  <ion-col>
+    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;">Add Permit Design </h5>
   </ion-col>
-<ion-col size="auto">
+<ion-col size="auto" style="align-self: center;">
   <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
       <ion-icon name="close-outline" color="dark" size="large"></ion-icon>
   </ion-button>
 </ion-col>
 </ion-row>
-  <ion-row class="ion-padding-start ion-padding-end mrT"  style="background: #ffffff;">
-      <ion-col size="9"  style="background: #ffffff; font-size:small;">
-          <p></p>
-          <!-- <span class="address-text"> -->
-          {{address == "" ? "No Address Found" : address}}
-          <!-- </span> -->
-      </ion-col>
-    
-      <ion-col class="ion-text-end" *ngIf="!tabsDisabled" size="3">
-          <p></p>
-          <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
-              Change
-          </span>
-      </ion-col>
-      <ion-col class="ion-text-end" *ngIf="tabsDisabled" size="3">
-          <p></p>
-          <span   style="color:grey;">
-              Change
-          </span>
-      </ion-col>
-  </ion-row>
+<ion-row class="ion-padding-start ion-padding-end mrT"  style="background: #ffffff;">
+    <ion-col size="9"  style="background: #ffffff; font-size:small;">
+        <p></p>
+        <!-- <span class="address-text"> -->
+        {{address == "" ? "No Address Found" : address}}
+        <!-- </span> -->
+    </ion-col>
+  
+    <ion-col class="ion-text-end" *ngIf="!tabsDisabled" size="3">
+        <p></p>
+        <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
+            Change
+        </span>
+    </ion-col>
+    <ion-col class="ion-text-end" *ngIf="tabsDisabled" size="3">
+        <p></p>
+        <span   style="color:grey;">
+            Change
+        </span>
+    </ion-col>
+</ion-row>
 
 
-<ion-content class="ion-padding-start ion-padding-end ion-padding-bottom" style="height:650px;">
+<ion-content class="ion-padding-start ion-padding-end ion-padding-bottom" >
+  
           <form [formGroup]="desginForm" novalidate style="overflow:scroll">
-            <ion-grid style="position: relative;margin-top: 10px;">
+            <ion-grid style="position: relative;">
               <ion-row >
                 <ion-col>
                     <ion-item class="ion-no-padding">
@@ -108,21 +109,21 @@
               <ion-col size="6">
                 <mat-form-field style="width: 100%;">
                   <mat-label>module make</mat-label>
-                  <input type="text" matInput [matAutocomplete]="auto" formControlName="modulemake" required>
+                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto" formControlName="modulemake" required>
                  
                   <mat-autocomplete #auto="matAutocomplete">
                     <mat-option *ngFor="let modulemake of filteredModuleMakes | async" [value]="modulemake.name"
-                      (onSelectionChange)="fetchModuleModelsData($event,modulemake)">{{modulemake.name}}</mat-option>
+                      (onSelectionChange)="fetchModuleModelsData($event,modulemake)" class="font">{{modulemake.name}}</mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
               </ion-col>
               <ion-col size="6">
                 <mat-form-field style="width: 100%;">
                   <mat-label>module model</mat-label>
-                  <input type="text" matInput [matAutocomplete]="auto1" formControlName="modulemodel" required>
+                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto1" formControlName="modulemodel" required>
                   
                   <mat-autocomplete #auto1="matAutocomplete">
-                    <mat-option *ngFor="let modulemodel of filteredModuleModels | async" [value]="modulemodel.name"
+                    <mat-option class="font" *ngFor="let modulemodel of filteredModuleModels | async" [value]="modulemodel.name"
                       (onSelectionChange)="setSelectedModuleModel(modulemodel)">{{modulemodel.name}}</mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
@@ -132,10 +133,10 @@
               <ion-col size="6">
                 <mat-form-field style="width: 100%;">
                   <mat-label>inverter make</mat-label>
-                  <input type="text" matInput [matAutocomplete]="auto2" formControlName="invertermake" required>
+                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto2" formControlName="invertermake" required>
                  
                   <mat-autocomplete #auto2="matAutocomplete">
-                    <mat-option *ngFor="let invertermake of filteredInverterMakes | async" [value]="invertermake.name"
+                    <mat-option class="font" *ngFor="let invertermake of filteredInverterMakes | async" [value]="invertermake.name"
                       (onSelectionChange)="fetchInverterModelsData($event,invertermake)">{{invertermake.name}}
                     </mat-option>
                   </mat-autocomplete>
@@ -144,10 +145,10 @@
               <ion-col size="6">
                 <mat-form-field style="width: 100%;">
                   <mat-label>inverter model</mat-label>
-                  <input type="text" matInput [matAutocomplete]="auto3" formControlName="invertermodel" required>
+                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto3" formControlName="invertermodel" required>
                  
                   <mat-autocomplete #auto3="matAutocomplete">
-                    <mat-option *ngFor="let invertermodel of filteredInverterModels | async"
+                    <mat-option class="font" *ngFor="let invertermodel of filteredInverterModels | async"
                       [value]="invertermodel.name" (onSelectionChange)="setSelectedInverterModel(invertermodel)">
                       {{invertermodel.name}}</mat-option>
                   </mat-autocomplete>

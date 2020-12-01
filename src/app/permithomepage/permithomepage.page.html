@@ -10,7 +10,7 @@
       <ion-row class="ion-align-items-center">
           <ion-col >
               <h1 class="ion-no-padding ion-no-margin home">
-                  Permit Home</h1>
+                  Permit Dashboard</h1>
           </ion-col>
           <!-- <ion-col *ngIf="showSearchBar === true" >
               <ion-searchbar debounce="0" placeholder="home" class="custom"></ion-searchbar>
@@ -24,7 +24,7 @@
               <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward" (click)="setzero()">
                   <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
                  <span class="badge" *ngIf="unreadCount > 0">
-                              {{unreadCount}}
+                              {{unreadCount > 99 ? '99+' : unreadCount}}
                           </span> 
               </div>
           </ion-col>

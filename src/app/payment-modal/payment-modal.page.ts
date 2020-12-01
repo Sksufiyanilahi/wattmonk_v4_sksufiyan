@@ -18,8 +18,8 @@ id:any
 design:any
 count:any
   freeDesigns: any;
-  servicePrice: any;
-  settingValue:any;
+  servicePrice: any=0;
+  settingValue:any=0;
   freeCharges:any;
   constructor( private storageService:StorageService,
     
@@ -31,7 +31,8 @@ count:any
     ) { }
 
   ngOnInit() {
-    
+    this.fetchData();
+    this.servicecharges();
    /* this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
     console.log(this.user)
     this.apiService.paymentDetail(this.user.id).subscribe(res=>{
@@ -46,7 +47,7 @@ count:any
   
   }
   ionViewDidEnter(){
-    this.fetchData();
+
   }
 
 fetchData(){

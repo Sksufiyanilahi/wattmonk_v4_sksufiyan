@@ -28,40 +28,59 @@
       <h6 style="margin:10px;padding:5px;">Please make the payment to process your order with Wattmonk</h6>
     </ion-row>
     <ion-row >
-    <ion-card style="position: relative; width:100%;"><ion-row><ion-col>
-      <ion-label style="font-size: larger;">Service Price</ion-label><br>
-      <ion-label style="font-size: x-large;"> $ {{settingValue}} </ion-label>
+    <ion-card style="position: relative; width:100%;" class="ion-padding"><ion-row><ion-col>
+      <ion-label style="font-size: larger;color:#111;font-weight: bold;">Service Price</ion-label><br>
+      <ion-label style="font-size: large;color:#111"> $ {{settingValue}} </ion-label>
     </ion-col>
     <ion-col size="6">
-      <ion-label style="font-size: larger;">Amount in Wallet</ion-label><br>
-      <ion-label style="font-size: x-large;">$ {{user?.amount}}</ion-label>
+      <ion-label style="font-size: larger;color:#111;font-weight: bold;">Amount in Wallet</ion-label><br>
+      <ion-label style="font-size: large;color:#111">$ {{user?.amount}}</ion-label>
     </ion-col>
   </ion-row>
   <ion-row><ion-col>
-    <ion-label style="font-size: larger;">Discount</ion-label><br>
-    <ion-label style="font-size: x-large;" *ngIf="count>freeCharges;else staticpay">$ 0 </ion-label>
-    <ng-template #staticpay><ion-label  style="font-size: x-large;">$ {{settingValue}}</ion-label></ng-template>
+    <ion-label style="font-size: larger;color:#111;font-weight: bold;">Discount</ion-label><br>
+    <ion-label style="font-size: large;color:#111" *ngIf="count>freeCharges;else staticpay">$ 0 </ion-label>
+    <ng-template #staticpay><ion-label  style="font-size: large;color:#111">$ {{settingValue}}</ion-label></ng-template>
   </ion-col>
   <ion-col size="6">
-    <ion-label style="font-size: larger;">Service Used</ion-label><br>
-    <ion-label style="font-size: x-large;">{{design}} design</ion-label>
+    <!-- <ion-label style="font-size: larger;">Service Used</ion-label><br>
+    <ion-label style="font-size: x-large;">{{design}} design</ion-label> -->
   </ion-col>
 </ion-row>
-<ion-row><ion-col>
+<!-- <ion-row>
+  <ion-col>
   <ion-label style="font-size: larger;">You have to pay</ion-label><br>
-  <ion-label *ngIf="count>freeCharges;else stat" style="font-size: x-large;"> $ {{settingValue}} </ion-label>
-  <ng-template #stat><ion-label  style="font-size: x-large;">$ 0</ion-label></ng-template>
+  <ion-label *ngIf="count>freeCharges;else stat" style="font-size: x-large;"> $ {{settingValue}}
+   </ion-label>
+  <ng-template #stat>
+    <ion-label  style="font-size: x-large;">$ 0</ion-label>
+  </ng-template>
 </ion-col>
 <ion-col size="6">
   <ion-label style="font-size: larger;">Design Id</ion-label><br>
   <ion-label style="font-size: x-large;" >{{id}}</ion-label>
 </ion-col>
-</ion-row>
+</ion-row> -->
   
     </ion-card>
   </ion-row>
-  <ion-button *ngIf="user?.amount>=settingValue" (click)="confirm()" >confirm</ion-button>
-   <ion-button *ngIf="settingValue>user?.amount"  (click)="addWallet('wallet')">Add Money to Wallet</ion-button>
-  <ion-button *ngIf="settingValue>user?.amount" (click)="addWallet('card')" >Pay via card </ion-button> 
-  <ion-button (click)="cancel()"> Cancel</ion-button>
+  <ion-row class="ion-padding">
+    <ion-col size="12" >
+      <ion-item *ngIf="user?.amount>=settingValue" (click)="confirm()" >
+        <ion-button  fill="clear"><ion-icon name="checkmark-circle-outline"></ion-icon>&nbsp;<ion-label class="black">Confirm</ion-label></ion-button>
+      </ion-item>
+      <ion-item (click)="addWallet('wallet')" *ngIf="settingValue>user?.amount">
+        
+        <ion-button  fill="clear" ><ion-icon name="cash-outline" style="color:green;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Add Money</ion-label></ion-button>
+      </ion-item>
+      <ion-item (click)="addWallet('card')" *ngIf="settingValue>user?.amount">
+   
+        <ion-button  fill="clear"  ><ion-icon name="card-outline" style="color:brown;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Pay via card </ion-label></ion-button> 
+      </ion-item>
+    
+    </ion-col>
+    </ion-row>
     </ion-content>
+    <ion-footer (click)="cancel()" class="ion-padding" style="text-align: center;background: blue;color:#fff">
+   Cancel
+    </ion-footer>

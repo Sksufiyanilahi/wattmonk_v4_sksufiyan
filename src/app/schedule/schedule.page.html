@@ -2,8 +2,8 @@
     <!-- <ion-grid style="overflow:hidden;" scroll="false"> -->
         <ion-row class="ion-align-items-center ion-padding-start">
             <ion-col>
-                <h1 class="ion-no-padding ion-no-margin" *ngIf="!tabsDisabled">Schedule</h1>
-                <h1 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit</h1>
+                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled">Add Prelim Design</h5>
+                <h5 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit</h5>
             </ion-col>
             <ion-col size="auto">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
@@ -48,9 +48,9 @@
             </ion-segment-button>
         </ion-segment> -->
     <!-- </ion-grid> -->
-    <ion-content style="overflow:hidden" scroll="false" >
-        <ion-tabs #tabs style="overflow:hidden">
-            <ion-tab-bar slot="top" style="display:none;" >
+    <ion-content >
+        <ion-tabs #tabs>
+            <!-- <ion-tab-bar slot="top" style="display:none;" >
                 <ion-tab-button tab="design">
                     <ion-label>Design</ion-label>
                 </ion-tab-button>
@@ -58,9 +58,9 @@
                 <ion-tab-button tab="survey">
                     <ion-label>Survey</ion-label>
                 </ion-tab-button>
-            </ion-tab-bar>
+            </ion-tab-bar> -->
         </ion-tabs>
-        <ion-grid>
+        <!-- <ion-grid> -->
             <ion-row class="ion-padding-start ion-padding-end mrT"  style="background: #ffffff;">
                 <ion-col size="9"  style="background: #ffffff;font-size:small;">
                     <p></p>
@@ -83,7 +83,7 @@
                 </ion-col>
             </ion-row>
 
-        </ion-grid>
+        <!-- </ion-grid> -->
     </ion-content>
 <!-- </ion-content> -->
 
