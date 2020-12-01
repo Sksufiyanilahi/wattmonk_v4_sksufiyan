@@ -195,7 +195,7 @@ export class PermitnewdesignComponent implements OnInit {
     this.listOfDesignData.forEach(element => {
     
       var reviewdate = new Date(element.designstarttime);
-      reviewdate.setHours(reviewdate.getHours() + 2);
+      reviewdate.setHours(reviewdate.getHours() + 6);
       element.designremainingtime = this.utils.getRemainingTime(reviewdate.toString());
     });
   }

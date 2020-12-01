@@ -5,6 +5,8 @@ import { EmailModelPage } from '../email-model/email-model.page';
 import {DeclinepagePageModule } from '../declinepage/declinepage.module';
 import { PaymentModalPageModule } from '../payment-modal/payment-modal.module';
 import { StatisticsDetailsPageModule } from '../statistics-details/statistics-details.module';
+import { ResendpagedialogPageModule } from '../resendpagedialog/resendpagedialog.module';
+
 
 
 @NgModule({
@@ -14,13 +16,15 @@ import { StatisticsDetailsPageModule } from '../statistics-details/statistics-de
     EmailModelPageModule,
     DeclinepagePageModule,
     PaymentModalPageModule,
-    StatisticsDetailsPageModule
+    StatisticsDetailsPageModule,
+    ResendpagedialogPageModule
   ],
   exports:[
     EmailModelPageModule,
     DeclinepagePageModule ,
     PaymentModalPageModule,
-    StatisticsDetailsPageModule
+    StatisticsDetailsPageModule,
+    ResendpagedialogPageModule
   ]
 })
 export class SharedModule { }

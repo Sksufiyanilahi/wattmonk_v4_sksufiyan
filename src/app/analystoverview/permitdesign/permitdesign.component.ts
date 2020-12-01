@@ -359,7 +359,7 @@ this.network.networkConnect();
         element.isoverdue = false;
       }
       var reviewdate = new Date(element.reviewstarttime)
-      reviewdate.setMinutes(reviewdate.getMinutes()+15)
+      reviewdate.setHours(reviewdate.getHours()+2)
       element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
       element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
