@@ -129,9 +129,11 @@ confirm(){
       })}
       else{
         if(this.design=='prelim'){
+          this.utils.setPaymentMode("wallet");
         this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
         }
         else{
+          this.utils.setPaymentMode("wallet");
           this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
         }
       }

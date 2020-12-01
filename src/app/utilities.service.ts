@@ -34,9 +34,11 @@ export class UtilitiesService {
   surveyDetailsRefresh = new BehaviorSubject<boolean>(false);
   designDetailsRefresh = new BehaviorSubject<boolean>(false);
   permitdesignDetailsRefresh = new BehaviorSubject<boolean>(false);
+  //permitdesignDetailsRefresh = new BehaviorSubject<boolean>(false);
   showBottomBarHomepage = new BehaviorSubject<boolean>(true);
   uploadfile = new BehaviorSubject<string>('');
   manualInput= new BehaviorSubject<string>('');
+  paymentMode = new BehaviorSubject<string>('');
 
   dataRefresh = new BehaviorSubject<boolean>(false);
   private currentUserSubject: BehaviorSubject<LoginModel>;
@@ -58,6 +60,14 @@ export class UtilitiesService {
 
   public get currentUserValue(): LoginModel {
     return this.currentUserSubject.value;
+  }
+
+  getPaymentMode(): BehaviorSubject<string>{
+    return this.paymentMode;
+  }
+  
+  setPaymentMode(paymentMode:string){
+    this.paymentMode.next(paymentMode);
   }
 
   getAddressObservable(): BehaviorSubject<AddressModel> {
@@ -128,10 +138,16 @@ export class UtilitiesService {
   getPermitDesignDetailsRefresh(): BehaviorSubject<boolean> {
     return this.permitdesignDetailsRefresh;
   }
-
   setPermitDesignDetailsRefresh(value: boolean) {
     this.permitdesignDetailsRefresh.next(value);
   }
+  // getPermitDesignDetailsRefresh(): BehaviorSubject<boolean> {
+  //   return this.permitdesignDetailsRefresh;
+  // }
+
+  // setPermitDesignDetailsRefresh(value: boolean) {
+  //   this.permitdesignDetailsRefresh.next(value);
+  // }
 
   getScheduleFormEvent(): BehaviorSubject<ScheduleFormEvent> {
     return this.saveScheduleForm;

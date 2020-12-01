@@ -18,6 +18,7 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { UserData } from '../model/userData.model';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   
   //isUserSurveyor = false ;
   //isUserDesigner= false ;
-  isUserAnalyst = false;
+  //isUserAnalyst = false;
 
   showSearchBar = false;
   showHome = true;
@@ -58,6 +59,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   netSwitch: any;
   update_version:string;
   unreadCount: any;
+  userData: UserData
 
   constructor(private utilities: UtilitiesService,
     private apiService: ApiService,
@@ -85,26 +87,28 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
      
 
   ngOnInit() { 
+    this.userData=this.storage.getUser();
     this.apiService.version.subscribe(versionInfo=>{
       this.update_version = versionInfo;
     })
+    this.apiService.emitUserNameAndRole(this.userData);
     this.getNotificationCount();
     this.setupCometChatUser();
     this.requestLocationPermission();
     this.updateUserPushToken();
+    this.route.navigate(['analystoverview/permitdesign']);
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
-    });
+      });
     
-    if (this.storage.getUser().role.id === ROLES.Analyst)
-    {
-     this.isUserAnalyst = true;
-     // this.isUserSurveyor = true;
-      //this.isUserDesigner = true;
+    
+    //  this.isUserAnalyst = true;
+    //  // this.isUserSurveyor = true;
+    //   //this.isUserDesigner = true;
       
       
-      this.route.navigate(['analystoverview/design']);
-    }
+     
+     
     
   }
 

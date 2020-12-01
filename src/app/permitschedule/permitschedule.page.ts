@@ -830,7 +830,7 @@ saveInverterModel() {
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
-                        paymenttype:"direct"
+                        
                         
     
   }
@@ -961,7 +961,7 @@ saveInverterModel() {
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
-                        paymenttype:"direct"
+                        
     
   }
             this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
@@ -1146,12 +1146,13 @@ saveInverterModel() {
     sendtowattmonk(){
       var designacceptancestarttime = new Date();
         designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+        console.log(this.utils.getPaymentMode().value);
       const postData = {
         outsourcedto: 232,
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime,
-          paymenttype:"direct"
+          paymenttype:this.utils.getPaymentMode().value
         };
     
         this.utils.showLoading('Assigning').then(()=>{

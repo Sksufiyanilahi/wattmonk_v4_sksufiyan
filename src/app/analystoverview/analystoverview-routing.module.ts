@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AnalystoverviewPage } from './analystoverview.page';
 import { DesignComponent } from './design/design.component';
 import { SurveyComponent } from './survey/survey.component';
+import {PermitdesignComponent} from 'src/app/analystoverview/permitdesign/permitdesign.component'
 
 
 const routes: Routes = [
@@ -21,6 +22,11 @@ const routes: Routes = [
     path: 'survey',
     //loadChildren: () => import('./survey/survey.component').then( m => m.SurveyComponent)
     component: SurveyComponent
+  },
+  {
+    path: 'permitdesign',
+    //loadChildren: () => import('./survey/survey.component').then( m => m.SurveyComponent)
+    component: PermitdesignComponent
   }]
 }
 ];
