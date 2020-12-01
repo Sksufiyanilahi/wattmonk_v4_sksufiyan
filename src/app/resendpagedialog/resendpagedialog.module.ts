@@ -15,6 +15,6 @@ import { ResendpagedialogPage } from './resendpagedialog.page';
     IonicModule,
     ResendpagedialogPageRoutingModule
   ],
-  declarations: []
+  declarations: [ResendpagedialogPage]
 })
 export class ResendpagedialogPageModule {}

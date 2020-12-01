@@ -114,7 +114,7 @@ this.network.networkConnect();
    
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
-        this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
+        this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
         // return this.segments;
       }
       else if(event.target.value=='InDesign'){

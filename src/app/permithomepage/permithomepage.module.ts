@@ -17,7 +17,7 @@ import { Chooser } from '@ionic-native/chooser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { DeclinepagePage } from '../declinepage/declinepage.page';
 import { EmailModelPage } from '../email-model/email-model.page';
-import { ResendpagedialogPage } from '../resendpagedialog/resendpagedialog.page';
+//import { ResendpagedialogPage } from '../resendpagedialog/resendpagedialog.page';
 import { File } from '@ionic-native/file/ngx';
 import { PermitdesignComponent } from './permitdesign/permitdesign.component';
 

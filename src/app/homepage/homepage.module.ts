@@ -26,7 +26,7 @@ import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.
 
 
 @NgModule({
-  entryComponents:[DeclinepagePage, EmailModelPage, ResendpagedialogPage],
+  entryComponents:[DeclinepagePage, EmailModelPage],
   imports: [
     CommonModule,
     FormsModule,
@@ -37,7 +37,7 @@ import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.
     UtilitiesModule,
     SharedModule
   ],
-  declarations: [HomepagePage, SurveyComponent,DesignComponent,ResendpagedialogPage],
+  declarations: [HomepagePage, SurveyComponent,DesignComponent],
   providers: [
     DatePipe,
     Diagnostic,

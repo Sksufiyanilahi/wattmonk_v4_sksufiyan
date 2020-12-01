@@ -560,7 +560,7 @@ return blob;
               this.router.navigate(['analystoverview/permitdesign']);
               }
               else{
-                this.navController.navigateRoot(['homepage/design']);
+                this.navController.navigateRoot(['permithomepage/permitdesign']);
               }
             //this.data.triggerEditEvent = false;
             //this.dialogRef.close(this.data);
@@ -617,7 +617,7 @@ return blob;
           if(this.user.role.type=='qcinspector'){
             this.navController.navigateRoot(['analystoverview/permitdesign']);}
             else{
-              this.navController.navigateRoot(['homepage/design']);
+              this.navController.navigateRoot(['permithomepage/permitdesign']);
             }
          // this.triggerEditEvent = false;
           //this.dialogRef.close(this.data);
