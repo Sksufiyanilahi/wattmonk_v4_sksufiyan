@@ -91,7 +91,7 @@
                   </ion-row>
                  
                   <ion-row class="ion-no-margin ion-no-margin">
-                      <ion-col *ngIf="segments=='requesttype=permit&status=created&status=outsourced&status=requestaccepted' || segments=='requesttype=permit&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined'">
+                      <ion-col *ngIf="segments=='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined' || segments=='requesttype=permit&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined'">
                           <span *ngIf="designData.status == 'created' || (designData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
                           >Assign</span>
                           <span style="float: right;">
@@ -105,7 +105,7 @@
                               </ng-container>
                           </span>
                         
-                          <span *ngIf="designData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
+                          <span  *ngIf="designData.status == 'requestdeclined' && userData.role.type=='clientsuperadmin'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
                           >Reassign</span>
                       </ion-col>
                      

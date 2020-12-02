@@ -82,7 +82,7 @@ export class PermitdesignComponent implements OnInit {
     this.userData = this.storageservice.getUser();
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
-      this.segments= 'requesttype=permit&status=created&status=outsourced&status=requestaccepted';
+      this.segments= 'requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
     }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin'){
       this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
     }
@@ -112,7 +112,7 @@ this.network.networkConnect();
    
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
-        this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted';
+        this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
         // return this.segments;
       }
       else if(event.target.value=='InDesign'){
