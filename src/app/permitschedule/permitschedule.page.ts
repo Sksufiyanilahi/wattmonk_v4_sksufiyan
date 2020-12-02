@@ -928,7 +928,7 @@ saveInverterModel() {
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
                 this.utils.showSnackBar('Design have been updated');
-                this.utils.setDesignDetailsRefresh(true);
+                this.utils.setPermitDesignDetailsRefresh(true);
                 this.navController.pop();
 
 
