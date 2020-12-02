@@ -574,7 +574,8 @@ return blob;
     
     if(this.isSelfUpdate && this.prelimFiles.length > 0)
     {
-      this.uploadpreliumdesign(this.designId,'prelimdesign' );
+      this.utilities.showLoading("Uploading").then(()=>
+      {this.uploadpreliumdesign(this.designId,'permitdesign' );})
       
       
     }else if(this.isSelfUpdate && this.prelimFiles.length == 0)

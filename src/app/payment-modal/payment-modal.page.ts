@@ -13,7 +13,7 @@ import { ScheduleFormEvent } from '../model/constants';
   styleUrls: ['./payment-modal.page.scss'],
 })
 export class PaymentModalPage implements OnInit {
-user:any
+user
 id:any
 design:any
 count:any
@@ -163,5 +163,48 @@ confirm(){
     }
     showLoader=false;
     this.fetchData()
+  }
+
+  confirmforPostpaid(){
+    if(this.id!=null){
+      var postData={};
+      var designacceptancestarttime = new Date();
+      if(this.design=='prelim'){
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+      }
+      else{
+        designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+      }
+        postData = {
+          outsourcedto: 232,
+          isoutsourced: "true",
+          status: "outsourced",
+          designacceptancestarttime: designacceptancestarttime,
+          paymenttype:null
+        };
+        this.utils.showLoading("Assigning").then(()=>
+          {this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
+            this.utils.hideLoading().then(()=>
+           { this.utils.showSnackBar("Design request has been send to wattmonk successfully")
+           this.navController.pop();
+           if(this.design=='prelim'){
+           this.utils.setHomepageDesignRefresh(true);
+           }
+           else{
+             this.utils.setHomepagePermitRefresh(true);
+           }
+           })
+          })
+          })}
+          else{
+            if(this.design=='prelim'){
+              this.utils.setPaymentMode("null");
+            this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
+            }
+            else{
+              this.utils.setPaymentMode("null");
+              this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
+            }
+          }
   }
 }
