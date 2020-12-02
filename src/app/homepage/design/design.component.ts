@@ -202,6 +202,7 @@ this.network.networkConnect();
 
     this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
       this.getDesigns(null);
+    
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
