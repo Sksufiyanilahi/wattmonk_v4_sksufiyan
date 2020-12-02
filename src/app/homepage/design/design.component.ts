@@ -598,7 +598,7 @@ this.network.networkConnect();
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
-    if(this.userData.role.type=='clientsuperadmin'){
+    if(this.userData.role.type=='clientsuperadmin'&& this.designerData.status=='created'){
       this.router.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
       
     }
