@@ -6,7 +6,8 @@ import {DeclinepagePageModule } from '../declinepage/declinepage.module';
 import { PaymentModalPageModule } from '../payment-modal/payment-modal.module';
 import { StatisticsDetailsPageModule } from '../statistics-details/statistics-details.module';
 import { ResendpagedialogPageModule } from '../resendpagedialog/resendpagedialog.module';
-
+import { IntercomModule } from 'ng-intercom';
+import { intercomId } from '../contants';
 
 
 @NgModule({
@@ -17,7 +18,11 @@ import { ResendpagedialogPageModule } from '../resendpagedialog/resendpagedialog
     DeclinepagePageModule,
     PaymentModalPageModule,
     StatisticsDetailsPageModule,
-    ResendpagedialogPageModule
+    ResendpagedialogPageModule,
+    IntercomModule.forRoot({
+      appId: intercomId, // from your Intercom config
+      updateOnRouterChange: true // will automatically run `update` on router event changes. Default: `false`
+    })
   ],
   exports:[
     EmailModelPageModule,

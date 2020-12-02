@@ -11,6 +11,7 @@ import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.modul
 import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
 import { AddMoneyPage } from '../add-money/add-money.page';
 import { Router } from '@angular/router';
+import { Intercom } from 'ng-intercom';
 
 @Component({
   selector: 'app-profile',
@@ -36,7 +37,8 @@ profile:any;
     private utilities: UtilitiesService,
     private toastController: ToastController,
     public modalController: ModalController,
-    public router:Router
+    public router:Router,
+    private intercom:Intercom
   ) {
   }
 
@@ -45,9 +47,10 @@ profile:any;
     this.user = this.storage.getUser();
     console.log(this.user);
     this.getProfileData();
-    
+
   }
   ionViewDidEnter(){
+    this.intercom.hide();
    this.getProfileData();
   }
   goBack() {
@@ -65,7 +68,7 @@ this.apiService.getProfileDetails().subscribe(res=>{
 AddWallet()
  {
    this.router.navigate(['add-money',{mode:'wallet'}]);
-  
+
 }
 
   async logout() {
@@ -80,6 +83,7 @@ AddWallet()
           handler: () => {
             this.storage.logout();
             this.deviceStorage.clear();
+            this.intercom.hide();
             this.apiService.resetHeaders();
             this.navController.navigateRoot('login');
           }
@@ -196,5 +200,11 @@ AddWallet()
 
   async addPoints(){
     this.navController.navigateForward('/paymentgateway');
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+   this.intercom.hide();
   }
 }
