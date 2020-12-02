@@ -71,7 +71,7 @@ export class PermitschedulePage implements OnInit {
   phoneError = INVALID_PHONE_NUMBER;
 
   fieldRequired = FIELD_REQUIRED;
-  
+
   fileName: any;
   archFiles: string[]=[];
   permitFiles: string[]=[];
@@ -90,7 +90,7 @@ export class PermitschedulePage implements OnInit {
   //user: User
   isEditMode:boolean=false;
   //data:DesignFormData;
-  
+
   userdata:any;
 
   solarMakeDisposable: Subscription;
@@ -100,6 +100,8 @@ export class PermitschedulePage implements OnInit {
     useLocale: true,
     maxResults: 5
   };
+  architecturalFileUpload: boolean= false;
+  attachmentFileUpload: boolean= false;
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -114,7 +116,7 @@ export class PermitschedulePage implements OnInit {
     private platform: Platform,
     private toastController: ToastController,
     //private data: DesignFormData
-    ) { 
+    ) {
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
        const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
     const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
@@ -161,7 +163,7 @@ export class PermitschedulePage implements OnInit {
     postalcode: new FormControl(''),
     status: new FormControl('created'),
     attachments: new FormControl([])
-   
+
   })
   this.designId = +this.route.snapshot.paramMap.get('id');
   }
@@ -188,13 +190,13 @@ export class PermitschedulePage implements OnInit {
       if (event === ScheduleFormEvent.SAVE_PERMIT_FORM || event === ScheduleFormEvent.SEND_PERMIT_FORM) {
         this.send=event;
         this.saveModuleMake();
-      
-      } 
+
+      }
     });
 
-    
+
     //this.addressValue();
-    
+
     if (this.designId !== 0) {
       setTimeout(()=>{
         this.getDesignDetails();
@@ -215,8 +217,8 @@ export class PermitschedulePage implements OnInit {
     // else{
     //   this.data.isEditMode=false;
     // }
-    
-    
+
+
 
     this.formControlValueChanged();
     this.uploadcontrolvalidation();
@@ -248,7 +250,7 @@ export class PermitschedulePage implements OnInit {
             tiltControl.updateValueAndValidity();
             roofcontrol.updateValueAndValidity();
         });
-  
+
   }
 
   uploadcontrolvalidation(){
@@ -314,7 +316,7 @@ export class PermitschedulePage implements OnInit {
     );
   }
 
-  
+
   fetchModuleMakesData() {
     this.apiService.getSolarMake().subscribe(
       response => {
@@ -452,7 +454,7 @@ export class PermitschedulePage implements OnInit {
   eventcheck(e){
     this.showValue = e.target.value;
     console.log(this.showValue);
-    
+
   }
 
 
@@ -460,7 +462,7 @@ export class PermitschedulePage implements OnInit {
   // }
   this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
     console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    
+
       this.desginForm.get('address').setValue('124/345');
       this.desginForm.get('latitude').setValue('24.553333');
       this.desginForm.get('longitude').setValue('80.5555555555');
@@ -491,7 +493,7 @@ export class PermitschedulePage implements OnInit {
 
   }
   getDesignDetails() {
-  
+
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
@@ -524,7 +526,7 @@ export class PermitschedulePage implements OnInit {
             newconstruction: this.design.newconstruction + '',
             prelimdesign:null,
             //attachments:this.design.attachments,
-            
+
             attachments:this.design.attachments,
             modulemake:this.design.solarmake.name,
             modulemodel:this.design.solarmodel.name,
@@ -540,7 +542,7 @@ export class PermitschedulePage implements OnInit {
               assignedto: this.design.assignedto.id
             });
           }
-          
+
           // setTimeout(() => {
           //   this.fetchModuleMakesData();
           //   this.fetchInverterMakesData();
@@ -548,16 +550,16 @@ export class PermitschedulePage implements OnInit {
           //     console.log("hello")
           //     this.loadModuleModelsData();
           //     this.loadInverterModelsData();
-              
+
           //   }
-            
+
           // });
         // setTimeout(()=>{
         //   this.fetchModuleMakesData();
         //   this.fetchInverterMakesData();
         // },500)
         });
-      
+
       }, (error) => {
         this.utils.hideLoading();
       });
@@ -569,7 +571,7 @@ export class PermitschedulePage implements OnInit {
 showUpload(e){
   this.uploadbox = e.target.value;
 
-  
+
 }
 
 saveModuleMake() {
@@ -579,7 +581,7 @@ saveModuleMake() {
     console.log("hello");
     let solarmadedata={
 
-      
+
       name:this.desginForm.get('modulemake').value
     }
     this.apiService
@@ -593,7 +595,7 @@ saveModuleMake() {
         },
         error => {
           this.utils.errorSnackBar(
-        
+
             "Error"
           );
         }
@@ -612,7 +614,7 @@ saveModuleModel() {
     let solarmadedata={
       modulemake:this.selectedModuleMakeID,
       name:this.desginForm.get('modulemodel').value
-      
+
     }
     this.apiService
       .postSolarMade(
@@ -652,7 +654,7 @@ saveInverterMake() {
         },
         error => {
           this.utils.errorSnackBar(
-          
+
             "Error"
           );
         }
@@ -686,13 +688,13 @@ saveInverterModel() {
         },
         error => {
           this.utils.errorSnackBar(
-            
+
             "Error"
           );
         }
       );
   } else {
-    
+
       this.submitform();
     }
   }
@@ -702,12 +704,12 @@ saveInverterModel() {
     this.onFormSubmit=false;
     // this.saveModuleMake();
      this.formValue = e;
-    
+
       console.log('Reach', this.desginForm.value);
-  
+
       // debugger;
       // this.saveModuleMake();
-     
+
       if(this.desginForm.status=='VALID'){
         if(this.formValue=='send'){
         this.router.navigate(['payment-modal',{designData:"permit"}]);
@@ -718,9 +720,9 @@ saveInverterModel() {
       else{
         this.error();
       }
-  
+
     }
-  
+
     submitform(){
       var pnumber = this.desginForm.get("phone").value;
       if (this.desginForm.status === 'VALID') {
@@ -730,7 +732,7 @@ saveInverterModel() {
           console.log(this.formValue);
           if (this.designId === 0) {
             if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM){
-              var data = {name:this.desginForm.get('name').value,  
+              var data = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -761,16 +763,20 @@ saveInverterModel() {
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId()
-    
+
   }
 
 
 
-            
+
              // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
-              this.apiService.addDesginForm(data).subscribe(response => {  
-             this.uploaarchitecturedesign(response.id,'architecturaldesign');
-                this.uploadAttachmentDesign(response.id,'attachments')
+              this.apiService.addDesginForm(data).subscribe(response => {
+                if(this.architecturalFileUpload){
+                  this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                }
+                if(this.attachmentFileUpload){
+                  this.uploadAttachmentDesign(response.id,'attachments')
+                }
                 this.utils.hideLoading().then(() => {
                   console.log('Res', response);
                   this.router.navigate(['/permithomepage'])
@@ -785,21 +791,21 @@ saveInverterModel() {
                   //     this.navController.pop();
                   //   });
                   // });
-                
+
                 });
               }, responseError => {
                 this.utils.hideLoading();
                   const error: ErrorModel = responseError.error;
                   this.utils.errorSnackBar(error.message);
                 });
-             
-              
-             
-            
+
+
+
+
               }
            else if(this.formValue === 'send' || this.send===ScheduleFormEvent.SEND_PERMIT_FORM){
-            
-              var postData = {name:this.desginForm.get('name').value,  
+
+              var postData = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -830,23 +836,27 @@ saveInverterModel() {
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
-                        
-                        
-    
+
+
+
   }
 
 
 
-            
+
              // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
-              this.apiService.addDesginForm(postData).subscribe(response => {  
-             this.uploaarchitecturedesign(response.id,'architecturaldesign');
-                this.uploadAttachmentDesign(response.id,'attachments')
+              this.apiService.addDesginForm(postData).subscribe(response => {
+                if(this.architecturalFileUpload){
+                  this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                }
+                if(this.attachmentFileUpload){
+                  this.uploadAttachmentDesign(response.id,'attachments')
+                }
                 this.utils.hideLoading().then(() => {
                   console.log('Res', response);
                   this.value = response.id;
                   this.sendtowattmonk();
-                  
+
                  // this.router.navigate(['/homepage'])
                  // this.utils.showSnackBar('Design have been Created');
                   // this.utils.showSnackBar('Design have been saved');
@@ -859,23 +869,23 @@ saveInverterModel() {
                   //     this.navController.pop();
                   //   });
                   // });
-                
+
                 });
               }, responseError => {
                 this.utils.hideLoading();
                   const error: ErrorModel = responseError.error;
                   this.utils.errorSnackBar(error.message);
                 });
-             
-              
-             
-            
+
+
+
+
               }
-          
+
             }
           else {
             if(this.formValue==='save'){
-              var data = {name:this.desginForm.get('name').value,  
+              var data = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -906,18 +916,22 @@ saveInverterModel() {
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId()
-    
+
   }
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
-              this.uploaarchitecturedesign(response.id,'architecturaldesign');
-              this.uploadAttachmentDesign(response.id,'attachments')
+              if(this.architecturalFileUpload){
+                this.uploaarchitecturedesign(response.id,'architecturaldesign');
+              }
+              if(this.attachmentFileUpload){
+                this.uploadAttachmentDesign(response.id,'attachments')
+              }
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
                 this.utils.showSnackBar('Design have been updated');
                 this.utils.setDesignDetailsRefresh(true);
                 this.navController.pop();
-                
-        
+
+
               });
             },
              responseError => {
@@ -925,12 +939,12 @@ saveInverterModel() {
                 const error: ErrorModel = responseError.error;
                 this.utils.errorSnackBar(error.message[0].messages[0].message);
               });
-  
+
             });
-          
+
           }
           else if(this.formValue==='send'){
-            var postData = {name:this.desginForm.get('name').value,  
+            var postData = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -961,19 +975,23 @@ saveInverterModel() {
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
-                        
-    
+
+
   }
             this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
-              this.uploaarchitecturedesign(response.id,'architecturaldesign');
-              this.uploadAttachmentDesign(response.id,'attachments')
+              if(this.architecturalFileUpload){
+                this.uploaarchitecturedesign(response.id,'architecturaldesign');
+              }
+              if(this.attachmentFileUpload){
+                this.uploadAttachmentDesign(response.id,'attachments')
+              }
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
                 this.value=response.id;
                 this.utils.showSnackBar('Design have been updated');
                 this.sendtowattmonk();
-                
-        
+
+
               });
             },
              responseError => {
@@ -983,21 +1001,21 @@ saveInverterModel() {
               });
   //
             });
-          
+
           }
         }
-  
+
         });
-  
+
       } else {
         this.error();
       }
     }
 
     error(){
-      
+
         if(this.desginForm.value.name==''){
-  
+
           this.utils.errorSnackBar('Please fill the name.');
         }
         else if(this.desginForm.value.email==''){
@@ -1033,8 +1051,8 @@ saveInverterModel() {
         else if(this.desginForm.value.rooftype==''){
           this.utils.errorSnackBar('Please fill the rooftype.');
         }
-       
-        
+
+
         else if(this.desginForm.value.architecturaldesign==[]){
           this.utils.errorSnackBar('Please attach architectural design.');
         }
@@ -1042,32 +1060,35 @@ saveInverterModel() {
           this.utils.errorSnackBar('Address not found. Make sure location is on on device.');
         }
     }
-  
+
 
     files(event){
       console.log(event.target.files);
        for(var i=0; i< event.target.files.length;i++){
-         this.archFiles.push(event.target.files[i]) 
+         this.archFiles.push(event.target.files[i])
        }
+       this.architecturalFileUpload= true;
        console.log(this.archFiles);
      }
-   
+
      permitfiles(event){
        console.log(event.target.files);
        for(var i=0; i< event.target.files.length;i++){
-         this.permitFiles.push(event.target.files[i]) 
+         this.permitFiles.push(event.target.files[i])
        }
+
+       this.attachmentFileUpload= true;
        if(this.permitFiles.length==1){
          this.fileName= event.target.files[0].name;
          console.log(this.fileName);
-         
+
        }else if(this.permitFiles.length >1){
          this.fileName= this.permitFiles.length;
        }else{
          this.fileName='';
        }
-     
-      
+
+
      }
 
     uploaarchitecturedesign(designId?: number, key?: string){
@@ -1081,15 +1102,15 @@ saveInverterModel() {
           imageData.append('ref', 'design');
           imageData.append('field', key);
         }
-      } 
+      }
       this.apiService.uploaddesign(imageData).subscribe(res=>{
-        console.log(res); 
-        
+        console.log(res);
+
       })
-  
-  
+
+
     }
-  
+
     uploadAttachmentDesign(designId?: number, key?: string,filearray?:File[]){
       console.log(this.permitFiles);
       const imageData = new FormData();
@@ -1101,10 +1122,10 @@ saveInverterModel() {
           imageData.append('ref', 'design');
           imageData.append('field', key);
         }
-      } 
+      }
       this.apiService.uploaddesign(imageData).subscribe(res=>{
-        console.log(res); 
-        
+        console.log(res);
+
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
@@ -1114,7 +1135,7 @@ saveInverterModel() {
 
     numberfield(event){
       console.log(event);
-      
+
     }
 
     removeArc(i) {
@@ -1137,10 +1158,10 @@ saveInverterModel() {
       this.utils.hideLoading().then(()=> {
         this.utils.errorSnackBar('some Error Occured');
       });
-    
+
     });
     });
-    
+
     }
 
     sendtowattmonk(){
@@ -1154,14 +1175,14 @@ saveInverterModel() {
           designacceptancestarttime: designacceptancestarttime,
           paymenttype:this.utils.getPaymentMode().value
         };
-    
+
         this.utils.showLoading('Assigning').then(()=>{
-        
+
           this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
             this.utils.hideLoading().then(()=>{
-              ; 
+              ;
               console.log('reach ', value);
-             
+
               this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
               this.router.navigate(['/permithomepage'])
               this.utils.setHomepagePermitRefresh(true);
@@ -1171,20 +1192,20 @@ saveInverterModel() {
           });
         })
     }
-    
+
     // Location
 
     ngOnDestroy(): void {
       this.subscription.unsubscribe();
       this.utils.setStaticAddress('');
     }
-  
+
     // segmentChanged(event: CustomEvent) {
     //   console.log(event);
     //   this.currentTab = event.detail.value;
     //   this.tabs.select(event.detail.value);
     // }
-  
+
     getGeoLocation() {
       // this.utilities.showLoading('Getting Location').then(()=>{
             // setTimeout(()=>{
@@ -1203,7 +1224,7 @@ saveInverterModel() {
         }).catch((error) => {
           this.utils.hideLoading();
           this.utils.errorSnackBar('Unable to get location');
-          
+
           console.log('Error getting location', error);
           this.showNoLocation();
         });
@@ -1211,7 +1232,7 @@ saveInverterModel() {
       //   this.utilities.hideLoading();
       // });
     }
-  
+
     async  showNoLocation() {
       const toast = await this.toastController.create({
         header: 'Error',
@@ -1228,9 +1249,9 @@ saveInverterModel() {
       });
       toast.present();
     }
-  
-  
-  
+
+
+
     async showLocationDenied() {
       const toast = await this.toastController.create({
         header: 'Error',
@@ -1247,8 +1268,8 @@ saveInverterModel() {
       });
       toast.present();
     }
-  
-  
+
+
     getGeoEncoder(latitude, longitude) {
       // this.utilities.hideLoading().then((success) => {
             this.utils.showLoading('Getting Location').then(()=>{
@@ -1274,11 +1295,11 @@ saveInverterModel() {
             });
           });
         // }, (error) => {
-  
+
         // }
       // );
     }
-  
+
     generateAddress(addressObj) {
       const obj = [];
       let address = '';
@@ -1293,7 +1314,7 @@ saveInverterModel() {
       }
       return address.slice(0, -2);
     }
-  
+
     requestLocationPermission() {
       this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
         console.log(mode);
@@ -1321,7 +1342,7 @@ saveInverterModel() {
         console.log(rejection);
         // this.goBack();
       });
-  
+
       // if (this.platform.is('ios')) {
       //   if (this.storage.isLocationAllowedOnIOS()) {
       //     this.fetchLocation();
@@ -1358,9 +1379,9 @@ saveInverterModel() {
       // } else {
       //
       // }
-  
+
     }
-  
+
     fetchLocation() {
       if (this.platform.is('ios')) {
         this.getGeoLocation();
@@ -1369,16 +1390,16 @@ saveInverterModel() {
           if (status === true) {
             this.getGeoLocation();
             // this.utilities.showLoading('Getting Location').then(() => {
-             
+
             // });
           } else {
             this.askToChangeSettings();
           }
         });
       }
-  
+
     }
-  
+
     async askToChangeSettings() {
       const toast = await this.toastController.create({
         header: 'Location Disabled',
@@ -1400,7 +1421,7 @@ saveInverterModel() {
       });
       toast.present();
     }
-  
+
     changeLocationSettings() {
       this.diagnostic.switchToLocationSettings();
       this.diagnostic.registerLocationStateChangeHandler((state) => {
@@ -1410,18 +1431,18 @@ saveInverterModel() {
           )) {
           this.checkLocationAccess();
         }
-  
+
       });
     }
-  
+
     checkLocationAccess() {
       this.diagnostic.isLocationAuthorized().then((success) => {
         this.fetchLocation();
       }, (error) => {
         this.utils.showSnackBar('GPS Not Allowed');
       });
-  
+
     }
-  
-  
+
+
 }

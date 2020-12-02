@@ -35,11 +35,11 @@ export class DeclinepagePage implements OnInit {
     this.id= this.nav.get('id');
     console.log(this.id);
     this.userId= this.nav.get('userData');
-    
+
   }
 
 
-  
+
 
   selectAttachment(){
     this.exceedfileSize=0;
@@ -54,7 +54,7 @@ export class DeclinepagePage implements OnInit {
     // }
 
     this.chooser.getFile()
-  .then((file) => 
+  .then((file) =>
     {
       console.log(file, 'canceled')
         this.filename= file.name;
@@ -64,25 +64,26 @@ export class DeclinepagePage implements OnInit {
             this.blob=fileObj;
            console.log(fileObj.size);
 
-           if(fileObj.size > 1024 * 1024 * 1){
-            this.exceedfileSize = fileObj.size;
+           this.exceedfileSize = fileObj.size;
+           if(fileObj.size > 1024 * 1024 * 25){
             this.enableDisable =true;
            }else{
             //  this.enableDisable = false;
+
               this.getBase64(fileObj).then(res=>{
                 let base64file= file.dataURI + res;
                 this.blob= this.utilities.b64toBlob(base64file);
                 console.log(this.blob);
             });
-            
+
            }
-           
+
           })
       })
 
 
     }
-    
+
     )
   .catch((error: any) => console.error(error));
 
@@ -93,7 +94,7 @@ export class DeclinepagePage implements OnInit {
     //   let base64Image = 'data:image/jpeg;base64,' + imageData;
     //   this.blob = this.utilities.b64tBlob(base64Image);
     //   console.log(this.blob);
-      
+
     //   this.filename = Date.now().toString() + '.png';
     //   if(this.blob){
     //     this.uploadFile();
@@ -115,7 +116,7 @@ export class DeclinepagePage implements OnInit {
     if(this.reason==undefined || this.reason==''){
       this.enableDisable= true;
     }else{
-  
+
         this.enableDisable= false;
     }
   }
@@ -124,12 +125,12 @@ export class DeclinepagePage implements OnInit {
 
     if(this.exceedfileSize < 1048576 && this.exceedfileSize!=0){
       this.uploadFile();
-       
-    
+
+
     }else if(this.filename !=='' && this.exceedfileSize > 1048576){
 
       console.log('could not submit');
-      
+
     }else{
 
       let data={
@@ -138,11 +139,11 @@ export class DeclinepagePage implements OnInit {
         outsourcedto : null,
         isoutsourced : "false",
         acknowledgedby : this.userId
-        
+
       }
-  
+
       console.log(data);
-      
+
       this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
           this.modalCtrl.dismiss({
             'dismissed': true
@@ -156,17 +157,17 @@ export class DeclinepagePage implements OnInit {
     this.utilities.showLoading('Uploading').then(()=>{
       this.apiservice.uploadDeclineImage(this.id,'requestdeclineattachment',this.blob,this.filename).subscribe((res:any)=>{
         this.utilities.hideLoading().then(()=>{
-             
+
               let data={
                 status : 'requestdeclined',
                 requestdeclinereason:this.reason,
                 outsourcedto : null,
                 isoutsourced : "false"
-                
+
               }
-          
+
               console.log(data);
-              
+
               this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
                   this.modalCtrl.dismiss({
                     'dismissed': true
@@ -195,6 +196,6 @@ export class DeclinepagePage implements OnInit {
     });
   }
 
-  
+
 
 }

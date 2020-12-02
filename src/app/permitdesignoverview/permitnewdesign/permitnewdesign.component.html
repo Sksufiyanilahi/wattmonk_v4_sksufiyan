@@ -38,11 +38,12 @@
 
                 <ion-row style="margin-bottom: 8px;" [routerLink]="['/permit-design-details/',designData.id]">
                     <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
-                    <span class="chipdetail" style="background-color: #95afc0;" >{{designData?.source}}</span>
+                    <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
+                    <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype}}</span>
                     <ion-col style="color: #737373; font-size: 14px;">
                         <span style="float: right;" >{{designData.designremainingtime}}</span>
                     </ion-col>
-                   
+
                       <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.isoverdue">Overdue</span> -->
                 </ion-row>
                 <ion-row class="ion-no-margin ion-no-margin">

@@ -16,10 +16,10 @@
       <ion-row>
         <ion-col>
           <h6 style="margin:0px 0 0px 0;">Attachment</h6>
-        
+
             <ion-input type="text" placeholder="Select Attachment" [(ngModel)]="filename" readonly (click)="selectAttachment()" style="border-bottom:1px solid grey"  > <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon></ion-input>
-           
-         <small *ngIf="exceedfileSize > 0" style="color:red">File size should not be greater than 25MB.</small>
+
+         <small *ngIf="exceedfileSize > 26214400" style="color:red">File size should not be greater than 25MB.</small>
         </ion-col>
       </ion-row>
     </ion-grid>

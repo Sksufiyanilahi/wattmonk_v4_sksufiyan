@@ -7,15 +7,15 @@
     <ion-col size="1">
     <ion-button fill="clear" size="small" class="ion-no-padding" (click)="cancel()">
         <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
-    </ion-button> 
+    </ion-button>
 </ion-col>
 <ion-col class="ion-text-center" size="9" style="padding-left: 27px; text-align: center;">
   <ion-grid class="ion-align-items-center ion-justify-content-center">
-   
+
       <ion-row class="ion-align-items-center ion-justify-content-center">
           <span class="survey-name ion-text-center" style="font-size:x-large; text-align: center;">Confirm your order</span>
       </ion-row>
-     
+
   </ion-grid>
 </ion-col>
 
@@ -61,23 +61,23 @@
   <ion-label style="font-size: x-large;" >{{id}}</ion-label>
 </ion-col>
 </ion-row> -->
-  
+
     </ion-card>
   </ion-row>
   <ion-row class="ion-padding">
     <ion-col size="12" >
       <ion-item *ngIf="user?.amount>=settingValue" (click)="confirm()" >
-        <ion-button  fill="clear"><ion-icon name="checkmark-circle-outline"></ion-icon>&nbsp;<ion-label class="black">Confirm</ion-label></ion-button>
+        <ion-button  fill="clear"><ion-icon name="checkmark-circle-outline" style="color: blue;"></ion-icon>&nbsp;<ion-label class="black">Confirm</ion-label></ion-button>
       </ion-item>
       <ion-item (click)="addWallet('wallet')" *ngIf="settingValue>user?.amount">
-        
+
         <ion-button  fill="clear" ><ion-icon name="cash-outline" style="color:green;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Add Money</ion-label></ion-button>
       </ion-item>
       <ion-item (click)="addWallet('card')" *ngIf="settingValue>user?.amount">
-   
-        <ion-button  fill="clear"  ><ion-icon name="card-outline" style="color:brown;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Pay via card </ion-label></ion-button> 
+
+        <ion-button  fill="clear"  ><ion-icon name="card-outline" style="color:brown;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Pay via card </ion-label></ion-button>
       </ion-item>
-    
+
     </ion-col>
     </ion-row>
     </ion-content>
