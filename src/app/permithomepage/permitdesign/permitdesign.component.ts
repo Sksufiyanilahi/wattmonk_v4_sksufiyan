@@ -101,13 +101,13 @@ export class PermitdesignComponent implements OnInit {
 
 
   intercomModule(){
-    // this.intercom.boot({
-    //   app_id: intercomId,
-    //   // Supports all optional configuration.
-    //   widget: {
-    //     "activator": "#intercom"
-    //   }
-    // });
+    this.intercom.boot({
+      app_id: intercomId,
+      // Supports all optional configuration.
+      widget: {
+        "activator": "#intercom"
+      }
+    });
   }
 
 
@@ -499,8 +499,8 @@ this.network.networkConnect();
       var designstarttime = new Date();
       var milisecond = designstarttime.getTime();
     var additonalhours = 0;
-    // if(this.designerData.requesttype == "prelim"){
-      if(this.designerData.requesttype == "permit"){
+    if(this.designerData.requesttype == "prelim"){
+      // if(this.designerData.requesttype == "permit"){
       console.log(parseInt(this.selectedDesigner.jobcount) );
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
 

@@ -14,6 +14,7 @@ import { NetworkdetectService } from './networkdetect.service';
 import { ROLES,COMETCHAT_CONSTANTS } from './contants';
 import { UserData } from './model/userData.model';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -57,7 +58,8 @@ export class AppComponent {
     private utilitiesService: UtilitiesService,
     private firebase: Firebase,
     private utilities:UtilitiesService,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    private router:Router
   ) {
     this.initializeApp();
     if (!navigator.onLine) {
@@ -93,11 +95,11 @@ export class AppComponent {
         this.statusBar.styleLightContent();
       }else{
       }
-      
+
       this.getNotification();
       this.setupCometChat();
     });
-  
+
   }
 
   ngOnInit() {
@@ -105,17 +107,17 @@ export class AppComponent {
       this.netSwitch = data;
       console.log(this.netSwitch);
     })
-    
-    
+
+
 this.network.networkDisconnect();
 this.network.networkConnect();
- 
+
     if (this.storageService.isUserPresent()) {
       this.apiservice.refreshHeader();
       this.user= JSON.parse(localStorage.getItem('user'));
       // console.log("???",this.user.role);
       console.log(this.user.role.type);
-      
+
         if(this.user.role.type=='surveyors'){
           this.navController.navigateRoot('surveyoroverview');
         }else if(this.user.role.type=='designer'){
@@ -123,7 +125,7 @@ this.network.networkConnect();
         }else if(this.user.role.type==='qcinspector'){
           console.log(this.user.role.type);
           this.navController.navigateRoot('analystoverview');
-          
+
         }
         else{
           this.navController.navigateRoot('permithomepage');
@@ -139,7 +141,30 @@ this.network.networkConnect();
       this.userData = res;
       console.log(this.userData)
     })
-    
+
+  }
+
+
+  SwitchMenuAccordingtoRoles(type){
+      if(this.userData.role.type !=='designer' && this.userData.role.type !=='qcinspector' && type=='prelim'){
+        this.router.navigate(['/homepage/design']);
+      }else if(this.userData.role.type=='designer' && type=='prelim'){
+          this.router.navigate(['/designoverview/newdesigns'])
+      }else if(this.userData.role.type =='qcinspector' && type=='prelim'){
+          this.router.navigate(['/analystoverview/design'])
+      }else if(this.userData.role.type !=='designer'&& this.userData.role.type !=='qcinspector' && type=='permit'){
+        this.router.navigate(['/permithomepage'])
+      }else if(this.userData.role.type =='designer' && type=='permit'){
+          this.router.navigate(['/permitdesignoverview/permitnewdesign'])
+      }else if(this.userData.role.type =='qcinspector' && type=='permit'){
+        this.router.navigate(['/analystoverview/permitdesign'])
+      }else if(this.userData.role.type !=='designer' && this.userData.role.type !=='qcinspector' && type=='survey'){
+            this.router.navigate(['/homepage/survey'])
+      }else if(this.userData.role.type =='qcinspector' && type=='survey'){
+            this.router.navigate(['/analystoverview/survey'])
+      }else if(this.userData.role.type !=='clientsuperadmin'){
+          this.router.navigate(['/statistics'])
+      }
   }
 
   getFcmToken() {
@@ -170,7 +195,7 @@ this.network.networkConnect();
         console.log('Initialization completed successfully');
         // if(this.utilities.currentUserValue != null){
           // You can now call login function.
-      
+
       // }
       },
       error => {
@@ -184,6 +209,6 @@ this.network.networkConnect();
     this.deactivateNetworkSwitch.unsubscribe();
   }
 
- 
+
 
 }

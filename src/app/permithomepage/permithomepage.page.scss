@@ -6,7 +6,7 @@
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
     padding: 8px 12px;
   }
-  
+
   .customer-name {
     font-size: 1em;
     color: #434343;
@@ -14,33 +14,33 @@
     display:table;
     margin: 0px;
   }
-  
+
   .customer-email {
     font-size: 0.8em;
     color: #B4B4B4;
   }
-  
+
   .customer-phone {
     font-size: 0.8em;
     color: #4272B9;
   }
-  
+
   .customer-address {
     margin-top: 4px;
     margin-bottom: 6px;
     font-size: 0.8em;
     color: #4272B9;
   }
-  
+
   .placeholder {
     // width: 50vw !important;
   }
-  
+
   .timestamp {
     font-size: 0.7em;
-   
+
   }
-  
+
   .chipdetail{
     display: inline;
     vertical-align: middle;
@@ -56,8 +56,8 @@
     // position: absolute;
     // display: block;
   }
-  
-  
+
+
   //.drawer {
   //  background: #F3F3F3;
   //  --background: #F3F3F3;
@@ -66,36 +66,36 @@
   //.ion-bottom-drawer-scrollable-content {
   //  background: #F3F3F3 !important;
   //}
-  
+
   ion-bottom-drawer {
-  
+
     --padding: 0 !important;
     padding: 0 !important;
-  
+
     --background: #F3F3F3 !important;
     background: #F3F3F3 !important;
-  
+
     ion-content {
       --background: #F3F3F3 !important;
     }
-  
-    
+
+
   }
       .segment-btn{
         font-size: 10px !important;
       }
-  
+
       .latebystyle{
-        float: right; 
+        float: right;
         font-size: 10px;
         color: #3C78DB;
       }
-  
+
   .imagebutton{
     float:right;
     margin-top: 0px;
   }
-  
+
   .alertClass{
     background-color: wheat;
   }
@@ -197,7 +197,12 @@ ion-searchbar.custom {
 }
 
 .fab-position {
-    bottom: 48px;
+    bottom: 18px;
+}
+
+.ht_wt{
+  height:62px;
+  width:62px;
 }
 
 ion-fab-button {

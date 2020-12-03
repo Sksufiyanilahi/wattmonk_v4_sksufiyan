@@ -16,11 +16,11 @@
           <ion-label class="segment-btn">Delivered</ion-label>
         </ion-segment-button>
       </ion-segment>
-    <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
-        <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
-    
-    <ion-content   (click)="close()" style="padding-bottom: 250px;">
+
+      <ion-content   (click)="close()" style="padding-bottom: 250px;">
+        <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
             <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
                 <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
                     <ion-col size="12" class="ion-margin-top">
@@ -58,14 +58,14 @@
                             <span class="customer-address z-100 m-0"
                                   (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
                                   <ion-row style="margin-bottom: 8px;"  [routerLink]="['/survey-detail/',surveyData.id]" class="m-0">
-                                    
+
                                     <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.source}}</span>
-                                   
+
                                 </ion-row>
                             <ion-row class="ion-no-margin">
                                 <ion-col></ion-col>
                                 <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type =='surveyor'">
-                                         <ion-button  class="ion-no-margin ion-no-padding z-100" fill="clear" 
+                                         <ion-button  class="ion-no-margin ion-no-padding z-100" fill="clear"
                                          [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                          routerDirection="forward">
                                          Start Survey
@@ -81,7 +81,7 @@
                         <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
                         >Accept</span> -->
                         <span style="float: right;">
-                            <ng-container *ngIf="userData.role.type !=='clientsuperadmin'"> 
+                            <ng-container *ngIf="userData.role.type !=='clientsuperadmin'">
                             <ion-col size="8"  *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)">
                                Accept
                             </ion-col>
@@ -119,9 +119,9 @@
                             <!-- <span class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                                 {{surveyData.datetime | date: 'hh:mm a'}}
                             </span> -->
-        
+
                         </ion-card>
-        
+
                     </ion-col>
                 </ion-row>
                 <ion-row>
@@ -129,14 +129,14 @@
                     </ion-col>
                 </ion-row>
             </ion-grid>
-        
+
             <div *ngIf="listOfSurveyDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
                 <!-- <div *ngIf="!netSwitch"> -->
                     No Surveys found
                 <!-- </div> -->
                 <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
             </div>
-   
+
 
 </ion-content>
 
