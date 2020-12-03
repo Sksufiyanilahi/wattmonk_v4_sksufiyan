@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DatePicker } from '@ionic-native/date-picker/ngx';
 import { ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -24,6 +25,7 @@ export class DesignersComponent implements OnInit {
   isSelected:boolean=false;
   topAnalyst:any=[];
   analystCount:any=[];
+  requestTypeValue:any;
 
   private subscription: Subscription;
 
@@ -31,12 +33,14 @@ export class DesignersComponent implements OnInit {
     private datePicker: DatePicker,
     private modalController:ModalController,
     private formBuilder:FormBuilder,
-    private utilities:UtilitiesService) { 
+    private utilities:UtilitiesService,
+    private router:Router) { 
       this.desginForm = this.formBuilder.group({
         startdate : new FormControl(new Date().getTime(), [Validators.required]),
         enddate : new FormControl(new Date().getTime(), [Validators.required]),
         filterFields : new FormControl(''),
-        sort : new FormControl('')
+        sort : new FormControl(''),
+        requesttype : new FormControl('prelim')
       })
     }
 
@@ -75,8 +79,8 @@ fetchStatisticsDesigners(){
   const date = new Date();
     const starttime=date.getFullYear()+'-01-01T06:30:00.000Z'.toString();
     const endtime = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+'-'+'T06:30:00.000Z'.toString();
-  
-  this.service.getDesignersDetails(starttime, endtime).subscribe(
+    var requesttype = this.desginForm.get('requesttype').value
+  this.service.getDesignersDetails(starttime, endtime, requesttype).subscribe(
     response =>{
       this.designersList = response;// = response;
       /*this.designers=response;
@@ -97,8 +101,9 @@ fetchFilteredStatisticsDesigners(){
       endDate.setDate(endDate.getDate()+1);
   const starttime = startDate.toISOString();
   const endtime = endDate.toISOString();
+  var requesttype = this.desginForm.get('requesttype').value
 
-  this.service.getDesignersDetails(starttime, endtime).subscribe(
+  this.service.getDesignersDetails(starttime, endtime, requesttype).subscribe(
     response =>{
       this.designersList = response;
     /*  this.designers=response;
@@ -148,6 +153,12 @@ eventFieldsChange(event)
   this.eventSortChange();
   
   
+}
+
+eventTypeChange(event){
+this.requestTypeValue = event.target.value;
+console.log(this.requestTypeValue);
+this.fetchStatisticsDesigners();
 }
 
 
@@ -218,5 +229,9 @@ else{
 }
 }
 
+statsDetails(){
+console.log("Hello");
+this.router.navigate(['/statsoverviewdetails']);
+}
 
 }

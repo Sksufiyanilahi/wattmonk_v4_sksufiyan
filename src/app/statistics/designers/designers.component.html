@@ -27,10 +27,20 @@
       <ion-row style="margin-top: 30px;">
         <ion-col ><ion-button color="primary" size="small"  class="button-inner" style="min-width: 10em; margin-left: 30%;" (click)="sendValue()" >Search</ion-button></ion-col>
         </ion-row>
-      <ion-row style="margin-top: 20px;"><ion-col size="7">
+      <ion-row style="margin-top: 20px;">
+        <ion-col size="4">
+          <ion-item class="ion-no-padding">
+            <ion-label position="floating" style="font-size: 13px;">Type</ion-label>
+            <ion-select interface="popover" (ionChange)="eventTypeChange($event)" formControlName="requesttype" style="font-size:14px;" value="prelim" >
+              <ion-select-option value="prelim" >Prelim</ion-select-option>
+              <ion-select-option value="permit">Permit</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="5">
         <ion-item class="ion-no-padding">
-      <ion-label position="floating">Select Field</ion-label>
-      <ion-select interface='popover' (ionChange)="eventFieldsChange($event)" formControlName="filterFields">
+      <ion-label position="floating" style="font-size:13px;">Select Field</ion-label>
+      <ion-select interface='popover' (ionChange)="eventFieldsChange($event)" formControlName="filterFields" style="font-size:14px;" >
       <ion-select-option value="Avg Comp Time">Avg Comp Time</ion-select-option>
       <ion-select-option value="Avg Review Failure">Avg Review Failure</ion-select-option>
       <ion-select-option value="Delayed">Delayed</ion-select-option>
@@ -39,24 +49,27 @@
       <ion-select-option value="Assigned">Assigned</ion-select-option> 
       </ion-select>
     </ion-item></ion-col>
-    <ion-col>
+    
+    <ion-col size="3">
       <ion-item class="ion-no-padding">
-        <ion-label position="floating">Sort</ion-label>
-        <ion-select interface="popover" (ionChange)="eventSortChange()" formControlName="sort">
+        <ion-label position="floating" style="font-size: 13px;">Sort</ion-label>
+        <ion-select interface="popover" (ionChange)="eventSortChange()" formControlName="sort" style="font-size:14px;" >
           <ion-select-option value="hightolow">High to Low</ion-select-option>
           <ion-select-option value="lowtohigh">Low to High</ion-select-option>
         </ion-select>
       </ion-item>
     </ion-col>
+    
       </ion-row>
       <div>
       <ion-row style=" background-color: rgb(211,211,211); text-align: center;" >
-        <ion-col>
+        <ion-col size="6">
         <ion-label position="fixed" style="float: left;">Designer</ion-label>
       </ion-col>
         <ion-col *ngIf="isSelected">
           <ion-label position="fixed" style="float: right;">{{fieldChangeValue}}</ion-label>
         </ion-col>
+        <ion-col></ion-col>
     </ion-row>
   </div>
   <ion-content style="height: 140px;" [scrollEvents]="true" >
@@ -66,9 +79,9 @@
     
   
     
-      <ion-item  *ngFor="let designers of designersList;" style="text-align: center; font-size: small;" (click)="details(designers, 'designername')">
-         <ion-col>
-         <ion-label style="float: left" class="item-input ion-label"  >{{designers.designer}}</ion-label>
+      <ion-item  *ngFor="let designers of designersList;" style="text-align: center; font-size: small;" >
+         <ion-col size="7" >
+         <ion-label style="float: left" class="clickEnableCls" (click)="details(designers, 'designername')" >{{designers.designer}}</ion-label>
         </ion-col>
         <ion-col *ngIf="isSelected && fieldChangeValue=='Avg Comp Time'">
           <ion-label style="float: right;" class="item-input ion-label">{{designers.avgdesigncompletiontimestamp}}</ion-label>
@@ -88,6 +101,8 @@
         <ion-col *ngIf="isSelected && fieldChangeValue=='Assigned'">
           <ion-label style="float: right;" class="item-input ion-label">{{designers.totaldesignscreated}}</ion-label>
         </ion-col>
+        <ion-col></ion-col>
+        <a (click)="statsDetails()">Details</a>
         </ion-item>
        
   </ion-list>

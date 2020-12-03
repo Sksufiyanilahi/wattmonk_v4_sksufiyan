@@ -482,7 +482,7 @@ this.network.networkConnect();
       var milisecond = designstarttime.getTime();
     var additonalhours = 0;
     // if(this.designerData.requesttype == "prelim"){
-      if(this.designerData.requesttype == "permit"){
+      if(this.designerData.requesttype == "prelim"){
       console.log(parseInt(this.selectedDesigner.jobcount) );
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
       

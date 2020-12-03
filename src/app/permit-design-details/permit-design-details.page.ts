@@ -494,7 +494,7 @@ return blob;
           imageData.append('field', key);
         // }
       } 
-       
+       this.utilities.showLoading('upload').then(()=>{
           this.apiService.uploaddesign(imageData).subscribe(res=>{
             this.utilities.hideLoading().then(()=>{
               console.log(res); 
@@ -527,6 +527,7 @@ return blob;
         // })
     // }
   })
+})
 }
 
 

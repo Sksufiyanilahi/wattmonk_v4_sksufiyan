@@ -388,8 +388,8 @@ export class ApiService {
      return this.http.get<User[]>(BaseUrl + '/fetchsuperadmins',{headers:this.headers});
     }
   
-    getDesignersDetails(starttime:string, endtime:string):Observable<DesignersStatistics[]>{
-      return this.http.get<DesignersStatistics[]>(BaseUrl + '/getdesignanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype=prelim', {headers:this.headers});
+    getDesignersDetails(starttime:string, endtime:string, requesttype:string):Observable<DesignersStatistics[]>{
+      return this.http.get<DesignersStatistics[]>(BaseUrl + '/getdesignanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype='+requesttype, {headers:this.headers});
     }
 
     getanalystanalytics(starttime:string, endtime:string):Observable<AnalystStatistics[]>{
