@@ -6,8 +6,8 @@
         <ion-menu-toggle>
           <ion-header style="text-align: -webkit-center;">
             <ion-toolbar style="height: 130px;display: flex;justify-content: center;align-content: center;" routerLink='/profile'>
-              <ion-card style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;">{{userData?.firstname.slice(0,1) + userData?.lastname.slice(0,1)}}</ion-card>
-            <ion-title ><h4 style="text-align: center;font-weight: bold;margin: 1px;">{{userData?.firstname + userData?.lastname}}</h4></ion-title>
+              <ion-card style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;">{{userData?.firstname.slice(0,1).toUpperCase() + userData?.lastname.slice(0,1).toUpperCase()}}</ion-card>
+            <ion-title ><h4 style="text-align: center;font-weight: bold;margin: 1px;">{{userData?.firstname.charAt(0).toUpperCase() + userData?.firstname.slice(1) + ' ' + userData?.lastname.charAt(0).toUpperCase() + userData?.lastname.slice(1)}}</h4></ion-title>
            <small style="text-align: center;">{{userData?.role.name}} </small>
           </ion-toolbar>
       </ion-header>
@@ -24,7 +24,7 @@
                     <ion-item  (click)="SwitchMenuAccordingtoRoles('prelim')" routerDirection="forward">
                       <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>
                      <ion-item  (click)="SwitchMenuAccordingtoRoles('permit')" routerDirection="forward">
-                      <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Permit</ion-item>
+                      <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Permit</ion-item>
                      <ion-item *ngIf="userData?.role.type !=='designer'" (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
                       <ion-img src="/assets/images/surveyblack.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Survey</ion-item>
                      <ion-item [routerLink]="['/groups']" routerDirection="forward">

@@ -10,6 +10,7 @@ import { PermitDesignDetailsPage } from './permit-design-details.page';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { NgxTimerModule } from 'ngx-timer';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { NgxTimerModule } from 'ngx-timer';
     ReactiveFormsModule,
     UtilitiesModule,
     NgxTimerModule,
-    PermitDesignDetailsPageRoutingModule
+    PermitDesignDetailsPageRoutingModule,
+    SharedModule
   ],
   declarations: [PermitDesignDetailsPage],
   providers: [

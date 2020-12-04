@@ -14,6 +14,8 @@ import {NgxImageCompressService} from 'ngx-image-compress';
 import { CountdownTimerService, countDownTimerConfigModel, countDownTimerTexts } from 'ngx-timer';
 import { User } from '../model/user.model';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Intercom } from 'ng-intercom';
+import { intercomId } from '../contants';
 
 @Component({
   selector: 'app-permit-design-details',
@@ -50,7 +52,7 @@ export class PermitDesignDetailsPage implements OnInit {
   timerConfig: any;
   user: User;
   commentsForm: FormGroup;
-  reviewIssuesForm: FormGroup; 
+  reviewIssuesForm: FormGroup;
   //reviewIssues= new FormControl('', Validators.required);
   browser: any;
   // user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
@@ -70,7 +72,8 @@ export class PermitDesignDetailsPage implements OnInit {
     private countdownservice: CountdownTimerService,
     private iab: InAppBrowser,
     private router:Router,
-  
+    private intercom:Intercom
+
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
@@ -88,25 +91,28 @@ export class PermitDesignDetailsPage implements OnInit {
      reviewIssues: new FormControl('',[Validators.required])
     })
 
-    
+
   }
 
   ionViewDidEnter(){
- 
+
   }
 
 
-  
+
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.enableDisable= false;
     console.log(this.imageName);
     this.user=this.storage.getUser();
     console.log(this.user);
-    
+
     // console.log("pop after ngoninit");
     // this.utilities.getHomepagePermitRefresh().subscribe(()=>{})
-    
+
     this.dataSubscription = this.utilities.getPermitDesignDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getDesignDetails();
@@ -129,7 +135,7 @@ export class PermitDesignDetailsPage implements OnInit {
     }else{
       this.browser = this.iab.create(this.design.architecturaldesign[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
     }
- 
+
   }
 
   updatecomments(){
@@ -152,11 +158,11 @@ export class PermitDesignDetailsPage implements OnInit {
              designendtime:date,
              reviewstarttime:date,
              comments:this.commentsForm.get('comments').value
-             
+
      }}
 
       this.utilities.showLoading('Submitting').then(()=>{
-        
+
         this.apiService.updateDesignForm(data,this.designId).subscribe((success)=>{
           this.uploadpreliumdesign(this.designId,'permitdesign');
           this.utilities.hideLoading().then(() => {
@@ -168,15 +174,15 @@ export class PermitDesignDetailsPage implements OnInit {
             if(this.ispermitUpdate){
               this.utilities.setHomepagePermitRefresh(true);
               this.router.navigate(['permitdesignoverview/permitInreview']);
-             
-              
+
+
             }
 
             else
             {
               this.router.navigate(['permitdesignoverview/permitcompleted'])
               // this.utilities.setHomepagePermitRefresh(true);
-        
+
           }
             // this.navController.navigateRoot(['homepage']);
           });
@@ -197,7 +203,7 @@ export class PermitDesignDetailsPage implements OnInit {
          //custom class
          this.timerConfig.timerClass = 'remainingtimerclass';
      ​
-         //timer text values  
+         //timer text values
          this.timerConfig.timerTexts = new countDownTimerTexts();
          this.timerConfig.timerTexts.hourText = " :"; //default - hh
          this.timerConfig.timerTexts.minuteText = " :"; //default - mm
@@ -205,7 +211,7 @@ export class PermitDesignDetailsPage implements OnInit {
          if (this.design.status == "designassigned"){
           let cdate = new Date(this.design.designstarttime);
           console.log(cdate);
-          
+
           cdate.setHours(cdate.getHours() + 6);
           this.countdownservice.startTimer(cdate);
         }else if (this.design.status == "reviewassigned"){
@@ -220,6 +226,9 @@ export class PermitDesignDetailsPage implements OnInit {
 
 
   ngOnDestroy(): void {
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
     this.dataSubscription.unsubscribe();
     if (this.refreshDataOnPreviousPage > 1) {
       this.utilities.setHomepagePermitRefresh(true);
@@ -257,7 +266,7 @@ export class PermitDesignDetailsPage implements OnInit {
     }else{
     this.imageName= result.permitdesign==null ? '' : result.permitdesign.name + result.permitdesign.ext;
     console.log(this.imageName);}
-    
+
     if (this.design.newconstruction == true) {
       this.design.newconstruction = 'Yes';
     } else {
@@ -308,7 +317,7 @@ export class PermitDesignDetailsPage implements OnInit {
   }
 
   getAssignees() {
-    
+
     this.apiService.getDesigners().subscribe(assignees => {
       this.listOfAssignees = [];
       assignees.forEach(item => this.listOfAssignees.push(item));
@@ -348,22 +357,22 @@ export class PermitDesignDetailsPage implements OnInit {
     this.apiService.deletePrelimImage(this.design.permitdesign.id).subscribe(_res=>{})
     console.log(this.imageName);
     this.imageName=[];
-    
+
   }
 
   permitfiles(event){
-    
-    
+
+
     console.log(this.imageName);
     console.log(event.target.files);
     // for(var i=0; i< event.target.files.length;i++){
-      // this.permitFiles.push(event.target.files) 
+      // this.permitFiles.push(event.target.files)
       this.permitFiles= event.target.files;
       this.imageName= event.target.files[0].name;
       this.imagebox= true;
     // }
     console.log(this.permitFiles);
-    
+
       this.targetLength= event.target.files.length;
 
 
@@ -374,7 +383,7 @@ export class PermitDesignDetailsPage implements OnInit {
       let localUrl = event.target.result;
         // this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
        // console.log(res,">><><><");
-        // this.image= res;  
+        // this.image= res;
     this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
     result => {
       this.image = result;
@@ -408,7 +417,7 @@ export class PermitDesignDetailsPage implements OnInit {
 }
 
 remove(){
-  
+
     this.permitFiles=[];
     this.imageName= [];
     this.imagebox= false;
@@ -423,13 +432,13 @@ permitupdate(event){
   //console.log(this.imageName);
   //console.log(event.target.files);
   // for(var i=0; i< event.target.files.length;i++){
-    // this.permitFiles.push(event.target.files) 
+    // this.permitFiles.push(event.target.files)
     this.permitFiles= event.target.files;
     //this.imageName= event.target.files[0].name;
     //this.imagebox= true;
   // }
   //console.log(this.permitFiles);
-  
+
     this.targetLength= event.target.files.length;
 
 
@@ -440,7 +449,7 @@ var orientation = -1;
 let localUrl = event.target.result;
 // this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
 // console.log(res,">><><><");
-// this.image= res;  
+// this.image= res;
 this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
   result => {
     this.image = result;
@@ -481,7 +490,7 @@ return blob;
       // console.log(blob);
       //  let blob= this.utilities.b64toBlob(this.image);
       //   console.log(blob);
-        
+
       // console.log(typeof(this.permitFiles[0]));
       console.log(key);
       const imageData = new FormData();
@@ -493,35 +502,35 @@ return blob;
           imageData.append('ref', 'design');
           imageData.append('field', key);
         // }
-      } 
-       
+      }
+
           this.apiService.uploaddesign(imageData).subscribe(res=>{
             this.utilities.hideLoading().then(()=>{
-              console.log(res); 
+              console.log(res);
               this.imagebox= false;
               // this.getDesignDetails();
               // this.updatecomments();
               // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res)=>{
               //   this.utilities.getDesignDetailsRefresh();
               //   console.log(res,">>");
-                
+
               // })
               if(this.isSelfUpdate){
                 this.reportDesignReviewSuccess();
               }//else{
                // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res) =>{
              // this.utilities.getDesignDetailsRefresh();
-              
-              
-     
-            
-              
+
+
+
+
+
            // });
         //  }
       },err=>{
             this.utilities.hideLoading().then(()=>{
               console.log(err);
-              
+
             })
           })
         // })
@@ -532,7 +541,7 @@ return blob;
 
   reportDesignReviewFailure(){
     //console.log("Value is" + this.reviewIssuesForm.value);
-    if(this.reviewIssuesForm.valid){  
+    if(this.reviewIssuesForm.valid){
     this.countdownservice.stopTimer();
         let cdate = Date.now();
         this.reviewenddatetime = cdate;
@@ -541,10 +550,10 @@ return blob;
        reviewissues : this.reviewIssuesForm.get('reviewIssues').value,
         reviewstarttime : this.reviewstartdatetime,
         reviewendtime : this.reviewenddatetime,
-        
+
       };
 
-    
+
       console.log("this is" + this.design.reviewstarttime);
 
      // console.log("this is"+ this.reviewstartdatetime);
@@ -567,7 +576,7 @@ return blob;
           },
           error => {
             this.utilities.errorSnackBar(
-              
+
               "Error"
             );
           }
@@ -581,13 +590,13 @@ return blob;
 
 
   designReviewSuccess(){
-    
+
     if(this.isSelfUpdate && this.permitFiles.length > 0)
     { this.utilities.showLoading("Uploading").then(()=>
       {this.uploadpreliumdesign(this.designId,'permitdesign' );})
-      
-      
-      
+
+
+
     }else if(this.isSelfUpdate && this.permitFiles.length == 0)
     {
       this.utilities.errorSnackBar("Please attach file");
@@ -630,9 +639,9 @@ return blob;
         }
       );
   ​
-     
-          
-        
+
+
+
   }
 
 }
