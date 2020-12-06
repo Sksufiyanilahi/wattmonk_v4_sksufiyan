@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DatePicker } from '@ionic-native/date-picker/ngx';
 import { ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -24,6 +25,10 @@ export class DesignersComponent implements OnInit {
   isSelected:boolean=false;
   topAnalyst:any=[];
   analystCount:any=[];
+  requestTypeValue:any;
+  starttime:any;
+  endtime:any;
+  designerId:any;
 
   private subscription: Subscription;
 
@@ -31,12 +36,14 @@ export class DesignersComponent implements OnInit {
     private datePicker: DatePicker,
     private modalController:ModalController,
     private formBuilder:FormBuilder,
-    private utilities:UtilitiesService) { 
+    private utilities:UtilitiesService,
+    private router:Router) { 
       this.desginForm = this.formBuilder.group({
         startdate : new FormControl(new Date().getTime(), [Validators.required]),
         enddate : new FormControl(new Date().getTime(), [Validators.required]),
         filterFields : new FormControl(''),
-        sort : new FormControl('')
+        sort : new FormControl(''),
+        requesttype : new FormControl('prelim')
       })
     }
 
@@ -73,10 +80,10 @@ export class DesignersComponent implements OnInit {
 
 fetchStatisticsDesigners(){
   const date = new Date();
-    const starttime=date.getFullYear()+'-01-01T06:30:00.000Z'.toString();
-    const endtime = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+'-'+'T06:30:00.000Z'.toString();
-  
-  this.service.getDesignersDetails(starttime, endtime).subscribe(
+     this.starttime=date.getFullYear()+'-01-01T06:30:00.000Z'.toString();
+     this.endtime = date.getFullYear()+'-'+(date.getMonth()+1)+'-0'+date.getDate()+'T06:30:00.000Z'.toString();
+    var requesttype = this.desginForm.get('requesttype').value
+  this.service.getDesignersDetails(this.starttime, this.endtime, requesttype).subscribe(
     response =>{
       this.designersList = response;// = response;
       /*this.designers=response;
@@ -95,10 +102,11 @@ fetchFilteredStatisticsDesigners(){
       console.log("date",startDate)
      var endDate = new Date(this.desginForm.get('enddate').value);
       endDate.setDate(endDate.getDate()+1);
-  const starttime = startDate.toISOString();
-  const endtime = endDate.toISOString();
+   this.starttime = startDate.toISOString();
+   this.endtime = endDate.toISOString();
+  var requesttype = this.desginForm.get('requesttype').value
 
-  this.service.getDesignersDetails(starttime, endtime).subscribe(
+  this.service.getDesignersDetails(this.starttime, this.endtime, requesttype).subscribe(
     response =>{
       this.designersList = response;
     /*  this.designers=response;
@@ -148,6 +156,12 @@ eventFieldsChange(event)
   this.eventSortChange();
   
   
+}
+
+eventTypeChange(event){
+this.requestTypeValue = event.target.value;
+console.log(this.requestTypeValue);
+this.fetchStatisticsDesigners();
 }
 
 
@@ -204,7 +218,7 @@ eventSortChange()
 }
 
 sendValue(){
-  if(this.desginForm.get('enddate').value > this.desginForm.get('startdate').value){
+  if(this.desginForm.get('enddate').value >= this.desginForm.get('startdate').value){
   this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGNERS_VALUE);
 }
 else if(this.desginForm.get('startdate').value == ''){
@@ -218,5 +232,11 @@ else{
 }
 }
 
+statsDetails(e){
+console.log("Hello");
+this.designerId = e;
+console.log("Hello",this.designerId);
+this.router.navigate(['/statsoverviewdetails',{starttime:this.starttime, endtime:this.endtime, requesttype:this.desginForm.get('requesttype').value, id:this.designerId, name:'designer'}]);
+}
 
 }

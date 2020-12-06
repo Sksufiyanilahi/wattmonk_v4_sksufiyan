@@ -388,12 +388,20 @@ export class ApiService {
      return this.http.get<User[]>(BaseUrl + '/fetchsuperadmins',{headers:this.headers});
     }
   
-    getDesignersDetails(starttime:string, endtime:string):Observable<DesignersStatistics[]>{
-      return this.http.get<DesignersStatistics[]>(BaseUrl + '/getdesignanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype=prelim', {headers:this.headers});
+    getDesignersDetails(starttime:string, endtime:string, requesttype:string):Observable<DesignersStatistics[]>{
+      return this.http.get<DesignersStatistics[]>(BaseUrl + '/getdesignanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype='+requesttype, {headers:this.headers});
     }
 
-    getanalystanalytics(starttime:string, endtime:string):Observable<AnalystStatistics[]>{
-      return this.http.get<AnalystStatistics[]>(BaseUrl + '/getanalystanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype=prelim', { headers: this.headers});
+    getanalystanalytics(starttime:string, endtime:string, requesttype:string):Observable<AnalystStatistics[]>{
+      return this.http.get<AnalystStatistics[]>(BaseUrl + '/getanalystanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype='+requesttype, { headers: this.headers});
+    }
+
+    getDesignerDesignsForStats(startdate:string, enddate:string, requesttype:string, id:number){
+      return this.http.get(BaseUrl + '/getdesignerdesigns?status=delivered&designerid='+id+'&startdate='+startdate+'&enddate='+enddate+'&requesttype='+requesttype,{headers: this.headers});
+    }
+
+    getAnalystDesignsForStats(startdate:string, enddate:string, requesttype:string, id:number){
+      return this.http.get(BaseUrl + '/getanalystdesigns?status=delivered&analystid='+id+'&startdate='+startdate+'&enddate='+enddate+'&requesttype='+requesttype,{headers: this.headers});
     }
     
 }
