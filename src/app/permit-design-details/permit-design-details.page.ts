@@ -494,7 +494,6 @@ return blob;
           imageData.append('field', key);
         // }
       } 
-       this.utilities.showLoading('upload').then(()=>{
           this.apiService.uploaddesign(imageData).subscribe(res=>{
             this.utilities.hideLoading().then(()=>{
               console.log(res); 
@@ -527,7 +526,7 @@ return blob;
         // })
     // }
   })
-})
+
 }
 
 
@@ -584,8 +583,9 @@ return blob;
   designReviewSuccess(){
     
     if(this.isSelfUpdate && this.permitFiles.length > 0)
-    {
-      this.uploadpreliumdesign(this.designId,'permitdesign' );
+    { this.utilities.showLoading("Uploading").then(()=>
+      {this.uploadpreliumdesign(this.designId,'permitdesign' );})
+      
       
       
     }else if(this.isSelfUpdate && this.permitFiles.length == 0)

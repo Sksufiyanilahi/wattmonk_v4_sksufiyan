@@ -1,6 +1,6 @@
 <ion-content class="ion-padding">
 
-  <h4 style="color: gray; margin-top: 40px; text-align: center;">Analysts Statistics</h4>
+  <h4 style="color: gray; text-align: center;">Analysts Statistics</h4>
   <form [formGroup]="desginForm" novalidate style="overflow:scroll">
     <ion-row class="ion-margin-top">
       <ion-col size="6">
@@ -20,7 +20,17 @@
       <ion-row style="margin-top: 30px;">
         <ion-col ><ion-button color="primary" size="small"  class="button-inner" style="min-width: 10em; margin-left: 30%;" (click)="sendValue()" >Search</ion-button></ion-col>
         </ion-row>
-      <ion-row style="margin-top: 20px;"><ion-col size="7">
+      <ion-row style="margin-top: 20px;">
+        <ion-col size="4">
+          <ion-item class="ion-no-padding">
+            <ion-label position="floating" style="font-size: 13px;">Type</ion-label>
+            <ion-select interface="popover" (ionChange)="eventTypeChange($event)" formControlName="requesttype" style="font-size:14px;" value="prelim" >
+              <ion-select-option value="prelim" >Prelim</ion-select-option>
+              <ion-select-option value="permit">Permit</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="5">
         <ion-item class="ion-no-padding">
       <ion-label position="floating">Select Field</ion-label>
       <ion-select interface='popover' (ionChange)="eventFieldChange($event)" formControlName="filterFields">
@@ -32,7 +42,7 @@
       <ion-select-option value="Assigned">Assigned</ion-select-option> 
       </ion-select>
     </ion-item></ion-col>
-    <ion-col>
+    <ion-col size="3">
       <ion-item class="ion-no-padding">
         <ion-label position="floating">Sort</ion-label>
         <ion-select interface="popover" (ionChange)="eventSortChange()" formControlName="sort">
@@ -58,9 +68,9 @@
       
     
       
-        <ion-item  *ngFor="let analysts of analystsList;" style="text-align: center; font-size: small;" (click)="details(analysts, 'analystname')">
+        <ion-item  *ngFor="let analysts of analystsList;" style="text-align: center; font-size: small;" >
            <ion-col>
-           <ion-label style="float: left" class="item-input ion-label"  >{{analysts.analyst}}</ion-label>
+           <ion-label style="float: left" class="clickEnableCls" (click)="details(analysts, 'analystname')" >{{analysts.analyst}}</ion-label>
           </ion-col>
           <ion-col *ngIf="isSelected && fieldChangeValue=='Avg Comp Time'">
             <ion-label style="float: right;" class="item-input ion-label">{{analysts.avgdesigncompletiontimestamp}}</ion-label>
@@ -80,6 +90,8 @@
           <ion-col *ngIf="isSelected && fieldChangeValue=='Assigned'">
             <ion-label style="float: right;" class="item-input ion-label">{{analysts.totaldesignscreated}}</ion-label>
           </ion-col>
+          <ion-col></ion-col>
+        <a (click)="statsDetails(analysts.id)" style="border-bottom: 1px solid skyblue;">Details</a>
           </ion-item>
           </ion-list>
           </ion-content>

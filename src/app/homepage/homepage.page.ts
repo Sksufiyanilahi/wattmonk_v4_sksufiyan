@@ -82,7 +82,7 @@ export class HomepagePage implements OnInit, OnDestroy {
      this.unreadCount= count;
     });
 
-   
+
   }
 
   ngOnInit() {
@@ -96,25 +96,25 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
-    if (this.storage.getUser().role.id === ROLES.Surveyor) {
-      // surveyor will only see survey tab
-      this.isUserSurveyor = true;
-      this.isUserDesigner = false;
-      this.route.navigate(['homepage/survey']);
+    // if (this.storage.getUser().role.id === ROLES.Surveyor) {
+    //   // surveyor will only see survey tab
+    //   this.isUserSurveyor = true;
+    //   this.isUserDesigner = false;
+    //   this.route.navigate(['homepage/survey']);
 
-    } else if (this.storage.getUser().role.id === ROLES.Designer) {
-      // designer will only see design tab
-      this.isUserSurveyor = false;
-      this.isUserDesigner = true;
-      this.route.navigate(['homepage/design']);
+    // } else if (this.storage.getUser().role.id === ROLES.Designer) {
+    //   // designer will only see design tab
+    //   this.isUserSurveyor = false;
+    //   this.isUserDesigner = true;
+    //   this.route.navigate(['homepage/design']);
 
-    } else if (this.storage.getUser().role.id === ROLES.BD || this.storage.getUser().role.id === ROLES.Admin || this.storage.getUser().role.id === ROLES.ContractorAdmin || this.storage.getUser().role.id === ROLES.ContractorSuperAdmin || this.storage.getUser().role.id === ROLES.SuperAdmin) {
-      // admin will see both tabs
-      this.isUserSurveyor = true;
-      this.isUserDesigner = true;
-      this.route.navigate(['homepage/design']);
-    }
-    
+    // } else if (this.storage.getUser().role.id === ROLES.BD || this.storage.getUser().role.id === ROLES.Admin || this.storage.getUser().role.id === ROLES.ContractorAdmin || this.storage.getUser().role.id === ROLES.ContractorSuperAdmin || this.storage.getUser().role.id === ROLES.SuperAdmin) {
+    //   // admin will see both tabs
+    //   this.isUserSurveyor = true;
+    //   this.isUserDesigner = true;
+    //   this.route.navigate(['homepage/design']);
+    // }
+
   }
 
   updateUserPushToken(){
@@ -202,7 +202,7 @@ export class HomepagePage implements OnInit, OnDestroy {
               this.searchDesginItem = searchModel;
               // console.log(this.searchDesginItem);
 
-            } else {    
+            } else {
                 this.searchSurveyItem = searchModel;
             }
           });
@@ -411,12 +411,12 @@ export class HomepagePage implements OnInit, OnDestroy {
   ionViewDidEnter() {
 
     if(this.version !== this.update_version && this.update_version !==''){
-        
+
       setTimeout(()=>{
-    
+
         this.utilities.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
           text:'Ok',
-        
+
           handler:()=>{
             this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
            this.ionViewDidEnter();
@@ -427,7 +427,7 @@ export class HomepagePage implements OnInit, OnDestroy {
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
-      
+
     })
 
 this.network.networkDisconnect();

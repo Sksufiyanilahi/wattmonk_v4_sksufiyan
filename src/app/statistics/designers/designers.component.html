@@ -1,5 +1,5 @@
 <ion-content class="ion-padding">
-  <h4 style="color: gray; margin-top: 40px; text-align: center;">Designers Statistics</h4>
+  <h4 style="color: gray; text-align: center;">Designers Statistics</h4>
   <!--<form [formGroup]="desginForm" novalidate style="overflow:scroll">
   <ion-row style="margin-top: 10px;"><ion-col size="6">
     <ion-item class="ion-no-padding">
@@ -102,7 +102,7 @@
           <ion-label style="float: right;" class="item-input ion-label">{{designers.totaldesignscreated}}</ion-label>
         </ion-col>
         <ion-col></ion-col>
-        <a (click)="statsDetails()">Details</a>
+        <a (click)="statsDetails(designers.id)" style="border-bottom: 1px solid skyblue;">Details</a>
         </ion-item>
        
   </ion-list>

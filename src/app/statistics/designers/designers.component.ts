@@ -26,6 +26,9 @@ export class DesignersComponent implements OnInit {
   topAnalyst:any=[];
   analystCount:any=[];
   requestTypeValue:any;
+  starttime:any;
+  endtime:any;
+  designerId:any;
 
   private subscription: Subscription;
 
@@ -77,10 +80,10 @@ export class DesignersComponent implements OnInit {
 
 fetchStatisticsDesigners(){
   const date = new Date();
-    const starttime=date.getFullYear()+'-01-01T06:30:00.000Z'.toString();
-    const endtime = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+'-'+'T06:30:00.000Z'.toString();
+     this.starttime=date.getFullYear()+'-01-01T06:30:00.000Z'.toString();
+     this.endtime = date.getFullYear()+'-'+(date.getMonth()+1)+'-0'+date.getDate()+'T06:30:00.000Z'.toString();
     var requesttype = this.desginForm.get('requesttype').value
-  this.service.getDesignersDetails(starttime, endtime, requesttype).subscribe(
+  this.service.getDesignersDetails(this.starttime, this.endtime, requesttype).subscribe(
     response =>{
       this.designersList = response;// = response;
       /*this.designers=response;
@@ -99,11 +102,11 @@ fetchFilteredStatisticsDesigners(){
       console.log("date",startDate)
      var endDate = new Date(this.desginForm.get('enddate').value);
       endDate.setDate(endDate.getDate()+1);
-  const starttime = startDate.toISOString();
-  const endtime = endDate.toISOString();
+   this.starttime = startDate.toISOString();
+   this.endtime = endDate.toISOString();
   var requesttype = this.desginForm.get('requesttype').value
 
-  this.service.getDesignersDetails(starttime, endtime, requesttype).subscribe(
+  this.service.getDesignersDetails(this.starttime, this.endtime, requesttype).subscribe(
     response =>{
       this.designersList = response;
     /*  this.designers=response;
@@ -215,7 +218,7 @@ eventSortChange()
 }
 
 sendValue(){
-  if(this.desginForm.get('enddate').value > this.desginForm.get('startdate').value){
+  if(this.desginForm.get('enddate').value >= this.desginForm.get('startdate').value){
   this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGNERS_VALUE);
 }
 else if(this.desginForm.get('startdate').value == ''){
@@ -229,9 +232,11 @@ else{
 }
 }
 
-statsDetails(){
+statsDetails(e){
 console.log("Hello");
-this.router.navigate(['/statsoverviewdetails']);
+this.designerId = e;
+console.log("Hello",this.designerId);
+this.router.navigate(['/statsoverviewdetails',{starttime:this.starttime, endtime:this.endtime, requesttype:this.desginForm.get('requesttype').value, id:this.designerId, name:'designer'}]);
 }
 
 }

@@ -96,6 +96,7 @@
     "ion-bottom-drawer": "2.0.0",
     "jquery-ui": "1.12.1",
     "moment": "2.27.0",
+    "ng-intercom": "^8.0.2",
     "ng2-charts": "^2.4.2",
     "ngx-image-compress": "8.0.4",
     "ngx-paypal": "4.0.2",

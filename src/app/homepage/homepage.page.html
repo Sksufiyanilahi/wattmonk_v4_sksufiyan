@@ -9,7 +9,7 @@
           </ion-buttons>
         <ion-row class="ion-align-items-center">
             <ion-col *ngIf="showHome === true">
-                <h1 class="ion-no-padding ion-no-margin home">Prelim Dashboard</h1>
+                <h1 class="ion-no-padding ion-no-margin home">Home</h1>
             </ion-col>
             <!-- <ion-col *ngIf="showSearchBar === true" >
                 <ion-searchbar debounce="0" placeholder="home" class="custom"></ion-searchbar>
@@ -24,7 +24,7 @@
                     <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
                    <span class="badge" *ngIf="unreadCount > 0">
                                 {{unreadCount > 99 ? '99+' : unreadCount }}
-                            </span> 
+                            </span>
                 </div>
             </ion-col>
         </ion-row>
@@ -33,7 +33,7 @@
     </ion-grid>
     <!-- </ion-toolbar> -->
     <!-- </ion-header> -->
-   
+
 
     <!-- <ion-tabs style="margin-top: 20%;">
         <ion-tab-bar slot="top">
@@ -126,12 +126,12 @@
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
     <div class="position-relative">
-        <ion-fab horizontal="center" class="fab-position position-absolute" *ngIf="isUserSurveyor && isUserDesigner">
-            <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md">
+        <ion-fab horizontal="start" class="fab-position position-absolute" >
+            <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md" class="ht_wt">
                 <ion-icon name="add"></ion-icon>
             </ion-fab-button>
         </ion-fab>
-        <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
+        <!-- <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
             <ion-row>
                 <ion-col size="4">
                     <div class="tab">
@@ -144,7 +144,7 @@
                         <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
                         <span class="tabText">Messages</span>
                     </div>
-                </ion-col> 
+                </ion-col>
                 <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
                     <div class="tab">
                         <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
@@ -152,7 +152,7 @@
                     </div>
                 </ion-col>
             </ion-row>
-        </ion-grid>
+        </ion-grid> -->
     </div>
 
 </ion-footer>

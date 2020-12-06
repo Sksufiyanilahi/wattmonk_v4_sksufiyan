@@ -5,7 +5,7 @@ import { NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
 import { AssigneeModel } from '../model/assignee.model';
-import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent } from '../model/constants';
+import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent, INVALID_MODULE_AND_INVERTER } from '../model/constants';
 import { DesginDataModel } from '../model/design.model';
 import { Invertermake } from '../model/inverter-made.model';
 import { InverterMakeModel } from '../model/inverter-make.model';
@@ -69,6 +69,7 @@ export class PermitschedulePage implements OnInit {
   annualunitError = INVALID_ANNUAL_UNIT;
   tiltforgroundError = INVALID_TILT_FOR_GROUND_MOUNT;
   phoneError = INVALID_PHONE_NUMBER;
+  moduleAndInverterError = INVALID_MODULE_AND_INVERTER;
 
   fieldRequired = FIELD_REQUIRED;
 
@@ -87,6 +88,7 @@ export class PermitschedulePage implements OnInit {
   attachmentData:any;
   architecturalData:any;
   send:any;
+  tabsDisabled = false;
   //user: User
   isEditMode:boolean=false;
   //data:DesignFormData;
@@ -118,13 +120,13 @@ export class PermitschedulePage implements OnInit {
     //private data: DesignFormData
     ) {
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
-       const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
-    const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
-    const NUMBERPATTERN = '^[0-9]*$';
+       const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
+    const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
+    const NUMBERPATTERN = '^[0-9]+$';
     this.desginForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
-      phone : new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
+      phone : new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
     modulemake : new FormControl("", [
       Validators.required,
       Validators.pattern("^[a-zA-Z-_ ]{3,}$")
@@ -146,7 +148,7 @@ export class PermitschedulePage implements OnInit {
     createdby: new FormControl(''),
     assignedto: new FormControl(''),
     rooftype: new FormControl(''),
-    architecturaldesign: this.formBuilder.array([new FormControl(null)],[Validators.required]),
+    architecturaldesign: this.formBuilder.array([new FormControl(null)]),
     tiltofgroundmountingsystem: new FormControl(''),
     mountingtype: new FormControl('', [Validators.required]),
    jobtype: new FormControl('', [Validators.required]),
@@ -166,13 +168,20 @@ export class PermitschedulePage implements OnInit {
 
   })
   this.designId = +this.route.snapshot.paramMap.get('id');
-  }
 
+  // const url = this.router.url;
+  //   const splittedUrl = url.split('/');
+  //   console.log(splittedUrl);
+  //   this.tabsDisabled = splittedUrl.length === 4;
+  //   this.currentTab = splittedUrl[2];
+  // }
+    }
   ngOnInit() {
     this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
     this.requestLocationPermission();
-    if (this.designId!==0) {
+    if (this.designId!=0) {
+      this.tabsDisabled=true;
       this.subscription = this.utils.getStaticAddress().subscribe((address) => {
         this.address = address;
         this.storage.setData(this.address);
@@ -570,6 +579,7 @@ export class PermitschedulePage implements OnInit {
 
 showUpload(e){
   this.uploadbox = e.target.value;
+  console.log(this.uploadbox)
 
 
 }
@@ -704,13 +714,14 @@ saveInverterModel() {
     this.onFormSubmit=false;
     // this.saveModuleMake();
      this.formValue = e;
-
+    console.log(this.formValue);
       console.log('Reach', this.desginForm.value);
 
       // debugger;
       // this.saveModuleMake();
 
-      if(this.desginForm.status=='VALID'){
+      if(this.desginForm.status==='VALID'){
+        console.log("Hello");
         if(this.formValue=='send'){
         this.router.navigate(['payment-modal',{designData:"permit"}]);
         }else{
@@ -1014,29 +1025,29 @@ saveInverterModel() {
 
     error(){
 
-        if(this.desginForm.value.name==''){
+        if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
 
           this.utils.errorSnackBar('Please fill the name.');
         }
-        else if(this.desginForm.value.email==''){
+        else if(this.desginForm.value.email=='' || this.desginForm.get('email').hasError('pattern')){
           this.utils.errorSnackBar('Please fill the email.');
         }
-        else if(this.desginForm.value.phone==''){
+        else if(this.desginForm.value.phone=='' || this.desginForm.get('phone').hasError('pattern')){
           this.utils.errorSnackBar('Please fill the phone number');
         }
-        else if(this.desginForm.value.monthlybill==''){
+        else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern')){
           this.utils.errorSnackBar('Please fill the annual units.');
         }
-        else if(this.desginForm.value.modulemake==''){
+        else if(this.desginForm.value.modulemake=='' || this.desginForm.get('modulemake').hasError('pattern')){
           this.utils.errorSnackBar('Please fill the module make.');
         }
-        else if(this.desginForm.value.modulemodel==''){
+        else if(this.desginForm.value.modulemodel=='' || this.desginForm.get('modulemodel').hasError('pattern')){
           this.utils.errorSnackBar('Please fill the module model.');
         }
-        else if(this.desginForm.value.invertermake==''){
+        else if(this.desginForm.value.invertermake=='' || this.desginForm.get('invertermake').hasError('pattern')){
           this.utils.errorSnackBar('Please fill the inverter make.');
         }
-        else if(this.desginForm.value.invertermodel==''){
+        else if(this.desginForm.value.invertermodel=='' || this.desginForm.get('invertermodel').hasError('pattern')){
           this.utils.errorSnackBar('Please fill the inverter model.');
         }
         else if(this.desginForm.value.mountingtype==''){
@@ -1045,7 +1056,7 @@ saveInverterModel() {
         else if(this.desginForm.value.projecttype==''){
           this.utils.errorSnackBar('Please fill the project type.');
         }
-        else if(this.desginForm.value.tiltofgroundmountingsystem==''){
+        else if(this.desginForm.value.tiltofgroundmountingsystem=='' || this.desginForm.get('tiltofgroundmountingsystem').hasError('pattern')){
           this.utils.errorSnackBar('Please fill the tilt for ground mount.');
         }
         else if(this.desginForm.value.rooftype==''){
@@ -1053,7 +1064,7 @@ saveInverterModel() {
         }
 
 
-        else if(this.desginForm.value.architecturaldesign==[]){
+        else if(this.desginForm.value.architecturaldesign=='[]'){
           this.utils.errorSnackBar('Please attach architectural design.');
         }
         else{

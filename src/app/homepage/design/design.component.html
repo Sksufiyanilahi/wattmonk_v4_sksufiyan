@@ -1,6 +1,6 @@
 
 
-    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="newDesign">
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" value="newDesign" mode="md">
         <ion-segment-button value="newDesign">
           <ion-label class="segment-btn">New Designs</ion-label>
         </ion-segment-button>
@@ -17,11 +17,11 @@
           <ion-label class="segment-btn">Delivered</ion-label>
         </ion-segment-button>
       </ion-segment>
-      <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
-          <ion-refresher-content></ion-refresher-content>
-        </ion-refresher>
 
-        <ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;">
+      <ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;">
+        <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+            <ion-refresher-content></ion-refresher-content>
+          </ion-refresher>
         <ion-grid *ngIf="listOfDesignsHelper.length !== 0">
             <ion-row *ngFor="let item of listOfDesignsHelper;let i = index">
                 <ion-col size="12" class="ion-margin-top">

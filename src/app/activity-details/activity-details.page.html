@@ -39,7 +39,7 @@
 </ion-header>
 
 <ion-content><p style="text-align: center; font-size:large; color:black; border:none;margin-bottom:0px ;"> Activities</p>
- <p  style="text-align: center; margin-top: 0px;"><span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'requestdeclined'">Declined</span>
+ <p  style="text-align: center; margin-top: 0px;"><span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'requestdeclined'">On Hold</span>
  <!-- <span class="chipdetail" style="background-color: rgb(246, 104, 10);" >--------{{isDatePassed()}}Overdue</span> -->
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'requestaccepted'">Accepted</span>
  <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'reviewfailed'" >Review Failed</span>

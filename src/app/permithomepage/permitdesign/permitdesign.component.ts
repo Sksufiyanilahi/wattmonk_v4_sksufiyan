@@ -22,6 +22,8 @@ import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 import * as moment from 'moment';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
+import { Intercom } from 'ng-intercom';
+import { intercomId } from '../../contants';
 
 @Component({
   selector: 'app-permitdesign',
@@ -29,14 +31,14 @@ import { EmailModelPage } from 'src/app/email-model/email-model.page';
   styleUrls: ['./permitdesign.component.scss'],
 })
 export class PermitdesignComponent implements OnInit {
-  
+
   drawerState = DrawerState.Bottom;
   showSearchBar = false;
   update_version: string;
   //netSwitch: any;
   unreadCount;
 
-  
+
   listOfDesignDataHelper: DesginDataHelper[] = [];
   listOfDesignsData: DesginDataModel[] = [];
   today: any;
@@ -51,7 +53,7 @@ export class PermitdesignComponent implements OnInit {
   disableAccept="true"
   showBottomDraw: boolean = false;
   roleType: any;
-  myFiles: string[] = [];  
+  myFiles: string[] = [];
   segments:any;
   listOfDesigns: DesginDataModel[];
   private DesignRefreshSubscription: Subscription;
@@ -65,7 +67,7 @@ export class PermitdesignComponent implements OnInit {
   selectedDesigner: any;
   netSwitch: boolean;
  reviewAssignedTo:any;
- 
+
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
     private network:NetworkdetectService,
@@ -75,10 +77,11 @@ export class PermitdesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private storageservice:StorageService,
     private storage:Storage,
+    public intercom: Intercom,
     public alertController: AlertController,
     public modalController: ModalController,
     private socialsharing: SocialSharing,
-    private formBuilder: FormBuilder) { 
+    private formBuilder: FormBuilder) {
     this.userData = this.storageservice.getUser();
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
@@ -95,21 +98,35 @@ export class PermitdesignComponent implements OnInit {
       comment: new FormControl('')
     });
   }
+
+
+  intercomModule(){
+    this.intercom.boot({
+      app_id: intercomId,
+      // Supports all optional configuration.
+      widget: {
+        "activator": "#intercom"
+      }
+    });
+  }
+
+
   ionViewDidEnter() {
+    this.intercomModule();
     this.apiService.emitUserNameAndRole(this.userData);
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
-      
+
     })
 
 this.network.networkDisconnect();
 this.network.networkConnect();
-    
+
   }
 
   segmentChanged(event){
-   
+
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -132,7 +149,7 @@ this.network.networkConnect();
       }
       this.getDesigns(null);
       // return this.segments;
-  
+
     }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
@@ -166,7 +183,7 @@ this.network.networkConnect();
     //     this.formatDesignData(this.listOfDesigns);
     //   }
     // });
-    
+
   }
 
   ngOnInit() {
@@ -177,13 +194,13 @@ this.network.networkConnect();
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
         this.formatDesignData(this.listOfDesigns);
-        
+
       }
     });
   }
 
   getDesigns(event: CustomEvent) {
-    
+
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -192,7 +209,7 @@ this.network.networkConnect();
   }
 
      accept(id,data:string){
-   
+
        let status={
         status:data
       }
@@ -201,9 +218,9 @@ this.network.networkConnect();
            this.utils.hideLoading().then(()=>{
             this.utils.setHomepagePermitRefresh(true);})})
           })
-           
+
        }
-      
+
 
    fetchPendingDesigns(event, showLoader: boolean) {
     console.log("inside fetch Designs");
@@ -235,11 +252,11 @@ this.network.networkConnect();
     this.listOfDesigns = this.fillinDynamicData(records);
 
     console.log(this.listOfDesigns);
-    
+
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesigns.forEach((designItem:any,i) => { 
+          this.listOfDesigns.forEach((designItem:any,i) => {
             console.log(i);
-            
+
             if (tempData.length === 0) {
               this.sDatePassed(designItem.updated_at,i);
               const listOfDesign = new DesginDataHelper();
@@ -248,17 +265,17 @@ this.network.networkConnect();
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
               console.log(tempData);
-              
-              
+
+
 ;
             } else {
-             
+
               let added = false;
               tempData.forEach((DesignList) => {
                 // DesignList['listOfDesigns'].forEach(element=>{
-                  
+
                 //   console.log(element.deliverydate,":::::::::::::");
-                  
+
                 //   this.sDatePassed(element.deliverydate);
                 // })
                 if (!added) {
@@ -292,9 +309,10 @@ this.network.networkConnect();
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
-    
+
   this.dataRefreshSubscription.unsubscribe();
   this.DesignRefreshSubscription.unsubscribe();
+  this.intercom.shutdown();
   }
 
   // filterData(records : DesginDataModel[]) {
@@ -348,7 +366,7 @@ this.network.networkConnect();
       var acceptancedate = new Date(element.designacceptancestarttime);
       element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
       var indesigndate = new Date(element.designstarttime);
-      indesigndate.setHours(indesigndate.getHours() + 6); 
+      indesigndate.setHours(indesigndate.getHours() + 6);
       element.designremainingtime = this.utils.getRemainingTime(indesigndate.toString());
       this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
@@ -358,19 +376,19 @@ this.network.networkConnect();
           element.totalpercent = 0;
         }
       });
-      
+
     });
 
     return records;
   }
 
-  
+
 
   // getDesign(event, showLoader: boolean) {
 
   //   this.listOfDesignsData = [];
   //   this.listOfDesignDataHelper = [];
-    
+
   //   this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting designs').then((success) => {
   //     // ;
   //     this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
@@ -382,10 +400,10 @@ this.network.networkConnect();
   //         console.log(response, '>>');
   //         this.listOfDesignsData = response;
   //          response.forEach(element => {
-  //             this.roleType = element.type;            
+  //             this.roleType = element.type;
   //         });;
   //         console.log(this.roleType);
-          
+
   //         const tempData: DesginDataHelper[] = [];
   //         this.listOfDesignsData.forEach((desginItem) => {
   //           if (tempData.length === 0) {
@@ -461,7 +479,7 @@ this.network.networkConnect();
 
   assignToDesigner() {
       console.log(this.designerData.createdby.id);
-      
+
     if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
       this.utils.errorSnackBar('Please select a analyst');
     }
@@ -470,22 +488,22 @@ this.network.networkConnect();
         this.utils.errorSnackBar('Please select the wattmonk admin');
       }
       else{this.utils.errorSnackBar('Please select a designer');}
-    } 
+    }
     else if( this.reviewAssignedTo!=null && (this.selectedDesigner.id==this.reviewAssignedTo.id)){
       this.utils.errorSnackBar("This design request has been already assigned to"+" "+this.selectedDesigner.firstname+" "+this.selectedDesigner.lastname)
 
     }
     else {
-      
-     
+
+
       var designstarttime = new Date();
       var milisecond = designstarttime.getTime();
     var additonalhours = 0;
-    // if(this.designerData.requesttype == "prelim"){
-      if(this.designerData.requesttype == "prelim"){
+    if(this.designerData.requesttype == "prelim"){
+      // if(this.designerData.requesttype == "permit"){
       console.log(parseInt(this.selectedDesigner.jobcount) );
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
-      
+
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
     }else{
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
@@ -500,18 +518,18 @@ this.network.networkConnect();
             reviewassignedto: this.selectedDesigner.id,
             status: "reviewassigned",
             reviewstarttime: milisecond
-          }; 
+          };
         }
        if(this.selectedDesigner.role.type=="designer") { postData = {
           designassignedto: this.selectedDesigner.id,
-          
+
           isoutsourced: "false",
           status: "designassigned",
           designstarttime: designstarttime
-        }; 
-        
+        };
+
       }
-      
+
       }
       else {
         var designacceptancestarttime = new Date();
@@ -540,9 +558,9 @@ this.network.networkConnect();
     this.utils.showLoading('Assigning').then(()=>{
       this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
         this.utils.hideLoading().then(()=>{
-          ; 
+          ;
           console.log('reach ', value);
-         
+
           if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
          {
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
@@ -552,7 +570,7 @@ this.network.networkConnect();
           this.dismissBottomSheet();
           this.showBottomDraw = false;
           this.utils.setHomepagePermitRefresh(true);
-          
+
         })
       }, (error) => {
         this.utils.hideLoading();
@@ -565,7 +583,7 @@ this.network.networkConnect();
   }
 
 
- 
+
 
   openDesigners(id: number,designData) {
     console.log("this is",designData);
@@ -573,9 +591,9 @@ this.network.networkConnect();
     this.reviewAssignedTo=designData.designassignedto;
     if(this.userData.role.type=='clientsuperadmin'&& this.designerData.status=='created'){
       this.route.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
-      
+
     }
-    
+
    else{ if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
         this.apiService.getDesigners().subscribe(assignees => {
@@ -613,7 +631,7 @@ this.network.networkConnect();
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;
-    
+
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Analysts').then(() => {
         this.apiService.getAnalysts().subscribe(assignees => {
@@ -660,7 +678,7 @@ this.network.networkConnect();
 
 
 
-  async openreviewPassed(id,designData){ 
+  async openreviewPassed(id,designData){
     this.designId=id
     const alert = await this.alertController.create({
       cssClass: 'alertClass',
@@ -697,10 +715,10 @@ this.network.networkConnect();
                console.log(postData);
                this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
-                  ; 
+                  ;
                   console.log('reach ', value);
                  this.utils.showSnackBar('Design request has been delivered successfully');
-                 
+
                   this.utils.setHomepagePermitRefresh(true);
                 })
               }, (error) => {
@@ -713,9 +731,9 @@ this.network.networkConnect();
     });
 
     await alert.present();
-  
-     
-    
+
+
+
   }
 
 
@@ -728,7 +746,7 @@ this.network.networkConnect();
   }
 
   /*async OpenPaymentmodal(id){
-    
+
   const modal = await this.modalController.create({
     component: PaymentModalPage,
     cssClass: 'my-custom-modal-css',
@@ -784,7 +802,7 @@ async Resend(id){
     cssClass: 'my-custom-modal-css',
     componentProps: {
       id:id
-    
+
     },
     backdropDismiss:false
   });
@@ -806,8 +824,8 @@ sDatePassed(datestring: string,i){
   var checkdate = moment(datestring, "YYYYMMDD");
   var todaydate = moment(new Date(), "YYYYMMDD");
   var lateby = todaydate.diff(checkdate, "days");
-  this.overdue = lateby;  
-  
+  this.overdue = lateby;
+
 }
 
 selfAssign(id,designData){
@@ -822,15 +840,15 @@ selfAssign(id,designData){
   this.utils.showLoading('Assigning').then(()=>{
     this.apiService.updateDesignForm(postData,id).subscribe((value) => {
       this.utils.hideLoading().then(()=>{
-        ; 
+        ;
         console.log('reach ', value);
       this.utils.showSnackBar('Design request has been assigned to you successfully');
       this.utils.setHomepagePermitRefresh(true);
-       
+
       })
     }, (error) => {
       this.utils.hideLoading();
-      
+
     });
 })}
 
@@ -847,7 +865,7 @@ pending(value){
 
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
-  
+
 }
 
 shareWhatsapp(designData){
@@ -862,7 +880,7 @@ shareWhatsapp(designData){
       id:id,
       designData:designData
     },
-    
+
   });
   modal.onDidDismiss().then((data) => {
     console.log(data)
@@ -885,7 +903,7 @@ export class DesginDataHelper {
   }
 
   shareDesign(){
-    
+
   }
 
 }

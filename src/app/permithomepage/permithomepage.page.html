@@ -25,7 +25,7 @@
                   <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
                  <span class="badge" *ngIf="unreadCount > 0">
                               {{unreadCount > 99 ? '99+' : unreadCount}}
-                          </span> 
+                          </span>
               </div>
           </ion-col>
       </ion-row>
@@ -33,7 +33,7 @@
   </ion-row>
   </ion-grid>
 
-  
+
 </ion-content>
 
 <ion-tabs style="margin-top: 52px">
@@ -45,17 +45,17 @@
 </ion-tabs>
 <!-- <router-outlet></router-outlet> -->
 
-  
+
 
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
   <div class="position-relative">
-      <ion-fab horizontal="center" class="fab-position position-absolute">
-          <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md">
+      <ion-fab horizontal="start" class="fab-position position-absolute">
+          <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md" class="ht_wt">
               <ion-icon name="add"></ion-icon>
           </ion-fab-button>
       </ion-fab>
-      <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
+      <!-- <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
           <ion-row>
               <ion-col size="4">
                   <div class="tab">
@@ -68,7 +68,7 @@
                       <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
                       <span class="tabText">Messages</span>
                   </div>
-              </ion-col> 
+              </ion-col>
               <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
                   <div class="tab">
                       <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
@@ -76,7 +76,7 @@
                   </div>
               </ion-col>
           </ion-row>
-      </ion-grid>
+      </ion-grid> -->
   </div>
 
 </ion-footer>
