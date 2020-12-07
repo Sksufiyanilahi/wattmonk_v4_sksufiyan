@@ -8,7 +8,7 @@ import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ScheduleFormEvent } from '../model/constants';
+import { ScheduleFormEvent, INVALID_AMOUNT } from '../model/constants';
 declare var Stripe;
 
 
@@ -18,7 +18,10 @@ declare var Stripe;
   styleUrls: ['./add-money.page.scss'],
 })
 export class AddMoneyPage implements OnInit {
- 
+
+  invalidAmount = INVALID_AMOUNT;
+
+amountChecking:boolean=false;
 card:any
   token:any;
   stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
@@ -41,7 +44,7 @@ card:any
     ) {
     this.amountForm=this.formBuilder.group(
        {
-         amount:new FormControl('',[Validators.required]),
+         amount:new FormControl('',[Validators.required, Validators.min(1), Validators.max(5000)]),
          card:new FormControl('')
         }
         )
@@ -95,7 +98,8 @@ card:any
     form.addEventListener('submit', event => {
       event.preventDefault();
       console.log(event)
-
+      if(this.amountForm.get('amount').value >=1 && this.amountForm.get('amount').value <=5000)
+      {
       this.stripe.createToken(this.card).then(result => {
         if (result.error) {
           var errorElement = document.getElementById('card-errors');
@@ -108,6 +112,9 @@ card:any
          
         }
       });
+    }else{
+      this.utils.errorSnackBar("Please Enter Valid Amount");
+    }
     });
   }
 
@@ -117,6 +124,7 @@ card:any
   }
   addMoney()
   {
+   
     if(this.mode=='wallet'){
       var data={};
   var rechargeData={};
@@ -249,7 +257,20 @@ this.utils.setHomepageDesignRefresh(true);}}
     )
     this.token='';})
   }
-  }
+
+}
+
+amountCheck(event){
+  console.log(event.target.value);
+if(event.target.value < 1 || event.target.value > 5000)
+{
+  this.amountChecking = true;
+  console.log(this.amountChecking);
+}else{
+  this.amountChecking = false;
+}
+}
+  
   
 }
 

@@ -73,8 +73,8 @@
               <ion-col>
                   <ion-item class="ion-no-padding">
                       <ion-label position="floating">phone*</ion-label>
-                      <ion-input class="form_input" type="number" autocapitalize="none" autocomplete="off"
-                                  formControlName="phone" ></ion-input>
+                      <ion-input class="form_input" type="tel" autocapitalize="none" autocomplete="off"
+                                  formControlName="phone" maxLength="15" ></ion-input>
                   </ion-item>
                   <div style="height: 5px;">
                       <div *ngIf="desginForm.get('phone').hasError('pattern') && desginForm.get('phone').dirty">
@@ -95,7 +95,7 @@
                     </ion-item>
                     <div style="height: 5px;">
                         <div *ngIf="desginForm.get('monthlybill').dirty && desginForm.get('monthlybill').hasError('pattern')">
-                            <span class="error">{{"Annual units should be a vaid number"}}</span>
+                            <span class="error">{{"Annual units should be a valid number"}}</span>
                         </div>
                         <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
                             <span class="error">{{annualunitError}}</span>
@@ -105,9 +105,9 @@
             </ion-row>
           
            
-            <ion-row>
+            <ion-row class="ion-align-items-center ion-justify-content-center">
               <ion-col size="6">
-                <mat-form-field style="width: 100%;">
+                <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                   <mat-label>module make</mat-label>
                   <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto" formControlName="modulemake" required>
                  
@@ -116,9 +116,14 @@
                       (onSelectionChange)="fetchModuleModelsData($event,modulemake)" class="font">{{modulemake.name}}</mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
+                <div style="height: 5px;">
+                    <div *ngIf="desginForm.get('modulemake').hasError('pattern') && desginForm.get('modulemake').dirty">
+                        <span class="error">{{moduleAndInverterError}}</span>
+                    </div>
+                </div>
               </ion-col>
               <ion-col size="6">
-                <mat-form-field style="width: 100%;">
+                <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                   <mat-label>module model</mat-label>
                   <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto1" formControlName="modulemodel" required>
                   
@@ -127,11 +132,17 @@
                       (onSelectionChange)="setSelectedModuleModel(modulemodel)">{{modulemodel.name}}</mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
+                <div style="height: 5px;">
+                    <div *ngIf="desginForm.get('modulemodel').hasError('pattern') && desginForm.get('modulemodel').dirty">
+                        <span class="error">{{moduleAndInverterError}}</span>
+                    </div>
+                </div>
               </ion-col>
-            </ion-row>
-            <ion-row>
+              
+            </ion-row >
+            <ion-row class="ion-align-items-center ion-justify-content-center">
               <ion-col size="6">
-                <mat-form-field style="width: 100%;">
+                <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                   <mat-label>inverter make</mat-label>
                   <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto2" formControlName="invertermake" required>
                  
@@ -141,9 +152,14 @@
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
+                <div style="height: 5px;">
+                    <div *ngIf="desginForm.get('invertermake').hasError('pattern') && desginForm.get('invertermake').dirty">
+                        <span class="error">{{moduleAndInverterError}}</span>
+                    </div>
+                </div>
               </ion-col>
               <ion-col size="6">
-                <mat-form-field style="width: 100%;">
+                <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                   <mat-label>inverter model</mat-label>
                   <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto3" formControlName="invertermodel" required>
                  
@@ -153,6 +169,11 @@
                       {{invertermodel.name}}</mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
+                <div style="height: 5px;">
+                    <div *ngIf="desginForm.get('invertermodel').hasError('pattern') && desginForm.get('invertermodel').dirty">
+                        <span class="error">{{moduleAndInverterError}}</span>
+                    </div>
+                </div>
               </ion-col>
             </ion-row>
           

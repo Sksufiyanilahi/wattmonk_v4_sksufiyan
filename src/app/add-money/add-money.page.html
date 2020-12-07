@@ -60,13 +60,19 @@
       <ion-item class="ion-no-padding " *ngIf="mode=='wallet'">
           <ion-label position="floating">Amount*</ion-label>
           <ion-input class="form_input" type="number" style="width: 330px;" autocapitalize="none" autocomplete="off"
-                formControlName="amount"></ion-input>
+                formControlName="amount" (ionChange)="amountCheck($event)"></ion-input>
+                
       </ion-item>
       <ion-item class="ion-no-padding" *ngIf="mode=='card'">
         <ion-label position="floating">Amount*</ion-label>
         <ion-input class="form_input" type="number" style="width: 330px;" autocapitalize="none" formControlName ="card" autocomplete="off"
          [disabled]=true  >{{serviceAmount}}</ion-input>
     </ion-item>
+    <div style="height: 5px;">
+      <div *ngIf="amountChecking">
+          <span class="error">{{invalidAmount}}</span>
+      </div>
+  </div>
       
   </ion-col>
 </ion-row>

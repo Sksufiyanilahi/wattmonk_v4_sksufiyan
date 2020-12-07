@@ -47,6 +47,7 @@ export class AppComponent {
   deactivateGetUserData: Subscription;
   deactivateNetworkSwitch: Subscription;
 
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -61,6 +62,7 @@ export class AppComponent {
     private network:NetworkdetectService,
     private router:Router
   ) {
+
     this.initializeApp();
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
@@ -102,7 +104,9 @@ export class AppComponent {
 
   }
 
+
   ngOnInit() {
+
    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
@@ -139,10 +143,15 @@ this.network.networkConnect();
 
    this.deactivateGetUserData=  this.apiservice.getUserName().subscribe((res:any)=>{
       this.userData = res;
-      console.log(this.userData)
+      if(res.role.name=='ContractorSuperAdmin'){
+        this.userData.role.name='SuperAdmin'
+      }else if(res.role.name=='WattmonkAdmin'){
+        this.userData.role.name='Admin'
+      }
     })
-
   }
+
+
 
 
   SwitchMenuAccordingtoRoles(type){

@@ -200,6 +200,10 @@ const routes: Routes = [
     path: 'permitdesignoverview',
     loadChildren: () => import('./permitdesignoverview/permitdesignoverview.module').then( m => m.PermitdesignoverviewPageModule)
   },
+  {
+    path: 'statsoverviewdetails',
+    loadChildren: () => import('./statsoverviewdetails/statsoverviewdetails.module').then( m => m.StatsoverviewdetailsPageModule)
+  },
 
 
 

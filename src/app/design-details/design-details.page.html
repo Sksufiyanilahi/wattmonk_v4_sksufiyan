@@ -411,7 +411,7 @@
         </ion-row>
 
         <!-- For Analyst -->
-        <ion-row class="ion-no-padding ion-margin-top" *ngIf="user.role.type=='qcinspector' && design && design.status =='reviewassigned'">
+        <ion-row class="ion-no-padding ion-margin-top" *ngIf="(user.role.type=='qcinspector' && design && design.status =='reviewassigned') || (design && design.status=='reviewassigned' && design.reviewassignedto.id==user.id)">
 
             <form  [formGroup]="reviewIssuesForm" style="width:100%">
                 

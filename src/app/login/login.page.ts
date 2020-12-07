@@ -58,6 +58,10 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
+    this.intercom.shutdown();
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.loginForm = this.formBuilder.group({
       identifier: new FormControl(this.storageService.getUserName(), [Validators.required, Validators.pattern(EMAILPATTERN)]),
@@ -68,7 +72,6 @@ export class LoginPage implements OnInit {
   }
 
   ionViewDidEnter(){
-    this.intercom.hide();
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);

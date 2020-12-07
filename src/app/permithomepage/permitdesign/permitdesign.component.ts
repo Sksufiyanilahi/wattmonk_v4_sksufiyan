@@ -309,10 +309,11 @@ this.network.networkConnect();
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
-
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
   this.dataRefreshSubscription.unsubscribe();
   this.DesignRefreshSubscription.unsubscribe();
-  this.intercom.shutdown();
   }
 
   // filterData(records : DesginDataModel[]) {
@@ -368,6 +369,52 @@ this.network.networkConnect();
       var indesigndate = new Date(element.designstarttime);
       indesigndate.setHours(indesigndate.getHours() + 6);
       element.designremainingtime = this.utils.getRemainingTime(indesigndate.toString());
+           //Setting acceptance timer
+    if(element.status == "outsourced"){
+      if(element.requesttype == "permit"){
+        var acceptancedate = new Date(element.designacceptancestarttime);
+        element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      }else{
+        var acceptancedate = new Date(element.designacceptancestarttime);
+        element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      }
+
+      if(element.designacceptanceremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
+
+    //Setting design timer
+    if(element.status == "designassigned" || element.status == "designcompleted"){
+      if(element.requesttype == "permit"){
+        var acceptancedate = new Date(element.designstarttime);
+        acceptancedate.setHours(acceptancedate.getHours() + 6);
+        element.designremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      }else{
+        var acceptancedate = new Date(element.designstarttime);
+        acceptancedate.setHours(acceptancedate.getHours() + 2);
+        element.designremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      }
+      if(element.designremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
+
+    //Setting review timer
+    if(element.status == "reviewassigned" || element.status == "reviewpassed" || element.status == "reviewfailed"){
+      if(element.requesttype == "permit"){
+        var reviewdate = new Date(element.reviewstarttime);
+        reviewdate.setHours(reviewdate.getHours() + 2);
+        element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+      }else{
+        var reviewdate = new Date(element.reviewstarttime);
+        reviewdate.setMinutes(reviewdate.getMinutes() + 15);
+        element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+      }
+      if(element.reviewremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
       this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
         if (data) {

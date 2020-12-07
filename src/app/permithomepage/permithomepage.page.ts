@@ -35,7 +35,7 @@ export class PermithomepagePage implements OnInit {
   private version = environment.version;
 
   private subscription: Subscription;
-  
+
   drawerState = DrawerState.Bottom;
   showSearchBar = false;
   update_version: string;
@@ -46,7 +46,7 @@ export class PermithomepagePage implements OnInit {
     maxResults: 5
   };
 
-  
+
   //listOfDesignDataHelper: DesginDataHelper[] = [];
   listOfDesignsData: DesginDataModel[] = [];
   private refreshSubscription: Subscription;
@@ -63,7 +63,7 @@ export class PermithomepagePage implements OnInit {
   disableAccept="true"
   showBottomDraw: boolean = false;
   roleType: any;
-  myFiles: string[] = [];  
+  myFiles: string[] = [];
   segments:any;
   listOfDesigns: DesginDataModel[];
   private DesignRefreshSubscription: Subscription;
@@ -98,8 +98,8 @@ export class PermithomepagePage implements OnInit {
               private toastController: ToastController,
               private geolocation: Geolocation,
               private nativeGeocoder: NativeGeocoder,
-              ) { 
-                
+              ) {
+
               }
 
 
@@ -108,11 +108,11 @@ export class PermithomepagePage implements OnInit {
                   console.log("count",count);
                  this.unreadCount= count;
                 });
-            
-               
+
+
               }
 
-              
+
 
   ngOnInit() {
     this.apiService.version.subscribe(versionInfo=>{
@@ -127,12 +127,12 @@ export class PermithomepagePage implements OnInit {
 
   ionViewDidEnter() {
     if(this.version !== this.update_version && this.update_version !==''){
-        
+
       setTimeout(()=>{
-    
+
         this.utils.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
           text:'Ok',
-        
+
           handler:()=>{
             this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
            this.ionViewDidEnter();
@@ -143,7 +143,7 @@ export class PermithomepagePage implements OnInit {
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
-      
+
     })
 
 this.network.networkDisconnect();
@@ -159,7 +159,7 @@ this.network.networkConnect();
 
   scheduledPage(){
     this.route.navigate(['/permitschedule']);
-     
+
     }
 
     searchbar(){
@@ -169,7 +169,7 @@ this.network.networkConnect();
     setzero(){
       this.unreadCount= 0;
     }
-  
+
     ////////////////////////////////////////////////
 
     requestLocationPermission() {
@@ -201,7 +201,7 @@ this.network.networkConnect();
         });
       });
     }
-  
+
     async showLocationDenied() {
       const toast = await this.toastController.create({
         header: 'Error',
@@ -217,7 +217,7 @@ this.network.networkConnect();
       });
       toast.present();
     }
-  
+
     fetchLocation() {
       this.diagnostic.isGpsLocationEnabled().then((status) => {
         if (status === true) {
@@ -229,7 +229,7 @@ this.network.networkConnect();
         }
       });
     }
-  
+
     async askToChangeSettings() {
       const toast = await this.toastController.create({
         header: 'Location Disabled',
@@ -250,10 +250,10 @@ this.network.networkConnect();
       });
       toast.present();
     }
-  
-  
+
+
     getGeoLocation() {
-  
+
       this.geolocation.getCurrentPosition().then((resp) => {
         console.log('resp', resp);
         this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
@@ -262,9 +262,9 @@ this.network.networkConnect();
         console.log('Error getting location', error);
         this.showNoLocation();
       });
-  
+
     }
-  
+
     getGeoEncoder(latitude, longitude) {
       // this.utilities.hideLoading().then((success) => {
       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
@@ -286,7 +286,7 @@ this.network.networkConnect();
           alert('Error getting location' + JSON.stringify(error));
         });
     }
-  
+
     generateAddress(addressObj) {
       const obj = [];
       let address = '';
@@ -301,19 +301,19 @@ this.network.networkConnect();
       }
       return address.slice(0, -2);
     }
-  
+
     changeLocationSettings() {
-  
+
       this.diagnostic.switchToLocationSettings();
       this.diagnostic.registerLocationStateChangeHandler((state) => {
         console.log(state);
         if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF)) {
           this.checkLocationAccess();
         }
-  
+
       });
     }
-  
+
     checkLocationAccess() {
       console.log('Getting location');
       this.diagnostic.isLocationAuthorized().then((success) => {
@@ -321,9 +321,9 @@ this.network.networkConnect();
       }, (error) => {
         this.utils.errorSnackBar('GPS Not Allowed');
       });
-  
+
     }
-  
+
     async showNoLocation() {
       const alert = await this.alertController.create({
         header: 'Error',
@@ -340,8 +340,10 @@ this.network.networkConnect();
       });
       await alert.present();
     }
-    
-    
-  
+
+
+
+
+
 
 }

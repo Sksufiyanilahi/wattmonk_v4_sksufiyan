@@ -65,7 +65,7 @@ export class UtilitiesService {
   getPaymentMode(): BehaviorSubject<string>{
     return this.paymentMode;
   }
-  
+
   setPaymentMode(paymentMode:string){
     this.paymentMode.next(paymentMode);
   }
@@ -129,7 +129,7 @@ export class UtilitiesService {
   getDesignDetailsRefresh(): BehaviorSubject<boolean> {
     return this.designDetailsRefresh;
   }
- 
+
 
   setDesignDetailsRefresh(value: boolean) {
     this.designDetailsRefresh.next(value);
@@ -154,10 +154,10 @@ export class UtilitiesService {
   }
 
   setScheduleFormEvent(event: ScheduleFormEvent) {
-   
+
     this.saveScheduleForm.next(event);
     this.saveScheduleForm.next(ScheduleFormEvent.NO_EVENT);
-    
+
   }
 
   async showLoading(message?: string) {
@@ -328,8 +328,8 @@ export class UtilitiesService {
 
   b64tBlob(b64Data) {
     let contentType ='image/jpg';
-    let sliceSize = 512;    
-    b64Data = b64Data.replace(/data\:image\/(jpeg|jpg|png)\;base64\,/gi,'');    
+    let sliceSize = 512;
+    b64Data = b64Data.replace(/data\:image\/(jpeg|jpg|png)\;base64\,/gi,'');
      let byteCharacters = atob(b64Data);
     let byteArrays = [];
 
@@ -391,8 +391,20 @@ export class UtilitiesService {
         return lateby + " years";
       }
 
-     
-  }
+
+    }
+
+          getRoleNames(name){
+              if(this.user.role.name=='ContractorSuperAdmin' || this.user.role.name=='ContractorSuperAdmin'){
+                name= 'SuperAdmin';
+                return name;
+              }else if(this.user.role.name=='WattmonkAdmin'){
+                name='Admin';
+                return name;
+              }else{
+                return this.user.role.name
+              }
+          }
 
   // getNotificationCount(){
   //   this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
@@ -408,7 +420,7 @@ export class UtilitiesService {
   // getcount(){
   //   return this.unreadCount.next(count);
   // }
-  
+
 
 
 

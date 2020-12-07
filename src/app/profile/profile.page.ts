@@ -12,6 +12,7 @@ import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
 import { AddMoneyPage } from '../add-money/add-money.page';
 import { Router } from '@angular/router';
 import { Intercom } from 'ng-intercom';
+import { intercomId } from '../contants';
 
 @Component({
   selector: 'app-profile',
@@ -43,6 +44,9 @@ profile:any;
   }
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.enableDisable= false;
     this.user = this.storage.getUser();
     console.log(this.user);
@@ -50,7 +54,6 @@ profile:any;
 
   }
   ionViewDidEnter(){
-    this.intercom.hide();
    this.getProfileData();
   }
   goBack() {
@@ -83,7 +86,6 @@ AddWallet()
           handler: () => {
             this.storage.logout();
             this.deviceStorage.clear();
-            this.intercom.hide();
             this.apiService.resetHeaders();
             this.navController.navigateRoot('login');
           }
@@ -203,8 +205,11 @@ AddWallet()
   }
 
   ngOnDestroy(): void {
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-   this.intercom.hide();
+
   }
 }
