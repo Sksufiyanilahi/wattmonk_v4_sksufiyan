@@ -517,6 +517,9 @@ this.network.networkConnect();
   dismissBottomSheet() {
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
     this.utils.setBottomBarHomepage(true);
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
@@ -633,6 +636,9 @@ this.network.networkConnect();
 
 
   openDesigners(id: number,designData) {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
@@ -675,6 +681,9 @@ this.network.networkConnect();
   }
 
   openAnalysts(id: number,designData) {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;
@@ -916,7 +925,7 @@ getassignedata(asssignedata){
 }
 
 shareWhatsapp(designData){
-  this.socialsharing.share(designData.prelimdesign.url);
+  this.socialsharing.share(designData.permitdesign.url);
 }
 
  async shareViaEmails(id,designData){

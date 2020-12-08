@@ -14,6 +14,8 @@ import {NgxImageCompressService} from 'ngx-image-compress';
 import { CountdownTimerService, countDownTimerConfigModel, countDownTimerTexts } from 'ngx-timer';
 import { User } from '../model/user.model';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Intercom } from 'ng-intercom';
+
 
 
 @Component({
@@ -70,6 +72,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private countdownservice: CountdownTimerService,
     private iab: InAppBrowser,
     private router:Router,
+    private intercom:Intercom
   
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
@@ -93,6 +96,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.enableDisable= false;
     console.log(this.imageName);
     this.user=this.storage.getUser();
@@ -624,6 +630,12 @@ return blob;
      
           
         
+  }
+
+  ionViewWillLeave(){
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
   }
 
   

@@ -25,6 +25,8 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
+import { Intercom } from 'ng-intercom';
+
 
 @Component({
   selector: 'app-permithomepage',
@@ -98,6 +100,7 @@ export class PermithomepagePage implements OnInit {
               private toastController: ToastController,
               private geolocation: Geolocation,
               private nativeGeocoder: NativeGeocoder,
+              private intercom:Intercom
               ) {
 
               }
@@ -115,6 +118,10 @@ export class PermithomepagePage implements OnInit {
 
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
+    this.getNotificationCount();
     this.apiService.version.subscribe(versionInfo=>{
       this.update_version = versionInfo;
        });

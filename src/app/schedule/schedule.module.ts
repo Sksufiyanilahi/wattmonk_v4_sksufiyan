@@ -12,6 +12,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { NumberOnlyDirective } from './number.directive';
 import { Camera } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { File } from '@ionic-native/file/ngx';
     SchedulePageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    UtilitiesModule
+    UtilitiesModule,
+    SharedModule
   ],
   declarations: [
     SchedulePage,

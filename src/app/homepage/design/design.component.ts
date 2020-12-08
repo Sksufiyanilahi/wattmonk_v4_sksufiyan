@@ -22,6 +22,7 @@ import { EmailSelectorComponent } from 'src/app/utilities/email-selector/email-s
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 import { PaymentModalPage } from 'src/app/payment-modal/payment-modal.page';
+import { Intercom } from 'ng-intercom';
 
 
 @Component({
@@ -79,6 +80,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     private network:NetworkdetectService,
     public alertController: AlertController,
     private socialsharing: SocialSharing,
+    private intercom:Intercom
 
   ) {
     this.userData = this.storageService.getUser();
@@ -527,6 +529,9 @@ this.network.networkConnect();
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
 
@@ -641,6 +646,9 @@ this.network.networkConnect();
 
 
   openDesigners(id: number,designData) {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
@@ -683,6 +691,9 @@ this.network.networkConnect();
   }
 
   openAnalysts(id: number,designData) {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;

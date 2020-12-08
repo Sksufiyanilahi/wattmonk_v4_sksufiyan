@@ -46,7 +46,7 @@
                 <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'requestaccepted'" [routerLink]="['/permit-design-details/',designData.id]">Accepted</span>
                 <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/permit-design-details/',designData.id]">Review Passed</span>
                 <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'" [routerLink]="['/permit-design-details/',designData.id]">Delivered</span>
-                <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/permit-design-details/',designData.id]">Completed</span>
+                <span class="chipdetail" style="background-color: rgb(109, 187, 26);padding: 4px 5px;" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/permit-design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
                 <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/permit-design-details/',designData.id]">Unassigned</span>
                 <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/permit-design-details/',designData.id]">Design Assigned</span>
                 <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/permit-design-details/',designData.id]">In Review</span>

@@ -81,12 +81,12 @@
 
     </ion-col>
     <ion-col size="12" *ngIf="!user?.ispaymentmodeprepay" >
-      <ion-item  (click)="confirmforPostpaid()" >
+      <!-- <ion-item  (click)="confirmforPostpaid()" >
         <ion-button  fill="clear"><ion-icon name="checkmark-circle-outline" style="color: blue;"></ion-icon>&nbsp;<ion-label class="black">Confirm</ion-label></ion-button>
-      </ion-item>
+      </ion-item> -->
     </ion-col>
     </ion-row>
     </ion-content>
-    <ion-footer (click)="cancel()" class="ion-padding" style="text-align: center;background: blue;color:#fff">
-   Cancel
+    <ion-footer (click)="confirmforPostpaid()" class="ion-padding" style="text-align: center;background: blue;color:#fff">
+   Confirm
     </ion-footer>

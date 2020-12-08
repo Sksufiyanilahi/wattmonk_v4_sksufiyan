@@ -11,10 +11,12 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_APP_ID, COMET_CHAT_REGION } from './model/constants';
 import { Firebase } from '@ionic-native/firebase/ngx';
 import { NetworkdetectService } from './networkdetect.service';
-import { ROLES,COMETCHAT_CONSTANTS } from './contants';
+import { ROLES,COMETCHAT_CONSTANTS, intercomId } from './contants';
 import { UserData } from './model/userData.model';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { Intercom } from 'ng-intercom';
+
 
 @Component({
   selector: 'app-root',
@@ -60,7 +62,8 @@ export class AppComponent {
     private firebase: Firebase,
     private utilities:UtilitiesService,
     private network:NetworkdetectService,
-    private router:Router
+    private router:Router,
+    private intercom:Intercom
   ) {
 
     this.initializeApp();
@@ -104,9 +107,19 @@ export class AppComponent {
 
   }
 
+  intercomModule(){
+    this.intercom.boot({
+      app_id: intercomId,
+      // Supports all optional configuration.
+      widget: {
+        "activator": "#intercom"
+      }
+    });
+  }
+
 
   ngOnInit() {
-
+    this.intercomModule();
    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
