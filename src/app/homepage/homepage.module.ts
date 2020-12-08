@@ -23,6 +23,9 @@ import { EmailModelPage } from '../email-model/email-model.page';
 import { EmailModelPageModule } from '../email-model/email-model.module';
 import { SharedModule } from '../shared/shared.module';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+
 
 
 @NgModule({
@@ -45,7 +48,9 @@ import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.
     LaunchNavigator,
     Chooser,
     File,
-    Network
+    Network,
+    FileTransfer,
+    LocalNotifications
   ]
 })
 export class HomepagePageModule {
