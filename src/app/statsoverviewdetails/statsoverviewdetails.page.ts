@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Intercom } from 'ng-intercom';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
@@ -27,9 +28,13 @@ export class StatsoverviewdetailsPage implements OnInit {
     private route:ActivatedRoute ,
     private formBuilder:FormBuilder,
     private navController:NavController,
+    private intercom:Intercom
   ) { }
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.startDate = this.route.snapshot.paramMap.get('starttime');
     this.endDate = this.route.snapshot.paramMap.get('endtime');
     this.requestType = this.route.snapshot.paramMap.get('requesttype');
@@ -61,5 +66,11 @@ export class StatsoverviewdetailsPage implements OnInit {
       this.dataList = response;
       console.log(this.dataList);
     })
+  }
+
+  ionViewWillLeave(){
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
   }
 }

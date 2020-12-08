@@ -9,7 +9,9 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ScheduleFormEvent, INVALID_AMOUNT } from '../model/constants';
+import { Intercom } from 'ng-intercom';
 declare var Stripe;
+
 
 
 @Component({
@@ -40,6 +42,7 @@ card:any
     private route:ActivatedRoute ,
     private formBuilder:FormBuilder,
     private navController:NavController,
+    private intercom:Intercom
     //private stripe:Stripe
     ) {
     this.amountForm=this.formBuilder.group(
@@ -52,6 +55,9 @@ card:any
 
   
     ngOnInit() {
+      this.intercom.update({
+        "hide_default_launcher": true
+      });
     this.mode= this.route.snapshot.paramMap.get('mode');
    this.designId= this.route.snapshot.paramMap.get('id');
       this.serviceAmount = this.route.snapshot.paramMap.get('serviceAmount');

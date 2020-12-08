@@ -9,6 +9,8 @@ import { ActionSheetController } from '@ionic/angular';
 import BaseMessage = CometChat.BaseMessage;
 import { UtilitiesService } from '../utilities.service';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
+import { Intercom } from 'ng-intercom';
+
 // import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 
 @Component({
@@ -26,7 +28,7 @@ export class GroupchatPage implements OnInit {
 
   @ViewChild('content',{static:false}) content: any;
 
-  constructor(private router: Router, private route: ActivatedRoute, private keyboard: Keyboard, private renderer2: Renderer2,private navCtrl:NavController) { 
+  constructor(private router: Router, private route: ActivatedRoute, private keyboard: Keyboard, private renderer2: Renderer2,private navCtrl:NavController,private intercom:Intercom) { 
     const html = document.getElementsByTagName('html').item(0);
     this.keyboard.onKeyboardHide().subscribe(() => {
       // this.renderer2.setStyle(html, 'height','101vh');
@@ -50,6 +52,9 @@ export class GroupchatPage implements OnInit {
   }
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     const  limit = 30;
     console.log('data of currentGroupData is ', this.currentGroupData);
     const guid: string = this.currentGroupData['guid'];
@@ -257,6 +262,12 @@ export class GroupchatPage implements OnInit {
 
   goBack(){
     this.navCtrl.pop();
+  }
+
+  ionViewWillLeave(){
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
   }
 
 }

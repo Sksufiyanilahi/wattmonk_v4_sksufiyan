@@ -25,6 +25,7 @@ import { PaymentModalPage } from 'src/app/payment-modal/payment-modal.page';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import { Intercom } from 'ng-intercom';
 
 
 @Component({
@@ -84,7 +85,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private socialsharing: SocialSharing,
     private transfer:FileTransfer,
     private file:File,
-    private localnotification:LocalNotifications
+    private localnotification:LocalNotifications,
+    private intercom:Intercom
 
   ) {
     this.userData = this.storageService.getUser();
@@ -533,6 +535,9 @@ this.network.networkConnect();
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
 
@@ -647,6 +652,9 @@ this.network.networkConnect();
 
 
   openDesigners(id: number,designData) {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
@@ -689,6 +697,9 @@ this.network.networkConnect();
   }
 
   openAnalysts(id: number,designData) {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;

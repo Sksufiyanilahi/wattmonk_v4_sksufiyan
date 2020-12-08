@@ -16,7 +16,7 @@ import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd } from '@angula
 import {  DesginDataModel, DesignModel } from '../../model/design.model';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
-import { AutoCompleteComponent } from 'src/app/utilities/auto-complete/auto-complete.component';
+import { Intercom } from 'ng-intercom';
 
 @Component({
   selector: 'app-design',
@@ -94,7 +94,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private camera: Camera,
     private file: File,
-    private router:Router
+    private router:Router,
+    public intercom: Intercom
   ) {
     var tomorrow=new Date();
     tomorrow.setDate(tomorrow.getDate()+1);
@@ -163,6 +164,9 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
       this.fieldDisabled=false;
+      this.intercom.update({
+        "hide_default_launcher": true
+      });
     // this.utils.manualInput.subscribe(data=>{
     //     if(this.modulename=='solarmake'){
     //       this.solarmake=data;
@@ -292,7 +296,11 @@ uploadcontrolvalidation(){
   })
 }
 
+
   ngOnDestroy(): void {
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
     this.subscription.unsubscribe();
     if (this.designId === 0) {
       this.addressSubscription.unsubscribe();
@@ -948,7 +956,7 @@ ioniViewDidEnter(){
             console.log('reach ', value);
            
             this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
-            this.router.navigate(['/homepage'])
+            this.router.navigate(['/homepage/design'])
             this.utils.setHomepageDesignRefresh(true);
           })
         }, (error) => {
