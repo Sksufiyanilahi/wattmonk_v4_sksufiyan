@@ -115,7 +115,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       assignedto: new FormControl(''),
       rooftype: new FormControl(''),
       prelimdesign: new FormControl(null),
-      architecturaldesign: this.formBuilder.array([new FormControl(null)],[Validators.required]),
+      architecturaldesign: new FormControl(''),
       tiltofgroundmountingsystem: new FormControl(''),
       mountingtype: new FormControl('', [Validators.required]),
       // jobtype: new FormControl('', [Validators.required]),
@@ -540,7 +540,7 @@ remove(index:number){
   this.utils.hideLoading().then(()=>{
     this.utils.showSnackBar('File deleted successfully');
     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
-    this.utils.setHomepageDesignRefresh(true);
+    //this.utils.setHomepageDesignRefresh(true);
   });
   },
 (error)=>{
@@ -578,7 +578,7 @@ remove(index:number){
               this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
-                this.router.navigate(['/homepage'])
+                this.router.navigate(['/homepage/design'])
                 // this.utils.showSnackBar('Design have been saved');
                 this.utils.setHomepageDesignRefresh(true);
                 // this.navController.pop();
@@ -672,27 +672,27 @@ remove(index:number){
       });
 
     } else {
-      if(this.desginForm.value.name==''){
+      if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
 
-        this.utils.errorSnackBar('Please fill the name.');
+        this.utils.errorSnackBar('Please check the field name.');
       }
-      else if(this.desginForm.value.email==''){
-        this.utils.errorSnackBar('Please fill the email.');
+      else if(this.desginForm.value.email=='' || this.desginForm.get('email').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field email.');
       }
-      else if(this.desginForm.value.monthlybill==''){
-        this.utils.errorSnackBar('Please fill the annual units.');
+      else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field annual units.');
       }
-      else if(this.desginForm.value.solarmake==''){
-        this.utils.errorSnackBar('Please fill the module make.');
+      else if(this.desginForm.value.solarmake=='' || this.desginForm.get('solarmake').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field module make.');
       }
-      else if(this.desginForm.value.solarmodel==''){
-        this.utils.errorSnackBar('Please fill the module model.');
+      else if(this.desginForm.value.solarmodel=='' || this.desginForm.get('solarmodel').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field module model.');
       }
-      else if(this.desginForm.value.invertermake==''){
-        this.utils.errorSnackBar('Please fill the inverter make.');
+      else if(this.desginForm.value.invertermake=='' || this.desginForm.get('invertermake').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field inverter make.');
       }
-      else if(this.desginForm.value.invertermodel==''){
-        this.utils.errorSnackBar('Please fill the inverter model.');
+      else if(this.desginForm.value.invertermodel=='' || this.desginForm.get('invertermodel').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field inverter model.');
       }
       else if(this.desginForm.value.mountingtype==''){
         this.utils.errorSnackBar('Please fill the mounting type.');
@@ -700,15 +700,15 @@ remove(index:number){
       else if(this.desginForm.value.projecttype==''){
         this.utils.errorSnackBar('Please fill the project type.');
       }
-      else if(this.desginForm.value.tiltofgroundmountingsystem==''){
-        this.utils.errorSnackBar('Please fill the tilt for ground mount.');
+      else if(this.desginForm.value.tiltofgroundmountingsystem=='' || this.desginForm.get('tiltofgroundmountingsystem').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field tilt for ground mount.');
       }
       else if(this.desginForm.value.rooftype==''){
         this.utils.errorSnackBar('Please fill the rooftype.');
       }
-     
-      
-      else if(this.desginForm.value.architecturaldesign==['']){
+
+
+      else if(this.desginForm.value.architecturaldesign==[]){
         this.utils.errorSnackBar('Please attach architectural design.');
       }
       else{
@@ -962,27 +962,27 @@ ioniViewDidEnter(){
     if (this.desginForm.status === 'VALID') {
     this.router.navigate(["payment-modal",{designData:"prelim"}]);
     }else {
-      if(this.desginForm.value.name==''){
+      if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
 
-        this.utils.errorSnackBar('Please fill the name.');
+        this.utils.errorSnackBar('Please check the field name.');
       }
-      else if(this.desginForm.value.email==''){
-        this.utils.errorSnackBar('Please fill the email.');
+      else if(this.desginForm.value.email=='' || this.desginForm.get('email').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field email.');
       }
-      else if(this.desginForm.value.monthlybill==''){
-        this.utils.errorSnackBar('Please fill the annual units.');
+      else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field annual units.');
       }
-      else if(this.desginForm.value.solarmake==''){
-        this.utils.errorSnackBar('Please fill the module make.');
+      else if(this.desginForm.value.modulemake=='' || this.desginForm.get('modulemake').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field module make.');
       }
-      else if(this.desginForm.value.solarmodel==''){
-        this.utils.errorSnackBar('Please fill the module model.');
+      else if(this.desginForm.value.modulemodel=='' || this.desginForm.get('modulemodel').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field module model.');
       }
-      else if(this.desginForm.value.invertermake==''){
-        this.utils.errorSnackBar('Please fill the inverter make.');
+      else if(this.desginForm.value.invertermake=='' || this.desginForm.get('invertermake').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field inverter make.');
       }
-      else if(this.desginForm.value.invertermodel==''){
-        this.utils.errorSnackBar('Please fill the inverter model.');
+      else if(this.desginForm.value.invertermodel=='' || this.desginForm.get('invertermodel').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field inverter model.');
       }
       else if(this.desginForm.value.mountingtype==''){
         this.utils.errorSnackBar('Please fill the mounting type.');
@@ -990,14 +990,14 @@ ioniViewDidEnter(){
       else if(this.desginForm.value.projecttype==''){
         this.utils.errorSnackBar('Please fill the project type.');
       }
-      else if(this.desginForm.value.tiltofgroundmountingsystem==''){
-        this.utils.errorSnackBar('Please fill the tilt for ground mount.');
+      else if(this.desginForm.value.tiltofgroundmountingsystem=='' || this.desginForm.get('tiltofgroundmountingsystem').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field tilt for ground mount.');
       }
       else if(this.desginForm.value.rooftype==''){
         this.utils.errorSnackBar('Please fill the rooftype.');
       }
-     
-      
+
+
       else if(this.desginForm.value.architecturaldesign==[]){
         this.utils.errorSnackBar('Please attach architectural design.');
       }

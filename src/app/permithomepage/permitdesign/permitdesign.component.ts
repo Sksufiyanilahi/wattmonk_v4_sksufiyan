@@ -24,6 +24,9 @@ import * as moment from 'moment';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import { Intercom } from 'ng-intercom';
 import { intercomId } from '../../contants';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import {File } from '@ionic-native/file/ngx';
+import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-permitdesign',
@@ -67,6 +70,7 @@ export class PermitdesignComponent implements OnInit {
   selectedDesigner: any;
   netSwitch: boolean;
  reviewAssignedTo:any;
+ 
 
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
@@ -81,7 +85,10 @@ export class PermitdesignComponent implements OnInit {
     public alertController: AlertController,
     public modalController: ModalController,
     private socialsharing: SocialSharing,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private transfer : FileTransfer,
+    private file: File,
+    private localnotification: LocalNotifications) {
     this.userData = this.storageservice.getUser();
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
@@ -938,6 +945,35 @@ shareWhatsapp(designData){
 });
     return await modal.present();
  }
+
+ designDownload(designData){
+   let dir_name = 'Wattmonk';
+   let path = '';
+   const url = designData.permitdesign.url;
+  const fileTransfer: FileTransferObject = this.transfer.create();
+  
+  
+  let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
+result.then((resp) => {
+  path = resp.toURL();
+  console.log(path); 
+  
+  fileTransfer.download(url, path + designData.permitdesign.hash + designData.permitdesign.ext).then((entry) => {
+    console.log('download complete: ' + entry.toURL());
+    this.utils.showSnackBar("Permit Design Downloaded Successfully");
+    
+    // this.clickSub = this.localnotification.on('click').subscribe(data => {
+    //   console.log(data)
+    //   path;
+    // })
+    this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
+  }, (error) => {
+    // handle error
+  });
+ })
+ 
+ 
+}
 }
 
 export class DesginDataHelper {

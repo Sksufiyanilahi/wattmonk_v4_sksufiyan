@@ -93,7 +93,7 @@
           <ion-label style="float: right;" class="item-input ion-label">{{designers.latedesignscompleted}}</ion-label>
         </ion-col>
         <ion-col *ngIf="isSelected && fieldChangeValue=='Monthly Rating'">
-          <ion-label style="float: right;" class="item-input ion-label">{{designers.monthlyrating}}</ion-label>
+          <ion-label style="float: right;" class="item-input ion-label">{{designers.monthlyrating.toFixed()}}</ion-label>
         </ion-col>
         <ion-col *ngIf="isSelected && fieldChangeValue=='On Time'">
           <ion-label style="float: right;" class="item-input ion-label">{{designers.ontimedesignscompleted}}</ion-label>
