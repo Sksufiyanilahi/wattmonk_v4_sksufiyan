@@ -151,7 +151,7 @@ export class PermitschedulePage implements OnInit {
     createdby: new FormControl(''),
     assignedto: new FormControl(''),
     rooftype: new FormControl(''),
-    architecturaldesign: new FormControl(),
+    architecturaldesign: new FormControl(''),
     tiltofgroundmountingsystem: new FormControl(''),
     mountingtype: new FormControl('', [Validators.required]),
    jobtype: new FormControl('', [Validators.required]),

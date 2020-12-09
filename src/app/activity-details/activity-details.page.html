@@ -57,7 +57,10 @@
   <ion-card  *ngFor="let activities of activity_details?.activities" class="custom-card"  >
   <span style="float: left; font-size: smaller;">{{activities.updated_at | date: 'dd MMM yyyy'}}</span><br><br>
   <span style="font-size:medium; float:left; color: black;">{{activities.activity}}</span><br><br>
-<span style="float: right !important; font-size: small; font-style: italic;" *ngIf="activities.performer!=null">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
-
+<!--<span style="float: right !important; font-size: small; font-style: italic;" *ngIf="activities.performer!=null">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>-->
+<span style="float: right !important; font-size: small; font-style: italic;" *ngIf="activities.performer!=null && userData.role.type!='clientsuperadmin'">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
+<span *ngIf="userData.role.type=='clientsuperadmin' && activities.performer.parent != userData.parent.id" style="float: right !important; font-size: small; font-style: italic;" >Wattmonk</span>
+<span *ngIf="userData.role.type=='clientsuperadmin' && activities.performer.parent == userData.parent.id" style="float: right !important; font-size: small; font-style: italic;" >{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
+</ion-card>
 </ion-card>
 </ion-content>
