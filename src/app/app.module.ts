@@ -36,6 +36,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 //import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { Intercom,IntercomConfig } from 'ng-intercom';
+  
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent],
@@ -73,7 +75,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     Stripe,
     SocialSharing,
     Dialogs,
-    Keyboard
+    Keyboard,
+    Intercom,
+    IntercomConfig
     ],
   exports: [
     UtilitiesModule

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Intercom } from 'ng-intercom';
+
 
 @Component({
   selector: 'app-statistics',
@@ -10,10 +12,13 @@ export class StatisticsPage implements OnInit {
 
   isSelected:boolean=false;
 
-  constructor(public route: Router){}
+  constructor(public route: Router,private intercom:Intercom){}
 
   
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.isSelected=true;
     this.route.navigate(['statistics/designs']);}
   
@@ -34,6 +39,14 @@ export class StatisticsPage implements OnInit {
         this.route.navigate(['statistics/analysts']);
         // return this.segments;
       }
+    }
+
+    ngOnDestroy(): void {
+      //Called once, before the instance is destroyed.
+      //Add 'implements OnDestroy' to the class.
+      // this.intercom.update({
+      //   "hide_default_launcher": false
+      // });
     }
 
 }

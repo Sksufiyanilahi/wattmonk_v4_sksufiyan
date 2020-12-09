@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Intercom } from 'ng-intercom';
 import { ApiService } from '../api.service';
 import { UtilitiesService } from '../utilities.service';
+
 
 @Component({
   selector: 'app-notification',
@@ -14,9 +16,15 @@ export class NotificationPage implements OnInit {
 
 
   constructor(  private apiservice:ApiService,
-    private utilities:UtilitiesService) { }
+    private utilities:UtilitiesService,
+    private intercom:Intercom
+    
+    ) { }
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.getNotification();
   }
 
@@ -41,6 +49,12 @@ updateNotificationStatus(id){
   this.apiservice.updateNotification(id,Notificationstatus).subscribe(()=>{
     this.getNotification();
   })
+}
+
+ionViewWillLeave(){
+  this.intercom.update({
+    "hide_default_launcher": false
+  });
 }
 
 }

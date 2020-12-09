@@ -7,6 +7,8 @@ import { NavController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { ErrorModel } from '../model/error.model';
 import { FIELD_REQUIRED, INVALID_EMAIL_MESSAGE } from '../model/constants';
+import { Intercom } from 'ng-intercom';
+
 
 @Component({
   selector: 'app-change-password',
@@ -32,10 +34,14 @@ export class ChangePasswordPage implements OnInit {
    private apiService: ApiService,
    private storage: StorageService,
    private deviceStorage: Storage,
+   private intercom:Intercom
  ) {
  }
 
  ngOnInit() {
+  this.intercom.update({
+    "hide_default_launcher": true
+  });
    this.password= localStorage.getItem('password');
   this.changepassword = this.formBuilder.group({
     newpassword: new FormControl('', [Validators.required, Validators.minLength(6)] ),
@@ -115,6 +121,12 @@ getnewType() {
 
  goBack() {
    this.navController.pop();
+ }
+
+ ionViewWillLeave(){
+  this.intercom.update({
+    "hide_default_launcher": false
+  });
  }
 
 

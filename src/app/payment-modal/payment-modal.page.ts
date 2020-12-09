@@ -6,6 +6,7 @@ import { ApiService } from '../api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UtilitiesService } from '../utilities.service';
 import { ScheduleFormEvent } from '../model/constants';
+import { Intercom } from 'ng-intercom';
 
 @Component({
   selector: 'app-payment-modal',
@@ -28,9 +29,13 @@ count:any
     private route:ActivatedRoute,
     private navController:NavController,
     private utils:UtilitiesService,
+    private intercom:Intercom
     ) { }
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.fetchData();
     this.servicecharges();
    /* this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
@@ -206,5 +211,11 @@ confirm(){
               this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
             }
           }
+  }
+
+  ionViewWillLeave(){
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
   }
 }

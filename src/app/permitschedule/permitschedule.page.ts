@@ -19,6 +19,8 @@ import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@io
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AddressModel } from '../model/address.model';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Intercom } from 'ng-intercom';
+
 
 // export interface DesignFormData {
 //   isEditMode: boolean;
@@ -117,6 +119,7 @@ export class PermitschedulePage implements OnInit {
     private geolocation: Geolocation,
     private platform: Platform,
     private toastController: ToastController,
+    private intercom:Intercom
     //private data: DesignFormData
     ) {
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
@@ -177,6 +180,9 @@ export class PermitschedulePage implements OnInit {
   // }
     }
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
     this.requestLocationPermission();
@@ -472,20 +478,20 @@ export class PermitschedulePage implements OnInit {
   this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
     console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-      this.desginForm.get('address').setValue('124/345');
-      this.desginForm.get('latitude').setValue('24.553333');
-      this.desginForm.get('longitude').setValue('80.5555555555');
-      this.desginForm.get('country').setValue('india');
-      this.desginForm.get('city').setValue('Lucknow');
-      this.desginForm.get('state').setValue('UP');
-      this.desginForm.get('postalcode').setValue(3232343);
-    //  this.desginForm.get('address').setValue(address.address);
-    //    this.desginForm.get('latitude').setValue(address.lat);
-    //    this.desginForm.get('longitude').setValue(address.long);
-    //    this.desginForm.get('country').setValue(address.country);
-    //  this.desginForm.get('city').setValue(address.city);
-    //    this.desginForm.get('state').setValue(address.state);
-    //    this.desginForm.get('postalcode').setValue(address.postalcode);
+      // this.desginForm.get('address').setValue('124/345');
+      // this.desginForm.get('latitude').setValue('24.553333');
+      // this.desginForm.get('longitude').setValue('80.5555555555');
+      // this.desginForm.get('country').setValue('india');
+      // this.desginForm.get('city').setValue('Lucknow');
+      // this.desginForm.get('state').setValue('UP');
+      // this.desginForm.get('postalcode').setValue(3232343);
+     this.desginForm.get('address').setValue(address.address);
+       this.desginForm.get('latitude').setValue(address.lat);
+       this.desginForm.get('longitude').setValue(address.long);
+       this.desginForm.get('country').setValue(address.country);
+     this.desginForm.get('city').setValue(address.city);
+       this.desginForm.get('state').setValue(address.state);
+       this.desginForm.get('postalcode').setValue(address.postalcode);
   }, (error) => {
     this.desginForm.get('address').setValue('');
     this.desginForm.get('latitude').setValue('');
@@ -1027,28 +1033,28 @@ saveInverterModel() {
 
         if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
 
-          this.utils.errorSnackBar('Please fill the name.');
+          this.utils.errorSnackBar('Please check the field name.');
         }
         else if(this.desginForm.value.email=='' || this.desginForm.get('email').hasError('pattern')){
-          this.utils.errorSnackBar('Please fill the email.');
+          this.utils.errorSnackBar('Please check the field email.');
         }
         else if(this.desginForm.value.phone=='' || this.desginForm.get('phone').hasError('pattern')){
-          this.utils.errorSnackBar('Please fill the phone number');
+          this.utils.errorSnackBar('Please check the field phone number');
         }
         else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern')){
-          this.utils.errorSnackBar('Please fill the annual units.');
+          this.utils.errorSnackBar('Please check the field annual units.');
         }
         else if(this.desginForm.value.modulemake=='' || this.desginForm.get('modulemake').hasError('pattern')){
-          this.utils.errorSnackBar('Please fill the module make.');
+          this.utils.errorSnackBar('Please check the field module make.');
         }
         else if(this.desginForm.value.modulemodel=='' || this.desginForm.get('modulemodel').hasError('pattern')){
-          this.utils.errorSnackBar('Please fill the module model.');
+          this.utils.errorSnackBar('Please check the field module model.');
         }
         else if(this.desginForm.value.invertermake=='' || this.desginForm.get('invertermake').hasError('pattern')){
-          this.utils.errorSnackBar('Please fill the inverter make.');
+          this.utils.errorSnackBar('Please check the field inverter make.');
         }
         else if(this.desginForm.value.invertermodel=='' || this.desginForm.get('invertermodel').hasError('pattern')){
-          this.utils.errorSnackBar('Please fill the inverter model.');
+          this.utils.errorSnackBar('Please check the field inverter model.');
         }
         else if(this.desginForm.value.mountingtype==''){
           this.utils.errorSnackBar('Please fill the mounting type.');
@@ -1057,7 +1063,7 @@ saveInverterModel() {
           this.utils.errorSnackBar('Please fill the project type.');
         }
         else if(this.desginForm.value.tiltofgroundmountingsystem=='' || this.desginForm.get('tiltofgroundmountingsystem').hasError('pattern')){
-          this.utils.errorSnackBar('Please fill the tilt for ground mount.');
+          this.utils.errorSnackBar('Please check the field tilt for ground mount.');
         }
         else if(this.desginForm.value.rooftype==''){
           this.utils.errorSnackBar('Please fill the rooftype.');
@@ -1161,8 +1167,8 @@ saveInverterModel() {
         this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
       this.utils.hideLoading().then(()=>{
         this.utils.showSnackBar('File deleted successfully');
-        this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
-       // this.utils.setHomepagePermitRefresh(true);
+        this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
+        // this.utils.setHomepagePermitRefresh(true);
       });
       },
     (error)=>{
@@ -1453,6 +1459,12 @@ saveInverterModel() {
         this.utils.showSnackBar('GPS Not Allowed');
       });
 
+    }
+
+    ionViewWillLeave(){
+      this.intercom.update({
+        "hide_default_launcher": false
+      });
     }
 
 

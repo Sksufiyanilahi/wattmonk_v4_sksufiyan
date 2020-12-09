@@ -20,6 +20,8 @@ import { EmailModelPage } from '../email-model/email-model.page';
 //import { ResendpagedialogPage } from '../resendpagedialog/resendpagedialog.page';
 import { File } from '@ionic-native/file/ngx';
 import { PermitdesignComponent } from './permitdesign/permitdesign.component';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 
 @NgModule({
   entryComponents:[DeclinepagePage, EmailModelPage],
@@ -41,7 +43,9 @@ import { PermitdesignComponent } from './permitdesign/permitdesign.component';
     LaunchNavigator,
     Chooser,
     File,
-    Network
+    Network,
+    FileTransfer,
+    LocalNotifications
   ]
 })
 export class PermithomepagePageModule {}

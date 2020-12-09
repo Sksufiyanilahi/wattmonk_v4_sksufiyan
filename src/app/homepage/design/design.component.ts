@@ -22,6 +22,10 @@ import { EmailSelectorComponent } from 'src/app/utilities/email-selector/email-s
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 import { PaymentModalPage } from 'src/app/payment-modal/payment-modal.page';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import {File } from '@ionic-native/file/ngx';
+import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import { Intercom } from 'ng-intercom';
 
 
 @Component({
@@ -79,6 +83,10 @@ export class DesignComponent implements OnInit, OnDestroy {
     private network:NetworkdetectService,
     public alertController: AlertController,
     private socialsharing: SocialSharing,
+    private transfer:FileTransfer,
+    private file:File,
+    private localnotification:LocalNotifications,
+    private intercom:Intercom
 
   ) {
     this.userData = this.storageService.getUser();
@@ -527,6 +535,9 @@ this.network.networkConnect();
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
 
@@ -641,6 +652,9 @@ this.network.networkConnect();
 
 
   openDesigners(id: number,designData) {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
@@ -683,6 +697,9 @@ this.network.networkConnect();
   }
 
   openAnalysts(id: number,designData) {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;
@@ -947,6 +964,35 @@ shareWhatsapp(designData){
 });
     return await modal.present();
  }
+
+ designDownload(designData){
+  let dir_name = 'Wattmonk';
+  let path = '';
+  const url = designData.prelimdesign.url;
+ const fileTransfer: FileTransferObject = this.transfer.create();
+ 
+ 
+ let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
+result.then((resp) => {
+ path = resp.toURL();
+ console.log(path); 
+ 
+ fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
+   console.log('download complete: ' + entry.toURL());
+   this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+   
+   // this.clickSub = this.localnotification.on('click').subscribe(data => {
+   //   console.log(data)
+   //   path;
+   // })
+   this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
+ }, (error) => {
+   // handle error
+ });
+})
+
+
+}
 }
 
 export class DesginDataHelper {
