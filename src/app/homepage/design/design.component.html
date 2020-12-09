@@ -139,7 +139,7 @@
                                     <ion-icon name="share-social-outline"></ion-icon></span>&nbsp;
                                 <span style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="shareViaEmails(designData.id,designData)">
                                     <ion-icon name="mail" ></ion-icon></span>
-                                    <span *ngIf="userData.role.type=='clientsuperadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id)">
+                                    <span *ngIf="userData.role.type=='clientsuperadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, designData.requesttype)">
                                         Resend</span>
                             </ion-col>
                             <!-- <ion-col class="ion-no-margin ion-no-padding">
