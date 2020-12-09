@@ -148,7 +148,7 @@ export class PermitschedulePage implements OnInit {
     createdby: new FormControl(''),
     assignedto: new FormControl(''),
     rooftype: new FormControl(''),
-    architecturaldesign: this.formBuilder.array([new FormControl(null)]),
+    architecturaldesign: new FormControl(),
     tiltofgroundmountingsystem: new FormControl(''),
     mountingtype: new FormControl('', [Validators.required]),
    jobtype: new FormControl('', [Validators.required]),
@@ -1064,7 +1064,7 @@ saveInverterModel() {
         }
 
 
-        else if(this.desginForm.value.architecturaldesign=='[]'){
+        else if(this.desginForm.value.architecturaldesign==''){
           this.utils.errorSnackBar('Please attach architectural design.');
         }
         else{
@@ -1162,7 +1162,7 @@ saveInverterModel() {
       this.utils.hideLoading().then(()=>{
         this.utils.showSnackBar('File deleted successfully');
         this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
-        this.utils.setHomepagePermitRefresh(true);
+       // this.utils.setHomepagePermitRefresh(true);
       });
       },
     (error)=>{

@@ -540,7 +540,7 @@ remove(index:number){
   this.utils.hideLoading().then(()=>{
     this.utils.showSnackBar('File deleted successfully');
     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
-    this.utils.setHomepageDesignRefresh(true);
+   // this.utils.setHomepageDesignRefresh(true);
   });
   },
 (error)=>{

@@ -279,7 +279,7 @@
       <ng-container>
           <ion-item class="ion-no-padding" (click)="f.click()">
               <ion-label position="floating">Architectural design*</ion-label>
-                  <input type="file" #f class="form_input"  (change)="files($event)" style="margin-top: 12px;" formArrayName="architecturaldesign" multiple>
+                  <input type="file" #f class="form_input"  (change)="files($event)" style="margin-top: 12px;" formControlName="architecturaldesign" multiple>
                   <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
               </ion-item>
               <div *ngFor="let file of archFiles;let i of index">
