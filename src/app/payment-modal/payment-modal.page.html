@@ -67,9 +67,9 @@
   </ion-row>
   <ion-row class="ion-padding">
     <ion-col size="12" *ngIf="user?.ispaymentmodeprepay" >
-      <ion-item *ngIf="user?.amount>=settingValue" (click)="confirm()" >
+      <!-- <ion-item *ngIf="user?.amount>=settingValue" (click)="confirm()" >
         <ion-button  fill="clear"><ion-icon name="checkmark-circle-outline" style="color: blue;"></ion-icon>&nbsp;<ion-label class="black">Confirm</ion-label></ion-button>
-      </ion-item>
+      </ion-item> -->
       <ion-item (click)="addWallet('wallet')" *ngIf="settingValue>user?.amount">
 
         <ion-button  fill="clear" ><ion-icon name="cash-outline" style="color:green;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Add Money</ion-label></ion-button>
@@ -87,6 +87,9 @@
     </ion-col>
     </ion-row>
     </ion-content>
-    <ion-footer (click)="confirmforPostpaid()" class="ion-padding" style="text-align: center;background: blue;color:#fff">
+    <ion-footer *ngIf="user?.ispaymentmodeprepay && user?.amount>=settingValue" (click)="confirm()"  class="ion-padding" style="text-align: center;background: blue;color:#fff">
+      Confirm
+       </ion-footer>
+    <ion-footer *ngIf="!user?.ispaymentmodeprepay" (click)="confirmforPostpaid()" class="ion-padding" style="text-align: center;background: blue;color:#fff">
    Confirm
     </ion-footer>
