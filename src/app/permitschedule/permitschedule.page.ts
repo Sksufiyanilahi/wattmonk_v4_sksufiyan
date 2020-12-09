@@ -151,7 +151,7 @@ export class PermitschedulePage implements OnInit {
     createdby: new FormControl(''),
     assignedto: new FormControl(''),
     rooftype: new FormControl(''),
-    architecturaldesign: new FormControl(),
+    architecturaldesign: new FormControl(''),
     tiltofgroundmountingsystem: new FormControl(''),
     mountingtype: new FormControl('', [Validators.required]),
    jobtype: new FormControl('', [Validators.required]),
@@ -1068,9 +1068,7 @@ saveInverterModel() {
         else if(this.desginForm.value.rooftype==''){
           this.utils.errorSnackBar('Please fill the rooftype.');
         }
-
-
-        else if(this.desginForm.value.architecturaldesign==''){
+       else if(this.desginForm.value.architecturaldesign==''){
           this.utils.errorSnackBar('Please attach architectural design.');
         }
         else{
