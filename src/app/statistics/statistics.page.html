@@ -1,33 +1,37 @@
  <!--<ion-header>-->
     
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-row>
-    <ion-col>
-      <h1 class="notification-padding ion-no-margin home">Statistics</h1>
-  </ion-col>
-</ion-row>
-    </ion-toolbar>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-row>
+        <ion-col>
+          <h1 class="notification-padding ion-no-margin home">Statistics</h1>
+      </ion-col>
+    </ion-row>
+        </ion-toolbar>
+       <!-- <ion-grid> <ion-grid> -->
+       <!-- </ion-header>-->
+       <ion-content style="position: relative;">    <ion-grid>
+       <ion-tabs (click)="segmentChanged($event)" value="Prelim">
+          <ion-tab-bar slot="top" class="ion-no-border">
+              <ion-tab-button tab="designs" *ngIf="isSelected">
+                  <ion-label>Companies</ion-label>
+              </ion-tab-button>
+              <ion-tab-button tab="designers">
+                  <ion-label>Designers</ion-label>
+              </ion-tab-button>
+              <ion-tab-button tab="analysts">
+                <ion-label>Analysts</ion-label>
+            </ion-tab-button>
+          </ion-tab-bar>
+        </ion-tabs>
   
-   <!-- </ion-header>-->
-   <ion-content style="position: relative;">    <ion-grid>
-   <ion-tabs (click)="segmentChanged($event)" value="Prelim">
-      <ion-tab-bar slot="top" class="ion-no-border">
-          <ion-tab-button tab="designs" *ngIf="isSelected">
-              <ion-label>Companies</ion-label>
-          </ion-tab-button>
-          <ion-tab-button tab="designers">
-              <ion-label>Designers</ion-label>
-          </ion-tab-button>
-          <ion-tab-button tab="analysts">
-            <ion-label>Analysts</ion-label>
-        </ion-tab-button>
-      </ion-tab-bar>
-    </ion-tabs>
-
-  </ion-grid>
+      </ion-grid>
+      
+       
+          
+ </ion-content>
   
    
       
