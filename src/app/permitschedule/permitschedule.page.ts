@@ -93,6 +93,8 @@ export class PermitschedulePage implements OnInit {
   tabsDisabled = false;
   //user: User
   isEditMode:boolean=false;
+  isArcFileDelete:boolean=false;
+  indexOfArcFiles:any={};
   //data:DesignFormData;
 
   userdata:any;
@@ -902,6 +904,7 @@ saveInverterModel() {
             }
           else {
             if(this.formValue==='save'){
+              
               var data = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
@@ -942,12 +945,19 @@ saveInverterModel() {
               if(this.attachmentFileUpload){
                 this.uploadAttachmentDesign(response.id,'attachments')
               }
+              if(this.isArcFileDelete){
+                console.log("hello");
+                this.deleteArcFile(this.indexOfArcFiles);
+              }
+              
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
                 this.utils.showSnackBar('Design have been updated');
+                if(!this.isArcFileDelete){
                 this.utils.setPermitDesignDetailsRefresh(true);
-                this.navController.pop();
-
+                }
+                //this.navController.pop();
+                this.router.navigate(['/permit-design-details/',this.designId])
 
               });
             },
@@ -958,6 +968,8 @@ saveInverterModel() {
               });
 
             });
+          
+          
 
           }
           else if(this.formValue==='send'){
@@ -1162,23 +1174,52 @@ saveInverterModel() {
       this.permitFiles.splice(this.permitFiles.indexOf(i), 1);
     }
 
-    remove(index:number){
-      this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-        this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
-      this.utils.hideLoading().then(()=>{
-        this.utils.showSnackBar('File deleted successfully');
-        this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
+    remove(arc){
+      // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+      //   this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+      // this.utils.hideLoading().then(()=>{
+      //   this.utils.showSnackBar('File deleted successfully');
+      //   this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
         // this.utils.setHomepagePermitRefresh(true);
-      });
-      },
-    (error)=>{
-      this.utils.hideLoading().then(()=> {
-        this.utils.errorSnackBar('some Error Occured');
-      });
+       
+    //   });
+    //   },
+    // (error)=>{
+    //   this.utils.hideLoading().then(()=> {
+    //     this.utils.errorSnackBar('some Error Occured');
+    //   });
 
-    });
-    });
+    // });
+    // });
+    console.log(arc);
+    this.indexOfArcFiles = arc.id;
+    this.isArcFileDelete=true;
+    console.log(this.isArcFileDelete);
+    console.log(this.indexOfArcFiles);
+    console.log(this.architecturalData);
+    this.architecturalData.splice(this.architecturalData.indexOf(arc.id));
 
+    }
+
+    deleteArcFile(index){
+      this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+          this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+         this.utils.hideLoading().then(()=>{
+        //   this.utils.showSnackBar('File deleted successfully');
+          // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
+           this.utils.setPermitDesignDetailsRefresh(true);
+         
+       // });
+        },
+      (error)=>{
+        this.utils.hideLoading().then(()=> {
+          this.utils.errorSnackBar('some Error Occured');
+        });
+  
+      });
+    });
+  });
+     
     }
 
     sendtowattmonk(){
