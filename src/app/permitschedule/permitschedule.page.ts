@@ -1080,9 +1080,13 @@ saveInverterModel() {
         else if(this.desginForm.value.rooftype==''){
           this.utils.errorSnackBar('Please fill the rooftype.');
         }
+<<<<<<< HEAD
 
 
         else if(this.desginForm.value.architecturaldesign==''){
+=======
+       else if(this.desginForm.value.architecturaldesign==''){
+>>>>>>> e6161bc565ed2da862d7bfb41682dc3b4cce9a46
           this.utils.errorSnackBar('Please attach architectural design.');
         }
         else{
