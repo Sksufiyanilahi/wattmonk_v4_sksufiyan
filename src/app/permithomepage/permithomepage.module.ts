@@ -22,6 +22,7 @@ import { File } from '@ionic-native/file/ngx';
 import { PermitdesignComponent } from './permitdesign/permitdesign.component';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 @NgModule({
   entryComponents:[DeclinepagePage, EmailModelPage],
@@ -45,7 +46,8 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
     File,
     Network,
     FileTransfer,
-    LocalNotifications
+    LocalNotifications,
+    FileOpener
   ]
 })
 export class PermithomepagePageModule {}

@@ -27,6 +27,7 @@ import { intercomId } from '../../contants';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 @Component({
   selector: 'app-permitdesign',
@@ -70,7 +71,7 @@ export class PermitdesignComponent implements OnInit {
   selectedDesigner: any;
   netSwitch: boolean;
  reviewAssignedTo:any;
- 
+ clickSub:any;
 
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
@@ -88,7 +89,8 @@ export class PermitdesignComponent implements OnInit {
     private formBuilder: FormBuilder,
     private transfer : FileTransfer,
     private file: File,
-    private localnotification: LocalNotifications) {
+    private localnotification: LocalNotifications,
+    private fileopener:FileOpener) {
     this.userData = this.storageservice.getUser();
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
@@ -859,12 +861,13 @@ async decline(id){
 }
 
 
-async Resend(id){
+async Resend(id, type){
   const modal = await this.modalController.create({
     component: ResendpagedialogPage,
     cssClass: 'my-custom-modal-css',
     componentProps: {
-      id:id
+      id:id,
+      requesttype:type
 
     },
     backdropDismiss:false
@@ -960,7 +963,7 @@ shareWhatsapp(designData){
    let path = '';
    const url = designData.permitdesign.url;
   const fileTransfer: FileTransferObject = this.transfer.create();
-  
+  let vari = '';
   
   let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
 result.then((resp) => {
@@ -970,18 +973,26 @@ result.then((resp) => {
   fileTransfer.download(url, path + designData.permitdesign.hash + designData.permitdesign.ext).then((entry) => {
     console.log('download complete: ' + entry.toURL());
     this.utils.showSnackBar("Permit Design Downloaded Successfully");
+    this.localnotification.schedule({text:'Downloaded Successfully',data:entry.toURL() , foreground:true, vibrate:true })
+  //    this.clickSub = this.localnotification.on('click').subscribe(data => {
+  //      console.log(data)
+  //   //    this.fileopener.open(data,designData.permitdesign.ext)
+  //   //    .then(() => console.log('File is opened'))
+  //   //  .catch(e => console.log('Error opening file', e));
+  //   //  })
+  //    let star = this.file.getDirectory(resp,dir_name ,{create: true, exclusive: false});
+  //    star.then((response)=>{ vari = response.toURL(); this.fileopener.open(vari,designData.permitdesign.ext) });
+
+     
     
-    // this.clickSub = this.localnotification.on('click').subscribe(data => {
-    //   console.log(data)
-    //   path;
-    // })
-    this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
-  }, (error) => {
-    // handle error
-  });
+   
+  // }, (error) => {
+  //   // handle error
+  // });
  })
  
  
+})
 }
 }
 

@@ -716,7 +716,7 @@ remove(index:number){
       }
 
 
-      else if(this.desginForm.value.architecturaldesign==[]){
+      else if(this.desginForm.value.architecturaldesign==''){
         this.utils.errorSnackBar('Please attach architectural design.');
       }
       else{

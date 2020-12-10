@@ -868,12 +868,13 @@ async decline(id){
 }
 
 
-async Resend(id){
+async Resend(id, type){
   const modal = await this.modalController.create({
     component: ResendpagedialogPage,
     cssClass: 'my-custom-modal-css',
     componentProps: {
-      id:id
+      id:id,
+      requesttype:type
 
     },
     backdropDismiss:false
