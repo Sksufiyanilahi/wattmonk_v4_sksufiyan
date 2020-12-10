@@ -98,6 +98,7 @@ export class PermitschedulePage implements OnInit {
   //data:DesignFormData;
 
   userdata:any;
+  isEdit : boolean = true
 
   solarMakeDisposable: Subscription;
 
@@ -953,9 +954,9 @@ saveInverterModel() {
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
                 this.utils.showSnackBar('Design have been updated');
-                //if(!this.isArcFileDelete){
+                if(!this.isArcFileDelete){
                 this.utils.setPermitDesignDetailsRefresh(true);
-               // }
+                }
                 //this.navController.pop();
                 this.router.navigate(['/permit-design-details/',this.designId])
 
@@ -973,6 +974,7 @@ saveInverterModel() {
 
           }
           else if(this.formValue==='send'){
+            this.isEdit = false;
             var postData = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
@@ -1013,6 +1015,10 @@ saveInverterModel() {
               }
               if(this.attachmentFileUpload){
                 this.uploadAttachmentDesign(response.id,'attachments')
+              }
+              if(this.isArcFileDelete){
+                console.log("hello");
+                this.deleteArcFile(this.indexOfArcFiles);
               }
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
@@ -1254,7 +1260,8 @@ saveInverterModel() {
 
               this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
               this.router.navigate(['/permithomepage'])
-              this.utils.setHomepagePermitRefresh(true);
+             
+              this.utils.setHomepagePermitRefresh(this.isEdit);
             })
           }, (error) => {
             this.utils.hideLoading();
