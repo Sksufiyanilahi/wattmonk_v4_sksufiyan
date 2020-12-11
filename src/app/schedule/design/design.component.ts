@@ -54,6 +54,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   archFiles: string[]=[];
   prelimFiles: string[]=[];
  imageName:any;
+ 
+ indexOfArcFiles=[]
+ isArcFileDelete:boolean=false;
   //attachmentName = this.desginForm.get('attachments').value;
 
  options: CameraOptions = {
@@ -542,23 +545,64 @@ getDesignDetails() {
 
   }
 
-remove(index:number){
-  this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-    this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
-  this.utils.hideLoading().then(()=>{
-    this.utils.showSnackBar('File deleted successfully');
-    this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
-    //this.utils.setHomepageDesignRefresh(true);
-  });
-  },
-(error)=>{
-  this.utils.hideLoading().then(()=> {
-    this.utils.errorSnackBar('some Error Occured');
-  });
+remove(arc,i){
+//   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+//     this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+//   this.utils.hideLoading().then(()=>{
+//     this.utils.showSnackBar('File deleted successfully');
+//     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
+//     //this.utils.setHomepageDesignRefresh(true);
+//   });
+//   },
+// (error)=>{
+//   this.utils.hideLoading().then(()=> {
+//     this.utils.errorSnackBar('some Error Occured');
+//   });
 
-});
-});
+// });
+// });
+console.log(arc);
+this.indexOfArcFiles.push( arc.id);
 
+this.isArcFileDelete=true;
+console.log(this.isArcFileDelete);
+console.log(this.indexOfArcFiles);
+console.log(this.architecturalData);
+console.log(i);
+
+this.architecturalData.splice(this.architecturalData.indexOf(i), 1);
+
+}
+
+deleteArcFile(index){
+     
+      
+  // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+     for(var i=0; i< index.length;i++){
+       var id = index[i];
+       this.apiService.deletePrelimImage(id).subscribe(res=>{console.log("hello",res)
+      
+   });
+ 
+ // this.utils.hideLoading().then(()=>{
+ //   //   this.utils.showSnackBar('File deleted successfully');
+ //     // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
+     
+ //    // this.utils.setPermitDesignDetailsRefresh(true);
+ //  // });
+ //   },
+ (error)=>{
+   this.utils.hideLoading().then(()=> {
+     this.utils.errorSnackBar('some Error Occured');
+   });
+ }}
+
+// });
+ //this.utils.setHomepageDesignRefresh(true);
+ 
+
+  
+ 
 }
 
   addForm() {
@@ -636,6 +680,11 @@ remove(index:number){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.uploaarchitecturedesign(response.id,'architecturaldesign');
             this.uploadpreliumdesign(response.id,'attachments')
+            if(this.isArcFileDelete){
+              console.log("hello");
+              this.deleteArcFile(this.indexOfArcFiles);
+            }
+            
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
               this.utils.showSnackBar('Design have been updated');
@@ -656,7 +705,11 @@ remove(index:number){
         else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.uploaarchitecturedesign(response.id,'architecturaldesign');
-            this.uploadpreliumdesign(response.id,'attachments')
+            this.uploadpreliumdesign(response.id,'attachments');
+            if(this.isArcFileDelete){
+              console.log("hello");
+              this.deleteArcFile(this.indexOfArcFiles);
+            }
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
               this.value=response.id;
@@ -716,7 +769,7 @@ remove(index:number){
       }
 
 
-      else if(this.desginForm.value.architecturaldesign==[]){
+      else if(this.desginForm.value.architecturaldesign==''){
         this.utils.errorSnackBar('Please attach architectural design.');
       }
       else{

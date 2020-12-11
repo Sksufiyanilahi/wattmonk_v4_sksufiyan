@@ -19,6 +19,7 @@ export class ResendpagedialogPage implements OnInit {
   filename: string;
   enableDisable:boolean=true;
   successmessage: string;
+  requestType:any;
 
   constructor(private camera: Camera,
     private modalCtrl:ModalController,
@@ -33,6 +34,7 @@ export class ResendpagedialogPage implements OnInit {
 
     this.id= this.nav.get('id');
     console.log(this.id);
+    this.requestType = this.nav.get('requesttype');
     
   }
 
@@ -129,11 +131,13 @@ export class ResendpagedialogPage implements OnInit {
       console.log('could not submit');
       
     }else{
+      var data={}
+      if(this.requestType=='prelim'){
       var tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes()+15);
-      let data={
+       data={
         deliverydate:tomorrow.toISOString(),
         designacceptancestarttime:  designacceptancestarttime,
         isinrevisionstate: "true",
@@ -142,6 +146,21 @@ export class ResendpagedialogPage implements OnInit {
          status: "outsourced"
           
         }
+      }else{
+        var tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 2);
+      var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes()+30);
+       data={
+        deliverydate:tomorrow.toISOString(),
+        designacceptancestarttime:  designacceptancestarttime,
+        isinrevisionstate: "true",
+        isoutsourced: "true",
+        revisioncomments: this.reason,
+         status: "outsourced"
+          
+        }
+      }
   
       console.log(data);
       

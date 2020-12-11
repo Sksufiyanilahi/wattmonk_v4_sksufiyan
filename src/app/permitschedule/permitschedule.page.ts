@@ -93,9 +93,12 @@ export class PermitschedulePage implements OnInit {
   tabsDisabled = false;
   //user: User
   isEditMode:boolean=false;
+  isArcFileDelete:boolean=false;
+  indexOfArcFiles=[];
   //data:DesignFormData;
 
   userdata:any;
+  isEdit : boolean = true
 
   solarMakeDisposable: Subscription;
 
@@ -482,20 +485,20 @@ export class PermitschedulePage implements OnInit {
   this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
     console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-      // this.desginForm.get('address').setValue('124/345');
-      // this.desginForm.get('latitude').setValue('24.553333');
-      // this.desginForm.get('longitude').setValue('80.5555555555');
-      // this.desginForm.get('country').setValue('india');
-      // this.desginForm.get('city').setValue('Lucknow');
-      // this.desginForm.get('state').setValue('UP');
-      // this.desginForm.get('postalcode').setValue(3232343);
-     this.desginForm.get('address').setValue(address.address);
-       this.desginForm.get('latitude').setValue(address.lat);
-       this.desginForm.get('longitude').setValue(address.long);
-       this.desginForm.get('country').setValue(address.country);
-     this.desginForm.get('city').setValue(address.city);
-       this.desginForm.get('state').setValue(address.state);
-       this.desginForm.get('postalcode').setValue(address.postalcode);
+      this.desginForm.get('address').setValue('124/345');
+      this.desginForm.get('latitude').setValue('24.553333');
+      this.desginForm.get('longitude').setValue('80.5555555555');
+      this.desginForm.get('country').setValue('india');
+      this.desginForm.get('city').setValue('Lucknow');
+      this.desginForm.get('state').setValue('UP');
+      this.desginForm.get('postalcode').setValue(3232343);
+    //  this.desginForm.get('address').setValue(address.address);
+    //    this.desginForm.get('latitude').setValue(address.lat);
+    //    this.desginForm.get('longitude').setValue(address.long);
+    //    this.desginForm.get('country').setValue(address.country);
+    //  this.desginForm.get('city').setValue(address.city);
+    //    this.desginForm.get('state').setValue(address.state);
+    //    this.desginForm.get('postalcode').setValue(address.postalcode);
   }, (error) => {
     this.desginForm.get('address').setValue('');
     this.desginForm.get('latitude').setValue('');
@@ -906,6 +909,7 @@ saveInverterModel() {
             }
           else {
             if(this.formValue==='save'){
+              
               var data = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
@@ -946,12 +950,19 @@ saveInverterModel() {
               if(this.attachmentFileUpload){
                 this.uploadAttachmentDesign(response.id,'attachments')
               }
+              if(this.isArcFileDelete){
+                console.log("hello");
+                this.deleteArcFile(this.indexOfArcFiles);
+              }
+              
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
                 this.utils.showSnackBar('Design have been updated');
+                if(!this.isArcFileDelete){
                 this.utils.setPermitDesignDetailsRefresh(true);
-                this.router.navigate(['/permit-design-details/',this.designId]);
-
+                }
+                //this.navController.pop();
+                this.router.navigate(['/permit-design-details/',this.designId])
 
               });
             },
@@ -962,9 +973,12 @@ saveInverterModel() {
               });
 
             });
+          
+          
 
           }
           else if(this.formValue==='send'){
+            this.isEdit = false;
             var postData = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
@@ -1005,6 +1019,10 @@ saveInverterModel() {
               }
               if(this.attachmentFileUpload){
                 this.uploadAttachmentDesign(response.id,'attachments')
+              }
+              if(this.isArcFileDelete){
+                console.log("hello");
+                this.deleteArcFile(this.indexOfArcFiles);
               }
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
@@ -1072,9 +1090,7 @@ saveInverterModel() {
         else if(this.desginForm.value.rooftype==''){
           this.utils.errorSnackBar('Please fill the rooftype.');
         }
-
-
-        else if(this.desginForm.value.architecturaldesign==''){
+       else if(this.desginForm.value.architecturaldesign==''){
           this.utils.errorSnackBar('Please attach architectural design.');
         }
         else{
@@ -1166,24 +1182,66 @@ saveInverterModel() {
       this.permitFiles.splice(this.permitFiles.indexOf(i), 1);
     }
 
-    remove(index:number){
-      this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-        this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
-      this.utils.hideLoading().then(()=>{
-        this.utils.showSnackBar('File deleted successfully');
-        this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
-      //  this.utils.setHomepagePermitRefresh(true);
+    remove(arc,i){
+      // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+      //   this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+      // this.utils.hideLoading().then(()=>{
+      //   this.utils.showSnackBar('File deleted successfully');
+      //   this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
+        // this.utils.setHomepagePermitRefresh(true);
+       
+    //   });
+    //   },
+    // (error)=>{
+    //   this.utils.hideLoading().then(()=> {
+    //     this.utils.errorSnackBar('some Error Occured');
+    //   });
+
+    // });
+    // });
+    console.log(arc);
+    this.indexOfArcFiles.push( arc.id);
+
+    this.isArcFileDelete=true;
+    console.log(this.isArcFileDelete);
+    console.log(this.indexOfArcFiles);
+    console.log(this.architecturalData);
+    console.log(i);
+    
+    this.architecturalData.splice(this.architecturalData.indexOf(i), 1);
+
+    }
+
+    deleteArcFile(index){
+     
+      
+     // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+        for(var i=0; i< index.length;i++){
+          var id = index[i];
+          this.apiService.deletePrelimImage(id).subscribe(res=>{console.log("hello",res)
+         
       });
-      },
+    
+    // this.utils.hideLoading().then(()=>{
+    //   //   this.utils.showSnackBar('File deleted successfully');
+    //     // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
+        
+    //    // this.utils.setPermitDesignDetailsRefresh(true);
+    //  // });
+    //   },
     (error)=>{
       this.utils.hideLoading().then(()=> {
         this.utils.errorSnackBar('some Error Occured');
       });
+    }}
 
-    });
-    });
-
-    }
+   // });
+    this.utils.setPermitDesignDetailsRefresh(true);
+    
+  
+     
+    
+  }
 
     sendtowattmonk(){
       var designacceptancestarttime = new Date();
@@ -1206,7 +1264,8 @@ saveInverterModel() {
 
               this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
               this.router.navigate(['/permithomepage'])
-              this.utils.setHomepagePermitRefresh(true);
+             
+              this.utils.setHomepagePermitRefresh(this.isEdit);
             })
           }, (error) => {
             this.utils.hideLoading();
