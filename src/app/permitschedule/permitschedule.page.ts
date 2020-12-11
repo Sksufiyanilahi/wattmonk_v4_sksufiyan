@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormArrayName } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
@@ -463,7 +463,11 @@ export class PermitschedulePage implements OnInit {
   }
 
   goBack() {
-    this.navController.pop();
+    if(this.designId==null){
+    this.navController.pop();}
+    else{
+      this.router.navigate(['/permit-design-details/',this.designId])
+    }
   }
 
   eventcheck(e){
@@ -946,7 +950,7 @@ saveInverterModel() {
                 console.log('Res', response);
                 this.utils.showSnackBar('Design have been updated');
                 this.utils.setPermitDesignDetailsRefresh(true);
-                this.navController.pop();
+                this.router.navigate(['/permit-design-details/',this.designId]);
 
 
               });
@@ -1168,7 +1172,7 @@ saveInverterModel() {
       this.utils.hideLoading().then(()=>{
         this.utils.showSnackBar('File deleted successfully');
         this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
-        // this.utils.setHomepagePermitRefresh(true);
+      //  this.utils.setHomepagePermitRefresh(true);
       });
       },
     (error)=>{
