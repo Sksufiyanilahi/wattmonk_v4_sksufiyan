@@ -27,7 +27,7 @@ import { intercomId } from '../../contants';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
-import { FileOpener } from '@ionic-native/file-opener/ngx';
+//import { FileOpener } from '@ionic-native/file-opener/ngx';
 
 @Component({
   selector: 'app-permitdesign',
@@ -90,7 +90,8 @@ export class PermitdesignComponent implements OnInit {
     private transfer : FileTransfer,
     private file: File,
     private localnotification: LocalNotifications,
-    private fileopener:FileOpener) {
+   // private fileopener:FileOpener
+   ) {
     this.userData = this.storageservice.getUser();
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
