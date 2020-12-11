@@ -28,6 +28,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
 @Component({
   selector: 'app-permitdesign',
@@ -89,6 +90,7 @@ export class PermitdesignComponent implements OnInit {
     private formBuilder: FormBuilder,
     private transfer : FileTransfer,
     private file: File,
+
     private localnotification: LocalNotifications,
     private fileopener:FileOpener) {
     this.userData = this.storageservice.getUser();
@@ -993,6 +995,27 @@ result.then((resp) => {
  
  
 })
+}
+
+createChatGroup(design:DesginDataModel){
+  var GUID = 'permit' + "_" + new Date().getTime();
+
+  var address = design.address.substring(0, 90);
+  var groupName = design.name + "_" + address;
+
+  var groupType = CometChat.GROUP_TYPE.PRIVATE;
+  var password = "";
+
+  var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+  CometChat.createGroup(group).then(group=>{
+    let membersList = [
+      new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+    ];
+    CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+      this.cdr.detectChanges();
+    })
+  })
 }
 }
 

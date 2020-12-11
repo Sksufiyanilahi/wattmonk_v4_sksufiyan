@@ -3,6 +3,7 @@ import { NavController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import Conversation = CometChat.Conversation;
 import { UtilitiesService } from 'src/app/utilities.service';
+import { Intercom } from 'ng-intercom';
 
 
 @Component({
@@ -18,11 +19,15 @@ export class GroupsPage implements OnInit {
 
   constructor(
     private navController: NavController,
-    private utilities: UtilitiesService
+    private utilities: UtilitiesService,
+    private intercom:Intercom
   ) {
   }
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.conversationsRequest = new CometChat.ConversationsRequestBuilder()
       .setLimit(50)
       .setConversationType('group')
@@ -79,6 +84,12 @@ export class GroupsPage implements OnInit {
 
   openConversation(conversation) {
     this.navController.navigateForward(['chat/' + conversation.getConversationWith().getGuid(),{'key':'group'}]);
+  }
+
+  ionViewWillLeave(){
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
   }
 
 }

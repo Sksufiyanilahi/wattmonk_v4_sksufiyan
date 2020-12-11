@@ -56,7 +56,7 @@
                 </ion-item>
                 <div style="height: 5px;">
                     <div *ngIf="desginForm.get('monthlybill').dirty && desginForm.get('monthlybill').hasError('pattern')">
-                        <span class="error">{{"Annual units should be a vaid number"}}</span>
+                        <span class="error">{{"Annual units should be a valid number"}}</span>
                     </div>
                     <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
                         <span class="error">{{annualunitError}}</span>
@@ -232,10 +232,10 @@
                          <!-- <ion-item> -->
                          <!-- <ion-label position="floating">architectural design*</ion-label> -->
                                 <ng-container *ngIf="design && design.architecturaldesign !==null">
-                                    <div *ngFor="let arc of design.architecturaldesign">
+                                    <div *ngFor="let arc of design.architecturaldesign; let i of index">
                                        <ion-item>
                                            <ion-col size="11"> {{arc.name}}{{arc.ext}}</ion-col>
-                                           <ion-col size="1" (click)="remove(arc.id)">x</ion-col>
+                                           <ion-col size="1" (click)="remove(arc, i)">x</ion-col>
                                           
       
                                        </ion-item>

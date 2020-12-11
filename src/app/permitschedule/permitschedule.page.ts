@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, Platform, ToastController } from '@ionic/angular';
@@ -20,6 +20,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AddressModel } from '../model/address.model';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Intercom } from 'ng-intercom';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
 
 // export interface DesignFormData {
@@ -94,10 +95,11 @@ export class PermitschedulePage implements OnInit {
   //user: User
   isEditMode:boolean=false;
   isArcFileDelete:boolean=false;
-  indexOfArcFiles:any={};
+  indexOfArcFiles=[];
   //data:DesignFormData;
 
   userdata:any;
+  isEdit : boolean = true
 
   solarMakeDisposable: Subscription;
 
@@ -121,7 +123,8 @@ export class PermitschedulePage implements OnInit {
     private geolocation: Geolocation,
     private platform: Platform,
     private toastController: ToastController,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private cdr:ChangeDetectorRef
     //private data: DesignFormData
     ) {
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
@@ -796,22 +799,26 @@ saveInverterModel() {
                 if(this.attachmentFileUpload){
                   this.uploadAttachmentDesign(response.id,'attachments')
                 }
-                this.utils.hideLoading().then(() => {
-                  console.log('Res', response);
-                  this.router.navigate(['/permithomepage'])
-                  this.utils.showSnackBar('Design have been Created');
-                  // this.utils.showSnackBar('Design have been saved');
-                  this.utils.setHomepagePermitRefresh(true);
-                  // this.navController.pop();
-                  // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-                  //   modal.present();
-                  //   modal.onWillDismiss().then((dismissed) => {
-                      // this.utils.setHomepageDesignRefresh(true);
-                  //     this.navController.pop();
-                  //   });
-                  // });
 
-                });
+                  setTimeout(()=>{
+                    this.utils.hideLoading().then(() => {
+                      console.log('Res', response);
+                      this.createChatGroup(response);
+                      this.router.navigate(['/permithomepage'])
+                      this.utils.showSnackBar('Design have been Created');
+                      // this.utils.showSnackBar('Design have been saved');
+                      this.utils.setHomepagePermitRefresh(true);
+                      // this.navController.pop();
+                      // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+                      //   modal.present();
+                      //   modal.onWillDismiss().then((dismissed) => {
+                          // this.utils.setHomepageDesignRefresh(true);
+                      //     this.navController.pop();
+                      //   });
+                      // });
+    
+                    });
+                  },2000)
               }, responseError => {
                 this.utils.hideLoading();
                   const error: ErrorModel = responseError.error;
@@ -872,6 +879,7 @@ saveInverterModel() {
                   this.uploadAttachmentDesign(response.id,'attachments')
                 }
                 this.utils.hideLoading().then(() => {
+                  this.createChatGroup(response);
                   console.log('Res', response);
                   this.value = response.id;
                   this.sendtowattmonk();
@@ -973,6 +981,7 @@ saveInverterModel() {
 
           }
           else if(this.formValue==='send'){
+            this.isEdit = false;
             var postData = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
@@ -1013,6 +1022,10 @@ saveInverterModel() {
               }
               if(this.attachmentFileUpload){
                 this.uploadAttachmentDesign(response.id,'attachments')
+              }
+              if(this.isArcFileDelete){
+                console.log("hello");
+                this.deleteArcFile(this.indexOfArcFiles);
               }
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
@@ -1172,7 +1185,7 @@ saveInverterModel() {
       this.permitFiles.splice(this.permitFiles.indexOf(i), 1);
     }
 
-    remove(arc){
+    remove(arc,i){
       // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
       //   this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
       // this.utils.hideLoading().then(()=>{
@@ -1190,35 +1203,51 @@ saveInverterModel() {
     // });
     // });
     console.log(arc);
-    this.indexOfArcFiles = arc.id;
+    this.indexOfArcFiles.push( arc.id);
+
     this.isArcFileDelete=true;
     console.log(this.isArcFileDelete);
     console.log(this.indexOfArcFiles);
     console.log(this.architecturalData);
-    this.architecturalData.splice(this.architecturalData.indexOf(arc.id));
+    console.log(i);
+    
+    this.architecturalData.splice(this.architecturalData.indexOf(i), 1);
 
     }
 
     deleteArcFile(index){
-      this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-          this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
-         this.utils.hideLoading().then(()=>{
-        //   this.utils.showSnackBar('File deleted successfully');
-          // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
-           this.utils.setPermitDesignDetailsRefresh(true);
-         
-       // });
-        },
-      (error)=>{
-        this.utils.hideLoading().then(()=> {
-          this.utils.errorSnackBar('some Error Occured');
-        });
-  
-      });
-    });
-  });
      
-    }
+      
+     // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+        for(var i=0; i< index.length;i++){
+          var id = index[i];
+          this.apiService.deletePrelimImage(id).subscribe(res=>{console.log("hello",res)
+         
+      });
+    
+    // this.utils.hideLoading().then(()=>{
+    //   //   this.utils.showSnackBar('File deleted successfully');
+    //     // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
+        
+    //    // this.utils.setPermitDesignDetailsRefresh(true);
+    //  // });
+    //   },
+    (error)=>{
+      this.utils.hideLoading().then(()=> {
+        this.utils.errorSnackBar('some Error Occured');
+      });
+    }}
+
+   // });
+
+
+     this.utils.setPermitDesignDetailsRefresh(true);
+
+    
+  
+     
+    
+  }
 
     sendtowattmonk(){
       var designacceptancestarttime = new Date();
@@ -1241,7 +1270,8 @@ saveInverterModel() {
 
               this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
               this.router.navigate(['/permithomepage'])
-              this.utils.setHomepagePermitRefresh(true);
+             
+              this.utils.setHomepagePermitRefresh(this.isEdit);
             })
           }, (error) => {
             this.utils.hideLoading();
@@ -1504,6 +1534,27 @@ saveInverterModel() {
       this.intercom.update({
         "hide_default_launcher": false
       });
+    }
+
+    createChatGroup(design:DesginDataModel){
+      var GUID = 'permit' + "_" + new Date().getTime();
+    
+      var address = design.address.substring(0, 90);
+      var groupName = design.name + "_" + address;
+    
+      var groupType = CometChat.GROUP_TYPE.PRIVATE;
+      var password = "";
+    
+      var group = new CometChat.Group(GUID, groupName, groupType, password);
+    
+      CometChat.createGroup(group).then(group=>{
+        let membersList = [
+          new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+        ];
+        CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+          this.cdr.detectChanges();
+        })
+      })
     }
 
 

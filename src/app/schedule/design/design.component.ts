@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from 'src/app/model/assignee.model';
 import { SolarMake } from 'src/app/model/solar-make.model';
@@ -17,6 +17,8 @@ import {  DesginDataModel, DesignModel } from '../../model/design.model';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Intercom } from 'ng-intercom';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+
 
 @Component({
   selector: 'app-design',
@@ -54,6 +56,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   archFiles: string[]=[];
   prelimFiles: string[]=[];
  imageName:any;
+ 
+ indexOfArcFiles=[]
+ isArcFileDelete:boolean=false;
   //attachmentName = this.desginForm.get('attachments').value;
 
  options: CameraOptions = {
@@ -95,7 +100,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private camera: Camera,
     private file: File,
     private router:Router,
-    public intercom: Intercom
+    public intercom: Intercom,
+    private cdr:ChangeDetectorRef
   ) {
     var tomorrow=new Date();
     tomorrow.setDate(tomorrow.getDate()+1);
@@ -542,23 +548,64 @@ getDesignDetails() {
 
   }
 
-remove(index:number){
-  this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-    this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
-  this.utils.hideLoading().then(()=>{
-    this.utils.showSnackBar('File deleted successfully');
-    this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
-    //this.utils.setHomepageDesignRefresh(true);
-  });
-  },
-(error)=>{
-  this.utils.hideLoading().then(()=> {
-    this.utils.errorSnackBar('some Error Occured');
-  });
+remove(arc,i){
+//   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+//     this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+//   this.utils.hideLoading().then(()=>{
+//     this.utils.showSnackBar('File deleted successfully');
+//     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
+//     //this.utils.setHomepageDesignRefresh(true);
+//   });
+//   },
+// (error)=>{
+//   this.utils.hideLoading().then(()=> {
+//     this.utils.errorSnackBar('some Error Occured');
+//   });
 
-});
-});
+// });
+// });
+console.log(arc);
+this.indexOfArcFiles.push( arc.id);
 
+this.isArcFileDelete=true;
+console.log(this.isArcFileDelete);
+console.log(this.indexOfArcFiles);
+console.log(this.architecturalData);
+console.log(i);
+
+this.architecturalData.splice(this.architecturalData.indexOf(i), 1);
+
+}
+
+deleteArcFile(index){
+     
+      
+  // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+     for(var i=0; i< index.length;i++){
+       var id = index[i];
+       this.apiService.deletePrelimImage(id).subscribe(res=>{console.log("hello",res)
+      
+   });
+ 
+ // this.utils.hideLoading().then(()=>{
+ //   //   this.utils.showSnackBar('File deleted successfully');
+ //     // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
+     
+ //    // this.utils.setPermitDesignDetailsRefresh(true);
+ //  // });
+ //   },
+ (error)=>{
+   this.utils.hideLoading().then(()=> {
+     this.utils.errorSnackBar('some Error Occured');
+   });
+ }}
+
+// });
+ //this.utils.setHomepageDesignRefresh(true);
+ 
+
+  
+ 
 }
 
   addForm() {
@@ -581,11 +628,13 @@ remove(index:number){
         if (this.designId === 0) {
 
           if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
-            this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+            debugger;
+            this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
               this.uploaarchitecturedesign(response.id,'architecturaldesign');
               this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
+                this.createChatGroup(response);
                 this.router.navigate(['/homepage/design'])
                 // this.utils.showSnackBar('Design have been saved');
                 this.utils.setHomepageDesignRefresh(true);
@@ -607,13 +656,14 @@ remove(index:number){
            
             }
             else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
-              this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+              this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
                 console.log(response.id);
                this.uploaarchitecturedesign(response.id,'architecturaldesign');
                 this.uploadpreliumdesign(response.id,'attachments')
                 
                 this.utils.hideLoading().then(() => {
                   this.value = response.id;
+                  this.createChatGroup(response);
                   this.sendtowattmonk();
                  // console.log('Res', response);
                  // this.router.navigate(['/homepage'])
@@ -636,14 +686,18 @@ remove(index:number){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.uploaarchitecturedesign(response.id,'architecturaldesign');
             this.uploadpreliumdesign(response.id,'attachments')
-            this.utils.hideLoading().then(() => {
-              console.log('Res', response);
-              this.utils.showSnackBar('Design have been updated');
-              this.utils.setDesignDetailsRefresh(true);
-              this.navController.pop();
-              
-      
-            });
+            if(this.isArcFileDelete){
+              console.log("hello");
+              this.deleteArcFile(this.indexOfArcFiles);
+            }
+            setTimeout(()=>{
+              this.utils.hideLoading().then(() => {
+                console.log('Res', response);
+                this.utils.showSnackBar('Design have been updated');
+                this.utils.setDesignDetailsRefresh(true);
+                this.navController.pop();
+              });
+            },2000)
           },
            responseError => {
             this.utils.hideLoading().then(() => {
@@ -656,7 +710,11 @@ remove(index:number){
         else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.uploaarchitecturedesign(response.id,'architecturaldesign');
-            this.uploadpreliumdesign(response.id,'attachments')
+            this.uploadpreliumdesign(response.id,'attachments');
+            if(this.isArcFileDelete){
+              console.log("hello");
+              this.deleteArcFile(this.indexOfArcFiles);
+            }
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
               this.value=response.id;
@@ -1013,6 +1071,28 @@ ioniViewDidEnter(){
         this.utils.errorSnackBar('Address not found. Make sure location is on on device.');
       }
     }
+  }
+
+  createChatGroup(design:DesginDataModel){
+    debugger;
+    var GUID = 'prelim' + "_" + new Date().getTime();
+
+    var address = design.address.substring(0, 90);
+    var groupName = design.name + "_" + address;
+
+    var groupType = CometChat.GROUP_TYPE.PRIVATE;
+    var password = "";
+
+    var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+    CometChat.createGroup(group).then(group=>{
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+        this.cdr.detectChanges();
+      })
+    })
   }
 }
 
