@@ -41,6 +41,7 @@ export class PermitDesignDetailsPage implements OnInit {
   isSelfUpdate: false;
   ispermitUpdate:false;
   enableDisable:boolean=false;
+  exceedfileSize:any;
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -143,6 +144,8 @@ export class PermitDesignDetailsPage implements OnInit {
       this.utilities.errorSnackBar('Please select permit design');
       return false;
     }else{
+      if(this.exceedfileSize<=25000000)
+      {
       var data={}
       var date= Date.now();
      if(this.ispermitUpdate){
@@ -193,6 +196,11 @@ export class PermitDesignDetailsPage implements OnInit {
         });
       })
     }
+    else
+    {
+      this.utilities.errorSnackBar("File is greater than 25MB")
+    }
+  }
   }
 
 
@@ -369,6 +377,8 @@ export class PermitDesignDetailsPage implements OnInit {
       // this.permitFiles.push(event.target.files)
       this.permitFiles= event.target.files;
       this.imageName= event.target.files[0].name;
+      this.exceedfileSize = event.target.files[0].size;
+      console.log(this.exceedfileSize);
       this.imagebox= true;
     // }
     console.log(this.permitFiles);
