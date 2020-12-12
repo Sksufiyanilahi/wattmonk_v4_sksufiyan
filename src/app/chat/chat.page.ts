@@ -10,6 +10,7 @@ import BaseMessage = CometChat.BaseMessage;
 import { UtilitiesService } from '../utilities.service';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { File,FileEntry } from '@ionic-native/file/ngx';
+import { Intercom } from 'ng-intercom';
 
 @Component({
   selector: 'app-chat',
@@ -47,7 +48,8 @@ export class ChatPage implements OnInit {
     public actionSheetController: ActionSheetController,
     private imagePicker: ImagePicker,
     public modalController: ModalController,
-    private file:File
+    private file:File,
+    private intercom:Intercom
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.messagesRequest = new CometChat.MessagesRequestBuilder()
@@ -57,6 +59,9 @@ export class ChatPage implements OnInit {
   }
 
   ionViewWillEnter(): void {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     setTimeout(() => {
       console.log('scrolled caled');
       this.content.scrollToBottom(300);
@@ -169,7 +174,7 @@ export class ChatPage implements OnInit {
 
   moveToBottom() {
     console.log('here moving to bottom');
-    this.content.scrollToBottom();
+    this.content.scrollToBottom(1500);
   }
 
   logScrollStart() {
@@ -374,13 +379,13 @@ export class ChatPage implements OnInit {
           this.ImagePicker();
         }
       },
-        {
-          text: 'Document',
-          handler: () => {
-            console.log('DOCUMENT PICKER CLICKED');
-            this.DocumentPicker();
-          }
-        },
+        // {
+        //  text: 'Document',
+        //   handler: () => {
+        //     console.log('DOCUMENT PICKER CLICKED');
+        //     this.DocumentPicker();
+        //   }
+        // }, 
         {
           text: 'Cancel',
           role: 'cancel',
@@ -524,5 +529,11 @@ export class ChatPage implements OnInit {
 
   goBack() {
     this.navController.pop();
+  }
+
+  ionViewWillLeave(){
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
   }
 }
