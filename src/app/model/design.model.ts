@@ -127,6 +127,7 @@ export class DesginDataModel {
   requestdeclineattachment:any;
   isoutsourced:any;
   chatid:string;
+  requesttype:string;
 }
 
 export class PrelimDesign{

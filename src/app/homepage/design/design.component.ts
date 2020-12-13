@@ -26,6 +26,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { Intercom } from 'ng-intercom';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
 
 @Component({
@@ -993,6 +994,40 @@ result.then((resp) => {
 })
 
 
+}
+
+createNewDesignChatGroup(design:DesginDataModel) {
+  var GUID = 'prelim' + "_" + new Date().getTime();
+  var address = design.address.substring(0, 60);
+  var groupName = design.name + "_" + address;
+
+  var groupType = CometChat.GROUP_TYPE.PRIVATE;
+  var password = "";
+
+  var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+  CometChat.createGroup(group).then(
+    group => {
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN),
+        new CometChat.GroupMember("" + this.userData.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(), membersList, []).then(
+        response => {
+          if(design.requesttype == "prelim"){
+            // this.updateItemInList(LISTTYPE.NEW, design);
+          }else{
+            // this.updateItemInPermitList(LISTTYPE.NEW, design);
+          }
+        },
+        error => {
+        }
+      );
+    },
+    error => {
+
+    }
+  );
 }
 }
 
