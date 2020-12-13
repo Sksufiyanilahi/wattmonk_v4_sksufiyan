@@ -41,6 +41,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   isSelfUpdate: false;
   isprelimUpdate:false;
   enableDisable:boolean=false;
+ // prelimFileType:any;
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -55,6 +56,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   reviewIssuesForm: FormGroup; 
   //reviewIssues= new FormControl('', Validators.required);
   browser: any;
+  exceedfileSize:any;
   // user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
 
@@ -135,6 +137,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.errorSnackBar('Please select prelim design');
       return false;
     }else{
+      if(this.exceedfileSize<=25000000)
+      {
       var data={}
       var date= Date.now();
      if(this.isprelimUpdate){
@@ -184,7 +188,10 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
           });
         });
       })
+    }else{
+      this.utilities.errorSnackBar("File is greater than 25MB");
     }
+  }
   }
 
 
@@ -351,7 +358,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   prelimfiles(event){
     
-    
     console.log(this.imageName);
     console.log(event.target.files);
     // for(var i=0; i< event.target.files.length;i++){
@@ -359,6 +365,10 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.prelimFiles= event.target.files;
       this.imageName= event.target.files[0].name;
       this.imagebox= true;
+      this.exceedfileSize = event.target.files[0].size;
+      //this.prelimFileType = event.target.files[0].type;
+      console.log(this.exceedfileSize);
+      //console.log(this.prelimFileType)
     // }
     console.log(this.prelimFiles);
     
