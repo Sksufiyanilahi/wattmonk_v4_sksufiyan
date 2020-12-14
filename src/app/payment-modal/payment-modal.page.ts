@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
-import { NavParams, ModalController, NavController } from '@ionic/angular';
+import { NavParams, ModalController, NavController, AlertController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UtilitiesService } from '../utilities.service';
@@ -22,6 +22,8 @@ count:any
   servicePrice: any=0;
   settingValue:any=0;
   freeCharges:any;
+  value:number=50;
+  applyPromocode:boolean=false;
   constructor( private storageService:StorageService,
     
     private apiService:ApiService,
@@ -29,7 +31,8 @@ count:any
     private route:ActivatedRoute,
     private navController:NavController,
     private utils:UtilitiesService,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private alertController:AlertController
     ) { }
 
   ngOnInit() {
@@ -218,4 +221,64 @@ confirm(){
       "hide_default_launcher": false
     });
   }
+
+
+  async Congratulations(){
+
+     const alert = await this.alertController.create({
+      cssClass: 'alertClass',
+       header: 'Congratulations!',
+     message:'<div><img src="/assets/images/tick.png"> <span>you got discount of $'+ this.value+'</span></div>',
+      // inputs:
+      //  [ {name:'comment',
+      //  id:'comment',
+      //     type:'textarea',
+      //   placeholder:'Enter Comment'}
+      //   ] ,
+      buttons: [
+        {
+          text: 'OK',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        // }, {
+        //   text: 'deliver',
+        //   handler: (alertData) => {
+        //     var postData= {};
+        //     if(alertData.comment!=""){
+        //      postData = {
+        //       status: "delivered",
+        //       comments: alertData.comment ,
+        //        };}
+        //        else{
+        //         postData = {
+        //           status: "delivered",
+        //            };
+        //        }
+        //        console.log(postData);
+        //       //  this.apiService.updateDesignForm(postData).subscribe((value) => {
+        //       //   this.utils.hideLoading().then(()=>{
+        //       //     ;
+        //       //     console.log('reach ', value);
+        //       //    this.utils.showSnackBar('Design request has been delivered successfully');
+
+        //       //     this.utils.setHomepageDesignRefresh(true);
+        //       //   })
+        //       // }, (error) => {
+        //       //   this.utils.hideLoading();
+        //       //   ;
+        //       // });
+        //   }
+        }
+      ]
+    });
+
+    await alert.present();
+
+
+
+  }
+
 }
