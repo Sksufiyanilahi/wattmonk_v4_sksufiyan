@@ -106,7 +106,7 @@
                                     </ng-container>
                                 </span>
 
-                                <span *ngIf="designData.status == 'requestdeclined' && userData.role.type=='clientsuperadmin'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
+                                <span *ngIf="designData.status == 'requestdeclined' && userData.role.type=='clientsuperadmin'"style="float:right !important;" class="ion-text-end action-button-color" (click)="directAssignToWattmonk(designData.id)"
                                 >Reassign</span>
                             </ion-col>
 

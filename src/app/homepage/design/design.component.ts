@@ -1089,7 +1089,41 @@ createNewDesignChatGroup(design:DesginDataModel) {
   );
 }
 
-
+directAssignToWattmonk(id:number){
+  this.designId = id;
+  var postData = {};
+  var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+        postData = {
+          outsourcedto: 232,
+          isoutsourced: "true",
+          status: "outsourced",
+          designacceptancestarttime: designacceptancestarttime
+        };
+        this.utils.showLoading('Assigning').then(()=>{
+          this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
+            this.utils.hideLoading().then(()=>{
+              ;
+              console.log('reach ', value);
+    
+            //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
+            //  {
+            //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+            //  }else{
+              this.utils.showSnackBar('Design request has been reassigned to wattmonk successfully');
+             
+              //this.dismissBottomSheet();
+              //this.showBottomDraw = false;
+              this.utils.setHomepageDesignRefresh(true);
+    
+            })
+          }, (error) => {
+            this.utils.hideLoading();
+           // this.dismissBottomSheet();
+           // this.showBottomDraw = false;
+          });
+        })
+}
 }
 
 export class DesginDataHelper {

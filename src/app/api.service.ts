@@ -403,5 +403,14 @@ export class ApiService {
     getAnalystDesignsForStats(startdate:string, enddate:string, requesttype:string, id:number){
       return this.http.get(BaseUrl + '/getanalystdesigns?status=delivered&analystid='+id+'&startdate='+startdate+'&enddate='+enddate+'&requesttype='+requesttype,{headers: this.headers});
     }
+
+    sendPrelimEmails(data:any){
+      return this.http.post(BaseUrl+"/designs/send-prelim-design", data,{headers:this.headers})
+    }
+
+    sendPermitEmails(data:any){
+      return this.http.post(BaseUrl+"/designs/send-permit-design", data,{headers:this.headers})
+    }
+    
     
 }

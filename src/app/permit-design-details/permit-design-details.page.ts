@@ -42,6 +42,7 @@ export class PermitDesignDetailsPage implements OnInit {
   ispermitUpdate:false;
   enableDisable:boolean=false;
   exceedfileSize:any;
+  permitFileSize:any;
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -144,7 +145,7 @@ export class PermitDesignDetailsPage implements OnInit {
       this.utilities.errorSnackBar('Please select permit design');
       return false;
     }else{
-      if(this.exceedfileSize<=25000000)
+      if(this.exceedfileSize<=25000000 || this.permitFileSize <= 25000000)
       {
       var data={}
       var date= Date.now();
@@ -444,6 +445,8 @@ permitupdate(event){
   // for(var i=0; i< event.target.files.length;i++){
     // this.permitFiles.push(event.target.files)
     this.permitFiles= event.target.files;
+    this.permitFileSize = event.target.files[0].size;
+    console.log(this.permitFileSize);
     //this.imageName= event.target.files[0].name;
     //this.imagebox= true;
   // }
@@ -502,6 +505,7 @@ return blob;
       //   console.log(blob);
 
       // console.log(typeof(this.permitFiles[0]));
+      
       console.log(key);
       const imageData = new FormData();
       for(var i=0; i< this.permitFiles.length;i++){
@@ -603,12 +607,18 @@ return blob;
   designReviewSuccess(){
 
     if(this.isSelfUpdate && this.permitFiles.length > 0)
-    { this.utilities.showLoading("Uploading").then(()=>
-      {this.uploadpreliumdesign(this.designId,'permitdesign' );})
+    {
+      if(this.permitFileSize <= 25000000){
+       this.utilities.showLoading("Uploading").then(()=>
+      {
+        this.uploadpreliumdesign(this.designId,'permitdesign' );
+      })
 
-
-
-    }else if(this.isSelfUpdate && this.permitFiles.length == 0)
+    }
+    else{
+      this.utilities.errorSnackBar("File is greater than 25MB");
+    }
+  }else if(this.isSelfUpdate && this.permitFiles.length == 0)
     {
       this.utilities.errorSnackBar("Please attach file");
     }else{

@@ -42,13 +42,17 @@ export class DesignoverviewPage implements OnInit {
     private network: NetworkdetectService,
     private platform: Platform,
     private iab:InAppBrowser,
-    private router:ActivatedRoute 
+    private router:ActivatedRoute,
+    // private intercom : Intercom
     ) { 
       let data = localStorage.getItem('type');
       console.log(data,"dataa");
     }
 
   ngOnInit() {
+    // this.intercom.update({
+    //   "hide_default_launcher": true
+    // });
     this.userData = this.storage.getUser();
     this.apiService.emitUserNameAndRole(this.userData);
     this.apiService.version.subscribe(versionInfo=>{
@@ -183,4 +187,9 @@ setzero(){
   this.unreadCount= 0;
 }
 
+// ionViewWillLeave(){
+//   this.intercom.update({
+//     "hide_default_launcher": false
+//   });
+// }
 }
