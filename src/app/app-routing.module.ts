@@ -204,6 +204,10 @@ const routes: Routes = [
     path: 'statsoverviewdetails',
     loadChildren: () => import('./statsoverviewdetails/statsoverviewdetails.module').then( m => m.StatsoverviewdetailsPageModule)
   },
+  {
+    path: 'onboarding',
+    loadChildren: () => import('./onboarding/onboarding.module').then( m => m.OnboardingPageModule)
+  },
 
 
 

@@ -1,0 +1,43 @@
+.margin{
+    margin-top: 0px;
+    
+}
+
+ion-radio{
+  margin-top: 0px;
+  margin-right: 5px;
+}
+
+::ng-deep.mat-step-header .mat-step-label.mat-step-label-active {
+  color: rgba(0,0,0,.87) !important;
+  font-size: large !important; 
+}
+
+// .card-content{
+//    // padding: 0px 16px;
+//     max-height: 0px;
+// }
+
+.clickEnableCls{
+    pointer-events: visible !important;
+ }
+ ion-label {
+    color: #6C6C6C !important;
+  }
+
+  ion-card-content {
+    position: relative;
+    overflow: hidden;
+    overflow-y: auto;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .mat-stepper-horizontal {
+    margin-top: 8px;
+  }
+  
+  .mat-form-field {
+    margin-top: 16px;
+  }
