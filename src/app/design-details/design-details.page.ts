@@ -41,6 +41,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   isSelfUpdate: false;
   isprelimUpdate:false;
   enableDisable:boolean=false;
+  prelimFileSize:number;
  // prelimFileType:any;
 
   options: LaunchNavigatorOptions = {
@@ -137,7 +138,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.errorSnackBar('Please select prelim design');
       return false;
     }else{
-      if(this.exceedfileSize<=25000000)
+      if(this.exceedfileSize<=25000000 || this.prelimFileSize<=25000000)
       {
       var data={}
       var date= Date.now();
@@ -433,6 +434,8 @@ prelimupdate(event){
   // for(var i=0; i< event.target.files.length;i++){
     // this.prelimFiles.push(event.target.files) 
     this.prelimFiles= event.target.files;
+    this.prelimFileSize = event.target.files[0].size;
+    console.log(this.prelimFileSize);
     //this.imageName= event.target.files[0].name;
     //this.imagebox= true;
   // }
@@ -591,8 +594,12 @@ return blob;
     
     if(this.isSelfUpdate && this.prelimFiles.length > 0)
     {
+      if(this.prelimFileSize<=25000000){
       this.utilities.showLoading("Uploading").then(()=>
       {this.uploadpreliumdesign(this.designId,'permitdesign' );})
+      }else{
+        this.utilities.errorSnackBar("File is greater than 25MB")
+      }
       
       
     }else if(this.isSelfUpdate && this.prelimFiles.length == 0)

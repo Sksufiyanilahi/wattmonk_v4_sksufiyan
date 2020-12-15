@@ -159,27 +159,30 @@ card:any
     user:this.userData.id
   }
   console.log(data);
-    this.apiService.createPayment(data).subscribe(res=>{
-      this.createPayment=res;
-      this.utils.hideLoading().then(()=>{
+    // this.apiService.createPayment(data).subscribe(res=>{
+    //   this.createPayment=res;
+    //   this.utils.hideLoading().then(()=>{
       var dates=new Date();
      console.log(dates)
 rechargeData={
   amount:this.amountForm.get('amount').value,
   datetime: dates,
   paymenttype: "wallet",
-  type: this.createPayment.paymentstatus,
+  type: "succeeded",
 user: this.userData.id
 }
 this.apiService.recharges(rechargeData).subscribe(res=>{
+  this.utils.hideLoading().then(()=>{
   this.utils.showSnackBar("$"+this.amountForm.get('amount').value +" added in your wallet successfully");
   this.goBack();
   this.utils.setHomepageDesignRefresh(true);
-});})
-    }),error=>{
-      console.log("payment was unsuccessful");
-     
+}),error=>{
+  this.utils.hideLoading().then(()=>{      
+    console.log("payment was unsuccessful");
+     this.utils.errorSnackBar(error);
+    })
     };
+  });
     this.token=''
   });
   }
