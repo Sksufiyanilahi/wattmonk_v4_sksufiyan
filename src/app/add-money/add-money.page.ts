@@ -67,6 +67,10 @@ card:any
     this.setupStripe();
     console.log(this.mode)
     console.log(this.designId);
+
+    if(this.mode=='card'){
+      this.amountForm.patchValue({amount:this.serviceAmount});
+    }
     
   }
  setupStripe() {
@@ -207,7 +211,7 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
    //   console.log(token);
      // this.token=token.id
   data={
-    amount:this.serviceAmount,
+    amount:this.amountForm.get('amount').value,
     email:this.userData.email,
     paymenttype: "direct",
     token: this.token.token.id,
@@ -241,7 +245,8 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
       outsourcedto: 232,
       isoutsourced: "true",
       status: "outsourced",
-      designacceptancestarttime: designacceptancestarttime
+      designacceptancestarttime: designacceptancestarttime,
+      paymenttype : "direct"
     };
     
       this.apiService.updateDesignForm(postData,this.designId).subscribe(value=>{
