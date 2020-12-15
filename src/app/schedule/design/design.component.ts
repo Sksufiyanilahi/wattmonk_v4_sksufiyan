@@ -634,7 +634,7 @@ deleteArcFile(index){
               this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
-                this.createChatGroup(response);
+                // this.createChatGroup(response);
                 this.router.navigate(['/homepage/design'])
                 // this.utils.showSnackBar('Design have been saved');
                 this.utils.setHomepageDesignRefresh(true);
@@ -663,7 +663,7 @@ deleteArcFile(index){
                 
                 this.utils.hideLoading().then(() => {
                   this.value = response.id;
-                  this.createChatGroup(response);
+                  // this.createChatGroup(response);
                   this.sendtowattmonk();
                  // console.log('Res', response);
                  // this.router.navigate(['/homepage'])
@@ -1074,10 +1074,9 @@ ioniViewDidEnter(){
   }
 
   createChatGroup(design:DesginDataModel){
-    debugger;
     var GUID = 'prelim' + "_" + new Date().getTime();
 
-    var address = design.address.substring(0, 90);
+    var address = design.address.substring(0, 60);
     var groupName = design.name + "_" + address;
 
     var groupType = CometChat.GROUP_TYPE.PRIVATE;

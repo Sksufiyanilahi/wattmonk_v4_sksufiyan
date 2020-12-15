@@ -14,6 +14,7 @@ import { UtilitiesService } from '../utilities.service';
 import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
+import { COMETCHAT_CONSTANTS } from '../contants';
 
 @Component({
   selector: 'app-permitdesignoverview',
@@ -54,7 +55,9 @@ export class PermitdesignoverviewPage implements OnInit {
       this.update_version = versionInfo;
     })
     this.getNotificationCount();
-    this.setupCometChatUser();
+    if(this.userData){
+      this.setupCometChatUser();
+    }
     this.updateUserPushToken();
     this.route.navigate(['permitdesignoverview/permitnewdesign']);
   }
@@ -64,23 +67,24 @@ export class PermitdesignoverviewPage implements OnInit {
   }
 
   setupCometChatUser() {
-    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMET_CHAT_REGION).build();
-    CometChat.init(COMET_CHAT_APP_ID, appSetting).then(
-      () => {
-        console.log('Initialization completed successfully');
-        CometChat.login(this.storage.getUserID(), COMET_CHAT_AUTH_KEY).then(
-          (user) => {
-            console.log('Login Successful:', { user });
-          },
-          error => {
-            console.log('Login failed with exception:', { error });
-          }
-        );
+    const user = new CometChat.User(this.storage.getUserID());
+    user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
+    // CometChat.createUser(user, COMETCHAT_CONSTANTS.API_KEY).then(
+    //   (user) => {
+    //     console.log('user created', user);
+    //   }, error => {
+    //     console.log('error', error);
+    //   }
+    // );
+    CometChat.login(this.storage.getUserID(),  COMETCHAT_CONSTANTS.API_KEY).then(
+      (user) => {
+        console.log('Login Successful:', { user });
       },
       error => {
-        console.log('Initialization failed with error:', error);
+        console.log('Login failed with exception:', { error });
       }
     );
+
   }
 
   updateUserPushToken(){

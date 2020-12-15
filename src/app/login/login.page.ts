@@ -72,6 +72,9 @@ export class LoginPage implements OnInit {
   }
 
   ionViewDidEnter(){
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
@@ -152,7 +155,7 @@ this.network.networkConnect();
                   this.apiService.refreshHeader();
                    this.navController.navigateRoot(['changepassword'])
                  } else {
-                   this.navController.navigateRoot(['permithomepage']);
+                   this.navController.navigateRoot(['permithomepage/permitdesign']);
                  }
               }
             });

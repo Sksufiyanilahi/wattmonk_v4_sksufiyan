@@ -26,6 +26,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { COMETCHAT_CONSTANTS } from '../contants';
 
 
 @Component({
@@ -118,6 +120,7 @@ export class PermithomepagePage implements OnInit {
 
 
   ngOnInit() {
+    this.setupCometChat();
     this.intercom.update({
       "hide_default_launcher": false
     });
@@ -130,6 +133,21 @@ export class PermithomepagePage implements OnInit {
        this.subscription = this.utils.getBottomBarHomepage().subscribe((value) => {
         this.showFooter = value;
       });
+  }
+  setupCometChat() {
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+
+      // }
+      },
+      error => {
+        console.log('Initialization failed with error:', error);
+      }
+    );
   }
 
   ionViewDidEnter() {

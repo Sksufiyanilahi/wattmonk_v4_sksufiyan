@@ -11,6 +11,7 @@ import { UtilitiesService } from '../utilities.service';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { File,FileEntry } from '@ionic-native/file/ngx';
 import { Intercom } from 'ng-intercom';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-chat',
@@ -37,6 +38,7 @@ export class ChatPage implements OnInit {
   listenerId = 'GroupMessage';
   showImage = 0;
   imageUrl = '';
+  userData:any;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,7 +51,8 @@ export class ChatPage implements OnInit {
     private imagePicker: ImagePicker,
     public modalController: ModalController,
     private file:File,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private storageService:StorageService
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.messagesRequest = new CometChat.MessagesRequestBuilder()
@@ -69,6 +72,7 @@ export class ChatPage implements OnInit {
   }
 
   ngOnInit() {
+    this.userData = this.storageService.getUser();
     CometChat.getGroup(this.id).then(
       user => {
         console.log('User details fetched for user:', user);

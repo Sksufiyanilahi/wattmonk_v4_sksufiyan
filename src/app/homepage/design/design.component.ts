@@ -37,7 +37,6 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 export class DesignComponent implements OnInit, OnDestroy {
 
   listOfDesignDataHelper: DesginDataHelper[] = [];
-  listOfDesignsData: DesginDataModel[] = [];
   private refreshSubscription: Subscription;
   private routeSubscription: Subscription;
   today: any;
@@ -67,6 +66,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectedDesigner: any;
   netSwitch: boolean;
  reviewAssignedTo:any;
+  isclientassigning: boolean=false;
+  acceptid: any;
 
 
   constructor(
@@ -108,6 +109,27 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   }
 
+  createChatGroup(design:DesginDataModel){
+    var GUID = 'prelim' + "_" + new Date().getTime();
+
+    var address = design.address.substring(0, 60);
+    var groupName = design.name + "_" + address;
+
+    var groupType = CometChat.GROUP_TYPE.PRIVATE;
+    var password = "";
+
+    var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+    CometChat.createGroup(group).then(group=>{
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+        this.cdr.detectChanges();
+      })
+    })
+  }
+
   ionViewDidEnter() {
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
@@ -119,6 +141,9 @@ this.network.networkDisconnect();
 this.network.networkConnect();
 
   }
+
+
+  
   segmentChanged(event){
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
@@ -232,17 +257,42 @@ this.network.networkConnect();
   }
 
      accept(id,data:string){
-
+        this.acceptid = id;
        let status={
         status:data
       }
       this.utils.showLoading("accepting").then(()=>{
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
+           if(!res.isinrevisionstate){
+             this.createNewDesignChatGroup(res);
+            }
+            debugger;
            this.utils.hideLoading().then(()=>{
             this.utils.setHomepageDesignRefresh(true);})})
           })
 
        }
+
+
+       addUserToGroupChat() {
+         debugger;
+        var GUID = this.designerData.chatid;
+        var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
+        if (this.isclientassigning) {
+          userscope = CometChat.GROUP_MEMBER_SCOPE.ADMIN;
+        }
+        let membersList = [
+          new CometChat.GroupMember("" + this.selectedDesigner.id, userscope)
+        ];
+        CometChat.addMembersToGroup(GUID, membersList, []).then(
+          response => {
+            
+          },
+          error => {
+          
+          }
+        );
+      }
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
@@ -546,6 +596,7 @@ this.network.networkConnect();
   }
 
   assignToDesigner() {
+    debugger;
       console.log(this.designerData.createdby.id);
 
     if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
@@ -630,8 +681,10 @@ this.network.networkConnect();
 
           if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
          {
+           this.isclientassigning= true;
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
          }else{
+          this.addUserToGroupChat();
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
          }
           this.dismissBottomSheet();
@@ -653,6 +706,7 @@ this.network.networkConnect();
 
 
   openDesigners(id: number,designData) {
+    debugger;
     this.intercom.update({
       "hide_default_launcher": true
     });
@@ -1015,6 +1069,11 @@ createNewDesignChatGroup(design:DesginDataModel) {
       CometChat.addMembersToGroup(group.getGuid(), membersList, []).then(
         response => {
           if(design.requesttype == "prelim"){
+            let postdata={
+              chatid:GUID
+            }
+
+            this.apiService.updateDesignForm(postdata,this.acceptid).subscribe(res=>{})
             // this.updateItemInList(LISTTYPE.NEW, design);
           }else{
             // this.updateItemInPermitList(LISTTYPE.NEW, design);
@@ -1029,6 +1088,8 @@ createNewDesignChatGroup(design:DesginDataModel) {
     }
   );
 }
+
+
 }
 
 export class DesginDataHelper {
