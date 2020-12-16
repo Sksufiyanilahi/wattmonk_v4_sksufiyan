@@ -15,6 +15,7 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
 import { COMETCHAT_CONSTANTS } from '../contants';
+import { Intercom } from 'ng-intercom';
 
 @Component({
   selector: 'app-permitdesignoverview',
@@ -42,6 +43,7 @@ export class PermitdesignoverviewPage implements OnInit {
     private network: NetworkdetectService,
     private platform: Platform,
     private iab:InAppBrowser,
+    private intercom:Intercom,
     private router:ActivatedRoute 
     ) { 
       let data = localStorage.getItem('type');
@@ -49,6 +51,9 @@ export class PermitdesignoverviewPage implements OnInit {
     }
 
   ngOnInit() {
+    this.intercom.update({
+      "hide_default_launcher": false
+    });
     this.userData = this.storage.getUser();
     this.apiService.emitUserNameAndRole(this.userData);
     this.apiService.version.subscribe(versionInfo=>{
@@ -183,5 +188,11 @@ getNotificationCount(){
 
 setzero(){
   this.unreadCount= 0;
+}
+
+ionViewWillLeave(){
+  this.intercom.update({
+    "hide_default_launcher": false
+  });
 }
 }

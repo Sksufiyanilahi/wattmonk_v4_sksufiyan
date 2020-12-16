@@ -102,7 +102,8 @@ export class PermithomepagePage implements OnInit {
               private toastController: ToastController,
               private geolocation: Geolocation,
               private nativeGeocoder: NativeGeocoder,
-              private intercom:Intercom
+              private intercom:Intercom,
+              private storageService:StorageService
               ) {
 
               }
@@ -120,7 +121,7 @@ export class PermithomepagePage implements OnInit {
 
 
   ngOnInit() {
-    this.setupCometChat();
+    this.setupCometChatUser();
     this.intercom.update({
       "hide_default_launcher": false
     });
@@ -134,20 +135,25 @@ export class PermithomepagePage implements OnInit {
         this.showFooter = value;
       });
   }
-  setupCometChat() {
-    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
-    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
-      () => {
-        console.log('Initialization completed successfully');
-        // if(this.utilities.currentUserValue != null){
-          // You can now call login function.
-
-      // }
+  setupCometChatUser() {
+    const user = new CometChat.User(this.storageService.getUserID());
+    user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+    // CometChat.createUser(user, COMETCHAT_CONSTANTS.API_KEY).then(
+    //   (user) => {
+    //     console.log('user created', user);
+    //   }, error => {
+    //     console.log('error', error);
+    //   }
+    // );
+    CometChat.login(this.storageService.getUserID(),  COMETCHAT_CONSTANTS.API_KEY).then(
+      (user) => {
+        console.log('Login Successful:', { user });
       },
       error => {
-        console.log('Initialization failed with error:', error);
+        console.log('Login failed with exception:', { error });
       }
     );
+
   }
 
   ionViewDidEnter() {

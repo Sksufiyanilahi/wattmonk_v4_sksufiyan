@@ -87,6 +87,9 @@ AddWallet()
             this.storage.logout();
             this.deviceStorage.clear();
             this.apiService.resetHeaders();
+            this.intercom.update({
+              "hide_default_launcher": true
+            });
             this.navController.navigateRoot('login');
           }
         }, {
