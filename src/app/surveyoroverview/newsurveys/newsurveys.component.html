@@ -21,36 +21,40 @@
                       <span *ngIf="surveyData.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                         Pending
                     </span>
-                    <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span>
+                    <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span> -->
                     <span fill="clear" background-border="clear" [routerLink]="['/','activity',surveyData.id,'survey']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
                 </p>
             <p style="margin:0px">
 
                 <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
                       routerDirection="forward">{{surveyData.email}}</span>
-                      <span *ngIf="surveyData.lateby > 1" class="latebystyle" style="font-size: 10px;"><strong>Late by {{surveyData.lateby}} days</strong></span>
-                      <span *ngIf="surveyData.lateby == 1" class="latebystyle" style="font-size: 10px;"><strong>Late by a day</strong></span>
+                      <!-- <span *ngIf="surveyData.lateby > 1" class="latebystyle" style="font-size: 10px;"><strong>Late by {{surveyData.lateby}} days</strong></span>
+                      <span *ngIf="surveyData.lateby == 1" class="latebystyle" style="font-size: 10px;"><strong>Late by a day</strong></span> -->
             </p>
                 <a href="tel:{{surveyData?.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
                 <span class="customer-address z-100"
                       (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
 
-                <ion-row style="margin-bottom: 8px;"  [routerLink]="['/survey-detail/',surveyData.id]">
-                    <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                    <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
-                   
+                <ion-row class="ion-no-margin ion-no-margin"  >
+                    <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
+                    <ion-col>
+                    <span class="chipdetail" style="background-color: #95afc0;" [routerLink]="['/survey-detail/',surveyData.id]">{{surveyData.source}}</span>
+                </ion-col>
+                <ion-col>
+                    <ion-button class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude + '/' + surveyData.city + '/' + surveyData.state]"
+                    routerDirection="forward">
+                        Start Survey
+                    </ion-button>
+                </ion-col>
                 </ion-row>
-                <ion-row class="ion-no-margin ion-no-margin">
+                <!-- <ion-row class="ion-no-margin ion-no-margin">
                     <ion-col></ion-col>
                     <ion-col class="ion-no-margin ion-no-padding">
-                    <!-- <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
-                        <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude + '/' + surveyData.city + '/' + surveyData.state]"
-                        routerDirection="forward">
-                            Start Survey
-                        </ion-button>
+                     <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> 
+                        
                     </ion-col>
-                </ion-row>
+                </ion-row> -->
                 <ion-progress-bar [value]="surveyData.totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
             </div>
         </ion-col>

@@ -10,6 +10,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UtilitiesService } from '../utilities.service';
 import { Platform } from '@ionic/angular';
 import { NetworkdetectService } from '../networkdetect.service';
+import { User } from '../model/user.model';
+import { UserData } from '../model/userData.model';
 
 @Component({
   selector: 'app-surveyoroverview',
@@ -22,6 +24,7 @@ export class SurveyoroverviewPage implements OnInit {
   update_version:string;
   netSwitch:any;
   showSearchBar=false;
+  userData:UserData;
 
 
   constructor(public route: Router,
@@ -33,12 +36,15 @@ export class SurveyoroverviewPage implements OnInit {
     private network: NetworkdetectService) { }
 
   ngOnInit() {
+    this.userData = this.storage.getUser();
     this.apiService.version.subscribe(versionInfo=>{
       this.update_version = versionInfo;
     })
+    this.apiService.emitUserNameAndRole(this.userData);
     this.setupCometChatUser();
     this.updateUserPushToken();
     this.route.navigate(['surveyoroverview/newsurveys']);
+    
   }
 
   ngOnDestroy() {
