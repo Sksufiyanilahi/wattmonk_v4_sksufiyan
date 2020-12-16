@@ -360,6 +360,10 @@ export class UtilitiesService {
     await alert.present();
   }
 
+  formatDateInTimeAgo(datestring: string){
+    return moment(datestring, "YYYY-MM-DD HH:mm:ss GMT Z").fromNow();
+  }
+
   isDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
@@ -379,7 +383,7 @@ export class UtilitiesService {
       return "few minutes";
     }else if (lateby == 1)
       return "a day";
-    else if (lateby < 30)
+    else if (lateby < 30 && lateby > 0)
       return lateby + " days";
     else if (lateby == 30)
       return "a month";
@@ -388,7 +392,7 @@ export class UtilitiesService {
     else if (lateby == 365)
       return "an year";
       else{
-        return lateby + " years";
+        return "few minutes";
       }
 
 
@@ -405,6 +409,7 @@ export class UtilitiesService {
                 return this.user.role.name
               }
           }
+
 
   // getNotificationCount(){
   //   this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{

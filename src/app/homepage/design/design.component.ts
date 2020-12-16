@@ -434,6 +434,7 @@ this.network.networkConnect();
       reviewdate.setMinutes(reviewdate.getMinutes()+15)
       element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
       element.lateby = this.utils.getTheLatebyString(element.deliverydate);
+      element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       var acceptancedate = new Date(element.designacceptancestarttime);
       element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());

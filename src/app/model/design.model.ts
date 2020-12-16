@@ -118,7 +118,7 @@ export class DesginDataModel {
   designremainingtime:any;
   isinrevisionstate: any;
   revisionattachments: any;
-  isoverdue:any;
+  isoverdue:boolean = false;
   lateby:any;
   reviewassignedto:any;
   reviewissues:any;
@@ -127,6 +127,7 @@ export class DesginDataModel {
   requestdeclineattachment:any;
   isoutsourced:any;
   requesttype:string;
+  recordupdatedon:any;
 }
 
 export class PrelimDesign{
