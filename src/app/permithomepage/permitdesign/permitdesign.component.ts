@@ -577,7 +577,10 @@ this.network.networkConnect();
     console.log(this.selectedDesigner);
     var postData = {};
     if (this.designerData.createdby.id == this.userData.id) {
-      if (this.selectedDesigner.company == this.userData.company) {
+      debugger;
+      console.log(this.userData)
+      // if (this.selectedDesigner.company == this.userData.company) {
+        if (this.selectedDesigner.parent.id == this.userData.parent.id) {
         if(this.selectedDesigner.role.type=="qcinspector"){
           postData = {
             reviewassignedto: this.selectedDesigner.id,
@@ -595,7 +598,7 @@ this.network.networkConnect();
 
       }
 
-      }
+     }
       else {
         var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
