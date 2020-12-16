@@ -18,13 +18,13 @@
 <ion-content padding #content [scrollEvents]="true" (ionScrollStart)="logScrollStart()" (ionScroll)="logScrolling($event)" (ionScrollEnd)="logScrollEnd()">
     <ion-list>
     <div class="chat" *ngFor="let message of groupMessages">
-      <div [class]="message.sender.uid === loggedInUserData.uid ? 'message you' : 'message me'"><span><b style="
+      <div [class]="message.sender?.uid === loggedInUserData?.uid ? 'message you' : 'message me'"><span><b style="
         font-size: 10px">{{message.sender.name}}:</b></span><br>{{message.text}}</div>
     </div> 
     </ion-list>
 </ion-content>
 
-<ion-footer no-border>
+<ion-footer no-border *ngIf="userData.role.type !=='designer' && userData.role.type !=='qc'">
     <ion-toolbar>
       <div class="bar bar-footer bar-balanced chat-box-container">
             <ion-input class="chat-editor-box" placeholder="Type Your Message Here.." type="text" [(ngModel)]="messageText" (ionBlur)="checkBlur()"

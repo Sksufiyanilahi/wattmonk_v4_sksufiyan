@@ -9,8 +9,8 @@
 // Production Server
 // export const PlatformUpdateUrl =  'https://admin.wattmonk.com/api/';
 // export const BaseUrl = 'https://admin.wattmonk.com/api/';
+// export const intercomId = 'o52f08q6';
 // export const COMETCHAT_CONSTANTS = {
-  // export const intercomId = 'o52f08q6';
 //     APP_ID: '190385dcec51285',
 //     REGION: 'US',
 //     API_KEY: '5cafae1939d4fc620698c50ae3f25e727fc90213',

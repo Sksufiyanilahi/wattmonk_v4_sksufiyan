@@ -201,6 +201,7 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
+    this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
@@ -1088,13 +1089,23 @@ createNewDesignChatGroup(design:DesginDataModel) {
 
 
       setupCometChat() {
+        let userId = this.storageservice.getUserID()
+        const user = new CometChat.User(userId);
+        user.setName(this.storageservice.getUser().firstname + ' ' + this.storageservice.getUser().lastname);
         const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
         CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
           () => {
             console.log('Initialization completed successfully');
             // if(this.utilities.currentUserValue != null){
               // You can now call login function.
-    
+              CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+                (user) => {
+                  console.log('Login Successful:', { user });
+                },
+                error => {
+                  console.log('Login failed with exception:', { error });
+                }
+              );
           // }
           },
           error => {

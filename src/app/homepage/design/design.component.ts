@@ -238,6 +238,7 @@ this.network.networkConnect();
       this.getDesigns(null);
 
     });
+    
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
@@ -586,9 +587,7 @@ this.network.networkConnect();
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+    this.utils.showHideIntercom(false);
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
 
@@ -706,10 +705,7 @@ this.network.networkConnect();
 
 
   openDesigners(id: number,designData) {
-    debugger;
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+ this.utils.showHideIntercom(true);
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
@@ -752,9 +748,7 @@ this.network.networkConnect();
   }
 
   openAnalysts(id: number,designData) {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utils.showHideIntercom(true);
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;

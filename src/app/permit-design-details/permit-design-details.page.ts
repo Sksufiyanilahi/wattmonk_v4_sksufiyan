@@ -77,6 +77,7 @@ export class PermitDesignDetailsPage implements OnInit {
     private intercom:Intercom
 
   ) {
+    this.utilities.showHideIntercom(true); 
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
       designassignedto: new FormControl('', [Validators.required]),
@@ -104,9 +105,7 @@ export class PermitDesignDetailsPage implements OnInit {
 
 
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utilities.showHideIntercom(true);
     this.enableDisable= false;
     console.log(this.imageName);
     this.user=this.storage.getUser();
@@ -235,9 +234,7 @@ export class PermitDesignDetailsPage implements OnInit {
 
 
   ngOnDestroy(): void {
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+    this.utilities.showHideIntercom(false);
     this.dataSubscription.unsubscribe();
     if (this.refreshDataOnPreviousPage > 1) {
       this.utilities.setHomepagePermitRefresh(true);

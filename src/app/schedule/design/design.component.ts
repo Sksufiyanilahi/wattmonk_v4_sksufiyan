@@ -103,6 +103,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     public intercom: Intercom,
     private cdr:ChangeDetectorRef
   ) {
+    this.utils.showHideIntercom(true);
     var tomorrow=new Date();
     tomorrow.setDate(tomorrow.getDate()+1);
     var d_date=tomorrow.toISOString();
@@ -150,6 +151,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   numberfield(event){
     console.log(event);
     
+  }
+
+  ionViewDidEnter(){
+    this.utils.showHideIntercom(true);
   }
 
   // getmodulename(event){
@@ -221,22 +226,22 @@ export class DesignComponent implements OnInit, OnDestroy {
         });
       // }
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-         this.desginForm.get('address').setValue('124/345');
-         this.desginForm.get('latitude').setValue('24.553333');
-         this.desginForm.get('longitude').setValue('80.5555555555');
-         this.desginForm.get('country').setValue('india');
-         this.desginForm.get('city').setValue('Lucknow');
-         this.desginForm.get('state').setValue('UP');
-         this.desginForm.get('postalcode').setValue(3232343);
-        //  this.desginForm.get('address').setValue(address.address);
-        //    this.desginForm.get('latitude').setValue(address.lat);
-        //    this.desginForm.get('longitude').setValue(address.long);
-        //    this.desginForm.get('country').setValue(address.country);
-        //  this.desginForm.get('city').setValue(address.city);
-        //    this.desginForm.get('state').setValue(address.state);
-        //    this.desginForm.get('postalcode').setValue(address.postalcode);
+        //  this.desginForm.get('address').setValue('124/345');
+        //  this.desginForm.get('latitude').setValue('24.553333');
+        //  this.desginForm.get('longitude').setValue('80.5555555555');
+        //  this.desginForm.get('country').setValue('india');
+        //  this.desginForm.get('city').setValue('Lucknow');
+        //  this.desginForm.get('state').setValue('UP');
+        //  this.desginForm.get('postalcode').setValue(3232343);
+         this.desginForm.get('address').setValue(address.address);
+           this.desginForm.get('latitude').setValue(address.lat);
+           this.desginForm.get('longitude').setValue(address.long);
+           this.desginForm.get('country').setValue(address.country);
+         this.desginForm.get('city').setValue(address.city);
+           this.desginForm.get('state').setValue(address.state);
+           this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -304,9 +309,7 @@ uploadcontrolvalidation(){
 
 
   ngOnDestroy(): void {
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+    this.utils.showHideIntercom(false);
     this.subscription.unsubscribe();
     if (this.designId === 0) {
       this.addressSubscription.unsubscribe();
@@ -318,6 +321,7 @@ getDesignDetails() {
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
+          this.utils.showHideIntercom(true);
           this.design = result;
           console.log(this.design);
           this.fieldDisabled=true;

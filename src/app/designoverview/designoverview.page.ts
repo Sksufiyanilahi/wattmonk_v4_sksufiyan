@@ -14,7 +14,8 @@ import { UtilitiesService } from '../utilities.service';
 import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
-import { COMETCHAT_CONSTANTS } from '../contants';
+import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
+import { Intercom } from 'ng-intercom';
 
 
 @Component({
@@ -43,8 +44,9 @@ export class DesignoverviewPage implements OnInit {
     private platform: Platform,
     private iab:InAppBrowser,
     private router:ActivatedRoute,
-    // private intercom : Intercom
+    private intercom : Intercom
     ) { 
+      this.intercomModule();
       let data = localStorage.getItem('type');
       console.log(data,"dataa");
     }
@@ -53,6 +55,7 @@ export class DesignoverviewPage implements OnInit {
     // this.intercom.update({
     //   "hide_default_launcher": true
     // });
+    
     this.userData = this.storage.getUser();
     this.apiService.emitUserNameAndRole(this.userData);
     this.apiService.version.subscribe(versionInfo=>{
@@ -62,6 +65,16 @@ export class DesignoverviewPage implements OnInit {
     this.setupCometChatUser();
     this.updateUserPushToken();
     this.route.navigate(['designoverview/newdesigns']);
+  }
+
+  intercomModule(){
+    this.intercom.boot({
+      app_id: intercomId,
+      // Supports all optional configuration.
+      widget: {
+        "activator": "#intercom"
+      }
+    });
   }
  
 
@@ -187,9 +200,9 @@ setzero(){
   this.unreadCount= 0;
 }
 
-// ionViewWillLeave(){
-//   this.intercom.update({
-//     "hide_default_launcher": false
-//   });
-// }
+ionViewWillLeave(){
+  this.intercom.update({
+    "hide_default_launcher": true
+  });
+}
 }

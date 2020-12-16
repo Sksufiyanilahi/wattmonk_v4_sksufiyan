@@ -119,7 +119,7 @@ export class AppComponent {
 
 
   ngOnInit() {
-    this.intercomModule();
+    // this.intercomModule();
    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);

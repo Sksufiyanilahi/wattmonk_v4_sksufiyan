@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { User } from './model/user.model';
 import { LoginModel } from './model/login.model';
 import { StorageService } from './storage.service';
+import { Intercom } from 'ng-intercom';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +51,8 @@ export class UtilitiesService {
     private toastController: ToastController,
     private alertController: AlertController,
     private modalController: ModalController,
-    private storageService:StorageService
+    private storageService:StorageService,
+    private intercom:Intercom
   ) {
     this.user= this.storageService.getUser();
     this.currentUserSubject = new BehaviorSubject<LoginModel>(this.user);
@@ -189,6 +191,12 @@ export class UtilitiesService {
       return Promise.resolve();
     }
 
+  }
+
+  showHideIntercom(value){
+    this.intercom.update({
+      "hide_default_launcher": value
+    });
   }
 
   setLoadingMessage(message: string) {

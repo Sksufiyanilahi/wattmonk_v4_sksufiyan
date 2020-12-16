@@ -30,8 +30,8 @@ export class ChatPage implements OnInit {
   loggedInUserData: any;
 
   @ViewChild('content',{static:false}) content: any;
-
-  constructor(private router: Router, private route: ActivatedRoute, private keyboard: Keyboard, private renderer2: Renderer2,private navController:NavController,private intercom:Intercom) {
+  userData:any;
+  constructor(private router: Router, private route: ActivatedRoute, private keyboard: Keyboard, private renderer2: Renderer2,private navController:NavController,private intercom:Intercom,private storageService:StorageService) {
 
     const html = document.getElementsByTagName('html').item(0);
     this.keyboard.onKeyboardHide().subscribe(() => {
@@ -68,6 +68,8 @@ export class ChatPage implements OnInit {
   }
 
   ngOnInit() {
+
+    this.userData = this.storageService.getUser();
     const  limit = 30;
     console.log('data of currentGroupData is ', this.currentGroupData);
     const guid: string = this.currentGroupData;
