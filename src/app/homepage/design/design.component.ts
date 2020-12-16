@@ -596,7 +596,6 @@ this.network.networkConnect();
   }
 
   assignToDesigner() {
-    debugger;
       console.log(this.designerData.createdby.id);
 
     if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
