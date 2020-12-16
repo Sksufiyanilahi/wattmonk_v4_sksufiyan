@@ -38,23 +38,23 @@
 
                 <ion-row class="ion-no-margin ion-no-margin"  >
                     <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
-                    <ion-col>
+                    
                     <span class="chipdetail" style="background-color: #95afc0;" [routerLink]="['/survey-detail/',surveyData.id]">{{surveyData.source}}</span>
-                </ion-col>
-                <ion-col>
-                    <ion-button class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude + '/' + surveyData.city + '/' + surveyData.state]"
+                
+                <!-- <ion-col>
+                    
+                </ion-col> -->
+                </ion-row>
+                 <ion-row class="ion-no-margin ion-no-margin">
+                    <ion-col></ion-col>
+                    <ion-col class="ion-no-margin ion-no-padding">
+                   <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
+                        <ion-button class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude + '/' + surveyData.city + '/' + surveyData.state]"
                     routerDirection="forward">
                         Start Survey
                     </ion-button>
-                </ion-col>
-                </ion-row>
-                <!-- <ion-row class="ion-no-margin ion-no-margin">
-                    <ion-col></ion-col>
-                    <ion-col class="ion-no-margin ion-no-padding">
-                     <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> 
-                        
                     </ion-col>
-                </ion-row> -->
+                </ion-row> 
                 <ion-progress-bar [value]="surveyData.totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
             </div>
         </ion-col>
