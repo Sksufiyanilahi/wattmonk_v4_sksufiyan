@@ -325,9 +325,7 @@ this.network.networkConnect();
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utils.showHideIntercom(true);
   this.dataRefreshSubscription.unsubscribe();
   this.DesignRefreshSubscription.unsubscribe();
   }
