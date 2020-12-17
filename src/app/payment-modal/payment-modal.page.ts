@@ -52,7 +52,7 @@ count:any
   
   }
   ionViewDidEnter(){
-
+    this.fetchData();
   }
 
 fetchData(){
