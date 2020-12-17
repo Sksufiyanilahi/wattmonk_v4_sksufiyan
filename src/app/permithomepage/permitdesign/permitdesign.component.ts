@@ -23,7 +23,7 @@ import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.
 import * as moment from 'moment';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import { Intercom } from 'ng-intercom';
-import { intercomId } from '../../contants';
+import { COMETCHAT_CONSTANTS, intercomId } from '../../contants';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
@@ -97,6 +97,7 @@ export class PermitdesignComponent implements OnInit {
     private fileopener:FileOpener) {
     this.userData = this.storageservice.getUser();
 
+
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       this.segments= 'requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
     }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin'){
@@ -112,7 +113,7 @@ export class PermitdesignComponent implements OnInit {
     });
   }
 
-
+ 
   intercomModule(){
     this.intercom.boot({
       app_id: intercomId,
@@ -200,6 +201,7 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
+    this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
@@ -323,9 +325,7 @@ this.network.networkConnect();
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utils.showHideIntercom(true);
   this.dataRefreshSubscription.unsubscribe();
   this.DesignRefreshSubscription.unsubscribe();
   }
@@ -1028,7 +1028,7 @@ createChatGroup(design:DesginDataModel){
 }
 
 createNewDesignChatGroup(design:DesginDataModel) {
-  var GUID = 'prelim' + "_" + new Date().getTime();
+  var GUID = 'permit' + "_" + new Date().getTime();
   var address = design.address.substring(0, 60);
   var groupName = design.name + "_" + address;
 
@@ -1085,6 +1085,35 @@ createNewDesignChatGroup(design:DesginDataModel) {
         }
       );
       }
+
+
+      setupCometChat() {
+        let userId = this.storageservice.getUserID()
+        const user = new CometChat.User(userId);
+        user.setName(this.storageservice.getUser().firstname + ' ' + this.storageservice.getUser().lastname);
+        const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+        CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+          () => {
+            console.log('Initialization completed successfully');
+            // if(this.utilities.currentUserValue != null){
+              // You can now call login function.
+              CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+                (user) => {
+                  console.log('Login Successful:', { user });
+                },
+                error => {
+                  console.log('Login failed with exception:', { error });
+                }
+              );
+          // }
+          },
+          error => {
+            console.log('Initialization failed with error:', error);
+          }
+        );
+      }
+
+
 directAssignToWattmonk(id:number){
   this.designId = id;
   var postData = {};

@@ -12,6 +12,7 @@ import { Platform } from '@ionic/angular';
 import { NetworkdetectService } from '../networkdetect.service';
 import { User } from '../model/user.model';
 import { UserData } from '../model/userData.model';
+import { COMETCHAT_CONSTANTS } from '../contants';
 
 @Component({
   selector: 'app-surveyoroverview',
@@ -51,23 +52,29 @@ export class SurveyoroverviewPage implements OnInit {
   }
 
   setupCometChatUser() {
-    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMET_CHAT_REGION).build();
-    CometChat.init(COMET_CHAT_APP_ID, appSetting).then(
-      () => {
-        console.log('Initialization completed successfully');
-        CometChat.login(this.storage.getUserID(), COMET_CHAT_AUTH_KEY).then(
-          (user) => {
-            console.log('Login Successful:', { user });
+    let userId = this.storage.getUserID()
+        const user = new CometChat.User(userId);
+        user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
+        const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+        CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+          () => {
+            console.log('Initialization completed successfully');
+            // if(this.utilities.currentUserValue != null){
+              // You can now call login function.
+              CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+                (user) => {
+                  console.log('Login Successful:', { user });
+                },
+                error => {
+                  console.log('Login failed with exception:', { error });
+                }
+              );
+          // }
           },
           error => {
-            console.log('Login failed with exception:', { error });
+            console.log('Initialization failed with error:', error);
           }
         );
-      },
-      error => {
-        console.log('Initialization failed with error:', error);
-      }
-    );
   }
 
   updateUserPushToken(){

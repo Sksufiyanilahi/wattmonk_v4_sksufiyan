@@ -58,9 +58,7 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+ this.utils.showHideIntercom(true);
     this.intercom.shutdown();
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.loginForm = this.formBuilder.group({
@@ -72,9 +70,7 @@ export class LoginPage implements OnInit {
   }
 
   ionViewDidEnter(){
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utils.showHideIntercom(true);
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
@@ -194,6 +190,4 @@ this.network.networkConnect();
 
     this.router.navigate(['/changepassword'])
   }
-
-
 }

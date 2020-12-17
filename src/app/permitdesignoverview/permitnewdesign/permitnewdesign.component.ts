@@ -52,6 +52,7 @@ export class PermitnewdesignComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.utils.showHideIntercom(false);
   }
 
 
@@ -59,6 +60,7 @@ export class PermitnewdesignComponent implements OnInit {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+    this.utils.showHideIntercom(true);
     this.designRefreshSubscription.unsubscribe();
     this.dataRefreshSubscription.unsubscribe();
     // this.unsubscribeMessage.unsubscribe();

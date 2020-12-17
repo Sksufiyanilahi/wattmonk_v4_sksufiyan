@@ -14,7 +14,8 @@ import { UtilitiesService } from '../utilities.service';
 import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
-import { COMETCHAT_CONSTANTS } from '../contants';
+import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
+import { Intercom } from 'ng-intercom';
 
 @Component({
   selector: 'app-permitdesignoverview',
@@ -42,6 +43,7 @@ export class PermitdesignoverviewPage implements OnInit {
     private network: NetworkdetectService,
     private platform: Platform,
     private iab:InAppBrowser,
+    private intercom:Intercom,
     private router:ActivatedRoute 
     ) { 
       let data = localStorage.getItem('type');
@@ -49,6 +51,7 @@ export class PermitdesignoverviewPage implements OnInit {
     }
 
   ngOnInit() {
+    this.intercomModule();
     this.userData = this.storage.getUser();
     this.apiService.emitUserNameAndRole(this.userData);
     this.apiService.version.subscribe(versionInfo=>{
@@ -61,27 +64,43 @@ export class PermitdesignoverviewPage implements OnInit {
     this.updateUserPushToken();
     this.route.navigate(['permitdesignoverview/permitnewdesign']);
   }
+
+  intercomModule(){
+    this.intercom.boot({
+      app_id: intercomId,
+      // Supports all optional configuration.
+      widget: {
+        "activator": "#intercom"
+      }
+    });
+  }
  
 
   ngOnDestroy() {
   }
 
   setupCometChatUser() {
-    const user = new CometChat.User(this.storage.getUserID());
+    let userId = this.storage.getUserID();
+    const user = new CometChat.User(userId);
     user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
-    // CometChat.createUser(user, COMETCHAT_CONSTANTS.API_KEY).then(
-    //   (user) => {
-    //     console.log('user created', user);
-    //   }, error => {
-    //     console.log('error', error);
-    //   }
-    // );
-    CometChat.login(this.storage.getUserID(),  COMETCHAT_CONSTANTS.API_KEY).then(
-      (user) => {
-        console.log('Login Successful:', { user });
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
       },
       error => {
-        console.log('Login failed with exception:', { error });
+        console.log('Initialization failed with error:', error);
       }
     );
 
@@ -183,5 +202,9 @@ getNotificationCount(){
 
 setzero(){
   this.unreadCount= 0;
+}
+
+ionViewWillLeave(){
+  this.utilities.showHideIntercom(true);
 }
 }

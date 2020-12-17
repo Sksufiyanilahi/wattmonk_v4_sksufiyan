@@ -22,9 +22,7 @@ export class NotificationPage implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utilities.showHideIntercom(true);
     this.getNotification();
   }
 
@@ -52,9 +50,7 @@ updateNotificationStatus(id){
 }
 
 ionViewWillLeave(){
-  this.intercom.update({
-    "hide_default_launcher": false
-  });
+  this.utilities.showHideIntercom(false);
 }
 
 }

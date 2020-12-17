@@ -55,9 +55,7 @@ card:any
 
   
     ngOnInit() {
-      this.intercom.update({
-        "hide_default_launcher": true
-      });
+   this.utils.showHideIntercom(true);
     this.mode= this.route.snapshot.paramMap.get('mode');
    this.designId= this.route.snapshot.paramMap.get('id');
       this.serviceAmount = this.route.snapshot.paramMap.get('serviceAmount');
