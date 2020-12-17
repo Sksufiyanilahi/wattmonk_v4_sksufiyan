@@ -18,7 +18,11 @@
 <ion-content padding #content [scrollEvents]="true" (ionScrollStart)="logScrollStart()" (ionScroll)="logScrolling($event)" (ionScrollEnd)="logScrollEnd()">
     <ion-list>
     <div class="chat" *ngFor="let message of groupMessages">
-      <div [class]="message.sender?.uid === loggedInUserData?.uid ? 'message you' : 'message me'"><span><b style="
+          <span *ngIf="message.message" style="text-align: center;color: dimgray;"><b style="
+        font-size: 10px;text-align: center;color: dimgray;"></b>{{message.message}}</span><br>
+      <div *ngIf="message.text" [class]="message.sender?.uid === loggedInUserData?.uid ? 'message you' : 'message me'">
+
+          <span *ngIf="message.text"><b style="
         font-size: 10px">{{message.sender.name}}:</b></span><br>{{message.text}}</div>
     </div> 
     </ion-list>
