@@ -1,5 +1,5 @@
 <ion-content>
-  <ion-segment scrollable (ionChange)="segmentChanged($event)" value="status=reviewassigned&status=reviewpassed&status=reviewfailed">
+  <ion-segment scrollable (ionChange)="segmentChanged($event)" value="InReview">
      <!-- <ion-segment-button value="status=created&status=outsourced&status=requestaccepted">
         <ion-label class="segment-btn">Pending</ion-label>
       </ion-segment-button>
@@ -10,10 +10,10 @@
         <ion-label class="segment-btn">Completed</ion-label>
       </ion-segment-button>-->
      <!-- <ion-segment-button value="status=reviewassigned&status=reviewpassed&status=reviewfailed">-->
-      <ion-segment-button value="status=reviewassigned&status=reviewpassed&status=reviewfailed">
+      <ion-segment-button value="InReview">
         <ion-label class="segment-btn">In Review</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="status=delivered">
+      <ion-segment-button value="delivered">
         <ion-label class="segment-btn">Delivered Designs</ion-label>
       </ion-segment-button>
     </ion-segment>

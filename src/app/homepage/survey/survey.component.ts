@@ -53,6 +53,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   overdue: number;
   userData: User;
   netSwitch: any;
+  reviewAssignedTo:any;
 
   constructor(
     private utils: UtilitiesService,
@@ -409,6 +410,8 @@ this.network.networkConnect();
   }
 
   assignToSurveyor() {
+    debugger;
+    console.log("hello");
     console.log(this.surveyData.createdby.id);
       
     if(this.assignForm.status === 'INVALID' && (this.surveyData.status === 'reviewassigned' || this.surveyData.status === 'reviewfailed' || this.surveyData.status === 'reviewpassed')){
@@ -416,7 +419,12 @@ this.network.networkConnect();
     }
     else if (this.assignForm.status === 'INVALID' && this.surveyData.status === 'requestaccepted') {
       this.utils.errorSnackBar('Please select a surveyor');
-    } else {
+    }
+    else if( this.reviewAssignedTo!=null && (this.selectedDesigner.id==this.reviewAssignedTo.id)){
+      this.utils.errorSnackBar("This design request has been already assigned to"+" "+this.selectedDesigner.firstname+" "+this.selectedDesigner.lastname)
+
+    } 
+    else {
       
      
       var surveystarttime = new Date();
@@ -434,7 +442,8 @@ this.network.networkConnect();
     console.log(this.selectedDesigner);
     var postData = {};
     if (this.surveyData.createdby.id == this.userData.id) {
-      if (this.selectedDesigner.company == this.userData.company) {
+      debugger;
+      if (this.selectedDesigner.parent.id == this.userData.parent.id) {
         if(this.selectedDesigner.role.type=="qcinspector"){
           postData = {
             reviewassignedto: this.selectedDesigner.id,
@@ -501,6 +510,9 @@ this.network.networkConnect();
   
   openAnalysts(id:number,surveyData){
     this.surveyData=surveyData;
+    console.log(surveyData);
+    this.reviewAssignedTo = surveyData.reviewassignedto;
+    console.log(this.reviewAssignedTo);
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Analysts').then(() => {
         this.apiService.getAnalysts().subscribe(assignees => {
@@ -537,7 +549,9 @@ this.network.networkConnect();
   
 
   openSurveyors(id: number,surveyData) {
+    console.log(surveyData);
     this.surveyData=surveyData;
+    this.reviewAssignedTo = surveyData.assignedto;
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Surveyors').then(() => {
         this.apiService.getSurveyors().subscribe(assignees => {
@@ -570,6 +584,32 @@ this.network.networkConnect();
       });
     }
   
+
+  }
+
+  selfAssign(id: number,surveyData){
+    var designstarttime = new Date();
+    var milisecond = designstarttime.getTime();
+var postData={}
+postData = {
+  reviewassignedto: this.userData.id,
+  status: "reviewassigned",
+  reviewstarttime: milisecond
+};
+this.utils.showLoading('Assigning').then(()=>{
+  this.apiService.updateSurveyForm(postData,id).subscribe((value) => {
+    this.utils.hideLoading().then(()=>{
+      ;
+      console.log('reach ', value);
+    this.utils.showSnackBar('Design request has been assigned to you successfully');
+    this.utils.sethomepageSurveyRefresh(true);
+
+    })
+  }, (error) => {
+    this.utils.hideLoading();
+
+  });
+})
 
   }
 

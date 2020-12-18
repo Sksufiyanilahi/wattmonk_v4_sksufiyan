@@ -387,6 +387,7 @@ export class UtilitiesService {
     var start = moment(datestring, "YYYYMMDD");
     var end = moment(new Date(), "YYYYMMDD");
     var lateby = end.diff(start, "days");
+    console.log(lateby)
     if(lateby == 0){
       return "few minutes";
     }else if (lateby == 1)
