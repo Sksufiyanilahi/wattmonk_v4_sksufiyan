@@ -178,6 +178,7 @@ searchbar(){
   }
   this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     this.netSwitch = data;
+    this.utilities.showHideIntercom(false);
     console.log(this.netSwitch);
     
   })

@@ -128,7 +128,7 @@ export class PermitdesignComponent implements OnInit {
 
 
   ionViewDidEnter() {
-    this.intercomModule();
+    // this.intercomModule();
     this.apiService.emitUserNameAndRole(this.userData);
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;

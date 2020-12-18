@@ -36,7 +36,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 //import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { Intercom,IntercomConfig } from 'ng-intercom';
+import { Intercom,IntercomConfig,IntercomModule } from 'ng-intercom';
+import { intercomId } from './contants';
   
 
 @NgModule({
@@ -56,7 +57,10 @@ import { Intercom,IntercomConfig } from 'ng-intercom';
     MatProgressBarModule,
     MatDialogModule,
     MatButtonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    IntercomModule.forRoot({
+      appId:intercomId
+    })
   ],
   providers: [
     StatusBar,

@@ -27,7 +27,7 @@ import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@io
 import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { COMETCHAT_CONSTANTS } from '../contants';
+import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
 
 
 @Component({
@@ -122,6 +122,7 @@ export class PermithomepagePage implements OnInit {
 
 
   ngOnInit() {
+    this.intercomModule();
     this.setupCometChatUser();
     this.utils.showHideIntercom(false);
     this.getNotificationCount();
@@ -179,6 +180,7 @@ export class PermithomepagePage implements OnInit {
     }
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
+      this.utils.showHideIntercom(false);
       console.log(this.netSwitch);
 
     })
@@ -380,6 +382,16 @@ this.network.networkConnect();
 
     ngOndestroy(){
       this.deactivateNetworkSwitch.unsubscribe();
+    }
+
+    intercomModule(){
+      this.intercom.boot({
+        app_id: intercomId,
+        // Supports all optional configuration.
+        widget: {
+          "activator": "#intercom"
+        }
+      });
     }
 
 

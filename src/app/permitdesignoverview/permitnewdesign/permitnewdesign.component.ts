@@ -12,6 +12,8 @@ import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
+import { intercomId } from 'src/app/contants';
+import { Intercom } from 'ng-intercom';
 
 @Component({
   selector: 'app-permitnewdesign',
@@ -41,7 +43,8 @@ export class PermitnewdesignComponent implements OnInit {
     private utils: UtilitiesService,
     private storage: Storage,
     private apiService: ApiService,
-    private router:ActivatedRoute
+    private router:ActivatedRoute,
+    private intercom:Intercom
     ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -72,9 +75,20 @@ export class PermitnewdesignComponent implements OnInit {
     this.cdr.detach();
   }
 
+  intercomModule(){
+    this.intercom.boot({
+      app_id: intercomId,
+      // Supports all optional configuration.
+      widget: {
+        "activator": "#intercom"
+      }
+    });
+  }
+
 
   ionViewDidEnter(){
-    
+
+    this.intercomModule();
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
@@ -82,6 +96,7 @@ export class PermitnewdesignComponent implements OnInit {
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfDesignData != null && this.listOfDesignData.length > 0){
         this.formatDesignData(this.listOfDesignData);
+
       }
     });
   }
