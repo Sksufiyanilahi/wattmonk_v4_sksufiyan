@@ -82,6 +82,7 @@ export class PermithomepagePage implements OnInit {
  // netSwitch: boolean;
  reviewAssignedTo:any;
  showFooter = true;
+  deactivateNetworkSwitch: Subscription;
 
   constructor(private apiService:ApiService,
               private utils:UtilitiesService,
@@ -176,7 +177,7 @@ export class PermithomepagePage implements OnInit {
         }]);
       },2000)
     }
-    this.network.networkSwitch.subscribe(data=>{
+    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
 
@@ -375,6 +376,10 @@ this.network.networkConnect();
         backdropDismiss: false
       });
       await alert.present();
+    }
+
+    ngOndestroy(){
+      this.deactivateNetworkSwitch.unsubscribe();
     }
 
 

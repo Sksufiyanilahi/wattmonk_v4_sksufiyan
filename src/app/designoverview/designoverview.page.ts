@@ -31,6 +31,7 @@ export class DesignoverviewPage implements OnInit {
   showSearchBar = false;
   unreadCount: any;
   userData: UserData
+  deactivateNetworkSwitch: Subscription;
   //showSearchBar = false;
   
 
@@ -79,6 +80,7 @@ export class DesignoverviewPage implements OnInit {
  
 
   ngOnDestroy() {
+    this.deactivateNetworkSwitch.unsubscribe();
   }
 
   setupCometChatUser() {
@@ -170,7 +172,7 @@ searchbar(){
       }]);
     },2000)
   }
-  this.network.networkSwitch.subscribe(data=>{
+  this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     this.netSwitch = data;
     console.log(this.netSwitch);
     

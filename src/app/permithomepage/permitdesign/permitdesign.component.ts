@@ -75,6 +75,8 @@ export class PermitdesignComponent implements OnInit {
  clickSub:any;
   acceptid: any;
   isclientassigning: boolean=false;
+  deactivateNetworkSwitch: Subscription;
+  noDesignFound: string='';
 
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
@@ -128,7 +130,7 @@ export class PermitdesignComponent implements OnInit {
   ionViewDidEnter() {
     this.intercomModule();
     this.apiService.emitUserNameAndRole(this.userData);
-    this.network.networkSwitch.subscribe(data=>{
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
 
@@ -136,6 +138,7 @@ export class PermitdesignComponent implements OnInit {
 
 this.network.networkDisconnect();
 this.network.networkConnect();
+this.deactivateNetworkSwitch.unsubscribe();
 
   }
 
@@ -239,6 +242,7 @@ this.network.networkConnect();
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
+    this.noDesignFound='';
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
@@ -246,7 +250,12 @@ this.network.networkConnect();
       this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found"
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -270,50 +279,53 @@ this.network.networkConnect();
     console.log(this.listOfDesigns);
 
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesigns.forEach((designItem:any,i) => {
-            console.log(i);
 
-            if (tempData.length === 0) {
-              this.sDatePassed(designItem.updated_at,i);
-              const listOfDesign = new DesginDataHelper();
-              listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
-              listOfDesign.listOfDesigns.push(designItem);
-              tempData.push(listOfDesign);
-              console.log(tempData);
+   
+
+      this.listOfDesigns.forEach((designItem:any,i) => {
+        console.log(i);
+
+        if (tempData.length === 0) {
+          this.sDatePassed(designItem.updated_at,i);
+          const listOfDesign = new DesginDataHelper();
+          listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
+            listOfDesign.lateby = this.overdue;
+          listOfDesign.listOfDesigns.push(designItem);
+          tempData.push(listOfDesign);
+          console.log(tempData);
 
 
 ;
-            } else {
+        } else {
 
-              let added = false;
-              tempData.forEach((DesignList) => {
-                // DesignList['listOfDesigns'].forEach(element=>{
+          let added = false;
+          tempData.forEach((DesignList) => {
+            // DesignList['listOfDesigns'].forEach(element=>{
 
-                //   console.log(element.deliverydate,":::::::::::::");
+            //   console.log(element.deliverydate,":::::::::::::");
 
-                //   this.sDatePassed(element.deliverydate);
-                // })
-                if (!added) {
-                  if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
-                    DesignList.listOfDesigns.push(designItem);
-                    this.sDatePassed(designItem.updated_at,i);
-                    added = true;
-                  }
-                }
-              });
-              if (!added) {
-                ;
+            //   this.sDatePassed(element.deliverydate);
+            // })
+            if (!added) {
+              if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
+                DesignList.listOfDesigns.push(designItem);
                 this.sDatePassed(designItem.updated_at,i);
-                const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
-                listOfDesign.listOfDesigns.push(designItem);
-                tempData.push(listOfDesign);
                 added = true;
               }
             }
           });
+          if (!added) {
+            ;
+            this.sDatePassed(designItem.updated_at,i);
+            const listOfDesign = new DesginDataHelper();
+            listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
+            listOfDesign.lateby = this.overdue;
+            listOfDesign.listOfDesigns.push(designItem);
+            tempData.push(listOfDesign);
+            added = true;
+          }
+        }
+      });
           this.listOfDesignsHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
@@ -430,14 +442,14 @@ this.network.networkConnect();
         element.isoverdue = true;
       }
     }
-      this.storage.get(''+element.id).then((data: any) => {
-        console.log(data);
-        if (data) {
-          element.totalpercent = data.currentprogress;
-        }else{
-          element.totalpercent = 0;
-        }
-      });
+      // this.storage.get(''+element.id).then((data: any) => {
+      //   console.log(data);
+      //   if (data) {
+      //     element.totalperceznt = data.currentprogress;
+      //   }else{
+      //     element.totalpercent = 0;
+      //   }
+      // });
 
     });
 
@@ -1149,6 +1161,9 @@ directAssignToWattmonk(id:number){
           });
         })
 }
+trackdesign(index,design){
+  return design.id;
+}
 }
 
 export class DesginDataHelper {
@@ -1163,5 +1178,7 @@ export class DesginDataHelper {
   shareDesign(){
 
   }
+
+ 
 
 }

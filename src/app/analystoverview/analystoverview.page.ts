@@ -61,6 +61,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   update_version:string;
   unreadCount: any;
   userData: UserData
+  deacctivateNetworkSwitch: Subscription;
 
   constructor(private utilities: UtilitiesService,
     private apiService: ApiService,
@@ -139,6 +140,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.deacctivateNetworkSwitch.unsubscribe();
   }
 
   initializeItems() {
@@ -422,7 +424,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
         }]);
       },2000)
     }
-    this.network.networkSwitch.subscribe(data=>{
+    this.deacctivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
       

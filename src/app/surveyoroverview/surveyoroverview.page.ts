@@ -26,6 +26,7 @@ export class SurveyoroverviewPage implements OnInit {
   netSwitch:any;
   showSearchBar=false;
   userData:UserData;
+  deactivateNetworkSwitch: Subscription;
 
 
   constructor(public route: Router,
@@ -49,6 +50,7 @@ export class SurveyoroverviewPage implements OnInit {
   }
 
   ngOnDestroy() {
+    this.deactivateNetworkSwitch.unsubscribe();
   }
 
   setupCometChatUser() {
@@ -99,7 +101,7 @@ export class SurveyoroverviewPage implements OnInit {
         }]);
       },2000)
     }
-    this.network.networkSwitch.subscribe(data=>{
+    this.deactivateNetworkSwitch=   this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
       

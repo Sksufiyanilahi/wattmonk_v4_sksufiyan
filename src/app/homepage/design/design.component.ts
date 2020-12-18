@@ -68,6 +68,8 @@ export class DesignComponent implements OnInit, OnDestroy {
  reviewAssignedTo:any;
   isclientassigning: boolean=false;
   acceptid: any;
+  deactivateNetworkSwitch: Subscription;
+  noDesignFound: string;
 
 
   constructor(
@@ -131,7 +133,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
-    this.network.networkSwitch.subscribe(data=>{
+    this.deactivateNetworkSwitch =this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
 
@@ -297,6 +299,7 @@ this.network.networkConnect();
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
+     this.noDesignFound= "";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
@@ -304,7 +307,11 @@ this.network.networkConnect();
       this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found";
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -488,17 +495,21 @@ this.network.networkConnect();
         element.isoverdue = true;
       }
     }
-      this.storage.get(''+element.id).then((data: any) => {
-        console.log(data);
-        if (data) {
-          element.totalpercent = data.currentprogress;
-        }else{
-          element.totalpercent = 0;
-        }
-      });
+      // this.storage.get(''+element.id).then((data: any) => {
+      //   console.log(data,">>>");
+      //   if (data) {
+      //     element.totalpercent = data.currentprogress;
+      //   }else{
+      //     element.totalpercent = 0;
+      //   }
+      // });
     });
 
     return records;
+  }
+
+  trackdesign(index,design){
+    return design.id;
   }
 
   // getDesign(event, showLoader: boolean) {
