@@ -38,6 +38,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { Intercom,IntercomConfig,IntercomModule } from 'ng-intercom';
 import { intercomId } from './contants';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
   
 
 @NgModule({
@@ -81,7 +82,8 @@ import { intercomId } from './contants';
     Dialogs,
     Keyboard,
     Intercom,
-    IntercomConfig
+    IntercomConfig,
+    AndroidPermissions
     ],
   exports: [
     UtilitiesModule

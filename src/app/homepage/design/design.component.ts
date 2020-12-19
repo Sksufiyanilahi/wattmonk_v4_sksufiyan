@@ -11,7 +11,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AssigneeModel } from '../../model/assignee.model';
 import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
 import {Storage} from '@ionic/storage';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, Platform } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
@@ -27,6 +27,7 @@ import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 
 @Component({
@@ -70,6 +71,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   acceptid: any;
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string;
+  storageDirectory: string;
 
 
   constructor(
@@ -87,10 +89,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     private network:NetworkdetectService,
     public alertController: AlertController,
     private socialsharing: SocialSharing,
-    private transfer:FileTransfer,
     private file:File,
     private localnotification:LocalNotifications,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private platform:Platform,
+    private androidPermissions: AndroidPermissions,
+    private transfer: FileTransfer
 
   ) {
     this.userData = this.storageService.getUser();
@@ -109,6 +113,18 @@ export class DesignComponent implements OnInit, OnDestroy {
       comment: new FormControl('')
     });
 
+  }
+
+  makeDirectory(){
+    this.platform.ready().then(() => {
+      if (this.platform.is('ios')) {
+        this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+      } else if (this.platform.is('android')) {
+        this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+      } else {
+        this.storageDirectory = this.file.cacheDirectory;
+      }
+    });
   }
 
   createChatGroup(design:DesginDataModel){
@@ -133,6 +149,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
+    this.makeDirectory();
     this.deactivateNetworkSwitch =this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
@@ -1028,6 +1045,73 @@ shareWhatsapp(designData){
  }
 
  designDownload(designData){
+
+
+
+this.platform.ready().then(()=>{
+  this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+      result => console.log('Has permission?',result.hasPermission),
+      err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
+    );
+    this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
+      console.log(data);
+
+      if(data==true){
+
+      }else{
+        console.log('not found!');
+        throw { code: 1, message: 'NOT_FOUND_ERR' };
+      }
+      
+    }).catch(async err=>{
+      console.log('Error occurred while checking local files:');
+      console.log(err);
+      if (err.code == 1) {
+        const fileTransfer: FileTransferObject = this.transfer.create();
+        fileTransfer.download(url, this.storageDirectory + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
+          console.log('download complete: ' + entry.toURL());
+          this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+          
+          // this.clickSub = this.localnotification.on('click').subscribe(data => {
+          //   console.log(data)
+          //   path;
+          // })
+          this.localnotification.schedule({text:'Prelim Design Downloaded Successfully', foreground:true, vibrate:true })
+        }, (error) => {
+          // handle error
+          console.log(error);
+          
+        });
+      }
+    })
+  })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   let dir_name = 'Wattmonk';
   let path = '';
   const url = designData.prelimdesign.url;
