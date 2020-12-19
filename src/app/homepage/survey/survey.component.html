@@ -75,7 +75,7 @@
                                     <!-- <span class="ion-text-end action-button-color" >Start Survey</span> -->
                                 </ion-col>
                         <!-- <ion-col></ion-col> -->
-                        <ion-col  size="auto" class="ion-no-margin ion-no-padding" style="margin-bottom: 5px;">
+                        <!-- <ion-col  size="auto" class="ion-no-margin ion-no-padding" style="margin-bottom: 5px;"> -->
                                     
                         <!-- <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
                         >Decline</span>
@@ -90,9 +90,9 @@
                             Decline
                             </ion-col></ng-container>
                         </span> -->
-                        <span *ngIf="surveyData.status == 'requestdeclined' && userData.role.type=='clientsuperadmin'"style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)"
+                        <!-- <span *ngIf="surveyData.status == 'requestdeclined' && userData.role.type=='clientsuperadmin'"style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)"
                         >Reassign</span>
-                        </ion-col>
+                        </ion-col> -->
                         
                             <!-- <span *ngIf="(designData.isoutsourced=='true' && designData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (designData.isoutsourced=='false' && designData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                             >Assign Review</span> -->
@@ -110,10 +110,10 @@
                                 <span *ngIf="userData.role.type!=='clientsuperadmin'" class="ion-text-end action-button-color z-100"    
                                 (click)="openAnalysts(surveyData.id,surveyData)">Assign Review</span>
                         </ion-col>
-                        <ion-col size="auto" class="ion-no-margin ion-no-padding">
+                        <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="segments=='status=reviewassigned&status=reviewpassed&status=reviewfailed'">
                             <span *ngIf="surveyData.status == 'reviewpassed'" class="ion-text-end action-button-color z-100"
                                     (click)="openreviewPassed(surveyData.id,surveyData)">&nbsp; Deliver</span>
-                                    <span *ngIf="userData.role.type!='clientsuperadmin' &&(surveyData.status =='reviewpassed'||surveyData.status=='reviewfailed'||surveyData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(surveyData.id,surveyData)"
+                                    <span style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(surveyData.id,surveyData)"
                                 >Reassign Review</span>
                         </ion-col>
 

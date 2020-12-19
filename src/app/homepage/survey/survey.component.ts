@@ -405,8 +405,11 @@ this.network.networkConnect();
   }
 
   dismissBottomSheet() {
+    console.log("hello cancel");
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
+    this.listOfAssignees=[];
+   // this.assignForm.get('comment').setValue("");
   }
 
   assignToSurveyor() {
