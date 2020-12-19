@@ -1020,20 +1020,24 @@ designDownload(designData){
         console.log(err);
         if (err.code == 1) {
           const fileTransfer: FileTransferObject = this.transfer.create();
-          fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.prelimdesign.ext).then((entry) => {
-            console.log('download complete: ' + entry.toURL());
-            this.utils.showSnackBar("Permit Design Downloaded Successfully");
-            
-            // this.clickSub = this.localnotification.on('click').subscribe(data => {
-            //   console.log(data)
-            //   path;
-            // })
-            this.localnotification.schedule({text:'Permit Design Downloaded Successfully', foreground:true, vibrate:true })
-          }, (error) => {
-            // handle error
-            console.log(error);
-            
-          });
+          this.utils.showLoading('Downloading').then(()=>{
+            fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.prelimdesign.ext).then((entry) => {
+              this.utils.hideLoading().then(()=>{
+                console.log('download complete: ' + entry.toURL());
+                this.utils.showSnackBar("Permit Design Downloaded Successfully");
+                
+                // this.clickSub = this.localnotification.on('click').subscribe(data => {
+                //   console.log(data)
+                //   path;
+                // })
+                this.localnotification.schedule({text:'Permit Design Downloaded Successfully', foreground:true, vibrate:true })
+              }, (error) => {
+                // handle error
+                console.log(error);
+                
+              });
+              })
+          })
         }
       })
     })
