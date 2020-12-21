@@ -53,6 +53,8 @@ export class PermitdesignComponent implements OnInit { listOfDesignDataHelper: D
   assigneeData: any;
   selectedDesigner: any;
   netSwitch: boolean;
+  deactivateNetworkSwitch: Subscription;
+  noDesignsFound: string;
 
   constructor(private utils: UtilitiesService,
     private apiService: ApiService,
@@ -80,7 +82,7 @@ export class PermitdesignComponent implements OnInit { listOfDesignDataHelper: D
   }
 
   ionViewDidEnter() {
-    this.network.networkSwitch.subscribe(data=>{
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
       
@@ -170,6 +172,7 @@ this.network.networkConnect();
   }
 
   fetchPendingDesigns(event, showLoader: boolean) {
+    this.noDesignsFound="";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
@@ -177,7 +180,11 @@ this.network.networkConnect();
       this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound= "No Designs Found";
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -312,6 +319,7 @@ this.network.networkConnect();
     // this.routeSubscription.unsubscribe();
     this.dataRefreshSubscription.unsubscribe();
   this.PermitRefreshSubscription.unsubscribe();
+  this.deactivateNetworkSwitch.unsubscribe();
   this.cdr.detach();
   }
 
@@ -658,6 +666,10 @@ shareWhatsapp(designData){
 });
     return await modal.present();
  }
+
+ trackdesign(index,design){
+  return design.id;
+}
 
 
 }

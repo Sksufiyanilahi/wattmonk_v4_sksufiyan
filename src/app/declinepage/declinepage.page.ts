@@ -5,6 +5,9 @@ import { ApiService } from '../api.service';
 import { UtilitiesService } from '../utilities.service';
 import { Chooser, ChooserResult } from '@ionic-native/chooser/ngx';
 import { File,FileEntry } from '@ionic-native/file/ngx';
+import { DesginDataModel } from '../model/design.model';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-declinepage',
@@ -20,6 +23,7 @@ export class DeclinepagePage implements OnInit {
   enableDisable:boolean=true;
   successmessage: string;
   userId: any;
+  userData: any;
 
   constructor(private camera: Camera,
     private modalCtrl:ModalController,
@@ -28,14 +32,15 @@ export class DeclinepagePage implements OnInit {
     private utilities:UtilitiesService,
     private chooser: Chooser,
     private file:File,
+    private storageService:StorageService
      ) { }
 
   ngOnInit() {
 
     this.id= this.nav.get('id');
     console.log(this.id);
-    this.userId= this.nav.get('userData');
 
+    this.userData = this.storageService.getUser();
   }
 
 
@@ -138,13 +143,14 @@ export class DeclinepagePage implements OnInit {
         requestdeclinereason:this.reason,
         outsourcedto : null,
         isoutsourced : "false",
-        acknowledgedby : this.userId
+        acknowledgedby : this.id
 
       }
 
       console.log(data);
 
       this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
+        this.createNewDesignChatGroup(res);
           this.modalCtrl.dismiss({
             'dismissed': true
           });
@@ -194,6 +200,55 @@ export class DeclinepagePage implements OnInit {
       };
       reader.onerror = error => reject(error);
     });
+  }
+
+  createNewDesignChatGroup(design:DesginDataModel) {
+    debugger;
+    var GUID = 'prelim' + "_" + new Date().getTime();
+    var address = design.address.substring(0, 60);
+    var groupName = design.name + "_" + address;
+  
+    var groupType = CometChat.GROUP_TYPE.PRIVATE;
+    var password = "";
+  
+    var group = new CometChat.Group(GUID, groupName, groupType, password);
+  
+    CometChat.createGroup(group).then(
+      group => {
+        debugger;
+        let membersList = [
+          new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN),
+          new CometChat.GroupMember("" + this.userData.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+        ];
+        CometChat.addMembersToGroup(group.getGuid(), membersList, []).then(
+          response => {
+            if(design.requesttype == "prelim"){
+              let postdata={
+                chatid:GUID
+              }
+  
+              this.apiservice.updateDesignForm(postdata,this.id).subscribe(res=>{
+                console.log(res);
+                
+              })
+              // this.updateItemInList(LISTTYPE.NEW, design);
+            }else{
+              // this.updateItemInPermitList(LISTTYPE.NEW, design);
+            }
+          },
+          error => {
+            console.log(error);
+            
+          }
+        );
+      },
+      error => {
+
+        console.log(error);
+        
+  
+      }
+    );
   }
 
 

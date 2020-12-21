@@ -76,6 +76,7 @@ export class DesginDataModel {
   name: string;
   email: string;
   monthlybill: number;
+  chatid:string;
   phonenumber: string;
   created_at: Date;
   updated_at: Date;
@@ -114,11 +115,10 @@ export class DesginDataModel {
   designacceptancestarttime:any;
   designacceptanceremainingtime:any;
   attachments:any=[];
-
   designremainingtime:any;
   isinrevisionstate: any;
   revisionattachments: any;
-  isoverdue:any;
+  isoverdue:boolean = false;
   lateby:any;
   reviewassignedto:any;
   reviewissues:any;
@@ -126,7 +126,8 @@ export class DesginDataModel {
   requestdeclinereason:any;
   requestdeclineattachment:any;
   isoutsourced:any;
-  chatid:string;
+  requesttype:string;
+  recordupdatedon:any;
 }
 
 export class PrelimDesign{

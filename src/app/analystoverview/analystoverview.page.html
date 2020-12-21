@@ -9,7 +9,8 @@
               </ion-buttons>
               <ion-row class="ion-align-items-center">
           <ion-col *ngIf="showHome === true">
-              <h1 class="ion-no-padding ion-no-margin home">Home</h1>
+              <h1 class="ion-no-padding ion-no-margin home" *ngIf="route.url=='/analystoverview/permitdesign'">Permit</h1>
+              <h1 class="ion-no-padding ion-no-margin home" *ngIf="route.url=='/analystoverview/design'">Prelim</h1>
           </ion-col>
           <!-- <ion-col *ngIf="showSearchBar === true" >
               <ion-searchbar debounce="0" placeholder="home" class="custom"></ion-searchbar>

@@ -28,6 +28,7 @@ export class PermitInreviewDesignComponent implements OnInit {
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
   overdue: number;
+  noDesignsFound: string;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -68,6 +69,7 @@ export class PermitInreviewDesignComponent implements OnInit {
   }
 
   fetchPendingDesigns(event, showLoader: boolean) {
+    this.noDesignsFound="";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
@@ -75,7 +77,11 @@ export class PermitInreviewDesignComponent implements OnInit {
       this.apiService.getDesignSurveys("requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound="No Designs Found";
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -164,6 +170,10 @@ export class PermitInreviewDesignComponent implements OnInit {
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
+  }
+
+  trackdesign(index,design){
+    return design.id;
   }
 
 

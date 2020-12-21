@@ -16,6 +16,7 @@ import { User } from '../model/user.model';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Intercom } from 'ng-intercom';
 import { intercomId } from '../contants';
+import { NetworkdetectService } from '../networkdetect.service';
 
 @Component({
   selector: 'app-permit-design-details',
@@ -42,6 +43,7 @@ export class PermitDesignDetailsPage implements OnInit {
   ispermitUpdate:false;
   enableDisable:boolean=false;
   exceedfileSize:any;
+  permitFileSize:any;
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -56,6 +58,8 @@ export class PermitDesignDetailsPage implements OnInit {
   reviewIssuesForm: FormGroup;
   //reviewIssues= new FormControl('', Validators.required);
   browser: any;
+  deactivateNetworkSwitch: Subscription;
+  netSwitch: boolean;
   // user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
 
@@ -73,9 +77,11 @@ export class PermitDesignDetailsPage implements OnInit {
     private countdownservice: CountdownTimerService,
     private iab: InAppBrowser,
     private router:Router,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private network:NetworkdetectService
 
   ) {
+    this.utilities.showHideIntercom(true); 
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
       designassignedto: new FormControl('', [Validators.required]),
@@ -96,6 +102,12 @@ export class PermitDesignDetailsPage implements OnInit {
   }
 
   ionViewDidEnter(){
+    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      this.utilities.showHideIntercom(true);
+      console.log(this.netSwitch);
+
+    })
 
   }
 
@@ -103,9 +115,7 @@ export class PermitDesignDetailsPage implements OnInit {
 
 
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utilities.showHideIntercom(true);
     this.enableDisable= false;
     console.log(this.imageName);
     this.user=this.storage.getUser();
@@ -144,7 +154,7 @@ export class PermitDesignDetailsPage implements OnInit {
       this.utilities.errorSnackBar('Please select permit design');
       return false;
     }else{
-      if(this.exceedfileSize<=25000000)
+      if(this.exceedfileSize<=25000000 || this.permitFileSize <= 25000000)
       {
       var data={}
       var date= Date.now();
@@ -234,12 +244,11 @@ export class PermitDesignDetailsPage implements OnInit {
 
 
   ngOnDestroy(): void {
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+    // this.utilities.showHideIntercom(false);
     this.dataSubscription.unsubscribe();
     if (this.refreshDataOnPreviousPage > 1) {
       this.utilities.setHomepagePermitRefresh(true);
+      this.deactivateNetworkSwitch.unsubscribe();
      }
   }
 
@@ -444,6 +453,8 @@ permitupdate(event){
   // for(var i=0; i< event.target.files.length;i++){
     // this.permitFiles.push(event.target.files)
     this.permitFiles= event.target.files;
+    this.permitFileSize = event.target.files[0].size;
+    console.log(this.permitFileSize);
     //this.imageName= event.target.files[0].name;
     //this.imagebox= true;
   // }
@@ -502,6 +513,7 @@ return blob;
       //   console.log(blob);
 
       // console.log(typeof(this.permitFiles[0]));
+      
       console.log(key);
       const imageData = new FormData();
       for(var i=0; i< this.permitFiles.length;i++){
@@ -603,12 +615,18 @@ return blob;
   designReviewSuccess(){
 
     if(this.isSelfUpdate && this.permitFiles.length > 0)
-    { this.utilities.showLoading("Uploading").then(()=>
-      {this.uploadpreliumdesign(this.designId,'permitdesign' );})
+    {
+      if(this.permitFileSize <= 25000000){
+       this.utilities.showLoading("Uploading").then(()=>
+      {
+        this.uploadpreliumdesign(this.designId,'permitdesign' );
+      })
 
-
-
-    }else if(this.isSelfUpdate && this.permitFiles.length == 0)
+    }
+    else{
+      this.utilities.errorSnackBar("File is greater than 25MB");
+    }
+  }else if(this.isSelfUpdate && this.permitFiles.length == 0)
     {
       this.utilities.errorSnackBar("Please attach file");
     }else{

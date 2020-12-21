@@ -33,9 +33,7 @@ count:any
     ) { }
 
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utils.showHideIntercom(true);
     this.fetchData();
     this.servicecharges();
    /* this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
@@ -52,7 +50,7 @@ count:any
   
   }
   ionViewDidEnter(){
-
+    this.fetchData();
   }
 
 fetchData(){
@@ -214,8 +212,6 @@ confirm(){
   }
 
   ionViewWillLeave(){
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+    this.utils.showHideIntercom(false);
   }
 }

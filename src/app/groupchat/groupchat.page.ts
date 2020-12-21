@@ -266,7 +266,7 @@ export class GroupchatPage implements OnInit {
 
   ionViewWillLeave(){
     this.intercom.update({
-      "hide_default_launcher": false
+      "hide_default_launcher": true
     });
   }
 

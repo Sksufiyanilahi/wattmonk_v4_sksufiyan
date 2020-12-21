@@ -2,12 +2,13 @@
     <!-- <ion-grid style="overflow:hidden;" scroll="false"> -->
         <ion-row class="ion-align-items-center ion-padding-start">
             <ion-col>
-                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled">Add Prelim Design</h5>
-                <h5 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit</h5>
+                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/design'">Add Prelim Design</h5>
+                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/survey'">Schedule Survey</h5>
+                <h4 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit </h4>
             </ion-col>
             <ion-col size="auto">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
-                    <ion-icon name="close-outline" color="dark" size="large"></ion-icon>
+                    <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
                 </ion-button>
             </ion-col>
         </ion-row>

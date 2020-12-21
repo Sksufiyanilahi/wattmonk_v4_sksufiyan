@@ -9,8 +9,7 @@ import { ActivatedRoute, Router, NavigationEnd, RoutesRecognized, NavigationStar
 import { ScheduleFormEvent } from '../model/constants';
 import { Subscription } from 'rxjs';
 import { AddressModel } from '../model/address.model';
-import { filter, pairwise } from 'rxjs/operators';
-import { User } from '../model/user.model';
+import { Intercom } from 'ng-intercom';
 
 @Component({
   selector: 'app-schedule',
@@ -48,10 +47,11 @@ export class SchedulePage implements OnInit, OnDestroy {
     private router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
+    private intercom:Intercom
   ) {
   
     
-      
+    this.utilities.showHideIntercom(true);
     const url = this.router.url;
     const splittedUrl = url.split('/');
     console.log(splittedUrl);
@@ -61,6 +61,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
 ngOnInit() {
+  this.utilities.showHideIntercom(true);
    this.userdata = this.storage.getUser();
     this.requestLocationPermission();
     if (this.tabsDisabled) {
@@ -80,6 +81,7 @@ ngOnInit() {
   }
 
   goBack() {
+    this.utilities.showHideIntercom(true);
     this.navController.pop();
   }
 

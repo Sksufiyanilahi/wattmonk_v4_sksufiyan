@@ -33,6 +33,7 @@ export class DelievereddesignComponent implements OnInit {
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
   overdue: number;
+  noDesignFound: string;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -77,13 +78,18 @@ export class DelievereddesignComponent implements OnInit {
   }
 
   fetchPendingDesigns(event, showLoader: boolean) {
+    this.noDesignFound="";
     this.listofDesignData = [];
     this.listofDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys("requesttype=prelim&status=delivered").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found"
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -196,5 +202,9 @@ export class DelievereddesignComponent implements OnInit {
   });
       return await modal.present();
    }
+
+   trackdesign(index,design){
+    return design.id;
+  }
 
 }

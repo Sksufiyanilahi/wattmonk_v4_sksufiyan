@@ -12,6 +12,8 @@ import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
+import { intercomId } from 'src/app/contants';
+import { Intercom } from 'ng-intercom';
 
 @Component({
   selector: 'app-permitnewdesign',
@@ -33,6 +35,7 @@ export class PermitnewdesignComponent implements OnInit {
   };
   overdue: any;
   unsubscribeMessage: Subscription;
+  noDesignsFound: string;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -40,7 +43,8 @@ export class PermitnewdesignComponent implements OnInit {
     private utils: UtilitiesService,
     private storage: Storage,
     private apiService: ApiService,
-    private router:ActivatedRoute
+    private router:ActivatedRoute,
+    private intercom:Intercom
     ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -52,6 +56,11 @@ export class PermitnewdesignComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.utils.showHideIntercom(false);
+  }
+
+  trackdesign(index,design){
+    return design.id;
   }
 
 
@@ -59,15 +68,27 @@ export class PermitnewdesignComponent implements OnInit {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+    this.utils.showHideIntercom(true);
     this.designRefreshSubscription.unsubscribe();
     this.dataRefreshSubscription.unsubscribe();
     // this.unsubscribeMessage.unsubscribe();
     this.cdr.detach();
   }
 
+  intercomModule(){
+    this.intercom.boot({
+      app_id: intercomId,
+      // Supports all optional configuration.
+      widget: {
+        "activator": "#intercom"
+      }
+    });
+  }
+
 
   ionViewDidEnter(){
-    
+
+    this.intercomModule();
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
@@ -75,6 +96,7 @@ export class PermitnewdesignComponent implements OnInit {
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfDesignData != null && this.listOfDesignData.length > 0){
         this.formatDesignData(this.listOfDesignData);
+
       }
     });
   }
@@ -88,13 +110,18 @@ export class PermitnewdesignComponent implements OnInit {
   }
 
   fetchPendingDesigns(event?, showLoader?: boolean) {
+    this.noDesignsFound="";
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys("requesttype=permit&status=designassigned&status=designinprocess").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound="No Designs Found"
+          }
           if (event !== null) {
             event.target.complete();
           }

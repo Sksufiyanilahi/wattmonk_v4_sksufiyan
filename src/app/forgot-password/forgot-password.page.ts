@@ -31,9 +31,7 @@ export class ForgotPasswordPage implements OnInit {
   }
 
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+   this.utils.showHideIntercom(true);
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.forgotPasswordForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
@@ -72,9 +70,7 @@ export class ForgotPasswordPage implements OnInit {
   }
 
   ionVieWillLeave(){
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+ this.utils.showHideIntercom(true);
   }
 
 }

@@ -13,12 +13,13 @@ import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
-import { ROLES } from '../contants';
+import { COMETCHAT_CONSTANTS, intercomId, ROLES } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
+import { Intercom } from 'ng-intercom';
 
 
 @Component({
@@ -60,6 +61,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   update_version:string;
   unreadCount: any;
   userData: UserData
+  deacctivateNetworkSwitch: Subscription;
 
   constructor(private utilities: UtilitiesService,
     private apiService: ApiService,
@@ -72,6 +74,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
     private geolocation: Geolocation,
     private toastController: ToastController,
     public route: Router,
+    private intercom:Intercom,
     private network:NetworkdetectService,
     private iab: InAppBrowser){
      
@@ -84,16 +87,28 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
 
    
   }
+
+  intercomModule(){
+    this.intercom.boot({
+      app_id: intercomId,
+      // Supports all optional configuration.
+      widget: {
+        "activator": "#intercom"
+      }
+    });
+  }
      
 
   ngOnInit() { 
+
+    this.intercomModule();
     this.userData=this.storage.getUser();
     this.apiService.version.subscribe(versionInfo=>{
       this.update_version = versionInfo;
     })
     this.apiService.emitUserNameAndRole(this.userData);
     this.getNotificationCount();
-    this.setupCometChatUser();
+    this.setupCometChat();
     this.requestLocationPermission();
     this.updateUserPushToken();
     this.route.navigate(['analystoverview/permitdesign']);
@@ -125,6 +140,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.deacctivateNetworkSwitch.unsubscribe();
   }
 
   initializeItems() {
@@ -134,25 +150,30 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
     ];
   }
 
-  setupCometChatUser() {
-    const user = new CometChat.User(this.storage.getUserID());
+  setupCometChat() {
+    let userId = this.storage.getUserID();
+    const user = new CometChat.User(userId);
     user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
-    CometChat.createUser(user, COMET_CHAT_AUTH_KEY).then(
-      (user) => {
-        console.log('user created', user);
-      }, error => {
-        console.log('error', error);
-      }
-    );
-    CometChat.login(this.storage.getUserID(), COMET_CHAT_AUTH_KEY).then(
-      (user) => {
-        console.log('Login Successful:', { user });
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
       },
       error => {
-        console.log('Login failed with exception:', { error });
+        console.log('Initialization failed with error:', error);
       }
     );
-
   }
 
   getItems(ev: any) {
@@ -408,8 +429,9 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
         }]);
       },2000)
     }
-    this.network.networkSwitch.subscribe(data=>{
+    this.deacctivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
+      this.utilities.showHideIntercom(false);
       console.log(this.netSwitch);
       
     })
@@ -426,6 +448,7 @@ this.network.networkConnect();
   }
 
   ionViewWillLeave() {
+    this.utilities.showHideIntercom(true);
     this.subscription.unsubscribe();
 
   }

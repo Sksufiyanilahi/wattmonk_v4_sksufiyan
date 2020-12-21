@@ -12,7 +12,7 @@
                       {{item.date | date: 'dd MMM yyyy'}}
                 </span>
         </ion-col>
-        <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="12">
+        <ion-col *ngFor="let designData of item.listOfDesigns;let i = index;trackBy: trackdesign " size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name" >{{designData.name}}
                       <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
@@ -67,7 +67,7 @@
 </ion-grid>
 
 <div *ngIf="listOfDesignsHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
-    No designs found
+        {{noDesignsFound}}
     <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
 </div>
 </ion-content>

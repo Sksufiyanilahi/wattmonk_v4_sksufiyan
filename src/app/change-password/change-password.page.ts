@@ -39,9 +39,7 @@ export class ChangePasswordPage implements OnInit {
  }
 
  ngOnInit() {
-  this.intercom.update({
-    "hide_default_launcher": true
-  });
+ this.utils.showHideIntercom(true);
    this.password= localStorage.getItem('password');
   this.changepassword = this.formBuilder.group({
     newpassword: new FormControl('', [Validators.required, Validators.minLength(6)] ),
@@ -124,9 +122,7 @@ getnewType() {
  }
 
  ionViewWillLeave(){
-  this.intercom.update({
-    "hide_default_launcher": false
-  });
+  this.utils.showHideIntercom(true);
  }
 
 
