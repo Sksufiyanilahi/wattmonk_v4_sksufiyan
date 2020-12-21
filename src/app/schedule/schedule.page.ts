@@ -10,6 +10,7 @@ import { ScheduleFormEvent } from '../model/constants';
 import { Subscription } from 'rxjs';
 import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
+import { NetworkdetectService } from '../networkdetect.service';
 
 @Component({
   selector: 'app-schedule',
@@ -35,6 +36,8 @@ export class SchedulePage implements OnInit, OnDestroy {
   gpsActive = false;
   private subscription: Subscription;
   userdata:any;
+  netSwitch: any;
+  deactivateNetworkSwitch: Subscription;
 
   constructor(
     private navController: NavController,
@@ -47,7 +50,8 @@ export class SchedulePage implements OnInit, OnDestroy {
     private router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private network:NetworkdetectService
   ) {
   
     
@@ -60,8 +64,19 @@ export class SchedulePage implements OnInit, OnDestroy {
 
   }
 
+  ionViewDidEnter(){
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      console.log(this.netSwitch);
+      this.utilities.showHideIntercom(true);
+    })
+  }
+
 ngOnInit() {
-  this.utilities.showHideIntercom(true);
+ 
+  this.network.networkDisconnect();
+this.network.networkConnect();
+ 
    this.userdata = this.storage.getUser();
     this.requestLocationPermission();
     if (this.tabsDisabled) {
@@ -88,6 +103,7 @@ ngOnInit() {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.utilities.setStaticAddress('');
+    this.deactivateNetworkSwitch.unsubscribe();
   }
 
   segmentChanged(event: CustomEvent) {

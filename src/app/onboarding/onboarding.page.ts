@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer, Renderer2, ViewChild } from '@angular/core
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
+import { StorageService } from '../storage.service';
 //import { Slides } from 'ionic-angular';
 
 @Component({
@@ -25,6 +26,7 @@ export class OnboardingPage implements OnInit {
   isCompany:boolean = false;
   radioValues:any;
   teamMember=[];
+  userId: string;
 
   // @ViewChild("sample", {static:true}) cardContent: any;
   // @ViewChild("sample1", {static:true}) cardContent1: any;
@@ -34,6 +36,7 @@ export class OnboardingPage implements OnInit {
   constructor(public renderer:Renderer,
               private router:Router,
               private formBuilder: FormBuilder,
+              private storage:StorageService,
               private apiService: ApiService) {
                 this.firstFormGroup = this.formBuilder.group({
                   firstCtrl : new FormControl('')
@@ -48,6 +51,9 @@ export class OnboardingPage implements OnInit {
   //constructor(){}
 
   ngOnInit() {
+    this.userId= this.storage.getUserID();
+    console.log(this.userId);
+    
 //  console.log(this.cardContent.el)
 //  this.toggle();
 this.buffer= this.value + 0.25;
@@ -134,6 +140,30 @@ this.buffer= this.value + 0.25;
     this.apiService.getTeamData().subscribe(response =>{
       this.teamMember = response;
       console.log(this.teamMember);
+    })
+  }
+
+  updateProcess(){
+    let dataToBeUpdated={
+      usertype:'',
+      billingaddress:'',
+      company:'',
+      logo:'',
+      designcompletednotification:'',
+      designdeliverednotification:'',
+      designmovedtoqcnotification:'',
+      designonholdnotification:'',
+      designreviewfailednotification:'',
+      designreviewpassednotification:'',
+      requestgeneratednotification:'',
+      requestacknowledgementnotification:'',
+      requestindesigningnotification:'',
+      ispaymentmodeprepay:''
+
+    }
+    this.apiService.updateUser(this.userId,dataToBeUpdated).subscribe(()=>{
+      console.log('updated');
+      
     })
   }
 

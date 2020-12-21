@@ -55,6 +55,10 @@ export class MapPagePage implements OnInit {
   }
 
   ngOnInit() {
+    
+  }
+
+  ionViewDidEnter(){
     this.utilities.showHideIntercom(true);
   }
 
@@ -257,6 +261,6 @@ export class MapPagePage implements OnInit {
   }
 
   ionViewWillLeave(){
-    this.utilities.showHideIntercom(false);
+    this.utilities.showHideIntercom(true);
   }
 }
