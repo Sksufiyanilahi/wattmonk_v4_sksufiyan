@@ -13,6 +13,8 @@ import { AddMoneyPage } from '../add-money/add-money.page';
 import { Router } from '@angular/router';
 import { Intercom } from 'ng-intercom';
 import { intercomId } from '../contants';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+
 
 @Component({
   selector: 'app-profile',
@@ -44,9 +46,7 @@ profile:any;
   }
 
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utilities.showHideIntercom(true);
     this.enableDisable= false;
     this.user = this.storage.getUser();
     console.log(this.user);
@@ -84,10 +84,19 @@ AddWallet()
         {
           text: 'Yes',
           handler: () => {
-            this.storage.logout();
-            this.deviceStorage.clear();
-            this.apiService.resetHeaders();
-            this.navController.navigateRoot('login');
+            CometChat.logout().then(()=>{
+              this.storage.logout();
+              this.deviceStorage.clear();
+              this.apiService.resetHeaders();
+              this.utilities.showHideIntercom(true);
+              this.navController.navigateRoot('login');
+            },err=>{
+              this.storage.logout();
+              this.deviceStorage.clear();
+              this.apiService.resetHeaders();
+              this.utilities.showHideIntercom(true);
+              this.navController.navigateRoot('login');
+            });
           }
         }, {
           text: 'No',
@@ -205,9 +214,7 @@ AddWallet()
   }
 
   ngOnDestroy(): void {
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+    this.utilities.showHideIntercom(false);
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
 

@@ -2,12 +2,13 @@
     <!-- <ion-grid style="overflow:hidden;" scroll="false"> -->
         <ion-row class="ion-align-items-center ion-padding-start">
             <ion-col>
-                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled">Add Prelim Design</h5>
-                <h5 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit</h5>
+                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/design'">Add Prelim Design</h5>
+                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/survey'">Schedule Survey</h5>
+                <h4 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit </h4>
             </ion-col>
             <ion-col size="auto">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
-                    <ion-icon name="close-outline" color="dark" size="large"></ion-icon>
+                    <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
                 </ion-button>
             </ion-col>
         </ion-row>
@@ -62,7 +63,7 @@
         </ion-tabs>
         <!-- <ion-grid> -->
             <ion-row class="ion-padding-start ion-padding-end mrT"  style="background: #ffffff;">
-                <ion-col size="9"  style="background: #ffffff;font-size:small;">
+                <ion-col size="9" [ngClass]="address.length > 20 ? 'font_10' : 'font_12'" style="background: #ffffff;">
                     <p></p>
                     <!-- <span class="address-text"> -->
                     {{address == "" ? "No Address Found" : address}}

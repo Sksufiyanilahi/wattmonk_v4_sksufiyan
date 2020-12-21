@@ -41,6 +41,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   isSelfUpdate: false;
   isprelimUpdate:false;
   enableDisable:boolean=false;
+  prelimFileSize:number;
+ // prelimFileType:any;
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -55,6 +57,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   reviewIssuesForm: FormGroup; 
   //reviewIssues= new FormControl('', Validators.required);
   browser: any;
+  exceedfileSize:any;
   // user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
 
@@ -75,6 +78,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private intercom:Intercom
   
   ) {
+    this.intercom.update({
+      "hide_default_launcher": true
+    });
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
       designassignedto: new FormControl('', [Validators.required]),
@@ -96,9 +102,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   
 
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
     this.enableDisable= false;
     console.log(this.imageName);
     this.user=this.storage.getUser();
@@ -135,6 +138,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.errorSnackBar('Please select prelim design');
       return false;
     }else{
+      if(this.exceedfileSize<=25000000 || this.prelimFileSize<=25000000)
+      {
       var data={}
       var date= Date.now();
      if(this.isprelimUpdate){
@@ -184,7 +189,10 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
           });
         });
       })
+    }else{
+      this.utilities.errorSnackBar("File is greater than 25MB");
     }
+  }
   }
 
 
@@ -265,6 +273,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   async deleteDesign() {
+this.utilities.showHideIntercom(true);
     this.enableDisable= true;
     const toast = await this.toastController.create({
       header: 'Delete Design',
@@ -351,7 +360,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   prelimfiles(event){
     
-    
     console.log(this.imageName);
     console.log(event.target.files);
     // for(var i=0; i< event.target.files.length;i++){
@@ -359,6 +367,10 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.prelimFiles= event.target.files;
       this.imageName= event.target.files[0].name;
       this.imagebox= true;
+      this.exceedfileSize = event.target.files[0].size;
+      //this.prelimFileType = event.target.files[0].type;
+      console.log(this.exceedfileSize);
+      //console.log(this.prelimFileType)
     // }
     console.log(this.prelimFiles);
     
@@ -423,6 +435,8 @@ prelimupdate(event){
   // for(var i=0; i< event.target.files.length;i++){
     // this.prelimFiles.push(event.target.files) 
     this.prelimFiles= event.target.files;
+    this.prelimFileSize = event.target.files[0].size;
+    console.log(this.prelimFileSize);
     //this.imageName= event.target.files[0].name;
     //this.imagebox= true;
   // }
@@ -491,7 +505,7 @@ return blob;
           imageData.append('field', key);
         // }
       } 
-       this.utilities.showLoading("uploading").then(()=>{
+       
           this.apiService.uploaddesign(imageData).subscribe(res=>{
             this.utilities.hideLoading().then(()=>{
               console.log(res); 
@@ -524,7 +538,7 @@ return blob;
         // })
     // }
   })
-})
+
 }
 
 
@@ -581,8 +595,12 @@ return blob;
     
     if(this.isSelfUpdate && this.prelimFiles.length > 0)
     {
+      if(this.prelimFileSize<=25000000){
       this.utilities.showLoading("Uploading").then(()=>
       {this.uploadpreliumdesign(this.designId,'permitdesign' );})
+      }else{
+        this.utilities.errorSnackBar("File is greater than 25MB")
+      }
       
       
     }else if(this.isSelfUpdate && this.prelimFiles.length == 0)
@@ -633,10 +651,10 @@ return blob;
   }
 
   ionViewWillLeave(){
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+ this.utilities.showHideIntercom(false);
   }
+
+
 
   
 

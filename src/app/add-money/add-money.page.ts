@@ -55,9 +55,7 @@ card:any
 
   
     ngOnInit() {
-      this.intercom.update({
-        "hide_default_launcher": true
-      });
+   this.utils.showHideIntercom(true);
     this.mode= this.route.snapshot.paramMap.get('mode');
    this.designId= this.route.snapshot.paramMap.get('id');
       this.serviceAmount = this.route.snapshot.paramMap.get('serviceAmount');
@@ -67,6 +65,10 @@ card:any
     this.setupStripe();
     console.log(this.mode)
     console.log(this.designId);
+
+    if(this.mode=='card'){
+      this.amountForm.patchValue({amount:this.serviceAmount});
+    }
     
   }
  setupStripe() {
@@ -159,27 +161,30 @@ card:any
     user:this.userData.id
   }
   console.log(data);
-    this.apiService.createPayment(data).subscribe(res=>{
-      this.createPayment=res;
-      this.utils.hideLoading().then(()=>{
+    // this.apiService.createPayment(data).subscribe(res=>{
+    //   this.createPayment=res;
+    //   this.utils.hideLoading().then(()=>{
       var dates=new Date();
      console.log(dates)
 rechargeData={
   amount:this.amountForm.get('amount').value,
   datetime: dates,
   paymenttype: "wallet",
-  type: this.createPayment.paymentstatus,
+  type: "succeeded",
 user: this.userData.id
 }
 this.apiService.recharges(rechargeData).subscribe(res=>{
+  this.utils.hideLoading().then(()=>{
   this.utils.showSnackBar("$"+this.amountForm.get('amount').value +" added in your wallet successfully");
   this.goBack();
   this.utils.setHomepageDesignRefresh(true);
-});})
-    }),error=>{
-      console.log("payment was unsuccessful");
-     
+}),error=>{
+  this.utils.hideLoading().then(()=>{      
+    console.log("payment was unsuccessful");
+     this.utils.errorSnackBar(error);
+    })
     };
+  });
     this.token=''
   });
   }
@@ -204,7 +209,7 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
    //   console.log(token);
      // this.token=token.id
   data={
-    amount:this.serviceAmount,
+    amount:this.amountForm.get('amount').value,
     email:this.userData.email,
     paymenttype: "direct",
     token: this.token.token.id,
@@ -238,7 +243,8 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
       outsourcedto: 232,
       isoutsourced: "true",
       status: "outsourced",
-      designacceptancestarttime: designacceptancestarttime
+      designacceptancestarttime: designacceptancestarttime,
+      paymenttype : "direct"
     };
     
       this.apiService.updateDesignForm(postData,this.designId).subscribe(value=>{

@@ -31,6 +31,8 @@ export class EmailModelPage implements OnInit {
   design : DesignModel;
   id:any;
   data:any;
+  emails:any='';
+  checkedEmailIds: boolean=false;
   
   constructor(
     private util:UtilitiesService,
@@ -85,9 +87,17 @@ export class EmailModelPage implements OnInit {
    // this.dialogRef.close(this.data);
  // }
  selectAll(event) {
-   debugger;
     const Checked = event.target.checked;
     this.TeamData.forEach(item => item.Checked = Checked);
+    console.log(this.TeamData.Checked);
+    
+  }
+
+  checkedMails(event){
+    const Checked = event.target.checked;
+    this.checkedEmailIds = event.target.checked;
+  
+    
   }
   
  SendMail(){
@@ -104,13 +114,11 @@ export class EmailModelPage implements OnInit {
     });
   
     console.log(this.selectedEmails)
+    // if(this.selectedEmails.length > 1){
   let body= {emails:this.selectedEmails,
   id:this.id}
-   return this.http.post(BaseUrl+"designs/send-prelim-design",
-   body,
-   {
-    headers:this.headers
-   }).subscribe((response)=>{
+  if(this.data.requesttype==='prelim'){
+  this.api.sendPrelimEmails(body).subscribe((response)=>{
      this.resp=response
      if(this.resp.status=='success'){
         this.util.showSnackBar("Email Sent  Successfully");
@@ -129,6 +137,32 @@ export class EmailModelPage implements OnInit {
     this.selectedEmails=[];
       }
       )
+    } 
+    else{
+      this.api.sendPermitEmails(body).subscribe((response)=>{
+        this.resp=response
+        if(this.resp.status=='success'){
+           this.util.showSnackBar("Email Sent  Successfully");
+           this.modalctrl.dismiss({
+             'dismissed': true
+           });
+          // this.dialogRef.close( );
+        }
+        this.selectedEmails=[]; 
+      },
+      error => {
+      
+       this.util.errorSnackBar(
+         "Something went wrong. Please try again."
+       );
+       this.selectedEmails=[];
+         }
+         )
+    }
+  // }
+  //   else{
+  //     this.util.errorSnackBar("Please Select the Email");
+  //   }
    
       
   }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from 'src/app/model/assignee.model';
 import { SolarMake } from 'src/app/model/solar-make.model';
@@ -17,6 +17,8 @@ import {  DesginDataModel, DesignModel } from '../../model/design.model';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Intercom } from 'ng-intercom';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+
 
 @Component({
   selector: 'app-design',
@@ -98,8 +100,10 @@ export class DesignComponent implements OnInit, OnDestroy {
     private camera: Camera,
     private file: File,
     private router:Router,
-    public intercom: Intercom
+    public intercom: Intercom,
+    private cdr:ChangeDetectorRef
   ) {
+    this.utils.showHideIntercom(true);
     var tomorrow=new Date();
     tomorrow.setDate(tomorrow.getDate()+1);
     var d_date=tomorrow.toISOString();
@@ -147,6 +151,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   numberfield(event){
     console.log(event);
     
+  }
+
+  ionViewDidEnter(){
+    this.utils.showHideIntercom(true);
   }
 
   // getmodulename(event){
@@ -218,22 +226,22 @@ export class DesignComponent implements OnInit, OnDestroy {
         });
       // }
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-         this.desginForm.get('address').setValue('124/345');
-         this.desginForm.get('latitude').setValue('24.553333');
-         this.desginForm.get('longitude').setValue('80.5555555555');
-         this.desginForm.get('country').setValue('india');
-         this.desginForm.get('city').setValue('Lucknow');
-         this.desginForm.get('state').setValue('UP');
-         this.desginForm.get('postalcode').setValue(3232343);
-        //  this.desginForm.get('address').setValue(address.address);
-        //    this.desginForm.get('latitude').setValue(address.lat);
-        //    this.desginForm.get('longitude').setValue(address.long);
-        //    this.desginForm.get('country').setValue(address.country);
-        //  this.desginForm.get('city').setValue(address.city);
-        //    this.desginForm.get('state').setValue(address.state);
-        //    this.desginForm.get('postalcode').setValue(address.postalcode);
+        //  this.desginForm.get('address').setValue('124/345');
+        //  this.desginForm.get('latitude').setValue('24.553333');
+        //  this.desginForm.get('longitude').setValue('80.5555555555');
+        //  this.desginForm.get('country').setValue('india');
+        //  this.desginForm.get('city').setValue('Lucknow');
+        //  this.desginForm.get('state').setValue('UP');
+        //  this.desginForm.get('postalcode').setValue(3232343);
+         this.desginForm.get('address').setValue(address.address);
+           this.desginForm.get('latitude').setValue(address.lat);
+           this.desginForm.get('longitude').setValue(address.long);
+           this.desginForm.get('country').setValue(address.country);
+         this.desginForm.get('city').setValue(address.city);
+           this.desginForm.get('state').setValue(address.state);
+           this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -301,9 +309,7 @@ uploadcontrolvalidation(){
 
 
   ngOnDestroy(): void {
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+    this.utils.showHideIntercom(false);
     this.subscription.unsubscribe();
     if (this.designId === 0) {
       this.addressSubscription.unsubscribe();
@@ -315,6 +321,7 @@ getDesignDetails() {
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
+          this.utils.showHideIntercom(true);
           this.design = result;
           console.log(this.design);
           this.fieldDisabled=true;
@@ -625,11 +632,13 @@ deleteArcFile(index){
         if (this.designId === 0) {
 
           if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
-            this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+            debugger;
+            this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
               this.uploaarchitecturedesign(response.id,'architecturaldesign');
               this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
+                // this.createChatGroup(response);
                 this.router.navigate(['/homepage/design'])
                 // this.utils.showSnackBar('Design have been saved');
                 this.utils.setHomepageDesignRefresh(true);
@@ -651,13 +660,14 @@ deleteArcFile(index){
            
             }
             else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
-              this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+              this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
                 console.log(response.id);
                this.uploaarchitecturedesign(response.id,'architecturaldesign');
                 this.uploadpreliumdesign(response.id,'attachments')
                 
                 this.utils.hideLoading().then(() => {
                   this.value = response.id;
+                  // this.createChatGroup(response);
                   this.sendtowattmonk();
                  // console.log('Res', response);
                  // this.router.navigate(['/homepage'])
@@ -684,15 +694,14 @@ deleteArcFile(index){
               console.log("hello");
               this.deleteArcFile(this.indexOfArcFiles);
             }
-            
-            this.utils.hideLoading().then(() => {
-              console.log('Res', response);
-              this.utils.showSnackBar('Design have been updated');
-              this.utils.setDesignDetailsRefresh(true);
-              this.navController.pop();
-              
-      
-            });
+            setTimeout(()=>{
+              this.utils.hideLoading().then(() => {
+                console.log('Res', response);
+                this.utils.showSnackBar('Design have been updated');
+                this.utils.setDesignDetailsRefresh(true);
+                this.navController.pop();
+              });
+            },2000)
           },
            responseError => {
             this.utils.hideLoading().then(() => {
@@ -1066,6 +1075,27 @@ ioniViewDidEnter(){
         this.utils.errorSnackBar('Address not found. Make sure location is on on device.');
       }
     }
+  }
+
+  createChatGroup(design:DesginDataModel){
+    var GUID = 'prelim' + "_" + new Date().getTime();
+
+    var address = design.address.substring(0, 60);
+    var groupName = design.name + "_" + address;
+
+    var groupType = CometChat.GROUP_TYPE.PRIVATE;
+    var password = "";
+
+    var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+    CometChat.createGroup(group).then(group=>{
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+        this.cdr.detectChanges();
+      })
+    })
   }
 }
 

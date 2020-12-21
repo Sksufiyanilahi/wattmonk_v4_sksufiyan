@@ -26,6 +26,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
 
 
 @Component({
@@ -80,6 +82,7 @@ export class PermithomepagePage implements OnInit {
  // netSwitch: boolean;
  reviewAssignedTo:any;
  showFooter = true;
+  deactivateNetworkSwitch: Subscription;
 
   constructor(private apiService:ApiService,
               private utils:UtilitiesService,
@@ -100,9 +103,10 @@ export class PermithomepagePage implements OnInit {
               private toastController: ToastController,
               private geolocation: Geolocation,
               private nativeGeocoder: NativeGeocoder,
-              private intercom:Intercom
+              private intercom:Intercom,
+              private storageService:StorageService
               ) {
-
+                this.setupCometChatUser();
               }
 
 
@@ -118,9 +122,9 @@ export class PermithomepagePage implements OnInit {
 
 
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+    this.intercomModule();
+    this.setupCometChatUser();
+    this.utils.showHideIntercom(false);
     this.getNotificationCount();
     this.apiService.version.subscribe(versionInfo=>{
       this.update_version = versionInfo;
@@ -130,6 +134,33 @@ export class PermithomepagePage implements OnInit {
        this.subscription = this.utils.getBottomBarHomepage().subscribe((value) => {
         this.showFooter = value;
       });
+  }
+  setupCometChatUser() {
+    debugger;
+    let userId = this.storageservice.getUserID();
+    const user = new CometChat.User(userId);
+    user.setName(this.storageservice.getUser().firstname + ' ' + this.storageservice.getUser().lastname);
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
+      },
+      error => {
+        console.log('Initialization failed with error:', error);
+      }
+    );
+
   }
 
   ionViewDidEnter() {
@@ -147,8 +178,9 @@ export class PermithomepagePage implements OnInit {
         }]);
       },2000)
     }
-    this.network.networkSwitch.subscribe(data=>{
+    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
+      this.utils.showHideIntercom(false);
       console.log(this.netSwitch);
 
     })
@@ -346,6 +378,20 @@ this.network.networkConnect();
         backdropDismiss: false
       });
       await alert.present();
+    }
+
+    ngOndestroy(){
+      this.deactivateNetworkSwitch.unsubscribe();
+    }
+
+    intercomModule(){
+      this.intercom.boot({
+        app_id: intercomId,
+        // Supports all optional configuration.
+        widget: {
+          "activator": "#intercom"
+        }
+      });
     }
 
 

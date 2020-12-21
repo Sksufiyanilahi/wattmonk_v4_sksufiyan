@@ -32,6 +32,7 @@ export class PermitcompleteddesignComponent implements OnInit {
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
   overdue: number;
+  noDesignsFound: string;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -65,6 +66,7 @@ export class PermitcompleteddesignComponent implements OnInit {
   }
 
   fetchPendingDesigns(event, showLoader: boolean) {
+    this.noDesignsFound= "";
     console.log("inside fetch surveys");
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
@@ -72,7 +74,11 @@ export class PermitcompleteddesignComponent implements OnInit {
       this.apiService.getDesignSurveys("requesttype=permit&status=designcompleted").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound= "No Designs Found"
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -168,6 +174,9 @@ export class PermitcompleteddesignComponent implements OnInit {
     this.designRefreshSubscription.unsubscribe();
     this.dataRefreshSubscription.unsubscribe();
     this.cdr.detach();
+  }
+  trackdesign(index,design){
+    return design.id;
   }
 
 

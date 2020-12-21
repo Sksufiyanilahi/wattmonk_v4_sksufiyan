@@ -55,9 +55,7 @@ export class MapPagePage implements OnInit {
   }
 
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utilities.showHideIntercom(true);
   }
 
   updateSearchResults(event: CustomEvent) {
@@ -259,8 +257,6 @@ export class MapPagePage implements OnInit {
   }
 
   ionViewWillLeave(){
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+    this.utilities.showHideIntercom(false);
   }
 }

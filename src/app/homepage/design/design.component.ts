@@ -11,7 +11,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AssigneeModel } from '../../model/assignee.model';
 import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
 import {Storage} from '@ionic/storage';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, Platform } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
@@ -26,6 +26,8 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { Intercom } from 'ng-intercom';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 
 @Component({
@@ -36,7 +38,6 @@ import { Intercom } from 'ng-intercom';
 export class DesignComponent implements OnInit, OnDestroy {
 
   listOfDesignDataHelper: DesginDataHelper[] = [];
-  listOfDesignsData: DesginDataModel[] = [];
   private refreshSubscription: Subscription;
   private routeSubscription: Subscription;
   today: any;
@@ -66,6 +67,11 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectedDesigner: any;
   netSwitch: boolean;
  reviewAssignedTo:any;
+  isclientassigning: boolean=false;
+  acceptid: any;
+  deactivateNetworkSwitch: Subscription;
+  noDesignFound: string;
+  storageDirectory: string;
 
 
   constructor(
@@ -83,10 +89,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     private network:NetworkdetectService,
     public alertController: AlertController,
     private socialsharing: SocialSharing,
-    private transfer:FileTransfer,
     private file:File,
     private localnotification:LocalNotifications,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private platform:Platform,
+    private androidPermissions: AndroidPermissions,
+    private transfer: FileTransfer
 
   ) {
     this.userData = this.storageService.getUser();
@@ -107,8 +115,42 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   }
 
+  makeDirectory(){
+    this.platform.ready().then(() => {
+      if (this.platform.is('ios')) {
+        this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+      } else if (this.platform.is('android')) {
+        this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+      } else {
+        this.storageDirectory = this.file.cacheDirectory;
+      }
+    });
+  }
+
+  createChatGroup(design:DesginDataModel){
+    var GUID = 'prelim' + "_" + new Date().getTime();
+
+    var address = design.address.substring(0, 60);
+    var groupName = design.name + "_" + address;
+
+    var groupType = CometChat.GROUP_TYPE.PRIVATE;
+    var password = "";
+
+    var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+    CometChat.createGroup(group).then(group=>{
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+        this.cdr.detectChanges();
+      })
+    })
+  }
+
   ionViewDidEnter() {
-    this.network.networkSwitch.subscribe(data=>{
+    this.makeDirectory();
+    this.deactivateNetworkSwitch =this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
 
@@ -118,6 +160,9 @@ this.network.networkDisconnect();
 this.network.networkConnect();
 
   }
+
+
+  
   segmentChanged(event){
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
@@ -212,6 +257,7 @@ this.network.networkConnect();
       this.getDesigns(null);
 
     });
+    
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
@@ -231,12 +277,16 @@ this.network.networkConnect();
   }
 
      accept(id,data:string){
-
+        this.acceptid = id;
        let status={
         status:data
       }
       this.utils.showLoading("accepting").then(()=>{
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
+           if(!res.isinrevisionstate){
+             this.createNewDesignChatGroup(res);
+            }
+            debugger;
            this.utils.hideLoading().then(()=>{
             this.utils.setHomepageDesignRefresh(true);})})
           })
@@ -244,7 +294,29 @@ this.network.networkConnect();
        }
 
 
+       addUserToGroupChat() {
+         debugger;
+        var GUID = this.designerData.chatid;
+        var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
+        if (this.isclientassigning) {
+          userscope = CometChat.GROUP_MEMBER_SCOPE.ADMIN;
+        }
+        let membersList = [
+          new CometChat.GroupMember("" + this.selectedDesigner.id, userscope)
+        ];
+        CometChat.addMembersToGroup(GUID, membersList, []).then(
+          response => {
+            
+          },
+          error => {
+          
+          }
+        );
+      }
+
+
    fetchPendingDesigns(event, showLoader: boolean) {
+     this.noDesignFound= "";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
@@ -252,7 +324,11 @@ this.network.networkConnect();
       this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found";
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -383,6 +459,7 @@ this.network.networkConnect();
       reviewdate.setMinutes(reviewdate.getMinutes()+15)
       element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
       element.lateby = this.utils.getTheLatebyString(element.deliverydate);
+      element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       var acceptancedate = new Date(element.designacceptancestarttime);
       element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
@@ -435,17 +512,21 @@ this.network.networkConnect();
         element.isoverdue = true;
       }
     }
-      this.storage.get(''+element.id).then((data: any) => {
-        console.log(data);
-        if (data) {
-          element.totalpercent = data.currentprogress;
-        }else{
-          element.totalpercent = 0;
-        }
-      });
+      // this.storage.get(''+element.id).then((data: any) => {
+      //   console.log(data,">>>");
+      //   if (data) {
+      //     element.totalpercent = data.currentprogress;
+      //   }else{
+      //     element.totalpercent = 0;
+      //   }
+      // });
     });
 
     return records;
+  }
+
+  trackdesign(index,design){
+    return design.id;
   }
 
   // getDesign(event, showLoader: boolean) {
@@ -535,9 +616,7 @@ this.network.networkConnect();
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
+    this.utils.showHideIntercom(false);
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
 
@@ -578,7 +657,8 @@ this.network.networkConnect();
     console.log(this.selectedDesigner);
     var postData = {};
     if (this.designerData.createdby.id == this.userData.id) {
-      if (this.selectedDesigner.company == this.userData.company) {
+      debugger;
+      if (this.selectedDesigner.parent.id == this.userData.parent.id) {
         if(this.selectedDesigner.role.type=="qcinspector"){
           postData = {
             reviewassignedto: this.selectedDesigner.id,
@@ -629,8 +709,10 @@ this.network.networkConnect();
 
           if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
          {
+           this.isclientassigning= true;
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
          }else{
+          this.addUserToGroupChat();
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
          }
           this.dismissBottomSheet();
@@ -652,9 +734,7 @@ this.network.networkConnect();
 
 
   openDesigners(id: number,designData) {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+ this.utils.showHideIntercom(true);
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
@@ -697,9 +777,7 @@ this.network.networkConnect();
   }
 
   openAnalysts(id: number,designData) {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utils.showHideIntercom(true);
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;
@@ -967,6 +1045,77 @@ shareWhatsapp(designData){
  }
 
  designDownload(designData){
+
+
+
+this.platform.ready().then(()=>{
+  this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+      result => console.log('Has permission?',result.hasPermission),
+      err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
+    );
+    this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
+      console.log(data);
+
+      if(data==true){
+
+      }else{
+        console.log('not found!');
+        throw { code: 1, message: 'NOT_FOUND_ERR' };
+      }
+      
+    }).catch(async err=>{
+      console.log('Error occurred while checking local files:');
+      console.log(err);
+      if (err.code == 1) {
+        const fileTransfer: FileTransferObject = this.transfer.create();
+        this.utils.showLoading('Downloading').then(()=>{
+          fileTransfer.download(url, this.storageDirectory + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
+            this.utils.hideLoading().then(()=>{
+              console.log('download complete: ' + entry.toURL());
+              this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+              
+              // this.clickSub = this.localnotification.on('click').subscribe(data => {
+              //   console.log(data)
+              //   path;
+              // })
+              this.localnotification.schedule({text:'Prelim Design Downloaded Successfully', foreground:true, vibrate:true })
+            }, (error) => {
+              // handle error
+              console.log(error);
+              
+            });
+            })
+        })
+      }
+    })
+  })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   let dir_name = 'Wattmonk';
   let path = '';
   const url = designData.prelimdesign.url;
@@ -993,6 +1142,81 @@ result.then((resp) => {
 })
 
 
+}
+
+createNewDesignChatGroup(design:DesginDataModel) {
+  var GUID = 'prelim' + "_" + new Date().getTime();
+  var address = design.address.substring(0, 60);
+  var groupName = design.name + "_" + address;
+
+  var groupType = CometChat.GROUP_TYPE.PRIVATE;
+  var password = "";
+
+  var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+  CometChat.createGroup(group).then(
+    group => {
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN),
+        new CometChat.GroupMember("" + this.userData.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(), membersList, []).then(
+        response => {
+          if(design.requesttype == "prelim"){
+            let postdata={
+              chatid:GUID
+            }
+
+            this.apiService.updateDesignForm(postdata,this.acceptid).subscribe(res=>{})
+            // this.updateItemInList(LISTTYPE.NEW, design);
+          }else{
+            // this.updateItemInPermitList(LISTTYPE.NEW, design);
+          }
+        },
+        error => {
+        }
+      );
+    },
+    error => {
+
+    }
+  );
+}
+
+directAssignToWattmonk(id:number){
+  this.designId = id;
+  var postData = {};
+  var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+        postData = {
+          outsourcedto: 232,
+          isoutsourced: "true",
+          status: "outsourced",
+          designacceptancestarttime: designacceptancestarttime
+        };
+        this.utils.showLoading('Assigning').then(()=>{
+          this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
+            this.utils.hideLoading().then(()=>{
+              ;
+              console.log('reach ', value);
+    
+            //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
+            //  {
+            //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+            //  }else{
+              this.utils.showSnackBar('Design request has been reassigned to wattmonk successfully');
+             
+              //this.dismissBottomSheet();
+              //this.showBottomDraw = false;
+              this.utils.setHomepageDesignRefresh(true);
+    
+            })
+          }, (error) => {
+            this.utils.hideLoading();
+           // this.dismissBottomSheet();
+           // this.showBottomDraw = false;
+          });
+        })
 }
 }
 

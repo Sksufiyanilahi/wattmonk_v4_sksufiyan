@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormArrayName } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
@@ -20,6 +20,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AddressModel } from '../model/address.model';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Intercom } from 'ng-intercom';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { NetworkdetectService } from '../networkdetect.service';
 
 
 // export interface DesignFormData {
@@ -109,6 +111,8 @@ export class PermitschedulePage implements OnInit {
   };
   architecturalFileUpload: boolean= false;
   attachmentFileUpload: boolean= false;
+  netSwitch: any;
+  deactivateNetworkSwitch: Subscription;
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -122,7 +126,9 @@ export class PermitschedulePage implements OnInit {
     private geolocation: Geolocation,
     private platform: Platform,
     private toastController: ToastController,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private cdr:ChangeDetectorRef,
+    private network:NetworkdetectService
     //private data: DesignFormData
     ) {
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
@@ -183,9 +189,12 @@ export class PermitschedulePage implements OnInit {
   // }
     }
   ngOnInit() {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      this.utils.showHideIntercom(true);
+      console.log(this.netSwitch);
+
+    })
     this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
     this.requestLocationPermission();
@@ -211,6 +220,7 @@ export class PermitschedulePage implements OnInit {
 
       }
     });
+    
 
 
     //this.addressValue();
@@ -485,20 +495,20 @@ export class PermitschedulePage implements OnInit {
   this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
     console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-      this.desginForm.get('address').setValue('124/345');
-      this.desginForm.get('latitude').setValue('24.553333');
-      this.desginForm.get('longitude').setValue('80.5555555555');
-      this.desginForm.get('country').setValue('india');
-      this.desginForm.get('city').setValue('Lucknow');
-      this.desginForm.get('state').setValue('UP');
-      this.desginForm.get('postalcode').setValue(3232343);
-    //  this.desginForm.get('address').setValue(address.address);
-    //    this.desginForm.get('latitude').setValue(address.lat);
-    //    this.desginForm.get('longitude').setValue(address.long);
-    //    this.desginForm.get('country').setValue(address.country);
-    //  this.desginForm.get('city').setValue(address.city);
-    //    this.desginForm.get('state').setValue(address.state);
-    //    this.desginForm.get('postalcode').setValue(address.postalcode);
+      // this.desginForm.get('address').setValue('124/345');
+      // this.desginForm.get('latitude').setValue('24.553333');
+      // this.desginForm.get('longitude').setValue('80.5555555555');
+      // this.desginForm.get('country').setValue('india');
+      // this.desginForm.get('city').setValue('Lucknow');
+      // this.desginForm.get('state').setValue('UP');
+      // this.desginForm.get('postalcode').setValue(3232343);
+     this.desginForm.get('address').setValue(address.address);
+       this.desginForm.get('latitude').setValue(address.lat);
+       this.desginForm.get('longitude').setValue(address.long);
+       this.desginForm.get('country').setValue(address.country);
+     this.desginForm.get('city').setValue(address.city);
+       this.desginForm.get('state').setValue(address.state);
+       this.desginForm.get('postalcode').setValue(address.postalcode);
   }, (error) => {
     this.desginForm.get('address').setValue('');
     this.desginForm.get('latitude').setValue('');
@@ -801,22 +811,26 @@ saveInverterModel() {
                 if(this.attachmentFileUpload){
                   this.uploadAttachmentDesign(response.id,'attachments')
                 }
-                this.utils.hideLoading().then(() => {
-                  console.log('Res', response);
-                  this.router.navigate(['/permithomepage'])
-                  this.utils.showSnackBar('Design have been Created');
-                  // this.utils.showSnackBar('Design have been saved');
-                  this.utils.setHomepagePermitRefresh(true);
-                  // this.navController.pop();
-                  // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-                  //   modal.present();
-                  //   modal.onWillDismiss().then((dismissed) => {
-                      // this.utils.setHomepageDesignRefresh(true);
-                  //     this.navController.pop();
-                  //   });
-                  // });
 
-                });
+                  setTimeout(()=>{
+                    this.utils.hideLoading().then(() => {
+                      console.log('Res', response);
+                      this.createChatGroup(response);
+                      this.router.navigate(['/permithomepage'])
+                      this.utils.showSnackBar('Design have been Created');
+                      // this.utils.showSnackBar('Design have been saved');
+                      this.utils.setHomepagePermitRefresh(true);
+                      // this.navController.pop();
+                      // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+                      //   modal.present();
+                      //   modal.onWillDismiss().then((dismissed) => {
+                          // this.utils.setHomepageDesignRefresh(true);
+                      //     this.navController.pop();
+                      //   });
+                      // });
+    
+                    });
+                  },2000)
               }, responseError => {
                 this.utils.hideLoading();
                   const error: ErrorModel = responseError.error;
@@ -877,6 +891,7 @@ saveInverterModel() {
                   this.uploadAttachmentDesign(response.id,'attachments')
                 }
                 this.utils.hideLoading().then(() => {
+                  this.createChatGroup(response);
                   console.log('Res', response);
                   this.value = response.id;
                   this.sendtowattmonk();
@@ -1236,7 +1251,10 @@ saveInverterModel() {
     }}
 
    // });
-    this.utils.setPermitDesignDetailsRefresh(true);
+
+
+     this.utils.setPermitDesignDetailsRefresh(true);
+
     
   
      
@@ -1278,6 +1296,7 @@ saveInverterModel() {
     ngOnDestroy(): void {
       this.subscription.unsubscribe();
       this.utils.setStaticAddress('');
+     this.deactivateNetworkSwitch.unsubscribe();
     }
 
     // segmentChanged(event: CustomEvent) {
@@ -1528,6 +1547,27 @@ saveInverterModel() {
       this.intercom.update({
         "hide_default_launcher": false
       });
+    }
+
+    createChatGroup(design:DesginDataModel){
+      var GUID = 'permit' + "_" + new Date().getTime();
+    
+      var address = design.address.substring(0, 90);
+      var groupName = design.name + "_" + address;
+    
+      var groupType = CometChat.GROUP_TYPE.PRIVATE;
+      var password = "";
+    
+      var group = new CometChat.Group(GUID, groupName, groupType, password);
+    
+      CometChat.createGroup(group).then(group=>{
+        let membersList = [
+          new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+        ];
+        CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+          this.cdr.detectChanges();
+        })
+      })
     }
 
 

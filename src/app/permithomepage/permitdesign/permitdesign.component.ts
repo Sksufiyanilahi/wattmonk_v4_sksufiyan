@@ -23,16 +23,18 @@ import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.
 import * as moment from 'moment';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import { Intercom } from 'ng-intercom';
-import { intercomId } from '../../contants';
+import { COMETCHAT_CONSTANTS, intercomId } from '../../contants';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
-//import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 @Component({
   selector: 'app-permitdesign',
   templateUrl: './permitdesign.component.html',
-  styleUrls: ['./permitdesign.component.scss'],
+  styleUrls: ['./permitdesign.component.scss'], 
 })
 export class PermitdesignComponent implements OnInit {
 
@@ -72,6 +74,11 @@ export class PermitdesignComponent implements OnInit {
   netSwitch: boolean;
  reviewAssignedTo:any;
  clickSub:any;
+  acceptid: any;
+  isclientassigning: boolean=false;
+  deactivateNetworkSwitch: Subscription;
+  noDesignFound: string='';
+  storageDirectory: string;
 
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
@@ -89,10 +96,13 @@ export class PermitdesignComponent implements OnInit {
     private formBuilder: FormBuilder,
     private transfer : FileTransfer,
     private file: File,
+    private platform:Platform,
+    private androidPermissions: AndroidPermissions,
     private localnotification: LocalNotifications,
    // private fileopener:FileOpener
    ) {
     this.userData = this.storageservice.getUser();
+
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       this.segments= 'requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -109,7 +119,7 @@ export class PermitdesignComponent implements OnInit {
     });
   }
 
-
+ 
   intercomModule(){
     this.intercom.boot({
       app_id: intercomId,
@@ -122,9 +132,9 @@ export class PermitdesignComponent implements OnInit {
 
 
   ionViewDidEnter() {
-    this.intercomModule();
+    // this.intercomModule();
     this.apiService.emitUserNameAndRole(this.userData);
-    this.network.networkSwitch.subscribe(data=>{
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
 
@@ -132,6 +142,7 @@ export class PermitdesignComponent implements OnInit {
 
 this.network.networkDisconnect();
 this.network.networkConnect();
+this.deactivateNetworkSwitch.unsubscribe();
 
   }
 
@@ -197,6 +208,8 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
+    this.makeDirectory();
+    this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
@@ -219,12 +232,13 @@ this.network.networkConnect();
   }
 
      accept(id,data:string){
-
+      this.acceptid= id;
        let status={
         status:data
       }
       this.utils.showLoading("accepting").then(()=>{
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
+          this.createNewDesignChatGroup(res);
            this.utils.hideLoading().then(()=>{
             this.utils.setHomepagePermitRefresh(true);})})
           })
@@ -233,6 +247,7 @@ this.network.networkConnect();
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
+    this.noDesignFound='';
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
@@ -240,7 +255,12 @@ this.network.networkConnect();
       this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found"
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -264,50 +284,53 @@ this.network.networkConnect();
     console.log(this.listOfDesigns);
 
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesigns.forEach((designItem:any,i) => {
-            console.log(i);
 
-            if (tempData.length === 0) {
-              this.sDatePassed(designItem.updated_at,i);
-              const listOfDesign = new DesginDataHelper();
-              listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
-              listOfDesign.listOfDesigns.push(designItem);
-              tempData.push(listOfDesign);
-              console.log(tempData);
+   
+
+      this.listOfDesigns.forEach((designItem:any,i) => {
+        console.log(i);
+
+        if (tempData.length === 0) {
+          this.sDatePassed(designItem.updated_at,i);
+          const listOfDesign = new DesginDataHelper();
+          listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
+            listOfDesign.lateby = this.overdue;
+          listOfDesign.listOfDesigns.push(designItem);
+          tempData.push(listOfDesign);
+          console.log(tempData);
 
 
 ;
-            } else {
+        } else {
 
-              let added = false;
-              tempData.forEach((DesignList) => {
-                // DesignList['listOfDesigns'].forEach(element=>{
+          let added = false;
+          tempData.forEach((DesignList) => {
+            // DesignList['listOfDesigns'].forEach(element=>{
 
-                //   console.log(element.deliverydate,":::::::::::::");
+            //   console.log(element.deliverydate,":::::::::::::");
 
-                //   this.sDatePassed(element.deliverydate);
-                // })
-                if (!added) {
-                  if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
-                    DesignList.listOfDesigns.push(designItem);
-                    this.sDatePassed(designItem.updated_at,i);
-                    added = true;
-                  }
-                }
-              });
-              if (!added) {
-                ;
+            //   this.sDatePassed(element.deliverydate);
+            // })
+            if (!added) {
+              if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
+                DesignList.listOfDesigns.push(designItem);
                 this.sDatePassed(designItem.updated_at,i);
-                const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
-                listOfDesign.listOfDesigns.push(designItem);
-                tempData.push(listOfDesign);
                 added = true;
               }
             }
           });
+          if (!added) {
+            ;
+            this.sDatePassed(designItem.updated_at,i);
+            const listOfDesign = new DesginDataHelper();
+            listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
+            listOfDesign.lateby = this.overdue;
+            listOfDesign.listOfDesigns.push(designItem);
+            tempData.push(listOfDesign);
+            added = true;
+          }
+        }
+      });
           this.listOfDesignsHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
@@ -319,9 +342,7 @@ this.network.networkConnect();
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
+    this.utils.showHideIntercom(true);
   this.dataRefreshSubscription.unsubscribe();
   this.DesignRefreshSubscription.unsubscribe();
   }
@@ -373,6 +394,7 @@ this.network.networkConnect();
       reviewdate.setHours(reviewdate.getHours()+2)
       element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
       element.lateby = this.utils.getTheLatebyString(element.deliverydate);
+      element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       var acceptancedate = new Date(element.designacceptancestarttime);
       element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
@@ -425,14 +447,14 @@ this.network.networkConnect();
         element.isoverdue = true;
       }
     }
-      this.storage.get(''+element.id).then((data: any) => {
-        console.log(data);
-        if (data) {
-          element.totalpercent = data.currentprogress;
-        }else{
-          element.totalpercent = 0;
-        }
-      });
+      // this.storage.get(''+element.id).then((data: any) => {
+      //   console.log(data);
+      //   if (data) {
+      //     element.totalperceznt = data.currentprogress;
+      //   }else{
+      //     element.totalpercent = 0;
+      //   }
+      // });
 
     });
 
@@ -572,7 +594,10 @@ this.network.networkConnect();
     console.log(this.selectedDesigner);
     var postData = {};
     if (this.designerData.createdby.id == this.userData.id) {
-      if (this.selectedDesigner.company == this.userData.company) {
+      debugger;
+      console.log(this.userData)
+      // if (this.selectedDesigner.company == this.userData.company) {
+        if (this.selectedDesigner.parent.id == this.userData.parent.id) {
         if(this.selectedDesigner.role.type=="qcinspector"){
           postData = {
             reviewassignedto: this.selectedDesigner.id,
@@ -590,10 +615,10 @@ this.network.networkConnect();
 
       }
 
-      }
+     }
       else {
         var designacceptancestarttime = new Date();
-      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
         postData = {
           outsourcedto: this.selectedDesigner.id,
           isoutsourced: "true",
@@ -623,8 +648,10 @@ this.network.networkConnect();
 
           if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
          {
+          this.isclientassigning= true;
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
          }else{
+          this.addUserToGroupChat();
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
          }
           this.dismissBottomSheet();
@@ -959,41 +986,261 @@ shareWhatsapp(designData){
     return await modal.present();
  }
 
- designDownload(designData){
-   let dir_name = 'Wattmonk';
-   let path = '';
-   const url = designData.permitdesign.url;
-  const fileTransfer: FileTransferObject = this.transfer.create();
-  let vari = '';
-  
-  let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
-result.then((resp) => {
-  path = resp.toURL();
-  console.log(path); 
-  
-  fileTransfer.download(url, path + designData.permitdesign.hash + designData.permitdesign.ext).then((entry) => {
-    console.log('download complete: ' + entry.toURL());
-    this.utils.showSnackBar("Permit Design Downloaded Successfully");
-    this.localnotification.schedule({text:'Downloaded Successfully',data:entry.toURL() , foreground:true, vibrate:true })
-  //    this.clickSub = this.localnotification.on('click').subscribe(data => {
-  //      console.log(data)
-  //   //    this.fileopener.open(data,designData.permitdesign.ext)
-  //   //    .then(() => console.log('File is opened'))
-  //   //  .catch(e => console.log('Error opening file', e));
-  //   //  })
-  //    let star = this.file.getDirectory(resp,dir_name ,{create: true, exclusive: false});
-  //    star.then((response)=>{ vari = response.toURL(); this.fileopener.open(vari,designData.permitdesign.ext) });
+ makeDirectory(){
+  this.platform.ready().then(() => {
+    if (this.platform.is('ios')) {
+      this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+    } else if (this.platform.is('android')) {
+      this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+    } else {
+      this.storageDirectory = this.file.cacheDirectory;
+    }
+  });
+}
 
-     
-    
+designDownload(designData){
+
+  this.platform.ready().then(()=>{
+    this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+        result => console.log('Has permission?',result.hasPermission),
+        err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
+      );
+      this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
+        console.log(data);
+  
+        if(data==true){
+  
+        }else{
+          console.log('not found!');
+          throw { code: 1, message: 'NOT_FOUND_ERR' };
+        }
+        
+      }).catch(async err=>{
+        console.log('Error occurred while checking local files:');
+        console.log(err);
+        if (err.code == 1) {
+          const fileTransfer: FileTransferObject = this.transfer.create();
+          this.utils.showLoading('Downloading').then(()=>{
+            fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.prelimdesign.ext).then((entry) => {
+              this.utils.hideLoading().then(()=>{
+                console.log('download complete: ' + entry.toURL());
+                this.utils.showSnackBar("Permit Design Downloaded Successfully");
+                
+                // this.clickSub = this.localnotification.on('click').subscribe(data => {
+                //   console.log(data)
+                //   path;
+                // })
+                this.localnotification.schedule({text:'Permit Design Downloaded Successfully', foreground:true, vibrate:true })
+              }, (error) => {
+                // handle error
+                console.log(error);
+                
+              });
+              })
+          })
+        }
+      })
+    })
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    let dir_name = 'Wattmonk';
+    let path = '';
+    const url = designData.prelimdesign.url;
+   const fileTransfer: FileTransferObject = this.transfer.create();
    
-  // }, (error) => {
-  //   // handle error
-  // });
- })
- 
- 
-})
+   
+   let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
+  result.then((resp) => {
+   path = resp.toURL();
+   console.log(path); 
+   
+   fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
+     console.log('download complete: ' + entry.toURL());
+     this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+     
+     // this.clickSub = this.localnotification.on('click').subscribe(data => {
+     //   console.log(data)
+     //   path;
+     // })
+     this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
+   }, (error) => {
+     // handle error
+   });
+  })
+  
+  
+  }
+
+createChatGroup(design:DesginDataModel){
+  var GUID = 'permit' + "_" + new Date().getTime();
+
+  var address = design.address.substring(0, 90);
+  var groupName = design.name + "_" + address;
+
+  var groupType = CometChat.GROUP_TYPE.PRIVATE;
+  var password = "";
+
+  var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+  CometChat.createGroup(group).then(group=>{
+    let membersList = [
+      new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+    ];
+    CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+      this.cdr.detectChanges();
+    })
+  })
+}
+
+createNewDesignChatGroup(design:DesginDataModel) {
+  var GUID = 'permit' + "_" + new Date().getTime();
+  var address = design.address.substring(0, 60);
+  var groupName = design.name + "_" + address;
+
+  var groupType = CometChat.GROUP_TYPE.PRIVATE;
+  var password = "";
+
+  var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+  CometChat.createGroup(group).then(
+    group => {
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN),
+        new CometChat.GroupMember("" + this.userData.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(), membersList, []).then(
+        response => {
+          if(design.requesttype == "permit"){
+            let postdata={
+              chatid:GUID
+            }
+
+            this.apiService.updateDesignForm(postdata,this.acceptid).subscribe(res=>{})
+            // this.updateItemInList(LISTTYPE.NEW, design);
+          }else{
+            // this.updateItemInPermitList(LISTTYPE.NEW, design);
+          }
+        },
+        error => {
+        }
+      );
+    },
+    error => {
+
+    }
+  );
+}
+
+      addUserToGroupChat() {
+        debugger;
+      var GUID = this.designerData.chatid;
+      var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
+      if (this.isclientassigning) {
+        userscope = CometChat.GROUP_MEMBER_SCOPE.ADMIN;
+      }
+      let membersList = [
+        new CometChat.GroupMember("" + this.selectedDesigner.id, userscope)
+      ];
+      CometChat.addMembersToGroup(GUID, membersList, []).then(
+        response => {
+          
+        },
+        error => {
+        
+        }
+      );
+      }
+
+
+      setupCometChat() {
+        let userId = this.storageservice.getUserID()
+        const user = new CometChat.User(userId);
+        user.setName(this.storageservice.getUser().firstname + ' ' + this.storageservice.getUser().lastname);
+        const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+        CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+          () => {
+            console.log('Initialization completed successfully');
+            // if(this.utilities.currentUserValue != null){
+              // You can now call login function.
+              CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+                (user) => {
+                  console.log('Login Successful:', { user });
+                },
+                error => {
+                  console.log('Login failed with exception:', { error });
+                }
+              );
+          // }
+          },
+          error => {
+            console.log('Initialization failed with error:', error);
+          }
+        );
+      }
+
+
+directAssignToWattmonk(id:number){
+  this.designId = id;
+  var postData = {};
+  var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+        postData = {
+          outsourcedto: 232,
+          isoutsourced: "true",
+          status: "outsourced",
+          designacceptancestarttime: designacceptancestarttime
+        };
+        this.utils.showLoading('Assigning').then(()=>{
+          this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
+            this.utils.hideLoading().then(()=>{
+              ;
+              console.log('reach ', value);
+    
+            //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
+            //  {
+            //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+            //  }else{
+              this.utils.showSnackBar('Design request has been reassigned to wattmonk successfully');
+             
+              //this.dismissBottomSheet();
+              //this.showBottomDraw = false;
+              this.utils.setHomepagePermitRefresh(true);
+    
+            })
+          }, (error) => {
+            this.utils.hideLoading();
+           // this.dismissBottomSheet();
+           // this.showBottomDraw = false;
+          });
+        })
+}
+trackdesign(index,design){
+  return design.id;
 }
 }
 
@@ -1009,5 +1256,7 @@ export class DesginDataHelper {
   shareDesign(){
 
   }
+
+ 
 
 }
