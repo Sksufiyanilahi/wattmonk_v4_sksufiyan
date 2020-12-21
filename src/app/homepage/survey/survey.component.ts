@@ -512,6 +512,8 @@ this.network.networkConnect();
 
   
   openAnalysts(id:number,surveyData){
+    this.listOfAssignees=[];
+    console.log(this.listOfAssignees);
     this.surveyData=surveyData;
     console.log(surveyData);
     this.reviewAssignedTo = surveyData.reviewassignedto;
@@ -552,7 +554,9 @@ this.network.networkConnect();
   
 
   openSurveyors(id: number,surveyData) {
+    this.listOfAssignees=[];
     console.log(surveyData);
+    console.log(this.listOfAssignees);
     this.surveyData=surveyData;
     this.reviewAssignedTo = surveyData.assignedto;
     if (this.listOfAssignees.length === 0) {
