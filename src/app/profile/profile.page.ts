@@ -13,6 +13,8 @@ import { AddMoneyPage } from '../add-money/add-money.page';
 import { Router } from '@angular/router';
 import { Intercom } from 'ng-intercom';
 import { intercomId } from '../contants';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+
 
 @Component({
   selector: 'app-profile',
@@ -82,11 +84,19 @@ AddWallet()
         {
           text: 'Yes',
           handler: () => {
-            this.storage.logout();
-            this.deviceStorage.clear();
-            this.apiService.resetHeaders();
-            this.utilities.showHideIntercom(true);
-            this.navController.navigateRoot('login');
+            CometChat.logout().then(()=>{
+              this.storage.logout();
+              this.deviceStorage.clear();
+              this.apiService.resetHeaders();
+              this.utilities.showHideIntercom(true);
+              this.navController.navigateRoot('login');
+            },err=>{
+              this.storage.logout();
+              this.deviceStorage.clear();
+              this.apiService.resetHeaders();
+              this.utilities.showHideIntercom(true);
+              this.navController.navigateRoot('login');
+            });
           }
         }, {
           text: 'No',

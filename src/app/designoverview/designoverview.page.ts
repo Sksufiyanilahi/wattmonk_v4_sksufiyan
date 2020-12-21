@@ -31,6 +31,7 @@ export class DesignoverviewPage implements OnInit {
   showSearchBar = false;
   unreadCount: any;
   userData: UserData
+  deactivateNetworkSwitch: Subscription;
   //showSearchBar = false;
   
 
@@ -62,7 +63,7 @@ export class DesignoverviewPage implements OnInit {
       this.update_version = versionInfo;
     })
     this.getNotificationCount();
-    this.setupCometChatUser();
+    this.setupCometChat();
     this.updateUserPushToken();
     this.route.navigate(['designoverview/newdesigns']);
   }
@@ -79,27 +80,33 @@ export class DesignoverviewPage implements OnInit {
  
 
   ngOnDestroy() {
+    this.deactivateNetworkSwitch.unsubscribe();
   }
 
-  setupCometChatUser() {
-    const user = new CometChat.User(this.storage.getUserID());
+  setupCometChat() {
+    let userId = this.storage.getUserID();
+    const user = new CometChat.User(userId);
     user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
-    // CometChat.createUser(user, COMETCHAT_CONSTANTS.API_KEY).then(
-    //   (user) => {
-    //     console.log('user created', user);
-    //   }, error => {
-    //     console.log('error', error);
-    //   }
-    // );
-    CometChat.login(this.storage.getUserID(),  COMETCHAT_CONSTANTS.API_KEY).then(
-      (user) => {
-        console.log('Login Successful:', { user });
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
       },
       error => {
-        console.log('Login failed with exception:', { error });
+        console.log('Initialization failed with error:', error);
       }
     );
-
   }
 
   updateUserPushToken(){
@@ -170,8 +177,9 @@ searchbar(){
       }]);
     },2000)
   }
-  this.network.networkSwitch.subscribe(data=>{
+  this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     this.netSwitch = data;
+    this.utilities.showHideIntercom(false);
     console.log(this.netSwitch);
     
   })

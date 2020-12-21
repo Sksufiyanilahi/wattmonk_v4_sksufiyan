@@ -29,6 +29,7 @@ import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 @Component({
   selector: 'app-permitdesign',
@@ -75,6 +76,9 @@ export class PermitdesignComponent implements OnInit {
  clickSub:any;
   acceptid: any;
   isclientassigning: boolean=false;
+  deactivateNetworkSwitch: Subscription;
+  noDesignFound: string='';
+  storageDirectory: string;
 
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
@@ -92,7 +96,8 @@ export class PermitdesignComponent implements OnInit {
     private formBuilder: FormBuilder,
     private transfer : FileTransfer,
     private file: File,
-
+    private platform:Platform,
+    private androidPermissions: AndroidPermissions,
     private localnotification: LocalNotifications,
     private fileopener:FileOpener) {
     this.userData = this.storageservice.getUser();
@@ -126,9 +131,9 @@ export class PermitdesignComponent implements OnInit {
 
 
   ionViewDidEnter() {
-    this.intercomModule();
+    // this.intercomModule();
     this.apiService.emitUserNameAndRole(this.userData);
-    this.network.networkSwitch.subscribe(data=>{
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
 
@@ -136,6 +141,7 @@ export class PermitdesignComponent implements OnInit {
 
 this.network.networkDisconnect();
 this.network.networkConnect();
+this.deactivateNetworkSwitch.unsubscribe();
 
   }
 
@@ -201,6 +207,7 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
+    this.makeDirectory();
     this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.getDesigns(null);
@@ -239,6 +246,7 @@ this.network.networkConnect();
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
+    this.noDesignFound='';
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
@@ -246,7 +254,12 @@ this.network.networkConnect();
       this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found"
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -270,50 +283,53 @@ this.network.networkConnect();
     console.log(this.listOfDesigns);
 
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesigns.forEach((designItem:any,i) => {
-            console.log(i);
 
-            if (tempData.length === 0) {
-              this.sDatePassed(designItem.updated_at,i);
-              const listOfDesign = new DesginDataHelper();
-              listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
-              listOfDesign.listOfDesigns.push(designItem);
-              tempData.push(listOfDesign);
-              console.log(tempData);
+   
+
+      this.listOfDesigns.forEach((designItem:any,i) => {
+        console.log(i);
+
+        if (tempData.length === 0) {
+          this.sDatePassed(designItem.updated_at,i);
+          const listOfDesign = new DesginDataHelper();
+          listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
+            listOfDesign.lateby = this.overdue;
+          listOfDesign.listOfDesigns.push(designItem);
+          tempData.push(listOfDesign);
+          console.log(tempData);
 
 
 ;
-            } else {
+        } else {
 
-              let added = false;
-              tempData.forEach((DesignList) => {
-                // DesignList['listOfDesigns'].forEach(element=>{
+          let added = false;
+          tempData.forEach((DesignList) => {
+            // DesignList['listOfDesigns'].forEach(element=>{
 
-                //   console.log(element.deliverydate,":::::::::::::");
+            //   console.log(element.deliverydate,":::::::::::::");
 
-                //   this.sDatePassed(element.deliverydate);
-                // })
-                if (!added) {
-                  if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
-                    DesignList.listOfDesigns.push(designItem);
-                    this.sDatePassed(designItem.updated_at,i);
-                    added = true;
-                  }
-                }
-              });
-              if (!added) {
-                ;
+            //   this.sDatePassed(element.deliverydate);
+            // })
+            if (!added) {
+              if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
+                DesignList.listOfDesigns.push(designItem);
                 this.sDatePassed(designItem.updated_at,i);
-                const listOfDesign = new DesginDataHelper();
-                listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-                listOfDesign.lateby = this.overdue;
-                listOfDesign.listOfDesigns.push(designItem);
-                tempData.push(listOfDesign);
                 added = true;
               }
             }
           });
+          if (!added) {
+            ;
+            this.sDatePassed(designItem.updated_at,i);
+            const listOfDesign = new DesginDataHelper();
+            listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
+            listOfDesign.lateby = this.overdue;
+            listOfDesign.listOfDesigns.push(designItem);
+            tempData.push(listOfDesign);
+            added = true;
+          }
+        }
+      });
           this.listOfDesignsHelper = tempData.sort(function (a, b) {
             var dateA = new Date(a.date).getTime(),
               dateB = new Date(b.date).getTime();
@@ -430,14 +446,14 @@ this.network.networkConnect();
         element.isoverdue = true;
       }
     }
-      this.storage.get(''+element.id).then((data: any) => {
-        console.log(data);
-        if (data) {
-          element.totalpercent = data.currentprogress;
-        }else{
-          element.totalpercent = 0;
-        }
-      });
+      // this.storage.get(''+element.id).then((data: any) => {
+      //   console.log(data);
+      //   if (data) {
+      //     element.totalperceznt = data.currentprogress;
+      //   }else{
+      //     element.totalpercent = 0;
+      //   }
+      // });
 
     });
 
@@ -969,42 +985,115 @@ shareWhatsapp(designData){
     return await modal.present();
  }
 
- designDownload(designData){
-   let dir_name = 'Wattmonk';
-   let path = '';
-   const url = designData.permitdesign.url;
-  const fileTransfer: FileTransferObject = this.transfer.create();
-  let vari = '';
-  
-  let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
-result.then((resp) => {
-  path = resp.toURL();
-  console.log(path); 
-  
-  fileTransfer.download(url, path + designData.permitdesign.hash + designData.permitdesign.ext).then((entry) => {
-    console.log('download complete: ' + entry.toURL());
-    this.utils.showSnackBar("Permit Design Downloaded Successfully");
-    this.localnotification.schedule({text:'Downloaded Successfully',data:entry.toURL() , foreground:true, vibrate:true })
-  //    this.clickSub = this.localnotification.on('click').subscribe(data => {
-  //      console.log(data)
-  //   //    this.fileopener.open(data,designData.permitdesign.ext)
-  //   //    .then(() => console.log('File is opened'))
-  //   //  .catch(e => console.log('Error opening file', e));
-  //   //  })
-  //    let star = this.file.getDirectory(resp,dir_name ,{create: true, exclusive: false});
-  //    star.then((response)=>{ vari = response.toURL(); this.fileopener.open(vari,designData.permitdesign.ext) });
-
-     
-    
-   
-  // }, (error) => {
-  //   // handle error
-  // });
- })
- 
- 
-})
+ makeDirectory(){
+  this.platform.ready().then(() => {
+    if (this.platform.is('ios')) {
+      this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+    } else if (this.platform.is('android')) {
+      this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+    } else {
+      this.storageDirectory = this.file.cacheDirectory;
+    }
+  });
 }
+
+designDownload(designData){
+
+  this.platform.ready().then(()=>{
+    this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+        result => console.log('Has permission?',result.hasPermission),
+        err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
+      );
+      this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
+        console.log(data);
+  
+        if(data==true){
+  
+        }else{
+          console.log('not found!');
+          throw { code: 1, message: 'NOT_FOUND_ERR' };
+        }
+        
+      }).catch(async err=>{
+        console.log('Error occurred while checking local files:');
+        console.log(err);
+        if (err.code == 1) {
+          const fileTransfer: FileTransferObject = this.transfer.create();
+          this.utils.showLoading('Downloading').then(()=>{
+            fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.prelimdesign.ext).then((entry) => {
+              this.utils.hideLoading().then(()=>{
+                console.log('download complete: ' + entry.toURL());
+                this.utils.showSnackBar("Permit Design Downloaded Successfully");
+                
+                // this.clickSub = this.localnotification.on('click').subscribe(data => {
+                //   console.log(data)
+                //   path;
+                // })
+                this.localnotification.schedule({text:'Permit Design Downloaded Successfully', foreground:true, vibrate:true })
+              }, (error) => {
+                // handle error
+                console.log(error);
+                
+              });
+              })
+          })
+        }
+      })
+    })
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    let dir_name = 'Wattmonk';
+    let path = '';
+    const url = designData.prelimdesign.url;
+   const fileTransfer: FileTransferObject = this.transfer.create();
+   
+   
+   let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
+  result.then((resp) => {
+   path = resp.toURL();
+   console.log(path); 
+   
+   fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
+     console.log('download complete: ' + entry.toURL());
+     this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+     
+     // this.clickSub = this.localnotification.on('click').subscribe(data => {
+     //   console.log(data)
+     //   path;
+     // })
+     this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
+   }, (error) => {
+     // handle error
+   });
+  })
+  
+  
+  }
 
 createChatGroup(design:DesginDataModel){
   var GUID = 'permit' + "_" + new Date().getTime();
@@ -1149,6 +1238,9 @@ directAssignToWattmonk(id:number){
           });
         })
 }
+trackdesign(index,design){
+  return design.id;
+}
 }
 
 export class DesginDataHelper {
@@ -1163,5 +1255,7 @@ export class DesginDataHelper {
   shareDesign(){
 
   }
+
+ 
 
 }

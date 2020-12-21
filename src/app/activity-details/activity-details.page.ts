@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { StorageService } from '../storage.service';
 import { Intercom } from 'ng-intercom';
+import { UtilitiesService } from '../utilities.service';
 
 
 
@@ -25,7 +26,8 @@ designId:any;
   constructor(private apiservice: ApiService, private route: ActivatedRoute,
     private storageService:StorageService,
     private navController: NavController,private datepipe:DatePipe,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private utilities:UtilitiesService
     ) {
     this.route.paramMap.subscribe( params =>{ this.designId=params.get('id');
   this.name=params.get('name')});
@@ -38,18 +40,26 @@ designId:any;
     this.userData = this.storageService.getUser();
     console.log(this.userData);
 
-    if(this.name=="design"){
-           this.apiservice.design_activityDetails(this.designId).subscribe(response =>{this.activity_details=response;
-  ;
-  
-     console.log("inside this",this.activity_details);});}
-    if(this.name=="survey"){
-      this.apiservice.survey_activityDetails(this.designId).subscribe(response =>{this.activity_details=response;
-        ;
-        
-           console.log("inside this",this.activity_details);});
-    }
+   this.activitiesList();
 
+  }
+
+  activitiesList(){
+    this.utilities.showLoading('Please wait...').then(()=>{
+    if(this.name=="design"){
+        this.apiservice.design_activityDetails(this.designId).subscribe(response =>{
+          this.utilities.hideLoading().then(()=>{
+            this.activity_details=response;
+          })
+       })}
+        if(this.name=="survey"){
+        this.apiservice.survey_activityDetails(this.designId).subscribe(response =>{
+          this.utilities.hideLoading().then(()=>{
+            this.activity_details=response;
+          })
+        });
+        }
+      })
   }
   
   goBack() {

@@ -32,6 +32,7 @@ export class NewdesignComponent implements OnInit {
   };
   overdue: any;
   unsubscribeMessage: Subscription;
+  noDesignsFound: string;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -88,13 +89,18 @@ console.log(this.currentDate.toISOString());
   }
 
   fetchPendingDesigns(event?, showLoader?: boolean) {
+    this.noDesignsFound= "";
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys("requesttype=prelim&status=designassigned&status=designinprocess").subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound= "No Design Found"
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -246,5 +252,9 @@ console.log(this.currentDate.toISOString());
       reviewdate.setHours(reviewdate.getHours() + 2);
       element.designremainingtime = this.utils.getRemainingTime(reviewdate.toString());
     });
+  }
+
+  trackdesign(index,design){
+    return design.id;
   }
 }

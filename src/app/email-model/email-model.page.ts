@@ -31,6 +31,8 @@ export class EmailModelPage implements OnInit {
   design : DesignModel;
   id:any;
   data:any;
+  emails:any='';
+  checkedEmailIds: boolean=false;
   
   constructor(
     private util:UtilitiesService,
@@ -85,9 +87,17 @@ export class EmailModelPage implements OnInit {
    // this.dialogRef.close(this.data);
  // }
  selectAll(event) {
-   debugger;
     const Checked = event.target.checked;
     this.TeamData.forEach(item => item.Checked = Checked);
+    console.log(this.TeamData.Checked);
+    
+  }
+
+  checkedMails(event){
+    const Checked = event.target.checked;
+    this.checkedEmailIds = event.target.checked;
+  
+    
   }
   
  SendMail(){

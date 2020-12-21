@@ -16,6 +16,7 @@ import { User } from '../model/user.model';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Intercom } from 'ng-intercom';
 import { intercomId } from '../contants';
+import { NetworkdetectService } from '../networkdetect.service';
 
 @Component({
   selector: 'app-permit-design-details',
@@ -57,6 +58,8 @@ export class PermitDesignDetailsPage implements OnInit {
   reviewIssuesForm: FormGroup;
   //reviewIssues= new FormControl('', Validators.required);
   browser: any;
+  deactivateNetworkSwitch: Subscription;
+  netSwitch: boolean;
   // user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
 
@@ -74,7 +77,8 @@ export class PermitDesignDetailsPage implements OnInit {
     private countdownservice: CountdownTimerService,
     private iab: InAppBrowser,
     private router:Router,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private network:NetworkdetectService
 
   ) {
     this.utilities.showHideIntercom(true); 
@@ -98,6 +102,12 @@ export class PermitDesignDetailsPage implements OnInit {
   }
 
   ionViewDidEnter(){
+    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      this.utilities.showHideIntercom(true);
+      console.log(this.netSwitch);
+
+    })
 
   }
 
@@ -234,10 +244,11 @@ export class PermitDesignDetailsPage implements OnInit {
 
 
   ngOnDestroy(): void {
-    this.utilities.showHideIntercom(false);
+    // this.utilities.showHideIntercom(false);
     this.dataSubscription.unsubscribe();
     if (this.refreshDataOnPreviousPage > 1) {
       this.utilities.setHomepagePermitRefresh(true);
+      this.deactivateNetworkSwitch.unsubscribe();
      }
   }
 

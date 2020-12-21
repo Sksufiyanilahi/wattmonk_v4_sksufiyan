@@ -54,6 +54,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   userData: User;
   netSwitch: any;
   reviewAssignedTo:any;
+  deactivateNetworkSwitch: Subscription;
 
   constructor(
     private utils: UtilitiesService,
@@ -99,7 +100,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   ionViewDidEnter() {
     this.network.networkDisconnect();
 this.network.networkConnect();
-    this.network.networkSwitch.subscribe(data=>{
+this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
       
@@ -293,6 +294,7 @@ this.network.networkConnect();
   }
 
   ngOnDestroy(): void {
+    this.deactivateNetworkSwitch.unsubscribe();
     this.surveyRefreshSubscription.unsubscribe();
   }
 

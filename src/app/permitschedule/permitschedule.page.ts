@@ -21,6 +21,7 @@ import { AddressModel } from '../model/address.model';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { NetworkdetectService } from '../networkdetect.service';
 
 
 // export interface DesignFormData {
@@ -110,6 +111,8 @@ export class PermitschedulePage implements OnInit {
   };
   architecturalFileUpload: boolean= false;
   attachmentFileUpload: boolean= false;
+  netSwitch: any;
+  deactivateNetworkSwitch: Subscription;
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -124,7 +127,8 @@ export class PermitschedulePage implements OnInit {
     private platform: Platform,
     private toastController: ToastController,
     private intercom:Intercom,
-    private cdr:ChangeDetectorRef
+    private cdr:ChangeDetectorRef,
+    private network:NetworkdetectService
     //private data: DesignFormData
     ) {
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
@@ -185,7 +189,12 @@ export class PermitschedulePage implements OnInit {
   // }
     }
   ngOnInit() {
-    this.utils.showHideIntercom(true);
+    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      this.utils.showHideIntercom(true);
+      console.log(this.netSwitch);
+
+    })
     this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
     this.requestLocationPermission();
@@ -211,6 +220,7 @@ export class PermitschedulePage implements OnInit {
 
       }
     });
+    
 
 
     //this.addressValue();
@@ -1282,6 +1292,7 @@ saveInverterModel() {
     ngOnDestroy(): void {
       this.subscription.unsubscribe();
       this.utils.setStaticAddress('');
+     this.deactivateNetworkSwitch.unsubscribe();
     }
 
     // segmentChanged(event: CustomEvent) {

@@ -31,6 +31,7 @@ export class PermitdesignoverviewPage implements OnInit {
   showSearchBar = false;
   unreadCount: any;
   userData: UserData
+  deactivateNetworkSwitch: Subscription;
   //showSearchBar = false;
   
 
@@ -77,6 +78,7 @@ export class PermitdesignoverviewPage implements OnInit {
  
 
   ngOnDestroy() {
+    this.deactivateNetworkSwitch.unsubscribe();
   }
 
   setupCometChatUser() {
@@ -174,8 +176,9 @@ searchbar(){
       }]);
     },2000)
   }
-  this.network.networkSwitch.subscribe(data=>{
+  this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     this.netSwitch = data;
+    this.utilities.showHideIntercom(false);
     console.log(this.netSwitch);
     
   })

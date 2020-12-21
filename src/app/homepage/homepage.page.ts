@@ -55,6 +55,7 @@ export class HomepagePage implements OnInit, OnDestroy {
   netSwitch: any;
   update_version: string;
   count: any;
+  deactivateNetworkSwitch: Subscription;
 
   constructor(
     private utilities: UtilitiesService,
@@ -126,6 +127,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.deactivateNetworkSwitch.unsubscribe();
   }
 
   initializeItems() {
@@ -429,7 +431,7 @@ export class HomepagePage implements OnInit, OnDestroy {
         }]);
       },2000)
     }
-    this.network.networkSwitch.subscribe(data=>{
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
 
