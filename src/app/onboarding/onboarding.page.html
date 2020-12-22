@@ -8,415 +8,6 @@
 </ion-header>
 
 <ion-content>
-  <!--<ion-card>
-    <ion-card-header  (click)="toggleAccordion()" style="font-size: medium; color: black;">1. Required Information*</ion-card-header>
-    <ion-card-content #sample style="padding-bottom: 0px;">
-     
-      
-      <ion-radio-group>
-        <ion-row><h4>Type of User</h4></ion-row>
-        <ion-row >
-          <ion-col size="6">
-        <ion-item >
-          <ion-label class="margin" style="font-size: small;">Individual</ion-label>
-          <ion-radio class="margin" slot="start" value="individual" (click)="companyOptions($event)"></ion-radio>
-        </ion-item>
-      </ion-col>
-      <ion-col size="6">
-        <ion-item >
-          <ion-label class="margin" style="font-size: small;">Company</ion-label>
-          <ion-radio class="margin" slot="start" value="company" (click)="companyOptions($event)"></ion-radio>
-        </ion-item>
-      </ion-col>
-      </ion-row>
-      </ion-radio-group>
-      <ion-row >
-        <ion-col>
-            <ion-item class="ion-no-padding">
-                <ion-label position="floating">Billing Address*</ion-label>
-                <ion-input type="text" class="form_input" autocapitalize="words"
-                            ></ion-input>
-            </ion-item>
-        </ion-col>
-    </ion-row>
-    <ion-row *ngIf="isCompany">
-      <ion-col>
-          <ion-item class="ion-no-padding">
-              <ion-label position="floating">Company Name*</ion-label>
-              <ion-input type="text" class="form_input" autocapitalize="words"
-                          ></ion-input>
-          </ion-item>
-      </ion-col>
-  </ion-row>
-  <ion-row *ngIf="isCompany">
-    <ion-col>
-        <ion-item class="ion-no-padding">
-            <ion-label position="floating">Lic No*</ion-label>
-            <ion-input type="text" class="form_input" autocapitalize="words"
-                        ></ion-input>
-        </ion-item>
-    </ion-col>
-</ion-row>
-<ion-radio-group>
-  <br>
-  <ion-row><h4>Payment</h4></ion-row>
-  <ion-row style="padding-bottom: 20px;">
-    <ion-col size="6">
-  <ion-item >
-    <ion-label class="margin" style="font-size: small;">Prepaid</ion-label>
-    <ion-radio class="margin" slot="start" value="prepaid" ></ion-radio>
-  </ion-item>
-</ion-col>
-<ion-col size="6">
-  <ion-item >
-    <ion-label class="margin" style="font-size: small;">Postpaid</ion-label>
-    <ion-radio class="margin" slot="start" value="postpaid" ></ion-radio>
-  </ion-item>
-</ion-col>
-</ion-row>
-</ion-radio-group>
-      
-      
-    </ion-card-content>
-  </ion-card>
-  <ion-card >
-    <ion-card-header  (click)="toggleAccordion1()" style="font-size: medium;color: black;">2. Notification</ion-card-header>
-    <ion-card-content #sample1 style="padding-bottom: 0px; height: 300px;" >
-      <ion-row>
-        <ion-col>
-     <ion-item>
-       <ion-label>Mails</ion-label>
-      <ion-toggle></ion-toggle>
-    </ion-item>
-  </ion-col>
-  <ion-col>
-    <ion-item>
-      <ion-label>Notifications</ion-label>
-     <ion-toggle></ion-toggle>
-   </ion-item>
-  </ion-col>
-  </ion-row>
-  <ion-item>
-    <ion-label>Request Generated</ion-label>
-   <ion-toggle></ion-toggle>
- </ion-item>
- <ion-item>
-  <ion-label>Request Acknowledgement</ion-label>
- <ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-  <ion-label>Request in Designing Stage</ion-label>
- <ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-  <ion-label>Design on Hold</ion-label>
- <ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-  <ion-label>Request Designing Completed</ion-label>
- <ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-  <ion-label>Request Moved to QC</ion-label>
- <ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-  <ion-label>Request Review Failed</ion-label>
- <ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-  <ion-label>Request Review Passed</ion-label>
- <ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-  <ion-label>Request Delivered</ion-label>
- <ion-toggle></ion-toggle>
-</ion-item>
-
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header  (click)="toggleAccordion2()" style="font-size: medium; color: black;">3. Build your own team</ion-card-header>
-    <ion-card-content #sample2 style="padding-bottom: 0px;">
-     
-      <ion-row><h4>Type of User</h4></ion-row>
-      <ion-radio-group>
-        <ion-row >
-          <ion-col size="6">
-        <ion-item >
-          <ion-label class="margin" style="font-size: small;">Individual</ion-label>
-          <ion-radio class="margin" slot="start" value="individual" ></ion-radio>
-        </ion-item>
-      </ion-col>
-      <ion-col size="6">
-        <ion-item >
-          <ion-label class="margin" style="font-size: small;">Company</ion-label>
-          <ion-radio class="margin" slot="start" value="company" ></ion-radio>
-        </ion-item>
-      </ion-col>
-      </ion-row>
-      </ion-radio-group>
-      
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header  (click)="toggleAccordion3()" style="font-size: medium; color: black;">4. Request for Design</ion-card-header>
-    <ion-card-content #sample3 style="padding-bottom: 0px;">
-     
-      <ion-row><h4>Add the first free design request</h4></ion-row>
-      <ion-radio-group>
-        <ion-row >
-          <ion-col size="6">
-        <ion-button style="height: 30px;" (click)="addPrelim()">Add Prelim</ion-button>
-      </ion-col>
-      <ion-col size="6">
-        <ion-button style="height: 30px;" (click)="addPermit()">Add Permit</ion-button>
-      </ion-col>
-      </ion-row>
-      </ion-radio-group>
-      
-    </ion-card-content>
-  </ion-card>-->
- <!-- <ion-slides #slidess><ion-slide>
-<ion-card class="ion-padding">
-  <ion-radio-group>
-    <ion-row><h4>Type of User</h4></ion-row>
-    <ion-row >
-      <ion-col size="6">
-    <ion-item lines="none">
-      <ion-label class="margin" style="font-size: small; width: 100px;">Individual</ion-label>
-      <ion-radio class="margin" style="margin-right: 10px;" slot="start" value="individual" (click)="companyOptions($event)"></ion-radio>
-    </ion-item>
-  </ion-col>
-  <ion-col size="6">
-    <ion-item lines="none">
-      <ion-label class="margin" style="font-size: small;">Company</ion-label>
-      <ion-radio class="margin" style="margin-right: 10px;" slot="start" value="company" (click)="companyOptions($event)"></ion-radio>
-    </ion-item>
-  </ion-col>
-  </ion-row>
-  </ion-radio-group>
-  <ion-row >
-    <ion-col>
-        <ion-item class="ion-no-padding">
-            <ion-label position="floating">Billing Address*</ion-label>
-            <ion-input type="text" class="form_input" autocapitalize="words"
-                        ></ion-input>
-        </ion-item>
-    </ion-col>
-</ion-row>
-<ion-row *ngIf="isCompany">
-  <ion-col>
-      <ion-item class="ion-no-padding">
-          <ion-label position="floating">Company Name*</ion-label>
-          <ion-input type="text" class="form_input" autocapitalize="words"
-                      ></ion-input>
-      </ion-item>
-  </ion-col>
-</ion-row>
-<ion-row *ngIf="isCompany">
-<ion-col>
-    <ion-item class="ion-no-padding">
-        <ion-label position="floating">Lic No*</ion-label>
-        <ion-input type="text" class="form_input" autocapitalize="words"
-                    ></ion-input>
-    </ion-item>
-</ion-col>
-</ion-row>
-<ion-radio-group>
-<br>
-<ion-row><h4>Payment</h4></ion-row>
-<ion-row style="padding-bottom: 20px;">
-<ion-col size="6">
-<ion-item lines="none">
-<ion-label class="margin" style="font-size: small;">Prepaid</ion-label>
-<ion-radio class="margin" style="margin-right: 10px;" slot="start" value="prepaid" ></ion-radio>
-</ion-item>
-</ion-col>
-<ion-col size="6">
-<ion-item lines="none">
-<ion-label class="margin" style="font-size: small;">Postpaid</ion-label>
-<ion-radio class="margin" style="margin-right: 10px;" slot="start" value="postpaid" ></ion-radio>
-</ion-item>
-</ion-col>
-</ion-row>
-</ion-radio-group>
-<ion-button class="action-button-color" fill="clear" style="float: right;" (click)="next()">Next</ion-button>
-</ion-card>
-</ion-slide>
-<ion-slide>
-  
-  </ion-slide>
-</ion-slides>-->
-<!-- <ion-card>
-  <ion-card-header  (click)="toggleAccordion()" style="font-size: medium; color: black;">1. Required Information*</ion-card-header>
-  <ion-card-content #sample style="padding-bottom: 0px;">
-   
-    
-    <ion-radio-group>
-      <ion-row><h4>Type of User</h4></ion-row>
-      <ion-row >
-        <ion-col size="6">
-      <ion-item lines="none">
-        <ion-label class="margin" style="font-size: small;">Individual</ion-label>
-        <ion-radio class="margin" slot="start" value="individual" (click)="companyOptions($event)"></ion-radio>
-      </ion-item>
-    </ion-col>
-    <ion-col size="6">
-      <ion-item lines="none">
-        <ion-label class="margin" style="font-size: small;">Company</ion-label>
-        <ion-radio class="margin" slot="start" value="company" (click)="companyOptions($event)"></ion-radio>
-      </ion-item>
-    </ion-col>
-    </ion-row>
-    </ion-radio-group>
-    <ion-row >
-      <ion-col>
-          <ion-item class="ion-no-padding">
-              <ion-label position="floating">Billing Address*</ion-label>
-              <ion-input type="text" class="form_input" autocapitalize="words"
-                          ></ion-input>
-          </ion-item>
-      </ion-col>
-  </ion-row>
-  <ion-row *ngIf="isCompany">
-    <ion-col>
-        <ion-item class="ion-no-padding">
-            <ion-label position="floating">Company Name*</ion-label>
-            <ion-input type="text" class="form_input" autocapitalize="words"
-                        ></ion-input>
-        </ion-item>
-    </ion-col>
-</ion-row>
-<ion-row *ngIf="isCompany">
-  <ion-col>
-      <ion-item class="ion-no-padding">
-          <ion-label position="floating">Lic No*</ion-label>
-          <ion-input type="text" class="form_input" autocapitalize="words"
-                      ></ion-input>
-      </ion-item>
-  </ion-col>
-</ion-row>
-<ion-radio-group>
-<br>
-<ion-row><h4>Payment</h4></ion-row>
-<ion-row style="padding-bottom: 20px;">
-  <ion-col size="6">
-<ion-item lines="none">
-  <ion-label class="margin" style="font-size: small;">Prepaid</ion-label>
-  <ion-radio class="margin" slot="start" value="prepaid" ></ion-radio>
-</ion-item>
-</ion-col>
-<ion-col size="6">
-<ion-item lines="none">
-  <ion-label class="margin" style="font-size: small;">Postpaid</ion-label>
-  <ion-radio class="margin" slot="start" value="postpaid" ></ion-radio>
-</ion-item>
-</ion-col>
-</ion-row>
-</ion-radio-group>
-    
-    
-  </ion-card-content>
-</ion-card>
-<ion-card >
-  <ion-card-header  (click)="toggleAccordion1()" style="font-size: medium;color: black;">2. Notification</ion-card-header>
-  <ion-card-content #sample1 style="padding-bottom: 0px; height: 300px;" >
-    <ion-row>
-      <ion-col size="6">
-   <ion-item>
-     <ion-label>Mails</ion-label>
-    <ion-toggle></ion-toggle>
-  </ion-item>
-</ion-col>
-<ion-col size="6">
-  <ion-item>
-    <ion-label>Notifications</ion-label>
-   <ion-toggle></ion-toggle>
- </ion-item>
-</ion-col>
-</ion-row>
-<ion-item>
-  <ion-label>Request Generated</ion-label>
- <ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-<ion-label>Request Acknowledgement</ion-label>
-<ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-<ion-label>Request in Designing Stage</ion-label>
-<ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-<ion-label>Design on Hold</ion-label>
-<ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-<ion-label>Request Designing Completed</ion-label>
-<ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-<ion-label>Request Moved to QC</ion-label>
-<ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-<ion-label>Request Review Failed</ion-label>
-<ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-<ion-label>Request Review Passed</ion-label>
-<ion-toggle></ion-toggle>
-</ion-item>
-<ion-item>
-<ion-label>Request Delivered</ion-label>
-<ion-toggle></ion-toggle>
-</ion-item>
-
-  </ion-card-content>
-</ion-card>
-<ion-card>
-  <ion-card-header  (click)="toggleAccordion2()" style="font-size: medium; color: black;">3. Build your own team</ion-card-header>
-  <ion-card-content #sample2 style="padding-bottom: 0px;">
-   
-    <ion-row><h4>Type of User</h4></ion-row>
-    <ion-radio-group>
-      <ion-row >
-        <ion-col size="6">
-      <ion-item >
-        <ion-label class="margin" style="font-size: small;">Individual</ion-label>
-        <ion-radio class="margin" slot="start" value="individual" ></ion-radio>
-      </ion-item>
-    </ion-col>
-    <ion-col size="6">
-      <ion-item >
-        <ion-label class="margin" style="font-size: small;">Company</ion-label>
-        <ion-radio class="margin" slot="start" value="company" ></ion-radio>
-      </ion-item>
-    </ion-col>
-    </ion-row>
-    </ion-radio-group>
-    
-  </ion-card-content>
-</ion-card>
-<ion-card>
-  <ion-card-header  (click)="toggleAccordion3()" style="font-size: medium; color: black;">4. Request for Design</ion-card-header>
-  <ion-card-content #sample3 style="padding-bottom: 0px;">
-   
-    <ion-row><h4>Add the first free design request</h4></ion-row>
-    <ion-radio-group>
-      <ion-row >
-        <ion-col size="6">
-      <ion-button style="height: 30px;" (click)="addPrelim()">Add Prelim</ion-button>
-    </ion-col>
-    <ion-col size="6">
-      <ion-button style="height: 30px;" (click)="addPermit()">Add Permit</ion-button>
-    </ion-col>
-    </ion-row>
-    </ion-radio-group>
-    
-  </ion-card-content>
-</ion-card> -->
 
 <mat-vertical-stepper labelPosition="bottom" #stepper>
   <mat-step [stepControl]="firstFormGroup">
@@ -424,7 +15,7 @@
       <ng-template matStepLabel>Required Information</ng-template>
      
         <mat-label>Type of User</mat-label>
-        <ion-radio-group>
+        <ion-radio-group formControlName="usertype" >
           <ion-row >
             <ion-col size="6">
           <ion-item lines="none">
@@ -434,8 +25,8 @@
         </ion-col>
         <ion-col size="6">
           <ion-item lines="none">
-            <ion-label class="margin" style="font-size: small;">Company</ion-label>
-            <ion-radio slot="start" value="company" (click)="companyOptions($event)"></ion-radio>
+            <ion-label class="margin"   style="font-size: small;">Company</ion-label>
+            <ion-radio slot="start"  value="company" (click)="companyOptions($event)"></ion-radio>
           </ion-item>
         </ion-col>
         </ion-row>
@@ -444,7 +35,7 @@
           <ion-col>
               <ion-item class="ion-no-padding">
                   <ion-label position="floating">Billing Address*</ion-label>
-                  <ion-input type="text" class="form_input" autocapitalize="words"
+                  <ion-input type="text" class="form_input" formControlName="billingaddress" autocapitalize="words"
                               ></ion-input>
               </ion-item>
           </ion-col>
@@ -453,12 +44,12 @@
         <ion-col>
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Company Name*</ion-label>
-                <ion-input type="text" class="form_input" autocapitalize="words"
+                <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words"
                             ></ion-input>
             </ion-item>
         </ion-col>
     </ion-row>
-    <ion-row *ngIf="isCompany">
+    <!-- <ion-row *ngIf="isCompany">
       <ion-col>
           <ion-item class="ion-no-padding">
               <ion-label position="floating">Lic No*</ion-label>
@@ -466,27 +57,27 @@
                           ></ion-input>
           </ion-item>
       </ion-col>
-  </ion-row>
-  <ion-radio-group>
-    <br>
-    <mat-label>Payment</mat-label>
-    <ion-row style="padding-bottom: 20px;">
+  </ion-row> -->
+  <br>
+  <mat-label>Payment</mat-label>
+  <ion-radio-group formControlName="ispaymentmodeprepay">
+    <ion-row >
       <ion-col size="6">
     <ion-item lines="none">
       <ion-label class="margin" style="font-size: small;">Prepaid</ion-label>
-      <ion-radio slot="start" value="prepaid" ></ion-radio>
+      <ion-radio slot="start" [value]=true></ion-radio>
     </ion-item>
   </ion-col>
   <ion-col size="6">
     <ion-item lines="none">
-      <ion-label class="margin" style="font-size: small;">Postpaid</ion-label>
-      <ion-radio slot="start" value="postpaid" ></ion-radio>
+      <ion-label class="margin"   style="font-size: small;">Postpaid</ion-label>
+      <ion-radio slot="start"  [value]=false ></ion-radio>
     </ion-item>
   </ion-col>
   </ion-row>
   </ion-radio-group>
       
-      <div>
+      <div (click)="firstStepper()">
         <button class="action-button-color" mat-button matStepperNext style="float: right; ">Next</button>
       </div>
     </form>
@@ -608,7 +199,7 @@
   </ion-col>
   </ion-row>
     <div>
-      <button class="action-button-color" mat-button style="float: right;">Save</button>
+      <!-- <button class="action-button-color" mat-button style="float: right;">Save</button> -->
       <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button>
       
     </div>

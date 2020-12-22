@@ -19,19 +19,10 @@ export class OnboardingPage implements OnInit {
   secondFormGroup:FormGroup;
   @ViewChild("slidess", {static:true}) slides:any;
 
-  // accordionExpanded = false;
-  // accordionExpanded1 = true;
-  // accordionExpanded2 = true;
-  // accordionExpanded3 = true;
   isCompany:boolean = false;
   radioValues:any;
   teamMember=[];
   userId: string;
-
-  // @ViewChild("sample", {static:true}) cardContent: any;
-  // @ViewChild("sample1", {static:true}) cardContent1: any;
-  // @ViewChild("sample2", {static:true}) cardContent2: any;
-  // @ViewChild("sample3", {static:true}) cardContent3: any;
 
   constructor(public renderer:Renderer,
               private router:Router,
@@ -39,85 +30,51 @@ export class OnboardingPage implements OnInit {
               private storage:StorageService,
               private apiService: ApiService) {
                 this.firstFormGroup = this.formBuilder.group({
-                  firstCtrl : new FormControl('')
+                  usertype : new FormControl(null),
+                  billingaddress:new FormControl(null),
+                  company:new FormControl(null),
+                  ispaymentmodeprepay:new FormControl(null)
                 })
                 this.secondFormGroup = this.formBuilder.group({
                   secondCtrl: new FormControl('')
                 })
                }
 
-  //isCompany:boolean = false;
-  // radioValues:any;
-  //constructor(){}
-
   ngOnInit() {
     this.userId= this.storage.getUserID();
     console.log(this.userId);
-    
-//  console.log(this.cardContent.el)
-//  this.toggle();
+      this.onboardingData();
+  
+
+
 this.buffer= this.value + 0.25;
     console.log(this.buffer);
     this.fetchTeamData();
 
   }
 
-  // toggle(){
-  //   this.toggleAccordion();
-  //   this.toggleAccordion1();
-  //   this.toggleAccordion2();
-  //   this.toggleAccordion3();
-  // }
-  // toggleAccordion(){
-    
-  //   if(this.accordionExpanded){
-  //     this.renderer.setElementStyle(this.cardContent.el, "max-height", "500px");
+  onboardingData(){
+
+    this.apiService.getUserData(this.userId).subscribe((res:any)=>{
+      console.log(res);
       
-  //     console.log(this.accordionExpanded)
-  //   }
-  //   else{
-  //     this.renderer.setElementStyle(this.cardContent.el, "max-height", "0px");
-  //     console.log(this.accordionExpanded)
-  //   }
-  //   this.accordionExpanded = !this.accordionExpanded;
+      if(res.usertype=='company'){
+        this.isCompany=true;
+      }else{
+        this.isCompany=false;
+        }
+      this.firstFormGroup.patchValue({
+        usertype:res.usertype,
+        billingaddress:res.billingaddress,
+        company:res.company,
+        ispaymentmodeprepay:res.ispaymentmodeprepay
+  
+      })
+    })
+  }
 
-  // }
-
-  // toggleAccordion1(){
-    
-  //   if(this.accordionExpanded1){
-  //     this.renderer.setElementStyle(this.cardContent1.el, "max-height", "0px");
-  //   }
-  //   else{
-  //     this.renderer.setElementStyle(this.cardContent1.el, "max-height", "500px");
-  //   }
-  //   this.accordionExpanded1 = !this.accordionExpanded1;
-
-  // }
-  // toggleAccordion2(){
-    
-  //   if(this.accordionExpanded2){
-  //     this.renderer.setElementStyle(this.cardContent2.el, "max-height", "0px");
-  //   }
-  //   else{
-  //     this.renderer.setElementStyle(this.cardContent2.el, "max-height", "500px");
-  //   }
-  //   this.accordionExpanded2 = !this.accordionExpanded2;
-
-  // }
-  // toggleAccordion3(){
-    
-  //   if(this.accordionExpanded3){
-  //     this.renderer.setElementStyle(this.cardContent3.el, "max-height", "0px");
-  //   }
-  //   else{
-  //     this.renderer.setElementStyle(this.cardContent3.el, "max-height", "500px");
-  //   }
-  //   this.accordionExpanded3 = !this.accordionExpanded3;
-
-  // }
   companyOptions(e){
-    console.log(e.target.value);
+    console.log(e);
     this.radioValues = e.target.value;
     console.log(this.radioValues);
     if(this.radioValues === 'company'){
@@ -125,6 +82,9 @@ this.buffer= this.value + 0.25;
     }
     else{
       this.isCompany = false;
+      this.firstFormGroup.patchValue({
+        company:''
+      })
     }
   }
 
@@ -143,9 +103,46 @@ this.buffer= this.value + 0.25;
     })
   }
 
+  firstStepper(){
+    let dataToBeUpdated={
+      usertype:this.radioValues,
+      billingaddress:'',
+      company:'',
+      logo:'',
+      ispaymentmodeprepay:''
+
+    }
+
+    console.log(this.firstFormGroup.value);
+    
+    this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res)=>{
+      console.log('updated',res);
+      
+    })
+  }
+
+  secondStepper(){
+    let dataToBeUpdated={
+      designcompletednotification:'',
+      designdeliverednotification:'',
+      designmovedtoqcnotification:'',
+      designonholdnotification:'',
+      designreviewfailednotification:'',
+      designreviewpassednotification:'',
+      requestgeneratednotification:'',
+      requestacknowledgementnotification:'',
+      requestindesigningnotification:''
+
+    }
+    this.apiService.updateUser(this.userId,dataToBeUpdated).subscribe(()=>{
+      console.log('updated');
+      
+    })
+  }
+
   updateProcess(){
     let dataToBeUpdated={
-      usertype:'',
+      usertype:this.radioValues,
       billingaddress:'',
       company:'',
       logo:'',
