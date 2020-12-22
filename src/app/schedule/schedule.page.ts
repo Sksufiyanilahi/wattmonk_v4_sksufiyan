@@ -36,11 +36,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   gpsActive = false;
   private subscription: Subscription;
   userdata:any;
-<<<<<<< HEAD
-  netSwitch: any;
-=======
   netSwitch: boolean;
->>>>>>> c82c141f247877db223679a2e89c3d3f5f64a5ab
   deactivateNetworkSwitch: Subscription;
 
   constructor(
