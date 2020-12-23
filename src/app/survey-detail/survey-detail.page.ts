@@ -35,6 +35,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   drawerState = DrawerState.Bottom;
   date: Date;
   user:User;
+  reviewcomments:any
   rescheduleForm: FormGroup;
   assigned = false;
   assigneeForm: FormGroup;
@@ -42,6 +43,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   refreshDataOnPreviousPage = 0;
   segments:any='SiteDetils';
   electricals:any='MSB';
+
+  reviewenddatetime:number;
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -310,4 +313,183 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     return await modal.present();
   }
 
-}
+  reportDesignReviewFailure(){
+    console.log("fail");
+    //console.log("Value is" + this.reviewIssuesForm.value);
+        let cdate = Date.now();
+        this.reviewenddatetime = cdate;
+       const postData = {
+        status: "reviewfailed",
+       reviewissues : this.reviewcomments,
+        reviewendtime : this.reviewenddatetime,
+        
+      };
+
+    
+      //console.log("this is" + this.survey.reviewstarttime);
+
+     // console.log("this is"+ this.reviewstartdatetime);
+      this.apiService.updateSurveyForm(
+        postData, 
+        this.survey.id
+         
+        )
+        .subscribe(
+          response => {
+            this.utilities.showSnackBar("Survey status has been updated successfully.");
+            this.utilities.sethomepageSurveyRefresh(true);
+            if(this.user.role.type=='qcinspector'){
+              this.navController.navigateRoot(['analystoverview/survey']);}
+              else{
+                this.navController.navigateRoot(['homepage/survey']);
+              }
+            //this.data.triggerEditEvent = false;
+            //this.dialogRef.close(this.data);
+          },
+          error => {
+            this.utilities.errorSnackBar(
+              
+              "Error"
+            );
+          }
+        );
+    }
+  
+
+  reportDesignReviewSuccess(){
+   // this.countdownservice.stopTimer();
+    let cdate = Date.now();
+    this.reviewenddatetime = cdate;
+  const postData = {
+    status: "reviewpassed",
+    //reviewissues : this.reviewIssuesForm.get('reviewIssues').value,
+    //reviewstarttime : this.reviewstartdatetime,
+    reviewissues : this.reviewcomments,
+    reviewendtime : this.reviewenddatetime
+  };
+  this.apiService
+  .updateSurveyForm(
+    postData,
+    this.survey.id
+    
+  )
+  .subscribe(
+    response => {
+      this.utilities.showSnackBar("Survey status has been updated successfully.");
+      this.utilities.sethomepageSurveyRefresh(true);
+      if(this.user.role.type=='qcinspector'){
+        this.navController.navigateRoot(['analystoverview/survey']);}
+        else{
+          this.navController.navigateRoot(['homepage/survey']);
+        }
+     // this.triggerEditEvent = false;
+      //this.dialogRef.close(this.data);
+    },
+    error => {
+      this.utilities.errorSnackBar(
+        "Error"
+      );
+    }
+  );
+​
+ 
+      
+    
+
+  }
+
+
+  
+  async openreviewPassed(value){
+    var checkValue = value;
+    console.log(checkValue)
+    if(checkValue == 'pass'){
+  const alert = await this.alertController.create({
+      cssClass: 'alertClass',
+      header: 'Confirm!',
+      message:'Would you like to  Add Comments!!',
+      inputs:
+       [ {name:'comment',
+       id:'comment',
+          type:'textarea',
+        placeholder:'Enter Comment'}
+        ] ,
+      buttons: [
+        {
+          text: 'Passed',
+        cssClass: 'secondary',
+          handler: (alertData) => {
+            console.log('Confirm Cancel: blah');
+            this.reviewcomments=alertData.comment;
+            this.reportDesignReviewSuccess();
+           // if(checkValue == 'pass'){
+           // this.reportDesignReviewSuccess();
+           // }
+           // else if(checkValue == 'fail')
+           // {
+           //   if(this.reviewcomments !== "")
+              // {
+              // this.reportDesignReviewFailure();
+              // }
+              // else{
+              //   this.utilities.errorSnackBar("Please Enter Issues");
+              // }
+            }
+          }
+      ]
+    });
+    await alert.present();
+  }
+  else if(checkValue == 'fail'){
+    const alert = await this.alertController.create({
+      cssClass: 'alertClass',
+      header: 'Confirm!',
+      message:'Would you like to  Add Comments!!',
+      inputs:
+       [ {name:'comment',
+       id:'comment',
+          type:'textarea',
+        placeholder:'Enter Comment'}
+        ] ,
+      buttons: [
+        {
+          text: 'Failed',
+        cssClass: 'secondary',
+          handler: (alertData) => {
+            console.log('Confirm Cancel: blah');
+            this.reviewcomments=alertData.comment;
+            if(this.reviewcomments !== ""){
+            this.reportDesignReviewFailure();
+            }
+            else{
+              this.utilities.errorSnackBar("Please Enter Issues");
+            }
+            // if(checkValue == 'pass'){
+            // this.reportDesignReviewSuccess();
+            // }
+            // else if(checkValue == 'fail')
+            // {
+            //   if(this.reviewcomments !== "")
+            //   {
+            //   this.reportDesignReviewFailure();
+            //   }
+            //   else{
+            //     this.utilities.errorSnackBar("Please Enter Issues");
+            //   }
+            // }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+  }
+
+    
+
+
+
+  }
+
+
+

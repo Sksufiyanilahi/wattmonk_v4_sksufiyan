@@ -20,6 +20,14 @@
                         <ion-input type="text" class="form_input" autocapitalize="words"
                                    formControlName="name"></ion-input>
                     </ion-item>
+                    <div style="height: 5px;">
+                        <div *ngIf="surveyForm.get('name').hasError('pattern') && surveyForm.get('name').dirty">
+                            <span class="error">{{nameError}}</span>
+                        </div>
+                        <div *ngIf="surveyForm.get('name').value === '' && surveyForm.get('name').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                    </div>
                 </ion-col>
             </ion-row>
             <ion-row>
@@ -48,6 +56,14 @@
                         <ion-input formControlName="phonenumber" type="number"
                                    class="form_input"></ion-input>
                     </ion-item>
+                    <div style="height: 5px;">
+                        <div *ngIf="surveyForm.get('phonenumber').hasError('pattern') && surveyForm.get('phonenumber').dirty">
+                            <span class="error">{{phoneError}}</span>
+                        </div>
+                    <!--    <div *ngIf="surveyForm.get('phone').value === '' && surveyForm.get('phone').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>-->
+                    </div>
                 </ion-col>
             </ion-row>
 

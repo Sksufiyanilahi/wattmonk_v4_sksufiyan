@@ -25,8 +25,8 @@
                       <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>
                      <ion-item  (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">
                       <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Permit</ion-item>
-                     <!-- <ion-item *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors'" (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
-                      <ion-img src="/assets/images/surveyblack.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Survey</ion-item> -->
+                     <ion-item *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors'" (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
+                      <ion-img src="/assets/images/surveyblack.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Survey</ion-item>
                      <ion-item [routerLink]="['/groups']" routerDirection="forward">
                       <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Messages</ion-item>
                       <!-- <ion-item  (click)="SwitchMenuAccordingtoRoles('statistics')" *ngIf="userData?.role.type!='clientsuperadmin'" routerDirection="forward">

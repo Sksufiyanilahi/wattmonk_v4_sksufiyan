@@ -288,17 +288,7 @@
                  </ion-grid>
                 </div>
 
-                <ion-footer *ngIf="(user.role.type=='qcinspector'&& survey && survey.status=='reviewassigned')||(survey && surveystatus=='reviewassigned' && survey.reviewassignedto.id==user.id)" class="ion-no-border white-bg">
-                    <ion-grid>
-                        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
-                            <ion-col size="auto">
-                                <ion-button class="action-button-color" fill="clear" style="float: left;" (click)="reportDesignReviewFailure()">Failed</ion-button>
-                                <ion-button class="action-button-color" fill="clear" style="float: right ;" (click)="designReviewSuccess()">Passed</ion-button>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
-                
-                </ion-footer>
+               
                 <!-- <ion-content [fullscreen]="true" class="ion-padding"> -->
               
 
@@ -568,6 +558,17 @@
 
     </ion-grid> -->
 </ion-content>
+<ion-footer *ngIf="(user.role.type=='qcinspector'&& survey && survey.status=='reviewassigned')||(survey && surveystatus=='reviewassigned' && survey.reviewassignedto.id==user.id)" class="ion-no-border white-bg">
+    <ion-grid>
+        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+            <ion-col size="auto">
+                <ion-button class="action-button-color" fill="clear" style="float: left;" (click)="openreviewPassed('fail')">Failed</ion-button>
+                <ion-button class="action-button-color" fill="clear" style="float: right ;" (click)="openreviewPassed('pass')">Passed</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-footer>
 
 <!-- <ion-footer *ngIf="!assigned && survey" class="ion-no-border white-bg">
     <ion-grid>

@@ -34,16 +34,20 @@
                   </ion-col>
                   <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
                       <div class="ion-no-padding custom-card" style="height: 100%;">
-                          <p class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]"
+                          <!-- <p class="customer-name" [routerLink]="['/survey-detail/',surveyData.id]" -->
+                            <p class="customer-name"
                           routerDirection="forward">{{surveyData.name}}
-                          <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',surveyData.id]" routerDirection="forward">
+                          <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                             {{surveyData.datetime | date: 'hh:mm a'}}
                         </span>
                         <span *ngIf="surveyData.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                           pending
                       </span>
-                        <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span>
-                </p>
+                        <span class="chipdetail" style="background-color: rgb(246, 77, 10);" [routerLink]="['/survey-detail/',surveyData.id]" *ngIf="surveyData.lateby > 0">Overdue</span>
+                        <span fill="clear" background-border="clear" [routerLink]="['/','activity',surveyData.id,'survey']" class="imagebutton"  size="small"  ><ion-icon src="/assets/images/activitylist.svg" ></ion-icon></span>
+                        <span class="chipdetail" style="background-color: rgb(109, 187, 26) ;" *ngIf="surveyData.status == 'reviewpassed'" [routerLink]="['/survey-detail/',surveyData.id]">Review Passed</span>
+                    <span class="chipdetail" style="background-color: rgb(246, 77, 10) ;" *ngIf="surveyData.status == 'reviewfailed'" [routerLink]="['/survey-detail/',surveyData.id]">Review Failed</span>
+                    </p>
                 <p style="margin:0px">
 
                   <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"

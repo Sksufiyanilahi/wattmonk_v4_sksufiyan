@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { NavController, Platform } from '@ionic/angular';
 import { AssigneeModel } from '../../model/assignee.model';
 import { UtilitiesService } from '../../utilities.service';
-import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../../model/constants';
+import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED, INVALID_NAME_MESSAGE, INVALID_PHONE_NUMBER } from '../../model/constants';
 import { ApiService } from '../../api.service';
 import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
@@ -22,13 +22,16 @@ export class SurveyComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private addressSubscription: Subscription;
 
-
+  nameError = INVALID_NAME_MESSAGE;
   emailError = INVALID_EMAIL_MESSAGE;
+  phoneError = INVALID_PHONE_NUMBER;
   fieldRequired = FIELD_REQUIRED;
 
   surveyId = 0;
   private survey: SurveyDataModel;
   address: string;
+
+  
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,12 +44,12 @@ export class SurveyComponent implements OnInit, OnDestroy {
   ) {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
-
+    const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.surveyForm = this.formBuilder.group({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
-      phonenumber: new FormControl('', [Validators.required]),
+      phonenumber: new FormControl('', [Validators.required,  Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
       jobtype: new FormControl('', [Validators.required]),
       datetime: new FormControl(new Date().getTime(), [Validators.required]),
       comments: new FormControl(''),
