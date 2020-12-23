@@ -12,6 +12,10 @@ import { StorageService } from '../storage.service';
 })
 export class OnboardingPage implements OnInit {
 
+  notification:any={
+
+  }
+
   buffer:any;
   value=0.25;
 
@@ -23,6 +27,7 @@ export class OnboardingPage implements OnInit {
   radioValues:any;
   teamMember=[];
   userId: string;
+ 
 
   constructor(public renderer:Renderer,
               private router:Router,
@@ -36,7 +41,15 @@ export class OnboardingPage implements OnInit {
                   ispaymentmodeprepay:new FormControl(null)
                 })
                 this.secondFormGroup = this.formBuilder.group({
-                  secondCtrl: new FormControl('')
+                    designcompletednotification:new FormControl(false),
+                    designdeliverednotification:new FormControl(false),
+                    designmovedtoqcnotification:new FormControl(false),
+                    designonholdnotification:new FormControl(false),
+                    designreviewfailednotification:new FormControl(false),
+                    designreviewpassednotification:new FormControl(false),
+                    requestgeneratednotification:new FormControl(false),
+                    requestacknowledgementnotification:new FormControl(false),
+                    requestindesigningnotification:new FormControl(false)
                 })
                }
 
@@ -68,8 +81,19 @@ this.buffer= this.value + 0.25;
         billingaddress:res.billingaddress,
         company:res.company,
         ispaymentmodeprepay:res.ispaymentmodeprepay
-  
       })
+      this.secondFormGroup.patchValue({
+        designcompletednotification:res.designcompletednotification,
+        designdeliverednotification:res.designdeliverednotification,
+        designmovedtoqcnotification:res.designmovedtoqcnotification,
+        designonholdnotification:res.designonholdnotification,
+        designreviewfailednotification:res.designreviewfailednotification,
+        designreviewpassednotification:res.designreviewpassednotification,
+        requestgeneratednotification:res.requestgeneratednotification,
+        requestacknowledgementnotification:res.requestacknowledgementnotification,
+        requestindesigningnotification:res.requestindesigningnotification
+      })
+    
     })
   }
 
@@ -104,16 +128,6 @@ this.buffer= this.value + 0.25;
   }
 
   firstStepper(){
-    let dataToBeUpdated={
-      usertype:this.radioValues,
-      billingaddress:'',
-      company:'',
-      logo:'',
-      ispaymentmodeprepay:''
-
-    }
-
-    console.log(this.firstFormGroup.value);
     
     this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res)=>{
       console.log('updated',res);
@@ -121,45 +135,61 @@ this.buffer= this.value + 0.25;
     })
   }
 
-  secondStepper(){
-    let dataToBeUpdated={
-      designcompletednotification:'',
-      designdeliverednotification:'',
-      designmovedtoqcnotification:'',
-      designonholdnotification:'',
-      designreviewfailednotification:'',
-      designreviewpassednotification:'',
-      requestgeneratednotification:'',
-      requestacknowledgementnotification:'',
-      requestindesigningnotification:''
 
+  onChange(event,value){
+   console.log(event);
+   
+     if(value=='requestgenerated'){
+      this.secondFormGroup.patchValue({
+        requestgeneratednotification:event.detail.checked
+      })
     }
-    this.apiService.updateUser(this.userId,dataToBeUpdated).subscribe(()=>{
-      console.log('updated');
-      
-    })
+    else if(value=='requestacknoledged'){
+      this.secondFormGroup.patchValue({
+        requestacknowledgementnotification:event.detail.checked
+      })
+    }
+    else if(value=='requestdesign'){
+      this.secondFormGroup.patchValue({
+        requestindesigningnotification:event.detail.checked
+      })
+    }
+    else if(value=='onhold'){
+      this.secondFormGroup.patchValue({
+        designonholdnotification:event.detail.checked
+      })
+    }
+    else if(value=='completedesign'){
+      this.secondFormGroup.patchValue({
+        designcompletednotification:event.detail.checked
+      })
+    }
+    else if(value=='qc'){
+      this.secondFormGroup.patchValue({
+        designmovedtoqcnotification:event.detail.checked
+      })
+    }
+    else if(value=='reviewfailed'){
+      this.secondFormGroup.patchValue({
+        designreviewfailednotification:event.detail.checked
+      })
+    }
+    else if(value=='reviewpassed'){
+      this.secondFormGroup.patchValue({
+        designreviewpassednotification:event.detail.checked
+      })
+    }
+    else if(value=='delivered'){
+      this.secondFormGroup.patchValue({
+        designdeliverednotification:event.detail.checked
+      })
+    }
   }
 
-  updateProcess(){
-    let dataToBeUpdated={
-      usertype:this.radioValues,
-      billingaddress:'',
-      company:'',
-      logo:'',
-      designcompletednotification:'',
-      designdeliverednotification:'',
-      designmovedtoqcnotification:'',
-      designonholdnotification:'',
-      designreviewfailednotification:'',
-      designreviewpassednotification:'',
-      requestgeneratednotification:'',
-      requestacknowledgementnotification:'',
-      requestindesigningnotification:'',
-      ispaymentmodeprepay:''
-
-    }
-    this.apiService.updateUser(this.userId,dataToBeUpdated).subscribe(()=>{
-      console.log('updated');
+  secondStepper(){
+    console.log(this.secondFormGroup.value);
+    this.apiService.updateUser(this.userId,this.secondFormGroup.value).subscribe((res)=>{
+      console.log('updated',res);
       
     })
   }

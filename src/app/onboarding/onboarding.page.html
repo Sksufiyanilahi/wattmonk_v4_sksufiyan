@@ -85,53 +85,53 @@
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Notification</ng-template>
-     <ion-item>
+     <!-- <ion-item>
        <ion-label>Mails</ion-label>
-      <ion-toggle></ion-toggle>
+      <ion-toggle formControlName="mails" (ionChange)="onChange($event,'mail')"></ion-toggle>
     </ion-item>
     <ion-item>
       <ion-label>Notifications</ion-label>
-     <ion-toggle></ion-toggle>
-   </ion-item>
+     <ion-toggle formControlName="" (ionChange)="onChange($event,'notification')"></ion-toggle>
+   </ion-item> -->
   <ion-item>
     <ion-label>Request Generated</ion-label>
-   <ion-toggle></ion-toggle>
+   <ion-toggle formControlName="requestgeneratednotification" (ionChange)="onChange($event,'requestgenerated')"  ></ion-toggle>
  </ion-item>
  <ion-item>
   <ion-label>Request Acknowledgement</ion-label>
- <ion-toggle></ion-toggle>
+ <ion-toggle formControlName="requestacknowledgementnotification" (ionChange)="onChange($event,'requestacknoledged')"></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label>Request in Designing Stage</ion-label>
- <ion-toggle></ion-toggle>
+ <ion-toggle formControlName="requestindesigningnotification" (ionChange)="onChange($event,'requestdesign')" ></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label>Design on Hold</ion-label>
- <ion-toggle></ion-toggle>
+ <ion-toggle formControlName="designonholdnotification" (ionChange)="onChange($event,'onhold')" ></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label>Request Designing Completed</ion-label>
- <ion-toggle></ion-toggle>
+ <ion-toggle formControlName="designcompletednotification" (ionChange)="onChange($event,'completedesign')"></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label>Request Moved to QC</ion-label>
- <ion-toggle></ion-toggle>
+ <ion-toggle formControlName="designmovedtoqcnotification" (ionChange)="onChange($event,'qc')"></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label>Request Review Failed</ion-label>
- <ion-toggle></ion-toggle>
+ <ion-toggle formControlName="designreviewfailednotification" (ionChange)="onChange($event,'reviewfailed')" ></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label>Request Review Passed</ion-label>
- <ion-toggle></ion-toggle>
+ <ion-toggle formControlName="designreviewpassednotification" (ionChange)="onChange($event,'reviewpassed')" ></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label>Request Delivered</ion-label>
- <ion-toggle></ion-toggle>
+ <ion-toggle formControlName="designdeliverednotification" (ionChange)="onChange($event,'delivered')"></ion-toggle>
 </ion-item>
 
       <div>
-        <button class="action-button-color" mat-button matStepperNext style="float: right;">Next</button>
+        <button (click)="secondStepper()" class="action-button-color" mat-button matStepperNext style="float: right;">Next</button>
         <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button>
         
       </div>
