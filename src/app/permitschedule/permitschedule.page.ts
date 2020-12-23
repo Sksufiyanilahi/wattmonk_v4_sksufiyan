@@ -480,11 +480,8 @@ export class PermitschedulePage implements OnInit {
   }
 
   goBack() {
-    if(this.designId==null){
-    this.navController.pop();}
-    else{
-      this.router.navigate(['/permit-design-details/',this.designId])
-    }
+   this.navController.pop();
+   
   }
 
   eventcheck(e){
