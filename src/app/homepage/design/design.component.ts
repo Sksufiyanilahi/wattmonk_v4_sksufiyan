@@ -734,6 +734,7 @@ this.network.networkConnect();
 
 
   openDesigners(id: number,designData) {
+    this.listOfAssignees=[];
  this.utils.showHideIntercom(true);
     console.log("this is",designData);
     this.designerData = designData;
@@ -777,6 +778,7 @@ this.network.networkConnect();
   }
 
   openAnalysts(id: number,designData) {
+    this.listOfAssignees=[];
     this.utils.showHideIntercom(true);
     console.log("this is",designData);
     this.designerData = designData;

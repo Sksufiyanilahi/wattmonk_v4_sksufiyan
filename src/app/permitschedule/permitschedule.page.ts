@@ -188,13 +188,17 @@ export class PermitschedulePage implements OnInit {
   //   this.currentTab = splittedUrl[2];
   // }
     }
-  ngOnInit() {
-    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
-      this.netSwitch = data;
-      this.utils.showHideIntercom(true);
-      console.log(this.netSwitch);
 
-    })
+    ionViewDidEnter(){
+      this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
+        this.netSwitch = data;
+        console.log(this.netSwitch);
+        this.utils.showHideIntercom(true);
+      })
+    }
+
+
+  ngOnInit() {
     this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
     this.requestLocationPermission();

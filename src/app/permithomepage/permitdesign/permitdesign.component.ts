@@ -673,6 +673,7 @@ this.deactivateNetworkSwitch.unsubscribe();
 
 
   openDesigners(id: number,designData) {
+    this.listOfAssignees=[];
     this.intercom.update({
       "hide_default_launcher": true
     });
@@ -718,6 +719,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   openAnalysts(id: number,designData) {
+    this.listOfAssignees=[];
     this.intercom.update({
       "hide_default_launcher": true
     });
