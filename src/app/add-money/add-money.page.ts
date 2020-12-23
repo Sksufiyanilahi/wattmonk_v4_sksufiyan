@@ -244,7 +244,8 @@ this.apiService.recharges(rechargeData).subscribe(res=>{
       isoutsourced: "true",
       status: "outsourced",
       designacceptancestarttime: designacceptancestarttime,
-      paymenttype : "direct"
+      paymenttype : "direct",
+      couponid:this.utils.getCouponId().value
     };
     
       this.apiService.updateDesignForm(postData,this.designId).subscribe(value=>{
