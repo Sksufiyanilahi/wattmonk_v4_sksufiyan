@@ -3,15 +3,18 @@
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull down to refresh" refreshingSpinner="lines"></ion-refresher-content>
   </ion-refresher>
   <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
-    <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index">
-        <ion-col size="12" class="ion-margin-top">
+    <!-- <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index"> -->
+        <ion-virtual-scroll [items]="listOfDesignsHelper">
+            <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
+                <ion-row *virtualItem="let item;let i = index">
+        <!-- <ion-col size="12" class="ion-margin-top">
                 <span class="ion-padding" *ngIf="today === item.date">
                     Today
                   </span>
             <span class="ion-padding" *ngIf="today !== item.date">
                       {{item.date | date: 'dd MMM yyyy'}}
                 </span>
-        </ion-col>
+        </ion-col> -->
         <ion-col *ngFor="let designData of item.listOfDesigns;let i = index ;trackBy: trackdesign" size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name">{{designData.name}}
@@ -60,6 +63,7 @@
             </div>
         </ion-col>
     </ion-row>
+    </ion-virtual-scroll>
     <ion-row>
         <ion-col size="12" style="height: 100px;">
         </ion-col>
