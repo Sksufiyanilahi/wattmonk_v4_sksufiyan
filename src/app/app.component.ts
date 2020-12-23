@@ -107,15 +107,15 @@ export class AppComponent {
 
   }
 
-  intercomModule(){
-    this.intercom.boot({
-      app_id: intercomId,
-      // Supports all optional configuration.
-      widget: {
-        "activator": "#intercom"
-      }
-    });
-  }
+  // intercomModule(){
+  //   this.intercom.boot({
+  //     app_id: intercomId,
+  //     // Supports all optional configuration.
+  //     widget: {
+  //       "activator": "#intercom"
+  //     }
+  //   });
+  // }
 
 
   ngOnInit() {

@@ -69,13 +69,13 @@ export class DesignoverviewPage implements OnInit {
   }
 
   intercomModule(){
-    this.intercom.boot({
-      app_id: intercomId,
-      // Supports all optional configuration.
-      widget: {
-        "activator": "#intercom"
-      }
-    });
+    // this.intercom.boot({
+    //   app_id: intercomId,
+    //   // Supports all optional configuration.
+    //   widget: {
+    //     "activator": "#intercom"
+    //   }
+    // });
   }
  
 
