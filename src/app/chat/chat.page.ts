@@ -29,7 +29,7 @@ export class ChatPage implements OnInit {
   public messageText: string;
   loggedInUserData: any;
 
-  @ViewChild('content',{static:false}) content: any;
+  @ViewChild('content') content: any;
   userData:any;
   constructor(private router: Router, private route: ActivatedRoute, private keyboard: Keyboard, private renderer2: Renderer2,private navController:NavController,private intercom:Intercom,private storageService:StorageService) {
 

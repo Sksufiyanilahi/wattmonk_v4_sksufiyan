@@ -123,12 +123,12 @@ export interface PENDING_SHOT {
 })
 export class SurveyprocessPage implements OnInit {
 
-  @ViewChild('screen', { static: false }) screen: ElementRef;
-  @ViewChild('slides', { static: false }) slider: IonSlides;
-  @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
-  @ViewChild('roofmaterial', { static: false }) roofmaterial: AutoCompleteComponent;
-  @ViewChild('mainscroll', { static: false }) mainscroll: any;
-  @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
+  @ViewChild('screen') screen: ElementRef;
+  @ViewChild('slides') slider: IonSlides;
+  @ViewChild('utility') utility: AutoCompleteComponent;
+  @ViewChild('roofmaterial') roofmaterial: AutoCompleteComponent;
+  @ViewChild('mainscroll') mainscroll: any;
+  @ViewChild('submenuscroll') submenuscroll: any;
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
