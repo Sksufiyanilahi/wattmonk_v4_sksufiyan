@@ -48,9 +48,9 @@
                       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/design-details/',designData.id]">Review Passed</span>
                       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'" [routerLink]="['/design-details/',designData.id]">Delivered</span>
                       <span class="chipdetail" style="background-color: rgb(109, 187, 26);border-radius: 50%;padding: 4px 5px;" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
-                      <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/design-details/',designData.id]">Unassigned</span>
-                      <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/design-details/',designData.id]">Design Assigned</span>
-                      <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/design-details/',designData.id]">In Review</span>
+                      <span class="chipdetail" style="background-color: #1289A7;" *ngIf="designData.status == 'created'" [routerLink]="['/design-details/',designData.id]">Unassigned</span>
+                      <span class="chipdetail" style="background-color: #1289A7;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/design-details/',designData.id]">Design Assigned</span>
+                      <span class="chipdetail" style="background-color: #1289A7;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/design-details/',designData.id]">In Review</span>
                       <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;" [routerLink]="['/design-details/',designData.id]">Waiting for acceptance</span>
                       <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>
                       <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"

@@ -28,7 +28,7 @@
     </ion-list>
 </ion-content>
 
-<ion-footer no-border *ngIf="userData.role.type !=='designer' && userData.role.type !=='qc'">
+<ion-footer no-border *ngIf="userData.role.type !=='designer' && userData.role.type !=='qcinspector'">
     <ion-toolbar>
       <div class="bar bar-footer bar-balanced chat-box-container">
             <ion-input class="chat-editor-box" placeholder="Type Your Message Here.." type="text" [(ngModel)]="messageText" (ionBlur)="checkBlur()"

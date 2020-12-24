@@ -3,7 +3,7 @@
     <ion-col size="1">
       <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
           <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img></ion-button></ion-col>
-          <ion-col  size="9" style="text-align:center;font-size: x-large;position: absolute;;">Search</ion-col>
+          <ion-col  size="9" style="text-align:center;font-size: x-large;position: absolute;">Search</ion-col>
      
  <ion-button style="float: right;" fill="clear" ><ion-icon name="filter-outline"></ion-icon>&nbsp;<ion-select value="both" (ionChange)="searchfor($event)" style="padding-left: 0px;text-transform: none;" interface="popover"  [(ngModel)]="Type">
    <ion-select-option  #d name="Designs" value="design" >{{'Designs' | lowercase}}</ion-select-option>
@@ -15,7 +15,7 @@
 </ion-header>
 
 <ion-content>
-<ion-searchbar class="searchStyle" debounce="0" placeholder="Search Here" (ionClear)="showHome()" (ionChange)="searchfor($event)" [(ngModel)]="searchElement"></ion-searchbar>
+<ion-searchbar class="searchStyle" debounce="0" placeholder="Search Here" (ionChange)="searchfor($event)" [(ngModel)]="searchElement"></ion-searchbar>
 <ion-refresher slot="fixed" (ionRefresh)="refreshData($event)">    
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -32,8 +32,8 @@
     <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'designcompleted'"  [routerLink]="['/design-details/',search?.id]">Completed</span>
     <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'reviewfailed'"  [routerLink]="['/design-details/',search?.id]">Review Failed</span>
     <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search?.status == 'created'"  [routerLink]="['/design-details/',search?.id]">Unassigned</span>
-    <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="search?.status == 'designassigned'"  [routerLink]="['/design-details/',search?.id]">Design Assigned</span>
-    <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="search?.status == 'reviewassigned'"  [routerLink]="['/design-details/',search?.id]">In Review</span>
+    <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search?.status == 'designassigned'"  [routerLink]="['/design-details/',search?.id]">Design Assigned</span>
+    <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search?.status == 'reviewassigned'"  [routerLink]="['/design-details/',search?.id]">In Review</span>
     <span class="chipdetail" *ngIf="search?.isoutsourced == 'true'" style="background-color: rgb(246, 104, 10);"  [routerLink]="['/design-details/',search?.id]">Outsourced</span>
     <span *ngIf="search?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;"  [routerLink]="['/design-details/',search?.id]">
      pending
@@ -97,8 +97,8 @@
       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'delivered'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Delivered</span>
       <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="search?.status == 'designcompleted'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Completed</span>
       <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search?.status == 'created'"  [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Unassigned</span>
-      <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="search?.status == 'designassigned'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Design Assigned</span>
-      <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="search?.status == 'reviewassigned'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">In Review</span>
+      <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search?.status == 'designassigned'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Design Assigned</span>
+      <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search?.status == 'reviewassigned'" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">In Review</span>
       <span class="chipdetail" *ngIf="search?.isoutsourced == 'true'" style="background-color: #95AFC0;" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward" >Waiting for acceptance</span>
       <span *ngIf="search?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">
        pending
