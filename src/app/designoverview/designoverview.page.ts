@@ -16,6 +16,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
 import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
 import { Intercom } from 'ng-intercom';
+import { Appversion } from '../appversion';
 
 
 @Component({
@@ -24,7 +25,7 @@ import { Intercom } from 'ng-intercom';
   styleUrls: ['./designoverview.page.scss'],
 })
 export class DesignoverviewPage implements OnInit {
-  private version = environment.version;
+  private version = Appversion.version;
   private subscription: Subscription;
   update_version: string;
   netSwitch:any;

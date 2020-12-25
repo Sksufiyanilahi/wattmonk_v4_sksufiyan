@@ -28,6 +28,7 @@ import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
+import {Appversion} from '../appversion';
 
 
 @Component({
@@ -36,7 +37,7 @@ import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
   styleUrls: ['./permithomepage.page.scss'],
 })
 export class PermithomepagePage implements OnInit {
-  private version = environment.version;
+  version= Appversion.version;
 
   private subscription: Subscription;
 

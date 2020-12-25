@@ -577,7 +577,7 @@ console.log(this.indexOfArcFiles);
 console.log(this.architecturalData);
 
 
-this.architecturalData.splice(this.architecturalData.indexOf(i), 1);
+this.architecturalData.splice(i, 1);
 
 }
 
@@ -994,10 +994,10 @@ ioniViewDidEnter(){
   // }
 
   removeArc(i) {
-    this.archFiles.splice(this.archFiles.indexOf(i), 1);
+    this.archFiles.splice(i, 1);
   }
   removePrelim(i) {
-    this.prelimFiles.splice(this.prelimFiles.indexOf(i), 1);
+    this.prelimFiles.splice(i, 1);
   }
   sendtowattmonk(){
     var designacceptancestarttime = new Date();
