@@ -282,7 +282,7 @@
                   <input type="file" #f class="form_input"  (change)="files($event)" style="margin-top: 12px;" formControlName="architecturaldesign" multiple>
                   <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
               </ion-item>
-              <div *ngFor="let file of archFiles;let i of index">
+              <div *ngFor="let file of archFiles;let i = index">
                   <ion-item>
                       <ion-col size="11">
                           {{file.name}}
@@ -304,7 +304,7 @@
                        <!-- <ion-item> -->
                        <!-- <ion-label position="floating">architectural design*</ion-label> -->
                               <ng-container *ngIf="design && design.architecturaldesign !==null">
-                                  <div *ngFor="let arc of design.architecturaldesign;let i of index">
+                                  <div *ngFor="let arc of design.architecturaldesign;let i = index">
                                      <ion-item>
                                          <ion-col size="11"> {{arc.name}}{{arc.ext}}</ion-col>
                                          <ion-col size="1" (click)="remove(arc,i)">x</ion-col>
@@ -329,7 +329,7 @@
                               <input #d type="file"  class="form_input"  (change)="permitfiles($event)" style="margin-top: 12px;" formArrayName="attachments" multiple>
                               <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
                           </ion-item>
-                          <div *ngFor="let file of permitFiles;let i of index">
+                          <div *ngFor="let file of permitFiles;let i = index">
                               <ion-item>
                                   <ion-col size="11">
                                       {{file.name}}
@@ -351,10 +351,10 @@
                                    <!-- <ion-item> -->
                                    <!-- <ion-label position="floating">architectural design*</ion-label> -->
                                           <ng-container *ngIf="design && design.attachments !==null">
-                                              <div *ngFor="let arc of design.attachments">
+                                              <div *ngFor="let arc of design.attachments;let i=index">
                                                  <ion-item>
                                                      <ion-col size="11"> {{arc.name}}{{arc.ext}}</ion-col>
-                                                     <ion-col size="1" (click)="remove(arc.id)">x</ion-col>
+                                                     <ion-col size="1" (click)="remove(arc.id,i)">x</ion-col>
                                                     
                 
                                                  </ion-item>

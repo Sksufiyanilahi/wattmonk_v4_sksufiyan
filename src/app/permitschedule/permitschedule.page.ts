@@ -1191,10 +1191,10 @@ saveInverterModel() {
     }
 
     removeArc(i) {
-      this.archFiles.splice(this.archFiles.indexOf(i), 1);
+      this.archFiles.splice(i, 1);
     }
     removePermit(i) {
-      this.permitFiles.splice(this.permitFiles.indexOf(i), 1);
+      this.permitFiles.splice(i, 1);
     }
 
     remove(arc,i){
@@ -1223,7 +1223,7 @@ saveInverterModel() {
     console.log(this.architecturalData);
     console.log(i);
     
-    this.architecturalData.splice(this.architecturalData.indexOf(i), 1);
+    this.architecturalData.splice(i, 1);
 
     }
 

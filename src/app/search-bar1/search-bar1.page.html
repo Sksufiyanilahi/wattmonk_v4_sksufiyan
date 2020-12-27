@@ -15,7 +15,7 @@
 </ion-header>
 
 <ion-content>
-<ion-searchbar class="searchStyle" debounce="0" placeholder="Search Here" (ionClear)="showHome()" (ionChange)="searchfor($event)" [(ngModel)]="searchElement"></ion-searchbar>
+<ion-searchbar class="searchStyle" debounce="0" placeholder="Search Here" (ionChange)="searchfor($event)" [(ngModel)]="searchElement"></ion-searchbar>
 <ion-refresher slot="fixed" (ionRefresh)="refreshData($event)">    
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
