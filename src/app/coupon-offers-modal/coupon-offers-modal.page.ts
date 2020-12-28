@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { UtilitiesService } from '../utilities.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { StorageService } from '../storage.service';
@@ -17,13 +17,16 @@ export class CouponOffersModalPage implements OnInit {
   selectedCoupon:any;
   selecteduserId=null;
   user:any
+ error:any
+  requesttype:any
 
   constructor(
     private apiservice:ApiService,
     private modalctrl:ModalController,
     private utils:UtilitiesService,
     private formBuilder : FormBuilder,
-    private storageService:StorageService
+    private storageService:StorageService,
+    private nav:NavParams
   ) { 
     this.couponForm = this.formBuilder.group({
       couponInput : new FormControl('')
@@ -31,7 +34,8 @@ export class CouponOffersModalPage implements OnInit {
   }
 
   ngOnInit() {
-    this.apiservice.getCoupons().subscribe((res)=>{
+    this.requesttype= this.nav.get('request');
+    this.apiservice.getCoupons(this.requesttype).subscribe((res)=>{
       this.Coupons=res;
       console.log(this.Coupons);
     },
@@ -77,16 +81,22 @@ export class CouponOffersModalPage implements OnInit {
       this.utils.showLoading("Applying").then(()=>{
         const postData={
           couponcode:this.couponForm.get('couponInput').value,
-          userid:404
+          userid:404,
+          requesttype:this.requesttype
       }
       this.apiservice.sendCoupon(postData).subscribe((res)=>{
         console.log(res);
+        
         this.selectedCoupon=res;
+        if(this.selectedCoupon.error){
+        this.error=this.selectedCoupon.message;
+        }
+        else{
         this.modalctrl.dismiss({
           'dismissed':true,
           data:this.selectedCoupon
         })
-      },
+      }},
      (error)=>{this.utils.errorSnackBar("Invalid Coupon Code")})
         
         this.utils.hideLoading();

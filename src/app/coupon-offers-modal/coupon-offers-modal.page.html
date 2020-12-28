@@ -7,13 +7,15 @@
     <ion-col><ion-button fill="clear" size="small" class="ion-no-padding" style="float:right" (click)="cancel()">
       <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
   </ion-button></ion-col>
+  
   </ion-row>
   
   <div style="height:17%;width: 100%;background-color:gainsboro;align-self: center;"><br>
     <form [formGroup]="couponForm">
 <ion-row><ion-col size='12'><ion-input type="text" class="input_class" autocapitalize="words"
   style="font-size: small;" placeholder="Have a promocode?Enter here" formControlName="couponInput"></ion-input>
-</ion-col></ion-row></form></div>
+</ion-col>
+<ion-row *ngIf="error!==null"><span class="error">{{error}}</span></ion-row></ion-row></form></div>
 
 
 <ion-row style="margin-top: 10px;margin-left:5%">

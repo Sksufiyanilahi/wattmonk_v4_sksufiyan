@@ -142,7 +142,7 @@ confirm(){
       outsourcedto: 232,
       isoutsourced: "true",
       status: "outsourced",
-      couponid:this.coupondata.id,
+      couponid:this.utils.getCouponId().value,
       designacceptancestarttime: designacceptancestarttime
     };
     this.utils.showLoading("Assigning").then(()=>
@@ -211,7 +211,7 @@ confirm(){
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime,
-          couponid:this.coupondata.id,
+          couponid:this.utils.getCouponId().value,
           paymenttype:null
         };
         this.utils.showLoading("Assigning").then(()=>
@@ -250,7 +250,7 @@ confirm(){
      const alert = await this.alertController.create({
       cssClass: 'alertClass',
        header: 'Congratulations!',
-     message:'<div><img src="/assets/images/tick.png"> <span>you got discount of $'+ this.coupondata.code+'</span></div>',
+     message:'<div><img src="/assets/images/tick.png"> <span>you got discount of $'+ this.code_discount+'</span></div>',
       // inputs:
       //  [ {name:'comment',
       //  id:'comment',
@@ -311,7 +311,8 @@ confirm(){
     console.log(this.code_discount)
 }
 else if(data.discounttype=='amount'){
-  this.code_discount=price-data.amount;
+  this.code_discount=data.amount;
+  console.log(this.code_discount)
    this.discountAmount();
 }
   }
@@ -321,7 +322,7 @@ else if(data.discounttype=='amount'){
       component: CouponOffersModalPage,
       cssClass: 'email-modal-css',
       componentProps: {
-     
+     request:this.design
       },
       backdropDismiss:false
     });
