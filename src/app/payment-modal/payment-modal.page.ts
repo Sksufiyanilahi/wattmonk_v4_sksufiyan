@@ -248,7 +248,7 @@ confirm(){
   async Congratulations(){
 
      const alert = await this.alertController.create({
-      cssClass: 'alertClass',
+      cssClass: 'CogratulationalertClass',
        header: 'Congratulations!',
      message:'<div><img src="/assets/images/tick.png"> <span>you got discount of $'+ this.code_discount+'</span></div>',
       // inputs:
