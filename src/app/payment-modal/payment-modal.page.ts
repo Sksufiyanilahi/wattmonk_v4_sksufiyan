@@ -309,11 +309,13 @@ confirm(){
     this.code_discount=(data.amount/100)*price;
   this.discountAmount();
     console.log(this.code_discount)
+    this.Congratulations();
 }
 else if(data.discounttype=='amount'){
   this.code_discount=data.amount;
   console.log(this.code_discount)
    this.discountAmount();
+   this.Congratulations();
 }
   }
 
@@ -334,7 +336,7 @@ else if(data.discounttype=='amount'){
       this.coupondata=data.data.data;
       console.log(this.coupondata);
       this.utils.setCouponId(this.coupondata.id);
-      this.Congratulations();
+      
       this.codeDiscountCalculation(this.coupondata,this.settingValue);
       }
   });
