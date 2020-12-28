@@ -47,7 +47,7 @@ export class SchedulePage implements OnInit, OnDestroy {
     private platform: Platform,
     private storage: StorageService,
     private utilities: UtilitiesService,
-    private router: Router,
+    public router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
     private intercom:Intercom,

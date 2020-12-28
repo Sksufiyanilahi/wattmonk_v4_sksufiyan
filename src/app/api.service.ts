@@ -416,5 +416,10 @@ export class ApiService {
       return this.http.get(BaseUrl + "/users/" + id,{headers: this.headers})
     }
     
-    
+    getCoupons(data){
+      return this.http.get(BaseUrl + "/getCoupons?userid="+ this.userId+"&requesttype="+data,{headers: this.headers});
+    }
+    sendCoupon(data:any){
+      return this.http.post(BaseUrl+"/getCoupon", data,{headers:this.headers})
+    }
 }

@@ -267,7 +267,7 @@
 
                                 <input type="file" *ngIf="imageName.length==0"  (change)="permitfiles($event)" formControlName="permitdesign" style="width: 76px;"/>
                                  {{imageName}}&nbsp;
-                                 <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 && user.role.type !='qcinspector'" (click)="remove()"></ion-icon>
+                                 <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 " (click)="remove()"></ion-icon>
                               <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
                               <!-- <ion-icon name="cloud-upload-outline" *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'permitdesign')" style="font-size: 20px;margin-left: 10px;color:green"></ion-icon> -->
 
