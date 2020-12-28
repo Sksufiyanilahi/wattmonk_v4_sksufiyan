@@ -21,6 +21,8 @@
               </ion-menu-toggle>-->
               <ion-list id="inbox-list">
               <ion-menu-toggle auto-hide="false">
+                <ion-item [routerLink]="['/onboarding']" routerDirection="forward">
+                  <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item>
                     <ion-item  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">
                       <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>
                      <ion-item  (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">
@@ -31,6 +33,7 @@
                       <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Messages</ion-item>
                       <!-- <ion-item  (click)="SwitchMenuAccordingtoRoles('statistics')" *ngIf="userData?.role.type!='clientsuperadmin'" routerDirection="forward">
                        <ion-img src="/assets/images/stats.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Statistics</ion-item> -->
+                       
               </ion-menu-toggle>
           </ion-list>
       </ion-content>

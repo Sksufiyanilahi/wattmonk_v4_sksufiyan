@@ -73,6 +73,10 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
 ngOnInit() {
+ 
+  this.network.networkDisconnect();
+this.network.networkConnect();
+ 
    this.userdata = this.storage.getUser();
     this.requestLocationPermission();
     if (this.tabsDisabled) {

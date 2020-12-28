@@ -411,6 +411,10 @@ export class ApiService {
     sendPermitEmails(data:any){
       return this.http.post(BaseUrl+"/designs/send-permit-design", data,{headers:this.headers})
     }
+
+    getUserData(id){
+      return this.http.get(BaseUrl + "/users/" + id,{headers: this.headers})
+    }
     
     getCoupons(data){
       return this.http.get(BaseUrl + "/getCoupons?userid="+ this.userId+"&requesttype="+data,{headers: this.headers});
