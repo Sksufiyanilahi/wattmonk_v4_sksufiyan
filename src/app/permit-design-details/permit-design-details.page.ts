@@ -39,8 +39,8 @@ export class PermitDesignDetailsPage implements OnInit {
   reviewenddatetime:number;
   reviewstartdatetime : number;
   reviewIssues='';
-  isSelfUpdate: false;
-  ispermitUpdate:false;
+  isSelfUpdate: boolean;
+  ispermitUpdate:boolean;
   enableDisable:boolean=false;
   exceedfileSize:any;
   permitFileSize:any;

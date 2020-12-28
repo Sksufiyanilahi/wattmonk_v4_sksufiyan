@@ -1,0 +1,26 @@
+.clickEnableCls{
+    pointer-events: visible !important;
+ }
+ .input_class{
+    background-color:white;
+    font-size:initial;
+    border-width: 2px 4px;
+  // border-radius: 15px;
+  align-self: center;
+ }
+
+
+ .selected {
+    border: dotted;
+    border-color:limegreen;
+    background: aliceblue;
+  }
+  
+  .normal {
+    border: dotted;
+    border-color: lightgrey;
+  }
+  .error {
+    color: rgb(223, 62, 62);
+    font-size: 11px;
+  }

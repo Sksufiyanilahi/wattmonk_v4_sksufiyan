@@ -480,7 +480,8 @@ export class PermitschedulePage implements OnInit {
   }
 
   goBack() {
-    this.navController.pop();
+   this.navController.pop();
+   
   }
 
   eventcheck(e){
@@ -495,20 +496,20 @@ export class PermitschedulePage implements OnInit {
   this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
     console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-      // this.desginForm.get('address').setValue('124/345');
-      // this.desginForm.get('latitude').setValue('24.553333');
-      // this.desginForm.get('longitude').setValue('80.5555555555');
-      // this.desginForm.get('country').setValue('india');
-      // this.desginForm.get('city').setValue('Lucknow');
-      // this.desginForm.get('state').setValue('UP');
-      // this.desginForm.get('postalcode').setValue(3232343);
-     this.desginForm.get('address').setValue(address.address);
-       this.desginForm.get('latitude').setValue(address.lat);
-       this.desginForm.get('longitude').setValue(address.long);
-       this.desginForm.get('country').setValue(address.country);
-     this.desginForm.get('city').setValue(address.city);
-       this.desginForm.get('state').setValue(address.state);
-       this.desginForm.get('postalcode').setValue(address.postalcode);
+      this.desginForm.get('address').setValue('124/345');
+      this.desginForm.get('latitude').setValue('24.553333');
+      this.desginForm.get('longitude').setValue('80.5555555555');
+      this.desginForm.get('country').setValue('india');
+      this.desginForm.get('city').setValue('Lucknow');
+      this.desginForm.get('state').setValue('UP');
+      this.desginForm.get('postalcode').setValue(3232343);
+    //  this.desginForm.get('address').setValue(address.address);
+    //    this.desginForm.get('latitude').setValue(address.lat);
+    //    this.desginForm.get('longitude').setValue(address.long);
+    //    this.desginForm.get('country').setValue(address.country);
+    //  this.desginForm.get('city').setValue(address.city);
+    //    this.desginForm.get('state').setValue(address.state);
+    //    this.desginForm.get('postalcode').setValue(address.postalcode);
   }, (error) => {
     this.desginForm.get('address').setValue('');
     this.desginForm.get('latitude').setValue('');
@@ -1191,10 +1192,10 @@ saveInverterModel() {
     }
 
     removeArc(i) {
-      this.archFiles.splice(this.archFiles.indexOf(i), 1);
+      this.archFiles.splice(i, 1);
     }
     removePermit(i) {
-      this.permitFiles.splice(this.permitFiles.indexOf(i), 1);
+      this.permitFiles.splice(i, 1);
     }
 
     remove(arc,i){
@@ -1223,9 +1224,24 @@ saveInverterModel() {
     console.log(this.architecturalData);
     console.log(i);
     
-    this.architecturalData.splice(this.architecturalData.indexOf(i), 1);
+    this.architecturalData.splice(i, 1);
 
     }
+
+    removeattachment(attachment,i){
+    
+      this.indexOfArcFiles.push( attachment.id);
+  
+      this.isArcFileDelete=true;
+      console.log(this.isArcFileDelete);
+      console.log(this.indexOfArcFiles);
+      console.log(this.attachmentData);
+      console.log(i);
+      
+      this.attachmentData.splice(i, 1);
+    }
+
+
 
     deleteArcFile(index){
      
@@ -1270,7 +1286,8 @@ saveInverterModel() {
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime,
-          paymenttype:this.utils.getPaymentMode().value
+          paymenttype:this.utils.getPaymentMode().value,
+          couponid:this.utils.getCouponId().value
         };
 
         this.utils.showLoading('Assigning').then(()=>{

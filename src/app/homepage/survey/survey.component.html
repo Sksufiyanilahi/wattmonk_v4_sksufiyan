@@ -82,20 +82,20 @@
                         >Accept</span> -->
                         <span style="float: right;">
                             <ng-container *ngIf="userData.role.type !=='clientsuperadmin'">
-                            <ion-col size="8"  *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)">
+                            <ion-col size="8"  *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id,surveyData)">
                                Accept
                             </ion-col>
-                            <ion-col size="4" *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)">
+                            <ion-col size="4" *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id,surveyData)">
                             Decline
                             </ion-col></ng-container>
                         </span>
-                        <span *ngIf="surveyData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)"
+                        <span *ngIf="surveyData.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id,surveyData)"
                         >Reassign</span>
                         </ion-col>
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
                         *ngIf="segments=='status=surveyassigned&status=surveyinprocess'" style="margin-bottom: 5px;">
                 <span class="ion-text-end action-button-color z-100"
-                (click)="openSurveyors(surveyData.id)">Reassign</span>
+                (click)="openSurveyors(surveyData.id,surveyData)">Reassign</span>
             </ion-col>
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
                                     *ngIf="segments=='status=surveycompleted'" style="margin-bottom: 5px;">

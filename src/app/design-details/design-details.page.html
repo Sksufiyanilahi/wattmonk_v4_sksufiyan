@@ -20,7 +20,7 @@
                     </ion-row>
                 </ion-grid>
             </ion-col>
-            <ion-col size="1" *ngIf="design.createdby.id == user.id && (design.status == 'created' || design.status == 'requestdeclined')" (click)="hideIntercom()">
+            <ion-col size="1" *ngIf="design.createdby.id == user.id && (design.status == 'created' || design.status == 'requestdeclined')">
                 <ion-button fill="clear" size="small" class="ion-no-padding"
                     [routerLink]="['/schedule/design/',designId]"  routerDirection="forward" [disabled]=enableDisable>
                     <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
@@ -255,7 +255,7 @@
 
                                   <input type="file" *ngIf="imageName.length==0"  (change)="prelimfiles($event)" formControlName="prelimdesign" style="width: 76px;"/>
                                    {{imageName}}&nbsp;
-                                   <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 && user.role.type !='qcinspector'" (click)="remove()"></ion-icon>
+                                   <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 " (click)="remove()"></ion-icon>
                                 <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
                                 <!-- <ion-icon name="cloud-upload-outline" *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')" style="font-size: 20px;margin-left: 10px;color:green"></ion-icon> -->
                             
