@@ -8,6 +8,7 @@ import { StatisticsDetailsPageModule } from '../statistics-details/statistics-de
 import { ResendpagedialogPageModule } from '../resendpagedialog/resendpagedialog.module';
 import { IntercomModule } from 'ng-intercom';
 import { intercomId } from '../contants';
+import { CouponOffersModalPageModule } from '../coupon-offers-modal/coupon-offers-modal.module';
 
 
 @NgModule({
@@ -15,8 +16,9 @@ import { intercomId } from '../contants';
   imports: [
     CommonModule,
     EmailModelPageModule,
+    CouponOffersModalPageModule,
     DeclinepagePageModule,
-    PaymentModalPageModule,
+    
     StatisticsDetailsPageModule,
     ResendpagedialogPageModule,
     IntercomModule.forRoot({
@@ -27,9 +29,10 @@ import { intercomId } from '../contants';
   exports:[
     EmailModelPageModule,
     DeclinepagePageModule ,
-    PaymentModalPageModule,
+   
     StatisticsDetailsPageModule,
-    ResendpagedialogPageModule
+    ResendpagedialogPageModule,
+    CouponOffersModalPageModule
   ]
 })
 export class SharedModule { }

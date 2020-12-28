@@ -204,6 +204,10 @@ const routes: Routes = [
     path: 'statsoverviewdetails',
     loadChildren: () => import('./statsoverviewdetails/statsoverviewdetails.module').then( m => m.StatsoverviewdetailsPageModule)
   },
+  {
+    path: 'coupon-offers-modal',
+    loadChildren: () => import('./coupon-offers-modal/coupon-offers-modal.module').then( m => m.CouponOffersModalPageModule)
+  },
 
 
 

@@ -109,7 +109,7 @@
               <ion-col size="6">
                 <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                   <mat-label>module make</mat-label>
-                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto" formControlName="modulemake" required>
+                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto" autocomplete="off" formControlName="modulemake" required>
                  
                   <mat-autocomplete #auto="matAutocomplete">
                     <mat-option *ngFor="let modulemake of filteredModuleMakes | async" [value]="modulemake.name"
@@ -125,7 +125,7 @@
               <ion-col size="6">
                 <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                   <mat-label>module model</mat-label>
-                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto1" formControlName="modulemodel" required>
+                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto1" autocomplete="off" formControlName="modulemodel" required>
                   
                   <mat-autocomplete #auto1="matAutocomplete">
                     <mat-option class="font" *ngFor="let modulemodel of filteredModuleModels | async" [value]="modulemodel.name"
@@ -144,7 +144,7 @@
               <ion-col size="6">
                 <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                   <mat-label>inverter make</mat-label>
-                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto2" formControlName="invertermake" required>
+                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto2" autocomplete="off" formControlName="invertermake" required>
                  
                   <mat-autocomplete #auto2="matAutocomplete">
                     <mat-option class="font" *ngFor="let invertermake of filteredInverterMakes | async" [value]="invertermake.name"
@@ -161,7 +161,7 @@
               <ion-col size="6">
                 <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                   <mat-label>inverter model</mat-label>
-                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto3" formControlName="invertermodel" required>
+                  <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto3" autocomplete="off" formControlName="invertermodel" required>
                  
                   <mat-autocomplete #auto3="matAutocomplete">
                     <mat-option class="font" *ngFor="let invertermodel of filteredInverterModels | async"
