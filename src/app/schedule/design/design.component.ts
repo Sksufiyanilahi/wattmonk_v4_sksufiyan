@@ -581,6 +581,19 @@ this.architecturalData.splice(i, 1);
 
 }
 
+removeattachment(attachment,i){
+    
+  this.indexOfArcFiles.push( attachment.id);
+
+  this.isArcFileDelete=true;
+  console.log(this.isArcFileDelete);
+  console.log(this.indexOfArcFiles);
+  console.log(this.attachmentData);
+  console.log(i);
+  
+  this.attachmentData.splice(i, 1);
+}
+
 deleteArcFile(index){
      
       

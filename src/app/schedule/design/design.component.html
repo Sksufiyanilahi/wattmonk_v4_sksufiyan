@@ -282,7 +282,7 @@
                                                 <div *ngFor="let arc of design.attachments;let i=index">
                                                    <ion-item>
                                                        <ion-col size="11"> {{arc.name}}{{arc.ext}}</ion-col>
-                                                       <ion-col size="1" (click)="remove(arc.id,i)">x</ion-col>
+                                                       <ion-col size="1" (click)="removeattachment(arc,i)">x</ion-col>
                                                       
                   
                                                    </ion-item>
