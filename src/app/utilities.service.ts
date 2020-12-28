@@ -40,6 +40,7 @@ export class UtilitiesService {
   uploadfile = new BehaviorSubject<string>('');
   manualInput= new BehaviorSubject<string>('');
   paymentMode = new BehaviorSubject<string>('');
+  couponid = new BehaviorSubject<number>(null);
 
   dataRefresh = new BehaviorSubject<boolean>(false);
   private currentUserSubject: BehaviorSubject<LoginModel>;
@@ -70,6 +71,15 @@ export class UtilitiesService {
 
   setPaymentMode(paymentMode:string){
     this.paymentMode.next(paymentMode);
+  }
+
+  
+  getCouponId(): BehaviorSubject<number>{
+    return this.couponid;
+  }
+
+  setCouponId(couponId:number){
+    this.couponid.next(couponId);
   }
 
   getAddressObservable(): BehaviorSubject<AddressModel> {

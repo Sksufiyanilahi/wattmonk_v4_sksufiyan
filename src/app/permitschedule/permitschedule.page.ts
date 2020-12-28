@@ -97,7 +97,9 @@ export class PermitschedulePage implements OnInit {
   isEditMode:boolean=false;
   isArcFileDelete:boolean=false;
   indexOfArcFiles=[];
+  isAttachememtDelete:boolean=false;
   //data:DesignFormData;
+  indexOfAtaachementFiles=[];
 
   userdata:any;
   isEdit : boolean = true
@@ -480,7 +482,8 @@ export class PermitschedulePage implements OnInit {
   }
 
   goBack() {
-    this.navController.pop();
+   this.navController.pop();
+   
   }
 
   eventcheck(e){
@@ -974,10 +977,10 @@ saveInverterModel() {
                 console.log('Res', response);
                 this.utils.showSnackBar('Design have been updated');
                 if(!this.isArcFileDelete){
-                this.utils.setPermitDesignDetailsRefresh(true);
+                  this.utils.setPermitDesignDetailsRefresh(true);
                 }
                 //this.navController.pop();
-                this.router.navigate(['/permit-design-details/',this.designId])
+                // this.router.navigate(['/permit-design-details/',this.designId])
 
               });
             },
@@ -1191,10 +1194,10 @@ saveInverterModel() {
     }
 
     removeArc(i) {
-      this.archFiles.splice(this.archFiles.indexOf(i), 1);
+      this.archFiles.splice(i, 1);
     }
     removePermit(i) {
-      this.permitFiles.splice(this.permitFiles.indexOf(i), 1);
+      this.permitFiles.splice(i, 1);
     }
 
     remove(arc,i){
@@ -1223,9 +1226,24 @@ saveInverterModel() {
     console.log(this.architecturalData);
     console.log(i);
     
-    this.architecturalData.splice(this.architecturalData.indexOf(i), 1);
+    this.architecturalData.splice(i, 1);
 
     }
+
+    removeattachment(attachment,i){
+    
+      this.indexOfArcFiles.push( attachment.id);
+  
+      this.isArcFileDelete=true;
+      console.log(this.isArcFileDelete);
+      console.log(this.indexOfArcFiles);
+      console.log(this.attachmentData);
+      console.log(i);
+      
+      this.attachmentData.splice(i, 1);
+    }
+
+
 
     deleteArcFile(index){
      
@@ -1270,7 +1288,8 @@ saveInverterModel() {
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime,
-          paymenttype:this.utils.getPaymentMode().value
+          paymenttype:this.utils.getPaymentMode().value,
+          couponid:this.utils.getCouponId().value
         };
 
         this.utils.showLoading('Assigning').then(()=>{
