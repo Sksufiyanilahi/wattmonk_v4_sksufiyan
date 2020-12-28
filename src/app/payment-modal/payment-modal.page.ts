@@ -322,7 +322,7 @@ else if(data.discounttype=='amount'){
    async openModal(){
     const modal = await this.modalController.create({
       component: CouponOffersModalPage,
-      cssClass: 'email-modal-css',
+      cssClass: 'coupon-modal-css',
       componentProps: {
      request:this.design
       },
