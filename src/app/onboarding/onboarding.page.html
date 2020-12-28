@@ -137,9 +137,10 @@
       </div>
     </form>
   </mat-step>
-  <mat-step>
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
     <ng-template matStepLabel>Build your own team</ng-template>
-    <ion-row style=" background-color: rgb(211,211,211); text-align: center;">
+    <!-- <ion-row style=" background-color: rgb(211,211,211); text-align: center;">
       <ion-col >
       <ion-label position="fixed">Name</ion-label>
     </ion-col>
@@ -165,12 +166,56 @@
          </ion-col>
       </ion-item>
     </ion-list>
-    </ion-content>
+    </ion-content> -->
+    <ion-row>
+      <ion-col size="6">
+        <ion-item class="ion-no-padding">
+        <ion-label position="floating">First Name*</ion-label>
+                  <ion-input type="text" class="form_input" formControlName="firstname" autocapitalize="words"
+                              ></ion-input>
+                            </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item class="ion-no-padding">
+        <ion-label position="floating">Last Name*</ion-label>
+                  <ion-input type="text" class="form_input" formControlName="lastname" autocapitalize="words"
+                              ></ion-input>
+                            </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row >
+      <ion-col>
+          <ion-item class="ion-no-padding">
+              <ion-label position="floating">Work Email*</ion-label>
+              <ion-input type="text" class="form_input" formControlName="workemail"
+                          ></ion-input>
+          </ion-item>
+      </ion-col>
+  </ion-row>
+  <br>
+  <mat-label>User Role</mat-label>
+        <ion-radio-group formControlName="userrole" >
+          <ion-row >
+            <ion-col size="auto">
+          <ion-item lines="none">
+            <ion-label class="margin" style="font-size: small;">Admin</ion-label>
+            <ion-radio slot="start" value="admin" ></ion-radio>
+          </ion-item>
+        </ion-col>
+        <ion-col size="auto">
+          <ion-item lines="none">
+            <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Design Manager</ion-label>
+            <ion-radio slot="start"  value="designmanager" ></ion-radio>
+          </ion-item>
+        </ion-col>
+        </ion-row>
+        </ion-radio-group>
     <div>
       <button class="action-button-color" mat-button matStepperNext style="float: right;">Next</button>
       <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button>
       <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
     </div>
+  </form>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Request for Design</ng-template>

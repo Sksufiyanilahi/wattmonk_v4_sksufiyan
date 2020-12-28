@@ -21,6 +21,7 @@ export class OnboardingPage implements OnInit {
 
   firstFormGroup:FormGroup;
   secondFormGroup:FormGroup;
+  thirdFormGroup:FormGroup;
   @ViewChild("slidess", {static:true}) slides:any;
 
   isCompany:boolean = false;
@@ -50,6 +51,12 @@ export class OnboardingPage implements OnInit {
                     requestgeneratednotification:new FormControl(false),
                     requestacknowledgementnotification:new FormControl(false),
                     requestindesigningnotification:new FormControl(false)
+                })
+                this.thirdFormGroup = this.formBuilder.group({
+                  firstname : new FormControl(null),
+                  lastname : new FormControl(null),
+                  workemail : new FormControl(null),
+                  userrole : new FormControl(null)
                 })
                }
 
