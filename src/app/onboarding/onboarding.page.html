@@ -47,7 +47,7 @@
           </ion-col>
       </ion-row>
       <ion-row *ngIf="isCompany">
-        <ion-col>
+        <ion-col size="12">
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Company Name*</ion-label>
                 <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words"
@@ -58,6 +58,25 @@
                   <span class="error">{{fieldRequired}}</span>
               </div>
           </div>
+        </ion-col>
+        <ion-col size="12">
+            <ion-item class="ion-no-padding">
+                <ion-label position="floating">Licence No.</ion-label>
+                <ion-input type="text" formControlName="registrationnumber" class="form_input" autocapitalize="words"
+                            ></ion-input>
+            </ion-item>
+        </ion-col>
+        <ion-col size="12">
+              <ion-item (click)="fileInput.click()" class="ion-no-padding">
+                <ion-label position="floating">Upload Logo</ion-label>
+                <input type='file' id="imageUpload" placeholder="Upload logo" accept=".png, .jpg, .jpeg" #fileInput (change)="uploadFile($event)" />
+                </ion-item>
+             
+                  <div *ngIf="logo !=null && logo !=''" class="avatar-upload" style="text-align: center;">
+                      <img [src]=logo height="100px" width="100px" />
+                </div>
+              
+            <!-- </ion-item> -->
         </ion-col>
     </ion-row>
     <!-- <ion-row *ngIf="isCompany">

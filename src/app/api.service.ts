@@ -264,6 +264,17 @@ export class ApiService {
 
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
+  uploadlogo(blob: Blob, fileName: string) {
+    const data = new FormData();
+    data.append('files', blob,fileName);
+    data.append('path', this.userId + '/logo');
+    data.append('refId', ''+ this.userId);
+    data.append('ref', 'user');
+    data.append('field', 'logo');
+    data.append('source', 'users-permissions');
+
+    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
+  }
   uploaddesign(data) {
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
