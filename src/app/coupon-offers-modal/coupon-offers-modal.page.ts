@@ -86,10 +86,10 @@ export class CouponOffersModalPage implements OnInit {
       }
       this.apiservice.sendCoupon(postData).subscribe((res)=>{
         console.log(res);
-        
         this.selectedCoupon=res;
         if(this.selectedCoupon.error){
         this.error=this.selectedCoupon.message;
+        this.selectedCoupon=null
         }
         else{
         this.modalctrl.dismiss({
@@ -105,13 +105,13 @@ export class CouponOffersModalPage implements OnInit {
  
     }
     else if(this.selectedCoupon!=null){
-this.utils.showLoading("Applying").then(()=>{
+   this.utils.showLoading("Applying").then(()=>{
  
-this.modalctrl.dismiss({
-  'dismissed':true,
-  data:this.selectedCoupon
-})
-this.utils.hideLoading();
+    this.modalctrl.dismiss({
+    'dismissed':true,
+    data:this.selectedCoupon
+   })
+  this.utils.hideLoading();
 }
 )}
 else{
