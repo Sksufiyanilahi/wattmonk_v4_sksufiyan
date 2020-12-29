@@ -10,6 +10,7 @@ import { User } from './model/user.model';
 import { LoginModel } from './model/login.model';
 import { StorageService } from './storage.service';
 import { Intercom } from 'ng-intercom';
+import { NumberOnlyDirective } from './schedule/number.directive';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,11 @@ export class UtilitiesService {
   private currentUserSubject: BehaviorSubject<LoginModel>;
   public currentUser: Observable<LoginModel>;
   user: any;
+  ////
+  private addUpper = true;
+  private addNumbers = true;
+  private addSymbols = false;
+  private passwordLength = 6;
 
   constructor(
     public loadingController: LoadingController,
@@ -426,6 +432,26 @@ export class UtilitiesService {
               }else{
                 return this.user.role.name
               }
+          }
+
+          randomPass() {
+            var lower = "abcdefghijklmnopqrstuvwxyz";
+            var upper = this.addUpper ? lower.toUpperCase() : "";
+            var nums = this.addNumbers ? "0123456789" : "";
+            var symbols = this.addSymbols ? "!#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~" : "";
+            var all = lower + upper + nums + symbols;
+            while (true) {
+              var pass = "";
+              for (var i = 0; i < this.passwordLength; i++) {
+                pass += all[Math.random() * all.length | 0];
+              }
+              // criteria:
+              if (!/[a-z]/.test(pass)) continue; // lowercase is a must
+              if (this.addUpper && !/[A-Z]/.test(pass)) continue; // check uppercase
+              if (this.addSymbols && !/\W/.test(pass)) continue; // check symbols
+              if (this.addNumbers && !/\d/.test(pass)) continue; // check nums
+              return pass; // all good
+            }
           }
 
 

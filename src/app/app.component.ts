@@ -142,7 +142,7 @@ this.network.networkConnect();
         }else if(this.user.role.type==='qcinspector'){
           console.log(this.user.role.type);
           this.navController.navigateRoot('analystoverview');
-
+        // }else if(this.user.role.type==='clientsuperadmin' && isonboardingcompleted === false){}
         }
         else{
           this.navController.navigateRoot('permithomepage');

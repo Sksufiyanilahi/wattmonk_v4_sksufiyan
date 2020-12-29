@@ -2,6 +2,13 @@
     margin-top: 0px;
     
 }
+.font{
+  font-size: 10px;
+}
+
+ion-toggle{
+  padding-right: 14px;
+}
 
 ion-radio{
   margin-top: 0px;
@@ -45,4 +52,9 @@ ion-radio{
     background: #3f51b5;
     color: #fff;
     padding: 5px;
+  }
+
+  .error {
+    color: rgb(223, 62, 62);
+    font-size: 11px;
   }

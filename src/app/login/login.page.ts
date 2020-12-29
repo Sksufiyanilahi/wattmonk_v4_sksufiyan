@@ -44,7 +44,6 @@ export class LoginPage implements OnInit {
   fieldRequired = FIELD_REQUIRED;
   isLoggedInOnce = false;
   netSwitch: any;
-
   constructor(
     private formBuilder: FormBuilder,
     private utils: UtilitiesService,
@@ -151,7 +150,7 @@ this.network.networkConnect();
                   this.apiService.refreshHeader();
                    this.navController.navigateRoot(['changepassword'])
                  } else {
-                   this.navController.navigateRoot(['permithomepage/permitdesign']);
+                   this.navController.navigateRoot(['permithomepage/permitdesign'])
                  }
               }
             });
@@ -190,4 +189,6 @@ this.network.networkConnect();
 
     this.router.navigate(['/changepassword'])
   }
+
+  
 }
