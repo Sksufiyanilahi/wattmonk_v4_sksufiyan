@@ -66,8 +66,9 @@ export class OnboardingPage implements OnInit {
                   billingaddress:new FormControl(null, [Validators.required]),
                   company:new FormControl(null, [Validators.required]),
                   ispaymentmodeprepay:new FormControl(null),
-                  logo:new FormControl(null),
-                  registrationnumber:new FormControl(null)
+                  logo:new FormControl(null, [Validators.required]),
+                  registrationnumber:new FormControl(null, [Validators.required]),
+                  isonboardingcompleted: new FormControl(false)
                 })
                 this.secondFormGroup = this.formBuilder.group({
                   //For Emails
@@ -201,25 +202,29 @@ export class OnboardingPage implements OnInit {
   }
 
   firstStepper(){
-    if(this.firstFormGroup.status === 'VALID')
-    {
-    this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res)=>{
+    // if(this.firstFormGroup.status === 'VALID')
+    // {
+    this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
       console.log('updated',res);
+     let token=  this.storage.getJWTToken();
+      this.storage.setUser(res,token);
+     
       this.updateLogo();
+      //this.utils.showSnackBar('uploaded')
     })
-  }
-  else{
-    if(this.firstFormGroup.value.billingaddress === ''){
-      this.utils.errorSnackBar('Please Enter Billing Address');
-    }
-    else if(this.firstFormGroup.value.company === '')
-    {
-      this.utils.errorSnackBar('Please Enter Company Name');
-    }
-    else {
-      this.utils.errorSnackBar('Please Check Fields');
-    }
-  }
+  // }
+  // else{
+  //   if(this.firstFormGroup.value.billingaddress === ''){
+  //     this.utils.errorSnackBar('Please Enter Billing Address');
+  //   }
+  //   else if(this.firstFormGroup.value.company === '')
+  //   {
+  //     this.utils.errorSnackBar('Please Enter Company Name');
+  //   }
+  //   else {
+  //     this.utils.errorSnackBar('Please Check Fields');
+  //   }
+  // }
     
   }
 
@@ -326,8 +331,11 @@ export class OnboardingPage implements OnInit {
 
   secondStepper(){
     console.log(this.secondFormGroup.value);
-    this.apiService.updateUser(this.userId,this.secondFormGroup.value).subscribe((res)=>{
+    this.apiService.updateUser(this.userId,this.secondFormGroup.value).subscribe((res:any)=>{
       console.log('updated',res);
+      let token=  this.storage.getJWTToken();
+      this.storage.setUser(res,token);
+     // this.utils.showSnackBar('Changes saved successfully');
       
     })
   }
@@ -352,6 +360,8 @@ export class OnboardingPage implements OnInit {
           )
           .subscribe(
             response => {
+
+              this.utils.showSnackBar('Team created successfully');
             },
             error => {
             }
@@ -377,6 +387,7 @@ export class OnboardingPage implements OnInit {
   }
 
   goToWallet(){
+    console.log("hello");
     this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"true"}]);
   }
 

@@ -90,6 +90,7 @@ this.network.networkConnect();
           this.apiService.login(this.loginForm.value).subscribe(response => {
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
+              console.log(response);
               if (response.user.role.id == ROLES.Surveyor) {
                 this.storageService.setUserName(this.loginForm.get('identifier').value);
                 this.storageService.setPassword(this.loginForm.get('password').value);
@@ -139,7 +140,7 @@ this.network.networkConnect();
                   }
               }
               else{
-
+                
                  // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
                  this.storageService.setUserName(this.loginForm.get('identifier').value);
                  this.storageService.setPassword(this.loginForm.get('password').value);
@@ -150,8 +151,14 @@ this.network.networkConnect();
                   this.apiService.refreshHeader();
                    this.navController.navigateRoot(['changepassword'])
                  } else {
+                  if(response.user.role.type==='clientsuperadmin' && response.user.isonboardingcompleted === false){
+
+                    this.navController.navigateRoot('onboarding');
+                  }
+                  else{
                    this.navController.navigateRoot(['permithomepage/permitdesign'])
                  }
+                }
               }
             });
           }, responseError => {

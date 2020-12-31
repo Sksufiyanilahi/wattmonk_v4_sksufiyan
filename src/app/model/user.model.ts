@@ -20,6 +20,7 @@ export class User {
   isdefaultpassword: string;
   contractorlogo: ContractorLogo;
   parent: User;
+  isonboardingcompleted:boolean;
 
 }
 

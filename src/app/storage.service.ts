@@ -17,7 +17,7 @@ export class StorageService {
     return localStorage.getItem('user') !== null && localStorage.getItem('user') !== undefined;
   }
 
-  setUser(user: User, jwt: string) {
+  setUser(user: User, jwt?: string) {
     localStorage.setItem('user', JSON.stringify(user));
     this.setUserId(user.id);
     if (user.parent) {

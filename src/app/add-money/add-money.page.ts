@@ -8,7 +8,7 @@ import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ScheduleFormEvent, INVALID_AMOUNT } from '../model/constants';
+import { ScheduleFormEvent, INVALID_AMOUNT, INVALID_AMOUNT_FOR_ONBOARDING } from '../model/constants';
 import { Intercom } from 'ng-intercom';
 declare var Stripe;
 
@@ -22,8 +22,10 @@ declare var Stripe;
 export class AddMoneyPage implements OnInit {
 
   invalidAmount = INVALID_AMOUNT;
+  invalidAmountForOnboarding = INVALID_AMOUNT_FOR_ONBOARDING;
 
 amountChecking:boolean=false;
+amountCheckingForOnboarding:boolean=false;
 card:any
   token:any;
   stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
@@ -325,6 +327,17 @@ this.utils.setHomepageDesignRefresh(true);}}
 
 amountCheck(event){
   console.log(event.target.value);
+  if(this.onBoarding == 'true')
+  {
+    if(event.target.value < 100 || event.target.value > 5000)
+{
+  this.amountCheckingForOnboarding = true;
+  console.log(this.amountCheckingForOnboarding);
+}else{
+  this.amountCheckingForOnboarding = false;
+}
+  }
+  else{
 if(event.target.value < 1 || event.target.value > 5000)
 {
   this.amountChecking = true;
@@ -333,7 +346,7 @@ if(event.target.value < 1 || event.target.value > 5000)
   this.amountChecking = false;
 }
 }
-  
+}
   
 }
 

@@ -10,11 +10,13 @@
 <ion-content>
 
 <!-- <mat-vertical-stepper labelPosition="bottom" #stepper linear> -->
-  <mat-vertical-stepper labelPosition="bottom" #stepper>
+  <mat-vertical-stepper labelPosition="bottom" [linear]="isLinear" #stepper>
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
-      <ng-template matStepLabel>Required Information</ng-template>
-     
+      
+      <ng-template matStepLabel>Required Information <button class="action-button-color" mat-button (click)="$event.stopPropagation()" matStepperNext>Skip</button></ng-template>
+      
+      
         <mat-label>Type of User</mat-label>
         <ion-radio-group formControlName="usertype" >
           <ion-row >
@@ -65,11 +67,16 @@
                 <ion-input type="text" formControlName="registrationnumber" class="form_input" autocapitalize="words"
                             ></ion-input>
             </ion-item>
+            <div style="height: 5px;">
+              <div *ngIf="firstFormGroup.get('registrationnumber').value === '' && firstFormGroup.get('registrationnumber').dirty">
+                  <span class="error">{{fieldRequired}}</span>
+              </div>
+          </div>
         </ion-col>
-        <ion-col size="12">
-              <ion-item (click)="fileInput.click()" class="ion-no-padding">
+        <ion-col size="12" (click)="fileInput.click()">
+              <ion-item  class="ion-no-padding">
                 <ion-label position="floating">Upload Logo</ion-label>
-                <input type='file' id="imageUpload" placeholder="Upload logo" accept=".png, .jpg, .jpeg" #fileInput (change)="uploadFile($event)" />
+                <input type='file' id="imageUpload" placeholder="Upload logo" accept="image/" #fileInput (change)="uploadFile($event)" />
                 </ion-item>
              
                   <div *ngIf="logo !=null && logo !=''" class="avatar-upload" style="text-align: center;">
@@ -127,21 +134,26 @@
     <h6 style="font-size: small;color:#6C6C6C">Recharge your wallet right now with more than $500 and get an additional benefit of $100</h6>
     </ion-col>
   </ion-row>
+ 
+
   <ion-row >
     <ion-col style="text-align: center;">
       <ion-button style="height: 90%;" (click)="goToWallet()">Recharge Wallet</ion-button>
     </ion-col>
   </ion-row>
+<hr style="background-color: lightgray;"/>
 </div>
       
       <div >
-        <button (click)="firstStepper()" class="action-button-color" mat-button matStepperNext style="float: right; ">Next</button>
+        <button (click)="firstStepper()" class="action-button-color" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext>Next</button>
+        <!-- <ion-button  fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
+        
       </div>
     </form>
   </mat-step>
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Notification</ng-template>
+      <ng-template matStepLabel>Notification <button class="action-button-color" mat-button (click)="$event.stopPropagation()" matStepperNext>Skip</button></ng-template>
      <!-- <ion-item>
        <ion-label>Mails</ion-label>
       <ion-toggle formControlName="mails" (ionChange)="onChange($event,'mail')"></ion-toggle>
@@ -200,15 +212,17 @@
 </ion-item>
 
       <div>
-        <button (click)="secondStepper()" class="action-button-color" mat-button matStepperNext style="float: right;">Next</button>
-        <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button>
+        <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext>Next</button>
+        <!-- <ion-button (click)="secondStepper()" fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
+        <!-- <button  class="action-button-color" mat-button matStepperNext style="float: right;">Next</button> -->
+        <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
         
       </div>
     </form>
   </mat-step>
   <mat-step [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
-    <ng-template matStepLabel>Build your own team</ng-template>
+    <ng-template matStepLabel>Build your own team <button class="action-button-color" mat-button (click)="$event.stopPropagation()" matStepperNext>Skip</button></ng-template>
     <!-- <ion-row style=" background-color: rgb(211,211,211); text-align: center;">
       <ion-col >
       <ion-label position="fixed">Name</ion-label>
@@ -304,9 +318,10 @@
         </ion-row>
         </ion-radio-group>
     <div>
-      <ion-button (click)="thirdStepper()" fill='clear' style="float: left;font-size: 11px; height: 30px;color: #3c78d8;">Save</ion-button>
-      <button class="action-button-color" mat-button matStepperNext style="float: right;">Skip</button>
-      <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button>
+      <button class="action-button-color" mat-button (click)="$event.stopPropagation()" style="float: right;" matStepperNext>Next</button>
+      <ion-button (click)="thirdStepper()" fill='clear' style="float: left;font-size: 12px; height: 30px;color: #3c78d8;">Save</ion-button>
+      <!-- <button class="action-button-color" mat-button matStepperNext style="float: right;">Skip</button>
+      <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
       <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
     </div>
   </form>
@@ -337,11 +352,11 @@
     <!-- <ion-button style="height: 30px;" (click)="addPermit()">Add Permit</ion-button> -->
   </ion-col>
   </ion-row>
-    <div>
+    <!-- <div> -->
       <!-- <button class="action-button-color" mat-button style="float: right;">Save</button> -->
-      <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button>
+      <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button>
       
-    </div>
+    </div> -->
   </mat-step>
 </mat-vertical-stepper>
 
