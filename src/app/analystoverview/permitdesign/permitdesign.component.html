@@ -26,15 +26,18 @@
                  
                      
       <ion-grid *ngIf="listOfDesignsHelper.length !== 0">
-          <ion-row *ngFor="let item of listOfDesignsHelper;let i = index">
-              <ion-col size="12" class="ion-margin-top">
+          <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
+            <ion-virtual-scroll [items]="listOfDesignsHelper">
+                <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
+                    <ion-row *virtualItem="let item;let i = index">
+              <!-- <ion-col size="12" class="ion-margin-top">
                       <span class="ion-padding" *ngIf="today === item.date">
                           Today
                           </span>
                   <span class="ion-padding" *ngIf="today !== item.date">
                               {{item.date | date: 'dd MMM yyyy'}}
                       </span>
-              </ion-col>
+              </ion-col> -->
               <ion-col *ngFor="let designData of item.listOfDesigns;let j = index;trackBy: trackdesign " size="12">
                   <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
                       <p class="customer-name" 
@@ -139,6 +142,7 @@
                 </ion-card>
               </ion-col>
           </ion-row>
+          </ion-virtual-scroll>
           <ion-row>
               <ion-col size="12" style="height: 100px;">
               
@@ -156,7 +160,12 @@
       </div>
 
      
-     
+      <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+        <ion-infinite-scroll-content
+          loadingSpinner="bubbles"
+          loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
 
 </ion-content>
 

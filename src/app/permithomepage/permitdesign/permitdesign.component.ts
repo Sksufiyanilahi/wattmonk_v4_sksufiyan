@@ -77,7 +77,7 @@ export class PermitdesignComponent implements OnInit {
  clickSub:any;
  skip:number=0;
   acceptid: any;
-  limit:number=5;
+  limit:number=10;
   isclientassigning: boolean=false;
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string='';
@@ -677,7 +677,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   doInfinite($event){
-  this.skip=this.skip+5;
+  this.skip=this.skip+10;
   this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
        console.log(response);
         if(response.length){
@@ -863,6 +863,7 @@ this.deactivateNetworkSwitch.unsubscribe();
 
 
   refreshDesigns(event: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
       showLoader = false;

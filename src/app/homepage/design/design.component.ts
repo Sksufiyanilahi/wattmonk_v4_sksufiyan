@@ -67,7 +67,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectedDesigner: any;
   netSwitch: boolean;
   skip:number=0;
-  limit:number=5;
+  limit:number=10;
  reviewAssignedTo:any;
   isclientassigning: boolean=false;
   acceptid: any;
@@ -896,7 +896,7 @@ this.network.networkConnect();
 
 
   doInfinite($event){
-    this.skip=this.skip+5;
+    this.skip=this.skip+10;
     this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
@@ -921,6 +921,7 @@ this.network.networkConnect();
     }
 
   refreshDesigns(event: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
       showLoader = false;
