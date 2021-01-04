@@ -6,7 +6,10 @@
         <ion-menu-toggle>
           <ion-header style="text-align: -webkit-center;">
             <ion-toolbar style="height: 130px;display: flex;justify-content: center;align-content: center;" routerLink='/profile'>
-              <ion-card style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;">{{userData?.firstname.slice(0,1).toUpperCase() + userData?.lastname.slice(0,1).toUpperCase()}}</ion-card>
+              <ion-card *ngIf="isEmptyObject(userData?.logo) || userData?.logo ==null" style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;">{{userData?.firstname.slice(0,1).toUpperCase() + userData?.lastname.slice(0,1).toUpperCase()}}</ion-card>
+              <div *ngIf="!isEmptyObject(userData?.logo) && userData?.logo !==null">
+                <img [src]="userData?.logo?.url" style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;"/>
+              </div>
             <ion-title ><h4 style="text-align: center;font-weight: bold;margin: 1px;">{{userData?.firstname.charAt(0).toUpperCase() + userData?.firstname.slice(1) + ' ' + userData?.lastname.charAt(0).toUpperCase() + userData?.lastname.slice(1)}}</h4></ion-title>
            <small style="text-align: center;">{{userData?.role.name}} </small>
           </ion-toolbar>
@@ -21,8 +24,8 @@
               </ion-menu-toggle>-->
               <ion-list id="inbox-list">
               <ion-menu-toggle auto-hide="false">
-                <ion-item [routerLink]="['/onboarding']" routerDirection="forward">
-                  <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item>
+                <!-- <ion-item [routerLink]="['/onboarding']" routerDirection="forward">
+                  <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item> -->
                     <ion-item  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">
                       <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>
                      <ion-item  (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">

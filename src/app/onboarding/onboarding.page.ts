@@ -2,7 +2,7 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ROLES } from '../contants';
 import { User } from '../model/user.model';
-import { FIELD_REQUIRED, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME } from '../model/constants';
+import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_REGISTRATION_NUMBER } from '../model/constants';
 import { MenuController } from '@ionic/angular';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -30,6 +30,9 @@ export class OnboardingPage implements OnInit {
   lastnameError = INVALID_LAST_NAME;
   fieldRequired = FIELD_REQUIRED;
   emailError = INVALID_EMAIL_MESSAGE;
+  addressError = INVALID_ADDRESS;
+  registrationError = INVALID_REGISTRATION_NUMBER;
+  
   @ViewChild('fileInput',{static:false}) el: ElementRef;
   logo: any ;
   editFile: boolean = true;
@@ -51,6 +54,8 @@ export class OnboardingPage implements OnInit {
   permitSettingValue:any;
   blob: Blob;
   fileName: any;
+  logoUploaded: boolean=false;
+  logoSelected: boolean=false;
  
 
   constructor(public renderer:Renderer,
@@ -61,14 +66,15 @@ export class OnboardingPage implements OnInit {
               private menu:MenuController,
               private utils: UtilitiesService,
               private cd:ChangeDetectorRef,) {
+                const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
                 this.firstFormGroup = this.formBuilder.group({
                   usertype : new FormControl(null),
-                  billingaddress:new FormControl(null, [Validators.required]),
+                  billingaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
                   company:new FormControl(null, [Validators.required]),
                   ispaymentmodeprepay:new FormControl(null),
-                  logo:new FormControl(null, [Validators.required]),
-                  registrationnumber:new FormControl(null, [Validators.required]),
-                  isonboardingcompleted: new FormControl(false)
+                  // logo:new FormControl(null, [Validators.required]),
+                  registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9]*')]),
+                  isonboardingcompleted: new FormControl(true)
                 })
                 this.secondFormGroup = this.formBuilder.group({
                   //For Emails
@@ -95,10 +101,10 @@ export class OnboardingPage implements OnInit {
                 const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
                 const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
                 this.thirdFormGroup = this.formBuilder.group({
-                  firstname : new FormControl(null,[Validators.required, Validators.pattern(NAMEPATTERN)]),
-                  lastname : new FormControl(null, [Validators.required, Validators.pattern(NAMEPATTERN)]),
-                  workemail : new FormControl(null, [Validators.required, Validators.pattern(EMAILPATTERN)]),
-                  userrole : new FormControl(null)
+                  firstname : new FormControl('',[Validators.required, Validators.pattern(NAMEPATTERN)]),
+                  lastname : new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
+                  workemail : new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
+                  userrole : new FormControl('')
                 })
                }
 
@@ -204,14 +210,27 @@ export class OnboardingPage implements OnInit {
   firstStepper(){
     // if(this.firstFormGroup.status === 'VALID')
     // {
-    this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
-      console.log('updated',res);
-     let token=  this.storage.getJWTToken();
-      this.storage.setUser(res,token);
-     
-      this.updateLogo();
-      //this.utils.showSnackBar('uploaded')
-    })
+      if(this.logoSelected){
+        this.updateLogo();
+      }
+      else{
+      // if(this.logoUploaded){
+      //   this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
+      //     console.log('updated',res);
+          
+      //    let token=  this.storage.getJWTToken();
+      //     this.storage.setUser(res,token);
+      //   })
+      // }
+      // else{
+        this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
+          console.log('updated',res);
+          
+         let token=  this.storage.getJWTToken();
+          this.storage.setUser(res,token);
+        })
+      // }
+    }
   // }
   // else{
   //   if(this.firstFormGroup.value.billingaddress === ''){
@@ -335,13 +354,14 @@ export class OnboardingPage implements OnInit {
       console.log('updated',res);
       let token=  this.storage.getJWTToken();
       this.storage.setUser(res,token);
-     // this.utils.showSnackBar('Changes saved successfully');
+      this.utils.showSnackBar('Changes saved successfully');
       
     })
   }
 
   thirdStepper(){
-    if (this.thirdFormGroup.status === 'VALID') {
+    console.log(this.thirdFormGroup.status)
+     if (this.thirdFormGroup.status === 'VALID') {
     // $ev.preventDefault();
     
         let rolesel = parseInt(this.thirdFormGroup.get("userrole").value);
@@ -360,23 +380,24 @@ export class OnboardingPage implements OnInit {
           )
           .subscribe(
             response => {
-
+              
               this.utils.showSnackBar('Team created successfully');
+              
             },
             error => {
             }
           );
+    
       }
     else{
-      
-      if(this.thirdFormGroup.value.firstname ===null || this.thirdFormGroup.get('firstname').hasError('pattern')){
+      if(this.thirdFormGroup.value.firstname =='' || this.thirdFormGroup.get('firstname').hasError('pattern')){
 
         this.utils.errorSnackBar('Please check the field first name');
       }
-      else if(this.thirdFormGroup.value.lastname ===null || this.thirdFormGroup.get('lastname').hasError('pattern')){
+      else if(this.thirdFormGroup.value.lastname =='' || this.thirdFormGroup.get('lastname').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field last name');
       }
-      else if(this.thirdFormGroup.value.workemail ===null || this.thirdFormGroup.get('workemail').hasError('pattern')){
+      else if(this.thirdFormGroup.value.workemail =='' || this.thirdFormGroup.get('workemail').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field email')
       }
       else{
@@ -416,6 +437,7 @@ export class OnboardingPage implements OnInit {
   }
   
   uploadFile(event) {
+    this.logoSelected=true;
     this.fileName= event.target.files[0].name;
     console.log(this.fileName);
     
@@ -448,7 +470,12 @@ export class OnboardingPage implements OnInit {
 
     this.apiService.uploadlogo(this.blob,this.fileName).subscribe(res=>{
       console.log(res);
-      
+        this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
+          console.log('updated',res);
+          
+         let token=  this.storage.getJWTToken();
+          this.storage.setUser(res,token);
+        })
     })
   }
 

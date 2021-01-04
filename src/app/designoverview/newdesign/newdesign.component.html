@@ -3,10 +3,14 @@
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull down to refresh" refreshingSpinner="lines"></ion-refresher-content>
   </ion-refresher>
   <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
+<<<<<<< HEAD
    <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index"> 
         <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
             <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
                 <!-- <ion-row *virtualItem="let item;let i = index"> -->
+=======
+    <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index">
+>>>>>>> c67b8b262504efd09ea10bb1fa3072eb726b975a
         <!-- <ion-col size="12" class="ion-margin-top">
                 <span class="ion-padding" *ngIf="today === item.date">
                     Today
@@ -22,7 +26,7 @@
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
                     <span [routerLink]="['/design-details/',designData.id]"
-                    routerDirection="forward" class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'">Design Assigned</span>
+                    routerDirection="forward" class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'">Assigned</span>
                     <span [routerLink]="['/design-details/',designData.id]"
                     routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue > 0">Overdue</span>
                     <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>

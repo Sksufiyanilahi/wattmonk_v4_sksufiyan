@@ -39,9 +39,12 @@
               <ion-item class="ion-no-padding">
                   <ion-label position="floating">Billing Address*</ion-label>
                   <ion-input type="text" class="form_input" formControlName="billingaddress" autocapitalize="words"
-                              ></ion-input>
+                              required></ion-input>
               </ion-item>
               <div style="height: 5px;">
+                <div *ngIf="firstFormGroup.get('billingaddress').hasError('pattern') && firstFormGroup.get('billingaddress').dirty">
+                  <span class="error">{{addressError}}</span>
+              </div>
                 <div *ngIf="firstFormGroup.get('billingaddress').value === '' && firstFormGroup.get('billingaddress').dirty">
                     <span class="error">{{fieldRequired}}</span>
                 </div>
@@ -53,7 +56,7 @@
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Company Name*</ion-label>
                 <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words"
-                            ></ion-input>
+                            required></ion-input>
             </ion-item>
             <div style="height: 5px;">
               <div *ngIf="firstFormGroup.get('company').value === '' && firstFormGroup.get('company').dirty">
@@ -64,10 +67,13 @@
         <ion-col size="12">
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Licence No.</ion-label>
-                <ion-input type="text" formControlName="registrationnumber" class="form_input" autocapitalize="words"
-                            ></ion-input>
+                <ion-input type="text" formControlName="registrationnumber" class="form_input" autocapitalize="words" maxLength="16"
+                            required></ion-input>
             </ion-item>
             <div style="height: 5px;">
+              <div *ngIf="firstFormGroup.get('registrationnumber').hasError('pattern') && firstFormGroup.get('registrationnumber').dirty">
+                <span class="error">{{registrationError}}</span>
+            </div>
               <div *ngIf="firstFormGroup.get('registrationnumber').value === '' && firstFormGroup.get('registrationnumber').dirty">
                   <span class="error">{{fieldRequired}}</span>
               </div>
@@ -144,12 +150,13 @@
 <hr style="background-color: lightgray;"/>
 </div>
       
-      <div >
-        <button (click)="firstStepper()" class="action-button-color" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext>Next</button>
-        <!-- <ion-button  fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
-        
-      </div>
+      
     </form>
+    <div >
+      <button (click)="firstStepper()" [ngClass]="{'colorChange':firstFormGroup.valid}" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext [disabled]="!firstFormGroup.valid">Next</button>
+      <!-- <ion-button  fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
+      
+    </div>
   </mat-step>
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
@@ -211,16 +218,17 @@
  <ion-toggle formControlName="designdeliverednotification" (ionChange)="onChange($event,'delivered')"></ion-toggle>
 </ion-item>
 
-      <div>
-        <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext>Next</button>
-        <!-- <ion-button (click)="secondStepper()" fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
-        <!-- <button  class="action-button-color" mat-button matStepperNext style="float: right;">Next</button> -->
-        <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
-        
-      </div>
+      
     </form>
+    <div>
+      <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext>Next</button>
+      <!-- <ion-button (click)="secondStepper()" fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
+      <!-- <button  class="action-button-color" mat-button matStepperNext style="float: right;">Next</button> -->
+      <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
+      
+    </div>
   </mat-step>
-  <mat-step [stepControl]="thirdFormGroup">
+  <mat-step *ngIf="isCompany" [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
     <ng-template matStepLabel>Build your own team <button class="action-button-color" mat-button (click)="$event.stopPropagation()" matStepperNext>Skip</button></ng-template>
     <!-- <ion-row style=" background-color: rgb(211,211,211); text-align: center;">
@@ -317,14 +325,15 @@
         </ion-col>
         </ion-row>
         </ion-radio-group>
-    <div>
-      <button class="action-button-color" mat-button (click)="$event.stopPropagation()" style="float: right;" matStepperNext>Next</button>
-      <ion-button (click)="thirdStepper()" fill='clear' style="float: left;font-size: 12px; height: 30px;color: #3c78d8;">Save</ion-button>
-      <!-- <button class="action-button-color" mat-button matStepperNext style="float: right;">Skip</button>
-      <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
-      <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
-    </div>
+    
   </form>
+  <div>
+    <button class="action-button-color" mat-button (click)="$event.stopPropagation()" style="float: right;" matStepperNext>Next</button>
+    <ion-button (click)="thirdStepper()" fill='clear' style="float: left;font-size: 12px; height: 30px;color: #3c78d8;">Save</ion-button>
+    <!-- <button class="action-button-color" mat-button matStepperNext style="float: right;">Skip</button>
+    <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
+    <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
+  </div>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Request for Design</ng-template>
