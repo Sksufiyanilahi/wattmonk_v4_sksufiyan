@@ -42,6 +42,9 @@
                               required></ion-input>
               </ion-item>
               <div style="height: 5px;">
+                <div *ngIf="firstFormGroup.get('billingaddress').hasError('pattern') && firstFormGroup.get('billingaddress').dirty">
+                  <span class="error">{{addressError}}</span>
+              </div>
                 <div *ngIf="firstFormGroup.get('billingaddress').value === '' && firstFormGroup.get('billingaddress').dirty">
                     <span class="error">{{fieldRequired}}</span>
                 </div>
@@ -64,10 +67,13 @@
         <ion-col size="12">
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Licence No.</ion-label>
-                <ion-input type="text" formControlName="registrationnumber" class="form_input" autocapitalize="words"
+                <ion-input type="text" formControlName="registrationnumber" class="form_input" autocapitalize="words" maxLength="16"
                             required></ion-input>
             </ion-item>
             <div style="height: 5px;">
+              <div *ngIf="firstFormGroup.get('registrationnumber').hasError('pattern') && firstFormGroup.get('registrationnumber').dirty">
+                <span class="error">{{registrationError}}</span>
+            </div>
               <div *ngIf="firstFormGroup.get('registrationnumber').value === '' && firstFormGroup.get('registrationnumber').dirty">
                   <span class="error">{{fieldRequired}}</span>
               </div>

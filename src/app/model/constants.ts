@@ -43,6 +43,8 @@ export const INVALID_AMOUNT_FOR_ONBOARDING = 'Please enter an amount greater tha
 export const INVALID_MODULE_AND_INVERTER = 'Please enter a valid format';
 export const INVALID_FIRST_NAME = 'Invalid First Name';
 export const INVALID_LAST_NAME = 'Invalid Last Name';
+export const INVALID_ADDRESS = "Invalid Address";
+export const INVALID_REGISTRATION_NUMBER = "Invalid Registration Number";
 
 
 export const COMET_CHAT_APP_ID = '190385dcec51285';

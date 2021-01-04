@@ -4,14 +4,14 @@
   </ion-refresher>
   <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
     <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index">
-        <ion-col size="12" class="ion-margin-top">
+        <!-- <ion-col size="12" class="ion-margin-top">
                 <span class="ion-padding" *ngIf="today === item.date">
                     Today
                   </span>
             <span class="ion-padding" *ngIf="today !== item.date">
                       {{item.date | date: 'dd MMM yyyy'}}
                 </span>
-        </ion-col>
+        </ion-col> -->
         <ion-col *ngFor="let designData of item.listOfDesigns;let i = index ;trackBy: trackdesign" size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name">{{designData.name}}
@@ -19,7 +19,7 @@
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
                     <span [routerLink]="['/permit-design-details/',designData.id]"
-                    routerDirection="forward" class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'">Design Assigned</span>
+                    routerDirection="forward" class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'">Assigned</span>
                     <span [routerLink]="['/permit-design-details/',designData.id]"
                     routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue > 0">Overdue</span>
                     <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/permit-design-details/',designData.id]">Revision</span>

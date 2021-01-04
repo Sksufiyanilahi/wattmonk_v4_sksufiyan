@@ -2,7 +2,7 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ROLES } from '../contants';
 import { User } from '../model/user.model';
-import { FIELD_REQUIRED, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME } from '../model/constants';
+import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_REGISTRATION_NUMBER } from '../model/constants';
 import { MenuController } from '@ionic/angular';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -30,6 +30,9 @@ export class OnboardingPage implements OnInit {
   lastnameError = INVALID_LAST_NAME;
   fieldRequired = FIELD_REQUIRED;
   emailError = INVALID_EMAIL_MESSAGE;
+  addressError = INVALID_ADDRESS;
+  registrationError = INVALID_REGISTRATION_NUMBER;
+  
   @ViewChild('fileInput',{static:false}) el: ElementRef;
   logo: any ;
   editFile: boolean = true;
@@ -63,13 +66,14 @@ export class OnboardingPage implements OnInit {
               private menu:MenuController,
               private utils: UtilitiesService,
               private cd:ChangeDetectorRef,) {
+                const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
                 this.firstFormGroup = this.formBuilder.group({
                   usertype : new FormControl(null),
-                  billingaddress:new FormControl(null, [Validators.required]),
+                  billingaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
                   company:new FormControl(null, [Validators.required]),
                   ispaymentmodeprepay:new FormControl(null),
                   // logo:new FormControl(null, [Validators.required]),
-                  registrationnumber:new FormControl(null, [Validators.required]),
+                  registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9]*')]),
                   isonboardingcompleted: new FormControl(true)
                 })
                 this.secondFormGroup = this.formBuilder.group({
