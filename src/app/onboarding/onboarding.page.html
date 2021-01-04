@@ -147,7 +147,7 @@
       
     </form>
     <div >
-      <button (click)="firstStepper()" [ngClass]="{'colorChange':!disabled}" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext [disabled]="!firstFormGroup.valid">Next</button>
+      <button (click)="firstStepper()" [ngClass]="{'colorChange':firstFormGroup.valid}" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext [disabled]="!firstFormGroup.valid">Next</button>
       <!-- <ion-button  fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
       
     </div>
@@ -222,7 +222,7 @@
       
     </div>
   </mat-step>
-  <mat-step [stepControl]="thirdFormGroup">
+  <mat-step *ngIf="isCompany" [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
     <ng-template matStepLabel>Build your own team <button class="action-button-color" mat-button (click)="$event.stopPropagation()" matStepperNext>Skip</button></ng-template>
     <!-- <ion-row style=" background-color: rgb(211,211,211); text-align: center;">
