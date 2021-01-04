@@ -38,8 +38,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   reviewenddatetime:number;
   reviewstartdatetime : number;
   reviewIssues='';
-  isSelfUpdate: boolean=false;
-  isprelimUpdate:boolean=true;
+  isSelfUpdate: boolean;
+  isprelimUpdate:boolean;
   enableDisable:boolean=false;
   prelimFileSize:number;
  // prelimFileType:any;

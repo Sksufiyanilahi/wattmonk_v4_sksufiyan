@@ -50,7 +50,7 @@ export class SearchbarPage implements OnInit {
   userRole: any;
   pageType:string='';
  // @Input() parentApi: DesignComponent
-  @ViewChild(DesignComponent) child:DesignComponent;
+  @ViewChild(DesignComponent,{static:false}) child:DesignComponent;
 
   constructor(
     private utilities: UtilitiesService,

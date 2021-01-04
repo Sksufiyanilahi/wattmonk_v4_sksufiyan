@@ -18,7 +18,7 @@ import { IonContent } from '@ionic/angular';
   styleUrls: ['./newsurveys.component.scss'],
 })
 export class NewsurveysComponent implements OnInit {
-  @ViewChild(IonContent) content: IonContent;
+  @ViewChild(IonContent,{static:false}) content: IonContent;
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;

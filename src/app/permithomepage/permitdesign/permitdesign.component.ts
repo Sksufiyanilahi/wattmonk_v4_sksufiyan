@@ -99,7 +99,8 @@ export class PermitdesignComponent implements OnInit {
     private platform:Platform,
     private androidPermissions: AndroidPermissions,
     private localnotification: LocalNotifications,
-    private fileopener:FileOpener) {
+   // private fileopener:FileOpener
+   ) {
     this.userData = this.storageservice.getUser();
 
 

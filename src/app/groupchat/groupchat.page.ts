@@ -26,7 +26,7 @@ export class GroupchatPage implements OnInit {
   public messageText: string;
   loggedInUserData: any;
 
-  @ViewChild('content') content: any;
+  @ViewChild('content',{static:false}) content: any;
 
   constructor(private router: Router, private route: ActivatedRoute, private keyboard: Keyboard, private renderer2: Renderer2,private navCtrl:NavController,private intercom:Intercom) { 
     const html = document.getElementsByTagName('html').item(0);
