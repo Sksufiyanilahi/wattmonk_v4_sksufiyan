@@ -151,7 +151,7 @@ this.network.networkConnect();
                   this.apiService.refreshHeader();
                    this.navController.navigateRoot(['changepassword'])
                  } else {
-                  if(response.user.role.type==='clientsuperadmin' && response.user.isonboardingcompleted === false){
+                  if(response.user.role.type==='clientsuperadmin' && (response.user.isonboardingcompleted == null || response.user.isonboardingcompleted == false)){
 
                     this.navController.navigateRoot('onboarding');
                   }
@@ -161,6 +161,7 @@ this.network.networkConnect();
                 }
               }
             });
+            this.apiService.emitUserNameAndRole(response.user);
           }, responseError => {
             this.utils.hideLoading().then(() => {
               this.apiService.resetHeaders();

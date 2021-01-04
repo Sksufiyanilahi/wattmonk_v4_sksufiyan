@@ -66,9 +66,9 @@ export class OnboardingPage implements OnInit {
                   billingaddress:new FormControl(null, [Validators.required]),
                   company:new FormControl(null, [Validators.required]),
                   ispaymentmodeprepay:new FormControl(null),
-                  logo:new FormControl(null, [Validators.required]),
+                  logo:new FormControl(null),
                   registrationnumber:new FormControl(null, [Validators.required]),
-                  isonboardingcompleted: new FormControl(false)
+                  isonboardingcompleted: new FormControl(true)
                 })
                 this.secondFormGroup = this.formBuilder.group({
                   //For Emails
@@ -95,10 +95,10 @@ export class OnboardingPage implements OnInit {
                 const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
                 const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
                 this.thirdFormGroup = this.formBuilder.group({
-                  firstname : new FormControl(null,[Validators.required, Validators.pattern(NAMEPATTERN)]),
-                  lastname : new FormControl(null, [Validators.required, Validators.pattern(NAMEPATTERN)]),
-                  workemail : new FormControl(null, [Validators.required, Validators.pattern(EMAILPATTERN)]),
-                  userrole : new FormControl(null)
+                  firstname : new FormControl('',[Validators.required, Validators.pattern(NAMEPATTERN)]),
+                  lastname : new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
+                  workemail : new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
+                  userrole : new FormControl('')
                 })
                }
 
@@ -212,7 +212,7 @@ export class OnboardingPage implements OnInit {
       this.updateLogo();
       //this.utils.showSnackBar('uploaded')
     })
-  // }
+  //}
   // else{
   //   if(this.firstFormGroup.value.billingaddress === ''){
   //     this.utils.errorSnackBar('Please Enter Billing Address');
@@ -335,13 +335,14 @@ export class OnboardingPage implements OnInit {
       console.log('updated',res);
       let token=  this.storage.getJWTToken();
       this.storage.setUser(res,token);
-     // this.utils.showSnackBar('Changes saved successfully');
+      this.utils.showSnackBar('Changes saved successfully');
       
     })
   }
 
   thirdStepper(){
-    if (this.thirdFormGroup.status === 'VALID') {
+    console.log(this.thirdFormGroup.status)
+     if (this.thirdFormGroup.status === 'VALID') {
     // $ev.preventDefault();
     
         let rolesel = parseInt(this.thirdFormGroup.get("userrole").value);
@@ -360,23 +361,24 @@ export class OnboardingPage implements OnInit {
           )
           .subscribe(
             response => {
-
+              
               this.utils.showSnackBar('Team created successfully');
+              
             },
             error => {
             }
           );
+    
       }
     else{
-      
-      if(this.thirdFormGroup.value.firstname ===null || this.thirdFormGroup.get('firstname').hasError('pattern')){
+      if(this.thirdFormGroup.value.firstname =='' || this.thirdFormGroup.get('firstname').hasError('pattern')){
 
         this.utils.errorSnackBar('Please check the field first name');
       }
-      else if(this.thirdFormGroup.value.lastname ===null || this.thirdFormGroup.get('lastname').hasError('pattern')){
+      else if(this.thirdFormGroup.value.lastname =='' || this.thirdFormGroup.get('lastname').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field last name');
       }
-      else if(this.thirdFormGroup.value.workemail ===null || this.thirdFormGroup.get('workemail').hasError('pattern')){
+      else if(this.thirdFormGroup.value.workemail =='' || this.thirdFormGroup.get('workemail').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field email')
       }
       else{
