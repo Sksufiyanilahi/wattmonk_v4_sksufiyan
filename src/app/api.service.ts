@@ -187,10 +187,10 @@ export class ApiService {
   }
 
   getSurveyorSurveys(search : string) {
-    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search, { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search , { headers: this.headers });
   }
-  getDesignSurveys(search : string) {
-    return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search, { headers: this.headers });
+  getDesignSurveys(search : string,limit,skip) {
+    return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search +'&limit='+ limit +'&skip='+ skip, { headers: this.headers });
   }
   getAnalystDesign(search :string){
     return this.http.get<DesginDataModel[]>(BaseUrl+'/userdesign?id='+this.userId+'&'+search,{headers:this.headers});
