@@ -68,7 +68,7 @@ export class OnboardingPage implements OnInit {
                   billingaddress:new FormControl(null, [Validators.required]),
                   company:new FormControl(null, [Validators.required]),
                   ispaymentmodeprepay:new FormControl(null),
-                  logo:new FormControl(null, [Validators.required]),
+                  // logo:new FormControl(null, [Validators.required]),
                   registrationnumber:new FormControl(null, [Validators.required]),
                   isonboardingcompleted: new FormControl(true)
                 })
@@ -208,22 +208,25 @@ export class OnboardingPage implements OnInit {
     // {
       if(this.logoSelected){
         this.updateLogo();
-      }else{}
-      if(this.logoUploaded){
-        this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
-          console.log('updated',res);
-          
-         let token=  this.storage.getJWTToken();
-          this.storage.setUser(res,token);
-        })
-      }else{
-        this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
-          console.log('updated',res);
-          
-         let token=  this.storage.getJWTToken();
-          this.storage.setUser(res,token);
-        })
       }
+      else{
+      // if(this.logoUploaded){
+      //   this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
+      //     console.log('updated',res);
+          
+      //    let token=  this.storage.getJWTToken();
+      //     this.storage.setUser(res,token);
+      //   })
+      // }
+      // else{
+        this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
+          console.log('updated',res);
+          
+         let token=  this.storage.getJWTToken();
+          this.storage.setUser(res,token);
+        })
+      // }
+    }
   // }
   // else{
   //   if(this.firstFormGroup.value.billingaddress === ''){
@@ -461,7 +464,12 @@ export class OnboardingPage implements OnInit {
 
     this.apiService.uploadlogo(this.blob,this.fileName).subscribe(res=>{
       console.log(res);
-        this.logoUploaded= true;
+        this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
+          console.log('updated',res);
+          
+         let token=  this.storage.getJWTToken();
+          this.storage.setUser(res,token);
+        })
     })
   }
 
