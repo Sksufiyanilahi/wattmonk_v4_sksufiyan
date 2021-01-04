@@ -117,7 +117,9 @@ export class AppComponent {
   //   });
   // }
 
-
+  isEmptyObject(obj) {
+    return (obj && (Object.keys(obj).length === 0));
+  }
   ngOnInit() {
     // this.intercomModule();
    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{

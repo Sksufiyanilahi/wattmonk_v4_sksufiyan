@@ -21,6 +21,9 @@ export class User {
   contractorlogo: ContractorLogo;
   parent: User;
   isonboardingcompleted:boolean;
+  logo:{
+    url:string;
+  }
 
 }
 
