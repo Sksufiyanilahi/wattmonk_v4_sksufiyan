@@ -51,6 +51,8 @@ export class OnboardingPage implements OnInit {
   permitSettingValue:any;
   blob: Blob;
   fileName: any;
+  logoUploaded: boolean=false;
+  logoSelected: boolean=false;
  
 
   constructor(public renderer:Renderer,
@@ -68,7 +70,7 @@ export class OnboardingPage implements OnInit {
                   ispaymentmodeprepay:new FormControl(null),
                   logo:new FormControl(null, [Validators.required]),
                   registrationnumber:new FormControl(null, [Validators.required]),
-                  isonboardingcompleted: new FormControl(false)
+                  isonboardingcompleted: new FormControl(true)
                 })
                 this.secondFormGroup = this.formBuilder.group({
                   //For Emails
@@ -204,14 +206,24 @@ export class OnboardingPage implements OnInit {
   firstStepper(){
     // if(this.firstFormGroup.status === 'VALID')
     // {
-    this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
-      console.log('updated',res);
-     let token=  this.storage.getJWTToken();
-      this.storage.setUser(res,token);
-     
-      this.updateLogo();
-      //this.utils.showSnackBar('uploaded')
-    })
+      if(this.logoSelected){
+        this.updateLogo();
+      }else{}
+      if(this.logoUploaded){
+        this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
+          console.log('updated',res);
+          
+         let token=  this.storage.getJWTToken();
+          this.storage.setUser(res,token);
+        })
+      }else{
+        this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
+          console.log('updated',res);
+          
+         let token=  this.storage.getJWTToken();
+          this.storage.setUser(res,token);
+        })
+      }
   // }
   // else{
   //   if(this.firstFormGroup.value.billingaddress === ''){
@@ -416,6 +428,7 @@ export class OnboardingPage implements OnInit {
   }
   
   uploadFile(event) {
+    this.logoSelected=true;
     this.fileName= event.target.files[0].name;
     console.log(this.fileName);
     
@@ -448,7 +461,7 @@ export class OnboardingPage implements OnInit {
 
     this.apiService.uploadlogo(this.blob,this.fileName).subscribe(res=>{
       console.log(res);
-      
+        this.logoUploaded= true;
     })
   }
 

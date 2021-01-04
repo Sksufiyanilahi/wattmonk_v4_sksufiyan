@@ -5,4 +5,7 @@ export class UserData{
         name:string;
         type:string;
     };
+    logo:{
+        url:string
+    }
 }
