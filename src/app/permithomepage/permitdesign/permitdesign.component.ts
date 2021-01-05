@@ -30,6 +30,7 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-permitdesign',
@@ -74,7 +75,9 @@ export class PermitdesignComponent implements OnInit {
   netSwitch: boolean;
  reviewAssignedTo:any;
  clickSub:any;
+ skip:number=0;
   acceptid: any;
+  limit:number=10;
   isclientassigning: boolean=false;
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string='';
@@ -147,7 +150,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   segmentChanged(event){
-
+   this.skip=0;
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -252,7 +255,7 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
+      this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -279,7 +282,11 @@ this.deactivateNetworkSwitch.unsubscribe();
 
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
-    this.listOfDesigns = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+   list=this.fillinDynamicData(records);
+   list.forEach(element =>{
+     this.listOfDesigns.push(element);
+   })
 
     console.log(this.listOfDesigns);
 
@@ -669,7 +676,30 @@ this.deactivateNetworkSwitch.unsubscribe();
 
   }
 
-
+  doInfinite($event){
+  this.skip=this.skip+10;
+  this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
+       console.log(response);
+        if(response.length){
+     
+          this.formatDesignData(response);
+        }else{
+          this.noDesignFound= "No Designs Found"
+        }
+        if (event !== null) {
+          $event.target.complete();
+        }
+      },
+   (responseError:any) => {
+      if (event !== null) {
+          $event.target.complete();
+        }
+        const error: ErrorModel = responseError.error;
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
+    
+    });
+    
+  }
 
 
   openDesigners(id: number,designData) {
@@ -833,6 +863,7 @@ this.deactivateNetworkSwitch.unsubscribe();
 
 
   refreshDesigns(event: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
       showLoader = false;

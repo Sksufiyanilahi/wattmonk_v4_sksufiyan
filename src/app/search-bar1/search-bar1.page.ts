@@ -127,23 +127,23 @@ this.DesignModel=this.sample1;
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+      // this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
+      //   this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+      //     console.log(response);
          
-          if (event !== null) {
-            event.target.complete();
-          }
-        });
-      }, responseError => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          if (event !== null) {
-            event.target.complete();
-          }
-          const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
-        });
-      });
+      //     if (event !== null) {
+      //       event.target.complete();
+      //     }
+      //   });
+      // }, responseError => {
+      //   this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+      //     if (event !== null) {
+      //       event.target.complete();
+      //     }
+      //     const error: ErrorModel = responseError.error;
+      //     this.utils.errorSnackBar(error.message[0].messages[0].message);
+      //   });
+      // });
     });
   }
 

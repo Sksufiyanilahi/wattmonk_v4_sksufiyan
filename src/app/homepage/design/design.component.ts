@@ -66,6 +66,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   assigneeData: any;
   selectedDesigner: any;
   netSwitch: boolean;
+  skip:number=0;
+  limit:number=10;
  reviewAssignedTo:any;
   isclientassigning: boolean=false;
   acceptid: any;
@@ -164,7 +166,7 @@ this.network.networkConnect();
 
   
   segmentChanged(event){
-
+     this.skip=0;
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -321,7 +323,7 @@ this.network.networkConnect();
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
+      this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -347,7 +349,11 @@ this.network.networkConnect();
 
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
-    this.listOfDesigns = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+   list=this.fillinDynamicData(records);
+   list.forEach(element =>{
+     this.listOfDesigns.push(element);
+   })
 
     console.log(this.listOfDesigns);
 
@@ -889,7 +895,33 @@ this.network.networkConnect();
   }
 
 
+  doInfinite($event){
+    this.skip=this.skip+10;
+    this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
+         console.log(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found"
+          }
+          if (event !== null) {
+            $event.target.complete();
+          }
+        },
+     (responseError:any) => {
+        if (event !== null) {
+            $event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      
+      });
+      
+    }
+
   refreshDesigns(event: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
       showLoader = false;

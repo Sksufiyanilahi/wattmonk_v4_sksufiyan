@@ -43,6 +43,8 @@ export class DesignComponent implements OnInit {
   roleType: any;
   myFiles: string[] = [];  
   segments:any;
+  limit:number=10;
+  skip:number=0;
   listOfDesigns: DesginDataModel[];
   private DesignRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
@@ -95,7 +97,7 @@ this.network.networkConnect();
   }
 
   segmentChanged(event){
-    
+    this.skip=0;
     if(this.userData.role.type=='qcinspector'){ 
      if(event.target.value=='InReview'){
         this.segments ="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed";
@@ -178,7 +180,7 @@ this.network.networkConnect();
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
+      this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -468,6 +470,31 @@ this.network.networkConnect();
     this.launchNavigator.navigate(address, this.options);
   }
 
+  doInfinite($event){
+    this.skip=this.skip+10;
+    this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
+         console.log(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found"
+          }
+          if (event !== null) {
+            $event.target.complete();
+          }
+        },
+     (responseError:any) => {
+        if (event !== null) {
+            $event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      
+      });
+      
+    }
+
   dismissBottomSheet() {
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
@@ -581,6 +608,7 @@ this.network.networkConnect();
   }
 
   refreshDesigns(event: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
       showLoader = false;

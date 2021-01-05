@@ -99,6 +99,7 @@ discountAmount(){
   else if(this.coupondata!=null){
     this.discount=this.code_discount;
     this.netPay=this.settingValue-this.code_discount;
+    console.log(this.netPay)
   }
   else{
     this.discount=null;
@@ -307,6 +308,7 @@ confirm(){
   if(data.discounttype=='percentage'){
     console.log(price)
     this.code_discount=(data.amount/100)*price;
+  this.code_discount= this.code_discount.toFixed(2);
   this.discountAmount();
     console.log(this.code_discount)
     this.Congratulations();
