@@ -17,6 +17,7 @@ import { COMETCHAT_CONSTANTS, ROLES } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Appversion } from '../appversion';
 
 @Component({
   selector: 'app-homepage',
@@ -24,7 +25,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
   styleUrls: ['./homepage.page.scss'],
 })
 export class HomepagePage implements OnInit, OnDestroy {
-  private version = environment.version;
+  private version = Appversion.version;
   @Output() ionInput = new EventEmitter();
 
 

@@ -99,7 +99,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private camera: Camera,
     private file: File,
-    private router:Router,
+    public router:Router,
     public intercom: Intercom,
     private cdr:ChangeDetectorRef
   ) {
@@ -575,7 +575,6 @@ this.isArcFileDelete=true;
 console.log(this.isArcFileDelete);
 console.log(this.indexOfArcFiles);
 console.log(this.architecturalData);
-console.log(i);
 
 this.architecturalData.splice(i, 1);
 

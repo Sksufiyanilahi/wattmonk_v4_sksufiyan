@@ -97,7 +97,9 @@ export class PermitschedulePage implements OnInit {
   isEditMode:boolean=false;
   isArcFileDelete:boolean=false;
   indexOfArcFiles=[];
+  isAttachememtDelete:boolean=false;
   //data:DesignFormData;
+  indexOfAtaachementFiles=[];
 
   userdata:any;
   isEdit : boolean = true
@@ -975,10 +977,10 @@ saveInverterModel() {
                 console.log('Res', response);
                 this.utils.showSnackBar('Design have been updated');
                 if(!this.isArcFileDelete){
-                this.utils.setPermitDesignDetailsRefresh(true);
+                  this.utils.setPermitDesignDetailsRefresh(true);
                 }
                 //this.navController.pop();
-                this.router.navigate(['/permit-design-details/',this.designId])
+                // this.router.navigate(['/permit-design-details/',this.designId])
 
               });
             },

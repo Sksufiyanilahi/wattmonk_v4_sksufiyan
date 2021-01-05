@@ -46,9 +46,9 @@
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'reviewpassed'">Review Passed</span>
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'delivered'">Delivered</span>
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'designcompleted'">Completed</span>
- <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'created'">Unassigned</span>
- <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'designassigned'">Design Assigned</span>
- <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'reviewassigned'">In Review</span>
+ <span class="chipdetail" style="background-color: #1289A7;" *ngIf="activity_details?.status == 'created'">Unassigned</span>
+ <span class="chipdetail" style="background-color: #1289A7;" *ngIf="activity_details?.status == 'designassigned'">Design Assigned</span>
+ <span class="chipdetail" style="background-color: #1289A7;" *ngIf="activity_details?.status == 'reviewassigned'">In Review</span>
  <span class="chipdetail" *ngIf="activity_details?.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;">Waiting for acceptance</span>
  <span *ngIf="activity_details?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;">
   pending

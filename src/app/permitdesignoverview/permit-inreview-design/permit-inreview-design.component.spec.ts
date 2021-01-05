@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { PermitInreviewDesignComponent } from './permit-inreview-design.component';
@@ -7,7 +7,7 @@ describe('PermitInreviewDesignComponent', () => {
   let component: PermitInreviewDesignComponent;
   let fixture: ComponentFixture<PermitInreviewDesignComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PermitInreviewDesignComponent ],
       imports: [IonicModule.forRoot()]
