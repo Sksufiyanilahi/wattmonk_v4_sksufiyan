@@ -3,14 +3,10 @@
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull down to refresh" refreshingSpinner="lines"></ion-refresher-content>
   </ion-refresher>
   <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
-<<<<<<< HEAD
    <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index"> 
         <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
             <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
                 <!-- <ion-row *virtualItem="let item;let i = index"> -->
-=======
-    <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index">
->>>>>>> c67b8b262504efd09ea10bb1fa3072eb726b975a
         <!-- <ion-col size="12" class="ion-margin-top">
                 <span class="ion-padding" *ngIf="today === item.date">
                     Today
@@ -81,7 +77,7 @@
 <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
-      loadingText="Loading more data...">
+      >
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
  
