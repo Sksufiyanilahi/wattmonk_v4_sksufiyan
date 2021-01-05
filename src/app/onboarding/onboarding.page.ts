@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
+import { MatStepper } from '@angular/material';
+import { ErrorModel } from '../model/error.model';
 //import { Slides } from 'ionic-angular';
 
 @Component({
@@ -18,6 +20,8 @@ import { UtilitiesService } from '../utilities.service';
 })
 export class OnboardingPage implements OnInit {
 
+  @ViewChild('stepper',{static:true}) stepper: MatStepper;
+  @ViewChild('fileInput',{static:false}) el: ElementRef;
   notification:any={
 
   }
@@ -33,7 +37,7 @@ export class OnboardingPage implements OnInit {
   addressError = INVALID_ADDRESS;
   registrationError = INVALID_REGISTRATION_NUMBER;
   
-  @ViewChild('fileInput',{static:false}) el: ElementRef;
+  
   logo: any ;
   editFile: boolean = true;
   removeUpload: boolean = false;
@@ -354,14 +358,14 @@ export class OnboardingPage implements OnInit {
       console.log('updated',res);
       let token=  this.storage.getJWTToken();
       this.storage.setUser(res,token);
-      this.utils.showSnackBar('Changes saved successfully');
+      //this.utils.showSnackBar('Changes saved successfully');
       
     })
   }
 
   thirdStepper(){
     console.log(this.thirdFormGroup.status)
-     if (this.thirdFormGroup.status === 'VALID') {
+    //  if (this.thirdFormGroup.status === 'VALID') {
     // $ev.preventDefault();
     
         let rolesel = parseInt(this.thirdFormGroup.get("userrole").value);
@@ -379,31 +383,36 @@ export class OnboardingPage implements OnInit {
             this.user.parent.minpermitdesignaccess
           )
           .subscribe(
-            response => {
+            (response:any) => {
               
               this.utils.showSnackBar('Team created successfully');
               
             },
-            error => {
+            // error => {
+            //   this.utils.errorSnackBar(error);
+            // }
+            responseError => {
+              const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message);
             }
           );
     
-      }
-    else{
-      if(this.thirdFormGroup.value.firstname =='' || this.thirdFormGroup.get('firstname').hasError('pattern')){
+     // }
+    // else{
+    //   if(this.thirdFormGroup.value.firstname =='' || this.thirdFormGroup.get('firstname').hasError('pattern')){
 
-        this.utils.errorSnackBar('Please check the field first name');
-      }
-      else if(this.thirdFormGroup.value.lastname =='' || this.thirdFormGroup.get('lastname').hasError('pattern')){
-        this.utils.errorSnackBar('Please check the field last name');
-      }
-      else if(this.thirdFormGroup.value.workemail =='' || this.thirdFormGroup.get('workemail').hasError('pattern')){
-        this.utils.errorSnackBar('Please check the field email')
-      }
-      else{
-        this.utils.errorSnackBar('Please check fields')
-      }
-    }
+    //     this.utils.errorSnackBar('Please check the field first name');
+    //   }
+    //   else if(this.thirdFormGroup.value.lastname =='' || this.thirdFormGroup.get('lastname').hasError('pattern')){
+    //     this.utils.errorSnackBar('Please check the field last name');
+    //   }
+    //   else if(this.thirdFormGroup.value.workemail =='' || this.thirdFormGroup.get('workemail').hasError('pattern')){
+    //     this.utils.errorSnackBar('Please check the field email')
+    //   }
+    //   else{
+    //     this.utils.errorSnackBar('Please check fields')
+    //   }
+    // }
     
   }
 
@@ -477,6 +486,11 @@ export class OnboardingPage implements OnInit {
           this.storage.setUser(res,token);
         })
     })
+  }
+
+  move($event,index: number) {
+    $event.stopPropagation();
+    this.stepper.selectedIndex = index;
   }
 
 }

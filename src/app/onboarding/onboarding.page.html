@@ -14,7 +14,7 @@
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       
-      <ng-template matStepLabel>Required Information <button class="action-button-color" mat-button (click)="$event.stopPropagation()" matStepperNext>Skip</button></ng-template>
+      <ng-template matStepLabel>Required Information <button class="action-button-color" *ngIf="this.stepper.selectedIndex==0" mat-button (click)="move($event,1)" matStepperNext>Skip</button></ng-template>
       
       
         <mat-label>Type of User</mat-label>
@@ -55,7 +55,7 @@
         <ion-col size="12">
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Company Name*</ion-label>
-                <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words"
+                <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words" maxLength="30"
                             required></ion-input>
             </ion-item>
             <div style="height: 5px;">
@@ -160,7 +160,7 @@
   </mat-step>
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Notification <button class="action-button-color" mat-button (click)="$event.stopPropagation()" matStepperNext>Skip</button></ng-template>
+      <ng-template matStepLabel>Notification <button class="action-button-color"  *ngIf="this.stepper.selectedIndex==1" mat-button (click)="move($event,2)" matStepperNext>Skip</button></ng-template>
      <!-- <ion-item>
        <ion-label>Mails</ion-label>
       <ion-toggle formControlName="mails" (ionChange)="onChange($event,'mail')"></ion-toggle>
@@ -230,7 +230,7 @@
   </mat-step>
   <mat-step *ngIf="isCompany" [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
-    <ng-template matStepLabel>Build your own team <button class="action-button-color" mat-button (click)="$event.stopPropagation()" matStepperNext>Skip</button></ng-template>
+    <ng-template matStepLabel>Build your own team <button class="action-button-color" *ngIf="this.stepper.selectedIndex==2" mat-button (click)="move($event,3)" matStepperNext>Skip</button></ng-template>
     <!-- <ion-row style=" background-color: rgb(211,211,211); text-align: center;">
       <ion-col >
       <ion-label position="fixed">Name</ion-label>
@@ -329,7 +329,7 @@
   </form>
   <div>
     <button class="action-button-color" mat-button (click)="$event.stopPropagation()" style="float: right;" matStepperNext>Next</button>
-    <ion-button (click)="thirdStepper()" fill='clear' style="float: left;font-size: 12px; height: 30px;color: #3c78d8;">Save</ion-button>
+    <ion-button (click)="thirdStepper()" [ngClass]="{'colorChange':thirdFormGroup.valid}" fill='clear' style="float: left;font-size: 12px; height: 30px;color: #3c78d8;" [disabled]="!thirdFormGroup.valid">Save</ion-button>
     <!-- <button class="action-button-color" mat-button matStepperNext style="float: right;">Skip</button>
     <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
     <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
