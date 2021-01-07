@@ -53,7 +53,9 @@ limit:number=10;
 
   ngOnInit() {
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+     this.skip=0;
       this.getDesigns(null);
+      
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {

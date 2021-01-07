@@ -91,6 +91,7 @@ export class PermitnewdesignComponent implements OnInit {
 
     this.intercomModule();
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 

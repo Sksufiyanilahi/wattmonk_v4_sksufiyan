@@ -154,6 +154,7 @@ this.network.networkConnect();
     // });
 
     this.PermitRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 
