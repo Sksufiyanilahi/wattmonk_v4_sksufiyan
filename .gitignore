@@ -32,4 +32,8 @@ npm-debug.log*
 *.zip
 *.rar
 
+wattmonk.keystore
+# built application files
+*.apk
+
 package-lock.json

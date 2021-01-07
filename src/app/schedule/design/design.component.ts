@@ -240,7 +240,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       
       }
       if(event===ScheduleFormEvent.PAY_EVENT){
-        this.Pay();
+        this.sendtowattmonk();
       }
     });
 
@@ -671,13 +671,12 @@ deleteArcFile(index){
 
   submitform(){
     if (this.desginForm.status === 'VALID') {
-      this.utils.showLoading('Saving').then(() => {
-
-
+    
         if (this.designId === 0) {
 
           if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
             debugger;
+            this.utils.showLoading('Saving').then(() => {
             this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
               this.uploaarchitecturedesign(response.id,'architecturaldesign');
               this.uploadpreliumdesign(response.id,'attachments')
@@ -702,7 +701,7 @@ deleteArcFile(index){
                 const error: ErrorModel = responseError.error;
                 this.utils.errorSnackBar(error.message);
               });
-           
+            });
             }
             else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
               this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
@@ -713,7 +712,8 @@ deleteArcFile(index){
                 this.utils.hideLoading().then(() => {
                   this.value = response.id;
                   // this.createChatGroup(response);
-                  this.sendtowattmonk();
+                  // this.sendtowattmonk();  
+                  this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
                  // console.log('Res', response);
                  // this.router.navigate(['/homepage'])
                   // this.utils.showSnackBar('Design have been saved');
@@ -732,6 +732,7 @@ deleteArcFile(index){
 
         } else {
           if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
+            this.utils.showLoading('Saving').then(() => {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.uploaarchitecturedesign(response.id,'architecturaldesign');
             this.uploadpreliumdesign(response.id,'attachments')
@@ -755,6 +756,7 @@ deleteArcFile(index){
             });
 
           });
+        });
         }
         else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
@@ -769,7 +771,7 @@ deleteArcFile(index){
               this.value=response.id;
               
               this.utils.showSnackBar('Design have been updated');
-              this.sendtowattmonk();
+              this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
               
               
       
@@ -784,7 +786,7 @@ deleteArcFile(index){
         }
       }
 
-      });
+    
 
     } else {
       if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
@@ -1044,6 +1046,7 @@ ioniViewDidEnter(){
   removePrelim(i) {
     this.prelimFiles.splice(i, 1);
   }
+
   sendtowattmonk(){
     var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
@@ -1052,7 +1055,8 @@ ioniViewDidEnter(){
         isoutsourced: "true",
         status: "outsourced",
         designacceptancestarttime: designacceptancestarttime,
-        paymenttype: this.utils.getPaymentMode().value
+        paymenttype: this.utils.getPaymentMode().value,
+        couponid:this.utils.getCouponId().value
       };
   
       this.utils.showLoading('Assigning').then(()=>{

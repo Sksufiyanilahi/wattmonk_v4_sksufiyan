@@ -30,6 +30,8 @@ netPay:any
   coupondata=null;
   code_discount:any
   discount:any
+  userData:any;
+  uss:any;
   //  //counts
   //  newpermits: Observable<any>;
   //  newpermitsRef: AngularFireObject<any>;
@@ -80,6 +82,8 @@ netPay:any
      }
 
   ngOnInit() {
+    this.userData = this.storageService.getUser();
+    console.log(this.userData)
     this.utils.showHideIntercom(true);
     this.fetchData();
     this.servicecharges();
@@ -105,7 +109,7 @@ fetchData(){
   this.design=params.get('designData')});
 
 
-  this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
+  this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
     console.log(this.user)
     this.apiService.paymentDetail(this.user.id).subscribe(res=>{
       this.count=res;
@@ -210,7 +214,7 @@ confirm(){
       else{
         if(this.design=='prelim'){
           this.utils.setPaymentMode("wallet");
-        this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
+        this.utils.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
         }
         else{
           this.utils.setPaymentMode("wallet");
@@ -227,13 +231,18 @@ confirm(){
   cancel(){
     if(this.id==null){
       if(this.design ==='prelim'){
-      this.utils.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
+      this.router.navigate(['/homepage/design'])
+      this.utils.setHomepageDesignRefresh(true);
       }
       else{
-        this.utils.setScheduleFormEvent(ScheduleFormEvent.SAVE_PERMIT_FORM);
+        this.router.navigate(['permithomepage/permitdesign'])
+        this.utils.setHomepagePermitRefresh(true);
       }
     }
+    else
+    {
     this.navController.pop();
+  }
   }
   refreshDesigns(event: CustomEvent) {
     let showLoader = true;

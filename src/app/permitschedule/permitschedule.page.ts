@@ -236,10 +236,13 @@ export class PermitschedulePage implements OnInit {
     }
 
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
-      if (event === ScheduleFormEvent.SAVE_PERMIT_FORM || event === ScheduleFormEvent.SEND_PERMIT_FORM) {
+      if (event === ScheduleFormEvent.SAVE_PERMIT_FORM ) {
         this.send=event;
         this.saveModuleMake();
 
+      }
+      if(event === ScheduleFormEvent.SEND_PERMIT_FORM){
+     this.sendtowattmonk();
       }
     });
     
@@ -765,7 +768,7 @@ saveInverterModel() {
       if(this.desginForm.status==='VALID'){
         console.log("Hello");
         if(this.formValue=='send'){
-        this.router.navigate(['payment-modal',{designData:"permit"}]);
+          this.saveModuleMake();
         }else{
       this.saveModuleMake();
         }
@@ -779,8 +782,7 @@ saveInverterModel() {
     submitform(){
       var pnumber = this.desginForm.get("phone").value;
       if (this.desginForm.status === 'VALID') {
-        this.utils.showLoading('Saving').then(() => {
-          var tomorrow = new Date();
+        var tomorrow = new Date();
           tomorrow.setDate(tomorrow.getDate() + 2);
           console.log(this.formValue);
           if (this.designId === 0) {
@@ -823,6 +825,7 @@ saveInverterModel() {
 
 
              // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+              this.utils.showLoading('Saving').then(() => {
               this.apiService.addDesginForm(data).subscribe(response => {
                 if(this.architecturalFileUpload){
                   this.uploaarchitecturedesign(response.id,'architecturaldesign');
@@ -856,11 +859,11 @@ saveInverterModel() {
                   this.utils.errorSnackBar(error.message);
                 });
 
-
-
+              
+              });
 
               }
-           else if(this.formValue === 'send' || this.send===ScheduleFormEvent.SEND_PERMIT_FORM){
+           else if(this.formValue === 'send'){
 
               var postData = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
@@ -913,7 +916,8 @@ saveInverterModel() {
                   this.createChatGroup(response);
                   console.log('Res', response);
                   this.value = response.id;
-                  this.sendtowattmonk();
+                  this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
+                  // this.sendtowattmonk();
 
                  // this.router.navigate(['/homepage'])
                  // this.utils.showSnackBar('Design have been Created');
@@ -943,7 +947,7 @@ saveInverterModel() {
             }
           else {
             if(this.formValue==='save'){
-              
+              this.utils.showLoading('Saving').then(() => {
               var data = {name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
@@ -1007,8 +1011,8 @@ saveInverterModel() {
               });
 
             });
-          
-          
+              
+              });
 
           }
           else if(this.formValue==='send'){
@@ -1062,7 +1066,7 @@ saveInverterModel() {
                 console.log('Res', response);
                 this.value=response.id;
                 this.utils.showSnackBar('Design have been updated');
-                this.sendtowattmonk();
+                this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
 
 
               });
@@ -1078,7 +1082,7 @@ saveInverterModel() {
           }
         }
 
-        });
+        
 
       } else {
         this.error();

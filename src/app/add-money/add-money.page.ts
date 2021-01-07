@@ -210,7 +210,8 @@ card:any
         datetime: dates,
         paymenttype: "wallet",
         type: "succeeded",
-      user: this.userData.id
+      user: this.userData.id,
+      token:this.token.token.id,
       }
      }
      else{
@@ -219,12 +220,15 @@ rechargeData={
   datetime: dates,
   paymenttype: "wallet",
   type: "succeeded",
-user: this.userData.id
+user: this.userData.id,
+token:this.token.token.id,
 }
      }
-this.apiService.recharges(rechargeData).subscribe((res)=>{
+this.apiService.recharges(rechargeData).subscribe((res:any)=>{
   this.utils.hideLoading().then(()=>{ 
   this.responseData = res;
+  let token=  this.storageService.getJWTToken();
+          this.storageService.setUser(res.user,token);
   console.log(res);
   this.utils.showSnackBar("$"+this.responseData.amount +" added in your wallet successfully");
   this.goBack();
@@ -259,10 +263,10 @@ this.apiService.recharges(rechargeData).subscribe((res)=>{
    // this.stripe.createCardToken(card).then(token => {
    //   console.log(token);
      // this.token=token.id
-     const date = new Date().toISOString();
-     console.log(date);
+var date= new Date();
+
   data={
-    designid:this.designId,
+    //designid:this.designId,
     datetime:date,
     amount:this.amountForm.get('amount').value,
     email:this.userData.email,
@@ -270,10 +274,13 @@ this.apiService.recharges(rechargeData).subscribe((res)=>{
     token: this.token.token.id,
     user:this.userData.id,
     couponid:this.utils.getCouponId().value,
-    type:"succeeded"
+    designid:this.designId
+    // datetime:date,
+    // type:"succeeded"
+
   }
   console.log(data);
-    this.apiService.createPayment(data).subscribe(res=>{
+    this.apiService.createPayment(data).subscribe((res)=>{
       this.createPayment=res;
       this.utils.hideLoading();
       if(this.createPayment.paymentstatus=='succeeded'){
@@ -281,7 +288,7 @@ this.apiService.recharges(rechargeData).subscribe((res)=>{
    if(this.designId==="null"){
      if(this.design==='prelim'){
        this.utils.setPaymentMode("direct");
-     this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
+     this.utils.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
      }
      else{
        this.utils.setPaymentMode("direct");
@@ -302,7 +309,8 @@ this.apiService.recharges(rechargeData).subscribe((res)=>{
       status: "outsourced",
       designacceptancestarttime: designacceptancestarttime,
       paymenttype : "direct",
-      couponid:this.utils.getCouponId().value
+      couponid:this.utils.getCouponId().value,
+    
     };
     
       this.apiService.updateDesignForm(postData,this.designId).subscribe(value=>{
@@ -323,7 +331,13 @@ this.apiService.recharges(rechargeData).subscribe((res)=>{
 else
 {this.utils.errorSnackBar("payment was unsuccessfull");
 this.router.navigate(['homepage/design']);
-this.utils.setHomepageDesignRefresh(true);}}
+this.utils.setHomepageDesignRefresh(true);}
+}
+    ,
+(error)=>{
+  this.utils.hideLoading();
+  this.utils.errorSnackBar("Something went wrong");
+}
     )
     this.token='';})
   }
@@ -332,7 +346,7 @@ this.utils.setHomepageDesignRefresh(true);}}
 
 amountCheck(event){
   console.log(event.target.value);
-  if(this.onBoarding == 'true')
+  if(this.onBoarding == 'true' || this.onBoarding == 'false')
   {
     if(event.target.value < 100 || event.target.value > 5000)
 {
