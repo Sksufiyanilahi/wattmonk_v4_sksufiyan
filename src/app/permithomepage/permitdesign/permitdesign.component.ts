@@ -657,6 +657,7 @@ this.deactivateNetworkSwitch.unsubscribe();
          {
           this.isclientassigning= true;
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+          this.addUserToGroupChat();
          }else{
           this.addUserToGroupChat();
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
@@ -704,9 +705,6 @@ this.deactivateNetworkSwitch.unsubscribe();
 
   openDesigners(id: number,designData) {
     this.listOfAssignees=[];
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
