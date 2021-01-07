@@ -10,6 +10,8 @@ import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms'
 import { StorageService } from '../storage.service';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import { ErrorModel } from '../model/error.model';
+import { EmailModelPage } from 'src/app/email-model/email-model.page';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 @Component({
   selector: 'app-search-bar1',
@@ -24,6 +26,9 @@ MixModel:[];
 SortedModel:[];
 sample:any;
 sample1:any;
+SearchData:any;
+surveyId = 0;
+surveyData:any;
 segments:any='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
 Type='both';
 listOfDesigns: DesginDataModel[];
@@ -41,6 +46,7 @@ userData:any;
   constructor( private apiService:ApiService,private navController: NavController,private formBuilder:FormBuilder,
     private storage: Storage,
     private storageService:StorageService,
+    private socialsharing:SocialSharing,
     private utils: UtilitiesService,
     private alertController:AlertController,
     public modalController: ModalController,) {
@@ -121,54 +127,33 @@ this.DesignModel=this.sample1;
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+      // this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
+      //   this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+      //     console.log(response);
          
-          if (event !== null) {
-            event.target.complete();
-          }
-        });
-      }, responseError => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          if (event !== null) {
-            event.target.complete();
-          }
-          const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
-        });
-      });
+      //     if (event !== null) {
+      //       event.target.complete();
+      //     }
+      //   });
+      // }, responseError => {
+      //   this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+      //     if (event !== null) {
+      //       event.target.complete();
+      //     }
+      //     const error: ErrorModel = responseError.error;
+      //     this.utils.errorSnackBar(error.message[0].messages[0].message);
+      //   });
+      // });
     });
   }
 
   openDesigners(id: number,designData) {
     console.log(designData);
     this.designerData = designData;
+    this.SearchData=designData;
+    console.log(designData);
     if (this.listOfAssignees.length === 0) {
-      if(this.designerData.type=="survey"){
-      this.utils.showLoading('Getting Surveyors').then(() => {
-        this.apiService.getSurveyors().subscribe(assignees => {
-          this.utils.hideLoading().then(() => {
-            this.listOfAssignees = [];
-            // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
-            assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
-            this.showBottomDraw = true;
-            this.designId = id;
-            this.utils.setBottomBarHomepage(false);
-            this.drawerState = DrawerState.Docked;
-            this.assignForm.patchValue({
-              assignedto: 0
-            });
-          });
-        }, (error) => {
-          this.utils.hideLoading().then(() => {
-            this.utils.errorSnackBar('Some error occurred. Please try again later');
-          });
-        });
-      });
-    }
-    if(this.designerData.type=="design"){
+  
       this.utils.showLoading('Getting Designers').then(() => {
         this.apiService.getDesigners().subscribe(assignees => {
           this.utils.hideLoading().then(() => {
@@ -190,7 +175,7 @@ this.DesignModel=this.sample1;
           });
         });
       });
-    }
+    
     } else {
       this.designId = id;
       this.utils.setBottomBarHomepage(false);
@@ -203,10 +188,49 @@ this.DesignModel=this.sample1;
 
 
 
+  openSurveyors(id: number,surveyData) {
+    this.surveyData=surveyData;
+    this.SearchData=surveyData;
+    if (this.listOfAssignees.length === 0) {
+      this.utils.showLoading('Getting Surveyors').then(() => {
+        this.apiService.getSurveyors().subscribe(assignees => {
+          this.utils.hideLoading().then(() => {
+            this.listOfAssignees = [];
+            // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+            assignees.forEach(item => this.listOfAssignees.push(item));
+            console.log(this.listOfAssignees);
+            this.showBottomDraw = true;
+            this.surveyId = id;
+            this.utils.setBottomBarHomepage(false);
+            this.drawerState = DrawerState.Docked;
+            this.assignForm.patchValue({
+              assignedto: ''
+            });
+          });
+        }, (error) => {
+          this.utils.hideLoading().then(() => {
+            this.utils.errorSnackBar('Some error occurred. Please try again later');
+          });
+        });
+      });
+
+    } else {
+      this.surveyId = id;
+      this.utils.setBottomBarHomepage(false);
+      this.drawerState = DrawerState.Docked;
+      this.assignForm.patchValue({
+        assignedto: ''
+      });
+    }
+  
+
+  }
+
+
   openAnalysts(id: number,designData) {
     console.log("this is",designData);
     this.designerData = designData;
-    
+    this.SearchData=designData;
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Analysts').then(() => {
         this.apiService.getAnalysts().subscribe(assignees => {
@@ -243,7 +267,8 @@ this.DesignModel=this.sample1;
 
 
   async openreviewPassed(id,designData){ 
-    this.designId=id
+    this.designId=id;
+    let data=designData;
     const alert = await this.alertController.create({
       cssClass: 'alertClass',
       header: 'Confirm!',
@@ -271,6 +296,7 @@ this.DesignModel=this.sample1;
               comments: alertData.comment ,
                };
                console.log(postData);
+               if(data.type=="design"){
                this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
                   ; 
@@ -282,7 +308,20 @@ this.DesignModel=this.sample1;
               }, (error) => {
                 this.utils.hideLoading();
                 ;
-              });
+              });}
+              if(data.type=="survey"){
+              this.apiService.updateSurveyForm(postData, this.designId).subscribe((value) => {
+                this.utils.hideLoading().then(()=>{
+                  ; 
+                  console.log('reach ', value);
+                 this.utils.showSnackBar('Survey request has been delivered successfully');
+                 
+                  this.utils.setHomepageDesignRefresh(true);
+                })
+              }, (error) => {
+                this.utils.hideLoading();
+                ;
+              });}
           }
         }
       ]
@@ -307,17 +346,20 @@ this.DesignModel=this.sample1;
 
   getassignedata(asssignedata){
     this.selectedDesigner = asssignedata;
+   
     
   }
 
  accept(id,data:string){
-
+  let event=null
     let status={
       status:data
     }
     this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
-      this.getDesigns(null);
-    })
+      
+    }) 
+    this.searchfor(event);
+    
   }
 
 
@@ -328,6 +370,7 @@ this.DesignModel=this.sample1;
       componentProps: {
         id:id
       },
+      backdropDismiss:false
     });
     modal.onDidDismiss().then((data) => {
       console.log(data)
@@ -336,9 +379,13 @@ this.DesignModel=this.sample1;
         this.getDesigns(null)
       }
   });
-    
+    // modal.dismiss(() => {
+    //   ;
+    //   this.getDesigns(null);
+    // });
     return await modal.present();
   }
+  
 
   dismissBottomSheet() {
     console.log('this', this.drawerState);
@@ -347,17 +394,101 @@ this.DesignModel=this.sample1;
     this.listOfAssignees=[];
   }
 
+//assigning to surveyor
+assignToSurveyor(){
+  if (this.assignForm.status === 'INVALID') {
+    this.utils.errorSnackBar('Please select a surveyor');
+  } else {
+    var designstarttime = new Date();
+    var milisecond = designstarttime.getTime();
+    var additonalhours = 0;
+    if(this.surveyData.requesttype == "prelim"){
+      console.log(parseInt(this.selectedDesigner.jobcount) );
+      additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
+      
+      designstarttime.setHours( designstarttime.getHours() + additonalhours );
+    }else{
+      additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
+      designstarttime.setHours( designstarttime.getHours() + additonalhours );
+    }
+    console.log(this.selectedDesigner);
+    var postData = {};
+    if (this.surveyData.createdby.id == this.userData.id) {
+      if (this.selectedDesigner.company == this.userData.company) {
+        if(this.selectedDesigner.role.type=="qcinspector"){
+          postData = {
+            reviewassignedto: this.selectedDesigner.id,
+            status: "reviewassigned",
+            reviewstarttime: milisecond
+          }; 
+        }
+       if(this.selectedDesigner.role.type=="surveyor") { postData = {
+          designassignedto: this.selectedDesigner.id,
+          isoutsourced: "false",
+          status: "surveyassigned",
+          designstarttime: designstarttime
+        }; 
+        
+      }
+      
+      }
+      else {
+        postData = {
+          outsourcedto: this.selectedDesigner.id,
+          isoutsourced: "true",
+          status: "outsourced"
+        };
+      }
+    } else {
+      if(this.selectedDesigner.role.type=="surveyor"){ postData = {
+        designassignedto: this.selectedDesigner.id,
+        status: "surveyassigned",
+        designstarttime: designstarttime
+      };}
+      if(this.selectedDesigner.role.type=="qcinspector"){
+        postData = {
+          reviewassignedto: this.selectedDesigner.id,
+          status: "reviewassigned",
+          reviewstarttime: milisecond
+        };
+      }
+    }
+    this.utils.showLoading('Assigning').then(()=>{
+      this.apiService.updateSurveyForm(postData, this.surveyId).subscribe((value) => {
+        this.utils.hideLoading().then(()=>{
+          ; 
+          console.log('reach ', value);
+          this.utils.showSnackBar('Survey request has been assigned to' + ' ' + this.selectedDesigner.firstname + ' ' +this.selectedDesigner.lastname +' ' +'successfully');
+          this.dismissBottomSheet();
+          this.showBottomDraw = false;
+          this.utils.setHomepageDesignRefresh(true);
+        })
+      }, (error) => {
+        this.utils.hideLoading();
+        this.dismissBottomSheet();
+        this.showBottomDraw = false;
+      });
+    })
+    }
+
+}
+
+//assigning to designer
   assignToDesigner() {
     console.log(this.designerData.createdby.id);
     
-  if (this.assignForm.status === 'INVALID') {
-    this.utils.errorSnackBar('Please select a designer');
-  } else {
+    if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
+      this.utils.errorSnackBar('Please select a analyst');
+    }
+    else if (this.assignForm.status === 'INVALID' && ( this.designerData.status === 'created'|| this.designerData.status === 'requestaccepted'|| this.designerData.status === 'designassigned')) {
+      this.utils.errorSnackBar('Please select a designer');
+    } else {
     
    
     var designstarttime = new Date();
-  var additonalhours = 0;
-  if(this.designerData.requesttype == "prelim"){
+    var milisecond = designstarttime.getTime();
+    var additonalhours = 0;
+    if(this.designerData.requesttype =="prelim"){
     additonalhours = this.selectedDesigner.jobcount * 2;
     designstarttime.setHours( designstarttime.getHours() + additonalhours );
   }else{
@@ -368,12 +499,11 @@ this.DesignModel=this.sample1;
   if (this.designerData.createdby.id == this.userData.id) {
     if (this.selectedDesigner.company == this.userData.company) {
       if(this.selectedDesigner.role.type=="qcinspector"){
-        postData = {
-          designassignedto: this.selectedDesigner.id,
-          isoutsourced: "false",
-          status: "reviewassigned",
-          designstarttime: designstarttime
-        }; 
+         postData = {
+            reviewassignedto: this.selectedDesigner.id,
+            status: "reviewassigned",
+            reviewstarttime: milisecond
+          };
       }
      if(this.selectedDesigner.role.type=="designer") { postData = {
         designassignedto: this.selectedDesigner.id,
@@ -400,9 +530,9 @@ this.DesignModel=this.sample1;
     };}
     if(this.selectedDesigner.role.type=="qcinspector"){
       postData = {
-        designassignedto: this.selectedDesigner.id,
+        reviewassignedto: this.selectedDesigner.id,
         status: "reviewassigned",
-        designstarttime: designstarttime
+        reviewstarttime: milisecond
       };
     }
   }
@@ -411,7 +541,7 @@ this.DesignModel=this.sample1;
       this.utils.hideLoading().then(()=>{
         ; 
         console.log('reach ', value);
-        this.utils.showSnackBar('Design request has been assigned to' + ' ' + value.name + ' ' + 'successfully');
+        this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname + ' ' +this.selectedDesigner.lastname +' ' +'successfully');
         this.dismissBottomSheet();
         this.showBottomDraw = false;
         this.utils.setHomepageDesignRefresh(true);
@@ -426,7 +556,58 @@ this.DesignModel=this.sample1;
 
 }
 
+//method for bottom drawer confirm
+assign(){
+  if(this.assignForm.status=='INVALID'){
+    this.utils.errorSnackBar('Please select a analyst');
+  }
+  
+  else{if(this.selectedDesigner.role.type=="designer"){
+    this.assignToDesigner();
+  }
+else if(this.selectedDesigner.role.type=="surveyor"){
+  this.assignToSurveyor();
+}
+ else if(this.selectedDesigner.role.type=="qcinspector"){
+ console.log(this.SearchData)
+  if(this.SearchData.type=="design"){
+  this.assignToDesigner();}
+  if(this.SearchData.type=="survey"){
+    this.assignToSurveyor();}
+}}
+}
 
+shareWhatsapp(designData){
+  this.socialsharing.share(designData.prelimdesign.url);
+}
+
+ async shareViaEmails(id,designData){
+  const modal = await this.modalController.create({
+    component: EmailModelPage,
+    cssClass: 'email-modal-css',
+    componentProps: {
+      id:id,
+      designData:designData
+    },
+    
+  });
+  modal.onDidDismiss().then((data) => {
+    console.log(data)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
+    }
+});
+    return await modal.present();
+ }
+
+ refreshData(event: CustomEvent) {
+  let showLoader = true;
+  if (event !== null && event !== undefined) {
+    showLoader = false;
+  }
+  this.fetchPendingDesigns(event, showLoader);
+}
 }
 
 export class DesginDataHelper {

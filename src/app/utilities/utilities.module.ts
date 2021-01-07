@@ -7,13 +7,18 @@ import { DatePicker } from '@ionic-native/date-picker/ngx';
 import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmailSelectorComponent } from './email-selector/email-selector.component'
+import { DateComponent } from './date/date.component';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+
 
 @NgModule({
   declarations: [
     DateTimeComponent,
     UserSelectorComponent,
     AutoCompleteComponent,
-    EmailSelectorComponent
+    EmailSelectorComponent,
+    DateComponent,
+    ProgressBarComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +30,9 @@ import { EmailSelectorComponent } from './email-selector/email-selector.componen
     DateTimeComponent,
     UserSelectorComponent,
     AutoCompleteComponent,
-    EmailSelectorComponent
+    EmailSelectorComponent,
+    DateComponent,
+    ProgressBarComponent
   ],
   providers: [
     DatePicker

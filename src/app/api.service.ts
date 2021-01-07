@@ -15,7 +15,7 @@ import { DesginDataModel } from './model/design.model';
 import { InverterMadeModel } from './model/inverter-made.model';
 import { AssigneeModel } from './model/assignee.model';
 import { SearchModel } from './model/search.model';
-import { BaseUrl } from './contants';
+import { BaseUrl,PlatformUpdateUrl } from './contants';
 import { GOOGLE_API_KEY } from './model/constants';
 import { UtilitiesService } from './utilities.service';
 import { BehaviorSubject } from 'rxjs';
@@ -25,6 +25,10 @@ import { RoofMaterial } from './model/roofmaterial.model';
 import { map, catchError } from 'rxjs/operators';
 import { User} from 'src/app/model/user.model'
 import { AuthGuardService } from './auth-guard.service';
+import { DesignStatistic } from './model/designstats.model';
+import { DesignersStatistics } from './model/designerstats.model';
+import { AnalystStatistics } from './model/analyststats.model';
+import { ROLES } from './contants';
 
 
 @Injectable({
@@ -40,8 +44,10 @@ export class ApiService {
   public searchbarElement: string = '';
   public _OnMessageReceivedSubject: Subject<string>;
   public design : Observable<DesignModel>;
+  public showUserName:Subject<any>;
 
   public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  version = new BehaviorSubject<string>('');
 
 
   constructor(
@@ -50,6 +56,7 @@ export class ApiService {
     private utilities:UtilitiesService,
     private auth: AuthGuardService
   ) {
+    this.getUpgradeMessage();
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
       //Do task when no internet connection
@@ -64,6 +71,7 @@ export class ApiService {
           });
     this.resetHeaders();
     this._OnMessageReceivedSubject = new Subject<string>();
+    this.showUserName= new Subject<any>();
   }
   
  /**
@@ -72,6 +80,18 @@ export class ApiService {
   public emitMessageReceived(msg: string): void {
     this._OnMessageReceivedSubject.next(msg);
   }
+
+  emitUserNameAndRole(data:any){
+    this.showUserName.next(data);
+  }
+
+
+  getUserName():Subject<any>{
+    return this.showUserName;
+  }
+
+
+
   login(data: any): Observable<LoginModel> {
     this.resetHeaders();
     return this.http.post<LoginModel>(BaseUrl + '/auth/local', data, { headers: this.headers });
@@ -167,15 +187,17 @@ export class ApiService {
   }
 
   getSurveyorSurveys(search : string) {
-    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search, { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search , { headers: this.headers });
   }
-  getDesignSurveys(search : string) {
-    return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search, { headers: this.headers });
+  getDesignSurveys(search : string,limit,skip) {
+    return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search +'&limit='+ limit +'&skip='+ skip, { headers: this.headers });
   }
   getAnalystDesign(search :string){
     return this.http.get<DesginDataModel[]>(BaseUrl+'/userdesign?id='+this.userId+'&'+search,{headers:this.headers});
   }
-
+  getProfileDetails(){
+    return this.http.get<DesginDataModel[]>(BaseUrl+'/users/me',{headers:this.headers});
+  }
   refreshHeader() {
     this.headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -203,7 +225,7 @@ export class ApiService {
   }
 
   getSurveyors(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=', { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId, { headers: this.headers });
   }
 
   getAnalysts(): Observable<AssigneeModel[]> {
@@ -242,6 +264,17 @@ export class ApiService {
 
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
+  uploadlogo(blob: Blob, fileName: string) {
+    const data = new FormData();
+    data.append('files', blob,fileName);
+    data.append('path', this.userId + '/logo');
+    data.append('refId', ''+ this.userId);
+    data.append('ref', 'user');
+    data.append('field', 'logo');
+    data.append('source', 'users-permissions');
+
+    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
+  }
   uploaddesign(data) {
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
@@ -260,10 +293,17 @@ export class ApiService {
   updateUser(id, data){
     return this.http.put(BaseUrl + '/users/'+ id, data, { headers: this.uploadHeaders } );
   }
-
-  profileNotification(){
-    return this.http.get(BaseUrl + '/notifications/user/' + this.userId,{ headers: this.headers })
+  getCountOfUnreadNotifications(){
+    return this.http.get(BaseUrl+ "/Notifications/count?user=" + this.userId + "&status=unread", { headers: this.headers});
   }
+  profileNotification(){
+    return this.http.get(BaseUrl + '/notifications?user=' + this.userId + "&_sort=created_at:DESC",{ headers: this.headers })
+  }
+
+  updateNotification(id,status){
+    return this.http.put(BaseUrl + '/notifications/' + id,status,{ headers: this.headers })
+  }
+
   getGoogleImage(lat:number, lng:number): Observable<Blob> {
     var imageurl = "https://maps.googleapis.com/maps/api/staticmap?zoom=19&size=1200x1600&scale=4&maptype=satellite&center=" + lat + ","+ lng + "&key=" + GOOGLE_API_KEY;
     return this.http.get(imageurl, { responseType: 'blob' });
@@ -280,32 +320,42 @@ export class ApiService {
   design_activityDetails(designid){
     return this.http.get(BaseUrl+ "designs/" + designid, { headers: this.headers});
   }
-
-  survey_activityDetails(surveyid){
-    return this.http.get(BaseUrl+ "surveys/" + surveyid, { headers: this.headers});
+  createPayment(data){
+    return this.http.post(BaseUrl + '/createpayment',data,{ headers: this.uploadHeaders });
+  }
+  recharges(data){
+    return this.http.post(BaseUrl + '/recharges',data,{ headers: this.uploadHeaders });
+  }
+  paymentDetail(C_id){
+    return this.http.get(BaseUrl+ "/designs/count?createdby=" + C_id + "&isoutsourced=true&outsourcedto=232", { headers: this.headers});}
+ 
+   
+    prelimCharges(){
+      return this.http.get(BaseUrl+ "commonsettings?settingname=prelimdesigncharges", { headers: this.headers});}
+      
+   
+    permitCharges(){
+      return this.http.get(BaseUrl+ "commonsettings?settingname=permitdesigncharges", { headers: this.headers});}
+     
+      freeCharges(){
+        return this.http.get(BaseUrl+ "commonsettings?settingname=freedesigns ", { headers: this.headers});}
+   
+    survey_activityDetails(surveyid){
+     return this.http.get(BaseUrl+ "surveys/" + surveyid, { headers: this.headers});
+  
   }
   publishSolarMake(value){
     this.solarMakeValue.next(value);
   }
 
-  editDesign(id, inputData): Observable<DesignModel>{
+  editDesign(id:number, inputData:any): Observable<DesignModel>{
    
     return this.http
-    .put<DesignModel>(BaseUrl + "designs/"+ id, inputData, {
+    .put<DesignModel>(BaseUrl + "/designs/"+ id, JSON.stringify(inputData), {
+      headers: this.headers,
       
-      observe: "response"
     })
-    .pipe(
-      map(value => {
-        const member: DesignModel = value.body;
-        return member;
-      }),
-      catchError((err: HttpErrorResponse) => {
-        console.log(err);
-        //   this.utils.showApiError(err.error.message);
-        return throwError(err.error.message);
-      })
-    );
+  
   }
 
   pushtoken(id,data){
@@ -315,18 +365,132 @@ export class ApiService {
   getTeamData(): Observable<User[]> {
     return this.http.get<User[]>(BaseUrl + "/users?_sort=created_at:desc&parent="+this.parentId+"&id_ne="+this.parentId, {
       headers: this.headers,
-      observe: "response"
+   
     })
-    .pipe(
-      map(value => {
-        const members: User[] = value.body;
-        return members;
-      }),
-      catchError((err: HttpErrorResponse) => {
-        return throwError(err.error.message);
-      })
-    );
+   
   
     }
+
+    update_message(){
+      this.headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + this.storageService.getJWTToken()
+      });
+      console.log(this.headers);
+      return this.http.get(BaseUrl + '/platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app',{ headers: this.headers})  
+    }
+
+    getUpgradeMessage(){
+      this.update_message().subscribe(res=>{
+        console.log(res);
+        this.version.next(res[0].appversion);
+      })
+    }
+
+    getStatistic(inputData:any):Observable<DesignStatistic[]>{
+ 
+      return this.http.post<DesignStatistic[]>(BaseUrl + '/designanalytics', inputData, { headers: this.headers });
+    }
   
+    getClientSuperadmin(): Observable<User[]> {
+     // return this.http.get<User[]>(BaseUrl + "fetchsuperadmins", {
+     //   headers: this.headers,
+     //   observe: "response"
+     // });
+     return this.http.get<User[]>(BaseUrl + '/fetchsuperadmins',{headers:this.headers});
+    }
+  
+    getDesignersDetails(starttime:string, endtime:string, requesttype:string):Observable<DesignersStatistics[]>{
+      return this.http.get<DesignersStatistics[]>(BaseUrl + '/getdesignanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype='+requesttype, {headers:this.headers});
+    }
+
+    getanalystanalytics(starttime:string, endtime:string, requesttype:string):Observable<AnalystStatistics[]>{
+      return this.http.get<AnalystStatistics[]>(BaseUrl + '/getanalystanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype='+requesttype, { headers: this.headers});
+    }
+
+    getDesignerDesignsForStats(startdate:string, enddate:string, requesttype:string, id:number){
+      return this.http.get(BaseUrl + '/getdesignerdesigns?status=delivered&designerid='+id+'&startdate='+startdate+'&enddate='+enddate+'&requesttype='+requesttype,{headers: this.headers});
+    }
+
+    getAnalystDesignsForStats(startdate:string, enddate:string, requesttype:string, id:number){
+      return this.http.get(BaseUrl + '/getanalystdesigns?status=delivered&analystid='+id+'&startdate='+startdate+'&enddate='+enddate+'&requesttype='+requesttype,{headers: this.headers});
+    }
+
+    sendPrelimEmails(data:any){
+      return this.http.post(BaseUrl+"/designs/send-prelim-design", data,{headers:this.headers})
+    }
+
+    sendPermitEmails(data:any){
+      return this.http.post(BaseUrl+"/designs/send-permit-design", data,{headers:this.headers})
+    }
+
+    getUserData(id){
+      return this.http.get(BaseUrl + "/users/" + id,{headers: this.headers})
+    }
+    
+    getCoupons(data){
+      return this.http.get(BaseUrl + "/getCoupons?userid="+ this.userId+"&requesttype="+data,{headers: this.headers});
+    }
+    sendCoupon(data:any){
+      return this.http.post(BaseUrl+"/getCoupon", data,{headers:this.headers})
+    }
+
+    addUser(
+      workemail: String,
+      firstname: String,
+      lastname: String,
+      permissiontomakedesign:boolean,
+      role: number,
+      minpermitaccess: boolean
+      // address: String,
+      // country: String,
+      // callingcode: number
+    ): Observable<User> {
+      var randomPassword = this.utilities.randomPass();
+      var parentid = 0;
+      //this.parentId = this.storageService.getParentId();
+      var user = this.storageService.getUser();
+      if (user.role.id == ROLES.SuperAdmin || user.role.id == ROLES.ContractorSuperAdmin){
+        parentid = user.id;
+      }else{
+        parentid = user.parent.id;
+      }
+      const postData = {
+        firstname: firstname,
+        lastname: lastname,
+        email: workemail,
+        permissiontomakedesign:permissiontomakedesign,
+        password: randomPassword,
+        resetPasswordToken: randomPassword,
+        source: "android",
+        username: workemail,
+        confirmed : true,
+        isdefaultpassword: true,
+        role: role,
+        minpermitdesignaccess: minpermitaccess,
+        provider: "local",
+        parent: parentid,
+        company: this.storageService.getUser().company,//user.company,
+        addedby: this.storageService.getUser().id//.currentUserValue.user.id
+      };
+      console.log(postData)
+      return this.http
+        .post<User>(BaseUrl + "/users", JSON.stringify(postData), {
+          headers: this.headers,
+         // observe: "response"
+        })
+        // .pipe(
+        //   map(value => {
+        //     const member: User = value.body;
+        //     return member;
+        //   }),
+        //   catchError((err: HttpErrorResponse) => {
+        //   if(err.error.error == "Unauthorized"){
+        //     this.genericService.handleusersignout();
+        //   }else{
+        //     return throwError(err.error.message);
+        //   }
+        // })
+        // );
+    }
 }

@@ -9,8 +9,8 @@ import { ActivatedRoute, Router, NavigationEnd, RoutesRecognized, NavigationStar
 import { ScheduleFormEvent } from '../model/constants';
 import { Subscription } from 'rxjs';
 import { AddressModel } from '../model/address.model';
-import { filter, pairwise } from 'rxjs/operators';
-import { User } from '../model/user.model';
+import { Intercom } from 'ng-intercom';
+import { NetworkdetectService } from '../networkdetect.service';
 
 @Component({
   selector: 'app-schedule',
@@ -36,6 +36,8 @@ export class SchedulePage implements OnInit, OnDestroy {
   gpsActive = false;
   private subscription: Subscription;
   userdata:any;
+  netSwitch: boolean;
+  deactivateNetworkSwitch: Subscription;
 
   constructor(
     private navController: NavController,
@@ -45,13 +47,15 @@ export class SchedulePage implements OnInit, OnDestroy {
     private platform: Platform,
     private storage: StorageService,
     private utilities: UtilitiesService,
-    private router: Router,
+    public router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
+    private intercom:Intercom,
+    private network:NetworkdetectService
   ) {
   
     
-      
+    this.utilities.showHideIntercom(true);
     const url = this.router.url;
     const splittedUrl = url.split('/');
     console.log(splittedUrl);
@@ -60,7 +64,19 @@ export class SchedulePage implements OnInit, OnDestroy {
 
   }
 
+  ionViewDidEnter(){
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      console.log(this.netSwitch);
+      this.utilities.showHideIntercom(true);
+    })
+  }
+
 ngOnInit() {
+ 
+  this.network.networkDisconnect();
+this.network.networkConnect();
+ 
    this.userdata = this.storage.getUser();
     this.requestLocationPermission();
     if (this.tabsDisabled) {
@@ -80,12 +96,14 @@ ngOnInit() {
   }
 
   goBack() {
+    this.utilities.showHideIntercom(true);
     this.navController.pop();
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.utilities.setStaticAddress('');
+    this.deactivateNetworkSwitch.unsubscribe();
   }
 
   segmentChanged(event: CustomEvent) {
@@ -350,5 +368,9 @@ ngOnInit() {
   startSurvey() {
     console.log('posting value');
     this.utilities.setScheduleFormEvent(ScheduleFormEvent.START_SURVEY);
+  }
+
+  sendDesignForm(){
+     this.utilities.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
   }
 }

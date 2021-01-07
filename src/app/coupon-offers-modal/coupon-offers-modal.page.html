@@ -1,0 +1,35 @@
+
+
+
+  
+  <ion-row><ion-col size="0"> </ion-col>
+    <ion-col size="9" style="align-self: center; font-size: larger;font-weight: bolder;"> Apply Coupon</ion-col>
+    <ion-col><ion-button fill="clear" size="small" class="ion-no-padding" style="float:right" (click)="cancel()">
+      <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+  </ion-button></ion-col>
+  
+  </ion-row>
+  
+  <div style="height:17%;width: 100%;background-color:gainsboro;align-self: center;"><br>
+    <form [formGroup]="couponForm">
+<ion-row><ion-col size='12' style="padding-bottom: 4px;" class="ion-padding"><ion-input type="text" class="input_class" autocapitalize="words"
+  style="font-size: small;" placeholder="Have a promocode?Enter here" formControlName="couponInput" maxlength="15"></ion-input>
+</ion-col></ion-row>
+<ion-row *ngIf="error!==null" style="margin-left: 19px;"><span class="error">{{error}}</span></ion-row></form></div>
+
+
+<ion-row style="margin-top: 10px;margin-left:5%">
+<span style="text-align: center; font-size: initial;font-weight: bold;">AVAILABLE COUPONS</span>
+</ion-row>
+<ion-content [scrollEvents]="true">
+<div *ngFor="let coupon of Coupons" (click)="selectCoupon(coupon)" style="padding: 2px;" >
+<ion-card   [class.selected]="coupon.selected" [class.normal]="!coupon.selected " ><ion-row style="margin-top: 5px;"><ion-col size="8">
+  <span style="font-weight: bold;font-size: revert; margin-left: 10px;color: black;">{{coupon.title}}</span></ion-col>
+ <ion-col><span style="font-weight: bold;float:right;background-color: green;color: white;height:100%;width:100%;text-align: center;">{{coupon.code}}</span> </ion-col>
+</ion-row>
+  <ion-row> <span style="margin-left: 10px;margin-top: 7px;margin-bottom: 5px;">{{coupon.description}}</span></ion-row>
+</ion-card>
+</div>
+
+</ion-content>
+<ion-footer class="ion-padding ion-no-border" ><ion-button  expand="full" shape="block" (click)="applycode()">Apply</ion-button></ion-footer>

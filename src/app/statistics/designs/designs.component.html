@@ -1,0 +1,96 @@
+<ion-content >
+  <form [formGroup]="desginForm" novalidate style="overflow:scroll" class="ion-padding">
+    <ion-row style="margin-top: 20px;"><ion-col size="6">
+    <ion-item class="ion-no-padding">
+  <ion-label position="floating">Company Name</ion-label><ion-select class="form_input select_div" interface='popover'  formControlName="company" (ionChange)="eventCompanyChange($event)">
+    <ion-select-option *ngFor="let data of companyList" [value]="data">{{data.company}}</ion-select-option>
+    
+  </ion-select></ion-item></ion-col>
+  <ion-col>
+  <ion-item class="ion-no-padding">
+  <ion-label position="floating">Filter Dates</ion-label>
+  <!-- <ion-select interface='popover' formControlName="filterDates">
+    
+  <ion-select-option *ngFor="let filter of filteredList" [value]="filter">{{filter}}</ion-select-option>-->
+  <ion-select class="form_input select_div" interface='popover' (ionChange)="eventDatesChange($event)" formControlName="filterDates" value="current">
+    <ion-select-option value="current">Current Month</ion-select-option>
+  <ion-select-option value="previous">Previous Month</ion-select-option>
+  <ion-select-option value="quarter">Previous Quarter</ion-select-option>
+  <ion-select-option value="customs">Customs Dates</ion-select-option> 
+  </ion-select>
+  </ion-item>
+  </ion-col>
+  
+  <!--<ion-row class="ion-margin-top" *ngIf="showValue=='customs'">
+  <ion-col size="6">
+      <ion-item class="ion-no-padding">
+        <ion-label position="floating" style="width: 280px;">From</ion-label>
+          <ion-input style="width: 180px;" type="date" placeholder="YY/MM/DD" (click)="showDate()" formControlName="startdate" readonly>{{myDate}}</ion-input>
+      </ion-item>
+  </ion-col>
+  
+  <ion-col size="6">
+    <ion-item class="ion-no-padding">
+      <ion-label position="floating">To</ion-label>
+        <ion-input style="width: 180px;" type="date"  placeholder="YY/MM/DD" (click)="showDateValue()" formControlName="enddate" readonly>{{mydates}}</ion-input>
+    </ion-item>
+  </ion-col>
+  </ion-row>-->
+  
+  <ion-row class="ion-margin-top" *ngIf="dateChangeValue=='customs'">
+    <ion-col size="6">
+        <ion-item class="ion-no-padding">
+          <ion-label position="floating" style="width: 280px;">From Date*</ion-label>
+            <app-date style="width: 180px;" formControlName="startdate" readonly></app-date>
+        </ion-item>
+    </ion-col>
+    
+    <ion-col size="6">
+      <ion-item class="ion-no-padding">
+        <ion-label position="floating">To Date*</ion-label>
+          <app-date style="width: 180px;"   formControlName="enddate" readonly></app-date>
+      </ion-item>
+    </ion-col>
+    </ion-row>
+  </ion-row>
+  
+  </form>
+  <ion-row style="margin-top: 30px;" *ngIf="dateChangeValue=='customs'">
+  <ion-col ><ion-button color="primary" size="small"  class="button-inner" style="min-width: 10em; margin-left: 30%;" (click)="sendValue()" >Search</ion-button></ion-col>
+  </ion-row>
+   <!--<form [formGroup]="desginForm" novalidate style="overflow:scroll">
+   <ion-row>
+   <ion-col size="6">
+    <ion-item class="ion-no-padding">
+        <ion-label position="floating">Company Name</ion-label>
+        <ion-select class="form_input select_div" placeholder="company name"
+                        ok-text=""
+                    cancel-text=""
+                    formControlName="companyName" interface="popover" value="false"  >
+            <ion-select-option  value="true">Yes</ion-select-option>
+        </ion-select>
+    </ion-item>
+  </ion-col>
+  </ion-row>
+  </form>--> 
+    <h3></h3>
+    <div class="ion-padding" style="margin-top: 30px;">
+      <ion-card style="background-color: white; border-color: white;">
+        <ion-card-header>
+          Bar Chart
+        </ion-card-header>
+        <ion-card-content>
+          <canvas baseChart  height="350vh"
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [colors]="lineChartColors"
+            [plugins]="barChartPlugins"
+            [legend]="barChartLegend"
+            [chartType]="barChartType">
+          </canvas>
+        </ion-card-content>
+      </ion-card>
+      </div>
+  
+    </ion-content>

@@ -1,3 +1,46 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+ <!-- <ion-router-outlet></ion-router-outlet>-->
+ <ion-split-pane contentId="main-content">
+  <ion-menu contentId="main-content" type="overlay">
+      <ion-content>
+        <ion-menu-toggle>
+          <ion-header style="text-align: -webkit-center;">
+            <ion-toolbar style="height: 130px;display: flex;justify-content: center;align-content: center;" routerLink='/profile'>
+              <ion-card *ngIf="isEmptyObject(userData?.logo) || userData?.logo ==null" style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;">{{userData?.firstname.slice(0,1).toUpperCase() + userData?.lastname.slice(0,1).toUpperCase()}}</ion-card>
+              <div *ngIf="!isEmptyObject(userData?.logo) && userData?.logo !==null">
+                <img [src]="userData?.logo?.url" style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;"/>
+              </div>
+            <ion-title ><h4 style="text-align: center;font-weight: bold;margin: 1px;">{{userData?.firstname.charAt(0).toUpperCase() + userData?.firstname.slice(1) + ' ' + userData?.lastname.charAt(0).toUpperCase() + userData?.lastname.slice(1)}}</h4></ion-title>
+           <small style="text-align: center;">{{userData?.role.name}} </small>
+          </ion-toolbar>
+      </ion-header>
+        </ion-menu-toggle>
+            <!--  <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+                  <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none"
+                            detail="false" [class.selected]="selectedIndex == i">
+                      <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                      <ion-label>{{ p.title }}</ion-label>
+                  </ion-item>
+              </ion-menu-toggle>-->
+              <ion-list id="inbox-list">
+              <ion-menu-toggle auto-hide="false">
+                <ion-item [routerLink]="['/onboarding']" routerDirection="forward">
+                  <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item>
+                    <ion-item  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">
+                      <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>
+                     <ion-item  (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">
+                      <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Permit</ion-item>
+                     <!-- <ion-item *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors'" (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
+                      <ion-img src="/assets/images/surveyblack.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Survey</ion-item> -->
+                     <ion-item [routerLink]="['/groups']" routerDirection="forward">
+                      <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Messages</ion-item>
+                      <!-- <ion-item  (click)="SwitchMenuAccordingtoRoles('statistics')" *ngIf="userData?.role.type!='clientsuperadmin'" routerDirection="forward">
+                       <ion-img src="/assets/images/stats.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Statistics</ion-item> -->
+                       
+              </ion-menu-toggle>
+          </ion-list>
+      </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+</ion-split-pane>
 </ion-app>

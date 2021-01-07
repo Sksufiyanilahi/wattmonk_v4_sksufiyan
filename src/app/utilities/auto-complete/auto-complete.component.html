@@ -1,6 +1,7 @@
 <ion-item class="ion-no-padding" #searchBar>
-    <ion-input [placeholder]="placeholder" style="font-size: 12px;word-wrap: break-word;" class="form_input" (ionChange)="onValueChanged($event)" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)" 
-               [(ngModel)]="selectedDataName"></ion-input>
+    <ng-content></ng-content>
+    <ion-input style="font-size: 12px;word-wrap: break-word;" class="form_input" (ionChange)="onValueChanged($event)" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)" 
+               [(ngModel)]="selectedDataName" autocomplete="off"></ion-input>
 </ion-item>
 <ion-grid class="ion-no-padding popup-list"
           *ngIf="sortedList.length !== 0">

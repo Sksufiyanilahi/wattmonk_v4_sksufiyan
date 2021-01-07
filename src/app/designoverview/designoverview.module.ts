@@ -10,6 +10,7 @@ import { DesignoverviewPage } from './designoverview.page';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
+import { SharedModule } from '../shared/shared.module';
 import { NewdesignComponent } from './newdesign/newdesign.component';
 import { CompleteddesignComponent } from './completeddesign/completeddesign.component';
 import { InreviewDesignComponent } from './inreview-design/inreview-design.component';
@@ -21,7 +22,8 @@ import { DelievereddesignComponent } from './delievereddesign/delievereddesign.c
     CommonModule,
     FormsModule,
     IonicModule,
-    DesignoverviewPageRoutingModule
+    DesignoverviewPageRoutingModule,
+    SharedModule
   ],
   declarations: [DesignoverviewPage,NewdesignComponent,CompleteddesignComponent,InreviewDesignComponent,DelievereddesignComponent],
   providers: [

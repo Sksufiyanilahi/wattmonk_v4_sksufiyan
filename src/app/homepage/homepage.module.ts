@@ -15,15 +15,17 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { IonBottomDrawerModule } from 'ion-bottom-drawer';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { PendingComponent } from './design/pending/pending.component';
-import { CompletedComponent } from './design/completed/completed.component';
-import { DeliveredComponent } from './design/delivered/delivered.component';
-import { InreviewComponent } from './design/inreview/inreview.component';
 import { DeclinepagePage } from '../declinepage/declinepage.page';
 import { Chooser } from '@ionic-native/chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { EmailModelPage } from '../email-model/email-model.page';
+import { EmailModelPageModule } from '../email-model/email-model.module';
+import { SharedModule } from '../shared/shared.module';
+import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+
 
 
 @NgModule({
@@ -35,9 +37,10 @@ import { EmailModelPage } from '../email-model/email-model.page';
     HomepagePageRoutingModule,
     IonBottomDrawerModule,
     ReactiveFormsModule,
-    UtilitiesModule
+    UtilitiesModule,
+    SharedModule
   ],
-  declarations: [HomepagePage, SurveyComponent,DesignComponent,PendingComponent,CompletedComponent,InreviewComponent,DeliveredComponent,DeclinepagePage,EmailModelPage],
+  declarations: [HomepagePage, SurveyComponent,DesignComponent],
   providers: [
     DatePipe,
     Diagnostic,
@@ -45,7 +48,9 @@ import { EmailModelPage } from '../email-model/email-model.page';
     LaunchNavigator,
     Chooser,
     File,
-    Network
+    Network,
+    FileTransfer,
+    LocalNotifications
   ]
 })
 export class HomepagePageModule {

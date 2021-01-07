@@ -1,9 +1,39 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>notification</ion-title>
+    <ion-back-button slot="start"></ion-back-button>
+    <ion-title>Notifications</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-grid style="text-align: center;">
+      <ion-spinner name="dots" *ngIf="!showLoader"></ion-spinner>
+   <ion-row *ngIf="notification.length>0;else noNotification">
+     <ion-col class="padding_adjust">
+       <!-- <ion-item  lines="none" > -->
+         <ng-container  *ngFor="let notifications of notification">
 
+           <ion-card class="ion-padding mg" (click)="updateNotificationStatus(notifications.id)" [ngClass]="notifications.status=='unread'? 'black': 'grey'">
+             <span >
+               <img class="profile-icon" src="/assets/images/icons8-checked.svg">
+               
+               <p style="white-space: normal;font-size:14px !important;text-align: justify;margin: 0px;">{{notifications.message}}
+                 <!-- <small style="color: mediumblue;float:right;">.</small> -->
+               </p>
+            
+             </span>
+              <small style="float: right;">{{notifications.created_at | date:'dd/MM/yyyy'}}</small>
+           </ion-card>
+         </ng-container>
+       <!-- </ion-item> -->
+     </ion-col>
+   </ion-row>
+   <ng-template #noNotification>
+     <ion-row>
+       <ion-col *ngIf="disableContent" style="text-align: center;margin-top: 50%;"> 
+         No Notification Found
+       </ion-col>
+     </ion-row>
+   </ng-template>
+ </ion-grid>
 </ion-content>

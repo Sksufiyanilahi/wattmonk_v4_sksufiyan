@@ -29,5 +29,10 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+*.zip
+*.rar
+wattmonk.keystore
+*.apk
+
 
 package-lock.json

@@ -3,8 +3,14 @@
       <ion-toolbar> -->
   <ion-grid>
       <ion-row class="ion-align-items-center">
+          <ion-toolbar>
+            <ion-buttons slot="start">
+                <ion-menu-button></ion-menu-button>
+              </ion-buttons>
+              <ion-row class="ion-align-items-center">
           <ion-col *ngIf="showHome === true">
-              <h1 class="ion-no-padding ion-no-margin home">Home</h1>
+              <h1 class="ion-no-padding ion-no-margin home" *ngIf="route.url=='/analystoverview/permitdesign'">Permit</h1>
+              <h1 class="ion-no-padding ion-no-margin home" *ngIf="route.url=='/analystoverview/design'">Prelim</h1>
           </ion-col>
           <!-- <ion-col *ngIf="showSearchBar === true" >
               <ion-searchbar debounce="0" placeholder="home" class="custom"></ion-searchbar>
@@ -15,27 +21,28 @@
               </div>
           </ion-col>
           <ion-col size="auto" style="position: relative;">
-              <div class="notification-padding" [routerLink]="['/profile']" routerDirection="forward">
+              <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward"  (click)="setzero()">
                   <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
-                  <!-- <span class="badge">
-                              4
-                          </span> -->
+                  <span class="badge" *ngIf="unreadCount > 0">
+                    {{unreadCount}}
+                          </span>
               </div>
-          </ion-col>
-      </ion-row>
+          </ion-col></ion-row>
+        </ion-toolbar>
+        </ion-row>
     </ion-grid>
-  
+
   <!-- </ion-toolbar> -->
   <!-- </ion-header> -->
   <ion-tabs style="margin-top: 52px;">
-      <ion-tab-bar slot="top" class="ion-no-border">
+    <!--  <ion-tab-bar slot="top" class="ion-no-border">
           <ion-tab-button tab="design" *ngIf="isUserAnalyst">
               <ion-label>Designs</ion-label>
           </ion-tab-button>
           <ion-tab-button tab="survey" *ngIf="isUserAnalyst">
               <ion-label>Surveys</ion-label>
           </ion-tab-button>
-      </ion-tab-bar>
+      </ion-tab-bar>-->
   </ion-tabs>
 
   <!-- <ion-tabs style="margin-top: 20%;">
@@ -117,30 +124,30 @@
   </ion-grid>
 
 </ion-content>
+<ion-tabs style="margin-top: 52px;">
+    <!-- <ion-tab-bar slot="top" class="ion-no-border">
+        <ion-tab-button tab="design" *ngIf="isUserAnalyst">
+            <ion-label>Designs</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="survey" *ngIf="isUserAnalyst">
+            <ion-label>Surveys</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar> -->
+</ion-tabs>
 
-
-<ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
+<!-- <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
   <div class="position-relative">
-      <ion-fab horizontal="center" class="fab-position position-absolute" *ngIf="isUserAnalyst ">
-          <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md">
-              <ion-icon name="add"></ion-icon>
-          </ion-fab-button>
-      </ion-fab>
+
       <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
           <ion-row>
-              <ion-col size="4" [routerLink]="['/analystoverview/design']">
+              <ion-col size="6" [routerLink]="['/analystoverview/design']">
                   <div class="tab"  style="cursor: pointer;">
                       <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>
                       <span class="tabText">Home</span>
                   </div>
               </ion-col>
-              <ion-col size="4" [routerLink]="['/message']">
-                  <div class="tab" style="cursor: pointer;">
-                      <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
-                      <span class="tabText">Messages</span>
-                  </div>
-              </ion-col>
-              <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
+
+              <ion-col size="6" [routerLink]="['/profile']" routerDirection="forward">
                   <div class="tab" style="cursor:pointer">
                       <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
                       <span class="tabText">Profile</span>
@@ -150,4 +157,4 @@
       </ion-grid>
   </div>
 
-</ion-footer>
+</ion-footer> -->

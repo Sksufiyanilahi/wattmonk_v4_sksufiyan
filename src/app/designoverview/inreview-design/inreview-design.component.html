@@ -4,15 +4,18 @@
   </ion-refresher>
   <ion-grid *ngIf="listOfDesignsHelper.length !== 0">
     <ion-row *ngFor="let item of listOfDesignsHelper;let i = index">
-        <ion-col size="12" class="ion-margin-top">
+        <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
+            <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
+                <!-- <ion-row *virtualItem="let item;let i = index"> -->
+        <!-- <ion-col size="12" class="ion-margin-top">
                 <span class="ion-padding" *ngIf="today === item.date">
                     Today
                   </span>
             <span class="ion-padding" *ngIf="today !== item.date">
                       {{item.date | date: 'dd MMM yyyy'}}
                 </span>
-        </ion-col>
-        <ion-col *ngFor="let designData of item.listOfDesigns;let i = index " size="12">
+        </ion-col> -->
+        <ion-col *ngFor="let designData of item.listOfDesigns;let i = index;trackBy: trackdesign " size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name" >{{designData.name}}
                       <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
@@ -20,26 +23,31 @@
                     </span> -->
                     <span [routerLink]="['/design-details/',designData.id]"
                     routerDirection="forward" class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'">In Review</span>
+                   
                     <span [routerLink]="['/design-details/',designData.id]"
-                    routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0">Overdue</span>
+                    routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue">Overdue</span>
+                    <span [routerLink]="['/design-details/',designData.id]" routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'">Review Failed</span>
+                    <span [routerLink]="['/design-details/',designData.id]" routerDirection="forward" class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'"> Review Passed</span>
+                    <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>
+                    <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+                    *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
                     <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span> 
                 </p>
-               <p> <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
+               <p style="margin: 0px;"> <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
                       routerDirection="forward">{{designData.email}}</span>
-                      <span *ngIf="item.lateby > 1" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{item.lateby}} days</strong></span>
-                      <span *ngIf="item.lateby == 1" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by a day</strong></span>
+                      <span *ngIf="designData.isoverdue" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{item.lateby}}</strong></span>
+                   
             </p>
             
                        <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{designData.phonenumber}}</span></a>
                 <span style="margin:0px" class="customer-address z-100"
-                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
+                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
 
                 <ion-row style="margin-bottom: 8px;" [routerLink]="['/design-details/',designData.id]" >
-                    <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                    <span class="chipdetail" style="background-color: #95afc0;" >{{designData.formattedjobtype}}</span>
-                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'">Failed</span>
-                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'">Passed</span>
+                    <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
+                    <span class="chipdetail" style="background-color: #95afc0;" >{{designData.source}}</span>
+                      
                 </ion-row>
                 <ion-row class="ion-no-margin ion-no-margin" *ngIf="designData.status == 'reviewfailed'">
                     <ion-col></ion-col>
@@ -54,6 +62,7 @@
             </div>
         </ion-col>
     </ion-row>
+    <!-- </ion-virtual-scroll> -->
     <ion-row>
         <ion-col size="12" style="height: 100px;">
         </ion-col>
@@ -61,6 +70,15 @@
 </ion-grid>
 
 <div *ngIf="listOfDesignsHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+        {{noDesignsFound}}
     <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
 </div>
+
+<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+     >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+ 
 </ion-content>

@@ -4,17 +4,19 @@ import { ApiService } from '../api.service';
 import { DatePipe } from '@angular/common';
 import { StorageService } from '../storage.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, MenuController, Platform, ToastController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
-import { ROLES } from '../contants';
+import { COMETCHAT_CONSTANTS, ROLES } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
+import { environment } from 'src/environments/environment';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-homepage',
@@ -22,6 +24,7 @@ import { NetworkdetectService } from '../networkdetect.service';
   styleUrls: ['./homepage.page.scss'],
 })
 export class HomepagePage implements OnInit, OnDestroy {
+  private version = environment.version;
   @Output() ionInput = new EventEmitter();
 
 
@@ -36,6 +39,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 
   showFooter = true;
   // Geocoder configuration
+  unreadCount;
   geoEncoderOptions: NativeGeocoderOptions = {
     useLocale: true,
     maxResults: 5
@@ -49,10 +53,14 @@ export class HomepagePage implements OnInit, OnDestroy {
   name: any;
   userRole: any;
   netSwitch: any;
+  update_version: string;
+  count: any;
+  deactivateNetworkSwitch: Subscription;
 
   constructor(
     private utilities: UtilitiesService,
     private apiService: ApiService,
+    private menu: MenuController,
     private nativeGeocoder: NativeGeocoder,
     private platform: Platform,
     private datePipe: DatePipe,
@@ -62,37 +70,52 @@ export class HomepagePage implements OnInit, OnDestroy {
     private geolocation: Geolocation,
     private toastController: ToastController,
     public route: Router,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    private iab:InAppBrowser
   ) {
     // this.initializeItems();
     //this.scheduledPage();
   }
 
+  getNotificationCount(){
+    this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+      console.log("count",count);
+     this.unreadCount= count;
+    });
+
+
+  }
+
   ngOnInit() {
-    this.setupCometChatUser();
-    this.requestLocationPermission();
-    this.updateUserPushToken();
+     this.apiService.version.subscribe(versionInfo=>{
+      this.update_version = versionInfo;
+       });
+       this.getNotificationCount();
+           this.setupCometChat();
+           this.requestLocationPermission();
+            this.updateUserPushToken();
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
-    if (this.storage.getUser().role.id === ROLES.Surveyor) {
-      // surveyor will only see survey tab
-      this.isUserSurveyor = true;
-      this.isUserDesigner = false;
-      this.route.navigate(['homepage/survey']);
+    // if (this.storage.getUser().role.id === ROLES.Surveyor) {
+    //   // surveyor will only see survey tab
+    //   this.isUserSurveyor = true;
+    //   this.isUserDesigner = false;
+    //   this.route.navigate(['homepage/survey']);
 
-    } else if (this.storage.getUser().role.id === ROLES.Designer) {
-      // designer will only see design tab
-      this.isUserSurveyor = false;
-      this.isUserDesigner = true;
-      this.route.navigate(['homepage/design']);
+    // } else if (this.storage.getUser().role.id === ROLES.Designer) {
+    //   // designer will only see design tab
+    //   this.isUserSurveyor = false;
+    //   this.isUserDesigner = true;
+    //   this.route.navigate(['homepage/design']);
 
-    } else if (this.storage.getUser().role.id === ROLES.BD || this.storage.getUser().role.id === ROLES.Admin || this.storage.getUser().role.id === ROLES.ContractorAdmin || this.storage.getUser().role.id === ROLES.ContractorSuperAdmin || this.storage.getUser().role.id === ROLES.SuperAdmin) {
-      // admin will see both tabs
-      this.isUserSurveyor = true;
-      this.isUserDesigner = true;
-      this.route.navigate(['homepage/design']);
-    }
+    // } else if (this.storage.getUser().role.id === ROLES.BD || this.storage.getUser().role.id === ROLES.Admin || this.storage.getUser().role.id === ROLES.ContractorAdmin || this.storage.getUser().role.id === ROLES.ContractorSuperAdmin || this.storage.getUser().role.id === ROLES.SuperAdmin) {
+    //   // admin will see both tabs
+    //   this.isUserSurveyor = true;
+    //   this.isUserDesigner = true;
+    //   this.route.navigate(['homepage/design']);
+    // }
+
   }
 
   updateUserPushToken(){
@@ -104,6 +127,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.deactivateNetworkSwitch.unsubscribe();
   }
 
   initializeItems() {
@@ -113,25 +137,44 @@ export class HomepagePage implements OnInit, OnDestroy {
     ];
   }
 
-  setupCometChatUser() {
-    const user = new CometChat.User(this.storage.getUserID());
+  openFirst() {
+    this.menu.enable(true, 'first');
+    this.menu.open('first');
+  }
+
+  openEnd() {
+    this.menu.open('end');
+  }
+
+  openCustom() {
+    this.menu.enable(true, 'custom');
+    this.menu.open('custom');
+  }
+
+  setupCometChat() {
+    let userId = this.storage.getUserID();
+    const user = new CometChat.User(userId);
     user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
-    CometChat.createUser(user, COMET_CHAT_AUTH_KEY).then(
-      (user) => {
-        console.log('user created', user);
-      }, error => {
-        console.log('error', error);
-      }
-    );
-    CometChat.login(this.storage.getUserID(), COMET_CHAT_AUTH_KEY).then(
-      (user) => {
-        console.log('Login Successful:', { user });
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
       },
       error => {
-        console.log('Login failed with exception:', { error });
+        console.log('Initialization failed with error:', error);
       }
     );
-
   }
 
   getItems(ev: any) {
@@ -166,7 +209,7 @@ export class HomepagePage implements OnInit, OnDestroy {
               this.searchDesginItem = searchModel;
               // console.log(this.searchDesginItem);
 
-            } else {    
+            } else {
                 this.searchSurveyItem = searchModel;
             }
           });
@@ -373,10 +416,25 @@ export class HomepagePage implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
-    this.network.networkSwitch.subscribe(data=>{
+
+    if(this.version !== this.update_version && this.update_version !==''){
+
+      setTimeout(()=>{
+
+        this.utilities.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
+          text:'Ok',
+
+          handler:()=>{
+            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
+           this.ionViewDidEnter();
+          }
+        }]);
+      },2000)
+    }
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
-      
+
     })
 
 this.network.networkDisconnect();
@@ -390,6 +448,10 @@ this.network.networkConnect();
     });
   }
 
+  setzero(){
+    this.unreadCount= 0;
+  }
+
   ionViewWillLeave() {
     this.subscription.unsubscribe();
 
@@ -397,7 +459,7 @@ this.network.networkConnect();
   scheduledPage(){
     if(this.route.url=='/homepage/design'){
       this.route.navigate(['/schedule/design'])
-    }else{
+    }else if(this.route.url=='/homepage/survey'){
       this.route.navigate(['/schedule/survey'])
     }
   }

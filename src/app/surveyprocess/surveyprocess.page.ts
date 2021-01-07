@@ -180,6 +180,8 @@ export class SurveyprocessPage implements OnInit {
   pvForm: FormGroup;
   activeForm: FormGroup;
 
+  archFiles: string[]=[];
+
   totalpercent = 0;
   shotcompletecount = 0;
   totalstepcount: number;
@@ -455,7 +457,68 @@ export class SurveyprocessPage implements OnInit {
 
       this.getSiteLocationGoogleImageFromService();
     } else if (this.surveytype == "pv") {
+      this.totalstepcount = 19;
+      this.pvForm = new FormGroup({
+        roofmaterial: new FormControl('', [Validators.required]),
+        servicefeedsource: new FormControl('', [Validators.required]),
+        existingsolarsystem: new FormControl('', [Validators.required]),
+        detailsofexisitingsystem: new FormControl('', []),
+        newconstruction: new FormControl('', [Validators.required]),
+        architecturaldesign: new FormControl('', []),
+        additionalnotes: new FormControl('', []),
+        shotname: new FormControl('', [])
+      });
 
+      this.activeForm = this.pvForm;
+
+      // this.storage.clear();
+      this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
+        console.log(data);
+        if (data) {
+          this.mainmenuitems = data.menuitems;
+          this.totalpercent = data.currentprogress;
+          this.selectedmainmenuindex = data.selectedmainmenuindex;
+          this.selectedsubmenuindex = data.selectedsubmenuindex;
+          this.selectedshotindex = data.selectedshotindex;
+          this.shotcompletecount = data.shotcompletecount;
+          this.previousmainmenuindex = data.previousmainmenuindex;
+          this.previoussubmenuindex = data.previoussubmenuindex;
+          this.previousshotindex = data.previousshotindex;
+
+          this.surveyid = data.surveyid;
+          this.surveytype = data.surveytype;
+          this.surveycity = data.city;
+          this.surveystate = data.state;
+          this.latitude = data.latitude;
+          this.longitude = data.longitude;
+
+          // restore form
+          Object.keys(data.formdata).forEach((key: string) => {
+            let control: AbstractControl = null;
+            control = this.activeForm.get(key);
+            control.setValue(data.formdata[key]);
+          });
+
+          this.isdataloaded = true;
+
+          this.handleViewModeSwitch();
+        } else {
+          this.http
+            .get("assets/surveyprocessjson/battery.json")
+            .subscribe((data) => {
+              this.mainmenuitems = JSON.parse(JSON.stringify(data));
+              this.isdataloaded = true;
+
+              this.mainmenuitems.forEach(element => {
+                if (element.isactive) {
+                  this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+                }
+              });
+            });
+        }
+      });
+
+      this.getSiteLocationGoogleImageFromService();
     }
   }
 
@@ -479,7 +542,7 @@ export class SurveyprocessPage implements OnInit {
       height: window.screen.height,
       camera: 'rear',
       tapPhoto: true,
-      tapFocus: true,
+      tapToFocus: true,
       previewDrag: true,
       toBack: true,
       alpha: 1
@@ -820,6 +883,12 @@ export class SurveyprocessPage implements OnInit {
     } else {
     }
   }
+
+  architecturalfiles(event){
+     for(var i = 0; i < event.target.files.length; i++){
+       this.archFiles.push(event.target.files[i]) 
+     }
+   }
 
   handleAnswerSubmission(result) {
     this.iscapturingallowed = true;
@@ -1233,10 +1302,12 @@ export class SurveyprocessPage implements OnInit {
     this.utilitieservice.setDataRefresh(true);
 
     var isutilitymanualinput = false;
-    if (this.activeForm.get("utility").value == null || this.activeForm.get("utility").value == "") {
-      if (this.utility.manualinput != "") {
-        isutilitymanualinput = true;
-        this.activeForm.get("utility").setValue(this.utility.manualinput);
+    if(this.surveytype != "pv"){
+      if (this.activeForm.get("utility").value == null || this.activeForm.get("utility").value == "") {
+        if (this.utility.manualinput != "") {
+          isutilitymanualinput = true;
+          this.activeForm.get("utility").setValue(this.utility.manualinput);
+        }
       }
     }
 
@@ -1245,6 +1316,7 @@ export class SurveyprocessPage implements OnInit {
     } else {
       this.markMainMenuCompletion();
       if (this.checkProcessCompletion()) {
+        if(this.surveytype != "pv"){
         this.utilitieservice.showLoading('Saving Survey').then(() => {
           // const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value.name);
           if (isutilitymanualinput) {
@@ -1277,6 +1349,9 @@ export class SurveyprocessPage implements OnInit {
             }
           }
         });
+      }else{
+        this.savePVFormData();
+      }
       } else {
         this.displayAlertForRemainingShots();
       }
@@ -1303,6 +1378,35 @@ export class SurveyprocessPage implements OnInit {
       pvmeter: JSON.parse(this.batteryForm.get("pvmeter").value),
       acdisconnect: JSON.parse(this.batteryForm.get("acdisconnect").value),
       interconnection: this.batteryForm.get("interconnection").value,
+      status: 'surveycompleted'
+    }
+    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.insomnia.keepAwake()
+          .then(
+            () => {
+              console.log('success')
+            },
+            () => console.log('error')
+          );
+        this.uploadImagesToServer();
+
+      });
+    }, (error) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.utilitieservice.errorSnackBar(JSON.stringify(error));
+      });
+    });
+  }
+
+  savePVFormData() {
+    const data = {
+      roofmaterial: this.pvForm.get("roofmaterial").value.id,
+      servicefeedsource: this.pvForm.get("servicefeedsource").value,
+      additionalnotes: this.pvForm.get("additionalnotes").value,
+      existingsolarsystem: this.pvForm.get("existingsolarsystem").value,
+      newconstruction: this.pvForm.get("newconstruction").value,
+      detailsofexisitingsystem: this.pvForm.get("detailsofexisitingsystem").value,
       status: 'surveycompleted'
     }
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
@@ -1449,7 +1553,7 @@ export class SurveyprocessPage implements OnInit {
       } else {
         filename = imageToUpload.imagename + '.png';
       }
-      this.utilitieservice.setLoadingMessage('Uploading ' + this.imageuploadindex + ' of ' + this.totalimagestoupload);
+      this.utilitieservice.setLoadingMessage('Uploading ' + filename + ' of ' + this.totalimagestoupload);
       this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
         this.imageuploadindex++;
         mapOfImages.splice(0, 1);

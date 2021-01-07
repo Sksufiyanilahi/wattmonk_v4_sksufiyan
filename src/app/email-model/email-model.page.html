@@ -15,7 +15,7 @@
          <p class="listitem">{{item?.firstname}}</p>
          <p class="listitem">{{item?.lastname}}</p>
          <p class="listitem">({{item?.email}})</p>
-         <ion-checkbox slot="start" [(ngModel)]="item.Checked" ></ion-checkbox>
+         <ion-checkbox slot="start" [(ngModel)]="item.Checked" (ionChange)="checkedMails($event)"></ion-checkbox>
          
      
      </ion-item>
@@ -25,7 +25,7 @@
          <ion-row>
            <ion-col>
              <h6 style="margin-top:0px;padding: 2px;"></h6>
-             <textarea id="inputemails" placeholder="eg : john@gmail.com" type="emails" multiple style="width: 100%;" ></textarea>
+             <textarea id="inputemails" placeholder="eg : john@gmail.com" type="emails" multiple style="width: 100%;" [(ngModel)]='emails'></textarea>
            </ion-col>
          </ion-row>
         <!-- <ion-row>
@@ -41,7 +41,7 @@
   </ion-content>
     <footer style="text-align: right;margin:12px;">
       <ion-button fill="clear" (click)="cancel()">Cancel</ion-button>
-      <ion-button fill="clear" (click)="SendMail()">Send</ion-button>
+      <ion-button fill="clear" (click)="SendMail()" [disabled]='emails =="" && !checkedEmailIds'>Send</ion-button>
     </footer>
   <!-- <div class=_padding>
     <p>Decline the design Request</p>

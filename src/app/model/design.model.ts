@@ -76,6 +76,7 @@ export class DesginDataModel {
   name: string;
   email: string;
   monthlybill: number;
+  chatid:string;
   phonenumber: string;
   created_at: Date;
   updated_at: Date;
@@ -104,13 +105,29 @@ export class DesginDataModel {
   tiltofgroundmountingsystem:string;
   architecturaldesign:any=[];
   prelimdesign:any;
+  permitdesign:any;
   deliverydate:any;
   formattedjobtype : string;
   totalpercent : number;
   status:string;
   reviewstarttime:any;
   designstarttime:any;
+  designacceptancestarttime:any;
+  designacceptanceremainingtime:any;
   attachments:any=[];
+  designremainingtime:any;
+  isinrevisionstate: any;
+  revisionattachments: any;
+  isoverdue:boolean = false;
+  lateby:any;
+  reviewassignedto:any;
+  reviewissues:any;
+  revisioncomments:any;
+  requestdeclinereason:any;
+  requestdeclineattachment:any;
+  isoutsourced:any;
+  requesttype:string;
+  recordupdatedon:any;
 }
 
 export class PrelimDesign{
@@ -125,5 +142,9 @@ export class PrelimDesign{
    id:number;
    activity:string
  }
+ export class arcFile{
+  name:string;
+  type:string;
+}
 
 

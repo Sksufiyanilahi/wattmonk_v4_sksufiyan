@@ -1,0 +1,81 @@
+<ion-header >
+  <ion-row>
+   <ion-col class="ion-padding" style="margin-top: 4px; font-size: larger;" *ngIf="name=='analystname'" size="10">{{designers.analyst}}</ion-col>
+    <ion-col class="ion-padding" style="margin-top: 4px; font-size: larger;" *ngIf="name=='designername'" size="10">{{designers.designer}}</ion-col>
+    <!-- <ion-col size="10"></ion-col> -->
+  <ion-col size="auto">
+    <ion-button fill="clear" style="margin-top: 6px;" size="small" class="ion-no-padding" (click)="goBack()">
+        <ion-icon style="margin-top: 6px;" name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+    </ion-button>
+  </ion-col></ion-row>
+  </ion-header>
+  <ion-content style="height: 170px;" [scrollEvents]="true">
+  
+  
+    <!--<p>{{designers?.designer}}</p>-->
+  
+    <ion-list>
+      <ion-item>
+        <ion-row class="width">
+          <ion-col style="float: left;">
+            <ion-label style="font-size: 14px; float: left;">Assigned</ion-label>
+          </ion-col>
+          <ion-col style="float: right;">
+            <ion-label style="font-size: 14px; float:right">{{designers.totaldesignscreated}}</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item>
+        <ion-row class="width">
+          <ion-col style="float: left;">
+            <ion-label style="font-size: 14px; float: left;">On Time</ion-label>
+          </ion-col>
+          <ion-col style="float: right;">
+            <ion-label style="font-size: 14px; float:right">{{designers.ontimedesignscompleted}}</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item>
+        <ion-row class="width">
+          <ion-col style="float: left;">
+            <ion-label style="font-size: 14px; float: left;">Delayed</ion-label>
+          </ion-col>
+          <ion-col style="float: right;">
+            <ion-label style="font-size: 14px; float:right">{{designers.latedesignscompleted}}</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item>
+        <ion-row class="width">
+          <ion-col style="float: left;">
+            <ion-label style="font-size: 14px; float: left;">Avg Completion Time</ion-label>
+          </ion-col>
+          <ion-col style="float: right;">
+            <ion-label style="font-size: 14px; float:right">{{designers.avgdesigncompletiontimestamp}}</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item>
+        <ion-row class="width">
+          <ion-col style="float: left;">
+            <ion-label style="font-size: 14px; float: left;">Avg Review Failure</ion-label>
+          </ion-col>
+          <ion-col style="float: right;">
+            <ion-label style="font-size: 14px; float:right">{{designers.avgreviewfailurecount}}</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item>
+        <ion-row class="width">
+    <ion-col style="float: left;">
+      <ion-label style="font-size: 14px; float: left;">Monthly Rating</ion-label>
+    </ion-col>
+    <ion-col style="float: right;">
+      <ion-label style="font-size: 14px; float:right">{{designers.monthlyrating}}</ion-label>
+    </ion-col>
+  </ion-row>
+</ion-item>
+
+    </ion-list>
+  </ion-content>
+  

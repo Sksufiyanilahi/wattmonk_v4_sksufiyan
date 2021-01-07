@@ -13,6 +13,7 @@ export class MessagePage implements OnInit {
 
   conversations: Conversation[] = [];
   conversationsRequest;
+  userListArray: any=[];
 
   constructor(
     private navController: NavController,
@@ -37,6 +38,21 @@ export class MessagePage implements OnInit {
     this.utilities.showLoading('Getting Conversations').then(() => {
       this.conversationsRequest.fetchNext().then((conversationList) => {
           this.utilities.hideLoading().then(() => {
+            // if(conversationList.length > 0){
+            //   CometChat.getUnreadMessageCountForAllUsers().then(array=>{
+            //     const unread  =Object.keys(array);
+            //     if(unread.length>0){
+            //       unread.map(uid=>{
+            //         const index= conversationList.findIndex(user=>user.uid===uid);
+            //         if(index !==-1){
+            //           conversationList[index].unreadCount = array[uid];
+            //         }
+            //       })
+            //     }
+            //     this.conversations = conversationList;
+            // console.log('UserList Array :', this.conversations);
+            //   })
+            // }
             console.log('Conversations list received:', conversationList);
             conversationList.forEach((item) => {
               console.log('item', item);

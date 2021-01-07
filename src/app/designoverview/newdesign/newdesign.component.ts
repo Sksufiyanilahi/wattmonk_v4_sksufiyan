@@ -23,6 +23,8 @@ export class NewdesignComponent implements OnInit {
   listOfDesignDataHelper: DesginDataHelper[] = [];
   private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
+  skip:number=0;
+  limit:number=10;
   currentDate:any=new Date()
 
   today: any;
@@ -31,6 +33,8 @@ export class NewdesignComponent implements OnInit {
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
   overdue: any;
+  unsubscribeMessage: Subscription;
+  noDesignsFound: string;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -41,23 +45,32 @@ export class NewdesignComponent implements OnInit {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
-    this.apiService._OnMessageReceivedSubject.subscribe((r) => {
-      console.log('message received! ', r);
-      this.getDesigns();
-    });
+  //  this.unsubscribeMessage=  this.apiService._OnMessageReceivedSubject.subscribe((r) => {
+  //     console.log('message received! ', r);
+  //     this.getDesigns();
+  //   });
   }
 
   ngOnInit() {
+    localStorage.setItem('type','prelim');
  console.log("ngoninit");
 console.log(this.currentDate.toISOString());
 
  
   }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.designRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    // this.unsubscribeMessage.unsubscribe();
+    this.cdr.detach();
+  }
 
 
-  ionViewDidEnter(event){
+  ionViewDidEnter(){
     
-    this.getDesigns(event);
+  
     this.designRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
       this.getDesigns(null);
     });
@@ -70,6 +83,7 @@ console.log(this.currentDate.toISOString());
   }
 
   getDesigns(event?: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -78,13 +92,18 @@ console.log(this.currentDate.toISOString());
   }
 
   fetchPendingDesigns(event?, showLoader?: boolean) {
+    this.noDesignsFound= "";
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("status=designassigned&status=designinprocess").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=prelim&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound= "No Design Found"
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -107,7 +126,11 @@ console.log(this.currentDate.toISOString());
 
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
-    this.listOfDesignData = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+    list=this.fillinDynamicData(records);
+    list.forEach(element =>{
+      this.listOfDesignData.push(element);
+    })
     console.log(this.listOfDesignData);
     
     const tempData: DesginDataHelper[] = [];
@@ -147,11 +170,66 @@ console.log(this.currentDate.toISOString());
             return dateB - dateA;
           });
           this.cdr.detectChanges();
+          console.log(this.listOfDesignDataHelper)
   }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
-    records.forEach(element => {
+    records.forEach((element:any) => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.deliverydate);
+      }else{
+        element.isoverdue = false;
+      }
+      element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
+      var acceptancedate = new Date(element.designacceptancestarttime);
+      element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+             //Setting acceptance timer
+    if(element.status == "outsourced"){
+      if(element.requesttype == "permit"){
+        var acceptancedate = new Date(element.designacceptancestarttime);
+        element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      }else{
+        var acceptancedate = new Date(element.designacceptancestarttime);
+        element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      }
+
+      if(element.designacceptanceremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
+
+    //Setting design timer
+    if(element.status == "designassigned" || element.status == "designcompleted"){
+      if(element.requesttype == "permit"){
+        var acceptancedate = new Date(element.designstarttime);
+        acceptancedate.setHours(acceptancedate.getHours() + 6);
+        element.designremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      }else{
+        var acceptancedate = new Date(element.designstarttime);
+        acceptancedate.setHours(acceptancedate.getHours() + 2);
+        element.designremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      }
+      if(element.designremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
+
+    //Setting review timer
+    if(element.status == "reviewassigned" || element.status == "reviewpassed" || element.status == "reviewfailed"){
+      if(element.requesttype == "permit"){
+        var reviewdate = new Date(element.reviewstarttime);
+        reviewdate.setHours(reviewdate.getHours() + 2);
+        element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+      }else{
+        var reviewdate = new Date(element.reviewstarttime);
+        reviewdate.setMinutes(reviewdate.getMinutes() + 15);
+        element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+      }
+      if(element.reviewremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
       this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
         if (data) {
@@ -159,12 +237,39 @@ console.log(this.currentDate.toISOString());
         }else{
           element.totalpercent = 0;
         }
+        this.startAllTimers();
       });
+  
+
     });
 
     return records;
   }
 
+  doInfinite($event){
+    this.skip=this.skip+10;
+    this.apiService.getDesignSurveys("requesttype=prelim&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
+         console.log(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound= "No Designs Found"
+          }
+          if (event !== null) {
+            $event.target.complete();
+          }
+        },
+     (responseError:any) => {
+        if (event !== null) {
+            $event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      
+      });
+      
+    }
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
@@ -172,4 +277,16 @@ console.log(this.currentDate.toISOString());
     this.overdue = lateby;  
   }
 
+  startAllTimers(){
+    this.listOfDesignData.forEach(element => {
+    
+      var reviewdate = new Date(element.designstarttime);
+      reviewdate.setHours(reviewdate.getHours() + 2);
+      element.designremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+    });
+  }
+
+  trackdesign(index,design){
+    return design.id;
+  }
 }

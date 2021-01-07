@@ -11,7 +11,12 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_APP_ID, COMET_CHAT_REGION } from './model/constants';
 import { Firebase } from '@ionic-native/firebase/ngx';
 import { NetworkdetectService } from './networkdetect.service';
-import { ROLES } from './contants';
+import { ROLES,COMETCHAT_CONSTANTS, intercomId } from './contants';
+import { UserData } from './model/userData.model';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { Intercom } from 'ng-intercom';
+
 
 @Component({
   selector: 'app-root',
@@ -19,9 +24,32 @@ import { ROLES } from './contants';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
+  homeimage:any;
+  public selectedIndex = 0;
+  public appPages = [
+    {
+      title: 'Home',
+      url: '/homepage/design',
+      //icon: 'home'
+    },
+    {
+      title: 'Statistics',
+      url: '/statistics',
+      //icon: 'statistic'
+    }
+  ];
   user: any;
+  ischatuserloggedin = false;
   public onlineOffline: boolean = navigator.onLine;
   netSwitch: boolean;
+  retryattempt = 2;
+  totalcountsforallgroups: number;
+  firebaseToken: string;
+  userData:UserData;
+  deactivateGetUserData: Subscription;
+  deactivateNetworkSwitch: Subscription;
+
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -33,8 +61,11 @@ export class AppComponent {
     private utilitiesService: UtilitiesService,
     private firebase: Firebase,
     private utilities:UtilitiesService,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    private router:Router,
+    private intercom:Intercom
   ) {
+
     this.initializeApp();
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
@@ -69,49 +100,104 @@ export class AppComponent {
         this.statusBar.styleLightContent();
       }else{
       }
-      
+
       this.getNotification();
       this.setupCometChat();
     });
-  
+
   }
 
+  // intercomModule(){
+  //   this.intercom.boot({
+  //     app_id: intercomId,
+  //     // Supports all optional configuration.
+  //     widget: {
+  //       "activator": "#intercom"
+  //     }
+  //   });
+  // }
+
+  isEmptyObject(obj) {
+    return (obj && (Object.keys(obj).length === 0));
+  }
   ngOnInit() {
-    this.network.networkSwitch.subscribe(data=>{
+    // this.intercomModule();
+   this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
-      
     })
+
 
 this.network.networkDisconnect();
 this.network.networkConnect();
- 
+
     if (this.storageService.isUserPresent()) {
       this.apiservice.refreshHeader();
       this.user= JSON.parse(localStorage.getItem('user'));
       // console.log("???",this.user.role);
       console.log(this.user.role.type);
-      
+
         if(this.user.role.type=='surveyors'){
           this.navController.navigateRoot('surveyoroverview');
         }else if(this.user.role.type=='designer'){
-          this.navController.navigateRoot('designoverview');
+          this.navController.navigateRoot('permitdesignoverview');
         }else if(this.user.role.type==='qcinspector'){
           console.log(this.user.role.type);
           this.navController.navigateRoot('analystoverview');
-          
-        }
+         }else if(this.user.role.type==='clientsuperadmin' && (this.user.isonboardingcompleted === null || this.user.isonboardingcompleted === false)){
+
+           this.navController.navigateRoot('onboarding');
+         }
         else{
-          this.navController.navigateRoot('homepage');
+          this.navController.navigateRoot('permithomepage');
         }
     }
-    
+    const path = window.location.pathname.split('/')[1];
+    console.log(path)
+    if (path !== undefined) {
+      this.selectedIndex = this.appPages.findIndex(page => page.title.toLowerCase() === path.toLowerCase());
+    }
+
+   this.deactivateGetUserData=  this.apiservice.getUserName().subscribe((res:any)=>{
+      this.userData = res;
+      if(res.role.name=='ContractorSuperAdmin'){
+        this.userData.role.name='SuperAdmin'
+      }else if(res.role.name=='WattmonkAdmin'){
+        this.userData.role.name='Admin'
+      }
+    })
+  }
+
+
+
+
+  SwitchMenuAccordingtoRoles(type){
+      if(this.userData.role.type !=='designer' && this.userData.role.type !=='qcinspector' && type=='prelim'){
+        this.router.navigate(['/homepage/design']);
+      }else if(this.userData.role.type=='designer' && type=='prelim'){
+          this.router.navigate(['/designoverview/newdesigns'])
+      }else if(this.userData.role.type =='qcinspector' && type=='prelim'){
+          this.router.navigate(['/analystoverview/design'])
+      }else if(this.userData.role.type !=='designer'&& this.userData.role.type !=='qcinspector' && type=='permit'){
+        this.router.navigate(['/permithomepage'])
+      }else if(this.userData.role.type =='designer' && type=='permit'){
+          this.router.navigate(['/permitdesignoverview/permitnewdesign'])
+      }else if(this.userData.role.type =='qcinspector' && type=='permit'){
+        this.router.navigate(['/analystoverview/permitdesign'])
+      }else if(this.userData.role.type !=='designer' && this.userData.role.type !=='qcinspector' && type=='survey'){
+            this.router.navigate(['/homepage/survey'])
+      }else if(this.userData.role.type =='qcinspector' && type=='survey'){
+            this.router.navigate(['/analystoverview/survey'])
+      }else if(this.userData.role.type !=='clientsuperadmin'){
+          this.router.navigate(['/statistics'])
+      }
   }
 
   getFcmToken() {
   this.firebase.getToken()
   .then(token => {
     console.log(`The token is ${token}`)
+    this.firebaseToken= token;
     localStorage.setItem('pushtoken', token);
   })
   .catch(error => {
@@ -129,15 +215,26 @@ this.network.networkConnect();
   }
 
   setupCometChat() {
-    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMET_CHAT_REGION).build();
-    CometChat.init(COMET_CHAT_APP_ID, appSetting).then(
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
       () => {
         console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+
+      // }
       },
       error => {
         console.log('Initialization failed with error:', error);
       }
     );
   }
+
+  ngOndestroy(){
+    this.deactivateGetUserData.unsubscribe();
+    this.deactivateNetworkSwitch.unsubscribe();
+  }
+
+
 
 }

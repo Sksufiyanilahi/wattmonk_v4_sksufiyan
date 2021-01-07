@@ -1,0 +1,402 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <!-- <ion-menu-button></ion-menu-button> -->
+    </ion-buttons>
+    <ion-title>Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close-outline" [routerLink]="['/permithomepage']" routerDirection="backward" style="font-size: 25px;padding: 5px;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+<!-- <mat-vertical-stepper labelPosition="bottom" #stepper linear> -->
+  <mat-vertical-stepper labelPosition="bottom" [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      
+      <ng-template matStepLabel>Required Information <button class="action-button-color" *ngIf="this.stepper.selectedIndex==0" mat-button (click)="move($event,1)" matStepperNext>Skip</button></ng-template>
+      
+      
+        <mat-label>Type of User</mat-label>
+        <ion-radio-group formControlName="usertype" >
+          <ion-row >
+            <ion-col size="6">
+          <ion-item lines="none">
+            <ion-label class="margin" style="font-size: small;">Individual</ion-label>
+            <ion-radio slot="start" value="individual" (click)="companyOptions($event)"></ion-radio>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item lines="none">
+            <ion-label class="margin"   style="font-size: small;">Company</ion-label>
+            <ion-radio slot="start"  value="company" (click)="companyOptions($event)"></ion-radio>
+          </ion-item>
+        </ion-col>
+        </ion-row>
+        </ion-radio-group>
+        <ion-row >
+          <ion-col>
+              <ion-item class="ion-no-padding">
+                  <ion-label position="floating">Billing Address*</ion-label>
+                  <ion-input type="text" class="form_input" formControlName="billingaddress" autocapitalize="words"
+                              required></ion-input>
+              </ion-item>
+              <div style="height: 5px;">
+                <div *ngIf="firstFormGroup.get('billingaddress').hasError('pattern') && firstFormGroup.get('billingaddress').dirty">
+                  <span class="error">{{addressError}}</span>
+              </div>
+                <div *ngIf="firstFormGroup.get('billingaddress').value === '' && firstFormGroup.get('billingaddress').dirty">
+                    <span class="error">{{fieldRequired}}</span>
+                </div>
+            </div>
+          </ion-col>
+      </ion-row>
+      <ion-row *ngIf="isCompany">
+        <ion-col size="12">
+            <ion-item class="ion-no-padding">
+                <ion-label position="floating">Company Name*</ion-label>
+                <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words" maxLength="30"
+                            required></ion-input>
+            </ion-item>
+            <div style="height: 5px;">
+              <div *ngIf="firstFormGroup.get('company').value === '' && firstFormGroup.get('company').dirty">
+                  <span class="error">{{fieldRequired}}</span>
+              </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+            <ion-item class="ion-no-padding">
+                <ion-label position="floating">Licence No.</ion-label>
+                <ion-input type="text" formControlName="registrationnumber" class="form_input" autocapitalize="words" maxLength="16"
+                            required></ion-input>
+            </ion-item>
+            <div style="height: 5px;">
+              <div *ngIf="firstFormGroup.get('registrationnumber').hasError('pattern') && firstFormGroup.get('registrationnumber').dirty">
+                <span class="error">{{registrationError}}</span>
+            </div>
+              <div *ngIf="firstFormGroup.get('registrationnumber').value === '' && firstFormGroup.get('registrationnumber').dirty">
+                  <span class="error">{{fieldRequired}}</span>
+              </div>
+          </div>
+        </ion-col>
+        <ion-col size="12" (click)="fileInput.click()">
+              <ion-item  class="ion-no-padding">
+                <ion-label position="floating">Upload Logo</ion-label>
+                <input type='file' id="imageUpload" placeholder="Upload logo" accept="image/" #fileInput (change)="uploadFile($event)" />
+                </ion-item>
+             
+                  <div *ngIf="logo !=null && logo !=''" class="avatar-upload" style="text-align: center;">
+                      <img [src]=logo height="100px" width="100px" />
+                </div>
+              
+            <!-- </ion-item> -->
+        </ion-col>
+    </ion-row>
+    <!-- <ion-row *ngIf="isCompany">
+      <ion-col>
+          <ion-item class="ion-no-padding">
+              <ion-label position="floating">Lic No*</ion-label>
+              <ion-input type="text" class="form_input" autocapitalize="words"
+                          ></ion-input>
+          </ion-item>
+      </ion-col>
+  </ion-row> -->
+  <br>
+  <mat-label>Payment</mat-label>
+  <ion-radio-group formControlName="ispaymentmodeprepay">
+    <ion-row >
+      <ion-col size="6">
+    <ion-item lines="none">
+      <ion-label class="margin" style="font-size: small;">Prepaid</ion-label>
+      <ion-radio slot="start" [value]=true></ion-radio>
+    </ion-item>
+  </ion-col>
+  <ion-col size="6">
+    <ion-item lines="none">
+      <ion-label class="margin"   style="font-size: small;">Postpaid</ion-label>
+      <ion-radio slot="start"  [value]=false ></ion-radio>
+    </ion-item>
+  </ion-col>
+  </ion-row>
+  </ion-radio-group>
+
+  <div style="color: #111 !important;padding-left: 0px;">
+    <ion-label style="color:#111 !important;">Service Charges</ion-label>
+  </div>
+
+  <ion-row style="margin-top: 3%;">
+    <ion-col><ion-label>Prelim Design</ion-label></ion-col>
+    <ion-col><ion-label>${{prelimSettingValue}}</ion-label></ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col><ion-label>Permit Design</ion-label></ion-col>
+    <ion-col><ion-label>${{permitSettingValue}}</ion-label></ion-col>
+  </ion-row>
+
+
+      <div *ngIf="firstFormGroup.get('ispaymentmodeprepay').value">
+  <ion-row>
+    <ion-col>
+    <h6 style="font-size: small;color:#6C6C6C">Recharge your wallet right now with more than $500 and get an additional benefit of $100</h6>
+    </ion-col>
+  </ion-row>
+ 
+
+  <ion-row >
+    <ion-col style="text-align: center;">
+      <ion-button style="height: 90%;" (click)="goToWallet()">Recharge Wallet</ion-button>
+    </ion-col>
+  </ion-row>
+<hr style="background-color: lightgray;"/>
+</div>
+      
+      
+    </form>
+    <div >
+      <button (click)="firstStepper()" [ngClass]="{'colorChange':firstFormGroup.valid}" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext [disabled]="!firstFormGroup.valid">Next</button>
+      <!-- <ion-button  fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
+      
+    </div>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Notification <button class="action-button-color"  *ngIf="this.stepper.selectedIndex==1" mat-button (click)="move($event,2)" matStepperNext>Skip</button></ng-template>
+     <!-- <ion-item>
+       <ion-label>Mails</ion-label>
+      <ion-toggle formControlName="mails" (ionChange)="onChange($event,'mail')"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>Notifications</ion-label>
+     <ion-toggle formControlName="" (ionChange)="onChange($event,'notification')"></ion-toggle>
+   </ion-item> -->
+   <ion-row>
+     <ion-col></ion-col>
+     <ion-col style="text-align: right;font-size: 12px;" >Mails</ion-col>
+     <ion-col style="text-align: right;font-size: 12px;">Notifications</ion-col>
+   </ion-row>
+  <ion-item>
+    <ion-label class="font" >Design Generated</ion-label>
+   <ion-toggle formControlName="requestgeneratedemail" (ionChange)="onEmailChange($event,'requestgeneratedemail')"  ></ion-toggle>
+   <ion-toggle formControlName="requestgeneratednotification" (ionChange)="onChange($event,'requestgenerated')"  ></ion-toggle>
+ </ion-item>
+ <ion-item>
+  <ion-label class="font">Design Acknowledgement</ion-label>
+ <ion-toggle formControlName="requestacknowledgementemail" (ionChange)="onEmailChange($event,'requestacknoledgedemail')"></ion-toggle>
+ <ion-toggle formControlName="requestacknowledgementnotification" (ionChange)="onChange($event,'requestacknoledged')"></ion-toggle>
+</ion-item>
+<!-- <ion-item>
+  <ion-label>Request in Designing Stage</ion-label>
+ <ion-toggle formControlName="requestindesigningnotification" (ionChange)="onChange($event,'requestdesign')" ></ion-toggle>
+</ion-item> -->
+<!-- <ion-item>
+  <ion-label>Design on Hold</ion-label>
+ <ion-toggle formControlName="designonholdnotification" (ionChange)="onChange($event,'onhold')" ></ion-toggle>
+</ion-item> -->
+<ion-item>
+  <ion-label class="font">Request Indesigning</ion-label>
+ <ion-toggle formControlName="requestindesigningemail" (ionChange)="onEmailChange($event,'completedesignemail')"></ion-toggle>
+ <ion-toggle formControlName="requestindesigningnotification" (ionChange)="onChange($event,'completedesign')"></ion-toggle>
+</ion-item>
+<ion-item>
+  <ion-label class="font">Design Moved to QC</ion-label>
+ <ion-toggle formControlName="designmovedtoqcemail" (ionChange)="onEmailChange($event,'qcemail')"></ion-toggle>
+ <ion-toggle formControlName="designmovedtoqcnotification" (ionChange)="onChange($event,'qc')"></ion-toggle>
+</ion-item>
+<ion-item>
+  <ion-label class="font">Design Review Failed</ion-label>
+ <ion-toggle formControlName="designreviewfailedemail" (ionChange)="onEmailChange($event,'reviewfailedemail')" ></ion-toggle>
+ <ion-toggle formControlName="designreviewfailednotification" (ionChange)="onChange($event,'reviewfailed')" ></ion-toggle>
+</ion-item>
+<ion-item>
+  <ion-label class="font">Design Review Passed</ion-label>
+ <ion-toggle formControlName="designreviewpassedemail" (ionChange)="onEmailChange($event,'reviewpassedemail')" ></ion-toggle>
+ <ion-toggle formControlName="designreviewpassednotification" (ionChange)="onChange($event,'reviewpassed')" ></ion-toggle>
+</ion-item>
+<ion-item>
+  <ion-label class="font">Design Delivered</ion-label>
+ <ion-toggle formControlName="designdeliveredemail" (ionChange)="onEmailChange($event,'deliveredemail')"></ion-toggle>
+ <ion-toggle formControlName="designdeliverednotification" (ionChange)="onChange($event,'delivered')"></ion-toggle>
+</ion-item>
+
+      
+    </form>
+    <div>
+      <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext>Next</button>
+      <!-- <ion-button (click)="secondStepper()" fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
+      <!-- <button  class="action-button-color" mat-button matStepperNext style="float: right;">Next</button> -->
+      <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
+      
+    </div>
+  </mat-step>
+  <mat-step *ngIf="isCompany" [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
+    <ng-template matStepLabel>Build your own team <button class="action-button-color" *ngIf="this.stepper.selectedIndex==2" mat-button (click)="move($event,3)" matStepperNext>Skip</button></ng-template>
+    <!-- <ion-row style=" background-color: rgb(211,211,211); text-align: center;">
+      <ion-col >
+      <ion-label position="fixed">Name</ion-label>
+    </ion-col>
+    <ion-col>
+      <ion-label position="fixed">Role</ion-label>
+    </ion-col>
+    <ion-col>
+      <ion-label position="fixed" style="float: right;">Email</ion-label>
+    </ion-col>
+  </ion-row>
+    <ion-content style="height: 160px;" [scrollEvents]="true">
+    <ion-list>
+      
+      <ion-item  *ngFor="let team of teamMember;" style="text-align: center; font-size: small;" >
+         <ion-col size="4">
+         <ion-label style="float: left" >{{team.firstname}}<br>{{team.lastname}}</ion-label>
+        </ion-col>
+        <ion-col size="4">
+          <ion-label style="float: left">{{team.role.name}}</ion-label>
+         </ion-col>
+         <ion-col size="4" style="max-width: 90px; word-wrap: break-word;">
+          <ion-label text-wrap style="float: left;" >{{team.email}}</ion-label>
+         </ion-col>
+      </ion-item>
+    </ion-list>
+    </ion-content> -->
+    <ion-row>
+      <ion-col size="6">
+        <ion-item class="ion-no-padding">
+        <ion-label position="floating">First Name*</ion-label>
+                  <ion-input type="text" class="form_input" formControlName="firstname" autocapitalize="words"
+                              required></ion-input>
+                            </ion-item>
+                            <div style="height: 5px;">
+                              <div *ngIf="thirdFormGroup.get('firstname').hasError('pattern') && thirdFormGroup.get('firstname').dirty">
+                                  <span class="error">{{firstnameError}}</span>
+                              </div>
+                              <div *ngIf="thirdFormGroup.get('firstname').value === '' && thirdFormGroup.get('firstname').dirty">
+                                  <span class="error">{{fieldRequired}}</span>
+                              </div>
+                          </div>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item class="ion-no-padding">
+        <ion-label position="floating">Last Name*</ion-label>
+                  <ion-input type="text" class="form_input" formControlName="lastname" autocapitalize="words"
+                              ></ion-input>
+                            </ion-item>
+                            <div style="height: 5px;">
+                              <div *ngIf="thirdFormGroup.get('lastname').hasError('pattern') && thirdFormGroup.get('lastname').dirty">
+                                  <span class="error">{{lastnameError}}</span>
+                              </div>
+                              <div *ngIf="thirdFormGroup.get('lastname').value === '' && thirdFormGroup.get('lastname').dirty">
+                                  <span class="error">{{fieldRequired}}</span>
+                              </div>
+                          </div>
+      </ion-col>
+    </ion-row>
+    <ion-row >
+      <ion-col>
+          <ion-item class="ion-no-padding">
+              <ion-label position="floating">Work Email*</ion-label>
+              <ion-input type="text" class="form_input" formControlName="workemail"
+                          ></ion-input>
+          </ion-item>
+          <div style="height: 5px;">
+            <div *ngIf="thirdFormGroup.get('workemail').hasError('pattern') && thirdFormGroup.get('workemail').dirty">
+                <span class="error">{{emailError}}</span>
+            </div>
+            <div *ngIf="thirdFormGroup.get('workemail').value === '' && thirdFormGroup.get('workemail').dirty">
+                <span class="error">{{fieldRequired}}</span>
+            </div>
+        </div>
+      </ion-col>
+  </ion-row>
+  <br>
+  <mat-label>User Role</mat-label>
+        <ion-radio-group formControlName="userrole" >
+          <ion-row >
+            <ion-col size="auto">
+          <ion-item lines="none">
+            <ion-label class="margin" style="font-size: small;">Admin</ion-label>
+            <ion-radio slot="start" value="5" ></ion-radio>
+          </ion-item>
+        </ion-col>
+        <ion-col size="auto">
+          <ion-item lines="none">
+            <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Design Manager</ion-label>
+            <ion-radio slot="start"  value="3" ></ion-radio>
+          </ion-item>
+        </ion-col>
+        </ion-row>
+        </ion-radio-group>
+    
+  </form>
+  <div>
+    <button class="action-button-color" mat-button (click)="$event.stopPropagation()" style="float: right;" matStepperNext>Next</button>
+    <ion-button (click)="thirdStepper()" [ngClass]="{'colorChange':thirdFormGroup.valid}" fill='clear' style="float: left;font-size: 12px; height: 30px;color: #3c78d8;" [disabled]="!thirdFormGroup.valid">Save</ion-button>
+    <!-- <button class="action-button-color" mat-button matStepperNext style="float: right;">Skip</button>
+    <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
+    <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
+  </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Request for Design</ng-template>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card (click)="addPrelim()" style="border-radius: 20%;">
+          <ion-card-header style="text-align: center;">
+            <img src="/assets/images/design.svg" alt="" class="cardimg">
+          </ion-card-header >
+          <ion-card-content class="ion-text-center bottomrow">
+            Prelim
+          </ion-card-content>
+        </ion-card>
+    <!-- <ion-button style="height: 30px;" (click)="addPrelim()">Add Prelim</ion-button> -->
+  </ion-col>
+  <ion-col size="6">
+    <ion-card (click)="addPermit()" style="border-radius: 20%;">
+      <ion-card-header style="text-align: center;">
+        <img src="/assets/images/permit.svg" alt="" class="cardimg">
+      </ion-card-header>
+      <ion-card-content class="ion-text-center bottomrow">
+        Permit
+      </ion-card-content>
+    </ion-card>
+    <!-- <ion-button style="height: 30px;" (click)="addPermit()">Add Permit</ion-button> -->
+  </ion-col>
+  </ion-row>
+    <!-- <div> -->
+      <!-- <button class="action-button-color" mat-button style="float: right;">Save</button> -->
+      <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button>
+      
+    </div> -->
+  </mat-step>
+</mat-vertical-stepper>
+
+<!-- <mat-horizontal-stepper>
+  <mat-step label="Step 1" state="phone">
+    <p>Put down your phones.</p>
+    <div>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="Step 2" state="chat">
+    <p>Socialize with each other.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="Step 3">
+    <p>You're welcome.</p>
+  </mat-step>
+
+   Icon overrides. -->
+  <!--<ng-template matStepperIcon="phone">
+    <mat-icon>call_end</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="chat">
+    <mat-icon>forum</mat-icon>
+  </ng-template>
+</mat-horizontal-stepper> -->
+
+</ion-content>

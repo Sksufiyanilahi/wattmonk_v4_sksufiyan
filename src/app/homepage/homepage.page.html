@@ -3,8 +3,14 @@
         <ion-toolbar> -->
     <ion-grid>
         <ion-row class="ion-align-items-center">
+        <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+        <ion-row class="ion-align-items-center">
             <ion-col *ngIf="showHome === true">
-                <h1 class="ion-no-padding ion-no-margin home">Home</h1>
+                <h1 class="ion-no-padding ion-no-margin home" *ngIf="route.url=='/homepage/design'">Prelim</h1>
+                <h1 class="ion-no-padding ion-no-margin home" *ngIf="route.url=='/homepage/survey'">Survey</h1>
             </ion-col>
             <!-- <ion-col *ngIf="showSearchBar === true" >
                 <ion-searchbar debounce="0" placeholder="home" class="custom"></ion-searchbar>
@@ -15,27 +21,20 @@
                 </div>
             </ion-col>
             <ion-col size="auto" style="position: relative;">
-                <div class="notification-padding" [routerLink]="['/profile']" routerDirection="forward">
+                <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward" (click)="setzero()">
                     <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
-                    <!-- <span class="badge">
-                                4
-                            </span> -->
+                   <span class="badge" *ngIf="unreadCount > 0">
+                                {{unreadCount > 99 ? '99+' : unreadCount }}
+                            </span>
                 </div>
             </ion-col>
         </ion-row>
+    </ion-toolbar>
+    </ion-row>
     </ion-grid>
     <!-- </ion-toolbar> -->
     <!-- </ion-header> -->
-    <ion-tabs style="margin-top: 52px;">
-        <ion-tab-bar slot="top" class="ion-no-border">
-            <ion-tab-button tab="design" *ngIf="isUserDesigner">
-                <ion-label>Designs</ion-label>
-            </ion-tab-button>
-            <ion-tab-button tab="survey" *ngIf="isUserSurveyor">
-                <ion-label>Surveys</ion-label>
-            </ion-tab-button>
-        </ion-tab-bar>
-    </ion-tabs>
+
 
     <!-- <ion-tabs style="margin-top: 20%;">
         <ion-tab-bar slot="top">
@@ -114,17 +113,26 @@
             </ng-template>
         </div>
     </ion-grid>
-
 </ion-content>
+<ion-tabs style="margin-top: 52px">
+    <!-- <ion-tab-bar class="ion-no-border"> -->
+        <!-- <ion-tab-button tab="design" *ngIf="isUserDesigner">
+            <ion-label>Designs</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="survey" *ngIf="isUserSurveyor">
+            <ion-label>Surveys</ion-label>
+        </ion-tab-button> -->
+    <!-- </ion-tab-bar> -->
+</ion-tabs>
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
     <div class="position-relative">
-        <ion-fab horizontal="center" class="fab-position position-absolute" *ngIf="isUserSurveyor && isUserDesigner">
-            <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md">
+        <ion-fab horizontal="start" class="fab-position position-absolute" >
+            <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md" class="ht_wt">
                 <ion-icon name="add"></ion-icon>
             </ion-fab-button>
         </ion-fab>
-        <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
+        <!-- <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
             <ion-row>
                 <ion-col size="4">
                     <div class="tab">
@@ -132,7 +140,7 @@
                         <span class="tabText">Home</span>
                     </div>
                 </ion-col>
-                <ion-col size="4" [routerLink]="['/message']">
+                <ion-col size="4" [routerLink]="['/groups']">
                     <div class="tab">
                         <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
                         <span class="tabText">Messages</span>
@@ -145,7 +153,7 @@
                     </div>
                 </ion-col>
             </ion-row>
-        </ion-grid>
+        </ion-grid> -->
     </div>
 
 </ion-footer>

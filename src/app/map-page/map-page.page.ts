@@ -8,6 +8,8 @@ import { AddressModel } from '../model/address.model';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { StorageService } from '../storage.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Intercom } from 'ng-intercom';
+
 
 declare var google;
 
@@ -45,14 +47,19 @@ export class MapPagePage implements OnInit {
     private platform: Platform,
     private storage: StorageService,
     private alertController: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private intercom:Intercom
   ) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
   }
 
   ngOnInit() {
+    
+  }
 
+  ionViewDidEnter(){
+    this.utilities.showHideIntercom(true);
   }
 
   updateSearchResults(event: CustomEvent) {
@@ -251,5 +258,9 @@ export class MapPagePage implements OnInit {
 
   goBack() {
     this.navController.pop();
+  }
+
+  ionViewWillLeave(){
+    this.utilities.showHideIntercom(true);
   }
 }

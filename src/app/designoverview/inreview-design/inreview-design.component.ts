@@ -22,13 +22,15 @@ export class InreviewDesignComponent implements OnInit {
   listOfDesignsHelper: DesginDataHelper[] = [];
   private DesignRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
-
+limit:number=10;
+skip:number=0
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
   overdue: number;
+  noDesignsFound: string;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -52,8 +54,16 @@ export class InreviewDesignComponent implements OnInit {
       }
     });
   }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.DesignRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    this.cdr.detach();
+  }
 
   getDesigns(event: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -62,14 +72,19 @@ export class InreviewDesignComponent implements OnInit {
   }
 
   fetchPendingDesigns(event, showLoader: boolean) {
+    this.noDesignsFound="";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("status=reviewassigned&status=reviewfailed&status=reviewpassed").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound= "No Designs Found"
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -91,7 +106,11 @@ export class InreviewDesignComponent implements OnInit {
   }
 
   formatDesignData(records : DesginDataModel[]){
-    this.listOfDesigns = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+    list=this.fillinDynamicData(records);
+    list.forEach(element =>{
+      this.listOfDesigns.push(element);
+    })
     const tempData: DesginDataHelper[] = [];
           this.listOfDesigns.forEach((designItem:any) => {
             if (tempData.length === 0) {
@@ -132,7 +151,13 @@ export class InreviewDesignComponent implements OnInit {
   }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
-    records.forEach(element => {
+    records.forEach((element:any) => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.deliverydate);
+      }else{
+        element.isoverdue = false;
+      }
+      element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
@@ -147,11 +172,40 @@ export class InreviewDesignComponent implements OnInit {
     return records;
   }
 
+  doInfinite($event){
+    this.skip=this.skip+10;
+    this.apiService.getDesignSurveys("requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed",this.limit,this.skip).subscribe((response:any) => {
+         console.log(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound= "No Designs Found"
+          }
+          if (event !== null) {
+            $event.target.complete();
+          }
+        },
+     (responseError:any) => {
+        if (event !== null) {
+            $event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      
+      });
+      
+    }
+
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
+  }
+
+  trackdesign(index,design){
+    return design.id;
   }
 
 

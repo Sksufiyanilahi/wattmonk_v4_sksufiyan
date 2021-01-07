@@ -25,13 +25,15 @@ export class CompleteddesignComponent implements OnInit {
   private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
   routeSubscription: Subscription;
-
+ skip:number=0;
+ limit:number=10;
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
   overdue: number;
+  noDesignFound: string;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -65,14 +67,19 @@ export class CompleteddesignComponent implements OnInit {
   }
 
   fetchPendingDesigns(event, showLoader: boolean) {
+    this.noDesignFound="";
     console.log("inside fetch surveys");
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("status=designcompleted").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=prelim&status=designcompleted",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
-          this.formatDesignData(response);
+          if(response.length){
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound = "No Designs Found"
+          }
           if (event !== null) {
             event.target.complete();
           }
@@ -94,7 +101,11 @@ export class CompleteddesignComponent implements OnInit {
   }
 
   formatDesignData(records : DesginDataModel[]){
-    this.listOfDesignData = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+    list=this.fillinDynamicData(records);
+    list.forEach(element =>{
+      this.listOfDesignData.push(element);
+    })
     const tempData: DesginDataHelper[] = [];
           this.listOfDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
@@ -136,8 +147,14 @@ export class CompleteddesignComponent implements OnInit {
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
     records.forEach(element => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.deliverydate);
+      }else{
+        element.isoverdue = false;
+      }
+      element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
-      this.storage.get(''+element.id).then((data) => {
+      this.storage.get(''+element.id).then((data: any) => {
         console.log(data);
         if (data) {
           element.totalpercent = data.currentprogress;
@@ -150,11 +167,48 @@ export class CompleteddesignComponent implements OnInit {
     return records;
   }
 
+  doInfinite($event){
+    this.skip=this.skip+10;
+    this.apiService.getDesignSurveys("requesttype=prelim&status=designcompleted",this.limit,this.skip).subscribe((response:any) => {
+         console.log(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found"
+          }
+          if (event !== null) {
+            $event.target.complete();
+          }
+        },
+     (responseError:any) => {
+        if (event !== null) {
+            $event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      
+      });
+      
+    }
+
+
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;  
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.designRefreshSubscription.unsubscribe();
+    this.dataRefreshSubscription.unsubscribe();
+    this.cdr.detach();
+  }
+
+  trackdesign(index,design){
+    return design.id;
   }
 
 }

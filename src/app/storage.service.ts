@@ -7,6 +7,8 @@ import { DesginDataHelper } from './homepage/design/design.component';
 })
 export class StorageService {
   data: any;
+  prelimCharges:any;
+  permitCharges:any;
 
   constructor() {
   }
@@ -15,7 +17,7 @@ export class StorageService {
     return localStorage.getItem('user') !== null && localStorage.getItem('user') !== undefined;
   }
 
-  setUser(user: User, jwt: string) {
+  setUser(user: User, jwt?: string) {
     localStorage.setItem('user', JSON.stringify(user));
     this.setUserId(user.id);
     if (user.parent) {
@@ -142,4 +144,24 @@ export class StorageService {
   getData():any{
     return this.data;
   }
+
+ setPrelimCharges(value:any){
+  //this.prelimCharges = value;
+  localStorage.setItem('prelimCharges',value);
+ }
+
+ getPrelimCharges(){
+  //return this.prelimCharges;
+  return localStorage.getItem('prelimCharges');
+ }
+
+ setPermitCharges(value:any){
+  //this.permitCharges = value;
+  localStorage.setItem('permitCharges',value);
+ }
+
+ getPermitCharges(){
+  //return this.permitCharges;
+  return localStorage.getItem('permtCharges');
+ }
 }

@@ -10,17 +10,20 @@ import { ProfilePage } from './profile.page';
 import { ProfileNotificationComponent } from './profile-notification/profile-notification.component';
 import { ProfileHistoryComponent } from './profile-history/profile-history.component';
 import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.module';
-import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
+import { SharedModule } from '../shared/shared.module';
+
 
 @NgModule({
-  // entryComponents:[PaymentgatewayPage],
+   entryComponents:[],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     ProfilePageRoutingModule,
-    PaymentgatewayPageModule
+    PaymentgatewayPageModule,
+    SharedModule
+
   ],
-  declarations: [ProfilePage,ProfileNotificationComponent,ProfileHistoryComponent]
+  declarations: [ProfilePage,ProfileNotificationComponent,ProfileHistoryComponent,]
 })
 export class ProfilePageModule {}

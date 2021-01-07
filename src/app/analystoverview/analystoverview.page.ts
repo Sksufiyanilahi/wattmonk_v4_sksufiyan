@@ -13,10 +13,13 @@ import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
-import { ROLES } from '../contants';
+import { COMETCHAT_CONSTANTS, intercomId, ROLES } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { FindValueSubscriber } from 'rxjs/internal/operators/find';
-
+import { environment } from 'src/environments/environment';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { UserData } from '../model/userData.model';
+import { Intercom } from 'ng-intercom';
 
 
 @Component({
@@ -25,6 +28,7 @@ import { FindValueSubscriber } from 'rxjs/internal/operators/find';
   styleUrls: ['./analystoverview.page.scss'],
 })
 export class AnalystoverviewPage implements OnInit, OnDestroy{
+  private version = environment.version;
   @Output() ionInput = new EventEmitter();
 
 
@@ -34,7 +38,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   
   //isUserSurveyor = false ;
   //isUserDesigner= false ;
-  isUserAnalyst = false;
+  //isUserAnalyst = false;
 
   showSearchBar = false;
   showHome = true;
@@ -54,6 +58,10 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   name: any;
   userRole: any;
   netSwitch: any;
+  update_version:string;
+  unreadCount: any;
+  userData: UserData
+  deacctivateNetworkSwitch: Subscription;
 
   constructor(private utilities: UtilitiesService,
     private apiService: ApiService,
@@ -66,27 +74,56 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
     private geolocation: Geolocation,
     private toastController: ToastController,
     public route: Router,
-    private network:NetworkdetectService){
+    private intercom:Intercom,
+    private network:NetworkdetectService,
+    private iab: InAppBrowser){
      
+  }
+  getNotificationCount(){
+    this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+      console.log("count",count);
+     this.unreadCount= count;
+    });
+
+   
+  }
+
+  intercomModule(){
+    // this.intercom.boot({
+    //   app_id: intercomId,
+    //   // Supports all optional configuration.
+    //   widget: {
+    //     "activator": "#intercom"
+    //   }
+    // });
   }
      
 
-  ngOnInit() { this.setupCometChatUser();
+  ngOnInit() { 
+
+    this.intercomModule();
+    this.userData=this.storage.getUser();
+    this.apiService.version.subscribe(versionInfo=>{
+      this.update_version = versionInfo;
+    })
+    this.apiService.emitUserNameAndRole(this.userData);
+    this.getNotificationCount();
+    this.setupCometChat();
     this.requestLocationPermission();
     this.updateUserPushToken();
+    this.route.navigate(['analystoverview/permitdesign']);
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
-    });
+      });
     
-    if (this.storage.getUser().role.id === ROLES.Analyst)
-    {
-     this.isUserAnalyst = true;
-     // this.isUserSurveyor = true;
-      //this.isUserDesigner = true;
+    
+    //  this.isUserAnalyst = true;
+    //  // this.isUserSurveyor = true;
+    //   //this.isUserDesigner = true;
       
       
-      this.route.navigate(['analystoverview/design']);
-    }
+     
+     
     
   }
 
@@ -96,9 +133,14 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
     });
   }
 
+  setzero(){
+    this.unreadCount= 0;
+  }
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.deacctivateNetworkSwitch.unsubscribe();
   }
 
   initializeItems() {
@@ -108,25 +150,30 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
     ];
   }
 
-  setupCometChatUser() {
-    const user = new CometChat.User(this.storage.getUserID());
+  setupCometChat() {
+    let userId = this.storage.getUserID();
+    const user = new CometChat.User(userId);
     user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
-    CometChat.createUser(user, COMET_CHAT_AUTH_KEY).then(
-      (user) => {
-        console.log('user created', user);
-      }, error => {
-        console.log('error', error);
-      }
-    );
-    CometChat.login(this.storage.getUserID(), COMET_CHAT_AUTH_KEY).then(
-      (user) => {
-        console.log('Login Successful:', { user });
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
       },
       error => {
-        console.log('Login failed with exception:', { error });
+        console.log('Initialization failed with error:', error);
       }
     );
-
   }
 
   getItems(ev: any) {
@@ -195,7 +242,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   }
 
   searchbar(){
-    this.route.navigate(['/searchbar/design']);
+    this.route.navigate(['/search-bar1']);
   }
 
   requestLocationPermission() {
@@ -368,8 +415,23 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   }
 
   ionViewDidEnter() {
-    this.network.networkSwitch.subscribe(data=>{
+    if(this.version !== this.update_version && this.update_version !==''){
+        
+      setTimeout(()=>{
+    
+        this.utilities.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
+          text:'Ok',
+        
+          handler:()=>{
+            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
+           this.ionViewDidEnter();
+          }
+        }]);
+      },2000)
+    }
+    this.deacctivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
+      this.utilities.showHideIntercom(false);
       console.log(this.netSwitch);
       
     })
@@ -386,6 +448,7 @@ this.network.networkConnect();
   }
 
   ionViewWillLeave() {
+    this.utilities.showHideIntercom(true);
     this.subscription.unsubscribe();
 
   }

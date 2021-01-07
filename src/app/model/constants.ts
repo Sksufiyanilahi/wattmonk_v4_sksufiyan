@@ -5,7 +5,14 @@ export enum ScheduleFormEvent {
   NO_EVENT = 0,
   SAVE_DESIGN_FORM = 1,
   SAVE_SURVEY_FORM = 2,
-  START_SURVEY = 3
+  START_SURVEY = 3,
+  SEND_DESIGN_FORM = 4,
+  PAY_EVENT=5,
+  SEND_VALUE = 6,
+  SEND_DESIGNERS_VALUE = 7,
+  SEND_ANALYSTS_VALUE = 8,
+  SEND_PERMIT_FORM =9,
+  SAVE_PERMIT_FORM = 10
 }
 
 export enum UserRoles {
@@ -27,6 +34,18 @@ export enum MapPageType {
 
 export const INVALID_EMAIL_MESSAGE = 'Invalid Email';
 export const FIELD_REQUIRED = 'This field is required';
+export const INVALID_NAME_MESSAGE='Invalid Name';
+export const INVALID_ANNUAL_UNIT = 'Invalid Annual Unit';
+export const INVALID_TILT_FOR_GROUND_MOUNT = 'Invalid Value';
+export const INVALID_PHONE_NUMBER = 'Phone should be of min. 8 and max. 15 characters.'
+export const INVALID_AMOUNT = 'Please enter an amount greater than 1 and less than 5000';
+export const INVALID_AMOUNT_FOR_ONBOARDING = 'Please enter an amount greater than 100 and less than 5000';
+export const INVALID_MODULE_AND_INVERTER = 'Please enter a valid format';
+export const INVALID_FIRST_NAME = 'Invalid First Name';
+export const INVALID_LAST_NAME = 'Invalid Last Name';
+export const INVALID_ADDRESS = "Invalid Address";
+export const INVALID_REGISTRATION_NUMBER = "Invalid Registration Number";
+
 
 export const COMET_CHAT_APP_ID = '190385dcec51285';
 export const COMET_CHAT_AUTH_KEY = '5cafae1939d4fc620698c50ae3f25e727fc90213';

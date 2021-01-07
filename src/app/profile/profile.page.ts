@@ -9,6 +9,12 @@ import { UtilitiesService } from '../utilities.service';
 import { User } from '../model/user.model';
 import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.module';
 import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
+import { AddMoneyPage } from '../add-money/add-money.page';
+import { Router } from '@angular/router';
+import { Intercom } from 'ng-intercom';
+import { intercomId } from '../contants';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+
 
 @Component({
   selector: 'app-profile',
@@ -23,7 +29,7 @@ export class ProfilePage implements OnInit {
   surveyIndex = 1;
   listOfSurveysToSave: SurveyStorageModel[] = [];
   enableDisable:boolean=false;
-
+profile:any;
   user: User;
 
   constructor(
@@ -33,20 +39,40 @@ export class ProfilePage implements OnInit {
     private deviceStorage: Storage,
     private utilities: UtilitiesService,
     private toastController: ToastController,
-    public modalController: ModalController
+    public modalController: ModalController,
+    public router:Router,
+    private intercom:Intercom
   ) {
   }
 
   ngOnInit() {
+    this.utilities.showHideIntercom(true);
     this.enableDisable= false;
     this.user = this.storage.getUser();
     console.log(this.user);
-    
-  }
+    this.getProfileData();
 
+  }
+  ionViewDidEnter(){
+   this.getProfileData();
+  }
   goBack() {
     this.navController.pop();
   }
+
+getProfileData(){
+this.apiService.getProfileDetails().subscribe(res=>{
+  console.log(res);
+  this.profile=res;
+  console.log(this.profile)
+})
+}
+
+AddWallet()
+ {
+   this.router.navigate(['add-money',{mode:'wallet'}]);
+
+}
 
   async logout() {
     this.enableDisable= true;
@@ -58,10 +84,22 @@ export class ProfilePage implements OnInit {
         {
           text: 'Yes',
           handler: () => {
-            this.storage.logout();
-            this.deviceStorage.clear();
-            this.apiService.resetHeaders();
-            this.navController.navigateRoot('login');
+            this.utilities.showLoading('Logging Out').then(res=>{
+
+              CometChat.logout().then(()=>{
+                this.utilities.hideLoading().then(()=>{
+                  this.storage.logout();
+                  this.deviceStorage.clear();
+                  this.apiService.resetHeaders();
+                  this.navController.navigateRoot('login');
+                })
+              },err=>{
+                this.storage.logout();
+                this.deviceStorage.clear();
+                this.apiService.resetHeaders();
+                this.navController.navigateRoot('login');
+              });
+            })
           }
         }, {
           text: 'No',
@@ -176,5 +214,12 @@ export class ProfilePage implements OnInit {
 
   async addPoints(){
     this.navController.navigateForward('/paymentgateway');
+  }
+
+  ngOnDestroy(): void {
+    this.utilities.showHideIntercom(false);
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+
   }
 }
