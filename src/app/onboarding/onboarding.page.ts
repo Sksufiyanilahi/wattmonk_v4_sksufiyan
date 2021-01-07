@@ -120,6 +120,7 @@ export class OnboardingPage implements OnInit {
     console.log(this.permitCharges);
       this.onboardingData();
       this.paymentCharges();
+      this.apiService.emitUserNameAndRole(this.user);
 
 
 
@@ -418,7 +419,13 @@ export class OnboardingPage implements OnInit {
 
   goToWallet(){
     console.log("hello");
+    if((this.user.amount == 0 || this.user.amount == null) && this.user.isonboardingcompleted == false)
+    {
     this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"true"}]);
+    }
+    else{
+      this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"false"}])
+    }
   }
 
   paymentCharges(){

@@ -12,7 +12,7 @@ import{SocialSharing} from '@ionic-native/social-sharing/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { environment } from 'src/environments/environment';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { DrawerState } from 'ion-bottom-drawer';
 //import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import { DesginDataModel } from 'src/app/model/design.model';
@@ -31,6 +31,7 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { element } from 'protractor';
+//import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 @Component({
   selector: 'app-permitdesign',
@@ -82,6 +83,10 @@ export class PermitdesignComponent implements OnInit {
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string='';
   storageDirectory: string;
+ //counts
+//  newpermits: Observable<any>;
+//  newpermitsRef: AngularFireObject<any>;
+//  newpermitscount = 0;
 
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
@@ -102,6 +107,8 @@ export class PermitdesignComponent implements OnInit {
     private platform:Platform,
     private androidPermissions: AndroidPermissions,
     private localnotification: LocalNotifications,
+   // private db:AngularFireDatabase,
+    
    // private fileopener:FileOpener
    ) {
     this.userData = this.storageservice.getUser();
@@ -120,6 +127,18 @@ export class PermitdesignComponent implements OnInit {
       assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
     });
+     //For Counts
+    //  this.newpermitsRef = db.object('newpermitdesigns');
+    //  this.newpermits = this.newpermitsRef.valueChanges();
+    //  this.newpermits.subscribe(
+    //    (res) => {
+    //      console.log(res);
+    //      this.newpermitscount = res.count;
+    //      cdr.detectChanges();
+    //    },
+    //    (err) => console.log(err),
+    //    () => console.log('done!')
+    //  )
   }
 
  
@@ -140,6 +159,7 @@ export class PermitdesignComponent implements OnInit {
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
+      //this.newpermitsRef.update({ count: 0 });
 
     })
 
@@ -250,10 +270,11 @@ this.deactivateNetworkSwitch.unsubscribe();
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
-    this.noDesignFound='';
+    this.noDesignFound="";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
+    //this.newpermitsRef.update({ count: 0 });
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
@@ -710,7 +731,7 @@ this.deactivateNetworkSwitch.unsubscribe();
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
-    if(this.userData.role.type=='clientsuperadmin'&& this.designerData.status=='created'){
+    if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin')&& this.designerData.status=='created'){
       this.route.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
 
     }

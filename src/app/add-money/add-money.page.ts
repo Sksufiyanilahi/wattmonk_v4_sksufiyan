@@ -112,7 +112,7 @@ card:any
     form.addEventListener('submit', event => {
       event.preventDefault();
       console.log(event)
-      if(this.onBoarding == 'true'){
+      if(this.onBoarding == 'true' || this.onBoarding =='false'){
         if(this.amountForm.get('amount').value >=100 && this.amountForm.get('amount').value <= 5000)
         {
           this.stripe.createToken(this.card).then(result => {
@@ -259,13 +259,18 @@ this.apiService.recharges(rechargeData).subscribe((res)=>{
    // this.stripe.createCardToken(card).then(token => {
    //   console.log(token);
      // this.token=token.id
+     const date = new Date().toISOString();
+     console.log(date);
   data={
+    designid:this.designId,
+    datetime:date,
     amount:this.amountForm.get('amount').value,
     email:this.userData.email,
     paymenttype: "direct",
     token: this.token.token.id,
     user:this.userData.id,
-    couponid:this.utils.getCouponId().value
+    couponid:this.utils.getCouponId().value,
+    type:"succeeded"
   }
   console.log(data);
     this.apiService.createPayment(data).subscribe(res=>{

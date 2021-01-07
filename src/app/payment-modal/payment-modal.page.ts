@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 import { NavParams, ModalController, NavController, AlertController } from '@ionic/angular';
@@ -8,6 +8,8 @@ import { UtilitiesService } from '../utilities.service';
 import { ScheduleFormEvent } from '../model/constants';
 import { Intercom } from 'ng-intercom';
 import { CouponOffersModalPage } from '../coupon-offers-modal/coupon-offers-modal.page';
+import { Observable } from 'rxjs';
+//import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 @Component({
   selector: 'app-payment-modal',
@@ -28,6 +30,16 @@ netPay:any
   coupondata=null;
   code_discount:any
   discount:any
+  //  //counts
+  //  newpermits: Observable<any>;
+  //  newpermitsRef: AngularFireObject<any>;
+  //  newpermitscount = 0;
+  //  //counts
+  // newprelims: Observable<any>;
+  // newprelimsRef: AngularFireObject<any>;
+  // //newprelimsRef:any;
+  // newprelimscount = 0;
+   
   constructor( private storageService:StorageService,
     
     private apiService:ApiService,
@@ -37,8 +49,35 @@ netPay:any
     private utils:UtilitiesService,
     private intercom:Intercom,
     private alertController:AlertController,
-    private modalController:ModalController
-    ) { }
+    private modalController:ModalController,
+    //private db:AngularFireDatabase,
+    private cdr: ChangeDetectorRef
+    ) {
+    //   //For Counts
+    // this.newpermitsRef = db.object('newpermitdesigns');
+    // this.newpermits = this.newpermitsRef.valueChanges();
+    // this.newpermits.subscribe(
+    //   (res) => {
+    //     console.log(res);
+    //     this.newpermitscount = res.count;
+    //     cdr.detectChanges();
+    //   },
+    //   (err) => console.log(err),
+    //   () => console.log('done!')
+    // )
+    // //counts
+    // this.newprelimsRef = db.object('newprelimdesigns');
+    // this.newprelims = this.newprelimsRef.valueChanges();
+    // this.newprelims.subscribe(
+    //   (res) => {
+    //     console.log(res);
+    //     this.newprelimscount = res.count;
+    //     cdr.detectChanges();
+    //   },
+    //   (err) => console.log(err),
+    //   () => console.log('done!')
+    // )
+     }
 
   ngOnInit() {
     this.utils.showHideIntercom(true);
@@ -147,7 +186,15 @@ confirm(){
       designacceptancestarttime: designacceptancestarttime
     };
     this.utils.showLoading("Assigning").then(()=>
-      {this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
+    {
+      // {if(this.design=='prelim')
+      // {
+      //   this.newprelimsRef.update({ count: this.newprelimscount + 1});
+      //   console.log("hello",this.newprelimscount)
+      // }else{
+      //   this.newpermitsRef.update({ count: this.newpermitscount + 1});
+      // }
+        this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
         this.utils.hideLoading().then(()=>
        { this.utils.showSnackBar("Design request has been send to wattmonk successfully")
        this.navController.pop();

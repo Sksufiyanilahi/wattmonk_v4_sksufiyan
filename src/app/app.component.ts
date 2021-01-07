@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 
 import { NavController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -13,9 +13,12 @@ import { Firebase } from '@ionic-native/firebase/ngx';
 import { NetworkdetectService } from './networkdetect.service';
 import { ROLES,COMETCHAT_CONSTANTS, intercomId } from './contants';
 import { UserData } from './model/userData.model';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { Intercom } from 'ng-intercom';
+ //import { AngularFirestore} from '@angular/fire/firestore';
+ //import { AngularFireObject } from '@angular/fire';
+ //import { AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
 
 
 @Component({
@@ -48,6 +51,14 @@ export class AppComponent {
   userData:UserData;
   deactivateGetUserData: Subscription;
   deactivateNetworkSwitch: Subscription;
+//   newprelims: Observable<any>;
+//   newprelimsRef: AngularFireObject<any>;
+//  //newprelimsRef:any;
+//   newprelimscounts = 0;
+//   newpermits: Observable<any>;
+//   newpermitsRef: AngularFireObject<any>;
+//   //newpermitsRef:any;
+//   newpermitscounts = 0;
 
 
   constructor(
@@ -63,7 +74,9 @@ export class AppComponent {
     private utilities:UtilitiesService,
     private network:NetworkdetectService,
     private router:Router,
-    private intercom:Intercom
+    private intercom:Intercom,
+    //private db: AngularFireDatabase,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
 
     this.initializeApp();
@@ -81,6 +94,33 @@ export class AppComponent {
             this.utilities.errorSnackBar('No internet connection');
           },2000)
           });
+          //Counts in Sidemenu
+    // this.newprelimsRef = db.object('newprelimdesigns');
+    // this.newprelims = this.newprelimsRef.valueChanges();
+    // this.newprelims.subscribe(
+    //   (res) => {
+    //     console.log(res);
+    //     this.newprelimscounts = res.count;
+    //     console.log(this.newprelimscounts)
+    //     changeDetectorRef.detectChanges();
+    //   },
+    //   (err) => console.log(err),
+    //   () => console.log('done!')
+    // )
+    // this.newpermitsRef = db.object('newpermitdesigns');
+    // this.newpermits = this.newpermitsRef.valueChanges();
+    // this.newpermits.subscribe(
+    //   (res) => {
+    //     this.newpermitscounts = res.count;
+    //     changeDetectorRef.detectChanges();
+    //   },
+    //   (err) => console.log(err),
+    //   () => console.log('done!')
+    // )
+    // this.db.doc('/newprelimdesigns/1').valueChanges().subscribe((res:any)=>{
+    //   this.newprelimscounts = res;
+    //   console.log(this.newprelimscounts)
+    // })
   }
 
   initializeApp() {
@@ -166,6 +206,7 @@ this.network.networkConnect();
         this.userData.role.name='Admin'
       }
     })
+    
   }
 
 
@@ -173,6 +214,11 @@ this.network.networkConnect();
 
   SwitchMenuAccordingtoRoles(type){
       if(this.userData.role.type !=='designer' && this.userData.role.type !=='qcinspector' && type=='prelim'){
+        // if(this.user.role.type == 'wattmonkadmins')
+        // {console.log("helloo")
+        // this.changeDetectorRef.detectChanges();
+        //   this.newprelimsRef.update({ count:0} );
+        // }
         this.router.navigate(['/homepage/design']);
       }else if(this.userData.role.type=='designer' && type=='prelim'){
           this.router.navigate(['/designoverview/newdesigns'])

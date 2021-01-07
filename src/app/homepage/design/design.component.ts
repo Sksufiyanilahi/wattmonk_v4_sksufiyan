@@ -4,7 +4,7 @@ import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
-import { Subscription,BehaviorSubject } from 'rxjs';
+import { Subscription,BehaviorSubject, Observable } from 'rxjs';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DrawerState } from 'ion-bottom-drawer';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -28,6 +28,7 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 
 @Component({
@@ -74,6 +75,11 @@ export class DesignComponent implements OnInit, OnDestroy {
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string;
   storageDirectory: string;
+  //counts
+  // newprelims: Observable<any>;
+  // newprelimsRef: AngularFireObject<any>;
+  // //newprelimsRef:any;
+  // newprelimscount = 0;
 
 
   constructor(
@@ -96,7 +102,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private intercom:Intercom,
     private platform:Platform,
     private androidPermissions: AndroidPermissions,
-    private transfer: FileTransfer
+    private transfer: FileTransfer,
+    //private db: AngularFireDatabase
 
   ) {
     this.userData = this.storageService.getUser();
@@ -114,6 +121,18 @@ export class DesignComponent implements OnInit, OnDestroy {
       assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
     });
+    //counts
+    // this.newprelimsRef = db.object('newprelimdesigns');
+    // this.newprelims = this.newprelimsRef.valueChanges();
+    // this.newprelims.subscribe(
+    //   (res) => {
+    //     console.log(res);
+    //     this.newprelimscount = res.count;
+    //     cdr.detectChanges();
+    //   },
+    //   (err) => console.log(err),
+    //   () => console.log('done!')
+    // )
 
   }
 
@@ -745,7 +764,7 @@ this.network.networkConnect();
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
-    if(this.userData.role.type=='clientsuperadmin'&& this.designerData.status=='created'){
+    if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin') && this.designerData.status=='created'){
       this.router.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
 
     }

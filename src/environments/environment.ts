@@ -4,7 +4,17 @@
 
 export const environment = {
   production: false,
-  version:'1.1.3'
+  version:'1.1.3',
+  firebase: {
+    apiKey: "AIzaSyAcveVBoDUxk_VPNozqLR7ZZ4x1fyZoPxI",
+    authDomain: "wattmonk-273002.firebaseapp.com",
+    databaseURL: "https://wattmonk-273002.firebaseio.com",
+    projectId: "wattmonk-273002",
+    storageBucket: "wattmonk-273002.appspot.com",
+    messagingSenderId: "554801985112",
+    appId: "1:554801985112:web:4d1bd25b29924b9de53c2d",
+    measurementId: "G-Y5FQXTC6DJ"
+  }
 };
 
 /*
