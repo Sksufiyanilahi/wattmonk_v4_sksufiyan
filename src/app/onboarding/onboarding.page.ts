@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ROLES } from '../contants';
 import { User } from '../model/user.model';
 import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_REGISTRATION_NUMBER } from '../model/constants';
-import { MenuController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
@@ -69,6 +69,7 @@ export class OnboardingPage implements OnInit {
               private apiService: ApiService,
               private menu:MenuController,
               private utils: UtilitiesService,
+              private navCtrl:NavController,
               private cd:ChangeDetectorRef,) {
                 const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
                 this.firstFormGroup = this.formBuilder.group({
@@ -78,7 +79,7 @@ export class OnboardingPage implements OnInit {
                   ispaymentmodeprepay:new FormControl(null),
                   // logo:new FormControl(null, [Validators.required]),
                   registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9]*')]),
-                  isonboardingcompleted: new FormControl(true)
+                  isonboardingcompleted: new FormControl(false)
                 })
                 this.secondFormGroup = this.formBuilder.group({
                   //For Emails
@@ -491,6 +492,9 @@ export class OnboardingPage implements OnInit {
   move($event,index: number) {
     $event.stopPropagation();
     this.stepper.selectedIndex = index;
+  }
+  goBack(){
+    this.navCtrl.pop();
   }
 
 }
