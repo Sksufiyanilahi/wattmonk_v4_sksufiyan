@@ -155,6 +155,7 @@ this.network.networkConnect();
     // });
 
     this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 

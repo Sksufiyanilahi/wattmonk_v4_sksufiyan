@@ -48,6 +48,7 @@ export class PermitcompleteddesignComponent implements OnInit {
 
   ngOnInit() {
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 

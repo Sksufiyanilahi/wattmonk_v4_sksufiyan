@@ -87,6 +87,7 @@ export class PermitdesignComponent implements OnInit {
 //  newpermits: Observable<any>;
 //  newpermitsRef: AngularFireObject<any>;
 //  newpermitscount = 0;
+  updatechat_id: boolean=false;
 
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
@@ -234,6 +235,7 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.makeDirectory();
     this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 
@@ -263,7 +265,13 @@ this.deactivateNetworkSwitch.unsubscribe();
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
           this.createNewDesignChatGroup(res);
            this.utils.hideLoading().then(()=>{
-            this.utils.setHomepagePermitRefresh(true);})})
+                if(this.updatechat_id){
+
+                  this.utils.setHomepagePermitRefresh(true);
+                }else{
+                  this.utils.setHomepagePermitRefresh(true);
+                }
+          })})
           })
 
        }
@@ -678,6 +686,7 @@ this.deactivateNetworkSwitch.unsubscribe();
          {
           this.isclientassigning= true;
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+          this.addUserToGroupChat();
          }else{
           this.addUserToGroupChat();
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
@@ -702,7 +711,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
        console.log(response);
         if(response.length){
-     
+       
           this.formatDesignData(response);
         }else{
           this.noDesignFound= "No Designs Found"
@@ -724,10 +733,8 @@ this.deactivateNetworkSwitch.unsubscribe();
 
 
   openDesigners(id: number,designData) {
+    debugger;
     this.listOfAssignees=[];
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
@@ -1194,7 +1201,9 @@ createNewDesignChatGroup(design:DesginDataModel) {
               chatid:GUID
             }
 
-            this.apiService.updateDesignForm(postdata,this.acceptid).subscribe(res=>{})
+            this.apiService.updateDesignForm(postdata,this.acceptid).subscribe(res=>{
+              this.updatechat_id=true;
+            })
             // this.updateItemInList(LISTTYPE.NEW, design);
           }else{
             // this.updateItemInPermitList(LISTTYPE.NEW, design);

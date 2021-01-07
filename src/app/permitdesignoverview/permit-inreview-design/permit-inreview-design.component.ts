@@ -44,6 +44,7 @@ export class PermitInreviewDesignComponent implements OnInit {
 
   ngOnInit() {
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 

@@ -11,7 +11,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AssigneeModel } from '../../model/assignee.model';
 import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
 import {Storage} from '@ionic/storage';
-import { ModalController, AlertController, Platform } from '@ionic/angular';
+import { ModalController, AlertController, Platform, IonInfiniteScroll } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
@@ -37,6 +37,7 @@ import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
   styleUrls: ['./design.component.scss'],
 })
 export class DesignComponent implements OnInit, OnDestroy {
+@ViewChild(IonInfiniteScroll,{static : false}) infinitescroll:IonInfiniteScroll;
 
   listOfDesignDataHelper: DesginDataHelper[] = [];
   private refreshSubscription: Subscription;
@@ -102,9 +103,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private intercom:Intercom,
     private platform:Platform,
     private androidPermissions: AndroidPermissions,
-    private transfer: FileTransfer,
-    //private db: AngularFireDatabase
-
+    private transfer: FileTransfer
+  
   ) {
     this.userData = this.storageService.getUser();
 
@@ -275,6 +275,7 @@ this.network.networkConnect();
     // });
 
     this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
 
     });
@@ -337,6 +338,7 @@ this.network.networkConnect();
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
+ 
      this.noDesignFound= "";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
@@ -346,7 +348,9 @@ this.network.networkConnect();
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
+            
             this.formatDesignData(response);
+            
           }else{
             this.noDesignFound= "No Designs Found";
           }
@@ -736,6 +740,7 @@ this.network.networkConnect();
          {
            this.isclientassigning= true;
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+          this.addUserToGroupChat();
          }else{
           this.addUserToGroupChat();
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
@@ -915,11 +920,12 @@ this.network.networkConnect();
 
 
   doInfinite($event){
+   
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
-       
+          
             this.formatDesignData(response);
           }else{
             this.noDesignFound= "No Designs Found"
@@ -927,6 +933,8 @@ this.network.networkConnect();
           if (event !== null) {
             $event.target.complete();
           }
+          if(response.length<10)
+           {$event.target.disabled=true}
         },
      (responseError:any) => {
         if (event !== null) {

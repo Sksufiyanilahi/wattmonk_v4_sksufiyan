@@ -84,19 +84,23 @@ AddWallet()
         {
           text: 'Yes',
           handler: () => {
-            CometChat.logout().then(()=>{
-              this.storage.logout();
-              this.deviceStorage.clear();
-              this.apiService.resetHeaders();
-              this.utilities.showHideIntercom(true);
-              this.navController.navigateRoot('login');
-            },err=>{
-              this.storage.logout();
-              this.deviceStorage.clear();
-              this.apiService.resetHeaders();
-              this.utilities.showHideIntercom(true);
-              this.navController.navigateRoot('login');
-            });
+            this.utilities.showLoading('Logging Out').then(()=>{
+              CometChat.logout().then(()=>{
+                this.utilities.hideLoading().then(()=>{
+                  this.storage.logout();
+                  this.deviceStorage.clear();
+                  this.apiService.resetHeaders();
+                  this.utilities.showHideIntercom(true);
+                  this.navController.navigateRoot('login');
+                })
+              },err=>{
+                this.storage.logout();
+                this.deviceStorage.clear();
+                this.apiService.resetHeaders();
+                this.utilities.showHideIntercom(true);
+                this.navController.navigateRoot('login');
+              });
+            })
           }
         }, {
           text: 'No',
