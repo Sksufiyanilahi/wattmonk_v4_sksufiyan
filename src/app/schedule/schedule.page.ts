@@ -371,6 +371,6 @@ this.network.networkConnect();
   }
 
   sendDesignForm(){
-     this.utilities.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
+     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
   }
 }

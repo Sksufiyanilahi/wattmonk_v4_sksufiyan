@@ -35,7 +35,7 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator ,O
   }
 ngOnInit(){
   
-    
+
     
 
 }
@@ -55,9 +55,7 @@ ngOnInit(){
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-   
-   
-    if (this.required) {
+   if (this.required) {
       console.log(this.selectedUserId);
       if (this.selectedUserId !== null) {
         return null;
@@ -72,6 +70,14 @@ ngOnInit(){
   }
 
   selectAssignee(assignee: AssigneeModel) {
+
+    if( this.reviewAssigned!=null ){
+    const element = <HTMLElement> document.getElementById('pre');
+    element.className='afterselected';
+
+    
+  }
+
     console.log("this is",assignee)
     this.assigneeData.emit(assignee);
     this.assignees.forEach((item) => {

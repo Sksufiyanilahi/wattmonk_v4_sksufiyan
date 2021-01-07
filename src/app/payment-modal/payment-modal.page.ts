@@ -163,7 +163,7 @@ confirm(){
       else{
         if(this.design=='prelim'){
           this.utils.setPaymentMode("wallet");
-        this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
+        this.utils.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
         }
         else{
           this.utils.setPaymentMode("wallet");
@@ -180,13 +180,18 @@ confirm(){
   cancel(){
     if(this.id==null){
       if(this.design ==='prelim'){
-      this.utils.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
+      this.router.navigate(['/homepage/design'])
+      this.utils.setHomepageDesignRefresh(true);
       }
       else{
-        this.utils.setScheduleFormEvent(ScheduleFormEvent.SAVE_PERMIT_FORM);
+        this.router.navigate(['permithomepage/permitdesign'])
+        this.utils.setHomepagePermitRefresh(true);
       }
     }
+    else
+    {
     this.navController.pop();
+  }
   }
   refreshDesigns(event: CustomEvent) {
     let showLoader = true;
