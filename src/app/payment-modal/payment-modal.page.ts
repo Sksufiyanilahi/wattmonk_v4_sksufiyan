@@ -231,7 +231,7 @@ confirm(){
   }
 
   cancel(){
-    if(this.id==null){
+   
       if(this.design ==='prelim'){
       this.router.navigate(['/homepage/design'])
       this.utils.setHomepageDesignRefresh(true);
@@ -240,11 +240,7 @@ confirm(){
         this.router.navigate(['permithomepage/permitdesign'])
         this.utils.setHomepagePermitRefresh(true);
       }
-    }
-    else
-    {
-    this.navController.pop();
-  }
+   
   }
   refreshDesigns(event: CustomEvent) {
     let showLoader = true;
@@ -356,7 +352,8 @@ confirm(){
       // ]
     });
 
-    await alert.present();
+      await alert.present();
+      setTimeout(()=>alert.dismiss(),1000);
 
 
 

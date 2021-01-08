@@ -13,7 +13,7 @@
   <div style="height:17%;width: 100%;background-color:gainsboro;align-self: center;"><br>
     <form [formGroup]="couponForm">
 <ion-row><ion-col size='12' style="padding-bottom: 4px;" class="ion-padding"><ion-input type="text" class="input_class" autocapitalize="words"
-  style="font-size: small;" placeholder="Have a promocode?Enter here" formControlName="couponInput" maxlength="15"></ion-input>
+  style="font-size: small;" placeholder="Have a promocode?Enter here" formControlName="couponInput" maxlength="15"  (ionChange)="changeInput()"></ion-input>
 </ion-col></ion-row>
 <ion-row *ngIf="error!==null" style="margin-left: 19px;"><span class="error">{{error}}</span></ion-row></form></div>
 

@@ -70,11 +70,15 @@ export class CouponOffersModalPage implements OnInit {
         couponInput:coupondata.code
       })
       this.selecteduserId = coupondata.id;
+      this.error=null;
       console.log(this.selectedCoupon);
       
     }
   }
   
+  changeInput(){
+    this.error=null;
+  }
 
   applycode(){
     if(this.couponForm.get('couponInput').value !=''){
