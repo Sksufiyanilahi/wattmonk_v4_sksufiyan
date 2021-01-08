@@ -58,10 +58,13 @@
         <ion-col size="12">
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Company Name*</ion-label>
-                <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words" maxLength="30"
+                <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words" minLength="3" maxLength="50"
                             required></ion-input>
             </ion-item>
             <div style="height: 5px;">
+              <div *ngIf="firstFormGroup.get('company').hasError('pattern') && firstFormGroup.get('company').dirty">
+                <span class="error">{{companyError}}</span>
+            </div>
               <div *ngIf="firstFormGroup.get('company').value === '' && firstFormGroup.get('company').dirty">
                   <span class="error">{{fieldRequired}}</span>
               </div>
