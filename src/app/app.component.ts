@@ -173,7 +173,7 @@ this.network.networkConnect();
 
     if (this.storageService.isUserPresent()) {
       this.apiservice.refreshHeader();
-      this.user=  this.storageService.getUser();
+      this.user= JSON.parse(localStorage.getItem('user'));
       // console.log("???",this.user.role);
       console.log(this.user.role.type);
 
@@ -215,7 +215,7 @@ this.network.networkConnect();
   SwitchMenuAccordingtoRoles(type){
     debugger;
       if(this.userData.role.type !=='designer' && this.userData.role.type !=='qcinspector' && type=='prelim'){
-        if(this.user.role.type == 'wattmonkadmins' || this.user.role.type == 'superadmin')
+        if(this.userData.role.type == 'wattmonkadmins' || this.userData.role.type == 'superadmin')
         {
         this.changeDetectorRef.detectChanges();
           this.newprelimsRef.update({ count:0} );
@@ -226,7 +226,7 @@ this.network.networkConnect();
       }else if(this.userData.role.type =='qcinspector' && type=='prelim'){
           this.router.navigate(['/analystoverview/design'])
       }else if(this.userData.role.type !=='designer'&& this.userData.role.type !=='qcinspector' && type=='permit'){
-        if(this.user.role.type == 'wattmonkadmins' || this.user.role.type == 'superadmin')
+        if(this.userData.role.type == 'wattmonkadmins' || this.userData.role.type == 'superadmin')
         {
         this.changeDetectorRef.detectChanges();
           this.newpermitsRef.update({ count:0} );
