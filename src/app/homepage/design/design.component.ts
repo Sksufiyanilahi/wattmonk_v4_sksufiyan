@@ -912,14 +912,13 @@ this.network.networkConnect();
           }else{
             this.noDesignFound= "No Designs Found"
           }
-          if (event !== null) {
+          if ($event !== null) {
             $event.target.complete();
-          }
-          if(response.length<10)
-           {$event.target.disabled=true}
+          } 
+          
         },
      (responseError:any) => {
-        if (event !== null) {
+        if ($event !== null) {
             $event.target.complete();
           }
           const error: ErrorModel = responseError.error;

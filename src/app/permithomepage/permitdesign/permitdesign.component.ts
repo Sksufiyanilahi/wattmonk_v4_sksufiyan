@@ -695,12 +695,12 @@ this.deactivateNetworkSwitch.unsubscribe();
         }else{
           this.noDesignFound= "No Designs Found"
         }
-        if (event !== null) {
+        if ($event !== null) {
           $event.target.complete();
         }
       },
    (responseError:any) => {
-      if (event !== null) {
+      if ($event !== null) {
           $event.target.complete();
         }
         const error: ErrorModel = responseError.error;
