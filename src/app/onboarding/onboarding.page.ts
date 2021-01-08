@@ -202,13 +202,13 @@ export class OnboardingPage implements OnInit {
     }
   }
 
-  addPrelim(){
-    this.router.navigate(['/schedule/design']);
-  }
+  // addPrelim(){
+  //   this.router.navigate(['/schedule/design']);
+  // }
 
-  addPermit(){
-    this.router.navigate(['/permitschedule']);
-  }
+  // addPermit(){
+  //   this.router.navigate(['/permitschedule']);
+  // }
 
   fetchTeamData(){
     this.apiService.getTeamData().subscribe(response =>{

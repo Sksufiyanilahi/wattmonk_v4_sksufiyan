@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 import { Intercom } from 'ng-intercom';
  //import { AngularFirestore} from '@angular/fire/firestore';
  //import { AngularFireObject } from '@angular/fire';
- //import { AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
+ import { AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
 
 
 @Component({
@@ -51,14 +51,14 @@ export class AppComponent {
   userData:UserData;
   deactivateGetUserData: Subscription;
   deactivateNetworkSwitch: Subscription;
-//   newprelims: Observable<any>;
-//   newprelimsRef: AngularFireObject<any>;
-//  //newprelimsRef:any;
-//   newprelimscounts = 0;
-//   newpermits: Observable<any>;
-//   newpermitsRef: AngularFireObject<any>;
-//   //newpermitsRef:any;
-//   newpermitscounts = 0;
+  newprelims: Observable<any>;
+  newprelimsRef: AngularFireObject<any>;
+ //newprelimsRef:any;
+  newprelimscounts = 0;
+  newpermits: Observable<any>;
+  newpermitsRef: AngularFireObject<any>;
+  //newpermitsRef:any;
+  newpermitscounts = 0;
 
 
   constructor(
@@ -75,7 +75,7 @@ export class AppComponent {
     private network:NetworkdetectService,
     private router:Router,
     private intercom:Intercom,
-    //private db: AngularFireDatabase,
+    private db: AngularFireDatabase,
     private changeDetectorRef: ChangeDetectorRef
   ) {
 
@@ -95,28 +95,28 @@ export class AppComponent {
           },2000)
           });
           //Counts in Sidemenu
-    // this.newprelimsRef = db.object('newprelimdesigns');
-    // this.newprelims = this.newprelimsRef.valueChanges();
-    // this.newprelims.subscribe(
-    //   (res) => {
-    //     console.log(res);
-    //     this.newprelimscounts = res.count;
-    //     console.log(this.newprelimscounts)
-    //     changeDetectorRef.detectChanges();
-    //   },
-    //   (err) => console.log(err),
-    //   () => console.log('done!')
-    // )
-    // this.newpermitsRef = db.object('newpermitdesigns');
-    // this.newpermits = this.newpermitsRef.valueChanges();
-    // this.newpermits.subscribe(
-    //   (res) => {
-    //     this.newpermitscounts = res.count;
-    //     changeDetectorRef.detectChanges();
-    //   },
-    //   (err) => console.log(err),
-    //   () => console.log('done!')
-    // )
+    this.newprelimsRef = db.object('newprelimdesigns');
+    this.newprelims = this.newprelimsRef.valueChanges();
+    this.newprelims.subscribe(
+      (res) => {
+        console.log(res);
+        this.newprelimscounts = res.count;
+        console.log(this.newprelimscounts)
+        changeDetectorRef.detectChanges();
+      },
+      (err) => console.log(err),
+      () => console.log('done!')
+    )
+    this.newpermitsRef = db.object('newpermitdesigns');
+    this.newpermits = this.newpermitsRef.valueChanges();
+    this.newpermits.subscribe(
+      (res) => {
+        this.newpermitscounts = res.count;
+        changeDetectorRef.detectChanges();
+      },
+      (err) => console.log(err),
+      () => console.log('done!')
+    )
     // this.db.doc('/newprelimdesigns/1').valueChanges().subscribe((res:any)=>{
     //   this.newprelimscounts = res;
     //   console.log(this.newprelimscounts)
@@ -173,7 +173,7 @@ this.network.networkConnect();
 
     if (this.storageService.isUserPresent()) {
       this.apiservice.refreshHeader();
-      this.user= JSON.parse(localStorage.getItem('user'));
+      this.user=  this.storageService.getUser();
       // console.log("???",this.user.role);
       console.log(this.user.role.type);
 
@@ -213,18 +213,24 @@ this.network.networkConnect();
 
 
   SwitchMenuAccordingtoRoles(type){
+    debugger;
       if(this.userData.role.type !=='designer' && this.userData.role.type !=='qcinspector' && type=='prelim'){
-        // if(this.user.role.type == 'wattmonkadmins')
-        // {console.log("helloo")
-        // this.changeDetectorRef.detectChanges();
-        //   this.newprelimsRef.update({ count:0} );
-        // }
+        if(this.user.role.type == 'wattmonkadmins' || this.user.role.type == 'superadmin')
+        {
+        this.changeDetectorRef.detectChanges();
+          this.newprelimsRef.update({ count:0} );
+        }
         this.router.navigate(['/homepage/design']);
       }else if(this.userData.role.type=='designer' && type=='prelim'){
           this.router.navigate(['/designoverview/newdesigns'])
       }else if(this.userData.role.type =='qcinspector' && type=='prelim'){
           this.router.navigate(['/analystoverview/design'])
       }else if(this.userData.role.type !=='designer'&& this.userData.role.type !=='qcinspector' && type=='permit'){
+        if(this.user.role.type == 'wattmonkadmins' || this.user.role.type == 'superadmin')
+        {
+        this.changeDetectorRef.detectChanges();
+          this.newpermitsRef.update({ count:0} );
+        }
         this.router.navigate(['/permithomepage'])
       }else if(this.userData.role.type =='designer' && type=='permit'){
           this.router.navigate(['/permitdesignoverview/permitnewdesign'])

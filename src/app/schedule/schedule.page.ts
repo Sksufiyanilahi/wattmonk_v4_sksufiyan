@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
 import { NetworkdetectService } from '../networkdetect.service';
+import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 
 @Component({
   selector: 'app-schedule',
@@ -51,7 +52,8 @@ export class SchedulePage implements OnInit, OnDestroy {
     private alertController: AlertController,
     private toastController: ToastController,
     private intercom:Intercom,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    private location:Location
   ) {
   
     
@@ -97,7 +99,8 @@ this.network.networkConnect();
 
   goBack() {
     this.utilities.showHideIntercom(true);
-    this.navController.pop();
+    //this.navController.pop();
+    this.location.back();
   }
 
   ngOnDestroy(): void {

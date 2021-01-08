@@ -342,7 +342,7 @@
     <ng-template matStepLabel>Request for Design</ng-template>
     <ion-row>
       <ion-col size="6">
-        <ion-card (click)="addPrelim()" style="border-radius: 20%;">
+        <ion-card [routerLink]="['/schedule/design']" style="border-radius: 20%;">
           <ion-card-header style="text-align: center;">
             <img src="/assets/images/design.svg" alt="" class="cardimg">
           </ion-card-header >
@@ -353,7 +353,7 @@
     <!-- <ion-button style="height: 30px;" (click)="addPrelim()">Add Prelim</ion-button> -->
   </ion-col>
   <ion-col size="6">
-    <ion-card (click)="addPermit()" style="border-radius: 20%;">
+    <ion-card [routerLink]="['/permitschedule']" style="border-radius: 20%;">
       <ion-card-header style="text-align: center;">
         <img src="/assets/images/permit.svg" alt="" class="cardimg">
       </ion-card-header>

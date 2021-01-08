@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NgForm, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 //import { Stripe } from '@ionic-native/stripe/ngx';
 import { ModalController, NavParams, NavController } from '@ionic/angular';
@@ -10,6 +10,8 @@ import { UtilitiesService } from '../utilities.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ScheduleFormEvent, INVALID_AMOUNT, INVALID_AMOUNT_FOR_ONBOARDING } from '../model/constants';
 import { Intercom } from 'ng-intercom';
+import { Observable } from 'rxjs';
+import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 declare var Stripe;
 
 
@@ -38,6 +40,15 @@ card:any
   amountForm:FormGroup;
   onBoarding:any;
   responseData:any;
+  //counts
+  newpermits: Observable<any>;
+  newpermitsRef: AngularFireObject<any>;
+  newpermitscount = 0;
+  //counts
+ newprelims: Observable<any>;
+ newprelimsRef: AngularFireObject<any>;
+ //newprelimsRef:any;
+ newprelimscount = 0;
 
   constructor(//private stripe:Stripe,
     private apiService:ApiService,
@@ -47,7 +58,9 @@ card:any
     private route:ActivatedRoute ,
     private formBuilder:FormBuilder,
     private navController:NavController,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private db:AngularFireDatabase,
+    private cdr: ChangeDetectorRef
     //private stripe:Stripe
     ) {
     this.amountForm=this.formBuilder.group(
@@ -56,6 +69,30 @@ card:any
          card:new FormControl('')
         }
         )
+        //For Counts
+    this.newpermitsRef = db.object('newpermitdesigns');
+    this.newpermits = this.newpermitsRef.valueChanges();
+    this.newpermits.subscribe(
+      (res) => {
+        console.log(res);
+        this.newpermitscount = res.count;
+        cdr.detectChanges();
+      },
+      (err) => console.log(err),
+      () => console.log('done!')
+    )
+    //counts
+    this.newprelimsRef = db.object('newprelimdesigns');
+    this.newprelims = this.newprelimsRef.valueChanges();
+    this.newprelims.subscribe(
+      (res) => {
+        console.log(res);
+        this.newprelimscount = res.count;
+        cdr.detectChanges();
+      },
+      (err) => console.log(err),
+      () => console.log('done!')
+    )
      }
 
   
@@ -314,6 +351,13 @@ var date= new Date();
     };
     
       this.apiService.updateDesignForm(postData,this.designId).subscribe(value=>{
+        if(this.design=='prelim')
+        {
+          this.newprelimsRef.update({ count: this.newprelimscount + 1});
+          console.log("hello",this.newprelimscount)
+        }else{
+          this.newpermitsRef.update({ count: this.newpermitscount + 1});
+        }
         this.utils.showSnackBar("Design request has been send to wattmonk successfully");
         if(this.design=='prelim'){
        this.router.navigate(['homepage/design']);
