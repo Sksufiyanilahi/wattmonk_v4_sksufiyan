@@ -248,7 +248,7 @@ confirm(){
   async Congratulations(){
 
      const alert = await this.alertController.create({
-      cssClass: 'alertClass',
+      cssClass: 'CogratulationalertClass',
        header: 'Congratulations!',
      message:'<div><img src="/assets/images/tick.png"> <span>you got discount of $'+ this.code_discount+'</span></div>',
       // inputs:
@@ -309,18 +309,20 @@ confirm(){
     this.code_discount=(data.amount/100)*price;
   this.discountAmount();
     console.log(this.code_discount)
+    this.Congratulations();
 }
 else if(data.discounttype=='amount'){
   this.code_discount=data.amount;
   console.log(this.code_discount)
    this.discountAmount();
+   this.Congratulations();
 }
   }
 
    async openModal(){
     const modal = await this.modalController.create({
       component: CouponOffersModalPage,
-      cssClass: 'email-modal-css',
+      cssClass: 'coupon-modal-css',
       componentProps: {
      request:this.design
       },
@@ -334,7 +336,7 @@ else if(data.discounttype=='amount'){
       this.coupondata=data.data.data;
       console.log(this.coupondata);
       this.utils.setCouponId(this.coupondata.id);
-      this.Congratulations();
+      
       this.codeDiscountCalculation(this.coupondata,this.settingValue);
       }
   });

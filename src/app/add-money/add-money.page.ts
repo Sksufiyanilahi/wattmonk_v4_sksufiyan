@@ -8,7 +8,7 @@ import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ScheduleFormEvent, INVALID_AMOUNT } from '../model/constants';
+import { ScheduleFormEvent, INVALID_AMOUNT, INVALID_AMOUNT_FOR_ONBOARDING } from '../model/constants';
 import { Intercom } from 'ng-intercom';
 declare var Stripe;
 
@@ -22,8 +22,10 @@ declare var Stripe;
 export class AddMoneyPage implements OnInit {
 
   invalidAmount = INVALID_AMOUNT;
+  invalidAmountForOnboarding = INVALID_AMOUNT_FOR_ONBOARDING;
 
 amountChecking:boolean=false;
+amountCheckingForOnboarding:boolean=false;
 card:any
   token:any;
   stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
@@ -34,6 +36,9 @@ card:any
  design:any;
   createPayment:any
   amountForm:FormGroup;
+  onBoarding:any;
+  responseData:any;
+
   constructor(//private stripe:Stripe,
     private apiService:ApiService,
     private storageService:StorageService,
@@ -60,6 +65,7 @@ card:any
    this.designId= this.route.snapshot.paramMap.get('id');
       this.serviceAmount = this.route.snapshot.paramMap.get('serviceAmount');
       this.design = this.route.snapshot.paramMap.get('design');
+      this.onBoarding = this.route.snapshot.paramMap.get('onBoarding');
       
     this.userData = this.storageService.getUser();
     this.setupStripe();
@@ -106,6 +112,26 @@ card:any
     form.addEventListener('submit', event => {
       event.preventDefault();
       console.log(event)
+      if(this.onBoarding == 'true'){
+        if(this.amountForm.get('amount').value >=100 && this.amountForm.get('amount').value <= 5000)
+        {
+          this.stripe.createToken(this.card).then(result => {
+            if (result.error) {
+              var errorElement = document.getElementById('card-errors');
+              errorElement.textContent = result.error.message;
+            } else {
+              console.log(result);
+              this.token=result;
+              console.log(this.token.token.id);
+              this.addMoney();
+             
+            }
+          });
+        }else{
+          this.utils.errorSnackBar("Please Enter Valid Amount");
+        }
+      }
+      else{
       if(this.amountForm.get('amount').value >=1 && this.amountForm.get('amount').value <=5000)
       {
       this.stripe.createToken(this.card).then(result => {
@@ -123,6 +149,7 @@ card:any
     }else{
       this.utils.errorSnackBar("Please Enter Valid Amount");
     }
+      }
     });
   }
 
@@ -152,20 +179,41 @@ card:any
     //this.stripe.createCardToken(card).then(token => {
      // console.log(token);
      // this.token=token.id
-     
-  data={
-    amount:this.amountForm.get('amount').value,
-    email:this.userData.email,
-    paymenttype: "wallet",
-    token:this.token.token.id,
-    user:this.userData.id
-  }
-  console.log(data);
+//      if(this.onBoarding=='true' && this.amountForm.get('amount').value >= 500){
+//       data={
+//         amount:this.amountForm.get('amount').value + 100,
+//         email:this.userData.email,
+//         paymenttype: "wallet",
+//         token:this.token.token.id,
+//         user:this.userData.id
+//       }
+//       console.log(data);
+//      }
+//      else{
+//   data={
+//     amount:this.amountForm.get('amount').value,
+//     email:this.userData.email,
+//     paymenttype: "wallet",
+//     token:this.token.token.id,
+//     user:this.userData.id
+//   }
+// }
+//   console.log(data);
     // this.apiService.createPayment(data).subscribe(res=>{
     //   this.createPayment=res;
     //   this.utils.hideLoading().then(()=>{
       var dates=new Date();
      console.log(dates)
+     if(this.onBoarding=='true' && this.amountForm.get('amount').value > 500){
+      rechargeData={
+        amount:this.amountForm.get('amount').value + 100,
+        datetime: dates,
+        paymenttype: "wallet",
+        type: "succeeded",
+      user: this.userData.id
+      }
+     }
+     else{
 rechargeData={
   amount:this.amountForm.get('amount').value,
   datetime: dates,
@@ -173,9 +221,12 @@ rechargeData={
   type: "succeeded",
 user: this.userData.id
 }
-this.apiService.recharges(rechargeData).subscribe(res=>{
-  this.utils.hideLoading().then(()=>{
-  this.utils.showSnackBar("$"+this.amountForm.get('amount').value +" added in your wallet successfully");
+     }
+this.apiService.recharges(rechargeData).subscribe((res)=>{
+  this.utils.hideLoading().then(()=>{ 
+  this.responseData = res;
+  console.log(res);
+  this.utils.showSnackBar("$"+this.responseData.amount +" added in your wallet successfully");
   this.goBack();
   this.utils.setHomepageDesignRefresh(true);
 }),error=>{
@@ -276,6 +327,17 @@ this.utils.setHomepageDesignRefresh(true);}}
 
 amountCheck(event){
   console.log(event.target.value);
+  if(this.onBoarding == 'true')
+  {
+    if(event.target.value < 100 || event.target.value > 5000)
+{
+  this.amountCheckingForOnboarding = true;
+  console.log(this.amountCheckingForOnboarding);
+}else{
+  this.amountCheckingForOnboarding = false;
+}
+  }
+  else{
 if(event.target.value < 1 || event.target.value > 5000)
 {
   this.amountChecking = true;
@@ -284,7 +346,7 @@ if(event.target.value < 1 || event.target.value > 5000)
   this.amountChecking = false;
 }
 }
-  
+}
   
 }
 

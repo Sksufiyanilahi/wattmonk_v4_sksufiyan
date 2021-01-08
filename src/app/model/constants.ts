@@ -39,7 +39,11 @@ export const INVALID_ANNUAL_UNIT = 'Invalid Annual Unit';
 export const INVALID_TILT_FOR_GROUND_MOUNT = 'Invalid Value';
 export const INVALID_PHONE_NUMBER = 'Phone should be of min. 8 and max. 15 characters.'
 export const INVALID_AMOUNT = 'Please enter an amount greater than 1 and less than 5000';
+export const INVALID_AMOUNT_FOR_ONBOARDING = 'Please enter an amount greater than 100 and less than 5000';
 export const INVALID_MODULE_AND_INVERTER = 'Please enter a valid format';
+export const INVALID_FIRST_NAME = 'Invalid First Name';
+export const INVALID_LAST_NAME = 'Invalid Last Name';
+
 
 export const COMET_CHAT_APP_ID = '190385dcec51285';
 export const COMET_CHAT_AUTH_KEY = '5cafae1939d4fc620698c50ae3f25e727fc90213';
