@@ -213,7 +213,7 @@ this.network.networkConnect();
 
 
   SwitchMenuAccordingtoRoles(type){
-    debugger;
+
       if(this.userData.role.type !=='designer' && this.userData.role.type !=='qcinspector' && type=='prelim'){
         if(this.userData.role.type == 'wattmonkadmins' || this.userData.role.type == 'superadmin')
         {

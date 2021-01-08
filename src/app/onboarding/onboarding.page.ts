@@ -392,7 +392,7 @@ export class OnboardingPage implements OnInit {
             (response:any) => {
               
               this.utils.showSnackBar('Team created successfully');
-              
+                this.thirdFormGroup.reset();
             },
             // error => {
             //   this.utils.errorSnackBar(error);
