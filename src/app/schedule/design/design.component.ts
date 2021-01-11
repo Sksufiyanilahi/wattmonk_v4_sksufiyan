@@ -18,6 +18,8 @@ import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { Clients } from 'src/app/model/clients.model';
+import { map, startWith } from "rxjs/operators";
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFirestore} from '@angular/fire/firestore';
 
@@ -41,6 +43,11 @@ export class DesignComponent implements OnInit, OnDestroy {
   attachmentData:any;
   private subscription: Subscription;
   private addressSubscription: Subscription;
+
+  getCompanies: Clients[] = [];
+  filteredCompanies: Observable<Clients[]>;
+  designCreatedBy;
+  designCreatedByUserParent;
 
   emailError = INVALID_EMAIL_MESSAGE;
   nameError = INVALID_NAME_MESSAGE;
@@ -89,6 +96,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   value:number;
   architecturalData:any;
   fieldDisabled = false;
+  userdata:any;
 
   // newprelims: Observable<any>;
   // newprelimsRef: AngularFireObject<any>;
@@ -117,7 +125,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
     const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
     const NUMBERPATTERN = '^[0-9]*$';
+    const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.desginForm = this.formBuilder.group({
+      companyname: new FormControl('', [Validators.pattern(COMPANYFORMAT)]),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       solarmake: new FormControl('', [Validators.required]),
@@ -147,7 +157,10 @@ export class DesignComponent implements OnInit, OnDestroy {
       postalcode: new FormControl(''),
       status: new FormControl('created'),
       attachments: new FormControl([]),
-      deliverydate:new FormControl(d_date,[])
+      deliverydate:new FormControl(d_date,[]),
+      outsourcedto:new FormControl(''),
+      isoutsourced:new FormControl('false'),
+      designacceptancestarttime:new FormControl(null)
       // uploadbox:new FormControl('')
     });
       
@@ -208,6 +221,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
       this.fieldDisabled=false;
+      this.userdata = this.storage.getUser();
       this.intercom.update({
         "hide_default_launcher": true
       });
@@ -243,6 +257,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.sendtowattmonk();
       }
     });
+    this.gettingClients();
 
     if (this.designId !== 0) {
       setTimeout(()=>{
@@ -288,7 +303,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         createdby: this.storage.getUserID()
       });
       this.getSolarMake();
-   
+     
       
     }
 this.formControlValueChanged();
@@ -671,7 +686,6 @@ deleteArcFile(index){
 
   submitform(){
     if (this.desginForm.status === 'VALID') {
-    
         if (this.designId === 0) {
 
           if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
@@ -1145,6 +1159,46 @@ ioniViewDidEnter(){
         this.cdr.detectChanges();
       })
     })
+  }
+
+  gettingClients(){
+    this.apiService.getClients().subscribe(res=>{
+      this.getCompanies = res;
+      console.log(this.getCompanies);
+      this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
+        startWith(""),
+        map(value => (typeof value === "string" ? value : value.companyid)),
+        map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
+      );
+    },
+    error => {
+      this.utils.errorSnackBar("Error");
+    }
+  );
+  }
+
+  proxyValue: any; onCompanyChanged(event$) { 
+    console.log(event$);
+    this.proxyValue = event$.option.value.companyname; 
+    this.designCreatedBy = event$.option.value.companyid; 
+    this.designCreatedByUserParent = event$.option.value.parentid;
+    if(this.designCreatedBy !== null && this.designCreatedByUserParent !== null){
+      var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+          console.log(designacceptancestarttime)
+      this.desginForm.patchValue({createdby:this.designCreatedBy,
+                                  creatorparentid:this.designCreatedByUserParent,
+                                  status:"outsourced",
+                                  outsourcedto:"232",
+                                  isoutsourced:"true",
+                                  designacceptancestarttime:designacceptancestarttime})
+    }
+}
+
+  private _filterCompanies(companyname: string): Clients[] {
+    return this.getCompanies.filter(
+      company => company.companyname.toLowerCase().indexOf(companyname) != -1
+    );
   }
 }
 
