@@ -45,6 +45,7 @@ export const INVALID_FIRST_NAME = 'Invalid First Name';
 export const INVALID_LAST_NAME = 'Invalid Last Name';
 export const INVALID_ADDRESS = "Invalid Address";
 export const INVALID_REGISTRATION_NUMBER = "Invalid Registration Number";
+export const INVALID_COMPANY_NAME = "Invalid Company Name";
 
 
 export const COMET_CHAT_APP_ID = '190385dcec51285';

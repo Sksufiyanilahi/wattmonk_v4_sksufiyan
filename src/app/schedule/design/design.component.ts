@@ -10,7 +10,7 @@ import { InverterMakeModel } from 'src/app/model/inverter-make.model';
 import { NavController } from '@ionic/angular';
 import { InverterMadeModel } from 'src/app/model/inverter-made.model';
 import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE, INVALID_ANNUAL_UNIT, INVALID_TILT_FOR_GROUND_MOUNT } from '../../model/constants';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd } from '@angular/router';
 import {  DesginDataModel, DesignModel } from '../../model/design.model';
@@ -18,7 +18,8 @@ import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-
+//import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
+//import { AngularFirestore} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-design',
@@ -89,6 +90,11 @@ export class DesignComponent implements OnInit, OnDestroy {
   architecturalData:any;
   fieldDisabled = false;
 
+  // newprelims: Observable<any>;
+  // newprelimsRef: AngularFireObject<any>;
+  // //newprelimsRef:any;
+  // newprelimscount = 0;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -101,7 +107,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private file: File,
     private router:Router,
     public intercom: Intercom,
-    private cdr:ChangeDetectorRef
+    private cdr:ChangeDetectorRef,
+    //private db: AngularFireDatabase
   ) {
     this.utils.showHideIntercom(true);
     var tomorrow=new Date();
@@ -143,9 +150,35 @@ export class DesignComponent implements OnInit, OnDestroy {
       deliverydate:new FormControl(d_date,[])
       // uploadbox:new FormControl('')
     });
+      
+    // this.newprelimsRef = db.object('newprelimdesigns');
+    // this.newprelims = this.newprelimsRef.valueChanges();
+    // this.newprelims.subscribe(
+    //   (res) => {
+    //     console.log(res);
+    //     this.newprelimscount = res.count;
+    //     cdr.detectChanges();
+    //   },
+    //   (err) => console.log(err),
+    //   () => console.log('done!')
+    // )
+     //this.newprelims = this.newprelimsRef.valueChanges();
+    // this.db.doc('newprelimdesigns').valueChanges().subscribe((res:any)=>{
+    //   this.newprelimscount = res;
+    //   console.log(this.newprelimscount)
+    // })
+    // this.newprelims.subscribe(
+    //   (res) => {
+    //     console.log(res);
+    //     this.newprelimscount = res.count;
+    //   },
+    //   (err) => console.log(err),
+    //   () => console.log('done!')
+    // )
     
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.getAssignees();
+
   }
 
   numberfield(event){
@@ -629,8 +662,7 @@ deleteArcFile(index){
   this.onFormSubmit=false;
   // this.saveModuleMake();
    debugger;
-    console.log('Reach', this.desginForm.value);
-
+    console.log('Reach', this.desginForm);
     // debugger;
     // this.saveModuleMake();
     this.submitform();
@@ -1028,7 +1060,7 @@ ioniViewDidEnter(){
       };
   
       this.utils.showLoading('Assigning').then(()=>{
-      
+        //this.newprelimsRef.update({ count: this.newprelimscount + 1});
         this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
           this.utils.hideLoading().then(()=>{
             ; 

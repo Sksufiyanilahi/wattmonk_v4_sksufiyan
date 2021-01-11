@@ -22,6 +22,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { NetworkdetectService } from '../networkdetect.service';
+//import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 
 // export interface DesignFormData {
@@ -113,6 +114,9 @@ export class PermitschedulePage implements OnInit {
   attachmentFileUpload: boolean= false;
   netSwitch: any;
   deactivateNetworkSwitch: Subscription;
+  // newpermits: Observable<any>;
+  // newpermitsRef: AngularFireObject<any>;
+  // newpermitscount = 0;
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -128,7 +132,8 @@ export class PermitschedulePage implements OnInit {
     private toastController: ToastController,
     private intercom:Intercom,
     private cdr:ChangeDetectorRef,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    //private db:AngularFireDatabase
     //private data: DesignFormData
     ) {
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
@@ -179,6 +184,19 @@ export class PermitschedulePage implements OnInit {
     attachments: new FormControl([])
 
   })
+  // //For Counts
+  // this.newpermitsRef = db.object('newpermitdesigns');
+  //   this.newpermits = this.newpermitsRef.valueChanges();
+  //   this.newpermits.subscribe(
+  //     (res) => {
+  //       console.log(res);
+  //       this.newpermitscount = res.count;
+  //       cdr.detectChanges();
+  //     },
+  //     (err) => console.log(err),
+  //     () => console.log('done!')
+  //   )
+
   this.designId = +this.route.snapshot.paramMap.get('id');
 
   // const url = this.router.url;
@@ -1295,7 +1313,7 @@ saveInverterModel() {
         };
 
         this.utils.showLoading('Assigning').then(()=>{
-
+          //this.newpermitsRef.update({ count: this.newpermitscount + 1});
           this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
             this.utils.hideLoading().then(()=>{
               ;

@@ -1,4 +1,4 @@
-<ion-header class="ion-no-border">
+ <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <!-- <ion-menu-button></ion-menu-button> -->
@@ -8,7 +8,7 @@
       <ion-icon name="close-outline" [routerLink]="['/permithomepage']" routerDirection="backward" style="font-size: 25px;padding: 5px;"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
+</ion-header> 
 
 <ion-content>
 
@@ -58,10 +58,13 @@
         <ion-col size="12">
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Company Name*</ion-label>
-                <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words" maxLength="30"
+                <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words" minLength="3" maxLength="50"
                             required></ion-input>
             </ion-item>
             <div style="height: 5px;">
+              <div *ngIf="firstFormGroup.get('company').hasError('pattern') && firstFormGroup.get('company').dirty">
+                <span class="error">{{companyError}}</span>
+            </div>
               <div *ngIf="firstFormGroup.get('company').value === '' && firstFormGroup.get('company').dirty">
                   <span class="error">{{fieldRequired}}</span>
               </div>
@@ -342,7 +345,7 @@
     <ng-template matStepLabel>Request for Design</ng-template>
     <ion-row>
       <ion-col size="6">
-        <ion-card (click)="addPrelim()" style="border-radius: 20%;">
+        <ion-card [routerLink]="['/schedule/design']" style="border-radius: 20%;">
           <ion-card-header style="text-align: center;">
             <img src="/assets/images/design.svg" alt="" class="cardimg">
           </ion-card-header >
@@ -353,7 +356,7 @@
     <!-- <ion-button style="height: 30px;" (click)="addPrelim()">Add Prelim</ion-button> -->
   </ion-col>
   <ion-col size="6">
-    <ion-card (click)="addPermit()" style="border-radius: 20%;">
+    <ion-card [routerLink]="['/permitschedule']" style="border-radius: 20%;">
       <ion-card-header style="text-align: center;">
         <img src="/assets/images/permit.svg" alt="" class="cardimg">
       </ion-card-header>
