@@ -29,6 +29,7 @@ import { DesignStatistic } from './model/designstats.model';
 import { DesignersStatistics } from './model/designerstats.model';
 import { AnalystStatistics } from './model/analyststats.model';
 import { ROLES } from './contants';
+import { Clients } from './model/clients.model';
 
 
 @Injectable({
@@ -492,5 +493,9 @@ export class ApiService {
         //   }
         // })
         // );
+    }
+
+    getClients(){
+      return this.http.get<Clients[]>(BaseUrl + "/getclients",{headers: this.headers});
     }
 }

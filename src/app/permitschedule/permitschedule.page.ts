@@ -5,7 +5,7 @@ import { NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
 import { AssigneeModel } from '../model/assignee.model';
-import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent, INVALID_MODULE_AND_INVERTER } from '../model/constants';
+import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent, INVALID_MODULE_AND_INVERTER, INVALID_COMPANY_NAME } from '../model/constants';
 import { DesginDataModel } from '../model/design.model';
 import { Invertermake } from '../model/inverter-made.model';
 import { InverterMakeModel } from '../model/inverter-make.model';
@@ -22,6 +22,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { NetworkdetectService } from '../networkdetect.service';
+import { Clients } from '../model/clients.model';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 
@@ -66,6 +67,12 @@ export class PermitschedulePage implements OnInit {
   filteredInverterModels: Observable<Invertermake[]>;
    selectedInverterModelID: number;
 
+   //filteredCompanies: Clients[] = [];
+   getCompanies: Clients[] = [];
+  filteredCompanies: Observable<Clients[]>;
+  designCreatedBy;
+  designCreatedByUserParent;
+
   private subscription: Subscription;
   private addressSubscription: Subscription;
 
@@ -75,6 +82,7 @@ export class PermitschedulePage implements OnInit {
   tiltforgroundError = INVALID_TILT_FOR_GROUND_MOUNT;
   phoneError = INVALID_PHONE_NUMBER;
   moduleAndInverterError = INVALID_MODULE_AND_INVERTER;
+  companyError = INVALID_COMPANY_NAME;
 
   fieldRequired = FIELD_REQUIRED;
 
@@ -118,6 +126,8 @@ export class PermitschedulePage implements OnInit {
   // newpermitsRef: AngularFireObject<any>;
   // newpermitscount = 0;
 
+  
+
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
     private utils: UtilitiesService,
@@ -140,7 +150,9 @@ export class PermitschedulePage implements OnInit {
        const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     const NUMBERPATTERN = '^[0-9]+$';
+    const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.desginForm = this.formBuilder.group({
+      companyname: new FormControl('', [Validators.pattern(COMPANYFORMAT)]),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       phone : new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
@@ -162,7 +174,7 @@ export class PermitschedulePage implements OnInit {
     ]),
     monthlybill: new FormControl('',[Validators.required,Validators.min(0),Validators.pattern(NUMBERPATTERN)]),
     address: new FormControl('',[Validators.required]),
-    createdby: new FormControl(''),
+    createdby: new FormControl(this.storage.getUserID()),
     assignedto: new FormControl(''),
     rooftype: new FormControl(''),
     architecturaldesign: new FormControl(''),
@@ -181,8 +193,8 @@ export class PermitschedulePage implements OnInit {
     city: new FormControl(''),
     postalcode: new FormControl(''),
     status: new FormControl('created'),
-    attachments: new FormControl([])
-
+    attachments: new FormControl([]),
+    creatorparentid: new FormControl(this.storage.getParentId()),
   })
   // //For Counts
   // this.newpermitsRef = db.object('newpermitdesigns');
@@ -219,6 +231,7 @@ export class PermitschedulePage implements OnInit {
   ngOnInit() {
     this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
+    console.log(this.userdata)
     this.requestLocationPermission();
     if (this.designId!=0) {
       this.tabsDisabled=true;
@@ -249,7 +262,7 @@ export class PermitschedulePage implements OnInit {
 
 
     //this.addressValue();
-
+    this.gettingClients();
     if (this.designId !== 0) {
       setTimeout(()=>{
         this.getDesignDetails();
@@ -766,7 +779,6 @@ saveInverterModel() {
       // this.saveModuleMake();
 
       if(this.desginForm.status==='VALID'){
-        console.log("Hello");
         if(this.formValue=='send'){
           this.saveModuleMake();
         }else{
@@ -782,12 +794,28 @@ saveInverterModel() {
     submitform(){
       var pnumber = this.desginForm.get("phone").value;
       if (this.desginForm.status === 'VALID') {
+        var designstatus;
+        var designoutsourcedto;
+        var isoutsourced;
+        if (this.designCreatedBy) {
+          designstatus = "outsourced";
+          designoutsourcedto = "232";
+          isoutsourced = "true";
+          var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+          console.log(designacceptancestarttime)
+        } else {
+          designstatus = "created";
+          designoutsourcedto = null;
+          isoutsourced = "false"
+        }
         var tomorrow = new Date();
           tomorrow.setDate(tomorrow.getDate() + 2);
           console.log(this.formValue);
           if (this.designId === 0) {
             if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM){
-              var data = {name:this.desginForm.get('name').value,
+              var data = {
+                          name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -796,7 +824,8 @@ saveInverterModel() {
                           solarmodel:this.selectedModuleModelID,
                           invertermake:this.selectedInverterMakeID,
                           invertermodel:this.selectedInverterModelID,
-                          createdby: this.storage.getUserID(),
+                          //createdby: this.storage.getUserID(),
+                          createdby: this.desginForm.get('createdby').value,
                            //assignedto: this.desginForm.get('assignedto').value,
                            rooftype: this.desginForm.get('rooftype').value,
                          //architecturaldesign: this.desginForm.get('architecturaldesign').value,
@@ -814,10 +843,14 @@ saveInverterModel() {
                          state: this.desginForm.get('state').value,
                         city: this.desginForm.get('city').value,
                          postalcode: this.desginForm.get('postalcode').value,
-                        status: this.desginForm.get('status').value,
+                        status:designstatus,
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
-                        creatorparentid:this.storage.getParentId()
+                        //creatorparentid:this.storage.getParentId()
+                        creatorparentid:this.desginForm.get('creatorparentid').value,
+                        outsourcedto:designoutsourcedto,
+                        designacceptancestarttime:designacceptancestarttime,
+                        isoutsourced:isoutsourced
 
   }
 
@@ -865,7 +898,8 @@ saveInverterModel() {
               }
            else if(this.formValue === 'send'){
 
-              var postData = {name:this.desginForm.get('name').value,
+              var postData = {
+                          name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -948,7 +982,8 @@ saveInverterModel() {
           else {
             if(this.formValue==='save'){
               this.utils.showLoading('Saving').then(() => {
-              var data = {name:this.desginForm.get('name').value,
+              var data = {
+                          name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -957,7 +992,7 @@ saveInverterModel() {
                           solarmodel:this.selectedModuleModelID,
                           invertermake:this.selectedInverterMakeID,
                           invertermodel:this.selectedInverterModelID,
-                          createdby: this.storage.getUserID(),
+                          createdby: this.desginForm.get('createdby').value,
                            //assignedto: this.desginForm.get('assignedto').value,
                            rooftype: this.desginForm.get('rooftype').value,
                          //architecturaldesign: this.desginForm.get('architecturaldesign').value,
@@ -978,7 +1013,10 @@ saveInverterModel() {
                         status: this.desginForm.get('status').value,
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
-                        creatorparentid:this.storage.getParentId()
+                        creatorparentid:this.desginForm.get('creatorparentid').value,
+                        outsourcedto:designoutsourcedto,
+                        designacceptancestarttime:designacceptancestarttime,
+                        isoutsourced:isoutsourced
 
   }
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
@@ -989,7 +1027,6 @@ saveInverterModel() {
                 this.uploadAttachmentDesign(response.id,'attachments')
               }
               if(this.isArcFileDelete){
-                console.log("hello");
                 this.deleteArcFile(this.indexOfArcFiles);
               }
               
@@ -1017,7 +1054,8 @@ saveInverterModel() {
           }
           else if(this.formValue==='send'){
             this.isEdit = false;
-            var postData = {name:this.desginForm.get('name').value,
+            var postData = {
+                          name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -1090,8 +1128,11 @@ saveInverterModel() {
     }
 
     error(){
-
-        if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
+        if(this.desginForm.value.name == '' || this.desginForm.get('companyname').hasError('pattern'))
+        {
+          this.utils.errorSnackBar('please check the field name');
+        }
+        else if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
 
           this.utils.errorSnackBar('Please check the field name.');
         }
@@ -1609,5 +1650,38 @@ saveInverterModel() {
       })
     }
 
+    gettingClients(){
+      this.apiService.getClients().subscribe(res=>{
+        this.getCompanies = res;
+        console.log(this.getCompanies);
+        this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
+          startWith(""),
+          map(value => (typeof value === "string" ? value : value.companyid)),
+          map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
+        );
+      },
+      error => {
+        this.utils.errorSnackBar("Error");
+      }
+    );
+    }
+
+    proxyValue: any; onCompanyChanged(event$) { 
+      console.log(event$);
+      this.proxyValue = event$.option.value.companyname; 
+      this.designCreatedBy = event$.option.value.companyid; 
+      this.designCreatedByUserParent = event$.option.value.parentid;
+      if(this.designCreatedBy !== null && this.designCreatedByUserParent !== null){
+        this.desginForm.patchValue({createdby:this.designCreatedBy,
+                                    creatorparentid:this.designCreatedByUserParent,
+                                    })
+      }
+    }
+
+    private _filterCompanies(companyname: string): Clients[] {
+      return this.getCompanies.filter(
+        company => company.companyname.toLowerCase().indexOf(companyname) != -1
+      );
+    }
 
 }

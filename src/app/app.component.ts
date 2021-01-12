@@ -231,7 +231,7 @@ this.network.networkConnect();
         this.changeDetectorRef.detectChanges();
           this.newpermitsRef.update({ count:0} );
         }
-        this.router.navigate(['/permithomepage'])
+        this.router.navigate(['/permithomepage/permitdesign'])
       }else if(this.userData.role.type =='designer' && type=='permit'){
           this.router.navigate(['/permitdesignoverview/permitnewdesign'])
       }else if(this.userData.role.type =='qcinspector' && type=='permit'){
