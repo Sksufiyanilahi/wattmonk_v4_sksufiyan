@@ -1,5 +1,4 @@
-
- <ion-header  class="ion-no-border white-bg">
+<ion-header  class="ion-no-border white-bg">
   <ion-toolbar>
     <ion-title></ion-title>
     <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
@@ -11,43 +10,58 @@
 </ion-col>
 <ion-col class="ion-text-center" size="9" style="padding-left: 27px; text-align: center;">
   <ion-grid class="ion-align-items-center ion-justify-content-center">
-
       <ion-row class="ion-align-items-center ion-justify-content-center">
           <span class="survey-name ion-text-center" style="font-size:x-large; text-align: center;">Confirm your order</span>
       </ion-row>
-
   </ion-grid>
 </ion-col>
-
 </ion-row><ion-row></ion-row>
 </ion-grid></ion-toolbar></ion-header>
-<ion-content><ion-row>
+<ion-content *ngIf="isShow"><ion-row>
   <h4 style="font-weight: bold;margin-bottom:0px !important;padding: 10px;"></h4>
 </ion-row>
 <ion-row>
-      <h6 *ngIf="user?.ispaymentmodeprepay" style="margin:10px;padding:5px;">Please make the payment to process your order with Wattmonk.</h6>
-      <h6 *ngIf="!user?.ispaymentmodeprepay" style="margin:10px;padding:5px;">Please find below summary of your service purchase.</h6>
+      <h6 *ngIf="user?.ispaymentmodeprepay" style="margin:10px;padding:5px;"> Please make the payment to process your order with Wattmonk.</h6>
+      <h6 *ngIf="!user?.ispaymentmodeprepay" style="margin:10px;padding:5px;">On confirmation ,your design request purchase will be add to your monthly invoice Please find below summary of your service purchase.</h6>
     </ion-row>
     <ion-row >
-    <ion-card style="position: relative; width:100%;" class="ion-padding"><ion-row><ion-col>
-      <ion-label style="font-size: larger;color:#111;font-weight: bold;">Service Price</ion-label><br>
-      <ion-label style="font-size: large;color:#111"> $ {{settingValue}} </ion-label>
+    <ion-card style="position: relative; width:100%;" class="ion-padding">
+      <ion-row style="width: 100%;" *ngIf="user?.role.type!=='clientadmin'">
+        <ion-col size="6">
+          <ion-label style="font-size: medium;color:#111;font-weight: bold;float: left;">Amount in Wallet</ion-label>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label style="font-size: large;color:#111;float:right;">$ {{user?.amount}}</ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row style="width: 100%;"><ion-col size="6">
+      <ion-label style="font-size: medium;color:#111;font-weight: bold; float: left;">Service Price</ion-label>
+      </ion-col>
+      <ion-col size="6">
+      <ion-label style="font-size: large;color:#111; float:right;"> $ {{settingValue}} </ion-label>
     </ion-col>
-    <ion-col size="6">
-      <ion-label style="font-size: larger;color:#111;font-weight: bold;">Amount in Wallet</ion-label><br>
-      <ion-label style="font-size: large;color:#111">$ {{user?.amount}}</ion-label>
+    </ion-row>
+    <a *ngIf="this.count>=this.freeCharges" (click)='openModal()'><u>Have a Promocode</u></a>
+<ion-row ><ion-col size="12"><ion-item *ngIf="coupondata!=null"  >
+  <ion-input type="text"  autocapitalize="words"
+    class="ion-padding"  disabled="true">{{coupondata?.code}}</ion-input>
+  <ion-label class="clickEnableCls" style="color:midnightblue;" (click)="removeCoupon()" >remove</ion-label>
+  </ion-item>
+</ion-col>
+   <!-- <ion-col style="align-self: flex-end;"><ion-button size='small' (click)="Congratulations()">Apply</ion-button> </ion-col> -->
+  </ion-row> 
+  <ion-row style="width: 100%;" *ngIf="discount!=null"><ion-col size="6">
+    <ion-label style="font-size: medium;color:#111;font-weight: bold;float: left;">Discount</ion-label>
     </ion-col>
-  </ion-row>
-  <ion-row><ion-col>
-    <ion-label style="font-size: larger;color:#111;font-weight: bold;">Discount</ion-label><br>
-    <ion-label style="font-size: large;color:#111" *ngIf="count>freeCharges;else staticpay">$ 0 </ion-label>
-    <ng-template #staticpay><ion-label  style="font-size: large;color:#111">$ {{settingValue}}</ion-label></ng-template>
+    <ion-col size="6">    <ion-label style="font-size: large;color:#111; float:right;" >$ {{discount}}</ion-label>
+    
   </ion-col>
   <ion-col size="6">
     <!-- <ion-label style="font-size: larger;">Service Used</ion-label><br>
     <ion-label style="font-size: x-large;">{{design}} design</ion-label> -->
   </ion-col>
 </ion-row>
+
 <!-- <ion-row>
   <ion-col>
   <ion-label style="font-size: larger;">You have to pay</ion-label><br>
@@ -62,23 +76,33 @@
   <ion-label style="font-size: x-large;" >{{id}}</ion-label>
 </ion-col>
 </ion-row> -->
-
+<!-- <ion-row style="width: 100%;" *ngIf="coupondata!=null">
+  <ion-col size="10"><ion-label style="font-size:small;color:#111;">Coupon Code Discount</ion-label></ion-col>
+    <ion-col size="2"><ion-label style="font-size: large;color:#111" >{{code_discount}} </ion-label></ion-col>
+</ion-row>  -->
     </ion-card>
   </ion-row>
-  <ion-row class="ion-padding">
+  <!--<ion-row style="width: 100%;">
+    <ion-col size="10"><ion-label style="font-size:small;color:#111;">You have to pay</ion-label></ion-col>
+      <ion-col size="2"><ion-label style="font-size: large;color:#111" >$ 35 </ion-label></ion-col>
+  </ion-row>-->
+  <ion-item><ion-row style="width: 100%;"  *ngIf="!user?.ispaymentmodeprepay">
+    <ion-col size="9"><ion-label style="font-size:medium;color:#111;font-weight: bold;">Net Payable Amount</ion-label></ion-col>
+      <ion-col size="3"><ion-label style="font-size: large;color:#111;float:right;padding-right: 10%;" *ngIf="netPay!=null" >$ {{netPay}} </ion-label>
+      <ion-label style="font-size: large;color:#111; float:right; padding-right: 10%;" *ngIf="netPay==null" >$ {{settingValue}} </ion-label>
+   </ion-col>
+    </ion-row></ion-item>
+  <ion-row class="ion-padding" *ngIf="user?.role.type!=='clientadmin'">
     <ion-col size="12" *ngIf="user?.ispaymentmodeprepay" >
       <!-- <ion-item *ngIf="user?.amount>=settingValue" (click)="confirm()" >
         <ion-button  fill="clear"><ion-icon name="checkmark-circle-outline" style="color: blue;"></ion-icon>&nbsp;<ion-label class="black">Confirm</ion-label></ion-button>
       </ion-item> -->
-      <ion-item (click)="addWallet('wallet')" *ngIf="settingValue>user?.amount">
-
+      <ion-item (click)="addWallet('wallet')" *ngIf="netPay>user?.amount" >
         <ion-button  fill="clear" ><ion-icon name="cash-outline" style="color:green;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Add Money</ion-label></ion-button>
       </ion-item>
-      <ion-item (click)="addWallet('card')" *ngIf="settingValue>user?.amount">
-
+       <ion-item (click)="addWallet('card')" *ngIf="netPay>user?.amount">
         <ion-button  fill="clear"  ><ion-icon name="card-outline" style="color:brown;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Pay via card </ion-label></ion-button>
       </ion-item>
-
     </ion-col>
     <ion-col size="12" *ngIf="!user?.ispaymentmodeprepay" >
       <!-- <ion-item  (click)="confirmforPostpaid()" >
@@ -87,7 +111,10 @@
     </ion-col>
     </ion-row>
     </ion-content>
-    <ion-footer *ngIf="user?.ispaymentmodeprepay && user?.amount>=settingValue" (click)="confirm()"  class="ion-padding" style="text-align: center;background: blue;color:#fff">
+    <div *ngIf="isShow">
+    <ion-footer *ngIf="user?.ispaymentmodeprepay && user?.parent.amount>=netPay && (user.role.type == 'clientsuperadmin' || user.role.type =='clientadmin')" (click)="confirm()"  class="ion-padding" style="text-align: center;background: blue;color:#fff">
       Confirm
        </ion-footer>
-    <ion-footer *ngIf="!user?.ispaymentmodeprepay" (click)="confirmforPostpaid()" class="ion-padding" style="text-align: center;background: blue;color:#fff">
+    <ion-footer *ngIf="!user?.ispaymentmodeprepay" (click)="confirmforPostpaid()" class="ion-padding" style="text-align: center;background: blue;color:#fff">Confirm</ion-footer>
+    <ion-footer *ngIf="netPay > user?.parent.amount && user.role.type=='clientadmin'" class="ion-padding" style="text-align: center;color:red" class="ion-padding">Insufficient Amount</ion-footer>
+  </div>

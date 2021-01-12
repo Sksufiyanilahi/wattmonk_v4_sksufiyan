@@ -5,7 +5,7 @@ import { NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
 import { AssigneeModel } from '../model/assignee.model';
-import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent, INVALID_MODULE_AND_INVERTER } from '../model/constants';
+import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent, INVALID_MODULE_AND_INVERTER, INVALID_COMPANY_NAME } from '../model/constants';
 import { DesginDataModel } from '../model/design.model';
 import { Invertermake } from '../model/inverter-made.model';
 import { InverterMakeModel } from '../model/inverter-make.model';
@@ -22,6 +22,8 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { NetworkdetectService } from '../networkdetect.service';
+import { Clients } from '../model/clients.model';
+//import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 
 // export interface DesignFormData {
@@ -65,6 +67,12 @@ export class PermitschedulePage implements OnInit {
   filteredInverterModels: Observable<Invertermake[]>;
    selectedInverterModelID: number;
 
+   //filteredCompanies: Clients[] = [];
+   getCompanies: Clients[] = [];
+  filteredCompanies: Observable<Clients[]>;
+  designCreatedBy;
+  designCreatedByUserParent;
+
   private subscription: Subscription;
   private addressSubscription: Subscription;
 
@@ -74,6 +82,7 @@ export class PermitschedulePage implements OnInit {
   tiltforgroundError = INVALID_TILT_FOR_GROUND_MOUNT;
   phoneError = INVALID_PHONE_NUMBER;
   moduleAndInverterError = INVALID_MODULE_AND_INVERTER;
+  companyError = INVALID_COMPANY_NAME;
 
   fieldRequired = FIELD_REQUIRED;
 
@@ -113,6 +122,11 @@ export class PermitschedulePage implements OnInit {
   attachmentFileUpload: boolean= false;
   netSwitch: any;
   deactivateNetworkSwitch: Subscription;
+  // newpermits: Observable<any>;
+  // newpermitsRef: AngularFireObject<any>;
+  // newpermitscount = 0;
+
+  
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -128,14 +142,17 @@ export class PermitschedulePage implements OnInit {
     private toastController: ToastController,
     private intercom:Intercom,
     private cdr:ChangeDetectorRef,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    //private db:AngularFireDatabase
     //private data: DesignFormData
     ) {
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
        const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     const NUMBERPATTERN = '^[0-9]+$';
+    const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.desginForm = this.formBuilder.group({
+      companyname: new FormControl('', [Validators.pattern(COMPANYFORMAT)]),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       phone : new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
@@ -157,7 +174,7 @@ export class PermitschedulePage implements OnInit {
     ]),
     monthlybill: new FormControl('',[Validators.required,Validators.min(0),Validators.pattern(NUMBERPATTERN)]),
     address: new FormControl('',[Validators.required]),
-    createdby: new FormControl(''),
+    createdby: new FormControl(this.storage.getUserID()),
     assignedto: new FormControl(''),
     rooftype: new FormControl(''),
     architecturaldesign: new FormControl(''),
@@ -176,9 +193,22 @@ export class PermitschedulePage implements OnInit {
     city: new FormControl(''),
     postalcode: new FormControl(''),
     status: new FormControl('created'),
-    attachments: new FormControl([])
-
+    attachments: new FormControl([]),
+    creatorparentid: new FormControl(this.storage.getParentId()),
   })
+  // //For Counts
+  // this.newpermitsRef = db.object('newpermitdesigns');
+  //   this.newpermits = this.newpermitsRef.valueChanges();
+  //   this.newpermits.subscribe(
+  //     (res) => {
+  //       console.log(res);
+  //       this.newpermitscount = res.count;
+  //       cdr.detectChanges();
+  //     },
+  //     (err) => console.log(err),
+  //     () => console.log('done!')
+  //   )
+
   this.designId = +this.route.snapshot.paramMap.get('id');
 
   // const url = this.router.url;
@@ -188,15 +218,20 @@ export class PermitschedulePage implements OnInit {
   //   this.currentTab = splittedUrl[2];
   // }
     }
-  ngOnInit() {
-    this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
-      this.netSwitch = data;
-      this.utils.showHideIntercom(true);
-      console.log(this.netSwitch);
 
-    })
+    ionViewDidEnter(){
+      this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
+        this.netSwitch = data;
+        console.log(this.netSwitch);
+        this.utils.showHideIntercom(true);
+      })
+    }
+
+
+  ngOnInit() {
     this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
+    console.log(this.userdata)
     this.requestLocationPermission();
     if (this.designId!=0) {
       this.tabsDisabled=true;
@@ -214,17 +249,20 @@ export class PermitschedulePage implements OnInit {
     }
 
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
-      if (event === ScheduleFormEvent.SAVE_PERMIT_FORM || event === ScheduleFormEvent.SEND_PERMIT_FORM) {
+      if (event === ScheduleFormEvent.SAVE_PERMIT_FORM ) {
         this.send=event;
         this.saveModuleMake();
 
+      }
+      if(event === ScheduleFormEvent.SEND_PERMIT_FORM){
+     this.sendtowattmonk();
       }
     });
     
 
 
     //this.addressValue();
-
+    this.gettingClients();
     if (this.designId !== 0) {
       setTimeout(()=>{
         this.getDesignDetails();
@@ -476,7 +514,8 @@ export class PermitschedulePage implements OnInit {
   }
 
   goBack() {
-    this.navController.pop();
+   this.navController.pop();
+   
   }
 
   eventcheck(e){
@@ -740,9 +779,8 @@ saveInverterModel() {
       // this.saveModuleMake();
 
       if(this.desginForm.status==='VALID'){
-        console.log("Hello");
         if(this.formValue=='send'){
-        this.router.navigate(['payment-modal',{designData:"permit"}]);
+          this.saveModuleMake();
         }else{
       this.saveModuleMake();
         }
@@ -756,13 +794,28 @@ saveInverterModel() {
     submitform(){
       var pnumber = this.desginForm.get("phone").value;
       if (this.desginForm.status === 'VALID') {
-        this.utils.showLoading('Saving').then(() => {
-          var tomorrow = new Date();
+        var designstatus;
+        var designoutsourcedto;
+        var isoutsourced;
+        if (this.designCreatedBy) {
+          designstatus = "outsourced";
+          designoutsourcedto = "232";
+          isoutsourced = "true";
+          var designacceptancestarttime = new Date();
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+          console.log(designacceptancestarttime)
+        } else {
+          designstatus = "created";
+          designoutsourcedto = null;
+          isoutsourced = "false"
+        }
+        var tomorrow = new Date();
           tomorrow.setDate(tomorrow.getDate() + 2);
           console.log(this.formValue);
           if (this.designId === 0) {
             if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM){
-              var data = {name:this.desginForm.get('name').value,
+              var data = {
+                          name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -771,7 +824,8 @@ saveInverterModel() {
                           solarmodel:this.selectedModuleModelID,
                           invertermake:this.selectedInverterMakeID,
                           invertermodel:this.selectedInverterModelID,
-                          createdby: this.storage.getUserID(),
+                          //createdby: this.storage.getUserID(),
+                          createdby: this.desginForm.get('createdby').value,
                            //assignedto: this.desginForm.get('assignedto').value,
                            rooftype: this.desginForm.get('rooftype').value,
                          //architecturaldesign: this.desginForm.get('architecturaldesign').value,
@@ -789,10 +843,14 @@ saveInverterModel() {
                          state: this.desginForm.get('state').value,
                         city: this.desginForm.get('city').value,
                          postalcode: this.desginForm.get('postalcode').value,
-                        status: this.desginForm.get('status').value,
+                        status:designstatus,
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
-                        creatorparentid:this.storage.getParentId()
+                        //creatorparentid:this.storage.getParentId()
+                        creatorparentid:this.desginForm.get('creatorparentid').value,
+                        outsourcedto:designoutsourcedto,
+                        designacceptancestarttime:designacceptancestarttime,
+                        isoutsourced:isoutsourced
 
   }
 
@@ -800,6 +858,7 @@ saveInverterModel() {
 
 
              // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
+              this.utils.showLoading('Saving').then(() => {
               this.apiService.addDesginForm(data).subscribe(response => {
                 if(this.architecturalFileUpload){
                   this.uploaarchitecturedesign(response.id,'architecturaldesign');
@@ -833,13 +892,14 @@ saveInverterModel() {
                   this.utils.errorSnackBar(error.message);
                 });
 
-
-
+              
+              });
 
               }
-           else if(this.formValue === 'send' || this.send===ScheduleFormEvent.SEND_PERMIT_FORM){
+           else if(this.formValue === 'send'){
 
-              var postData = {name:this.desginForm.get('name').value,
+              var postData = {
+                          name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -890,7 +950,8 @@ saveInverterModel() {
                   this.createChatGroup(response);
                   console.log('Res', response);
                   this.value = response.id;
-                  this.sendtowattmonk();
+                  this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
+                  // this.sendtowattmonk();
 
                  // this.router.navigate(['/homepage'])
                  // this.utils.showSnackBar('Design have been Created');
@@ -920,8 +981,9 @@ saveInverterModel() {
             }
           else {
             if(this.formValue==='save'){
-              
-              var data = {name:this.desginForm.get('name').value,
+              this.utils.showLoading('Saving').then(() => {
+              var data = {
+                          name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -930,7 +992,7 @@ saveInverterModel() {
                           solarmodel:this.selectedModuleModelID,
                           invertermake:this.selectedInverterMakeID,
                           invertermodel:this.selectedInverterModelID,
-                          createdby: this.storage.getUserID(),
+                          createdby: this.desginForm.get('createdby').value,
                            //assignedto: this.desginForm.get('assignedto').value,
                            rooftype: this.desginForm.get('rooftype').value,
                          //architecturaldesign: this.desginForm.get('architecturaldesign').value,
@@ -951,7 +1013,10 @@ saveInverterModel() {
                         status: this.desginForm.get('status').value,
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
-                        creatorparentid:this.storage.getParentId()
+                        creatorparentid:this.desginForm.get('creatorparentid').value,
+                        outsourcedto:designoutsourcedto,
+                        designacceptancestarttime:designacceptancestarttime,
+                        isoutsourced:isoutsourced
 
   }
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
@@ -962,7 +1027,6 @@ saveInverterModel() {
                 this.uploadAttachmentDesign(response.id,'attachments')
               }
               if(this.isArcFileDelete){
-                console.log("hello");
                 this.deleteArcFile(this.indexOfArcFiles);
               }
               
@@ -984,13 +1048,14 @@ saveInverterModel() {
               });
 
             });
-          
-          
+              
+              });
 
           }
           else if(this.formValue==='send'){
             this.isEdit = false;
-            var postData = {name:this.desginForm.get('name').value,
+            var postData = {
+                          name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
                           address:this.desginForm.get('address').value,
@@ -1039,7 +1104,7 @@ saveInverterModel() {
                 console.log('Res', response);
                 this.value=response.id;
                 this.utils.showSnackBar('Design have been updated');
-                this.sendtowattmonk();
+                this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
 
 
               });
@@ -1055,7 +1120,7 @@ saveInverterModel() {
           }
         }
 
-        });
+        
 
       } else {
         this.error();
@@ -1063,8 +1128,11 @@ saveInverterModel() {
     }
 
     error(){
-
-        if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
+        if(this.desginForm.value.name == '' || this.desginForm.get('companyname').hasError('pattern'))
+        {
+          this.utils.errorSnackBar('please check the field name');
+        }
+        else if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
 
           this.utils.errorSnackBar('Please check the field name.');
         }
@@ -1187,10 +1255,10 @@ saveInverterModel() {
     }
 
     removeArc(i) {
-      this.archFiles.splice(this.archFiles.indexOf(i), 1);
+      this.archFiles.splice(i, 1);
     }
     removePermit(i) {
-      this.permitFiles.splice(this.permitFiles.indexOf(i), 1);
+      this.permitFiles.splice(i, 1);
     }
 
     remove(arc,i){
@@ -1219,9 +1287,24 @@ saveInverterModel() {
     console.log(this.architecturalData);
     console.log(i);
     
-    this.architecturalData.splice(this.architecturalData.indexOf(i), 1);
+    this.architecturalData.splice(i, 1);
 
     }
+
+    removeattachment(attachment,i){
+    
+      this.indexOfArcFiles.push( attachment.id);
+  
+      this.isArcFileDelete=true;
+      console.log(this.isArcFileDelete);
+      console.log(this.indexOfArcFiles);
+      console.log(this.attachmentData);
+      console.log(i);
+      
+      this.attachmentData.splice(i, 1);
+    }
+
+
 
     deleteArcFile(index){
      
@@ -1266,11 +1349,12 @@ saveInverterModel() {
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime,
-          paymenttype:this.utils.getPaymentMode().value
+          paymenttype:this.utils.getPaymentMode().value,
+          couponid:this.utils.getCouponId().value
         };
 
         this.utils.showLoading('Assigning').then(()=>{
-
+          //this.newpermitsRef.update({ count: this.newpermitscount + 1});
           this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
             this.utils.hideLoading().then(()=>{
               ;
@@ -1566,5 +1650,38 @@ saveInverterModel() {
       })
     }
 
+    gettingClients(){
+      this.apiService.getClients().subscribe(res=>{
+        this.getCompanies = res;
+        console.log(this.getCompanies);
+        this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
+          startWith(""),
+          map(value => (typeof value === "string" ? value : value.companyid)),
+          map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
+        );
+      },
+      error => {
+        this.utils.errorSnackBar("Error");
+      }
+    );
+    }
+
+    proxyValue: any; onCompanyChanged(event$) { 
+      console.log(event$);
+      this.proxyValue = event$.option.value.companyname; 
+      this.designCreatedBy = event$.option.value.companyid; 
+      this.designCreatedByUserParent = event$.option.value.parentid;
+      if(this.designCreatedBy !== null && this.designCreatedByUserParent !== null){
+        this.desginForm.patchValue({createdby:this.designCreatedBy,
+                                    creatorparentid:this.designCreatedByUserParent,
+                                    })
+      }
+    }
+
+    private _filterCompanies(companyname: string): Clients[] {
+      return this.getCompanies.filter(
+        company => company.companyname.toLowerCase().indexOf(companyname) != -1
+      );
+    }
 
 }

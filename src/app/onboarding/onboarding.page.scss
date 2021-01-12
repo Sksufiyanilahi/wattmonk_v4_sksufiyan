@@ -1,0 +1,67 @@
+.margin{
+    margin-top: 0px;
+    
+}
+.font{
+  font-size: 10px;
+}
+
+ion-toggle{
+  padding-right: 14px;
+}
+
+ion-radio{
+  margin-top: 0px;
+  margin-right: 5px;
+}
+
+.colorChange{
+  color: #3c78d8;
+}
+
+::ng-deep.mat-step-header .mat-step-label.mat-step-label-active {
+  color: rgba(0,0,0,.87) !important;
+  font-size: large !important; 
+}
+
+// .card-content{
+//    // padding: 0px 16px;
+//     max-height: 0px;
+// }
+
+.clickEnableCls{
+    pointer-events: visible !important;
+ }
+ ion-label {
+    color: #6C6C6C !important;
+  }
+
+  ion-card-content {
+    position: relative;
+    overflow: hidden;
+    overflow-y: auto;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .mat-stepper-horizontal {
+    margin-top: 8px;
+  }
+  
+  .mat-form-field {
+    margin-top: 16px;
+  }
+  .bottomrow{
+    background: #3f51b5;
+    color: #fff;
+    padding: 5px;
+  }
+
+  .error {
+    color: rgb(223, 62, 62);
+    font-size: 11px;
+  }
+  input[type="file"]{
+    visibility:hidden;
+  }

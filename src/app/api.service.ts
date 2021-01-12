@@ -28,6 +28,8 @@ import { AuthGuardService } from './auth-guard.service';
 import { DesignStatistic } from './model/designstats.model';
 import { DesignersStatistics } from './model/designerstats.model';
 import { AnalystStatistics } from './model/analyststats.model';
+import { ROLES } from './contants';
+import { Clients } from './model/clients.model';
 
 
 @Injectable({
@@ -186,10 +188,10 @@ export class ApiService {
   }
 
   getSurveyorSurveys(search : string) {
-    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search, { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search , { headers: this.headers });
   }
-  getDesignSurveys(search : string) {
-    return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search, { headers: this.headers });
+  getDesignSurveys(search : string,limit,skip) {
+    return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search +'&limit='+ limit +'&skip='+ skip, { headers: this.headers });
   }
   getAnalystDesign(search :string){
     return this.http.get<DesginDataModel[]>(BaseUrl+'/userdesign?id='+this.userId+'&'+search,{headers:this.headers});
@@ -260,6 +262,17 @@ export class ApiService {
     data.append('field', key);
 
     console.log("file upload data---"+data);
+
+    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
+  }
+  uploadlogo(blob: Blob, fileName: string) {
+    const data = new FormData();
+    data.append('files', blob,fileName);
+    data.append('path', this.userId + '/logo');
+    data.append('refId', ''+ this.userId);
+    data.append('ref', 'user');
+    data.append('field', 'logo');
+    data.append('source', 'users-permissions');
 
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
@@ -411,6 +424,78 @@ export class ApiService {
     sendPermitEmails(data:any){
       return this.http.post(BaseUrl+"/designs/send-permit-design", data,{headers:this.headers})
     }
+
+    getUserData(id){
+      return this.http.get(BaseUrl + "/users/" + id,{headers: this.headers})
+    }
     
-    
+    getCoupons(data){
+      return this.http.get(BaseUrl + "/getCoupons?userid="+ this.userId+"&requesttype="+data,{headers: this.headers});
+    }
+    sendCoupon(data:any){
+      return this.http.post(BaseUrl+"/getCoupon", data,{headers:this.headers})
+    }
+
+    addUser(
+      workemail: String,
+      firstname: String,
+      lastname: String,
+      permissiontomakedesign:boolean,
+      role: number,
+      minpermitaccess: boolean
+      // address: String,
+      // country: String,
+      // callingcode: number
+    ): Observable<User> {
+      var randomPassword = this.utilities.randomPass();
+      var parentid = 0;
+      //this.parentId = this.storageService.getParentId();
+      var user = this.storageService.getUser();
+      if (user.role.id == ROLES.SuperAdmin || user.role.id == ROLES.ContractorSuperAdmin){
+        parentid = user.id;
+      }else{
+        parentid = user.parent.id;
+      }
+      const postData = {
+        firstname: firstname,
+        lastname: lastname,
+        email: workemail,
+        permissiontomakedesign:permissiontomakedesign,
+        password: randomPassword,
+        resetPasswordToken: randomPassword,
+        source: "android",
+        username: workemail,
+        confirmed : true,
+        isdefaultpassword: true,
+        role: role,
+        minpermitdesignaccess: minpermitaccess,
+        provider: "local",
+        parent: parentid,
+        company: this.storageService.getUser().company,//user.company,
+        addedby: this.storageService.getUser().id//.currentUserValue.user.id
+      };
+      console.log(postData)
+      return this.http
+        .post<User>(BaseUrl + "/users", JSON.stringify(postData), {
+          headers: this.headers,
+         // observe: "response"
+        })
+        // .pipe(
+        //   map(value => {
+        //     const member: User = value.body;
+        //     return member;
+        //   }),
+        //   catchError((err: HttpErrorResponse) => {
+        //   if(err.error.error == "Unauthorized"){
+        //     this.genericService.handleusersignout();
+        //   }else{
+        //     return throwError(err.error.message);
+        //   }
+        // })
+        // );
+    }
+
+    getClients(){
+      return this.http.get<Clients[]>(BaseUrl + "/getclients",{headers: this.headers});
+    }
 }

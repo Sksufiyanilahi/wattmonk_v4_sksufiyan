@@ -43,6 +43,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
+import { UtilitiesModule } from '../utilities/utilities.module';
 
 @NgModule({
   imports: [
@@ -86,6 +87,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
     MatBadgeModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
+    UtilitiesModule
   ],
   declarations: [PermitschedulePage],
   providers: [

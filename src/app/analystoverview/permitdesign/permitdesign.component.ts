@@ -51,6 +51,8 @@ export class PermitdesignComponent implements OnInit { listOfDesignDataHelper: D
   userData: any;
   designerData: any;
   assigneeData: any;
+  skip:number=0;
+  limit:number=10;
   selectedDesigner: any;
   netSwitch: boolean;
   deactivateNetworkSwitch: Subscription;
@@ -152,6 +154,7 @@ this.network.networkConnect();
     // });
 
     this.PermitRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 
@@ -177,7 +180,7 @@ this.network.networkConnect();
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
+      this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -646,6 +649,32 @@ getassignedata(asssignedata){
 shareWhatsapp(designData){
   this.socialsharing.share(designData.permitdesign.url);
 }
+
+doInfinite($event){
+  this.skip=this.skip+10;
+  this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
+       console.log(response);
+        if(response.length){
+     
+          this.formatDesignData(response);
+        }else{
+          this.noDesignsFound= "No Designs Found"
+        }
+        if (event !== null) {
+          $event.target.complete();
+        }
+      },
+   (responseError:any) => {
+      if (event !== null) {
+          $event.target.complete();
+        }
+        const error: ErrorModel = responseError.error;
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
+    
+    });
+    
+  }
+
 
  async shareViaEmails(id,designData){
   const modal = await this.modalController.create({

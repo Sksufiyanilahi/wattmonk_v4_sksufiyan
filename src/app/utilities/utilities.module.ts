@@ -8,6 +8,8 @@ import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmailSelectorComponent } from './email-selector/email-selector.component'
 import { DateComponent } from './date/date.component';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+
 
 @NgModule({
   declarations: [
@@ -15,7 +17,8 @@ import { DateComponent } from './date/date.component';
     UserSelectorComponent,
     AutoCompleteComponent,
     EmailSelectorComponent,
-    DateComponent
+    DateComponent,
+    ProgressBarComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +31,8 @@ import { DateComponent } from './date/date.component';
     UserSelectorComponent,
     AutoCompleteComponent,
     EmailSelectorComponent,
-    DateComponent
+    DateComponent,
+    ProgressBarComponent
   ],
   providers: [
     DatePicker

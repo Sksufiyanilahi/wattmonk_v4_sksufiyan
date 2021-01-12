@@ -22,17 +22,21 @@
         <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
             <ion-refresher-content></ion-refresher-content>
           </ion-refresher>
-        <ion-grid *ngIf="listOfDesignsHelper.length !== 0">
+        <ion-grid *ngIf="listOfDesignsHelper.length !== 0 ;else nodesignFound">
+            <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
             <ion-row *ngFor="let item of listOfDesignsHelper;let i = index">
-                <ion-col size="12" class="ion-margin-top">
+                <!-- <ion-row *virtualItem="let item;let i = index"> -->
+                <!-- <ion-col size="12" class="ion-margin-top">
                         <span class="ion-padding" *ngIf="today === item.date">
                             Today
                             </span>
                     <span class="ion-padding" *ngIf="today !== item.date">
                                 {{item.date | date: 'dd MMM yyyy'}}
                         </span>
-                </ion-col>
-                <ion-col *ngFor="let designData of item.listOfDesigns;let j = index;trackBy: trackdesign" size="12">
+                </ion-col> -->
+                <!-- <ion-virtual-scroll [items]="item.listOfDesigns" approxItemHeight="320px" > -->
+                <!-- <ion-col *ngFor="let designData of item.listOfDesigns;let j = index;trackBy: trackdesign" size="12"> -->
+                   <ion-col *ngFor="let designData of item.listOfDesigns;let j = index;trackBy: trackdesign" size="12">
                     <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
                         <p class="customer-name"
                         routerDirection="forward">{{designData.name}}
@@ -83,7 +87,7 @@
                            <ion-col style="padding-left:0px" >
                             <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
                         </ion-col>
-                        <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin'">
+                        <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
                                 <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
                                     {{designData.designremainingtime}}</span></ion-col>
                                     <ion-col *ngIf="designData.status == 'outsourced'">
@@ -96,10 +100,10 @@
 
                         <ion-row class="ion-no-margin ion-no-margin">
                             <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined' || segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined'">
-                                <span *ngIf="designData.status == 'created' || (designData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
+                                <span *ngIf="designData.status == 'created' || (designData.status == 'requestaccepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')) " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
                                 >Assign</span>
                                 <span style="float: right;">
-                                    <ng-container *ngIf="userData.role.type !=='clientsuperadmin'">
+                                    <ng-container *ngIf="userData.role.type !=='clientsuperadmin' && userData.role.type !== 'clientadmin'">
                                         <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')">
                                            Accept
                                         </ion-col>
@@ -109,26 +113,26 @@
                                     </ng-container>
                                 </span>
 
-                                <span *ngIf="designData.status == 'requestdeclined' && userData.role.type=='clientsuperadmin'"style="float:right !important;" class="ion-text-end action-button-color" (click)="directAssignToWattmonk(designData.id)"
+                                <span *ngIf="designData.status == 'requestdeclined' && (userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin')"style="float:right !important;" class="ion-text-end action-button-color" (click)="directAssignToWattmonk(designData.id)"
                                 >Reassign</span>
                             </ion-col>
 
 
                             <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
-                                <span *ngIf= "(designData.status =='designassigned') && userData.role.type !='clientsuperadmin'" (click)="openDesigners(designData.id,designData)" style="float:right !important" class="ion-text-end action-button-color"
+                                <span *ngIf= "(designData.status =='designassigned') && userData.role.type !='clientsuperadmin' && userData.role.type !='clientadmin'" (click)="openDesigners(designData.id,designData)" style="float:right !important" class="ion-text-end action-button-color"
                                 >Reassign</span>
                             </ion-col>
 
                             <ion-col *ngIf="segments=='requesttype=prelim&status=designcompleted'">
                                 <!-- <span *ngIf="(designData.isoutsourced=='true' && designData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (designData.isoutsourced=='false' && designData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                                 >Assign Review</span> -->
-                                <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="selfAssign(designData.id,designData)"
+                                <span *ngIf="userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="selfAssign(designData.id,designData)"
                                 > &nbsp; Self Assign</span>
 
-                                <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                                <span *ngIf="userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                                 >Assign Review</span>
                             </ion-col>
-                            <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin'">
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'">
                                 <span *ngIf="designData.status =='reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData)"
                                 >  &nbsp; Deliver</span>
                                 <span *ngIf="userData.role.type!='clientsuperadmin' &&(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
@@ -142,7 +146,7 @@
                                     <ion-icon name="share-social-outline"></ion-icon></span>&nbsp;
                                 <span style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="shareViaEmails(designData.id,designData)">
                                     <ion-icon name="mail" ></ion-icon></span>
-                                    <span *ngIf="userData.role.type=='clientsuperadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, designData.requesttype)">
+                                    <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, designData.requesttype)">
                                         Resend</span>
                             </ion-col>
                             <!-- <ion-col class="ion-no-margin ion-no-padding">
@@ -159,22 +163,33 @@
                     </span> -->
                 </ion-card>
                 </ion-col>
+            <!-- </ion-virtual-scroll> -->
             </ion-row>
-            <ion-row>
-                <ion-col size="12" style="height: 100px;">
+            
+        <!-- </ion-virtual-scroll> -->
+        <!-- <ion-row>
+            <ion-col size="12" style="height: 100px;">
 
-                </ion-col>
-            </ion-row>
+            </ion-col>
+        </ion-row> -->
+        
         </ion-grid>
-
+     <ng-template #nodesignFound>
         <div *ngIf="listOfDesignsHelper.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
                 <!-- <div *ngIf="!netSwitch"> -->
                    {{noDesignFound}}
                 <!-- </div> -->
 
             <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
-        </div>
+        </div></ng-template>
 
+
+        <ion-infinite-scroll (ionInfinite)="doInfinite($event)" >
+            <ion-infinite-scroll-content
+              loadingSpinner="bubbles"
+              >
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
 
 </ion-content>
 

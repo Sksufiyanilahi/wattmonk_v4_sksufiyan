@@ -196,13 +196,22 @@ const routes: Routes = [
     path: 'permithomepage',
     loadChildren: () => import('./permithomepage/permithomepage.module').then( m => m.PermithomepagePageModule),
     canActivate: [AuthGuardService]
-  },  {
+  },
+  {
     path: 'permitdesignoverview',
     loadChildren: () => import('./permitdesignoverview/permitdesignoverview.module').then( m => m.PermitdesignoverviewPageModule)
   },
   {
     path: 'statsoverviewdetails',
     loadChildren: () => import('./statsoverviewdetails/statsoverviewdetails.module').then( m => m.StatsoverviewdetailsPageModule)
+  },
+  {
+    path: 'coupon-offers-modal',
+    loadChildren: () => import('./coupon-offers-modal/coupon-offers-modal.module').then( m => m.CouponOffersModalPageModule)
+  },
+  {
+    path: 'onboarding',
+    loadChildren: () => import('./onboarding/onboarding.module').then( m => m.OnboardingPageModule)
   },
 
 
