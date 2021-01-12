@@ -33,6 +33,7 @@ netPay:any
   userData:any;
   uss:any;
    //counts
+   isShow:boolean=false
    newpermits: Observable<any>;
    newpermitsRef: AngularFireObject<any>;
    newpermitscount = 0;
@@ -82,11 +83,17 @@ netPay:any
      }
 
   ngOnInit() {
+   
+   
+   this.utils.showLoading("Please wait....").then(()=>{
+   
+   
+   
     this.userData = this.storageService.getUser();
     console.log(this.userData)
     this.utils.showHideIntercom(true);
     this.fetchData();
-    this.servicecharges();
+    this.servicecharges();});
    /* this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
     console.log(this.user)
     this.apiService.paymentDetail(this.user.id).subscribe(res=>{
@@ -98,6 +105,10 @@ netPay:any
 
     console.log(this.id);
    console.log(this.design);*/
+   setTimeout(() => {
+    this.utils.hideLoading();
+    this.isShow=true
+    }, 2000);
   
   }
   ionViewDidEnter(){
@@ -170,6 +181,7 @@ servicecharges(){
       })
     }
     this.discountAmount();
+    
 }
 
 confirm(){
