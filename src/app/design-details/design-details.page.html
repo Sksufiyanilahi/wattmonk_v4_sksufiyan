@@ -347,11 +347,10 @@
             </ion-row>
         
 
-        <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
+        <ion-row style="margin-top:40px !important" 
         *ngIf="design.status=='designassigned'||design.status=='completed'">
-        <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned
-                to</span></ion-col>
-        <ion-col size="auto">
+        <ion-col size="6" class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned to</span></ion-col>
+        <ion-col size="6">
             <div class="selected d-flex">
                 <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"
                     [src]="design.designassignedto.contractorlogo.logo.url" class="assignee-image" />
@@ -367,10 +366,9 @@
     </ion-row>
 
 
-    <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
+    <ion-row style="margin-top:40px !important" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
     *ngIf="design.status=='reviewassigned'||design.status=='delivered'">
-    <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned
-            to</span></ion-col>
+    <ion-col size="auto" class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned to</span></ion-col>
     <ion-col size="auto">
         <div class="selected d-flex">
             <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"
