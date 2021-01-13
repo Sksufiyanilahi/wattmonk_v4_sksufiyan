@@ -86,7 +86,7 @@
     <ion-col size="10"><ion-label style="font-size:small;color:#111;">You have to pay</ion-label></ion-col>
       <ion-col size="2"><ion-label style="font-size: large;color:#111" >$ 35 </ion-label></ion-col>
   </ion-row>-->
-  <ion-item><ion-row style="width: 100%;"  *ngIf="!user?.ispaymentmodeprepay">
+  <ion-item><ion-row style="width: 100%;" >
     <ion-col size="9"><ion-label style="font-size:medium;color:#111;font-weight: bold;">Net Payable Amount</ion-label></ion-col>
       <ion-col size="3"><ion-label style="font-size: large;color:#111;float:right;padding-right: 10%;" *ngIf="netPay!=null" >$ {{netPay}} </ion-label>
       <ion-label style="font-size: large;color:#111; float:right; padding-right: 10%;" *ngIf="netPay==null" >$ {{settingValue}} </ion-label>

@@ -120,7 +120,7 @@ fetchData(){
   this.design=params.get('designData')});
 
 
-  this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
+  this.apiService.getUserData(this.userData.parent.id).subscribe(res=>{this.user=res;
     console.log(this.user)
     this.apiService.paymentDetail(this.user.id).subscribe(res=>{
       this.count=res;
