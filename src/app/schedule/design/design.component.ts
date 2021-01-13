@@ -1005,7 +1005,7 @@ ioniViewDidEnter(){
     for(var i=0; i< this.archFiles.length;i++){
       imageData.append("files",this.archFiles[i]);
       if(i ==0){
-        imageData.append('path', 'design/' + designId);
+        imageData.append('path', 'designs/' + designId);
         imageData.append('refId', designId + '');
         imageData.append('ref', 'design');
         imageData.append('field', key);
@@ -1025,7 +1025,7 @@ ioniViewDidEnter(){
     for(var i=0; i< this.prelimFiles.length;i++){
       imageData.append("files",this.prelimFiles[i]);
       if(i ==0){
-        imageData.append('path', 'design/' + designId);
+        imageData.append('path', 'designs/' + designId);
         imageData.append('refId', designId + '');
         imageData.append('ref', 'design');
         imageData.append('field', key);

@@ -26,7 +26,7 @@
     </ion-row>
     <ion-row >
     <ion-card style="position: relative; width:100%;" class="ion-padding">
-      <ion-row style="width: 100%;" *ngIf="user?.role.type!=='clientadmin'">
+      <ion-row style="width: 100%;" *ngIf="user?.role.type!='clientadmin'">
         <ion-col size="6">
           <ion-label style="font-size: medium;color:#111;font-weight: bold;float: left;">Amount in Wallet</ion-label>
         </ion-col>
@@ -108,6 +108,7 @@
       <!-- <ion-item  (click)="confirmforPostpaid()" >
         <ion-button  fill="clear"><ion-icon name="checkmark-circle-outline" style="color: blue;"></ion-icon>&nbsp;<ion-label class="black">Confirm</ion-label></ion-button>
       </ion-item> -->
+      
     </ion-col>
     </ion-row>
     </ion-content>

@@ -27,7 +27,7 @@ import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@io
 import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
+import { COMETCHAT_CONSTANTS, intercomId,version } from '../contants';
 
 
 @Component({
@@ -36,7 +36,7 @@ import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
   styleUrls: ['./permithomepage.page.scss'],
 })
 export class PermithomepagePage implements OnInit {
-  private version = environment.version;
+  private version = version;
 
   private subscription: Subscription;
 

@@ -83,6 +83,7 @@ export class PermitdesignComponent implements OnInit {
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string='';
   storageDirectory: string;
+  infinitescroll:boolean=false
  //counts
 //  newpermits: Observable<any>;
 //  newpermitsRef: AngularFireObject<any>;
@@ -171,7 +172,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   segmentChanged(event){
-   this.skip=0;
+   
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -235,8 +236,7 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.makeDirectory();
     this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
-      this.skip=0;
-      this.getDesigns(null);
+    this.getDesigns(null);
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
@@ -248,7 +248,8 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   getDesigns(event: CustomEvent) {
-
+    this.skip=0;
+   
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -278,6 +279,7 @@ this.deactivateNetworkSwitch.unsubscribe();
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
+    // this.infinitescroll=false;
     this.noDesignFound="";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
@@ -707,6 +709,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   doInfinite($event){
+    console.log($event)
   this.skip=this.skip+10;
   this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
        console.log(response);
@@ -716,6 +719,9 @@ this.deactivateNetworkSwitch.unsubscribe();
         }else{
           this.noDesignFound= "No Designs Found"
         }
+        // if(response.length<10){
+        //   this.infinitescroll=true
+        // }else{this.infinitescroll=false}
         if ($event !== null) {
           $event.target.complete();
         }

@@ -13,7 +13,7 @@ import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
-import { COMETCHAT_CONSTANTS, ROLES } from '../contants';
+import { COMETCHAT_CONSTANTS, ROLES,version } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -24,7 +24,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
   styleUrls: ['./homepage.page.scss'],
 })
 export class HomepagePage implements OnInit, OnDestroy {
-  private version = environment.version;
+  private version = version;
   @Output() ionInput = new EventEmitter();
 
 
