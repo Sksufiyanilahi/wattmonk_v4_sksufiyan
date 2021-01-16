@@ -23,7 +23,8 @@ export class User {
   isonboardingcompleted:boolean;
   logo:{
     url:string;
-  }
+  };
+  ispaymentmodeprepay:boolean;
 
 }
 

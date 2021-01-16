@@ -199,20 +199,47 @@ const routes: Routes = [
   },
   {
     path: 'permitdesignoverview',
-    loadChildren: () => import('./permitdesignoverview/permitdesignoverview.module').then( m => m.PermitdesignoverviewPageModule)
+    loadChildren: () => import('./permitdesignoverview/permitdesignoverview.module').then( m => m.PermitdesignoverviewPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'statsoverviewdetails',
-    loadChildren: () => import('./statsoverviewdetails/statsoverviewdetails.module').then( m => m.StatsoverviewdetailsPageModule)
+    loadChildren: () => import('./statsoverviewdetails/statsoverviewdetails.module').then( m => m.StatsoverviewdetailsPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'coupon-offers-modal',
-    loadChildren: () => import('./coupon-offers-modal/coupon-offers-modal.module').then( m => m.CouponOffersModalPageModule)
+    loadChildren: () => import('./coupon-offers-modal/coupon-offers-modal.module').then( m => m.CouponOffersModalPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'onboarding',
-    loadChildren: () => import('./onboarding/onboarding.module').then( m => m.OnboardingPageModule)
+    loadChildren: () => import('./onboarding/onboarding.module').then( m => m.OnboardingPageModule),
+    canActivate: [AuthGuardService]
   },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule),
+    canActivate: [AuthGuardService]
+  },  {
+    path: 'onhold',
+    loadChildren: () => import('./onhold/onhold.module').then( m => m.OnholdPageModule)
+  },
+  {
+    path: 'waitingforacceptance',
+    loadChildren: () => import('./waitingforacceptance/waitingforacceptance.module').then( m => m.WaitingforacceptancePageModule)
+  },
+  {
+    path: 'unassigned',
+    loadChildren: () => import('./unassigned/unassigned.module').then( m => m.UnassignedPageModule)
+  },
+  {
+    path: 'revision',
+    loadChildren: () => import('./revision/revision.module').then( m => m.RevisionPageModule)
+  }
+
+
+
 
 
 

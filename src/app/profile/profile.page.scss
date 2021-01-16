@@ -16,6 +16,23 @@
 
 }
 
+.profile_img{
+    height: 100px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    color: #fff;
+    border-radius: 50%;
+    /* background: blue; */
+    background: #266eef;
+    background: 4c8dff;
+    border: 4px solid #4c8dff;
+    border-radius:50%;
+
+}
+
 .profile-name{
   color: #8B8B8B;
   font-size: 20px;

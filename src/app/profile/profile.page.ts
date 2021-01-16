@@ -10,10 +10,11 @@ import { User } from '../model/user.model';
 import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.module';
 import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
 import { AddMoneyPage } from '../add-money/add-money.page';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Intercom } from 'ng-intercom';
 import { intercomId } from '../contants';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class ProfilePage implements OnInit {
   enableDisable:boolean=false;
 profile:any;
   user: User;
+  userdata: any;
 
   constructor(
     private navController: NavController,
@@ -41,15 +43,19 @@ profile:any;
     private toastController: ToastController,
     public modalController: ModalController,
     public router:Router,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private route: ActivatedRoute
   ) {
+   
   }
 
   ngOnInit() {
-    this.utilities.showHideIntercom(true);
-    this.enableDisable= false;
-    this.user = this.storage.getUser();
+   
+    this.user = this.storage.getUser(); // get data from resolver
     console.log(this.user);
+    this.enableDisable= false;
+    // this.user = this.storage.getUser();
+    // console.log(this.user);
     this.getProfileData();
 
   }
@@ -64,8 +70,11 @@ getProfileData(){
 this.apiService.getProfileDetails().subscribe(res=>{
   console.log(res);
   this.profile=res;
-  console.log(this.profile)
 })
+}
+
+isEmptyObject(obj) {
+  return (obj && (Object.keys(obj).length === 0));
 }
 
 AddWallet()
@@ -97,9 +106,12 @@ AddWallet()
                 this.storage.logout();
                 this.deviceStorage.clear();
                 this.apiService.resetHeaders();
-                this.utilities.showHideIntercom(true);
+                this.utilities.hideLoading();
                 this.navController.navigateRoot('login');
               });
+            },err=>{
+              console.log(err);
+              this.utilities.hideLoading();
             })
           }
         }, {
