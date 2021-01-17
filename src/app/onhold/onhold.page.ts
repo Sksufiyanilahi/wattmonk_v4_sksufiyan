@@ -203,7 +203,7 @@ this.network.networkConnect();
            if(!res.isinrevisionstate){
              this.createNewDesignChatGroup(res);
             }
-            debugger;
+          
            this.utils.hideLoading().then(()=>{
             this.utils.setHomepageDesignRefresh(true);})})
           })
@@ -212,7 +212,7 @@ this.network.networkConnect();
 
 
        addUserToGroupChat() {
-         debugger;
+       
         var GUID = this.designerData.chatid;
         var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
         if (this.isclientassigning) {
@@ -469,7 +469,7 @@ this.network.networkConnect();
     console.log(this.selectedDesigner);
     var postData = {};
     if (this.designerData.createdby.id == this.userData.id) {
-      debugger;
+    
       if (this.selectedDesigner.parent.id == this.userData.parent.id) {
         if(this.selectedDesigner.role.type=="qcinspector"){
           postData = {
