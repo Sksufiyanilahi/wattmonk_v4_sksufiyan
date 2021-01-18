@@ -59,6 +59,13 @@ designId:any;
           })
         });
         }
+        if(this.name=="pestamp"){
+          this.apiservice.pestamp_activityDetails(this.designId).subscribe(response =>{
+            this.utilities.hideLoading().then(()=>{
+              this.activity_details=response;
+            })
+          });
+          }
       })
   }
   

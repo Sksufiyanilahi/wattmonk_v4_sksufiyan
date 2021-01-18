@@ -1213,7 +1213,7 @@ saveInverterModel() {
       for(var i=0; i< this.archFiles.length;i++){
         imageData.append("files",this.archFiles[i]);
         if(i ==0){
-          imageData.append('path', 'design/' + designId);
+          imageData.append('path', 'designs/' + designId);
           imageData.append('refId', designId + '');
           imageData.append('ref', 'design');
           imageData.append('field', key);
@@ -1233,7 +1233,7 @@ saveInverterModel() {
       for(var i=0; i< this.permitFiles.length;i++){
         imageData.append("files",this.permitFiles[i]);
         if(i ==0){
-          imageData.append('path', 'design/' + designId);
+          imageData.append('path', 'designs/' + designId);
           imageData.append('refId', designId + '');
           imageData.append('ref', 'design');
           imageData.append('field', key);

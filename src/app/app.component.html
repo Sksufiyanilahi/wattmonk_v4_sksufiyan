@@ -40,7 +40,8 @@
                       <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Messages </ion-item>
                       <!-- <ion-item  (click)="SwitchMenuAccordingtoRoles('statistics')" *ngIf="userData?.role.type!='clientsuperadmin'" routerDirection="forward">
                        <ion-img src="/assets/images/stats.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Statistics</ion-item> -->
-                       
+                       <ion-item [routerLink]="['/pestamp-homepage']" routerDirection="forward">
+                        <ion-img src="/assets/images/stamp.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;PE Stamps </ion-item>
               </ion-menu-toggle>
           </ion-list>
       </ion-content>
