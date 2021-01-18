@@ -38,3 +38,9 @@
 
 #### Postpaid : Payment confirmation: Amount in wallet is showing BUG Medium fixed
 #### 446 opened 3 days ago by subbarathna  TestRelease_V1.1.0
+
+#### Designer name UI is not proper Blue ovel shape is present on UI around designer name BUG MINOR fixed
+## 412 opened 4 days ago by Pratikshadesai671  TestRelease_V1.1.0
+
+#### Wattmonk admin /wattmonk super admin company name provided is both list box and text box...we should not alowed to type the company name and save ...we should be able to only search BUG MAJOR fixed
+## 409 opened 4 days ago by Pratikshadesai671  TestRelease_V1.1.0
