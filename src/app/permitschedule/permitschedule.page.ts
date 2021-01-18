@@ -152,7 +152,7 @@ export class PermitschedulePage implements OnInit {
     const NUMBERPATTERN = '^[0-9]+$';
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.desginForm = this.formBuilder.group({
-      companyname: new FormControl('', [Validators.pattern(COMPANYFORMAT)]),
+      companyname: new FormControl(''),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       phone : new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
@@ -1128,11 +1128,11 @@ saveInverterModel() {
     }
 
     error(){
-        if(this.desginForm.value.name == '' || this.desginForm.get('companyname').hasError('pattern'))
-        {
-          this.utils.errorSnackBar('please check the field name');
-        }
-        else if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
+        // if(this.desginForm.value.name == '' || this.desginForm.get('companyname').hasError('pattern'))
+        // {
+        //   this.utils.errorSnackBar('please check the field name');
+        // }
+       if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
 
           this.utils.errorSnackBar('Please check the field name.');
         }
@@ -1668,9 +1668,9 @@ saveInverterModel() {
 
     proxyValue: any; onCompanyChanged(event$) { 
       console.log(event$);
-      this.proxyValue = event$.option.value.companyname; 
-      this.designCreatedBy = event$.option.value.companyid; 
-      this.designCreatedByUserParent = event$.option.value.parentid;
+      this.proxyValue = event$.detail.value.companyname; 
+      this.designCreatedBy = event$.detail.value.companyid; 
+      this.designCreatedByUserParent = event$.detail.value.parentid;
       if(this.designCreatedBy !== null && this.designCreatedByUserParent !== null){
         this.desginForm.patchValue({createdby:this.designCreatedBy,
                                     creatorparentid:this.designCreatedByUserParent,

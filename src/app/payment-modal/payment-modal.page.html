@@ -26,7 +26,7 @@
     </ion-row>
     <ion-row >
     <ion-card style="position: relative; width:100%;" class="ion-padding">
-      <ion-row style="width: 100%;" *ngIf="user?.role.type!='clientadmin'">
+      <ion-row style="width: 100%;" *ngIf="user?.role.type!='clientadmin' && user?.ispaymentmodeprepay">
         <ion-col size="6">
           <ion-label style="font-size: medium;color:#111;font-weight: bold;float: left;">Amount in Wallet</ion-label>
         </ion-col>

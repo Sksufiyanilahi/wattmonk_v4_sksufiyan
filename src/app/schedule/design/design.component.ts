@@ -128,7 +128,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     const NUMBERPATTERN = '^[0-9]*$';
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.desginForm = this.formBuilder.group({
-      companyname: new FormControl('', [Validators.pattern(COMPANYFORMAT)]),
+      companyname: new FormControl(''),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       solarmake: new FormControl('', [Validators.required]),
@@ -277,20 +277,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        //  this.desginForm.get('address').setValue('124/345');
-        //  this.desginForm.get('latitude').setValue('24.553333');
-        //  this.desginForm.get('longitude').setValue('80.5555555555');
-        //  this.desginForm.get('country').setValue('india');
-        //  this.desginForm.get('city').setValue('Lucknow');
-        //  this.desginForm.get('state').setValue('UP');
-        //  this.desginForm.get('postalcode').setValue(3232343);
-         this.desginForm.get('address').setValue(address.address);
-           this.desginForm.get('latitude').setValue(address.lat);
-           this.desginForm.get('longitude').setValue(address.long);
-           this.desginForm.get('country').setValue(address.country);
-         this.desginForm.get('city').setValue(address.city);
-           this.desginForm.get('state').setValue(address.state);
-           this.desginForm.get('postalcode').setValue(address.postalcode);
+         this.desginForm.get('address').setValue('124/345');
+         this.desginForm.get('latitude').setValue('24.553333');
+         this.desginForm.get('longitude').setValue('80.5555555555');
+         this.desginForm.get('country').setValue('india');
+         this.desginForm.get('city').setValue('Lucknow');
+         this.desginForm.get('state').setValue('UP');
+         this.desginForm.get('postalcode').setValue(3232343);
+        //  this.desginForm.get('address').setValue(address.address);
+        //    this.desginForm.get('latitude').setValue(address.lat);
+        //    this.desginForm.get('longitude').setValue(address.long);
+        //    this.desginForm.get('country').setValue(address.country);
+        //  this.desginForm.get('city').setValue(address.city);
+        //    this.desginForm.get('state').setValue(address.state);
+        //    this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -1180,12 +1180,12 @@ ioniViewDidEnter(){
 
   proxyValue: any; onCompanyChanged(event$) { 
     console.log(event$);
-    this.proxyValue = event$.option.value.companyname; 
-    this.designCreatedBy = event$.option.value.companyid; 
-    this.designCreatedByUserParent = event$.option.value.parentid;
+    this.proxyValue = event$.detail.value.companyname; 
+    this.designCreatedBy = event$.detail.value.companyid; 
+    this.designCreatedByUserParent = event$.detail.value.parentid;
     if(this.designCreatedBy !== null && this.designCreatedByUserParent !== null){
       var designacceptancestarttime = new Date();
-      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
           console.log(designacceptancestarttime)
       this.desginForm.patchValue({createdby:this.designCreatedBy,
                                   creatorparentid:this.designCreatedByUserParent,

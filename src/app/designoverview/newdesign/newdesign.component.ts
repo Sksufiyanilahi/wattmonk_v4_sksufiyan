@@ -11,6 +11,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import * as moment from 'moment';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-newdesign',
@@ -25,6 +26,7 @@ export class NewdesignComponent implements OnInit {
   private dataRefreshSubscription: Subscription;
   skip:number=0;
   limit:number=10;
+  user:any
   currentDate:any=new Date()
 
   today: any;
@@ -41,7 +43,11 @@ export class NewdesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+     private storageservice :StorageService) {
+
+      this.user=this.storageservice.getUser();
+      
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
