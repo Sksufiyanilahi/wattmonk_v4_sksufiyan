@@ -25,21 +25,25 @@
     <ion-grid class="profile-background">
         <ion-row>
             <ion-col size="12">
-                <div style="text-align:center;">
-                    <img src="assets/images/user_placeholder.jpg" alt="User Image" class="user-image">
+                <div style="display:flex;justify-content: center;">
+                    <ion-card *ngIf="isEmptyObject(user?.logo) || user?.logo ==null" class="profile_img">{{user?.firstname.slice(0,1).toUpperCase() + user?.lastname.slice(0,1).toUpperCase()}}</ion-card>
+                    <div *ngIf="!isEmptyObject(user?.logo) && user?.logo !==null">
+                      <img [src]="user?.logo?.url" class="profile_img"/>
+                    </div>
+                    <!-- <img src="assets/images/user_placeholder.jpg" alt="User Image" class="user-image"> -->
                 </div>
             </ion-col>
         </ion-row>
         <ion-row>
             <ion-col size="12" class="ion-no-padding">
                 <div style="text-align: center">
-                    <span class="profile-name">{{profile?.firstname}} {{profile?.lastname}}</span>
+                    <span class="profile-name">{{user?.firstname}} {{user?.lastname}}</span>
                 </div>
             </ion-col>
 
             <ion-col size="12" class="ion-no-padding">
                 <div style="text-align: center">
-                    <span class="profile-email">{{profile?.email}}</span>
+                    <span class="profile-email">{{user?.email}}</span>
                 </div>
             </ion-col>
             <ion-col size="12" class="ion-no-padding">
@@ -52,11 +56,11 @@
             </ion-col>
             <ion-col size="12" class="ion-no-padding" *ngIf="user.role.type=='clientsuperadmin'">
               <div style="text-align: center">
-                <span>$ {{profile?.amount}}</span><br>
+                <span>$ {{user?.amount}}</span><br>
                  <ion-label>Wallet</ion-label>
               </div>
           </ion-col> 
-          <ion-col style="text-align: center;" *ngIf="user.role.type=='clientsuperadmin' && !profile?.ispaymentmodeprepay">
+          <ion-col style="text-align: center;" *ngIf="user.role.type=='clientsuperadmin' && user?.ispaymentmodeprepay">
             <ion-button (click)='AddWallet()' fill='clear'>Add money</ion-button> 
           </ion-col>
             <!-- <ion-col size="12" class="ion-no-padding">

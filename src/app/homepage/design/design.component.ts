@@ -920,7 +920,7 @@ this.network.networkConnect();
 
 
   doInfinite($event){
-   
+   console.log($event)
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
          console.log(response);

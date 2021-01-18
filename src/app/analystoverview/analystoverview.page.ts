@@ -13,7 +13,7 @@ import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
-import { COMETCHAT_CONSTANTS, intercomId, ROLES } from '../contants';
+import { COMETCHAT_CONSTANTS, intercomId, ROLES,version } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 import { environment } from 'src/environments/environment';
@@ -28,7 +28,7 @@ import { Intercom } from 'ng-intercom';
   styleUrls: ['./analystoverview.page.scss'],
 })
 export class AnalystoverviewPage implements OnInit, OnDestroy{
-  private version = environment.version;
+  private version = version;
   @Output() ionInput = new EventEmitter();
 
 

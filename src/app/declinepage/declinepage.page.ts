@@ -137,15 +137,14 @@ export class DeclinepagePage implements OnInit {
       console.log('could not submit');
 
     }else{
-
+      var designstarttime = new Date();
+      var milisecond = designstarttime.getTime();
       let data={
         status : 'requestdeclined',
         requestdeclinereason:this.reason,
-        outsourcedto : null,
         isoutsourced : "false",
-        acknowledgedby : this.id
-
-      }
+       designacceptanceendtime:milisecond,
+    }
 
       console.log(data);
 
