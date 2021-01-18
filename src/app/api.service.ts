@@ -498,4 +498,8 @@ export class ApiService {
     getClients(){
       return this.http.get<Clients[]>(BaseUrl + "/getclients",{headers: this.headers});
     }
+
+    getcounts(id){
+      return this.http.get(BaseUrl + '/userdesigns/count?id=' + id + '&status=outsourced',{headers: this.headers});
+    }
 }
