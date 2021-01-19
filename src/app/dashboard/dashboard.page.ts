@@ -36,7 +36,7 @@ export class DashboardPage implements OnInit {
       this.onHold= res.length;
       console.log(res);
     })
-    this.apiService.getDesignSurveys('status=isinrevisionstate','','').subscribe((res:any)=>{
+    this.apiService.getDesignSurveys('status=outsourced&isinrevisionstate=true','','').subscribe((res:any)=>{
       this.revision = res.length;
       console.log(res);
     })
