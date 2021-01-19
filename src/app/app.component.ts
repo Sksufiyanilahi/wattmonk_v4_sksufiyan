@@ -200,6 +200,7 @@ this.network.networkConnect();
 
    this.deactivateGetUserData=  this.apiservice.getUserName().subscribe((res:any)=>{
       this.userData = res;
+      debugger;
       if(res.role.name=='ContractorSuperAdmin'){
         this.userData.role.name='SuperAdmin'
       }else if(res.role.name=='WattmonkAdmin'){

@@ -104,7 +104,6 @@ export class PermithomepagePage implements OnInit {
               private geolocation: Geolocation,
               private nativeGeocoder: NativeGeocoder,
               private intercom:Intercom,
-              private storageService:StorageService
               ) {
                 this.setupCometChatUser();
               }
@@ -182,6 +181,8 @@ export class PermithomepagePage implements OnInit {
       this.netSwitch = data;
       this.utils.showHideIntercom(false);
       console.log(this.netSwitch);
+      let user= this.storageservice.getUser();
+      this.apiService.emitUserNameAndRole(user);
 
     })
 

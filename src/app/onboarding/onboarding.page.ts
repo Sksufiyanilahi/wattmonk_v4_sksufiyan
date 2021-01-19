@@ -201,6 +201,10 @@ export class OnboardingPage implements OnInit {
       this.firstFormGroup.patchValue({
         company:''
       })
+      this.firstFormGroup.get('company').clearValidators();
+      this.firstFormGroup.get('company').updateValueAndValidity();
+      this.firstFormGroup.get('registrationnumber').clearValidators();
+      this.firstFormGroup.get('registrationnumber').updateValueAndValidity();
     }
   }
 

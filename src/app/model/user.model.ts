@@ -3,6 +3,7 @@ export class User {
   username: string;
   email: string;
   amount:number;
+  designertype:string;
   provider: string;
   confirmed: boolean;
   blocked: boolean;
@@ -23,7 +24,8 @@ export class User {
   isonboardingcompleted:boolean;
   logo:{
     url:string;
-  }
+  };
+  ispaymentmodeprepay:boolean;
 
 }
 
