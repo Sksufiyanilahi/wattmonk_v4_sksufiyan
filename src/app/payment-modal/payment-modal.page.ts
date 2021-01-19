@@ -287,9 +287,11 @@ confirm(){
            { this.utils.showSnackBar("Design request has been send to wattmonk successfully")
            this.navController.pop();
            if(this.design=='prelim'){
+            this.router.navigate(['/homepage/design'])
            this.utils.setHomepageDesignRefresh(true);
            }
            else{
+            this.router.navigate(['/permithomepage/permitdesign'])
              this.utils.setHomepagePermitRefresh(true);
            }
            })

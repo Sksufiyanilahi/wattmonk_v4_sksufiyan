@@ -14,6 +14,7 @@ import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import * as moment from 'moment';
 import { ModalController } from '@ionic/angular';
 import{SocialSharing} from '@ionic-native/social-sharing/ngx';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-delievereddesign',
@@ -28,6 +29,7 @@ export class DelievereddesignComponent implements OnInit {
   private dataRefreshSubscription: Subscription;
 skip:number=0;
 limit:number=10;
+user:any
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
@@ -44,7 +46,10 @@ limit:number=10;
     private apiService: ApiService,
     private socialsharing: SocialSharing,
     public modalController: ModalController,
+     private storageservice:StorageService
     ) {
+      this.user=this.storageservice.getUser();
+
       console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');

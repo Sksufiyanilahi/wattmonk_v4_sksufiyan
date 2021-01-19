@@ -14,6 +14,7 @@ import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import * as moment from 'moment';
 import { ModalController } from '@ionic/angular';
 import{SocialSharing} from '@ionic-native/social-sharing/ngx';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-permitdeliver-design',
@@ -26,6 +27,7 @@ export class PermitdeliverDesignComponent implements OnInit {
   listofDesignDataHelper: DesginDataHelper[] = [];
   private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
+  userData:any
 skip:number=0;
 limit:number=10;
   today: any;
@@ -44,7 +46,9 @@ limit:number=10;
     private apiService: ApiService,
     private socialsharing: SocialSharing,
     public modalController: ModalController,
+    private storageservice:StorageService
     ) {
+      this.userData = this.storageservice.getUser();
       console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');

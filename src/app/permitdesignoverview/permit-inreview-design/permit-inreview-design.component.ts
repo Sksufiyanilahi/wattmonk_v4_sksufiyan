@@ -10,6 +10,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { Storage } from '@ionic/storage';
 import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import * as moment from 'moment';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-permit-inreview-design',
@@ -23,6 +24,7 @@ export class PermitInreviewDesignComponent implements OnInit {
   private dataRefreshSubscription: Subscription;
  skip:number=0;
  limit:number=10;
+ userData:any
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
@@ -36,7 +38,10 @@ export class PermitInreviewDesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+     private storageservice:StorageService) {
+
+      this.userData = this.storageservice.getUser();
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
