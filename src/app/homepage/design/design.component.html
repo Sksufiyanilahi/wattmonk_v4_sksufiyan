@@ -99,7 +99,7 @@
                         </ion-row>
 
                         <ion-row class="ion-no-margin ion-no-margin">
-                            <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed'" style="font-size: 0.8em;">
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')" style="font-size: 0.8em;">
                                 <span>Assigned to : {{designData.reviewassignedto.firstname | titlecase}} {{designData.reviewassignedto.lastname | titlecase}}</span>
                             </ion-col>
                             <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined' || segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined'">

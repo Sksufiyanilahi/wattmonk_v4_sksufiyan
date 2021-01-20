@@ -107,7 +107,7 @@ export class RevisionPage implements OnInit {
   
   ) {
     this.userData = this.storageService.getUser();
-    this.segments= 'status=isinrevisionstate';
+    this.segments= 'status=outsourced&isinrevisionstate=true';
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);

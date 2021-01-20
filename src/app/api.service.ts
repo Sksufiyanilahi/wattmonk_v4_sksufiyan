@@ -566,4 +566,7 @@ export class ApiService {
           headers: this.headers
         })
       }
+    getcounts(id){
+      return this.http.get(BaseUrl + '/userdesigns/count?id=' + id + '&status=outsourced',{headers: this.headers});
+    }
 }
