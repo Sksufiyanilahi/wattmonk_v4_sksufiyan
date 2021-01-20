@@ -20,11 +20,13 @@ export class DashboardPage implements OnInit {
     unassiigned:'',
     waitingforacceptance:''
   };
+  userData: any;
 
   constructor(private apiService:ApiService,private route: ActivatedRoute,private storage:StorageService) { }
 
   ngOnInit() {
     this.userId= this.storage.getUserID();
+    this.userData= this.storage.getUser();
   //  let data = this.route.snapshot.data.userdata; // get data from resolver
   //  console.log(data);
     this.getCount();
