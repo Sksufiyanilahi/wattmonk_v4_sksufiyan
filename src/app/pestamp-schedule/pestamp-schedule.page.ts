@@ -86,7 +86,7 @@ export class PestampSchedulePage implements OnInit {
       stampingmode:new FormControl(null,[Validators.required]),
       numberofhardcopy:new FormControl(''),
       shippingaddress:new FormControl(''),
-      contactnumber : new FormControl(''),
+      contactnumber : new FormControl(null),
       stampingtype:new FormControl(null,[Validators.required]),
       atticphotos:new FormControl(''),
       roofphotos:new FormControl(''),
@@ -369,7 +369,6 @@ export class PestampSchedulePage implements OnInit {
     const hardcopy = this.firstFormGroup.get('numberofhardcopy');
     if(this.stampingModeValue == 'hardcopy' || this.stampingModeValue == 'both')
     {
-     console.log("hello")
       shipping.setValidators([
         Validators.required,
         Validators.pattern(ADDRESSFORMAT)
@@ -431,7 +430,7 @@ export class PestampSchedulePage implements OnInit {
           var data = {
             personname:this.firstFormGroup.get('name').value,
             email: this.firstFormGroup.get('email').value,
-            contactnumber : contactnumber.toString(),
+            contactnumber : contactnumber,
             hardcopies: parseInt(this.firstFormGroup.get('numberofhardcopy').value),
             modeofstamping:this.firstFormGroup.get('stampingmode').value,
             type: this.firstFormGroup.get('stampingtype').value,
@@ -506,8 +505,9 @@ export class PestampSchedulePage implements OnInit {
         modeofstamping:this.firstFormGroup.get('stampingmode').value,
         type: this.firstFormGroup.get('stampingtype').value,
         mountingtype:this.firstFormGroup.get('mountingtype').value,
+        propertytype:this.firstFormGroup.get('propertytype').value,
         deliveryaddress: this.firstFormGroup.get('shippingaddress').value,
-        //comments: this.firstFormGroup.get('comment').value,
+        comments: this.firstFormGroup.get('comment').value,
         latitude: this.firstFormGroup.get('latitude').value,
         longitude: this.firstFormGroup.get('longitude').value,
         actualdelivereddate: tomorrow.toISOString(),
@@ -550,7 +550,7 @@ export class PestampSchedulePage implements OnInit {
       var data = {
         personname:this.firstFormGroup.get('name').value,
         email: this.firstFormGroup.get('email').value,
-        contactnumber : contactnumber.toString(),
+        contactnumber : contactnumber,
         hardcopies: parseInt(this.firstFormGroup.get('numberofhardcopy').value),
         modeofstamping:this.firstFormGroup.get('stampingmode').value,
         type: this.firstFormGroup.get('stampingtype').value,
@@ -625,7 +625,8 @@ this.utils.showLoading('Saving').then(() => {
         type: this.firstFormGroup.get('stampingtype').value,
         mountingtype:this.firstFormGroup.get('mountingtype').value,
         deliveryaddress: this.firstFormGroup.get('shippingaddress').value,
-        //comments: this.firstFormGroup.get('comment').value,
+        propertytype:this.firstFormGroup.get('propertytype').value,
+        comments: this.firstFormGroup.get('comment').value,
         latitude: this.firstFormGroup.get('latitude').value,
         longitude: this.firstFormGroup.get('longitude').value,
         actualdelivereddate: tomorrow.toISOString(),
@@ -797,11 +798,11 @@ this.utils.showLoading('Saving').then(() => {
     return address.slice(0, -2);
   }
 
-  // onCancel() {
-  //   console.log("hello");
-  //   this.autocompleteItems = [];
-  //   console.log(this.autocompleteItems)
-  // }
+  onCancel() {
+    console.log("hello");
+    this.autocompleteItems = [];
+    console.log(this.autocompleteItems)
+  }
 
   addressValue(){
     // }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { NavController, ToastController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { Pestamp } from '../model/pestamp.model';
@@ -19,13 +20,19 @@ export class PestampDesignDetailsPage implements OnInit {
   enableDisable:boolean=false;
   user:User;
 
+  options: LaunchNavigatorOptions = {
+    start: '',
+    app: this.launchNavigator.APP.GOOGLE_MAPS
+  };
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private utilities:UtilitiesService,
               private apiService:ApiService,
               private navController: NavController,
               private toastController: ToastController,
-              private storage: StorageService) { 
+              private storage: StorageService,
+              private launchNavigator: LaunchNavigator) { 
     this.designId = +this.route.snapshot.paramMap.get('id');
     console.log(this.designId);
   }
@@ -96,6 +103,10 @@ export class PestampDesignDetailsPage implements OnInit {
     
           });
         });
+      }
+
+      openAddressOnMap(address: string) {
+        this.launchNavigator.navigate(address, this.options);
       }
 }
 

@@ -351,9 +351,9 @@ export class PestampDesignComponent implements OnInit {
     return records;
   }
 
-  // openAddressOnMap(address: string) {
-  //   this.launchNavigator.navigate(address, this.options);
-  // }
+  openAddressOnMap(address: string) {
+    this.launchNavigator.navigate(address, this.options);
+  }
 
   dismissBottomSheet() {
     console.log('this', this.drawerState);

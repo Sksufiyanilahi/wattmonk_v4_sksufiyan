@@ -65,9 +65,9 @@
                   <span *ngIf="designData.isoverdue" class="latebystyle"><strong>Late by {{designData.lateby}}</strong></span>
 
       </p>
-      <p style="margin:0px" *ngIf="designData.contactnumber != null && designData.contactnumber != ''" >
+      <p style="margin:0px"  >
                 <a href="tel:{{designData.contactnumber}}" style="text-decoration: none;" class="z-100">
-                    <span class="customer-phone">{{designData.contactnumber}}</span></a>
+                    <span class="customer-phone" *ngIf="designData.contactnumber != null && designData.contactnumber != ''">{{designData.contactnumber}}</span></a>
                     <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
                   </p>
                 <span class="customer-address z-100" *ngIf="designData.deliveryaddress != null && designData.deliveryaddress != ''" 

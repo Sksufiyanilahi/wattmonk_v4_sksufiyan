@@ -543,26 +543,26 @@ export class ApiService {
     /* Get Pe Engineers */
     getPeEngineers() {
 
-      return this.http.get(BaseUrl + "peengineers?parent_eq="+this.storageService.getUser().parent.id, {
+      return this.http.get(BaseUrl + "/peengineers?parent_eq="+this.storageService.getUser().parent.id, {
         headers: this.headers,
       })
     }
 
     /* Assign to PeEngineer */
     assignPestamps(id:number,inputData: any): Observable<Pestamp> {
-      return this.http.put<Pestamp>(BaseUrl + "pestamps/"+id, JSON.stringify(inputData), {
+      return this.http.put<Pestamp>(BaseUrl + "/pestamps/"+id, JSON.stringify(inputData), {
           headers: this.headers
         })
       }
 
       updatePestamps(id:number,inputData: any): Observable<Pestamp> {
-        return this.http.put<Pestamp>(BaseUrl + "pestamps/"+id, JSON.stringify(inputData), {
+        return this.http.put<Pestamp>(BaseUrl + "/pestamps/"+id, JSON.stringify(inputData), {
             headers: this.headers
           })
         }
 
       deletePestamp(id:string): Observable<Pestamp> {
-        return this.http.delete<Pestamp>(BaseUrl + "pestamps/"+id, {
+        return this.http.delete<Pestamp>(BaseUrl + "/pestamps/"+id, {
           headers: this.headers
         })
       }

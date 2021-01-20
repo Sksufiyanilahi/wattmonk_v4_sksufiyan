@@ -41,7 +41,7 @@
       </ion-row>
       <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
           <ion-col class="flex-center">
-              <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
+              <ion-img src="/assets/images/stamp.svg" class="header-icon"></ion-img>
           </ion-col>
       </ion-row>
       <!-- <ion-row class="ion-no-padding" *ngIf="user.role.type=='designer' || user.role.type=='qcinspector'||(design.status=='reviewassigned' && design.reviewassignedto.id==user.id)">
@@ -55,7 +55,7 @@
   <ion-grid *ngIf="design" class="page-text-color">
       <ion-row *ngIf="design.deliveryaddress != null && design.deliveryaddress != ''" >
           <ion-col class="font">
-              <span (click)="openAddressOnMap(design.address)" class="address">{{design?.deliveryaddress}}</span>
+              <span (click)="openAddressOnMap(design.deliveryaddress)" class="address">{{design?.deliveryaddress}}</span>
           </ion-col>
       </ion-row>
 
