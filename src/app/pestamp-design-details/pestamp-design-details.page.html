@@ -1,9 +1,194 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>pestamp-design-details</ion-title>
-  </ion-toolbar>
+<ion-header class="ion-no-border white-bg" *ngIf="design">
+  <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
+      <ion-row>
+          <ion-col size="1">
+              <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()" [disabled]=enableDisable>
+                  <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+              </ion-button>
+          </ion-col>
+          <!-- <ion-col size="auto">
+              <ion-button fill="clear" disabled="true" size="small" class="ion-no-padding action-icon">
+              </ion-button>
+          </ion-col> -->
+          <ion-col class="ion-text-center" size="9" style="padding-left: 27px;">
+              <ion-grid class="ion-align-items-center ion-justify-content-center">
+                  <ion-row class="ion-align-items-center ion-justify-content-center">
+                      <span class="survey-name ion-text-center">{{design?.personname}}</span>
+                  </ion-row>
+                  <ion-row class="ion-align-items-center ion-justify-content-center">
+                      <span class="survey-email ion-text-center">{{design?.email}}</span>
+                  </ion-row>
+              </ion-grid>
+          </ion-col>
+          <ion-col size="1" *ngIf="design.createdby.id == user.id && (design.status == 'created' || design.status == 'declined')">
+              <ion-button fill="clear" size="small" class="ion-no-padding"
+                  [routerLink]="['/pestamp-schedule/',designId]"  routerDirection="forward" [disabled]=enableDisable>
+                  <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
+              </ion-button>
+          </ion-col>
+          <ion-col size="1" *ngIf="design.createdby.id == user.id && (design.status == 'created' || design.status == 'declined')">
+              <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()" [disabled]=enableDisable>
+                  <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
+              </ion-button>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+  <ion-grid class="position-relative ion-no-padding">
+      <ion-row class="ion-no-padding border-header header-half-height">
+      </ion-row>
+      <ion-row class="ion-no-padding header-half-height">
+
+      </ion-row>
+      <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
+          <ion-col class="flex-center">
+              <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
+          </ion-col>
+      </ion-row>
+      <!-- <ion-row class="ion-no-padding" *ngIf="user.role.type=='designer' || user.role.type=='qcinspector'||(design.status=='reviewassigned' && design.reviewassignedto.id==user.id)">
+          <ion-col class="flex-center">
+              <countdown-timer [countDownTimerConfig]="timerConfig"></countdown-timer>
+          </ion-col>
+      </ion-row> -->
+  </ion-grid>
 </ion-header>
+<ion-content class="ion-padding page-text-color" scrollY="true">
+  <ion-grid *ngIf="design" class="page-text-color">
+      <ion-row *ngIf="design.deliveryaddress != null && design.deliveryaddress != ''" >
+          <ion-col class="font">
+              <span (click)="openAddressOnMap(design.address)" class="address">{{design?.deliveryaddress}}</span>
+          </ion-col>
+      </ion-row>
 
-<ion-content>
+      <ion-row class="ion-no-padding">
+        <ion-col><span class="model-type font">Phone Number</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.contactnumber}}</span>
+        </ion-col>
+    </ion-row>
 
-</ion-content>
+    <ion-row class="ion-no-padding">
+        <ion-col><span class="model-type font">Stamping Mode</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.modeofstamping}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-padding">
+        <ion-col><span class="model-type font">Hard Copies</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.hardcopies}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row>
+        <ion-col><span class="model-type font">Mounting Type</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.mountingtype}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-padding">
+        <ion-col><span class="model-type font">Property Type</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.propertytype}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-padding">
+        <ion-col><span class="model-type font">Stamping Type</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.type}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.atticphotos.length > 0">
+            <ion-col><span class="model-type font">Attic Photos</span></ion-col>
+            <ion-col size="auto" >
+                <div *ngFor="let attic of design.atticphotos;let i=index" style="display: flex;justify-content: flex-end;">
+                    <span class="model-name font" style="color:#3c78d8 !important">{{attic?.name}}{{attic?.ext}}</span>
+                </div>
+            </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.roofphotos.length > 0">
+            <ion-col><span class="model-type font">Roof Photos</span></ion-col>
+            <ion-col size="auto" >
+                <div *ngFor="let roof of design.roofphotos;let i=index" style="display: flex;justify-content: flex-end;">
+                    <span class="model-name font" style="color:#3c78d8 !important">{{roof?.name}}{{roof?.ext}}</span>
+                </div>
+            </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.permitplan.length > 0">
+            <ion-col><span class="model-type font">Permit Plan Photos</span></ion-col>
+            <ion-col size="auto" >
+                <div *ngFor="let permitplan of design.permitplan;let i=index" style="display: flex;justify-content: flex-end;">
+                    <span class="model-name font" style="color:#3c78d8 !important">{{permitplan?.name}}{{permitplan?.ext}}</span>
+                </div>
+            </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.stampedfiles != null">
+            <ion-col><span class="model-type font">Stamped Files</span></ion-col>
+            <ion-col size="auto" >
+                <!-- <div *ngFor="let stampedfiles of design.stampedfiles;let i=index" style="display: flex;justify-content: flex-end;"> -->
+                    <span class="model-name font" style="color:#3c78d8 !important">{{design.stampedfiles.name}}{{design.stampedfiles.ext}}</span>
+                <!-- </div> -->
+            </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="design.comments || design.comments !==null  " class="ion-no-padding ion-margin-top">
+        <ion-col size="6">
+            <span class="models font">comments</span>
+        </ion-col>
+        <!-- <div> -->
+
+        <ion-col size="6"  class="ion-no-padding">
+            <div *ngFor="let comment of design.comments">
+                <p class="comment font" style="text-align: right;margin:0px">{{comment?.message}}</p>
+                <p class="comment-by" style="text-align: right;margin-top:0px">Posted by {{comment.createdby?.firstname}}
+                    {{comment.createdby?.lastname}}</p>
+            </div>
+        </ion-col>
+        <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
+                     
+                    </ion-col> -->
+
+        <!-- </div> -->
+
+    </ion-row>
+
+    <ion-row>
+        <ion-col><span class="model-type font">created at</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
+      *ngIf="design.status=='assigned'||design.status=='completed'">
+      <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned to</span></ion-col>
+      <ion-col size="auto">
+          <div class="selected d-flex">
+              <img *ngIf="design.assignedto.contractorlogo && design.assignedto.contractorlogo.logo"
+                  [src]="design.assignedto.contractorlogo.logo.url" class="assignee-image" />
+              <div *ngIf="!design.assignedto.contractorlogo || !design.assignedto.contractorlogo.logo"
+                  class="assignee-image d-flex flex-row align-center justify-center">
+                  <div class="name_div">
+                      <span
+                          style="text-transform: capitalize;">{{design.assignedto.firstname.substring(0, 1)}}{{design.assignedto.lastname.substring(0, 1)}}</span>
+                  </div>
+              </div>
+          </div>
+      </ion-col>
+  </ion-row>
+      </ion-grid>
+      </ion-content>

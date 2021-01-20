@@ -24,6 +24,7 @@ export class DeclinepagePage implements OnInit {
   successmessage: string;
   userId: any;
   userData: any;
+  value:any;
 
   constructor(private camera: Camera,
     private modalCtrl:ModalController,
@@ -38,7 +39,9 @@ export class DeclinepagePage implements OnInit {
   ngOnInit() {
 
     this.id= this.nav.get('id');
+    this.value = this.nav.get('value');
     console.log(this.id);
+    console.log(this.value);
 
     this.userData = this.storageService.getUser();
   }
@@ -139,26 +142,87 @@ export class DeclinepagePage implements OnInit {
     }else{
       var designstarttime = new Date();
       var milisecond = designstarttime.getTime();
-      let data={
-        status : 'requestdeclined',
-        requestdeclinereason:this.reason,
-        isoutsourced : "false",
-       designacceptanceendtime:milisecond,
+      if(this.value =='pestamp')
+      {
+          var cdate = Date.now();
+          var postData = {
+            status: 'declined',
+            requestdeclinereason: this.reason,
+            isoutsourced : "false",
+            pestampacceptancestarttime: cdate,
+            acknowledgedby : this.userData.id
+            }
+            this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{
+            //this.createNewDesignChatGroup(res);
+            console.log(res);
+            this.modalCtrl.dismiss({
+              'dismissed' : true
+            })
+          })
+      }
+      else{
+          var data={
+              status : 'requestdeclined',
+              requestdeclinereason:this.reason,
+              isoutsourced : "false",
+              designacceptanceendtime:milisecond,
+                   }
+        
+            console.log(data);
+
+            this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
+              this.createNewDesignChatGroup(res);
+                this.modalCtrl.dismiss({
+                  'dismissed': true
+                });
+            })
     }
-
-      console.log(data);
-
-      this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
-        this.createNewDesignChatGroup(res);
-          this.modalCtrl.dismiss({
-            'dismissed': true
-          });
-      })
     }
 
   }
 
   uploadFile(){
+    if(this.value == 'pestamp'){
+      //const data={
+        // this.id,
+        // "pestamp/" +  this.data.pestamp.id,
+        // this.attachmentfiles,
+        // "requestdeclineattachment",
+        // "pestamp",
+        const data = new FormData();
+        data.append("files",this.filename);
+         //data.append('files', file);
+         data.append('path', "pestamp/" + this.id);
+         data.append('refId', ""+this.id);
+         data.append('ref', "pestamp");
+         data.append('field', "requestdeclineattachment");
+      //}
+      this.utilities.showLoading('Uploading').then(()=>{
+        this.apiservice.uploadFile(data).subscribe((res:any)=>{
+          this.utilities.hideLoading().then(()=>{
+            var cdate = Date.now();
+          var postData = {
+            status: 'declined',
+            requestdeclinereason: this.reason,
+            isoutsourced : "false",
+            pestampacceptancestarttime: cdate,
+            acknowledgedby : this.userData.id
+            }
+            this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{
+            //this.createNewDesignChatGroup(res);
+            console.log(res);
+            this.modalCtrl.dismiss({
+              'dismissed' : true
+            })
+          })
+          })
+        },err=>{
+          this.utilities.errorSnackBar(err.error);
+          this.utilities.hideLoading();
+        })
+      })
+    }
+    else{
     this.utilities.showLoading('Uploading').then(()=>{
       this.apiservice.uploadDeclineImage(this.id,'requestdeclineattachment',this.blob,this.filename).subscribe((res:any)=>{
         this.utilities.hideLoading().then(()=>{
@@ -184,6 +248,7 @@ export class DeclinepagePage implements OnInit {
         this.utilities.hideLoading();
       })
     })
+  }
   }
 
   getBase64(file) {

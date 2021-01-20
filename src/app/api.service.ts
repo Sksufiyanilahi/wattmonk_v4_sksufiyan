@@ -509,7 +509,7 @@ export class ApiService {
       return this.http.post<Pestamp>(BaseUrl + "/pestamps",JSON.stringify(postData),{headers:this.headers});
     }
 
-    uploadFile(data): Observable<UploadedFile> {
+    uploadFile(data): Observable<UploadedFile[]> {
      
       // const data = new FormData();
       // data.append('files', blob, file);
@@ -520,7 +520,7 @@ export class ApiService {
       
       // console.log("file upload data---"+data);
 
-      return this.http.post<UploadedFile>(BaseUrl + "/upload", data, {
+      return this.http.post<UploadedFile[]>(BaseUrl + "/upload", data, {
           headers: this.uploadHeaders,
         })
     }
@@ -539,4 +539,31 @@ export class ApiService {
         headers: this.headers
       })
     }
+
+    /* Get Pe Engineers */
+    getPeEngineers() {
+
+      return this.http.get(BaseUrl + "peengineers?parent_eq="+this.storageService.getUser().parent.id, {
+        headers: this.headers,
+      })
+    }
+
+    /* Assign to PeEngineer */
+    assignPestamps(id:number,inputData: any): Observable<Pestamp> {
+      return this.http.put<Pestamp>(BaseUrl + "pestamps/"+id, JSON.stringify(inputData), {
+          headers: this.headers
+        })
+      }
+
+      updatePestamps(id:number,inputData: any): Observable<Pestamp> {
+        return this.http.put<Pestamp>(BaseUrl + "pestamps/"+id, JSON.stringify(inputData), {
+            headers: this.headers
+          })
+        }
+
+      deletePestamp(id:string): Observable<Pestamp> {
+        return this.http.delete<Pestamp>(BaseUrl + "pestamps/"+id, {
+          headers: this.headers
+        })
+      }
 }

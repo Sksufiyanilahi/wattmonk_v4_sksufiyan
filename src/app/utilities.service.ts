@@ -35,6 +35,7 @@ export class UtilitiesService {
   homepagePermitRefresh = new BehaviorSubject<boolean>(false);
   surveyDetailsRefresh = new BehaviorSubject<boolean>(false);
   designDetailsRefresh = new BehaviorSubject<boolean>(false);
+  peStampRefresh = new BehaviorSubject<boolean>(false);
   permitdesignDetailsRefresh = new BehaviorSubject<boolean>(false);
   //permitdesignDetailsRefresh = new BehaviorSubject<boolean>(false);
   showBottomBarHomepage = new BehaviorSubject<boolean>(true);
@@ -118,6 +119,16 @@ export class UtilitiesService {
 
   sethomepageSurveyRefresh(refresh: boolean) {
     this.homepageSurveyRefresh.next(refresh);
+  }
+
+  getPeStampRefresh(): BehaviorSubject<boolean>
+  {
+    return this.peStampRefresh;
+  }
+
+  setPeStampRefresh(refresh: boolean)
+  {
+   this.peStampRefresh.next(refresh);
   }
 
   getDataRefresh() : BehaviorSubject<boolean>{
@@ -311,6 +322,16 @@ export class UtilitiesService {
       return "Battery";
     } else {
       return "PV";
+    }
+  }
+
+  getPestampTypeName(type) {
+    if (type == "structural") {
+      return "Structural";
+    } else if (type == "electrical") {
+      return "Electrical";
+    } else {
+      return "Both";
     }
   }
 

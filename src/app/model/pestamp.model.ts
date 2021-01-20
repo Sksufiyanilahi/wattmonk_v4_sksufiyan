@@ -38,7 +38,16 @@ export class Pestamp{
     pestampendtime: string;
     pestampacceptancestarttime : string;
     pestampacceptanceendtime : string;
-    stampedfiles:UploadedFile
+    stampedfiles:UploadedFile;
+    mountingtype:string;
+    latitude: number;
+  longitude: number;
+  country: string;
+  state: string;
+  city:string;
+  postalcode: string;
+  modeofstamping:string;
+  propertytype:string;
 
 
     //Dynamic content

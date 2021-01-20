@@ -244,12 +244,17 @@ const routes: Routes = [
   canActivate: [AuthGuardService]
 },
 {
+  path: 'pestamp-schedule/:id',
+  loadChildren: () => import('./pestamp-schedule/pestamp-schedule.module').then( m => m.PestampSchedulePageModule),
+  canActivate: [AuthGuardService]
+},
+{
   path: 'pestamp-homepage',
   loadChildren: () => import('./pestamp-homepage/pestamp-homepage.module').then( m => m.PestampHomepagePageModule),
   canActivate: [AuthGuardService]
 },
 {
-  path: 'pestamp-design-details',
+  path: 'pestamp-design-details/:id',
   loadChildren: () => import('./pestamp-design-details/pestamp-design-details.module').then( m => m.PestampDesignDetailsPageModule),
   canActivate: [AuthGuardService]
 },

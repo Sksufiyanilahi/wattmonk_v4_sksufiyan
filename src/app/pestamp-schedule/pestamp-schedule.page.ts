@@ -8,6 +8,10 @@ import { Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
 import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_PHONE_NUMBER } from '../model/constants';
 import { ErrorModel } from '../model/error.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Pestamp } from '../model/pestamp.model';
+import { NetworkdetectService } from '../networkdetect.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-pestamp-schedule',
@@ -36,7 +40,16 @@ export class PestampSchedulePage implements OnInit {
   stampingModeValue:any;
   isECopy:boolean = false;
 
+  deactivateNetworkSwitch: Subscription;
+  netSwitch: any;
+
   userdata:any;
+  designId=0;
+  design:Pestamp=null;
+
+  atticData:any;
+  roofData:any;
+  permitPlanData:any;
 
   GoogleAutocomplete: google.maps.places.AutocompleteService;
   autocompleteItems: any[];
@@ -60,7 +73,11 @@ export class PestampSchedulePage implements OnInit {
               private utils:UtilitiesService,
               private zone: NgZone,
               private nativeGeocoder: NativeGeocoder,
-              private apiService: ApiService) 
+              private apiService: ApiService,
+              private route: ActivatedRoute,
+              private network:NetworkdetectService,
+              private navController:NavController,
+              private router:Router) 
               { 
     const MAILFORMAT = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     this.firstFormGroup = this.formBuilder.group({
@@ -81,18 +98,83 @@ export class PestampSchedulePage implements OnInit {
     state: new FormControl(''),
     city: new FormControl(''),
     postalcode: new FormControl(''),
-    mountingtype:new FormControl('',[Validators.required])
+    mountingtype:new FormControl('',[Validators.required]),
+    propertytype:new FormControl('',[Validators.required])
     // })
     // this.secondFormGroup = this.formBuilder.group({
      
     })
+    this.designId = +this.route.snapshot.paramMap.get('id');
+
+   
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
+  }
+
+  ionViewDidEnter(){
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      console.log(this.netSwitch);
+      this.utils.showHideIntercom(true);
+    })
   }
 
   ngOnInit() {
     this.userdata = this.storage.getUser();
     console.log(this.userdata);
+
+    if (this.designId !== 0) {
+      setTimeout(()=>{
+        this.getDesignDetails();
+      },1000)
+
+    }else{
+      this.addressValue();
+    }
+  }
+
+  /* Getting Design Details */
+  getDesignDetails()
+  {
+    this.utils.showLoading('Getting Design Details').then(() => {
+      this.apiService.getPestampDetails(this.designId).subscribe(async (result) => {
+        await this.utils.hideLoading().then(()=>{
+          this.design = result;
+          console.log(this.design);
+          this.atticData = this.design.atticphotos;
+          this.roofData = this.design.roofphotos;
+          this.permitPlanData = this.design.permitplan;
+          console.log(this.permitPlanData)
+          this.firstFormGroup.patchValue({
+            name: this.design.personname,
+            email: this.design.email,
+            stampingmode : this.design.modeofstamping,
+            atticphotos : this.design.atticphotos,
+            roofphotos : this.design.roofphotos,
+            permitplanphotos : this.design.permitplan,
+            stampingtype : this.design.type,
+            numberofhardcopy : this.design.hardcopies,
+            shippingaddress: this.design.deliveryaddress,
+            contactnumber:this.design.contactnumber,
+            createdby: this.design.createdby,
+            mountingtype:this.design.mountingtype,
+            propertytype:this.design.propertytype,
+            // architecturaldesign:this.design.architecturaldesign,
+            comment:this.design.comments[0].message,
+            // type: this.design.type,
+            latitude: this.design.latitude,
+            longitude: this.design.longitude,
+            country: this.design.country,
+            state: this.design.state,
+            city: this.design.city,
+            postalcode:this.design.postalcode,
+            //attachments:this.design.attachments,
+          });
+        })
+      }, (error) => {
+        this.utils.hideLoading();
+      })
+    })
   }
 
   /* FOR SELECT ATTIC FILES FROM DEVICE */
@@ -329,6 +411,11 @@ export class PestampSchedulePage implements OnInit {
     }
   }
 
+  goBack() {
+    this.navController.pop();
+    
+   }
+
   /* FOR SUBMIT FORM */
   submitForm(e){
     console.log(e)
@@ -336,19 +423,22 @@ export class PestampSchedulePage implements OnInit {
     {
       var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
+    let contactnumber = this.firstFormGroup.get('contactnumber').value;
+    if(this.designId === 0){
       if(e=='save'){
         console.log("hii")
         //this.utils.showLoading('Saving').then(() => {
           var data = {
             personname:this.firstFormGroup.get('name').value,
             email: this.firstFormGroup.get('email').value,
-            contactnumber : this.firstFormGroup.get('contactnumber').value,
+            contactnumber : contactnumber.toString(),
             hardcopies: parseInt(this.firstFormGroup.get('numberofhardcopy').value),
             modeofstamping:this.firstFormGroup.get('stampingmode').value,
             type: this.firstFormGroup.get('stampingtype').value,
             mountingtype:this.firstFormGroup.get('mountingtype').value,
             deliveryaddress: this.firstFormGroup.get('shippingaddress').value,
-           // comments: this.firstFormGroup.get('comment').value,
+            propertytype:this.firstFormGroup.get('propertytype').value,
+            comments: this.firstFormGroup.get('comment').value,
             latitude: this.firstFormGroup.get('latitude').value,
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
@@ -378,10 +468,24 @@ export class PestampSchedulePage implements OnInit {
             console.log(this.permitPlanList[0]);
           }
           setTimeout(()=>{
-            this.utils.hideLoading().then(()=>{
-          
-        })
-      },2000)
+            this.utils.hideLoading().then(() => {
+              console.log('Res', res);
+              //this.createChatGroup(response);
+              this.router.navigate(['/pestamp-homepage'])
+              this.utils.showSnackBar('Pe Stamp have been Created');
+              // this.utils.showSnackBar('Design have been saved');
+              this.utils.setPeStampRefresh(true);
+              // this.navController.pop();
+              // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+              //   modal.present();
+              //   modal.onWillDismiss().then((dismissed) => {
+                  // this.utils.setHomepageDesignRefresh(true);
+              //     this.navController.pop();
+              //   });
+              // });
+
+            });
+          },2000)
       },
       responseError => {
        this.utils.hideLoading().then(() => {
@@ -442,6 +546,126 @@ export class PestampSchedulePage implements OnInit {
     }
     }
     else{
+      if(e=='save'){
+      var data = {
+        personname:this.firstFormGroup.get('name').value,
+        email: this.firstFormGroup.get('email').value,
+        contactnumber : contactnumber.toString(),
+        hardcopies: parseInt(this.firstFormGroup.get('numberofhardcopy').value),
+        modeofstamping:this.firstFormGroup.get('stampingmode').value,
+        type: this.firstFormGroup.get('stampingtype').value,
+        mountingtype:this.firstFormGroup.get('mountingtype').value,
+        deliveryaddress: this.firstFormGroup.get('shippingaddress').value,
+        propertytype:this.firstFormGroup.get('propertytype').value,
+        comments: this.firstFormGroup.get('comment').value,
+        latitude: this.firstFormGroup.get('latitude').value,
+        longitude: this.firstFormGroup.get('longitude').value,
+        actualdelivereddate: tomorrow.toISOString(),
+        source: "android",
+        createdby: this.userdata.id,
+        creatorparentid: this.userdata.parent.id,
+         status: "created",
+        outsourcedto:null,
+        //paymenttype: null,
+        paymentstatus:null
+}
+this.utils.showLoading('Saving').then(() => {
+  this.apiService.updatePestamps(this.designId,data).subscribe(res => {
+    console.log(res);
+    if(this.isAtticFileUpload)
+      {
+        console.log("hello",this.isAtticFileUpload)
+        this.uploadAtticFiles(res.id,this.atticPhotosList[0])
+      }
+      if(this.isRoofFileUpload)
+      {
+        this.uploadRoofFiles(res.id,this.roofPhotosList[0])
+      }
+      if(this.isPermitPlanFileUpload)
+      {
+        this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
+        console.log(this.permitPlanList[0]);
+      }
+      setTimeout(()=>{
+        this.utils.hideLoading().then(() => {
+          console.log('Res', res);
+          //this.createChatGroup(response);
+          this.router.navigate(['/pestamp-homepage'])
+          this.utils.showSnackBar('Pe Stamp have been updated');
+          // this.utils.showSnackBar('Design have been saved');
+          this.utils.setPeStampRefresh(true);
+          // this.navController.pop();
+          // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+          //   modal.present();
+          //   modal.onWillDismiss().then((dismissed) => {
+              // this.utils.setHomepageDesignRefresh(true);
+          //     this.navController.pop();
+          //   });
+          // });
+
+        });
+      },2000)
+  },
+  responseError => {
+   this.utils.hideLoading().then(() => {
+     const error: ErrorModel = responseError.error;
+     this.utils.errorSnackBar(error.message[0].messages[0].message);
+   });
+//
+ })
+})
+    }
+    else if(e == 'send'){
+      var postData = {
+        personname:this.firstFormGroup.get('name').value,
+        email: this.firstFormGroup.get('email').value,
+        contactnumber : this.firstFormGroup.get('contactnumber').value,
+        hardcopies: parseInt(this.firstFormGroup.get('numberofhardcopy').value),
+        modeofstamping:this.firstFormGroup.get('stampingmode').value,
+        type: this.firstFormGroup.get('stampingtype').value,
+        mountingtype:this.firstFormGroup.get('mountingtype').value,
+        deliveryaddress: this.firstFormGroup.get('shippingaddress').value,
+        //comments: this.firstFormGroup.get('comment').value,
+        latitude: this.firstFormGroup.get('latitude').value,
+        longitude: this.firstFormGroup.get('longitude').value,
+        actualdelivereddate: tomorrow.toISOString(),
+        source: "android",
+        createdby: this.userdata.id,
+        creatorparentid: this.userdata.parent.id,
+         status: "outsourced",
+        outsourcedto:'232',
+        //paymenttype: null,
+        paymentstatus:null
+}
+  this.apiService.addSiteAssessment(postData).subscribe(res => {
+    console.log(res);
+      if(this.isAtticFileUpload)
+      {
+        console.log("hello",this.isAtticFileUpload)
+        this.uploadAtticFiles(res.id,this.atticPhotosList[0])
+      }
+      if(this.isRoofFileUpload)
+          {
+            this.uploadRoofFiles(res.id,this.roofPhotosList[0])
+          }
+          if(this.isPermitPlanFileUpload)
+          {
+            this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
+            console.log(this.permitPlanList[0]);
+          }
+  },
+  responseError => {
+   this.utils.hideLoading().then(() => {
+     const error: ErrorModel = responseError.error;
+     this.utils.errorSnackBar(error.message[0].messages[0].message);
+   });
+//
+ })
+
+    }
+  }
+  }
+    else{
       if(this.firstFormGroup.value.name == '' || this.firstFormGroup.get('name').hasError('pattern')){
         this.utils.errorSnackBar("Please check the field name")
       }
@@ -453,6 +677,14 @@ export class PestampSchedulePage implements OnInit {
       }
       else if(this.firstFormGroup.value.stampingtype == null){
         this.utils.errorSnackBar("Please select type of stamping");
+      }
+      else if(this.firstFormGroup.value.mountingtype == '')
+      {
+        this.utils.errorSnackBar("Please select mounting type");
+      }
+      else if(this.firstFormGroup.value.propertytype == '')
+      {
+        this.utils.errorSnackBar("Please select property type");
       }
       else{
         this.utils.errorSnackBar("Error");

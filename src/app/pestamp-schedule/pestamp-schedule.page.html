@@ -6,17 +6,16 @@
     <ion-title>pestamp-schedule</ion-title>
   </ion-toolbar>
 </ion-header> -->
-<ion-toolbar>
-
-  <ion-buttons slot="start">
-    <ion-menu-button></ion-menu-button>
-  </ion-buttons>
   <ion-row>
   <ion-col>
     <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;">Add Pestamp Design </h5>
   </ion-col>
+  <ion-col size="auto" style="align-self: center;">
+    <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+        <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+    </ion-button>
+  </ion-col>
 </ion-row>
-</ion-toolbar>
 
 <ion-content class="ion-padding-start ion-padding-end ion-padding-bottom" style="height:650px">
   <form [formGroup]="firstFormGroup" novalidate style="overflow:scroll">
@@ -134,8 +133,8 @@
     <ion-col>
       <ion-item class="ion-no-padding">
         <ion-label position="floating" class="label">Contact Number*</ion-label>
-        <ion-input type="text" class="form_input" autocapitalize="words"
-                    formControlName="contactnumber" autocomplete="off" (ionClear)="onCancel()"></ion-input>
+        <ion-input type="tel" class="form_input" autocapitalize="none"
+                    formControlName="contactnumber" autocomplete="off" maxLength="15"></ion-input>
     </ion-item>
     <div style="height: 5px;">
       <div *ngIf="firstFormGroup.get('contactnumber').hasError('pattern') && firstFormGroup.get('contactnumber').dirty">
@@ -192,21 +191,18 @@
                 </ng-container>
                 
             </ion-col>
-                         <!-- <ion-item> -->
-                         <!-- <ion-label position="floating">architectural design*</ion-label> -->
-                                <!-- <ng-container *ngIf="design && design.architecturaldesign !==null">
-                                    <div *ngFor="let arc of design.architecturaldesign;let i = index">
-                                       <ion-item>
-                                           <ion-col size="11"> {{arc.name}}{{arc.ext}}</ion-col>
-                                           <ion-col size="1" (click)="remove(arc,i)">x</ion-col>
-                                          
-      
-                                       </ion-item>
-                                   
-                                       
-                                   </div> 
-                                </ng-container> -->
-                         <!-- </ion-item> -->
+            <ng-container *ngIf="design && design.atticphotos !==null">
+              <div *ngFor="let arc of design.atticphotos;let i=index">
+                 <ion-item>
+                     <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
+                     <!-- <ion-col size="1" (click)="removeattachment(arc,i)">x</ion-col> -->
+                    
+
+                 </ion-item>
+             
+                 
+             </div> 
+          </ng-container>
     
   </ion-row>
   <ion-row *ngIf="stampingTypeValue == 'structural' || stampingTypeValue =='both'">
@@ -229,21 +225,18 @@
                 </ng-container>
                 
             </ion-col>
-                         <!-- <ion-item> -->
-                         <!-- <ion-label position="floating">architectural design*</ion-label> -->
-                                <!-- <ng-container *ngIf="design && design.architecturaldesign !==null">
-                                    <div *ngFor="let arc of design.architecturaldesign;let i = index">
-                                       <ion-item>
-                                           <ion-col size="11"> {{arc.name}}{{arc.ext}}</ion-col>
-                                           <ion-col size="1" (click)="remove(arc,i)">x</ion-col>
-                                          
-      
-                                       </ion-item>
-                                   
-                                       
-                                   </div> 
-                                </ng-container> -->
-                         <!-- </ion-item> -->
+            <ng-container *ngIf="design && design.roofphotos !==null">
+              <div *ngFor="let arc of design.roofphotos;let i=index">
+                 <ion-item>
+                     <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
+                     <!-- <ion-col size="1" (click)="removeattachment(arc,i)">x</ion-col> -->
+                    
+
+                 </ion-item>
+             
+                 
+             </div> 
+          </ng-container>
     
   </ion-row>
   <ion-row *ngIf="stampingTypeValue == 'structural' || stampingTypeValue =='both' || stampingTypeValue == 'electrical'">
@@ -266,21 +259,18 @@
                 </ng-container>
                 
             </ion-col>
-                         <!-- <ion-item> -->
-                         <!-- <ion-label position="floating">architectural design*</ion-label> -->
-                                <!-- <ng-container *ngIf="design && design.architecturaldesign !==null">
-                                    <div *ngFor="let arc of design.architecturaldesign;let i = index">
-                                       <ion-item>
-                                           <ion-col size="11"> {{arc.name}}{{arc.ext}}</ion-col>
-                                           <ion-col size="1" (click)="remove(arc,i)">x</ion-col>
-                                          
-      
-                                       </ion-item>
-                                   
-                                       
-                                   </div> 
-                                </ng-container> -->
-                         <!-- </ion-item> -->
+            <ng-container *ngIf="design && design.permitplan !==null">
+              <div *ngFor="let arc of design.permitplan;let i=index">
+                 <ion-item>
+                     <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
+                     <!-- <ion-col size="1" (click)="removePermitPlan(arc,i)">x</ion-col> -->
+                    
+
+                 </ion-item>
+             
+                 
+             </div> 
+          </ng-container>
     
   </ion-row>
   <!-- <ion-row style="margin-top: 20px;">
@@ -309,7 +299,7 @@
   </ion-row>
   </ion-radio-group> -->
   <ion-row>
-    <ion-col>
+    <ion-col size="6">
       <ion-item class="ion-no-padding">
           <!-- <ion-label style="display: none;">Mounting Type*</ion-label> -->
           <ion-label position="floating">Mounting Type*</ion-label>
@@ -323,6 +313,19 @@
           </ion-select>
       </ion-item>
   </ion-col>
+  <ion-col size="6">
+    <ion-item class="ion-no-padding">
+        <!-- <ion-label style="display: none;">Mounting Type*</ion-label> -->
+        <ion-label position="floating">Property Type*</ion-label>
+        <!-- <ion-label position="floating">mounting type</ion-label> -->
+        <ion-select class="form_input select_div"
+                    ok-text="" cancel-text=""
+                    formControlName="propertytype" interface="popover">
+            <ion-select-option value="residential">Residential</ion-select-option>
+            <ion-select-option value="commercial">Commercial</ion-select-option>
+        </ion-select>
+    </ion-item>
+</ion-col>
 </ion-row>
 
   <ion-row style="margin-top: 16px;">

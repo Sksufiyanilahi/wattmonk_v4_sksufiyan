@@ -12,6 +12,17 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { DesginDataModel } from 'src/app/model/design.model';
 import { Router } from '@angular/router';
 import { AssigneeModel } from 'src/app/model/assignee.model';
+import { Subscription } from 'rxjs';
+import { NetworkdetectService } from 'src/app/networkdetect.service';
+import { AlertController, ModalController, Platform } from '@ionic/angular';
+import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
+import{SocialSharing} from '@ionic-native/social-sharing/ngx';
+import { EmailModelPage } from 'src/app/email-model/email-model.page';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import {File } from '@ionic-native/file/ngx';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 
 @Component({
   selector: 'app-pestamp-design',
@@ -26,20 +37,27 @@ export class PestampDesignComponent implements OnInit {
   segments:any;
 
   listOfDesigns: Pestamp[];
-  // private DesignRefreshSubscription: Subscription;
-  // private dataRefreshSubscription: Subscription;
   listOfDesignsHelper: any[];
   overdue:any;
 
   noDesignFound: string='';
   showBottomDraw:boolean = false;
+  private PeStampRefreshSubscription: Subscription;
 
   designerData: any;
   assigneeData: any;
   reviewAssignedTo:any;
 
   listOfAssignees: AssigneeModel[] = [];
+  //listOfAssignees:any[];
   designId = 0;
+  selectedPeEngineer: any;
+  skip:number=0;
+  limit:number=10;
+  deactivateNetworkSwitch: Subscription;
+  netSwitch: boolean;
+  acceptid: any;
+  storageDirectory: string;
 
   today: any;
   todaysdate:string;
@@ -55,14 +73,23 @@ export class PestampDesignComponent implements OnInit {
               private cdr: ChangeDetectorRef,
               private launchNavigator: LaunchNavigator,
               private formBuilder:FormBuilder,
-              private route: Router) {
+              private route: Router,
+              private network:NetworkdetectService,
+              public modalController: ModalController,
+              private socialsharing: SocialSharing,
+              private platform:Platform,
+               private androidPermissions: AndroidPermissions,
+               private localnotification: LocalNotifications,
+               private file: File,
+               private transfer : FileTransfer,
+               public alertController: AlertController) {
                 this.userData = this.storageService.getUser();
 
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
-      this.segments= 'status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
+      this.segments= 'status=created&status=outsourced&status=accepted&status=declined';
     }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin'){
-      this.segments ='status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
+      this.segments ='status=created&status=outsourced&status=accepted&&status=declined';
     }
                 const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -74,11 +101,27 @@ export class PestampDesignComponent implements OnInit {
     });
                }
 
+               ionViewDidEnter() {
+                // this.intercomModule();
+                this.apiService.emitUserNameAndRole(this.userData);
+                this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
+                  this.netSwitch = data;
+                  console.log(this.netSwitch);
+                  //this.newpermitsRef.update({ count: 0 });
+            
+                })
+            
+            this.network.networkDisconnect();
+            this.network.networkConnect();
+            this.deactivateNetworkSwitch.unsubscribe();
+            
+              }
+
                segmentChanged(event){
                 // this.skip=0;
                   if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
                     if(event.target.value=='newpestamp'){
-                      this.segments ='status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
+                      this.segments ='status=created&status=outsourced&status=accepted&status=declined';
                       // return this.segments;
                     }
                     else if(event.target.value=='InStamping'){
@@ -101,7 +144,7 @@ export class PestampDesignComponent implements OnInit {
               
                   }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin' ){
                     if(event.target.value=='newpestamp'){
-                      this.segments ='status=created&status=outsourced&status=requestaccepted&&status=requestdeclined';
+                      this.segments ='status=created&status=outsourced&status=accepted&&status=declined';
                       // return this.segments;
                     }
                     else if(event.target.value=='InStamping'){
@@ -137,18 +180,25 @@ export class PestampDesignComponent implements OnInit {
 
   ngOnInit() {
     //this.userData = this.storageService.getUser();
+    this.PeStampRefreshSubscription = this.utils.getPeStampRefresh().subscribe((result)=>{
     this.getDesigns(null);
+  })
   }
 
  
 
    getDesigns(event: CustomEvent) {
-
+     this.skip = 0;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
     }
     this.fetchPendingDesigns(event, showLoader);
+  }
+
+  ngOnDestroy()
+  {
+    this.PeStampRefreshSubscription.unsubscribe();
   }
 
   fetchPendingDesigns(event, showLoader: boolean) {
@@ -187,8 +237,8 @@ export class PestampDesignComponent implements OnInit {
     this.overdue=[];
     let list:Pestamp[];
     console.log(records);
-  // list=this.fillinDynamicData(records);
-   records.forEach(element =>{
+   list=this.fillinDynamicData(records);
+   list.forEach(element =>{
      this.listOfDesigns.push(element);
    })
 
@@ -251,83 +301,55 @@ export class PestampDesignComponent implements OnInit {
           this.cdr.detectChanges();
   }
 
-  // fillinDynamicData(records : Pestamp[]) : Pestamp[]{
-  //   records.forEach((element:any) => {
-  //     if(element.status != "delivered"){
-  //       element.isoverdue = this.utils.isDatePassed(element.deliverydate);
-  //     }else{
-  //       element.isoverdue = false;
-  //     }
-  //     var reviewdate = new Date(element.reviewstarttime)
-  //     reviewdate.setHours(reviewdate.getHours()+2)
-  //     element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
-  //     element.lateby = this.utils.getTheLatebyString(element.deliverydate);
-  //     element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
-  //     element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
-  //     var acceptancedate = new Date(element.designacceptancestarttime);
-  //     element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
-  //     var indesigndate = new Date(element.designstarttime);
-  //     indesigndate.setHours(indesigndate.getHours() + 6);
-  //     element.designremainingtime = this.utils.getRemainingTime(indesigndate.toString());
-  //          //Setting acceptance timer
-  //   if(element.status == "outsourced"){
-  //     if(element.requesttype == "permit"){
-  //       var acceptancedate = new Date(element.designacceptancestarttime);
-  //       element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
-  //     }else{
-  //       var acceptancedate = new Date(element.designacceptancestarttime);
-  //       element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
-  //     }
+  fillinDynamicData(records : Pestamp[]) : Pestamp[]{
+    records.forEach((element:any) => {
+      if(element.status != "delivered"){
+        element.isoverdue = this.utils.isDatePassed(element.actualdelivereddate);
+      }else{
+        element.isoverdue = false;
+      }
+      // var reviewdate = new Date(element.reviewstarttime)
+      // reviewdate.setHours(reviewdate.getHours()+2)
+      // element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
+      element.lateby = this.utils.getTheLatebyString(element.actualdelivereddate);
+      element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
+      element.formattedpestamptype = this.utils.getPestampTypeName(element.type);
+      // var acceptancedate = new Date(element.designacceptancestarttime);
+      // element.designacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      // var indesigndate = new Date(element.designstarttime);
+      // indesigndate.setHours(indesigndate.getHours() + 6);
+      // element.designremainingtime = this.utils.getRemainingTime(indesigndate.toString());
 
-  //     if(element.designacceptanceremainingtime == "0h : 0m"){
-  //       element.isoverdue = true;
-  //     }
-  //   }
+      if(element.email != null && element.hardcopies != null && element.type != null && element.shippingaddress != null && element.roofphotos.length > 0  &&  element.atticphotos.length > 0 && element.permitplan.length > 0){
+        element.isrecordcomplete = true;
+      }
+           //Setting acceptance timer
+    if(element.status == "outsourced"){
+      var acceptancedate = new Date(element.pestampacceptancestarttime);
+      element.pestampacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      console.log(element.pestampacceptancestarttime)
+      console.log(element.pestampacceptanceremainingtime)
+      if(element.pestampacceptanceremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
 
-  //   //Setting design timer
-  //   if(element.status == "designassigned" || element.status == "designcompleted"){
-  //     if(element.requesttype == "permit"){
-  //       var acceptancedate = new Date(element.designstarttime);
-  //       acceptancedate.setHours(acceptancedate.getHours() + 6);
-  //       element.designremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
-  //     }else{
-  //       var acceptancedate = new Date(element.designstarttime);
-  //       acceptancedate.setHours(acceptancedate.getHours() + 2);
-  //       element.designremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
-  //     }
-  //     if(element.designremainingtime == "0h : 0m"){
-  //       element.isoverdue = true;
-  //     }
-  //   }
+    //Setting design timer
+    if(element.status == "assigned" || element.status == "completed"){
 
-  //   //Setting review timer
-  //   if(element.status == "reviewassigned" || element.status == "reviewpassed" || element.status == "reviewfailed"){
-  //     if(element.requesttype == "permit"){
-  //       var reviewdate = new Date(element.reviewstarttime);
-  //       reviewdate.setHours(reviewdate.getHours() + 2);
-  //       element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
-  //     }else{
-  //       var reviewdate = new Date(element.reviewstarttime);
-  //       reviewdate.setMinutes(reviewdate.getMinutes() + 15);
-  //       element.reviewremainingtime = this.utils.getRemainingTime(reviewdate.toString());
-  //     }
-  //     if(element.reviewremainingtime == "0h : 0m"){
-  //       element.isoverdue = true;
-  //     }
-  //   }
-  //     // this.storage.get(''+element.id).then((data: any) => {
-  //     //   console.log(data);
-  //     //   if (data) {
-  //     //     element.totalperceznt = data.currentprogress;
-  //     //   }else{
-  //     //     element.totalpercent = 0;
-  //     //   }
-  //     // });
+      var acceptancedate = new Date(element.pestampstarttime);
+      acceptancedate.setHours(acceptancedate.getHours() + 2);
+      element.designremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
+      
+      if(element.designremainingtime == "0h : 0m"){
+        element.isoverdue = true;
+      }
+    }
 
-  //   });
+    });
 
-  //   return records;
-  // }
+    return records;
+  }
 
   // openAddressOnMap(address: string) {
   //   this.launchNavigator.navigate(address, this.options);
@@ -346,170 +368,99 @@ export class PestampDesignComponent implements OnInit {
    console.log("this works",this.listOfAssignees)
   }
 
-  assignToDesigner() {
-    //   console.log(this.designerData.createdby.id);
-
-    // if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
-    //   this.utils.errorSnackBar('Please select a analyst');
-    // }
-    // else if (this.assignForm.status === 'INVALID' && ( this.designerData.status === 'created'|| this.designerData.status === 'requestaccepted'|| this.designerData.status === 'designassigned')) {
-    //   if(this.userData.role.type=='clientsuperadmin'){
-    //     this.utils.errorSnackBar('Please select the wattmonk admin');
-    //   }
-    //   else{this.utils.errorSnackBar('Please select a designer');}
-    // }
-    // else if( this.reviewAssignedTo!=null && (this.selectedDesigner.id==this.reviewAssignedTo.id)){
-    //   this.utils.errorSnackBar("This design request has been already assigned to"+" "+this.selectedDesigner.firstname+" "+this.selectedDesigner.lastname)
-
-    // }
-    // else {
-
-
-    //   var designstarttime = new Date();
-    //   var milisecond = designstarttime.getTime();
-    // var additonalhours = 0;
-    // if(this.designerData.requesttype == "prelim"){
-    //   // if(this.designerData.requesttype == "permit"){
-    //   console.log(parseInt(this.selectedDesigner.jobcount) );
-    //   additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
-
-    //   designstarttime.setHours( designstarttime.getHours() + additonalhours );
-    // }else{
-    //   additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
-    //   designstarttime.setHours( designstarttime.getHours() + additonalhours );
-    // }
-    // console.log(this.selectedDesigner);
-    // var postData = {};
-    // if (this.designerData.createdby.id == this.userData.id) {
-    //   debugger;
-    //   console.log(this.userData)
-    //   // if (this.selectedDesigner.company == this.userData.company) {
-    //     if (this.selectedDesigner.parent.id == this.userData.parent.id) {
-    //     if(this.selectedDesigner.role.type=="qcinspector"){
-    //       postData = {
-    //         reviewassignedto: this.selectedDesigner.id,
-    //         status: "reviewassigned",
-    //         reviewstarttime: milisecond
-    //       };
-    //     }
-    //    if(this.selectedDesigner.role.type=="designer") { postData = {
-    //       designassignedto: this.selectedDesigner.id,
-
-    //       isoutsourced: "false",
-    //       status: "designassigned",
-    //       designstarttime: designstarttime
-    //     };
-
-    //   }
-
-    //  }
-    //   else {
-    //     var designacceptancestarttime = new Date();
-    //   designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
-    //     postData = {
-    //       outsourcedto: this.selectedDesigner.id,
-    //       isoutsourced: "true",
-    //       status: "outsourced",
-    //       designacceptancestarttime: designacceptancestarttime
-    //     };
-    //   }
-    // } else {
-    //   if(this.selectedDesigner.role.type=="designer"){ postData = {
-    //     designassignedto: this.selectedDesigner.id,
-    //     status: "designassigned",
-    //     designstarttime: designstarttime
-    //   };}
-    //   if(this.selectedDesigner.role.type=="qcinspector"){
-    //     postData = {
-    //       reviewassignedto: this.selectedDesigner.id,
-    //       status: "reviewassigned",
-    //       reviewstarttime: milisecond
-    //     };
-    //   }
-    // }
-    // this.utils.showLoading('Assigning').then(()=>{
-    //   this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
-    //     this.utils.hideLoading().then(()=>{
-    //       ;
-    //       console.log('reach ', value);
-
-    //       if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
-    //      {
-    //       this.isclientassigning= true;
-    //       this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
-    //       this.addUserToGroupChat();
-    //      }else{
-    //       this.addUserToGroupChat();
-    //       this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
-    //      }
-    //       this.dismissBottomSheet();
-    //       this.showBottomDraw = false;
-    //       this.utils.setHomepagePermitRefresh(true);
-
-    //     })
-    //   }, (error) => {
-    //     this.utils.hideLoading();
-    //     this.dismissBottomSheet();
-    //     this.showBottomDraw = false;
-    //   });
-    // })
-    // }
-
+  assignToPeEngineer() {
+       console.log(this.designerData.createdby.id);
+    console.log(this.selectedPeEngineer);
+    //if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
+    if(this.assignForm.status === 'INVALID') {
+    this.utils.errorSnackBar('Please select a pe engineer');
+    }
+    else{
+      var pestampstarttime = new Date();
+      var pestampacceptancestarttime = new Date();
+      var additonalhours = 0;
+        additonalhours = this.selectedPeEngineer.jobcount * 2;
+        pestampstarttime.setHours(pestampstarttime.getHours() + additonalhours);
+        pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
+        console.log(this.designId);
+     
+        var postData = {
+          assignedto: this.selectedPeEngineer.id,
+          status: "assigned",
+          pestampstarttime: pestampstarttime
+        };
+        this.utils.showLoading('assigning').then(() => {
+        this.apiService.assignPestamps(this.designId,postData).subscribe(res=>{
+          console.log(res);
+          this.utils.hideLoading().then(()=>{
+            this.utils.showSnackBar('successfully assigned to'+this.selectedPeEngineer.firstname+' '+this.selectedPeEngineer.lastname);
+            this.route.navigate(["pestamp-homepage/pestamp-design"]);
+            this.dismissBottomSheet();
+            this.showBottomDraw = false;
+            this.utils.setPeStampRefresh(true);
+          })
+        }, (error) => {
+          this.utils.hideLoading().then(() => {
+            this.utils.errorSnackBar('Some error occurred. Please try again later');
+            this.dismissBottomSheet();
+            this.showBottomDraw = false;
+          });
+        }
+        )
+      })
+    }
   }
 
-  doInfinite($event){
-  // this.skip=this.skip+10;
-  // this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
-  //      console.log(response);
-  //       if(response.length){
-       
-  //         this.formatDesignData(response);
-  //       }else{
-  //         this.noDesignFound= "No Designs Found"
-  //       }
-  //       if ($event !== null) {
-  //         $event.target.complete();
-  //       }
-  //     },
-  //  (responseError:any) => {
-  //     if ($event !== null) {
-  //         $event.target.complete();
-  //       }
-  //       const error: ErrorModel = responseError.error;
-  //       this.utils.errorSnackBar(error.message[0].messages[0].message);
-    
-  //   });
-    
-  }
+  accept(id,data:string){
+    this.acceptid= id;
+     let status={
+      status:data
+    }
+    this.utils.showLoading("accepting").then(()=>{
+       this.apiService.assignPestamps(id,status).subscribe((res:any)=>{
+       // this.createNewDesignChatGroup(res);
+         this.utils.hideLoading().then(()=>{
+              // if(this.updatechat_id){
 
+              //   this.utils.setHomepagePermitRefresh(true);
+              // }else{
+              //   this.utils.setHomepagePermitRefresh(true);
+              // }
+              this.utils.showSnackBar("Design request has been accepted successfully.")
+              this.utils.setPeStampRefresh(true);
+        })})
+        })
+
+     }
 
   openDesigners(id: number,designData) {
     debugger;
-    //this.listOfAssignees=[];
+    this.listOfAssignees=[];
     console.log("this is",designData);
      this.designerData = designData;
-     this.reviewAssignedTo=designData.designassignedto;
+     //this.reviewAssignedTo=designData.designassignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin')&& this.designerData.status=='created'){
       this.route.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
 
     }
 
    else{ if (this.listOfAssignees.length === 0) {
-      this.utils.showLoading('Getting Designers').then(() => {
-        this.apiService.getDesigners().subscribe(assignees => {
+      this.utils.showLoading('Getting Pe Engineers').then(() => {
+        this.apiService.getPeEngineers().subscribe((assignees:any) => {
           this.utils.hideLoading().then(() => {
             this.listOfAssignees = [];
-            // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
-            assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
-            this.showBottomDraw = true;
-            this.designId = id;
-            this.utils.setBottomBarHomepage(false);
+          //   // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+             assignees.forEach(item => this.listOfAssignees.push(item));
+             console.log(this.listOfAssignees);
+             this.showBottomDraw = true;
+             this.designId = id;
+             this.utils.setBottomBarHomepage(false);
             this.drawerState = DrawerState.Docked;
             this.assignForm.patchValue({
               assignedto: ''
             });
           });
+          console.log(assignees);
         }, (error) => {
           this.utils.hideLoading().then(() => {
             this.utils.errorSnackBar('Some error occurred. Please try again later');
@@ -527,48 +478,6 @@ export class PestampDesignComponent implements OnInit {
     }}
   }
 
-  openAnalysts(id: number,designData) {
-    // this.listOfAssignees=[];
-    // this.intercom.update({
-    //   "hide_default_launcher": true
-    // });
-    // console.log("this is",designData);
-    // this.designerData = designData;
-    // this.reviewAssignedTo=designData.reviewassignedto;
-
-    // if (this.listOfAssignees.length === 0) {
-    //   this.utils.showLoading('Getting Analysts').then(() => {
-    //     this.apiService.getAnalysts().subscribe(assignees => {
-    //       this.utils.hideLoading().then(() => {
-    //         this.listOfAssignees = [];
-    //         // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
-    //         assignees.forEach(item => this.listOfAssignees.push(item));
-    //         console.log(this.listOfAssignees);
-    //         this.showBottomDraw = true;
-    //         this.designId = id;
-    //         this.utils.setBottomBarHomepage(false);
-    //         this.drawerState = DrawerState.Docked;
-    //         this.assignForm.patchValue({
-    //           assignedto: ''
-    //         });
-    //       });
-    //     }, (error) => {
-    //       this.utils.hideLoading().then(() => {
-    //         this.utils.errorSnackBar('Some error occurred. Please try again later');
-    //       });
-    //     });
-    //   });
-
-    // } else {
-    //   this.designId = id;
-    //   this.utils.setBottomBarHomepage(false);
-    //   this.drawerState = DrawerState.Docked;
-    //   this.assignForm.patchValue({
-    //     assignedto: ''
-    //   });
-    // }
-  }
-
   close() {
     if (this.showBottomDraw === true) {
       this.showBottomDraw = false;
@@ -578,68 +487,6 @@ export class PestampDesignComponent implements OnInit {
       this.showBottomDraw = true;
     }
   }
-
-
-
-
-  async openreviewPassed(id,designData){
-    // this.designId=id
-    // const alert = await this.alertController.create({
-    //   cssClass: 'alertClass',
-    //   header: 'Confirm!',
-    //   message:'Would you like to  Add Comments!!',
-    //   inputs:
-    //    [ {name:'comment',
-    //    id:'comment',
-    //       type:'textarea',
-    //     placeholder:'Enter Comment'}
-    //     ] ,
-    //   buttons: [
-    //     {
-    //       text: 'Cancel',
-    //       role: 'cancel',
-    //       cssClass: 'secondary',
-    //       handler: (blah) => {
-    //         console.log('Confirm Cancel: blah');
-    //       }
-    //     }, {
-    //       text: 'deliver',
-    //       handler: (alertData) => {
-    //         var postData= {};
-    //         if(alertData.comment!=""){
-    //          postData = {
-    //           status: "delivered",
-    //           comments: alertData.comment ,
-    //            };}
-    //            else{
-    //             postData = {
-    //               status: "delivered",
-    //                };
-    //            }
-    //            console.log(postData);
-    //            this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
-    //             this.utils.hideLoading().then(()=>{
-    //               ;
-    //               console.log('reach ', value);
-    //              this.utils.showSnackBar('Design request has been delivered successfully');
-
-    //               this.utils.setHomepagePermitRefresh(true);
-    //             })
-    //           }, (error) => {
-    //             this.utils.hideLoading();
-    //             ;
-    //           });
-    //       }
-    //     }
-    //   ]
-    // });
-
-    // await alert.present();
-
-
-
-  }
-
 
   refreshDesigns(event: CustomEvent) {
     //this.skip=0;
@@ -677,53 +524,58 @@ export class PestampDesignComponent implements OnInit {
   }
 */
 
-async decline(id){
-//   const modal = await this.modalController.create({
-//     component: DeclinepagePage,
-//     cssClass: 'my-custom-modal-css',
-//     componentProps: {
-//       id:id
-//     },
-//     backdropDismiss:false
-//   });
-//   modal.onDidDismiss().then((data) => {
-//     console.log(data)
-//     if(data.data.cancel=='cancel'){
-//     }else{
-//       this.getDesigns(null)
-//     }
-// });
-//   // modal.dismiss(() => {
-//   //   ;
-//   //   this.getDesigns(null);
-//   // });
-//   return await modal.present();
+async decline(id,e){
+  let status = e;
+  console.log(status);
+  const modal = await this.modalController.create({
+    component: DeclinepagePage,
+    cssClass: 'my-custom-modal-css',
+    componentProps: {
+      id:id,
+      value:status
+      
+    },
+    backdropDismiss:false
+  });
+  modal.onDidDismiss().then((data) => {
+    console.log(data)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
+    }
+});
+  // modal.dismiss(() => {
+  //   ;
+  //   this.getDesigns(null);
+  // });
+  return await modal.present();
 }
 
 
 async Resend(id, type){
-//   const modal = await this.modalController.create({
-//     component: ResendpagedialogPage,
-//     cssClass: 'my-custom-modal-css',
-//     componentProps: {
-//       id:id,
-//       requesttype:type
+  console.log(type);
+  const modal = await this.modalController.create({
+    component: ResendpagedialogPage,
+    cssClass: 'my-custom-modal-css',
+    componentProps: {
+      id:id,
+      requesttype:type
 
-//     },
-//     backdropDismiss:false
-//   });
-//   modal.onDidDismiss().then((data) => {
-//     console.log(data)
-//     if(data.data.cancel=='cancel'){
-//     }else{
-//       this.getDesigns(null)
-//     }
-// });
-//   // modal.dismiss(() => {
-//   //   ;
-//   //   this.getDesigns(null);
-//   // });
-//   return await modal.present();
+    },
+    backdropDismiss:false
+  });
+  modal.onDidDismiss().then((data) => {
+    console.log(data)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
+    }
+});
+  // modal.dismiss(() => {
+  //   ;
+  //   this.getDesigns(null);
+  // });
+  return await modal.present();
 }
 
 sDatePassed(datestring: string,i){
@@ -734,154 +586,188 @@ sDatePassed(datestring: string,i){
 
 }
 
-selfAssign(id,designData){
-  var designstarttime = new Date();
-      var milisecond = designstarttime.getTime();
-  var postData={}
-  postData = {
-    reviewassignedto: this.userData.id,
-    status: "reviewassigned",
-    reviewstarttime: milisecond
-  };
-  this.utils.showLoading('Assigning').then(()=>{
-    this.apiService.updateDesignForm(postData,id).subscribe((value) => {
-      this.utils.hideLoading().then(()=>{
-        ;
-        console.log('reach ', value);
-      this.utils.showSnackBar('Design request has been assigned to you successfully');
-      this.utils.setHomepagePermitRefresh(true);
-
-      })
-    }, (error) => {
-      this.utils.hideLoading();
-
-    });
-})}
 
 
-
-pending(value){
-  ;
-  if(this.userData.role.type=='SuperAdmin'){
-      value= "requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined"
-  }else{
-    value= "requesttype=permit&status=created&status=outsourced&status=requestaccepted"
-  }
-}
+// pending(value){
+//   ;
+//   if(this.userData.role.type=='SuperAdmin'){
+//       value= "requesttype=permit&status=created&status=outsourced&status=accepted&status=declined"
+//   }else{
+//     value= "requesttype=permit&status=created&status=outsourced&status=accepted"
+//   }
+// }
 
 getassignedata(asssignedata){
-  //this.selectedDesigner = asssignedata;
+  this.selectedPeEngineer = asssignedata;
 
 }
 
 shareWhatsapp(designData){
-  //this.socialsharing.share(designData.permitdesign.url);
+  this.socialsharing.share(designData.permitdesign.url);
 }
 
  async shareViaEmails(id,designData){
-//   const modal = await this.modalController.create({
-//     component: EmailModelPage,
-//     cssClass: 'email-modal-css',
-//     componentProps: {
-//       id:id,
-//       designData:designData
-//     },
+  const modal = await this.modalController.create({
+    component: EmailModelPage,
+    cssClass: 'email-modal-css',
+    componentProps: {
+      id:id,
+      designData:designData
+    },
 
-//   });
-//   modal.onDidDismiss().then((data) => {
-//     console.log(data)
-//     if(data.data.cancel=='cancel'){
-//     }else{
-//       this.getDesigns(null)
-//     }
-// });
-//     return await modal.present();
+  });
+  modal.onDidDismiss().then((data) => {
+    console.log(data)
+    if(data.data.cancel=='cancel'){
+    }else{
+      this.getDesigns(null)
+    }
+});
+    return await modal.present();
  }
 
  makeDirectory(){
-  // this.platform.ready().then(() => {
-  //   if (this.platform.is('ios')) {
-  //     this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
-  //   } else if (this.platform.is('android')) {
-  //     this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
-  //   } else {
-  //     this.storageDirectory = this.file.cacheDirectory;
-  //   }
-  // });
+  this.platform.ready().then(() => {
+    if (this.platform.is('ios')) {
+      this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+    } else if (this.platform.is('android')) {
+      this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+    } else {
+      this.storageDirectory = this.file.cacheDirectory;
+    }
+  });
 }
 
 designDownload(designData){
 
-  // this.platform.ready().then(()=>{
-  //   this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
-  //     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
-  //       result => console.log('Has permission?',result.hasPermission),
-  //       err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
-  //     );
-  //     this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
-  //       console.log(data);
+  this.platform.ready().then(()=>{
+    this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+        result => console.log('Has permission?',result.hasPermission),
+        err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
+      );
+      this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
+        console.log(data);
   
-  //       if(data==true){
+        if(data==true){
   
-  //       }else{
-  //         console.log('not found!');
-  //         throw { code: 1, message: 'NOT_FOUND_ERR' };
-  //       }
+        }else{
+          console.log('not found!');
+          throw { code: 1, message: 'NOT_FOUND_ERR' };
+        }
         
-  //     }).catch(async err=>{
-  //       console.log('Error occurred while checking local files:');
-  //       console.log(err);
-  //       if (err.code == 1) {
-  //         const fileTransfer: FileTransferObject = this.transfer.create();
-  //         this.utils.showLoading('Downloading').then(()=>{
-  //           fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.prelimdesign.ext).then((entry) => {
-  //             this.utils.hideLoading().then(()=>{
-  //               console.log('download complete: ' + entry.toURL());
-  //               this.utils.showSnackBar("Permit Design Downloaded Successfully");
+      }).catch(async err=>{
+        console.log('Error occurred while checking local files:');
+        console.log(err);
+        if (err.code == 1) {
+          const fileTransfer: FileTransferObject = this.transfer.create();
+          this.utils.showLoading('Downloading').then(()=>{
+            fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.prelimdesign.ext).then((entry) => {
+              this.utils.hideLoading().then(()=>{
+                console.log('download complete: ' + entry.toURL());
+                this.utils.showSnackBar("Permit Design Downloaded Successfully");
                 
-  //               // this.clickSub = this.localnotification.on('click').subscribe(data => {
-  //               //   console.log(data)
-  //               //   path;
-  //               // })
-  //               this.localnotification.schedule({text:'Permit Design Downloaded Successfully', foreground:true, vibrate:true })
-  //             }, (error) => {
-  //               // handle error
-  //               console.log(error);
+                // this.clickSub = this.localnotification.on('click').subscribe(data => {
+                //   console.log(data)
+                //   path;
+                // })
+                this.localnotification.schedule({text:'Permit Design Downloaded Successfully', foreground:true, vibrate:true })
+              }, (error) => {
+                // handle error
+                console.log(error);
                 
-  //             });
-  //             })
-  //         })
-  //       }
-  //     })
-  //   })
-  // })
+              });
+              })
+          })
+        }
+      })
+    })
+  })
   
-  //   let dir_name = 'Wattmonk';
-  //   let path = '';
-  //   const url = designData.prelimdesign.url;
-  //  const fileTransfer: FileTransferObject = this.transfer.create();
+    let dir_name = 'Wattmonk';
+    let path = '';
+    const url = designData.prelimdesign.url;
+   const fileTransfer: FileTransferObject = this.transfer.create();
    
    
-  //  let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
-  // result.then((resp) => {
-  //  path = resp.toURL();
-  //  console.log(path); 
+   let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
+  result.then((resp) => {
+   path = resp.toURL();
+   console.log(path); 
    
-  //  fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
-  //    console.log('download complete: ' + entry.toURL());
-  //    this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+   fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
+     console.log('download complete: ' + entry.toURL());
+     this.utils.showSnackBar("Prelim Design Downloaded Successfully");
      
-  //    // this.clickSub = this.localnotification.on('click').subscribe(data => {
-  //    //   console.log(data)
-  //    //   path;
-  //    // })
-  //    this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
-  //  }, (error) => {
-  //    // handle error
-  //  });
-  // })
+     // this.clickSub = this.localnotification.on('click').subscribe(data => {
+     //   console.log(data)
+     //   path;
+     // })
+     this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
+   }, (error) => {
+     // handle error
+   });
+  })
   
   
+  }
+
+  async openreviewPassed(id,designData){
+    this.designId=id
+    const alert = await this.alertController.create({
+      cssClass: 'alertClass',
+      header: 'Confirm!',
+      message:'Would you like to  Add Comments!!',
+      inputs:
+       [ {name:'comment',
+       id:'comment',
+          type:'textarea',
+        placeholder:'Enter Comment'}
+        ] ,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'deliver',
+          handler: (alertData) => {
+            var postData= {};
+            if(alertData.comment!=""){
+             postData = {
+              status: "delivered",
+              comments: alertData.comment ,
+               };}
+               else{
+                postData = {
+                  status: "delivered",
+                   };
+               }
+               console.log(postData);
+               this.apiService.updatePestamps(this.designId,postData).subscribe((value) => {
+                this.utils.hideLoading().then(()=>{
+                  ;
+                  console.log('reach ', value);
+                 this.utils.showSnackBar('Pe Stamp request has been delivered successfully');
+
+                  this.utils.setPeStampRefresh(true);
+                })
+              }, (error) => {
+                this.utils.hideLoading();
+                ;
+              });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+
+
   }
 
 createChatGroup(design:DesginDataModel){
