@@ -567,7 +567,7 @@ export class ApiService {
         })
       }
     getcounts(id){
-      return this.http.get(BaseUrl + '/userdesigns/count?id=' + id + '&status=outsourced',{headers: this.headers});
+      return this.http.get(BaseUrl + '/dashboarddesigncount?id=' + id,{headers: this.headers});
     }
 
     getPeStampCharges()

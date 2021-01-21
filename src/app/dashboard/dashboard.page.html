@@ -15,7 +15,7 @@
         <ion-card-header class="top">
           On Hold
         </ion-card-header>
-        <ion-badge color="success">{{onHold}}</ion-badge>  
+        <ion-badge color="success">{{count.putonhold}}</ion-badge>  
         <ion-card-content></ion-card-content>
       </ion-card>
     </ion-col>
@@ -24,18 +24,18 @@
         <ion-card-header class="top">
           Revision
         </ion-card-header>  
-        <ion-badge color="success">{{revision}}</ion-badge>
+        <ion-badge color="success">{{count.isinrevisionstatecount}}</ion-badge>
         <ion-card-content></ion-card-content>
       </ion-card>
     </ion-col>
   </ion-row>
   <ion-row> 
-    <ion-col size="6">
+    <ion-col size="6" *ngIf="userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin' || userData.role.name=='SuperAdmin'">
       <ion-card class=" card"  [routerLink]="['/waitingforacceptance']">
         <ion-card-header class="top">
           Waiting for acceptance
         </ion-card-header>  
-        <ion-badge color="success">{{waitingforacceptance}}</ion-badge>  
+        <ion-badge color="success">{{count.waitingforacceptance}}</ion-badge>  
         <ion-card-content></ion-card-content>
       </ion-card>
     </ion-col>
@@ -44,7 +44,7 @@
         <ion-card-header class="top">
           Unassigned
         </ion-card-header>  
-        <ion-badge color="success">{{unassigned}}</ion-badge>
+        <ion-badge color="success">{{count.unassiigned}}</ion-badge>
         <ion-card-content></ion-card-content>
       </ion-card>
     </ion-col>
