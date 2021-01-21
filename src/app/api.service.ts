@@ -569,4 +569,9 @@ export class ApiService {
     getcounts(id){
       return this.http.get(BaseUrl + '/userdesigns/count?id=' + id + '&status=outsourced',{headers: this.headers});
     }
+
+    getPeStampCharges()
+    {
+      return this.http.get(BaseUrl + 'commonsettings?settingname=structuralbothpecharges',{headers:this.headers});
+    }
 }

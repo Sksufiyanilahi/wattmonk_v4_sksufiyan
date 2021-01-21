@@ -27,7 +27,7 @@ export class Pestamp{
     created_at : string;
     updated_at : string;
     paymentstatus:string;
-    comments: Comment[];
+    comments: {};
     activities : Activity[];
     source: string;
     status : string;

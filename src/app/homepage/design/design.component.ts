@@ -1076,7 +1076,7 @@ pending(value){
 
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
-  console.log("dholak is",this.selectedDesigner);
+  console.log(this.selectedDesigner);
 
 }
 

@@ -160,7 +160,7 @@ export class PestampSchedulePage implements OnInit {
             mountingtype:this.design.mountingtype,
             propertytype:this.design.propertytype,
             // architecturaldesign:this.design.architecturaldesign,
-            comment:this.design.comments[0].message,
+            comment:this.design.comments==''?'': this.design.comments[0].message,
             // type: this.design.type,
             latitude: this.design.latitude,
             longitude: this.design.longitude,
@@ -514,12 +514,12 @@ export class PestampSchedulePage implements OnInit {
         source: "android",
         createdby: this.userdata.id,
         creatorparentid: this.userdata.parent.id,
-         status: "outsourced",
-        outsourcedto:'232',
+         status: "created",
+        outsourcedto:null,
         //paymenttype: null,
         paymentstatus:null
 }
-  this.apiService.addSiteAssessment(postData).subscribe(res => {
+  this.apiService.addSiteAssessment(postData).subscribe((res:any) => {
     console.log(res);
       if(this.isAtticFileUpload)
       {
@@ -535,6 +535,7 @@ export class PestampSchedulePage implements OnInit {
             this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
             console.log(this.permitPlanList[0]);
           }
+          this.router.navigate(['payment-modal',{isConfirmed: false, isLater: false, ispestamp: true, pestampid: res.id}]);
   },
   responseError => {
    this.utils.hideLoading().then(() => {
@@ -633,8 +634,8 @@ this.utils.showLoading('Saving').then(() => {
         source: "android",
         createdby: this.userdata.id,
         creatorparentid: this.userdata.parent.id,
-         status: "outsourced",
-        outsourcedto:'232',
+         status: "created",
+        outsourcedto:null,
         //paymenttype: null,
         paymentstatus:null
 }

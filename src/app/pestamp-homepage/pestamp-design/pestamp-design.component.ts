@@ -646,7 +646,7 @@ designDownload(designData){
         result => console.log('Has permission?',result.hasPermission),
         err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
       );
-      this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
+      this.file.checkFile(resolvedDirectory.nativeURL,designData.stampedfiles.hash).then(data=>{
         console.log(data);
   
         if(data==true){
@@ -662,16 +662,16 @@ designDownload(designData){
         if (err.code == 1) {
           const fileTransfer: FileTransferObject = this.transfer.create();
           this.utils.showLoading('Downloading').then(()=>{
-            fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.prelimdesign.ext).then((entry) => {
+            fileTransfer.download(url, this.storageDirectory + designData.stampedfiles.hash + designData.stampedfiles.ext).then((entry) => {
               this.utils.hideLoading().then(()=>{
                 console.log('download complete: ' + entry.toURL());
-                this.utils.showSnackBar("Permit Design Downloaded Successfully");
+                this.utils.showSnackBar("Stamped File Downloaded Successfully");
                 
                 // this.clickSub = this.localnotification.on('click').subscribe(data => {
                 //   console.log(data)
                 //   path;
                 // })
-                this.localnotification.schedule({text:'Permit Design Downloaded Successfully', foreground:true, vibrate:true })
+                this.localnotification.schedule({text:'Stamped File Downloaded Successfully', foreground:true, vibrate:true })
               }, (error) => {
                 // handle error
                 console.log(error);
@@ -686,7 +686,7 @@ designDownload(designData){
   
     let dir_name = 'Wattmonk';
     let path = '';
-    const url = designData.prelimdesign.url;
+    const url = designData.stampedfiles.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
    
    
@@ -695,9 +695,9 @@ designDownload(designData){
    path = resp.toURL();
    console.log(path); 
    
-   fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
+   fileTransfer.download(url, path + designData.stampedfiles.hash + designData.stampedfiles.ext).then((entry) => {
      console.log('download complete: ' + entry.toURL());
-     this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+     this.utils.showSnackBar("Stamped File Downloaded Successfully");
      
      // this.clickSub = this.localnotification.on('click').subscribe(data => {
      //   console.log(data)
