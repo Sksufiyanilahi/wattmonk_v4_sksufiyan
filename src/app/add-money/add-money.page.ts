@@ -31,6 +31,7 @@ amountCheckingForOnboarding:boolean=false;
 card:any
   token:any;
   stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
+  // stripe= Stripe('sk_test_51HQ4SfBlSfQmxsSflRlcq7ntq1xMbhlBVW03jzMCd1WiOZMqjglO0jO2FV6IHDSiFfDnesYt2feU7w4uEe34PfPR00iLg5qpLm');
  userData:User;
  mode:any;
  designId;
@@ -320,7 +321,7 @@ var date= new Date();
     this.apiService.createPayment(data).subscribe((res)=>{
       this.createPayment=res;
       this.utils.hideLoading();
-      if(this.createPayment.paymentstatus=='succeeded'){
+      if(this.createPayment.status=='succeeded'){
     this.utils.showSnackBar("payment via card is successfull");
    if(this.designId==="null"){
      if(this.design==='prelim'){
@@ -373,9 +374,18 @@ var date= new Date();
     
  }
 else
-{this.utils.errorSnackBar("payment was unsuccessfull");
-this.router.navigate(['homepage/design']);
-this.utils.setHomepageDesignRefresh(true);}
+{
+  this.utils.errorSnackBar("payment was unsuccessfull");
+  if(this.design=='prelim'){
+    this.router.navigate(['homepage/design']);
+    this.utils.setHomepageDesignRefresh(true);
+     }
+     else{
+       this.router.navigate(['permithomepage/permitdesign']);
+       this.utils.setHomepagePermitRefresh(true);
+     }
+
+}
 }
     ,
 (error)=>{

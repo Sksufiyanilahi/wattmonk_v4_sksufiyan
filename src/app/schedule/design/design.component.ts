@@ -124,7 +124,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     tomorrow.setDate(tomorrow.getDate()+1);
     var d_date=tomorrow.toISOString();
     const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
-    const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
+    const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     const NUMBERPATTERN = '^[0-9]*$';
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.desginForm = this.formBuilder.group({

@@ -84,9 +84,10 @@
                             </span>
 
                         <ion-row style="margin-bottom: 0px;" [routerLink]="['/design-details/',designData.id]">
-                           <ion-col style="padding-left:0px" >
-                            <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
-                        </ion-col>
+                            <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')" style="font-size: 0.8em;">
+                                <span><strong>Assigned to : {{designData.reviewassignedto.firstname | titlecase}} {{designData.reviewassignedto.lastname | titlecase}}</strong></span>
+                            </ion-col>
+                        
                         <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
                                 <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
                                     {{designData.designremainingtime}}</span></ion-col>
@@ -99,8 +100,8 @@
                         </ion-row>
 
                         <ion-row class="ion-no-margin ion-no-margin">
-                            <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')" style="font-size: 0.8em;">
-                                <span>Assigned to : {{designData.reviewassignedto.firstname | titlecase}} {{designData.reviewassignedto.lastname | titlecase}}</span>
+                            <ion-col style="padding-left:0px" >
+                                <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
                             </ion-col>
                             <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined' || segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined'">
                                 <span *ngIf="designData.status == 'created' || (designData.status == 'requestaccepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')) " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
