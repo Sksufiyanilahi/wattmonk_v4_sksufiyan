@@ -263,6 +263,11 @@ const routes: Routes = [
     loadChildren: () => import('./pestamp-payment-modal/pestamp-payment-modal.module').then( m => m.PestampPaymentModalPageModule),
     canActivate: [AuthGuardService]
   },
+  {
+    path: 'peengineer',
+    loadChildren: () => import('./peengineer/peengineer.module').then( m => m.PEengineerPageModule)
+  },
+
 
 
 
