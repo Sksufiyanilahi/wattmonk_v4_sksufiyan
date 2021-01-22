@@ -145,6 +145,20 @@
         </ng-container>
     </ion-row>
 
+    <ion-row *ngIf="design.status=='declined'" class="ion-no-padding ion-margin-top">
+        <ion-col size="6"  >
+            <span class="model-type font">Reason</span></ion-col>
+            <ion-col size="6"  class="ion-no-padding">
+                    <p class="model-name font" style="text-align: right;margin:0px">{{design.requestdeclinereason}}</p>
+                </ion-col>
+        </ion-row>
+            <ion-row *ngIf="design.status=='declined' && design.requestdeclineattachment.length > 0">
+            <ion-col > <span class="model-type font">Reason Attachment</span></ion-col>
+            <ion-col size="6"  style="float: right;" *ngFor="let attachment of design.requestdeclineattachment">
+            <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showreasonImage(attachment)">{{attachment.name.length > 40 ? (attachment.name | slice: 0:40) + '...' : attachment.name}}{{attachment.ext}}</span>
+            </ion-col>
+        </ion-row>
+
     <ion-row *ngIf="design.comments || design.comments !==null  " class="ion-no-padding ion-margin-top">
         <ion-col size="6">
             <span class="models font">Comments</span>

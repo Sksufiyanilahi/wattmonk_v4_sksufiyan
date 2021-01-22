@@ -7,6 +7,7 @@ import { Pestamp } from '../model/pestamp.model';
 import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-pestamp-design-details',
@@ -32,7 +33,8 @@ export class PestampDesignDetailsPage implements OnInit {
               private navController: NavController,
               private toastController: ToastController,
               private storage: StorageService,
-              private launchNavigator: LaunchNavigator) { 
+              private launchNavigator: LaunchNavigator,
+              private iab: InAppBrowser) { 
     this.designId = +this.route.snapshot.paramMap.get('id');
     console.log(this.designId);
   }
@@ -107,6 +109,10 @@ export class PestampDesignDetailsPage implements OnInit {
 
       openAddressOnMap(address: string) {
         this.launchNavigator.navigate(address, this.options);
+      }
+
+      showreasonImage(attachmentFile:any){
+        const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
       }
 }
 

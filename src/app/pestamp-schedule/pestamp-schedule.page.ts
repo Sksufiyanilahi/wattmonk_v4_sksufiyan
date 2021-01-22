@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
 import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_PHONE_NUMBER } from '../model/constants';
 import { ErrorModel } from '../model/error.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Pestamp } from '../model/pestamp.model';
 import { NetworkdetectService } from '../networkdetect.service';
 import { NavController } from '@ionic/angular';
@@ -535,8 +535,20 @@ export class PestampSchedulePage implements OnInit {
             this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
             console.log(this.permitPlanList[0]);
           }
-          this.router.navigate(['pestamp-payment-modal',{isConfirmed: false, isLater: false, ispestamp: true, pestampid: res.id}]);
-  },
+          //this.router.navigate(['pestamp-payment-modal',{isConfirmed: false, isLater: false, ispestamp: true, pestampid: res.id}]);
+          let objToSend: NavigationExtras = {
+            queryParams: {
+            designData:res
+            },
+            skipLocationChange: false,
+            fragment: 'top' 
+        };
+    
+    
+    this.router.navigate(['/pestamp-payment-modal'], { 
+      state: { productdetails: objToSend }
+    });
+        },
   responseError => {
    this.utils.hideLoading().then(() => {
      const error: ErrorModel = responseError.error;
@@ -639,7 +651,7 @@ this.utils.showLoading('Saving').then(() => {
         //paymenttype: null,
         paymentstatus:null
 }
-  this.apiService.addSiteAssessment(postData).subscribe(res => {
+  this.apiService.updatePestamps(this.designId,postData).subscribe(res => {
     console.log(res);
       if(this.isAtticFileUpload)
       {
@@ -655,6 +667,18 @@ this.utils.showLoading('Saving').then(() => {
             this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
             console.log(this.permitPlanList[0]);
           }
+          let objToSend: NavigationExtras = {
+            queryParams: {
+            designData:res
+            },
+            skipLocationChange: false,
+            fragment: 'top' 
+        };
+    
+    
+    this.router.navigate(['/pestamp-payment-modal'], { 
+      state: { productdetails: objToSend }
+    });
   },
   responseError => {
    this.utils.hideLoading().then(() => {
