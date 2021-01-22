@@ -53,7 +53,7 @@
               <!-- <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/pestamp-design-details/',designData.id]">In Review</span> -->
               <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;" [routerLink]="['/pestamp-design-details/',designData.id]">Waiting for acceptance</span>
               <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/pestamp-design-details/',designData.id]">Revision</span>
-              <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+              <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;" [routerLink]="['/pestamp-design-details/',designData.id]"
                     *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
               <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'pestamp']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
 
@@ -137,8 +137,8 @@
                             <ion-icon name="share-social-outline"></ion-icon></span>&nbsp;
                         <span style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="shareViaEmails(designData.id,designData)">
                             <ion-icon name="mail" ></ion-icon></span> -->
-                            <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, 'pestamp')">
-                                Resend</span>
+                            <!-- <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, 'pestamp')">
+                                Resend</span> -->
                     </ion-col>
                     <!-- <ion-col class="ion-no-margin ion-no-padding">
                         <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + designData.id + '/' + designData.jobtype + '/' + designData.latitude + '/' + designData.longitude]"

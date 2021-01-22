@@ -10,9 +10,9 @@ import { DatePipe } from '@angular/common';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DesginDataModel } from 'src/app/model/design.model';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { AssigneeModel } from 'src/app/model/assignee.model';
-import { Subscription } from 'rxjs';
+import { identity, Subscription } from 'rxjs';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
@@ -435,12 +435,26 @@ export class PestampDesignComponent implements OnInit {
 
   openDesigners(id: number,designData) {
     debugger;
+
     this.listOfAssignees=[];
     console.log("this is",designData);
      this.designerData = designData;
      //this.reviewAssignedTo=designData.designassignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin')&& this.designerData.status=='created'){
-      this.route.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+      //this.route.navigate(["pestamp-payment-modal",{id:id,designData:this.designerData.requesttype}])
+      let objToSend: NavigationExtras = {
+        queryParams: {
+        designData:designData
+        },
+        skipLocationChange: false,
+        fragment: 'top' 
+    };
+
+
+this.route.navigate(['/pestamp-payment-modal'], { 
+  state: { productdetails: objToSend }
+});
+
 
     }
 

@@ -43,6 +43,7 @@ export class CouponOffersModalPage implements OnInit {
 
     })
     this.user=this.storageService.getUserID();
+    console.log(this.user);
   }
  
   selectCoupon(coupondata:any) {
@@ -85,7 +86,7 @@ export class CouponOffersModalPage implements OnInit {
       this.utils.showLoading("Applying").then(()=>{
         const postData={
           couponcode:this.couponForm.get('couponInput').value,
-          userid:404,
+          userid:this.user.id,
           requesttype:this.requesttype
       }
       this.apiservice.sendCoupon(postData).subscribe((res)=>{

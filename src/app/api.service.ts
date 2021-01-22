@@ -570,8 +570,8 @@ export class ApiService {
       return this.http.get(BaseUrl + '/dashboarddesigncount?id=' + id,{headers: this.headers});
     }
 
-    getPeStampCharges()
+    getPeStampCharges(searchData)
     {
-      return this.http.get(BaseUrl + 'commonsettings?settingname=structuralbothpecharges',{headers:this.headers});
+      return this.http.get(BaseUrl + 'commonsettings?settingname=' + searchData,{headers:this.headers});
     }
 }

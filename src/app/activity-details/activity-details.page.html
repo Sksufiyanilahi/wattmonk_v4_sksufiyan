@@ -33,7 +33,12 @@
 <ion-col class="flex-center" *ngIf="activity_details?.type=='survey'">
 
   <ion-img src="/assets/images/survey.svg" class="header-icon"></ion-img>
-</ion-col></ion-row></ion-grid>
+</ion-col>
+<ion-col class="flex-center" *ngIf="name=='pestamp'">
+
+  <ion-img src="/assets/images/stamp.svg" class="header-icon"></ion-img>
+</ion-col>
+</ion-row></ion-grid>
 
   </ion-toolbar>
 </ion-header>

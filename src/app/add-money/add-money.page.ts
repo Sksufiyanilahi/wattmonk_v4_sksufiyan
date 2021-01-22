@@ -108,6 +108,7 @@ card:any
     this.setupStripe();
     console.log(this.mode)
     console.log(this.designId);
+    console.log(this.design);
 
     if(this.mode=='card'){
       this.amountForm.patchValue({amount:this.serviceAmount});
@@ -320,7 +321,7 @@ var date= new Date();
     this.apiService.createPayment(data).subscribe((res)=>{
       this.createPayment=res;
       this.utils.hideLoading();
-      if(this.createPayment.paymentstatus=='succeeded'){
+      if(this.createPayment.status=='succeeded'){
     this.utils.showSnackBar("payment via card is successfull");
    if(this.designId==="null"){
      if(this.design==='prelim'){
@@ -332,6 +333,26 @@ var date= new Date();
        this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
      }
    }else{
+     if(this.design == 'pestamp'){var postData={};
+     var pestampacceptancestarttime = new Date();
+    pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
+     postData = {
+      outsourcedto: 232,
+      isoutsourced: "true",
+      status: "outsourced",
+      pestampacceptancestarttime: pestampacceptancestarttime,
+      paymenttype : "direct",
+     // couponid:this.utils.getCouponId().value,
+    
+    };
+    this.apiService.updatePestamps(this.designId,postData).subscribe(value=>{
+      this.utils.showSnackBar("Pe Stamp request has been send to wattmonk successfully");
+      this.router.navigate(['pestamp-homepage/pestamp-design']);
+      this.utils.setPeStampRefresh(true);
+    
+    })
+  }
+  else{
             var postData={};
             var designacceptancestarttime = new Date();
             if(this.design=='prelim'){
@@ -368,14 +389,29 @@ var date= new Date();
           this.utils.setHomepagePermitRefresh(true);
         }
       
-      })}
+      })
+  }
+    }
    
     
  }
 else
-{this.utils.errorSnackBar("payment was unsuccessfull");
+{
+  this.utils.errorSnackBar("payment was unsuccessfull");
+  if(this.design=='pestamp')
+  { 
+this.router.navigate(['pestamp-homepage/pestamp-design']);
+this.utils.setPeStampRefresh(true);
+  }
+  else if(this.design=='prelim'){
 this.router.navigate(['homepage/design']);
 this.utils.setHomepageDesignRefresh(true);}
+else
+{
+  this.router.navigate(['permithomepage/permitdesign']);
+this.utils.setHomepagePermitRefresh(true);
+}
+  }
 }
     ,
 (error)=>{

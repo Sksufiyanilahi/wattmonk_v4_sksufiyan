@@ -146,6 +146,37 @@
   </div>
     </ion-col>
   </ion-row>
+
+  <ion-row>
+    <ion-col size="6">
+      <ion-item class="ion-no-padding">
+          <!-- <ion-label style="display: none;">Mounting Type*</ion-label> -->
+          <ion-label position="floating">Mounting Type*</ion-label>
+          <!-- <ion-label position="floating">mounting type</ion-label> -->
+          <ion-select class="form_input select_div"
+                      ok-text="" cancel-text=""
+                      formControlName="mountingtype" interface="popover">
+              <ion-select-option value="roof">Roof</ion-select-option>
+              <ion-select-option value="ground">Ground</ion-select-option>
+              <ion-select-option value="both">Both</ion-select-option>
+          </ion-select>
+      </ion-item>
+  </ion-col>
+  <ion-col size="6">
+    <ion-item class="ion-no-padding">
+        <!-- <ion-label style="display: none;">Mounting Type*</ion-label> -->
+        <ion-label position="floating">Property Type*</ion-label>
+        <!-- <ion-label position="floating">mounting type</ion-label> -->
+        <ion-select class="form_input select_div"
+                    ok-text="" cancel-text=""
+                    formControlName="propertytype" interface="popover">
+            <ion-select-option value="residential">Residential</ion-select-option>
+            <ion-select-option value="commercial">Commercial</ion-select-option>
+        </ion-select>
+    </ion-item>
+</ion-col>
+</ion-row>
+
     <ion-row style="margin-top: 20px;">
     <ion-label style="font-weight: bold;">Type of Stamping</ion-label>
   </ion-row>
@@ -298,39 +329,10 @@
   </ion-col>
   </ion-row>
   </ion-radio-group> -->
-  <ion-row>
-    <ion-col size="6">
-      <ion-item class="ion-no-padding">
-          <!-- <ion-label style="display: none;">Mounting Type*</ion-label> -->
-          <ion-label position="floating">Mounting Type*</ion-label>
-          <!-- <ion-label position="floating">mounting type</ion-label> -->
-          <ion-select class="form_input select_div"
-                      ok-text="" cancel-text=""
-                      formControlName="mountingtype" interface="popover">
-              <ion-select-option value="roof">Roof</ion-select-option>
-              <ion-select-option value="ground">Ground</ion-select-option>
-              <ion-select-option value="both">Both</ion-select-option>
-          </ion-select>
-      </ion-item>
-  </ion-col>
-  <ion-col size="6">
-    <ion-item class="ion-no-padding">
-        <!-- <ion-label style="display: none;">Mounting Type*</ion-label> -->
-        <ion-label position="floating">Property Type*</ion-label>
-        <!-- <ion-label position="floating">mounting type</ion-label> -->
-        <ion-select class="form_input select_div"
-                    ok-text="" cancel-text=""
-                    formControlName="propertytype" interface="popover">
-            <ion-select-option value="residential">Residential</ion-select-option>
-            <ion-select-option value="commercial">Commercial</ion-select-option>
-        </ion-select>
-    </ion-item>
-</ion-col>
-</ion-row>
 
   <ion-row style="margin-top: 16px;">
     <ion-col size="12">
-        <span class="input-placeholder">comments</span>
+        <span class="input-placeholder">Comments</span>
     </ion-col>
     <ion-col size="12" style="padding-top: 0px;">
         <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"

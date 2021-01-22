@@ -535,7 +535,7 @@ export class PestampSchedulePage implements OnInit {
             this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
             console.log(this.permitPlanList[0]);
           }
-          this.router.navigate(['payment-modal',{isConfirmed: false, isLater: false, ispestamp: true, pestampid: res.id}]);
+          this.router.navigate(['pestamp-payment-modal',{isConfirmed: false, isLater: false, ispestamp: true, pestampid: res.id}]);
   },
   responseError => {
    this.utils.hideLoading().then(() => {

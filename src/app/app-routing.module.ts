@@ -258,6 +258,12 @@ const routes: Routes = [
   loadChildren: () => import('./pestamp-design-details/pestamp-design-details.module').then( m => m.PestampDesignDetailsPageModule),
   canActivate: [AuthGuardService]
 },
+  {
+    path: 'pestamp-payment-modal',
+    loadChildren: () => import('./pestamp-payment-modal/pestamp-payment-modal.module').then( m => m.PestampPaymentModalPageModule),
+    canActivate: [AuthGuardService]
+  },
+
 
 
 

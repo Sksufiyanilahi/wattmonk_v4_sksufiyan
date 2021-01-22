@@ -125,7 +125,7 @@
 
     <ion-row class="ion-no-padding font">
         <ng-container *ngIf="design.permitplan.length > 0">
-            <ion-col><span class="model-type font">Permit Plan Photos</span></ion-col>
+            <ion-col><span class="model-type font">Permit Plan</span></ion-col>
             <ion-col size="auto" >
                 <div *ngFor="let permitplan of design.permitplan;let i=index" style="display: flex;justify-content: flex-end;">
                     <span class="model-name font" style="color:#3c78d8 !important">{{permitplan?.name}}{{permitplan?.ext}}</span>
@@ -147,7 +147,7 @@
 
     <ion-row *ngIf="design.comments || design.comments !==null  " class="ion-no-padding ion-margin-top">
         <ion-col size="6">
-            <span class="models font">comments</span>
+            <span class="models font">Comments</span>
         </ion-col>
         <!-- <div> -->
 
@@ -167,7 +167,7 @@
     </ion-row>
 
     <ion-row>
-        <ion-col><span class="model-type font">created at</span></ion-col>
+        <ion-col><span class="model-type font">Created At</span></ion-col>
         <ion-col size="auto">
             <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
         </ion-col>
@@ -175,7 +175,7 @@
 
     <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
       *ngIf="design.status=='assigned'||design.status=='completed'">
-      <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned to</span></ion-col>
+      <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">Assigned to</span></ion-col>
       <ion-col size="auto">
           <div class="selected d-flex">
               <img *ngIf="design.assignedto.contractorlogo && design.assignedto.contractorlogo.logo"
