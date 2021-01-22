@@ -187,6 +187,8 @@ this.network.networkConnect();
          }else if(this.user.role.type==='clientsuperadmin' && (this.user.isonboardingcompleted === null || this.user.isonboardingcompleted === false)){
 
            this.navController.navigateRoot('onboarding');
+         }else if(this.user.role.type==='peengineer'){
+          this.navController.navigateRoot('peengineer');
          }
         else{
           this.navController.navigateRoot('permithomepage');
