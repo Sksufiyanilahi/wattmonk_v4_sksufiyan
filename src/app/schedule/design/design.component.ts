@@ -404,7 +404,8 @@ getDesignDetails() {
             solarmake:this.design.solarmake,
             solarmodel:this.design.solarmodel,
             invertermake:this.design.invertermake,
-            invertermodel:this.design.invertermodel
+            invertermodel:this.design.invertermodel,
+            status:this.design.status
           });
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);

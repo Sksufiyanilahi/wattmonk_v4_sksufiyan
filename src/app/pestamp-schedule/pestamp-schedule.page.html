@@ -151,6 +151,19 @@
     <ion-col size="6">
       <ion-item class="ion-no-padding">
           <!-- <ion-label style="display: none;">Mounting Type*</ion-label> -->
+          <ion-label position="floating">Property Type*</ion-label>
+          <!-- <ion-label position="floating">mounting type</ion-label> -->
+          <ion-select class="form_input select_div"
+                      ok-text="" cancel-text=""
+                      formControlName="propertytype" interface="popover">
+              <ion-select-option value="residential">Residential</ion-select-option>
+              <ion-select-option value="commercial">Commercial</ion-select-option>
+          </ion-select>
+      </ion-item>
+  </ion-col>
+    <ion-col size="6">
+      <ion-item class="ion-no-padding">
+          <!-- <ion-label style="display: none;">Mounting Type*</ion-label> -->
           <ion-label position="floating">Mounting Type*</ion-label>
           <!-- <ion-label position="floating">mounting type</ion-label> -->
           <ion-select class="form_input select_div"
@@ -162,19 +175,7 @@
           </ion-select>
       </ion-item>
   </ion-col>
-  <ion-col size="6">
-    <ion-item class="ion-no-padding">
-        <!-- <ion-label style="display: none;">Mounting Type*</ion-label> -->
-        <ion-label position="floating">Property Type*</ion-label>
-        <!-- <ion-label position="floating">mounting type</ion-label> -->
-        <ion-select class="form_input select_div"
-                    ok-text="" cancel-text=""
-                    formControlName="propertytype" interface="popover">
-            <ion-select-option value="residential">Residential</ion-select-option>
-            <ion-select-option value="commercial">Commercial</ion-select-option>
-        </ion-select>
-    </ion-item>
-</ion-col>
+  
 </ion-row>
 
     <ion-row style="margin-top: 20px;">
