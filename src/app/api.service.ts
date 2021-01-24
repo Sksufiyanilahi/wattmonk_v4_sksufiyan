@@ -555,7 +555,7 @@ export class ApiService {
         })
       }
 
-      updatePestamps(id:number,inputData: any): Observable<Pestamp> {
+      updatePestamps(id:number,inputData?: any): Observable<Pestamp> {
         return this.http.put<Pestamp>(BaseUrl + "/pestamps/"+id, JSON.stringify(inputData), {
             headers: this.headers
           })

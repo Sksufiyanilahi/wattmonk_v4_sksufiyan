@@ -48,6 +48,7 @@ export class Pestamp{
   postalcode: string;
   modeofstamping:string;
   propertytype:string;
+  workinghours:any;
 
 
     //Dynamic content

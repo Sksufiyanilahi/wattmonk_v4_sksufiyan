@@ -241,7 +241,14 @@ this.network.networkConnect();
         this.router.navigate(['/analystoverview/permitdesign'])
       }else if(this.userData.role.type !=='designer' && this.userData.role.type !=='qcinspector' && type=='survey'){
             this.router.navigate(['/homepage/survey'])
-      }else if(this.userData.role.type =='qcinspector' && type=='survey'){
+      }else if(type=='pestamp'){
+        debugger;
+        if(this.userData.role.type=='peengineer'){
+          this.router.navigate(['/peengineer']);
+        }else{
+          this.router.navigate(['/pestamp-homepage'])
+        }
+    }else if(this.userData.role.type =='qcinspector' && type=='survey'){
             this.router.navigate(['/analystoverview/survey'])
       }else if(this.userData.role.type !=='clientsuperadmin'){
           this.router.navigate(['/statistics'])
