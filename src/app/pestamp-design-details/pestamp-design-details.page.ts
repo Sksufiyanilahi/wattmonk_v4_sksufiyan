@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { NavController, ToastController } from '@ionic/angular';
@@ -20,11 +21,14 @@ export class PestampDesignDetailsPage implements OnInit {
   design:Pestamp;
   enableDisable:boolean=false;
   user:User;
-
+  pestampForm:FormGroup;
+  stampfile: string[]=[];
+  imageName:any;
   options: LaunchNavigatorOptions = {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+  indexOfstampFiles: any;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -33,8 +37,13 @@ export class PestampDesignDetailsPage implements OnInit {
               private navController: NavController,
               private toastController: ToastController,
               private storage: StorageService,
-              private launchNavigator: LaunchNavigator,
-              private iab: InAppBrowser) { 
+              private formbuilder:FormBuilder,
+              private cdr:ChangeDetectorRef,
+              private navctrl:NavController,
+              private iab: InAppBrowser,
+              private launchNavigator: LaunchNavigator) { 
+             
+     
     this.designId = +this.route.snapshot.paramMap.get('id');
     console.log(this.designId);
   }
@@ -43,6 +52,13 @@ export class PestampDesignDetailsPage implements OnInit {
     this.user=this.storage.getUser();
     console.log(this.user);
     this.getDesignDetails();
+
+    this.pestampForm= this.formbuilder.group({
+      workinghours: new FormControl(null,[Validators.required]),
+      comments:new FormControl(null),
+      status: new FormControl('completed'),
+      stampedfiles: new FormControl(''),
+    })
   }
 
   getDesignDetails() {
@@ -111,6 +127,50 @@ export class PestampDesignDetailsPage implements OnInit {
         this.launchNavigator.navigate(address, this.options);
       }
 
+      submit(){
+        if(this.pestampForm.status=='INVALID'){
+          this.utilities.errorSnackBar('Please add working hours');
+          return false;
+        }else{
+          this.utilities.showLoading('Submitting').then(()=>{
+          this.apiService.updatePestamps(this.designId,this.pestampForm.value).subscribe(res=>{
+            this.utilities.hideLoading().then(() => {
+              console.log(res);
+              this.navController.pop();
+              this.utilities.setPeStampRefresh(true);
+            })
+          },err=>{
+            console.log(err);
+            
+          })
+        })
+        }
+      }
+
+      removeArc(i) {
+        this.stampfile.splice(i, 1);
+      }
+
+      remove(stamp,i){
+    
+        console.log(stamp);
+        this.indexOfstampFiles.push( stamp.id);
+        
+        console.log(i);
+        
+        this.stampfile.splice(i, 1);
+        
+        }
+
+        files(event){
+          console.log(event.target.files);
+           for(var i=0; i< event.target.files.length;i++){
+             this.stampfile.push(event.target.files[i]) 
+           }
+           console.log(this.stampfile);
+         }
+
+         
       showreasonImage(attachmentFile:any){
         const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
       }

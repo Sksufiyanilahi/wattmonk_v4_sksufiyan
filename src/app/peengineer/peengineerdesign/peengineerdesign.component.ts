@@ -386,21 +386,16 @@ export class PEengineerdesignComponent implements OnInit {
   }
 
   accept(id,data:string){
-    this.acceptid= id;
-     let status={
-      status:data
-    }
+    // this.acceptid= id;
+    const postData = {
+      acceptedbypeengineer: true,
+      declinedbypeengineer:false
+    };
     this.utils.showLoading("accepting").then(()=>{
-       this.apiService.assignPestamps(id,status).subscribe((res:any)=>{
-       // this.createNewDesignChatGroup(res);
+       this.apiService.assignPestamps(id,postData).subscribe((res:any)=>{
          this.utils.hideLoading().then(()=>{
-              // if(this.updatechat_id){
-
-              //   this.utils.setHomepagePermitRefresh(true);
-              // }else{
-              //   this.utils.setHomepagePermitRefresh(true);
-              // }
-              this.utils.showSnackBar("Design request has been accepted successfully.")
+        
+              this.utils.showSnackBar("PE stamp request has been accepted successfully.")
               this.utils.setPeStampRefresh(true);
         })})
         })

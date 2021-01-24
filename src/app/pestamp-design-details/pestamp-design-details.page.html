@@ -44,11 +44,6 @@
               <ion-img src="/assets/images/stamp.svg" class="header-icon"></ion-img>
           </ion-col>
       </ion-row>
-      <!-- <ion-row class="ion-no-padding" *ngIf="user.role.type=='designer' || user.role.type=='qcinspector'||(design.status=='reviewassigned' && design.reviewassignedto.id==user.id)">
-          <ion-col class="flex-center">
-              <countdown-timer [countDownTimerConfig]="timerConfig"></countdown-timer>
-          </ion-col>
-      </ion-row> -->
   </ion-grid>
 </ion-header>
 <ion-content class="ion-padding page-text-color" scrollY="true">
@@ -138,13 +133,61 @@
         <ng-container *ngIf="design.stampedfiles != null">
             <ion-col><span class="model-type font">Stamped Files</span></ion-col>
             <ion-col size="auto" >
-                <!-- <div *ngFor="let stampedfiles of design.stampedfiles;let i=index" style="display: flex;justify-content: flex-end;"> -->
                     <span class="model-name font" style="color:#3c78d8 !important">{{design.stampedfiles.name}}{{design.stampedfiles.ext}}</span>
                 <!-- </div> -->
             </ion-col>
         </ng-container>
     </ion-row>
+    <form novalidate [formGroup]="pestampForm">
+        <ion-row>
+            <ion-col size="12">
+        
+                <ng-container>
+                    <ion-item class="ion-no-padding" (click)="f.click()">
+                        <ion-label class="model-type font" position="floating">Stamped Files*</ion-label>
+                            <input type="file" #f class="form_input"  (change)="files($event)" style="margin-top: 12px;" formControlName="stampedfiles" multiple>
+                            <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
+                        </ion-item>
+                        <div *ngFor="let file of stampfile;let i = index">
+                            <ion-item>
+                                <ion-col size="11">
+                                    {{file.name}}
+                                </ion-col>
+                                <ion-col size="1" (click)="removeArc(i)">x</ion-col>
+                            </ion-item>
+                        </div>
+                        </ng-container>
+                        
+                    </ion-col>
+                                 <!-- <ion-item> -->
+                                 <!-- <ion-label position="floating">architectural design*</ion-label> -->
+                                        <ng-container *ngIf="design && design.stampedfiles !==null">
+                                            <div *ngFor="let stamp of design.stampedfiles; let i = index">
+                                               <ion-item>
+                                                   <ion-col size="11"> {{stamp.name}}{{stamp.ext}}</ion-col>
+                                                   <ion-col size="1" (click)="remove(stamp, i)">x</ion-col>
+                                                  
+              
+                                               </ion-item>
+                                           
+                                               
+                                           </div> 
+                                        </ng-container>
+                                 <!-- </ion-item> -->
+            
+        </ion-row>
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.propertytype == 'commercial'">
+            <ion-col><span class="model-type font">Working Hours</span></ion-col>
+            <ion-col size="auto" >
+                <ion-input *ngIf="design.workinghours == 0" class="ht_wt" type="text" formControlName="workinghours" ></ion-input>
+                <span *ngIf="design.workinghours !== 0" class="model-name font">{{design.workinghours}}</span>
+                <!-- </div> -->
+            </ion-col>
+        </ng-container>
+    </ion-row>
 
+    <ion-row *ngIf="design.comments !=[] || design.comments !==null  " class="ion-no-padding ion-margin-top">
     <ion-row *ngIf="design.status=='declined'" class="ion-no-padding ion-margin-top">
         <ion-col size="6"  >
             <span class="model-type font">Reason</span></ion-col>
@@ -172,14 +215,16 @@
                     {{comment.createdby?.lastname}}</p>
             </div>
         </ion-col>
-        <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
-                     
-                    </ion-col> -->
-
-        <!-- </div> -->
+        <ion-col size="12" *ngIf="design.status =='assigned'">
+            <span class="input-placeholder">Comments</span>
+        </ion-col>
+        <ion-col size="12" *ngIf="design.status =='assigned'" style="padding-top: 0px;">
+            <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
+                          formControlName="comments"></ion-textarea>
+        </ion-col>
 
     </ion-row>
-
+    </form>
     <ion-row>
         <ion-col><span class="model-type font">Created at</span></ion-col>
         <ion-col size="auto">
@@ -206,3 +251,14 @@
   </ion-row>
       </ion-grid>
       </ion-content>
+
+      <ion-footer  class="ion-no-border white-bg" *ngIf="design && design.status =='assigned'">
+        <ion-grid>
+            <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+                <ion-col size="auto">
+                    <ion-button class="action-button-color" fill="clear" (click)="submit()">Submit</ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    
+    </ion-footer>
