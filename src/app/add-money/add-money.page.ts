@@ -66,7 +66,7 @@ card:any
     ) {
     this.amountForm=this.formBuilder.group(
        {
-         amount:new FormControl('',[Validators.required, Validators.min(1), Validators.max(5000)]),
+         amount:new FormControl('',[Validators.required, Validators.min(1), Validators.max(10000)]),
          card:new FormControl('')
         }
         )
@@ -151,27 +151,27 @@ card:any
     form.addEventListener('submit', event => {
       event.preventDefault();
       console.log(event)
-      if(this.onBoarding == 'true' || this.onBoarding =='false'){
-        if(this.amountForm.get('amount').value >=100 && this.amountForm.get('amount').value <= 5000)
-        {
-          this.stripe.createToken(this.card).then(result => {
-            if (result.error) {
-              var errorElement = document.getElementById('card-errors');
-              errorElement.textContent = result.error.message;
-            } else {
-              console.log(result);
-              this.token=result;
-              console.log(this.token.token.id);
-              this.addMoney();
+      // if(this.onBoarding == 'true' || this.onBoarding =='false'){
+      //   if(this.amountForm.get('amount').value >=100 && this.amountForm.get('amount').value <= 5000)
+      //   {
+      //     this.stripe.createToken(this.card).then(result => {
+      //       if (result.error) {
+      //         var errorElement = document.getElementById('card-errors');
+      //         errorElement.textContent = result.error.message;
+      //       } else {
+      //         console.log(result);
+      //         this.token=result;
+      //         console.log(this.token.token.id);
+      //         this.addMoney();
              
-            }
-          });
-        }else{
-          this.utils.errorSnackBar("Please Enter Valid Amount");
-        }
-      }
-      else{
-      if(this.amountForm.get('amount').value >=1 && this.amountForm.get('amount').value <=5000)
+      //       }
+      //     });
+      //   }else{
+      //     this.utils.errorSnackBar("Please Enter Valid Amount");
+      //   }
+      // }
+     // else{
+      if(this.amountForm.get('amount').value >=1 && this.amountForm.get('amount').value <=10000)
       {
       this.stripe.createToken(this.card).then(result => {
         if (result.error) {
@@ -188,7 +188,7 @@ card:any
     }else{
       this.utils.errorSnackBar("Please Enter Valid Amount");
     }
-      }
+      //}
     });
   }
 
@@ -243,7 +243,7 @@ card:any
     //   this.utils.hideLoading().then(()=>{
       var dates=new Date();
      console.log(dates)
-     if(this.onBoarding=='true' && this.amountForm.get('amount').value > 500){
+     if(this.onBoarding=='true' && this.amountForm.get('amount').value > 1000){
       rechargeData={
         amount:this.amountForm.get('amount').value + 100,
         datetime: dates,
@@ -427,25 +427,25 @@ this.utils.setHomepagePermitRefresh(true);
 
 amountCheck(event){
   console.log(event.target.value);
-  if(this.onBoarding == 'true' || this.onBoarding == 'false')
-  {
-    if(event.target.value < 100 || event.target.value > 5000)
-{
-  this.amountCheckingForOnboarding = true;
-  console.log(this.amountCheckingForOnboarding);
-}else{
-  this.amountCheckingForOnboarding = false;
-}
-  }
-  else{
-if(event.target.value < 1 || event.target.value > 5000)
+//   if(this.onBoarding == 'true' || this.onBoarding == 'false')
+//   {
+//     if(event.target.value < 100 || event.target.value > 5000)
+// {
+//   this.amountCheckingForOnboarding = true;
+//   console.log(this.amountCheckingForOnboarding);
+// }else{
+//   this.amountCheckingForOnboarding = false;
+// }
+//   }
+//   else{
+if(event.target.value < 1 || event.target.value > 10000)
 {
   this.amountChecking = true;
   console.log(this.amountChecking);
 }else{
   this.amountChecking = false;
 }
-}
+//}
 }
   
 }

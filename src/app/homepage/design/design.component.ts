@@ -1249,7 +1249,7 @@ directAssignToWattmonk(id:number){
   var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
         postData = {
-          outsourcedto: 232,
+          //outsourcedto: 232,
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime

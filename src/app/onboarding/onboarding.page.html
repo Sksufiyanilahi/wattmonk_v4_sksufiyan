@@ -17,7 +17,7 @@
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       
-      <ng-template matStepLabel>Required Information <button class="action-button-color" *ngIf="this.stepper.selectedIndex==0" mat-button (click)="move($event,1)" matStepperNext>Skip</button></ng-template>
+      <ng-template matStepLabel>Profile Information <button class="action-button-color" *ngIf="this.stepper.selectedIndex==0" style="float: right;" mat-button (click)="move($event,1)" matStepperNext>Skip</button></ng-template>
       
       
         <mat-label>Type of User</mat-label>
@@ -125,36 +125,6 @@
   </ion-col>
   </ion-row>
   </ion-radio-group> -->
-
-  <div style="color: #111 !important;padding-left: 0px;">
-    <ion-label style="color:#111 !important;">Service Charges</ion-label>
-  </div>
-
-  <ion-row style="margin-top: 3%;">
-    <ion-col><ion-label>Prelim Design</ion-label></ion-col>
-    <ion-col><ion-label>${{prelimSettingValue}}</ion-label></ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col><ion-label>Permit Design</ion-label></ion-col>
-    <ion-col><ion-label>${{permitSettingValue}}</ion-label></ion-col>
-  </ion-row>
-
-
-      <div *ngIf="firstFormGroup.get('ispaymentmodeprepay').value">
-  <ion-row>
-    <ion-col>
-    <h6 style="font-size: small;color:#6C6C6C">Recharge your wallet right now with more than $500 and get an additional benefit of $100</h6>
-    </ion-col>
-  </ion-row>
- 
-
-  <ion-row >
-    <ion-col style="text-align: center;">
-      <ion-button style="height: 90%;" (click)="goToWallet()">Recharge Wallet</ion-button>
-    </ion-col>
-  </ion-row>
-<hr style="background-color: lightgray;"/>
-</div>
       
       
     </form>
@@ -166,7 +136,7 @@
   </mat-step>
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Notification <button class="action-button-color"  *ngIf="this.stepper.selectedIndex==1" mat-button (click)="move($event,2)" matStepperNext>Skip</button></ng-template>
+      <ng-template matStepLabel>Notification <button class="action-button-color"  *ngIf="this.stepper.selectedIndex==1" style="float: right;" mat-button (click)="move($event,2)" matStepperNext>Skip</button></ng-template>
      <!-- <ion-item>
        <ion-label>Mails</ion-label>
       <ion-toggle formControlName="mails" (ionChange)="onChange($event,'mail')"></ion-toggle>
@@ -236,7 +206,7 @@
   </mat-step>
   <mat-step *ngIf="isCompany" [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
-    <ng-template matStepLabel>Build your own team <button class="action-button-color" *ngIf="this.stepper.selectedIndex==2" mat-button (click)="move($event,3)" matStepperNext>Skip</button></ng-template>
+    <ng-template matStepLabel>Build your own team <button class="action-button-color" *ngIf="this.stepper.selectedIndex==2" style="float: right;" mat-button (click)="move($event,3)" matStepperNext>Skip</button></ng-template>
     <!-- <ion-row style=" background-color: rgb(211,211,211); text-align: center;">
       <ion-col >
       <ion-label position="fixed">Name</ion-label>
@@ -343,6 +313,35 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Request for Design</ng-template>
+    <div style="color: #111 !important;padding-left: 0px;">
+      <ion-label style="color:#111 !important;">Service Charges</ion-label>
+    </div>
+  
+    <ion-row style="margin-top: 3%;">
+      <ion-col><ion-label>Prelim Design</ion-label></ion-col>
+      <ion-col><ion-label>${{prelimSettingValue}}</ion-label></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><ion-label>Permit Design</ion-label></ion-col>
+      <ion-col><ion-label>${{permitSettingValue}}</ion-label></ion-col>
+    </ion-row>
+  
+  
+        <div *ngIf="firstFormGroup.get('ispaymentmodeprepay').value">
+    <ion-row *ngIf="user.amount == 0">
+      <ion-col>
+      <h6 style="font-size: small;color:#6C6C6C">Recharge your wallet right now with more than $1000 and get an additional benefit of $100</h6>
+      </ion-col>
+    </ion-row>
+   
+  
+    <ion-row >
+      <ion-col style="text-align: center;">
+        <ion-button style="height: 90%;" (click)="goToWallet()">Recharge Wallet</ion-button>
+      </ion-col>
+    </ion-row>
+  <hr style="background-color: lightgray;"/>
+  </div>
     <ion-row>
       <ion-col size="6">
         <ion-card [routerLink]="['/schedule/design']" style="border-radius: 20%;">
