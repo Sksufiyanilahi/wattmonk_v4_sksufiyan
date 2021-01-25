@@ -41,6 +41,7 @@ export const COMETCHAT_CONSTANTS = {
 export const version='1.1.3'
 
 export enum ROLES {
+    Peengineer = 11,
     SuperAdmin = 4,
     ContractorSuperAdmin = 6,
     ContractorAdmin = 7,
@@ -49,6 +50,5 @@ export enum ROLES {
     Designer = 8,
     Surveyor = 9,
     Analyst = 10,
-    Peengineer=11
 }
 

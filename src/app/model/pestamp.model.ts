@@ -49,7 +49,8 @@ export class Pestamp{
   modeofstamping:string;
   propertytype:string;
   workinghours:any;
-
+  requestdeclinereason:any;
+  requestdeclineattachment:any;
 
     //Dynamic content
     designremainingtime : string;
