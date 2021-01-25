@@ -140,13 +140,13 @@ export class DesignComponent implements OnInit, OnDestroy {
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
       rooftype: new FormControl(''),
-      prelimdesign: new FormControl(null),
+      //prelimdesign: new FormControl(null),
       architecturaldesign: new FormControl(''),
       tiltofgroundmountingsystem: new FormControl(''),
       mountingtype: new FormControl('', [Validators.required]),
       // jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
-      newconstruction: new FormControl('false'),
+      newconstruction: new FormControl(false),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim'),
@@ -159,9 +159,13 @@ export class DesignComponent implements OnInit, OnDestroy {
       status: new FormControl('created'),
       attachments: new FormControl([]),
       deliverydate:new FormControl(d_date,[]),
-      outsourcedto:new FormControl(''),
+      outsourcedto:new FormControl(null),
       isoutsourced:new FormControl('false'),
-      designacceptancestarttime:new FormControl(null)
+      designacceptancestarttime:new FormControl(null),
+      creatorparentid:new FormControl(this.storage.getParentId()),
+      //isonpriority:new FormControl('false'),
+      paymentstatus:new FormControl(null),
+      paymenttype:new FormControl(null)
       // uploadbox:new FormControl('')
     });
       
@@ -277,20 +281,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        //  this.desginForm.get('address').setValue('124/345');
-        //  this.desginForm.get('latitude').setValue('24.553333');
-        //  this.desginForm.get('longitude').setValue('80.5555555555');
-        //  this.desginForm.get('country').setValue('india');
-        //  this.desginForm.get('city').setValue('Lucknow');
-        //  this.desginForm.get('state').setValue('UP');
-        //  this.desginForm.get('postalcode').setValue(3232343);
-         this.desginForm.get('address').setValue(address.address);
-           this.desginForm.get('latitude').setValue(address.lat);
-           this.desginForm.get('longitude').setValue(address.long);
-           this.desginForm.get('country').setValue(address.country);
-         this.desginForm.get('city').setValue(address.city);
-           this.desginForm.get('state').setValue(address.state);
-           this.desginForm.get('postalcode').setValue(address.postalcode);
+         this.desginForm.get('address').setValue('124/345');
+         this.desginForm.get('latitude').setValue('24.553333');
+         this.desginForm.get('longitude').setValue('80.5555555555');
+         this.desginForm.get('country').setValue('india');
+         this.desginForm.get('city').setValue('Lucknow');
+         this.desginForm.get('state').setValue('UP');
+         this.desginForm.get('postalcode').setValue(3232343);
+        //  this.desginForm.get('address').setValue(address.address);
+        //    this.desginForm.get('latitude').setValue(address.lat);
+        //    this.desginForm.get('longitude').setValue(address.long);
+        //    this.desginForm.get('country').setValue(address.country);
+        //  this.desginForm.get('city').setValue(address.city);
+        //    this.desginForm.get('state').setValue(address.state);
+        //    this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
