@@ -429,7 +429,7 @@ this.route.navigate(['/pestamp-payment-modal'], {
 
    else{ if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Pe Engineers').then(() => {
-        this.apiService.getPeEngineers().subscribe((assignees:any) => {
+        this.apiService.getPeEngineers(designData.type).subscribe((assignees:any) => {
           this.utils.hideLoading().then(() => {
             this.listOfAssignees = [];
           //   // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
@@ -515,8 +515,8 @@ async decline(id,e){
     cssClass: 'my-custom-modal-css',
     componentProps: {
       id:id,
-      value:status
-      
+      value:status,
+      declinedbypeengineer:true
     },
     backdropDismiss:false
   });

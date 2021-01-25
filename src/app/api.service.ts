@@ -541,9 +541,9 @@ export class ApiService {
     }
 
     /* Get Pe Engineers */
-    getPeEngineers() {
-
-      return this.http.get(BaseUrl + "/peengineers?parent_eq="+this.storageService.getUser().parent.id, {
+    getPeEngineers(peenginertype:string) {
+      console.log(peenginertype);
+      return this.http.get(BaseUrl + "/peengineers?peengineertype="+peenginertype+"&parent_eq="+this.storageService.getUser().parent.id, {
         headers: this.headers,
       })
     }

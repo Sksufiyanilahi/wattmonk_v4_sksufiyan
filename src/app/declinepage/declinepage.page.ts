@@ -25,6 +25,7 @@ export class DeclinepagePage implements OnInit {
   userId: any;
   userData: any;
   value:any;
+  declinedbypeengineer:boolean;
 
   constructor(private camera: Camera,
     private modalCtrl:ModalController,
@@ -40,6 +41,8 @@ export class DeclinepagePage implements OnInit {
 
     this.id= this.nav.get('id');
     this.value = this.nav.get('value');
+    this.declinedbypeengineer = this.nav.get('declinedbypeengineer');
+    console.log(this.declinedbypeengineer);
     console.log(this.id);
     console.log(this.value);
 
@@ -144,13 +147,22 @@ export class DeclinepagePage implements OnInit {
       var milisecond = designstarttime.getTime();
       if(this.value =='pestamp')
       {
+        var declinedbypeengineer;
+        if(this.declinedbypeengineer == true)
+        {
+          declinedbypeengineer = true;
+        }
+        else{
+          declinedbypeengineer = false;
+        }
           var cdate = Date.now();
           var postData = {
             status: 'declined',
             requestdeclinereason: this.reason,
             isoutsourced : "false",
             pestampacceptancestarttime: cdate,
-            acknowledgedby : this.userData.id
+            acknowledgedby : this.userData.id,
+            declinedbypeengineer : declinedbypeengineer
             }
             this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{
             //this.createNewDesignChatGroup(res);

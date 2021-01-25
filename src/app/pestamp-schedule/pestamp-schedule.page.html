@@ -276,8 +276,8 @@
   
         <ng-container>
             <ion-item class="ion-no-padding" (click)="permitplan.click()">
-                <ion-label position="floating" class="label">Permit Plan Photos*</ion-label>
-                    <input type="file" #permitplan class="form_input"  (change)="permitPlanFiles($event)" style="margin-top: 12px;" formControlName="permitplanphotos" multiple>
+                <ion-label position="floating" class="label">Permit Plan*</ion-label>
+                    <input type="file" #permitplan class="form_input"  (change)="permitPlanFiles($event)" accept="application/pdf" style="margin-top: 12px;" formControlName="permitplanphotos">
                     <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
                 </ion-item>
                 <div *ngFor="let file of permitPlanList;let i = index">

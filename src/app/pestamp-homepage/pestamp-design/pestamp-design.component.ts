@@ -460,7 +460,7 @@ this.route.navigate(['/pestamp-payment-modal'], {
 
    else{ if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Pe Engineers').then(() => {
-        this.apiService.getPeEngineers().subscribe((assignees:any) => {
+        this.apiService.getPeEngineers(designData.type).subscribe((assignees:any) => {
           this.utils.hideLoading().then(() => {
             this.listOfAssignees = [];
           //   // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
@@ -894,40 +894,51 @@ createChatGroup(design:DesginDataModel){
 //       }
 
 
-directAssignToWattmonk(id:number){
-  // this.designId = id;
-  // var postData = {};
-  // var designacceptancestarttime = new Date();
-  //     designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
-  //       postData = {
-  //         outsourcedto: 232,
-  //         isoutsourced: "true",
-  //         status: "outsourced",
-  //         designacceptancestarttime: designacceptancestarttime
-  //       };
-  //       this.utils.showLoading('Assigning').then(()=>{
-  //         this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
-  //           this.utils.hideLoading().then(()=>{
-  //             ;
-  //             console.log('reach ', value);
+directAssignToWattmonk(id:number,design){
+  this.designId = id;
+  console.log(design);
+  var postData = {};
+  var pestampacceptancestarttime = new Date();
+  pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
+  if(design.declinedbypeengineer == true)
+  {
+    postData = {
+      isoutsourced: "true",
+      status:"assigned",
+      declinedbypeengineer:'false'
+    }
+  }
+  else{
+        postData = {
+          //outsourcedto: 232,
+          isoutsourced: "true",
+          status: "outsourced",
+          pestampacceptancestarttime: pestampacceptancestarttime
+        };
+      }
+        this.utils.showLoading('Assigning').then(()=>{
+          this.apiService.updatePestamps(this.designId,postData).subscribe((value) => {
+            this.utils.hideLoading().then(()=>{
+              ;
+              console.log('reach ', value);
     
-  //           //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
-  //           //  {
-  //           //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
-  //           //  }else{
-  //             this.utils.showSnackBar('Design request has been reassigned to wattmonk successfully');
+            //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
+            //  {
+            //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+            //  }else{
+              this.utils.showSnackBar('Pe Stamp request has been reassigned to wattmonk successfully');
              
-  //             //this.dismissBottomSheet();
-  //             //this.showBottomDraw = false;
-  //             this.utils.setHomepagePermitRefresh(true);
+              //this.dismissBottomSheet();
+              //this.showBottomDraw = false;
+              this.utils.setPeStampRefresh(true);
     
-  //           })
-  //         }, (error) => {
-  //           this.utils.hideLoading();
-  //          // this.dismissBottomSheet();
-  //          // this.showBottomDraw = false;
-  //         });
-  //       })
+            })
+          }, (error) => {
+            this.utils.hideLoading();
+           // this.dismissBottomSheet();
+           // this.showBottomDraw = false;
+          });
+        })
 }
 trackdesign(index,design){
   return design.id;
