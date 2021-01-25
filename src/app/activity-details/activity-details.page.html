@@ -12,6 +12,7 @@
   <ion-grid class="ion-align-items-center ion-justify-content-center">
       <ion-row class="ion-align-items-center ion-justify-content-center">
           <span class="survey-name ion-text-center" style="font-size:x-large; text-align: center;">{{activity_details?.name}}</span>
+          <span class="survey-name ion-text-center" *ngIf="name=='pestamp'" style="font-size:x-large; text-align: center;">{{activity_details?.personname}}</span>
       </ion-row>
      
   </ion-grid>
@@ -46,14 +47,15 @@
 <ion-content><p style="text-align: center; font-size:large; color:black; border:none;margin-bottom:0px ;"> Activities</p>
  <p  style="text-align: center; margin-top: 0px;"><span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'requestdeclined'">On Hold</span>
  <!-- <span class="chipdetail" style="background-color: rgb(246, 104, 10);" >--------{{isDatePassed()}}Overdue</span> -->
- <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'requestaccepted'">Accepted</span>
+ <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'requestaccepted' || activity_details?.status == 'accepted'">Accepted</span>
  <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="activity_details?.status == 'reviewfailed'" >Review Failed</span>
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'reviewpassed'">Review Passed</span>
  <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'delivered'">Delivered</span>
- <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'designcompleted'">Completed</span>
+ <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="activity_details?.status == 'designcompleted' || activity_details?.status == 'completed'">Completed</span>
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'created'">Unassigned</span>
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'designassigned'">Design Assigned</span>
  <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'reviewassigned'">In Review</span>
+ <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.status == 'assigned'">In Stamping</span>
  <span class="chipdetail" *ngIf="activity_details?.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;">Waiting for acceptance</span>
  <span *ngIf="activity_details?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;">
   pending

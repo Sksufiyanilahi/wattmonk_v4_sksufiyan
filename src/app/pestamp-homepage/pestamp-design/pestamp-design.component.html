@@ -78,25 +78,27 @@
                                 </ion-col>
 
                     </span>
-
+                    <ion-row style="margin-bottom: 0px;" [routerLink]="['/pestamp-design-details/',designData.id]">
+                        <ion-col *ngIf="designData.status == 'assigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
+                            <span *ngIf="designData.status == 'assigned'" style="float:right;text-align: right;">
+                                {{designData.designremainingtime}}</span></ion-col>
+                                <ion-col *ngIf="designData.status == 'outsourced'">
+                                    <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
+                                        {{designData.pestampacceptanceremainingtime}}</span></ion-col>
+                    </ion-row>
+                    <ion-row class="ion-no-margin ion-no-margin">
                 <!-- <ion-row style="margin-bottom: 0px;" [routerLink]="['/permit-design-details/',designData.id]"> -->
-                  <ion-row style="margin-bottom: 0px;" [routerLink]="['/pestamp-design-details/',designData.id]">
+                  <!-- <ion-row style="margin-bottom: 0px;" > -->
                    <ion-col style="padding-left:0px" >
-                    <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.propertytype}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.type}}</span>
                     <!-- <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype}}</span> -->
                 </ion-col>
-
-
-                <ion-col *ngIf="designData.status == 'assigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
-                        <span *ngIf="designData.status == 'assigned'" style="float:right;text-align: right;">
-                            {{designData.designremainingtime}}</span></ion-col>
-                            <ion-col *ngIf="designData.status == 'outsourced'">
-                                <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
-                                    {{designData.pestampacceptanceremainingtime}}</span></ion-col>
                                 
-                </ion-row>
+                
 
-                <ion-row class="ion-no-margin ion-no-margin">
+                
                     <ion-col *ngIf="segments=='status=created&status=outsourced&status=accepted&status=declined' || segments=='status=created&status=outsourced&status=accepted&&status=declined'">
                         <span *ngIf="designData.status == 'created' || (designData.status == 'accepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')) " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
                         >Assign</span>

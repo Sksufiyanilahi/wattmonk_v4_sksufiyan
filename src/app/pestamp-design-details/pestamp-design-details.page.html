@@ -54,7 +54,7 @@
           </ion-col>
       </ion-row>
 
-      <ion-row class="ion-no-padding">
+      <ion-row class="ion-no-padding" *ngIf="design.contactnumber != null">
         <ion-col><span class="model-type font">Phone Number</span></ion-col>
         <ion-col size="auto">
             <span class="model-name font">{{design?.contactnumber}}</span>
@@ -68,17 +68,10 @@
         </ion-col>
     </ion-row>
 
-    <ion-row class="ion-no-padding">
+    <ion-row class="ion-no-padding" *ngIf="design.hardcopies != null">
         <ion-col><span class="model-type font">Hard Copies</span></ion-col>
         <ion-col size="auto">
             <span class="model-name font">{{design?.hardcopies}}</span>
-        </ion-col>
-    </ion-row>
-
-    <ion-row>
-        <ion-col><span class="model-type font">Mounting Type</span></ion-col>
-        <ion-col size="auto">
-            <span class="model-name font">{{design?.mountingtype}}</span>
         </ion-col>
     </ion-row>
 
@@ -86,6 +79,13 @@
         <ion-col><span class="model-type font">Property Type</span></ion-col>
         <ion-col size="auto">
             <span class="model-name font">{{design?.propertytype}}</span>
+        </ion-col>
+    </ion-row>
+    
+    <ion-row>
+        <ion-col><span class="model-type font">Mounting Type</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.mountingtype}}</span>
         </ion-col>
     </ion-row>
 
@@ -202,7 +202,7 @@
             </ion-col>
         </ion-row>
 
-    <ion-row *ngIf="design.comments || design.comments !==null  " class="ion-no-padding ion-margin-top">
+    <ion-row *ngIf="design.comments || design.comments !=null  " class="ion-no-padding ion-margin-top">
         <ion-col size="6">
             <span class="models font">Comments</span>
         </ion-col>
@@ -226,7 +226,7 @@
     </ion-row>
     </form>
     <ion-row>
-        <ion-col><span class="model-type font">Created At</span></ion-col>
+        <ion-col><span class="model-type font">Created at</span></ion-col>
         <ion-col size="auto">
             <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
         </ion-col>

@@ -59,6 +59,8 @@ export class PestampSchedulePage implements OnInit {
   isRoofFileUpload:boolean = false;
   isPermitPlanFileUpload:boolean = false;
 
+  formatted_address:string;
+
   // map: any;
 
   geoEncoderOptions: NativeGeocoderOptions = {
@@ -367,6 +369,9 @@ export class PestampSchedulePage implements OnInit {
     const shipping = this.firstFormGroup.get('shippingaddress');
     const contact = this.firstFormGroup.get('contactnumber');
     const hardcopy = this.firstFormGroup.get('numberofhardcopy');
+    console.log(shipping);
+    console.log(contact);
+    console.log(hardcopy);
     if(this.stampingModeValue == 'hardcopy' || this.stampingModeValue == 'both')
     {
       shipping.setValidators([
@@ -729,7 +734,9 @@ this.utils.showLoading('Saving').then(() => {
       this.autocompleteItems = [];
       return;
     }
-    this.GoogleAutocomplete.getPlacePredictions({ input },
+    this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+      country: 'us'
+    }  },
       (predictions, status) => {
         this.autocompleteItems = [];
         this.zone.run(() => {
@@ -776,6 +783,7 @@ this.utils.showLoading('Saving').then(() => {
     this.utils.showLoading('Loading').then(() => {
       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
         .then((result: NativeGeocoderResult[]) => {
+          console.log(result)
           let add = '';
           if (formattedAddress === '') {
             add = this.generateAddress(result[0]);
@@ -833,7 +841,7 @@ this.utils.showLoading('Saving').then(() => {
     // }
     this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
       console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-  
+    
         // this.firstFormGroup.get('address').setValue('124/345');
         // this.firstFormGroup.get('latitude').setValue('24.553333');
         // this.firstFormGroup.get('longitude').setValue('80.5555555555');

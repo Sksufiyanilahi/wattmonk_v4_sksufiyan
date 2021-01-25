@@ -112,7 +112,7 @@ export class PestampDesignDetailsPage implements OnInit {
             this.utilities.hideLoading().then(() => {
               this.utilities.showSnackBar(this.design.personname+" "+'has been deleted successfully');
               this.navController.pop();
-              this.utilities.setHomepageDesignRefresh(true);
+              this.utilities.setPeStampRefresh(true);
             });
           }, (error) => {
             this.utilities.hideLoading().then(() => {

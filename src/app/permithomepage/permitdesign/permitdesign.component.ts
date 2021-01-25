@@ -116,7 +116,7 @@ export class PermitdesignComponent implements OnInit {
    ) {
     
     this.userData =this.storageservice.getUser(); // get data from resolver
-
+    
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       this.segments= 'requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';

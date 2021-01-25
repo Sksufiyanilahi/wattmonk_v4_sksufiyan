@@ -68,7 +68,9 @@ export class MapPagePage implements OnInit {
       this.autocompleteItems = [];
       return;
     }
-    this.GoogleAutocomplete.getPlacePredictions({ input },
+    this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+      country: 'us'
+    } },
       (predictions, status) => {
         this.autocompleteItems = [];
         this.zone.run(() => {

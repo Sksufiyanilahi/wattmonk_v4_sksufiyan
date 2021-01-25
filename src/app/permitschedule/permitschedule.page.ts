@@ -598,7 +598,8 @@ export class PermitschedulePage implements OnInit {
             modulemake:this.design.solarmake.name,
             modulemodel:this.design.solarmodel.name,
             invertermake:this.design.invertermake.name,
-            invertermodel:this.design.invertermodel.name
+            invertermodel:this.design.invertermodel.name,
+            status:this.design.status
           });
           console.log("gg",this.design.solarmake.name);
           //console.log("attachments",this.desginForm.get('attachments').value)
