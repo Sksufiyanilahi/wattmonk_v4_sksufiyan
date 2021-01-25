@@ -201,6 +201,7 @@
             <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showreasonImage(attachment)">{{attachment.name.length > 40 ? (attachment.name | slice: 0:40) + '...' : attachment.name}}{{attachment.ext}}</span>
             </ion-col>
         </ion-row>
+    </ion-row>
 
     <ion-row *ngIf="design.comments || design.comments !=null  " class="ion-no-padding ion-margin-top">
         <ion-col size="6">
