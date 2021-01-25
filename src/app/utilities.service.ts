@@ -53,6 +53,7 @@ export class UtilitiesService {
   private addNumbers = true;
   private addSymbols = false;
   private passwordLength = 6;
+  designlistofdesignDetail: any;
 
   constructor(
     public loadingController: LoadingController,
@@ -170,6 +171,14 @@ export class UtilitiesService {
   setPermitDesignDetailsRefresh(value: boolean) {
     this.permitdesignDetailsRefresh.next(value);
   }
+
+   getdesignDetails(){
+    return this.designlistofdesignDetail;
+   }
+
+   setDesignDetails(data){
+    this.designlistofdesignDetail=data;
+   }
   // getPermitDesignDetailsRefresh(): BehaviorSubject<boolean> {
   //   return this.permitdesignDetailsRefresh;
   // }

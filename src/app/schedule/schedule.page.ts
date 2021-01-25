@@ -39,6 +39,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   userdata:any;
   netSwitch: boolean;
   deactivateNetworkSwitch: Subscription;
+  designs: any;
 
   constructor(
     private navController: NavController,
@@ -75,7 +76,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
 ngOnInit() {
- 
+  
   this.network.networkDisconnect();
 this.network.networkConnect();
  
@@ -94,7 +95,8 @@ this.network.networkConnect();
       this.storage.setData(this.address);
       });
     }
-
+     this.designs = this.utilities.getdesignDetails();
+  console.log(this.designs.status);
   }
 
   goBack() {
