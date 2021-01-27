@@ -1,0 +1,265 @@
+<ion-header class="ion-no-border white-bg" *ngIf="design">
+  <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
+      <ion-row>
+          <ion-col size="1">
+              <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()" [disabled]=enableDisable>
+                  <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+              </ion-button>
+          </ion-col>
+          <!-- <ion-col size="auto">
+              <ion-button fill="clear" disabled="true" size="small" class="ion-no-padding action-icon">
+              </ion-button>
+          </ion-col> -->
+          <ion-col class="ion-text-center" size="9" style="padding-left: 27px;">
+              <ion-grid class="ion-align-items-center ion-justify-content-center">
+                  <ion-row class="ion-align-items-center ion-justify-content-center">
+                      <span class="survey-name ion-text-center">{{design?.personname}}</span>
+                  </ion-row>
+                  <ion-row class="ion-align-items-center ion-justify-content-center">
+                      <span class="survey-email ion-text-center">{{design?.email}}</span>
+                  </ion-row>
+              </ion-grid>
+          </ion-col>
+          <ion-col size="1" *ngIf="design.createdby.id == user.id && (design.status == 'created' || design.status == 'declined')">
+              <ion-button fill="clear" size="small" class="ion-no-padding"
+                  [routerLink]="['/pestamp-schedule/',designId]"  routerDirection="forward" [disabled]=enableDisable>
+                  <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
+              </ion-button>
+          </ion-col>
+          <ion-col size="1" *ngIf="design.createdby.id == user.id && (design.status == 'created' || design.status == 'declined')">
+              <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()" [disabled]=enableDisable>
+                  <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
+              </ion-button>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+  <ion-grid class="position-relative ion-no-padding">
+      <ion-row class="ion-no-padding border-header header-half-height">
+      </ion-row>
+      <ion-row class="ion-no-padding header-half-height">
+
+      </ion-row>
+      <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
+          <ion-col class="flex-center">
+              <ion-img src="/assets/images/stamp.svg" class="header-icon"></ion-img>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+</ion-header>
+<ion-content class="ion-padding page-text-color" scrollY="true">
+  <ion-grid *ngIf="design" class="page-text-color">
+      <ion-row *ngIf="design.deliveryaddress != null && design.deliveryaddress != ''" >
+          <ion-col class="font">
+              <span (click)="openAddressOnMap(design.deliveryaddress)" class="address">{{design?.deliveryaddress}}</span>
+          </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-no-padding" *ngIf="design.contactnumber != null">
+        <ion-col><span class="model-type font">Phone Number</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.contactnumber}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-padding">
+        <ion-col><span class="model-type font">Stamping Mode</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.modeofstamping}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-padding" *ngIf="design.hardcopies != null">
+        <ion-col><span class="model-type font">Hard Copies</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.hardcopies}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-padding">
+        <ion-col><span class="model-type font">Property Type</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.propertytype}}</span>
+        </ion-col>
+    </ion-row>
+    
+    <ion-row>
+        <ion-col><span class="model-type font">Mounting Type</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.mountingtype}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-padding">
+        <ion-col><span class="model-type font">Stamping Type</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.type}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.atticphotos.length > 0">
+            <ion-col><span class="model-type font">Attic Photos</span></ion-col>
+            <ion-col size="auto" >
+                <div *ngFor="let attic of design.atticphotos;let i=index" style="display: flex;justify-content: flex-end;">
+                    <span class="model-name font" style="color:#3c78d8 !important">{{attic?.name}}{{attic?.ext}}</span>
+                </div>
+            </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.roofphotos.length > 0">
+            <ion-col><span class="model-type font">Roof Photos</span></ion-col>
+            <ion-col size="auto" >
+                <div *ngFor="let roof of design.roofphotos;let i=index" style="display: flex;justify-content: flex-end;">
+                    <span class="model-name font" style="color:#3c78d8 !important">{{roof?.name}}{{roof?.ext}}</span>
+                </div>
+            </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.permitplan.length > 0">
+            <ion-col><span class="model-type font">Permit Plan</span></ion-col>
+            <ion-col size="auto" >
+                <div *ngFor="let permitplan of design.permitplan;let i=index" style="display: flex;justify-content: flex-end;">
+                    <span class="model-name font" style="color:#3c78d8 !important">{{permitplan?.name}}{{permitplan?.ext}}</span>
+                </div>
+            </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.stampedfiles != null">
+            <ion-col><span class="model-type font">Stamped Files</span></ion-col>
+            <ion-col size="auto" >
+                    <span class="model-name font" style="color:#3c78d8 !important">{{design.stampedfiles.name}}{{design.stampedfiles.ext}}</span>
+                <!-- </div> -->
+            </ion-col>
+        </ng-container>
+    </ion-row>
+    <form novalidate [formGroup]="pestampForm">
+        <ion-row>
+            <ion-col size="12">
+        
+                <ng-container>
+                    <ion-item class="ion-no-padding" (click)="f.click()">
+                        <ion-label class="model-type font" position="floating">Stamped Files*</ion-label>
+                            <input type="file" #f class="form_input"  (change)="files($event)" style="margin-top: 12px;" formControlName="stampedfiles" multiple>
+                            <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
+                        </ion-item>
+                        <div *ngFor="let file of stampfile;let i = index">
+                            <ion-item>
+                                <ion-col size="11">
+                                    {{file.name}}
+                                </ion-col>
+                                <ion-col size="1" (click)="removeArc(i)">x</ion-col>
+                            </ion-item>
+                        </div>
+                        </ng-container>
+                        
+                    </ion-col>
+                                 <!-- <ion-item> -->
+                                 <!-- <ion-label position="floating">architectural design*</ion-label> -->
+                                        <ng-container *ngIf="design && design.stampedfiles !==null">
+                                            <div *ngFor="let stamp of design.stampedfiles; let i = index">
+                                               <ion-item>
+                                                   <ion-col size="11"> {{stamp.name}}{{stamp.ext}}</ion-col>
+                                                   <ion-col size="1" (click)="remove(stamp, i)">x</ion-col>
+                                                  
+              
+                                               </ion-item>
+                                           
+                                               
+                                           </div> 
+                                        </ng-container>
+                                 <!-- </ion-item> -->
+            
+        </ion-row>
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.propertytype == 'commercial'">
+            <ion-col><span class="model-type font">Working Hours</span></ion-col>
+            <ion-col size="auto" >
+                <ion-input *ngIf="design.workinghours == 0" class="ht_wt" type="text" formControlName="workinghours" ></ion-input>
+                <span *ngIf="design.workinghours !== 0" class="model-name font">{{design.workinghours}}</span>
+                <!-- </div> -->
+            </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="design.comments || design.comments !=null  " class="ion-no-padding ion-margin-top">
+        <ion-col size="6">
+            <span class="models font">Comments</span>
+        </ion-col>
+        <!-- <div> -->
+
+        <ion-col size="6"  class="ion-no-padding">
+            <div *ngFor="let comment of design.comments">
+                <p class="comment font" style="text-align: right;margin:0px">{{comment?.message}}</p>
+                <p class="comment-by" style="text-align: right;margin-top:0px">Posted by {{comment.createdby?.firstname}}
+                    {{comment.createdby?.lastname}}</p>
+            </div>
+        </ion-col>
+        <ion-col size="12" *ngIf="design.status =='assigned'">
+            <span class="input-placeholder">Comments</span>
+        </ion-col>
+        <ion-col size="12" *ngIf="design.status =='assigned'" style="padding-top: 0px;">
+            <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
+                          formControlName="comments"></ion-textarea>
+        </ion-col>
+
+    </ion-row>
+    </form>
+
+    <!-- <ion-row *ngIf="design.comments !=[] || design.comments !==null  " class="ion-no-padding ion-margin-top"> -->
+        <ion-row *ngIf="design.status=='declined'" class="ion-no-padding font">
+            <ion-col size="6"  >
+                <span class="model-type font">Reason</span></ion-col>
+                <ion-col size="6" >
+                        <span class="model-name font" style="float: right !important">{{design.requestdeclinereason}}</span>
+                    </ion-col>
+            </ion-row>
+                <ion-row *ngIf="design.status=='declined' && design.requestdeclineattachment.length > 0">
+                <ion-col > <span class="model-type font">Reason Attachment</span></ion-col>
+                <ion-col size="6"  style="float: right;" *ngFor="let attachment of design.requestdeclineattachment">
+                <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showreasonImage(attachment)">{{attachment.name.length > 40 ? (attachment.name | slice: 0:40) + '...' : attachment.name}}{{attachment.ext}}</span>
+                </ion-col>
+            </ion-row>
+        <!-- </ion-row> -->
+    <ion-row>
+        <ion-col><span class="model-type font">Created at</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
+        </ion-col>
+    </ion-row>
+
+    <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
+      *ngIf="design.status=='assigned'||design.status=='completed'">
+      <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">Assigned to</span></ion-col>
+      <ion-col size="auto">
+          <div class="selected d-flex">
+              <img *ngIf="design.assignedto.contractorlogo && design.assignedto.contractorlogo.logo"
+                  [src]="design.assignedto.contractorlogo.logo.url" class="assignee-image" />
+              <div *ngIf="!design.assignedto.contractorlogo || !design.assignedto.contractorlogo.logo"
+                  class="assignee-image d-flex flex-row align-center justify-center">
+                  <div class="name_div">
+                      <span
+                          style="text-transform: capitalize;">{{design.assignedto.firstname.substring(0, 1)}}{{design.assignedto.lastname.substring(0, 1)}}</span>
+                  </div>
+              </div>
+          </div>
+      </ion-col>
+  </ion-row>
+      </ion-grid>
+      </ion-content>
+
+      <ion-footer  class="ion-no-border white-bg" *ngIf="design && design.status =='assigned'">
+        <ion-grid>
+            <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+                <ion-col size="auto">
+                    <ion-button class="action-button-color" fill="clear" (click)="submit()">Submit</ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    
+    </ion-footer>

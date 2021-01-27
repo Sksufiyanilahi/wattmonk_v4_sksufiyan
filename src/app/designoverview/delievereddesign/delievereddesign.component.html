@@ -32,15 +32,15 @@
                 </p>
                 <p style="margin:0px">
                 <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
-                      routerDirection="forward">{{designData.email}}</span>
+                      routerDirection="forward" *ngIf="user.designertype!='external'">{{designData.email}}</span>
                       <span *ngIf="designData.isoverdue" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{item.lateby}}</strong></span>
                       
             </p>
           
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
-                    <span class="customer-phone">{{designData.phonenumber}}</span></a>
+                    <span class="customer-phone" *ngIf="user.designertype!='external'">{{designData.phonenumber}}</span></a>
                 <span style="margin:0px" class="customer-address z-100"
-                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
+                      (click)="openAddressOnMap(designData.address)" *ngIf="user.designertype!='external'">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
 
                 <ion-row style="margin-bottom: 8px;" [routerLink]="['/design-details/',designData.id]" >
                     <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->

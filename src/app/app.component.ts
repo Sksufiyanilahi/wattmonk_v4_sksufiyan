@@ -187,6 +187,8 @@ this.network.networkConnect();
          }else if(this.user.role.type==='clientsuperadmin' && (this.user.isonboardingcompleted === null || this.user.isonboardingcompleted === false)){
 
            this.navController.navigateRoot('onboarding');
+         }else if(this.user.role.type==='peengineer'){
+          this.navController.navigateRoot('peengineer');
          }
         else{
           this.navController.navigateRoot('permithomepage');
@@ -200,6 +202,7 @@ this.network.networkConnect();
 
    this.deactivateGetUserData=  this.apiservice.getUserName().subscribe((res:any)=>{
       this.userData = res;
+      debugger;
       if(res.role.name=='ContractorSuperAdmin'){
         this.userData.role.name='SuperAdmin'
       }else if(res.role.name=='WattmonkAdmin'){
@@ -238,7 +241,16 @@ this.network.networkConnect();
         this.router.navigate(['/analystoverview/permitdesign'])
       }else if(this.userData.role.type !=='designer' && this.userData.role.type !=='qcinspector' && type=='survey'){
             this.router.navigate(['/homepage/survey'])
-      }else if(this.userData.role.type =='qcinspector' && type=='survey'){
+      }else if(type=='pestamp'){
+        debugger;
+        if(this.userData.role.type=='peengineer'){
+          //  this.router.navigate(['/peengineer']);
+          this.router.navigate(['/comingsoon']);
+        }else{
+          //  this.router.navigate(['/pestamp-homepage'])
+          this.router.navigate(['/comingsoon'])
+        }
+    }else if(this.userData.role.type =='qcinspector' && type=='survey'){
             this.router.navigate(['/analystoverview/survey'])
       }else if(this.userData.role.type !=='clientsuperadmin'){
           this.router.navigate(['/statistics'])

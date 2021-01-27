@@ -12,6 +12,7 @@ import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import * as moment from 'moment';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-completeddesign',
@@ -27,6 +28,7 @@ export class CompleteddesignComponent implements OnInit {
   routeSubscription: Subscription;
  skip:number=0;
  limit:number=10;
+ user:any
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
@@ -40,7 +42,11 @@ export class CompleteddesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+     private storageservice:StorageService) {
+
+      this.user=this.storageservice.getUser();
+
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);

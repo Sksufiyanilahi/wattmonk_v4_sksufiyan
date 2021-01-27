@@ -31,6 +31,7 @@ amountCheckingForOnboarding:boolean=false;
 card:any
   token:any;
   stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
+  // stripe= Stripe('sk_test_51HQ4SfBlSfQmxsSflRlcq7ntq1xMbhlBVW03jzMCd1WiOZMqjglO0jO2FV6IHDSiFfDnesYt2feU7w4uEe34PfPR00iLg5qpLm');
  userData:User;
  mode:any;
  designId;
@@ -65,7 +66,7 @@ card:any
     ) {
     this.amountForm=this.formBuilder.group(
        {
-         amount:new FormControl('',[Validators.required, Validators.min(1), Validators.max(5000)]),
+         amount:new FormControl('',[Validators.required, Validators.min(1), Validators.max(10000)]),
          card:new FormControl('')
         }
         )
@@ -108,6 +109,7 @@ card:any
     this.setupStripe();
     console.log(this.mode)
     console.log(this.designId);
+    console.log(this.design);
 
     if(this.mode=='card'){
       this.amountForm.patchValue({amount:this.serviceAmount});
@@ -149,27 +151,27 @@ card:any
     form.addEventListener('submit', event => {
       event.preventDefault();
       console.log(event)
-      if(this.onBoarding == 'true' || this.onBoarding =='false'){
-        if(this.amountForm.get('amount').value >=100 && this.amountForm.get('amount').value <= 5000)
-        {
-          this.stripe.createToken(this.card).then(result => {
-            if (result.error) {
-              var errorElement = document.getElementById('card-errors');
-              errorElement.textContent = result.error.message;
-            } else {
-              console.log(result);
-              this.token=result;
-              console.log(this.token.token.id);
-              this.addMoney();
+      // if(this.onBoarding == 'true' || this.onBoarding =='false'){
+      //   if(this.amountForm.get('amount').value >=100 && this.amountForm.get('amount').value <= 5000)
+      //   {
+      //     this.stripe.createToken(this.card).then(result => {
+      //       if (result.error) {
+      //         var errorElement = document.getElementById('card-errors');
+      //         errorElement.textContent = result.error.message;
+      //       } else {
+      //         console.log(result);
+      //         this.token=result;
+      //         console.log(this.token.token.id);
+      //         this.addMoney();
              
-            }
-          });
-        }else{
-          this.utils.errorSnackBar("Please Enter Valid Amount");
-        }
-      }
-      else{
-      if(this.amountForm.get('amount').value >=1 && this.amountForm.get('amount').value <=5000)
+      //       }
+      //     });
+      //   }else{
+      //     this.utils.errorSnackBar("Please Enter Valid Amount");
+      //   }
+      // }
+     // else{
+      if(this.amountForm.get('amount').value >=1 && this.amountForm.get('amount').value <=10000)
       {
       this.stripe.createToken(this.card).then(result => {
         if (result.error) {
@@ -186,7 +188,7 @@ card:any
     }else{
       this.utils.errorSnackBar("Please Enter Valid Amount");
     }
-      }
+      //}
     });
   }
 
@@ -241,7 +243,7 @@ card:any
     //   this.utils.hideLoading().then(()=>{
       var dates=new Date();
      console.log(dates)
-     if(this.onBoarding=='true' && this.amountForm.get('amount').value > 500){
+     if(this.onBoarding=='true' && this.amountForm.get('amount').value > 1000){
       rechargeData={
         amount:this.amountForm.get('amount').value + 100,
         datetime: dates,
@@ -320,7 +322,7 @@ var date= new Date();
     this.apiService.createPayment(data).subscribe((res)=>{
       this.createPayment=res;
       this.utils.hideLoading();
-      if(this.createPayment.paymentstatus=='succeeded'){
+      if(this.createPayment.status=='succeeded'){
     this.utils.showSnackBar("payment via card is successfull");
    if(this.designId==="null"){
      if(this.design==='prelim'){
@@ -332,6 +334,26 @@ var date= new Date();
        this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
      }
    }else{
+     if(this.design == 'pestamp'){var postData={};
+     var pestampacceptancestarttime = new Date();
+    pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
+     postData = {
+      outsourcedto: 232,
+      isoutsourced: "true",
+      status: "outsourced",
+      pestampacceptancestarttime: pestampacceptancestarttime,
+      paymenttype : "direct",
+     // couponid:this.utils.getCouponId().value,
+    
+    };
+    this.apiService.updatePestamps(this.designId,postData).subscribe(value=>{
+      this.utils.showSnackBar("Pe Stamp request has been send to wattmonk successfully");
+      this.router.navigate(['pestamp-homepage/pestamp-design']);
+      this.utils.setPeStampRefresh(true);
+    
+    })
+  }
+  else{
             var postData={};
             var designacceptancestarttime = new Date();
             if(this.design=='prelim'){
@@ -368,14 +390,29 @@ var date= new Date();
           this.utils.setHomepagePermitRefresh(true);
         }
       
-      })}
+      })
+  }
+    }
    
     
  }
 else
-{this.utils.errorSnackBar("payment was unsuccessfull");
+{
+  this.utils.errorSnackBar("payment was unsuccessfull");
+  if(this.design=='pestamp')
+  { 
+this.router.navigate(['pestamp-homepage/pestamp-design']);
+this.utils.setPeStampRefresh(true);
+  }
+  else if(this.design=='prelim'){
 this.router.navigate(['homepage/design']);
 this.utils.setHomepageDesignRefresh(true);}
+else
+{
+  this.router.navigate(['permithomepage/permitdesign']);
+this.utils.setHomepagePermitRefresh(true);
+}
+  }
 }
     ,
 (error)=>{
@@ -390,25 +427,25 @@ this.utils.setHomepageDesignRefresh(true);}
 
 amountCheck(event){
   console.log(event.target.value);
-  if(this.onBoarding == 'true' || this.onBoarding == 'false')
-  {
-    if(event.target.value < 100 || event.target.value > 5000)
-{
-  this.amountCheckingForOnboarding = true;
-  console.log(this.amountCheckingForOnboarding);
-}else{
-  this.amountCheckingForOnboarding = false;
-}
-  }
-  else{
-if(event.target.value < 1 || event.target.value > 5000)
+//   if(this.onBoarding == 'true' || this.onBoarding == 'false')
+//   {
+//     if(event.target.value < 100 || event.target.value > 5000)
+// {
+//   this.amountCheckingForOnboarding = true;
+//   console.log(this.amountCheckingForOnboarding);
+// }else{
+//   this.amountCheckingForOnboarding = false;
+// }
+//   }
+//   else{
+if(event.target.value < 1 || event.target.value > 10000)
 {
   this.amountChecking = true;
   console.log(this.amountChecking);
 }else{
   this.amountChecking = false;
 }
-}
+//}
 }
   
 }

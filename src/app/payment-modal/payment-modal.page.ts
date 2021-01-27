@@ -122,7 +122,7 @@ fetchData(){
 
   this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
     console.log(this.user)
-    this.apiService.paymentDetail(this.user.id).subscribe(res=>{
+    this.apiService.paymentDetail(this.user.parent.id).subscribe(res=>{
       this.count=res;
       console.log(this.count);
       this.servicecharges();
@@ -287,9 +287,11 @@ confirm(){
            { this.utils.showSnackBar("Design request has been send to wattmonk successfully")
            this.navController.pop();
            if(this.design=='prelim'){
+            this.router.navigate(['/homepage/design'])
            this.utils.setHomepageDesignRefresh(true);
            }
            else{
+            this.router.navigate(['/permithomepage/permitdesign'])
              this.utils.setHomepagePermitRefresh(true);
            }
            })

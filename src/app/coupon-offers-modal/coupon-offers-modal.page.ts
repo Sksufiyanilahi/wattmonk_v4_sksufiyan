@@ -42,7 +42,7 @@ export class CouponOffersModalPage implements OnInit {
     (error)=>{
 
     })
-    this.user=this.storageService.getUserID();
+    this.user=this.storageService.getUser();
   }
  
   selectCoupon(coupondata:any) {
@@ -81,11 +81,12 @@ export class CouponOffersModalPage implements OnInit {
   }
 
   applycode(){
+
     if(this.couponForm.get('couponInput').value !=''){
       this.utils.showLoading("Applying").then(()=>{
         const postData={
           couponcode:this.couponForm.get('couponInput').value,
-          userid:404,
+          userid:this.user.parent.id,
           requesttype:this.requesttype
       }
       this.apiservice.sendCoupon(postData).subscribe((res)=>{

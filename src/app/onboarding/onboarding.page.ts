@@ -201,6 +201,10 @@ export class OnboardingPage implements OnInit {
       this.firstFormGroup.patchValue({
         company:''
       })
+      this.firstFormGroup.get('company').clearValidators();
+      this.firstFormGroup.get('company').updateValueAndValidity();
+      this.firstFormGroup.get('registrationnumber').clearValidators();
+      this.firstFormGroup.get('registrationnumber').updateValueAndValidity();
     }
   }
 
@@ -429,7 +433,7 @@ export class OnboardingPage implements OnInit {
     console.log("hello",this.user.amount);
     console.log("hello",this.user.isonboardingcompleted);
     if(this.user.amount == 0 && this.user.isonboardingcompleted == false)
-    {console.log("hii himanshu");
+    {
     this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"true"}]);
     }
     else{

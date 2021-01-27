@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { ApiService } from 'src/app/api.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
@@ -30,7 +30,7 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-import { element } from 'protractor';
+
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 @Component({
@@ -83,6 +83,7 @@ export class PermitdesignComponent implements OnInit {
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string='';
   storageDirectory: string;
+  infinitescroll:boolean=false
  //counts
 //  newpermits: Observable<any>;
 //  newpermitsRef: AngularFireObject<any>;
@@ -108,12 +109,14 @@ export class PermitdesignComponent implements OnInit {
     private platform:Platform,
     private androidPermissions: AndroidPermissions,
     private localnotification: LocalNotifications,
+    private router:ActivatedRoute
    // private db:AngularFireDatabase,
     
    // private fileopener:FileOpener
    ) {
-    this.userData = this.storageservice.getUser();
-
+    
+    this.userData =this.storageservice.getUser(); // get data from resolver
+    
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       this.segments= 'requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -171,7 +174,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   segmentChanged(event){
-   this.skip=0;
+   
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -235,8 +238,7 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.makeDirectory();
     this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
-      this.skip=0;
-      this.getDesigns(null);
+    this.getDesigns(null);
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
@@ -248,7 +250,8 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   getDesigns(event: CustomEvent) {
-
+    this.skip=0;
+   
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -278,6 +281,7 @@ this.deactivateNetworkSwitch.unsubscribe();
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
+    // this.infinitescroll=false;
     this.noDesignFound="";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
@@ -707,6 +711,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   doInfinite($event){
+    console.log($event)
   this.skip=this.skip+10;
   this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
        console.log(response);
@@ -716,6 +721,9 @@ this.deactivateNetworkSwitch.unsubscribe();
         }else{
           this.noDesignFound= "No Designs Found"
         }
+        // if(response.length<10){
+        //   this.infinitescroll=true
+        // }else{this.infinitescroll=false}
         if ($event !== null) {
           $event.target.complete();
         }
@@ -1273,7 +1281,7 @@ directAssignToWattmonk(id:number){
   var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
         postData = {
-          outsourcedto: 232,
+          //outsourcedto: 232,
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime

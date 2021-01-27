@@ -124,11 +124,11 @@ export class DesignComponent implements OnInit, OnDestroy {
     tomorrow.setDate(tomorrow.getDate()+1);
     var d_date=tomorrow.toISOString();
     const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
-    const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
+    const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     const NUMBERPATTERN = '^[0-9]*$';
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.desginForm = this.formBuilder.group({
-      companyname: new FormControl('', [Validators.pattern(COMPANYFORMAT)]),
+      companyname: new FormControl(''),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       solarmake: new FormControl('', [Validators.required]),
@@ -140,13 +140,13 @@ export class DesignComponent implements OnInit, OnDestroy {
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
       rooftype: new FormControl(''),
-      prelimdesign: new FormControl(null),
+      //prelimdesign: new FormControl(null),
       architecturaldesign: new FormControl(''),
       tiltofgroundmountingsystem: new FormControl(''),
       mountingtype: new FormControl('', [Validators.required]),
       // jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
-      newconstruction: new FormControl('false'),
+      newconstruction: new FormControl(false),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim'),
@@ -159,9 +159,13 @@ export class DesignComponent implements OnInit, OnDestroy {
       status: new FormControl('created'),
       attachments: new FormControl([]),
       deliverydate:new FormControl(d_date,[]),
-      outsourcedto:new FormControl(''),
+      outsourcedto:new FormControl(null),
       isoutsourced:new FormControl('false'),
-      designacceptancestarttime:new FormControl(null)
+      designacceptancestarttime:new FormControl(null),
+      creatorparentid:new FormControl(this.storage.getParentId()),
+      //isonpriority:new FormControl('false'),
+      paymentstatus:new FormControl(null),
+      paymenttype:new FormControl(null)
       // uploadbox:new FormControl('')
     });
       
@@ -404,7 +408,8 @@ getDesignDetails() {
             solarmake:this.design.solarmake,
             solarmodel:this.design.solarmodel,
             invertermake:this.design.invertermake,
-            invertermodel:this.design.invertermodel
+            invertermodel:this.design.invertermodel,
+            status:this.design.status
           });
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
@@ -1005,7 +1010,7 @@ ioniViewDidEnter(){
     for(var i=0; i< this.archFiles.length;i++){
       imageData.append("files",this.archFiles[i]);
       if(i ==0){
-        imageData.append('path', 'design/' + designId);
+        imageData.append('path', 'designs/' + designId);
         imageData.append('refId', designId + '');
         imageData.append('ref', 'design');
         imageData.append('field', key);
@@ -1025,7 +1030,7 @@ ioniViewDidEnter(){
     for(var i=0; i< this.prelimFiles.length;i++){
       imageData.append("files",this.prelimFiles[i]);
       if(i ==0){
-        imageData.append('path', 'design/' + designId);
+        imageData.append('path', 'designs/' + designId);
         imageData.append('refId', designId + '');
         imageData.append('ref', 'design');
         imageData.append('field', key);
@@ -1180,12 +1185,12 @@ ioniViewDidEnter(){
 
   proxyValue: any; onCompanyChanged(event$) { 
     console.log(event$);
-    this.proxyValue = event$.option.value.companyname; 
-    this.designCreatedBy = event$.option.value.companyid; 
-    this.designCreatedByUserParent = event$.option.value.parentid;
+    this.proxyValue = event$.detail.value.companyname; 
+    this.designCreatedBy = event$.detail.value.companyid; 
+    this.designCreatedByUserParent = event$.detail.value.parentid;
     if(this.designCreatedBy !== null && this.designCreatedByUserParent !== null){
       var designacceptancestarttime = new Date();
-      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+      designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
           console.log(designacceptancestarttime)
       this.desginForm.patchValue({createdby:this.designCreatedBy,
                                   creatorparentid:this.designCreatedByUserParent,

@@ -30,6 +30,8 @@ import { DesignersStatistics } from './model/designerstats.model';
 import { AnalystStatistics } from './model/analyststats.model';
 import { ROLES } from './contants';
 import { Clients } from './model/clients.model';
+import { Pestamp } from './model/pestamp.model';
+import { UploadedFile } from './model/uploadedfile.model';
 
 
 @Injectable({
@@ -321,6 +323,10 @@ export class ApiService {
   design_activityDetails(designid){
     return this.http.get(BaseUrl+ "designs/" + designid, { headers: this.headers});
   }
+
+  pestamp_activityDetails(designid){
+    return this.http.get(BaseUrl+ "/pestamps/" + designid, { headers: this.headers});
+  }
   createPayment(data){
     return this.http.post(BaseUrl + '/createpayment',data,{ headers: this.uploadHeaders });
   }
@@ -497,5 +503,75 @@ export class ApiService {
 
     getClients(){
       return this.http.get<Clients[]>(BaseUrl + "/getclients",{headers: this.headers});
+    }
+
+    addSiteAssessment(postData){
+      return this.http.post<Pestamp>(BaseUrl + "/pestamps",JSON.stringify(postData),{headers:this.headers});
+    }
+
+    uploadFile(data): Observable<UploadedFile[]> {
+     
+      // const data = new FormData();
+      // data.append('files', blob, file);
+      // data.append('path', path);
+      // data.append('refId', ""+recordid);
+      // data.append('ref', ref);
+      // data.append('field', field);
+      
+      // console.log("file upload data---"+data);
+
+      return this.http.post<UploadedFile[]>(BaseUrl + "/upload", data, {
+          headers: this.uploadHeaders,
+        })
+    }
+
+    /* SEARCH PE STAMP DESIGNS */
+    getFilteredDesigns(search:string): Observable<Pestamp[]> {
+    
+      return this.http.get<Pestamp[]>(BaseUrl + "/userpestamps?id="+this.storageService.getUser().id+"&"+search, {
+        headers: this.headers,
+        //observe: "response"
+      })
+    }
+
+    getPestampDetails(id:number): Observable<Pestamp> {
+      return this.http.get<Pestamp>(BaseUrl + "/pestamps/"+id, {
+        headers: this.headers
+      })
+    }
+
+    /* Get Pe Engineers */
+    getPeEngineers(peenginertype:string) {
+      console.log(peenginertype);
+      return this.http.get(BaseUrl + "/peengineers?peengineertype="+peenginertype+"&parent_eq="+this.storageService.getUser().parent.id, {
+        headers: this.headers,
+      })
+    }
+
+    /* Assign to PeEngineer */
+    assignPestamps(id:number,inputData: any): Observable<Pestamp> {
+      return this.http.put<Pestamp>(BaseUrl + "/pestamps/"+id, JSON.stringify(inputData), {
+          headers: this.headers
+        })
+      }
+
+      updatePestamps(id:number,inputData?: any): Observable<Pestamp> {
+        return this.http.put<Pestamp>(BaseUrl + "/pestamps/"+id, JSON.stringify(inputData), {
+            headers: this.headers
+          })
+        }
+
+      deletePestamp(id:string): Observable<Pestamp> {
+        return this.http.delete<Pestamp>(BaseUrl + "/pestamps/"+id, {
+          headers: this.headers
+        })
+      }
+    getcounts(id){
+      return this.http.get(BaseUrl + '/dashboarddesigncount?id=' + id,{headers: this.headers});
+    }
+
+    getPeStampCharges(searchData)
+    {
+      return this.http.get(BaseUrl + 'commonsettings?settingname=' + searchData,{headers:this.headers});
     }
 }

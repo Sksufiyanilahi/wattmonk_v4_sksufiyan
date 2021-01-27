@@ -24,7 +24,9 @@ import { EmailModelPage } from 'src/app/email-model/email-model.page';
   templateUrl: './permitdesign.component.html',
   styleUrls: ['./permitdesign.component.scss'],
 })
-export class PermitdesignComponent implements OnInit { listOfDesignDataHelper: DesginDataHelper[] = [];
+export class PermitdesignComponent implements OnInit { 
+  
+  listOfDesignDataHelper: DesginDataHelper[] = [];
   listOfDesignsData: DesginDataModel[] = [];
   private refreshSubscription: Subscription;
   private routeSubscription: Subscription;

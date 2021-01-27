@@ -5,6 +5,7 @@ import { ApiService } from '../api.service';
 import { UtilitiesService } from '../utilities.service';
 import { Chooser, ChooserResult } from '@ionic-native/chooser/ngx';
 import { File,FileEntry } from '@ionic-native/file/ngx';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-resendpagedialog',
@@ -20,6 +21,7 @@ export class ResendpagedialogPage implements OnInit {
   enableDisable:boolean=true;
   successmessage: string;
   requestType:any;
+  userData:any;
 
   constructor(private camera: Camera,
     private modalCtrl:ModalController,
@@ -27,14 +29,16 @@ export class ResendpagedialogPage implements OnInit {
     private nav:NavParams,
     private utilities:UtilitiesService,
     private chooser: Chooser,
-    private file:File
+    private file:File,
+    private storageService:StorageService
      ) { }
 
   ngOnInit() {
-
+    this.userData = this.storageService.getUser();
     this.id= this.nav.get('id');
     console.log(this.id);
     this.requestType = this.nav.get('requesttype');
+    console.log(this.requestType)
     
   }
 
@@ -131,6 +135,27 @@ export class ResendpagedialogPage implements OnInit {
       console.log('could not submit');
       
     }else{
+      if(this.requestType=='pestamp')
+      {
+        let cdate = Date.now();
+        var pestampacceptancestarttime = new Date();
+    pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
+    const postData = {
+      status: "outsourced",
+      isoutsourced: "true",
+      isinrevisionstate : "true",
+      revisioncomments: this.reason,
+      pestampacceptancestarttime: pestampacceptancestarttime,
+      actualdelivereddate: null
+    };
+      this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>
+      {
+        this.modalCtrl.dismiss({
+          'dismissed': true
+        });
+      })
+      }
+      else{
       var data={}
       if(this.requestType=='prelim'){
       var tomorrow = new Date();
@@ -161,7 +186,7 @@ export class ResendpagedialogPage implements OnInit {
           
         }
       }
-  
+    
       console.log(data);
       
       this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
@@ -170,6 +195,7 @@ export class ResendpagedialogPage implements OnInit {
           });
       })
     }
+  }
 
   }
 

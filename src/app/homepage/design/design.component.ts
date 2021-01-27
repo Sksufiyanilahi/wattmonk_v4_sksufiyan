@@ -920,7 +920,7 @@ this.network.networkConnect();
 
 
   doInfinite($event){
-   
+   console.log($event)
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
@@ -1076,7 +1076,7 @@ pending(value){
 
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
-  console.log("dholak is",this.selectedDesigner);
+  console.log(this.selectedDesigner);
 
 }
 
@@ -1249,7 +1249,7 @@ directAssignToWattmonk(id:number){
   var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
         postData = {
-          outsourcedto: 232,
+          //outsourcedto: 232,
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime
