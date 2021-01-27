@@ -37,7 +37,11 @@ card:any
  designId;
  serviceAmount:any;
  design:any;
-  createPayment:any
+  createPayment:any;
+  assignValue:any;
+  data:any;
+  //for pestamp
+  createDirectPayment:any;
   amountForm:FormGroup;
   onBoarding:any;
   responseData:any;
@@ -50,6 +54,9 @@ card:any
  newprelimsRef: AngularFireObject<any>;
  //newprelimsRef:any;
  newprelimscount = 0;
+ createpayment:any;
+
+ designData:any;
 
   constructor(//private stripe:Stripe,
     private apiService:ApiService,
@@ -94,16 +101,38 @@ card:any
       (err) => console.log(err),
       () => console.log('done!')
     )
+
+    //PESTAMP Payment
+    // this.designData = this.router.getCurrentNavigation().extras.state;
+    // console.log(this.designData)
+    // this.mode = this.designData.productdetails.queryParams.mode;
+    // this.designId = this.designData.productdetails.queryParams.id;
+    // this.serviceAmount = this.designData.productdetails.queryParams.serviceAmount;
+    // this.design = this.designData.productdetails.queryParams.design;
+    // this.data = this.designData.productdetails.queryParams.data;
+    // this.assignValue = this.designData.productdetails.queryParams.assignValue;
      }
 
   
     ngOnInit() {
    this.utils.showHideIntercom(true);
-    this.mode= this.route.snapshot.paramMap.get('mode');
-   this.designId= this.route.snapshot.paramMap.get('id');
-      this.serviceAmount = this.route.snapshot.paramMap.get('serviceAmount');
-      this.design = this.route.snapshot.paramMap.get('design');
-      this.onBoarding = this.route.snapshot.paramMap.get('onBoarding');
+  //   this.mode= this.route.snapshot.paramMap.get('mode');
+  //  this.designId= this.route.snapshot.paramMap.get('id');
+  //     this.serviceAmount = this.route.snapshot.paramMap.get('serviceAmount');
+  //     this.design = this.route.snapshot.paramMap.get('design');
+  //     this.onBoarding = this.route.snapshot.paramMap.get('onBoarding');
+  //     this.assignValue = this.route.snapshot.paramMap.get('assignValue');
+  //     this.data = this.route.snapshot.paramMap.get('data');
+  this.designData = this.router.getCurrentNavigation().extras.state;
+    console.log(this.designData)
+    this.mode = this.designData.productdetails.queryParams.mode;
+    this.designId = this.designData.productdetails.queryParams.id;
+    this.serviceAmount = this.designData.productdetails.queryParams.serviceAmount;
+    this.design = this.designData.productdetails.queryParams.design;
+    this.data = this.designData.productdetails.queryParams.data;
+    this.assignValue = this.designData.productdetails.queryParams.assignValue;
+      console.log(this.assignValue);
+      console.log(this.data);
       
     this.userData = this.storageService.getUser();
     this.setupStripe();
@@ -296,14 +325,82 @@ this.apiService.recharges(rechargeData).subscribe((res:any)=>{
       cvc : form.value.cvc,
       amount : form.value.amount,
       
-    }
-    console.log(card);*/
+    }*/
+    console.log("card");
  this.utils.showLoading("Adding").then(()=>{
    // this.stripe.createCardToken(card).then(token => {
    //   console.log(token);
      // this.token=token.id
 var date= new Date();
-
+if(this.design == 'pestamp'){
+  if(this.assignValue =='assign'){
+  data={
+    datetime:date,
+    amount:this.amountForm.get('amount').value,
+    //email:this.userData.email,
+    // paymenttype: "direct",
+    token: this.token.token.id,
+    user:this.userData.id,
+    pestampid:this.designId
+  }
+  this.apiService.createdirectpayment(data).subscribe((res)=>{
+    this.createDirectPayment=res;
+    this.utils.hideLoading();
+    if(this.createDirectPayment.status=='succeeded'){
+  this.utils.showSnackBar("payment via card is successfull");
+  var postData={};
+  var pestampacceptancestarttime = new Date();
+ pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
+  postData = {
+   outsourcedto: 232,
+   isoutsourced: "true",
+   status: "outsourced",
+   pestampacceptancestarttime: pestampacceptancestarttime,
+   paymenttype : "direct",
+  // couponid:this.utils.getCouponId().value,
+ 
+ };
+ this.apiService.updatePestamps(this.designId,postData).subscribe(value=>{
+   this.utils.showSnackBar("Pe Stamp request has been send to wattmonk successfully");
+   this.router.navigate(['pestamp-homepage/pestamp-design']);
+   this.utils.setPeStampRefresh(true);
+ 
+ })
+}
+else{
+  this.utils.errorSnackBar("payment was unsuccessfull");
+this.router.navigate(['pestamp-homepage/pestamp-design']);
+this.utils.setPeStampRefresh(true);
+}
+},
+(error)=>{
+  this.utils.hideLoading();
+  this.utils.errorSnackBar("Something went wrong");
+})
+}
+else{
+  const inputData = {
+    paymenttype: "direct",
+    token: this.token.token.id,
+    pestampid: this.designId,
+    email: this.data.email,
+    amount: this.serviceAmount,
+    user: this.userData.id
+  }
+  console.log(inputData)
+  if (this.data.propertytype == 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+    this.makeCommercialpayment(inputData);
+  }
+  else if (this.data.propertytype == 'commercial' && this.data.modeofstamping == 'ecopy') {
+    this.makeCommercialpayment(inputData);
+  }
+  else if (this.data.propertytype != 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+    this.makepayment(inputData);
+  }
+}
+this.token='';
+}
+else{
   data={
     //designid:this.designId,
     datetime:date,
@@ -334,26 +431,6 @@ var date= new Date();
        this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
      }
    }else{
-     if(this.design == 'pestamp'){var postData={};
-     var pestampacceptancestarttime = new Date();
-    pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
-     postData = {
-      outsourcedto: 232,
-      isoutsourced: "true",
-      status: "outsourced",
-      pestampacceptancestarttime: pestampacceptancestarttime,
-      paymenttype : "direct",
-     // couponid:this.utils.getCouponId().value,
-    
-    };
-    this.apiService.updatePestamps(this.designId,postData).subscribe(value=>{
-      this.utils.showSnackBar("Pe Stamp request has been send to wattmonk successfully");
-      this.router.navigate(['pestamp-homepage/pestamp-design']);
-      this.utils.setPeStampRefresh(true);
-    
-    })
-  }
-  else{
             var postData={};
             var designacceptancestarttime = new Date();
             if(this.design=='prelim'){
@@ -391,7 +468,7 @@ var date= new Date();
         }
       
       })
-  }
+  
     }
    
     
@@ -399,12 +476,12 @@ var date= new Date();
 else
 {
   this.utils.errorSnackBar("payment was unsuccessfull");
-  if(this.design=='pestamp')
-  { 
-this.router.navigate(['pestamp-homepage/pestamp-design']);
-this.utils.setPeStampRefresh(true);
-  }
-  else if(this.design=='prelim'){
+//   if(this.design=='pestamp')
+//   { 
+// this.router.navigate(['pestamp-homepage/pestamp-design']);
+// this.utils.setPeStampRefresh(true);
+//   }
+ if(this.design=='prelim'){
 this.router.navigate(['homepage/design']);
 this.utils.setHomepageDesignRefresh(true);}
 else
@@ -420,7 +497,9 @@ this.utils.setHomepagePermitRefresh(true);
   this.utils.errorSnackBar("Something went wrong");
 }
     )
-    this.token='';})
+    this.token='';
+}
+  })
   }
 
 }
@@ -446,6 +525,62 @@ if(event.target.value < 1 || event.target.value > 10000)
   this.amountChecking = false;
 }
 //}
+}
+
+makepayment(inputData) {
+  console.log(inputData);
+  this.apiService.createPestamppayment(inputData).subscribe(response => {
+    console.log(response);
+    this.createpayment=response;
+this.utils.hideLoading().then(()=>{
+//if(this.createpayment.status=='succeeded'){
+this.utils.showSnackBar("payment successfull");
+    //this.data.isConfirmed = true;
+   // this.data.pestamp=response;
+    //this.dialogRef.close(this.data);
+    //this.notifyService.showSuccess("payment successfull", "success")
+    this.router.navigate(['pestamp-homepage/pestamp-design']);
+  this.utils.setPeStampRefresh(true);
+  //}
+  //else{
+  //   this.utils.errorSnackBar("payment was unsuccessfull");
+  // this.router.navigate(['pestamp-homepage/pestamp-design']);
+  // this.utils.setPeStampRefresh(true);
+  //}
+});
+  },
+  (error)=>{
+    this.utils.hideLoading();
+    this.utils.errorSnackBar("Something went wrong");
+  })
+}
+
+makeCommercialpayment(inputData) {
+  this.apiService.createCommercialPestamppayment(inputData).subscribe(response => {
+    console.log(response);
+    this.createpayment=response;
+this.utils.hideLoading().then(()=>{
+//if(this.createpayment.status=='succeeded'){
+this.utils.showSnackBar("payment successfull");
+this.router.navigate(['pestamp-homepage/pestamp-design']);
+  this.utils.setPeStampRefresh(true);
+    //this.data.isConfirmed = true;
+   // this.data.pestamp=response;
+    //this.dialogRef.close(this.data);
+    //this.notifyService.showSuccess("payment successfull", "success")
+    
+ // }
+ // else{
+  //   this.utils.errorSnackBar("payment was unsuccessfull");
+  // this.router.navigate(['pestamp-homepage/pestamp-design']);
+  // this.utils.setPeStampRefresh(true);
+ // }
+});
+  },
+  (error)=>{
+    this.utils.hideLoading();
+    this.utils.errorSnackBar("Something went wrong");
+  })
 }
   
 }

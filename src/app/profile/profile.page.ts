@@ -10,7 +10,7 @@ import { User } from '../model/user.model';
 import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.module';
 import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
 import { AddMoneyPage } from '../add-money/add-money.page';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Intercom } from 'ng-intercom';
 import { intercomId } from '../contants';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
@@ -79,7 +79,20 @@ isEmptyObject(obj) {
 
 AddWallet()
  {
-   this.router.navigate(['add-money',{mode:'wallet'}]);
+  // this.router.navigate(['add-money',{mode:'wallet'}]);
+  let objToSend: NavigationExtras = {
+    queryParams: {
+      //id:response.id,
+      mode:'wallet'
+    },
+    skipLocationChange: false,
+    fragment: 'top' 
+};
+
+
+this.router.navigate(['/add-money'], { 
+state: { productdetails: objToSend }
+});
 
 }
 

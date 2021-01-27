@@ -49,7 +49,12 @@ export class Pestamp{
   modeofstamping:string;
   propertytype:string;
   workinghours:any;
-
+  requestdeclinereason:string;
+  requestdeclineattachment:UploadedFile[];
+  deliverychargespaymentstatus:string;
+    deliverycharges:number;
+    acceptedbypeengineer:boolean;
+    declinedbypeengineer:boolean;
 
     //Dynamic content
     designremainingtime : string;

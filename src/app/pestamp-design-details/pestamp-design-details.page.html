@@ -138,8 +138,30 @@
             </ion-col>
         </ng-container>
     </ion-row>
-    <form novalidate [formGroup]="pestampForm">
+    <ion-row *ngIf="design.comments || design.comments !=null  " class="ion-no-padding ion-margin-top">
+        <ion-col size="6">
+            <span class="models font">Comments</span>
+        </ion-col>
+        <!-- <div> -->
+
+        <ion-col size="6"  class="ion-no-padding">
+            <div *ngFor="let comment of design.comments">
+                <p class="comment font" style="text-align: right;margin:0px">{{comment?.message}}</p>
+                <p class="comment-by" style="text-align: right;margin-top:0px">Posted by {{comment.createdby?.firstname}}
+                    {{comment.createdby?.lastname}}</p>
+            </div>
+        </ion-col>
+        </ion-row>
+
         <ion-row>
+            <ion-col><span class="model-type font">Created at</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
+            </ion-col>
+        </ion-row>
+    <form novalidate [formGroup]="pestampForm">
+        <ion-grid *ngIf="(design.status=='assigned' && design.acceptedbypeengineer==true) && user.role.type=='peengineer'">
+        <ion-row >
             <ion-col size="12">
         
                 <ng-container>
@@ -177,38 +199,16 @@
             
         </ion-row>
     <ion-row class="ion-no-padding font">
-        <ng-container *ngIf="design.propertytype == 'commercial'">
+        <ng-container>
             <ion-col><span class="model-type font">Working Hours</span></ion-col>
             <ion-col size="auto" >
-                <ion-input *ngIf="design.workinghours == 0" class="ht_wt" type="text" formControlName="workinghours" ></ion-input>
-                <span *ngIf="design.workinghours !== 0" class="model-name font">{{design.workinghours}}</span>
+                <ion-input *ngIf="design.workinghours == '0'" class="ht_wt" type="text" formControlName="workinghours" ></ion-input>
+                <span *ngIf="design.workinghours !== '0'" class="model-name font">{{design.workinghours}}</span>
                 <!-- </div> -->
             </ion-col>
         </ng-container>
     </ion-row>
-
-    <ion-row *ngIf="design.comments || design.comments !=null  " class="ion-no-padding ion-margin-top">
-        <ion-col size="6">
-            <span class="models font">Comments</span>
-        </ion-col>
-        <!-- <div> -->
-
-        <ion-col size="6"  class="ion-no-padding">
-            <div *ngFor="let comment of design.comments">
-                <p class="comment font" style="text-align: right;margin:0px">{{comment?.message}}</p>
-                <p class="comment-by" style="text-align: right;margin-top:0px">Posted by {{comment.createdby?.firstname}}
-                    {{comment.createdby?.lastname}}</p>
-            </div>
-        </ion-col>
-        <ion-col size="12" *ngIf="design.status =='assigned'">
-            <span class="input-placeholder">Comments</span>
-        </ion-col>
-        <ion-col size="12" *ngIf="design.status =='assigned'" style="padding-top: 0px;">
-            <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
-                          formControlName="comments"></ion-textarea>
-        </ion-col>
-
-    </ion-row>
+</ion-grid>
     </form>
 
     <!-- <ion-row *ngIf="design.comments !=[] || design.comments !==null  " class="ion-no-padding ion-margin-top"> -->
@@ -226,12 +226,7 @@
                 </ion-col>
             </ion-row>
         <!-- </ion-row> -->
-    <ion-row>
-        <ion-col><span class="model-type font">Created at</span></ion-col>
-        <ion-col size="auto">
-            <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
-        </ion-col>
-    </ion-row>
+    
 
     <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
       *ngIf="design.status=='assigned'||design.status=='completed'">
@@ -250,12 +245,24 @@
           </div>
       </ion-col>
   </ion-row>
+  <form novalidate [formGroup]="commentform">
+    <ion-row *ngIf="(design.status=='assigned' && design.acceptedbypeengineer==true) && user.role.type=='peengineer'">
+        <ion-col size="12" *ngIf="design.status =='assigned'">
+            <span class="input-placeholder">Comments</span>
+        </ion-col>
+        <ion-col size="12" *ngIf="design.status =='assigned'" style="padding-top: 0px;">
+            <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
+                          formControlName="comments"></ion-textarea>
+        </ion-col>
+
+    </ion-row>
+  </form>
       </ion-grid>
       </ion-content>
 
       <ion-footer  class="ion-no-border white-bg" *ngIf="design && design.status =='assigned'">
         <ion-grid>
-            <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+            <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end" *ngIf="(design.status=='assigned' && design.acceptedbypeengineer==true) && user.role.type=='peengineer'">
                 <ion-col size="auto">
                     <ion-button class="action-button-color" fill="clear" (click)="submit()">Submit</ion-button>
                 </ion-col>

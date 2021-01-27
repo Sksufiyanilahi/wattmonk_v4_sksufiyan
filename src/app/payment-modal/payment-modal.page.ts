@@ -3,7 +3,7 @@ import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 import { NavParams, ModalController, NavController, AlertController } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { UtilitiesService } from '../utilities.service';
 import { ScheduleFormEvent } from '../model/constants';
 import { Intercom } from 'ng-intercom';
@@ -42,6 +42,7 @@ netPay:any
   newprelimsRef: AngularFireObject<any>;
   //newprelimsRef:any;
   newprelimscount = 0;
+  designData:any;
    
   constructor( private storageService:StorageService,
     
@@ -116,8 +117,13 @@ netPay:any
   }
 
 fetchData(){
-  this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
-  this.design=params.get('designData')});
+  // this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
+  // this.design=params.get('designData')});
+  this.designData = this.router.getCurrentNavigation().extras.state;
+      this.id = this.designData.productdetails.queryParams.id;
+      this.design = this.designData.productdetails.queryParams.id;
+      console.log(this.id);
+      console.log(this.design);
 
 
   this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
@@ -239,7 +245,22 @@ confirm(){
 
   addWallet(value){
     
-    this.router.navigate(['/add-money',{mode:value,id:this.id,serviceAmount:this.netPay,design:this.design}])
+    //this.router.navigate(['/add-money',{mode:value,id:this.id,serviceAmount:this.netPay,design:this.design}])
+    let objToSend: NavigationExtras = {
+      queryParams: {
+        mode:value,
+        id:this.id,
+        serviceAmount:this.netPay,
+        design:this.design
+      },
+      skipLocationChange: false,
+      fragment: 'top' 
+  };
+  
+  
+  this.router.navigate(['/add-money'], { 
+  state: { productdetails: objToSend }
+  });
   }
 
   cancel(){

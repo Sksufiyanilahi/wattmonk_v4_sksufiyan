@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { ApiService } from 'src/app/api.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
@@ -747,8 +747,20 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin')&& this.designerData.status=='created'){
-      this.route.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+      //this.route.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+      let objToSend: NavigationExtras = {
+        queryParams: {
+          id:id,
+          designData:this.designerData.requesttype
+        },
+        skipLocationChange: false,
+        fragment: 'top' 
+    };
 
+
+this.route.navigate(['/payment-modal'], { 
+  state: { productdetails: objToSend }
+});
     }
 
    else{ if (this.listOfAssignees.length === 0) {

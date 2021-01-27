@@ -45,15 +45,15 @@
                                 </ion-col>
 
                     </span>
-                  <ion-row style="margin-bottom: 0px;" [routerLink]="['/pestamp-design-details/',designData.id]">
+                  <ion-row class="ion-no-margin ion-no-margin" style="margin-bottom: 0px;">
                    <ion-col style="padding-left:0px" >
-                    <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.propertytype}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.type}}</span>
                 </ion-col>
 
 
-                </ion-row>
-
-                <ion-row class="ion-no-margin ion-no-margin">
+                
                     <ion-col *ngIf="segments=='status=assigned'">
                                    <span style="float: right;">
                             <ng-container *ngIf="designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false)" >

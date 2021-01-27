@@ -9,7 +9,7 @@ import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-na
 import { DrawerState } from 'ion-bottom-drawer';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from '../../model/assignee.model';
-import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized, NavigationExtras } from '@angular/router';
 import {Storage} from '@ionic/storage';
 import { ModalController, AlertController, Platform, IonInfiniteScroll } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
@@ -770,8 +770,20 @@ this.network.networkConnect();
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin') && this.designerData.status=='created'){
-      this.router.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+      //this.router.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+      let objToSend: NavigationExtras = {
+        queryParams: {
+          id:id,
+          designData:this.designerData.requesttype
+        },
+        skipLocationChange: false,
+        fragment: 'top' 
+    };
 
+
+this.router.navigate(['/payment-modal'], { 
+  state: { productdetails: objToSend }
+});
     }
 
    else{ if (this.listOfAssignees.length === 0) {

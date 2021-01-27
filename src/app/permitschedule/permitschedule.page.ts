@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
@@ -951,7 +951,20 @@ saveInverterModel() {
                   this.createChatGroup(response);
                   console.log('Res', response);
                   this.value = response.id;
-                  this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
+                  //this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
+                  let objToSend: NavigationExtras = {
+                    queryParams: {
+                      id:response.id,
+                      designData:"permit"
+                    },
+                    skipLocationChange: false,
+                    fragment: 'top' 
+                };
+            
+            
+            this.router.navigate(['/payment-modal'], { 
+              state: { productdetails: objToSend }
+            });
                   // this.sendtowattmonk();
 
                  // this.router.navigate(['/homepage'])
@@ -1105,8 +1118,20 @@ saveInverterModel() {
                 console.log('Res', response);
                 this.value=response.id;
                 this.utils.showSnackBar('Design have been updated');
-                this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
-
+               // this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
+               let objToSend: NavigationExtras = {
+                queryParams: {
+                  id:response.id,
+                  designData:"permit"
+                },
+                skipLocationChange: false,
+                fragment: 'top' 
+            };
+        
+        
+        this.router.navigate(['/payment-modal'], { 
+          state: { productdetails: objToSend }
+        });
 
               });
             },

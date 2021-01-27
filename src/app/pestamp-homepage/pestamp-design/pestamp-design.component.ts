@@ -215,7 +215,7 @@ export class PestampDesignComponent implements OnInit {
        
             this.formatDesignData(response);
           }else{
-            this.noDesignFound= "No Designs Found"
+            this.noDesignFound= "No PE Stamp Found"
           }
           if (event !== null) {
             event.target.complete();
@@ -444,7 +444,8 @@ export class PestampDesignComponent implements OnInit {
       //this.route.navigate(["pestamp-payment-modal",{id:id,designData:this.designerData.requesttype}])
       let objToSend: NavigationExtras = {
         queryParams: {
-        designData:designData
+        designData:designData,
+        value:'assign'
         },
         skipLocationChange: false,
         fragment: 'top' 
@@ -731,11 +732,18 @@ designDownload(designData){
     const alert = await this.alertController.create({
       cssClass: 'alertClass',
       header: 'Confirm!',
-      message:'Would you like to  Add Comments!!',
+     // message:'Would you like to  Add Comments!!',
       inputs:
-       [ {name:'comment',
+       [ 
+         {name:'charges',
+       id:'charges',
+       type:'text',
+       placeholder:'Enter Delivery Charges'
+        },
+         {name:'comment',
        id:'comment',
           type:'textarea',
+          //label:'Would you like to  Add Comments!!',
         placeholder:'Enter Comment'}
         ] ,
       buttons: [
@@ -750,14 +758,31 @@ designDownload(designData){
           text: 'deliver',
           handler: (alertData) => {
             var postData= {};
+            var deliverycharges;
+    if(designData.modeofstamping == 'hardcopy' || designData.modeofstamping =='both' ){
+      console.log("harddcopy");
+      if(alertData.charges ==='undefined' || alertData.charges ==='' || alertData.charges === null){
+        console.log("error");
+        //alertData.deliverycharges.setValidators([Validators.required]);
+        this.utils.errorSnackBar("Please Enter Delivery Charges");
+        return;
+      }
+      console.log(alertData.charges);
+      deliverycharges = alertData.charges;
+    } else {
+      deliverycharges = 0;
+    }
+    console.log("this is",deliverycharges)
             if(alertData.comment!=""){
              postData = {
               status: "delivered",
+              deliverycharges: deliverycharges,
               comments: alertData.comment ,
                };}
                else{
                 postData = {
                   status: "delivered",
+                  deliverycharges: deliverycharges
                    };
                }
                console.log(postData);
@@ -782,6 +807,22 @@ designDownload(designData){
 
 
 
+  }
+
+  clearPendingPayments(designData){
+    let objToSend: NavigationExtras = {
+      queryParams: {
+      designData:designData,
+      value:'clearDues'
+      },
+      skipLocationChange: false,
+      fragment: 'top' 
+  };
+
+
+this.route.navigate(['/pestamp-payment-modal'], { 
+state: { productdetails: objToSend }
+});
   }
 
 createChatGroup(design:DesginDataModel){
