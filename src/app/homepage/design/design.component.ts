@@ -771,20 +771,20 @@ this.network.networkConnect();
     this.reviewAssignedTo=designData.designassignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin') && this.designerData.status=='created'){
       //this.router.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+      console.log(id,this.designerData.requesttype);
       let objToSend: NavigationExtras = {
         queryParams: {
-          id:id,
-          designData:this.designerData.requesttype
+          id:id,designData:this.designerData.requesttype
         },
         skipLocationChange: false,
         fragment: 'top' 
     };
 
-
+console.log(objToSend);
 this.router.navigate(['/payment-modal'], { 
   state: { productdetails: objToSend }
 });
-    }
+}
 
    else{ if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {

@@ -43,8 +43,8 @@
               <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'declined'"  [routerLink]="['/pestamp-design-details/',designData.id]">On Hold</span>
 
               <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  [routerLink]="['/pestamp-design-details/',designData.id]">Review Failed</span> -->
-              <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" [routerLink]="['/pestamp-design-details/',designData.id]">Overdue</span>
-              <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'accepted'" [routerLink]="['pestamp-design-details/',designData.id]">Accepted</span>
+              <!-- <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" [routerLink]="['/pestamp-design-details/',designData.id]">Overdue</span> -->
+              <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'accepted'" [routerLink]="['/pestamp-design-details/',designData.id]">Accepted</span>
               <!-- <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/pestamp-design-details/',designData.id]">Review Passed</span> -->
               <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'" [routerLink]="['/pestamp-design-details/',designData.id]">Delivered</span>
               <span class="chipdetail" style="background-color: rgb(109, 187, 26);padding: 4px 5px;" *ngIf="designData.status == 'completed'" [routerLink]="['/pestamp-design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
@@ -78,21 +78,21 @@
                                 </ion-col>
 
                     </span>
-                    <ion-row style="margin-bottom: 0px;" [routerLink]="['/pestamp-design-details/',designData.id]">
+                    <!-- <ion-row style="margin-bottom: 0px;" [routerLink]="['/pestamp-design-details/',designData.id]">
                         <ion-col *ngIf="designData.status == 'assigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
                             <span *ngIf="designData.status == 'assigned'" style="float:right;text-align: right;">
                                 {{designData.designremainingtime}}</span></ion-col>
                                 <ion-col *ngIf="designData.status == 'outsourced'">
                                     <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
                                         {{designData.pestampacceptanceremainingtime}}</span></ion-col>
-                    </ion-row>
+                    </ion-row> -->
                     <ion-row class="ion-no-margin ion-no-margin">
                 <!-- <ion-row style="margin-bottom: 0px;" [routerLink]="['/permit-design-details/',designData.id]"> -->
                   <!-- <ion-row style="margin-bottom: 0px;" > -->
                    <ion-col style="padding-left:0px" >
-                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
-                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.propertytype}}</span>
-                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.type}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.source | titlecase}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.propertytype | titlecase}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.type | titlecase}}</span>
                     <!-- <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype}}</span> -->
                 </ion-col>
                                 

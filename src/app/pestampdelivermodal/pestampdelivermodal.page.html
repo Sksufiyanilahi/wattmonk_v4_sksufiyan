@@ -1,0 +1,60 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>pestampdelivermodal</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+<ion-content>
+  <ion-grid>
+<ion-row>
+  <ion-col>
+<h4 style="font-weight: bold;margin-bottom:0px !important;margin-top: 0%;">Confirm!</h4>
+</ion-col>
+<ion-col size="auto" style="align-self: center;padding-top: 0%;">
+  <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+      <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+  </ion-button>
+</ion-col>
+</ion-row>
+
+  <form [formGroup]="deliverForm" novalidate>
+    <ion-row *ngIf="data.modeofstamping == 'hardcopy' || data.modeofstamping =='both'">
+    <ion-col>
+      <ion-icon name="location-outline"></ion-icon>
+      <span (click)="openAddressOnMap(design.deliveryaddress)" class="address">{{data.deliveryaddress}}</span>
+  </ion-col>
+</ion-row>
+  <ion-row *ngIf="data.modeofstamping == 'hardcopy' || data.modeofstamping =='both'">
+    <ion-col>
+  <ion-item class="ion-no-padding">
+    <ion-label position="floating">Enter Delivery Charges</ion-label>
+  <ion-input type="tel" class="form_input" formControlName="delivercharges"></ion-input>
+</ion-item>
+<div style="height: 6px;">
+  <!-- <div *ngIf="chargesError!=null">
+      <span class="error">{{chargesError}}</span>
+  </div> -->
+  <div *ngIf="deliverForm.get('delivercharges').value === '' && deliverForm.get('delivercharges').dirty">
+    <span class="error">{{fieldRequired}}</span>
+</div>
+</div>
+</ion-col>
+</ion-row>
+<ion-row>
+  <h6 style="margin-left:3%">Would you like to add comments?</h6>
+</ion-row>
+<ion-row>
+  <ion-col>
+  <ion-item class="ion-no-padding">
+    <ion-label position="floating">Enter Comments</ion-label>
+  <ion-input type="text" class="form_input" formControlName="comments"></ion-input>
+</ion-item>
+</ion-col>
+</ion-row>
+</form>
+<ion-row>
+  <ion-col>
+    <ion-button fill="clear" style="float: right !important" (click)="deliver()">Deliver</ion-button>
+  </ion-col>
+</ion-row>
+</ion-grid>
+</ion-content>

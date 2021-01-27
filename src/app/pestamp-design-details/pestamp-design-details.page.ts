@@ -219,6 +219,23 @@ export class PestampDesignDetailsPage implements OnInit {
         const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
       }
 
+      showAtticImage(attachmentFile:any){
+        const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+      }
+
+      showRoofImage(attachmentFile:any){
+        const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+      }
+
+      showPermitPlan(attachmentFile:any){
+        const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+      }
+
+      showStampedFile(attachmentFile:any){
+        console.log(attachmentFile);
+        const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+      }
+
       // files(event){
       //   console.log(event);
       //   console.log(event.target.files);

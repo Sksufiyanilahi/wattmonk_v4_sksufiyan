@@ -270,6 +270,10 @@ const routes: Routes = [
     path: 'comingsoon',
     loadChildren: () => import('./comingsoon/comingsoon.module').then( m => m.ComingsoonPageModule)
   },
+  {
+    path: 'pestampdelivermodal',
+    loadChildren: () => import('./pestampdelivermodal/pestampdelivermodal.module').then( m => m.PestampdelivermodalPageModule)
+  },
 
 
 
