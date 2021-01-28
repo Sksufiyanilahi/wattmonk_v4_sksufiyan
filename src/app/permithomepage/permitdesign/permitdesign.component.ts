@@ -752,7 +752,7 @@ this.deactivateNetworkSwitch.unsubscribe();
         queryParams: {
           id:id,
           designData:this.designerData.requesttype,
-          design:this.designerData
+          fulldesigndata:this.designerData
         },
         skipLocationChange: false,
         fragment: 'top' 
@@ -1088,7 +1088,7 @@ designDownload(designData){
         result => console.log('Has permission?',result.hasPermission),
         err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
       );
-      this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
+      this.file.checkFile(resolvedDirectory.nativeURL,designData.permitdesign.hash).then(data=>{
         console.log(data);
   
         if(data==true){
@@ -1104,7 +1104,7 @@ designDownload(designData){
         if (err.code == 1) {
           const fileTransfer: FileTransferObject = this.transfer.create();
           this.utils.showLoading('Downloading').then(()=>{
-            fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.prelimdesign.ext).then((entry) => {
+            fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.permitdesign.ext).then((entry) => {
               this.utils.hideLoading().then(()=>{
                 console.log('download complete: ' + entry.toURL());
                 this.utils.showSnackBar("Permit Design Downloaded Successfully");
@@ -1152,7 +1152,7 @@ designDownload(designData){
   
     let dir_name = 'Wattmonk';
     let path = '';
-    const url = designData.prelimdesign.url;
+    const url = designData.permitdesign.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
    
    
@@ -1161,9 +1161,9 @@ designDownload(designData){
    path = resp.toURL();
    console.log(path); 
    
-   fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
+   fileTransfer.download(url, path + designData.permitdesign.hash + designData.permitdesign.ext).then((entry) => {
      console.log('download complete: ' + entry.toURL());
-     this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+     this.utils.showSnackBar("Permit Design Downloaded Successfully");
      
      // this.clickSub = this.localnotification.on('click').subscribe(data => {
      //   console.log(data)

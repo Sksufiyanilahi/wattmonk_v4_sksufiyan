@@ -731,13 +731,14 @@ deleteArcFile(index){
                 
                 this.utils.hideLoading().then(() => {
                   this.value = response.id;
-                  this.createChatGroup(response);
+                  //this.createChatGroup(response);
                   // this.sendtowattmonk();  
                   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
                   let objToSend: NavigationExtras = {
                     queryParams: {
                       id:response.id,
-                      designData:"prelim"
+                      designData:"prelim",
+                      fulldesigndata:response
                     },
                     skipLocationChange: false,
                     fragment: 'top' 
@@ -808,7 +809,8 @@ deleteArcFile(index){
               let objToSend: NavigationExtras = {
                 queryParams: {
                   id:response.id,
-                  designData:"prelim"
+                  designData:"prelim",
+                  fulldesigndata:response
                 },
                 skipLocationChange: false,
                 fragment: 'top' 

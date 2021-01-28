@@ -47,6 +47,7 @@ export class DeclinepagePage implements OnInit {
     console.log(this.declinedbypeengineer);
     console.log(this.id);
     console.log(this.value);
+    this.pestampDeclineFileUpload = false;
 
     this.userData = this.storageService.getUser();
   }

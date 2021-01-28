@@ -955,7 +955,8 @@ saveInverterModel() {
                   let objToSend: NavigationExtras = {
                     queryParams: {
                       id:response.id,
-                      designData:"permit"
+                      designData:"permit",
+                      fulldesigndata:response
                     },
                     skipLocationChange: false,
                     fragment: 'top' 
@@ -1122,7 +1123,8 @@ saveInverterModel() {
                let objToSend: NavigationExtras = {
                 queryParams: {
                   id:response.id,
-                  designData:"permit"
+                  designData:"permit",
+                  fulldesigndata:response
                 },
                 skipLocationChange: false,
                 fragment: 'top' 
