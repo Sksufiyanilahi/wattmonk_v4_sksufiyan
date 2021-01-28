@@ -123,14 +123,14 @@
                         >Reassign</span>
                     </ion-col> -->
 
-                    <ion-col *ngIf="segments=='status=completed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'">
+                    <!-- <ion-col *ngIf="segments=='status=completed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'">
                         <span style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData)"
-                        >  &nbsp; Deliver</span>
+                        >  &nbsp; Deliver</span></ion-col> -->
                         <!-- <span (click)="openDesigners(designData.id,designData)" style="float:right !important;" class="ion-text-end action-button-color"
                         >Reassign</span> -->
                         <!-- <span *ngIf="userData.role.type!='clientsuperadmin' &&(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                         >Reassign Review</span> -->
-                    </ion-col>
+                    
 
                     <ion-col *ngIf="segments=='status=delivered'">
                       <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="designDownload(designData)">

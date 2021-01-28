@@ -728,28 +728,28 @@ designDownload(designData){
   
   }
 
-  async openreviewPassed(id,designData){
-    const modal = await this.modalController.create({
-      component: PestampdelivermodalPage,
-      cssClass: 'deliver-modal-css',
-      componentProps: {
-        id:id,
-        designData:designData
-      },
-      backdropDismiss:false
-    });
-    modal.onDidDismiss().then((data) => {
-      console.log(data)
-      if(data.data.cancel=='cancel'){
-      }else{
-        this.getDesigns(null)
-      }
-  });
-    // modal.dismiss(() => {
-    //   ;
-    //   this.getDesigns(null);
-    // });
-    return await modal.present();
+  // async openreviewPassed(id,designData){
+  //   const modal = await this.modalController.create({
+  //     component: PestampdelivermodalPage,
+  //     cssClass: 'deliver-modal-css',
+  //     componentProps: {
+  //       id:id,
+  //       designData:designData
+  //     },
+  //     backdropDismiss:false
+  //   });
+  //   modal.onDidDismiss().then((data) => {
+  //     console.log(data)
+  //     if(data.data.cancel=='cancel'){
+  //     }else{
+  //       this.getDesigns(null)
+  //     }
+  // });
+  //   // modal.dismiss(() => {
+  //   //   ;
+  //   //   this.getDesigns(null);
+  //   // });
+  //   return await modal.present();
     // this.designId=id
     // const alert = await this.alertController.create({
     //   cssClass: 'alertClass',
@@ -829,7 +829,7 @@ designDownload(designData){
 
 
 
-  }
+  //}
 
   clearPendingPayments(designData){
     let objToSend: NavigationExtras = {

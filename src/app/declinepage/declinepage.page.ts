@@ -223,6 +223,11 @@ export class DeclinepagePage implements OnInit {
      console.log(this.pestampDeclineList);
    }
 
+   removeArc(i) {
+   this.pestampDeclineList.splice(i, 1);
+    
+ }
+
    pestampDeclineFile(){
       console.log("Hello pestamp");
       const data = new FormData();
@@ -241,13 +246,22 @@ export class DeclinepagePage implements OnInit {
       this.utilities.showLoading('Uploading').then(()=>{
         this.apiservice.uploadFile(data).subscribe((res:any)=>{
           this.utilities.hideLoading().then(()=>{
+            var declinedbypeengineer;
+         if(this.declinedbypeengineer == true)
+          {
+          declinedbypeengineer = true;
+          }
+          else{
+          declinedbypeengineer = false;
+          }
             var cdate = Date.now();
           var postData = {
             status: 'declined',
             requestdeclinereason: this.reason,
             isoutsourced : "false",
             pestampacceptancestarttime: cdate,
-            acknowledgedby : this.userData.id
+            acknowledgedby : this.userData.id,
+            declinedbypeengineer : declinedbypeengineer
             }
             this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{
             //this.createNewDesignChatGroup(res);

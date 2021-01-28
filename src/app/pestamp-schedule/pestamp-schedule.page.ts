@@ -142,9 +142,9 @@ export class PestampSchedulePage implements OnInit {
         await this.utils.hideLoading().then(()=>{
           this.design = result;
           console.log(this.design);
-          this.atticData = this.design.atticphotos;
-          this.roofData = this.design.roofphotos;
-          this.permitPlanData = this.design.permitplan;
+          // this.atticData = this.design.atticphotos;
+          // this.roofData = this.design.roofphotos;
+          // this.permitPlanData = this.design.permitplan;
           console.log(this.permitPlanData)
           this.firstFormGroup.patchValue({
             name: this.design.personname,

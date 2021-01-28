@@ -145,6 +145,7 @@ export class PestampPaymentModalPage implements OnInit {
     getPeStampCharges()
     {
       var searchdata;
+      var bothtypepestampcharges = 0;
     if (this.data.propertytype == 'commercial') {
       searchdata = "commercialanymountingpecharges"
     }
@@ -160,6 +161,26 @@ export class PestampPaymentModalPage implements OnInit {
     else if (this.data.type == "structural" && this.data.mountingtype == 'roof') {
       searchdata = "structuralroofpecharges"
     }
+    else if (this.data.type == "both") {
+      searchdata = "electricalanymountingpecharges"
+      var structuralsearchdata;
+      if (this.data.mountingtype == 'both') {
+        structuralsearchdata = "structural" + this.data.mountingtype + "pecharges"
+      }
+      else if (this.data.mountingtype == 'ground') {
+        structuralsearchdata = "structural" + this.data.mountingtype + "mountpecharges"
+      }
+      else if (this.data.mountingtype == 'roof') {
+        structuralsearchdata = "structural" + this.data.mountingtype + "pecharges"
+      }
+      this.apiService.getPeStampCharges(structuralsearchdata).subscribe(
+        response => {
+          console.log(response);
+          bothtypepestampcharges = parseInt(response[0].settingvalue);
+        }
+      );
+    }
+    setTimeout(() => {
       this.apiService.getPeStampCharges(searchdata).subscribe((res)=>{
         console.log(res);
         this.servicePrice = res;
@@ -173,12 +194,13 @@ export class PestampPaymentModalPage implements OnInit {
           this.netPay = this.settingValue;    
         }
         else{
-          console.log("hello1")
-          this.settingValue = res[0].settingvalue;
+          this.settingValue = res[0].settingvalue + bothtypepestampcharges;
           this.netPay = this.settingValue;
+          console.log("hello1",this.netPay);
         }
       }
       )
+    }, 500);
     }
 
     getCommercialCharges(){

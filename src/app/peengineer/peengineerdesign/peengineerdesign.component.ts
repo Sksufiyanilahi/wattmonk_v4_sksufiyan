@@ -23,6 +23,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
+import { PestampdelivermodalPage } from 'src/app/pestampdelivermodal/pestampdelivermodal.page';
 
 @Component({
   selector: 'app-peengineerdesign',
@@ -696,62 +697,28 @@ designDownload(designData){
   }
 
   async openreviewPassed(id,designData){
-    this.designId=id
-    const alert = await this.alertController.create({
-      cssClass: 'alertClass',
-      header: 'Confirm!',
-      message:'Would you like to  Add Comments!!',
-      inputs:
-       [ {name:'comment',
-       id:'comment',
-          type:'textarea',
-        placeholder:'Enter Comment'}
-        ] ,
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
-        }, {
-          text: 'deliver',
-          handler: (alertData) => {
-            var postData= {};
-            if(alertData.comment!=""){
-             postData = {
-              status: "delivered",
-              comments: alertData.comment ,
-               };}
-               else{
-                postData = {
-                  status: "delivered",
-                   };
-               }
-               console.log(postData);
-               this.apiService.updatePestamps(this.designId,postData).subscribe((value) => {
-                this.utils.hideLoading().then(()=>{
-                  ;
-                  console.log('reach ', value);
-                 this.utils.showSnackBar('Pe Stamp request has been delivered successfully');
-
-                  this.utils.setPeStampRefresh(true);
-                })
-              }, (error) => {
-                this.utils.hideLoading();
-                ;
-              });
-          }
-        }
-      ]
+    const modal = await this.modalController.create({
+      component: PestampdelivermodalPage,
+      cssClass: 'deliver-modal-css',
+      componentProps: {
+        id:id,
+        designData:designData
+      },
+      backdropDismiss:false
     });
-
-    await alert.present();
-
-
-
-  }
+    modal.onDidDismiss().then((data) => {
+      console.log(data)
+      if(data.data.cancel=='cancel'){
+      }else{
+        this.getDesigns(null)
+      }
+  });
+    // modal.dismiss(() => {
+    //   ;
+    //   this.getDesigns(null);
+    // });
+    return await modal.present();
+}
 
 createChatGroup(design:DesginDataModel){
   // var GUID = 'permit' + "_" + new Date().getTime();

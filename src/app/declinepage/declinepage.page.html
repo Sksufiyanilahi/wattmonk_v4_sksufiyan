@@ -28,7 +28,7 @@
             <ng-container>
                 <ion-item class="ion-no-padding" (click)="decline.click()">
                     <ion-label position="floating" class="label">Attachment</ion-label>
-                        <input type="file" #decline class="form_input"  (change)="uploadPestampDeclineFile($event)" style="margin-top: 12px;" [(ngModel)]="atticphotos">
+                        <input type="file" #decline class="form_input"  (change)="uploadPestampDeclineFile($event)" style="margin-top: 12px;">
                         <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
                     </ion-item>
                     <div *ngFor="let file of pestampDeclineList;let i = index">
@@ -36,7 +36,7 @@
                             <ion-col size="11">
                                 {{file.name}}
                             </ion-col>
-                            <ion-col size="1" (click)="removeArc(i,'attic')">x</ion-col>
+                            <ion-col size="1" (click)="removeArc(i)">x</ion-col>
                         </ion-item>
                     </div>
                     </ng-container>
