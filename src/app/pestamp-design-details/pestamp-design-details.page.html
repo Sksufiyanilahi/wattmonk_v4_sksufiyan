@@ -139,7 +139,7 @@
         </ng-container>
     </ion-row>
 
-    <ion-row class="ion-no-padding" *ngIf="((design.status == 'completed' || design.status == 'delivered') && design.propertytype == 'commercial') && (design.role.type !='clientadmin' && design.role.type !='clientsuperadmin')">
+    <ion-row class="ion-no-padding" *ngIf="((design.status == 'completed' || design.status == 'delivered') && design.propertytype == 'commercial') && (user.role.type !='clientadmin' && user.role.type !='clientsuperadmin')">
         <ion-col><span class="model-type font">Working Hours</span></ion-col>
         <ion-col size="auto">
             <span class="model-name font">{{design?.workinghours}}</span>

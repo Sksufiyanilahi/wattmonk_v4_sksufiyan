@@ -188,7 +188,7 @@ export class PestampPaymentModalPage implements OnInit {
         console.log("deliver")
         this.settingValue = res[0].settingvalue;
         this.serviceCharges = this.settingValue * this.data.workinghours;
-        this.netPay = this.settingValue * this.data.workinghours;
+        //this.netPay = this.settingValue * this.data.workinghours;
         this.getAmounttopay();
     })
   }

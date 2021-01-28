@@ -20,7 +20,7 @@
     <ion-row *ngIf="data.modeofstamping == 'hardcopy' || data.modeofstamping =='both'">
     <ion-col>
       <ion-icon name="location-outline"></ion-icon>
-      <span (click)="openAddressOnMap(design.deliveryaddress)" class="address">{{data.deliveryaddress}}</span>
+      <span (click)="openAddressOnMap(data.deliveryaddress)" class="address">{{data.deliveryaddress}}</span>
   </ion-col>
 </ion-row>
   <ion-row *ngIf="data.modeofstamping == 'hardcopy' || data.modeofstamping =='both'">
