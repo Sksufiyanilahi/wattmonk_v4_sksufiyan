@@ -88,7 +88,7 @@ export class PestampPaymentModalPage implements OnInit {
       //   (err) => console.log(err),
       //   () => console.log('done!')
       // )
-
+        console.log(this.router.getCurrentNavigation().extras.state);
       this.designData = this.router.getCurrentNavigation().extras.state;
       this.data = this.designData.productdetails.queryParams.designData;
       this.assignValue = this.designData.productdetails.queryParams.value;
@@ -188,7 +188,7 @@ export class PestampPaymentModalPage implements OnInit {
         console.log("deliver")
         this.settingValue = res[0].settingvalue;
         this.serviceCharges = this.settingValue * this.data.workinghours;
-        this.netPay = this.settingValue * this.data.workinghours;
+        //this.netPay = this.settingValue * this.data.workinghours;
         this.getAmounttopay();
     })
   }

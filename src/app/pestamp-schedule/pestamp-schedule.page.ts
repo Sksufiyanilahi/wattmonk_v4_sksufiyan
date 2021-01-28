@@ -30,6 +30,7 @@ export class PestampSchedulePage implements OnInit {
   emailError = INVALID_EMAIL_MESSAGE;
   addressError = INVALID_ADDRESS;
   contactError = INVALID_PHONE_NUMBER;
+  hardCopiesError = "Please Enter a Valid Value";
   
   atticPhotosList: string[]=[];
   roofPhotosList:string[]=[];
@@ -388,7 +389,9 @@ export class PestampSchedulePage implements OnInit {
         hardcopy.setValidators([
         Validators.required,
         Validators.min(1),
-        Validators.pattern("^[0-4]+$")]);
+        Validators.max(10),
+        //Validators.pattern("^[0-4]+$")]);
+        Validators.pattern("")]);
     }
     // else if(this.stampingModeValue == 'ecopy'){
     //   console.log("hello")

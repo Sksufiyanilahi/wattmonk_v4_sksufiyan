@@ -101,7 +101,7 @@
             <ion-col><span class="model-type font">Attic Photos</span></ion-col>
             <ion-col size="auto" >
                 <div *ngFor="let attic of design.atticphotos;let i=index" style="display: flex;justify-content: flex-end;">
-                    <span class="model-name font" style="color:#3c78d8 !important">{{attic?.name}}{{attic?.ext}}</span>
+                    <span class="model-name font" style="color:#3c78d8 !important" (click)="showAtticImage(attic)">{{attic?.name}}{{attic?.ext}}</span>
                 </div>
             </ion-col>
         </ng-container>
@@ -112,7 +112,7 @@
             <ion-col><span class="model-type font">Roof Photos</span></ion-col>
             <ion-col size="auto" >
                 <div *ngFor="let roof of design.roofphotos;let i=index" style="display: flex;justify-content: flex-end;">
-                    <span class="model-name font" style="color:#3c78d8 !important">{{roof?.name}}{{roof?.ext}}</span>
+                    <span class="model-name font" style="color:#3c78d8 !important" (click)="showRoofImage(roof)">{{roof?.name}}{{roof?.ext}}</span>
                 </div>
             </ion-col>
         </ng-container>
@@ -123,7 +123,7 @@
             <ion-col><span class="model-type font">Permit Plan</span></ion-col>
             <ion-col size="auto" >
                 <div *ngFor="let permitplan of design.permitplan;let i=index" style="display: flex;justify-content: flex-end;">
-                    <span class="model-name font" style="color:#3c78d8 !important">{{permitplan?.name}}{{permitplan?.ext}}</span>
+                    <span class="model-name font" style="color:#3c78d8 !important" (click)="showPermitPlan(permitplan)">{{permitplan?.name}}{{permitplan?.ext}}</span>
                 </div>
             </ion-col>
         </ng-container>
@@ -133,11 +133,19 @@
         <ng-container *ngIf="design.stampedfiles != null">
             <ion-col><span class="model-type font">Stamped Files</span></ion-col>
             <ion-col size="auto" >
-                    <span class="model-name font" style="color:#3c78d8 !important">{{design.stampedfiles.name}}{{design.stampedfiles.ext}}</span>
+                    <span class="model-name font" style="color:#3c78d8 !important" (click)="showStampedFile(design.stampedfiles)">{{design.stampedfiles.name}}{{design.stampedfiles.ext}}</span>
                 <!-- </div> -->
             </ion-col>
         </ng-container>
     </ion-row>
+
+    <ion-row class="ion-no-padding" *ngIf="((design.status == 'completed' || design.status == 'delivered') && design.propertytype == 'commercial') && (user.role.type !='clientadmin' && user.role.type !='clientsuperadmin')">
+        <ion-col><span class="model-type font">Working Hours</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{design?.workinghours}}</span>
+        </ion-col>
+    </ion-row>
+
     <ion-row *ngIf="design.comments || design.comments !=null  " class="ion-no-padding ion-margin-top">
         <ion-col size="6">
             <span class="models font">Comments</span>
@@ -198,12 +206,12 @@
                                  <!-- </ion-item> -->
             
         </ion-row>
-    <ion-row class="ion-no-padding font">
+    <ion-row class="ion-no-padding workinghours">
         <ng-container>
-            <ion-col><span class="model-type font">Working Hours</span></ion-col>
+            <ion-col><span class="model-type workinghours">Working Hours</span></ion-col>
             <ion-col size="auto" >
-                <ion-input *ngIf="design.workinghours == '0'" class="ht_wt" type="text" formControlName="workinghours" ></ion-input>
-                <span *ngIf="design.workinghours !== '0'" class="model-name font">{{design.workinghours}}</span>
+                <ion-input *ngIf="design.workinghours == '0'" class="ht_wt" type="tel" min="1" max="10" formControlName="workinghours" ></ion-input>
+                <!-- <span *ngIf="design.workinghours !== '0'" class="model-name font">{{design.workinghours}}</span> -->
                 <!-- </div> -->
             </ion-col>
         </ng-container>

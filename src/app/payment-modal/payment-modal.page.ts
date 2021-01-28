@@ -61,6 +61,12 @@ netPay:any
     private db:AngularFireDatabase,
     private cdr: ChangeDetectorRef
     ) {
+      this.designData = this.router.getCurrentNavigation().extras.state;
+      console.log(this.designData)
+      this.id = this.designData.productdetails.queryParams.id;
+      this.design = this.designData.productdetails.queryParams.designData;
+      console.log(this.id);
+      console.log(this.design);
       //For Counts
       this.designData = this.router.getCurrentNavigation().extras.state;
       this.id = this.designData.productdetails.queryParams.id;
@@ -131,6 +137,9 @@ netPay:any
 fetchData(){
   // this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
   // this.design=params.get('designData')});
+  // const navigation = this.router.getCurrentNavigation()
+  // console.log(navigation)
+  // console.log(this.router.getCurrentNavigation().extras.state)
  
 
 
