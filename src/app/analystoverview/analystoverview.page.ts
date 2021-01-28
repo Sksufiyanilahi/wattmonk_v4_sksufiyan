@@ -103,9 +103,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
 
     this.intercomModule();
     this.userData=this.storage.getUser();
-    this.apiService.version.subscribe(versionInfo=>{
-      this.update_version = versionInfo;
-    })
+ 
     this.apiService.emitUserNameAndRole(this.userData);
     this.getNotificationCount();
     this.setupCometChat();
@@ -415,20 +413,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   }
 
   ionViewDidEnter() {
-    if(this.version !== this.update_version && this.update_version !==''){
-        
-      setTimeout(()=>{
-    
-        this.utilities.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
-          text:'Ok',
-        
-          handler:()=>{
-            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
-           this.ionViewDidEnter();
-          }
-        }]);
-      },2000)
-    }
+  
     this.deacctivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       this.utilities.showHideIntercom(false);

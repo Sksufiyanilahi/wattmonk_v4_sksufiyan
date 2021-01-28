@@ -751,7 +751,8 @@ this.deactivateNetworkSwitch.unsubscribe();
       let objToSend: NavigationExtras = {
         queryParams: {
           id:id,
-          designData:this.designerData.requesttype
+          designData:this.designerData.requesttype,
+          design:this.designerData
         },
         skipLocationChange: false,
         fragment: 'top' 

@@ -13,6 +13,8 @@ import { Intercom } from 'ng-intercom';
 import { Observable } from 'rxjs';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 declare var Stripe;
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { DesginDataModel } from '../model/design.model';
 
 
 
@@ -57,6 +59,7 @@ card:any
  createpayment:any;
 
  designData:any;
+  fulldesigndata: any;
 
   constructor(//private stripe:Stripe,
     private apiService:ApiService,
@@ -71,6 +74,16 @@ card:any
     private cdr: ChangeDetectorRef
     //private stripe:Stripe
     ) {
+      this.designData = this.router.getCurrentNavigation().extras.state;
+      console.log(this.designData)
+      this.mode = this.designData.productdetails.queryParams.mode;
+      this.designId = this.designData.productdetails.queryParams.id;
+      this.serviceAmount = this.designData.productdetails.queryParams.serviceAmount;
+      this.design = this.designData.productdetails.queryParams.design;
+      this.data = this.designData.productdetails.queryParams.data;
+      this.fulldesigndata = this.designData.productdetails.queryParams.fulldesigndata;
+      this.assignValue = this.designData.productdetails.queryParams.assignValue;
+        console.log(this.fulldesigndata);
     this.amountForm=this.formBuilder.group(
        {
          amount:new FormControl('',[Validators.required, Validators.min(1), Validators.max(10000)]),
@@ -123,16 +136,7 @@ card:any
   //     this.onBoarding = this.route.snapshot.paramMap.get('onBoarding');
   //     this.assignValue = this.route.snapshot.paramMap.get('assignValue');
   //     this.data = this.route.snapshot.paramMap.get('data');
-  this.designData = this.router.getCurrentNavigation().extras.state;
-    console.log(this.designData)
-    this.mode = this.designData.productdetails.queryParams.mode;
-    this.designId = this.designData.productdetails.queryParams.id;
-    this.serviceAmount = this.designData.productdetails.queryParams.serviceAmount;
-    this.design = this.designData.productdetails.queryParams.design;
-    this.data = this.designData.productdetails.queryParams.data;
-    this.assignValue = this.designData.productdetails.queryParams.assignValue;
-      console.log(this.assignValue);
-      console.log(this.data);
+
       
     this.userData = this.storageService.getUser();
     this.setupStripe();
@@ -418,7 +422,13 @@ else{
   console.log(data);
     this.apiService.createPayment(data).subscribe((res)=>{
       this.createPayment=res;
-      this.utils.hideLoading();
+      debugger;
+      if(res){
+        this.utils.hideLoading().then(()=>{
+          this.createChatGroup(this.fulldesigndata);
+  
+        });
+      }
       if(this.createPayment.status=='succeeded'){
     this.utils.showSnackBar("payment via card is successfull");
    if(this.designId==="null"){
@@ -582,6 +592,33 @@ this.router.navigate(['pestamp-homepage/pestamp-design']);
     this.utils.errorSnackBar("Something went wrong");
   })
 }
+
+
+createChatGroup(design){
+  debugger;
+  if(this.design=='prelim'){
+    var GUID = 'prelim' + "_" + new Date().getTime();
+  }else if(this.design=='permit'){
+    var GUID = 'permit' + "_" + new Date().getTime();
+  } 
+
+    var address = design.address.substring(0, 60);
+    var groupName = design.name + "_" + address;
+
+    var groupType = CometChat.GROUP_TYPE.PRIVATE;
+    var password = "";
+
+    var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+    CometChat.createGroup(group).then(group=>{
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+        this.cdr.detectChanges();
+      })
+    })
+  }
   
 }
 

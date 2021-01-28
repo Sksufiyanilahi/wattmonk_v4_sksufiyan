@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
@@ -12,6 +12,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Pestamp } from '../model/pestamp.model';
 import { NetworkdetectService } from '../networkdetect.service';
 import { NavController } from '@ionic/angular';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
 @Component({
   selector: 'app-pestamp-schedule',
@@ -78,6 +79,7 @@ export class PestampSchedulePage implements OnInit {
               private route: ActivatedRoute,
               private network:NetworkdetectService,
               private navController:NavController,
+              private cdr:ChangeDetectorRef,
               private router:Router) 
               { 
     const MAILFORMAT = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
@@ -878,5 +880,26 @@ this.utils.showLoading('Saving').then(() => {
 //         this.autocompleteItems = [];
 //       }, 100);
 //     }
+
+createChatGroup(design:Pestamp){
+  var GUID = 'permit' + "_" + new Date().getTime();
+
+  // var address = design.address.substring(0, 90);
+  var groupName = design.name
+
+  var groupType = CometChat.GROUP_TYPE.PRIVATE;
+  var password = "";
+
+  var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+  CometChat.createGroup(group).then(group=>{
+    let membersList = [
+      new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+    ];
+    CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+      this.cdr.detectChanges();
+    })
+  })
+}
 
 }

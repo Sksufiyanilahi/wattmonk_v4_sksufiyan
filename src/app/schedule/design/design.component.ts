@@ -281,20 +281,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        //  this.desginForm.get('address').setValue('124/345');
-        //  this.desginForm.get('latitude').setValue('24.553333');
-        //  this.desginForm.get('longitude').setValue('80.5555555555');
-        //  this.desginForm.get('country').setValue('india');
-        //  this.desginForm.get('city').setValue('Lucknow');
-        //  this.desginForm.get('state').setValue('UP');
-        //  this.desginForm.get('postalcode').setValue(3232343);
-         this.desginForm.get('address').setValue(address.address);
-           this.desginForm.get('latitude').setValue(address.lat);
-           this.desginForm.get('longitude').setValue(address.long);
-           this.desginForm.get('country').setValue(address.country);
-         this.desginForm.get('city').setValue(address.city);
-           this.desginForm.get('state').setValue(address.state);
-           this.desginForm.get('postalcode').setValue(address.postalcode);
+         this.desginForm.get('address').setValue('124/345');
+         this.desginForm.get('latitude').setValue('24.553333');
+         this.desginForm.get('longitude').setValue('80.5555555555');
+         this.desginForm.get('country').setValue('india');
+         this.desginForm.get('city').setValue('Lucknow');
+         this.desginForm.get('state').setValue('UP');
+         this.desginForm.get('postalcode').setValue(3232343);
+        //  this.desginForm.get('address').setValue(address.address);
+        //    this.desginForm.get('latitude').setValue(address.lat);
+        //    this.desginForm.get('longitude').setValue(address.long);
+        //    this.desginForm.get('country').setValue(address.country);
+        //  this.desginForm.get('city').setValue(address.city);
+        //    this.desginForm.get('state').setValue(address.state);
+        //    this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -702,7 +702,7 @@ deleteArcFile(index){
               this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
-                // this.createChatGroup(response);
+                this.createChatGroup(response);
                 this.router.navigate(['/homepage/design'])
                 // this.utils.showSnackBar('Design have been saved');
                 this.utils.setHomepageDesignRefresh(true);
@@ -731,7 +731,7 @@ deleteArcFile(index){
                 
                 this.utils.hideLoading().then(() => {
                   this.value = response.id;
-                  // this.createChatGroup(response);
+                  this.createChatGroup(response);
                   // this.sendtowattmonk();  
                   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
                   let objToSend: NavigationExtras = {
