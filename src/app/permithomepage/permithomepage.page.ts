@@ -163,6 +163,7 @@ export class PermithomepagePage implements OnInit {
   }
 
   ionViewDidEnter() {
+    debugger;
     if(this.version !== this.update_version && this.update_version !==''){
 
       setTimeout(()=>{

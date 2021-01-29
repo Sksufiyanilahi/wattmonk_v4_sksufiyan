@@ -17,6 +17,7 @@ import { COMETCHAT_CONSTANTS, ROLES,version } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Appversion } from '../appversion';
 
 @Component({
   selector: 'app-homepage',
