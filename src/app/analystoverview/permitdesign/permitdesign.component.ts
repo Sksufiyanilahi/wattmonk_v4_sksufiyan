@@ -18,13 +18,17 @@ import { StorageService } from 'src/app/storage.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
+import { version } from 'src/app/contants.prod';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-permitdesign',
   templateUrl: './permitdesign.component.html',
   styleUrls: ['./permitdesign.component.scss'],
 })
-export class PermitdesignComponent implements OnInit { listOfDesignDataHelper: DesginDataHelper[] = [];
+export class PermitdesignComponent implements OnInit { 
+  private version = version;
+  listOfDesignDataHelper: DesginDataHelper[] = [];
   listOfDesignsData: DesginDataModel[] = [];
   private refreshSubscription: Subscription;
   private routeSubscription: Subscription;
@@ -57,6 +61,7 @@ export class PermitdesignComponent implements OnInit { listOfDesignDataHelper: D
   netSwitch: boolean;
   deactivateNetworkSwitch: Subscription;
   noDesignsFound: string;
+  update_version: string;
 
   constructor(private utils: UtilitiesService,
     private apiService: ApiService,
@@ -71,6 +76,7 @@ export class PermitdesignComponent implements OnInit { listOfDesignDataHelper: D
     private storageService:StorageService,
     private network:NetworkdetectService,
     private socialsharing: SocialSharing,
+    private iab: InAppBrowser,
     private social: SocialSharing) { 
       this.segments ='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed';
       const latestDate = new Date();
@@ -84,6 +90,20 @@ export class PermitdesignComponent implements OnInit { listOfDesignDataHelper: D
   }
 
   ionViewDidEnter() {
+    if(this.version !== this.update_version && this.update_version !==''){
+        
+      setTimeout(()=>{
+    
+        this.utils.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
+          text:'Ok',
+        
+          handler:()=>{
+            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
+           this.ionViewDidEnter();
+          }
+        }]);
+      },2000)
+    }
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
@@ -127,7 +147,12 @@ this.network.networkConnect();
     
   }
 
-  ngOnInit() {this.userData = this.storageService.getUser();
+  ngOnInit() {
+
+    this.userData = this.storageService.getUser();
+    this.apiService.version.subscribe(versionInfo=>{
+      this.update_version = versionInfo;
+    })
     console.log(this.userData);
     
     // this.router.navigate(['homepage/design/pending']);
@@ -154,6 +179,7 @@ this.network.networkConnect();
     // });
 
     this.PermitRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 

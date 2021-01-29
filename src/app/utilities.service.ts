@@ -35,6 +35,7 @@ export class UtilitiesService {
   homepagePermitRefresh = new BehaviorSubject<boolean>(false);
   surveyDetailsRefresh = new BehaviorSubject<boolean>(false);
   designDetailsRefresh = new BehaviorSubject<boolean>(false);
+  peStampRefresh = new BehaviorSubject<boolean>(false);
   permitdesignDetailsRefresh = new BehaviorSubject<boolean>(false);
   //permitdesignDetailsRefresh = new BehaviorSubject<boolean>(false);
   showBottomBarHomepage = new BehaviorSubject<boolean>(true);
@@ -52,6 +53,7 @@ export class UtilitiesService {
   private addNumbers = true;
   private addSymbols = false;
   private passwordLength = 6;
+  designlistofdesignDetail: any;
 
   constructor(
     public loadingController: LoadingController,
@@ -120,6 +122,16 @@ export class UtilitiesService {
     this.homepageSurveyRefresh.next(refresh);
   }
 
+  getPeStampRefresh(): BehaviorSubject<boolean>
+  {
+    return this.peStampRefresh;
+  }
+
+  setPeStampRefresh(refresh: boolean)
+  {
+   this.peStampRefresh.next(refresh);
+  }
+
   getDataRefresh() : BehaviorSubject<boolean>{
     return this.dataRefresh;
   }
@@ -159,6 +171,14 @@ export class UtilitiesService {
   setPermitDesignDetailsRefresh(value: boolean) {
     this.permitdesignDetailsRefresh.next(value);
   }
+
+   getdesignDetails(){
+    return this.designlistofdesignDetail;
+   }
+
+   setDesignDetails(data){
+    this.designlistofdesignDetail=data;
+   }
   // getPermitDesignDetailsRefresh(): BehaviorSubject<boolean> {
   //   return this.permitdesignDetailsRefresh;
   // }
@@ -311,6 +331,16 @@ export class UtilitiesService {
       return "Battery";
     } else {
       return "PV";
+    }
+  }
+
+  getPestampTypeName(type) {
+    if (type == "structural") {
+      return "Structural";
+    } else if (type == "electrical") {
+      return "Electrical";
+    } else {
+      return "Both";
     }
   }
 

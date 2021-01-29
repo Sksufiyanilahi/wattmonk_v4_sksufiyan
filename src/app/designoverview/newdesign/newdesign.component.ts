@@ -11,6 +11,9 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import * as moment from 'moment';
+import { StorageService } from 'src/app/storage.service';
+import { version } from 'src/app/contants.prod';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-newdesign',
@@ -18,13 +21,14 @@ import * as moment from 'moment';
   styleUrls: ['./newdesign.component.scss'],
 })
 export class NewdesignComponent implements OnInit {
-
+  private version = version;
   listOfDesignData: DesginDataModel[] = [];
   listOfDesignDataHelper: DesginDataHelper[] = [];
   private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
   skip:number=0;
   limit:number=10;
+  user:any
   currentDate:any=new Date()
 
   today: any;
@@ -35,13 +39,19 @@ export class NewdesignComponent implements OnInit {
   overdue: any;
   unsubscribeMessage: Subscription;
   noDesignsFound: string;
+  update_version: string;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+    private iab:InAppBrowser,
+     private storageservice :StorageService) {
+
+      this.user=this.storageservice.getUser();
+      
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -55,7 +65,9 @@ export class NewdesignComponent implements OnInit {
     localStorage.setItem('type','prelim');
  console.log("ngoninit");
 console.log(this.currentDate.toISOString());
-
+this.apiService.version.subscribe(versionInfo=>{
+  this.update_version = versionInfo;
+})
  
   }
   ngOnDestroy(): void {
@@ -69,9 +81,23 @@ console.log(this.currentDate.toISOString());
 
 
   ionViewDidEnter(){
+    if(this.version !== this.update_version && this.update_version !==''){
+      
+      setTimeout(()=>{
     
+        this.utils.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
+          text:'Ok',
+        
+          handler:()=>{
+            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
+           this.ionViewDidEnter();
+          }
+        }]);
+      },2000)
+    }
   
     this.designRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 

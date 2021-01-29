@@ -22,8 +22,8 @@ export class ChangePasswordPage implements OnInit {
  fieldRequired = FIELD_REQUIRED;
 
  forgotPasswordForm: FormGroup;
-  isActiveToggleTextPassword: boolean;
-  isActiveToggleTextnewPassword: boolean;
+  isActiveToggleTextPassword: boolean=false;
+  isActiveToggleTextnewPassword: boolean=false;
   changepassword: FormGroup;
   password: string;
 

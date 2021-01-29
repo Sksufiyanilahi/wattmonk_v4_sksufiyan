@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { AssigneeModel } from '../../model/assignee.model';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-user-selector',
@@ -28,14 +29,15 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator ,O
   private onChange: (assignee: number) => void;
   selectedUserId = null;
   @Input() reviewAssigned:any;
+  userId:any;
   // assignee: AssigneeModel;
 
-  constructor() {
-   
+  constructor( private storage:StorageService) {
+  
   }
 ngOnInit(){
   
-    
+   this.userId=this.storage.getUserID();
     
 
 }
@@ -55,9 +57,7 @@ ngOnInit(){
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-   
-   
-    if (this.required) {
+   if (this.required) {
       console.log(this.selectedUserId);
       if (this.selectedUserId !== null) {
         return null;
@@ -72,6 +72,14 @@ ngOnInit(){
   }
 
   selectAssignee(assignee: AssigneeModel) {
+    console.log(this.userId);
+    if( this.reviewAssigned!=null && this.reviewAssigned.id!=this.userId ){
+    const element = <HTMLElement> document.getElementById('pre');
+    element.className='afterselected';
+
+    
+  }
+
     console.log("this is",assignee)
     this.assigneeData.emit(assignee);
     this.assignees.forEach((item) => {

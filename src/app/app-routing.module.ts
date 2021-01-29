@@ -199,20 +199,88 @@ const routes: Routes = [
   },
   {
     path: 'permitdesignoverview',
-    loadChildren: () => import('./permitdesignoverview/permitdesignoverview.module').then( m => m.PermitdesignoverviewPageModule)
+    loadChildren: () => import('./permitdesignoverview/permitdesignoverview.module').then( m => m.PermitdesignoverviewPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'statsoverviewdetails',
-    loadChildren: () => import('./statsoverviewdetails/statsoverviewdetails.module').then( m => m.StatsoverviewdetailsPageModule)
+    loadChildren: () => import('./statsoverviewdetails/statsoverviewdetails.module').then( m => m.StatsoverviewdetailsPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'coupon-offers-modal',
-    loadChildren: () => import('./coupon-offers-modal/coupon-offers-modal.module').then( m => m.CouponOffersModalPageModule)
+    loadChildren: () => import('./coupon-offers-modal/coupon-offers-modal.module').then( m => m.CouponOffersModalPageModule),
+    canActivate: [AuthGuardService]
   },
   {
     path: 'onboarding',
-    loadChildren: () => import('./onboarding/onboarding.module').then( m => m.OnboardingPageModule)
+    loadChildren: () => import('./onboarding/onboarding.module').then( m => m.OnboardingPageModule),
+    canActivate: [AuthGuardService]
   },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule),
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'onhold',
+    loadChildren: () => import('./onhold/onhold.module').then( m => m.OnholdPageModule)
+  },
+  {
+    path: 'waitingforacceptance',
+    loadChildren: () => import('./waitingforacceptance/waitingforacceptance.module').then( m => m.WaitingforacceptancePageModule)
+  },
+  {
+    path: 'unassigned',
+    loadChildren: () => import('./unassigned/unassigned.module').then( m => m.UnassignedPageModule)
+  },
+  {
+    path: 'revision',
+    loadChildren: () => import('./revision/revision.module').then( m => m.RevisionPageModule)
+  },
+{
+  path: 'pestamp-schedule',
+  loadChildren: () => import('./pestamp-schedule/pestamp-schedule.module').then( m => m.PestampSchedulePageModule),
+  canActivate: [AuthGuardService]
+},
+{
+  path: 'pestamp-schedule/:id',
+  loadChildren: () => import('./pestamp-schedule/pestamp-schedule.module').then( m => m.PestampSchedulePageModule),
+  canActivate: [AuthGuardService]
+},
+{
+  path: 'pestamp-homepage',
+  loadChildren: () => import('./pestamp-homepage/pestamp-homepage.module').then( m => m.PestampHomepagePageModule),
+  canActivate: [AuthGuardService]
+},
+{
+  path: 'pestamp-design-details/:id',
+  loadChildren: () => import('./pestamp-design-details/pestamp-design-details.module').then( m => m.PestampDesignDetailsPageModule),
+  canActivate: [AuthGuardService]
+},
+  {
+    path: 'pestamp-payment-modal',
+    loadChildren: () => import('./pestamp-payment-modal/pestamp-payment-modal.module').then( m => m.PestampPaymentModalPageModule),
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'peengineer',
+    loadChildren: () => import('./peengineer/peengineer.module').then( m => m.PEengineerPageModule)
+  },
+  {
+    path: 'comingsoon',
+    loadChildren: () => import('./comingsoon/comingsoon.module').then( m => m.ComingsoonPageModule)
+  },
+  {
+    path: 'pestampdelivermodal',
+    loadChildren: () => import('./pestampdelivermodal/pestampdelivermodal.module').then( m => m.PestampdelivermodalPageModule)
+  },
+
+
+
+
+
+
 
 
 

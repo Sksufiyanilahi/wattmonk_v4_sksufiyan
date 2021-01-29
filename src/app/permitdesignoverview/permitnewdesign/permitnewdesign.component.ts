@@ -14,6 +14,7 @@ import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
 import { intercomId } from 'src/app/contants';
 import { Intercom } from 'ng-intercom';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-permitnewdesign',
@@ -29,6 +30,7 @@ export class PermitnewdesignComponent implements OnInit {
   currentDate:any=new Date()
   skip:number=0;
   limit:number=10;
+  userData:any
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
@@ -45,8 +47,10 @@ export class PermitnewdesignComponent implements OnInit {
     private storage: Storage,
     private apiService: ApiService,
     private router:ActivatedRoute,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private storageservice:StorageService
     ) {
+      this.userData = this.storageservice.getUser();
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -91,6 +95,7 @@ export class PermitnewdesignComponent implements OnInit {
 
     this.intercomModule();
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 

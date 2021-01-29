@@ -9,6 +9,7 @@ import { ResendpagedialogPageModule } from '../resendpagedialog/resendpagedialog
 import { IntercomModule } from 'ng-intercom';
 import { intercomId } from '../contants';
 import { CouponOffersModalPageModule } from '../coupon-offers-modal/coupon-offers-modal.module';
+import { PestampdelivermodalPageModule } from '../pestampdelivermodal/pestampdelivermodal.module';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { CouponOffersModalPageModule } from '../coupon-offers-modal/coupon-offer
     
     StatisticsDetailsPageModule,
     ResendpagedialogPageModule,
+    PestampdelivermodalPageModule,
     IntercomModule.forRoot({
       appId: intercomId, // from your Intercom config
       updateOnRouterChange: true // will automatically run `update` on router event changes. Default: `false`
@@ -29,7 +31,7 @@ import { CouponOffersModalPageModule } from '../coupon-offers-modal/coupon-offer
   exports:[
     EmailModelPageModule,
     DeclinepagePageModule ,
-   
+    PestampdelivermodalPageModule,
     StatisticsDetailsPageModule,
     ResendpagedialogPageModule,
     CouponOffersModalPageModule

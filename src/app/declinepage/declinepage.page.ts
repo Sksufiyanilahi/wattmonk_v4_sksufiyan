@@ -24,6 +24,10 @@ export class DeclinepagePage implements OnInit {
   successmessage: string;
   userId: any;
   userData: any;
+  value:any;
+  declinedbypeengineer:boolean;
+  pestampDeclineList:string[]=[];
+  pestampDeclineFileUpload:boolean = false;
 
   constructor(private camera: Camera,
     private modalCtrl:ModalController,
@@ -38,7 +42,12 @@ export class DeclinepagePage implements OnInit {
   ngOnInit() {
 
     this.id= this.nav.get('id');
+    this.value = this.nav.get('value');
+    this.declinedbypeengineer = this.nav.get('declinedbypeengineer');
+    console.log(this.declinedbypeengineer);
     console.log(this.id);
+    console.log(this.value);
+    this.pestampDeclineFileUpload = false;
 
     this.userData = this.storageService.getUser();
   }
@@ -47,6 +56,8 @@ export class DeclinepagePage implements OnInit {
 
 
   selectAttachment(){
+    
+  //else{
     this.exceedfileSize=0;
     // const options: CameraOptions = {
     //   quality: 30,
@@ -61,6 +72,13 @@ export class DeclinepagePage implements OnInit {
     this.chooser.getFile()
   .then((file) =>
     {
+      console.log(file);
+      // if(this.value == 'pestamp'){
+      //   for(var i=0; i< e.target.files.length;i++){
+      //     this.pestampDeclineList.push(e.target.files[i])
+      //   }
+      // }
+      // else{
       console.log(file, 'canceled')
         this.filename= file.name;
         this.file.resolveLocalFilesystemUrl(file.uri).then((fileentry:FileEntry)=>{
@@ -88,7 +106,7 @@ export class DeclinepagePage implements OnInit {
 
 
     }
-
+  //}
     )
   .catch((error: any) => console.error(error));
 
@@ -107,7 +125,7 @@ export class DeclinepagePage implements OnInit {
     //  }, (err) => {
     //   // Handle error
     //  })
-  }
+}
 
   cancel(){
     this.modalCtrl.dismiss({
@@ -129,35 +147,137 @@ export class DeclinepagePage implements OnInit {
   submit(){
 
     if(this.exceedfileSize < 1048576 && this.exceedfileSize!=0){
+      if(this.pestampDeclineFileUpload)
+      {
+        this.pestampDeclineFile();
+      }
+      else{
       this.uploadFile();
-
+      }
 
     }else if(this.filename !=='' && this.exceedfileSize > 1048576){
 
       console.log('could not submit');
 
     }else{
-
-      let data={
-        status : 'requestdeclined',
-        requestdeclinereason:this.reason,
-        outsourcedto : null,
-        isoutsourced : "false",
-        acknowledgedby : this.id
-
+      var designstarttime = new Date();
+      var milisecond = designstarttime.getTime();
+      if(this.value =='pestamp')
+      {
+        var declinedbypeengineer;
+        if(this.declinedbypeengineer == true)
+        {
+          declinedbypeengineer = true;
+        }
+        else{
+          declinedbypeengineer = false;
+        }
+          var cdate = Date.now();
+          var postData = {
+            status: 'declined',
+            requestdeclinereason: this.reason,
+            isoutsourced : "false",
+            pestampacceptancestarttime: cdate,
+            acknowledgedby : this.userData.id,
+            declinedbypeengineer : declinedbypeengineer
+            }
+            this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{
+            //this.createNewDesignChatGroup(res);
+            console.log(res);
+            this.modalCtrl.dismiss({
+              'dismissed' : true
+            })
+          })
       }
+      else{
+          var data={
+              status : 'requestdeclined',
+              requestdeclinereason:this.reason,
+              isoutsourced : "false",
+              designacceptanceendtime:milisecond,
+                   }
+        
+            console.log(data);
 
-      console.log(data);
-
-      this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
-        this.createNewDesignChatGroup(res);
-          this.modalCtrl.dismiss({
-            'dismissed': true
-          });
-      })
+            this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
+              this.createNewDesignChatGroup(res);
+                this.modalCtrl.dismiss({
+                  'dismissed': true
+                });
+            })
+    }
     }
 
   }
+
+  uploadPestampDeclineFile(event){
+    console.log(event);
+    console.log(event.target.files);
+    this.exceedfileSize = event.target.files[0].size;
+    console.log(this.exceedfileSize);
+    //this.isPermitPlanFileUpload = true;
+     for(var i=0; i< event.target.files.length;i++){
+       this.pestampDeclineList.push(event.target.files[i])
+     }
+     this.pestampDeclineFileUpload= true;
+     console.log(this.pestampDeclineList);
+   }
+
+   removeArc(i) {
+   this.pestampDeclineList.splice(i, 1);
+    
+ }
+
+   pestampDeclineFile(){
+      console.log("Hello pestamp");
+      const data = new FormData();
+     for(var i=0; i< this.pestampDeclineList.length;i++){
+       data.append("files",this.pestampDeclineList[i]);
+       if(i ==0){
+        //data.append('files', file);
+        data.append('path', "pestamp/" + this.id);
+        data.append('refId', ""+this.id);
+        data.append('ref', "pestamp");
+        data.append('field', "requestdeclineattachment");
+        
+        console.log("file upload data---"+data);
+       }
+     }
+      this.utilities.showLoading('Uploading').then(()=>{
+        this.apiservice.uploadFile(data).subscribe((res:any)=>{
+          this.utilities.hideLoading().then(()=>{
+            var declinedbypeengineer;
+         if(this.declinedbypeengineer == true)
+          {
+          declinedbypeengineer = true;
+          }
+          else{
+          declinedbypeengineer = false;
+          }
+            var cdate = Date.now();
+          var postData = {
+            status: 'declined',
+            requestdeclinereason: this.reason,
+            isoutsourced : "false",
+            pestampacceptancestarttime: cdate,
+            acknowledgedby : this.userData.id,
+            declinedbypeengineer : declinedbypeengineer
+            }
+            this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{
+            //this.createNewDesignChatGroup(res);
+            console.log(res);
+            this.modalCtrl.dismiss({
+              'dismissed' : true
+            })
+          })
+          })
+        },err=>{
+          this.utilities.errorSnackBar(err.error);
+          this.utilities.hideLoading();
+        })
+      })
+
+   }
 
   uploadFile(){
     this.utilities.showLoading('Uploading').then(()=>{

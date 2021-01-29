@@ -31,15 +31,15 @@
                     <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
                 </p>
                 <p style="margin:0px">
-                <span class="customer-email"  [routerLink]="['/permit-design-details/',designData.id]"
+                <span class="customer-email"  [routerLink]="['/permit-design-details/',designData.id]" *ngIf="userData.designertype!='external'"
                       routerDirection="forward">{{designData.email}}</span>
                       <span *ngIf="designData.isoverdue" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{item.lateby}}</strong></span>
 
             </p>
 
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
-                    <span class="customer-phone">{{designData.phonenumber}}</span></a>
-                <span style="margin:0px" class="customer-address z-100"
+                    <span class="customer-phone" *ngIf="userData.designertype!='external'">{{designData.phonenumber}}</span></a>
+                <span style="margin:0px" class="customer-address z-100" *ngIf="userData.designertype!='external'"
                       (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
 
                 <ion-row style="margin-bottom: 8px;"  [routerLink]="['/permit-design-details/',designData.id]" >

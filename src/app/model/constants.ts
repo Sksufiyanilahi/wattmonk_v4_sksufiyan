@@ -38,13 +38,14 @@ export const INVALID_NAME_MESSAGE='Invalid Name';
 export const INVALID_ANNUAL_UNIT = 'Invalid Annual Unit';
 export const INVALID_TILT_FOR_GROUND_MOUNT = 'Invalid Value';
 export const INVALID_PHONE_NUMBER = 'Phone should be of min. 8 and max. 15 characters.'
-export const INVALID_AMOUNT = 'Please enter an amount greater than 1 and less than 5000';
+export const INVALID_AMOUNT = 'Please enter an amount greater than $1 and less than $10000';
 export const INVALID_AMOUNT_FOR_ONBOARDING = 'Please enter an amount greater than 100 and less than 5000';
 export const INVALID_MODULE_AND_INVERTER = 'Please enter a valid format';
 export const INVALID_FIRST_NAME = 'Invalid First Name';
 export const INVALID_LAST_NAME = 'Invalid Last Name';
 export const INVALID_ADDRESS = "Invalid Address";
 export const INVALID_REGISTRATION_NUMBER = "Invalid Registration Number";
+export const INVALID_COMPANY_NAME = "Invalid Company Name";
 
 
 export const COMET_CHAT_APP_ID = '190385dcec51285';

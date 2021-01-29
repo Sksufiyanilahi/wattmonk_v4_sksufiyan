@@ -13,6 +13,10 @@ import { NumberOnlyDirective } from './number.directive';
 import { Camera } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { SharedModule } from '../shared/shared.module';
+import { MatAutocompleteModule } from '@angular/material';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+
 
 
 @NgModule({
@@ -24,7 +28,10 @@ import { SharedModule } from '../shared/shared.module';
     FormsModule,
     ReactiveFormsModule,
     UtilitiesModule,
-    SharedModule
+    SharedModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   declarations: [
     SchedulePage,

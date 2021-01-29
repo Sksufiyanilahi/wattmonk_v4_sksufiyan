@@ -240,6 +240,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
         this.utilities.hideLoading();
         console.log('re', result);
         this.setData(result);
+        this.utilities.setDesignDetails(result);
         this.timer();
       }, (error) => {
         this.utilities.hideLoading();

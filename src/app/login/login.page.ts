@@ -139,6 +139,21 @@ this.network.networkConnect();
                     this.navController.navigateRoot(['analystoverview']);
                   }
               }
+              else if(response.user.role.id == ROLES.Peengineer)
+              {
+                 this.storageService.setUserName(this.loginForm.get('identifier').value);
+                  this.storageService.setPassword(this.loginForm.get('password').value);
+
+                  if(response.user.isdefaultpassword){
+                      this.storageService.setJWTToken(response.jwt);
+                      this.apiService.refreshHeader();
+                      this.navController.navigateRoot(['changepassword'])
+                  } else{
+                    this.storageService.setUser(response.user, response.jwt);
+                    this.apiService.refreshHeader();
+                    this.navController.navigateRoot(['peengineer']);
+                  }
+              }
               else{
                 
                  // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");

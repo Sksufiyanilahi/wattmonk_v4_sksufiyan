@@ -12,6 +12,7 @@ import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import * as moment from 'moment';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-permitcompleteddesign',
@@ -25,6 +26,7 @@ export class PermitcompleteddesignComponent implements OnInit {
   private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
   routeSubscription: Subscription;
+  userData:any
  skip:number=0;
  limit:number=10;
   today: any;
@@ -40,7 +42,10 @@ export class PermitcompleteddesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+     private storageservice:StorageService) {
+
+      this.userData = this.storageservice.getUser();
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -48,6 +53,7 @@ export class PermitcompleteddesignComponent implements OnInit {
 
   ngOnInit() {
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 

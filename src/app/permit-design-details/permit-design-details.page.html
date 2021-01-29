@@ -16,7 +16,7 @@
                       <span class="survey-name ion-text-center">{{design?.name}}</span>
                   </ion-row>
                   <ion-row class="ion-align-items-center ion-justify-content-center">
-                      <span class="survey-email ion-text-center">{{design?.email}}</span>
+                      <span class="survey-email ion-text-center" *ngIf="user.designertype!='external'">{{design?.email}}</span>
                   </ion-row>
               </ion-grid>
           </ion-col>
@@ -54,7 +54,7 @@
 
 <ion-content class="ion-padding page-text-color" scrollY="true">
   <ion-grid *ngIf="design" class="page-text-color">
-      <ion-row>
+      <ion-row *ngIf="user.designertype!='external'">
           <ion-col class="font">
               <span (click)="openAddressOnMap(design.address)" class="address">{{design?.address}}</span>
           </ion-col>
@@ -74,7 +74,7 @@
       <!-- <ion-row>
           <ion-col> -->
               <!-- <ion-grid class="ion-no-padding"> -->
-                  <ion-row class="ion-no-padding">
+                  <ion-row class="ion-no-padding" *ngIf="user.designertype!='external'">
                       <ion-col><span class="model-type font">Phone Number</span></ion-col>
                       <ion-col size="auto">
                           <span class="model-name font">{{design?.phonenumber}}</span>
@@ -359,10 +359,9 @@
           </ion-row>
 
 
-      <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
+      <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
       *ngIf="design.status=='designassigned'||design.status=='completed'">
-      <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned
-              to</span></ion-col>
+      <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned to</span></ion-col>
       <ion-col size="auto">
           <div class="selected d-flex">
               <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"
@@ -379,10 +378,9 @@
   </ion-row>
 
 
-  <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
+  <ion-row style="margin-top: 40px !important;" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
   *ngIf="design.status=='reviewassigned'||design.status=='delivered'">
-  <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned
-          to</span></ion-col>
+  <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned to</span></ion-col>
   <ion-col size="auto">
       <div class="selected d-flex">
           <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"

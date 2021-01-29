@@ -2,10 +2,10 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ROLES } from '../contants';
 import { User } from '../model/user.model';
-import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_REGISTRATION_NUMBER } from '../model/constants';
+import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_COMPANY_NAME, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_REGISTRATION_NUMBER } from '../model/constants';
 import { MenuController, NavController } from '@ionic/angular';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, Renderer2, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
@@ -36,6 +36,7 @@ export class OnboardingPage implements OnInit {
   emailError = INVALID_EMAIL_MESSAGE;
   addressError = INVALID_ADDRESS;
   registrationError = INVALID_REGISTRATION_NUMBER;
+  companyError = INVALID_COMPANY_NAME;
   
   
   logo: any ;
@@ -72,14 +73,15 @@ export class OnboardingPage implements OnInit {
               private navCtrl:NavController,
               private cd:ChangeDetectorRef,) {
                 const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
+                const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
                 this.firstFormGroup = this.formBuilder.group({
                   usertype : new FormControl(null),
                   billingaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
-                  company:new FormControl(null, [Validators.required]),
+                  company:new FormControl(null, [Validators.required,Validators.minLength(3), Validators.pattern(COMPANYFORMAT)]),
                   ispaymentmodeprepay:new FormControl(null),
                   // logo:new FormControl(null, [Validators.required]),
-                  registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9]*')]),
-                  isonboardingcompleted: new FormControl(false)
+                  registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9-]*')]),
+                  isonboardingcompleted: new FormControl(true)
                 })
                 this.secondFormGroup = this.formBuilder.group({
                   //For Emails
@@ -121,6 +123,7 @@ export class OnboardingPage implements OnInit {
     console.log(this.permitCharges);
       this.onboardingData();
       this.paymentCharges();
+      this.apiService.emitUserNameAndRole(this.user);
 
 
 
@@ -128,6 +131,10 @@ export class OnboardingPage implements OnInit {
 //     console.log(this.buffer);
     this.fetchTeamData();
 
+  }
+
+  ionViewDidEnter(){
+    this.user = this.storage.getUser();
   }
 
   ngOnDestroy(){
@@ -194,16 +201,20 @@ export class OnboardingPage implements OnInit {
       this.firstFormGroup.patchValue({
         company:''
       })
+      this.firstFormGroup.get('company').clearValidators();
+      this.firstFormGroup.get('company').updateValueAndValidity();
+      this.firstFormGroup.get('registrationnumber').clearValidators();
+      this.firstFormGroup.get('registrationnumber').updateValueAndValidity();
     }
   }
 
-  addPrelim(){
-    this.router.navigate(['/schedule/design']);
-  }
+  // addPrelim(){
+  //   this.router.navigate(['/schedule/design']);
+  // }
 
-  addPermit(){
-    this.router.navigate(['/permitschedule']);
-  }
+  // addPermit(){
+  //   this.router.navigate(['/permitschedule']);
+  // }
 
   fetchTeamData(){
     this.apiService.getTeamData().subscribe(response =>{
@@ -387,7 +398,7 @@ export class OnboardingPage implements OnInit {
             (response:any) => {
               
               this.utils.showSnackBar('Team created successfully');
-              
+              this.thirdFormGroup.reset();
             },
             // error => {
             //   this.utils.errorSnackBar(error);
@@ -416,10 +427,44 @@ export class OnboardingPage implements OnInit {
     // }
     
   }
+  
 
   goToWallet(){
-    console.log("hello");
-    this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"true"}]);
+    console.log("hello",this.user.amount);
+    console.log("hello",this.user.isonboardingcompleted);
+    if(this.user.amount == 0 && this.user.isonboardingcompleted == false)
+    {
+    //this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"true"}]);
+    let objToSend: NavigationExtras = {
+      queryParams: {
+        mode:"wallet",
+        onBoarding:"true"
+      },
+      skipLocationChange: false,
+      fragment: 'top' 
+  };
+
+
+this.router.navigate(['/add-money'], { 
+state: { productdetails: objToSend }
+});
+    }
+    else{
+      //this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"false"}])
+      let objToSend: NavigationExtras = {
+        queryParams: {
+          mode:"wallet",
+          onBoarding:"false"
+        },
+        skipLocationChange: false,
+        fragment: 'top' 
+    };
+  
+  
+  this.router.navigate(['/add-money'], { 
+  state: { productdetails: objToSend }
+  });
+    }
   }
 
   paymentCharges(){

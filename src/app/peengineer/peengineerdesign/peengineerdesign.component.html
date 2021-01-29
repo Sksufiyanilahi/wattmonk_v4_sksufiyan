@@ -1,0 +1,101 @@
+<ion-segment scrollable (ionChange)="segmentChanged($event)" value="InStamping" mode="md">
+  <ion-segment-button value="InStamping">
+    <ion-label class="segment-btn">In Stamping</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="completed">
+    <ion-label class="segment-btn">Completed</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+<ion-grid *ngIf="listOfDesignsHelper.length !== 0 ;else nodesignFound">
+
+          <ion-row *ngFor="let item of listOfDesignsHelper;let i = index">
+      
+        <ion-col *ngFor="let designData of item.listOfDesigns;let j = index;trackBy: trackdesign" size="12">
+            <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
+                <p class="customer-name" *ngIf="designData.personname != null && designData.personname != ''"
+                routerDirection="forward">{{designData.personname}}
+                <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'declined'"  [routerLink]="['/pestamp-design-details/',designData.id]">On Hold</span>
+              <span class="chipdetail" style="background-color: rgb(109, 187, 26);"   *ngIf=" designData.acceptedbypeengineer==true && designData.status == 'accepted'" [routerLink]="['/pestamp-design-details/',designData.id]">Accepted</span>
+              <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'assigned'" [routerLink]="['/pestamp-design-details/',designData.id]">Assigned</span>
+              <span class="chipdetail" style="background-color: rgb(109, 187, 26);padding: 4px 5px;" *ngIf="designData.status == 'completed'" [routerLink]="['/pestamp-design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
+              <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/pestamp-design-details/',designData.id]">Revision</span>
+              <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;" [routerLink]="['/pestamp-design-details/',designData.id]"
+                    *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
+              <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'pestamp']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+
+      </p>
+
+      <p style="margin:0px">
+          <span class="customer-email" [routerLink]="['/pestamp-design-details/',designData.id]"
+                  routerDirection="forward">{{designData.email}}</span>
+                  <span *ngIf="designData.isoverdue" class="latebystyle"><strong>Late by {{designData.lateby}}</strong></span>
+
+      </p>
+      <p style="margin:0px"  >
+                <a href="tel:{{designData.contactnumber}}" style="text-decoration: none;" class="z-100">
+                    <span class="customer-phone" *ngIf="designData.contactnumber != null && designData.contactnumber != ''">{{designData.contactnumber}}</span></a>
+                    <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
+                  </p>
+                <span class="customer-address z-100" *ngIf="designData.deliveryaddress != null && designData.deliveryaddress != ''" 
+                        (click)="openAddressOnMap(designData.address)">{{(designData.deliveryaddress | slice:0:60) + (designData.deliveryaddress.length > 60 ? '...' : '')}}
+
+                             <ion-col>
+
+                                </ion-col>
+
+                    </span>
+                  <ion-row class="ion-no-margin ion-no-margin" style="margin-bottom: 0px;">
+                   <ion-col style="padding-left:0px" >
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.propertytype}}</span>
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.type}}</span>
+                </ion-col>
+
+
+                
+                    <ion-col *ngIf="segments=='status=assigned'">
+                                   <span style="float: right;">
+                            <ng-container *ngIf="designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false)" >
+                                <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,'accepted')">
+                                   Accept
+                                </ion-col>
+                                <ion-col size="4"  class="ion-text-end action-button-color" (click)="decline(designData.id,'pestamp')">
+                                On Hold
+                                </ion-col>
+                            </ng-container>
+                        </span>
+                    </ion-col>
+
+                    <ion-col *ngIf="segments=='status=completed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'">
+                      <span style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData)"
+                      >  &nbsp; Deliver</span>
+                      <!-- <span (click)="openDesigners(designData.id,designData)" style="float:right !important;" class="ion-text-end action-button-color"
+                      >Reassign</span> -->
+                      <!-- <span *ngIf="userData.role.type!='clientsuperadmin' &&(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                      >Reassign Review</span> -->
+                  </ion-col>
+
+
+ 
+                </ion-row>
+
+        </ion-card>
+        </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ng-template #nodesignFound>
+      <div *ngIf="listOfDesignsHelper.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
+        
+                  
+                {{noDesignFound}}
+    
+          <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+      </div>
+  </ng-template>
+
+    
+</ion-content>

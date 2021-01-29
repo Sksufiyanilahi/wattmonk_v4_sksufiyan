@@ -31,7 +31,9 @@ npm-debug.log*
 /www
 *.zip
 *.rar
+
 wattmonk.keystore
+# built application files
 *.apk
 
 

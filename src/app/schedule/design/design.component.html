@@ -13,6 +13,49 @@
             </ion-col>
         
         </ion-row> -->
+        <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="userdata.role.type=='wattmonkadmins' || userdata.role.type=='superadmin'">
+       <ion-col>
+            <ion-item class="ion-no-padding">
+                           
+                            <ion-label position="floating">Company Name</ion-label>
+                            <ion-select  (ionChange)="onCompanyChanged($event)" class="form_input select_div"
+                                        ok-text="" cancel-text=""
+                                        formControlName="companyname" interface="popover" >
+                                <ion-select-option *ngFor="let company of getCompanies" [value]="company">{{company.companyname}}</ion-select-option>
+                               
+                            </ion-select>
+                        </ion-item>
+                        <!-- <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
+                            <mat-label style="font-size: smaller;color: #6C6C6C;">Company Name</mat-label>
+                            <input [(ngModel)]="proxyValue" type="text" class="form_input font-size" matInput [matAutocomplete]="auto11" formControlName="companyname">
+                            <mat-autocomplete #auto11="matAutocomplete" (optionSelected)="onCompanyChanged($event)">
+                              <mat-option *ngFor="let company of filteredCompanies | async" [value]="company"
+                              class="font">{{company.companyname}}</mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                      <div style="height: 5px;">
+                          <div *ngIf="desginForm.get('companyname').hasError('pattern') && desginForm.get('companyname').dirty">
+                              <span class="error">{{companyError}}</span>
+                          </div>
+                      </div> -->
+                    </ion-col>
+            <!-- <ion-col size="12">
+                <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
+                    <mat-label style="font-size: smaller;color: #6C6C6C;">Company Name</mat-label>
+                    <input [(ngModel)]="proxyValue" type="text" class="form_input font-size" matInput [matAutocomplete]="auto11" formControlName="companyname">
+                    <mat-autocomplete #auto11="matAutocomplete" (optionSelected)="onCompanyChanged($event)">
+                      <mat-option *ngFor="let company of filteredCompanies | async" [value]="company"
+                      class="font">{{company.companyname}}</mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+              <div style="height: 5px;">
+                  <div *ngIf="desginForm.get('companyname').hasError('pattern') && desginForm.get('companyname').dirty">
+                      <span class="error">{{companyError}}</span>
+                  </div>
+              </div>
+            </ion-col> -->
+            
+          </ion-row >
         <ion-row >
             <ion-col>
                 <ion-item class="ion-no-padding">

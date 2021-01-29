@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
 import { NetworkdetectService } from '../networkdetect.service';
+import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 
 @Component({
   selector: 'app-schedule',
@@ -38,6 +39,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   userdata:any;
   netSwitch: boolean;
   deactivateNetworkSwitch: Subscription;
+  designs: any;
 
   constructor(
     private navController: NavController,
@@ -51,7 +53,8 @@ export class SchedulePage implements OnInit, OnDestroy {
     private alertController: AlertController,
     private toastController: ToastController,
     private intercom:Intercom,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    private location:Location
   ) {
   
     
@@ -73,7 +76,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
 ngOnInit() {
- 
+  
   this.network.networkDisconnect();
 this.network.networkConnect();
  
@@ -92,12 +95,14 @@ this.network.networkConnect();
       this.storage.setData(this.address);
       });
     }
-
+     this.designs = this.utilities.getdesignDetails();
+  //console.log(this.designs.status);
   }
 
   goBack() {
     this.utilities.showHideIntercom(true);
-    this.navController.pop();
+    //this.navController.pop();
+    this.location.back();
   }
 
   ngOnDestroy(): void {
@@ -371,6 +376,6 @@ this.network.networkConnect();
   }
 
   sendDesignForm(){
-     this.utilities.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
+     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
   }
 }
