@@ -13,6 +13,7 @@ import { File,FileEntry } from '@ionic-native/file/ngx';
 import { Intercom } from 'ng-intercom';
 import { StorageService } from '../storage.service';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
+import { COMETCHAT_CONSTANTS } from '../contants';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class ChatPage implements OnInit {
 
   @ViewChild('content',{static:false}) content: any;
   userData:any;
+  sessionID: string;
   constructor(private router: Router, private route: ActivatedRoute, private keyboard: Keyboard, private renderer2: Renderer2,private navController:NavController,private intercom:Intercom,private storageService:StorageService) {
 
     const html = document.getElementsByTagName('html').item(0);
@@ -58,6 +60,8 @@ export class ChatPage implements OnInit {
   }
 
   ionViewWillEnter(): void {
+    this.ngOnInit();
+   
     this.intercom.update({
       "hide_default_launcher": true
     });
@@ -85,6 +89,7 @@ export class ChatPage implements OnInit {
     }, error => {
       console.log('error getting details:', {error});
     });
+    this.listencall();
   }
 
   loadMessages() {
@@ -100,9 +105,14 @@ export class ChatPage implements OnInit {
         this.moveToBottom();
       },
       error => {
+      console.log(">>>>>");
+      
         console.log('Message fetching failed with error:', error);
       }
-    );
+    ),err=>{
+      console.log(err,"<<");
+      
+    };
 
   }
 
@@ -277,4 +287,90 @@ export class ChatPage implements OnInit {
   goBack() {
     this.navController.pop();
   }
+
+  listencall(){
+    var listnerID =  this.currentGroupData;
+CometChat.addCallListener(
+  listnerID,
+  new CometChat.CallListener({
+    onIncomingCallReceived(call) {
+      this.sessionID= call.getSessionId();
+      console.log("Incoming call:", call,this.sessionID);
+      this.callingvariable= call;
+      // Handle incoming call
+    },
+    onOutgoingCallAccepted(call) {
+      console.log("Outgoing call accepted:", call);
+      // Outgoing Call Accepted
+    },
+    onOutgoingCallRejected(call) {
+      console.log("Outgoing call rejected:", call);
+      // Outgoing Call Rejected
+    },
+    onIncomingCallCancelled(call) {
+      console.log("Incoming call calcelled:", call);
+    }
+  })
+);
+  }
+
+  gotopage(){
+      // console.log(this.callingvariable);
+      
+    this.router.navigate(['/callingscreen']);
+  }
+
+  dialcall(){
+    var receiverID =  this.currentGroupData;
+var callType = CometChat.CALL_TYPE.AUDIO;
+var receiverType = CometChat.RECEIVER_TYPE.GROUP;
+
+var call = new CometChat.Call(receiverID, callType, receiverType);
+
+CometChat.initiateCall(call).then(
+  outGoingCall => {
+    console.log("Call initiated successfully:", outGoingCall);
+
+    this.sessionID= outGoingCall.getSessionId();
+    // perform action on success. Like show your calling screen.
+  },
+  error => {
+    console.log("Call initialization failed with exception:", error);
+  }
+);
+  }
+
+  acceptcall(){
+    var sessionID = this.sessionID;
+
+CometChat.acceptCall(sessionID).then(
+  call => {
+    console.log("Call accepted successfully:", call);
+    // start the call using the startCall() method
+  },
+  error => {
+    console.log("Call acceptance failed with error", error);
+    // handle exception
+  }
+);
+  }
+
+ 
+
+  
+
+  rejectincomingcall(){
+    var sessionID = this.sessionID;
+var status = CometChat.CALL_STATUS.REJECTED;
+
+CometChat.rejectCall(sessionID, status).then(
+  call => {
+    console.log("Call rejected successfully", call);
+  },
+  error => {
+    console.log("Call rejection failed with error:", error,status);
+  }
+);
+  }
+
 }

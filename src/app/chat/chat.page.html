@@ -5,6 +5,13 @@
                 <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
             </ion-button>
         </ion-buttons>
+        <ion-buttons slot="end" (click)="dialcall()">
+            <ion-icon name="call"></ion-icon>
+          </ion-buttons>
+        <ion-buttons slot="end" (click)="rejectincomingcall()">
+            <!-- <ion-icon name="call"></ion-icon> -->
+            reject
+          </ion-buttons>
         <ion-title *ngIf="currentGroupData">
             <div class="Inline"><img
                     src="{{currentGroupData.avatar || 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?resize=256%2C256&quality=100&ssl=1' }}"
