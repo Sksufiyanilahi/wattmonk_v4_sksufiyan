@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { EventEmitter, Injectable, Output } from '@angular/core';
+import { AlertController, LoadingController, ModalController, NavController, ToastController } from '@ionic/angular';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
@@ -11,11 +11,15 @@ import { LoginModel } from './model/login.model';
 import { StorageService } from './storage.service';
 import { Intercom } from 'ng-intercom';
 import { NumberOnlyDirective } from './schedule/number.directive';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilitiesService {
+  guid$: Observable<any>;
+  private myMethodSubject = new Subject<any>();
 
   loading: HTMLIonLoadingElement;
   isLoading = false;
@@ -54,6 +58,8 @@ export class UtilitiesService {
   private addSymbols = false;
   private passwordLength = 6;
   designlistofdesignDetail: any;
+  groupid: any;
+  @Output() callingvariable:EventEmitter<any> = new EventEmitter();
 
   constructor(
     public loadingController: LoadingController,
@@ -61,12 +67,24 @@ export class UtilitiesService {
     private alertController: AlertController,
     private modalController: ModalController,
     private storageService:StorageService,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private router:Router,
+    private navCtrl:NavController
   ) {
+    this.guid$ = this.myMethodSubject.asObservable();
+    this.listencall();
     this.user= this.storageService.getUser();
     this.currentUserSubject = new BehaviorSubject<LoginModel>(this.user);
     this.currentUser = this.currentUserSubject.asObservable();
   }
+
+  guid(data) {
+    console.log(data); // I have data! Let's return it so subscribers can use it!
+    // we can do stuff with data if we want
+
+    this.groupid = data;
+    this.myMethodSubject.next(data);
+}
 
 
   public get currentUserValue(): LoginModel {
@@ -494,6 +512,38 @@ export class UtilitiesService {
     // this.unreadCount.subscribe(data=>{
     //   this.count = data;
     // })
+
+    listencall() {
+      var listnerID = this.groupid;
+      const that= this;
+      CometChat.addCallListener(
+        listnerID,
+        new CometChat.CallListener({
+          onIncomingCallReceived(call) {
+            console.log('Incoming call:', call);
+            that.callingvariable.emit(call);
+            // if(call.status=='initiated'){
+              that.router.navigate(['/', 'callingscreen']);
+            // }
+            // Handle incoming call
+          },
+          onOutgoingCallAccepted(call) {
+            console.log('Outgoing call accepted:', call);
+            that.callingvariable.emit(call);
+            // Outgoing Call Accepted
+          },
+          onOutgoingCallRejected(call) {
+            console.log('Outgoing call rejected:', call);
+            that.callingvariable.emit(call);
+            // Outgoing Call Rejected
+          },
+          onIncomingCallCancelled(call) {
+            console.log('Incoming call calcelled:', call);
+            that.callingvariable.emit(call);
+          }
+        })
+      );
+    }
   }
 
   // getcount(){
