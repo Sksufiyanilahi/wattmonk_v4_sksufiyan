@@ -21,18 +21,13 @@ export class CallingscreenPage implements OnInit {
   }
 
   ionViewDidEnter(){
-    debugger;
     let that=this;
-    this.calldeactivate =  that.utils.callingvariable.subscribe(res=>{
-      that.calldata = res;
-        if(that.calldata.status=='cancelled'){
-          // that.location.back();
-          that.navCtrl.back();
-
-        }
+    // this.calldeactivate =  that.utils.callData;
+      that.calldata = that.utils.getCallData();
+       
   
-      console.log(res,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-    })
+      console.log(that.calldata.status,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
   }
 
 
@@ -53,12 +48,16 @@ export class CallingscreenPage implements OnInit {
   }
 
   rejectcall(){
-    var sessionID = "SESSION_ID";
+    var sessionID =this.calldata.sessionId;
+
+    console.log(sessionID);
+    
 var status = CometChat.CALL_STATUS.REJECTED;
 
 CometChat.rejectCall(sessionID, status).then(
   call => {
     console.log("Call rejected successfully", call);
+    this.navCtrl.pop();
   },
   error => {
     console.log("Call rejection failed with error:", error);
@@ -95,7 +94,7 @@ CometChat.startCall(callSettings);
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    this.calldeactivate.unsubscribe();
+    // this.calldeactivate.unsubscribe();
   }
 
 }

@@ -13,6 +13,7 @@ import { Intercom } from 'ng-intercom';
 import { NumberOnlyDirective } from './schedule/number.directive';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +60,7 @@ export class UtilitiesService {
   private passwordLength = 6;
   designlistofdesignDetail: any;
   groupid: any;
-  @Output() callingvariable:EventEmitter<any> = new EventEmitter();
+  callData:any;
 
   constructor(
     public loadingController: LoadingController,
@@ -69,7 +70,8 @@ export class UtilitiesService {
     private storageService:StorageService,
     private intercom:Intercom,
     private router:Router,
-    private navCtrl:NavController
+    private navCtrl:NavController,
+    private location:Location
   ) {
     this.guid$ = this.myMethodSubject.asObservable();
     this.listencall();
@@ -521,7 +523,7 @@ export class UtilitiesService {
         new CometChat.CallListener({
           onIncomingCallReceived(call) {
             console.log('Incoming call:', call);
-            that.callingvariable.emit(call);
+            that.callData = call;
             // if(call.status=='initiated'){
               that.router.navigate(['/', 'callingscreen']);
             // }
@@ -529,21 +531,30 @@ export class UtilitiesService {
           },
           onOutgoingCallAccepted(call) {
             console.log('Outgoing call accepted:', call);
-            that.callingvariable.emit(call);
+            that.callData = call;
             // Outgoing Call Accepted
           },
           onOutgoingCallRejected(call) {
             console.log('Outgoing call rejected:', call);
-            that.callingvariable.emit(call);
+            that.callData = call;
             // Outgoing Call Rejected
           },
           onIncomingCallCancelled(call) {
             console.log('Incoming call calcelled:', call);
-            that.callingvariable.emit(call);
+            that.callData = call;
+      
+              // that.location.back();
+              that.navCtrl.pop();
+    
+            
           }
         })
       );
     }
+
+    getCallData(): Observable<any> {
+      return this.callData;
+}
   }
 
   // getcount(){

@@ -338,7 +338,7 @@ export class ChatPage implements OnInit {
 			(outGoingCall) => {
 				console.log('Call initiated successfully:', outGoingCall);
         this.sessionID = outGoingCall.getSessionId();
-        this.utils.callingvariable.emit(outGoingCall);
+        this.utils.callData = outGoingCall;
         this.router.navigate(['/callingscreen']);
 				// perform action on success. Like show your calling screen.
 			},
