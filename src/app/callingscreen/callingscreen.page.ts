@@ -33,7 +33,7 @@ export class CallingscreenPage implements OnInit {
 
 
   acceptcall(){
-    var sessionID = "SESSION_ID";
+    var sessionID = this.calldata.sessionId;
 
     CometChat.acceptCall(sessionID).then(
       call => {
@@ -69,8 +69,8 @@ CometChat.rejectCall(sessionID, status).then(
     /**
         * You can get the call Object from the success of acceptCall() or from the onOutgoingCallAccepted() callback of the CallListener.
         */
-var sessionId = 'sessionId';
-var callType = 'type';
+var sessionId = this.calldata.sessionId;
+var callType = this.calldata.type;
 let callListener = new CometChat.OngoingCallListener({
     onUserJoined: user => {
         console.log('User joined call:', user);
