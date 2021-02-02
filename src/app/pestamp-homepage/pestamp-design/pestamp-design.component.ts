@@ -24,6 +24,8 @@ import {File } from '@ionic-native/file/ngx';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 import { PestampdelivermodalPage } from 'src/app/pestampdelivermodal/pestampdelivermodal.page';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { COMETCHAT_CONSTANTS } from 'src/app/contants';
 
 @Component({
   selector: 'app-pestamp-design',
@@ -59,6 +61,9 @@ export class PestampDesignComponent implements OnInit {
   netSwitch: boolean;
   acceptid: any;
   storageDirectory: string;
+
+  updatechat_id: boolean=false;
+  isclientassigning: boolean=false;
 
   today: any;
   todaysdate:string;
@@ -181,6 +186,8 @@ export class PestampDesignComponent implements OnInit {
 
   ngOnInit() {
     //this.userData = this.storageService.getUser();
+    this.makeDirectory();
+    this.setupCometChat();
     this.PeStampRefreshSubscription = this.utils.getPeStampRefresh().subscribe((result)=>{
     this.getDesigns(null);
   })
@@ -228,7 +235,7 @@ export class PestampDesignComponent implements OnInit {
             event.target.complete();
           }
           const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
+          this.utils.errorSnackBar(error.message);
         });
       });
     });
@@ -394,7 +401,8 @@ export class PestampDesignComponent implements OnInit {
         this.apiService.assignPestamps(this.designId,postData).subscribe(res=>{
           console.log(res);
           this.utils.hideLoading().then(()=>{
-            this.utils.showSnackBar('successfully assigned to'+this.selectedPeEngineer.firstname+' '+this.selectedPeEngineer.lastname);
+            this.addUserToGroupChat(res.chatid);
+            this.utils.showSnackBar('successfully assigned to'+' '+this.selectedPeEngineer.firstname+' '+this.selectedPeEngineer.lastname);
             this.route.navigate(["pestamp-homepage/pestamp-design"]);
             this.dismissBottomSheet();
             this.showBottomDraw = false;
@@ -419,16 +427,16 @@ export class PestampDesignComponent implements OnInit {
     }
     this.utils.showLoading("accepting").then(()=>{
        this.apiService.assignPestamps(id,status).subscribe((res:any)=>{
-       // this.createNewDesignChatGroup(res);
+        this.createNewDesignChatGroup(res);
          this.utils.hideLoading().then(()=>{
-              // if(this.updatechat_id){
+              if(this.updatechat_id){
+                this.utils.setPeStampRefresh(true);
+              }else{
+                this.utils.setPeStampRefresh(true);
+              }
 
-              //   this.utils.setHomepagePermitRefresh(true);
-              // }else{
-              //   this.utils.setHomepagePermitRefresh(true);
-              // }
-              this.utils.showSnackBar("Design request has been accepted successfully.")
-              this.utils.setPeStampRefresh(true);
+              // this.utils.showSnackBar("Design request has been accepted successfully.")
+              // this.utils.setPeStampRefresh(true);
         })})
         })
 
@@ -847,7 +855,7 @@ state: { productdetails: objToSend }
 });
   }
 
-createChatGroup(design:DesginDataModel){
+//createChatGroup(design:DesginDataModel){
   // var GUID = 'permit' + "_" + new Date().getTime();
 
   // var address = design.address.substring(0, 90);
@@ -866,95 +874,96 @@ createChatGroup(design:DesginDataModel){
   //     this.cdr.detectChanges();
   //   })
   // })
+//}
+
+createNewDesignChatGroup(design:Pestamp) {
+  var GUID = 'pestamp' + "_" + new Date().getTime();
+  //var address = design.deliveryaddress.substring(0, 60);
+  var groupName = design.type + "_" +design.personname + "_" + design.email;
+
+  var groupType = CometChat.GROUP_TYPE.PRIVATE;
+  var password = "";
+
+  var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+  CometChat.createGroup(group).then(
+    group => {
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN),
+        new CometChat.GroupMember("" + this.userData.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(), membersList, []).then(
+        response => {
+          //if(design.requesttype == "permit"){
+            debugger;
+            let postdata={
+              chatid:GUID
+            }
+            console.log(postdata);
+            this.apiService.assignPestamps(this.acceptid,postdata).subscribe(res=>{
+              this.updatechat_id=true;
+            })
+            // this.updateItemInList(LISTTYPE.NEW, design);
+          // }else{
+          //   // this.updateItemInPermitList(LISTTYPE.NEW, design);
+          // }
+        },
+        error => {
+        }
+      );
+    },
+    error => {
+
+    }
+  );
 }
 
-// createNewDesignChatGroup(design:DesginDataModel) {
-//   var GUID = 'permit' + "_" + new Date().getTime();
-//   var address = design.address.substring(0, 60);
-//   var groupName = design.name + "_" + address;
-
-//   var groupType = CometChat.GROUP_TYPE.PRIVATE;
-//   var password = "";
-
-//   var group = new CometChat.Group(GUID, groupName, groupType, password);
-
-//   CometChat.createGroup(group).then(
-//     group => {
-//       let membersList = [
-//         new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN),
-//         new CometChat.GroupMember("" + this.userData.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
-//       ];
-//       CometChat.addMembersToGroup(group.getGuid(), membersList, []).then(
-//         response => {
-//           if(design.requesttype == "permit"){
-//             let postdata={
-//               chatid:GUID
-//             }
-
-//             this.apiService.updateDesignForm(postdata,this.acceptid).subscribe(res=>{
-//               this.updatechat_id=true;
-//             })
-//             // this.updateItemInList(LISTTYPE.NEW, design);
-//           }else{
-//             // this.updateItemInPermitList(LISTTYPE.NEW, design);
-//           }
-//         },
-//         error => {
-//         }
-//       );
-//     },
-//     error => {
-
-//     }
-//   );
-// }
-
-//       addUserToGroupChat() {
-//         debugger;
-//       var GUID = this.designerData.chatid;
-//       var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
-//       if (this.isclientassigning) {
-//         userscope = CometChat.GROUP_MEMBER_SCOPE.ADMIN;
-//       }
-//       let membersList = [
-//         new CometChat.GroupMember("" + this.selectedDesigner.id, userscope)
-//       ];
-//       CometChat.addMembersToGroup(GUID, membersList, []).then(
-//         response => {
+      addUserToGroupChat(chatid) {
+        debugger;
+      var GUID = chatid;
+      var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
+      // if (this.isclientassigning) {
+      //   userscope = CometChat.GROUP_MEMBER_SCOPE.ADMIN;
+      // }
+      let membersList = [
+        new CometChat.GroupMember("" + this.selectedPeEngineer.id, userscope)
+      ];
+      CometChat.addMembersToGroup(GUID, membersList, []).then(
+        response => {
           
-//         },
-//         error => {
+        },
+        error => {
         
-//         }
-//       );
-//       }
+        }
+      );
+      }
 
 
-//       setupCometChat() {
-//         let userId = this.storageservice.getUserID()
-//         const user = new CometChat.User(userId);
-//         user.setName(this.storageservice.getUser().firstname + ' ' + this.storageservice.getUser().lastname);
-//         const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
-//         CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
-//           () => {
-//             console.log('Initialization completed successfully');
-//             // if(this.utilities.currentUserValue != null){
-//               // You can now call login function.
-//               CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
-//                 (user) => {
-//                   console.log('Login Successful:', { user });
-//                 },
-//                 error => {
-//                   console.log('Login failed with exception:', { error });
-//                 }
-//               );
-//           // }
-//           },
-//           error => {
-//             console.log('Initialization failed with error:', error);
-//           }
-//         );
-//       }
+      setupCometChat() {
+        let userId = this.storageService.getUserID()
+        const user = new CometChat.User(userId);
+        user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+        const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+        CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+          () => {
+            console.log('Initialization completed successfully');
+            // if(this.utilities.currentUserValue != null){
+              // You can now call login function.
+              CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+                (user) => {
+                  console.log('Login Successful:', { user });
+                },
+                error => {
+                  console.log('Login failed with exception:', { error });
+                }
+              );
+          // }
+          },
+          error => {
+            console.log('Initialization failed with error:', error);
+          }
+        );
+      }
 
 
 directAssignToWattmonk(id:number,design){

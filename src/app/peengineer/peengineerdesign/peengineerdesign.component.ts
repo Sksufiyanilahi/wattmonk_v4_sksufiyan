@@ -24,6 +24,8 @@ import {File } from '@ionic-native/file/ngx';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 import { PestampdelivermodalPage } from 'src/app/pestampdelivermodal/pestampdelivermodal.page';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { COMETCHAT_CONSTANTS } from 'src/app/contants';
 
 @Component({
   selector: 'app-peengineerdesign',
@@ -35,7 +37,7 @@ export class PEengineerdesignComponent implements OnInit {
   assignForm:FormGroup
   drawerState = DrawerState.Bottom;
   userData: any;
-  segments:any="status=assigned";
+  segments:any="status=assigned&status=declined";
 
   listOfDesigns: Pestamp[];
   listOfDesignsHelper: any[];
@@ -87,8 +89,9 @@ export class PEengineerdesignComponent implements OnInit {
                 this.userData = this.storageService.getUser();
 
 
-    // if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
-    //   this.segments= 'status=created&status=outsourced&status=accepted&status=declined';
+    // if(this.userData.role.type=='peengineer'){
+    //   this.segments= 'status=assigned&status=declined';
+    // }
     // }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin'){
     //   this.segments ='status=created&status=outsourced&status=accepted&&status=declined';
     // }
@@ -122,7 +125,7 @@ export class PEengineerdesignComponent implements OnInit {
                 // this.skip=0;
              
                 if(event.target.value=='InStamping'){
-                      this.segments ="status=assigned";
+                      this.segments ="status=assigned&status=declined";
                       // return this.segments;
                     }
                     else if(event.target.value=='completed'){
@@ -155,6 +158,7 @@ export class PEengineerdesignComponent implements OnInit {
 
   ngOnInit() {
     //this.userData = this.storageService.getUser();
+    this.setupCometChat()
     this.PeStampRefreshSubscription = this.utils.getPeStampRefresh().subscribe((result)=>{
     this.getDesigns(null);
   })
@@ -803,31 +807,31 @@ createChatGroup(design:DesginDataModel){
 //       }
 
 
-//       setupCometChat() {
-//         let userId = this.storageservice.getUserID()
-//         const user = new CometChat.User(userId);
-//         user.setName(this.storageservice.getUser().firstname + ' ' + this.storageservice.getUser().lastname);
-//         const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
-//         CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
-//           () => {
-//             console.log('Initialization completed successfully');
-//             // if(this.utilities.currentUserValue != null){
-//               // You can now call login function.
-//               CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
-//                 (user) => {
-//                   console.log('Login Successful:', { user });
-//                 },
-//                 error => {
-//                   console.log('Login failed with exception:', { error });
-//                 }
-//               );
-//           // }
-//           },
-//           error => {
-//             console.log('Initialization failed with error:', error);
-//           }
-//         );
-//       }
+      setupCometChat() {
+        let userId = this.storageService.getUserID()
+        const user = new CometChat.User(userId);
+        user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+        const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+        CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+          () => {
+            console.log('Initialization completed successfully');
+            // if(this.utilities.currentUserValue != null){
+              // You can now call login function.
+              CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+                (user) => {
+                  console.log('Login Successful:', { user });
+                },
+                error => {
+                  console.log('Login failed with exception:', { error });
+                }
+              );
+          // }
+          },
+          error => {
+            console.log('Initialization failed with error:', error);
+          }
+        );
+      }
 
 
 directAssignToWattmonk(id:number){

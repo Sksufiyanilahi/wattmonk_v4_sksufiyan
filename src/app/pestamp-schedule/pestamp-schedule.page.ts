@@ -125,7 +125,6 @@ export class PestampSchedulePage implements OnInit {
 
   ngOnInit() {
     this.userdata = this.storage.getUser();
-    console.log(this.userdata);
 
     if (this.designId !== 0) {
       setTimeout(()=>{
@@ -141,11 +140,9 @@ export class PestampSchedulePage implements OnInit {
       this.apiService.getPestampDetails(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
           this.design = result;
-          console.log(this.design);
           // this.atticData = this.design.atticphotos;
           // this.roofData = this.design.roofphotos;
           // this.permitPlanData = this.design.permitplan;
-          console.log(this.permitPlanData)
           this.firstFormGroup.patchValue({
             name: this.design.personname,
             email: this.design.email,
@@ -180,20 +177,15 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR SELECT ATTIC FILES FROM DEVICE */
   atticFiles(event){
-    console.log(event);
-    console.log(event.target.files);
     this.isAtticFileUpload = true;
      for(var i=0; i< event.target.files.length;i++){
        this.atticPhotosList.push(event.target.files[i])
      }
      //this.architecturalFileUpload= true;
-     console.log(this.atticPhotosList);
    }
 
    /* FOR UPLOAD ATTIC PHOTOS OR FILES */
    uploadAtticFiles(recordid: number,file: string){
-    // console.log(this.archFiles);
-    console.log(file);
      const data = new FormData();
      for(var i=0; i< this.atticPhotosList.length;i++){
        data.append("files",this.atticPhotosList[i]);
@@ -204,11 +196,9 @@ export class PestampSchedulePage implements OnInit {
         data.append('ref', "pestamp");
         data.append('field', "atticphotos");
         
-        console.log("file upload data---"+data);
        }
      }
      this.apiService.uploadFile(data).subscribe(res=>{
-       console.log(res);
 
      })
 
@@ -217,20 +207,15 @@ export class PestampSchedulePage implements OnInit {
   
    /* FOR SELECT ROOF FILES OR PHOTOS FROM DEVICE */
    roofFiles(event){
-    console.log(event);
-    console.log(event.target.files);
     this.isRoofFileUpload = true;
      for(var i=0; i< event.target.files.length;i++){
        this.roofPhotosList.push(event.target.files[i])
      }
      //this.architecturalFileUpload= true;
-     console.log(this.roofPhotosList);
    }
 
    /* FOR UPLOAD ROOF PHOTOS OR FILES */
    uploadRoofFiles(recordid: number,file: string){
-    // console.log(this.archFiles);
-    console.log(file);
      const data = new FormData();
      for(var i=0; i< this.roofPhotosList.length;i++){
        data.append("files",this.roofPhotosList[i]);
@@ -241,11 +226,9 @@ export class PestampSchedulePage implements OnInit {
         data.append('ref', "pestamp");
         data.append('field', "roofphotos");
         
-        console.log("file upload data---"+data);
        }
      }
      this.apiService.uploadFile(data).subscribe(res=>{
-       console.log(res);
 
      })
 
@@ -254,20 +237,15 @@ export class PestampSchedulePage implements OnInit {
 
    /* FOR SELECT PHOTOS OR FILES FOR PERMIT PLAN FROM DEVICE */
    permitPlanFiles(event){
-    console.log(event);
-    console.log(event.target.files);
     this.isPermitPlanFileUpload = true;
      for(var i=0; i< event.target.files.length;i++){
        this.permitPlanList.push(event.target.files[i])
      }
      //this.architecturalFileUpload= true;
-     console.log(this.permitPlanList);
    }
 
    /* FOR UPLOAD PERMIT PLAN PHOTOS OR FILES */
    uploadPermitPlanFiles(recordid: number,file: string){
-    // console.log(this.archFiles);
-    console.log(file);
      const data = new FormData();
      for(var i=0; i< this.permitPlanList.length;i++){
        data.append("files",this.permitPlanList[i]);
@@ -282,7 +260,6 @@ export class PestampSchedulePage implements OnInit {
        }
      }
      this.apiService.uploadFile(data).subscribe(res=>{
-       console.log(res);
 
      })
 
@@ -291,7 +268,6 @@ export class PestampSchedulePage implements OnInit {
 
    /* FOR REMOVE SELECTED PHOTOS OR FILES */
    removeArc(i,value) {
-     console.log(value);
      if(value=='attic'){
     this.atticPhotosList.splice(i, 1);
      }
@@ -305,7 +281,6 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR TYPE OF STAMPING RADIO BUTTONS */
   stampingTypeOption(e){
-    console.log(e.target.value);
     this.stampingTypeValue = e.target.value;
     const attic = this.firstFormGroup.get('atticphotos');
     const roof = this.firstFormGroup.get('roofphotos');
@@ -327,12 +302,13 @@ export class PestampSchedulePage implements OnInit {
     }
     else{
       attic.clearValidators();
-      attic.updateValueAndValidity();
-      roof.clearValidators();
-      roof.updateValueAndValidity();
+      roof.clearValidators(); 
       permitplan.clearValidators();
-      permitplan.updateValueAndValidity();
+      
     }
+    attic.updateValueAndValidity();
+    roof.updateValueAndValidity();
+    permitplan.updateValueAndValidity();
     // if(this.stampingTypeValue == 'electrical')
     // {
     //   this.isElectrical = true;
@@ -353,8 +329,6 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR MODE OF STAMPING RADIO BUTTONS*/
   stampingModeOption(e){
-    console.log(e)
-    console.log(e.target.value);
     this.stampingModeValue = e.target.value;
     console.log(this.stampingModeValue)
     // if(this.stampingModeValue == 'ecopy')
@@ -368,9 +342,6 @@ export class PestampSchedulePage implements OnInit {
     const shipping = this.firstFormGroup.get('shippingaddress');
     const contact = this.firstFormGroup.get('contactnumber');
     const hardcopy = this.firstFormGroup.get('numberofhardcopy');
-    console.log(shipping);
-    console.log(contact);
-    console.log(hardcopy);
     if(this.stampingModeValue == 'hardcopy' || this.stampingModeValue == 'both')
     {
       shipping.setValidators([
@@ -386,6 +357,7 @@ export class PestampSchedulePage implements OnInit {
         Validators.minLength(8),
         Validators.maxLength(15),
         Validators.pattern("^[0-9]{8,15}$")]);
+
         hardcopy.setValidators([
         Validators.required,
         Validators.min(1),
@@ -408,12 +380,15 @@ export class PestampSchedulePage implements OnInit {
     // }
     else{
       shipping.clearValidators();
-      shipping.updateValueAndValidity();
+      shipping.reset();
       contact.clearValidators();
-      contact.updateValueAndValidity();
+      contact.reset();
       hardcopy.clearValidators();
-      hardcopy.updateValueAndValidity();
+      hardcopy.reset();
     }
+    shipping.updateValueAndValidity();
+    contact.updateValueAndValidity();
+    hardcopy.updateValueAndValidity();
   }
 
   goBack() {
@@ -423,7 +398,6 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR SUBMIT FORM */
   submitForm(e){
-    console.log(e)
     if(this.firstFormGroup.status=='VALID')
     {
       var tomorrow = new Date();
@@ -431,7 +405,6 @@ export class PestampSchedulePage implements OnInit {
     let contactnumber = this.firstFormGroup.get('contactnumber').value;
     if(this.designId === 0){
       if(e=='save'){
-        console.log("hii")
         //this.utils.showLoading('Saving').then(() => {
           var data = {
             personname:this.firstFormGroup.get('name').value,
@@ -457,10 +430,8 @@ export class PestampSchedulePage implements OnInit {
     }
     this.utils.showLoading('Saving').then(() => {
       this.apiService.addSiteAssessment(data).subscribe(res => {
-        console.log(res);
         if(this.isAtticFileUpload)
           {
-            console.log("hello",this.isAtticFileUpload)
             this.uploadAtticFiles(res.id,this.atticPhotosList[0])
           }
           if(this.isRoofFileUpload)
@@ -470,11 +441,9 @@ export class PestampSchedulePage implements OnInit {
           if(this.isPermitPlanFileUpload)
           {
             this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
-            console.log(this.permitPlanList[0]);
           }
           setTimeout(()=>{
             this.utils.hideLoading().then(() => {
-              console.log('Res', res);
               //this.createChatGroup(response);
               this.router.navigate(['/pestamp-homepage'])
               this.utils.showSnackBar('Pe Stamp have been Created');
@@ -493,12 +462,9 @@ export class PestampSchedulePage implements OnInit {
           },2000)
       },
       responseError => {
-       this.utils.hideLoading().then(() => {
-         const error: ErrorModel = responseError.error;
-         this.utils.errorSnackBar(error.message[0].messages[0].message);
-       });
-//
-     })
+        const error: ErrorModel = responseError.error;
+    this.utils.errorSnackBar(error.message);
+      })
     })
       }
     else if(e == 'send')
@@ -529,7 +495,6 @@ export class PestampSchedulePage implements OnInit {
     console.log(res);
       if(this.isAtticFileUpload)
       {
-        console.log("hello",this.isAtticFileUpload)
         this.uploadAtticFiles(res.id,this.atticPhotosList[0])
       }
       if(this.isRoofFileUpload)
@@ -539,7 +504,6 @@ export class PestampSchedulePage implements OnInit {
           if(this.isPermitPlanFileUpload)
           {
             this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
-            console.log(this.permitPlanList[0]);
           }
           //this.router.navigate(['pestamp-payment-modal',{isConfirmed: false, isLater: false, ispestamp: true, pestampid: res.id}]);
           let objToSend: NavigationExtras = {
@@ -556,13 +520,10 @@ export class PestampSchedulePage implements OnInit {
       state: { productdetails: objToSend }
     });
         },
-  responseError => {
-   this.utils.hideLoading().then(() => {
-     const error: ErrorModel = responseError.error;
-     this.utils.errorSnackBar(error.message[0].messages[0].message);
-   });
-//
- })
+        responseError => {
+          const error: ErrorModel = responseError.error;
+      this.utils.errorSnackBar(error.message);
+        })
     }
     }
     else{
@@ -591,10 +552,8 @@ export class PestampSchedulePage implements OnInit {
 }
 this.utils.showLoading('Saving').then(() => {
   this.apiService.updatePestamps(this.designId,data).subscribe(res => {
-    console.log(res);
     if(this.isAtticFileUpload)
       {
-        console.log("hello",this.isAtticFileUpload)
         this.uploadAtticFiles(res.id,this.atticPhotosList[0])
       }
       if(this.isRoofFileUpload)
@@ -604,11 +563,9 @@ this.utils.showLoading('Saving').then(() => {
       if(this.isPermitPlanFileUpload)
       {
         this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
-        console.log(this.permitPlanList[0]);
       }
       setTimeout(()=>{
         this.utils.hideLoading().then(() => {
-          console.log('Res', res);
           //this.createChatGroup(response);
           this.router.navigate(['/pestamp-homepage'])
           this.utils.showSnackBar('Pe Stamp have been updated');
@@ -627,12 +584,9 @@ this.utils.showLoading('Saving').then(() => {
       },2000)
   },
   responseError => {
-   this.utils.hideLoading().then(() => {
-     const error: ErrorModel = responseError.error;
-     this.utils.errorSnackBar(error.message[0].messages[0].message);
-   });
-//
- })
+    const error: ErrorModel = responseError.error;
+this.utils.errorSnackBar(error.message);
+  })
 })
     }
     else if(e == 'send'){
@@ -662,7 +616,6 @@ this.utils.showLoading('Saving').then(() => {
     console.log(res);
       if(this.isAtticFileUpload)
       {
-        console.log("hello",this.isAtticFileUpload)
         this.uploadAtticFiles(res.id,this.atticPhotosList[0])
       }
       if(this.isRoofFileUpload)
@@ -672,7 +625,6 @@ this.utils.showLoading('Saving').then(() => {
           if(this.isPermitPlanFileUpload)
           {
             this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
-            console.log(this.permitPlanList[0]);
           }
           let objToSend: NavigationExtras = {
             queryParams: {
@@ -688,12 +640,9 @@ this.utils.showLoading('Saving').then(() => {
     });
   },
   responseError => {
-   this.utils.hideLoading().then(() => {
-     const error: ErrorModel = responseError.error;
-     this.utils.errorSnackBar(error.message[0].messages[0].message);
-   });
-//
- })
+    const error: ErrorModel = responseError.error;
+this.utils.errorSnackBar(error.message);
+  })
 
     }
   }
@@ -708,17 +657,42 @@ this.utils.showLoading('Saving').then(() => {
       else if(this.firstFormGroup.value.stampingmode == null){
             this.utils.errorSnackBar("Please select mode of stamping");
       }
-      else if(this.firstFormGroup.value.stampingtype == null){
-        this.utils.errorSnackBar("Please select type of stamping");
+      // else if(this.firstFormGroup.value.numberofhardcopy == '')
+      // {
+      //   this.utils.errorSnackBar("Please check the field no of hardcopies")
+      // }
+      // else if(this.firstFormGroup.value.shippingaddress == '' || this.firstFormGroup.get('shippingaddress').hasError('pattern'))
+      // {
+      //   this.utils.errorSnackBar("Please check the field address");
+      // }
+      // else if(this.firstFormGroup.value.contactnumber == null || this.firstFormGroup.get('contactnumber').hasError('pattern'))
+      // {
+      //   this.utils.errorSnackBar("Please check the field contact number")
+      // }
+      else if(this.firstFormGroup.value.propertytype == '')
+      {
+        this.utils.errorSnackBar("Please select property type");
       }
       else if(this.firstFormGroup.value.mountingtype == '')
       {
         this.utils.errorSnackBar("Please select mounting type");
       }
-      else if(this.firstFormGroup.value.propertytype == '')
-      {
-        this.utils.errorSnackBar("Please select property type");
+      else if(this.firstFormGroup.value.stampingtype == null){
+        this.utils.errorSnackBar("Please select type of stamping");
       }
+      
+      // else if(this.firstFormGroup.value.atticphotos == '')
+      // {
+      //   this.utils.errorSnackBar("Please check the field attic photos")
+      // }
+      // else if(this.firstFormGroup.value.roofphotos == '')
+      // {
+      //   this.utils.errorSnackBar("Please check the field roof photos");
+      // }
+      // else if(this.firstFormGroup.value.permitplanphotos == '')
+      // {
+      //   this.utils.errorSnackBar("Please check the field permit plan");
+      // }
       else{
         this.utils.errorSnackBar("Error");
       }
