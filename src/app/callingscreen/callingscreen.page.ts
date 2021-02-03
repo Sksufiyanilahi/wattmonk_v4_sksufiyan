@@ -34,7 +34,7 @@ export class CallingscreenPage implements OnInit, OnChanges {
 		// let data  =this.router.getCurrentNavigation().extras.state.data.queryParams.value;
 		console.log(data);
 		// if(data){
-		// 	this.showHideCallButtton= data;
+			// this.showHideCallButtton= data;
 		// }
 	}
 
@@ -102,16 +102,17 @@ export class CallingscreenPage implements OnInit, OnChanges {
 		let callListener = new CometChat.OngoingCallListener({
 			onUserJoined: (user) => {
 				console.log('User joined call:', user);
+				this.pauseAudio();
 			},
 			onUserLeft: (user) => {
 				console.log('User left call:', user);
 				this.navCtrl.pop();
-				this.pauseAudio();
+				// this.pauseAudio();
 			},
 			onCallEnded: (call) => {
 				console.log('Call ended listener', call);
 				this.navCtrl.pop();
-				this.pauseAudio();
+				// this.pauseAudio();
 			}
 		});
 		var callSettings = new CometChat.CallSettingsBuilder()
@@ -120,6 +121,7 @@ export class CallingscreenPage implements OnInit, OnChanges {
 			.setIsAudioOnlyCall(callType == 'audio' ? true : false)
 			.setCallEventListener(callListener)
 			.build();
+			console.log(callSettings,">>>>");
 		CometChat.startCall(callSettings);
 	}
 
