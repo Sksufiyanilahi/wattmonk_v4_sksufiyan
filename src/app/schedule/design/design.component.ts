@@ -12,7 +12,7 @@ import { InverterMadeModel } from 'src/app/model/inverter-made.model';
 import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE, INVALID_ANNUAL_UNIT, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_COMPANY_NAME } from '../../model/constants';
 import { Observable, Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
-import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd, NavigationExtras } from '@angular/router';
 import {  DesginDataModel, DesignModel } from '../../model/design.model';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
@@ -702,7 +702,7 @@ deleteArcFile(index){
               this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
-                // this.createChatGroup(response);
+                this.createChatGroup(response);
                 this.router.navigate(['/homepage/design'])
                 // this.utils.showSnackBar('Design have been saved');
                 this.utils.setHomepageDesignRefresh(true);
@@ -731,9 +731,23 @@ deleteArcFile(index){
                 
                 this.utils.hideLoading().then(() => {
                   this.value = response.id;
-                  // this.createChatGroup(response);
+                  //this.createChatGroup(response);
                   // this.sendtowattmonk();  
-                  this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
+                  //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
+                  let objToSend: NavigationExtras = {
+                    queryParams: {
+                      id:response.id,
+                      designData:"prelim",
+                      fulldesigndata:response
+                    },
+                    skipLocationChange: false,
+                    fragment: 'top' 
+                };
+            
+            
+            this.router.navigate(['/payment-modal'], { 
+              state: { productdetails: objToSend }
+            });
                  // console.log('Res', response);
                  // this.router.navigate(['/homepage'])
                   // this.utils.showSnackBar('Design have been saved');
@@ -791,8 +805,21 @@ deleteArcFile(index){
               this.value=response.id;
               
               this.utils.showSnackBar('Design have been updated');
-              this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
-              
+              //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
+              let objToSend: NavigationExtras = {
+                queryParams: {
+                  id:response.id,
+                  designData:"prelim",
+                  fulldesigndata:response
+                },
+                skipLocationChange: false,
+                fragment: 'top' 
+            };
+        
+        
+        this.router.navigate(['/payment-modal'], { 
+          state: { productdetails: objToSend }
+        });
               
       
             });
@@ -1099,7 +1126,20 @@ ioniViewDidEnter(){
   Pay()
   {
     if (this.desginForm.status === 'VALID') {
-    this.router.navigate(["payment-modal",{designData:"prelim"}]);
+    //this.router.navigate(["payment-modal",{designData:"prelim"}]);
+    let objToSend: NavigationExtras = {
+      queryParams: {
+        //id:response.id,
+        designData:"prelim"
+      },
+      skipLocationChange: false,
+      fragment: 'top' 
+  };
+
+
+this.router.navigate(['/payment-modal'], { 
+state: { productdetails: objToSend }
+});
     }else {
       if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
 

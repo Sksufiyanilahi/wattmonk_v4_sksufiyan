@@ -64,6 +64,7 @@
                   <ion-row style="margin-bottom: 0px;" [routerLink]="['/design-details/',designData.id]">
                      <ion-col style="padding-left:0px" >
                       <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
+                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.requesttype}}</span>
                   </ion-col>
                   <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
                           <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">

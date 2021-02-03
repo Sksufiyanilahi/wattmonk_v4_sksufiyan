@@ -7,7 +7,7 @@
           <textarea placeholder="Reason*" [(ngModel)]="reason" (input)="detectchange()" style="width: 100%;" required></textarea>
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="requestType!='pestamp'">
         <ion-col>
           <h6 style="margin:0px 0 0px 0;">Attachment</h6>
         
@@ -15,6 +15,40 @@
            
          <small *ngIf="exceedfileSize > 0" style="color:red">File size should not be greater than 25MB.</small>
         </ion-col>
+      </ion-row>
+      <ion-row *ngIf="requestType=='pestamp'">
+        <ion-col size="12">
+      
+            <ng-container>
+                <ion-item class="ion-no-padding" (click)="resend.click()">
+                    <ion-label position="floating" class="label">Attachment</ion-label>
+                        <input type="file" #resend class="form_input"  (change)="uploadPestamResendFile($event)" style="margin-top: 12px;">
+                        <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
+                    </ion-item>
+                    <div *ngFor="let file of pestampResendList;let i = index">
+                        <ion-item>
+                            <ion-col size="11">
+                                {{file.name}}
+                            </ion-col>
+                            <ion-col size="1" (click)="removeArc(i)">x</ion-col>
+                        </ion-item>
+                    </div>
+                    </ng-container>
+                    
+                </ion-col>
+                <!-- <ng-container *ngIf="design && design.atticphotos !==null">
+                  <div *ngFor="let arc of design.atticphotos;let i=index">
+                     <ion-item>
+                         <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
+                         
+                        
+    
+                     </ion-item>
+                 
+                     
+                 </div> 
+              </ng-container> -->
+        
       </ion-row>
     </ion-grid>
     <footer style="text-align: right;margin:12px;">

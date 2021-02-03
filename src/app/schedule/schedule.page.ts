@@ -96,7 +96,7 @@ this.network.networkConnect();
       });
     }
      this.designs = this.utilities.getdesignDetails();
-  console.log(this.designs);
+  //console.log(this.designs.status);
   }
 
   goBack() {

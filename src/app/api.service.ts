@@ -543,7 +543,7 @@ export class ApiService {
     /* Get Pe Engineers */
     getPeEngineers(peenginertype:string) {
       console.log(peenginertype);
-      return this.http.get(BaseUrl + "/peengineers?peengineertype="+peenginertype+"&parent_eq="+this.storageService.getUser().parent.id, {
+      return this.http.get(BaseUrl + "/peengineers?pestamptype="+peenginertype+"&parent_eq="+this.storageService.getUser().parent.id, {
         headers: this.headers,
       })
     }
@@ -572,6 +572,30 @@ export class ApiService {
 
     getPeStampCharges(searchData)
     {
-      return this.http.get(BaseUrl + 'commonsettings?settingname=' + searchData,{headers:this.headers});
+      return this.http.get(BaseUrl + '/commonsettings?settingname=' + searchData,{headers:this.headers});
     }
+
+    createdirectpayment(inputData){
+      return this.http.post<any>(BaseUrl+"/Pestampdirectpayment", inputData,{
+        headers: this.uploadHeaders
+       })
+      }
+
+      createPestamppayment(inputData:any): Observable<Pestamp>{
+        return this.http.post<Pestamp>(BaseUrl+"/pestampdeliverychargespayment", inputData,{
+         headers: this.uploadHeaders
+        })
+      }
+
+      createCommercialPestamppayment (inputData:any): Observable<Pestamp>{
+        return this.http.post<Pestamp>(BaseUrl+"/deliveredcommercialpestampayment", inputData,{
+         headers: this.uploadHeaders
+        })
+      }
+
+      getPendingPaymentstatus(){
+        return this.http.get(BaseUrl + "paymentpendingpestamps?creatorparentid="+this.storageService.getUser().parent.id, {
+          headers: this.headers
+        })
+      }
 }

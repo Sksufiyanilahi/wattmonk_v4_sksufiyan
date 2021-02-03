@@ -5,7 +5,7 @@ import { User } from '../model/user.model';
 import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_COMPANY_NAME, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_REGISTRATION_NUMBER } from '../model/constants';
 import { MenuController, NavController } from '@ionic/angular';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, Renderer2, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
@@ -434,10 +434,36 @@ export class OnboardingPage implements OnInit {
     console.log("hello",this.user.isonboardingcompleted);
     if(this.user.amount == 0 && this.user.isonboardingcompleted == false)
     {
-    this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"true"}]);
+    //this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"true"}]);
+    let objToSend: NavigationExtras = {
+      queryParams: {
+        mode:"wallet",
+        onBoarding:"true"
+      },
+      skipLocationChange: false,
+      fragment: 'top' 
+  };
+
+
+this.router.navigate(['/add-money'], { 
+state: { productdetails: objToSend }
+});
     }
     else{
-      this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"false"}])
+      //this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"false"}])
+      let objToSend: NavigationExtras = {
+        queryParams: {
+          mode:"wallet",
+          onBoarding:"false"
+        },
+        skipLocationChange: false,
+        fragment: 'top' 
+    };
+  
+  
+  this.router.navigate(['/add-money'], { 
+  state: { productdetails: objToSend }
+  });
     }
   }
 

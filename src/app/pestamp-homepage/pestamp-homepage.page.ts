@@ -24,6 +24,7 @@ export class PestampHomepagePage implements OnInit {
   update_version: string;
   netSwitch: any;
   deactivateNetworkSwitch: Subscription;
+  userData:any;
 
   constructor(
               private network:NetworkdetectService,
@@ -33,7 +34,9 @@ export class PestampHomepagePage implements OnInit {
               private utils:UtilitiesService,
               private iab:InAppBrowser,
               private storageService:StorageService
-  ) { }
+  ) { 
+    this.userData = this.storageService.getUser();
+  }
 
   getNotificationCount(){
     this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
@@ -100,7 +103,24 @@ this.network.networkConnect();
   }
 
   scheduledPage(){
-    this.route.navigate(['/pestamp-schedule']);
+    if(this.userData.ispaymentmodeprepay){
+      this.apiService.getPendingPaymentstatus().subscribe((res:any)=>{
+        console.log(res);
+        if(res.length>0){
+          this.utils.errorSnackBar("Please clear your pending dues from the delivered section");
+        } 
+        else{
+          this.route.navigate(['/pestamp-schedule']);
+        }
+      },
+        error => {
+          this.utils.errorSnackBar("Error");
+        })
+    
+    }
+    else{
+      this.route.navigate(['/pestamp-schedule']);
+    }
 
     }
     ngOndestroy(){

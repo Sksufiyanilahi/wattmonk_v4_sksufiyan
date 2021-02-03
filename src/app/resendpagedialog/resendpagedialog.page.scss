@@ -18,3 +18,12 @@ textarea{
 ion-grid{
     padding: 14px;
 }
+
+input[type="file"]{
+    visibility:hidden;
+  }
+
+  .label {
+    color: #6C6C6C !important;
+    font-size: 15px;
+  }

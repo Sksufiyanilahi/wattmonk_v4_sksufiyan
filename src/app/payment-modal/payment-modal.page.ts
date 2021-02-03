@@ -3,13 +3,15 @@ import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 import { NavParams, ModalController, NavController, AlertController } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { UtilitiesService } from '../utilities.service';
 import { ScheduleFormEvent } from '../model/constants';
 import { Intercom } from 'ng-intercom';
 import { CouponOffersModalPage } from '../coupon-offers-modal/coupon-offers-modal.page';
 import { Observable } from 'rxjs';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { DesginDataModel } from '../model/design.model';
 
 @Component({
   selector: 'app-payment-modal',
@@ -42,6 +44,9 @@ netPay:any
   newprelimsRef: AngularFireObject<any>;
   //newprelimsRef:any;
   newprelimscount = 0;
+  designData:any;
+  fulldesigndata: any;
+
    
   constructor( private storageService:StorageService,
     
@@ -56,14 +61,28 @@ netPay:any
     private db:AngularFireDatabase,
     private cdr: ChangeDetectorRef
     ) {
+      // this.designData = this.router.getCurrentNavigation().extras.state;
+      // console.log(this.designData)
+      // this.id = this.designData.productdetails.queryParams.id;
+      // this.design = this.designData.productdetails.queryParams.designData;
+      // console.log(this.id);
+      // console.log(this.design);
       //For Counts
+      this.designData = this.router.getCurrentNavigation().extras.state;
+      this.id = this.designData.productdetails.queryParams.id;
+      this.design = this.designData.productdetails.queryParams.designData;
+      this.fulldesigndata = this.designData.productdetails.queryParams.fulldesigndata;
+
+      console.log(this.fulldesigndata);
+
+
     this.newpermitsRef = db.object('newpermitdesigns');
     this.newpermits = this.newpermitsRef.valueChanges();
     this.newpermits.subscribe(
       (res) => {
         console.log(res);
         this.newpermitscount = res.count;
-        cdr.detectChanges();
+        this.cdr.detectChanges();
       },
       (err) => console.log(err),
       () => console.log('done!')
@@ -75,7 +94,7 @@ netPay:any
       (res) => {
         console.log(res);
         this.newprelimscount = res.count;
-        cdr.detectChanges();
+        this.cdr.detectChanges();
       },
       (err) => console.log(err),
       () => console.log('done!')
@@ -120,8 +139,12 @@ netPay:any
   }
 
 fetchData(){
-  this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
-  this.design=params.get('designData')});
+  // this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
+  // this.design=params.get('designData')});
+  // const navigation = this.router.getCurrentNavigation()
+  // console.log(navigation)
+  // console.log(this.router.getCurrentNavigation().extras.state)
+ 
 
 
   this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
@@ -210,9 +233,11 @@ confirm(){
         this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
           if(this.design=='prelim')
       {
+        this.createChatGroup(value);
         this.newprelimsRef.update({ count: this.newprelimscount + 1});
         console.log("hello",this.newprelimscount)
       }else{
+        this.createChatGroup(value);
         this.newpermitsRef.update({ count: this.newpermitscount + 1});
       }
         this.utils.hideLoading().then(()=>
@@ -243,7 +268,23 @@ confirm(){
 
   addWallet(value){
     
-    this.router.navigate(['/add-money',{mode:value,id:this.id,serviceAmount:this.netPay,design:this.design}])
+    //this.router.navigate(['/add-money',{mode:value,id:this.id,serviceAmount:this.netPay,design:this.design}])
+    let objToSend: NavigationExtras = {
+      queryParams: {
+        mode:value,
+        id:this.id,
+        serviceAmount:this.netPay,
+        design:this.design,
+        fulldesigndata:this.fulldesigndata
+      },
+      skipLocationChange: false,
+      fragment: 'top' 
+  };
+  
+  
+  this.router.navigate(['/add-money'], { 
+  state: { productdetails: objToSend }
+  });
   }
 
   cancel(){
@@ -291,10 +332,12 @@ confirm(){
            { this.utils.showSnackBar("Design request has been send to wattmonk successfully")
            this.navController.pop();
            if(this.design=='prelim'){
+             this.createChatGroup(this.design);
             this.router.navigate(['/homepage/design'])
            this.utils.setHomepageDesignRefresh(true);
            }
            else{
+            this.createChatGroup(this.design);
             this.router.navigate(['/permithomepage/permitdesign'])
              this.utils.setHomepagePermitRefresh(true);
            }
@@ -427,6 +470,33 @@ else if(data.discounttype=='amount'){
     this.coupondata=null;
     this.discountAmount();
     this.utils.setCouponId(null);
+  }
+
+  createChatGroup(design:DesginDataModel){
+
+    if(this.design=='prelim'){
+      var GUID = 'prelim' + "_" + new Date().getTime();
+    }else if(this.design=='permit'){
+      var GUID = 'permit' + "_" + new Date().getTime();
+
+    }
+
+    var address = design.address.substring(0, 60);
+    var groupName = design.name + "_" + address;
+
+    var groupType = CometChat.GROUP_TYPE.PRIVATE;
+    var password = "";
+
+    var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+    CometChat.createGroup(group).then(group=>{
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+        this.cdr.detectChanges();
+      })
+    })
   }
 
 }

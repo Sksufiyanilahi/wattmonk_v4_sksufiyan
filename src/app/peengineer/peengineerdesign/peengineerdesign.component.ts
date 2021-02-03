@@ -23,6 +23,9 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
+import { PestampdelivermodalPage } from 'src/app/pestampdelivermodal/pestampdelivermodal.page';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { COMETCHAT_CONSTANTS } from 'src/app/contants';
 
 @Component({
   selector: 'app-peengineerdesign',
@@ -34,7 +37,7 @@ export class PEengineerdesignComponent implements OnInit {
   assignForm:FormGroup
   drawerState = DrawerState.Bottom;
   userData: any;
-  segments:any="status=assigned";
+  segments:any="status=assigned&status=declined";
 
   listOfDesigns: Pestamp[];
   listOfDesignsHelper: any[];
@@ -86,8 +89,9 @@ export class PEengineerdesignComponent implements OnInit {
                 this.userData = this.storageService.getUser();
 
 
-    // if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
-    //   this.segments= 'status=created&status=outsourced&status=accepted&status=declined';
+    // if(this.userData.role.type=='peengineer'){
+    //   this.segments= 'status=assigned&status=declined';
+    // }
     // }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin'){
     //   this.segments ='status=created&status=outsourced&status=accepted&&status=declined';
     // }
@@ -121,7 +125,7 @@ export class PEengineerdesignComponent implements OnInit {
                 // this.skip=0;
              
                 if(event.target.value=='InStamping'){
-                      this.segments ="status=assigned";
+                      this.segments ="status=assigned&status=declined";
                       // return this.segments;
                     }
                     else if(event.target.value=='completed'){
@@ -154,6 +158,7 @@ export class PEengineerdesignComponent implements OnInit {
 
   ngOnInit() {
     //this.userData = this.storageService.getUser();
+    this.setupCometChat()
     this.PeStampRefreshSubscription = this.utils.getPeStampRefresh().subscribe((result)=>{
     this.getDesigns(null);
   })
@@ -696,62 +701,28 @@ designDownload(designData){
   }
 
   async openreviewPassed(id,designData){
-    this.designId=id
-    const alert = await this.alertController.create({
-      cssClass: 'alertClass',
-      header: 'Confirm!',
-      message:'Would you like to  Add Comments!!',
-      inputs:
-       [ {name:'comment',
-       id:'comment',
-          type:'textarea',
-        placeholder:'Enter Comment'}
-        ] ,
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
-        }, {
-          text: 'deliver',
-          handler: (alertData) => {
-            var postData= {};
-            if(alertData.comment!=""){
-             postData = {
-              status: "delivered",
-              comments: alertData.comment ,
-               };}
-               else{
-                postData = {
-                  status: "delivered",
-                   };
-               }
-               console.log(postData);
-               this.apiService.updatePestamps(this.designId,postData).subscribe((value) => {
-                this.utils.hideLoading().then(()=>{
-                  ;
-                  console.log('reach ', value);
-                 this.utils.showSnackBar('Pe Stamp request has been delivered successfully');
-
-                  this.utils.setPeStampRefresh(true);
-                })
-              }, (error) => {
-                this.utils.hideLoading();
-                ;
-              });
-          }
-        }
-      ]
+    const modal = await this.modalController.create({
+      component: PestampdelivermodalPage,
+      cssClass: 'deliver-modal-css',
+      componentProps: {
+        id:id,
+        designData:designData
+      },
+      backdropDismiss:false
     });
-
-    await alert.present();
-
-
-
-  }
+    modal.onDidDismiss().then((data) => {
+      console.log(data)
+      if(data.data.cancel=='cancel'){
+      }else{
+        this.getDesigns(null)
+      }
+  });
+    // modal.dismiss(() => {
+    //   ;
+    //   this.getDesigns(null);
+    // });
+    return await modal.present();
+}
 
 createChatGroup(design:DesginDataModel){
   // var GUID = 'permit' + "_" + new Date().getTime();
@@ -836,31 +807,31 @@ createChatGroup(design:DesginDataModel){
 //       }
 
 
-//       setupCometChat() {
-//         let userId = this.storageservice.getUserID()
-//         const user = new CometChat.User(userId);
-//         user.setName(this.storageservice.getUser().firstname + ' ' + this.storageservice.getUser().lastname);
-//         const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
-//         CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
-//           () => {
-//             console.log('Initialization completed successfully');
-//             // if(this.utilities.currentUserValue != null){
-//               // You can now call login function.
-//               CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
-//                 (user) => {
-//                   console.log('Login Successful:', { user });
-//                 },
-//                 error => {
-//                   console.log('Login failed with exception:', { error });
-//                 }
-//               );
-//           // }
-//           },
-//           error => {
-//             console.log('Initialization failed with error:', error);
-//           }
-//         );
-//       }
+      setupCometChat() {
+        let userId = this.storageService.getUserID()
+        const user = new CometChat.User(userId);
+        user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+        const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+        CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+          () => {
+            console.log('Initialization completed successfully');
+            // if(this.utilities.currentUserValue != null){
+              // You can now call login function.
+              CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+                (user) => {
+                  console.log('Login Successful:', { user });
+                },
+                error => {
+                  console.log('Login failed with exception:', { error });
+                }
+              );
+          // }
+          },
+          error => {
+            console.log('Initialization failed with error:', error);
+          }
+        );
+      }
 
 
 directAssignToWattmonk(id:number){

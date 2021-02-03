@@ -1,14 +1,16 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Intercom } from 'ng-intercom';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { ScheduleFormEvent } from '../model/constants';
+import { DesginDataModel } from '../model/design.model';
 import { Pestamp } from '../model/pestamp.model';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
 @Component({
   selector: 'app-pestamp-payment-modal',
@@ -45,6 +47,11 @@ export class PestampPaymentModalPage implements OnInit {
 
     designData:any;
     data:any;
+    assignValue:any;
+    serviceCharges:any;
+    amounttopay:any;
+    createpayment:any;
+    deliveryCharges:any;
      
     constructor( private storageService:StorageService,
       
@@ -60,34 +67,36 @@ export class PestampPaymentModalPage implements OnInit {
       private cdr: ChangeDetectorRef
       ) {
         //For Counts
-      this.newpermitsRef = db.object('newpermitdesigns');
-      this.newpermits = this.newpermitsRef.valueChanges();
-      this.newpermits.subscribe(
-        (res) => {
-          console.log(res);
-          this.newpermitscount = res.count;
-          cdr.detectChanges();
-        },
-        (err) => console.log(err),
-        () => console.log('done!')
-      )
-      //counts
-      this.newprelimsRef = db.object('newprelimdesigns');
-      this.newprelims = this.newprelimsRef.valueChanges();
-      this.newprelims.subscribe(
-        (res) => {
-          console.log(res);
-          this.newprelimscount = res.count;
-          cdr.detectChanges();
-        },
-        (err) => console.log(err),
-        () => console.log('done!')
-      )
-
+      // this.newpermitsRef = db.object('newpermitdesigns');
+      // this.newpermits = this.newpermitsRef.valueChanges();
+      // this.newpermits.subscribe(
+      //   (res) => {
+      //     console.log(res);
+      //     this.newpermitscount = res.count;
+      //     cdr.detectChanges();
+      //   },
+      //   (err) => console.log(err),
+      //   () => console.log('done!')
+      // )
+      // //counts
+      // this.newprelimsRef = db.object('newprelimdesigns');
+      // this.newprelims = this.newprelimsRef.valueChanges();
+      // this.newprelims.subscribe(
+      //   (res) => {
+      //     console.log(res);
+      //     this.newprelimscount = res.count;
+      //     cdr.detectChanges();
+      //   },
+      //   (err) => console.log(err),
+      //   () => console.log('done!')
+      // )
+        console.log(this.router.getCurrentNavigation().extras.state);
       this.designData = this.router.getCurrentNavigation().extras.state;
       this.data = this.designData.productdetails.queryParams.designData;
+      this.assignValue = this.designData.productdetails.queryParams.value;
+      this.deliveryCharges = this.data.deliverycharges;
+      console.log(this.assignValue);
       console.log(this.data);
-console.log(this.designData.productdetails);
        }
   
     ngOnInit() {
@@ -107,7 +116,13 @@ console.log(this.designData.productdetails);
       this.utils.showHideIntercom(true);
        this.fetchData();
       // this.servicecharges();
-      this.getPeStampCharges();});
+      if(this.assignValue == 'assign')
+      {
+      this.getPeStampCharges();
+     }
+    else{
+      this.getCommercialCharges();
+    }});
      /* this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
       console.log(this.user)
       this.apiService.paymentDetail(this.user.id).subscribe(res=>{
@@ -132,6 +147,7 @@ console.log(this.designData.productdetails);
     getPeStampCharges()
     {
       var searchdata;
+      var bothtypepestampcharges = 0;
     if (this.data.propertytype == 'commercial') {
       searchdata = "commercialanymountingpecharges"
     }
@@ -147,6 +163,26 @@ console.log(this.designData.productdetails);
     else if (this.data.type == "structural" && this.data.mountingtype == 'roof') {
       searchdata = "structuralroofpecharges"
     }
+    else if (this.data.type == "both") {
+      searchdata = "electricalanymountingpecharges"
+      var structuralsearchdata;
+      if (this.data.mountingtype == 'both') {
+        structuralsearchdata = "structural" + this.data.mountingtype + "pecharges"
+      }
+      else if (this.data.mountingtype == 'ground') {
+        structuralsearchdata = "structural" + this.data.mountingtype + "mountpecharges"
+      }
+      else if (this.data.mountingtype == 'roof') {
+        structuralsearchdata = "structural" + this.data.mountingtype + "pecharges"
+      }
+      this.apiService.getPeStampCharges(structuralsearchdata).subscribe(
+        response => {
+          console.log(response);
+          bothtypepestampcharges = parseInt(response[0].settingvalue);
+        }
+      );
+    }
+    setTimeout(() => {
       this.apiService.getPeStampCharges(searchdata).subscribe((res)=>{
         console.log(res);
         this.servicePrice = res;
@@ -157,15 +193,40 @@ console.log(this.designData.productdetails);
         {
           console.log("hello");
           this.settingValue = 0;
-          this.netPay = this.settingValue;
+          this.netPay = this.settingValue;    
         }
         else{
-          console.log("hello1")
-          this.settingValue = res[0].settingvalue;
+          this.settingValue = res[0].settingvalue + bothtypepestampcharges;
           this.netPay = this.settingValue;
+          console.log("hello1",this.netPay);
         }
       }
       )
+    }, 500);
+    }
+
+    getCommercialCharges(){
+      this.apiService.getPeStampCharges("commercialanymountingpecharges").subscribe((res)=>{
+        console.log(res);
+        this.servicePrice = res;
+        console.log("deliver")
+        this.settingValue = res[0].settingvalue;
+        this.serviceCharges = this.settingValue * this.data.workinghours;
+        //this.netPay = this.settingValue * this.data.workinghours;
+        this.getAmounttopay();
+    })
+  }
+
+    getAmounttopay() {
+      if (this.data.propertytype == 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+        this.amounttopay = this.serviceCharges + this.data.deliverycharges;
+      }
+      else if (this.data.propertytype == 'commercial' && this.data.modeofstamping == 'ecopy') {
+        this.amounttopay = this.serviceCharges;
+      }
+      else if (this.data.propertytype == 'residential' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+        this.amounttopay = this.data.deliverycharges
+      }
     }
   
   fetchData(){
@@ -235,6 +296,23 @@ console.log(this.designData.productdetails);
   
   confirm(){
     //if(this.data.id!=null){
+      if(this.assignValue == 'clearDues'){
+        const inputData = {
+          paymenttype: "wallet",
+          pestampid: this.data.id,
+          user: this.user.id
+        }
+        if (this.data.propertytype == 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+          this.makeCommercialpayment(inputData);
+        }
+        else if (this.data.propertytype == 'commercial' && this.data.modeofstamping == 'ecopy') {
+          this.makeCommercialpayment(inputData);
+        }
+        else if (this.data.propertytype != 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+          this.makepayment(inputData);
+        }
+      }
+      else{
     var postData={};
     var pestampacceptancestarttime = new Date();
     pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
@@ -254,6 +332,7 @@ console.log(this.designData.productdetails);
       this.utils.showLoading("Assigning").then(()=>
       {
           this.apiService.updatePestamps(this.data.id,postData).subscribe(value=>{
+            this.createChatGroup(value);
         //     if(this.design=='prelim')
         // {
         //   this.newprelimsRef.update({ count: this.newprelimscount + 1});
@@ -287,11 +366,54 @@ console.log(this.designData.productdetails);
         //     this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
         //   }
         // }
+      }
   }
   
     addWallet(value){
-      
-      this.router.navigate(['/add-money',{mode:value,id:this.data.id,serviceAmount:this.netPay,design:this.design}])
+      if(this.assignValue == 'assign'){
+        console.log("assign")
+      //this.router.navigate(['/add-money',{mode:value,id:this.data.id,serviceAmount:this.netPay,design:this.design,assignValue:this.assignValue}])
+      let objToSend: NavigationExtras = {
+        queryParams: {
+        mode:value,
+        id:this.data.id,
+        serviceAmount:this.netPay,
+        design:this.design,
+        assignValue:this.assignValue,
+        fulldesigndata:this.data,
+        //value:'assign'
+        },
+        skipLocationChange: false,
+        fragment: 'top' 
+    };
+
+
+this.router.navigate(['/add-money'], { 
+  state: { productdetails: objToSend }
+});  
+    }
+      else{
+        console.log("deliver")
+        //this.router.navigate(['/add-money',{mode:value,id:this.data.id,serviceAmount:this.amounttopay,design:this.design,assignValue:this.assignValue,data:this.data}])
+       let objToSend: NavigationExtras = {
+        queryParams: {
+        mode:value,
+        id:this.data.id,
+        serviceAmount:this.amounttopay,
+        design:this.design,
+        assignValue:this.assignValue,
+        fulldesigndata:this.data,
+        //value:'assign'
+        },
+        skipLocationChange: false,
+        fragment: 'top' 
+    };
+
+
+this.router.navigate(['/add-money'], { 
+  state: { productdetails: objToSend }
+});
+      }
     }
   
     cancel(){
@@ -316,6 +438,45 @@ console.log(this.designData.productdetails);
       showLoader=false;
       this.fetchData()
     }
+
+    makepayment(inputData) {
+      this.utils.showLoading("Adding").then(()=>{
+      this.apiService.createPestamppayment(inputData).subscribe(response => {
+        console.log(response);
+        this.createpayment=response;
+    this.utils.hideLoading().then(()=>{
+  this.utils.showSnackBar("payment successfull");
+        this.router.navigate(['pestamp-homepage/pestamp-design']);
+  this.utils.setPeStampRefresh(true);
+    });
+      },
+      (error)=>{
+        this.utils.hideLoading();
+        this.utils.errorSnackBar("Something went wrong");
+      })
+    })
+    }
+    
+    makeCommercialpayment(inputData) {
+      this.utils.showLoading("Adding").then(()=>{
+      this.apiService.createCommercialPestamppayment(inputData).subscribe(response => {
+        console.log(response);
+        this.createpayment=response;
+    this.utils.hideLoading().then(()=>{
+   // if(this.createpayment.status=='succeeded'){
+  this.utils.showSnackBar("payment successfull");
+        this.router.navigate(['pestamp-homepage/pestamp-design']);
+  this.utils.setPeStampRefresh(true);
+    });
+      },
+      (error)=>{
+        this.utils.hideLoading();
+        this.utils.errorSnackBar("Something went wrong");
+      })
+    })
+    }
+
+    
   
     confirmforPostpaid(){
      // if(this.id!=null){
@@ -368,6 +529,33 @@ console.log(this.designData.productdetails);
   
     ionViewWillLeave(){
       this.utils.showHideIntercom(false);
+    }
+
+    createChatGroup(design:Pestamp){
+
+      // if(this.design=='prelim'){
+      //   var GUID = 'prelim' + "_" + new Date().getTime();
+      // }else if(this.design=='permit'){
+      //   var GUID = 'permit' + "_" + new Date().getTime();
+  
+      // }
+      var GUID = 'pestamp' + "_" + new Date().getTime();
+      var address = design.deliveryaddress.substring(0, 60);
+      var groupName = design.personname// + "_" + address;
+  
+      var groupType = CometChat.GROUP_TYPE.PRIVATE;
+      var password = "";
+  
+      var group = new CometChat.Group(GUID, groupName, groupType, password);
+  
+      CometChat.createGroup(group).then(group=>{
+        let membersList = [
+          new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+        ];
+        CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+          this.cdr.detectChanges();
+        })
+      })
     }
   
   

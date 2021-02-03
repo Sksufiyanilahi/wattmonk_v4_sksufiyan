@@ -9,7 +9,7 @@ import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-na
 import { DrawerState } from 'ion-bottom-drawer';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from '../../model/assignee.model';
-import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized, NavigationExtras } from '@angular/router';
 import {Storage} from '@ionic/storage';
 import { ModalController, AlertController, Platform, IonInfiniteScroll } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
@@ -29,6 +29,7 @@ import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
+import { COMETCHAT_CONSTANTS } from 'src/app/contants';
 
 
 @Component({
@@ -273,7 +274,7 @@ this.network.networkConnect();
     //     }
     //   }
     // });
-
+    this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
       this.skip=0;
       this.getDesigns(null);
@@ -770,9 +771,23 @@ this.network.networkConnect();
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin') && this.designerData.status=='created'){
-      this.router.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+      //this.router.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+      console.log(id,this.designerData.requesttype);
+      let objToSend: NavigationExtras = {
+        queryParams: {
+          id:id,
+          designData:this.designerData.requesttype,
+          fulldesigndata:this.designerData
+        },
+        skipLocationChange: false,
+        fragment: 'top' 
+    };
 
-    }
+console.log(objToSend);
+this.router.navigate(['/payment-modal'], { 
+  state: { productdetails: objToSend }
+});
+}
 
    else{ if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
@@ -1239,6 +1254,53 @@ createNewDesignChatGroup(design:DesginDataModel) {
     },
     error => {
 
+    }
+  );
+}
+
+// addUserToGroupChat() {
+//   debugger;
+// var GUID = this.designerData.chatid;
+// var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
+// if (this.isclientassigning) {
+//   userscope = CometChat.GROUP_MEMBER_SCOPE.ADMIN;
+// }
+// let membersList = [
+//   new CometChat.GroupMember("" + this.selectedDesigner.id, userscope)
+// ];
+// CometChat.addMembersToGroup(GUID, membersList, []).then(
+//   response => {
+    
+//   },
+//   error => {
+  
+//   }
+// );
+// }
+
+
+setupCometChat() {
+  let userId = this.storageService.getUserID()
+  const user = new CometChat.User(userId);
+  user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+  const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+  CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+    () => {
+      console.log('Initialization completed successfully');
+      // if(this.utilities.currentUserValue != null){
+        // You can now call login function.
+        CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+          (user) => {
+            console.log('Login Successful:', { user });
+          },
+          error => {
+            console.log('Login failed with exception:', { error });
+          }
+        );
+    // }
+    },
+    error => {
+      console.log('Initialization failed with error:', error);
     }
   );
 }
