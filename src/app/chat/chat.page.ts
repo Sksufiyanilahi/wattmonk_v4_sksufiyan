@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { ModalController, NavController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { Chooser } from '@ionic-native/chooser/ngx';
@@ -14,6 +14,7 @@ import { Intercom } from 'ng-intercom';
 import { StorageService } from '../storage.service';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { COMETCHAT_CONSTANTS } from '../contants';
+import { ApiService } from '../api.service';
 
 @Component({
 	selector: 'app-chat',
@@ -40,7 +41,8 @@ export class ChatPage implements OnInit {
 		private navController: NavController,
 		private intercom: Intercom,
     private storageService: StorageService,
-    private utils:UtilitiesService
+	private utils:UtilitiesService,
+	private apiService:ApiService
 	) {
     
 		const html = document.getElementsByTagName('html').item(0);
@@ -61,7 +63,8 @@ export class ChatPage implements OnInit {
 		// if (this.router.getCurrentNavigation().extras.state) {
 		this.currentGroupData = this.route.snapshot.paramMap.get('id');
 		console.log(this.currentGroupData);
-    this.utils.guid(this.currentGroupData);
+		localStorage.setItem('gid',this.currentGroupData);
+    this.apiService.listencall(this.currentGroupData);
 		// }
 
 		// });
@@ -338,7 +341,8 @@ export class ChatPage implements OnInit {
 			(outGoingCall) => {
 				console.log('Call initiated successfully:', outGoingCall);
         this.sessionID = outGoingCall.getSessionId();
-        this.utils.callData = outGoingCall;
+		this.utils.callData = outGoingCall;
+					localStorage.setItem('showHideButton','true');
         this.router.navigate(['/callingscreen']);
 				// perform action on success. Like show your calling screen.
 			},
@@ -358,7 +362,9 @@ export class ChatPage implements OnInit {
 			(outGoingCall) => {
 				console.log('Call initiated successfully:', outGoingCall);
 
-				this.sessionID = outGoingCall.getSessionId();
+				this.utils.callData = outGoingCall;
+				localStorage.setItem('showHideButton','true');
+				this.router.navigate(['/callingscreen']);
 				// perform action on success. Like show your calling screen.
 			},
 			(error) => {
