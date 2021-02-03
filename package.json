@@ -51,6 +51,7 @@
     "@ionic-native/keyboard": "5.29.0",
     "@ionic-native/launch-navigator": "5.24.0",
     "@ionic-native/local-notifications": "^5.30.0",
+    "@ionic-native/mixpanel": "^5.31.1",
     "@ionic-native/native-geocoder": "5.23.0",
     "@ionic-native/network": "5.28.0",
     "@ionic-native/social-sharing": "5.28.0",
@@ -89,6 +90,7 @@
     "cordova-plugin-geolocation": "4.0.2",
     "cordova-plugin-inappbrowser": "3.2.0",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
+    "cordova-plugin-mixpanel": "^4.7.0",
     "cordova-plugin-nativegeocoder": "3.2.2",
     "cordova-plugin-network-information": "2.0.2",
     "cordova-plugin-stripe": "1.5.3",
@@ -201,7 +203,11 @@
       "cordova-plugin-file-opener2": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "cordova-plugin-mixpanel": {
+        "PLAY_SERVICES_VERSION": "+",
+        "FIREBASE_VERSION": "+"
+      }
     },
     "platforms": [
       "ios",
