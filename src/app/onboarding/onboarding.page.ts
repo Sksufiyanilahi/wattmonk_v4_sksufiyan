@@ -2,7 +2,7 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ROLES } from '../contants';
 import { User } from '../model/user.model';
-import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_COMPANY_NAME, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_REGISTRATION_NUMBER } from '../model/constants';
+import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_COMPANY_NAME, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_PHONE_NUMBER, INVALID_REGISTRATION_NUMBER } from '../model/constants';
 import { MenuController, NavController } from '@ionic/angular';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, Renderer2, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
@@ -37,6 +37,7 @@ export class OnboardingPage implements OnInit {
   addressError = INVALID_ADDRESS;
   registrationError = INVALID_REGISTRATION_NUMBER;
   companyError = INVALID_COMPANY_NAME;
+  phoneError = INVALID_PHONE_NUMBER;
   
   
   logo: any ;
@@ -61,7 +62,7 @@ export class OnboardingPage implements OnInit {
   fileName: any;
   logoUploaded: boolean=false;
   logoSelected: boolean=false;
- 
+  checkboxValue:boolean;
 
   constructor(public renderer:Renderer,
               private router:Router,
@@ -77,11 +78,14 @@ export class OnboardingPage implements OnInit {
                 this.firstFormGroup = this.formBuilder.group({
                   usertype : new FormControl(null),
                   billingaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
+                  phone:new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
+                  //companyaddresssameasbilling:new FormControl(''),
+                  companyaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
                   company:new FormControl(null, [Validators.required,Validators.minLength(3), Validators.pattern(COMPANYFORMAT)]),
                   ispaymentmodeprepay:new FormControl(null),
                   // logo:new FormControl(null, [Validators.required]),
                   registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9-]*')]),
-                  isonboardingcompleted: new FormControl(true)
+                  isonboardingcompleted: new FormControl(false)
                 })
                 this.secondFormGroup = this.formBuilder.group({
                   //For Emails
@@ -124,6 +128,7 @@ export class OnboardingPage implements OnInit {
       this.onboardingData();
       this.paymentCharges();
       this.apiService.emitUserNameAndRole(this.user);
+      console.log(this.firstFormGroup.value)
 
 
 
@@ -149,7 +154,7 @@ export class OnboardingPage implements OnInit {
 
     this.apiService.getUserData(this.userId).subscribe((res:any)=>{
       console.log(res);
-      
+      //this.checkboxValue = res.companyaddresssameasbilling;
       if(res.usertype=='company'){
         this.isCompany=true;
       }else{
@@ -158,10 +163,14 @@ export class OnboardingPage implements OnInit {
       this.firstFormGroup.patchValue({
         usertype:res.usertype,
         billingaddress:res.billingaddress,
+        phone:res.phone,
+        companyaddresssameasbilling:res.companyaddresssameasbilling,
+        companyaddress:res.companyaddress,
         company:res.company,
         ispaymentmodeprepay:res.ispaymentmodeprepay,
         registrationnumber:res.registrationnumber,
-        logo:res.logo
+        logo:res.logo,
+        
       })
       this.secondFormGroup.patchValue({
         //For Emails
@@ -195,17 +204,33 @@ export class OnboardingPage implements OnInit {
     console.log(this.radioValues);
     if(this.radioValues === 'company'){
     this.isCompany = true;
+    this.checkboxValue = false;
+    this.firstFormGroup.patchValue({
+      phone:'',
+      billingaddress:'',
+      
+    })
     }
     else{
       this.isCompany = false;
+      this.checkboxValue = false;
       this.firstFormGroup.patchValue({
-        company:''
+        company:'',
+        companyaddress:'',
+        registrationnumber:'',
+        phone:'',
+        billingaddress:''
       })
+      this.firstFormGroup.get('companyaddress').clearValidators();
       this.firstFormGroup.get('company').clearValidators();
-      this.firstFormGroup.get('company').updateValueAndValidity();
+      //this.firstFormGroup.get('company').reset();
       this.firstFormGroup.get('registrationnumber').clearValidators();
-      this.firstFormGroup.get('registrationnumber').updateValueAndValidity();
+      //this.firstFormGroup.get('registrationnumber').reset();
+      
     }
+    this.firstFormGroup.get('companyaddress').updateValueAndValidity();
+    this.firstFormGroup.get('company').updateValueAndValidity();
+    this.firstFormGroup.get('registrationnumber').updateValueAndValidity();
   }
 
   // addPrelim(){
@@ -239,6 +264,7 @@ export class OnboardingPage implements OnInit {
       //   })
       // }
       // else{
+        console.log(this.firstFormGroup.value);
         this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
           console.log('updated',res);
           
@@ -541,5 +567,19 @@ state: { productdetails: objToSend }
   goBack(){
     this.navCtrl.pop();
   }
+
+  change(e)
+  {
+    this.checkboxValue = e.detail.checked;
+    console.log(this.checkboxValue)
+    if(this.checkboxValue == true)
+    {
+      this.firstFormGroup.get("billingaddress").setValue(this.firstFormGroup.get("companyaddress").value);
+      console.log(this.firstFormGroup.get("billingaddress").value);
+    }
+    else{
+      this.firstFormGroup.get("billingaddress").setValue('');
+    }
+ }
 
 }

@@ -29,6 +29,11 @@ export class DashboardPage implements OnInit {
     this.userData= this.storage.getUser();
   //  let data = this.route.snapshot.data.userdata; // get data from resolver
   //  console.log(data);
+    //this.getCount();
+  }
+
+  ionViewDidEnter()
+  {
     this.getCount();
   }
 
