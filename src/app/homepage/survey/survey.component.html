@@ -64,15 +64,15 @@
 
                                 </ion-row>
                             <ion-row class="ion-no-margin">
-                                <ion-col><span *ngIf="surveyData.status == 'created' || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'" style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id,surveyData)"
+                                <ion-col ><span *ngIf="surveyData.status == 'created' || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'" style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id,surveyData)"
                                     >Assign</span>
                                 <!-- <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type =='surveyor'"> -->
                                       
-                                    <!-- <span  style="float:right !important;" class="ion-text-end action-button-color z-100"
-                                         [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
+                                    <span *ngIf="surveyData.status == 'created' || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'" style="float:right !important;" class="ion-text-end action-button-color z-100"
+                                    [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude + '/' + surveyData.city + '/' + surveyData.state]"
                                          routerDirection="forward">
                                          Start Survey &nbsp;
-                                    </span> -->
+                                    </span>
                                     <!-- <span class="ion-text-end action-button-color" >Start Survey</span> -->
                                 </ion-col>
                         <!-- <ion-col></ion-col> -->
@@ -115,7 +115,7 @@
                             <span *ngIf="surveyData.status == 'reviewpassed'" class="ion-text-end action-button-color z-100"
                                     (click)="openreviewPassed(surveyData.id,surveyData)">&nbsp; Deliver</span>
                                     <span style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(surveyData.id,surveyData)"
-                                >Reassign Review</span>
+                                >&nbsp;Reassign Review</span>
                         </ion-col>
 
                         <ion-col *ngIf="segments=='status=delivered'">

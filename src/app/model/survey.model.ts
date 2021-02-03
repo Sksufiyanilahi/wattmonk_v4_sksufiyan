@@ -11,6 +11,7 @@ export class SurveyDataModel {
   id: number;
   name: string;
   email: string;
+  chatid:number
   phonenumber: string;
   datetime: Date;
   comments: {};

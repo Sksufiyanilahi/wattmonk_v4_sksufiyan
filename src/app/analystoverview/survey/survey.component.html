@@ -66,25 +66,34 @@
                               </ion-row>
                           <ion-row class="ion-no-margin">
                               <ion-col></ion-col>
-                              <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type !=='wattmonkadmins'">
+                              <!-- <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type !=='wattmonkadmins'">
                                        <ion-button  class="ion-no-margin ion-no-padding z-100" fill="clear" 
                                        [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                        routerDirection="forward">
                                        Start Survey
                                        </ion-button>
+                                  <span class="ion-text-end action-button-color" >Start Survey</span> 
+                               </ion-col>  <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type !=='wattmonkadmins'"> -->
+                                       <!-- <ion-button  class="ion-no-margin ion-no-padding z-100" fill="clear" 
+                                       [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
+                                       routerDirection="forward">
+                                       Start Survey
+                                       </ion-button> --> 
                                   <!-- <span class="ion-text-end action-button-color" >Start Survey</span> -->
-                              </ion-col>
+                              <!-- </ion-col> -->
                       <!-- <ion-col></ion-col> -->
-                      <ion-col *ngIf="segments=='status=created&status=outsourced&status=requestaccepted'" size="auto" class="ion-no-margin ion-no-padding" style="margin-bottom: 5px;">
+                      <!-- <ion-col *ngIf="segments=='status=created&status=outsourced&status=requestaccepted'" size="auto" class="ion-no-margin ion-no-padding" style="margin-bottom: 5px;">
                                   <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)"
-                      >Assign</span>
+                      >Assign</span>  <ion-col *ngIf="segments=='status=created&status=outsourced&status=requestaccepted'" size="auto" class="ion-no-margin ion-no-padding" style="margin-bottom: 5px;">
+                                  <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)"
+                      >Assign</span> -->
                       <!-- <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
                       >Decline</span>
                       <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
                       >Accept</span> -->
-                      <span style="float: right;">
+                      <!-- <span style="float: right;"></span> -->
 
-                          <ion-col size="8"  *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)">
+                          <!-- <ion-col size="8"  *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)">
                              Accept
                           </ion-col>
                           <ion-col size="4" *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)">
@@ -103,7 +112,7 @@
                                   *ngIf="surveyData.status == 'reviewpassed'">
                           <span class="ion-text-end action-button-color z-100"
                                   (click)="openSurveyors(surveyData.id)">Deliver</span>
-                      </ion-col>
+                      </ion-col> -->
                   </ion-row>
                   <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
                           <!-- <span class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">

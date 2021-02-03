@@ -115,6 +115,10 @@ netPay:any
     this.fetchData();
   }
 
+  ionViewDidLeave(){
+    this.utils.setCouponId(null);
+  }
+
 fetchData(){
   this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
   this.design=params.get('designData')});

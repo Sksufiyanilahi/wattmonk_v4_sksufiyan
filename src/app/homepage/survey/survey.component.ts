@@ -12,12 +12,14 @@ import { AssigneeModel } from '../../model/assignee.model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserRoles } from '../../model/constants';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { COMETCHAT_CONSTANTS, intercomId } from '../../contants';
 import { StorageService } from 'src/app/storage.service';
 import { ROLES } from 'src/app/contants';
 import {Storage} from '@ionic/storage';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import * as moment from 'moment';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import{SocialSharing} from '@ionic-native/social-sharing/ngx';
 import { User } from 'src/app/model/user.model';
@@ -54,6 +56,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
   userData: User;
   netSwitch: any;
   reviewAssignedTo:any;
+  chatid:any
+  
+  updatechat_id: boolean=false;
   deactivateNetworkSwitch: Subscription;
 
   constructor(
@@ -122,6 +127,7 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
   ngOnInit() {
     this.userData = this.storageService.getUser();
     console.log(this.userData);
+    this.setupCometChat();
     
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
       this.getSurveys(null);
@@ -491,6 +497,7 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.apiService.updateSurveyForm(postData, this.surveyId).subscribe((value) => {
         this.utils.hideLoading().then(()=>{
           ; 
+          this.createNewDesignChatGroup(value);
           console.log('reach ', value);
          
           this.utils.showSnackBar('Survey request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
@@ -705,6 +712,103 @@ this.utils.showLoading('Assigning').then(()=>{
      
     
   }
+
+  createNewDesignChatGroup(survey:SurveyDataModel) {
+    var GUID = 'survey' + "_" + new Date().getTime();
+    var address = survey.address.substring(0, 60);
+    var groupName = survey.name + "_" + address;
+  
+    var groupType = CometChat.GROUP_TYPE.PRIVATE;
+    var password = "";
+  
+    var group = new CometChat.Group(GUID, groupName, groupType, password);
+  
+    CometChat.createGroup(group).then(
+      group => {
+        let membersList = [
+          new CometChat.GroupMember("" + survey.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN),
+          new CometChat.GroupMember("" + this.userData.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+        ];
+        CometChat.addMembersToGroup(group.getGuid(), membersList, []).then(
+          response => {
+            // if(design.requesttype == "permit"){
+              let postdata={
+                chatid:GUID
+              // } 
+            }
+  
+              this.apiService.updateSurveyForm(postdata,this.surveyId).subscribe(res=>{
+                console.log(res);
+                this.chatid=res.chatid;
+                console.log(this.chatid);
+                this.updatechat_id=true;
+                this.addUserToGroupChat();
+                
+              })
+              // this.updateItemInList(LISTTYPE.NEW, design);
+            // }else{
+              // this.updateItemInPermitList(LISTTYPE.NEW, design);
+            // }
+          },
+          error => {
+          }
+        );
+      },
+      error => {
+  
+      }
+    );
+   
+  }
+  
+        addUserToGroupChat() {
+          debugger;
+        var GUID = this.chatid;
+        var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
+        
+          // userscope = CometChat.GROUP_MEMBER_SCOPE.ADMIN;
+        
+        let membersList = [
+          new CometChat.GroupMember("" + this.selectedDesigner.id, userscope)
+        ];
+        CometChat.addMembersToGroup(GUID, membersList, []).then(
+          response => {
+            
+          },
+          error => {
+          
+          }
+        );
+        }
+  
+  
+        setupCometChat() {
+          let userId = this.storageService.getUserID()
+          const user = new CometChat.User(userId);
+          user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+          const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+          CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+            () => {
+              console.log('Initialization completed successfully');
+              // if(this.utilities.currentUserValue != null){
+                // You can now call login function.
+                CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+                  (user) => {
+                    console.log('Login Successful:', { user });
+                  },
+                  error => {
+                    console.log('Login failed with exception:', { error });
+                  }
+                );
+            // }
+            },
+            error => {
+              console.log('Initialization failed with error:', error);
+            }
+          );
+        }
+  
+  
 
   close() {
     if (this.showBottomDraw === true) {

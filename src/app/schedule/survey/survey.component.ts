@@ -84,7 +84,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
     if (this.surveyId !== 0) {
       this.getSurveyDetails();
-    } else {
+    } 
+    else {
       this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
          this.surveyForm.get('address').setValue("sdck");
          this.surveyForm.get('latitude').setValue('1111111');
@@ -256,7 +257,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             jobtype: this.survey.jobtype,
             phonenumber: this.survey.phonenumber,
             datetime: date.getTime(),
-            comments: this.survey.comments==[] ? this.survey.comments : this.survey.comments[0].message,
+            comments: this.survey.comments=='' ? this.survey.comments : this.survey.comments[0].message,
             address: this.survey.address,
             source: this.survey.source,
             createdby: this.survey.createdby.id,

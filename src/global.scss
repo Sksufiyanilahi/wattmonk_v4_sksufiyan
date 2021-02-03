@@ -267,6 +267,16 @@ ion-item {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
+.survey-modal-css .modal-wrapper {
+  height: 40%;
+  width:70%;
+  // top: 80%;
+  position: absolute; 
+  display: block;  
+    --border-radius: 12px !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
 .email-modal-css .modal-wrapper{
   height: 80%;
   width:90%;

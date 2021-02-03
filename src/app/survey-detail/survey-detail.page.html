@@ -149,6 +149,27 @@
                             <ion-col style="text-align: right;">{{comments.createdBy.updated_at | date:'dd/MM/yyyy'}}</ion-col> -->
                         </ion-row>
                
+                        <ion-row *ngIf="survey.reviewissues || survey.reviewissues !==null  " class="ion-no-padding ion-margin-top">
+                            <ion-col size="6">
+                                <span class="models font"> Review Comments</span>
+                            </ion-col>
+                            <!-- <div> -->
+                
+                            <ion-col size="6"  class="ion-no-padding">
+                                <div >
+                                    <p class="comment font" style="text-align: right;margin:0px">{{survey?.reviewissues}}</p>
+                                    <p class="comment-by" style="text-align: right;margin-top:0px">Posted by {{survey.reviewassignedto?.firstname}}
+                                        {{survey.reviewassignedto?.lastname}}</p>
+                                </div>
+                            </ion-col>
+                            <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
+                                         
+                                        </ion-col> -->
+                
+                            <!-- </div> -->
+                
+                        </ion-row>
+
                         <ion-row class="bkg">
                             <ion-col class="hgt-margin">
                                 <!-- <ion-item> -->
@@ -558,7 +579,22 @@
 
     </ion-grid> -->
 </ion-content>
-<ion-footer *ngIf="(user.role.type=='qcinspector'&& survey && survey.status=='reviewassigned')||(survey && surveystatus=='reviewassigned' && survey.reviewassignedto.id==user.id)" class="ion-no-border white-bg">
+<ion-footer *ngIf="((user.role.type=='clientadmin' || user.role.type=='clientsuperadmin')&& survey && survey.status=='created')||(user.role.type=='clientadmin' && survey && survey.status=='surveyassigned')" class="ion-no-border white-bg">
+    <ion-grid>
+        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+            <ion-col class="ion-no-margin ion-no-padding">
+                <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
+                     <ion-button class="ion-no-margin ion-no-padding" style="float: right;margin-right: 10%;
+                     margin-bottom: 5%;" fill="clear" [routerLink]="['/surveyprocess/' + survey.id + '/' + survey.jobtype + '/' + survey.latitude + '/' + survey.longitude + '/' + survey.city + '/' + survey.state]"
+                 routerDirection="forward">
+                     Start Survey
+                 </ion-button>
+                 </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-footer>
+<ion-footer *ngIf="(user.role.type=='qcinspector'&& survey && survey.status=='reviewassigned')||(survey && survey.status=='reviewassigned' && survey.reviewassignedto.id==user.id)" class="ion-no-border white-bg">
     <ion-grid>
         <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
             <ion-col size="auto">
