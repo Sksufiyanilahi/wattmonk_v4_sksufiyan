@@ -161,6 +161,26 @@
         </ion-col>
         </ion-row>
 
+        <ion-row *ngIf="design.isinrevisionstate" class="ion-no-padding ion-margin-top font">
+            <ion-col size="6"  >
+                <span class="model-type font">Revision Comments</span></ion-col>
+                <ion-col size="6" >
+                    <div>
+                        <p class="model-space font" style="text-align: right;">{{design.revisioncomments}}</p>
+  
+                    </div>
+  
+                   </ion-col>
+            </ion-row>
+              <ion-row class="ion-no-padding font" *ngIf="design.isinrevisionstate && design.revisionattachments.length > 0">
+             <ion-col > <span class="model-type font">Revision Attachments</span></ion-col>
+             <ion-col size="6"  style="float: right;" *ngFor="let attachmentfile of design.revisionattachments">
+  
+                <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ? (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}{{attachmentfile.ext}}</span>
+              </ion-col>
+  
+            </ion-row>
+
         <ion-row>
             <ion-col><span class="model-type font">Created at</span></ion-col>
             <ion-col size="auto">
@@ -206,7 +226,7 @@
                                  <!-- </ion-item> -->
             
         </ion-row>
-    <ion-row class="ion-no-padding workinghours">
+    <ion-row class="ion-no-padding workinghours" *ngIf="design.propertytype=='commercial'">
         <ng-container>
             <ion-col><span class="model-type workinghours">Working Hours</span></ion-col>
             <ion-col size="auto" >

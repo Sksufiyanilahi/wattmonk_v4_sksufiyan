@@ -55,6 +55,9 @@ export class Pestamp{
     deliverycharges:number;
     acceptedbypeengineer:boolean;
     declinedbypeengineer:boolean;
+    revisioncomments:string;
+    revisionattachments:UploadedFile[];
+    isinrevisionstate:boolean;
 
     //Dynamic content
     designremainingtime : string;

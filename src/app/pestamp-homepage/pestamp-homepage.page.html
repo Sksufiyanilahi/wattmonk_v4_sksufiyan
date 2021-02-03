@@ -48,7 +48,7 @@
 
 
 
-<ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
+<ion-footer class="ion-no-border white-bg" *ngIf="showFooter && userData?.parent.id != 232">
   <div class="position-relative">
       <ion-fab horizontal="start" class="fab-position position-absolute">
           <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md" class="ht_wt">

@@ -551,7 +551,7 @@ export class ApiService {
     /* Get Pe Engineers */
     getPeEngineers(peenginertype:string) {
       console.log(peenginertype);
-      return this.http.get(BaseUrl + "/peengineers?peengineertype="+peenginertype+"&parent_eq="+this.storageService.getUser().parent.id, {
+      return this.http.get(BaseUrl + "/peengineers?pestamptype="+peenginertype+"&parent_eq="+this.storageService.getUser().parent.id, {
         headers: this.headers,
       })
     }
