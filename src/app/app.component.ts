@@ -244,11 +244,11 @@ this.network.networkConnect();
       }else if(type=='pestamp'){
         debugger;
         if(this.userData.role.type=='peengineer'){
-            // this.router.navigate(['/peengineer']);
-          this.router.navigate(['/comingsoon']);
+           this.router.navigate(['/peengineer']);
+          //this.router.navigate(['/comingsoon']);
         }else{
-            // this.router.navigate(['/pestamp-homepage'])
-          this.router.navigate(['/comingsoon'])
+           this.router.navigate(['/pestamp-homepage'])
+          //this.router.navigate(['/comingsoon'])
         }
     }else if(this.userData.role.type =='qcinspector' && type=='survey'){
             this.router.navigate(['/analystoverview/survey'])

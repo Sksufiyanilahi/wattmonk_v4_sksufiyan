@@ -30,7 +30,7 @@ export class PestampSchedulePage implements OnInit {
   emailError = INVALID_EMAIL_MESSAGE;
   addressError = INVALID_ADDRESS;
   contactError = INVALID_PHONE_NUMBER;
-  hardCopiesError = "Please Enter a Valid Value";
+  hardCopiesError = "Maximum value of hardcopy cannot exceed 10";
   
   atticPhotosList: string[]=[];
   roofPhotosList:string[]=[];
@@ -88,8 +88,8 @@ export class PestampSchedulePage implements OnInit {
       name:new FormControl('',[Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
       email:new FormControl('',[Validators.required, Validators.pattern(MAILFORMAT)]),
       stampingmode:new FormControl(null,[Validators.required]),
-      numberofhardcopy:new FormControl(''),
-      shippingaddress:new FormControl(''),
+      numberofhardcopy:new FormControl(null),
+      shippingaddress:new FormControl(null),
       contactnumber : new FormControl(null),
       stampingtype:new FormControl(null,[Validators.required]),
       atticphotos:new FormControl(''),
@@ -657,18 +657,19 @@ this.utils.errorSnackBar(error.message);
       else if(this.firstFormGroup.value.stampingmode == null){
             this.utils.errorSnackBar("Please select mode of stamping");
       }
-      // else if(this.firstFormGroup.value.numberofhardcopy == '')
-      // {
-      //   this.utils.errorSnackBar("Please check the field no of hardcopies")
-      // }
-      // else if(this.firstFormGroup.value.shippingaddress == '' || this.firstFormGroup.get('shippingaddress').hasError('pattern'))
-      // {
-      //   this.utils.errorSnackBar("Please check the field address");
-      // }
-      // else if(this.firstFormGroup.value.contactnumber == null || this.firstFormGroup.get('contactnumber').hasError('pattern'))
-      // {
-      //   this.utils.errorSnackBar("Please check the field contact number")
-      // }
+      else if((this.firstFormGroup.value.numberofhardcopy == null || this.firstFormGroup.value.numberofhardcopy == '') && (this.stampingModeValue == 'hardcopy' || this.stampingModeValue == 'both'))
+      {
+        this.utils.errorSnackBar("Please check the field no of hardcopies")
+        console.log(this.stampingModeValue)
+      }
+      else if((this.firstFormGroup.value.shippingaddress == null || this.firstFormGroup.value.shippingaddress == '' || this.firstFormGroup.get('shippingaddress').hasError('pattern')) && (this.stampingModeValue == 'hardcopy' || this.stampingModeValue == 'both'))
+      {
+        this.utils.errorSnackBar("Please check the field address");
+      }
+      else if((this.firstFormGroup.value.contactnumber == null || this.firstFormGroup.get('contactnumber').hasError('pattern')) && (this.stampingModeValue == 'hardcopy' || this.stampingModeValue == 'both'))
+      {
+        this.utils.errorSnackBar("Please check the field contact number")
+      }
       else if(this.firstFormGroup.value.propertytype == '')
       {
         this.utils.errorSnackBar("Please select property type");
@@ -681,18 +682,18 @@ this.utils.errorSnackBar(error.message);
         this.utils.errorSnackBar("Please select type of stamping");
       }
       
-      // else if(this.firstFormGroup.value.atticphotos == '')
-      // {
-      //   this.utils.errorSnackBar("Please check the field attic photos")
-      // }
-      // else if(this.firstFormGroup.value.roofphotos == '')
-      // {
-      //   this.utils.errorSnackBar("Please check the field roof photos");
-      // }
-      // else if(this.firstFormGroup.value.permitplanphotos == '')
-      // {
-      //   this.utils.errorSnackBar("Please check the field permit plan");
-      // }
+      else if(this.firstFormGroup.value.atticphotos == '' && (this.stampingTypeValue == 'structural' || this.stampingTypeValue == 'both'))
+      {
+        this.utils.errorSnackBar("Please check the field attic photos")
+      }
+      else if(this.firstFormGroup.value.roofphotos == '' && (this.stampingTypeValue == 'structural' || this.stampingTypeValue == 'both'))
+      {
+        this.utils.errorSnackBar("Please check the field roof photos");
+      }
+      else if(this.firstFormGroup.value.permitplanphotos == '')
+      {
+        this.utils.errorSnackBar("Please check the field permit plan");
+      }
       else{
         this.utils.errorSnackBar("Error");
       }
