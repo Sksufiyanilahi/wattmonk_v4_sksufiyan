@@ -193,7 +193,7 @@ export class PestampDesignDetailsPage implements OnInit {
       pestampstarttime: this.designstartdatetime,
       pestampendtime: this.designenddatetime,
       comments: this.commentform.get('comments').value,
-      workinghours : String(this.pestampForm.get('workinghours').value)
+      workinghours : this.pestampForm.get('workinghours').value
     };
           this.utilities.showLoading('Submitting').then(()=>{
          // this.apiService.updatePestamps(this.designId,this.pestampForm.value).subscribe(res=>{
