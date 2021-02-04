@@ -143,7 +143,7 @@ export class PestampDesignDetailsPage implements OnInit {
         if(this.design.propertytype == 'commercial')
         {
           stamped.setValidators([Validators.required]);
-          working.setValidators([Validators.required]);
+          working.setValidators([Validators.required,Validators.min(1),Validators.max(48)]);
         }
         else
         {
@@ -157,6 +157,7 @@ export class PestampDesignDetailsPage implements OnInit {
 
       submit(){
         //this.validations();
+        debugger;
         if(this.pestampForm.status=='INVALID'){
           // if(this.design.propertytype=='commercial'){
           //   console.log("Hello Commercial",this.design.propertytype)
@@ -180,6 +181,8 @@ export class PestampDesignDetailsPage implements OnInit {
           else if(this.pestampForm.get('workinghours').value==null)
           {
             this.utilities.errorSnackBar('Please add working hours');
+          }else if(this.pestampForm.get('workinghours').hasError('max')){
+            this.utilities.errorSnackBar('Maximum working hours should be 48');
           }
           return false;
         }else{

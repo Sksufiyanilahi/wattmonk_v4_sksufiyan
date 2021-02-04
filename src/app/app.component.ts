@@ -128,6 +128,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+  
       setTimeout(()=>{
         this.splashScreen.hide();
       },1000)
@@ -148,6 +149,7 @@ export class AppComponent {
       this.setupCometChat();
       this.mix.initializeMixPanel()
     });
+  
 
   }
 
@@ -170,7 +172,6 @@ export class AppComponent {
       this.netSwitch = data;
       console.log(this.netSwitch);
     })
-
 
 this.network.networkDisconnect();
 this.network.networkConnect();
