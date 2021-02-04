@@ -8,6 +8,16 @@
 *.tmp.*
 *.sublime-project
 *.sublime-workspace
+.idea
+.idea/*
+*.idea
+.vscode
+.vscode/*
+*.vscode
+*.zip
+*.rar
+*.keystore
+*.apk
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
@@ -29,12 +39,7 @@ npm-debug.log*
 /platforms
 /plugins
 /www
-*.zip
-*.rar
-
-wattmonk.keystore
 # built application files
-*.apk
 
 
 package-lock.json
