@@ -8,6 +8,7 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { UtilitiesService } from '../utilities.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { StorageService } from '../storage.service';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-pestamp-homepage',
@@ -33,7 +34,8 @@ export class PestampHomepagePage implements OnInit {
               private apiService: ApiService,
               private utils:UtilitiesService,
               private iab:InAppBrowser,
-              private storageService:StorageService
+              private storageService:StorageService,
+              private mixpanelService:MixpanelService
   ) { 
     this.userData = this.storageService.getUser();
   }
@@ -103,24 +105,26 @@ this.network.networkConnect();
   }
 
   scheduledPage(){
-    if(this.userData.ispaymentmodeprepay){
-      this.apiService.getPendingPaymentstatus().subscribe((res:any)=>{
-        console.log(res);
-        if(res.length>0){
-          this.utils.errorSnackBar("Please clear your pending dues from the delivered section");
-        } 
-        else{
-          this.route.navigate(['/pestamp-schedule']);
-        }
-      },
-        error => {
-          this.utils.errorSnackBar("Error");
-        })
+    // if(this.userData.ispaymentmodeprepay){
+    //   this.apiService.getPendingPaymentstatus().subscribe((res:any)=>{
+    //     console.log(res);
+    //     if(res.length>0){
+    //       this.utils.errorSnackBar("Please clear your pending dues from the delivered section");
+    //     } 
+    //     else{
+    //       this.route.navigate(['/pestamp-schedule']);
+    //     }
+    //   },
+    //     error => {
+    //       this.utils.errorSnackBar("Error");
+    //     })
     
-    }
-    else{
+    // }
+    // else{
+      this.mixpanelService.track("Add_PE stamp add _PAGE_OPEN", {
+      });
       this.route.navigate(['/pestamp-schedule']);
-    }
+    //}
 
     }
     ngOndestroy(){

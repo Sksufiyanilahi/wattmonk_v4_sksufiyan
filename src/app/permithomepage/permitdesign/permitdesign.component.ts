@@ -30,6 +30,7 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { MixpanelService } from 'src/app/utilities/mixpanel.service';
 
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
@@ -109,7 +110,8 @@ export class PermitdesignComponent implements OnInit {
     private platform:Platform,
     private androidPermissions: AndroidPermissions,
     private localnotification: LocalNotifications,
-    private router:ActivatedRoute
+    private router:ActivatedRoute,
+    private mixpanel:MixpanelService
    // private db:AngularFireDatabase,
     
    // private fileopener:FileOpener
@@ -131,6 +133,7 @@ export class PermitdesignComponent implements OnInit {
       assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
     });
+    this.mixpanel.setUserDetails(this.userData.email,this.userData.firstname+" "+this.userData.lastname,this.userData.id)
      //For Counts
     //  this.newpermitsRef = db.object('newpermitdesigns');
     //  this.newpermits = this.newpermitsRef.valueChanges();
@@ -235,6 +238,11 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   ngOnInit() {
+    this.mixpanel.track("Permitdesign_Page_Open", {
+      $id: this.userData.id,
+      $email: this.userData.email,
+      $name: this.userData.firstname + this.userData.lastname
+    });
     this.makeDirectory();
     this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {

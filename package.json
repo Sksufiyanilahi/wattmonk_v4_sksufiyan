@@ -90,7 +90,7 @@
     "cordova-plugin-geolocation": "4.0.2",
     "cordova-plugin-inappbrowser": "3.2.0",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
-    "cordova-plugin-mixpanel": "^4.7.0",
+    "cordova-plugin-mixpanel": "^4.5.2",
     "cordova-plugin-nativegeocoder": "3.2.2",
     "cordova-plugin-network-information": "2.0.2",
     "cordova-plugin-stripe": "1.5.3",

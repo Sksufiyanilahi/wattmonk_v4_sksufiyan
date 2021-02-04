@@ -26,6 +26,7 @@ import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.
 import { PestampdelivermodalPage } from 'src/app/pestampdelivermodal/pestampdelivermodal.page';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMETCHAT_CONSTANTS } from 'src/app/contants';
+import { MixpanelService } from 'src/app/utilities/mixpanel.service';
 
 @Component({
   selector: 'app-pestamp-design',
@@ -88,7 +89,8 @@ export class PestampDesignComponent implements OnInit {
                private localnotification: LocalNotifications,
                private file: File,
                private transfer : FileTransfer,
-               public alertController: AlertController) {
+               public alertController: AlertController,
+               private mixpanelService:MixpanelService) {
                 this.userData = this.storageService.getUser();
 
 
@@ -105,6 +107,7 @@ export class PestampDesignComponent implements OnInit {
       assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
     });
+    //this.mixpanelService.setUserDetails(this.userData.email,this.userData.firstname+" "+this.userData.lastname,this.userData.id)
                }
 
                ionViewDidEnter() {
@@ -186,6 +189,8 @@ export class PestampDesignComponent implements OnInit {
 
   ngOnInit() {
     //this.userData = this.storageService.getUser();
+    this.mixpanelService.track("Pestamp_Page_Open", {   
+    });
     this.makeDirectory();
     this.setupCometChat();
     this.PeStampRefreshSubscription = this.utils.getPeStampRefresh().subscribe((result)=>{
@@ -421,6 +426,8 @@ export class PestampDesignComponent implements OnInit {
   }
 
   accept(id,data:string){
+    this.mixpanelService.track("Accept_Pestamp_Design_PAGE_OPEN", {
+    });
     this.acceptid= id;
      let status={
       status:data
@@ -444,7 +451,8 @@ export class PestampDesignComponent implements OnInit {
 
   openDesigners(id: number,designData) {
     debugger;
-
+    this.mixpanelService.track("Assign_Pestamp_Design_PAGE_OPEN", {
+    });
     this.listOfAssignees=[];
     console.log("this is",designData);
      this.designerData = designData;
@@ -549,6 +557,8 @@ this.route.navigate(['/pestamp-payment-modal'], {
 */
 
 async decline(id,e){
+  this.mixpanelService.track("Decline_Pestamp_Design_PAGE_OPEN", {
+  });
   let status = e;
   console.log(status);
   const modal = await this.modalController.create({
@@ -577,6 +587,8 @@ async decline(id,e){
 
 
 async Resend(id, type){
+  this.mixpanelService.track("Resend_Design_PAGE_OPEN", {
+  });
   console.log(type);
   const modal = await this.modalController.create({
     component: ResendpagedialogPage,
@@ -663,7 +675,8 @@ shareWhatsapp(designData){
 }
 
 designDownload(designData){
-
+  this.mixpanelService.track("Download_Pestamp_PAGE_OPEN", {
+  });
   this.platform.ready().then(()=>{
     this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
@@ -840,6 +853,8 @@ designDownload(designData){
   //}
 
   clearPendingPayments(designData){
+    this.mixpanelService.track("Open_Pending_Payments_PAGE_OPEN", {
+    });
     let objToSend: NavigationExtras = {
       queryParams: {
       designData:designData,
@@ -967,6 +982,8 @@ createNewDesignChatGroup(design:Pestamp) {
 
 
 directAssignToWattmonk(id:number,design){
+  this.mixpanelService.track("ReAssign_Pestamp_Design_PAGE_OPEN", {
+  });
   this.designId = id;
   console.log(design);
   var postData = {};
