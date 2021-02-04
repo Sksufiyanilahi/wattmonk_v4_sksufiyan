@@ -19,6 +19,8 @@ import { Intercom } from 'ng-intercom';
  //import { AngularFirestore} from '@angular/fire/firestore';
  //import { AngularFireObject } from '@angular/fire';
  import { AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
+ import { Mixpanel, MixpanelPeople } from '@ionic-native/mixpanel/ngx';
+import { MixpanelService } from './utilities/mixpanel.service';
 
 
 @Component({
@@ -76,7 +78,8 @@ export class AppComponent {
     private router:Router,
     private intercom:Intercom,
     private db: AngularFireDatabase,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private mix:MixpanelService
   ) {
 
     this.initializeApp();
@@ -144,6 +147,7 @@ export class AppComponent {
 
       this.getNotification();
       this.setupCometChat();
+      this.mix.initializeMixPanel()
     });
   
 
@@ -302,8 +306,6 @@ this.network.networkConnect();
     this.deactivateGetUserData.unsubscribe();
     this.deactivateNetworkSwitch.unsubscribe();
   }
-
-  
 
 
 

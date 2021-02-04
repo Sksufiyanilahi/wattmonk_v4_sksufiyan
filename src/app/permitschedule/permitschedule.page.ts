@@ -23,6 +23,7 @@ import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { NetworkdetectService } from '../networkdetect.service';
 import { Clients } from '../model/clients.model';
+import { MixpanelService } from '../utilities/mixpanel.service';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 
@@ -143,6 +144,7 @@ export class PermitschedulePage implements OnInit {
     private intercom:Intercom,
     private cdr:ChangeDetectorRef,
     private network:NetworkdetectService,
+    private mixpanelService:MixpanelService
     //private db:AngularFireDatabase
     //private data: DesignFormData
     ) {
@@ -514,6 +516,8 @@ export class PermitschedulePage implements OnInit {
   }
 
   goBack() {
+    this.mixpanelService.track("Permitdesign_PAGE_Close", {
+    });
    this.navController.pop();
    
   }
@@ -815,6 +819,8 @@ saveInverterModel() {
           console.log(this.formValue);
           if (this.designId === 0) {
             if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM){
+              this.mixpanelService.track("Save_Permitdesign_PAGE", {
+              });
               var data = {
                           name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
@@ -898,6 +904,8 @@ saveInverterModel() {
 
               }
            else if(this.formValue === 'send'){
+            this.mixpanelService.track("Order_Permitdesign_PAGE", {
+            });
 
               var postData = {
                           name:this.desginForm.get('name').value,

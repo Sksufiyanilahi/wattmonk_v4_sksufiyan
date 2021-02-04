@@ -13,6 +13,7 @@ import { Pestamp } from '../model/pestamp.model';
 import { NetworkdetectService } from '../networkdetect.service';
 import { NavController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-pestamp-schedule',
@@ -81,7 +82,8 @@ export class PestampSchedulePage implements OnInit {
               private network:NetworkdetectService,
               private navController:NavController,
               private cdr:ChangeDetectorRef,
-              private router:Router) 
+              private router:Router,
+              private mixpanelService:MixpanelService) 
               { 
     const MAILFORMAT = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     this.firstFormGroup = this.formBuilder.group({
@@ -392,6 +394,8 @@ export class PestampSchedulePage implements OnInit {
   }
 
   goBack() {
+    this.mixpanelService.track("Pestamp_PAGE_Close", {
+    });
     this.navController.pop();
     
    }
@@ -405,6 +409,8 @@ export class PestampSchedulePage implements OnInit {
     let contactnumber = this.firstFormGroup.get('contactnumber').value;
     if(this.designId === 0){
       if(e=='save'){
+        this.mixpanelService.track("SavePestamp_PAGE", {
+        });
         //this.utils.showLoading('Saving').then(() => {
           var data = {
             personname:this.firstFormGroup.get('name').value,
@@ -469,6 +475,8 @@ export class PestampSchedulePage implements OnInit {
       }
     else if(e == 'send')
     {
+      this.mixpanelService.track("Order_Pestamp_PAGE", {
+      });
       var postData = {
         personname:this.firstFormGroup.get('name').value,
         email: this.firstFormGroup.get('email').value,
