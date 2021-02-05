@@ -25,4 +25,4 @@
  1
 
 #### Prelim & Permit : 10$ less is getting deducted from wallet for both prelim & permit BUG 
-#### 493 opened 9 days ago by subbarathna  TestRelease_V1.1.0
+#### 493 opened 9 days ago by subbarathna  TestRelease_V1.1.0 
