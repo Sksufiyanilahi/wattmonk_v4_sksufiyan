@@ -540,7 +540,7 @@ this.router.navigate(['/add-money'], {
   
       // }
       var GUID = 'pestamp' + "_" + new Date().getTime();
-      var address = design.deliveryaddress.substring(0, 60);
+      //var address = design.deliveryaddress.substring(0, 60);
       var groupName = design.personname// + "_" + address;
   
       var groupType = CometChat.GROUP_TYPE.PRIVATE;

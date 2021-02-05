@@ -230,9 +230,9 @@
         <ng-container>
             <ion-col><span class="model-type workinghours">Working Hours</span></ion-col>
             <ion-col size="auto" >
-                <ion-input *ngIf="design.workinghours == '0'" class="ht_wt" type="tel" min="1" max="10" formControlName="workinghours" ></ion-input>
-                <!-- <span *ngIf="design.workinghours !== '0'" class="model-name font">{{design.workinghours}}</span> -->
+                <ion-input *ngIf="design.workinghours == '0' " class="ht_wt" type="tel" min="1" maxLength="2" formControlName="workinghours" ></ion-input>
                 <!-- </div> -->
+                <span *ngIf="pestampForm.get('workinghours').dirty && pestampForm.get('workinghours').hasError('max')"class="model-name font" style="color: red;font-size: 8px;">Maximum hours should be 48</span>
             </ion-col>
         </ng-container>
     </ion-row>

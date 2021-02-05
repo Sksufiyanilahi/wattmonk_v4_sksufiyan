@@ -37,24 +37,78 @@
         </ion-col>
         </ion-row>
         </ion-radio-group>
-        <ion-row >
-          <ion-col>
-              <ion-item class="ion-no-padding">
-                  <ion-label position="floating">Billing Address*</ion-label>
-                  <ion-input type="text" class="form_input" formControlName="billingaddress" autocapitalize="words"
-                              required></ion-input>
-              </ion-item>
-              <div style="height: 5px;">
-                <div *ngIf="firstFormGroup.get('billingaddress').hasError('pattern') && firstFormGroup.get('billingaddress').dirty">
-                  <span class="error">{{addressError}}</span>
-              </div>
-                <div *ngIf="firstFormGroup.get('billingaddress').value === '' && firstFormGroup.get('billingaddress').dirty">
-                    <span class="error">{{fieldRequired}}</span>
-                </div>
+        <ion-row *ngIf="isCompany">
+          
+          <!--  -->
+          <ion-col >
+            <ion-item class="ion-no-padding">
+                <ion-label position="floating">Company Address*</ion-label>
+                <ion-input type="text" class="form_input" formControlName="companyaddress" autocapitalize="words"
+                            required></ion-input>
+            </ion-item>
+            <div style="height: 5px;">
+              <div *ngIf="firstFormGroup.get('companyaddress').hasError('pattern') && firstFormGroup.get('companyaddress').dirty">
+                <span class="error">{{addressError}}</span>
             </div>
-          </ion-col>
+              <div *ngIf="firstFormGroup.get('companyaddress').value === '' && firstFormGroup.get('companyaddress').dirty">
+                  <span class="error">{{fieldRequired}}</span>
+              </div>
+          </div>
+        </ion-col>
+          <!--  -->
       </ion-row>
+      <ion-row >
+        <ion-col>
+            <ion-item class="ion-no-padding">
+                <ion-label position="floating">Phone Number*</ion-label>
+                <ion-input type="text" class="form_input" formControlName="phone"
+                            required></ion-input>
+            </ion-item>
+            <div style="height: 5px;">
+              <div *ngIf="firstFormGroup.get('phone').hasError('pattern') && firstFormGroup.get('phone').dirty">
+                <span class="error">{{phoneError}}</span>
+            </div>
+              <div *ngIf="firstFormGroup.get('phone').value === '' && firstFormGroup.get('phone').dirty">
+                  <span class="error">{{fieldRequired}}</span>
+              </div>
+          </div>
+        </ion-col>
+    </ion-row>
       <ion-row *ngIf="isCompany">
+        <!--For Checkbox-->
+        <ion-col size="12">
+          <ion-item class="ion-no-padding" lines="none">
+              <ion-label class="margin"   style="font-size: small;margin-bottom: 0px;">Is billing address same as company?</ion-label>
+              <ion-checkbox class="margin" slot="start" class="form_input" (ionChange)="change($event)"></ion-checkbox>
+          </ion-item>
+      </ion-col>
+      </ion-row>
+      <ion-row>
+      <ion-col *ngIf="!checkboxValue || !isCompany">
+        <!-- <ion-col> -->
+        <ion-item class="ion-no-padding">
+            <ion-label position="floating">Billing Address*</ion-label>
+            <ion-input type="text" class="form_input" formControlName="billingaddress" autocapitalize="words"
+                        required></ion-input>
+        </ion-item>
+        <!-- <ion-item class="ion-no-padding">
+          <ion-label position="floating">Billing Address*</ion-label>
+          <ion-input type="text" class="form_input" formControlName="billingaddress" autocapitalize="words" [disabled]="checkboxValue"
+                      required></ion-input>
+      </ion-item> -->
+        <div style="height: 5px;">
+          <div *ngIf="firstFormGroup.get('billingaddress').hasError('pattern') && firstFormGroup.get('billingaddress').dirty">
+            <span class="error">{{addressError}}</span>
+        </div>
+          <div *ngIf="firstFormGroup.get('billingaddress').value === '' && firstFormGroup.get('billingaddress').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+    </ion-col>
+  </ion-row>
+      
+        <!--End-->
+        <ion-row *ngIf="isCompany">
         <ion-col size="12">
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Company Name*</ion-label>

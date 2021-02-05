@@ -27,7 +27,7 @@
     "@angular/platform-browser-dynamic": "8.2.14",
     "@angular/router": "8.2.14",
     "@babel/compat-data": "7.8.0",
-    "@cometchat-pro/cordova-ionic-chat": "^2.1.1",
+    "@cometchat-pro/cordova-ionic-chat": "^2.1.2",
     "@ionic-native/android-permissions": "^5.30.0",
     "@ionic-native/app-version": "^5.29.0",
     "@ionic-native/base64-to-gallery": "5.22.0",
@@ -92,7 +92,7 @@
     "cordova-plugin-geolocation": "4.0.2",
     "cordova-plugin-inappbrowser": "3.2.0",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
-    "cordova-plugin-mixpanel": "^4.7.0",
+    "cordova-plugin-mixpanel": "^4.5.2",
     "cordova-plugin-nativegeocoder": "3.2.2",
     "cordova-plugin-network-information": "2.0.2",
     "cordova-plugin-stripe": "1.5.3",
@@ -206,11 +206,7 @@
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-mixpanel": {
-        "PLAY_SERVICES_VERSION": "+",
-        "FIREBASE_VERSION": "+"
-      },
-      "com-sarriaroman-photoviewer": {}
+      "cordova-plugin-mixpanel": {}
     },
     "platforms": [
       "ios",
