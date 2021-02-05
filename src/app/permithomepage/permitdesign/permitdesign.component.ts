@@ -30,11 +30,7 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-<<<<<<< HEAD
-// import { Mixpanel, MixpanelPeople } from '@ionic-native/mixpanel/ngx';
-=======
 import { MixpanelService } from 'src/app/utilities/mixpanel.service';
->>>>>>> a8bd53db462f506a3f9619341526241872cdc0a0
 
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
@@ -115,12 +111,7 @@ export class PermitdesignComponent implements OnInit {
     private androidPermissions: AndroidPermissions,
     private localnotification: LocalNotifications,
     private router:ActivatedRoute,
-<<<<<<< HEAD
-    // private mixpanel: Mixpanel, 
-    // private mixpanelPeople: MixpanelPeople
-=======
     private mixpanel:MixpanelService
->>>>>>> a8bd53db462f506a3f9619341526241872cdc0a0
    // private db:AngularFireDatabase,
     
    // private fileopener:FileOpener
