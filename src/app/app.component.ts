@@ -282,6 +282,9 @@ this.network.networkConnect();
     const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
     CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
       () => {
+        if(this.storageService.getUserID() !==''){
+          this.utilities.doCometUserLogin();
+        }
         console.log('Initialization completed successfully');
         // if(this.utilities.currentUserValue != null){
           // You can now call login function.

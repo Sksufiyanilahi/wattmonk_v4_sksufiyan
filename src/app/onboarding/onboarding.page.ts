@@ -482,7 +482,7 @@ state: { productdetails: objToSend }
 
     })
 
-    this.apiService.permitCharges().subscribe(res => {
+    this.apiService.permitinitcharges().subscribe(res => {
       // this.storage.setPermitCharges(res);
       this.permitCharges = res;
       this.permitCharges.forEach(element => {

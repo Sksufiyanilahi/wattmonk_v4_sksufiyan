@@ -11,6 +11,7 @@ import { IonBottomDrawerModule } from 'ion-bottom-drawer';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { ModalPageComponent } from './modal-page/modal-page.component';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { ModalPageComponent } from './modal-page/modal-page.component';
   ],
   declarations: [SurveyDetailPage,ModalPageComponent],
   providers: [
-    LaunchNavigator
+    LaunchNavigator,
+    PhotoViewer
   ],
   entryComponents: [ModalPageComponent],
 })

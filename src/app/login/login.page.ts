@@ -177,6 +177,7 @@ this.network.networkConnect();
               }
             });
             this.apiService.emitUserNameAndRole(response.user);
+            this.utils.doCometUserLogin();
           }, responseError => {
             this.utils.hideLoading().then(() => {
               this.apiService.resetHeaders();

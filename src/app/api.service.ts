@@ -32,12 +32,16 @@ import { ROLES } from './contants';
 import { Clients } from './model/clients.model';
 import { Pestamp } from './model/pestamp.model';
 import { UploadedFile } from './model/uploadedfile.model';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
+import { NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  callData:any;
   public onlineOffline: boolean = navigator.onLine;
   headers: HttpHeaders;
   uploadHeaders: HttpHeaders;
@@ -57,8 +61,12 @@ export class ApiService {
     private http: HttpClient,
     private storageService: StorageService,
     private utilities:UtilitiesService,
-    private auth: AuthGuardService
+    private auth: AuthGuardService,
+    private navCtrl:NavController,
+    private router:Router,
+    // private route: ActivatedRoute
   ) {
+    // this.listencall();
     this.getUpgradeMessage();
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
@@ -339,10 +347,12 @@ export class ApiService {
    
     prelimCharges(){
       return this.http.get(BaseUrl+ "commonsettings?settingname=prelimdesigncharges", { headers: this.headers});}
-      
+
+      permitinitcharges(){
+        return this.http.get(BaseUrl+ "commonsettings?settingname=permitdesigncharges", { headers: this.headers});}
    
-    permitCharges(){
-      return this.http.get(BaseUrl+ "commonsettings?settingname=permitdesigncharges", { headers: this.headers});}
+    permitCharges(data){
+      return this.http.post(BaseUrl+ "getdesignservicecharge",data, { headers: this.headers});}
      
       freeCharges(){
         return this.http.get(BaseUrl+ "commonsettings?settingname=freedesigns ", { headers: this.headers});}
@@ -598,4 +608,49 @@ export class ApiService {
           headers: this.headers
         })
       }
+
+      listencall(listnerID) {
+      // let listnerID = localStorage.getItem('gid');
+        const that= this;
+        CometChat.addCallListener(
+          listnerID,
+          new CometChat.CallListener({
+            onIncomingCallReceived(call) {
+              console.log('Incoming call:', call);
+              that.callData = call;
+              // if(call.status=='initiated'){
+                that.router.navigate(['/', 'callingscreen']);
+              // }
+              // Handle incoming call
+            },
+            onOutgoingCallAccepted(call) {
+              console.log('Outgoing call accepted:', call);
+              that.callData = call;
+              // Outgoing Call Accepted
+            },
+            onOutgoingCallRejected(call) {
+              console.log('Outgoing call rejected:', call);
+              that.callData = call;
+              // Outgoing Call Rejected
+              that.navCtrl.pop();
+            },
+            onIncomingCallCancelled(call) {
+              console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+              
+              console.log('Incoming call calcelled:', call);
+              console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+              that.callData = call;
+        
+                // that.location.back();
+                that.navCtrl.pop();
+      
+              
+            }
+          })
+        );
+      }
+  
+      getCallData(): Observable<any> {
+        return this.callData;
+  }
 }

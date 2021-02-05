@@ -26,6 +26,69 @@
     </ion-row>
     <ion-row >
     <ion-card style="position: relative; width:100%;" class="ion-padding">
+      <ion-row style="width: 100%;" *ngIf="design=='permit'">
+       
+        <ion-col size="12">
+          <ion-label style="font-size: medium;color:#111;font-weight: bold;float: left;">Choose your delivery time</ion-label>
+        </ion-col >
+      
+        
+        <!-- <ion-col size="3" >
+     <ion-checkbox value="6" id="1" name="box1" (ionChange)="checkboxClicking($event)"> </ion-checkbox>
+      <span style="font-size: larger; margin-left: 12%;  position: absolute;">0-6</span>
+     </ion-col>
+    
+    <ion-col size="3">
+    <ion-checkbox value="6" id="2" name="box2" (ionChange)="checkboxClicking($event,)"> </ion-checkbox>
+      <ion-label style="font-size: larger; margin-left: 12%;  position: absolute;">6-12</ion-label>
+    </ion-col>
+
+    <ion-col size="3">
+    <ion-checkbox value="6" (ionChange)="checkboxClicking($event)"> </ion-checkbox>
+      <ion-label style="font-size: larger; margin-left: 12%;  position: absolute;">12-24</ion-label>
+    </ion-col>
+
+    <ion-col size="3">
+    <ion-checkbox   (ionChange)="checkboxClicking($event)"> </ion-checkbox>
+      <ion-label style="font-size: larger; margin-left: 12%;  position: absolute;">24-48</ion-label>
+   </ion-col>
+     -->
+    <ion-radio-group style="width:100% " (ionChange)="checkboxClicking($event)"  value="delivertime" [(ngModel)]="delivertime" >
+      <ion-row style="height:35%" >
+        <ion-col size="6">
+      <ion-item lines="none">
+      <ion-radio style="margin-right: 0px;" slot="start" value="1-6" [disabled]=isradiodisable></ion-radio>
+     <ion-label style="font-size: medium; margin-left: 12%;  position: absolute;color: dimgrey;">0-6 hrs</ion-label>
+      </ion-item>
+    </ion-col>
+
+    <ion-col size="6">
+      <ion-item lines="none">
+         <ion-radio style="margin-right: 0px;" slot="start" value="6-12" [disabled]=isradiodisable ></ion-radio>
+         <ion-label style="font-size: medium; margin-left: 12%;  position: absolute;color: dimgrey;">6-12 hrs</ion-label>
+        </ion-item>
+    </ion-col>
+      </ion-row>
+
+      <ion-row style="height:35%">
+    <ion-col size="6">
+      <ion-item lines="none">
+      
+        <ion-radio  style="margin-right: 0px;" slot="start" value="12-24" [disabled]=isradiodisable ></ion-radio>
+        <ion-label style="font-size: medium; margin-left: 12%;  position: absolute;color: dimgrey;">12-24 hrs</ion-label>
+      </ion-item>
+    </ion-col>
+    <ion-col size="6">
+      <ion-item lines="none">
+       
+        <ion-radio style="margin-right: 0px;" slot="start"  value="24-48" ></ion-radio>
+        <ion-label style="font-size: medium; margin-left: 12%;  position: absolute;color: dimgrey;">24-48 hrs</ion-label>
+      </ion-item>
+    </ion-col>
+    </ion-row>
+    </ion-radio-group>
+      </ion-row>
+
       <ion-row style="width: 100%;" *ngIf="user?.role.type!='clientadmin' && user?.ispaymentmodeprepay">
         <ion-col size="6">
           <ion-label style="font-size: medium;color:#111;font-weight: bold;float: left;">Amount in Wallet</ion-label>
