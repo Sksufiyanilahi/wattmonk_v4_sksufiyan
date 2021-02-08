@@ -244,6 +244,13 @@ ion-item {
   --highlight-height: 0px;
 }
 
+
+.searchbar-input-container.sc-ion-searchbar-md{
+  .searchbar-input{
+  border-radius: 1rem;
+  }
+  }
+
 .buttom-drawer-button {
     --background: #3c78d8 !important;
     --color: white;

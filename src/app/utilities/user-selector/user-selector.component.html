@@ -4,7 +4,7 @@
   <span class="input-placeholder" *ngIf="required">*</span>
   
     <div>
-      <ion-searchbar  debounce="0" placeholder="Search Here" (ionChange)="filterUsers()" [(ngModel)]="searchTerm">
+      <ion-searchbar class="searchbar-input-container.sc-ion-searchbar-md" debounce="0" placeholder="Search Here" (ionChange)="filterUsers()" [(ngModel)]="searchTerm">
     
       </ion-searchbar>
     </div>
