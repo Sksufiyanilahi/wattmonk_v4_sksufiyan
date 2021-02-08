@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +23,7 @@ export class DashboardPage implements OnInit {
   };
   userData: any;
 
-  constructor(private apiService:ApiService,private route: ActivatedRoute,private storage:StorageService) { }
+  constructor(private apiService:ApiService,private route: ActivatedRoute,private storage:StorageService,private mixpanelService:MixpanelService) { }
 
   ngOnInit() {
     this.userId= this.storage.getUserID();
@@ -30,6 +31,8 @@ export class DashboardPage implements OnInit {
   //  let data = this.route.snapshot.data.userdata; // get data from resolver
   //  console.log(data);
     //this.getCount();
+    this.mixpanelService.track('DASHBOARD_PAGE_OPEN', {
+    });
   }
 
   ionViewDidEnter()

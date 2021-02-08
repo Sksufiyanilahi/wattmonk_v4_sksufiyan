@@ -15,6 +15,7 @@ import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 declare var Stripe;
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { DesginDataModel } from '../model/design.model';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 
 
@@ -71,7 +72,8 @@ card:any
     private navController:NavController,
     private intercom:Intercom,
     private db:AngularFireDatabase,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private mixpanelService:MixpanelService
     //private stripe:Stripe
     ) {
       this.designData = this.router.getCurrentNavigation().extras.state;
@@ -144,6 +146,8 @@ card:any
     console.log(this.mode)
     console.log(this.designId);
     console.log(this.design);
+    this.mixpanelService.track("ADD_MONEY_PAGE_OPEN", {
+    });
 
     if(this.mode=='card'){
       this.amountForm.patchValue({amount:this.serviceAmount});
@@ -249,6 +253,8 @@ card:any
   }
 
   goBack(){
+    this.mixpanelService.track("ADD_MONEY_PAGE_CLOSE",{})
+    
     this.navController.pop();
   }
   addMoney()

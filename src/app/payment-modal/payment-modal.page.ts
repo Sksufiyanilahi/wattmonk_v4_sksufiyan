@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { DesginDataModel } from '../model/design.model';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-payment-modal',
@@ -59,7 +60,8 @@ netPay:any
     private alertController:AlertController,
     private modalController:ModalController,
     private db:AngularFireDatabase,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private mixpanelService:MixpanelService
     ) {
       // this.designData = this.router.getCurrentNavigation().extras.state;
       // console.log(this.designData)
@@ -110,6 +112,8 @@ netPay:any
    
     this.userData = this.storageService.getUser();
     console.log(this.userData)
+    this.mixpanelService.track('PAYMENT_PAGE_OPEN', {
+    });
     this.utils.showHideIntercom(true);
     this.fetchData();
     this.servicecharges();});
@@ -288,7 +292,8 @@ confirm(){
   }
 
   cancel(){
-   
+    this.mixpanelService.track("PAYMENT_PAGE_CLOSE", {
+    });
       if(this.design ==='prelim'){
       this.router.navigate(['/homepage/design'])
       this.utils.setHomepageDesignRefresh(true);

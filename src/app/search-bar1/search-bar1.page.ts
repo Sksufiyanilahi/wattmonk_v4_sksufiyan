@@ -12,6 +12,7 @@ import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import { ErrorModel } from '../model/error.model';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-search-bar1',
@@ -49,7 +50,8 @@ userData:any;
     private socialsharing:SocialSharing,
     private utils: UtilitiesService,
     private alertController:AlertController,
-    public modalController: ModalController,) {
+    public modalController: ModalController,
+    private mixpanelService:MixpanelService) {
       this.assignForm = this.formBuilder.group({
         assignedto: new FormControl('', [Validators.required]),
         comment: new FormControl('')
@@ -60,6 +62,8 @@ userData:any;
 
   ngOnInit() {this.userData = this.storageService.getUser();
     console.log(this.userData);
+    this.mixpanelService.track("SEARCH_PAGE_OPEN", {
+    });
   }
 
   searchfor(event){
@@ -108,6 +112,8 @@ this.DesignModel=this.sample1;
   }
   
   goBack() {
+    this.mixpanelService.track("SEARCH_PAGE_CLOSE", {
+    });
     this.navController.pop();
   }
 

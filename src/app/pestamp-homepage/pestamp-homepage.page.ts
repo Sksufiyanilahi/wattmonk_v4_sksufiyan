@@ -121,7 +121,7 @@ this.network.networkConnect();
     
     // }
     // else{
-      this.mixpanelService.track("Add_PE stamp add _PAGE_OPEN", {
+      this.mixpanelService.track("ADD_PESTAMP_PAGE_OPEN", {
       });
       this.route.navigate(['/pestamp-schedule']);
     //}
