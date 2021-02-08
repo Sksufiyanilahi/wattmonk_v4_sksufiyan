@@ -139,6 +139,7 @@ export class PermithomepagePage implements OnInit {
   setupCometChatUser() {
     debugger;
     let userId = this.storageservice.getUserID();
+    this.userData = this.storageservice.getUser();
     const user = new CometChat.User(userId);
     user.setName(this.storageservice.getUser().firstname + ' ' + this.storageservice.getUser().lastname);
     const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
@@ -197,10 +198,16 @@ this.network.networkConnect();
         (navigator as any).app.exitApp();
       }
     });
+    this.mixpanelService.setUserDetails(this.userData.email,this.userData.firstname+" "+this.userData.lastname,this.userData.id)
+    this.mixpanelService.track("PERMITDESIGN_PAGE_OPEN", {
+      $id: this.userData.id,
+      $email: this.userData.email,
+      $name: this.userData.firstname + this.userData.lastname
+    });
   }
 
   scheduledPage(){
-    this.mixpanelService.track("Add_Permitdesign_PAGE_OPEN", {
+    this.mixpanelService.track("ADD_PERMITDESIGN_PAGE_OPEN", {
     });
     this.route.navigate(['/permitschedule']);
 

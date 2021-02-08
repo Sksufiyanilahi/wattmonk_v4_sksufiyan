@@ -516,7 +516,7 @@ export class PermitschedulePage implements OnInit {
   }
 
   goBack() {
-    this.mixpanelService.track("Permitdesign_PAGE_Close", {
+    this.mixpanelService.track("PERMITDESIGN_PAGE_CLOSE", {
     });
    this.navController.pop();
    
@@ -819,7 +819,7 @@ saveInverterModel() {
           console.log(this.formValue);
           if (this.designId === 0) {
             if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM){
-              this.mixpanelService.track("Save_Permitdesign_PAGE", {
+              this.mixpanelService.track("SAVE_PERMITDESIGN_PAGE", {
               });
               var data = {
                           name:this.desginForm.get('name').value,
@@ -904,7 +904,7 @@ saveInverterModel() {
 
               }
            else if(this.formValue === 'send'){
-            this.mixpanelService.track("Order_Permitdesign_PAGE", {
+            this.mixpanelService.track("ORDER_PERMITDESIGN_PAGE", {
             });
 
               var postData = {

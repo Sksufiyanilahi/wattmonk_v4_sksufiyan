@@ -189,7 +189,7 @@ export class PestampDesignComponent implements OnInit {
 
   ngOnInit() {
     //this.userData = this.storageService.getUser();
-    this.mixpanelService.track("Pestamp_Page_Open", {   
+    this.mixpanelService.track("PESTAMP_PAGE_OPEN", {   
     });
     this.makeDirectory();
     this.setupCometChat();
@@ -426,7 +426,7 @@ export class PestampDesignComponent implements OnInit {
   }
 
   accept(id,data:string){
-    this.mixpanelService.track("Accept_Pestamp_Design_PAGE_OPEN", {
+    this.mixpanelService.track("ACCEPT_PESTAMP_DESIGN_PAGE_OPEN", {
     });
     this.acceptid= id;
      let status={
@@ -451,7 +451,7 @@ export class PestampDesignComponent implements OnInit {
 
   openDesigners(id: number,designData) {
     debugger;
-    this.mixpanelService.track("Assign_Pestamp_Design_PAGE_OPEN", {
+    this.mixpanelService.track("ASSIGN_PESTAMP_DESIGN_PAGE_OPEN", {
     });
     this.listOfAssignees=[];
     console.log("this is",designData);
@@ -557,7 +557,7 @@ this.route.navigate(['/pestamp-payment-modal'], {
 */
 
 async decline(id,e){
-  this.mixpanelService.track("Decline_Pestamp_Design_PAGE_OPEN", {
+  this.mixpanelService.track("DECLINE_PESTAMP_DESIGN_PAGE_OPEN", {
   });
   let status = e;
   console.log(status);
@@ -587,7 +587,7 @@ async decline(id,e){
 
 
 async Resend(id, type){
-  this.mixpanelService.track("Resend_Design_PAGE_OPEN", {
+  this.mixpanelService.track("RESEND_PESTAMP_DESIGN_PAGE_OPEN", {
   });
   console.log(type);
   const modal = await this.modalController.create({
@@ -675,7 +675,7 @@ shareWhatsapp(designData){
 }
 
 designDownload(designData){
-  this.mixpanelService.track("Download_Pestamp_PAGE_OPEN", {
+  this.mixpanelService.track("DOWNLOAD_PESTAMP_PAGE_OPEN", {
   });
   this.platform.ready().then(()=>{
     this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
@@ -853,7 +853,7 @@ designDownload(designData){
   //}
 
   clearPendingPayments(designData){
-    this.mixpanelService.track("Open_Pending_Payments_PAGE_OPEN", {
+    this.mixpanelService.track("PESTAMP_PENDING_PAYMENTS_PAGE_OPEN", {
     });
     let objToSend: NavigationExtras = {
       queryParams: {
@@ -982,7 +982,7 @@ createNewDesignChatGroup(design:Pestamp) {
 
 
 directAssignToWattmonk(id:number,design){
-  this.mixpanelService.track("ReAssign_Pestamp_Design_PAGE_OPEN", {
+  this.mixpanelService.track("REASSIGN_PESTAMP_DESIGN_PAGE_OPEN", {
   });
   this.designId = id;
   console.log(design);

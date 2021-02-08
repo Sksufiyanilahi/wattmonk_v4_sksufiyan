@@ -26,6 +26,7 @@ import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.
 import { PestampdelivermodalPage } from 'src/app/pestampdelivermodal/pestampdelivermodal.page';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMETCHAT_CONSTANTS } from 'src/app/contants';
+import { MixpanelService } from 'src/app/utilities/mixpanel.service';
 
 @Component({
   selector: 'app-peengineerdesign',
@@ -85,7 +86,8 @@ export class PEengineerdesignComponent implements OnInit {
                private localnotification: LocalNotifications,
                private file: File,
                private transfer : FileTransfer,
-               public alertController: AlertController) {
+               public alertController: AlertController,
+               private mixpanelService:MixpanelService) {
                 this.userData = this.storageService.getUser();
 
 
@@ -392,6 +394,8 @@ export class PEengineerdesignComponent implements OnInit {
 
   accept(id,data:string){
     // this.acceptid= id;
+    this.mixpanelService.track("ACCEPT_PESTAMP_PAGE_OPEN", {
+    });
     const postData = {
       acceptedbypeengineer: true,
       declinedbypeengineer:false
@@ -513,6 +517,8 @@ this.route.navigate(['/pestamp-payment-modal'], {
 */
 
 async decline(id,e){
+  this.mixpanelService.track("DECLINE_PESTAMP_PAGE_OPEN", {
+  });
   let status = e;
   console.log(status);
   const modal = await this.modalController.create({
@@ -701,6 +707,8 @@ designDownload(designData){
   }
 
   async openreviewPassed(id,designData){
+    this.mixpanelService.track("DELIVER_PESTAMP_PAGE_OPEN", {
+    });
     const modal = await this.modalController.create({
       component: PestampdelivermodalPage,
       cssClass: 'deliver-modal-css',

@@ -4,6 +4,7 @@ import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { UtilitiesService } from '../utilities.service';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { StorageService } from '../storage.service';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-coupon-offers-modal',
@@ -26,7 +27,8 @@ export class CouponOffersModalPage implements OnInit {
     private utils:UtilitiesService,
     private formBuilder : FormBuilder,
     private storageService:StorageService,
-    private nav:NavParams
+    private nav:NavParams,
+    private mixpanelService:MixpanelService
   ) { 
     this.couponForm = this.formBuilder.group({
       couponInput : new FormControl('')
@@ -43,6 +45,8 @@ export class CouponOffersModalPage implements OnInit {
 
     })
     this.user=this.storageService.getUser();
+    this.mixpanelService.track("COUPON_OFFER_PAGE_OPEN", {
+    });
   }
  
   selectCoupon(coupondata:any) {

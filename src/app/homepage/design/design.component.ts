@@ -30,6 +30,7 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { COMETCHAT_CONSTANTS } from 'src/app/contants';
+import { MixpanelService } from 'src/app/utilities/mixpanel.service';
 
 
 @Component({
@@ -104,7 +105,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private intercom:Intercom,
     private platform:Platform,
     private androidPermissions: AndroidPermissions,
-    private transfer: FileTransfer
+    private transfer: FileTransfer,
+    private mixpanelService:MixpanelService
   
   ) {
     this.userData = this.storageService.getUser();
@@ -251,7 +253,11 @@ this.network.networkConnect();
     this.apiService.emitUserNameAndRole(this.userData);
     // this.userData = this.storageService.getUser();
     console.log(this.userData);
-
+    this.mixpanelService.track("PRELIM_DESIGN_PAGE_OPEN", {
+      // $id: this.userData.id,
+      // $email: this.userData.email,
+      // $name: this.userData.firstname + this.userData.lastname
+    });
     // this.router.navigate(['homepage/design/pending']);
     // this.routeSubscription = this.router.events.subscribe((event) => {
     //   if (event instanceof NavigationEnd) {
@@ -300,6 +306,8 @@ this.network.networkConnect();
   }
 
      accept(id,data:string){
+      this.mixpanelService.track("ACCEPT_PRELIM_DESIGN_PAGE_OPEN", {
+      });
         this.acceptid = id;
        let status={
         status:data
@@ -765,6 +773,8 @@ this.network.networkConnect();
 
 
   openDesigners(id: number,designData) {
+    this.mixpanelService.track("ASSIGN_PRELIM_DESIGN_PAGE_OPEN", {
+    });
     this.listOfAssignees=[];
  this.utils.showHideIntercom(true);
     console.log("this is",designData);
@@ -876,6 +886,8 @@ this.router.navigate(['/payment-modal'], {
 
 
   async openreviewPassed(id,designData){
+    this.mixpanelService.track("DELIVER_PRELIM_PAGE_OPEN", {
+    });
     this.designId=id
     const alert = await this.alertController.create({
       cssClass: 'alertClass',
@@ -998,6 +1010,8 @@ this.router.navigate(['/payment-modal'], {
 
 
 async decline(id){
+  this.mixpanelService.track("DECLINE_PRELIM_PAGE_OPEN", {
+  });
   const modal = await this.modalController.create({
     component: DeclinepagePage,
     cssClass: 'my-custom-modal-css',
@@ -1022,6 +1036,8 @@ async decline(id){
 
 
 async Resend(id, type){
+  this.mixpanelService.track("RESEND_PRELIM_PAGE_OPEN", {
+  });
   const modal = await this.modalController.create({
     component: ResendpagedialogPage,
     cssClass: 'my-custom-modal-css',
@@ -1055,6 +1071,8 @@ sDatePassed(datestring: string,i){
 }
 
 selfAssign(id,designData){
+  // this.mixpanelService.track("SelfAssign_Pestamp_PAGE_OPEN", {
+  // });
   var designstarttime = new Date();
       var milisecond = designstarttime.getTime();
   var postData={}
@@ -1120,7 +1138,8 @@ shareWhatsapp(designData){
  }
 
  designDownload(designData){
-
+  this.mixpanelService.track("DOWNLOAD_PRELIM_PAGE_OPEN", {
+  });
 
 
 this.platform.ready().then(()=>{
@@ -1306,6 +1325,8 @@ setupCometChat() {
 }
 
 directAssignToWattmonk(id:number){
+  this.mixpanelService.track("REASSIGN_PRELIM_DESIGN_PAGE_OPEN", {
+  });
   this.designId = id;
   var postData = {};
   var designacceptancestarttime = new Date();

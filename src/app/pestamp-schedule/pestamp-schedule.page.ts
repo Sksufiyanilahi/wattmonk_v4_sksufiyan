@@ -394,7 +394,7 @@ export class PestampSchedulePage implements OnInit {
   }
 
   goBack() {
-    this.mixpanelService.track("Pestamp_PAGE_Close", {
+    this.mixpanelService.track("PESTAMP_PAGE_CLOSE", {
     });
     this.navController.pop();
     
@@ -409,7 +409,7 @@ export class PestampSchedulePage implements OnInit {
     let contactnumber = this.firstFormGroup.get('contactnumber').value;
     if(this.designId === 0){
       if(e=='save'){
-        this.mixpanelService.track("SavePestamp_PAGE", {
+        this.mixpanelService.track("SAVEPESTAMP_PAGE", {
         });
         //this.utils.showLoading('Saving').then(() => {
           var data = {
@@ -475,7 +475,7 @@ export class PestampSchedulePage implements OnInit {
       }
     else if(e == 'send')
     {
-      this.mixpanelService.track("Order_Pestamp_PAGE", {
+      this.mixpanelService.track("ORDER_PESTAMP_PAGE", {
       });
       var postData = {
         personname:this.firstFormGroup.get('name').value,

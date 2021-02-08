@@ -11,6 +11,7 @@ import { Pestamp } from '../model/pestamp.model';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-pestamp-payment-modal',
@@ -64,7 +65,8 @@ export class PestampPaymentModalPage implements OnInit {
       private alertController:AlertController,
       private modalController:ModalController,
       private db:AngularFireDatabase,
-      private cdr: ChangeDetectorRef
+      private cdr: ChangeDetectorRef,
+      private mixpanelService:MixpanelService
       ) {
         //For Counts
       // this.newpermitsRef = db.object('newpermitdesigns');
@@ -113,6 +115,8 @@ export class PestampPaymentModalPage implements OnInit {
      
       this.userData = this.storageService.getUser();
       console.log(this.userData)
+      this.mixpanelService.track('PESTAMP_PAYMENT_PAGE_OPEN', {
+      });
       this.utils.showHideIntercom(true);
        this.fetchData();
       // this.servicecharges();

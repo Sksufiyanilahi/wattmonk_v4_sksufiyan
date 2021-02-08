@@ -9,6 +9,7 @@ import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-pestamp-design-details',
@@ -44,7 +45,8 @@ export class PestampDesignDetailsPage implements OnInit {
               private cdr:ChangeDetectorRef,
               private navctrl:NavController,
               private iab: InAppBrowser,
-              private launchNavigator: LaunchNavigator) { 
+              private launchNavigator: LaunchNavigator,
+              private mixpanelService:MixpanelService) { 
                 this.pestampForm= this.formbuilder.group({
                   workinghours: new FormControl(null,[Validators.required]),
                  // comments:new FormControl(null),
@@ -63,6 +65,8 @@ export class PestampDesignDetailsPage implements OnInit {
   ngOnInit() {
     this.user=this.storage.getUser();
     console.log(this.user);
+    this.mixpanelService.track('PESTAMP_DESIGN_DETAIL_PAGE_OPEN', {
+    });
     this.getDesignDetails();
 
     
@@ -87,6 +91,8 @@ export class PestampDesignDetailsPage implements OnInit {
   }
 
   goBack() {
+    this.mixpanelService.track("PESTAMP_DESIGN_DETAIL_PAGE_CLOSE", {
+    });
     this.navController.pop();
   }
 

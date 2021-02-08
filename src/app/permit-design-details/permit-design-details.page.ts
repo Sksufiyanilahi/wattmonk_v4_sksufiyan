@@ -17,6 +17,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Intercom } from 'ng-intercom';
 import { intercomId } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-permit-design-details',
@@ -78,7 +79,8 @@ export class PermitDesignDetailsPage implements OnInit {
     private iab: InAppBrowser,
     private router:Router,
     private intercom:Intercom,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    private mixpanelService:MixpanelService
 
   ) {
     this.utilities.showHideIntercom(true); 
@@ -120,7 +122,8 @@ export class PermitDesignDetailsPage implements OnInit {
     console.log(this.imageName);
     this.user=this.storage.getUser();
     console.log(this.user);
-
+    this.mixpanelService.track('PERMIT_DESIGN_DETAIL_PAGE_OPEN', {
+    });
     // console.log("pop after ngoninit");
     // this.utilities.getHomepagePermitRefresh().subscribe(()=>{})
 
@@ -268,6 +271,8 @@ export class PermitDesignDetailsPage implements OnInit {
   }
 
   goBack() {
+    this.mixpanelService.track("PERMIT_DESIGN_DETAIL_PAGE_CLOSE", {
+    });
     this.navController.pop();
   }
 
