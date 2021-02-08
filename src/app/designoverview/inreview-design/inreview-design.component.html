@@ -22,7 +22,7 @@
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
                     <span [routerLink]="['/design-details/',designData.id]"
-                    routerDirection="forward" class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'">In Review</span>
+                    routerDirection="forward" class="chipdetail" style="background-color: #1289A7;" *ngIf="designData.status == 'reviewassigned'">In Review</span>
                    
                     <span [routerLink]="['/design-details/',designData.id]"
                     routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue">Overdue</span>

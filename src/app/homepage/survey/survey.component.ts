@@ -29,7 +29,7 @@ import { User } from 'src/app/model/user.model';
   templateUrl: './survey.component.html',
   styleUrls: ['./survey.component.scss'],
 })
-export class SurveyComponent implements OnInit, OnDestroy {
+export class SurveyComponent  {
 
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
@@ -432,7 +432,7 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.utils.errorSnackBar('Please select a surveyor');
     }
     else if( this.reviewAssignedTo!=null && (this.selectedDesigner.id==this.reviewAssignedTo.id)){
-      this.utils.errorSnackBar("This design request has been already assigned to"+" "+this.selectedDesigner.firstname+" "+this.selectedDesigner.lastname)
+      this.utils.errorSnackBar("This survey request has been already assigned to"+" "+this.selectedDesigner.firstname+" "+this.selectedDesigner.lastname)
 
     } 
     else {
@@ -855,4 +855,3 @@ export class SurveyDataHelper {
     this.listOfSurveys = [];
   }
 }
-

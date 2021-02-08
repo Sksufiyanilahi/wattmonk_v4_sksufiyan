@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  version:'1.1.1',
+  version:'1.1.3',
   firebase: {
     apiKey: "AIzaSyCUeAsEj_4_7YTENw2l8y8bMB4fntNXo-4",
     authDomain: "livewattmonk.firebaseapp.com",

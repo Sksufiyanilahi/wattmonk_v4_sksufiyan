@@ -44,23 +44,26 @@
                           {{designData.deliverydate | date: 'hh:mm a'}}
                       </span> -->
 
-                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'"  [routerLink]="['/design-details/',designData.id]">On Hold</span>
+                   
+                      <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
 
-                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  [routerLink]="['/design-details/',designData.id]">Review Failed</span>
-                      <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" [routerLink]="['/design-details/',designData.id]">Overdue</span>
-                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'requestaccepted'" [routerLink]="['/design-details/',designData.id]">Accepted</span>
-                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/design-details/',designData.id]">Review Passed</span>
-                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'" [routerLink]="['/design-details/',designData.id]">Delivered</span>
-                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);border-radius: 50%;padding: 4px 5px;" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
-                      <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/design-details/',designData.id]">Unassigned</span>
-                      <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/design-details/',designData.id]">Design Assigned</span>
-                      <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/design-details/',designData.id]">In Review</span>
-                      <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.type == 'clientadmin' || userData.role.type == 'clientsuperadmin')" style="background-color: #95afc0;" [routerLink]="['/design-details/',designData.id]">Waiting for acceptance</span>
-                      <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>
-                      <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
-                            *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
-                      <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+              </p>
+              <p style="margin:0px">
+                <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'"  [routerLink]="['/design-details/',designData.id]">On Hold</span>
 
+                <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  [routerLink]="['/design-details/',designData.id]">Review Failed</span>
+                <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" [routerLink]="['/design-details/',designData.id]">Overdue</span>
+                <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'requestaccepted'" [routerLink]="['/design-details/',designData.id]">Accepted</span>
+                <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/design-details/',designData.id]">Review Passed</span>
+                <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'" [routerLink]="['/design-details/',designData.id]">Delivered</span>
+                <span class="chipdetail" style="background-color: rgb(109, 187, 26);border-radius: 50%;padding: 4px 5px;" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
+                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/design-details/',designData.id]">Unassigned</span>
+                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/design-details/',designData.id]">Design Assigned</span>
+                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/design-details/',designData.id]">In Review</span>
+                <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.type == 'clientadmin' || userData.role.type == 'clientsuperadmin')" style="background-color: #95afc0;" [routerLink]="['/design-details/',designData.id]">Waiting for acceptance</span>
+                <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>
+                <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+                      *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
               </p>
 
               <p style="margin:0px">

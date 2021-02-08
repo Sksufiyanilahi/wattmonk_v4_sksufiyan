@@ -58,11 +58,14 @@ export class SurveyDataModel {
   isoverdue : boolean;
   formattedjobtype : string;
   solarpanelsimages:Image[];
+  electricalslocation:any
   lateby:any;
   city:string;
   state:string;
   country:string;
   postalcode:number;
+  reviewissues:String;
+  reviewassignedto:any;
 }
 
 

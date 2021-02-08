@@ -20,6 +20,7 @@ import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
 import { Intercom } from 'ng-intercom';
+import { Appversion } from '../appversion';
 
 
 @Component({
