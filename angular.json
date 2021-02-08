@@ -40,8 +40,7 @@
                 "input": "src/global.scss"
               },
               "node_modules/angular2-draggable/css/resizable.min.css"
-            ],
-            "scripts": []
+            ]
           },
           "configurations": {
             "production": {
@@ -101,6 +100,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             },

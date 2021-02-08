@@ -16,6 +16,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
 import { COMETCHAT_CONSTANTS, intercomId,version } from '../contants.prod';
 import { Intercom } from 'ng-intercom';
+import { Appversion } from '../appversion';
 
 
 @Component({

@@ -46,21 +46,23 @@
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
                     
-                    <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'" [routerLink]="['/permit-design-details/',designData.id]">Declined</span>
-                    <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0"[routerLink]="['/permit-design-details/',designData.id]">Overdue</span>
-                    <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'requestaccepted'"[routerLink]="['/permit-design-details/',designData.id]">Accepted</span>
-                    <span class="chipdetail" style="background-color: rgb(109, 187, 26); cursor: pointer;" *ngIf="designData.status == 'delivered'" [routerLink]="['/design-details/',designData.id]">Delivered</span>
-                    <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/permit-design-details/',designData.id]">Completed</span>
-                    <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'"[routerLink]="['/permit-design-details/',designData.id]">Unassigned</span>
-                    <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/permit-design-details/',designData.id]">Design Assigned</span>
-                    <span class="chipdetail" style="background-color: #1289A7;; cursor: pointer;" *ngIf="designData.status == 'reviewassigned'"[routerLink]="['/permit-design-details/',designData.id]">In Review</span>
-                    <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;"[routerLink]="['/permit-design-details/',designData.id]">Waiting for acceptance</span>
-                    <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon src="/assets/images/activitylist.svg" ></ion-icon></span>
-                    <span class="chipdetail" style="background-color: rgb(109, 187, 26) ;" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/permit-design-details/',designData.id]">Review Passed</span>
-                    <span class="chipdetail" style="background-color: rgb(246, 77, 10) ;" *ngIf="designData.status == 'reviewfailed'" [routerLink]="['/permit-design-details/',designData.id]">Review Failed</span>
-                    <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate" [routerLink]="['/permit-design-details/',designData.id]">Revision</span>
-                    <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
-                    *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
+                   <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon src="/assets/images/activitylist.png" style="height: 20px;" ></ion-icon></span>
+            </p>
+            <p style="margin:0px">
+                <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'" [routerLink]="['/permit-design-details/',designData.id]">Declined</span>
+                <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="item.lateby > 0"[routerLink]="['/permit-design-details/',designData.id]">Overdue</span>
+                <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'requestaccepted'"[routerLink]="['/permit-design-details/',designData.id]">Accepted</span>
+                <span class="chipdetail" style="background-color: rgb(109, 187, 26); cursor: pointer;" *ngIf="designData.status == 'delivered'" [routerLink]="['/design-details/',designData.id]">Delivered</span>
+                <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/permit-design-details/',designData.id]">Completed</span>
+                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'"[routerLink]="['/permit-design-details/',designData.id]">Unassigned</span>
+                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/permit-design-details/',designData.id]">Design Assigned</span>
+                <span class="chipdetail" style="background-color: #1289A7;; cursor: pointer;" *ngIf="designData.status == 'reviewassigned'"[routerLink]="['/permit-design-details/',designData.id]">In Review</span>
+                <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;"[routerLink]="['/permit-design-details/',designData.id]">Waiting for acceptance</span>
+                <span class="chipdetail" style="background-color: rgb(109, 187, 26) ;" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/permit-design-details/',designData.id]">Review Passed</span>
+                <span class="chipdetail" style="background-color: rgb(246, 77, 10) ;" *ngIf="designData.status == 'reviewfailed'" [routerLink]="['/permit-design-details/',designData.id]">Review Failed</span>
+                <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate" [routerLink]="['/permit-design-details/',designData.id]">Revision</span>
+                <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+                *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
             </p>
             
             <p style="margin:0px">

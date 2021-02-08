@@ -50,4 +50,12 @@
   </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-split-pane>
+
+<!-- 
+<ng-container *ngIf="userData.role.type === 'wattmonkadmins'">
+  <ion-item routerDirection="forward">
+    <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Permit
+      <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
+    </ion-item>
+</ng-container> -->
 </ion-app>

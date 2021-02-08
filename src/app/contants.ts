@@ -29,6 +29,16 @@
 //    }
 // export const version='1.1.3'
 
+// Test Server
+//   export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';
+//   export const BaseUrl = 'https://testorbit.wattmonk.com/api';
+// export const intercomId = 'c6w73e4e';
+//   export const COMETCHAT_CONSTANTS = {
+//       APP_ID: '22738c62a78b107',
+//        REGION: 'US',
+//        API_KEY: '3afc04a7495edb03f4c7c802096a954faf7e3a27'
+//    }
+
 //Development Server
 export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api';
 export const BaseUrl = 'https://devspace.wattmonk.com/api';

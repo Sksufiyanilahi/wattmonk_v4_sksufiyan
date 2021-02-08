@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { AutoCompleteComponent } from './auto-complete.component';
@@ -7,7 +7,7 @@ describe('AutoCompleteComponent', () => {
   let component: AutoCompleteComponent;
   let fixture: ComponentFixture<AutoCompleteComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AutoCompleteComponent ],
       imports: [IonicModule.forRoot()]

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { DateTimeComponent } from './date-time.component';
@@ -7,7 +7,7 @@ describe('DateTimeComponent', () => {
   let component: DateTimeComponent;
   let fixture: ComponentFixture<DateTimeComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DateTimeComponent ],
       imports: [IonicModule.forRoot()]
