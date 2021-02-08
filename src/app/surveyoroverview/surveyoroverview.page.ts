@@ -13,6 +13,7 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { User } from '../model/user.model';
 import { UserData } from '../model/userData.model';
 import { COMETCHAT_CONSTANTS } from '../contants';
+import { Appversion } from '../appversion';
 
 @Component({
   selector: 'app-surveyoroverview',
@@ -20,7 +21,7 @@ import { COMETCHAT_CONSTANTS } from '../contants';
   styleUrls: ['./surveyoroverview.page.scss'],
 })
 export class SurveyoroverviewPage implements OnInit {
-  private version = environment.version;
+  private version = Appversion.version;
   private subscription: Subscription;
   update_version:string;
   netSwitch:any;

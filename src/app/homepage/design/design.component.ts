@@ -170,6 +170,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     })
   }
 
+
   ionViewDidEnter() {
     this.makeDirectory();
     this.deactivateNetworkSwitch =this.network.networkSwitch.subscribe(data=>{

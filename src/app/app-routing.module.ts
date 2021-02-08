@@ -266,7 +266,8 @@ const routes: Routes = [
   {
     path: 'peengineer',
     loadChildren: () => import('./peengineer/peengineer.module').then( m => m.PEengineerPageModule)
-  },  {
+  },
+  {
     path: 'comingsoon',
     loadChildren: () => import('./comingsoon/comingsoon.module').then( m => m.ComingsoonPageModule)
   },
@@ -293,9 +294,10 @@ const routes: Routes = [
 ];
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'legacy' })
   ],
   exports: [RouterModule]
 })
 export class AppRoutingModule {
 }
+
