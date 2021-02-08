@@ -6,9 +6,11 @@ import { Intercom } from 'ng-intercom';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { ScheduleFormEvent } from '../model/constants';
+import { DesginDataModel } from '../model/design.model';
 import { Pestamp } from '../model/pestamp.model';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
 @Component({
   selector: 'app-pestamp-payment-modal',
@@ -330,6 +332,7 @@ export class PestampPaymentModalPage implements OnInit {
       this.utils.showLoading("Assigning").then(()=>
       {
           this.apiService.updatePestamps(this.data.id,postData).subscribe(value=>{
+            this.createChatGroup(value);
         //     if(this.design=='prelim')
         // {
         //   this.newprelimsRef.update({ count: this.newprelimscount + 1});
@@ -377,7 +380,7 @@ export class PestampPaymentModalPage implements OnInit {
         serviceAmount:this.netPay,
         design:this.design,
         assignValue:this.assignValue,
-        data:this.data,
+        fulldesigndata:this.data,
         //value:'assign'
         },
         skipLocationChange: false,
@@ -399,7 +402,7 @@ this.router.navigate(['/add-money'], {
         serviceAmount:this.amounttopay,
         design:this.design,
         assignValue:this.assignValue,
-        data:this.data,
+        fulldesigndata:this.data,
         //value:'assign'
         },
         skipLocationChange: false,
@@ -442,20 +445,9 @@ this.router.navigate(['/add-money'], {
         console.log(response);
         this.createpayment=response;
     this.utils.hideLoading().then(()=>{
-    //if(this.createpayment.status=='succeeded'){
   this.utils.showSnackBar("payment successfull");
-        //this.data.isConfirmed = true;
-       // this.data.pestamp=response;
-        //this.dialogRef.close(this.data);
-        //this.notifyService.showSuccess("payment successfull", "success")
         this.router.navigate(['pestamp-homepage/pestamp-design']);
   this.utils.setPeStampRefresh(true);
-     // }
-     // else{
-      //   this.utils.errorSnackBar("payment was unsuccessfull");
-      // this.router.navigate(['pestamp-homepage/pestamp-design']);
-      // this.utils.setPeStampRefresh(true);
-      // }
     });
       },
       (error)=>{
@@ -473,18 +465,8 @@ this.router.navigate(['/add-money'], {
     this.utils.hideLoading().then(()=>{
    // if(this.createpayment.status=='succeeded'){
   this.utils.showSnackBar("payment successfull");
-        //this.data.isConfirmed = true;
-       // this.data.pestamp=response;
-        //this.dialogRef.close(this.data);
-        //this.notifyService.showSuccess("payment successfull", "success")
         this.router.navigate(['pestamp-homepage/pestamp-design']);
   this.utils.setPeStampRefresh(true);
-      // }
-      // else{
-      //   this.utils.errorSnackBar("payment was unsuccessfull");
-      // this.router.navigate(['pestamp-homepage/pestamp-design']);
-      // this.utils.setPeStampRefresh(true);
-      // }
     });
       },
       (error)=>{
@@ -547,6 +529,33 @@ this.router.navigate(['/add-money'], {
   
     ionViewWillLeave(){
       this.utils.showHideIntercom(false);
+    }
+
+    createChatGroup(design:Pestamp){
+
+      // if(this.design=='prelim'){
+      //   var GUID = 'prelim' + "_" + new Date().getTime();
+      // }else if(this.design=='permit'){
+      //   var GUID = 'permit' + "_" + new Date().getTime();
+  
+      // }
+      var GUID = 'pestamp' + "_" + new Date().getTime();
+      //var address = design.deliveryaddress.substring(0, 60);
+      var groupName = design.personname// + "_" + address;
+  
+      var groupType = CometChat.GROUP_TYPE.PRIVATE;
+      var password = "";
+  
+      var group = new CometChat.Group(GUID, groupName, groupType, password);
+  
+      CometChat.createGroup(group).then(group=>{
+        let membersList = [
+          new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+        ];
+        CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+          this.cdr.detectChanges();
+        })
+      })
     }
   
   

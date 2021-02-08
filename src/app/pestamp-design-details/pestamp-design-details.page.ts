@@ -49,7 +49,7 @@ export class PestampDesignDetailsPage implements OnInit {
                   workinghours: new FormControl(null,[Validators.required]),
                  // comments:new FormControl(null),
                   status: new FormControl('completed'),
-                  stampedfiles: new FormControl(''),
+                  stampedfiles: new FormControl('',[Validators.required]),
                 })
                 this.commentform = this.formbuilder.group({
                   comments:new FormControl(null)
@@ -79,6 +79,7 @@ export class PestampDesignDetailsPage implements OnInit {
         //this.setData(result);
         //this.timer();
         this.design = result;
+        this.validations();
       }, (error) => {
         this.utilities.hideLoading();
       });
@@ -135,9 +136,54 @@ export class PestampDesignDetailsPage implements OnInit {
         this.launchNavigator.navigate(address, this.options);
       }
 
+      validations()
+      {
+        const working = this.pestampForm.get('workinghours');
+        const stamped = this.pestampForm.get('stampedfiles');
+        if(this.design.propertytype == 'commercial')
+        {
+          stamped.setValidators([Validators.required]);
+          working.setValidators([Validators.required,Validators.min(1),Validators.max(48)]);
+        }
+        else
+        {
+          stamped.setValidators([Validators.required]);
+          working.clearValidators();
+          working.reset();
+        }
+        working.updateValueAndValidity();
+        stamped.updateValueAndValidity();
+      }
+
       submit(){
+        //this.validations();
+        debugger;
         if(this.pestampForm.status=='INVALID'){
-          this.utilities.errorSnackBar('Please add working hours');
+          // if(this.design.propertytype=='commercial'){
+          //   console.log("Hello Commercial",this.design.propertytype)
+          //   if(this.pestampForm.get('stampedfiles').value=='')
+          //   {
+          //     console.log("Hello Stampedfiles")
+          //     this.utilities.errorSnackBar('Please attach stamped file');
+          //   }else if(this.pestampForm.get('workinghours').value==null){
+          //     console.log("Hello Working HOurs");
+          // this.utilities.errorSnackBar('Please add working hours');
+          //   }
+          // }
+          // else{
+          //   this.utilities.errorSnackBar('Please attach stamped file');
+          // }
+
+          if(this.pestampForm.get('stampedfiles').value=='')
+          {
+            this.utilities.errorSnackBar('Please attach stamped file');
+          }
+          else if(this.pestampForm.get('workinghours').value==null)
+          {
+            this.utilities.errorSnackBar('Please add working hours');
+          }else if(this.pestampForm.get('workinghours').hasError('max')){
+            this.utilities.errorSnackBar('Maximum working hours should be 48');
+          }
           return false;
         }else{
           let cdate = Date.now();
@@ -147,7 +193,7 @@ export class PestampDesignDetailsPage implements OnInit {
       pestampstarttime: this.designstartdatetime,
       pestampendtime: this.designenddatetime,
       comments: this.commentform.get('comments').value,
-      workinghours : String(this.pestampForm.get('workinghours').value)
+      workinghours : this.pestampForm.get('workinghours').value
     };
           this.utilities.showLoading('Submitting').then(()=>{
          // this.apiService.updatePestamps(this.designId,this.pestampForm.value).subscribe(res=>{
@@ -236,6 +282,10 @@ export class PestampDesignDetailsPage implements OnInit {
         const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
       }
 
+      showRevisionImage(revisionattachment:any){
+        console.log(revisionattachment)
+        const browser = this.iab.create(revisionattachment.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+      }
       // files(event){
       //   console.log(event);
       //   console.log(event.target.files);

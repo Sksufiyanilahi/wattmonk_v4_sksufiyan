@@ -275,6 +275,10 @@ const routes: Routes = [
     path: 'pestampdelivermodal',
     loadChildren: () => import('./pestampdelivermodal/pestampdelivermodal.module').then( m => m.PestampdelivermodalPageModule)
   },
+  {
+    path: 'callingscreen',
+    loadChildren: () => import('./callingscreen/callingscreen.module').then( m => m.CallingscreenPageModule)
+  },
 
 
 

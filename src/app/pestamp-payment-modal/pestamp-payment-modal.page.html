@@ -22,7 +22,8 @@
   <h4 style="font-weight: bold;margin-bottom:0px !important;padding: 10px;"></h4>
 </ion-row>
 <ion-row *ngIf="assignValue != 'clearDues'">
-      <h6 *ngIf="user?.ispaymentmodeprepay" style="margin:10px;padding:5px;"> Please make the payment to process your order with Wattmonk.</h6>
+      <h6 *ngIf="user?.ispaymentmodeprepay && data.propertytype != 'commercial' " style="margin:10px;padding:5px;"> Please make the payment to process your order with Wattmonk.</h6>
+      <h6 *ngIf="user?.ispaymentmodeprepay && data.propertytype == 'commercial' " style="margin:10px;padding:5px;"> Payment to be made on delivery</h6>
       <h6 *ngIf="!user?.ispaymentmodeprepay" style="margin:10px;padding:5px;">On confirmation ,your design request purchase will be add to your monthly invoice Please find below summary of your service purchase.</h6>
     </ion-row>
     <ion-row *ngIf="assignValue == 'clearDues'">
@@ -42,8 +43,13 @@
       <ion-row style="width: 100%;" *ngIf="assignValue == 'assign' || data.propertytype == 'commercial'"><ion-col size="6">
       <ion-label style="font-size: medium;color:#111;font-weight: bold; float: left;">Service Price</ion-label>
       </ion-col>
-      <ion-col size="6" *ngIf="assignValue != 'clearDues'">
-      <ion-label style="font-size: large;color:#111; float:right;"> $ {{settingValue}} </ion-label>
+      <ion-col size="6" *ngIf="assignValue != 'clearDues' && data.propertytype == 'residential'">
+        <ion-label style="font-size: large;color:#111; float:right;"> $ {{settingValue}} </ion-label>
+        <!-- <ion-label style="font-size: large;color:#111; float:right;"> $ 100/hr </ion-label> -->
+      </ion-col>
+      <ion-col size="6" *ngIf="assignValue != 'clearDues' && data.propertytype == 'commercial'">
+      <!-- <ion-label style="font-size: large;color:#111; float:right;"> $ {{settingValue}} </ion-label> -->
+      <ion-label style="font-size: large;color:#111; float:right;"> $ 100/hr </ion-label>
     </ion-col>
     <ion-col size="6" *ngIf="assignValue == 'clearDues'">
       <ion-label style="font-size: large;color:#111; float:right;"> $ {{serviceCharges}} </ion-label>
@@ -108,6 +114,11 @@
       <ion-label style="font-size: large;color:#111; float:right; padding-right: 10%;" *ngIf="amounttopay!=null && assignValue =='clearDues'" >$ {{amounttopay}} </ion-label>
    </ion-col>
     </ion-row></ion-item>
+    <ion-row>
+      <ion-col>
+        <span class="error">*Shipping charges to be paid on service delivery</span>
+    </ion-col>
+  </ion-row>
   <ion-row class="ion-padding" *ngIf="user?.role.type!=='clientadmin'">
     <ion-col size="12" *ngIf="user?.ispaymentmodeprepay" >
       <!-- <ion-item *ngIf="user?.amount>=settingValue" (click)="confirm()" >
@@ -129,9 +140,9 @@
     </ion-row>
     </ion-content>
     <div *ngIf="isShow">
-    <ion-footer *ngIf="user?.ispaymentmodeprepay && (user?.parent.amount>=netPay || user?.parent.amount>=amounttopay) && (user.role.type == 'clientsuperadmin' || user.role.type =='clientadmin')" (click)="confirm()"  class="ion-padding" style="text-align: center;background: blue;color:#fff">
+    <ion-footer *ngIf="user?.ispaymentmodeprepay && (user?.parent.amount>=netPay || user?.parent.amount>=amounttopay) && (user?.role.type == 'clientsuperadmin' || user?.role.type =='clientadmin')" (click)="confirm()"  class="ion-padding" style="text-align: center;background: blue;color:#fff">
       Confirm
        </ion-footer>
     <ion-footer *ngIf="!user?.ispaymentmodeprepay" (click)="confirmforPostpaid()" class="ion-padding" style="text-align: center;background: blue;color:#fff">Confirm</ion-footer>
-    <ion-footer *ngIf="(netPay > user?.parent.amount || amounttopay > user?.parent.amount) && user.role.type=='clientadmin'" class="ion-padding" style="text-align: center;color:red" class="ion-padding">Insufficient Amount</ion-footer>
+    <ion-footer *ngIf="(netPay > user?.parent.amount || amounttopay > user?.parent.amount) && user?.role.type=='clientadmin'" class="ion-padding" style="text-align: center;color:red" class="ion-padding">Insufficient Amount</ion-footer>
   </div>

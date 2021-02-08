@@ -18,15 +18,19 @@
             <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
                 <p class="customer-name" *ngIf="designData.personname != null && designData.personname != ''"
                 routerDirection="forward">{{designData.personname}}
-                <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'declined'"  [routerLink]="['/pestamp-design-details/',designData.id]">On Hold</span>
-              <span class="chipdetail" style="background-color: rgb(109, 187, 26);"   *ngIf=" designData.acceptedbypeengineer==true && designData.status == 'accepted'" [routerLink]="['/pestamp-design-details/',designData.id]">Accepted</span>
-              <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'assigned'" [routerLink]="['/pestamp-design-details/',designData.id]">Assigned</span>
-              <span class="chipdetail" style="background-color: rgb(109, 187, 26);padding: 4px 5px;" *ngIf="designData.status == 'completed'" [routerLink]="['/pestamp-design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
-              <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/pestamp-design-details/',designData.id]">Revision</span>
-              <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;" [routerLink]="['/pestamp-design-details/',designData.id]"
-                    *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
-              <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'pestamp']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+            
+             
+              <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'pestamp']" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
 
+      </p>
+      <p style="margin:0px">
+        <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;" [routerLink]="['/pestamp-design-details/',designData.id]"
+        *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
+        <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'declined'"  [routerLink]="['/pestamp-design-details/',designData.id]">On Hold</span>
+        <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'assigned'" [routerLink]="['/pestamp-design-details/',designData.id]">Assigned</span>
+      <span class="chipdetail" style="background-color: rgb(109, 187, 26);"   *ngIf=" designData.acceptedbypeengineer==true && designData.status == 'assigned'" [routerLink]="['/pestamp-design-details/',designData.id]">Accepted</span>
+      <span class="chipdetail" style="background-color: rgb(109, 187, 26);padding: 4px 5px;" *ngIf="designData.status == 'completed'" [routerLink]="['/pestamp-design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
+      <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/pestamp-design-details/',designData.id]">Revision</span>
       </p>
 
       <p style="margin:0px">
@@ -57,7 +61,7 @@
 
 
                 
-                    <ion-col *ngIf="segments=='status=assigned'">
+                    <ion-col *ngIf="segments=='status=assigned&status=declined'">
                                    <span style="float: right;">
                             <ng-container *ngIf="designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false)" >
                                 <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,'accepted')">

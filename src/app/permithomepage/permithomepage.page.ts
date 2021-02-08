@@ -28,6 +28,7 @@ import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMETCHAT_CONSTANTS, intercomId,version } from '../contants';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 
 @Component({
@@ -104,6 +105,7 @@ export class PermithomepagePage implements OnInit {
               private geolocation: Geolocation,
               private nativeGeocoder: NativeGeocoder,
               private intercom:Intercom,
+              private mixpanelService:MixpanelService
               ) {
                 this.setupCometChatUser();
               }
@@ -199,6 +201,8 @@ this.network.networkConnect();
   }
 
   scheduledPage(){
+    this.mixpanelService.track("Add_Permitdesign_PAGE_OPEN", {
+    });
     this.route.navigate(['/permitschedule']);
 
     }

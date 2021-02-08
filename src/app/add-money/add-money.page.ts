@@ -32,8 +32,8 @@ amountChecking:boolean=false;
 amountCheckingForOnboarding:boolean=false;
 card:any
   token:any;
-  // stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
-  stripe= Stripe('sk_test_51HQ4SfBlSfQmxsSflRlcq7ntq1xMbhlBVW03jzMCd1WiOZMqjglO0jO2FV6IHDSiFfDnesYt2feU7w4uEe34PfPR00iLg5qpLm');
+  stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
+  // stripe= Stripe('sk_test_51HQ4SfBlSfQmxsSflRlcq7ntq1xMbhlBVW03jzMCd1WiOZMqjglO0jO2FV6IHDSiFfDnesYt2feU7w4uEe34PfPR00iLg5qpLm');
  userData:User;
  mode:any;
  designId;
@@ -41,7 +41,7 @@ card:any
  design:any;
   createPayment:any;
   assignValue:any;
-  data:any;
+  //data:any;
   //for pestamp
   createDirectPayment:any;
   amountForm:FormGroup;
@@ -80,10 +80,11 @@ card:any
       this.designId = this.designData.productdetails.queryParams.id;
       this.serviceAmount = this.designData.productdetails.queryParams.serviceAmount;
       this.design = this.designData.productdetails.queryParams.design;
-      this.data = this.designData.productdetails.queryParams.data;
+     // this.data = this.designData.productdetails.queryParams.data;
       this.fulldesigndata = this.designData.productdetails.queryParams.fulldesigndata;
       this.assignValue = this.designData.productdetails.queryParams.assignValue;
         console.log(this.fulldesigndata);
+        console.log(this.design);
     this.amountForm=this.formBuilder.group(
        {
          amount:new FormControl('',[Validators.required, Validators.min(1), Validators.max(10000)]),
@@ -370,7 +371,8 @@ if(this.design == 'pestamp'){
   }
   this.apiService.createdirectpayment(data).subscribe((res)=>{
     this.createDirectPayment=res;
-    this.utils.hideLoading();
+    this.utils.hideLoading().then(()=>{
+      this.createChatGroup(this.fulldesigndata);
     if(this.createDirectPayment.status=='succeeded'){
   this.utils.showSnackBar("payment via card is successfull");
   var postData={};
@@ -397,6 +399,7 @@ else{
 this.router.navigate(['pestamp-homepage/pestamp-design']);
 this.utils.setPeStampRefresh(true);
 }
+});
 },
 (error)=>{
   this.utils.hideLoading();
@@ -408,18 +411,18 @@ else{
     paymenttype: "direct",
     token: this.token.token.id,
     pestampid: this.designId,
-    email: this.data.email,
+    email: this.fulldesigndata.email,
     amount: this.serviceAmount,
     user: this.userData.id
   }
   console.log(inputData)
-  if (this.data.propertytype == 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+  if (this.fulldesigndata.propertytype == 'commercial' && (this.fulldesigndata.modeofstamping == 'hardcopy' || this.fulldesigndata.modeofstamping == 'both')) {
     this.makeCommercialpayment(inputData);
   }
-  else if (this.data.propertytype == 'commercial' && this.data.modeofstamping == 'ecopy') {
+  else if (this.fulldesigndata.propertytype == 'commercial' && this.fulldesigndata.modeofstamping == 'ecopy') {
     this.makeCommercialpayment(inputData);
   }
-  else if (this.data.propertytype != 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+  else if (this.fulldesigndata.propertytype != 'commercial' && (this.fulldesigndata.modeofstamping == 'hardcopy' || this.fulldesigndata.modeofstamping == 'both')) {
     this.makepayment(inputData);
   }
 }
@@ -617,6 +620,26 @@ this.router.navigate(['pestamp-homepage/pestamp-design']);
 
 createChatGroup(design){
   debugger;
+  if(this.design == 'pestamp'){
+    var GUID = 'pestamp' + "_" + new Date().getTime();
+    //var address = design.address.substring(0, 60);
+    var groupname = design.personname// + "_" + address;
+
+    var groupType = CometChat.GROUP_TYPE.PRIVATE;
+    var password = "";
+
+    var group = new CometChat.Group(GUID, groupname, groupType, password);
+
+    CometChat.createGroup(group).then(group=>{
+      let membersList = [
+        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+      ];
+      CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+        this.cdr.detectChanges();
+      })
+    })
+  }
+  else{
   if(this.design=='prelim'){
     var GUID = 'prelim' + "_" + new Date().getTime();
   }else if(this.design=='permit'){
@@ -640,7 +663,7 @@ createChatGroup(design){
       })
     })
   }
-  
+}
 }
 
 

@@ -87,7 +87,7 @@
                           formControlName="numberofhardcopy" autocomplete="off" min="1" max="10"></ion-input>
           </ion-item>
           <div style="height: 5px;">
-            <div *ngIf="firstFormGroup.get('numberofhardcopy').invalid && firstFormGroup.get('numberofhardcopy').dirty">
+            <div *ngIf="firstFormGroup.get('numberofhardcopy').hasError('max') && firstFormGroup.get('numberofhardcopy').dirty">
                 <span class="error">{{hardCopiesError}}</span>
             </div>
             <div *ngIf="firstFormGroup.get('numberofhardcopy').value === '' && firstFormGroup.get('numberofhardcopy').dirty">

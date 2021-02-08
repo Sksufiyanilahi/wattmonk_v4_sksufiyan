@@ -28,11 +28,11 @@
                   <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item> -->
                 <!-- <ion-item [routerLink]="['/onboarding']" routerDirection="forward">
                   <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item> -->
-                    <ion-item  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">
+                    <ion-item  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'  && userData?.role.type!=='peengineer'" routerDirection="forward">
                        <!-- <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>  -->
                       <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Prelim 
                         <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newprelimscounts > 0">{{ newprelimscounts }}</span></p></ion-item>
-                     <ion-item  (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">
+                     <ion-item  (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="userData?.role.type!=='surveyors' && userData?.role.type!=='peengineer'" routerDirection="forward">
                       <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Permit
                         <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
                       </ion-item>
@@ -50,4 +50,12 @@
   </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-split-pane>
+
+<!-- 
+<ng-container *ngIf="userData.role.type === 'wattmonkadmins'">
+  <ion-item routerDirection="forward">
+    <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Permit
+      <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
+    </ion-item>
+</ng-container> -->
 </ion-app>

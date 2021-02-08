@@ -74,7 +74,8 @@ export class PestampdelivermodalPage implements OnInit {
                else{
                 postData = {
                   status: "delivered",
-                  deliverycharges: deliverycharges
+                  deliverycharges: deliverycharges,
+                  comments:""
                    };
                }
                console.log(postData);

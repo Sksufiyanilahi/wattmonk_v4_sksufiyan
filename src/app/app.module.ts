@@ -43,6 +43,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
  //import { AngularFirestoreModule } from '@angular/fire/firestore';
  import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
+import { Mixpanel, MixpanelPeople } from '@ionic-native/mixpanel/ngx';
   
 
 @NgModule({
@@ -90,7 +91,9 @@ import { environment } from 'src/environments/environment';
     Keyboard,
     Intercom,
     IntercomConfig,
-    AndroidPermissions
+    AndroidPermissions,
+    Mixpanel,
+    MixpanelPeople
     ],
   exports: [
     UtilitiesModule

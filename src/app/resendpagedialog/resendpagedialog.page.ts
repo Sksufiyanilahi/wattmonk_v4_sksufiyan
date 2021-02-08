@@ -23,6 +23,9 @@ export class ResendpagedialogPage implements OnInit {
   requestType:any;
   userData:any;
 
+  pestampResendList:string[]=[];
+  pestampResendFileUpload:boolean = false;
+
   constructor(private camera: Camera,
     private modalCtrl:ModalController,
     private apiservice:ApiService,
@@ -127,8 +130,13 @@ export class ResendpagedialogPage implements OnInit {
   submit(){
 
     if(this.exceedfileSize < 1048576 && this.exceedfileSize!=0){
+      if(this.pestampResendFileUpload)
+      {
+        this.pestampResendFile();
+      }
+      else{
       this.uploadFile();
-       
+      }
     
     }else if(this.filename !=='' && this.exceedfileSize > 1048576){
 
@@ -141,7 +149,7 @@ export class ResendpagedialogPage implements OnInit {
         var pestampacceptancestarttime = new Date();
     pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
     const postData = {
-      status: "outsourced",
+      status: "accepted",
       isoutsourced: "true",
       isinrevisionstate : "true",
       revisioncomments: this.reason,
@@ -150,6 +158,7 @@ export class ResendpagedialogPage implements OnInit {
     };
       this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>
       {
+        this.utilities.showSnackBar("Pestamp request has been send for revision successfully."); 
         this.modalCtrl.dismiss({
           'dismissed': true
         });
@@ -198,6 +207,77 @@ export class ResendpagedialogPage implements OnInit {
   }
 
   }
+
+  uploadPestamResendFile(event){
+    console.log(event);
+    console.log(event.target.files);
+    this.exceedfileSize = event.target.files[0].size;
+    console.log(this.exceedfileSize);
+    //this.isPermitPlanFileUpload = true;
+     for(var i=0; i< event.target.files.length;i++){
+       this.pestampResendList.push(event.target.files[i])
+     }
+     this.pestampResendFileUpload= true;
+     console.log(this.pestampResendList);
+   }
+
+   removeArc(i) {
+   this.pestampResendList.splice(i, 1);
+    
+ }
+
+ pestampResendFile(){
+  console.log("Hello pestamp");
+  const data = new FormData();
+ for(var i=0; i< this.pestampResendList.length;i++){
+   data.append("files",this.pestampResendList[i]);
+   if(i ==0){
+    //data.append('files', file);
+    data.append('path', "pestamp/" + this.id);
+    data.append('refId', ""+this.id);
+    data.append('ref', "pestamp");
+    data.append('field', "revisionattachments");
+    
+    console.log("file upload data---"+data);
+   }
+ }
+  this.utilities.showLoading('Uploading').then(()=>{
+    this.apiservice.uploadFile(data).subscribe((res:any)=>{
+      this.utilities.hideLoading().then(()=>{
+    //     var declinedbypeengineer;
+    //  if(this.declinedbypeengineer == true)
+    //   {
+    //   declinedbypeengineer = true;
+    //   }
+    //   else{
+    //   declinedbypeengineer = false;
+    //   }
+    var pestampacceptancestarttime = new Date();
+    pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
+      var postData = {
+        status: 'accepted',
+        revisioncomments: this.reason,
+        isoutsourced : "true",
+        isinrevisionstate: "true",
+        pestampacceptancestarttime: pestampacceptancestarttime,
+        actualdelivereddate: null,
+        }
+        this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{ 
+        //this.createNewDesignChatGroup(res);
+        console.log(res);
+        this.utilities.showSnackBar("Pestamp request has been send for revision successfully."); 
+        this.modalCtrl.dismiss({
+          'dismissed' : true
+        })
+      })
+      })
+    },err=>{
+      this.utilities.errorSnackBar(err.error);
+      this.utilities.hideLoading();
+    })
+  })
+
+}
 
   uploadFile(){
     var designacceptancestarttime = new Date();

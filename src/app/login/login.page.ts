@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import { ROLES } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { Intercom } from 'ng-intercom';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-login',
@@ -52,7 +53,8 @@ export class LoginPage implements OnInit {
     private router: Router,
     private network:NetworkdetectService,
     private intercom:Intercom,
-    private navController: NavController) {
+    private navController: NavController,
+    private mixpanelService:MixpanelService) {
     this.isLoggedInOnce = this.storageService.isLoggedInOnce();
   }
 
@@ -91,6 +93,11 @@ this.network.networkConnect();
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
               console.log(response);
+              this.mixpanelService.track("User_Login", {
+                $id: response.user.id,
+                $email: response.user.email,
+                $name: response.user.firstname + response.user.lastname
+              });
               if (response.user.role.id == ROLES.Surveyor) {
                 this.storageService.setUserName(this.loginForm.get('identifier').value);
                 this.storageService.setPassword(this.loginForm.get('password').value);
@@ -177,6 +184,7 @@ this.network.networkConnect();
               }
             });
             this.apiService.emitUserNameAndRole(response.user);
+            this.utils.doCometUserLogin();
           }, responseError => {
             this.utils.hideLoading().then(() => {
               this.apiService.resetHeaders();
