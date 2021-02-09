@@ -36,7 +36,7 @@ designId:any;
    }
 
   ngOnInit() {
-    this.mixpanelService.track("Activity_Bar_Toggle_PAGE_OPEN", {
+    this.mixpanelService.track("ACTIVITY_BAR_TOGGLE_PAGE_OPEN", {
     });
     this.intercom.update({
       "hide_default_launcher": true
@@ -75,6 +75,8 @@ designId:any;
   }
   
   goBack() {
+    this.mixpanelService.track("ACTIVITY_BAR_TOGGLE_PAGE_CLOSE", {
+    });
     this.navController.pop();
   }
 

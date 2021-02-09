@@ -17,6 +17,7 @@ import { COMETCHAT_CONSTANTS, ROLES, version } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { MixpanelService } from '../utilities/mixpanel.service';
 import { Appversion } from '../appversion';
 
 @Component({
@@ -71,7 +72,8 @@ export class HomepagePage implements OnInit, OnDestroy {
 		private toastController: ToastController,
 		public route: Router,
 		private network: NetworkdetectService,
-		private iab: InAppBrowser
+		private iab: InAppBrowser,
+		private mixpanelService:MixpanelService
 	) {
 		// this.initializeItems();
 		//this.scheduledPage();
@@ -459,6 +461,8 @@ export class HomepagePage implements OnInit, OnDestroy {
 	}
 	scheduledPage() {
 		if (this.route.url == '/homepage/design') {
+			this.mixpanelService.track("ADD_PRELIMDESIGN_PAGE_OPEN", {
+			});
 			this.route.navigate([ '/schedule/design' ]);
 		} else if (this.route.url == '/homepage/survey') {
 			this.route.navigate([ '/schedule/survey' ]);

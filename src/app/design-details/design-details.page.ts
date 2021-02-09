@@ -15,6 +15,7 @@ import { CountdownTimerService, countDownTimerConfigModel, countDownTimerTexts }
 import { User } from '../model/user.model';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Intercom } from 'ng-intercom';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 
 
@@ -75,7 +76,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private countdownservice: CountdownTimerService,
     private iab: InAppBrowser,
     private router:Router,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private mixpanelService:MixpanelService
   
   ) {
     this.intercom.update({
@@ -106,7 +108,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     console.log(this.imageName);
     this.user=this.storage.getUser();
     console.log(this.user);
-    
+    this.mixpanelService.track('PRELIM_DESIGN_DETAIL_PAGE_OPEN', {
+    });
     
     this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
@@ -249,6 +252,8 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   goBack() {
+    this.mixpanelService.track("PRELIM_DESIGN_DETAIL_PAGE_CLOSE", {
+    });
     this.navController.pop();
   }
 

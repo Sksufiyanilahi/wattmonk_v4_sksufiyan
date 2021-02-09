@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Intercom } from 'ng-intercom';
 import { ApiService } from '../api.service';
 import { UtilitiesService } from '../utilities.service';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 
 @Component({
@@ -17,11 +18,13 @@ export class NotificationPage implements OnInit {
 
   constructor(  private apiservice:ApiService,
     private utilities:UtilitiesService,
-    private intercom:Intercom
-    
+    private intercom:Intercom,
+    private mixpanelService:MixpanelService    
     ) { }
 
   ngOnInit() {
+    this.mixpanelService.track("NOTIFICATION_PAGE_OPEN", {
+    });
     this.utilities.showHideIntercom(true);
     this.getNotification();
   }

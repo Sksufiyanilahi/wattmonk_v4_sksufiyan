@@ -15,6 +15,7 @@ import { Intercom } from 'ng-intercom';
 import { intercomId } from '../contants';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Subscription } from 'rxjs';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 
 @Component({
@@ -44,7 +45,8 @@ profile:any;
     public modalController: ModalController,
     public router:Router,
     private intercom:Intercom,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private mixpanelService:MixpanelService
   ) {
    
   }
@@ -53,6 +55,11 @@ profile:any;
    
     this.user = this.storage.getUser(); // get data from resolver
     console.log(this.user);
+    this.mixpanelService.track("PROFILE_PAGE_OPEN", {
+      $id: this.user.id,
+      $email: this.user.email,
+      $name: this.user.firstname + this.user.lastname
+    });
     this.enableDisable= false;
     // this.user = this.storage.getUser();
     // console.log(this.user);
@@ -63,6 +70,8 @@ profile:any;
    this.getProfileData();
   }
   goBack() {
+    this.mixpanelService.track("PROFILE_PAGE_CLOSE", {
+    });
     this.navController.pop();
   }
 
@@ -97,6 +106,11 @@ state: { productdetails: objToSend }
 }
 
   async logout() {
+    this.mixpanelService.track("SIGNOUT", {
+      $id: this.user.id,
+      $email: this.user.email,
+      $name: this.user.firstname + this.user.lastname
+    });
     this.enableDisable= true;
     const toast = await this.toastController.create({
       header: 'Please confirm',

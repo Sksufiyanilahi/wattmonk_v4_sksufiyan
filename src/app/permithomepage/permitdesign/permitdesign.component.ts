@@ -111,7 +111,7 @@ export class PermitdesignComponent implements OnInit {
     private androidPermissions: AndroidPermissions,
     private localnotification: LocalNotifications,
     private router:ActivatedRoute,
-    private mixpanel:MixpanelService
+    private mixpanel:MixpanelService,
    // private db:AngularFireDatabase,
     
    // private fileopener:FileOpener
@@ -133,7 +133,6 @@ export class PermitdesignComponent implements OnInit {
       assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
     });
-    this.mixpanel.setUserDetails(this.userData.email,this.userData.firstname+" "+this.userData.lastname,this.userData.id)
      //For Counts
     //  this.newpermitsRef = db.object('newpermitdesigns');
     //  this.newpermits = this.newpermitsRef.valueChanges();
@@ -167,6 +166,11 @@ export class PermitdesignComponent implements OnInit {
       this.netSwitch = data;
       console.log(this.netSwitch);
       //this.newpermitsRef.update({ count: 0 });
+      // this.mixpanel.track("PERMITDESIGN_PAGE_OPEN", {
+      //   $id: this.userData.id,
+      //   $email: this.userData.email,
+      //   $name: this.userData.firstname + this.userData.lastname
+      // });
 
     })
 
@@ -238,11 +242,6 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   ngOnInit() {
-    this.mixpanel.track("Permitdesign_Page_Open", {
-      $id: this.userData.id,
-      $email: this.userData.email,
-      $name: this.userData.firstname + this.userData.lastname
-    });
     this.makeDirectory();
     this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
@@ -268,6 +267,8 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
      accept(id,data:string){
+      this.mixpanel.track("ACCEPT_PERMIT_DESIGN_PAGE_OPEN", {
+      });
       this.acceptid= id;
        let status={
         status:data
@@ -750,6 +751,8 @@ this.deactivateNetworkSwitch.unsubscribe();
 
   openDesigners(id: number,designData) {
     debugger;
+    this.mixpanel.track("ASSIGN_PERMIT_DESIGN_PAGE_OPEN", {
+    });
     this.listOfAssignees=[];
     console.log("this is",designData);
     this.designerData = designData;
@@ -861,6 +864,8 @@ this.route.navigate(['/payment-modal'], {
 
 
   async openreviewPassed(id,designData){
+    this.mixpanel.track("DELIVER_PERMIT_PAGE_OPEN", {
+    });
     this.designId=id
     const alert = await this.alertController.create({
       cssClass: 'alertClass',
@@ -956,6 +961,8 @@ this.route.navigate(['/payment-modal'], {
 */
 
 async decline(id){
+  this.mixpanel.track("DECLINE_PERMIT_DESIGN_PAGE_OPEN", {
+  });
   const modal = await this.modalController.create({
     component: DeclinepagePage,
     cssClass: 'my-custom-modal-css',
@@ -980,6 +987,8 @@ async decline(id){
 
 
 async Resend(id, type){
+  this.mixpanel.track("RESEND_PERMIT_DESIGN_PAGE_OPEN", {
+  });
   const modal = await this.modalController.create({
     component: ResendpagedialogPage,
     cssClass: 'my-custom-modal-css',
@@ -1013,6 +1022,8 @@ sDatePassed(datestring: string,i){
 }
 
 selfAssign(id,designData){
+  // this.mixpanel.track("SelfAssign_Permit_Design_PAGE_OPEN", {
+  // });
   var designstarttime = new Date();
       var milisecond = designstarttime.getTime();
   var postData={}
@@ -1089,7 +1100,8 @@ shareWhatsapp(designData){
 }
 
 designDownload(designData){
-
+  this.mixpanel.track("DOWNLOAD_PERMIT_PAGE_OPEN", {
+  });
   this.platform.ready().then(()=>{
     this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
@@ -1297,6 +1309,8 @@ createNewDesignChatGroup(design:DesginDataModel) {
 
 
 directAssignToWattmonk(id:number){
+  this.mixpanel.track("REASSIGN_PERMIT_DESIGN_PAGE_OPEN", {
+  });
   this.designId = id;
   var postData = {};
   var designacceptancestarttime = new Date();

@@ -93,7 +93,7 @@ this.network.networkConnect();
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
               console.log(response);
-              this.mixpanelService.track("User_Login", {
+              this.mixpanelService.track("USER_LOGIN", {
                 $id: response.user.id,
                 $email: response.user.email,
                 $name: response.user.firstname + response.user.lastname
