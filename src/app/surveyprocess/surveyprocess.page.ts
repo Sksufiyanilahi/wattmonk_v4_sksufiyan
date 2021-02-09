@@ -257,6 +257,7 @@ export class SurveyprocessPage implements OnInit {
 
     equipmentscanvasimage: string;
     sitelocationimage: any;
+    hasExistingSolarSystem: boolean;
 
     constructor(
         private cameraPreview: CameraPreview,
@@ -1793,5 +1794,9 @@ export class SurveyprocessPage implements OnInit {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
         this.startCameraAfterPermission();
+    }
+
+    changeExistingSolarSystem() {
+        this.hasExistingSolarSystem = this.pvForm.value.existingsolarsystem;
     }
 }

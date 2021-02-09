@@ -417,7 +417,7 @@
             </ion-row>
         </ion-grid>
     </form>
-    <form [formGroup]="activeForm" class="white-bg" *ngIf="surveytype === 'pv'">
+    <form [formGroup]="activeForm" class="white-bg" *ngIf="surveytype == 'pv'">
         <p class="formheader">Additional Information</p>
         <ion-grid class="ion-padding">
             <ion-row>
@@ -444,7 +444,7 @@
             <ion-row>
                 <ion-col>
                     <ion-label position="fixed">Any Existing Solar System*</ion-label>
-                    <ion-radio-group formControlName="existingsolarsystem">
+                    <ion-radio-group formControlName="existingsolarsystem" (ionChange)="changeExistingSolarSystem()">
                         <ion-item>
                             <ion-label>Yes</ion-label>
                             <ion-radio slot="start" value="true"></ion-radio>
@@ -456,7 +456,7 @@
                     </ion-radio-group>
                 </ion-col>
             </ion-row>
-            <ion-row *ngIf="existingsolarsystem">
+            <ion-row *ngIf="pvForm.value.existingsolarsystem">
                 <ion-col>
                     <ion-label position="fixed">Details Of Existing System</ion-label>
                     <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="detailsofexisitingsystem">
@@ -478,7 +478,7 @@
                     </ion-radio-group>
                 </ion-col>
             </ion-row>
-            <ion-row *ngIf='newconstruction'>
+            <ion-row *ngIf='pvForm.value.newconstruction'>
                 <ion-col>
                     <ion-item class="ion-no-padding">
                         <ion-label position="floating">architectural design</ion-label>
