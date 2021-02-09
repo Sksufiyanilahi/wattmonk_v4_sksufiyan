@@ -211,7 +211,7 @@
 
           <ion-col size="6"  class="ion-no-padding">
               <div *ngFor="let comment of design.comments">
-                  <div [innerHTML]="commentboxdata" class="comment font" style="text-align: right;margin:0px"></div>
+                  <p [innerHTML]="comment?.message | linkify" class="comment font" style="text-align: right;margin:0px"></p>
                   <p class="comment-by" style="text-align: right;margin-top:0px">Posted by {{comment.createdby?.firstname}}
                       {{comment.createdby?.lastname}}</p>
               </div>

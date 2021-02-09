@@ -44,6 +44,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
  import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { Mixpanel, MixpanelPeople } from '@ionic-native/mixpanel/ngx';
+// import { LinkifyPipe } from './linkify.pipe';
   
 
 @NgModule({

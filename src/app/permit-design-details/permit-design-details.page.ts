@@ -19,8 +19,9 @@ import { intercomId } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { DomSanitizer } from '@angular/platform-browser';
-const linkifyUrls = require('linkify-urls');
-const getUrls = require('get-urls');
+// const linkifyUrls = require('linkify-urls');
+// const getUrls = require('get-urls');
+// import * as getUrls from "get-urls";
 
 @Component({
   selector: 'app-permit-design-details',
@@ -276,28 +277,28 @@ export class PermitDesignDetailsPage implements OnInit {
         this.utilities.hideLoading();
         console.log('re', result.comments[0].message);
        
-        this.commentbox = result.comments[0].message;
-       const urlArray=  Array.from(getUrls(this.commentbox));
+        this.commentboxdata = result.comments[0].message;
+      //  const urlArray=  Array.from(getUrls(this.commentbox));
 
-       urlArray.map(url=>{
+      //  urlArray.map(url=>{
 
-         this.commentbox.replace(url,`<a href="${url}">${url}</a>`)
-        })
-        setTimeout(()=>{
-          const urlData=this._element.nativeElement.querySelectorAll('a');
-           urlData.forEach(url=>{
-             url.addEventListener('click', (event) => 
-                {
-                   event.preventDefault();
-                   this._link = event.target.href;
-                   console.log('Name is: ' + event.target.innerText);
-                   console.log('Link is: ' + this._link);
-                   this.openUrl(this._link);
-                }, false);
-           })         
-           this.commentboxdata=this.sanitizer.bypassSecurityTrustHtml(this.commentbox);
-             console.log(this.commentboxdata);
-        },2000)
+      //    this.commentbox.replace(url,`<a href="${url}">${url}</a>`)
+      //   })
+      //   setTimeout(()=>{
+      //     const urlData=this._element.nativeElement.querySelectorAll('a');
+      //      urlData.forEach(url=>{
+      //        url.addEventListener('click', (event) => 
+      //           {
+      //              event.preventDefault();
+      //              this._link = event.target.href;
+      //              console.log('Name is: ' + event.target.innerText);
+      //              console.log('Link is: ' + this._link);
+      //              this.openUrl(this._link);
+      //           }, false);
+      //      })         
+      //      this.commentboxdata=this.sanitizer.bypassSecurityTrustHtml(this.commentbox);
+      //        console.log(this.commentboxdata);
+      //   },2000)
         
         this.setData(result);
         this.timer();
