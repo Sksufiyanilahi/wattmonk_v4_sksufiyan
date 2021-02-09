@@ -55,6 +55,10 @@ export class MapPagePage implements OnInit {
   }
 
   ngOnInit() {
+    
+  }
+
+  ionViewDidEnter(){
     this.utilities.showHideIntercom(true);
   }
 
@@ -64,7 +68,9 @@ export class MapPagePage implements OnInit {
       this.autocompleteItems = [];
       return;
     }
-    this.GoogleAutocomplete.getPlacePredictions({ input },
+    this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+      country: 'us'
+    } },
       (predictions, status) => {
         this.autocompleteItems = [];
         this.zone.run(() => {
@@ -257,6 +263,6 @@ export class MapPagePage implements OnInit {
   }
 
   ionViewWillLeave(){
-    this.utilities.showHideIntercom(false);
+    this.utilities.showHideIntercom(true);
   }
 }

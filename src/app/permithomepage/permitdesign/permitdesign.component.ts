@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { ApiService } from 'src/app/api.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
@@ -12,7 +12,7 @@ import{SocialSharing} from '@ionic-native/social-sharing/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { environment } from 'src/environments/environment';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { DrawerState } from 'ion-bottom-drawer';
 //import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import { DesginDataModel } from 'src/app/model/design.model';
@@ -30,6 +30,9 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { MixpanelService } from 'src/app/utilities/mixpanel.service';
+
+//import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 @Component({
   selector: 'app-permitdesign',
@@ -74,11 +77,19 @@ export class PermitdesignComponent implements OnInit {
   netSwitch: boolean;
  reviewAssignedTo:any;
  clickSub:any;
+ skip:number=0;
   acceptid: any;
+  limit:number=10;
   isclientassigning: boolean=false;
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string='';
   storageDirectory: string;
+  infinitescroll:boolean=false
+ //counts
+//  newpermits: Observable<any>;
+//  newpermitsRef: AngularFireObject<any>;
+//  newpermitscount = 0;
+  updatechat_id: boolean=false;
 
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
@@ -99,9 +110,15 @@ export class PermitdesignComponent implements OnInit {
     private platform:Platform,
     private androidPermissions: AndroidPermissions,
     private localnotification: LocalNotifications,
-    private fileopener:FileOpener) {
-    this.userData = this.storageservice.getUser();
-
+    private router:ActivatedRoute,
+    private mixpanel:MixpanelService
+   // private db:AngularFireDatabase,
+    
+   // private fileopener:FileOpener
+   ) {
+    
+    this.userData =this.storageservice.getUser(); // get data from resolver
+    
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       this.segments= 'requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -116,6 +133,19 @@ export class PermitdesignComponent implements OnInit {
       assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
     });
+    this.mixpanel.setUserDetails(this.userData.email,this.userData.firstname+" "+this.userData.lastname,this.userData.id)
+     //For Counts
+    //  this.newpermitsRef = db.object('newpermitdesigns');
+    //  this.newpermits = this.newpermitsRef.valueChanges();
+    //  this.newpermits.subscribe(
+    //    (res) => {
+    //      console.log(res);
+    //      this.newpermitscount = res.count;
+    //      cdr.detectChanges();
+    //    },
+    //    (err) => console.log(err),
+    //    () => console.log('done!')
+    //  )
   }
 
  
@@ -136,6 +166,7 @@ export class PermitdesignComponent implements OnInit {
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
+      //this.newpermitsRef.update({ count: 0 });
 
     })
 
@@ -146,7 +177,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   segmentChanged(event){
-
+   
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -207,10 +238,15 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   ngOnInit() {
+    this.mixpanel.track("Permitdesign_Page_Open", {
+      $id: this.userData.id,
+      $email: this.userData.email,
+      $name: this.userData.firstname + this.userData.lastname
+    });
     this.makeDirectory();
     this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
-      this.getDesigns(null);
+    this.getDesigns(null);
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
@@ -222,7 +258,8 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   getDesigns(event: CustomEvent) {
-
+    this.skip=0;
+   
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -239,19 +276,27 @@ this.deactivateNetworkSwitch.unsubscribe();
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
           this.createNewDesignChatGroup(res);
            this.utils.hideLoading().then(()=>{
-            this.utils.setHomepagePermitRefresh(true);})})
+                if(this.updatechat_id){
+
+                  this.utils.setHomepagePermitRefresh(true);
+                }else{
+                  this.utils.setHomepagePermitRefresh(true);
+                }
+          })})
           })
 
        }
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
-    this.noDesignFound='';
+    // this.infinitescroll=false;
+    this.noDesignFound="";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
+    //this.newpermitsRef.update({ count: 0 });
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
+      this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -278,7 +323,11 @@ this.deactivateNetworkSwitch.unsubscribe();
 
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
-    this.listOfDesigns = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+   list=this.fillinDynamicData(records);
+   list.forEach(element =>{
+     this.listOfDesigns.push(element);
+   })
 
     console.log(this.listOfDesigns);
 
@@ -649,6 +698,7 @@ this.deactivateNetworkSwitch.unsubscribe();
          {
           this.isclientassigning= true;
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+          this.addUserToGroupChat();
          }else{
           this.addUserToGroupChat();
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
@@ -668,20 +718,58 @@ this.deactivateNetworkSwitch.unsubscribe();
 
   }
 
-
+  doInfinite($event){
+    console.log($event)
+  this.skip=this.skip+10;
+  this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
+       console.log(response);
+        if(response.length){
+       
+          this.formatDesignData(response);
+        }else{
+          this.noDesignFound= "No Designs Found"
+        }
+        // if(response.length<10){
+        //   this.infinitescroll=true
+        // }else{this.infinitescroll=false}
+        if ($event !== null) {
+          $event.target.complete();
+        }
+      },
+   (responseError:any) => {
+      if ($event !== null) {
+          $event.target.complete();
+        }
+        const error: ErrorModel = responseError.error;
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
+    
+    });
+    
+  }
 
 
   openDesigners(id: number,designData) {
+    debugger;
     this.listOfAssignees=[];
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
-    if(this.userData.role.type=='clientsuperadmin'&& this.designerData.status=='created'){
-      this.route.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+    if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin')&& this.designerData.status=='created'){
+      //this.route.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+      let objToSend: NavigationExtras = {
+        queryParams: {
+          id:id,
+          designData:this.designerData.requesttype,
+          fulldesigndata:this.designerData
+        },
+        skipLocationChange: false,
+        fragment: 'top' 
+    };
 
+
+this.route.navigate(['/payment-modal'], { 
+  state: { productdetails: objToSend }
+});
     }
 
    else{ if (this.listOfAssignees.length === 0) {
@@ -832,6 +920,7 @@ this.deactivateNetworkSwitch.unsubscribe();
 
 
   refreshDesigns(event: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
       showLoader = false;
@@ -1007,7 +1096,7 @@ designDownload(designData){
         result => console.log('Has permission?',result.hasPermission),
         err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
       );
-      this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
+      this.file.checkFile(resolvedDirectory.nativeURL,designData.permitdesign.hash).then(data=>{
         console.log(data);
   
         if(data==true){
@@ -1023,7 +1112,7 @@ designDownload(designData){
         if (err.code == 1) {
           const fileTransfer: FileTransferObject = this.transfer.create();
           this.utils.showLoading('Downloading').then(()=>{
-            fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.prelimdesign.ext).then((entry) => {
+            fileTransfer.download(url, this.storageDirectory + designData.permitdesign.hash + designData.permitdesign.ext).then((entry) => {
               this.utils.hideLoading().then(()=>{
                 console.log('download complete: ' + entry.toURL());
                 this.utils.showSnackBar("Permit Design Downloaded Successfully");
@@ -1071,7 +1160,7 @@ designDownload(designData){
   
     let dir_name = 'Wattmonk';
     let path = '';
-    const url = designData.prelimdesign.url;
+    const url = designData.permitdesign.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
    
    
@@ -1080,9 +1169,9 @@ designDownload(designData){
    path = resp.toURL();
    console.log(path); 
    
-   fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
+   fileTransfer.download(url, path + designData.permitdesign.hash + designData.permitdesign.ext).then((entry) => {
      console.log('download complete: ' + entry.toURL());
-     this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+     this.utils.showSnackBar("Permit Design Downloaded Successfully");
      
      // this.clickSub = this.localnotification.on('click').subscribe(data => {
      //   console.log(data)
@@ -1141,7 +1230,9 @@ createNewDesignChatGroup(design:DesginDataModel) {
               chatid:GUID
             }
 
-            this.apiService.updateDesignForm(postdata,this.acceptid).subscribe(res=>{})
+            this.apiService.updateDesignForm(postdata,this.acceptid).subscribe(res=>{
+              this.updatechat_id=true;
+            })
             // this.updateItemInList(LISTTYPE.NEW, design);
           }else{
             // this.updateItemInPermitList(LISTTYPE.NEW, design);
@@ -1211,7 +1302,7 @@ directAssignToWattmonk(id:number){
   var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
         postData = {
-          outsourcedto: 232,
+          //outsourcedto: 232,
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime

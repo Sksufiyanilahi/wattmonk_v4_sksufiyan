@@ -14,8 +14,9 @@ import { UtilitiesService } from '../utilities.service';
 import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
-import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
+import { COMETCHAT_CONSTANTS, intercomId,version } from '../contants.prod';
 import { Intercom } from 'ng-intercom';
+import { Appversion } from '../appversion';
 
 
 @Component({
@@ -24,7 +25,7 @@ import { Intercom } from 'ng-intercom';
   styleUrls: ['./designoverview.page.scss'],
 })
 export class DesignoverviewPage implements OnInit {
-  private version = environment.version;
+  private version = version;
   private subscription: Subscription;
   update_version: string;
   netSwitch:any;
@@ -69,13 +70,13 @@ export class DesignoverviewPage implements OnInit {
   }
 
   intercomModule(){
-    this.intercom.boot({
-      app_id: intercomId,
-      // Supports all optional configuration.
-      widget: {
-        "activator": "#intercom"
-      }
-    });
+    // this.intercom.boot({
+    //   app_id: intercomId,
+    //   // Supports all optional configuration.
+    //   widget: {
+    //     "activator": "#intercom"
+    //   }
+    // });
   }
  
 
@@ -163,20 +164,7 @@ searchbar(){
  ionViewDidEnter() {
 
    
-  if(this.version !== this.update_version && this.update_version !==''){
-      
-    setTimeout(()=>{
-  
-      this.utilities.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
-        text:'Ok',
-      
-        handler:()=>{
-          this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
-         this.ionViewDidEnter();
-        }
-      }]);
-    },2000)
-  }
+ 
   this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     this.netSwitch = data;
     this.utilities.showHideIntercom(false);

@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { StorageService } from '../storage.service';
 import { Intercom } from 'ng-intercom';
 import { UtilitiesService } from '../utilities.service';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 
 
@@ -27,13 +28,16 @@ designId:any;
     private storageService:StorageService,
     private navController: NavController,private datepipe:DatePipe,
     private intercom:Intercom,
-    private utilities:UtilitiesService
+    private utilities:UtilitiesService,
+    private mixpanelService:MixpanelService
     ) {
     this.route.paramMap.subscribe( params =>{ this.designId=params.get('id');
   this.name=params.get('name')});
    }
 
   ngOnInit() {
+    this.mixpanelService.track("Activity_Bar_Toggle_PAGE_OPEN", {
+    });
     this.intercom.update({
       "hide_default_launcher": true
     });
@@ -59,6 +63,14 @@ designId:any;
           })
         });
         }
+        if(this.name=="pestamp"){
+          this.apiservice.pestamp_activityDetails(this.designId).subscribe(response =>{
+            this.utilities.hideLoading().then(()=>{
+              this.activity_details=response;
+              console.log(this.activity_details)
+            })
+          });
+          }
       })
   }
   

@@ -6,7 +6,10 @@
         <ion-menu-toggle>
           <ion-header style="text-align: -webkit-center;">
             <ion-toolbar style="height: 130px;display: flex;justify-content: center;align-content: center;" routerLink='/profile'>
-              <ion-card style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;">{{userData?.firstname.slice(0,1).toUpperCase() + userData?.lastname.slice(0,1).toUpperCase()}}</ion-card>
+              <ion-card *ngIf="isEmptyObject(userData?.logo) || userData?.logo ==null" style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;">{{userData?.firstname.slice(0,1).toUpperCase() + userData?.lastname.slice(0,1).toUpperCase()}}</ion-card>
+              <div *ngIf="!isEmptyObject(userData?.logo) && userData?.logo !==null">
+                <img [src]="userData?.logo?.url" style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;border-radius: 50%;"/>
+              </div>
             <ion-title ><h4 style="text-align: center;font-weight: bold;margin: 1px;">{{userData?.firstname.charAt(0).toUpperCase() + userData?.firstname.slice(1) + ' ' + userData?.lastname.charAt(0).toUpperCase() + userData?.lastname.slice(1)}}</h4></ion-title>
            <small style="text-align: center;">{{userData?.role.name}} </small>
           </ion-toolbar>
@@ -21,20 +24,38 @@
               </ion-menu-toggle>-->
               <ion-list id="inbox-list">
               <ion-menu-toggle auto-hide="false">
-                    <ion-item  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">
-                      <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>
-                     <ion-item  (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="userData?.role.type!=='surveyors'" routerDirection="forward">
-                      <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Permit</ion-item>
+                    <!-- <ion-item *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector'" [routerLink]="['/dashboard']" routerDirection="forward">
+                  <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item> -->
+                <!-- <ion-item [routerLink]="['/onboarding']" routerDirection="forward">
+                  <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item> -->
+                    <ion-item  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'  && userData?.role.type!=='peengineer'" routerDirection="forward">
+                       <!-- <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>  -->
+                      <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Prelim 
+                        <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newprelimscounts > 0">{{ newprelimscounts }}</span></p></ion-item>
+                     <ion-item  (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="userData?.role.type!=='surveyors' && userData?.role.type!=='peengineer'" routerDirection="forward">
+                      <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Permit
+                        <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
+                      </ion-item>
                      <ion-item *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors'" (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
                       <ion-img src="/assets/images/surveyblack.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Survey</ion-item>
                      <ion-item [routerLink]="['/groups']" routerDirection="forward">
-                      <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Messages</ion-item>
+                      <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Messages </ion-item>
                       <!-- <ion-item  (click)="SwitchMenuAccordingtoRoles('statistics')" *ngIf="userData?.role.type!='clientsuperadmin'" routerDirection="forward">
                        <ion-img src="/assets/images/stats.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Statistics</ion-item> -->
+                       <ion-item  (click)="SwitchMenuAccordingtoRoles('pestamp')" routerDirection="forward">
+                        <ion-img src="/assets/images/stamp.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;PE Stamps </ion-item>
               </ion-menu-toggle>
           </ion-list>
       </ion-content>
   </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-split-pane>
+
+<!-- 
+<ng-container *ngIf="userData.role.type === 'wattmonkadmins'">
+  <ion-item routerDirection="forward">
+    <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Permit
+      <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
+    </ion-item>
+</ng-container> -->
 </ion-app>

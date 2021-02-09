@@ -1,0 +1,150 @@
+.survey-email {
+    font-size: 0.8em;
+  }
+  
+  .survey-name {
+    font-size: 1.7em;
+  }
+  
+  .survey-phone {
+    font-size: 0.8em;
+  }
+  
+  ion-header {
+    color: #666666;
+  }
+  
+  .page-text-color {
+    color: #666666 !important;;
+  }
+  
+  
+  
+  .image-count {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .data-header {
+    font-size: 0.9em;
+    color: #BFBFBF;
+  }
+  
+  .data-point {
+    font-size: 1em;
+    color: black;
+  }
+  
+  .address {
+    color: #3a7be0;
+  }
+  
+  .models {
+    font-size: 18px;
+    color: #B6B6B6;
+  }
+  
+  .model-type {
+    font-size: 18px;
+    color: #B6B6B6;
+  }
+  
+  .model-name {
+    font-size: 15px;
+    text-transform: capitalize;
+  }
+  .model-space {
+    font-size: 15px;
+    text-transform: capitalize;
+    float:right;
+  }
+  .comment {
+    font-size: 18px;
+  }
+  
+  .comment-by {
+    font-size: 10px;
+    font-style: italic;
+    color: #666666 !important;
+  }
+  
+  .assignee-image {
+    width: 3.5em;
+    height: 3.5em;
+    border-radius: 50%;
+    object-fit: fill;
+    border: 2px solid white;
+    padding: 8px;
+    text-align: center;
+    background: #FFF1CF;
+  }
+  
+  .assignee-margin {
+    margin: 8px;
+    text-align: center;
+  }
+  
+  .selected {
+    border: 3px solid #3c78d8;
+    border-radius: 50%;
+  }
+  
+  .normal {
+    border: 3px solid white;
+  }
+  
+  div[scrollx=true], div[scrolly=true] {
+    position: relative;
+    overflow: hidden;
+  
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  
+  div[scrollx=true] {
+    overflow-x: auto;
+  }
+  
+  div[scrolly=true] {
+    overflow-y: auto;
+  }
+  
+  .name_div{
+    font-size: 20px;
+  }
+  
+  .font{
+  font-size: .7rem;
+  }
+  
+  .workinghours{
+    font-size: .7rem;
+    margin-top: 12px !important;
+    }
+
+  .flx{
+    display: flex;
+    align-items: center;
+  }
+  
+  // input[type="file"]{
+  //   visibility:hidden;
+  // }
+  .ht_wt{
+    
+    border: 1px solid;
+    height: 28px;
+    width: 105px;
+
+  }
+
+  input[type="file"]{
+    visibility:hidden;
+  }
+  
+  
+  
+  
+  
+  

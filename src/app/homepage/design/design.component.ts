@@ -4,14 +4,14 @@ import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
-import { Subscription,BehaviorSubject } from 'rxjs';
+import { Subscription,BehaviorSubject, Observable } from 'rxjs';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DrawerState } from 'ion-bottom-drawer';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from '../../model/assignee.model';
-import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized, NavigationExtras } from '@angular/router';
 import {Storage} from '@ionic/storage';
-import { ModalController, AlertController, Platform } from '@ionic/angular';
+import { ModalController, AlertController, Platform, IonInfiniteScroll } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
@@ -28,6 +28,8 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
+import { COMETCHAT_CONSTANTS } from 'src/app/contants';
 
 
 @Component({
@@ -36,6 +38,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
   styleUrls: ['./design.component.scss'],
 })
 export class DesignComponent implements OnInit, OnDestroy {
+@ViewChild(IonInfiniteScroll,{static : false}) infinitescroll:IonInfiniteScroll;
 
   listOfDesignDataHelper: DesginDataHelper[] = [];
   private refreshSubscription: Subscription;
@@ -66,12 +69,19 @@ export class DesignComponent implements OnInit, OnDestroy {
   assigneeData: any;
   selectedDesigner: any;
   netSwitch: boolean;
+  skip:number=0;
+  limit:number=10;
  reviewAssignedTo:any;
   isclientassigning: boolean=false;
   acceptid: any;
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string;
   storageDirectory: string;
+  //counts
+  // newprelims: Observable<any>;
+  // newprelimsRef: AngularFireObject<any>;
+  // //newprelimsRef:any;
+  // newprelimscount = 0;
 
 
   constructor(
@@ -95,7 +105,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     private platform:Platform,
     private androidPermissions: AndroidPermissions,
     private transfer: FileTransfer
-
+  
   ) {
     this.userData = this.storageService.getUser();
 
@@ -112,6 +122,18 @@ export class DesignComponent implements OnInit, OnDestroy {
       assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
     });
+    //counts
+    // this.newprelimsRef = db.object('newprelimdesigns');
+    // this.newprelims = this.newprelimsRef.valueChanges();
+    // this.newprelims.subscribe(
+    //   (res) => {
+    //     console.log(res);
+    //     this.newprelimscount = res.count;
+    //     cdr.detectChanges();
+    //   },
+    //   (err) => console.log(err),
+    //   () => console.log('done!')
+    // )
 
   }
 
@@ -148,6 +170,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     })
   }
 
+
   ionViewDidEnter() {
     this.makeDirectory();
     this.deactivateNetworkSwitch =this.network.networkSwitch.subscribe(data=>{
@@ -164,7 +187,7 @@ this.network.networkConnect();
 
   
   segmentChanged(event){
-
+     this.skip=0;
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=prelim&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -252,8 +275,9 @@ this.network.networkConnect();
     //     }
     //   }
     // });
-
+    this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
 
     });
@@ -316,16 +340,19 @@ this.network.networkConnect();
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
+ 
      this.noDesignFound= "";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
+      this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
+            
             this.formatDesignData(response);
+            
           }else{
             this.noDesignFound= "No Designs Found";
           }
@@ -347,7 +374,11 @@ this.network.networkConnect();
 
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
-    this.listOfDesigns = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+   list=this.fillinDynamicData(records);
+   list.forEach(element =>{
+     this.listOfDesigns.push(element);
+   })
 
     console.log(this.listOfDesigns);
 
@@ -711,6 +742,7 @@ this.network.networkConnect();
          {
            this.isclientassigning= true;
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+          this.addUserToGroupChat();
          }else{
           this.addUserToGroupChat();
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
@@ -739,10 +771,24 @@ this.network.networkConnect();
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
-    if(this.userData.role.type=='clientsuperadmin'&& this.designerData.status=='created'){
-      this.router.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+    if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin') && this.designerData.status=='created'){
+      //this.router.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
+      console.log(id,this.designerData.requesttype);
+      let objToSend: NavigationExtras = {
+        queryParams: {
+          id:id,
+          designData:this.designerData.requesttype,
+          fulldesigndata:this.designerData
+        },
+        skipLocationChange: false,
+        fragment: 'top' 
+    };
 
-    }
+console.log(objToSend);
+this.router.navigate(['/payment-modal'], { 
+  state: { productdetails: objToSend }
+});
+}
 
    else{ if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
@@ -889,7 +935,35 @@ this.network.networkConnect();
   }
 
 
+  doInfinite($event){
+   console.log($event)
+    this.skip=this.skip+10;
+    this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
+         console.log(response);
+          if(response.length){
+          
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found"
+          }
+          if ($event !== null) {
+            $event.target.complete();
+          } 
+          
+        },
+     (responseError:any) => {
+        if ($event !== null) {
+            $event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      
+      });
+      
+    }
+
   refreshDesigns(event: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
       showLoader = false;
@@ -1018,7 +1092,7 @@ pending(value){
 
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
-  console.log("dholak is",this.selectedDesigner);
+  console.log(this.selectedDesigner);
 
 }
 
@@ -1185,13 +1259,60 @@ createNewDesignChatGroup(design:DesginDataModel) {
   );
 }
 
+// addUserToGroupChat() {
+//   debugger;
+// var GUID = this.designerData.chatid;
+// var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
+// if (this.isclientassigning) {
+//   userscope = CometChat.GROUP_MEMBER_SCOPE.ADMIN;
+// }
+// let membersList = [
+//   new CometChat.GroupMember("" + this.selectedDesigner.id, userscope)
+// ];
+// CometChat.addMembersToGroup(GUID, membersList, []).then(
+//   response => {
+    
+//   },
+//   error => {
+  
+//   }
+// );
+// }
+
+
+setupCometChat() {
+  let userId = this.storageService.getUserID()
+  const user = new CometChat.User(userId);
+  user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+  const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+  CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+    () => {
+      console.log('Initialization completed successfully');
+      // if(this.utilities.currentUserValue != null){
+        // You can now call login function.
+        CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+          (user) => {
+            console.log('Login Successful:', { user });
+          },
+          error => {
+            console.log('Login failed with exception:', { error });
+          }
+        );
+    // }
+    },
+    error => {
+      console.log('Initialization failed with error:', error);
+    }
+  );
+}
+
 directAssignToWattmonk(id:number){
   this.designId = id;
   var postData = {};
   var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
         postData = {
-          outsourcedto: 232,
+          //outsourcedto: 232,
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime

@@ -16,6 +16,7 @@ import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-na
 import { ROLES } from '../contants';
 import { ModalPageComponent } from './modal-page/modal-page.component';
 import { User } from '../model/user.model';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 
 @Component({
   selector: 'app-survey-detail',
@@ -64,7 +65,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private launchNavigator: LaunchNavigator,
     private toastController: ToastController,
-    private modalController:ModalController
+    private modalController:ModalController,
+    private photoViewer: PhotoViewer
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.rescheduleForm = this.formBuilder.group({
@@ -486,7 +488,9 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
     
-
+showimage(url){
+  this.photoViewer.show(url);
+}
 
 
   }

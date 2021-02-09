@@ -10,6 +10,8 @@ import { ScheduleFormEvent } from '../model/constants';
 import { Subscription } from 'rxjs';
 import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
+import { NetworkdetectService } from '../networkdetect.service';
+import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 
 @Component({
   selector: 'app-schedule',
@@ -35,6 +37,9 @@ export class SchedulePage implements OnInit, OnDestroy {
   gpsActive = false;
   private subscription: Subscription;
   userdata:any;
+  netSwitch: boolean;
+  deactivateNetworkSwitch: Subscription;
+  designs: any;
 
   constructor(
     private navController: NavController,
@@ -44,10 +49,12 @@ export class SchedulePage implements OnInit, OnDestroy {
     private platform: Platform,
     private storage: StorageService,
     private utilities: UtilitiesService,
-    private router: Router,
+    public router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private network:NetworkdetectService,
+    private location:Location
   ) {
   
     
@@ -60,8 +67,19 @@ export class SchedulePage implements OnInit, OnDestroy {
 
   }
 
+  ionViewDidEnter(){
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      console.log(this.netSwitch);
+      this.utilities.showHideIntercom(true);
+    })
+  }
+
 ngOnInit() {
-  this.utilities.showHideIntercom(true);
+  
+  this.network.networkDisconnect();
+this.network.networkConnect();
+ 
    this.userdata = this.storage.getUser();
     this.requestLocationPermission();
     if (this.tabsDisabled) {
@@ -77,17 +95,20 @@ ngOnInit() {
       this.storage.setData(this.address);
       });
     }
-
+     this.designs = this.utilities.getdesignDetails();
+  //console.log(this.designs.status);
   }
 
   goBack() {
     this.utilities.showHideIntercom(true);
-    this.navController.pop();
+    //this.navController.pop();
+    this.location.back();
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.utilities.setStaticAddress('');
+    this.deactivateNetworkSwitch.unsubscribe();
   }
 
   segmentChanged(event: CustomEvent) {
@@ -355,6 +376,6 @@ ngOnInit() {
   }
 
   sendDesignForm(){
-     this.utilities.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
+     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
   }
 }

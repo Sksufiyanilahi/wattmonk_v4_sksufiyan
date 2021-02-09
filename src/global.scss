@@ -127,12 +127,12 @@
   color: #6C6C6C !important;
 }
 
-ion-modal {
-  --height: 16em !important;
-  --width: 16em !important;
-  --border-radius: 12px !important;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
-}
+// ion-modal {
+//   --height: 16em !important;
+//   --width: 16em !important;
+//   --border-radius: 12px !important;
+//   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+// }
 
 //ion-content:not(.background-color-transparent) {
 //    background-color: #fff !important;
@@ -244,6 +244,13 @@ ion-item {
   --highlight-height: 0px;
 }
 
+
+.searchbar-input-container.sc-ion-searchbar-md{
+  .searchbar-input{
+  border-radius: 1rem;
+  }
+  }
+
 .buttom-drawer-button {
     --background: #3c78d8 !important;
     --color: white;
@@ -263,6 +270,23 @@ ion-item {
   // top: 80%;
   position: absolute; 
   display: block;  
+    --border-radius: 12px !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.survey-modal-css .modal-wrapper {
+  height: 40%;
+  width:70%;
+}
+
+.deliver-modal-css .modal-wrapper{
+  height: 53%;
+  width:80%;
+  // top: 80%;
+  position: absolute; 
+  display: block;  
+    --border-radius: 12px !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 .email-modal-css .modal-wrapper{
@@ -271,6 +295,22 @@ ion-item {
   // top: 80%;
   position: absolute; 
   display: block;  
+    --border-radius: 12px !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+coupon-modal-css .modal-wrapper{
+  height: 100%;
+  width:100%;
+  // top: 80%;
+  position: absolute; 
+  display: block;  
+    --border-radius:0px !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.CogratulationalertClass .alert-wrapper {
+  // background: #e5e5e5;
+  text-align: center;
 }
 
 

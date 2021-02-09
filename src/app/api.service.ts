@@ -28,12 +28,20 @@ import { AuthGuardService } from './auth-guard.service';
 import { DesignStatistic } from './model/designstats.model';
 import { DesignersStatistics } from './model/designerstats.model';
 import { AnalystStatistics } from './model/analyststats.model';
+import { ROLES } from './contants';
+import { Clients } from './model/clients.model';
+import { Pestamp } from './model/pestamp.model';
+import { UploadedFile } from './model/uploadedfile.model';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
+import { NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  callData:any;
   public onlineOffline: boolean = navigator.onLine;
   headers: HttpHeaders;
   uploadHeaders: HttpHeaders;
@@ -53,8 +61,12 @@ export class ApiService {
     private http: HttpClient,
     private storageService: StorageService,
     private utilities:UtilitiesService,
-    private auth: AuthGuardService
+    private auth: AuthGuardService,
+    private navCtrl:NavController,
+    private router:Router,
+    // private route: ActivatedRoute
   ) {
+    // this.listencall();
     this.getUpgradeMessage();
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
@@ -186,10 +198,10 @@ export class ApiService {
   }
 
   getSurveyorSurveys(search : string) {
-    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search, { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search , { headers: this.headers });
   }
-  getDesignSurveys(search : string) {
-    return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search, { headers: this.headers });
+  getDesignSurveys(search : string,limit,skip) {
+    return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search +'&limit='+ limit +'&skip='+ skip, { headers: this.headers });
   }
   getAnalystDesign(search :string){
     return this.http.get<DesginDataModel[]>(BaseUrl+'/userdesign?id='+this.userId+'&'+search,{headers:this.headers});
@@ -263,6 +275,17 @@ export class ApiService {
 
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
+  uploadlogo(blob: Blob, fileName: string) {
+    const data = new FormData();
+    data.append('files', blob,fileName);
+    data.append('path', this.userId + '/logo');
+    data.append('refId', ''+ this.userId);
+    data.append('ref', 'user');
+    data.append('field', 'logo');
+    data.append('source', 'users-permissions');
+
+    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
+  }
   uploaddesign(data) {
     return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
   }
@@ -308,6 +331,10 @@ export class ApiService {
   design_activityDetails(designid){
     return this.http.get(BaseUrl+ "designs/" + designid, { headers: this.headers});
   }
+
+  pestamp_activityDetails(designid){
+    return this.http.get(BaseUrl+ "/pestamps/" + designid, { headers: this.headers});
+  }
   createPayment(data){
     return this.http.post(BaseUrl + '/createpayment',data,{ headers: this.uploadHeaders });
   }
@@ -320,10 +347,12 @@ export class ApiService {
    
     prelimCharges(){
       return this.http.get(BaseUrl+ "commonsettings?settingname=prelimdesigncharges", { headers: this.headers});}
-      
+
+      permitinitcharges(){
+        return this.http.get(BaseUrl+ "commonsettings?settingname=permitdesigncharges", { headers: this.headers});}
    
-    permitCharges(){
-      return this.http.get(BaseUrl+ "commonsettings?settingname=permitdesigncharges", { headers: this.headers});}
+    permitCharges(data){
+      return this.http.post(BaseUrl+ "getdesignservicecharge",data, { headers: this.headers});}
      
       freeCharges(){
         return this.http.get(BaseUrl+ "commonsettings?settingname=freedesigns ", { headers: this.headers});}
@@ -411,6 +440,217 @@ export class ApiService {
     sendPermitEmails(data:any){
       return this.http.post(BaseUrl+"/designs/send-permit-design", data,{headers:this.headers})
     }
+
+    getUserData(id){
+      return this.http.get(BaseUrl + "/users/" + id,{headers: this.headers})
+    }
     
+    getCoupons(data){
+      return this.http.get(BaseUrl + "/getCoupons?userid="+ this.userId+"&requesttype="+data,{headers: this.headers});
+    }
+    sendCoupon(data:any){
+      return this.http.post(BaseUrl+"/getCoupon", data,{headers:this.headers})
+    }
+
+    addUser(
+      workemail: String,
+      firstname: String,
+      lastname: String,
+      permissiontomakedesign:boolean,
+      role: number,
+      minpermitaccess: boolean
+      // address: String,
+      // country: String,
+      // callingcode: number
+    ): Observable<User> {
+      var randomPassword = this.utilities.randomPass();
+      var parentid = 0;
+      //this.parentId = this.storageService.getParentId();
+      var user = this.storageService.getUser();
+      if (user.role.id == ROLES.SuperAdmin || user.role.id == ROLES.ContractorSuperAdmin){
+        parentid = user.id;
+      }else{
+        parentid = user.parent.id;
+      }
+      const postData = {
+        firstname: firstname,
+        lastname: lastname,
+        email: workemail,
+        permissiontomakedesign:permissiontomakedesign,
+        password: randomPassword,
+        resetPasswordToken: randomPassword,
+        source: "android",
+        username: workemail,
+        confirmed : true,
+        isdefaultpassword: true,
+        role: role,
+        minpermitdesignaccess: minpermitaccess,
+        provider: "local",
+        parent: parentid,
+        company: this.storageService.getUser().company,//user.company,
+        addedby: this.storageService.getUser().id//.currentUserValue.user.id
+      };
+      console.log(postData)
+      return this.http
+        .post<User>(BaseUrl + "/users", JSON.stringify(postData), {
+          headers: this.headers,
+         // observe: "response"
+        })
+        // .pipe(
+        //   map(value => {
+        //     const member: User = value.body;
+        //     return member;
+        //   }),
+        //   catchError((err: HttpErrorResponse) => {
+        //   if(err.error.error == "Unauthorized"){
+        //     this.genericService.handleusersignout();
+        //   }else{
+        //     return throwError(err.error.message);
+        //   }
+        // })
+        // );
+    }
+
+    getClients(){
+      return this.http.get<Clients[]>(BaseUrl + "/getclients",{headers: this.headers});
+    }
+
+    addSiteAssessment(postData){
+      return this.http.post<Pestamp>(BaseUrl + "/pestamps",JSON.stringify(postData),{headers:this.headers});
+    }
+
+    uploadFile(data): Observable<UploadedFile[]> {
+     
+      // const data = new FormData();
+      // data.append('files', blob, file);
+      // data.append('path', path);
+      // data.append('refId', ""+recordid);
+      // data.append('ref', ref);
+      // data.append('field', field);
+      
+      // console.log("file upload data---"+data);
+
+      return this.http.post<UploadedFile[]>(BaseUrl + "/upload", data, {
+          headers: this.uploadHeaders,
+        })
+    }
+
+    /* SEARCH PE STAMP DESIGNS */
+    getFilteredDesigns(search:string): Observable<Pestamp[]> {
     
+      return this.http.get<Pestamp[]>(BaseUrl + "/userpestamps?id="+this.storageService.getUser().id+"&"+search, {
+        headers: this.headers,
+        //observe: "response"
+      })
+    }
+
+    getPestampDetails(id:number): Observable<Pestamp> {
+      return this.http.get<Pestamp>(BaseUrl + "/pestamps/"+id, {
+        headers: this.headers
+      })
+    }
+
+    /* Get Pe Engineers */
+    getPeEngineers(peenginertype:string) {
+      console.log(peenginertype);
+      return this.http.get(BaseUrl + "/peengineers?pestamptype="+peenginertype+"&parent_eq="+this.storageService.getUser().parent.id, {
+        headers: this.headers,
+      })
+    }
+
+    /* Assign to PeEngineer */
+    assignPestamps(id:number,inputData: any): Observable<Pestamp> {
+      return this.http.put<Pestamp>(BaseUrl + "/pestamps/"+id, JSON.stringify(inputData), {
+          headers: this.headers
+        })
+      }
+
+      updatePestamps(id:number,inputData?: any): Observable<Pestamp> {
+        return this.http.put<Pestamp>(BaseUrl + "/pestamps/"+id, JSON.stringify(inputData), {
+            headers: this.headers
+          })
+        }
+
+      deletePestamp(id:string): Observable<Pestamp> {
+        return this.http.delete<Pestamp>(BaseUrl + "/pestamps/"+id, {
+          headers: this.headers
+        })
+      }
+    getcounts(id){
+      return this.http.get(BaseUrl + '/dashboarddesigncount?id=' + id,{headers: this.headers});
+    }
+
+    getPeStampCharges(searchData)
+    {
+      return this.http.get(BaseUrl + '/commonsettings?settingname=' + searchData,{headers:this.headers});
+    }
+
+    createdirectpayment(inputData){
+      return this.http.post<any>(BaseUrl+"/Pestampdirectpayment", inputData,{
+        headers: this.uploadHeaders
+       })
+      }
+
+      createPestamppayment(inputData:any): Observable<Pestamp>{
+        return this.http.post<Pestamp>(BaseUrl+"/pestampdeliverychargespayment", inputData,{
+         headers: this.uploadHeaders
+        })
+      }
+
+      createCommercialPestamppayment (inputData:any): Observable<Pestamp>{
+        return this.http.post<Pestamp>(BaseUrl+"/deliveredcommercialpestampayment", inputData,{
+         headers: this.uploadHeaders
+        })
+      }
+
+      getPendingPaymentstatus(){
+        return this.http.get(BaseUrl + "paymentpendingpestamps?creatorparentid="+this.storageService.getUser().parent.id, {
+          headers: this.headers
+        })
+      }
+
+      listencall(listnerID) {
+      // let listnerID = localStorage.getItem('gid');
+        const that= this;
+        CometChat.addCallListener(
+          listnerID,
+          new CometChat.CallListener({
+            onIncomingCallReceived(call) {
+              console.log('Incoming call:', call);
+              that.callData = call;
+              // if(call.status=='initiated'){
+                that.router.navigate(['/', 'callingscreen']);
+              // }
+              // Handle incoming call
+            },
+            onOutgoingCallAccepted(call) {
+              console.log('Outgoing call accepted:', call);
+              that.callData = call;
+              // Outgoing Call Accepted
+            },
+            onOutgoingCallRejected(call) {
+              console.log('Outgoing call rejected:', call);
+              that.callData = call;
+              // Outgoing Call Rejected
+              that.navCtrl.pop();
+            },
+            onIncomingCallCancelled(call) {
+              console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+              
+              console.log('Incoming call calcelled:', call);
+              console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+              that.callData = call;
+        
+                // that.location.back();
+                that.navCtrl.pop();
+      
+              
+            }
+          })
+        );
+      }
+  
+      getCallData(): Observable<any> {
+        return this.callData;
+  }
 }

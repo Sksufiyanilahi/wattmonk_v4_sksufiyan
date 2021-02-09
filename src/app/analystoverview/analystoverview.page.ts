@@ -13,13 +13,14 @@ import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
-import { COMETCHAT_CONSTANTS, intercomId, ROLES } from '../contants';
+import { COMETCHAT_CONSTANTS, intercomId, ROLES,version } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
 import { Intercom } from 'ng-intercom';
+import { Appversion } from '../appversion';
 
 
 @Component({
@@ -28,7 +29,7 @@ import { Intercom } from 'ng-intercom';
   styleUrls: ['./analystoverview.page.scss'],
 })
 export class AnalystoverviewPage implements OnInit, OnDestroy{
-  private version = environment.version;
+  private version = version;
   @Output() ionInput = new EventEmitter();
 
 
@@ -89,13 +90,13 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   }
 
   intercomModule(){
-    this.intercom.boot({
-      app_id: intercomId,
-      // Supports all optional configuration.
-      widget: {
-        "activator": "#intercom"
-      }
-    });
+    // this.intercom.boot({
+    //   app_id: intercomId,
+    //   // Supports all optional configuration.
+    //   widget: {
+    //     "activator": "#intercom"
+    //   }
+    // });
   }
      
 
@@ -103,9 +104,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
 
     this.intercomModule();
     this.userData=this.storage.getUser();
-    this.apiService.version.subscribe(versionInfo=>{
-      this.update_version = versionInfo;
-    })
+ 
     this.apiService.emitUserNameAndRole(this.userData);
     this.getNotificationCount();
     this.setupCometChat();
@@ -415,20 +414,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   }
 
   ionViewDidEnter() {
-    if(this.version !== this.update_version && this.update_version !==''){
-        
-      setTimeout(()=>{
-    
-        this.utilities.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
-          text:'Ok',
-        
-          handler:()=>{
-            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
-           this.ionViewDidEnter();
-          }
-        }]);
-      },2000)
-    }
+  
     this.deacctivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       this.utilities.showHideIntercom(false);

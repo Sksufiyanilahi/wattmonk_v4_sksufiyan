@@ -8,6 +8,8 @@ import { StatisticsDetailsPageModule } from '../statistics-details/statistics-de
 import { ResendpagedialogPageModule } from '../resendpagedialog/resendpagedialog.module';
 import { IntercomModule } from 'ng-intercom';
 import { intercomId } from '../contants';
+import { CouponOffersModalPageModule } from '../coupon-offers-modal/coupon-offers-modal.module';
+import { PestampdelivermodalPageModule } from '../pestampdelivermodal/pestampdelivermodal.module';
 
 
 @NgModule({
@@ -15,10 +17,12 @@ import { intercomId } from '../contants';
   imports: [
     CommonModule,
     EmailModelPageModule,
+    CouponOffersModalPageModule,
     DeclinepagePageModule,
-    PaymentModalPageModule,
+    
     StatisticsDetailsPageModule,
     ResendpagedialogPageModule,
+    PestampdelivermodalPageModule,
     IntercomModule.forRoot({
       appId: intercomId, // from your Intercom config
       updateOnRouterChange: true // will automatically run `update` on router event changes. Default: `false`
@@ -27,9 +31,10 @@ import { intercomId } from '../contants';
   exports:[
     EmailModelPageModule,
     DeclinepagePageModule ,
-    PaymentModalPageModule,
+    PestampdelivermodalPageModule,
     StatisticsDetailsPageModule,
-    ResendpagedialogPageModule
+    ResendpagedialogPageModule,
+    CouponOffersModalPageModule
   ]
 })
 export class SharedModule { }

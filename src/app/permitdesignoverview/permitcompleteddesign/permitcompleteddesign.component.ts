@@ -12,6 +12,7 @@ import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import * as moment from 'moment';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-permitcompleteddesign',
@@ -25,7 +26,9 @@ export class PermitcompleteddesignComponent implements OnInit {
   private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
   routeSubscription: Subscription;
-
+  userData:any
+ skip:number=0;
+ limit:number=10;
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
@@ -39,7 +42,10 @@ export class PermitcompleteddesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+     private storageservice:StorageService) {
+
+      this.userData = this.storageservice.getUser();
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -47,6 +53,7 @@ export class PermitcompleteddesignComponent implements OnInit {
 
   ngOnInit() {
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 
@@ -58,6 +65,7 @@ export class PermitcompleteddesignComponent implements OnInit {
   }
 
   getDesigns(event: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -71,7 +79,7 @@ export class PermitcompleteddesignComponent implements OnInit {
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("requesttype=permit&status=designcompleted").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=permit&status=designcompleted",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -100,7 +108,11 @@ export class PermitcompleteddesignComponent implements OnInit {
   }
 
   formatDesignData(records : DesginDataModel[]){
-    this.listOfDesignData = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+    list=this.fillinDynamicData(records);
+    list.forEach(element =>{
+      this.listOfDesignData.push(element);
+    })
     const tempData: DesginDataHelper[] = [];
           this.listOfDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
@@ -161,6 +173,31 @@ export class PermitcompleteddesignComponent implements OnInit {
 
     return records;
   }
+
+  doInfinite($event){
+    this.skip=this.skip+10;
+    this.apiService.getDesignSurveys("requesttype=permit&status=designcompleted",this.limit,this.skip).subscribe((response:any) => {
+         console.log(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound= "No Designs Found"
+          }
+          if (event !== null) {
+            $event.target.complete();
+          }
+        },
+     (responseError:any) => {
+        if (event !== null) {
+            $event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      
+      });
+      
+    }
 
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");

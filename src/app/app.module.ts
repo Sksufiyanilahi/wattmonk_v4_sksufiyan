@@ -39,6 +39,11 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { Intercom,IntercomConfig,IntercomModule } from 'ng-intercom';
 import { intercomId } from './contants';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+ import { AngularFireDatabaseModule } from '@angular/fire/database';
+ //import { AngularFirestoreModule } from '@angular/fire/firestore';
+ import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
+import { Mixpanel, MixpanelPeople } from '@ionic-native/mixpanel/ngx';
   
 
 @NgModule({
@@ -61,7 +66,10 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
     MatProgressSpinnerModule,
     IntercomModule.forRoot({
       appId:intercomId
-    })
+    }),
+    AngularFireDatabaseModule,
+     AngularFireModule.initializeApp(environment.firebase)
+     
   ],
   providers: [
     StatusBar,
@@ -83,7 +91,9 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
     Keyboard,
     Intercom,
     IntercomConfig,
-    AndroidPermissions
+    AndroidPermissions,
+    Mixpanel,
+    MixpanelPeople
     ],
   exports: [
     UtilitiesModule

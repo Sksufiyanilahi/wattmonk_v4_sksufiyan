@@ -14,6 +14,7 @@ import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import * as moment from 'moment';
 import { ModalController } from '@ionic/angular';
 import{SocialSharing} from '@ionic-native/social-sharing/ngx';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-delievereddesign',
@@ -26,7 +27,9 @@ export class DelievereddesignComponent implements OnInit {
   listofDesignDataHelper: DesginDataHelper[] = [];
   private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
-
+skip:number=0;
+limit:number=10;
+user:any
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
@@ -43,7 +46,10 @@ export class DelievereddesignComponent implements OnInit {
     private apiService: ApiService,
     private socialsharing: SocialSharing,
     public modalController: ModalController,
+     private storageservice:StorageService
     ) {
+      this.user=this.storageservice.getUser();
+
       console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -52,6 +58,7 @@ export class DelievereddesignComponent implements OnInit {
 
   ngOnInit() {
     this.designRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
+      this.utils.setHomepagePermitRefresh(true);
       this.getDesigns(null);
     });
 
@@ -70,6 +77,7 @@ export class DelievereddesignComponent implements OnInit {
   }
 
   getDesigns(event: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -82,7 +90,7 @@ export class DelievereddesignComponent implements OnInit {
     this.listofDesignData = [];
     this.listofDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("requesttype=prelim&status=delivered").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=prelim&status=delivered",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -111,7 +119,11 @@ export class DelievereddesignComponent implements OnInit {
   }
 
   formatDesignData(records : DesginDataModel[]){
-    this.listofDesignData = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+    list=this.fillinDynamicData(records);
+    list.forEach(element =>{
+      this.listofDesignData.push(element);
+    })
     const tempData: DesginDataHelper[] = [];
           this.listofDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
@@ -183,6 +195,31 @@ export class DelievereddesignComponent implements OnInit {
     this.socialsharing.share(designData.prelimdesign.url);
   }
   
+  doInfinite($event){
+    this.skip=this.skip+10;
+    this.apiService.getDesignSurveys("requesttype=prelim&status=delivered",this.limit,this.skip).subscribe((response:any) => {
+         console.log(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignFound= "No Designs Found"
+          }
+          if (event !== null) {
+            $event.target.complete();
+          }
+        },
+     (responseError:any) => {
+        if (event !== null) {
+            $event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      
+      });
+      
+    }
+
    async shareViaEmails(id,designData){
     const modal = await this.modalController.create({
       component: EmailModelPage,

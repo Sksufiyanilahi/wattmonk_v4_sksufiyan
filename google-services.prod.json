@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "915613059391",
+    "firebase_url": "https://livewattmonk.firebaseio.com",
+    "project_id": "livewattmonk",
+    "storage_bucket": "livewattmonk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915613059391:android:137aff273388cd7eabeb8a",
+        "android_client_info": {
+          "package_name": "com.solar.wattmonk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915613059391-r5vmloi9rgic73pjqhvuvr2p37puohi7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOpZojKGuAA30Jsbo3qDxCbRkBWSw7A0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "915613059391-r5vmloi9rgic73pjqhvuvr2p37puohi7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

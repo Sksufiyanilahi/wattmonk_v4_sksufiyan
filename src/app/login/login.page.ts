@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import { ROLES } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { Intercom } from 'ng-intercom';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-login',
@@ -44,7 +45,6 @@ export class LoginPage implements OnInit {
   fieldRequired = FIELD_REQUIRED;
   isLoggedInOnce = false;
   netSwitch: any;
-
   constructor(
     private formBuilder: FormBuilder,
     private utils: UtilitiesService,
@@ -53,7 +53,8 @@ export class LoginPage implements OnInit {
     private router: Router,
     private network:NetworkdetectService,
     private intercom:Intercom,
-    private navController: NavController) {
+    private navController: NavController,
+    private mixpanelService:MixpanelService) {
     this.isLoggedInOnce = this.storageService.isLoggedInOnce();
   }
 
@@ -91,6 +92,12 @@ this.network.networkConnect();
           this.apiService.login(this.loginForm.value).subscribe(response => {
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
+              console.log(response);
+              this.mixpanelService.track("User_Login", {
+                $id: response.user.id,
+                $email: response.user.email,
+                $name: response.user.firstname + response.user.lastname
+              });
               if (response.user.role.id == ROLES.Surveyor) {
                 this.storageService.setUserName(this.loginForm.get('identifier').value);
                 this.storageService.setPassword(this.loginForm.get('password').value);
@@ -139,8 +146,23 @@ this.network.networkConnect();
                     this.navController.navigateRoot(['analystoverview']);
                   }
               }
-              else{
+              else if(response.user.role.id == ROLES.Peengineer)
+              {
+                 this.storageService.setUserName(this.loginForm.get('identifier').value);
+                  this.storageService.setPassword(this.loginForm.get('password').value);
 
+                  if(response.user.isdefaultpassword){
+                      this.storageService.setJWTToken(response.jwt);
+                      this.apiService.refreshHeader();
+                      this.navController.navigateRoot(['changepassword'])
+                  } else{
+                    this.storageService.setUser(response.user, response.jwt);
+                    this.apiService.refreshHeader();
+                    this.navController.navigateRoot(['peengineer']);
+                  }
+              }
+              else{
+                
                  // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
                  this.storageService.setUserName(this.loginForm.get('identifier').value);
                  this.storageService.setPassword(this.loginForm.get('password').value);
@@ -151,10 +173,18 @@ this.network.networkConnect();
                   this.apiService.refreshHeader();
                    this.navController.navigateRoot(['changepassword'])
                  } else {
-                   this.navController.navigateRoot(['permithomepage/permitdesign']);
+                  if(response.user.role.type==='clientsuperadmin' && (response.user.isonboardingcompleted == null || response.user.isonboardingcompleted == false)){
+
+                    this.navController.navigateRoot('onboarding');
+                  }
+                  else{
+                   this.navController.navigateRoot(['permithomepage/permitdesign'])
                  }
+                }
               }
             });
+            this.apiService.emitUserNameAndRole(response.user);
+            this.utils.doCometUserLogin();
           }, responseError => {
             this.utils.hideLoading().then(() => {
               this.apiService.resetHeaders();
@@ -190,4 +220,6 @@ this.network.networkConnect();
 
     this.router.navigate(['/changepassword'])
   }
+
+  
 }

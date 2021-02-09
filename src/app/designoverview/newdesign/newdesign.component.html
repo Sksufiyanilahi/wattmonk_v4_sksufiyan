@@ -3,15 +3,18 @@
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull down to refresh" refreshingSpinner="lines"></ion-refresher-content>
   </ion-refresher>
   <ion-grid *ngIf="listOfDesignDataHelper.length !== 0">
-    <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index">
-        <ion-col size="12" class="ion-margin-top">
+   <ion-row *ngFor="let item of listOfDesignDataHelper;let i = index"> 
+        <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
+            <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
+                <!-- <ion-row *virtualItem="let item;let i = index"> -->
+        <!-- <ion-col size="12" class="ion-margin-top">
                 <span class="ion-padding" *ngIf="today === item.date">
                     Today
                   </span>
             <span class="ion-padding" *ngIf="today !== item.date">
                       {{item.date | date: 'dd MMM yyyy'}}
                 </span>
-        </ion-col>
+        </ion-col> -->
         <ion-col *ngFor="let designData of item.listOfDesigns;let i = index;trackBy: trackdesign " size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name">{{designData.name}}
@@ -19,7 +22,7 @@
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
                     <span [routerLink]="['/design-details/',designData.id]"
-                    routerDirection="forward" class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'">Design Assigned</span>
+                    routerDirection="forward" class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'">Assigned</span>
                     <span [routerLink]="['/design-details/',designData.id]"
                     routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue > 0">Overdue</span>
                     <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/design-details/',designData.id]">Revision</span>
@@ -28,13 +31,13 @@
                     <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
                 </p>
                <p style="margin: 0px;"> <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
-                      routerDirection="forward">{{designData.email}}</span>
+                      routerDirection="forward" *ngIf="user.designertype!='external'">{{designData.email}}</span>
                       <span *ngIf="designData.isoverdue" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{designData.lateby}}</strong></span>
                      </p>
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
-                    <span class="customer-phone">{{designData.phonenumber}}</span></a>
+                    <span class="customer-phone" *ngIf="user.designertype!='external'">{{designData.phonenumber}}</span></a>
                 <span style="margin:0px" class="customer-address z-100"
-                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
+                      (click)="openAddressOnMap(designData.address)" *ngIf="user.designertype!='external'">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
 
                 <ion-row style="margin-bottom: 8px;" [routerLink]="['/design-details/',designData.id]">
                     <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
@@ -59,14 +62,23 @@
             </div>
         </ion-col>
     </ion-row>
-    <ion-row>
+    <!-- </ion-virtual-scroll> -->
+    <!-- <ion-row>
         <ion-col size="12" style="height: 100px;">
         </ion-col>
-    </ion-row>
+    </ion-row> -->
 </ion-grid>
 
 <div *ngIf="listOfDesignDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
     {{noDesignsFound}}
     <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
 </div>
+
+<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+ 
 </ion-content>

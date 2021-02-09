@@ -14,6 +14,7 @@ import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
 import { intercomId } from 'src/app/contants';
 import { Intercom } from 'ng-intercom';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-permitnewdesign',
@@ -27,7 +28,9 @@ export class PermitnewdesignComponent implements OnInit {
   private designRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
   currentDate:any=new Date()
-
+  skip:number=0;
+  limit:number=10;
+  userData:any
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
@@ -44,8 +47,10 @@ export class PermitnewdesignComponent implements OnInit {
     private storage: Storage,
     private apiService: ApiService,
     private router:ActivatedRoute,
-    private intercom:Intercom
+    private intercom:Intercom,
+    private storageservice:StorageService
     ) {
+      this.userData = this.storageservice.getUser();
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -76,13 +81,13 @@ export class PermitnewdesignComponent implements OnInit {
   }
 
   intercomModule(){
-    this.intercom.boot({
-      app_id: intercomId,
-      // Supports all optional configuration.
-      widget: {
-        "activator": "#intercom"
-      }
-    });
+    // this.intercom.boot({
+    //   app_id: intercomId,
+    //   // Supports all optional configuration.
+    //   widget: {
+    //     "activator": "#intercom"
+    //   }
+    // });
   }
 
 
@@ -90,6 +95,7 @@ export class PermitnewdesignComponent implements OnInit {
 
     this.intercomModule();
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 
@@ -102,6 +108,7 @@ export class PermitnewdesignComponent implements OnInit {
   }
 
   getDesigns(event?: CustomEvent) {
+    this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -114,7 +121,7 @@ export class PermitnewdesignComponent implements OnInit {
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("requesttype=permit&status=designassigned&status=designinprocess").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=permit&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -144,7 +151,11 @@ export class PermitnewdesignComponent implements OnInit {
 
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
-    this.listOfDesignData = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+    list=this.fillinDynamicData(records);
+    list.forEach(element =>{
+      this.listOfDesignData.push(element);
+    })
     console.log(this.listOfDesignData);
     
     const tempData: DesginDataHelper[] = [];
@@ -258,6 +269,31 @@ export class PermitnewdesignComponent implements OnInit {
 
     return records;
   }
+  doInfinite($event){
+    this.skip=this.skip+10;
+    this.apiService.getDesignSurveys("requesttype=permit&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
+         console.log(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound= "No Designs Found"
+          }
+          if (event !== null) {
+            $event.target.complete();
+          }
+        },
+     (responseError:any) => {
+        if (event !== null) {
+            $event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      
+      });
+      
+    }
+
 
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");

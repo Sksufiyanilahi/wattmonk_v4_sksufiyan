@@ -22,15 +22,18 @@
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
   <ion-grid *ngIf="listOfDesignsHelper.length !== 0 ;else nodesignFound">
-      <ion-row *ngFor="let item of listOfDesignsHelper;let i = index">
-          <ion-col size="12" class="ion-margin-top">
+      <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
+        <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
+            <ion-row *ngFor="let item of listOfDesignsHelper;let i = index">
+                <!-- <ion-row *virtualItem="let item;let i = index"> -->
+          <!-- <ion-col size="12" class="ion-margin-top">
                   <span class="ion-padding" *ngIf="today === item.date">
                       Today
                       </span>
               <span class="ion-padding" *ngIf="today !== item.date">
                           {{item.date | date: 'dd MMM yyyy'}}
                   </span>
-          </ion-col>
+          </ion-col> -->
           <ion-col *ngFor="let designData of item.listOfDesigns;let j = index;trackBy: trackdesign" size="12">
               <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
                   <p class="customer-name"
@@ -39,22 +42,25 @@
                     {{designData.deliverydate | date: 'hh:mm a'}}
                 </span> -->
 
-                <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'"  [routerLink]="['/permit-design-details/',designData.id]">On Hold</span>
+                <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><img  style= "height:20px" src="assets/images/activitylist.png" /></span>
+              </p>
+              <p style="margin:0px">
+          <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'"  [routerLink]="['/permit-design-details/',designData.id]">On Hold</span>
 
-                <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  [routerLink]="['/permit-design-details/',designData.id]">Review Failed</span>
-                <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" [routerLink]="['/permit-design-details/',designData.id]">Overdue</span>
-                <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'requestaccepted'" [routerLink]="['/permit-design-details/',designData.id]">Accepted</span>
-                <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/permit-design-details/',designData.id]">Review Passed</span>
-                <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'" [routerLink]="['/permit-design-details/',designData.id]">Delivered</span>
-                <span class="chipdetail" style="background-color: rgb(109, 187, 26);padding: 4px 5px;" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/permit-design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
-                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/permit-design-details/',designData.id]">Unassigned</span>
-                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/permit-design-details/',designData.id]">Design Assigned</span>
-                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/permit-design-details/',designData.id]">In Review</span>
-                <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')" style="background-color: #95afc0;" [routerLink]="['/permit-design-details/',designData.id]">Waiting for acceptance</span>
-                <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/permit-design-details/',designData.id]">Revision</span>
-                <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
-                      *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
-                <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+          <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  [routerLink]="['/permit-design-details/',designData.id]">Review Failed</span>
+          <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" [routerLink]="['/permit-design-details/',designData.id]">Overdue</span>
+          <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'requestaccepted'" [routerLink]="['/permit-design-details/',designData.id]">Accepted</span>
+          <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'" [routerLink]="['/permit-design-details/',designData.id]">Review Passed</span>
+          <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'" [routerLink]="['/permit-design-details/',designData.id]">Delivered</span>
+          <span class="chipdetail" style="background-color: rgb(109, 187, 26);padding: 4px 5px;" *ngIf="designData.status == 'designcompleted'" [routerLink]="['/permit-design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
+          <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/permit-design-details/',designData.id]">Unassigned</span>
+          <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'designassigned'" [routerLink]="['/permit-design-details/',designData.id]">Design Assigned</span>
+          <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/permit-design-details/',designData.id]">In Review</span>
+          <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.type=='clientadmin' || userData.role.type=='clientsuperadmin')" style="background-color: #95afc0;" [routerLink]="['/permit-design-details/',designData.id]">Waiting for acceptance</span>
+          <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/permit-design-details/',designData.id]">Revision</span>
+          <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+                *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
+         
 
         </p>
 
@@ -79,13 +85,13 @@
                       </span>
 
                   <ion-row style="margin-bottom: 0px;" [routerLink]="['/permit-design-details/',designData.id]">
-                     <ion-col style="padding-left:0px" >
-                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
-                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype}}</span>
+                    <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;">
+                      <span><strong>Assigned to : {{designData.reviewassignedto.firstname | titlecase}} {{designData.reviewassignedto.lastname | titlecase}}</strong></span>
                   </ion-col>
+               
 
 
-                  <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin'">
+                  <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
                           <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
                               {{designData.designremainingtime}}</span></ion-col>
                               <ion-col *ngIf="designData.status == 'outsourced'">
@@ -97,11 +103,15 @@
                   </ion-row>
 
                   <ion-row class="ion-no-margin ion-no-margin">
+                    <ion-col style="padding-left:0px" >
+                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
+                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype}}</span>
+                  </ion-col>
                       <ion-col *ngIf="segments=='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined' || segments=='requesttype=permit&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined'">
-                          <span *ngIf="designData.status == 'created' || (designData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
+                          <span *ngIf="designData.status == 'created' || (designData.status == 'requestaccepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')) " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
                           >Assign</span>
                           <span style="float: right;">
-                              <ng-container *ngIf="userData.role.type !=='clientsuperadmin'">
+                              <ng-container *ngIf="userData.role.type !=='clientsuperadmin' && userData.role.type !== 'clientadmin'">
                                   <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')">
                                      Accept
                                   </ion-col>
@@ -111,26 +121,26 @@
                               </ng-container>
                           </span>
 
-                          <span  *ngIf="designData.status == 'requestdeclined' && userData.role.type=='clientsuperadmin'"style="float:right !important;" class="ion-text-end action-button-color" (click)="directAssignToWattmonk(designData.id)"
+                          <span  *ngIf="designData.status == 'requestdeclined' && (userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin')" style="float:right !important;" class="ion-text-end action-button-color" (click)="directAssignToWattmonk(designData.id)"
                           >Reassign</span>
                       </ion-col>
 
 
                       <ion-col *ngIf="segments=='requesttype=permit&status=designassigned'">
-                          <span *ngIf= "(designData.status =='designassigned') && userData.role.type !='clientsuperadmin'" (click)="openDesigners(designData.id,designData)" style="float:right !important" class="ion-text-end action-button-color"
+                          <span *ngIf= "(designData.status =='designassigned') && userData.role.type !='clientsuperadmin' && userData.role.type !='clientadmin'" (click)="openDesigners(designData.id,designData)" style="float:right !important" class="ion-text-end action-button-color"
                           >Reassign</span>
                       </ion-col>
 
                       <ion-col *ngIf="segments=='requesttype=permit&status=designcompleted'">
                           <!-- <span *ngIf="(designData.isoutsourced=='true' && designData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (designData.isoutsourced=='false' && designData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                           >Assign Review</span> -->
-                          <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="selfAssign(designData.id,designData)"
+                          <span *ngIf="userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="selfAssign(designData.id,designData)"
                           > &nbsp; Self Assign</span>
 
-                          <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                          <span *ngIf="userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                           >Assign Review</span>
                       </ion-col>
-                      <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin'">
+                      <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'" size="7">
                           <span *ngIf="designData.status =='reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData)"
                           >  &nbsp; Deliver</span>
                           <span *ngIf="userData.role.type!='clientsuperadmin' &&(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
@@ -144,7 +154,7 @@
                               <ion-icon name="share-social-outline"></ion-icon></span>&nbsp;
                           <span style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="shareViaEmails(designData.id,designData)">
                               <ion-icon name="mail" ></ion-icon></span>
-                              <span *ngIf="userData.role.type=='clientsuperadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, designData.requesttype)">
+                              <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, designData.requesttype)">
                                   Resend</span>
                       </ion-col>
                       <!-- <ion-col class="ion-no-margin ion-no-padding">
@@ -162,11 +172,15 @@
           </ion-card>
           </ion-col>
       </ion-row>
-      <ion-row>
+      <!-- </ion-virtual-scroll> -->
+      
+    
+      
+      <!-- <ion-row>
           <ion-col size="12" style="height: 100px;">
 
           </ion-col>
-      </ion-row>
+      </ion-row>  -->
     </ion-grid>
     <ng-template #nodesignFound>
         <div *ngIf="listOfDesignsHelper.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
@@ -179,16 +193,22 @@
         </div>
     </ng-template>
 
-
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)" >
+        <ion-infinite-scroll-content
+          loadingSpinner="bubbles"
+         >
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+      
 </ion-content>
 
-<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
+<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="320" draggable="false" disableDrag="true"
              shouldBounce="true" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
 <form [formGroup]="assignForm">
   <ion-grid class="drawer">
       <ion-row>
          <ion-col size="12">
-              <app-user-selector  (assigneeData)=getassignedata($event) placeholder="assign" [assignees]="listOfAssignees"  [reviewAssigned]=reviewAssignedTo
+              <app-user-selector  (assigneeData)=getassignedata($event) placeholder="Assign" [assignees]="listOfAssignees"  [reviewAssigned]=reviewAssignedTo
                                  formControlName="assignedto"></app-user-selector>
 
           </ion-col>

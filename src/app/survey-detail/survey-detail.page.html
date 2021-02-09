@@ -57,7 +57,7 @@
     <!-- <ion-grid fixed> -->
         <!-- <ion-row> -->
             <!-- <ion-col> -->
-                <ion-segment scrollable [(ngModel)]="segments" class="wd140 colorwht" *ngIf='survey.status !=="surveyassigned"'>
+                <ion-segment scrollable [(ngModel)]="segments" class="wd140 colorwht" *ngIf='survey.status !=="surveyassigned"' mode="md">
                 <ion-segment-button value="SiteDetils" class="wd140 colorwht"> 
                     <ion-label>
                         Site Details
@@ -149,6 +149,27 @@
                             <ion-col style="text-align: right;">{{comments.createdBy.updated_at | date:'dd/MM/yyyy'}}</ion-col> -->
                         </ion-row>
                
+                        <ion-row *ngIf="survey.reviewissues || survey.reviewissues !==null  " class="ion-no-padding ion-margin-top">
+                            <ion-col size="6">
+                                <span class="models font"> Review Comments</span>
+                            </ion-col>
+                            <!-- <div> -->
+                
+                            <ion-col size="6"  class="ion-no-padding">
+                                <div >
+                                    <p class="comment font" style="text-align: right;margin:0px">{{survey?.reviewissues}}</p>
+                                    <p class="comment-by" style="text-align: right;margin-top:0px">Posted by {{survey.reviewassignedto?.firstname}}
+                                        {{survey.reviewassignedto?.lastname}}</p>
+                                </div>
+                            </ion-col>
+                            <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
+                                         
+                                        </ion-col> -->
+                
+                            <!-- </div> -->
+                
+                        </ion-row>
+
                         <ion-row class="bkg">
                             <ion-col class="hgt-margin">
                                 <!-- <ion-item> -->
@@ -186,7 +207,7 @@
                                     <ion-slides pager="true" zoom [options]="slideOpts" class="image-slider">
                                         <ion-slide *ngFor="let elecmsb of survey.mspimages">
                                             <div class="swiper-zoom-container">
-                                                <img [src]="elecmsb.url" />
+                                                <img [src]="elecmsb.url" (click)="showimage(elecmsb.url)" />
                                             </div>
                                         </ion-slide>
                                     </ion-slides>
@@ -195,7 +216,7 @@
                                     <ion-slides pager="true" [options]="slideOpts" zoom="true">
                                         <ion-slide *ngFor="let elecutility of survey.utilitymeterimages">
                                             <div class="swiper-zoom-container">
-                                                <img [src]="elecutility.url" width='100%'/>
+                                                <img [src]="elecutility.url" (click)="showimage(elecutility.url)" width='100%'/>
                                             </div>
                                         </ion-slide>
                                     </ion-slides>
@@ -204,7 +225,7 @@
                                     <ion-slides pager="true" [options]="slideOpts" zom="true">
                                         <ion-slide *ngFor="let elecpvmeter of survey.pvmeterimages">
                                             <div class="swiper-zoom-container">
-                                                <img [src]="elecpvmeter.url" width='100%'/>
+                                                <img [src]="elecpvmeter.url" (click)="showimage(elecpvmeter.url)" width='100%'/>
                                             </div>
                                         </ion-slide>
                                     </ion-slides>
@@ -213,7 +234,7 @@
                                     <ion-slides pager="true" [options]="slideOpts" zoom="true">
                                         <ion-slide *ngFor="let elecacdisconnect of survey.acdisconnectimages">
                                             <div class="swiper-zoom-container">
-                                                <img [src]="elecacdisconnect.url" width='100%'/>
+                                                <img [src]="elecacdisconnect.url" (click)="showimage(elecacdisconnect.url)" width='100%'/>
                                             </div>
 
                                         </ion-slide>
@@ -227,7 +248,7 @@
                         <ion-slide *ngFor="let solarpanel of survey.solarpanelsimages">
                             <div class="swiper-zoom-container">
                             <h2 class="position-fix">{{solarpanel.name}}</h2>
-                                <img [src]="solarpanel.url" />
+                                <img [src]="solarpanel.url" (click)="showimage(solarpanel.url)"/>
                             </div>
                         </ion-slide>
                     </ion-slides>
@@ -237,7 +258,7 @@
                         <ion-slide *ngFor="let roof of survey.roofimages">
                             <div class="swiper-zoom-container">
                                 <h2 class="position-fix">{{roof.name}}</h2>
-                                <img [src]="roof.url" />
+                                <img [src]="roof.url" (click)="showimage(roof.url)" />
                             </div>
 
                         </ion-slide>
@@ -248,13 +269,20 @@
                         <ion-slide *ngFor="let appliance of survey.appliancesimages">
                             <div class="swiper-zoom-container">
                                 <h2 class="position-fix">{{appliance.name}}</h2>
-                                <img [src]="appliance.url" />
+                                <img [src]="appliance.url"  (click)="showimage(appliance.url)"/>
                             </div>
                         </ion-slide>
                     </ion-slides>
                  </ion-grid>
                    <ion-grid *ngSwitchCase="'equipmentMarketing'">
-                    
+                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
+                        <ion-slide >
+                            <div class="swiper-zoom-container">
+                                <h2 class="position-fix">{{survey.electricalslocation.name}}</h2>
+                                <img [src]="survey.electricalslocation.url"  (click)="showimage(survey.electricalslocation.url)"/>
+                            </div>
+                        </ion-slide>
+                    </ion-slides>
                  </ion-grid>
                    <ion-grid *ngSwitchCase="'generalInfo'">
                     <ion-row class="bkg">
@@ -558,7 +586,22 @@
 
     </ion-grid> -->
 </ion-content>
-<ion-footer *ngIf="(user.role.type=='qcinspector'&& survey && survey.status=='reviewassigned')||(survey && surveystatus=='reviewassigned' && survey.reviewassignedto.id==user.id)" class="ion-no-border white-bg">
+<ion-footer *ngIf="((user.role.type=='clientadmin' || user.role.type=='clientsuperadmin')&& survey && survey.status=='created')||(user.role.type=='clientadmin' && survey && survey.status=='surveyassigned')" class="ion-no-border white-bg">
+    <ion-grid>
+        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+            <ion-col class="ion-no-margin ion-no-padding">
+                <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
+                     <ion-button class="ion-no-margin ion-no-padding" style="float: right;margin-right: 10%;
+                     margin-bottom: 5%;" fill="clear" [routerLink]="['/surveyprocess/' + survey.id + '/' + survey.jobtype + '/' + survey.latitude + '/' + survey.longitude + '/' + survey.city + '/' + survey.state]"
+                 routerDirection="forward">
+                     Start Survey
+                 </ion-button>
+                 </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-footer>
+<ion-footer *ngIf="(user.role.type=='qcinspector'&& survey && survey.status=='reviewassigned')||(survey && survey.status=='reviewassigned' && survey.reviewassignedto.id==user.id)" class="ion-no-border white-bg">
     <ion-grid>
         <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
             <ion-col size="auto">

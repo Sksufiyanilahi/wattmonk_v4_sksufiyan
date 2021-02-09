@@ -10,6 +10,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { Storage } from '@ionic/storage';
 import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import * as moment from 'moment';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-permit-inreview-design',
@@ -21,7 +22,9 @@ export class PermitInreviewDesignComponent implements OnInit {
   listOfDesignsHelper: DesginDataHelper[] = [];
   private DesignRefreshSubscription: Subscription;
   private dataRefreshSubscription: Subscription;
-
+ skip:number=0;
+ limit:number=10;
+ userData:any
   today: any;
   options: LaunchNavigatorOptions = {
     start: '',
@@ -35,7 +38,10 @@ export class PermitInreviewDesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+     private storageservice:StorageService) {
+
+      this.userData = this.storageservice.getUser();
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -43,6 +49,7 @@ export class PermitInreviewDesignComponent implements OnInit {
 
   ngOnInit() {
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
+      this.skip=0;
       this.getDesigns(null);
     });
 
@@ -61,6 +68,7 @@ export class PermitInreviewDesignComponent implements OnInit {
   }
 
   getDesigns(event: CustomEvent) {
+   this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -74,7 +82,7 @@ export class PermitInreviewDesignComponent implements OnInit {
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
-      this.apiService.getDesignSurveys("requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed").subscribe((response:any) => {
+      this.apiService.getDesignSurveys("requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -103,7 +111,11 @@ export class PermitInreviewDesignComponent implements OnInit {
   }
 
   formatDesignData(records : DesginDataModel[]){
-    this.listOfDesigns = this.fillinDynamicData(records);
+    let list:DesginDataModel[];
+    list=this.fillinDynamicData(records);
+    list.forEach(element =>{
+      this.listOfDesigns.push(element);
+    })
     const tempData: DesginDataHelper[] = [];
           this.listOfDesigns.forEach((designItem:any) => {
             if (tempData.length === 0) {
@@ -164,6 +176,31 @@ export class PermitInreviewDesignComponent implements OnInit {
 
     return records;
   }
+
+  doInfinite($event){
+    this.skip=this.skip+10;
+    this.apiService.getDesignSurveys("requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed",this.limit,this.skip).subscribe((response:any) => {
+         console.log(response);
+          if(response.length){
+       
+            this.formatDesignData(response);
+          }else{
+            this.noDesignsFound= "No Designs Found"
+          }
+          if (event !== null) {
+            $event.target.complete();
+          }
+        },
+     (responseError:any) => {
+        if (event !== null) {
+            $event.target.complete();
+          }
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+      
+      });
+      
+    }
 
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");

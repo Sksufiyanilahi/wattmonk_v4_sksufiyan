@@ -27,7 +27,8 @@ import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@io
 import { AddressModel } from '../model/address.model';
 import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
+import { COMETCHAT_CONSTANTS, intercomId,version } from '../contants';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 
 @Component({
@@ -36,7 +37,7 @@ import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
   styleUrls: ['./permithomepage.page.scss'],
 })
 export class PermithomepagePage implements OnInit {
-  private version = environment.version;
+  private version = version;
 
   private subscription: Subscription;
 
@@ -104,7 +105,7 @@ export class PermithomepagePage implements OnInit {
               private geolocation: Geolocation,
               private nativeGeocoder: NativeGeocoder,
               private intercom:Intercom,
-              private storageService:StorageService
+              private mixpanelService:MixpanelService
               ) {
                 this.setupCometChatUser();
               }
@@ -164,6 +165,7 @@ export class PermithomepagePage implements OnInit {
   }
 
   ionViewDidEnter() {
+    debugger;
     if(this.version !== this.update_version && this.update_version !==''){
 
       setTimeout(()=>{
@@ -182,6 +184,8 @@ export class PermithomepagePage implements OnInit {
       this.netSwitch = data;
       this.utils.showHideIntercom(false);
       console.log(this.netSwitch);
+      let user= this.storageservice.getUser();
+      this.apiService.emitUserNameAndRole(user);
 
     })
 
@@ -197,6 +201,8 @@ this.network.networkConnect();
   }
 
   scheduledPage(){
+    this.mixpanelService.track("Add_Permitdesign_PAGE_OPEN", {
+    });
     this.route.navigate(['/permitschedule']);
 
     }
@@ -385,13 +391,13 @@ this.network.networkConnect();
     }
 
     intercomModule(){
-      this.intercom.boot({
-        app_id: intercomId,
-        // Supports all optional configuration.
-        widget: {
-          "activator": "#intercom"
-        }
-      });
+      // this.intercom.boot({
+      //   app_id: intercomId,
+      //   // Supports all optional configuration.
+      //   widget: {
+      //     "activator": "#intercom"
+      //   }
+      // });
     }
 
 

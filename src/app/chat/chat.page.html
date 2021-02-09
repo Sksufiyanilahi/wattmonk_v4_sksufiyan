@@ -5,6 +5,12 @@
                 <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
             </ion-button>
         </ion-buttons>
+        <ion-buttons slot="end" (click)="dialcall()">
+            <ion-icon name="call" style="color:#3c78d8;font-size: 20px;"></ion-icon>&nbsp;&nbsp;
+          </ion-buttons>
+        <ion-buttons slot="end" (click)="videocall()">
+          <ion-icon name="videocam" style="color:#3c78d8;font-size: 20px;"></ion-icon>&nbsp;&nbsp;
+          </ion-buttons>
         <ion-title *ngIf="currentGroupData">
             <div class="Inline"><img
                     src="{{currentGroupData.avatar || 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?resize=256%2C256&quality=100&ssl=1' }}"
@@ -28,7 +34,7 @@
     </ion-list>
 </ion-content>
 
-<ion-footer no-border *ngIf="userData.role.type !=='designer' && userData.role.type !=='qc'">
+<ion-footer no-border *ngIf="userData.role.type !=='designer' && userData.role.type !=='qcinspector'">
     <ion-toolbar>
       <div class="bar bar-footer bar-balanced chat-box-container">
             <ion-input class="chat-editor-box" placeholder="Type Your Message Here.." type="text" [(ngModel)]="messageText" (ionBlur)="checkBlur()"

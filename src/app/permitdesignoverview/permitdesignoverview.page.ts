@@ -16,6 +16,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
 import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
 import { Intercom } from 'ng-intercom';
+import { Appversion } from '../appversion';
 
 @Component({
   selector: 'app-permitdesignoverview',
@@ -24,7 +25,7 @@ import { Intercom } from 'ng-intercom';
 })
 export class PermitdesignoverviewPage implements OnInit {
 
-  private version = environment.version;
+  private version = Appversion.version;
   private subscription: Subscription;
   update_version: string;
   netSwitch:any;
@@ -67,13 +68,13 @@ export class PermitdesignoverviewPage implements OnInit {
   }
 
   intercomModule(){
-    this.intercom.boot({
-      app_id: intercomId,
-      // Supports all optional configuration.
-      widget: {
-        "activator": "#intercom"
-      }
-    });
+    // this.intercom.boot({
+    //   app_id: intercomId,
+    //   // Supports all optional configuration.
+    //   widget: {
+    //     "activator": "#intercom"
+    //   }
+    // });
   }
  
 

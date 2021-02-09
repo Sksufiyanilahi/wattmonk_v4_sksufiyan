@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { AssigneeModel } from '../../model/assignee.model';
+import { StorageService } from 'src/app/storage.service';
 
 @Component({
   selector: 'app-user-selector',
@@ -19,26 +20,35 @@ import { AssigneeModel } from '../../model/assignee.model';
     }
   ]
 })
-export class UserSelectorComponent implements ControlValueAccessor, Validator ,OnInit{
+export class UserSelectorComponent implements ControlValueAccessor, Validator ,OnInit,OnChanges{
 
   @Input() assignees: AssigneeModel[] = [];
-  @Input() placeholder = 'assign to';
+  filteredAssignees: AssigneeModel[];
+  @Input() placeholder = 'Assign to';
   @Input() required = false;
   @Output() assigneeData = new EventEmitter<AssigneeModel>();
   private onChange: (assignee: number) => void;
   selectedUserId = null;
   @Input() reviewAssigned:any;
+  userId:any;
+  searchTerm:any='';
   // assignee: AssigneeModel;
 
-  constructor() {
+  constructor( private storage:StorageService) {
    
   }
 ngOnInit(){
-  
-    
+ 
+ 
+   this.userId=this.storage.getUserID();
     
 
 }
+
+ngOnChanges(){
+  this.filterUsers();
+}
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
@@ -55,9 +65,7 @@ ngOnInit(){
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-   
-   
-    if (this.required) {
+   if (this.required) {
       console.log(this.selectedUserId);
       if (this.selectedUserId !== null) {
         return null;
@@ -72,6 +80,14 @@ ngOnInit(){
   }
 
   selectAssignee(assignee: AssigneeModel) {
+    console.log(this.userId);
+    if( this.reviewAssigned!=null && this.reviewAssigned.id!=this.userId ){
+    const element = <HTMLElement> document.getElementById('pre');
+    element.className='afterselected';
+
+    
+  }
+
     console.log("this is",assignee)
     this.assigneeData.emit(assignee);
     this.assignees.forEach((item) => {
@@ -93,5 +109,16 @@ ngOnInit(){
 
   selectSelf() {
 
+  }
+
+  filterUsers(){
+    console.log('-------------------');
+    console.log(this.searchTerm);
+    this.filteredAssignees = this.assignees.filter(assignee =>{
+      return assignee.firstname.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1
+      || assignee.lastname.toLowerCase().indexOf(this.searchTerm.toLowerCase())  > -1
+
+    })
+    console.log(this.filteredAssignees)
   }
 }

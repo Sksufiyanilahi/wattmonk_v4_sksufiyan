@@ -29,6 +29,20 @@
   border-radius: 50%;
 }
 
+.preselected{
+  display:flex;
+  border-color:  #3c78d8;
+  
+}
+
+.afterselected{
+  display:flex;
+
+}
+
+
+
+
 div[scrollx=true], div[scrolly=true] {
   position: relative;
   overflow: hidden;
