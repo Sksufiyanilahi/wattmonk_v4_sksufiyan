@@ -178,7 +178,7 @@ this.network.networkConnect();
                     this.navController.navigateRoot('onboarding');
                   }
                   else{
-                   this.navController.navigateRoot(['permithomepage/permitdesign'])
+                   this.navController.navigateRoot(['/dashboard'])
                  }
                 }
               }
