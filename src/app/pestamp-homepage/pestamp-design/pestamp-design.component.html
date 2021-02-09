@@ -55,7 +55,7 @@
               <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/pestamp-design-details/',designData.id]">Revision</span>
               <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;" [routerLink]="['/pestamp-design-details/',designData.id]"
                     *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
-              <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'pestamp']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+              <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'pestamp']" class="imagebutton"  size="small"  ><img  style= "height:20px" src="assets/images/activitylist.png" /></span>
 
       </p>
 
@@ -63,6 +63,8 @@
           <span class="customer-email" [routerLink]="['/pestamp-design-details/',designData.id]"
                   routerDirection="forward">{{designData.email}}</span>
                   <span *ngIf="designData.isoverdue" class="latebystyle"><strong>Late by {{designData.lateby}}</strong></span>
+                  <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
+                <!-- </ion-col> -->
 
       </p>
       <p style="margin:0px"  >
@@ -74,10 +76,13 @@
                         (click)="openAddressOnMap(designData.address)">{{(designData.deliveryaddress | slice:0:60) + (designData.deliveryaddress.length > 60 ? '...' : '')}}
 
                              <ion-col>
-
+                                
                                 </ion-col>
 
                     </span>
+                    <ion-col>
+                    <span *ngIf="designData.status=='assigned' && userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'" style="font-size: 0.8em; float:right"><strong>Assigned to : {{designData.assignedto.firstname | titlecase}} {{designData.assignedto.lastname | titlecase}}</strong></span>
+                    </ion-col>
                     <!-- <ion-row style="margin-bottom: 0px;" [routerLink]="['/pestamp-design-details/',designData.id]">
                         <ion-col *ngIf="designData.status == 'assigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
                             <span *ngIf="designData.status == 'assigned'" style="float:right;text-align: right;">
@@ -89,15 +94,16 @@
                     <ion-row class="ion-no-margin ion-no-margin">
                 <!-- <ion-row style="margin-bottom: 0px;" [routerLink]="['/permit-design-details/',designData.id]"> -->
                   <!-- <ion-row style="margin-bottom: 0px;" > -->
-                   <ion-col size="5" style="padding-left:0px" >
+                   <ion-col style="padding-left:0px" >
                     <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.source | titlecase}}</span>
                     <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.propertytype | titlecase}}</span>
-                    <!-- <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.type | titlecase}}</span> -->
+                    <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.type | titlecase}}</span>
                     <!-- <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype}}</span> -->
                 </ion-col>
+                </ion-row>
                                 
                 
-
+                <ion-row class="ion-no-margin ion-no-margin">
                 
                     <ion-col *ngIf="segments=='status=created&status=outsourced&status=accepted&status=declined' || segments=='status=created&status=outsourced&status=accepted&&status=declined'">
                         <span *ngIf="designData.status == 'created' || (designData.status == 'accepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')) " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"

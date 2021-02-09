@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { FIELD_REQUIRED } from '../model/constants';
+import { FIELD_REQUIRED, INVALID_AMOUNT } from '../model/constants';
 import { UtilitiesService } from '../utilities.service';
 
 @Component({
@@ -18,6 +18,8 @@ export class PestampdelivermodalPage implements OnInit {
   id:number;
   data:any;
 
+  amountError=INVALID_AMOUNT
+  
   fieldRequired = "Delivery Charges should be minimum $1";
   chargesError:string=null;
 
@@ -33,7 +35,8 @@ export class PestampdelivermodalPage implements OnInit {
               private modalCtrl:ModalController,
               private launchNavigator: LaunchNavigator) { 
     this.deliverForm = formBuilder.group({
-      delivercharges : new FormControl(""),
+      delivercharges : new FormControl("",[ Validators.min(1),
+        Validators.max(10000)]),
       comments : new FormControl("")
     })
   }
