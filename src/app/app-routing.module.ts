@@ -78,11 +78,6 @@ const routes: Routes = [
         // canActivate: [AuthGuardService]
     },
     {
-        path: 'surveyprocess/:id/:type/:lat/:long/:city/:state',
-        loadChildren: () => import('./surveyprocess/surveyprocess.module').then(m => m.SurveyprocessPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
         path: 'surveyoroverview',
         loadChildren: () => import('./surveyoroverview/surveyoroverview.module').then(m => m.SurveyoroverviewPageModule),
         canActivate: [AuthGuardService]
@@ -263,6 +258,11 @@ const routes: Routes = [
         canActivate: [AuthGuardService]
     },
     {
+        path: 'camera/:id/:type/:city/:state/:lat/:long',
+        loadChildren: () => import('./surveyprocess/surveyprocess.module').then(m => m.SurveyprocessPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
         path: 'peengineer',
         loadChildren: () => import('./peengineer/peengineer.module').then(m => m.PEengineerPageModule)
     },
@@ -277,10 +277,6 @@ const routes: Routes = [
     {
         path: 'callingscreen',
         loadChildren: () => import('./callingscreen/callingscreen.module').then(m => m.CallingscreenPageModule)
-    },
-    {
-        path: 'camera/:id/:type/:lat/:long',
-        loadChildren: () => import('./surveyprocess/surveyprocess.module').then(m => m.SurveyprocessPageModule)
     },
 ];
 
