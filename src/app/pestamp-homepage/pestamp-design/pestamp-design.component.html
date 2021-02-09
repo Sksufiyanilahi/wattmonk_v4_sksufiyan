@@ -80,8 +80,8 @@
                                 </ion-col>
 
                     </span>
-                    <ion-col>
-                    <span *ngIf="designData.status=='assigned' && userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'" style="font-size: 0.8em; float:right"><strong>Assigned to : {{designData.assignedto.firstname | titlecase}} {{designData.assignedto.lastname | titlecase}}</strong></span>
+                    <ion-col *ngIf="designData.status=='assigned' && userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'" style="font-size: 0.8em;padding-right: 0px;">
+                    <span style=" float:right"><strong>Assigned to : {{designData.assignedto.firstname | titlecase}} {{designData.assignedto.lastname | titlecase}}</strong></span>
                     </ion-col>
                     <!-- <ion-row style="margin-bottom: 0px;" [routerLink]="['/pestamp-design-details/',designData.id]">
                         <ion-col *ngIf="designData.status == 'assigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
