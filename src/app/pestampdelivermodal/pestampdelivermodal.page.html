@@ -43,6 +43,9 @@
 <div *ngIf="deliverForm.get('delivercharges').hasError('max') && deliverForm.get('delivercharges').dirty">
   <span class="error">{{amountError}}</span>
 </div>
+<div *ngIf="deliverForm.get('delivercharges').hasError('min') && deliverForm.get('delivercharges').dirty">
+  <span class="error">{{minAmountError}}</span>
+</div>
 </div>
 </ion-col>
 </ion-row>

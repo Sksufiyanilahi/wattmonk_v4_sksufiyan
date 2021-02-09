@@ -18,8 +18,8 @@ export class PestampdelivermodalPage implements OnInit {
   id:number;
   data:any;
 
-  amountError=INVALID_AMOUNT
-  
+  amountError='Please enter an amount less than $10000'
+  minAmountError = 'Please enter an amount greater than 0'
   fieldRequired = "Delivery Charges should be minimum $1";
   chargesError:string=null;
 
@@ -54,11 +54,11 @@ export class PestampdelivermodalPage implements OnInit {
     var deliverycharges;
     if(this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping =='both' ){
       console.log("harddcopy");
-      if(this.deliverForm.get('delivercharges').value ==='undefined' || this.deliverForm.get('delivercharges').value ==='' || this.deliverForm.get('delivercharges').value === null){
+      if(this.deliverForm.get('delivercharges').value ==='undefined' || this.deliverForm.get('delivercharges').value ==='' || this.deliverForm.get('delivercharges').value === null || this.deliverForm.get('delivercharges').invalid){
         console.log("error");
         //alertData.deliverycharges.setValidators([Validators.required]);
         //this.chargesError = "Please Enter Delivery Charges";
-        this.utils.errorSnackBar("Please Enter Delivery Charges");
+        this.utils.errorSnackBar("Please Enter Valid Delivery Charges");
         return;
       }
       deliverycharges = this.deliverForm.get('delivercharges').value;
@@ -66,6 +66,7 @@ export class PestampdelivermodalPage implements OnInit {
       deliverycharges = 0;
     // }
   }
+  //if(this.deliverForm.status=='VALID'){
   var postData={};
   if(this.deliverForm.get("comments").value!=""){
              postData = {
