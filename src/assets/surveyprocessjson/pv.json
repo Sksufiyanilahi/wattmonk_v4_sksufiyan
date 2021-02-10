@@ -134,7 +134,7 @@
                 "isvisible": true,
                 "checkexistence":false,
                 "isexistencechecked":false,
-                "inputformcontrol": "pvinverter",
+                "inputformcontrol": "",
                 "allowmultipleshots": false,
                 "capturedshots": [],
                 "shots":[
