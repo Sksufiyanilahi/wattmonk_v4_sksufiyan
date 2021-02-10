@@ -325,7 +325,6 @@ export class SurveyprocessPage implements OnInit {
             pvinverter: new FormControl('', [Validators.required]),
             pvinverterlocation: new FormControl('', [Validators.required]),
             pvinvertermanufacturer: new FormControl('', [Validators.required]),
-            acdisconnect: new FormControl('', [Validators.required]),
             additionalnotes: new FormControl('', []),
             shotname: new FormControl('', [])
         });

@@ -208,7 +208,7 @@
                 "isvisible": true,
                 "checkexistence":true,
                 "isexistencechecked":true,
-                "inputformcontrol": "acdisconnect",
+                "inputformcontrol": "",
                 "allowmultipleshots": false,
                 "capturedshots": [],
                 "shots":[
