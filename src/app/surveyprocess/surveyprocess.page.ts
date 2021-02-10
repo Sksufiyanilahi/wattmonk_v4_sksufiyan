@@ -324,7 +324,6 @@ export class SurveyprocessPage implements OnInit {
             framing: new FormControl('', [Validators.required]),
             framingsize: new FormControl('', [Validators.required]),
             distancebetweentworafts: new FormControl('', [Validators.required]),
-            pvinverter: new FormControl('', [Validators.required]),
             pvinverterlocation: new FormControl('', [Validators.required]),
             pvinvertermanufacturer: new FormControl('', [Validators.required]),
             additionalnotes: new FormControl('', []),
