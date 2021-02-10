@@ -50,7 +50,7 @@ export class PestampDesignComponent implements OnInit {
 
   designerData: any;
   assigneeData: any;
-  reviewAssignedTo:any;
+  assignedTo:any;
 
   listOfAssignees: AssigneeModel[] = [];
   //listOfAssignees:any[];
@@ -388,6 +388,10 @@ export class PestampDesignComponent implements OnInit {
     if(this.assignForm.status === 'INVALID') {
     this.utils.errorSnackBar('Please select a pe engineer');
     }
+    else if( this.assignedTo!=null && (this.selectedPeEngineer.id==this.assignedTo.id)){
+      this.utils.errorSnackBar("This design request has been already assigned to"+" "+this.selectedPeEngineer.firstname+" "+this.selectedPeEngineer.lastname)
+
+    }
     else{
       var pestampstarttime = new Date();
       var pestampacceptancestarttime = new Date();
@@ -456,7 +460,7 @@ export class PestampDesignComponent implements OnInit {
     this.listOfAssignees=[];
     console.log("this is",designData);
      this.designerData = designData;
-     //this.reviewAssignedTo=designData.designassignedto;
+     this.assignedTo=designData.assignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin')&& this.designerData.status=='created'){
       //this.route.navigate(["pestamp-payment-modal",{id:id,designData:this.designerData.requesttype}])
       let objToSend: NavigationExtras = {

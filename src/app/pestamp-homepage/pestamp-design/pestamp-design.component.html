@@ -39,7 +39,8 @@
                 <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
                   {{designData.deliverydate | date: 'hh:mm a'}}
               </span> -->
-
+              <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;" [routerLink]="['/pestamp-design-details/',designData.id]"
+                    *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
               <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'declined'"  [routerLink]="['/pestamp-design-details/',designData.id]">On Hold</span>
 
               <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  [routerLink]="['/pestamp-design-details/',designData.id]">Review Failed</span> -->
@@ -49,12 +50,11 @@
               <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'delivered'" [routerLink]="['/pestamp-design-details/',designData.id]">Delivered</span>
               <span class="chipdetail" style="background-color: rgb(109, 187, 26);padding: 4px 5px;" *ngIf="designData.status == 'completed'" [routerLink]="['/pestamp-design-details/',designData.id]"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
               <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/pestamp-design-details/',designData.id]">Unassigned</span>
-              <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'assigned'" [routerLink]="['/pestamp-design-details/',designData.id]">Design Assigned</span>
+              <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'assigned'" [routerLink]="['/pestamp-design-details/',designData.id]">Assigned</span>
               <!-- <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" [routerLink]="['/pestamp-design-details/',designData.id]">In Review</span> -->
               <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.type=='clientadmin'|| userData.role.type=='clientsuperadmin')" style="background-color: #95afc0;" [routerLink]="['/pestamp-design-details/',designData.id]">Waiting for acceptance</span>
               <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/pestamp-design-details/',designData.id]">Revision</span>
-              <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;" [routerLink]="['/pestamp-design-details/',designData.id]"
-                    *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
+              
               <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'pestamp']" class="imagebutton"  size="small"  ><img  style= "height:20px" src="assets/images/activitylist.png" /></span>
 
       </p>
