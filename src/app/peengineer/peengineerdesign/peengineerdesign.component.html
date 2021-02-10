@@ -66,7 +66,7 @@
                 
                     <ion-col *ngIf="segments=='status=assigned&status=declined'">
                                    <span style="float: right;">
-                            <ng-container *ngIf="designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false) && isinrevisionstate==true" >
+                            <ng-container *ngIf="designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false)" >
                                 <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,'accepted')">
                                    Accept
                                 </ion-col>
