@@ -5,6 +5,9 @@
   <ion-segment-button value="completed">
     <ion-label class="segment-btn">Completed</ion-label>
   </ion-segment-button>
+  <ion-segment-button value="delivered">
+    <ion-label class="segment-btn">Delivered</ion-label>
+  </ion-segment-button>
 </ion-segment>
 <ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;">
   <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
@@ -63,7 +66,7 @@
                 
                     <ion-col *ngIf="segments=='status=assigned&status=declined'">
                                    <span style="float: right;">
-                            <ng-container *ngIf="designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false)" >
+                            <ng-container *ngIf="designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false) && isinrevisionstate==true" >
                                 <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,'accepted')">
                                    Accept
                                 </ion-col>

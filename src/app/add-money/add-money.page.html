@@ -11,7 +11,8 @@
 <ion-col class="ion-text-center" size="9" style="padding-left: 27px; text-align: center;">
   <ion-grid class="ion-align-items-center ion-justify-content-center">
       <ion-row class="ion-align-items-center ion-justify-content-center ion-margin">
-          <span class="survey-name ion-text-center" style="font-size:x-large; text-align: center;">Add Money</span>
+          <span *ngIf="mode=='wallet'" class="survey-name ion-text-center" style="font-size:x-large; text-align: center;">Add Money</span>
+          <span *ngIf="mode=='card'" class="survey-name ion-text-center" style="font-size:x-large; text-align: center;">Pay Via Card</span>
       </ion-row>
      
   </ion-grid>

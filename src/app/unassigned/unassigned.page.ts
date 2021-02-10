@@ -107,7 +107,11 @@ export class UnassignedPage implements OnInit {
   
   ) {
     this.userData = this.storageService.getUser();
-    this.segments= 'status=created';
+    if(this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin'){
+      this.segments= 'status=created';
+    }else{
+      this.segments= 'status=created&status=requestaccepted';
+    }
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);

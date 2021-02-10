@@ -32,6 +32,7 @@ export class PestampSchedulePage implements OnInit {
   addressError = INVALID_ADDRESS;
   contactError = INVALID_PHONE_NUMBER;
   hardCopiesError = "Maximum value of hardcopy cannot exceed 10";
+  hardCopiesPatternError = "Value of hardcopy should be a valid number";
   
   atticPhotosList: string[]=[];
   roofPhotosList:string[]=[];
@@ -341,6 +342,7 @@ export class PestampSchedulePage implements OnInit {
     //   this.isECopy = false;
     // }
     const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
+    const NUMBERPATTERN = '^[0-9]+$';
     const shipping = this.firstFormGroup.get('shippingaddress');
     const contact = this.firstFormGroup.get('contactnumber');
     const hardcopy = this.firstFormGroup.get('numberofhardcopy');
@@ -365,7 +367,7 @@ export class PestampSchedulePage implements OnInit {
         Validators.min(1),
         Validators.max(10),
         //Validators.pattern("^[0-4]+$")]);
-        Validators.pattern("")]);
+        Validators.pattern(NUMBERPATTERN)]);
     }
     // else if(this.stampingModeValue == 'ecopy'){
     //   console.log("hello")

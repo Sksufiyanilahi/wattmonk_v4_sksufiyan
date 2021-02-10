@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { ModalController, NavController, NavParams } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { FIELD_REQUIRED } from '../model/constants';
+import { FIELD_REQUIRED, INVALID_AMOUNT } from '../model/constants';
 import { UtilitiesService } from '../utilities.service';
 
 @Component({
@@ -18,6 +18,8 @@ export class PestampdelivermodalPage implements OnInit {
   id:number;
   data:any;
 
+  amountError='Please enter an amount less than $10000'
+  minAmountError = 'Please enter an amount greater than 0'
   fieldRequired = "Delivery Charges should be minimum $1";
   chargesError:string=null;
 
@@ -33,7 +35,8 @@ export class PestampdelivermodalPage implements OnInit {
               private modalCtrl:ModalController,
               private launchNavigator: LaunchNavigator) { 
     this.deliverForm = formBuilder.group({
-      delivercharges : new FormControl(""),
+      delivercharges : new FormControl("",[ Validators.min(1),
+        Validators.max(10000)]),
       comments : new FormControl("")
     })
   }
@@ -51,11 +54,11 @@ export class PestampdelivermodalPage implements OnInit {
     var deliverycharges;
     if(this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping =='both' ){
       console.log("harddcopy");
-      if(this.deliverForm.get('delivercharges').value ==='undefined' || this.deliverForm.get('delivercharges').value ==='' || this.deliverForm.get('delivercharges').value === null){
+      if(this.deliverForm.get('delivercharges').value ==='undefined' || this.deliverForm.get('delivercharges').value ==='' || this.deliverForm.get('delivercharges').value === null || this.deliverForm.get('delivercharges').invalid){
         console.log("error");
         //alertData.deliverycharges.setValidators([Validators.required]);
         //this.chargesError = "Please Enter Delivery Charges";
-        this.utils.errorSnackBar("Please Enter Delivery Charges");
+        this.utils.errorSnackBar("Please Enter Valid Delivery Charges");
         return;
       }
       deliverycharges = this.deliverForm.get('delivercharges').value;
@@ -63,6 +66,7 @@ export class PestampdelivermodalPage implements OnInit {
       deliverycharges = 0;
     // }
   }
+  //if(this.deliverForm.status=='VALID'){
   var postData={};
   if(this.deliverForm.get("comments").value!=""){
              postData = {
