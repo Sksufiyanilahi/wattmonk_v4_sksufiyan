@@ -308,23 +308,24 @@ export class SurveyprocessPage implements OnInit {
         console.log('pv form');
         this.totalstepcount = 19;
         this.pvForm = new FormGroup({
-            roofmaterial: new FormControl('', [Validators.required]),
-            servicefeedsource: new FormControl('', [Validators.required]),
             existingsolarsystem: new FormControl('', [Validators.required]),
             detailsofexisitingsystem: new FormControl('', []),
-            newconstruction: new FormControl('', [Validators.required]),
+            batterybackup: new FormControl('', [Validators.required]),
+            interconnection: new FormControl('', [Validators.required]),
+            servicefeedsource: new FormControl('', [Validators.required]),
             mainbreakersize: new FormControl('', [Validators.required]),
             msprating: new FormControl('', [Validators.required]),
             msplocation: new FormControl('', [Validators.required]),
             mspbreaker: new FormControl('', [Validators.required]),
-            subpanellocation: new FormControl('', [Validators.required]),
-            subpanelrating: new FormControl('', [Validators.required]),
-            subpanelmainbreakersize: new FormControl('', [Validators.required]),
             architecturaldesign: new FormControl('', []),
             utilitymeter: new FormControl('', [Validators.required]),
             framing: new FormControl('', [Validators.required]),
             framingsize: new FormControl('', [Validators.required]),
             distancebetweentworafts: new FormControl('', [Validators.required]),
+            pvinverter: new FormControl('', [Validators.required]),
+            pvinverterlocation: new FormControl('', [Validators.required]),
+            pvinvertermanufacturer: new FormControl('', [Validators.required]),
+            acdisconnect: new FormControl('', [Validators.required]),
             additionalnotes: new FormControl('', []),
             shotname: new FormControl('', [])
         });

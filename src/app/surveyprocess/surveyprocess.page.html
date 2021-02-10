@@ -422,27 +422,6 @@
         <ion-grid class="ion-padding">
             <ion-row>
                 <ion-col>
-                    <ion-label position="fixed">Type of Roof Material*</ion-label>
-                    <app-auto-complete [dataList]="roofmaterials" mode="object" formControlName="roofmaterial" #roofmaterial></app-auto-complete>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <ion-label position="fixed">Service feed source*</ion-label>
-                    <ion-radio-group formControlName="servicefeedsource">
-                        <ion-item>
-                            <ion-label>Overhead</ion-label>
-                            <ion-radio slot="start" value="overhead"></ion-radio>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label>Underground</ion-label>
-                            <ion-radio slot="start" value="underground"></ion-radio>
-                        </ion-item>
-                    </ion-radio-group>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
                     <ion-label position="fixed">Any Existing Solar System*</ion-label>
                     <ion-radio-group formControlName="existingsolarsystem" (ionChange)="changeExistingSolarSystem()">
                         <ion-item>
@@ -465,25 +444,47 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <ion-label position="fixed">Is It Newly Constructed?*</ion-label>
-                    <ion-radio-group formControlName="newconstruction">
+                    <ion-label position="fixed">Battery Backup*</ion-label>
+                    <ion-radio-group formControlName="batterybackup">
                         <ion-item>
-                            <ion-label>Yes</ion-label>
-                            <ion-radio slot="start" value="true"></ion-radio>
+                            <ion-label>Whole</ion-label>
+                            <ion-radio slot="start" value="whole"></ion-radio>
                         </ion-item>
                         <ion-item>
-                            <ion-label>No</ion-label>
-                            <ion-radio slot="start" value="false"></ion-radio>
+                            <ion-label>Partial</ion-label>
+                            <ion-radio slot="start" value="partial"></ion-radio>
                         </ion-item>
                     </ion-radio-group>
                 </ion-col>
             </ion-row>
-            <ion-row *ngIf='pvForm.value.newconstruction'>
+            <ion-row>
                 <ion-col>
-                    <ion-item class="ion-no-padding">
-                        <ion-label position="floating">architectural design</ion-label>
-                        <ion-input type="file"  class="form_input" (change)="architecturalfiles($event)" style="margin-top: 12px;" formControlName="architecturaldesign" placeholder="Upload Architectural design" multiple></ion-input>
-                    </ion-item>
+                    <ion-label position="fixed">Interconnection*</ion-label>
+                    <ion-radio-group formControlName="interconnection">
+                        <ion-item>
+                            <ion-label>Underground</ion-label>
+                            <ion-radio slot="start" value="underground"></ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>Overhead</ion-label>
+                            <ion-radio slot="start" value="overhead"></ion-radio>
+                        </ion-item>
+                    </ion-radio-group>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-label position="fixed">Service feed source*</ion-label>
+                    <ion-radio-group formControlName="servicefeedsource">
+                        <ion-item>
+                            <ion-label>Overhead</ion-label>
+                            <ion-radio slot="start" value="overhead"></ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>Underground</ion-label>
+                            <ion-radio slot="start" value="underground"></ion-radio>
+                        </ion-item>
+                    </ion-radio-group>
                 </ion-col>
             </ion-row>
             <ion-row>
