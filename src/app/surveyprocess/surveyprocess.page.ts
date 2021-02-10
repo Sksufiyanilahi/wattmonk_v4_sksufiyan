@@ -258,7 +258,7 @@ export class SurveyprocessPage implements OnInit {
     equipmentscanvasimage: string;
     sitelocationimage: any;
     hasExistingSolarSystem: boolean;
-
+    user:any
     constructor(
         private cameraPreview: CameraPreview,
         private route: ActivatedRoute,
@@ -267,6 +267,7 @@ export class SurveyprocessPage implements OnInit {
         private navController: NavController,
         private alertController: AlertController,
         private storage: Storage,
+        private storageuserdata:StorageService,
         private utilitieservice: UtilitiesService,
         private apiService: ApiService,
         private changedetectorref: ChangeDetectorRef,
@@ -274,6 +275,7 @@ export class SurveyprocessPage implements OnInit {
         private routeroutlet: IonRouterOutlet,
         private storageService: StorageService,
         private insomnia: Insomnia) {
+            this.user=this.storageuserdata.getUser();
         this.surveyid = +this.route.snapshot.paramMap.get('id');
         this.surveytype = this.route.snapshot.paramMap.get('type');
         this.surveycity = this.route.snapshot.paramMap.get('city');
@@ -1067,8 +1069,14 @@ export class SurveyprocessPage implements OnInit {
         data.saved = true;
         this.storage.set(this.surveyid + '', data);
 
+        if(this.user.role.type=="surveyor"){
+
         this.utilitieservice.setDataRefresh(true);
-        this.navController.navigateBack('surveyoroverview');
+        this.navController.navigateBack('surveyoroverview');}
+        else{
+            this.utilitieservice.sethomepageSurveyRefresh(true);
+            this.navController.navigateBack('/homepage/survey');
+        }
     }
 
     preparesurveystorage(): SurveyStorageModel {

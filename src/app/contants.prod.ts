@@ -28,6 +28,7 @@ export const COMETCHAT_CONSTANTS = {
      API_KEY: '3afc04a7495edb03f4c7c802096a954faf7e3a27'
  }
 export const version='1.1.3'
+export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
 
 //Development Server
 // export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api';
