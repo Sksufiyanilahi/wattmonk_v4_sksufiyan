@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { UtilitiesService } from '../utilities.service';
@@ -18,6 +18,10 @@ import { Intercom } from 'ng-intercom';
 import { intercomId } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import { DomSanitizer } from '@angular/platform-browser';
+// const linkifyUrls = require('linkify-urls');
+// const getUrls = require('get-urls');
+// import * as getUrls from "get-urls";
 
 @Component({
   selector: 'app-permit-design-details',
@@ -61,10 +65,15 @@ export class PermitDesignDetailsPage implements OnInit {
   browser: any;
   deactivateNetworkSwitch: Subscription;
   netSwitch: boolean;
+  commentbox: any;
+  commentboxdata: any;
+  private _link: any;
   // user: import("j:/wattmonk/mobileapp/src/app/model/user.model").User;
 
 
   constructor(
+    private _element : ElementRef,
+    private sanitizer: DomSanitizer,
     private utilities: UtilitiesService,
     private apiService: ApiService,
     private route: ActivatedRoute,
@@ -103,7 +112,12 @@ export class PermitDesignDetailsPage implements OnInit {
 
   }
 
+ 
+
+  
+
   ionViewDidEnter(){
+    
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       this.utilities.showHideIntercom(true);
@@ -261,13 +275,42 @@ export class PermitDesignDetailsPage implements OnInit {
     this.utilities.showLoading('Getting Design Details').then((success) => {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
-        console.log('re', result);
+        console.log('re', result.comments[0].message);
+       
+        this.commentboxdata = result.comments[0].message;
+      //  const urlArray=  Array.from(getUrls(this.commentbox));
+
+      //  urlArray.map(url=>{
+
+      //    this.commentbox.replace(url,`<a href="${url}">${url}</a>`)
+      //   })
+      //   setTimeout(()=>{
+      //     const urlData=this._element.nativeElement.querySelectorAll('a');
+      //      urlData.forEach(url=>{
+      //        url.addEventListener('click', (event) => 
+      //           {
+      //              event.preventDefault();
+      //              this._link = event.target.href;
+      //              console.log('Name is: ' + event.target.innerText);
+      //              console.log('Link is: ' + this._link);
+      //              this.openUrl(this._link);
+      //           }, false);
+      //      })         
+      //      this.commentboxdata=this.sanitizer.bypassSecurityTrustHtml(this.commentbox);
+      //        console.log(this.commentboxdata);
+      //   },2000)
+        
         this.setData(result);
         this.timer();
       }, (error) => {
         this.utilities.hideLoading();
       });
     });
+  }
+
+  openUrl(url){
+    console.log(url);
+    const browser = this.iab.create(url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
 
   goBack() {
