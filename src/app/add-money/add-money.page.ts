@@ -48,6 +48,9 @@ card:any
   amountForm:FormGroup;
   onBoarding:any;
   responseData:any;
+  slabdiscount:any;
+  slabtime:any;
+  initialamount:any
   //counts
   newpermits: Observable<any>;
   newpermitsRef: AngularFireObject<any>;
@@ -82,6 +85,9 @@ card:any
       this.designId = this.designData.productdetails.queryParams.id;
       this.serviceAmount = this.designData.productdetails.queryParams.serviceAmount;
       this.design = this.designData.productdetails.queryParams.design;
+      this.slabdiscount=this.designData.productdetails.queryParams.slabdiscount;
+      this.slabtime=this.designData.productdetails.queryParams.slabtime;
+      this.initialamount=this.designData.productdetails.queryParams.serviceinitialamount;
      // this.data = this.designData.productdetails.queryParams.data;
       this.fulldesigndata = this.designData.productdetails.queryParams.fulldesigndata;
       this.assignValue = this.designData.productdetails.queryParams.assignValue;
@@ -419,7 +425,9 @@ else{
     pestampid: this.designId,
     email: this.fulldesigndata.email,
     amount: this.serviceAmount,
-    user: this.userData.id
+    user: this.userData.id,
+   
+
   }
   console.log(inputData)
   if (this.fulldesigndata.propertytype == 'commercial' && (this.fulldesigndata.modeofstamping == 'hardcopy' || this.fulldesigndata.modeofstamping == 'both')) {
@@ -435,6 +443,8 @@ else{
 this.token='';
 }
 else{
+  var data={}
+  if (this.design=='permit'){
   data={
     //designid:this.designId,
     datetime:date,
@@ -444,10 +454,29 @@ else{
     token: this.token.token.id,
     user:this.userData.id,
     couponid:this.utils.getCouponId().value,
-    designid:this.designId
+    designid:this.designId,
+    slabdiscount:this.slabdiscount,
+    serviceamount:this.initialamount
     // datetime:date,
     // type:"succeeded"
 
+  }}
+  else{
+    data={
+      //designid:this.designId,
+      datetime:date,
+      amount:this.amountForm.get('amount').value,
+      email:this.userData.email,
+      paymenttype: "direct",
+      token: this.token.token.id,
+      user:this.userData.id,
+      couponid:this.utils.getCouponId().value,
+      designid:this.designId,
+    
+      // datetime:date,
+      // type:"succeeded"
+  
+    }
   }
   console.log(data);
     this.apiService.createPayment(data).subscribe((res)=>{
@@ -475,19 +504,33 @@ else{
             var designacceptancestarttime = new Date();
             if(this.design=='prelim'){
              designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+             postData = {
+              outsourcedto: 232,
+              isoutsourced: "true",
+              status: "outsourced",
+              designacceptancestarttime: designacceptancestarttime,
+              paymenttype : "direct",
+              couponid:this.utils.getCouponId().value,
+            
+            };
             }
             else{
               designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+              postData = {
+                outsourcedto: 232,
+                isoutsourced: "true",
+                status: "outsourced",
+                designacceptancestarttime: designacceptancestarttime,
+                paymenttype : "direct",
+                couponid:this.utils.getCouponId().value,
+                slabdiscount:this.slabdiscount,
+                slabtime:this.slabtime,
+                serviceamount:this.initialamount,
+                amount:this.amountForm.get('amount').value
+              
+              };
             }
-               postData = {
-      outsourcedto: 232,
-      isoutsourced: "true",
-      status: "outsourced",
-      designacceptancestarttime: designacceptancestarttime,
-      paymenttype : "direct",
-      couponid:this.utils.getCouponId().value,
-    
-    };
+     
     
       this.apiService.updateDesignForm(postData,this.designId).subscribe(value=>{
         if(this.design=='prelim')

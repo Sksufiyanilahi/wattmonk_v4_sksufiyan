@@ -42,7 +42,7 @@ export class SurveyComponent implements OnInit {
   listOfAssignees: AssigneeModel[] = [];
   routeSubscription: Subscription;
   filterDataArray: SurveyDataModel[];
-  segments:any='status=reviewassigned&status=reviewpassed&status=reviewfailed';
+  segments:any;
   overdue: number;
   userData: any;
   netSwitch: any;
@@ -61,6 +61,7 @@ export class SurveyComponent implements OnInit {
     private storageService:StorageService,
     private network:NetworkdetectService) 
     { 
+      this.segments='status=reviewassigned&status=reviewpassed&status=reviewfailed';
       const latestDate = new Date();
       this.today = datePipe.transform(latestDate, 'M/dd/yy');
       console.log('date', this.today);
@@ -71,18 +72,33 @@ export class SurveyComponent implements OnInit {
     }
 
     segmentChanged(event){
-      this.segments= event.target.value;
-      this.getSurveys(event);
+
+      if(this.userData.role.type=='qcinspector'){ 
+        if(event.target.value=='InReview'){
+           this.segments ="status=reviewassigned&status=reviewpassed&status=reviewfailed";
+           // return this.segments;
+         }
+         else if(event.target.value=='delivered'){
+           this.segments ="status=delivered";
+         }
+         this.getSurveys(null);
+         // return this.segments;
+     
+       }
+       // this.getsegmentdata(event.target.value);
+       console.log((event.target.value));
+      // this.segments= event.target.value;
+      // this.getSurveys(event);
   
-      this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-        this.getSurveys(null);
-      });
+      // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+      //   this.getSurveys(null);
+      // });
   
-      this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-        if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-          this.formatSurveyData(this.listOfSurveyData);
-        }
-      });
+      // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+      //   if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+      //     this.formatSurveyData(this.listOfSurveyData);
+      //   }
+      // });
     }
   
     ionViewDidEnter() {
@@ -121,7 +137,7 @@ export class SurveyComponent implements OnInit {
   }
 
   fetchPendingSurveys(event?, showLoader?: boolean) {
-    
+    console.log(this.segments)
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {

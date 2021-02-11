@@ -200,13 +200,13 @@
 
 </ion-content>
 
-<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
+<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="320" draggable="false" disableDrag="true"
                    shouldBounce="true" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
     <form [formGroup]="assignForm">
         <ion-grid class="drawer">
             <ion-row>
                <ion-col size="12">
-                    <app-user-selector  (assigneeData)=getassignedata($event) placeholder="assign" [assignees]="listOfAssignees"  [reviewAssigned]=reviewAssignedTo
+                    <app-user-selector  (assigneeData)=getassignedata($event) placeholder="Assign" [assignees]="listOfAssignees"  [reviewAssigned]=reviewAssignedTo
                                        formControlName="assignedto"></app-user-selector>
 
                 </ion-col>
