@@ -58,7 +58,6 @@ export class PestampSchedulePage implements OnInit {
   // GoogleAutocomplete: google.maps.places.AutocompleteService;
   // autocompleteItems: any[];
 
-  autoCompleteOff:boolean = false;
   isAtticFileUpload:boolean = false;
   isRoofFileUpload:boolean = false;
   isPermitPlanFileUpload:boolean = false;
