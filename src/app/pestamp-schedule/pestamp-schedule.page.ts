@@ -1,5 +1,5 @@
   
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
@@ -57,25 +57,25 @@ export class PestampSchedulePage implements OnInit {
   permitPlanData:any;
   tabsDisabled = false;
   
-  GoogleAutocomplete: google.maps.places.AutocompleteService;
-  autocompleteItems: any[];
+  // GoogleAutocomplete: google.maps.places.AutocompleteService;
+  // autocompleteItems: any[];
 
-  autoCompleteOff:boolean = false;
+  ///autoCompleteOff:boolean = false;
   isAtticFileUpload:boolean = false;
   isRoofFileUpload:boolean = false;
   isPermitPlanFileUpload:boolean = false;
   //user: User
-  isEditMode:boolean=false;
-  formatted_address:string;
+  // isEditMode:boolean=false;
+  // formatted_address:string;
 
   // map: any;
 
-  geoEncoderOptions: NativeGeocoderOptions = {
-    useLocale: true,
-    maxResults: 5
-  };
+  // geoEncoderOptions: NativeGeocoderOptions = {
+  //   useLocale: true,
+  //   maxResults: 5
+  // };
 
-  geocoder = new google.maps.Geocoder();
+  // geocoder = new google.maps.Geocoder();
 
   constructor(private formBuilder:FormBuilder,
               private storage:StorageService,
@@ -86,7 +86,7 @@ export class PestampSchedulePage implements OnInit {
               private route: ActivatedRoute,
               private network:NetworkdetectService,
               private navController:NavController,
-              //private cdr:ChangeDetectorRef,
+              private cdr:ChangeDetectorRef,
               private router:Router,
               private mixpanelService:MixpanelService) 
               { 
@@ -118,8 +118,8 @@ export class PestampSchedulePage implements OnInit {
     this.designId = +this.route.snapshot.paramMap.get('id');
 
    
-    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
-    this.autocompleteItems = [];
+    // this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
+    // this.autocompleteItems = [];
   }
 
   ionViewDidEnter(){
@@ -140,8 +140,6 @@ export class PestampSchedulePage implements OnInit {
         this.getDesignDetails();
       },1000)
 
-    }else{
-      this.addressValue();
     }
   }
 
@@ -154,9 +152,9 @@ export class PestampSchedulePage implements OnInit {
           this.design = result;
           console.log(this.design);
           this.fieldDisabled=true;
-          this.atticData = this.design.atticphotos;
-          this.roofData = this.design.roofphotos;
-          this.permitPlanData = this.design.permitplan;
+          // this.atticData = this.design.atticphotos;
+          // this.roofData = this.design.roofphotos;
+          // this.permitPlanData = this.design.permitplan;
           console.log(this.permitPlanData)
           this.firstFormGroup.patchValue({
             name: this.design.personname,
@@ -192,14 +190,11 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR SELECT ATTIC FILES FROM DEVICE */
   atticFiles(event){
-    console.log(event);
-    console.log(event.target.files);
     this.isAtticFileUpload = true;
      for(var i=0; i< event.target.files.length;i++){
        this.atticPhotosList.push(event.target.files[i])
      }
      //this.architecturalFileUpload= true;
-     console.log(this.atticPhotosList);
    }
 
    /* FOR UPLOAD ATTIC PHOTOS OR FILES */
@@ -771,164 +766,184 @@ this.utils.showLoading('Saving').then(() => {
   }
 
   //// For Address
-  /* FOR SEARCH SHIPPING ADDRESS */
-  updateSearchResults(event: CustomEvent) {
-    //this.autoCompleteOff = true;
-    console.log(this.autoCompleteOff);
-    const input = event.detail.value;
-    if (input === '') {
-      this.autocompleteItems = [];
-      return;
-    }
-    this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
-      country: 'us'
-    }  },
-      (predictions, status) => {
-        this.autocompleteItems = [];
-        this.zone.run(() => {
-          predictions.forEach((prediction) => {
-            this.autocompleteItems.push(prediction);
-          });
-        });
-      });
-  }
+//   /* FOR SEARCH SHIPPING ADDRESS */
+//   updateSearchResults(event: CustomEvent) {
+//     //this.autoCompleteOff = true;
+//     console.log(this.autoCompleteOff);
+//     const input = event.detail.value;
+//     if (input === '') {
+//       this.autocompleteItems = [];
+//       return;
+//     }
+//     this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+//       country: 'us'
+//     }  },
+//       (predictions, status) => {
+//         this.autocompleteItems = [];
+//         this.zone.run(() => {
+//           predictions.forEach((prediction) => {
+//             this.autocompleteItems.push(prediction);
+//           });
+//         });
+//       });
+//   }
 
-  forAutoComplete(e){
-    console.log("hello",e);
-    this.autoCompleteOff = true;
+//   forAutoComplete(e){
+//     console.log("hello",e);
+//     this.autoCompleteOff = true;
     
-  }
+//   }
 
-  /* FOR SELECT SEARCH SHIPPING ADDRESS*/
-  selectSearchResult(item) {
-    console.log(item);
-    this.geocoder.geocode({
-      placeId: item.place_id
-    }, (responses, status) => {
-      console.log('respo', responses);
-      this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
-    });
-  }
+//   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
+//   selectSearchResult(item) {
+//     console.log(item);
+//     this.geocoder.geocode({
+//       placeId: item.place_id
+//     }, (responses, status) => {
+//       console.log('respo', responses);
+//       this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
+//     });
+//   }
 
-  getGeoEncoder(latitude, longitude, formattedAddress) {
+//   getGeoEncoder(latitude, longitude, formattedAddress) {
 
-    // // TODO remove later
-    // const address: AddressModel = {
-    //   address: 'Vasant Kunj, New Delhi, Delhi',
-    //   lat: 28.5200491,
-    //   long: 77.158687,
-    //   country: 'India',
-    //   state: 'Delhi',
-    //   city: 'New Delhi',
-    //   postalcode: '110070'
-    // };
-    // this.utilities.setAddress(address);
-    // this.goBack();
-    // return;
+//     // // TODO remove later
+//     // const address: AddressModel = {
+//     //   address: 'Vasant Kunj, New Delhi, Delhi',
+//     //   lat: 28.5200491,
+//     //   long: 77.158687,
+//     //   country: 'India',
+//     //   state: 'Delhi',
+//     //   city: 'New Delhi',
+//     //   postalcode: '110070'
+//     // };
+//     // this.utilities.setAddress(address);
+//     // this.goBack();
+//     // return;
 
-    this.utils.showLoading('Loading').then(() => {
-      this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
-        .then((result: NativeGeocoderResult[]) => {
-          console.log(result)
-          let add = '';
-          if (formattedAddress === '') {
-            add = this.generateAddress(result[0]);
-          } else {
-            add = formattedAddress;
-          }
-          this.utils.hideLoading().then(() => {
-            console.log('resu', result);
-            const address: AddressModel = {
-              address: add,
-              lat: latitude,
-              long: longitude,
-              country: result[0].countryName,
-              state: result[0].administrativeArea,
-              city: result[0].locality,
-              postalcode: result[0].postalCode
-            };
-            this.utils.setAddress(address);
-            this.addressValue();
-            //this.goBack();
-          });
+//     this.utils.showLoading('Loading').then(() => {
+//       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+//         .then((result: NativeGeocoderResult[]) => {
+//           console.log(result)
+//           let add = '';
+//           if (formattedAddress === '') {
+//             add = this.generateAddress(result[0]);
+//           } else {
+//             add = formattedAddress;
+//           }
+//           this.utils.hideLoading().then(() => {
+//             console.log('resu', result);
+//             const address: AddressModel = {
+//               address: add,
+//               lat: latitude,
+//               long: longitude,
+//               country: result[0].countryName,
+//               state: result[0].administrativeArea,
+//               city: result[0].locality,
+//               postalcode: result[0].postalCode
+//             };
+//             this.utils.setAddress(address);
+//             this.addressValue();
+//             //this.goBack();
+//           });
 
-        })
-        .catch((error: any) => {
-          this.utils.hideLoading().then(() => {
-            alert('Error getting location' + JSON.stringify(error));
-          });
+//         })
+//         .catch((error: any) => {
+//           this.utils.hideLoading().then(() => {
+//             alert('Error getting location' + JSON.stringify(error));
+//           });
 
-        });
-    });
-  }
+//         });
+//     });
+//   }
 
-  generateAddress(addressObj) {
-    const obj = [];
-    let address = '';
-    for (const key in addressObj) {
-      obj.push(addressObj[key]);
-    }
-    obj.reverse();
-    for (const val in obj) {
-      if (obj[val].length) {
-        address += obj[val] + ', ';
-      }
-    }
-    return address.slice(0, -2);
-  }
+//   generateAddress(addressObj) {
+//     const obj = [];
+//     let address = '';
+//     for (const key in addressObj) {
+//       obj.push(addressObj[key]);
+//     }
+//     obj.reverse();
+//     for (const val in obj) {
+//       if (obj[val].length) {
+//         address += obj[val] + ', ';
+//       }
+//     }
+//     return address.slice(0, -2);
+//   }
 
-  onCancel() {
-    console.log("hello");
-    this.autocompleteItems = [];
-    console.log(this.autocompleteItems)
-  }
+//   onCancel() {
+//     console.log("hello");
+//     this.autocompleteItems = [];
+//     console.log(this.autocompleteItems)
+//   }
 
-  addressValue(){
-    // }
-    this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-      console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//   addressValue(){
+//     // }
+//     this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+//       console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     
-        // this.firstFormGroup.get('address').setValue('124/345');
-        // this.firstFormGroup.get('latitude').setValue('24.553333');
-        // this.firstFormGroup.get('longitude').setValue('80.5555555555');
-        // this.firstFormGroup.get('country').setValue('india');
-        // this.firstFormGroup.get('city').setValue('Lucknow');
-        // this.firstFormGroup.get('state').setValue('UP');
-        // this.firstFormGroup.get('postalcode').setValue(3232343);
-       this.firstFormGroup.get('shippingaddress').setValue(address.address);
-         this.firstFormGroup.get('latitude').setValue(address.lat);
-         this.firstFormGroup.get('longitude').setValue(address.long);
-         this.firstFormGroup.get('country').setValue(address.country);
-       this.firstFormGroup.get('city').setValue(address.city);
-         this.firstFormGroup.get('state').setValue(address.state);
-         this.firstFormGroup.get('postalcode').setValue(address.postalcode);
-    }, (error) => {
-      this.firstFormGroup.get('address').setValue('');
-      this.firstFormGroup.get('latitude').setValue('');
-      this.firstFormGroup.get('longitude').setValue('');
-      this.firstFormGroup.get('country').setValue('');
-      this.firstFormGroup.get('city').setValue('');
-      this.firstFormGroup.get('state').setValue('');
-      this.firstFormGroup.get('postalcode').setValue('');
-    });
-    // this.firstFormGroup.patchValue({
-    //   createdby: this.storage.getUserID()
-    // });
- // this.autocompleteItems = [];
-    this.autoCompleteOff = false;
-    console.log(this.autoCompleteOff);
-    //this.getSolarMake();
+//         // this.firstFormGroup.get('address').setValue('124/345');
+//         // this.firstFormGroup.get('latitude').setValue('24.553333');
+//         // this.firstFormGroup.get('longitude').setValue('80.5555555555');
+//         // this.firstFormGroup.get('country').setValue('india');
+//         // this.firstFormGroup.get('city').setValue('Lucknow');
+//         // this.firstFormGroup.get('state').setValue('UP');
+//         // this.firstFormGroup.get('postalcode').setValue(3232343);
+//        this.firstFormGroup.get('shippingaddress').setValue(address.address);
+//          this.firstFormGroup.get('latitude').setValue(address.lat);
+//          this.firstFormGroup.get('longitude').setValue(address.long);
+//          this.firstFormGroup.get('country').setValue(address.country);
+//        this.firstFormGroup.get('city').setValue(address.city);
+//          this.firstFormGroup.get('state').setValue(address.state);
+//          this.firstFormGroup.get('postalcode').setValue(address.postalcode);
+//     }, (error) => {
+//       this.firstFormGroup.get('address').setValue('');
+//       this.firstFormGroup.get('latitude').setValue('');
+//       this.firstFormGroup.get('longitude').setValue('');
+//       this.firstFormGroup.get('country').setValue('');
+//       this.firstFormGroup.get('city').setValue('');
+//       this.firstFormGroup.get('state').setValue('');
+//       this.firstFormGroup.get('postalcode').setValue('');
+//     });
+//     // this.firstFormGroup.patchValue({
+//     //   createdby: this.storage.getUserID()
+//     // });
+//  // this.autocompleteItems = [];
+//     this.autoCompleteOff = false;
+//     console.log(this.autoCompleteOff);
+//     //this.getSolarMake();
   
-    }
+//     }
 
-    onBlur()
-    {
-      setTimeout(() => {
-        this.autocompleteItems = [];
-      }, 100);
-    }
+//     onBlur()
+//     {
+//       setTimeout(() => {
+//         this.autocompleteItems = [];
+//       }, 100);
+//     }
 
-    uploadAtticphotos(recordid: number, fileobj: File, index){
+//     uploadAtticphotos(recordid: number, fileobj: File, index){
 
-    }
+//     }
+createChatGroup(design:Pestamp){
+  var GUID = 'permit' + "_" + new Date().getTime();
+
+  // var address = design.address.substring(0, 90);
+  var groupName = design.name
+
+  var groupType = CometChat.GROUP_TYPE.PRIVATE;
+  var password = "";
+
+  var group = new CometChat.Group(GUID, groupName, groupType, password);
+
+  CometChat.createGroup(group).then(group=>{
+    let membersList = [
+      new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+    ];
+    CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+      this.cdr.detectChanges();
+    })
+  })
+}
 }
