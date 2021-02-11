@@ -435,7 +435,7 @@
                     </ion-radio-group>
                 </ion-col>
             </ion-row>
-            <ion-row *ngIf="pvForm.value.existingsolarsystem == true">
+            <ion-row *ngIf="hasExistingSolarSystem">
                 <ion-col>
                     <ion-label position="fixed">Details Of Existing System</ion-label>
                     <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="detailsofexisitingsystem">
