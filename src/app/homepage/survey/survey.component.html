@@ -83,7 +83,7 @@
                             <span
                                 *ngIf="surveyData.status == 'created' || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'"
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
-                                [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude + '/' + surveyData.city + '/' + surveyData.state]"
+                                [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                 routerDirection="forward">
                                 Start Survey &nbsp;{{surveyData.state}}
                             </span>
