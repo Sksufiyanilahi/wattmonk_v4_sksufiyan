@@ -41,7 +41,7 @@
         </ion-col>
       </ion-row>
       <ion-row style="width: 100%;" *ngIf="assignValue == 'assign' || data.propertytype == 'commercial'"><ion-col size="6">
-      <ion-label style="font-size: medium;color:#111;font-weight: bold; float: left;">Service Price</ion-label>
+      <ion-label style="font-size: medium;color:#111;font-weight: bold; float: left;">Service Charges</ion-label>
       </ion-col>
       <ion-col size="6" *ngIf="assignValue != 'clearDues' && data.propertytype == 'residential'">
         <ion-label style="font-size: large;color:#111; float:right;"> $ {{settingValue}} </ion-label>
@@ -58,6 +58,7 @@
     <ion-row style="width: 100%;" *ngIf="assignValue == 'clearDues' && (data.modeofstamping=='hardcopy' || data.modeofstamping=='both')"><ion-col size="6">
       <ion-label style="font-size: medium;color:#111;font-weight: bold; float: left;">Shipping Charges</ion-label>
       </ion-col>
+      
       <ion-col size="6">
       <ion-label style="font-size: large;color:#111; float:right;"> $ {{deliveryCharges}} </ion-label>
     </ion-col>
@@ -115,7 +116,7 @@
       <ion-label style="font-size: large;color:#111; float:right; padding-right: 10%;" *ngIf="amounttopay!=null && assignValue =='clearDues'" >$ {{amounttopay}} </ion-label>
    </ion-col>
     </ion-row></ion-item>
-    <ion-row>
+    <ion-row  *ngIf="data.modeofstamping!=='ecopy'">
       <ion-col>
         <span class="error">*Shipping charges to be paid on service delivery</span>
     </ion-col>
@@ -147,3 +148,4 @@
     <ion-footer *ngIf="!user?.ispaymentmodeprepay" (click)="confirmforPostpaid()" class="ion-padding" style="text-align: center;background: blue;color:#fff">Confirm</ion-footer>
     <ion-footer *ngIf="(netPay > user?.parent.amount || amounttopay > user?.parent.amount) && user?.role.type=='clientadmin'" class="ion-padding" style="text-align: center;color:red" class="ion-padding">Insufficient Amount</ion-footer>
   </div>
+  

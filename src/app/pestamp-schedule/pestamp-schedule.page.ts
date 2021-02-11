@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
+  
+import { Component, NgZone, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
@@ -50,19 +51,22 @@ export class PestampSchedulePage implements OnInit {
   userdata:any;
   designId=0;
   design:Pestamp=null;
-
+  fieldDisabled = false;
   atticData:any;
   roofData:any;
   permitPlanData:any;
-
+  tabsDisabled = false;
+  
   // GoogleAutocomplete: google.maps.places.AutocompleteService;
   // autocompleteItems: any[];
 
-  autoCompleteOff:boolean = false;
+  ///autoCompleteOff:boolean = false;
   isAtticFileUpload:boolean = false;
   isRoofFileUpload:boolean = false;
   isPermitPlanFileUpload:boolean = false;
-
+  //user: User
+  // isEditMode:boolean=false;
+  // formatted_address:string;
 
   // map: any;
 
@@ -127,12 +131,15 @@ export class PestampSchedulePage implements OnInit {
   }
 
   ngOnInit() {
+    this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
+    console.log(this.userdata);
 
     if (this.designId !== 0) {
       setTimeout(()=>{
         this.getDesignDetails();
       },1000)
+
     }
   }
 
@@ -143,9 +150,12 @@ export class PestampSchedulePage implements OnInit {
       this.apiService.getPestampDetails(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
           this.design = result;
+          console.log(this.design);
+          this.fieldDisabled=true;
           // this.atticData = this.design.atticphotos;
           // this.roofData = this.design.roofphotos;
           // this.permitPlanData = this.design.permitplan;
+          console.log(this.permitPlanData)
           this.firstFormGroup.patchValue({
             name: this.design.personname,
             email: this.design.email,
@@ -189,6 +199,8 @@ export class PestampSchedulePage implements OnInit {
 
    /* FOR UPLOAD ATTIC PHOTOS OR FILES */
    uploadAtticFiles(recordid: number,file: string){
+    // console.log(this.archFiles);
+    console.log(file);
      const data = new FormData();
      for(var i=0; i< this.atticPhotosList.length;i++){
        data.append("files",this.atticPhotosList[i]);
@@ -199,9 +211,11 @@ export class PestampSchedulePage implements OnInit {
         data.append('ref', "pestamp");
         data.append('field', "atticphotos");
         
+        console.log("file upload data---"+data);
        }
      }
      this.apiService.uploadFile(data).subscribe(res=>{
+       console.log(res);
 
      })
 
@@ -210,15 +224,20 @@ export class PestampSchedulePage implements OnInit {
   
    /* FOR SELECT ROOF FILES OR PHOTOS FROM DEVICE */
    roofFiles(event){
+    console.log(event);
+    console.log(event.target.files);
     this.isRoofFileUpload = true;
      for(var i=0; i< event.target.files.length;i++){
        this.roofPhotosList.push(event.target.files[i])
      }
      //this.architecturalFileUpload= true;
+     console.log(this.roofPhotosList);
    }
 
    /* FOR UPLOAD ROOF PHOTOS OR FILES */
    uploadRoofFiles(recordid: number,file: string){
+    // console.log(this.archFiles);
+    console.log(file);
      const data = new FormData();
      for(var i=0; i< this.roofPhotosList.length;i++){
        data.append("files",this.roofPhotosList[i]);
@@ -229,9 +248,11 @@ export class PestampSchedulePage implements OnInit {
         data.append('ref', "pestamp");
         data.append('field', "roofphotos");
         
+        console.log("file upload data---"+data);
        }
      }
      this.apiService.uploadFile(data).subscribe(res=>{
+       console.log(res);
 
      })
 
@@ -240,15 +261,20 @@ export class PestampSchedulePage implements OnInit {
 
    /* FOR SELECT PHOTOS OR FILES FOR PERMIT PLAN FROM DEVICE */
    permitPlanFiles(event){
+    console.log(event);
+    console.log(event.target.files);
     this.isPermitPlanFileUpload = true;
      for(var i=0; i< event.target.files.length;i++){
        this.permitPlanList.push(event.target.files[i])
      }
      //this.architecturalFileUpload= true;
+     console.log(this.permitPlanList);
    }
 
    /* FOR UPLOAD PERMIT PLAN PHOTOS OR FILES */
    uploadPermitPlanFiles(recordid: number,file: string){
+    // console.log(this.archFiles);
+    console.log(file);
      const data = new FormData();
      for(var i=0; i< this.permitPlanList.length;i++){
        data.append("files",this.permitPlanList[i]);
@@ -263,6 +289,7 @@ export class PestampSchedulePage implements OnInit {
        }
      }
      this.apiService.uploadFile(data).subscribe(res=>{
+       console.log(res);
 
      })
 
@@ -271,6 +298,7 @@ export class PestampSchedulePage implements OnInit {
 
    /* FOR REMOVE SELECTED PHOTOS OR FILES */
    removeArc(i,value) {
+     console.log(value);
      if(value=='attic'){
     this.atticPhotosList.splice(i, 1);
      }
@@ -284,6 +312,7 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR TYPE OF STAMPING RADIO BUTTONS */
   stampingTypeOption(e){
+    console.log(e.target.value);
     this.stampingTypeValue = e.target.value;
     const attic = this.firstFormGroup.get('atticphotos');
     const roof = this.firstFormGroup.get('roofphotos');
@@ -305,13 +334,12 @@ export class PestampSchedulePage implements OnInit {
     }
     else{
       attic.clearValidators();
-      roof.clearValidators(); 
+      attic.updateValueAndValidity();
+      roof.clearValidators();
+      roof.updateValueAndValidity();
       permitplan.clearValidators();
-      
+      permitplan.updateValueAndValidity();
     }
-    attic.updateValueAndValidity();
-    roof.updateValueAndValidity();
-    permitplan.updateValueAndValidity();
     // if(this.stampingTypeValue == 'electrical')
     // {
     //   this.isElectrical = true;
@@ -332,6 +360,8 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR MODE OF STAMPING RADIO BUTTONS*/
   stampingModeOption(e){
+    console.log(e)
+    console.log(e.target.value);
     this.stampingModeValue = e.target.value;
     console.log(this.stampingModeValue)
     // if(this.stampingModeValue == 'ecopy')
@@ -346,6 +376,9 @@ export class PestampSchedulePage implements OnInit {
     const shipping = this.firstFormGroup.get('shippingaddress');
     const contact = this.firstFormGroup.get('contactnumber');
     const hardcopy = this.firstFormGroup.get('numberofhardcopy');
+    console.log(shipping);
+    console.log(contact);
+    console.log(hardcopy);
     if(this.stampingModeValue == 'hardcopy' || this.stampingModeValue == 'both')
     {
       shipping.setValidators([
@@ -361,7 +394,6 @@ export class PestampSchedulePage implements OnInit {
         Validators.minLength(8),
         Validators.maxLength(15),
         Validators.pattern("^[0-9]{8,15}$")]);
-
         hardcopy.setValidators([
         Validators.required,
         Validators.min(1),
@@ -384,15 +416,12 @@ export class PestampSchedulePage implements OnInit {
     // }
     else{
       shipping.clearValidators();
-      shipping.reset();
+      shipping.updateValueAndValidity();
       contact.clearValidators();
-      contact.reset();
+      contact.updateValueAndValidity();
       hardcopy.clearValidators();
-      hardcopy.reset();
+      hardcopy.updateValueAndValidity();
     }
-    shipping.updateValueAndValidity();
-    contact.updateValueAndValidity();
-    hardcopy.updateValueAndValidity();
   }
 
   goBack() {
@@ -404,6 +433,7 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR SUBMIT FORM */
   submitForm(e){
+    console.log(e)
     if(this.firstFormGroup.status=='VALID')
     {
       var tomorrow = new Date();
@@ -438,8 +468,10 @@ export class PestampSchedulePage implements OnInit {
     }
     this.utils.showLoading('Saving').then(() => {
       this.apiService.addSiteAssessment(data).subscribe(res => {
+        console.log(res);
         if(this.isAtticFileUpload)
           {
+            console.log("hello",this.isAtticFileUpload)
             this.uploadAtticFiles(res.id,this.atticPhotosList[0])
           }
           if(this.isRoofFileUpload)
@@ -449,9 +481,11 @@ export class PestampSchedulePage implements OnInit {
           if(this.isPermitPlanFileUpload)
           {
             this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
+            console.log(this.permitPlanList[0]);
           }
           setTimeout(()=>{
             this.utils.hideLoading().then(() => {
+              console.log('Res', res);
               //this.createChatGroup(response);
               this.router.navigate(['/pestamp-homepage'])
               this.utils.showSnackBar('Pe Stamp have been Created');
@@ -470,9 +504,12 @@ export class PestampSchedulePage implements OnInit {
           },2000)
       },
       responseError => {
-        const error: ErrorModel = responseError.error;
-    this.utils.errorSnackBar(error.message);
-      })
+       this.utils.hideLoading().then(() => {
+         const error: ErrorModel = responseError.error;
+         this.utils.errorSnackBar(error.message[0].messages[0].message);
+       });
+//
+     })
     })
       }
     else if(e == 'send')
@@ -505,6 +542,7 @@ export class PestampSchedulePage implements OnInit {
     console.log(res);
       if(this.isAtticFileUpload)
       {
+        console.log("hello",this.isAtticFileUpload)
         this.uploadAtticFiles(res.id,this.atticPhotosList[0])
       }
       if(this.isRoofFileUpload)
@@ -514,12 +552,12 @@ export class PestampSchedulePage implements OnInit {
           if(this.isPermitPlanFileUpload)
           {
             this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
+            console.log(this.permitPlanList[0]);
           }
           //this.router.navigate(['pestamp-payment-modal',{isConfirmed: false, isLater: false, ispestamp: true, pestampid: res.id}]);
           let objToSend: NavigationExtras = {
             queryParams: {
-            designData:res,
-            value:'assign'
+            designData:res
             },
             skipLocationChange: false,
             fragment: 'top' 
@@ -530,10 +568,13 @@ export class PestampSchedulePage implements OnInit {
       state: { productdetails: objToSend }
     });
         },
-        responseError => {
-          const error: ErrorModel = responseError.error;
-      this.utils.errorSnackBar(error.message);
-        })
+  responseError => {
+   this.utils.hideLoading().then(() => {
+     const error: ErrorModel = responseError.error;
+     this.utils.errorSnackBar(error.message[0].messages[0].message);
+   });
+//
+ })
     }
     }
     else{
@@ -562,8 +603,10 @@ export class PestampSchedulePage implements OnInit {
 }
 this.utils.showLoading('Saving').then(() => {
   this.apiService.updatePestamps(this.designId,data).subscribe(res => {
+    console.log(res);
     if(this.isAtticFileUpload)
       {
+        console.log("hello",this.isAtticFileUpload)
         this.uploadAtticFiles(res.id,this.atticPhotosList[0])
       }
       if(this.isRoofFileUpload)
@@ -573,9 +616,11 @@ this.utils.showLoading('Saving').then(() => {
       if(this.isPermitPlanFileUpload)
       {
         this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
+        console.log(this.permitPlanList[0]);
       }
       setTimeout(()=>{
         this.utils.hideLoading().then(() => {
+          console.log('Res', res);
           //this.createChatGroup(response);
           this.router.navigate(['/pestamp-homepage'])
           this.utils.showSnackBar('Pe Stamp have been updated');
@@ -594,9 +639,12 @@ this.utils.showLoading('Saving').then(() => {
       },2000)
   },
   responseError => {
-    const error: ErrorModel = responseError.error;
-this.utils.errorSnackBar(error.message);
-  })
+   this.utils.hideLoading().then(() => {
+     const error: ErrorModel = responseError.error;
+     this.utils.errorSnackBar(error.message[0].messages[0].message);
+   });
+//
+ })
 })
     }
     else if(e == 'send'){
@@ -626,6 +674,7 @@ this.utils.errorSnackBar(error.message);
     console.log(res);
       if(this.isAtticFileUpload)
       {
+        console.log("hello",this.isAtticFileUpload)
         this.uploadAtticFiles(res.id,this.atticPhotosList[0])
       }
       if(this.isRoofFileUpload)
@@ -635,6 +684,7 @@ this.utils.errorSnackBar(error.message);
           if(this.isPermitPlanFileUpload)
           {
             this.uploadPermitPlanFiles(res.id,this.permitPlanList[0]);
+            console.log(this.permitPlanList[0]);
           }
           let objToSend: NavigationExtras = {
             queryParams: {
@@ -650,9 +700,12 @@ this.utils.errorSnackBar(error.message);
     });
   },
   responseError => {
-    const error: ErrorModel = responseError.error;
-this.utils.errorSnackBar(error.message);
-  })
+   this.utils.hideLoading().then(() => {
+     const error: ErrorModel = responseError.error;
+     this.utils.errorSnackBar(error.message[0].messages[0].message);
+   });
+//
+ })
 
     }
   }
@@ -688,8 +741,9 @@ this.utils.errorSnackBar(error.message);
       {
         this.utils.errorSnackBar("Please select mounting type");
       }
-      else if(this.firstFormGroup.value.stampingtype == null){
-        this.utils.errorSnackBar("Please select type of stamping");
+      else if(this.firstFormGroup.value.propertytype == '')
+      {
+        this.utils.errorSnackBar("Please select property type");
       }
       
       else if(this.firstFormGroup.value.atticphotos == '' && (this.stampingTypeValue == 'structural' || this.stampingTypeValue == 'both'))
@@ -711,118 +765,118 @@ this.utils.errorSnackBar(error.message);
 
   }
 
-  // //// For Address
-  // /* FOR SEARCH SHIPPING ADDRESS */
-  // updateSearchResults(event: CustomEvent) {
-  //   //this.autoCompleteOff = true;
-  //   console.log(this.autoCompleteOff);
-  //   const input = event.detail.value;
-  //   if (input === '') {
-  //     this.autocompleteItems = [];
-  //     return;
-  //   }
-  //   this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
-  //     country: 'us'
-  //   }  },
-  //     (predictions, status) => {
-  //       this.autocompleteItems = [];
-  //       this.zone.run(() => {
-  //         predictions.forEach((prediction) => {
-  //           this.autocompleteItems.push(prediction);
-  //         });
-  //       });
-  //     });
-  // }
+  //// For Address
+//   /* FOR SEARCH SHIPPING ADDRESS */
+//   updateSearchResults(event: CustomEvent) {
+//     //this.autoCompleteOff = true;
+//     console.log(this.autoCompleteOff);
+//     const input = event.detail.value;
+//     if (input === '') {
+//       this.autocompleteItems = [];
+//       return;
+//     }
+//     this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+//       country: 'us'
+//     }  },
+//       (predictions, status) => {
+//         this.autocompleteItems = [];
+//         this.zone.run(() => {
+//           predictions.forEach((prediction) => {
+//             this.autocompleteItems.push(prediction);
+//           });
+//         });
+//       });
+//   }
 
-  // forAutoComplete(e){
-  //   console.log("hello",e);
-  //   this.autoCompleteOff = true;
+//   forAutoComplete(e){
+//     console.log("hello",e);
+//     this.autoCompleteOff = true;
     
-  // }
+//   }
 
-  // /* FOR SELECT SEARCH SHIPPING ADDRESS*/
-  // selectSearchResult(item) {
-  //   console.log(item);
-  //   this.geocoder.geocode({
-  //     placeId: item.place_id
-  //   }, (responses, status) => {
-  //     console.log('respo', responses);
-  //     this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
-  //   });
-  // }
+//   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
+//   selectSearchResult(item) {
+//     console.log(item);
+//     this.geocoder.geocode({
+//       placeId: item.place_id
+//     }, (responses, status) => {
+//       console.log('respo', responses);
+//       this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
+//     });
+//   }
 
-  // getGeoEncoder(latitude, longitude, formattedAddress) {
+//   getGeoEncoder(latitude, longitude, formattedAddress) {
 
-  //   // // TODO remove later
-  //   // const address: AddressModel = {
-  //   //   address: 'Vasant Kunj, New Delhi, Delhi',
-  //   //   lat: 28.5200491,
-  //   //   long: 77.158687,
-  //   //   country: 'India',
-  //   //   state: 'Delhi',
-  //   //   city: 'New Delhi',
-  //   //   postalcode: '110070'
-  //   // };
-  //   // this.utilities.setAddress(address);
-  //   // this.goBack();
-  //   // return;
+//     // // TODO remove later
+//     // const address: AddressModel = {
+//     //   address: 'Vasant Kunj, New Delhi, Delhi',
+//     //   lat: 28.5200491,
+//     //   long: 77.158687,
+//     //   country: 'India',
+//     //   state: 'Delhi',
+//     //   city: 'New Delhi',
+//     //   postalcode: '110070'
+//     // };
+//     // this.utilities.setAddress(address);
+//     // this.goBack();
+//     // return;
 
-  //   this.utils.showLoading('Loading').then(() => {
-  //     this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
-  //       .then((result: NativeGeocoderResult[]) => {
-  //         console.log(result)
-  //         let add = '';
-  //         if (formattedAddress === '') {
-  //           add = this.generateAddress(result[0]);
-  //         } else {
-  //           add = formattedAddress;
-  //         }
-  //         this.utils.hideLoading().then(() => {
-  //           console.log('resu', result);
-  //           const address: AddressModel = {
-  //             address: add,
-  //             lat: latitude,
-  //             long: longitude,
-  //             country: result[0].countryName,
-  //             state: result[0].administrativeArea,
-  //             city: result[0].locality,
-  //             postalcode: result[0].postalCode
-  //           };
-  //           this.utils.setAddress(address);
-  //           this.addressValue();
-  //           //this.goBack();
-  //         });
+//     this.utils.showLoading('Loading').then(() => {
+//       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+//         .then((result: NativeGeocoderResult[]) => {
+//           console.log(result)
+//           let add = '';
+//           if (formattedAddress === '') {
+//             add = this.generateAddress(result[0]);
+//           } else {
+//             add = formattedAddress;
+//           }
+//           this.utils.hideLoading().then(() => {
+//             console.log('resu', result);
+//             const address: AddressModel = {
+//               address: add,
+//               lat: latitude,
+//               long: longitude,
+//               country: result[0].countryName,
+//               state: result[0].administrativeArea,
+//               city: result[0].locality,
+//               postalcode: result[0].postalCode
+//             };
+//             this.utils.setAddress(address);
+//             this.addressValue();
+//             //this.goBack();
+//           });
 
-  //       })
-  //       .catch((error: any) => {
-  //         this.utils.hideLoading().then(() => {
-  //           alert('Error getting location' + JSON.stringify(error));
-  //         });
+//         })
+//         .catch((error: any) => {
+//           this.utils.hideLoading().then(() => {
+//             alert('Error getting location' + JSON.stringify(error));
+//           });
 
-  //       });
-  //   });
-  // }
+//         });
+//     });
+//   }
 
-  // generateAddress(addressObj) {
-  //   const obj = [];
-  //   let address = '';
-  //   for (const key in addressObj) {
-  //     obj.push(addressObj[key]);
-  //   }
-  //   obj.reverse();
-  //   for (const val in obj) {
-  //     if (obj[val].length) {
-  //       address += obj[val] + ', ';
-  //     }
-  //   }
-  //   return address.slice(0, -2);
-  // }
+//   generateAddress(addressObj) {
+//     const obj = [];
+//     let address = '';
+//     for (const key in addressObj) {
+//       obj.push(addressObj[key]);
+//     }
+//     obj.reverse();
+//     for (const val in obj) {
+//       if (obj[val].length) {
+//         address += obj[val] + ', ';
+//       }
+//     }
+//     return address.slice(0, -2);
+//   }
 
-  // onCancel() {
-  //   console.log("hello");
-  //   this.autocompleteItems = [];
-  //   console.log(this.autocompleteItems)
-  // }
+//   onCancel() {
+//     console.log("hello");
+//     this.autocompleteItems = [];
+//     console.log(this.autocompleteItems)
+//   }
 
 //   addressValue(){
 //     // }
@@ -869,6 +923,9 @@ this.utils.errorSnackBar(error.message);
 //       }, 100);
 //     }
 
+//     uploadAtticphotos(recordid: number, fileobj: File, index){
+
+//     }
 createChatGroup(design:Pestamp){
   var GUID = 'permit' + "_" + new Date().getTime();
 
@@ -889,5 +946,4 @@ createChatGroup(design:Pestamp){
     })
   })
 }
-
 }
