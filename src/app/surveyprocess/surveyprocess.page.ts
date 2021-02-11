@@ -292,7 +292,6 @@ export class SurveyprocessPage implements OnInit {
         }
 
         this.platform.backButton.subscribeWithPriority(10, () => {
-            console.log('Handler was called!');
             this.handleSurveyExit();
             navController.pop();
         });
@@ -307,7 +306,6 @@ export class SurveyprocessPage implements OnInit {
     }
 
     pvSurveyProcess() {
-        console.log('pv form');
         this.totalstepcount = 19;
         this.pvForm = new FormGroup({
             existingsolarsystem: new FormControl('', [Validators.required]),
@@ -334,7 +332,6 @@ export class SurveyprocessPage implements OnInit {
 
         // this.storage.clear();
         this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
-            console.log(data);
             if (data) {
                 this.mainmenuitems = data.menuitems;
                 this.totalpercent = data.currentprogress;
@@ -410,7 +407,6 @@ export class SurveyprocessPage implements OnInit {
 
         // this.storage.clear();
         this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
-            console.log(data);
             if (data) {
                 this.mainmenuitems = data.menuitems;
                 this.totalpercent = data.currentprogress;
@@ -500,7 +496,6 @@ export class SurveyprocessPage implements OnInit {
 
         // this.storage.clear();
         this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
-            console.log(data);
             if (data) {
                 this.mainmenuitems = data.menuitems;
                 this.totalpercent = data.currentprogress;
@@ -839,7 +834,6 @@ export class SurveyprocessPage implements OnInit {
         } else {
             this.currentzoom = 1;
         }
-        console.log(this.currentzoom);
         this.cameraPreview.setZoom(this.currentzoom);
     }
 
@@ -1433,12 +1427,12 @@ export class SurveyprocessPage implements OnInit {
 
     savePVFormData() {
         const data = {
-            roofmaterial: this.pvForm.get("roofmaterial").value.id,
+            existingsolarsystem: this.pvForm.get("existingsolarsystem").value,
+            detailsofexisitingsystem: this.pvForm.get("detailsofexisitingsystem").value,
+            batterybackup: this.pvForm.get("batterybackup").value,
+            interconnection: this.pvForm.get("interconnection").value,
             servicefeedsource: this.pvForm.get("servicefeedsource").value,
             additionalnotes: this.pvForm.get("additionalnotes").value,
-            existingsolarsystem: this.pvForm.get("existingsolarsystem").value,
-            newconstruction: this.pvForm.get("newconstruction").value,
-            detailsofexisitingsystem: this.pvForm.get("detailsofexisitingsystem").value,
             status: 'surveycompleted'
         }
         this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
@@ -1451,11 +1445,12 @@ export class SurveyprocessPage implements OnInit {
                         () => console.log('error')
                     );
                 this.uploadImagesToServer();
-
             });
         }, (error) => {
             this.utilitieservice.hideLoading().then(() => {
+                console.log(error);
                 this.utilitieservice.errorSnackBar(JSON.stringify(error));
+                this.utilitieservice.errorSnackBar('There was some error in processing the request');
             });
         });
     }

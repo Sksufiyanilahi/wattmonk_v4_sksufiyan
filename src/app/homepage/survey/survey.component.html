@@ -80,11 +80,10 @@
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="openSurveyors(surveyData.id,surveyData)">Assign</span>
                             <!-- <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type =='surveyor'"> -->
-
                             <span
                                 *ngIf="surveyData.status == 'created' || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'"
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
-                                [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude + '/' + surveyData.city + '/' + surveyData.state]"
+                                [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude + '/' + surveyData.city + '/' + surveyData.state]"
                                 routerDirection="forward">
                                 Start Survey &nbsp;{{surveyData.state}}
                             </span>
