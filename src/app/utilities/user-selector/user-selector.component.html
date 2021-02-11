@@ -1,12 +1,17 @@
+
 <div class="d-flex flex-column transparent-background margin" style="overflow:scroll">
-  <span class="input-placeholder" style="margin-left: 8px;">{{placeholder}}</span>
+  <span class="input-placeholder" style="margin-left: 8px; font-weight: bold;">{{placeholder }}</span>
   <span class="input-placeholder" *ngIf="required">*</span>
-  <div scrollX="true" style="margin-top: 4px;">
-
-
+  
+    <div>
+      <ion-searchbar class="searchbar-input-container.sc-ion-searchbar-md" debounce="0" placeholder="Search Here" (ionChange)="filterUsers()" [(ngModel)]="searchTerm">
+    
+      </ion-searchbar>
+    </div>
+    <div scrollX="true" style="margin-top: 4px;">
     <div class="d-flex flex-row">
       
-      <div *ngFor="let assignee of assignees" class="assignee-margin " (click)="selectAssignee(assignee)">
+      <div *ngFor="let assignee of filteredAssignees" class="assignee-margin " (click)="selectAssignee(assignee)">
 
         <div class="preselected" id="pre" *ngIf="assignee.id==reviewAssigned?.id"
              [class.selected]="assignee.selected" [class.normal]="!assignee.selected " >

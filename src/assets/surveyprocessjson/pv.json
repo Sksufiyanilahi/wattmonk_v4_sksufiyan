@@ -83,83 +83,6 @@
                 ]
             },
             {
-                "name":"Existing Sub Panel",
-                "isactive": true,
-                "ispending": true,
-                "isvisible": true,
-                "checkexistence":true,
-                "isexistencechecked":false,
-                "inputformcontrol": "",
-                "allowmultipleshots": false,
-                "capturedshots": [],
-                "shots":[
-                    {
-                        "isactive": true,
-                        "ispending": true,
-                        "shotinfo":"Capture Long Shot",
-                        "questioninfo":"Provide Sub Panel Location",
-                        "shotstatus": false,
-                        "promptquestion": false,
-                        "question" : "Sub Panel is located inside or outside the building?",
-                        "actions" : ["inside","outside"],
-                        "result" : "",
-                        "questionstatus": false,
-                        "questiontype": 1,
-                        "inputformcontrol" : "subpanellocation",
-                        "imagekey":"existingsubpanelimages",
-                        "imagename":"subpanellongshot"
-                    },
-                    {
-                        "isactive": false,
-                        "ispending": true,
-                        "shotinfo":"Capture Zoom Shot",
-                        "questioninfo":"Provide Sub Panel Rating",
-                        "shotstatus": false,
-                        "promptquestion": false,
-                        "question" : "Sub Panel Rating?",
-                        "actions" : ["confirm"],
-                        "result" : "",
-                        "questionstatus": false,
-                        "questiontype": 2,
-                        "inputformcontrol" : "subpanelrating",
-                        "imagekey":"existingsubpanelimages",
-                        "imagename":"subpanelzoomshot"
-                    },
-                    {
-                        "isactive": false,
-                        "ispending": true,
-                        "shotinfo":"Open Sub Panel Shutter & Capture Zoom Shot",
-                        "questioninfo":"Provide Sub Panel Main Breaker Size",
-                        "shotstatus": false,
-                        "promptquestion": false,
-                        "question" : "Sub Panel Main Breaker Size",
-                        "actions" : ["confirm"],
-                        "result" : "",
-                        "questionstatus": false,
-                        "questiontype": 2,
-                        "inputformcontrol" : "subpanelmainbreakersize",
-                        "imagekey":"existingsubpanelimages",
-                        "imagename":"subpanelopenshutterzoomshot"
-                    },
-                    {
-                        "isactive": false,
-                        "ispending": true,
-                        "shotinfo":"Open Sub Panel Inside Cover & Capture Zoom Shot",
-                        "questioninfo":"",
-                        "shotstatus": false,
-                        "promptquestion": false,
-                        "question" : "",
-                        "actions" : [],
-                        "result" : "",
-                        "questionstatus": false,
-                        "questiontype": 0,
-                        "inputformcontrol" : "",
-                        "imagekey":"existingsubpanelimages",
-                        "imagename":"subpanelwithoutcovershot"
-                    }
-                ]
-            },
-            {
                 "name":"Utility Meter",
                 "ispending": true,
                 "isactive": false,
@@ -203,6 +126,125 @@
                         "imagename":"umzoomshoturl"
                     }
                 ]
+            },
+            {
+                "name":"PV Inverter",
+                "ispending": true,
+                "isactive": false,
+                "isvisible": true,
+                "checkexistence":false,
+                "isexistencechecked":false,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"Provide Inverter Location",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Inverter is located inside or outside the building?",
+                        "actions" : ["inside","outside"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "pvinverterlocation",
+                        "imagekey":"pvinverterimages",
+                        "imagename":"pvinverterwideshoturl"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide Inverter Manufacturer & Model",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Inverter Manufacturer, Model",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 7,
+                        "inputformcontrol" : "pvinvertermanufacturer",
+                        "imagekey":"utilitymeterimages",
+                        "imagename":"pvinverterzoomshoturl"
+                    }
+                ]
+            },
+            {
+                "name":"PV Meter",
+                "ispending": true,
+                "isactive": false,
+                "isvisible": true,
+                "checkexistence":true,
+                "isexistencechecked":true,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"PV Meter",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"pvmeterimages",
+                        "imagename":"pvmeterwideshoturl"
+                    }
+                ]
+            },
+            {
+                "name":"AC Disconnect",
+                "ispending": true,
+                "isactive": false,
+                "isvisible": true,
+                "checkexistence":true,
+                "isexistencechecked":true,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"acdisconnectimages",
+                        "imagename":"acdisconnectwideshoturl"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"acdisconnectimages",
+                        "imagename":"acdisconnectzoomshoturl"
+                    }
+                ]
             }
         ]
     },
@@ -238,7 +280,7 @@
                         "questiontype": 0,
                         "inputformcontrol" : "",
                         "imagekey":"roofimages",
-                        "imagename":"roofphoto"
+                        "imagename":"roof"
                     }
                 ]
             },
@@ -301,7 +343,7 @@
                 ]
             },
             {
-                "name":"Obstacles Dimensiones",
+                "name":"Obstacles Dimensions",
                 "isactive": false,
                 "ispending": true,
                 "isvisible": true,
