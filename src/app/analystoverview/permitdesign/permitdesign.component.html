@@ -46,7 +46,7 @@
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
                     
-                   <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon src="/assets/images/activitylist.png" style="height: 20px;" ></ion-icon></span>
+                   <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><img  style= "height:20px" src="assets/images/activitylist.png" /></span>
             </p>
             <p style="margin:0px">
                 <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'" [routerLink]="['/permit-design-details/',designData.id]">Declined</span>
