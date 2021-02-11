@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { DesginDataModel } from '../model/design.model';
-import { MixpanelService } from '../utilities/mixpanel.service';
+import { ThemeService } from 'ng2-charts';
 
 @Component({
   selector: 'app-payment-modal',
@@ -37,6 +37,7 @@ netPay:any
   uss:any;
    //counts
    isShow:boolean=false
+   isradiodisable:boolean=false
    newpermits: Observable<any>;
    newpermitsRef: AngularFireObject<any>;
    newpermitscount = 0;
@@ -47,6 +48,7 @@ netPay:any
   newprelimscount = 0;
   designData:any;
   fulldesigndata: any;
+  delivertime:String="6-12";
 
    
   constructor( private storageService:StorageService,
@@ -60,8 +62,7 @@ netPay:any
     private alertController:AlertController,
     private modalController:ModalController,
     private db:AngularFireDatabase,
-    private cdr: ChangeDetectorRef,
-    private mixpanelService:MixpanelService
+    private cdr: ChangeDetectorRef
     ) {
       // this.designData = this.router.getCurrentNavigation().extras.state;
       // console.log(this.designData)
@@ -112,8 +113,6 @@ netPay:any
    
     this.userData = this.storageService.getUser();
     console.log(this.userData)
-    this.mixpanelService.track('PAYMENT_PAGE_OPEN', {
-    });
     this.utils.showHideIntercom(true);
     this.fetchData();
     this.servicecharges();});
@@ -149,7 +148,7 @@ fetchData(){
   // console.log(navigation)
   // console.log(this.router.getCurrentNavigation().extras.state)
  
-
+this.isradiodisable=false
 
   this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
     console.log(this.user)
@@ -181,15 +180,26 @@ discountAmount(){
     this.discount=this.settingValue;
     this.netPay=this.settingValue-this.discount;
   }
-  else if(this.coupondata!=null){
+  else if(this.coupondata!=null){ 
+    if(this.design=='prelim'){
     this.discount=this.code_discount;
     this.netPay=this.settingValue-this.code_discount;
-    console.log(this.netPay)
+    console.log(this.netPay)}
+    if(this.design=='permit'){
+      this.discount=this.code_discount+this.discount;
+      this.netPay=this.netPay-this.discount;
+    }
   }
   else{
+    if(this.design=='prelim'){
     this.discount=null;
     this.netPay=this.settingValue;
-    console.log(this.netPay)
+    console.log(this.netPay)}
+
+    if(this.design=='permit'){
+      this.netPay=this.servicePrice.paymentamount;
+     this.discount=this.servicePrice.slabdiscount;
+    }
   }
 }
 
@@ -201,17 +211,33 @@ servicecharges(){
         this.settingValue = element.settingvalue;
       });
       console.log("ddd",this.settingValue)
+      this.discountAmount();
     })}
     else{
-      this.apiService.permitCharges().subscribe(res=>{
+      var postData={
+        userparentid:this.user.parent.id,
+        timeslab:this.delivertime
+      }
+      this.apiService.permitCharges(postData).subscribe(res=>{
         this.servicePrice=res;
-        this.servicePrice.forEach(element => {
-          this.settingValue = element.settingvalue;
-        });
+       this.settingValue=this.servicePrice.servicecharge
         console.log("ddd",this.settingValue)
+        
+        
+        if(this.servicePrice.freedesign==true){
+          this.delivertime="24-48";
+          this.discount=this.servicePrice.slabdiscount;
+          this.netPay=0
+          this.isradiodisable=true
+        }else{
+          this.netPay=this.servicePrice.paymentamount;
+          this.discount=this.servicePrice.slabdiscount;
+          this.isradiodisable=false
+        }
+      
       })
     }
-    this.discountAmount();
+    
     
 }
 
@@ -221,17 +247,30 @@ confirm(){
   var designacceptancestarttime = new Date();
   if(this.design=='prelim'){
   designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+  postData = {
+    outsourcedto: 232,
+    isoutsourced: "true",
+    status: "outsourced",
+    couponid:this.utils.getCouponId().value,
+    designacceptancestarttime: designacceptancestarttime,
+    
+  };
   }
   else{
     designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
-  }
     postData = {
       outsourcedto: 232,
       isoutsourced: "true",
       status: "outsourced",
       couponid:this.utils.getCouponId().value,
-      designacceptancestarttime: designacceptancestarttime
+      designacceptancestarttime: designacceptancestarttime,
+      slabname:this.delivertime,
+      slabdiscount:this.servicePrice.slabdiscount,
+      serviceamount:this.servicePrice.servicecharge,
+      amount:this.netPay
     };
+  }
+   
     this.utils.showLoading("Assigning").then(()=>
     {
         this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
@@ -279,7 +318,10 @@ confirm(){
         id:this.id,
         serviceAmount:this.netPay,
         design:this.design,
-        fulldesigndata:this.fulldesigndata
+        fulldesigndata:this.fulldesigndata,
+        slabname:this.delivertime,
+        slabdiscount:this.servicePrice.slabdiscount,
+        serviceinitialamount:this.servicePrice.servicecharge
       },
       skipLocationChange: false,
       fragment: 'top' 
@@ -292,8 +334,7 @@ confirm(){
   }
 
   cancel(){
-    this.mixpanelService.track("PAYMENT_PAGE_CLOSE", {
-    });
+   
       if(this.design ==='prelim'){
       this.router.navigate(['/homepage/design'])
       this.utils.setHomepageDesignRefresh(true);
@@ -319,18 +360,32 @@ confirm(){
       var designacceptancestarttime = new Date();
       if(this.design=='prelim'){
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+      postData = {
+        outsourcedto: 232,
+        isoutsourced: "true",
+        status: "outsourced",
+        designacceptancestarttime: designacceptancestarttime,
+        couponid:this.utils.getCouponId().value,
+        paymenttype:null,
+        
+      };
       }
       else{
         designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
-      }
         postData = {
           outsourcedto: 232,
           isoutsourced: "true",
           status: "outsourced",
           designacceptancestarttime: designacceptancestarttime,
           couponid:this.utils.getCouponId().value,
-          paymenttype:null
+          paymenttype:null,
+          slabname:this.delivertime,
+          slabdiscount:this.servicePrice.slabdiscount,
+          serviceamount:this.servicePrice.servicecharge,
+          amount:this.netPay
         };
+      }
+        
         this.utils.showLoading("Assigning").then(()=>
           {this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
             this.utils.hideLoading().then(()=>
@@ -429,7 +484,7 @@ confirm(){
   if(data.discounttype=='percentage'){
     console.log(price)
     this.code_discount=(data.amount/100)*price;
-  this.code_discount= this.code_discount.toFixed(2);
+  // this.code_discount= this.code_discount.toFixed(2);
   this.discountAmount();
     console.log(this.code_discount)
     this.Congratulations();
@@ -504,4 +559,11 @@ else if(data.discounttype=='amount'){
     })
   }
 
+  checkboxClicking(event){
+    
+console.log(this.delivertime);
+this.servicecharges();
+this.removeCoupon();
+
+  }
 }
