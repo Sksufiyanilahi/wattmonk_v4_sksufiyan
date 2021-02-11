@@ -141,7 +141,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           // if starting survey directly, assign the survey to yourself
           this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
           this.surveyForm.get('status').setValue('surveyassigned');
-
+          console.log(this.surveyForm.value);
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);

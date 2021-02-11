@@ -165,7 +165,7 @@
                         "actions" : ["confirm"],
                         "result" : "",
                         "questionstatus": false,
-                        "questiontype": 2,
+                        "questiontype": 7,
                         "inputformcontrol" : "pvinvertermanufacturer",
                         "imagekey":"utilitymeterimages",
                         "imagename":"pvinverterzoomshoturl"
@@ -343,7 +343,7 @@
                 ]
             },
             {
-                "name":"Obstacles Dimensiones",
+                "name":"Obstacles Dimensions",
                 "isactive": false,
                 "ispending": true,
                 "isvisible": true,
