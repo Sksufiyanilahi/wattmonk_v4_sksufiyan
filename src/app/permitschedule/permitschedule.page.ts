@@ -804,6 +804,7 @@ saveInverterModel() {
         var designstatus;
         var designoutsourcedto;
         var isoutsourced;
+        var newConstruction = this.desginForm.get("newconstruction").value;
         if (this.designCreatedBy) {
           designstatus = "outsourced";
           designoutsourcedto = "232";
@@ -869,13 +870,16 @@ saveInverterModel() {
              // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
               this.utils.showLoading('Saving').then(() => {
               this.apiService.addDesginForm(data).subscribe(response => {
-                if(this.architecturalFileUpload){
+                if(newConstruction=='true'){
+               // if(this.architecturalFileUpload){
                   this.uploaarchitecturedesign(response.id,'architecturaldesign');
-                }
+               // }
+              }
+              else{
                 if(this.attachmentFileUpload){
                   this.uploadAttachmentDesign(response.id,'attachments')
                 }
-
+              }
                   setTimeout(()=>{
                     this.utils.hideLoading().then(() => {
                       console.log('Res', response);
@@ -951,12 +955,22 @@ saveInverterModel() {
 
              // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
               this.apiService.addDesginForm(postData).subscribe(response => {
-                if(this.architecturalFileUpload){
-                  this.uploaarchitecturedesign(response.id,'architecturaldesign');
-                }
-                if(this.attachmentFileUpload){
-                  this.uploadAttachmentDesign(response.id,'attachments')
-                }
+                // if(this.architecturalFileUpload){
+                //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                // }
+                // if(this.attachmentFileUpload){
+                //   this.uploadAttachmentDesign(response.id,'attachments')
+                // }
+                if(newConstruction=='true'){
+                  // if(this.architecturalFileUpload){
+                     this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                  // }
+                 }
+                 else{
+                   if(this.attachmentFileUpload){
+                     this.uploadAttachmentDesign(response.id,'attachments')
+                   }
+                 }
                 this.utils.hideLoading().then(() => {
                   // this.createChatGroup(response);
                   console.log('Res', response);
@@ -1045,12 +1059,22 @@ saveInverterModel() {
 
   }
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
-              if(this.architecturalFileUpload){
-                this.uploaarchitecturedesign(response.id,'architecturaldesign');
-              }
-              if(this.attachmentFileUpload){
-                this.uploadAttachmentDesign(response.id,'attachments')
-              }
+              // if(this.architecturalFileUpload){
+              //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+              // }
+              // if(this.attachmentFileUpload){
+              //   this.uploadAttachmentDesign(response.id,'attachments')
+              // }
+              if(newConstruction=='true'){
+                // if(this.architecturalFileUpload){
+                   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                // }
+               }
+               else{
+                 if(this.attachmentFileUpload){
+                   this.uploadAttachmentDesign(response.id,'attachments')
+                 }
+               }
               if(this.isArcFileDelete){
                 this.deleteArcFile(this.indexOfArcFiles);
               }
@@ -1115,12 +1139,22 @@ saveInverterModel() {
 
   }
             this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
-              if(this.architecturalFileUpload){
-                this.uploaarchitecturedesign(response.id,'architecturaldesign');
-              }
-              if(this.attachmentFileUpload){
-                this.uploadAttachmentDesign(response.id,'attachments')
-              }
+              // if(this.architecturalFileUpload){
+              //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+              // }
+              // if(this.attachmentFileUpload){
+              //   this.uploadAttachmentDesign(response.id,'attachments')
+              // }
+              if(newConstruction=='true'){
+                // if(this.architecturalFileUpload){
+                   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                // }
+               }
+               else{
+                 if(this.attachmentFileUpload){
+                   this.uploadAttachmentDesign(response.id,'attachments')
+                 }
+               }
               if(this.isArcFileDelete){
                 console.log("hello");
                 this.deleteArcFile(this.indexOfArcFiles);
@@ -1257,11 +1291,16 @@ saveInverterModel() {
           imageData.append('field', key);
         }
       }
+      this.utils.uploadingSnackBar("Architectural File Uploading...").then(()=>{
       this.apiService.uploaddesign(imageData).subscribe(res=>{
         console.log(res);
+        this.utils.hideUploadingLoading();
+        if(this.attachmentFileUpload){
+          this.uploadAttachmentDesign(designId,'attachments')
+        }
 
       })
-
+      })
 
     }
 
@@ -1277,14 +1316,17 @@ saveInverterModel() {
           imageData.append('field', key);
         }
       }
+      this.utils.uploadingSnackBar("Attachment File Uploading...").then(()=>{
       this.apiService.uploaddesign(imageData).subscribe(res=>{
         console.log(res);
+        this.utils.hideUploadingLoading();
 
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
         this.utils.errorSnackBar(error.message[0].messages[0].message);
       })
+    })
     }
 
     numberfield(event){

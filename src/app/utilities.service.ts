@@ -63,6 +63,8 @@ export class UtilitiesService {
 	groupid: any;
 	callData: any;
 
+	toast:any;
+
 	constructor(
 		public loadingController: LoadingController,
 		private toastController: ToastController,
@@ -309,6 +311,24 @@ export class UtilitiesService {
 			cssClass: 'my-custom-error-class'
 		});
 		await toast.present();
+	}
+
+	async uploadingSnackBar(message) {
+		//this.hideLoading();
+		//const toast = await this.toastController.create({
+			console.log("hii")
+		this.toast = await this.toastController.create({
+			message,
+			//duration: 2000,
+			cssClass: 'my-custom-class'
+		});
+		await this.toast.present();
+	}
+
+	 async hideUploadingLoading() {
+		 //that = this;
+		 console.log("hello");
+	await this.toast.dismiss();
 	}
 
 	setStaticAddress(address: string) {

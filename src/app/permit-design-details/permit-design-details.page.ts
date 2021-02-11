@@ -275,9 +275,9 @@ export class PermitDesignDetailsPage implements OnInit {
     this.utilities.showLoading('Getting Design Details').then((success) => {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
-        console.log('re', result.comments[0].message);
+        //console.log('re', result.comments[0].message);
        
-        this.commentboxdata = result.comments[0].message;
+       // this.commentboxdata = result.comments[0].message;
       //  const urlArray=  Array.from(getUrls(this.commentbox));
 
       //  urlArray.map(url=>{
@@ -344,7 +344,7 @@ export class PermitDesignDetailsPage implements OnInit {
     this.enableDisable= true;
     const toast = await this.toastController.create({
       header: 'Delete Design',
-      message: 'Are you sure you want to delete this PE Stamp?',
+      message: 'Are you sure you want to delete this design?',
       cssClass: 'my-custom-delete-class',
       buttons: [
         {
@@ -573,8 +573,9 @@ return blob;
           imageData.append('field', key);
         // }
       }
-
+      this.utilities.uploadingSnackBar("Permit File Uploading...").then(()=>{
           this.apiService.uploaddesign(imageData).subscribe(res=>{
+            this.utilities.hideUploadingLoading();
             this.utilities.hideLoading().then(()=>{
               console.log(res);
               this.imagebox= false;
@@ -603,6 +604,7 @@ return blob;
 
             })
           })
+        })
         // })
     // }
   })

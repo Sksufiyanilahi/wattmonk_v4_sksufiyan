@@ -56,6 +56,9 @@
               <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  [routerLink]="['/pestamp-design-details/',designData.id]">Revision</span>
               
               <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'pestamp']" class="imagebutton"  size="small"  ><img  style= "height:20px" src="assets/images/activitylist.png" /></span>
+              <ng-container *ngIf="designData?.chatid!==null && designData?.addedtogroupchat">
+                <span *ngIf="designData.status!=='assigned'" fill="clear" background-border="clear" [routerLink]="['/','chat',designData.chatid]" class="chatbutton"  size="small"  ><img  style= "height:20px" src="assets/images/chat.svg" /></span>
+              </ng-container>
 
       </p>
 
@@ -113,7 +116,7 @@
                                 <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'accepted')">
                                    Accept
                                 </ion-col>
-                                <ion-col size="4" *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(designData.id,'pestamp')">
+                                <ion-col size="4" *ngIf="designData.status == 'outsourced'" style="color:#dc6e67;" class="ion-text-end" (click)="decline(designData.id,'pestamp')">
                                 On Hold
                                 </ion-col>
                             </ng-container>
