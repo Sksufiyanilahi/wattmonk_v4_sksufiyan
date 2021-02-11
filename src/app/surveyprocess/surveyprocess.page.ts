@@ -1571,25 +1571,34 @@ export class SurveyprocessPage implements OnInit {
     }
 
     uploadImageByIndex(mapOfImages) {
+        console.log(mapOfImages);
+        
         if (mapOfImages.length > 0 && mapOfImages.length <= this.totalimagestoupload) {
             const imageToUpload = mapOfImages[0];
-            const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
-            let filename = '';
-            if (imageToUpload.imagename === '') {
-                filename = Date.now().toString() + '.png';
-            } else {
-                filename = imageToUpload.imagename + '.png';
+            console.log(imageToUpload);
+            if(imageToUpload.shotimage){
+                const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
+                let filename = '';
+                if (imageToUpload.imagename === '') {
+                    filename = Date.now().toString() + '.png';
+                } else {
+                    filename = imageToUpload.imagename + '.png';
+                }
+                this.utilitieservice.setLoadingMessage('Uploading image ' + this.imageuploadindex + ' of ' + this.totalimagestoupload);
+                this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
+                    this.imageuploadindex++;
+                    mapOfImages.splice(0, 1);
+                    this.uploadImageByIndex(mapOfImages);
+                }, (error) => {
+                    this.imageuploadindex++;
+                    mapOfImages.splice(0, 1);
+                    this.uploadImageByIndex(mapOfImages);
+                });
+            }else{
+                this.imageuploadindex++;
+                    mapOfImages.splice(0, 1);
+                    this.uploadImageByIndex(mapOfImages);
             }
-            this.utilitieservice.setLoadingMessage('Uploading image ' + this.imageuploadindex + ' of ' + this.totalimagestoupload);
-            this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
-                this.imageuploadindex++;
-                mapOfImages.splice(0, 1);
-                this.uploadImageByIndex(mapOfImages);
-            }, (error) => {
-                this.imageuploadindex++;
-                mapOfImages.splice(0, 1);
-                this.uploadImageByIndex(mapOfImages);
-            });
         } else {
             this.utilitieservice.hideLoading().then(() => {
                 this.utilitieservice.showSuccessModal('Survey have been saved').then((modal) => {
