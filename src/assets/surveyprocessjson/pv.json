@@ -152,7 +152,7 @@
                         "questiontype": 1,
                         "inputformcontrol" : "pvinverterlocation",
                         "imagekey":"pvinverterimages",
-                        "imagename":"umwideshoturl"
+                        "imagename":"pvinverterwideshoturl"
                     },
                     {
                         "isactive": false,
@@ -168,7 +168,7 @@
                         "questiontype": 2,
                         "inputformcontrol" : "pvinvertermanufacturer",
                         "imagekey":"utilitymeterimages",
-                        "imagename":"umzoomshoturl"
+                        "imagename":"pvinverterzoomshoturl"
                     }
                 ]
             },
@@ -197,7 +197,7 @@
                         "questiontype": 0,
                         "inputformcontrol" : "",
                         "imagekey":"pvmeterimages",
-                        "imagename":"umwideshoturl"
+                        "imagename":"pvmeterwideshoturl"
                     }
                 ]
             },
@@ -226,7 +226,7 @@
                         "questiontype": 0,
                         "inputformcontrol" : "",
                         "imagekey":"acdisconnectimages",
-                        "imagename":"umwideshoturl"
+                        "imagename":"acdisconnectwideshoturl"
                     },
                     {
                         "isactive": false,
@@ -242,7 +242,7 @@
                         "questiontype": 0,
                         "inputformcontrol" : "",
                         "imagekey":"acdisconnectimages",
-                        "imagename":"umzoomshoturl"
+                        "imagename":"acdisconnectzoomshoturl"
                     }
                 ]
             }
@@ -280,7 +280,7 @@
                         "questiontype": 0,
                         "inputformcontrol" : "",
                         "imagekey":"roofimages",
-                        "imagename":"roofphoto"
+                        "imagename":"roof"
                     }
                 ]
             },

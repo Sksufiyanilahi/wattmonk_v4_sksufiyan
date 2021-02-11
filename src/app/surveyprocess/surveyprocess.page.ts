@@ -1573,7 +1573,7 @@ export class SurveyprocessPage implements OnInit {
     uploadImageByIndex(mapOfImages) {
         if (mapOfImages.length !== 0) {
             const imageToUpload = mapOfImages[0];
-            const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
+            const blob = this.utilitieservice.b64toBlob(imageToUpload.shotimage);
             let filename = '';
             if (imageToUpload.imagename === '') {
                 filename = Date.now().toString() + '.png';
