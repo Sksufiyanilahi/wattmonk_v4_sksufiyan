@@ -385,7 +385,28 @@ this.deactivateNetworkSwitch.unsubscribe();
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
           });
+          this.chatIcon(list);
+          console.log(list);
           this.cdr.detectChanges();
+  }
+
+  ///chat icon
+  chatIcon(list:DesginDataModel[]){
+    list.forEach(element => {
+      console.log(element)
+      var groupMembersRequest = new CometChat.GroupMembersRequestBuilder(element.chatid)
+        .setLimit(10)
+        .build();
+      groupMembersRequest.fetchNext().then(
+        groupMembers => {
+          console.log(groupMembers);
+          element.addedtogroupchat=true;
+        },
+        error => {
+          console.log("Group Member list fetching failed with exception:", error);
+        }
+      );
+    })
   }
 
   ngOnDestroy(): void {

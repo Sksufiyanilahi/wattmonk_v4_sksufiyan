@@ -15,6 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 import { intercomId } from 'src/app/contants';
 import { Intercom } from 'ng-intercom';
 import { StorageService } from 'src/app/storage.service';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
 @Component({
   selector: 'app-permitnewdesign',
@@ -194,7 +195,26 @@ export class PermitnewdesignComponent implements OnInit {
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
           });
+          this.chatIcon(list);
           this.cdr.detectChanges();
+  }
+
+  ///chat icon
+  chatIcon(list:DesginDataModel[]){
+    list.forEach(element => {
+      var groupMembersRequest = new CometChat.GroupMembersRequestBuilder(element.chatid)
+        .setLimit(10)
+        .build();
+      groupMembersRequest.fetchNext().then(
+        groupMembers => {
+          console.log(groupMembers);
+          element.addedtogroupchat=true;
+        },
+        error => {
+          console.log("Group Member list fetching failed with exception:", error);
+        }
+      );
+    })
   }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{

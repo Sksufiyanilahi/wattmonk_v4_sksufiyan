@@ -101,7 +101,7 @@ export class PestampDesignDetailsPage implements OnInit {
         this.enableDisable= true;
         const toast = await this.toastController.create({
           header: 'Delete Design',
-          message: 'Are you sure you want to delete this design?',
+          message: 'Are you sure you want to delete this PE Stamp?',
           cssClass: 'my-custom-delete-class',
           buttons: [
             {

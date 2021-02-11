@@ -511,8 +511,9 @@ return blob;
           imageData.append('field', key);
         // }
       } 
-       
+        this.utilities.uploadingSnackBar("Prelim File Uploading...").then(()=>{
           this.apiService.uploaddesign(imageData).subscribe(res=>{
+            this.utilities.hideUploadingLoading();
             this.utilities.hideLoading().then(()=>{
               console.log(res); 
               this.imagebox= false;
@@ -541,6 +542,7 @@ return blob;
               
             })
           })
+        })
         // })
     // }
   })
