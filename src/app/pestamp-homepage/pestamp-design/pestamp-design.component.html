@@ -171,30 +171,115 @@
     <!-- </ion-virtual-scroll> -->
     
   
-    
-    <!-- <ion-row>
-        <ion-col size="12" style="height: 100px;">
-
-        </ion-col>
-    </ion-row>  -->
-  </ion-grid>
-  <ng-template #nodesignFound>
-      <div *ngIf="listOfDesignsHelper.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
-              <!-- <div *ngIf="!netSwitch"> -->
+        </p>
+  
+        <p style="margin:0px">
+            <span class="customer-email" [routerLink]="['/pestamp-design-details/',designData.id]"
+                    routerDirection="forward">{{designData.email}}</span>
+                    <span *ngIf="designData.isoverdue" class="latebystyle"><strong>Late by {{designData.lateby}}</strong></span>
+                    <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
+                  <!-- </ion-col> -->
+  
+        </p>
+        <p style="margin:0px"  >
+                  <a href="tel:{{designData.contactnumber}}" style="text-decoration: none;" class="z-100">
+                      <span class="customer-phone" *ngIf="designData.contactnumber != null && designData.contactnumber != ''">{{designData.contactnumber}}</span></a>
+                      <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
+                    </p>
+                  <span class="customer-address z-100" *ngIf="designData.deliveryaddress != null && designData.deliveryaddress != ''" 
+                          (click)="openAddressOnMap(designData.address)">{{(designData.deliveryaddress | slice:0:60) + (designData.deliveryaddress.length > 60 ? '...' : '')}}
+  
+                               <ion-col>
+                                  
+                                  </ion-col>
+  
+                      </span>
+                      <ion-col *ngIf="designData.status=='assigned' && userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'" style="font-size: 0.8em;padding-right: 0px;">
+                      <span style=" float:right"><strong>Assigned to : {{designData.assignedto.firstname | titlecase}} {{designData.assignedto.lastname | titlecase}}</strong></span>
+                      </ion-col>
+                      <!-- <ion-row style="margin-bottom: 0px;" [routerLink]="['/pestamp-design-details/',designData.id]">
+                          <ion-col *ngIf="designData.status == 'assigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
+                              <span *ngIf="designData.status == 'assigned'" style="float:right;text-align: right;">
+                                  {{designData.designremainingtime}}</span></ion-col>
+                                  <ion-col *ngIf="designData.status == 'outsourced'">
+                                      <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
+                                          {{designData.pestampacceptanceremainingtime}}</span></ion-col>
+                      </ion-row> -->
+                      <ion-row class="ion-no-margin ion-no-margin">
+                  <!-- <ion-row style="margin-bottom: 0px;" [routerLink]="['/permit-design-details/',designData.id]"> -->
+                    <!-- <ion-row style="margin-bottom: 0px;" > -->
+                     <ion-col style="padding-left:0px" >
+                      <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.source | titlecase}}</span>
+                      <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.propertytype | titlecase}}</span>
+                      <span class="chipdetail" [routerLink]="['/pestamp-design-details/',designData.id]" style="background-color: #95afc0;align-self: center;" >{{designData?.type | titlecase}}</span>
+                      <!-- <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype}}</span> -->
+                  </ion-col>
+                  </ion-row>
+                                  
                   
-                {{noDesignFound}}
-              <!-- </div> -->
-    
-          <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
-      </div>
-  </ng-template>
-
-  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
-      <ion-infinite-scroll-content
-        loadingSpinner="bubbles"
-       >
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll> -->
+                  <ion-row class="ion-no-margin ion-no-margin">
+                  
+                      <ion-col *ngIf="segments=='status=created&status=outsourced&status=accepted&status=declined' || segments=='status=created&status=outsourced&status=accepted&&status=declined'">
+                          <span *ngIf="designData.status == 'created' || (designData.status == 'accepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')) " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
+                          >Assign</span>
+                          <span style="float: right;">
+                              <ng-container *ngIf="userData.role.type !=='clientsuperadmin' && userData.role.type !== 'clientadmin'">
+                                  <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'accepted')">
+                                     Accept
+                                  </ion-col>
+                                  <ion-col size="4" *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(designData.id,'pestamp')">
+                                  On Hold
+                                  </ion-col>
+                              </ng-container>
+                          </span>
+  
+                          <span  *ngIf="designData.status == 'declined' && (userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin')" style="float:right !important;" class="ion-text-end action-button-color" (click)="directAssignToWattmonk(designData.id,designData)"
+                          >Reassign</span>
+                      </ion-col>
+  
+  
+                      <!-- <ion-col *ngIf="segments=='status=completed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'">
+                          <span (click)="openDesigners(designData.id,designData)" class="ion-text-end action-button-color"
+                          >Reassign</span>
+                      </ion-col> -->
+  
+                      <!-- <ion-col *ngIf="segments=='status=completed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'">
+                          <span style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData)"
+                          >  &nbsp; Deliver</span></ion-col> -->
+                          <!-- <span (click)="openDesigners(designData.id,designData)" style="float:right !important;" class="ion-text-end action-button-color"
+                          >Reassign</span> -->
+                          <!-- <span *ngIf="userData.role.type!='clientsuperadmin' &&(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                          >Reassign Review</span> -->
+                      
+  
+                      <ion-col *ngIf="segments=='status=delivered'">
+                        <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="designDownload(designData)">
+                            <ion-icon name="cloud-download-outline"></ion-icon></span>&nbsp;
+                          <!-- <span  style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="shareWhatsapp(designData)">
+                              <ion-icon name="share-social-outline"></ion-icon></span>&nbsp;
+                          <span style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="shareViaEmails(designData.id,designData)">
+                              <ion-icon name="mail" ></ion-icon></span> -->
+                              <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, 'pestamp')">
+                                  Resend</span>
+                                  <span *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin') && (designData.deliverychargespaymentstatus=='pending' || designData.paymentstatus =='pending')" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="clearPendingPayments(designData)">
+                                      Make Payment</span>
+                      </ion-col>
+                      <!-- <ion-col class="ion-no-margin ion-no-padding">
+                          <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + designData.id + '/' + designData.jobtype + '/' + designData.latitude + '/' + designData.longitude]"
+                          routerDirection="forward">
+                              Restart Survey
+                          </ion-button>
+                      </ion-col> -->
+                  </ion-row>
+                  <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
+                    <!-- <span class="ion-text-end timestamp" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
+                          {{designData.deliverydate | date: 'hh:mm a'}}
+              </span> -->
+          </ion-card>
+          </ion-col>
+      </ion-row>
+      <!-- </ion-virtual-scroll> -->
+      
     
 </ion-content>
 
