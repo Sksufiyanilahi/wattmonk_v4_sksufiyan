@@ -1571,16 +1571,16 @@ export class SurveyprocessPage implements OnInit {
     }
 
     uploadImageByIndex(mapOfImages) {
-        if (mapOfImages.length !== 0) {
+        if (mapOfImages.length > 0 && mapOfImages.length < this.totalimagestoupload) {
             const imageToUpload = mapOfImages[0];
-            const blob = this.utilitieservice.b64toBlob(imageToUpload.shotimage);
+            const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
             let filename = '';
             if (imageToUpload.imagename === '') {
                 filename = Date.now().toString() + '.png';
             } else {
                 filename = imageToUpload.imagename + '.png';
             }
-            this.utilitieservice.setLoadingMessage('Uploading ' + filename + ' of ' + this.totalimagestoupload);
+            this.utilitieservice.setLoadingMessage('Uploading ' + this.imageuploadindex + ' of ' + this.totalimagestoupload);
             this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
                 this.imageuploadindex++;
                 mapOfImages.splice(0, 1);
