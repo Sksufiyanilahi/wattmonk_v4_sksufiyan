@@ -314,6 +314,7 @@ export class SurveyprocessPage implements OnInit {
             batterysystem: new FormControl('', [Validators.required]),
             detailsofbatterysystem: new FormControl('', []),
             interconnection: new FormControl('', [Validators.required]),
+            interconnection_input: new FormControl('', []),
             servicefeedsource: new FormControl('', [Validators.required]),
             mainbreakersize: new FormControl('', [Validators.required]),
             msprating: new FormControl('', [Validators.required]),
@@ -324,8 +325,8 @@ export class SurveyprocessPage implements OnInit {
             framing: new FormControl('', [Validators.required]),
             framingsize: new FormControl('', [Validators.required]),
             distancebetweentworafts: new FormControl('', [Validators.required]),
-            pvinverterlocation: new FormControl('', [Validators.required]),
-            pvinvertermanufacturer: new FormControl('', [Validators.required]),
+            pvinverterlocation: new FormControl('', []),
+            pvinvertermanufacturer: new FormControl('', []),
             additionalnotes: new FormControl('', []),
             rooftilt: new FormControl('', []),
             shotname: new FormControl('', [])
@@ -1431,9 +1432,10 @@ export class SurveyprocessPage implements OnInit {
     savePVFormData() {
         const data = {
             existingsolarsystem: this.pvForm.get("existingsolarsystem").value,
-            detailsofexisitingsystem: this.pvForm.get("detailsofexisitingsystem").value,
-            batterybackup: this.pvForm.get("batterybackup").value,
+            batterysystem: this.pvForm.get("batterysystem").value,
+            detailsofbatterysystem: this.pvForm.get("detailsofbatterysystem").value,
             interconnection: this.pvForm.get("interconnection").value,
+            interconnectiondetails: this.pvForm.get("interconnection_input").value,
             servicefeedsource: this.pvForm.get("servicefeedsource").value,
             additionalnotes: this.pvForm.get("additionalnotes").value,
             status: 'surveycompleted'
