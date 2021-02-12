@@ -1552,14 +1552,14 @@ export class SurveyprocessPage implements OnInit {
             });
         });
 
-        if (this.equipmentscanvasimage != "") {
-            var captureshot: CAPTUREDSHOT = {
+        if (this.equipmentscanvasimage && this.equipmentscanvasimage !== '') {
+            const captureshot: CAPTUREDSHOT = {
                 menuindex: -1,
                 submenuindex: -1,
                 shotindex: imagesArray.length + 1,
                 shotimage: this.equipmentscanvasimage,
-                imagekey: "electricalslocation",
-                imagename: "electricalslocation"
+                imagekey: 'electricalslocation',
+                imagename: 'electricalslocation'
             }
             imagesArray.push(captureshot);
         }
