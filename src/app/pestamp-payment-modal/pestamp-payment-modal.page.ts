@@ -37,14 +37,9 @@ export class PestampPaymentModalPage implements OnInit {
     uss:any;
      //counts
      isShow:boolean=false
-     newpermits: Observable<any>;
-     newpermitsRef: AngularFireObject<any>;
-     newpermitscount = 0;
-     //counts
-    newprelims: Observable<any>;
-    newprelimsRef: AngularFireObject<any>;
-    //newprelimsRef:any;
-    newprelimscount = 0;
+     newpestamp: Observable<any>;
+     newpestampRef: AngularFireObject<any>;
+     newpestampscount = 0;
 
     designData:any;
     data:any;
@@ -99,6 +94,18 @@ export class PestampPaymentModalPage implements OnInit {
       this.deliveryCharges = this.data.deliverycharges;
       console.log(this.assignValue);
       console.log(this.data);
+
+      this.newpestampRef = db.object('newpestamp');
+    this.newpestamp = this.newpestampRef.valueChanges();
+    this.newpestamp.subscribe(
+      (res) => {
+        console.log(res);
+        this.newpestampscount = res.count;
+        this.cdr.detectChanges();
+      },
+      (err) => console.log(err),
+      () => console.log('done!')
+    )
        }
   
     ngOnInit() {
@@ -343,6 +350,7 @@ export class PestampPaymentModalPage implements OnInit {
         //   console.log("hello",this.newprelimscount)
         // }else{
         //   this.newpermitsRef.update({ count: this.newpermitscount + 1});
+        this.newpestampRef.update({ count: this.newpestampscount + 1});
         // }
           this.utils.hideLoading().then(()=>
          { this.utils.showSnackBar("pe stamp request has been send to wattmonk successfully")
@@ -503,6 +511,7 @@ this.router.navigate(['/add-money'], {
           };
           this.utils.showLoading("Assigning").then(()=>
             {this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
+              this.newpestampRef.update({ count: this.newpestampscount + 1});
               this.utils.hideLoading().then(()=>
              { this.utils.showSnackBar("Pe Stamp request has been send to wattmonk successfully")
              //this.navController.pop();

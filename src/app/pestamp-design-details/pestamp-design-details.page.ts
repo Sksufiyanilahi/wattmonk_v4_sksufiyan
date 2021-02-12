@@ -10,6 +10,7 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import { ErrorModel } from '../model/error.model';
 
 @Component({
   selector: 'app-pestamp-design-details',
@@ -258,11 +259,17 @@ export class PestampDesignDetailsPage implements OnInit {
             console.log("file upload data---"+data);
            }
          }
+         this.utilities.uploadingSnackBar("Stamped File Uploading...").then(()=>{
          this.apiService.uploadFile(data).subscribe(res=>{
+           this.utilities.hideUploadingLoading();
            console.log(res);
     
-         })
-    
+         }, responseError => {
+          this.utilities.hideUploadingLoading();
+          const error: ErrorModel = responseError.error;
+          this.utilities.errorSnackBar(error.message[0].messages[0].message);
+        })
+      })
     
        }
 

@@ -62,6 +62,11 @@ card:any
  newprelimscount = 0;
  createpayment:any;
 
+ //Pestamp count
+ newpestamp: Observable<any>;
+     newpestampRef: AngularFireObject<any>;
+     newpestampscount = 0;
+
  designData:any;
   fulldesigndata: any;
 
@@ -118,6 +123,20 @@ card:any
       (res) => {
         console.log(res);
         this.newprelimscount = res.count;
+        cdr.detectChanges();
+      },
+      (err) => console.log(err),
+      () => console.log('done!')
+    )
+
+    //PESTAMP badge count
+    this.newpestampRef = db.object('newpestamp');
+    this.newpestamp = this.newpestampRef.valueChanges();
+    this.newpestamp.subscribe(
+      (res) => {
+        console.log(res);
+        this.newpestampscount = res.count;
+        console.log(res.count);
         cdr.detectChanges();
       },
       (err) => console.log(err),
@@ -400,6 +419,8 @@ if(this.design == 'pestamp'){
  
  };
  this.apiService.updatePestamps(this.designId,postData).subscribe(value=>{
+  this.newpestampRef.update({ count: this.newpestampscount + 1});
+  console.log(this.newpestampscount);
    this.utils.showSnackBar("Pe Stamp request has been send to wattmonk successfully");
    this.router.navigate(['pestamp-homepage/pestamp-design']);
    this.utils.setPeStampRefresh(true);

@@ -1062,6 +1062,10 @@ ioniViewDidEnter(){
       this.utils.hideUploadingLoading();
       this.uploadpreliumdesign(designId,'attachments');
       
+    }, responseError => {
+      this.utils.hideUploadingLoading();
+      const error: ErrorModel = responseError.error;
+      this.utils.errorSnackBar(error.message[0].messages[0].message);
     })
   })
 
@@ -1087,6 +1091,7 @@ ioniViewDidEnter(){
       
     }, responseError => {
       this.utils.hideLoading();
+      this.utils.hideUploadingLoading();
       const error: ErrorModel = responseError.error;
       this.utils.errorSnackBar(error.message[0].messages[0].message);
     })
