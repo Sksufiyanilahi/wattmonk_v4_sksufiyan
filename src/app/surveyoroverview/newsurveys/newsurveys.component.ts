@@ -166,9 +166,12 @@ export class NewsurveysComponent implements OnInit {
         console.log(data);
         if (data) {
           element.totalpercent = data.currentprogress;
+           console.log(element);
         }else{
           element.totalpercent = 0;
+          console.log(element);
         }
+       
       });
     });
 
