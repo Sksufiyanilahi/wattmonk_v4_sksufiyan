@@ -258,7 +258,9 @@ export class SurveyprocessPage implements OnInit {
     equipmentscanvasimage: string;
     sitelocationimage: any;
     hasExistingSolarSystem: boolean;
-    user:any
+    user: any
+    hasBatterySystem: boolean;
+
     constructor(
         private cameraPreview: CameraPreview,
         private route: ActivatedRoute,
@@ -267,7 +269,7 @@ export class SurveyprocessPage implements OnInit {
         private navController: NavController,
         private alertController: AlertController,
         private storage: Storage,
-        private storageuserdata:StorageService,
+        private storageuserdata: StorageService,
         private utilitieservice: UtilitiesService,
         private apiService: ApiService,
         private changedetectorref: ChangeDetectorRef,
@@ -275,7 +277,7 @@ export class SurveyprocessPage implements OnInit {
         private routeroutlet: IonRouterOutlet,
         private storageService: StorageService,
         private insomnia: Insomnia) {
-            this.user=this.storageuserdata.getUser();
+        this.user = this.storageuserdata.getUser();
         this.surveyid = +this.route.snapshot.paramMap.get('id');
         this.surveytype = this.route.snapshot.paramMap.get('type');
         this.surveycity = this.route.snapshot.paramMap.get('city');
@@ -309,8 +311,8 @@ export class SurveyprocessPage implements OnInit {
         this.totalstepcount = 19;
         this.pvForm = new FormGroup({
             existingsolarsystem: new FormControl('', [Validators.required]),
-            detailsofexisitingsystem: new FormControl('', []),
-            batterybackup: new FormControl('', [Validators.required]),
+            batterysystem: new FormControl('', [Validators.required]),
+            detailsofbatterysystem: new FormControl('', []),
             interconnection: new FormControl('', [Validators.required]),
             servicefeedsource: new FormControl('', [Validators.required]),
             mainbreakersize: new FormControl('', [Validators.required]),
@@ -325,6 +327,7 @@ export class SurveyprocessPage implements OnInit {
             pvinverterlocation: new FormControl('', [Validators.required]),
             pvinvertermanufacturer: new FormControl('', [Validators.required]),
             additionalnotes: new FormControl('', []),
+            rooftilt: new FormControl('', []),
             shotname: new FormControl('', [])
         });
 
@@ -1061,11 +1064,11 @@ export class SurveyprocessPage implements OnInit {
         data.saved = true;
         this.storage.set(this.surveyid + '', data);
 
-        if(this.user.role.type=="surveyor"){
+        if (this.user.role.type == "surveyor") {
 
-        this.utilitieservice.setDataRefresh(true);
-        this.navController.navigateBack('surveyoroverview');}
-        else{
+            this.utilitieservice.setDataRefresh(true);
+            this.navController.navigateBack('surveyoroverview');
+        } else {
             this.utilitieservice.sethomepageSurveyRefresh(true);
             this.navController.navigateBack('/homepage/survey');
         }
@@ -1107,11 +1110,11 @@ export class SurveyprocessPage implements OnInit {
                 element.questionstatus = true;
             });
             this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
-            this.handleMenuSwitch();
+            this.handleMenuSwitch(false);
         }
     }
 
-    handleMenuSwitch() {
+    handleMenuSwitch(selectedSubMenuDoesNotExist?) {
         this.iscapturingallowed = true;
 
         //Retaining previous shots
@@ -1122,7 +1125,7 @@ export class SurveyprocessPage implements OnInit {
         if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
             this.markShotCompletion(this.selectedshotindex);
             this.updateProgressStatus();
-            if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1) {
+            if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1 && selectedSubMenuDoesNotExist != false) {
                 this.selectedshotindex += 1;
             } else {
                 if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
@@ -1572,11 +1575,11 @@ export class SurveyprocessPage implements OnInit {
 
     uploadImageByIndex(mapOfImages) {
         console.log(mapOfImages);
-        
+
         if (mapOfImages.length > 0 && mapOfImages.length <= this.totalimagestoupload) {
             const imageToUpload = mapOfImages[0];
             console.log(imageToUpload);
-            if(imageToUpload.shotimage){
+            if (imageToUpload.shotimage) {
                 const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
                 let filename = '';
                 if (imageToUpload.imagename === '') {
@@ -1594,10 +1597,10 @@ export class SurveyprocessPage implements OnInit {
                     mapOfImages.splice(0, 1);
                     this.uploadImageByIndex(mapOfImages);
                 });
-            }else{
+            } else {
                 this.imageuploadindex++;
-                    mapOfImages.splice(0, 1);
-                    this.uploadImageByIndex(mapOfImages);
+                mapOfImages.splice(0, 1);
+                this.uploadImageByIndex(mapOfImages);
             }
         } else {
             this.utilitieservice.hideLoading().then(() => {
@@ -1807,7 +1810,8 @@ export class SurveyprocessPage implements OnInit {
         this.startCameraAfterPermission();
     }
 
-    changeExistingSolarSystem() {
-        this.hasExistingSolarSystem = this.pvForm.value.existingsolarsystem;
+    changeBatterySystem() {
+        this.hasBatterySystem = eval(this.pvForm.value.batterysystem);
+        console.log(this.hasBatterySystem);
     }
 }

@@ -34,7 +34,7 @@
                         <div #submenuscroll class="scroll" scrollX="true">
                             <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
                                 <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear"
-                                            [ngClass]="{'completed-inactive' : !button.ispending && !button.isactive, 'completed' : !button.ispending && button.isactive, 'active' : button.ispending && button.isactive, 'normal' : button.ispending && !button.isactive}"
+                                            [ngClass]="{'completed-inactive' : !button.ispending, 'completed' : !button.ispending && button.isactive, 'active' : button.ispending && button.isactive, 'normal' : button.ispending && !button.isactive}"
                                             (click)="toggleSubMenuSelection(i)">{{button.name}}</ion-button>
                             </ng-container>
                         </div>
@@ -422,8 +422,8 @@
         <ion-grid class="ion-padding">
             <ion-row>
                 <ion-col>
-                    <ion-label position="fixed">Any Existing Solar System*</ion-label>
-                    <ion-radio-group formControlName="existingsolarsystem" (ionChange)="changeExistingSolarSystem()">
+                    <ion-label position="fixed">Is there any Battery System?*</ion-label>
+                    <ion-radio-group formControlName="batterysystem" (ionChange)="changeBatterySystem()">
                         <ion-item>
                             <ion-label>Yes</ion-label>
                             <ion-radio slot="start" value="true"></ion-radio>
@@ -435,26 +435,11 @@
                     </ion-radio-group>
                 </ion-col>
             </ion-row>
-            <ion-row *ngIf="hasExistingSolarSystem">
+            <ion-row *ngIf="hasBatterySystem">
                 <ion-col>
-                    <ion-label position="fixed">Details Of Existing System</ion-label>
-                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="detailsofexisitingsystem">
+                    <ion-label position="fixed">Details Of Battery System</ion-label>
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="detailsofbatterysystem">
                     </ion-textarea>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <ion-label position="fixed">Battery Backup*</ion-label>
-                    <ion-radio-group formControlName="batterybackup">
-                        <ion-item>
-                            <ion-label>Whole</ion-label>
-                            <ion-radio slot="start" value="whole"></ion-radio>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label>Partial</ion-label>
-                            <ion-radio slot="start" value="partial"></ion-radio>
-                        </ion-item>
-                    </ion-radio-group>
                 </ion-col>
             </ion-row>
             <ion-row>

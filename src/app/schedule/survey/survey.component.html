@@ -33,7 +33,7 @@
             <ion-row>
                 <ion-col>
                     <ion-item class="ion-no-padding">
-                        <ion-label position="floating">email*</ion-label>
+                        <ion-label position="floating">email</ion-label>
                         <ion-input autocapitalize="none" formControlName="email" email="true"
                                    type="email" autocomplete="off"
                                    class="form_input"></ion-input>
@@ -42,9 +42,9 @@
                         <div *ngIf="surveyForm.get('email').hasError('pattern') && surveyForm.get('email').dirty">
                             <span class="error">{{emailError}}</span>
                         </div>
-                        <div *ngIf="surveyForm.get('email').value === '' && surveyForm.get('email').dirty">
+                        <!--<div *ngIf="surveyForm.get('email').value === '' && surveyForm.get('email').dirty">
                             <span class="error">{{fieldRequired}}</span>
-                        </div>
+                        </div>-->
                     </div>
                 </ion-col>
             </ion-row>

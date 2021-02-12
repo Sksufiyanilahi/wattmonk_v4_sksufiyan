@@ -48,7 +48,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
-      email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
+      email: new FormControl('', [Validators.pattern(EMAILPATTERN)]),
       phonenumber: new FormControl('', [Validators.required,  Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
       jobtype: new FormControl('', [Validators.required]),
       datetime: new FormControl(new Date().getTime(), [Validators.required]),
