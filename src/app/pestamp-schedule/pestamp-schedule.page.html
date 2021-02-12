@@ -102,20 +102,25 @@
   </ion-row>
   <ion-row *ngIf="stampingModeValue == 'hardcopy' || stampingModeValue == 'both'">
     <ion-col>
-      <ion-item class="ion-no-padding">
+      <!-- <ion-item class="ion-no-padding">
         <ion-label position="floating" class="label">Shipping Address*</ion-label>
         <ion-input type="text" class="form_input" autocapitalize="words"
                     formControlName="shippingaddress" autocomplete="off"  (ionChange)="updateSearchResults($event)"
                     (ionClear)="onCancel()" debounce="300"
                     (ionFocus)="forAutoComplete($event)" (ionBlur)="onBlur()"></ion-input>
-    </ion-item>
-    <ion-list *ngIf="autocompleteItems.length > 0 && autoCompleteOff">
+    </ion-item> -->
+    <ion-item class="ion-no-padding">
+      <ion-label position="floating" class="label">Shipping Address*</ion-label>
+      <ion-input type="text" class="form_input" autocapitalize="words"
+                  formControlName="shippingaddress" autocomplete="off"></ion-input>
+  </ion-item>
+    <!-- <ion-list *ngIf="autocompleteItems.length > 0 && autoCompleteOff">
       <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
           <ion-label>
               {{ item.description }}
           </ion-label>
       </ion-item>
-  </ion-list>
+  </ion-list> -->
   <div style="height: 5px;">
     <div *ngIf="firstFormGroup.get('shippingaddress').hasError('pattern') && firstFormGroup.get('shippingaddress').dirty">
         <span class="error">{{addressError}}</span>
