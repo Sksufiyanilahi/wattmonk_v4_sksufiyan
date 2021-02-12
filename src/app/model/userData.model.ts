@@ -8,4 +8,5 @@ export class UserData{
     logo:{
         url:string
     }
+    peengineertype:string;
 }
