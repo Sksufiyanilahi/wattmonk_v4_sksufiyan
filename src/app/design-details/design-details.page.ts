@@ -16,6 +16,7 @@ import { User } from '../model/user.model';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Intercom } from 'ng-intercom';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import { ErrorModel } from '../model/error.model';
 
 
 
@@ -542,6 +543,11 @@ return blob;
               
             })
           })
+        }, responseError => {
+         // this.utilities.hideLoading();
+          this.utilities.hideUploadingLoading();
+          const error: ErrorModel = responseError.error;
+          this.utilities.errorSnackBar(error.message[0].messages[0].message);
         })
         // })
     // }

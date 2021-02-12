@@ -85,7 +85,7 @@
           <ion-item class="ion-no-padding">
               <ion-label position="floating" class="label">No. of Hard Copies*</ion-label>
               <ion-input type="cell" class="form_input" autocapitalize="words"
-                          formControlName="numberofhardcopy" [disabled]="fieldDisabled" autocomplete="off" maxLength="4"></ion-input>
+                          formControlName="numberofhardcopy" autocomplete="off" maxLength="4"></ion-input>
           </ion-item>
           <div style="height: 5px;">
             <div *ngIf="firstFormGroup.get('numberofhardcopy').hasError('max') && firstFormGroup.get('numberofhardcopy').dirty">
@@ -105,7 +105,7 @@
       <ion-item class="ion-no-padding">
         <ion-label position="floating" class="label">Shipping Address*</ion-label>
         <ion-input type="text" class="form_input" autocapitalize="words"
-                    formControlName="shippingaddress" [disabled]="fieldDisabled" autocomplete="off"  (ionChange)="updateSearchResults($event)"
+                    formControlName="shippingaddress" autocomplete="off"  (ionChange)="updateSearchResults($event)"
                     (ionClear)="onCancel()" debounce="300"
                     (ionFocus)="forAutoComplete($event)" (ionBlur)="onBlur()"></ion-input>
     </ion-item>
@@ -138,7 +138,7 @@
       <ion-item class="ion-no-padding">
         <ion-label position="floating" class="label">Contact Number*</ion-label>
         <ion-input type="tel" class="form_input" autocapitalize="none"
-                    formControlName="contactnumber" [disabled]="fieldDisabled" autocomplete="off" maxLength="15"></ion-input>
+                    formControlName="contactnumber" autocomplete="off" maxLength="15"></ion-input>
     </ion-item>
     <div style="height: 5px;">
       <div *ngIf="firstFormGroup.get('contactnumber').hasError('pattern') && firstFormGroup.get('contactnumber').dirty">
@@ -213,7 +213,7 @@
         <ng-container>
             <ion-item class="ion-no-padding" (click)="attic.click()">
                 <ion-label position="floating" class="label">Attic Photos*</ion-label>
-                    <input type="file" #attic class="form_input" [disabled]="fieldDisabled" (change)="atticFiles($event)" style="margin-top: 12px;" formControlName="atticphotos" multiple>
+                    <input type="file" #attic class="form_input" (change)="atticFiles($event)" style="margin-top: 12px;" formControlName="atticphotos" multiple>
                     <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
                 </ion-item>
                 <div *ngFor="let file of atticPhotosList;let i = index">
@@ -247,7 +247,7 @@
         <ng-container>
             <ion-item class="ion-no-padding" (click)="roof.click()">
                 <ion-label position="floating" class="label">Roof Photos*</ion-label>
-                    <input type="file" #roof class="form_input" [disabled]="fieldDisabled" (change)="roofFiles($event)" style="margin-top: 12px;" formControlName="roofphotos" multiple>
+                    <input type="file" #roof class="form_input" (change)="roofFiles($event)" style="margin-top: 12px;" formControlName="roofphotos" multiple>
                     <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
                 </ion-item>
                 <div *ngFor="let file of roofPhotosList;let i = index">
@@ -281,7 +281,7 @@
         <ng-container>
             <ion-item class="ion-no-padding" (click)="permitplan.click()">
                 <ion-label position="floating" class="label">Permit Plan Photos*</ion-label>
-                    <input type="file" #permitplan class="form_input" (change)="permitPlanFiles($event)" style="margin-top: 12px;" formControlName="permitplanphotos" multiple>
+                    <input type="file" #permitplan class="form_input" (change)="permitPlanFiles($event)" accept="application/pdf" style="margin-top: 12px;" formControlName="permitplanphotos" multiple>
                     <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
                 </ion-item>
                 <div *ngFor="let file of permitPlanList;let i = index">

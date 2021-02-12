@@ -44,7 +44,9 @@
                       <!-- <ion-item  (click)="SwitchMenuAccordingtoRoles('statistics')" *ngIf="userData?.role.type!='clientsuperadmin'" routerDirection="forward">
                        <ion-img src="/assets/images/stats.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Statistics</ion-item> -->
                        <ion-item  (click)="SwitchMenuAccordingtoRoles('pestamp')" *ngIf="userData?.role.type!=='bd'" routerDirection="forward">
-                        <ion-img src="/assets/images/stamp.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;PE Stamps </ion-item>
+                        <ion-img src="/assets/images/stamp.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>PE Stamps 
+                        <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpestampscount > 0">{{ newpestampscount }}</span></p>
+                      </ion-item>
               </ion-menu-toggle>
           </ion-list>
       </ion-content>

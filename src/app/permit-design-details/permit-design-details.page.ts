@@ -599,6 +599,7 @@ return blob;
            // });
         //  }
       },err=>{
+        this.utilities.hideUploadingLoading();
             this.utilities.hideLoading().then(()=>{
               console.log(err);
 

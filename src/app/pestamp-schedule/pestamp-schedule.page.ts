@@ -218,7 +218,11 @@ export class PestampSchedulePage implements OnInit {
       {
         this.uploadRoofFiles(recordid)
       }
-     })
+     }, responseError => {
+      this.utils.hideUploadingLoading();
+      const error: ErrorModel = responseError.error;
+      this.utils.errorSnackBar(error.message[0].messages[0].message);
+    })
     })
 
    }
@@ -257,7 +261,11 @@ export class PestampSchedulePage implements OnInit {
       {
         this.uploadPermitPlanFiles(recordid);
       }
-     })
+     }, responseError => {
+      this.utils.hideUploadingLoading();
+      const error: ErrorModel = responseError.error;
+      this.utils.errorSnackBar(error.message[0].messages[0].message);
+    })
     })
 
    }
@@ -292,7 +300,11 @@ export class PestampSchedulePage implements OnInit {
      this.utils.uploadingSnackBar("Permit Plan Uploading...").then(()=>{
      this.apiService.uploadFile(data).subscribe(res=>{
       this.utils.hideUploadingLoading();
-     })
+     }, responseError => {
+      this.utils.hideUploadingLoading();
+      const error: ErrorModel = responseError.error;
+      this.utils.errorSnackBar(error.message[0].messages[0].message);
+    })
     })
 
    }
