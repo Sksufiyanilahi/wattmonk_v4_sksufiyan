@@ -248,12 +248,12 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.getDesigns(null);
     });
 
-    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
-        this.formatDesignData(this.listOfDesigns);
+    // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+    //   if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
+    //     this.formatDesignData(this.listOfDesigns);
 
-      }
-    });
+    //   }
+    // });
   }
 
   getDesigns(event: CustomEvent) {
@@ -403,9 +403,13 @@ this.deactivateNetworkSwitch.unsubscribe();
           element.addedtogroupchat=true;
         },
         error => {
+          // this.utils.hideLoadingWithPullRefreshSupport(this.showLoader).then(() => {
+          // })
           console.log("Group Member list fetching failed with exception:", error);
         }
       );
+     // this.utils.hideLoadingWithPullRefreshSupport(this.showLoader).then(() => {
+      //})
     })
   }
 
@@ -413,7 +417,7 @@ this.deactivateNetworkSwitch.unsubscribe();
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
     this.utils.showHideIntercom(true);
-  this.dataRefreshSubscription.unsubscribe();
+ // this.dataRefreshSubscription.unsubscribe();
   this.DesignRefreshSubscription.unsubscribe();
   }
 

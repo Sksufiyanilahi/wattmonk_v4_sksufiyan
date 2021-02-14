@@ -72,6 +72,8 @@ export class PestampDesignComponent implements OnInit {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+
+  //showLoader= true;
   
   constructor(private storageService: StorageService,
               private utils: UtilitiesService,
@@ -222,6 +224,7 @@ export class PestampDesignComponent implements OnInit {
     //this.newpermitsRef.update({ count: 0 });
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getFilteredDesigns(this.segments).subscribe((response:any) => {
+
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -246,11 +249,12 @@ export class PestampDesignComponent implements OnInit {
     });
   }
 
-  formatDesignData(records : Pestamp[]){
+ async formatDesignData(records : Pestamp[]){
     this.overdue=[];
     let list:Pestamp[];
     console.log(records);
    list=this.fillinDynamicData(records);
+   await this.chatIcon(list);
    list.forEach(element =>{
      this.listOfDesigns.push(element);
    })
@@ -311,7 +315,7 @@ export class PestampDesignComponent implements OnInit {
             return dateB - dateA;
           });
           console.log(this.listOfDesignsHelper);
-          this.chatIcon(list);
+        
           this.cdr.detectChanges();
           }
   ///chat icon
@@ -325,12 +329,18 @@ export class PestampDesignComponent implements OnInit {
         groupMembers => {
           console.log(groupMembers);
           element.addedtogroupchat=true;
+          
         },
         error => {
           console.log("Group Member list fetching failed with exception:", error);
         }
       );
-    })
+  })
+  // setTimeout(() => {
+   // console.log("hello loader");
+   // this.utils.hideLoadingWithPullRefreshSupport(this.showLoader);
+  // }, 2000);
+    
   }
 
   fillinDynamicData(records : Pestamp[]) : Pestamp[]{

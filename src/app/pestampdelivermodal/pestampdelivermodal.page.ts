@@ -18,8 +18,8 @@ export class PestampdelivermodalPage implements OnInit {
   id:number;
   data:any;
 
-  amountError='Please enter an amount less than $10000'
-  minAmountError = 'Please enter an amount greater than 0'
+  amountError='Please enter an amount less than $5000'
+  //minAmountError = 'Please enter an amount greater than $0'
   fieldRequired = "Delivery Charges should be minimum $1";
   chargesError:string=null;
 
@@ -36,7 +36,7 @@ export class PestampdelivermodalPage implements OnInit {
               private launchNavigator: LaunchNavigator) { 
     this.deliverForm = formBuilder.group({
       delivercharges : new FormControl("",[ Validators.min(1),
-        Validators.max(10000)]),
+        Validators.max(5000)]),
       comments : new FormControl("")
     })
   }

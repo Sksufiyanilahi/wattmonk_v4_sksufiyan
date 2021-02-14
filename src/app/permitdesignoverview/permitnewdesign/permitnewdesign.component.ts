@@ -100,12 +100,12 @@ export class PermitnewdesignComponent implements OnInit {
       this.getDesigns(null);
     });
 
-    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfDesignData != null && this.listOfDesignData.length > 0){
-        this.formatDesignData(this.listOfDesignData);
+    // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+    //   if(this.listOfDesignData != null && this.listOfDesignData.length > 0){
+    //     this.formatDesignData(this.listOfDesignData);
 
-      }
-    });
+    //   }
+    // });
   }
 
   getDesigns(event?: CustomEvent) {
