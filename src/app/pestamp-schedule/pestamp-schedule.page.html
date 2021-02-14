@@ -62,7 +62,7 @@
         <ion-col size="auto">
       <ion-item lines="none">
         <ion-label class="margin" style="font-size: small;">Email Copy</ion-label>
-        <ion-radio slot="start"[disabled]="fieldDisabled" value="ecopy" ></ion-radio>
+        <ion-radio slot="start" [disabled]="fieldDisabled" value="ecopy" ></ion-radio>
       </ion-item>
     </ion-col>
     <ion-col size="auto">
@@ -91,7 +91,7 @@
             <div *ngIf="firstFormGroup.get('numberofhardcopy').hasError('max') && firstFormGroup.get('numberofhardcopy').dirty">
                 <span class="error">{{hardCopiesError}}</span>
             </div>
-            <div *ngIf="firstFormGroup.get('numberofhardcopy').dirty && firstFormGroup.get('numberofhardcopy').hasError('pattern')">
+            <div *ngIf="(firstFormGroup.get('numberofhardcopy').dirty && firstFormGroup.get('numberofhardcopy').hasError('pattern')) || (firstFormGroup.get('numberofhardcopy').hasError('min') && firstFormGroup.get('numberofhardcopy').dirty)">
               <span class="error">{{hardCopiesPatternError}}</span>
           </div>
             <div *ngIf="firstFormGroup.get('numberofhardcopy').value === '' && firstFormGroup.get('numberofhardcopy').dirty">
@@ -258,7 +258,7 @@
                 <div *ngFor="let file of roofPhotosList;let i = index">
                     <ion-item>
                         <ion-col size="11">
-                            {{file}}
+                            {{file.name}}
                         </ion-col>
                         <ion-col size="1" (click)="removeArc(i,'roof')">x</ion-col>
                     </ion-item>

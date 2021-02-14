@@ -234,8 +234,20 @@
                 <!-- <ion-input *ngIf="design.workinghours == '0' " class="ht_wt" type="tel" min="1" maxLength="2" formControlName="workinghours" ></ion-input> -->
                 <ion-input class="ht_wt" type="tel" min="1" formControlName="workinghours" ></ion-input>
                 <!-- </div> -->
-                <span *ngIf="pestampForm.get('workinghours').dirty && pestampForm.get('workinghours').hasError('max')"class="model-name font" style="color: red;font-size: 8px;">Maximum hours should be 48</span>
+                <!-- <span *ngIf="pestampForm.get('workinghours').dirty && pestampForm.get('workinghours').hasError('max')"class="model-name font" style="color: red;font-size: 8px;">Maximum hours should be 48</span>
                 <span *ngIf="pestampForm.get('workinghours').dirty && pestampForm.get('workinghours').hasError('min')"class="model-name font" style="color: red;font-size: 8px;">Minimum hours should be 1</span>
+                <span *ngIf="pestampForm.get('workinghours').dirty && pestampForm.get('workinghours').hasError('pattern')"class="model-name font" style="color: red;font-size: 8px;">Please enter valid numbers</span> -->
+                <div style="height: 5px;">
+                    <div *ngIf="pestampForm.get('workinghours').hasError('max') && pestampForm.get('workinghours').dirty">
+                        <span class="model-name font" style="color: red;font-size: 8px;">Maximum hours should be 48</span>
+                    </div>
+                    <!-- <div *ngIf="pestampForm.get('workinghours').dirty && pestampForm.get('workinghours').hasError('pattern')">
+                      <span class="model-name font" style="color: red;font-size: 8px;">Please enter valid numbers</span>
+                  </div> -->
+                    <div *ngIf="pestampForm.get('workinghours').hasError('min') && pestampForm.get('workinghours').dirty">
+                        <span class="model-name font" style="color: red;font-size: 8px;">Minimum hours should be 1</span>
+                    </div>
+                </div>
             </ion-col>
         </ng-container>
     </ion-row>

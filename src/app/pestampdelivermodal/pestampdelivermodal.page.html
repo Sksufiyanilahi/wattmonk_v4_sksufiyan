@@ -27,7 +27,7 @@
     <ion-col>
   <ion-item class="ion-no-padding">
     <ion-label position="floating">Enter Delivery Charges</ion-label>
-  <ion-input type="tel" class="form_input" formControlName="delivercharges" min="1" max="10000"></ion-input>
+  <ion-input type="tel" class="form_input" formControlName="delivercharges" min="1" max="5000"></ion-input>
 </ion-item>
 <div style="height: 6px;">
   <!-- <div *ngIf="chargesError!=null">
@@ -44,7 +44,7 @@
   <span class="error">{{amountError}}</span>
 </div>
 <div *ngIf="deliverForm.get('delivercharges').hasError('min') && deliverForm.get('delivercharges').dirty">
-  <span class="error">{{minAmountError}}</span>
+  <span class="error">{{fieldRequired}}</span>
 </div>
 </div>
 </ion-col>

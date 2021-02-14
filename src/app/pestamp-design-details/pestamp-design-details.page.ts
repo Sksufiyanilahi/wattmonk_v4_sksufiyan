@@ -147,10 +147,11 @@ export class PestampDesignDetailsPage implements OnInit {
       {
         const working = this.pestampForm.get('workinghours');
         const stamped = this.pestampForm.get('stampedfiles');
+        const NUMBERPATTERN = '^[0-9]+$';
         if(this.design.propertytype == 'commercial')
         {
           stamped.setValidators([Validators.required]);
-          working.setValidators([Validators.required,Validators.min(1),Validators.max(48)]);
+          working.setValidators([Validators.required,Validators.min(1),Validators.max(48),Validators.pattern(NUMBERPATTERN)]);
         }
         else
         {
@@ -188,8 +189,9 @@ export class PestampDesignDetailsPage implements OnInit {
           else if(this.pestampForm.get('workinghours').value==null)
           {
             this.utilities.errorSnackBar('Please add working hours');
-          }else if(this.pestampForm.get('workinghours').hasError('max')){
-            this.utilities.errorSnackBar('Maximum working hours should be 48');
+          }else if(this.pestampForm.get('workinghours').hasError('max') || this.pestampForm.get('workinghours').hasError('min') || this.pestampForm.get('workinghours').hasError('pattern')){
+            // this.utilities.errorSnackBar('Maximum working hours should be 48');
+            this.utilities.errorSnackBar('Please enter a valid working hours');
           }
           return false;
         }else{
