@@ -415,27 +415,27 @@ export class HomepagePage implements OnInit, OnDestroy {
 	}
 
 	ionViewDidEnter() {
-		if (this.version !== this.update_version && this.update_version !== '') {
-			setTimeout(() => {
-				this.utilities.showAlertBox(
-					'Update App',
-					'New version of app is available on Play Store. Please update now to get latest features and bug fixes.',
-					[
-						{
-							text: 'Ok',
+		// if (this.version !== this.update_version && this.update_version !== '') {
+		// 	setTimeout(() => {
+		// 		this.utilities.showAlertBox(
+		// 			'Update App',
+		// 			'New version of app is available on Play Store. Please update now to get latest features and bug fixes.',
+		// 			[
+		// 				{
+		// 					text: 'Ok',
 
-							handler: () => {
-								this.iab.create(
-									'https://play.google.com/store/apps/details?id=com.solar.wattmonk',
-									'_system'
-								);
-								this.ionViewDidEnter();
-							}
-						}
-					]
-				);
-			}, 2000);
-		}
+		// 					handler: () => {
+		// 						this.iab.create(
+		// 							'https://play.google.com/store/apps/details?id=com.solar.wattmonk',
+		// 							'_system'
+		// 						);
+		// 						this.ionViewDidEnter();
+		// 					}
+		// 				}
+		// 			]
+		// 		);
+		// 	}, 2000);
+		// }
 		this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe((data) => {
 			this.netSwitch = data;
 			console.log(this.netSwitch);

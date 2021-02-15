@@ -7,7 +7,7 @@ import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED, IN
 import { ApiService } from '../../api.service';
 import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyDataModel } from '../../model/survey.model';
 
 @Component({
@@ -30,7 +30,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   surveyId = 0;
   private survey: SurveyDataModel;
   address: string;
-
+  userData: any;
   
 
   constructor(
@@ -40,7 +40,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private platform: Platform,
     private apiService: ApiService,
     private storage: StorageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router:Router
   ) {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
@@ -48,7 +49,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
-      email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
+      email: new FormControl('', [Validators.pattern(EMAILPATTERN)]),
       phonenumber: new FormControl('', [Validators.required,  Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
       jobtype: new FormControl('', [Validators.required]),
       datetime: new FormControl(new Date().getTime(), [Validators.required]),
@@ -70,6 +71,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.userData =  this.storage.getUser();
     // this.address= this.storage.getData();
     this.subscription = this.utilities.getScheduleFormEvent().subscribe((event) => {
       switch (event) {
@@ -281,5 +283,19 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.utilities.hideLoading();
       });
     });
+  }
+
+  assignedTo(surveyData){
+
+    let postData = {
+      assignedto: this.userData.id,
+      status: "surveyassigned"
+    };
+    this.apiService.updateSurveyForm(postData,surveyData.id).subscribe(res=>{
+      console.log(res);
+      this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
+    })
+
+ 
   }
 }
