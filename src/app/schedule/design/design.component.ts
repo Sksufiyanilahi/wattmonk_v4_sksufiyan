@@ -99,6 +99,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   fieldDisabled = false;
   userdata:any;
 
+  attachmentFileUpload: boolean= false;
+
   // newprelims: Observable<any>;
   // newprelimsRef: AngularFireObject<any>;
   // //newprelimsRef:any;
@@ -691,14 +693,25 @@ deleteArcFile(index){
 
   submitform(){
     if (this.desginForm.status === 'VALID') {
+      var newConstruction = this.desginForm.get("newconstruction").value;
         if (this.designId === 0) {
 
           if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
             debugger;
             this.utils.showLoading('Saving').then(() => {
             this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
-              this.uploaarchitecturedesign(response.id,'architecturaldesign');
-              this.uploadpreliumdesign(response.id,'attachments')
+              // this.uploaarchitecturedesign(response.id,'architecturaldesign');
+              // this.uploadpreliumdesign(response.id,'attachments')
+              if(newConstruction=='true'){
+                // if(this.architecturalFileUpload){
+                   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                // }
+               }
+               else{
+                 if(this.attachmentFileUpload){
+                   this.uploadpreliumdesign(response.id,'attachments')
+                 }
+               }
               this.utils.hideLoading().then(() => {
                 console.log('Res', response);
                 this.createChatGroup(response);
@@ -1016,6 +1029,7 @@ ioniViewDidEnter(){
     for(var i=0; i< event.target.files.length;i++){
       this.prelimFiles.push(event.target.files[i]) 
     }
+    this.attachmentFileUpload= true;
     if(this.prelimFiles.length==1){
       this.fileName= event.target.files[0].name;
       console.log(this.fileName);
@@ -1042,10 +1056,18 @@ ioniViewDidEnter(){
         imageData.append('field', key);
       }
     } 
+    this.utils.uploadingSnackBar("Architectural File Uploading...").then(()=>{
     this.apiService.uploaddesign(imageData).subscribe(res=>{
       console.log(res); 
+      this.utils.hideUploadingLoading();
+      this.uploadpreliumdesign(designId,'attachments');
       
+    }, responseError => {
+      this.utils.hideUploadingLoading();
+      const error: ErrorModel = responseError.error;
+      this.utils.errorSnackBar(error.message[0].messages[0].message);
     })
+  })
 
 
   }
@@ -1062,14 +1084,18 @@ ioniViewDidEnter(){
         imageData.append('field', key);
       }
     } 
+    this.utils.uploadingSnackBar("Attachment File Uploading...").then(()=>{
     this.apiService.uploaddesign(imageData).subscribe(res=>{
       console.log(res); 
+      this.utils.hideUploadingLoading();
       
     }, responseError => {
       this.utils.hideLoading();
+      this.utils.hideUploadingLoading();
       const error: ErrorModel = responseError.error;
       this.utils.errorSnackBar(error.message[0].messages[0].message);
     })
+  })
   }
 
   // pickarchitecturaldesign(){

@@ -58,6 +58,7 @@ export class Pestamp{
     revisioncomments:string;
     revisionattachments:UploadedFile[];
     isinrevisionstate:boolean;
+    addedtogroupchat:boolean;
 
     //Dynamic content
     designremainingtime : string;

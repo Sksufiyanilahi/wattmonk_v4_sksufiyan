@@ -10,6 +10,7 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import { ErrorModel } from '../model/error.model';
 
 @Component({
   selector: 'app-pestamp-design-details',
@@ -101,7 +102,7 @@ export class PestampDesignDetailsPage implements OnInit {
         this.enableDisable= true;
         const toast = await this.toastController.create({
           header: 'Delete Design',
-          message: 'Are you sure you want to delete this design?',
+          message: 'Are you sure you want to delete this PE Stamp?',
           cssClass: 'my-custom-delete-class',
           buttons: [
             {
@@ -146,10 +147,11 @@ export class PestampDesignDetailsPage implements OnInit {
       {
         const working = this.pestampForm.get('workinghours');
         const stamped = this.pestampForm.get('stampedfiles');
+        const NUMBERPATTERN = '^[0-9]+$';
         if(this.design.propertytype == 'commercial')
         {
           stamped.setValidators([Validators.required]);
-          working.setValidators([Validators.required,Validators.min(1),Validators.max(48)]);
+          working.setValidators([Validators.required,Validators.min(1),Validators.max(48),Validators.pattern(NUMBERPATTERN)]);
         }
         else
         {
@@ -187,8 +189,9 @@ export class PestampDesignDetailsPage implements OnInit {
           else if(this.pestampForm.get('workinghours').value==null)
           {
             this.utilities.errorSnackBar('Please add working hours');
-          }else if(this.pestampForm.get('workinghours').hasError('max')){
-            this.utilities.errorSnackBar('Maximum working hours should be 48');
+          }else if(this.pestampForm.get('workinghours').hasError('max') || this.pestampForm.get('workinghours').hasError('min') || this.pestampForm.get('workinghours').hasError('pattern')){
+            // this.utilities.errorSnackBar('Maximum working hours should be 48');
+            this.utilities.errorSnackBar('Please enter a valid working hours');
           }
           return false;
         }else{
@@ -258,11 +261,17 @@ export class PestampDesignDetailsPage implements OnInit {
             console.log("file upload data---"+data);
            }
          }
+         this.utilities.uploadingSnackBar("Stamped File Uploading...").then(()=>{
          this.apiService.uploadFile(data).subscribe(res=>{
+           this.utilities.hideUploadingLoading();
            console.log(res);
     
-         })
-    
+         }, responseError => {
+          this.utilities.hideUploadingLoading();
+          const error: ErrorModel = responseError.error;
+          this.utilities.errorSnackBar(error.message[0].messages[0].message);
+        })
+      })
     
        }
 

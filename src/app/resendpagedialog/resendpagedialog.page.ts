@@ -149,12 +149,20 @@ export class ResendpagedialogPage implements OnInit {
         var pestampacceptancestarttime = new Date();
     pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
     const postData = {
-      status: "accepted",
+      // status: "accepted",
+      // isoutsourced: "true",
+      // isinrevisionstate : "true",
+      // revisioncomments: this.reason,
+      // pestampacceptancestarttime: pestampacceptancestarttime,
+      // actualdelivereddate: null
+      status: "assigned",
       isoutsourced: "true",
-      isinrevisionstate : "true",
+      isinrevisionstate: "true",
       revisioncomments: this.reason,
       pestampacceptancestarttime: pestampacceptancestarttime,
-      actualdelivereddate: null
+      actualdelivereddate: null,
+      acceptedbypeengineer: false,
+      declinedbypeengineer: false
     };
       this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>
       {
@@ -255,12 +263,20 @@ export class ResendpagedialogPage implements OnInit {
     var pestampacceptancestarttime = new Date();
     pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
       var postData = {
-        status: 'accepted',
-        revisioncomments: this.reason,
-        isoutsourced : "true",
+        // status: 'accepted',
+        // revisioncomments: this.reason,
+        // isoutsourced : "true",
+        // isinrevisionstate: "true",
+        // pestampacceptancestarttime: pestampacceptancestarttime,
+        // actualdelivereddate: null,
+        status: "assigned",
+        isoutsourced: "true",
         isinrevisionstate: "true",
+        revisioncomments: this.reason,
         pestampacceptancestarttime: pestampacceptancestarttime,
         actualdelivereddate: null,
+        acceptedbypeengineer: false,
+        declinedbypeengineer: false
         }
         this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{ 
         //this.createNewDesignChatGroup(res);

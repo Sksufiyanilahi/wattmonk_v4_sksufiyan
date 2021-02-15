@@ -63,6 +63,8 @@ export class UtilitiesService {
 	groupid: any;
 	callData: any;
 
+	toast:any;
+
 	constructor(
 		public loadingController: LoadingController,
 		private toastController: ToastController,
@@ -312,6 +314,24 @@ export class UtilitiesService {
 		await toast.present();
 	}
 
+	async uploadingSnackBar(message) {
+		//this.hideLoading();
+		//const toast = await this.toastController.create({
+			console.log("hii")
+		this.toast = await this.toastController.create({
+			message,
+			//duration: 2000,
+			cssClass: 'my-custom-class'
+		});
+		await this.toast.present();
+	}
+
+	 async hideUploadingLoading() {
+		 //that = this;
+		 console.log("hello");
+	await this.toast.dismiss();
+	}
+
 	setStaticAddress(address: string) {
 		this.staticAddress.next(address);
 	}
@@ -547,35 +567,58 @@ export class UtilitiesService {
 	}
 
 	doCometUserLogin() {
-		CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-			loggedInUser => {
-				console.log('Login Successful:', {loggedInUser});
-				this.listencall();
-			},
-			error => {
-				if (error.code === 'ERR_UID_NOT_FOUND') {
-					const userDetails = new CometChat.User(this.storageService.getUserID());
-					userDetails.setName(this.storageService.getUserName());
-					CometChat.createUser(userDetails, COMETCHAT_CONSTANTS.API_KEY).then(
-						user => {
-							console.log('user created', user);
-							CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-								loggedInUser => {
-									console.log('Login Successful:', {loggedInUser});
-									this.listencall();
-								},
-								error => {
-									console.log('Login failed with exception:', {error});
-								}
-							);
-						},
-						error => {
-							console.log('error', error);
-						});
-				}
-				console.log('Login failed with exception:', {error});
-			}
-		);
+		let userId = this.storageService.getUserID()
+        const user = new CometChat.User(userId);
+        user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+        const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+        CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+          () => {
+            console.log('Initialization completed successfully');
+            // if(this.utilities.currentUserValue != null){
+              // You can now call login function.
+              CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+                (user) => {
+                  console.log('Login Successful:', { user });
+                },
+                error => {
+                  console.log('Login failed with exception:', { error });
+                }
+              );
+          // }
+          },
+          error => {
+            console.log('Initialization failed with error:', error);
+          }
+        );
+		// CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
+		// 	loggedInUser => {
+		// 		console.log('Login Successful:', {loggedInUser});
+		// 		this.listencall();
+		// 	},
+		// 	error => {
+		// 		if (error.code === 'ERR_UID_NOT_FOUND') {
+		// 			const userDetails = new CometChat.User(this.storageService.getUserID());
+		// 			userDetails.setName(this.storageService.getUserName());
+		// 			CometChat.createUser(userDetails, COMETCHAT_CONSTANTS.API_KEY).then(
+		// 				user => {
+		// 					console.log('user created', user);
+		// 					CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
+		// 						loggedInUser => {
+		// 							console.log('Login Successful:', {loggedInUser});
+		// 							this.listencall();
+		// 						},
+		// 						error => {
+		// 							console.log('Login failed with exception:', {error});
+		// 						}
+		// 					);
+		// 				},
+		// 				error => {
+		// 					console.log('error', error);
+		// 				});
+		// 		}
+		// 		console.log('Login failed with exception:', {error});
+		// 	}
+		// );
        
     }
 }

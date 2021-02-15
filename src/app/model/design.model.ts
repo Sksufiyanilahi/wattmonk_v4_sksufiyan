@@ -128,6 +128,7 @@ export class DesginDataModel {
   isoutsourced:any;
   requesttype:string;
   recordupdatedon:any;
+  addedtogroupchat:boolean;
 }
 
 export class PrelimDesign{
