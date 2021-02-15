@@ -451,22 +451,24 @@
                             <ion-radio slot="start" value="backfed"></ion-radio>
                         </ion-item>
                         <ion-item>
-                            <ion-label>Dreate main breaker</ion-label>
-                            <ion-radio slot="start" value="dreatemainbreaker"></ion-radio>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label>SST with CT</ion-label>
-                            <ion-radio slot="start" value="sstwithct"></ion-radio>
+                            <ion-label>Supply Side Tap</ion-label>
+                            <ion-radio slot="start" value="supplysidetap"></ion-radio>
                         </ion-item>
                         <ion-item>
                             <ion-label>Load Side Tap</ion-label>
                             <ion-radio slot="start" value="loadsidetap"></ion-radio>
                         </ion-item>
                         <ion-item>
-                            <ion-label>SST with location of SST</ion-label>
-                            <ion-radio slot="start" value="sstwithlocationofsst"></ion-radio>
+                            <ion-label>More</ion-label>
+                            <ion-radio slot="start" value="more"></ion-radio>
                         </ion-item>
                     </ion-radio-group>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="pvForm.value.interconnection == 'more'">
+                <ion-col>
+                    <ion-input class="form-control" placeholder="Interconnection Detail" autocomplete="off" formControlName="interconnection_input">
+                    </ion-input>
                 </ion-col>
             </ion-row>
             <ion-row>
