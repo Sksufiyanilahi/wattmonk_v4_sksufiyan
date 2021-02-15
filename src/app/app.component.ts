@@ -60,6 +60,10 @@ export class AppComponent {
 	newpermitsRef: AngularFireObject<any>;
 	//newpermitsRef:any;
 	newpermitscounts = 0;
+	//for pestamp badges
+	newpestamp: Observable<any>;
+	newpestampRef: AngularFireObject<any>;
+	newpestampscount = 0;
 
 	constructor(
 		private platform: Platform,
@@ -112,6 +116,19 @@ export class AppComponent {
 		this.newpermits.subscribe(
 			(res) => {
 				this.newpermitscounts = res.count;
+				changeDetectorRef.detectChanges();
+			},
+			(err) => console.log(err),
+			() => console.log('done!')
+		);
+
+		//For Pestamp Badges
+		this.newpestampRef = db.object('newpestamp');
+		this.newpestamp = this.newpestampRef.valueChanges();
+		this.newpestamp.subscribe(
+			(res) => {
+				this.newpestampscount = res.count;
+				console.log(res.count);
 				changeDetectorRef.detectChanges();
 			},
 			(err) => console.log(err),
@@ -248,6 +265,10 @@ export class AppComponent {
 				this.router.navigate([ '/peengineer' ]);
 				//this.router.navigate(['/comingsoon']);
 			} else {
+				if (this.userData.role.type == 'wattmonkadmins' || this.userData.role.type == 'superadmin') {
+					this.changeDetectorRef.detectChanges();
+					this.newpestampRef.update({ count: 0 });
+				}
 				this.router.navigate([ '/pestamp-homepage' ]);
 				//this.router.navigate(['/comingsoon'])
 			}

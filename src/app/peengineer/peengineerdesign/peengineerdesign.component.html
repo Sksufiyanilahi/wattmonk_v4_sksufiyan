@@ -5,6 +5,9 @@
   <ion-segment-button value="completed">
     <ion-label class="segment-btn">Completed</ion-label>
   </ion-segment-button>
+  <ion-segment-button value="delivered">
+    <ion-label class="segment-btn">Delivered</ion-label>
+  </ion-segment-button>
 </ion-segment>
 <ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;">
   <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
@@ -21,6 +24,9 @@
             
              
               <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'pestamp']" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
+              <ng-container *ngIf="designData?.chatid!==null && designData?.addedtogroupchat">
+                <span fill="clear" background-border="clear" [routerLink]="['/','chat',designData.chatid]" class="chatbutton"  size="small"  ><img  style= "height:20px" src="assets/images/chat.svg" /></span>
+              </ng-container>
 
       </p>
       <p style="margin:0px">
@@ -67,7 +73,7 @@
                                 <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,'accepted')">
                                    Accept
                                 </ion-col>
-                                <ion-col size="4"  class="ion-text-end action-button-color" (click)="decline(designData.id,'pestamp')">
+                                <ion-col size="4" style="color:#dc6e67;" class="ion-text-end" (click)="decline(designData.id,'pestamp')">
                                 On Hold
                                 </ion-col>
                             </ng-container>

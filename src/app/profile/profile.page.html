@@ -28,7 +28,7 @@
                 <div style="display:flex;justify-content: center;">
                     <ion-card *ngIf="isEmptyObject(user?.logo) || user?.logo ==null" class="profile_img">{{user?.firstname.slice(0,1).toUpperCase() + user?.lastname.slice(0,1).toUpperCase()}}</ion-card>
                     <div *ngIf="!isEmptyObject(user?.logo) && user?.logo !==null">
-                      <img [src]="user?.logo?.url" class="profile_img"/>
+                      <img [src]="user?.logo?.url" class="profile_image"/>
                     </div>
                     <!-- <img src="assets/images/user_placeholder.jpg" alt="User Image" class="user-image"> -->
                 </div>

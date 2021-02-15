@@ -248,12 +248,12 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.getDesigns(null);
     });
 
-    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
-        this.formatDesignData(this.listOfDesigns);
+    // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+    //   if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
+    //     this.formatDesignData(this.listOfDesigns);
 
-      }
-    });
+    //   }
+    // });
   }
 
   getDesigns(event: CustomEvent) {
@@ -385,14 +385,39 @@ this.deactivateNetworkSwitch.unsubscribe();
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
           });
+          this.chatIcon(list);
+          console.log(list);
           this.cdr.detectChanges();
+  }
+
+  ///chat icon
+  chatIcon(list:DesginDataModel[]){
+    list.forEach(element => {
+      console.log(element)
+      var groupMembersRequest = new CometChat.GroupMembersRequestBuilder(element.chatid)
+        .setLimit(10)
+        .build();
+      groupMembersRequest.fetchNext().then(
+        groupMembers => {
+          console.log(groupMembers);
+          element.addedtogroupchat=true;
+        },
+        error => {
+          // this.utils.hideLoadingWithPullRefreshSupport(this.showLoader).then(() => {
+          // })
+          console.log("Group Member list fetching failed with exception:", error);
+        }
+      );
+     // this.utils.hideLoadingWithPullRefreshSupport(this.showLoader).then(() => {
+      //})
+    })
   }
 
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
     this.utils.showHideIntercom(true);
-  this.dataRefreshSubscription.unsubscribe();
+ // this.dataRefreshSubscription.unsubscribe();
   this.DesignRefreshSubscription.unsubscribe();
   }
 

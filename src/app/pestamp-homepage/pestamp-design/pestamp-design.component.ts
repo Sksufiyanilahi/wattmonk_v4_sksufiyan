@@ -50,7 +50,7 @@ export class PestampDesignComponent implements OnInit {
 
   designerData: any;
   assigneeData: any;
-  reviewAssignedTo:any;
+  //assignedTo:any;
 
   listOfAssignees: AssigneeModel[] = [];
   //listOfAssignees:any[];
@@ -72,6 +72,8 @@ export class PestampDesignComponent implements OnInit {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+
+  //showLoader= true;
   
   constructor(private storageService: StorageService,
               private utils: UtilitiesService,
@@ -222,6 +224,7 @@ export class PestampDesignComponent implements OnInit {
     //this.newpermitsRef.update({ count: 0 });
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getFilteredDesigns(this.segments).subscribe((response:any) => {
+
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
@@ -246,11 +249,12 @@ export class PestampDesignComponent implements OnInit {
     });
   }
 
-  formatDesignData(records : Pestamp[]){
+ async formatDesignData(records : Pestamp[]){
     this.overdue=[];
     let list:Pestamp[];
     console.log(records);
    list=this.fillinDynamicData(records);
+   await this.chatIcon(list);
    list.forEach(element =>{
      this.listOfDesigns.push(element);
    })
@@ -311,7 +315,32 @@ export class PestampDesignComponent implements OnInit {
             return dateB - dateA;
           });
           console.log(this.listOfDesignsHelper);
+        
           this.cdr.detectChanges();
+          }
+  ///chat icon
+  chatIcon(list:Pestamp[]){
+    list.forEach(element => {
+      console.log(element);
+      var groupMembersRequest = new CometChat.GroupMembersRequestBuilder(element.chatid)
+        .setLimit(10)
+        .build();
+      groupMembersRequest.fetchNext().then(
+        groupMembers => {
+          console.log(groupMembers);
+          element.addedtogroupchat=true;
+          
+        },
+        error => {
+          console.log("Group Member list fetching failed with exception:", error);
+        }
+      );
+  })
+  // setTimeout(() => {
+   // console.log("hello loader");
+   // this.utils.hideLoadingWithPullRefreshSupport(this.showLoader);
+  // }, 2000);
+    
   }
 
   fillinDynamicData(records : Pestamp[]) : Pestamp[]{
@@ -388,6 +417,10 @@ export class PestampDesignComponent implements OnInit {
     if(this.assignForm.status === 'INVALID') {
     this.utils.errorSnackBar('Please select a pe engineer');
     }
+    // else if( this.assignedTo!=null && (this.selectedPeEngineer.id==this.assignedTo.id)){
+    //   this.utils.errorSnackBar("This design request has been already assigned to"+" "+this.selectedPeEngineer.firstname+" "+this.selectedPeEngineer.lastname)
+
+    // }
     else{
       var pestampstarttime = new Date();
       var pestampacceptancestarttime = new Date();
@@ -456,7 +489,7 @@ export class PestampDesignComponent implements OnInit {
     this.listOfAssignees=[];
     console.log("this is",designData);
      this.designerData = designData;
-     //this.reviewAssignedTo=designData.designassignedto;
+     //this.assignedTo=designData.assignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin')&& this.designerData.status=='created'){
       //this.route.navigate(["pestamp-payment-modal",{id:id,designData:this.designerData.requesttype}])
       let objToSend: NavigationExtras = {

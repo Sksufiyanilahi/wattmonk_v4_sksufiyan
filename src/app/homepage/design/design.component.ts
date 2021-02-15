@@ -380,6 +380,8 @@ this.network.networkConnect();
     });
   }
 
+  
+
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
     let list:DesginDataModel[];
@@ -440,8 +442,27 @@ this.network.networkConnect();
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
           });
+          this.chatIcon(list);
           this.cdr.detectChanges();
   }
+
+          ///chat icon
+          chatIcon(list:DesginDataModel[]){
+          list.forEach(element => {
+            var groupMembersRequest = new CometChat.GroupMembersRequestBuilder(element.chatid)
+              .setLimit(10)
+              .build();
+            groupMembersRequest.fetchNext().then(
+              groupMembers => {
+                console.log(groupMembers);
+                element.addedtogroupchat=true;
+              },
+              error => {
+                console.log("Group Member list fetching failed with exception:", error);
+              }
+            );
+          })
+        }
 
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();

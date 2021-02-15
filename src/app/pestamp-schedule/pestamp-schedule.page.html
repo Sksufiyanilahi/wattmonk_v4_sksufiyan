@@ -6,9 +6,9 @@
     <ion-title>pestamp-schedule</ion-title>
   </ion-toolbar>
 </ion-header> -->
-  <ion-row>
+<ion-row>
   <ion-col>
-    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;">Add Pestamp Design </h5>
+    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;">Add PE Stamp Request </h5>
   </ion-col>
   <ion-col size="auto" style="align-self: center;">
     <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
@@ -23,8 +23,8 @@
       <ion-col>
         <ion-item class="ion-no-padding">
           <ion-label position="floating" class="label">Name*</ion-label>
-          <ion-input type="text" class="form_input" autocapitalize="words"
-                      formControlName="name"></ion-input>
+          <ion-input class="form_input" type="name" autocapitalize="none" autocomplete="off"
+          formControlName="name"  ></ion-input>
         </ion-item>
         <div style="height: 5px;">
           <div *ngIf="firstFormGroup.get('name').hasError('pattern') && firstFormGroup.get('name').dirty">
@@ -40,8 +40,9 @@
       <ion-col>
         <ion-item class="ion-no-padding">
           <ion-label position="floating" class="label">Email*</ion-label>
-          <ion-input type="text" class="form_input" autocapitalize="words"
-                      formControlName="email"></ion-input>
+           <ion-input class="form_input" type="email" autocapitalize="none" autocomplete="off"
+          formControlName="email" [disabled]="fieldDisabled" ></ion-input>
+                  
         </ion-item>
         <div style="height: 5px;">
           <div *ngIf="firstFormGroup.get('email').hasError('pattern') && firstFormGroup.get('email').dirty">
@@ -61,19 +62,19 @@
         <ion-col size="auto">
       <ion-item lines="none">
         <ion-label class="margin" style="font-size: small;">Email Copy</ion-label>
-        <ion-radio slot="start" value="ecopy" ></ion-radio>
+        <ion-radio slot="start" [disabled]="fieldDisabled" value="ecopy" ></ion-radio>
       </ion-item>
     </ion-col>
     <ion-col size="auto">
       <ion-item lines="none">
         <ion-label class="margin"   style="font-size: small;">Hard Copy</ion-label>
-        <ion-radio slot="start"  value="hardcopy" ></ion-radio>
+        <ion-radio slot="start" [disabled]="fieldDisabled" value="hardcopy" ></ion-radio>
       </ion-item>
     </ion-col>
     <ion-col size="auto">
       <ion-item lines="none">
         <ion-label class="margin"   style="font-size: small;">Both</ion-label>
-        <ion-radio slot="start"  value="both" ></ion-radio>
+        <ion-radio slot="start" [disabled]="fieldDisabled"  value="both" ></ion-radio>
       </ion-item>
     </ion-col>
     </ion-row>
@@ -83,13 +84,16 @@
       <ion-col>
           <ion-item class="ion-no-padding">
               <ion-label position="floating" class="label">No. of Hard Copies*</ion-label>
-              <ion-input type="tel" class="form_input" autocapitalize="words"
-                          formControlName="numberofhardcopy" autocomplete="off" min="1" max="10"></ion-input>
+              <ion-input type="cell" class="form_input" autocapitalize="words"
+                          formControlName="numberofhardcopy" autocomplete="off" maxLength="4"></ion-input>
           </ion-item>
           <div style="height: 5px;">
             <div *ngIf="firstFormGroup.get('numberofhardcopy').hasError('max') && firstFormGroup.get('numberofhardcopy').dirty">
                 <span class="error">{{hardCopiesError}}</span>
             </div>
+            <div *ngIf="(firstFormGroup.get('numberofhardcopy').dirty && firstFormGroup.get('numberofhardcopy').hasError('pattern')) || (firstFormGroup.get('numberofhardcopy').hasError('min') && firstFormGroup.get('numberofhardcopy').dirty)">
+              <span class="error">{{hardCopiesPatternError}}</span>
+          </div>
             <div *ngIf="firstFormGroup.get('numberofhardcopy').value === '' && firstFormGroup.get('numberofhardcopy').dirty">
                 <span class="error">{{fieldRequired}}</span>
             </div>
@@ -98,11 +102,18 @@
   </ion-row>
   <ion-row *ngIf="stampingModeValue == 'hardcopy' || stampingModeValue == 'both'">
     <ion-col>
-      <ion-item class="ion-no-padding">
+      <!-- <ion-item class="ion-no-padding">
         <ion-label position="floating" class="label">Shipping Address*</ion-label>
         <ion-input type="text" class="form_input" autocapitalize="words"
-                    formControlName="shippingaddress" autocomplete="off"></ion-input>
-    </ion-item>
+                    formControlName="shippingaddress" autocomplete="off"  (ionChange)="updateSearchResults($event)"
+                    (ionClear)="onCancel()" debounce="300"
+                    (ionFocus)="forAutoComplete($event)" (ionBlur)="onBlur()"></ion-input>
+    </ion-item> -->
+    <ion-item class="ion-no-padding">
+      <ion-label position="floating" class="label">Shipping Address*</ion-label>
+      <ion-input type="text" class="form_input" autocapitalize="words"
+                  formControlName="shippingaddress" autocomplete="off"></ion-input>
+  </ion-item>
     <!-- <ion-list *ngIf="autocompleteItems.length > 0 && autoCompleteOff">
       <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
           <ion-label>
@@ -153,7 +164,7 @@
           <!-- <ion-label position="floating">mounting type</ion-label> -->
           <ion-select class="form_input select_div"
                       ok-text="" cancel-text=""
-                      formControlName="propertytype" interface="popover">
+                      formControlName="propertytype" [disabled]="fieldDisabled" interface="popover">
               <ion-select-option value="residential">Residential</ion-select-option>
               <ion-select-option value="commercial">Commercial</ion-select-option>
           </ion-select>
@@ -166,7 +177,7 @@
           <!-- <ion-label position="floating">mounting type</ion-label> -->
           <ion-select class="form_input select_div"
                       ok-text="" cancel-text=""
-                      formControlName="mountingtype" interface="popover">
+                      formControlName="mountingtype" [disabled]="fieldDisabled" interface="popover">
               <ion-select-option value="roof">Roof</ion-select-option>
               <ion-select-option value="ground">Ground</ion-select-option>
               <ion-select-option value="both">Both</ion-select-option>
@@ -184,19 +195,19 @@
       <ion-col size="auto">
     <ion-item lines="none">
       <ion-label class="margin" style="font-size: small;">Structural</ion-label>
-      <ion-radio slot="start" value="structural"></ion-radio>
+      <ion-radio slot="start" [disabled]="fieldDisabled" value="structural"></ion-radio>
     </ion-item>
   </ion-col>
   <ion-col size="auto">
     <ion-item lines="none">
       <ion-label class="margin"   style="font-size: small;">Electrical</ion-label>
-      <ion-radio slot="start"  value="electrical"></ion-radio>
+      <ion-radio slot="start" [disabled]="fieldDisabled" value="electrical"></ion-radio>
     </ion-item>
   </ion-col>
   <ion-col size="auto">
     <ion-item lines="none">
       <ion-label class="margin"   style="font-size: small;">Both</ion-label>
-      <ion-radio slot="start"  value="both"></ion-radio>
+      <ion-radio slot="start" [disabled]="fieldDisabled" value="both"></ion-radio>
     </ion-item>
   </ion-col>
   </ion-row>
@@ -207,7 +218,7 @@
         <ng-container>
             <ion-item class="ion-no-padding" (click)="attic.click()">
                 <ion-label position="floating" class="label">Attic Photos*</ion-label>
-                    <input type="file" #attic class="form_input"  (change)="atticFiles($event)" style="margin-top: 12px;" formControlName="atticphotos" multiple>
+                    <input type="file" #attic class="form_input" (change)="atticFiles($event)" style="margin-top: 12px;" formControlName="atticphotos" multiple>
                     <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
                 </ion-item>
                 <div *ngFor="let file of atticPhotosList;let i = index">
@@ -241,7 +252,7 @@
         <ng-container>
             <ion-item class="ion-no-padding" (click)="roof.click()">
                 <ion-label position="floating" class="label">Roof Photos*</ion-label>
-                    <input type="file" #roof class="form_input"  (change)="roofFiles($event)" style="margin-top: 12px;" formControlName="roofphotos" multiple>
+                    <input type="file" #roof class="form_input" (change)="roofFiles($event)" style="margin-top: 12px;" formControlName="roofphotos" multiple>
                     <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
                 </ion-item>
                 <div *ngFor="let file of roofPhotosList;let i = index">
@@ -274,8 +285,8 @@
   
         <ng-container>
             <ion-item class="ion-no-padding" (click)="permitplan.click()">
-                <ion-label position="floating" class="label">Permit Plan*</ion-label>
-                    <input type="file" #permitplan class="form_input"  (change)="permitPlanFiles($event)" accept="application/pdf" style="margin-top: 12px;" formControlName="permitplanphotos">
+                <ion-label position="floating" class="label">Permit Plan Photos*</ion-label>
+                    <input type="file" #permitplan class="form_input" (change)="permitPlanFiles($event)" accept="application/pdf" style="margin-top: 12px;" formControlName="permitplanphotos" multiple>
                     <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
                 </ion-item>
                 <div *ngFor="let file of permitPlanList;let i = index">
@@ -292,7 +303,7 @@
             <ng-container *ngIf="design && design.permitplan !==null">
               <div *ngFor="let arc of design.permitplan;let i=index">
                  <ion-item>
-                     <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
+                     <ion-col size="auto" > {{arc.name}}{{arc.ext}}</ion-col>
                      <!-- <ion-col size="1" (click)="removePermitPlan(arc,i)">x</ion-col> -->
                     
 
@@ -335,13 +346,12 @@
     </ion-col>
     <ion-col size="12" style="padding-top: 0px;">
         <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
-                      formControlName="comment"></ion-textarea>
+         formControlName="comment"></ion-textarea>
     </ion-col>
 </ion-row>
 </form>
 <!-- <form [formGroup]="secondFormGroup" novalidate style="overflow:scroll">
  
-
 </form> -->
 </ion-content>
 <ion-row>
@@ -350,4 +360,4 @@
       <ion-button class="action-button-color" fill="clear" (click)="submitForm('save')">Save</ion-button>
       <ion-button class="action-button-color" *ngIf="userdata.role.type=='clientsuperadmin' || userdata.role.type=='clientadmin'" fill="clear" (click)="submitForm('send')">Send to Wattmonk</ion-button>
       </ion-col>
-      </ion-row> 
+      </ion-row>
