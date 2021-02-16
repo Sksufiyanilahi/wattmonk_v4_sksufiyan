@@ -290,8 +290,10 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
         console.log(data);
         if (data) {
           element.totalpercent = data.currentprogress;
+          console.log(element);
         }else{
           element.totalpercent = 0;
+          console.log(element);
         }
       });
     });
@@ -480,11 +482,13 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
         };
       }
     } else {
-      if(this.selectedDesigner.role.type=="surveyors"){ postData = {
+      if(this.selectedDesigner.role.type=="surveyors"){ 
+        postData = {
         assignedto: this.selectedDesigner.id,
         status: "surveyassigned",
         surveystarttime: surveystarttime
-      };}
+      };
+    }
       if(this.selectedDesigner.role.type=="qcinspector"){
         postData = {
           reviewassignedto: this.selectedDesigner.id,
@@ -843,6 +847,19 @@ this.utils.showLoading('Assigning').then(()=>{
   });
       return await modal.present();
    }
+   assignedTo(surveyData){
+
+    let postData = {
+      assignedto: this.userData.id,
+      status: "surveyassigned"
+    };
+    this.apiService.updateSurveyForm(postData,surveyData.id).subscribe(res=>{
+      console.log(res);
+      this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
+    })
+
+ 
+  }
 
 }
 
