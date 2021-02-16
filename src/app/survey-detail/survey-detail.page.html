@@ -141,7 +141,7 @@
                         
                         
                             <ion-col size="6" *ngFor="let comment of survey.comments">
-                                <p class="comment font" style="text-align:left;margin:0px">{{comment?.message}}</p>
+                                <p  [innerHTML]="comment?.message | linkify" class="comment font" style="text-align:left;margin:0px"></p>
                                 <p class="comment-by" style="text-align:left;margin-top:0px">Posted by {{comment.createdby?.firstname}}
                                     {{comment.createdby?.lastname}}</p>
                             </ion-col>

@@ -560,7 +560,8 @@ export class PestampSchedulePage implements OnInit {
           //this.router.navigate(['pestamp-payment-modal',{isConfirmed: false, isLater: false, ispestamp: true, pestampid: res.id}]);
           let objToSend: NavigationExtras = {
             queryParams: {
-            designData:res
+            designData:res,
+            value:'assign'
             },
             skipLocationChange: false,
             fragment: 'top' 
