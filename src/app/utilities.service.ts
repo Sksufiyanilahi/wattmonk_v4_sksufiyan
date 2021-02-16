@@ -279,6 +279,7 @@ export class UtilitiesService {
 	async showSuccessModal(successMessage: string): Promise<HTMLIonModalElement> {
 		const modal = await this.modalController.create({
 			component: SuccessModalComponent,
+			cssClass:'survey-modal-css',
 			componentProps: {
 				message: successMessage
 			}

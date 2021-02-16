@@ -681,7 +681,8 @@ this.utils.showLoading('Saving').then(() => {
     }
           let objToSend: NavigationExtras = {
             queryParams: {
-            designData:res
+            designData:res,
+            value:'assign'
             },
             skipLocationChange: false,
             fragment: 'top' 

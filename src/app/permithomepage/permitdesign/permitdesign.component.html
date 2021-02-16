@@ -137,7 +137,7 @@
                       <ion-col size="12" *ngIf="segments=='requesttype=permit&status=designcompleted'">
                           <!-- <span *ngIf="(designData.isoutsourced=='true' && designData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (designData.isoutsourced=='false' && designData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
                           >Assign Review</span> -->
-                          <span *ngIf="userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="selfAssign(designData.id,designData)"
+                          <span size="12" *ngIf="userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="selfAssign(designData.id,designData)"
                           > &nbsp; Self Assign</span>
 
                           <span *ngIf="userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"

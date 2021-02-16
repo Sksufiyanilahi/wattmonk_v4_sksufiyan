@@ -68,11 +68,11 @@
                         Electrical
                     </ion-label>
                 </ion-segment-button>
-                <ion-segment-button value="solarPanel" class="wd140 colorwht">
+                <!-- <ion-segment-button value="solarPanel" class="wd140 colorwht">
                     <ion-label>
                         Solar Panel
                     </ion-label>
-                </ion-segment-button>
+                </ion-segment-button> -->
                 <ion-segment-button value="roof" class="wd140 colorwht">
                     <ion-label>
                         Roof
@@ -83,11 +83,11 @@
                         Appliances
                     </ion-label>
                 </ion-segment-button>
-                <ion-segment-button value="equipmentMarketing" class="wd140 colorwht">
+                <!-- <ion-segment-button value="equipmentMarketing" class="wd140 colorwht">
                     <ion-label style="width:100%">
                         Equipment Marking
                     </ion-label>
-                </ion-segment-button>
+                </ion-segment-button> -->
                 <ion-segment-button value="generalInfo" class="wd140 colorwht">
                     <ion-label>
                         General information
@@ -292,14 +292,14 @@
                             <!-- </ion-item> -->
                         </ion-col>
                     </ion-row>
-                    <ion-row>
+                    <!-- <ion-row>
                         <ion-col size="6">Existing Modules Brand</ion-col>
                         <ion-col size="6">{{survey.modulemake.name}}</ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col size="6">Existing Modules Model</ion-col>
                         <ion-col size="6">{{survey.modulemodel.name}}</ion-col>
-                    </ion-row>
+                    </ion-row> -->
                     <ion-row>
                         <ion-col size="6">Battery Backup</ion-col>
                         <ion-col size="6">{{survey.batterybackup}}</ion-col>
@@ -310,7 +310,7 @@
                     </ion-row>
                     <ion-row>
                         <ion-col size="6">Service Feed Source</ion-col>
-                        <ion-col size="6">{{survey.servicefeedsource}}</ion-col>
+                        <ion-col size="6">{{survey?.servicefeedsource}}</ion-col>
                     </ion-row>
                     
                  </ion-grid>

@@ -1,125 +1,125 @@
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {CameraPreview, CameraPreviewOptions} from '@ionic-native/camera-preview/ngx';
-import {ActivatedRoute} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {AlertController, IonRouterOutlet, IonSlides, NavController, Platform} from '@ionic/angular';
-import {Diagnostic} from '@ionic-native/diagnostic/ngx';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {UtilitiesService} from '../utilities.service';
-import {ApiService} from '../api.service';
-import {InverterMakeModel} from '../model/inverter-make.model';
-import {ErrorModel} from '../model/error.model';
-import {InverterMadeModel} from '../model/inverter-made.model';
-import {SolarMake} from '../model/solar-make.model';
-import {SolarMadeModel} from '../model/solar-made.model';
-import {CdkDragEnd} from '@angular/cdk/drag-drop';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { CameraPreview, CameraPreviewOptions } from '@ionic-native/camera-preview/ngx';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { AlertController, IonRouterOutlet, IonSlides, NavController, Platform } from '@ionic/angular';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UtilitiesService } from '../utilities.service';
+import { ApiService } from '../api.service';
+import { InverterMakeModel } from '../model/inverter-make.model';
+import { ErrorModel } from '../model/error.model';
+import { InverterMadeModel } from '../model/inverter-made.model';
+import { SolarMake } from '../model/solar-make.model';
+import { SolarMadeModel } from '../model/solar-made.model';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import html2canvas from 'html2canvas';
-import {SurveyStorageModel} from '../model/survey-storage.model';
-import {Storage} from '@ionic/storage';
-import {AutoCompleteComponent} from '../utilities/auto-complete/auto-complete.component';
-import {StorageService} from '../storage.service';
-import {Insomnia} from '@ionic-native/insomnia/ngx';
+import { SurveyStorageModel } from '../model/survey-storage.model';
+import { Storage } from '@ionic/storage';
+import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
+import { StorageService } from '../storage.service';
+import { Insomnia } from '@ionic-native/insomnia/ngx';
 import * as domtoimage from 'dom-to-image';
-import {RoofMaterial} from '../model/roofmaterial.model';
+import { RoofMaterial } from '../model/roofmaterial.model';
 
 export interface MAINMENU {
-    name: string;
-    isactive: boolean;
-    ispending: boolean;
-    isvisible: boolean;
-    viewmode: number;
-    children: CHILDREN[];
+	name: string;
+	isactive: boolean;
+	ispending: boolean;
+	isvisible: boolean;
+	viewmode: number;
+	children: CHILDREN[];
 }
 
 export interface CHILDREN {
-    name: string;
-    isactive: boolean;
-    ispending: boolean;
-    isvisible: boolean;
-    checkexistence: boolean;
-    isexistencechecked: boolean,
-    inputformcontrol: string;
-    shotscount: number;
-    allowmultipleshots: boolean;
-    capturedshots: CAPTUREDSHOT[];
-    shots: SHOT[];
+	name: string;
+	isactive: boolean;
+	ispending: boolean;
+	isvisible: boolean;
+	checkexistence: boolean;
+	isexistencechecked: boolean;
+	inputformcontrol: string;
+	shotscount: number;
+	allowmultipleshots: boolean;
+	capturedshots: CAPTUREDSHOT[];
+	shots: SHOT[];
 }
 
 export interface SHOT {
-    isactive: boolean;
-    ispending: boolean;
-    shotinfo: string;
-    questioninfo: string;
-    shotstatus: boolean;
-    promptquestion: boolean;
-    question: string;
-    actions: string[];
-    result: string;
-    questionstatus: boolean;
-    questiontype: QUESTIONTYPE;
-    inputformcontrol: string;
-    imagekey: string;
-    imagename: string;
+	isactive: boolean;
+	ispending: boolean;
+	shotinfo: string;
+	questioninfo: string;
+	shotstatus: boolean;
+	promptquestion: boolean;
+	question: string;
+	actions: string[];
+	result: string;
+	questionstatus: boolean;
+	questiontype: QUESTIONTYPE;
+	inputformcontrol: string;
+	imagekey: string;
+	imagename: string;
 }
 
 export interface CAPTUREDSHOT {
-    menuindex: number;
-    submenuindex: number;
-    shotindex: number;
-    shotimage: string;
-    imagekey: string;
-    imagename: string;
+	menuindex: number;
+	submenuindex: number;
+	shotindex: number;
+	shotimage: string;
+	imagekey: string;
+	imagename: string;
 }
 
 export interface Equipment {
-    id: number;
-    name: string;
-    color: string;
-    disabledcolor: string;
-    enabled: boolean;
-    event: CdkDragEnd;
+	id: number;
+	name: string;
+	color: string;
+	disabledcolor: string;
+	enabled: boolean;
+	event: CdkDragEnd;
 }
 
 export enum QUESTIONTYPE {
-    NONE = 0,
-    OPTIONS = 1,
-    INPUT_NUMBER = 2,
-    INPUT_UTILITIES_AUTOCOMPLETE = 3,
-    INPUT_INVERTER_AUTOCOMPLETE = 4,
-    INPUT_SHOT_NAME = 5,
-    INPUT_ROOF_MATERIAL_AUTOCOMPLETE = 6,
-    INPUT_TEXT = 7
+	NONE = 0,
+	OPTIONS = 1,
+	INPUT_NUMBER = 2,
+	INPUT_UTILITIES_AUTOCOMPLETE = 3,
+	INPUT_INVERTER_AUTOCOMPLETE = 4,
+	INPUT_SHOT_NAME = 5,
+	INPUT_ROOF_MATERIAL_AUTOCOMPLETE = 6,
+	INPUT_TEXT = 7
 }
 
 export enum VIEWMODE {
-    NONE = -1,
-    CAMERA = 0,
-    FORM = 1,
-    MAP = 2,
-    GALLERY = 3
+	NONE = -1,
+	CAMERA = 0,
+	FORM = 1,
+	MAP = 2,
+	GALLERY = 3
 }
 
 export interface PENDING_MENU {
-    index: number;
-    name: string;
-    pendingchilds: PENDING_CHILD[];
+	index: number;
+	name: string;
+	pendingchilds: PENDING_CHILD[];
 }
 
 export interface PENDING_CHILD {
-    index: number;
-    name: string;
-    pendingshots: PENDING_SHOT[];
+	index: number;
+	name: string;
+	pendingshots: PENDING_SHOT[];
 }
 
 export interface PENDING_SHOT {
-    index: number;
-    name: string;
+	index: number;
+	name: string;
 }
 
 @Component({
-    selector: 'app-surveyprocess',
-    templateUrl: './surveyprocess.page.html',
-    styleUrls: ['./surveyprocess.page.scss'],
+	selector: 'app-surveyprocess',
+	templateUrl: './surveyprocess.page.html',
+	styleUrls: [ './surveyprocess.page.scss' ]
 })
 export class SurveyprocessPage implements OnInit {
 
@@ -258,7 +258,9 @@ export class SurveyprocessPage implements OnInit {
     equipmentscanvasimage: string;
     sitelocationimage: any;
     hasExistingSolarSystem: boolean;
-    user:any
+    user: any
+    hasBatterySystem: boolean;
+
     constructor(
         private cameraPreview: CameraPreview,
         private route: ActivatedRoute,
@@ -267,7 +269,7 @@ export class SurveyprocessPage implements OnInit {
         private navController: NavController,
         private alertController: AlertController,
         private storage: Storage,
-        private storageuserdata:StorageService,
+        private storageuserdata: StorageService,
         private utilitieservice: UtilitiesService,
         private apiService: ApiService,
         private changedetectorref: ChangeDetectorRef,
@@ -275,7 +277,7 @@ export class SurveyprocessPage implements OnInit {
         private routeroutlet: IonRouterOutlet,
         private storageService: StorageService,
         private insomnia: Insomnia) {
-            this.user=this.storageuserdata.getUser();
+        this.user = this.storageuserdata.getUser();
         this.surveyid = +this.route.snapshot.paramMap.get('id');
         this.surveytype = this.route.snapshot.paramMap.get('type');
         this.surveycity = this.route.snapshot.paramMap.get('city');
@@ -309,9 +311,10 @@ export class SurveyprocessPage implements OnInit {
         this.totalstepcount = 19;
         this.pvForm = new FormGroup({
             existingsolarsystem: new FormControl('', [Validators.required]),
-            detailsofexisitingsystem: new FormControl('', []),
-            batterybackup: new FormControl('', [Validators.required]),
+            batterysystem: new FormControl('', [Validators.required]),
+            detailsofbatterysystem: new FormControl('', []),
             interconnection: new FormControl('', [Validators.required]),
+            interconnection_input: new FormControl('', []),
             servicefeedsource: new FormControl('', [Validators.required]),
             mainbreakersize: new FormControl('', [Validators.required]),
             msprating: new FormControl('', [Validators.required]),
@@ -322,9 +325,10 @@ export class SurveyprocessPage implements OnInit {
             framing: new FormControl('', [Validators.required]),
             framingsize: new FormControl('', [Validators.required]),
             distancebetweentworafts: new FormControl('', [Validators.required]),
-            pvinverterlocation: new FormControl('', [Validators.required]),
-            pvinvertermanufacturer: new FormControl('', [Validators.required]),
+            pvinverterlocation: new FormControl('', []),
+            pvinvertermanufacturer: new FormControl('', []),
             additionalnotes: new FormControl('', []),
+            rooftilt: new FormControl('', []),
             shotname: new FormControl('', [])
         });
 
@@ -1061,11 +1065,11 @@ export class SurveyprocessPage implements OnInit {
         data.saved = true;
         this.storage.set(this.surveyid + '', data);
 
-        if(this.user.role.type=="surveyor"){
+        if (this.user.role.type == "surveyors") {
 
-        this.utilitieservice.setDataRefresh(true);
-        this.navController.navigateBack('surveyoroverview');}
-        else{
+            this.utilitieservice.setDataRefresh(true);
+            this.navController.navigateBack('surveyoroverview');
+        } else {
             this.utilitieservice.sethomepageSurveyRefresh(true);
             this.navController.navigateBack('/homepage/survey');
         }
@@ -1107,11 +1111,11 @@ export class SurveyprocessPage implements OnInit {
                 element.questionstatus = true;
             });
             this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
-            this.handleMenuSwitch();
+            this.handleMenuSwitch(false);
         }
     }
 
-    handleMenuSwitch() {
+    handleMenuSwitch(selectedSubMenuDoesNotExist?) {
         this.iscapturingallowed = true;
 
         //Retaining previous shots
@@ -1122,7 +1126,7 @@ export class SurveyprocessPage implements OnInit {
         if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
             this.markShotCompletion(this.selectedshotindex);
             this.updateProgressStatus();
-            if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1) {
+            if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1 && selectedSubMenuDoesNotExist != false) {
                 this.selectedshotindex += 1;
             } else {
                 if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
@@ -1428,9 +1432,10 @@ export class SurveyprocessPage implements OnInit {
     savePVFormData() {
         const data = {
             existingsolarsystem: this.pvForm.get("existingsolarsystem").value,
-            detailsofexisitingsystem: this.pvForm.get("detailsofexisitingsystem").value,
-            batterybackup: this.pvForm.get("batterybackup").value,
+            batterysystem: this.pvForm.get("batterysystem").value,
+            detailsofbatterysystem: this.pvForm.get("detailsofbatterysystem").value,
             interconnection: this.pvForm.get("interconnection").value,
+            interconnectiondetails: this.pvForm.get("interconnection_input").value,
             servicefeedsource: this.pvForm.get("servicefeedsource").value,
             additionalnotes: this.pvForm.get("additionalnotes").value,
             status: 'surveycompleted'
@@ -1552,14 +1557,14 @@ export class SurveyprocessPage implements OnInit {
             });
         });
 
-        if (this.equipmentscanvasimage != "") {
-            var captureshot: CAPTUREDSHOT = {
+        if (this.equipmentscanvasimage && this.equipmentscanvasimage !== '') {
+            const captureshot: CAPTUREDSHOT = {
                 menuindex: -1,
                 submenuindex: -1,
                 shotindex: imagesArray.length + 1,
                 shotimage: this.equipmentscanvasimage,
-                imagekey: "electricalslocation",
-                imagename: "electricalslocation"
+                imagekey: 'electricalslocation',
+                imagename: 'electricalslocation'
             }
             imagesArray.push(captureshot);
         }
@@ -1572,11 +1577,11 @@ export class SurveyprocessPage implements OnInit {
 
     uploadImageByIndex(mapOfImages) {
         console.log(mapOfImages);
-        
+
         if (mapOfImages.length > 0 && mapOfImages.length <= this.totalimagestoupload) {
             const imageToUpload = mapOfImages[0];
             console.log(imageToUpload);
-            if(imageToUpload.shotimage){
+            if (imageToUpload.shotimage) {
                 const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
                 let filename = '';
                 if (imageToUpload.imagename === '') {
@@ -1594,10 +1599,10 @@ export class SurveyprocessPage implements OnInit {
                     mapOfImages.splice(0, 1);
                     this.uploadImageByIndex(mapOfImages);
                 });
-            }else{
+            } else {
                 this.imageuploadindex++;
-                    mapOfImages.splice(0, 1);
-                    this.uploadImageByIndex(mapOfImages);
+                mapOfImages.splice(0, 1);
+                this.uploadImageByIndex(mapOfImages);
             }
         } else {
             this.utilitieservice.hideLoading().then(() => {
@@ -1605,8 +1610,13 @@ export class SurveyprocessPage implements OnInit {
                     modal.present();
                     modal.onWillDismiss().then((dismissed) => {
                         this.storage.remove("" + this.surveyid);
-                        this.utilitieservice.sethomepageSurveyRefresh(true);
-                        this.navController.navigateRoot('surveyoroverview');
+						if(this.user.type=='surveyors'){
+							this.utilitieservice.sethomepageSurveyRefresh(true);
+							this.navController.navigateRoot('surveyoroverview');
+						}else{
+							this.utilitieservice.sethomepageSurveyRefresh(true);
+							this.navController.navigateRoot('homepage/survey');
+						}
                         this.insomnia.allowSleepAgain()
                             .then(
                                 () => console.log('success'),
@@ -1807,7 +1817,8 @@ export class SurveyprocessPage implements OnInit {
         this.startCameraAfterPermission();
     }
 
-    changeExistingSolarSystem() {
-        this.hasExistingSolarSystem = this.pvForm.value.existingsolarsystem;
+    changeBatterySystem() {
+        this.hasBatterySystem = eval(this.pvForm.value.batterysystem);
+        console.log(this.hasBatterySystem);
     }
 }
