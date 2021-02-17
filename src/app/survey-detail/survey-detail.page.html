@@ -193,10 +193,10 @@
                                 <ion-segment-button value="utilityMeter" class="wd140">
                                     <ion-label>Utility Meter</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="pvMeter" class="wd140">
+                                <ion-segment-button *ngIf="survey.existingsolarsystem" value="pvMeter" class="wd140">
                                     <ion-label>PV Inverter</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="acDisconnect" class="wd140">
+                                <ion-segment-button value="acDisconnect" class="wd140" *ngIf="survey.existingsolarsystem">
                                     <ion-label>AC Disconnected</ion-label>
                                 </ion-segment-button>
                             </ion-segment>

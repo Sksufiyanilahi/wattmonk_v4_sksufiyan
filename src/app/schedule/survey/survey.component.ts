@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyDataModel } from '../../model/survey.model';
+import { ErrorModel } from 'src/app/model/error.model';
 
 @Component({
   selector: 'app-survey',
@@ -89,20 +90,20 @@ export class SurveyComponent implements OnInit, OnDestroy {
     } 
     else {
       this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
-         // this.surveyForm.get('address').setValue("sdck");
-         // this.surveyForm.get('latitude').setValue('1111111');
-         // this.surveyForm.get('longitude').setValue('222222222');
-         // this.surveyForm.get('country').setValue('India');
-         // this.surveyForm.get('city').setValue('delhi');
-        // this.surveyForm.get('state').setValue('up');
-        //  this.surveyForm.get('postalcode').setValue(777777777);
-       this.surveyForm.get('address').setValue(address.address);
-       this.surveyForm.get('latitude').setValue(address.lat);
-        this.surveyForm.get('longitude').setValue(address.long);
-        this.surveyForm.get('country').setValue(address.country);
-        this.surveyForm.get('city').setValue(address.city);
-        this.surveyForm.get('state').setValue(address.state);
-        this.surveyForm.get('postalcode').setValue(address.postalcode);
+         this.surveyForm.get('address').setValue("sdck");
+         this.surveyForm.get('latitude').setValue('1111111');
+         this.surveyForm.get('longitude').setValue('222222222');
+         this.surveyForm.get('country').setValue('India');
+         this.surveyForm.get('city').setValue('delhi');
+        this.surveyForm.get('state').setValue('up');
+         this.surveyForm.get('postalcode').setValue(777777777);
+      //  this.surveyForm.get('address').setValue(address.address);
+      //  this.surveyForm.get('latitude').setValue(address.lat);
+      //   this.surveyForm.get('longitude').setValue(address.long);
+      //   this.surveyForm.get('country').setValue(address.country);
+      //   this.surveyForm.get('city').setValue(address.city);
+      //   this.surveyForm.get('state').setValue(address.state);
+      //   this.surveyForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.surveyForm.get('address').setValue('');
         this.surveyForm.get('latitude').setValue('');
@@ -137,6 +138,13 @@ export class SurveyComponent implements OnInit, OnDestroy {
               this.utilities.setDesignDetailsRefresh(true);
               this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
             });
+          },
+          responseError => {
+            this.utilities.hideLoading().then(() => {
+              const error :ErrorModel= responseError.error;
+              this.utilities.errorSnackBar(error.message);
+            });
+         //
           });
         } else {
 
@@ -149,7 +157,15 @@ export class SurveyComponent implements OnInit, OnDestroy {
               this.utilities.setDesignDetailsRefresh(true);
               this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
             });
-          });
+          },
+          responseError => {
+            this.utilities.hideLoading().then(() => {
+              const error :ErrorModel= responseError.error;
+              this.utilities.errorSnackBar(error.message);
+            });
+         //
+          }
+          );
         }
       });
     }
@@ -183,6 +199,13 @@ export class SurveyComponent implements OnInit, OnDestroy {
               // this.navController.navigateRoot('homepage/survey');
               this.navController.pop();
             });
+          },
+          responseError => {
+            this.utilities.hideLoading().then(() => {
+              const error :ErrorModel= responseError.error;
+              this.utilities.errorSnackBar(error.message);
+            });
+         //
           });
 
         } else {
@@ -208,7 +231,15 @@ export class SurveyComponent implements OnInit, OnDestroy {
               // });
             });
 
-          });
+          },
+          responseError => {
+            this.utilities.hideLoading().then(() => {
+              const error :ErrorModel= responseError.error;
+              this.utilities.errorSnackBar(error.message);
+            });
+         //
+          }
+          );
         }
       });
 

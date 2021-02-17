@@ -28,6 +28,7 @@ export class SurveyoroverviewPage implements OnInit {
   showSearchBar=false;
   userData:UserData;
   deactivateNetworkSwitch: Subscription;
+  unreadCount: Object;
 
 
   constructor(public route: Router,
@@ -46,8 +47,22 @@ export class SurveyoroverviewPage implements OnInit {
     this.apiService.emitUserNameAndRole(this.userData);
     this.setupCometChat();
     this.updateUserPushToken();
+    this.getNotificationCount();
     this.route.navigate(['surveyoroverview/newsurveys']);
     
+  }
+
+  searchbar(){
+    this.route.navigate(['/search-bar1']);
+  }
+
+  getNotificationCount(){
+    this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+      console.log("count",count);
+     this.unreadCount= count;
+    });
+  
+   
   }
 
   ngOnDestroy() {
