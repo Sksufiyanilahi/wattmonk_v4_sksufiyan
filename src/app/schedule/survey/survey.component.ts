@@ -46,7 +46,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
-    const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    const EMAILPATTERN =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.pattern(EMAILPATTERN)]),
@@ -259,7 +259,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             jobtype: this.survey.jobtype,
             phonenumber: this.survey.phonenumber,
             datetime: date.getTime(),
-            comments: this.survey.comments=='' ? this.survey.comments : this.survey.comments[0].message,
+            comments:this.survey.comments=='' ?'': this.survey.comments[0].message,
             address: this.survey.address,
             source: this.survey.source,
             createdby: this.survey.createdby.id,

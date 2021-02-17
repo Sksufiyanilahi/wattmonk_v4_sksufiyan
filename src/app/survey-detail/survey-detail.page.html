@@ -57,7 +57,7 @@
     <!-- <ion-grid fixed> -->
         <!-- <ion-row> -->
             <!-- <ion-col> -->
-                <ion-segment scrollable [(ngModel)]="segments" class="wd140 colorwht" *ngIf='survey.status !=="surveyassigned"' mode="md">
+                <ion-segment scrollable [(ngModel)]="segments" class="wd140 colorwht" *ngIf='survey.status =="surveycompleted"' mode="md">
                 <ion-segment-button value="SiteDetils" class="wd140 colorwht"> 
                     <ion-label>
                         Site Details
@@ -129,7 +129,7 @@
                         </ion-row>
                         <ion-row>
                             <ion-col size="6">Scheduled On</ion-col>
-                            <ion-col size="6">{{survey.created_at | date:'dd/MM/yyyy'}}</ion-col>
+                            <ion-col size="6">{{survey.datetime | date:'MM/dd/yyyy   hh:mm a'}}</ion-col>
                         </ion-row>
                
                         <ion-row class="bkg">

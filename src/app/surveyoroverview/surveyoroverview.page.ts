@@ -44,7 +44,7 @@ export class SurveyoroverviewPage implements OnInit {
       this.update_version = versionInfo;
     })
     this.apiService.emitUserNameAndRole(this.userData);
-    this.setupCometChatUser();
+    this.setupCometChat();
     this.updateUserPushToken();
     this.route.navigate(['surveyoroverview/newsurveys']);
     
@@ -54,30 +54,30 @@ export class SurveyoroverviewPage implements OnInit {
     this.deactivateNetworkSwitch.unsubscribe();
   }
 
-  setupCometChatUser() {
-    let userId = this.storage.getUserID()
-        const user = new CometChat.User(userId);
-        user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
-        const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
-        CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
-          () => {
-            console.log('Initialization completed successfully');
-            // if(this.utilities.currentUserValue != null){
-              // You can now call login function.
-              CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
-                (user) => {
-                  console.log('Login Successful:', { user });
-                },
-                error => {
-                  console.log('Login failed with exception:', { error });
-                }
-              );
-          // }
-          },
-          error => {
-            console.log('Initialization failed with error:', error);
-          }
-        );
+  setupCometChat() {
+    let userId = this.storage.getUserID();
+    const user = new CometChat.User(userId);
+    user.setName(this.storage.getUser().firstname + ' ' + this.storage.getUser().lastname);
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
+      },
+      error => {
+        console.log('Initialization failed with error:', error);
+      }
+    );
   }
 
   updateUserPushToken(){

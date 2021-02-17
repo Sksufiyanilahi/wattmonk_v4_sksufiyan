@@ -40,6 +40,7 @@
                     <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
                     
                     <span class="chipdetail" style="background-color: #95afc0;" [routerLink]="['/survey-detail/',surveyData.id]">{{surveyData.source}}</span>
+                    <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{surveyData?.jobtype=='pvbattery' ? 'PV + Battery' : surveyData?.jobtype}}</span>
                 
                 <!-- <ion-col>
                     

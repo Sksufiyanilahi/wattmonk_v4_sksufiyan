@@ -72,6 +72,8 @@
                     <ion-row style="margin-bottom: 8px;" [routerLink]="['/survey-detail/',surveyData.id]" class="m-0">
 
                         <span class="chipdetail" style="background-color: #95afc0;">{{surveyData.source}}</span>
+                        <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{surveyData?.jobtype=='pvbattery' ? 'PV + Battery' : surveyData?.jobtype | uppercase}}</span>
+                        
 
                     </ion-row>
                     <ion-row class="ion-no-margin">
@@ -81,7 +83,7 @@
                                 (click)="openSurveyors(surveyData.id,surveyData)">Assign</span>
                             <!-- <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type =='surveyor'"> -->
                             <span
-                                *ngIf="surveyData.status == 'created' || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'"
+                            *ngIf="surveyData.status == 'created' && userData.role.type !== 'clientsuperadmin'"
                                 style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="assignedTo(surveyData)">
                                 Start Survey &nbsp;
                             </span>
@@ -120,16 +122,15 @@
                                 &nbsp;    Resume Survey
                                 </span>
                         </ion-col>
-                        <ion-col size="auto" class="ion-no-margin ion-no-padding"
+                        <!-- <ion-col size="auto" class="ion-no-margin ion-no-padding"
                             *ngIf="segments=='status=surveycompleted'" style="margin-bottom: 5px;">
-                            <!-- <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" class="ion-text-end action-button-color z-100" -->
                             <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;"
                                 class="ion-text-end action-button-color" (click)="selfAssign(surveyData.id,surveyData)">
                                 &nbsp; Self Assign</span>
                             <span *ngIf="userData.role.type!=='clientsuperadmin'"
                                 class="ion-text-end action-button-color z-100"
                                 (click)="openAnalysts(surveyData.id,surveyData)">Assign Review</span>
-                        </ion-col>
+                        </ion-col> -->
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
                             *ngIf="segments=='status=reviewassigned&status=reviewpassed&status=reviewfailed'">
                             <span *ngIf="surveyData.status == 'reviewpassed'"

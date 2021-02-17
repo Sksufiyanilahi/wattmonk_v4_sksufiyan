@@ -62,7 +62,7 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
     console.log(currentDate);
     this.datePicker.show({
       date: new Date(this.date),
-      minDate: new Date(),
+      minDate: new Date().getTime(),
       mode: 'date',
       androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
     }).then(

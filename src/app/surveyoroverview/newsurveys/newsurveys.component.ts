@@ -11,6 +11,9 @@ import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { IonContent } from '@ionic/angular';
+import { StorageService } from 'src/app/storage.service';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { COMETCHAT_CONSTANTS } from 'src/app/contants';
 
 @Component({
   selector: 'app-newsurveys',
@@ -36,6 +39,7 @@ export class NewsurveysComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
+    private storageService:StorageService,
     private el:ElementRef,
     private apiService: ApiService) {
       
@@ -86,7 +90,7 @@ export class NewsurveysComponent implements OnInit {
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
       // this.utils.showLoading('Getting Surveys').then(()=>{
         this.apiService.getSurveyorSurveys("status=surveyassigned&status=surveyinprocess").subscribe(response => {
-          this.utils.hideLoading().then(()=>{
+          // this.utils.hideLoading().then(()=>{
             this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
               console.log(response);
               this.formatSurveyData(response);
@@ -94,7 +98,7 @@ export class NewsurveysComponent implements OnInit {
                 event.target.complete();
               }
             });
-          })
+          // })
         }, responseError => {
           this.utils.hideLoading();
           this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
@@ -194,5 +198,32 @@ export class NewsurveysComponent implements OnInit {
    this.surveyRefreshSubscription.unsubscribe();
    this.cdr.detach();
    }
+
+
+   setupCometChat() {
+    let userId = this.storageService.getUserID();
+    const user = new CometChat.User(userId);
+    user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
+      },
+      error => {
+        console.log('Initialization failed with error:', error);
+      }
+    );
+  }
 
 }
