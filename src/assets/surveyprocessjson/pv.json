@@ -257,7 +257,7 @@
         "checkexistence": false,
         "isexistencechecked": false,
         "inputformcontrol": "",
-        "allowmultipleshots": true,
+        "allowmultipleshots": false,
         "capturedshots": [],
         "shots": [
           {
