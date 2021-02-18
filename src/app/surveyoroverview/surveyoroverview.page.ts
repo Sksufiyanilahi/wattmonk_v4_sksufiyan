@@ -134,5 +134,9 @@ export class SurveyoroverviewPage implements OnInit {
     });
   }
   
+  
+	setzero() {
+		this.unreadCount = 0;
+	}
 
 }
