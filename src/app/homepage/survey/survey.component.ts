@@ -862,12 +862,12 @@ this.utils.showLoading('Assigning').then(()=>{
 
     let postData = {
       assignedto: this.userData.id,
-      status: "surveyassigned"
+      status: "surveyinprocess"
     };
     this.apiService.updateSurveyForm(postData,surveyData.id).subscribe(res=>{
       console.log(res);
-      this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
     })
+    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
 
  
   }

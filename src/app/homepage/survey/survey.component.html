@@ -116,7 +116,7 @@
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
                             *ngIf="segments=='status=surveyassigned&status=surveyinprocess'"
                             style="margin-bottom: 5px;">
-                            <span class="ion-text-end action-button-color z-100"
+                            <span *ngIf="surveyData.status !=='surveyinprocess'" class="ion-text-end action-button-color z-100"
                                 (click)="openSurveyors(surveyData.id,surveyData)">Reassign</span>
                                 <span  class="ion-text-end action-button-color z-100" style="float:right !important;" *ngIf="userData.id==surveyData.assignedto?.id"  [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                 routerDirection="forward">
