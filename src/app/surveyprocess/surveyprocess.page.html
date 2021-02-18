@@ -722,11 +722,11 @@
                             <ion-radio-group [formControlName]="child.inputformcontrol">
                                 <ion-item>
                                     <ion-label>Yes</ion-label>
-                                    <ion-radio slot="start" value="true"></ion-radio>
+                                    <ion-radio slot="start" [value]="true"></ion-radio>
                                 </ion-item>
                                 <ion-item>
                                     <ion-label>No</ion-label>
-                                    <ion-radio slot="start" value="false"></ion-radio>
+                                    <ion-radio slot="start" [value]="false"></ion-radio>
                                 </ion-item>
                             </ion-radio-group>
                         </ion-col>
