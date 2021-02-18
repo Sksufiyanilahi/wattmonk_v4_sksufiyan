@@ -1133,6 +1133,7 @@ export class SurveyprocessPage implements OnInit {
                 element.ispending = false;
                 element.shotstatus = true;
                 element.questionstatus = true;
+                this.updateProgressStatus();
             });
             this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
             this.handleMenuSwitch(false);
