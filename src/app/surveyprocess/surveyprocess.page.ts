@@ -1350,7 +1350,6 @@ export class SurveyprocessPage implements OnInit {
 
     handleCompleteSurveyDataSubmission() {
         //Code to save current status
-        this.reviewPVFormData();
         const data = this.preparesurveystorage();
         data.saved = true;
         this.storage.set(this.surveyid + '', data);
