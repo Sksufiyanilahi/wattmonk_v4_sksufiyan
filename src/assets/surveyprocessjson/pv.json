@@ -186,7 +186,7 @@
             "result": "",
             "questionstatus": false,
             "questiontype": 7,
-            "inputformcontrol": "pvinvertermanufacturer",
+            "inputformcontrol": "invertermanufacturerandmodel",
             "imagekey": "utilitymeterimages",
             "imagename": "pvinverterzoomshoturl"
           },
@@ -257,7 +257,7 @@
         "checkexistence": false,
         "isexistencechecked": false,
         "inputformcontrol": "",
-        "allowmultipleshots": true,
+        "allowmultipleshots": false,
         "capturedshots": [],
         "shots": [
           {

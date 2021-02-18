@@ -261,6 +261,7 @@ export class SurveyprocessPage implements OnInit {
     hasExistingSolarSystem: boolean;
     user: any
     hasBatterySystem: boolean;
+    reviewForm: boolean = false;
 
     constructor(
         private cameraPreview: CameraPreview,
@@ -351,7 +352,7 @@ export class SurveyprocessPage implements OnInit {
             framingsize: 'Framing Size',
             distancebetweentworafts: 'Distance between Two Rafts',
             pvinverterlocation: 'PV Inverter Location',
-            pvinvertermanufacturer: 'PV Inverter Manufacturer',
+            invertermanufacturerandmodel: 'PV Inverter Manufacturer and Model',
             additionalnotes: 'Additional Notes',
             rooftilt: 'Roof Tilt',
             shotname: 'Shot Name'
@@ -1403,7 +1404,7 @@ export class SurveyprocessPage implements OnInit {
                         }
                     });
                 } else {
-                    this.savePVFormData();
+                    this.reviewPVFormData();
                 }
             } else {
                 this.displayAlertForRemainingShots();
@@ -1450,6 +1451,27 @@ export class SurveyprocessPage implements OnInit {
                 this.utilitieservice.errorSnackBar(JSON.stringify(error));
             });
         });
+    }
+
+    handleReviewFormBack() {
+        this.reviewForm = false;
+        this.startCameraAfterPermission();
+        this.selectedmainmenuindex = this.previousmainmenuindex;
+        this.selectedsubmenuindex = this.previoussubmenuindex;
+        this.selectedshotindex = this.previousshotindex;
+        this.mainmenuitems[this.selectedmainmenuindex].viewmode = this.previousviewmode;
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+    }
+
+    reviewPVFormData() {
+        this.reviewForm = true;
+        this.cameraPreview.stopCamera();
+        this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
+        this.previousmainmenuindex = this.selectedmainmenuindex;
+        this.previoussubmenuindex = this.selectedsubmenuindex;
+        this.previousshotindex = this.selectedshotindex;
+        this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.NONE;
     }
 
     savePVFormData() {
@@ -1584,6 +1606,16 @@ export class SurveyprocessPage implements OnInit {
             backdropDismiss: false
         });
         await alert.present();
+    }
+
+    saveForm() {
+        if (this.activeForm.status == 'INVALID') {
+            this.displayIncompleteFormAlert();
+        } else {
+            if (this.surveytype == 'pv') {
+                this.savePVFormData();
+            }
+        }
     }
 
     uploadImagesToServer() {
@@ -1826,6 +1858,12 @@ export class SurveyprocessPage implements OnInit {
                 this.sliderIndex = 0;
             }
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.splice(this.sliderIndex, 1);
+            const imagename = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedmainmenuindex].capturedshots[this.sliderIndex].imagename;
+            const shots = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedmainmenuindex].shots;
+            const filteredShot = shots.filter(shot => shot.imagename === imagename)[0];
+            if (filteredShot.inputformcontrol != '') {
+                this.activeForm[filteredShot.inputformcontrol].value = '';
+            }
             this.slideDidChange();
         }
         if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 0) {
