@@ -955,7 +955,7 @@ this.utils.showLoading('Assigning').then(()=>{
   
     let dir_name = 'Wattmonk';
     let path = '';
-    const url = designData.surveypdf;
+    const url = designData.surveypdf.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
    
    
@@ -964,7 +964,7 @@ this.utils.showLoading('Assigning').then(()=>{
    path = resp.toURL();
    console.log(path); 
    
-   fileTransfer.download(url, path + designData.surveypdf).then((entry) => {
+   fileTransfer.download(url, path + designData.surveypdf.hash + designData.surveypdf.ext).then((entry) => {
      console.log('download complete: ' + entry.toURL());
      this.utils.showSnackBar("Prelim Design Downloaded Successfully");
      

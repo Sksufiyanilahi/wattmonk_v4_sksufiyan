@@ -34,7 +34,7 @@ export class NewsurveysComponent implements OnInit {
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
   overdue: number;
-  userData: import("e:/mobileapp/src/app/model/user.model").User;
+  userData:any;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
