@@ -66,6 +66,12 @@ export class SurveyDataModel {
   postalcode:number;
   reviewissues:String;
   reviewassignedto:any;
+  invertermanufacturerandmodel:any;
+  existingsolarsystem:any;
+  framing:any;
+  framingsize:any;
+  distancebetweentworafts:any;
+  batterysystem:any;
 }
 
 
