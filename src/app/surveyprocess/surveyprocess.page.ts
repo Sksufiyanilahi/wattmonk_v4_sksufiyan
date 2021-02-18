@@ -1438,9 +1438,28 @@ export class SurveyprocessPage implements OnInit {
             interconnectiondetails: this.pvForm.get("interconnection_input").value,
             servicefeedsource: this.pvForm.get("servicefeedsource").value,
             additionalnotes: this.pvForm.get("additionalnotes").value,
-            status: 'surveycompleted'
+            status: 'surveycompleted',
+            mainbreakersize: this.pvForm.get("mainbreakersize").value,
+            msprating: this.pvForm.get("msprating").value,
+            msplocation: this.pvForm.get("msplocation").value,
+            mspbreaker: this.pvForm.get("mspbreaker").value,
+            architecturaldesign: this.pvForm.get("architecturaldesign").value,
+            utilitymeter: this.pvForm.get("utilitymeter").value,
+            framing: this.pvForm.get("framing").value,
+            framingsize: this.pvForm.get("framingsize").value,
+            distancebetweentworafts: this.pvForm.get("distancebetweentworafts").value,
+            pvinverterlocation: this.pvForm.get("pvinverterlocation").value,
+            pvinvertermanufacturer: this.pvForm.get("pvinvertermanufacturer").value,
+            rooftilt: this.pvForm.get("rooftilt").value,
+            shotname: this.pvForm.get("shotname").value,
+
         }
+        console.log(data,"data post wala");
+        console.log(this.surveyid,"this.surveyid");
+
         this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
+            console.log(data,"data api k andr ka");
+            
             this.utilitieservice.hideLoading().then(() => {
                 this.insomnia.keepAwake()
                     .then(
@@ -1454,7 +1473,7 @@ export class SurveyprocessPage implements OnInit {
         }, (error) => {
             this.utilitieservice.hideLoading().then(() => {
                 console.log(error);
-                this.utilitieservice.errorSnackBar(JSON.stringify(error));
+                // this.utilitieservice.errorSnackBar(JSON.stringify(error));
                 this.utilitieservice.errorSnackBar('There was some error in processing the request');
             });
         });
@@ -1606,7 +1625,7 @@ export class SurveyprocessPage implements OnInit {
             }
         } else {
             this.utilitieservice.hideLoading().then(() => {
-                this.utilitieservice.showSuccessModal('Survey have been saved').then((modal) => {
+                this.utilitieservice.showSuccessModal('Survey has been Submitted').then((modal) => {
                     modal.present();
                     modal.onWillDismiss().then((dismissed) => {
                         this.storage.remove("" + this.surveyid);
@@ -1801,7 +1820,7 @@ export class SurveyprocessPage implements OnInit {
         }
     }
 
-    protected async slideDidChange(): Promise<void> {
+    async slideDidChange(): Promise<void> {
         this.sliderIndex = await this.slider.getActiveIndex();
         return Promise.resolve();
     }

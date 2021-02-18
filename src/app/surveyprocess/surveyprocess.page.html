@@ -22,9 +22,9 @@
                             <a *ngIf="!displayflashrow" (click)="switchCamera()" class="circularbutton"><img src="../../assets/images/switch-camera.svg"/></a>
                             <a (click)="displayflashrow = !displayflashrow" class="flashbutton"><ion-icon name="flash-outline"></ion-icon></a>
                             <ion-row *ngIf="displayflashrow">
-                                <ion-button style="margin-top: 8px;" color="light" size="small" (click)="changeFlashMode(auto)">Auto</ion-button>
-                                <ion-button style="margin-top: 8px;" color="light" size="small" (click)="changeFlashMode(on)">On</ion-button>
-                                <ion-button style="margin-top: 8px;" color="light" size="small" (click)="changeFlashMode(off)">Off</ion-button>
+                                <ion-button style="margin-top: 8px;" color="light" size="small" (click)="changeFlashMode('auto')">Auto</ion-button>
+                                <ion-button style="margin-top: 8px;" color="light" size="small" (click)="changeFlashMode('on')">On</ion-button>
+                                <ion-button style="margin-top: 8px;" color="light" size="small" (click)="changeFlashMode('off')">Off</ion-button>
                             </ion-row>
                         </ion-row>
                     </ion-col>
@@ -616,7 +616,7 @@
 </ion-content>
 
 <ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.GALLERY" [forceOverscroll]="false">
-    <ion-slides #slides pager="true" [options]="slideOpts" (ionSlidesDidLoad)="this.slideDidChange();" (ionSlideDidChange)="this.slideDidChange();">
+    <ion-slides #slides pager="true" [options]="slideOpts" (ionSlidesDidLoad)="slideDidChange();" (ionSlideDidChange)="slideDidChange();">
         <ion-slide *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
             <img class="slideimage" [src]="shot.shotimage" />
         </ion-slide>

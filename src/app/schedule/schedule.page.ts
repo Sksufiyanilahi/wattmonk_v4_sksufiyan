@@ -101,8 +101,8 @@ this.network.networkConnect();
 
   goBack() {
     this.utilities.showHideIntercom(true);
-    //this.navController.pop();
-    this.location.back();
+    this.navController.pop();
+    // this.location.back();
   }
 
   ngOnDestroy(): void {
