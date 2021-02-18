@@ -352,7 +352,7 @@ export class SurveyprocessPage implements OnInit {
             framingsize: 'Framing Size',
             distancebetweentworafts: 'Distance between Two Rafts',
             pvinverterlocation: 'PV Inverter Location',
-            pvinvertermanufacturer: 'PV Inverter Manufacturer',
+            invertermanufacturerandmodel: 'PV Inverter Manufacturer and Model',
             additionalnotes: 'Additional Notes',
             rooftilt: 'Roof Tilt',
             shotname: 'Shot Name'
