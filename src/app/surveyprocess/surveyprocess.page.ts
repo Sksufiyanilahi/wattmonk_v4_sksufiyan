@@ -1609,6 +1609,16 @@ export class SurveyprocessPage implements OnInit {
         await alert.present();
     }
 
+    saveForm() {
+        if (this.activeForm.status == 'INVALID') {
+            this.displayIncompleteFormAlert();
+        } else {
+            if (this.surveytype == 'pv') {
+                this.savePVFormData();
+            }
+        }
+    }
+
     uploadImagesToServer() {
         var imagesArray = [];
         this.mainmenuitems.forEach(mainmenu => {

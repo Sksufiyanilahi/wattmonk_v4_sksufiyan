@@ -97,13 +97,13 @@ export class SurveyComponent implements OnInit, OnDestroy {
          this.surveyForm.get('city').setValue('delhi');
         this.surveyForm.get('state').setValue('up');
          this.surveyForm.get('postalcode').setValue(777777777);
-      //  this.surveyForm.get('address').setValue(address.address);
-      //  this.surveyForm.get('latitude').setValue(address.lat);
-      //   this.surveyForm.get('longitude').setValue(address.long);
-      //   this.surveyForm.get('country').setValue(address.country);
-      //   this.surveyForm.get('city').setValue(address.city);
-      //   this.surveyForm.get('state').setValue(address.state);
-      //   this.surveyForm.get('postalcode').setValue(address.postalcode);
+       // this.surveyForm.get('address').setValue(address.address);
+       // this.surveyForm.get('latitude').setValue(address.lat);
+       //  this.surveyForm.get('longitude').setValue(address.long);
+       //  this.surveyForm.get('country').setValue(address.country);
+       //  this.surveyForm.get('city').setValue(address.city);
+       //  this.surveyForm.get('state').setValue(address.state);
+       //  this.surveyForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.surveyForm.get('address').setValue('');
         this.surveyForm.get('latitude').setValue('');
@@ -177,9 +177,6 @@ export class SurveyComponent implements OnInit, OnDestroy {
       console.log(this.surveyForm.value);
       if(this.surveyForm.value.name==''){
         this.utilities.errorSnackBar('Please enter name.');
-      }
-      else if(this.surveyForm.value.email==''){
-        this.utilities.errorSnackBar('Please enter email.');
       }
       else if(this.surveyForm.value.phonenumber==''){
         this.utilities.errorSnackBar('Please enter phone number.');
