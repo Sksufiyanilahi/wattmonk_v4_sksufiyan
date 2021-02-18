@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UtilitiesService } from '../utilities.service';
 import { ApiService } from '../api.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, NavController, ToastController, ModalController } from '@ionic/angular';
 import { SurveyDataModel } from '../model/survey.model';
 import { UserRoles } from '../model/constants';
@@ -66,7 +66,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     private launchNavigator: LaunchNavigator,
     private toastController: ToastController,
     private modalController:ModalController,
-    private photoViewer: PhotoViewer
+    private photoViewer: PhotoViewer,
+    private router:Router
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.rescheduleForm = this.formBuilder.group({
@@ -176,6 +177,20 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
       ]
     });
     toast.present();
+  }
+
+  assignedTo(surveyData){
+
+    let postData = {
+      assignedto: this.user.id,
+      status: "surveyinprocess"
+    };
+    this.apiService.updateSurveyForm(postData,surveyData.id).subscribe(res=>{
+      console.log(res);
+    })
+    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
+
+ 
   }
 
 

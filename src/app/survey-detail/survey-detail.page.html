@@ -204,6 +204,8 @@
                     </ion-row>
                             <div [ngSwitch]="electricals">
                                 <div *ngSwitchCase="'MSB'">
+                                  
+                                    <h2>{{survey.msplocation}}</h2>
                                     <ion-slides pager="true" zoom [options]="slideOpts" class="image-slider">
                                         <ion-slide *ngFor="let elecmsb of survey.mspimages">
                                             <div class="swiper-zoom-container">
@@ -592,8 +594,7 @@
             <ion-col class="ion-no-margin ion-no-padding">
                 <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
                      <ion-button class="ion-no-margin ion-no-padding" style="float: right;margin-right: 10%;
-                     margin-bottom: 5%;" fill="clear" [routerLink]="['/camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude]"
-                 routerDirection="forward">
+                     margin-bottom: 5%;" fill="clear"  (click)="assignedTo(surveyData)">
                      Start Survey
                  </ion-button>
                  </ion-col>
