@@ -14,6 +14,7 @@ import { IonContent } from '@ionic/angular';
 import { StorageService } from 'src/app/storage.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMETCHAT_CONSTANTS } from 'src/app/contants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-newsurveys',
@@ -33,6 +34,7 @@ export class NewsurveysComponent implements OnInit {
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
   overdue: number;
+  userData: import("e:/mobileapp/src/app/model/user.model").User;
 
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
@@ -41,11 +43,14 @@ export class NewsurveysComponent implements OnInit {
     private storage: Storage,
     private storageService:StorageService,
     private el:ElementRef,
+    private router:Router,
     private apiService: ApiService) {
       
     }
     
     ngOnInit() {
+
+      this.userData= this.storageService.getUser();
       const latestDate = new Date();
     this.today = this.datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -224,6 +229,20 @@ export class NewsurveysComponent implements OnInit {
         console.log('Initialization failed with error:', error);
       }
     );
+  }
+
+  assignedTo(surveyData){
+
+    let postData = {
+      assignedto: this.userData.id,
+      status: "surveyinprocess"
+    };
+    this.apiService.updateSurveyForm(postData,surveyData.id).subscribe(res=>{
+      console.log(res);
+    })
+    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
+
+ 
   }
 
 }
