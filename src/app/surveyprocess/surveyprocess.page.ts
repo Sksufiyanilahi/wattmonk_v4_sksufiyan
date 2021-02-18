@@ -328,7 +328,7 @@ export class SurveyprocessPage implements OnInit {
             framingsize: new FormControl('', [Validators.required]),
             distancebetweentworafts: new FormControl('', [Validators.required]),
             pvinverterlocation: new FormControl('', []),
-            pvinvertermanufacturer: new FormControl('', []),
+            invertermanufacturerandmodel: new FormControl('', []),
             additionalnotes: new FormControl('', []),
             rooftilt: new FormControl('', []),
             shotname: new FormControl('', [])
@@ -1494,7 +1494,7 @@ export class SurveyprocessPage implements OnInit {
             framingsize: this.pvForm.get("framingsize").value,
             distancebetweentworafts: this.pvForm.get("distancebetweentworafts").value,
             pvinverterlocation: this.pvForm.get("pvinverterlocation").value == '' ? null : this.pvForm.get("pvinverterlocation").value,
-            pvinvertermanufacturer: this.pvForm.get("pvinvertermanufacturer").value == '' ? null : this.pvForm.get("pvinvertermanufacturer").value,
+            invertermanufacturerandmodel: this.pvForm.get("invertermanufacturerandmodel").value == '' ? null : this.pvForm.get("invertermanufacturerandmodel").value,
             rooftilt: this.pvForm.get("rooftilt").value,
             shotname: this.pvForm.get("shotname").value,
 
