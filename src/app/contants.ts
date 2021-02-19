@@ -36,7 +36,7 @@ export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
 
 // Test Server
 //   export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';
-//   export const BaseUrl = 'htFtps://testorbit.wattmonk.com/api';
+//   export const BaseUrl = 'https://testorbit.wattmonk.com/api';
 // export const intercomId = 'c6w73e4e';
 //   export const COMETCHAT_CONSTANTS = {
 //       APP_ID: '22738c62a78b107',
