@@ -76,7 +76,7 @@ export class PermitnewdesignComponent implements OnInit {
     //Add 'implements OnDestroy' to the class.
     this.utils.showHideIntercom(true);
     this.designRefreshSubscription.unsubscribe();
-    this.dataRefreshSubscription.unsubscribe();
+   // this.dataRefreshSubscription.unsubscribe();
     // this.unsubscribeMessage.unsubscribe();
     this.cdr.detach();
   }
