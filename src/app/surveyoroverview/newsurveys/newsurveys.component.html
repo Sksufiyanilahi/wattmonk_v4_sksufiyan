@@ -22,7 +22,7 @@
                         Pending
                     </span>
                     <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span> -->
-                    <span fill="clear" background-border="clear" [routerLink]="['/','activity',surveyData.id,'survey']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+                    <span fill="clear" background-border="clear"    [routerLink]="['/','activity',surveyData.id,'survey']"  class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                 </p>
             <p style="margin:0px">
 
@@ -40,6 +40,7 @@
                     <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
                     
                     <span class="chipdetail" style="background-color: #95afc0;" [routerLink]="['/survey-detail/',surveyData.id]">{{surveyData.source}}</span>
+                    <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{surveyData?.jobtype=='pvbattery' ? 'PV + Battery' : surveyData?.jobtype}}</span>
                 
                 <!-- <ion-col>
                     
@@ -49,9 +50,11 @@
                     <ion-col></ion-col>
                     <ion-col class="ion-no-margin ion-no-padding">
                    <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
-                        <ion-button class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]"
-                    routerDirection="forward">
+                        <ion-button *ngIf="surveyData.status=='surveyassigned'" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="assignedTo(surveyData)">
                         Start Survey
+                    </ion-button>
+                        <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]">
+                        Resume Survey
                     </ion-button>
                     </ion-col>
                 </ion-row> 

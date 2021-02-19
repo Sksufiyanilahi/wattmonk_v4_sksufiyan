@@ -10,6 +10,9 @@
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
                     <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
                 </ion-button>
+                <!-- <ion-buttons slot="start">
+                    <ion-back-button></ion-back-button>
+                </ion-buttons> -->
             </ion-col>
         </ion-row>
         <!-- <ion-row class="ion-padding-start ion-padding-end">
@@ -104,7 +107,7 @@
                 <ion-button class="action-button-color" fill="clear" (click)="saveSurveyForm()">Save</ion-button>
             </ion-col>
             <ion-col></ion-col>
-            <ion-col size="auto" *ngIf="userdata.role.type !=='wattmonkadmins'">
+            <ion-col size="auto" *ngIf="userdata.role.type !=='wattmonkadmins' && userdata.role.type !=='clientsuperadmin'">
                 <ion-button class="action-button-color" fill="clear" (click)="startSurvey()">Start Survey</ion-button>
             </ion-col>
         </ion-row>

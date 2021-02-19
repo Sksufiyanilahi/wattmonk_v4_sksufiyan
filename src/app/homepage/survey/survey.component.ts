@@ -5,7 +5,7 @@ import { SurveyDataModel } from 'src/app/model/survey.model';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { NavController, AlertController, ModalController } from '@ionic/angular';
+import { NavController, AlertController, ModalController, Platform } from '@ionic/angular';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DrawerState } from 'ion-bottom-drawer';
 import { AssigneeModel } from '../../model/assignee.model';
@@ -23,6 +23,10 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import{SocialSharing} from '@ionic-native/social-sharing/ngx';
 import { User } from 'src/app/model/user.model';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import {File } from '@ionic-native/file/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-survey',
@@ -60,6 +64,7 @@ export class SurveyComponent  {
   
   updatechat_id: boolean=false;
   deactivateNetworkSwitch: Subscription;
+  storageDirectory: string;
 
   constructor(
     private utils: UtilitiesService,
@@ -76,7 +81,12 @@ export class SurveyComponent  {
     private route: ActivatedRoute,
     private storage: Storage,
     private storageService:StorageService,
-    private network:NetworkdetectService
+    private network:NetworkdetectService,
+    private platform:Platform,
+    private file:File,
+    private androidPermissions: AndroidPermissions,
+    private transfer: FileTransfer,
+    private localnotification:LocalNotifications
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -103,6 +113,7 @@ export class SurveyComponent  {
   }
 
   ionViewDidEnter() {
+    this.makeDirectory();
     this.network.networkDisconnect();
 this.network.networkConnect();
 this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
@@ -851,14 +862,123 @@ this.utils.showLoading('Assigning').then(()=>{
 
     let postData = {
       assignedto: this.userData.id,
-      status: "surveyassigned"
+      status: "surveyinprocess"
     };
     this.apiService.updateSurveyForm(postData,surveyData.id).subscribe(res=>{
       console.log(res);
-      this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
     })
+    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
 
  
+  }
+  makeDirectory(){
+    this.platform.ready().then(() => {
+      if (this.platform.is('ios')) {
+        this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+      } else if (this.platform.is('android')) {
+        this.storageDirectory = this.file.externalRootDirectory+'/Wattmonk/';
+      } else {
+        this.storageDirectory = this.file.cacheDirectory;
+      }
+    });
+  }
+
+  designDownload(designData){
+
+  this.platform.ready().then(()=>{
+    this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+        result => console.log('Has permission?',result.hasPermission),
+        err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
+      );
+      this.file.checkFile(resolvedDirectory.nativeURL,designData.surveypdf).then(data=>{
+        console.log(data);
+  
+        if(data==true){
+  
+        }else{
+          console.log('not found!');
+          throw { code: 1, message: 'NOT_FOUND_ERR' };
+        }
+        
+      }).catch(async err=>{
+        console.log('Error occurred while checking local files:');
+        console.log(err);
+        if (err.code == 1) {
+          const fileTransfer: FileTransferObject = this.transfer.create();
+          this.utils.showLoading('Downloading').then(()=>{
+            fileTransfer.download(url, this.storageDirectory + designData.surveypdf).then((entry) => {
+              this.utils.hideLoading().then(()=>{
+                console.log('download complete: ' + entry.toURL());
+                this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+                
+                // this.clickSub = this.localnotification.on('click').subscribe(data => {
+                //   console.log(data)
+                //   path;
+                // })
+                this.localnotification.schedule({text:'Prelim Design Downloaded Successfully', foreground:true, vibrate:true })
+              }, (error) => {
+                // handle error
+                console.log(error);
+                
+              });
+              })
+          })
+        }
+      })
+    })
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    let dir_name = 'Wattmonk';
+    let path = '';
+    const url = designData.surveypdf.url;
+   const fileTransfer: FileTransferObject = this.transfer.create();
+   
+   
+   let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
+  result.then((resp) => {
+   path = resp.toURL();
+   console.log(path); 
+   
+   fileTransfer.download(url, path + designData.surveypdf.hash + designData.surveypdf.ext).then((entry) => {
+     console.log('download complete: ' + entry.toURL());
+     this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+     
+     // this.clickSub = this.localnotification.on('click').subscribe(data => {
+     //   console.log(data)
+     //   path;
+     // })
+     this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
+   }, (error) => {
+     // handle error
+   });
+  })
+  
+  
   }
 
 }

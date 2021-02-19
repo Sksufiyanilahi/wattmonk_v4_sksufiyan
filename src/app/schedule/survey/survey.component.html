@@ -1,6 +1,6 @@
-<ion-content class="ion-padding-start ion-padding-end ion-padding-bottom" >
+<ion-content class="ion-padding-start ion-padding-end ion-padding-bottom" style="height:650px" >
     <form [formGroup]="surveyForm">
-        <ion-grid>
+        <ion-grid style="position: relative;margin-top: 30px;">
             <!-- <ion-row *ngIf="address !== ''">
                 <ion-col>
                     {{address}}
@@ -16,7 +16,7 @@
             <ion-row>
                 <ion-col>
                     <ion-item class="ion-no-padding">
-                        <ion-label position="floating">name*</ion-label>
+                        <ion-label position="floating">Name*</ion-label>
                         <ion-input type="text" class="form_input" autocapitalize="words"
                                    formControlName="name"></ion-input>
                     </ion-item>
@@ -33,7 +33,7 @@
             <ion-row>
                 <ion-col>
                     <ion-item class="ion-no-padding">
-                        <ion-label position="floating">email</ion-label>
+                        <ion-label position="floating">Email</ion-label>
                         <ion-input autocapitalize="none" formControlName="email" email="true"
                                    type="email" autocomplete="off"
                                    class="form_input"></ion-input>
@@ -52,9 +52,9 @@
             <ion-row>
                 <ion-col>
                     <ion-item class="ion-no-padding">
-                        <ion-label position="floating">phone*</ion-label>
-                        <ion-input formControlName="phonenumber" type="number"
-                                   class="form_input"></ion-input>
+                        <ion-label position="floating">Phone*</ion-label>
+                        <ion-input formControlName="phonenumber" type="tel"
+                                   class="form_input" maxLength="15"></ion-input>
                     </ion-item>
                     <div style="height: 5px;">
                         <div *ngIf="surveyForm.get('phonenumber').hasError('pattern') && surveyForm.get('phonenumber').dirty">
