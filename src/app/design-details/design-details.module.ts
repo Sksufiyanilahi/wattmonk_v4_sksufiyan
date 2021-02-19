@@ -11,6 +11,7 @@ import { UtilitiesModule } from '../utilities/utilities.module';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { NgxTimerModule } from 'ngx-timer';
 import { LinkifyPipe } from '../linkify.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -20,9 +21,10 @@ import { LinkifyPipe } from '../linkify.pipe';
     IonicModule,
     DesignDetailsPageRoutingModule,
     UtilitiesModule,
-    NgxTimerModule
+    NgxTimerModule,
+    SharedModule
   ],
-  declarations: [DesignDetailsPage,LinkifyPipe],
+  declarations: [DesignDetailsPage],
   providers: [
     LaunchNavigator
   ]

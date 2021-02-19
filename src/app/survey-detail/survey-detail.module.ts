@@ -13,6 +13,7 @@ import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { ModalPageComponent } from './modal-page/modal-page.component';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { LinkifyPipe } from '../linkify.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -22,9 +23,10 @@ import { LinkifyPipe } from '../linkify.pipe';
     IonicModule,
     IonBottomDrawerModule,
     SurveyDetailPageRoutingModule,
-    UtilitiesModule
+    UtilitiesModule,
+    SharedModule
   ],
-  declarations: [SurveyDetailPage,ModalPageComponent,LinkifyPipe],
+  declarations: [SurveyDetailPage,ModalPageComponent],
   providers: [
     LaunchNavigator,
     PhotoViewer

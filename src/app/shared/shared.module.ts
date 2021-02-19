@@ -10,10 +10,11 @@ import { IntercomModule } from 'ng-intercom';
 import { intercomId } from '../contants';
 import { CouponOffersModalPageModule } from '../coupon-offers-modal/coupon-offers-modal.module';
 import { PestampdelivermodalPageModule } from '../pestampdelivermodal/pestampdelivermodal.module';
+import { LinkifyPipe } from '../linkify.pipe';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [LinkifyPipe],
   imports: [
     CommonModule,
     EmailModelPageModule,
@@ -34,7 +35,8 @@ import { PestampdelivermodalPageModule } from '../pestampdelivermodal/pestampdel
     PestampdelivermodalPageModule,
     StatisticsDetailsPageModule,
     ResendpagedialogPageModule,
-    CouponOffersModalPageModule
+    CouponOffersModalPageModule,
+    LinkifyPipe
   ]
 })
 export class SharedModule { }

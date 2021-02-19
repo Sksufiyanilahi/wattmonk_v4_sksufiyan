@@ -9,6 +9,7 @@ import { PestampDesignDetailsPageRoutingModule } from './pestamp-design-details-
 import { PestampDesignDetailsPage } from './pestamp-design-details.page';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { LinkifyPipe } from '../linkify.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -16,9 +17,10 @@ import { LinkifyPipe } from '../linkify.pipe';
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    PestampDesignDetailsPageRoutingModule
+    PestampDesignDetailsPageRoutingModule,
+    SharedModule
   ],
-  declarations: [PestampDesignDetailsPage,LinkifyPipe],
+  declarations: [PestampDesignDetailsPage],
   providers: [
     LaunchNavigator
   ]
