@@ -1681,7 +1681,7 @@ export class SurveyprocessPage implements OnInit {
                     modal.present();
                     modal.onWillDismiss().then((dismissed) => {
                         this.storage.remove("" + this.surveyid);
-                        if (this.user.type == 'surveyors') {
+                        if (this.user.role.type == 'surveyors') {
                             this.utilitieservice.sethomepageSurveyRefresh(true);
                             this.navController.navigateRoot('surveyoroverview');
                         } else {

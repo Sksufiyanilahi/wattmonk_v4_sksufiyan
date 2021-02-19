@@ -1,17 +1,17 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit,ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ApiService } from 'src/app/api.service';
 import { SurveyDataModel } from 'src/app/model/survey.model';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { NavController, AlertController, ModalController, Platform } from '@ionic/angular';
+import { NavController, AlertController, ModalController, Platform, IonContent } from '@ionic/angular';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DrawerState } from 'ion-bottom-drawer';
 import { AssigneeModel } from '../../model/assignee.model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserRoles } from '../../model/constants';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute,NavigationExtras } from '@angular/router';
 import { COMETCHAT_CONSTANTS, intercomId } from '../../contants';
 import { StorageService } from 'src/app/storage.service';
 import { ROLES } from 'src/app/contants';
@@ -28,12 +28,17 @@ import {File } from '@ionic-native/file/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
+
+
 @Component({
   selector: 'app-survey',
   templateUrl: './survey.component.html',
   styleUrls: ['./survey.component.scss'],
 })
 export class SurveyComponent  {
+
+  @ViewChild('content', { static: true }) content: IonContent;
+
 
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
@@ -77,6 +82,7 @@ export class SurveyComponent  {
     private launchNavigator: LaunchNavigator,
     private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
+    private renderer:Renderer2,
     private router: Router,
     private route: ActivatedRoute,
     private storage: Storage,
@@ -86,7 +92,8 @@ export class SurveyComponent  {
     private file:File,
     private androidPermissions: AndroidPermissions,
     private transfer: FileTransfer,
-    private localnotification:LocalNotifications
+    private localnotification:LocalNotifications,
+    private el:ElementRef
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -119,7 +126,8 @@ this.network.networkConnect();
 this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
-      
+    
+      //  this.scrollTo();
     })
     // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
 
@@ -142,6 +150,7 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
       this.getSurveys(null);
+     
     });
   }
   // ngOnInit() {
@@ -216,10 +225,27 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
           }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
+        
         });
       });
     });
   }
+
+
+  
+  // scrollTo() {
+
+  //   setTimeout(() => {
+  //     console.log(this.el.nativeElement)
+  //     let sectionOffset = document.getElementById('todaydate');
+  //     console.log("sectionOffset == ", sectionOffset);
+  //     sectionOffset.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+  //   }, 2000)
+
+  // }
+
+
+  
 
   // filterData(serchTerm: any) {
   //   console.log(this.listOfSurveyData);
@@ -286,11 +312,12 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
               }
             }
           });
-          this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
-            var dateA = new Date(a.date).getTime(),
-              dateB = new Date(b.date).getTime();
-            return dateB - dateA;
-          });
+          this.listOfSurveyDataHelper=tempData;
+          // this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+          //   var dateA = new Date(a.date).getTime(),
+          //     dateB = new Date(b.date).getTime();
+          //   return dateB - dateA;
+          // });
           this.cdr.detectChanges();
   }
 
@@ -668,7 +695,22 @@ this.utils.showLoading('Assigning').then(()=>{
     this.selectedDesigner = asssignedata;
     
   }
+   
 
+  raisepermit(data:any){
+    let objToSend: NavigationExtras = {
+      queryParams: {
+         surveyData:data,
+        },
+      skipLocationChange: false,
+      fragment: 'top' 
+  };
+
+console.log(objToSend);
+this.router.navigate(['/permitschedule/'], { 
+state: { productdetails: objToSend }
+});
+  }
   
   async openreviewPassed(id,designData){ 
     this.surveyId=id
@@ -910,13 +952,13 @@ this.utils.showLoading('Assigning').then(()=>{
             fileTransfer.download(url, this.storageDirectory + designData.surveypdf).then((entry) => {
               this.utils.hideLoading().then(()=>{
                 console.log('download complete: ' + entry.toURL());
-                this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+                this.utils.showSnackBar("Survey File Downloaded Successfully");
                 
                 // this.clickSub = this.localnotification.on('click').subscribe(data => {
                 //   console.log(data)
                 //   path;
                 // })
-                this.localnotification.schedule({text:'Prelim Design Downloaded Successfully', foreground:true, vibrate:true })
+                this.localnotification.schedule({text:'Survey File Downloaded Successfully', foreground:true, vibrate:true })
               }, (error) => {
                 // handle error
                 console.log(error);

@@ -16,7 +16,7 @@
             <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name" >{{surveyData.name}}
                       <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
-                        {{surveyData.datetime | date: 'hh:mm a'}}
+                       {{utils.formatTimeInDisplayFormat(surveyData.datetime)}}
                     </span>
                     <span fill="clear" background-border="clear"    [routerLink]="['/','activity',surveyData.id,'survey']"  class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                     <span *ngIf="surveyData.status=='surveycompleted'" class="chipdetail" style="background-color: rgb(109, 187, 26);" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">

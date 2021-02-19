@@ -105,109 +105,109 @@ export class ApiService {
 
   login(data: any): Observable<LoginModel> {
     this.resetHeaders();
-    return this.http.post<LoginModel>(BaseUrl + '/auth/local', data, { headers: this.headers });
+    return this.http.post<LoginModel>(BaseUrl + 'auth/local', data, { headers: this.headers });
   }
 
   sendForgotPasswordLink(data: any) {
-    return this.http.post(BaseUrl + '/auth/forgot-password', data, { headers: this.headers });
+    return this.http.post(BaseUrl + 'auth/forgot-password', data, { headers: this.headers });
   }
 
   getSolarMake() {
-    return this.http.get<SolarMake[]>(BaseUrl + '/modulemakes', { headers: this.headers });
+    return this.http.get<SolarMake[]>(BaseUrl + 'modulemakes', { headers: this.headers });
   }
   postSolarMake(data){
-    return this.http.post<SolarMake[]>(BaseUrl + '/modulemakes',data, { headers: this.headers });
+    return this.http.post<SolarMake[]>(BaseUrl + 'modulemakes',data, { headers: this.headers });
   }
 
   getRoofMaterial() {
-    return this.http.get<SolarMake[]>(BaseUrl + '/roofmaterials', { headers: this.headers });
+    return this.http.get<SolarMake[]>(BaseUrl + 'roofmaterials', { headers: this.headers });
   }
 
   getSolarMade(id: number) {
-    return this.http.get<SolarMadeModel[]>(BaseUrl + '/modulemodels?modulemake.id_eq=' + id, { headers: this.headers });
+    return this.http.get<SolarMadeModel[]>(BaseUrl + 'modulemodels?modulemake.id_eq=' + id, { headers: this.headers });
   }
 
   postSolarMade(data){
-    return this.http.post<SolarMadeModel[]>(BaseUrl + '/modulemodels' ,data, { headers: this.headers });
+    return this.http.post<SolarMadeModel[]>(BaseUrl + 'modulemodels' ,data, { headers: this.headers });
   }
 
   getInverterMake() {
-    return this.http.get<InverterMakeModel[]>(BaseUrl + '/invertermakes', { headers: this.headers });
+    return this.http.get<InverterMakeModel[]>(BaseUrl + 'invertermakes', { headers: this.headers });
   }
 
   postInverterMake(data){
-    return this.http.post<InverterMakeModel[]>(BaseUrl + '/invertermakes',data, { headers: this.headers });
+    return this.http.post<InverterMakeModel[]>(BaseUrl + 'invertermakes',data, { headers: this.headers });
   }
 
   postInverterMade(data){
-    return this.http.post<InverterMadeModel[]>(BaseUrl + '/invertermodels', data,{ headers: this.headers });
+    return this.http.post<InverterMadeModel[]>(BaseUrl + 'invertermodels', data,{ headers: this.headers });
 
   }
 
   getUtilities() {
-    return this.http.get<InverterMakeModel[]>(BaseUrl + '/utilities', { headers: this.headers });
+    return this.http.get<InverterMakeModel[]>(BaseUrl + 'utilities', { headers: this.headers });
   }
 
   addUtility(data: any): Observable<InverterMakeModel> {
-    return this.http.post<InverterMakeModel>(BaseUrl + '/utilities', data, { headers: this.headers });
+    return this.http.post<InverterMakeModel>(BaseUrl + 'utilities', data, { headers: this.headers });
   }
 
   getRoofMaterials() {
-    return this.http.get<RoofMaterial[]>(BaseUrl + '/roofmaterials', { headers: this.headers });
+    return this.http.get<RoofMaterial[]>(BaseUrl + 'roofmaterials', { headers: this.headers });
   }
 
   getInverterMade(id): Observable<InverterMadeModel[]> {
     console.log(id);
-    return this.http.get<InverterMadeModel[]>(BaseUrl + '/invertermodels?invertermake.id_eq=' + id, { headers: this.headers });
+    return this.http.get<InverterMadeModel[]>(BaseUrl + 'invertermodels?invertermake.id_eq=' + id, { headers: this.headers });
   }
 
   addDesginForm(data: any): Observable<DesginDataModel> {
-    return this.http.post<DesginDataModel>(BaseUrl + '/designs', data, { headers: this.headers });
+    return this.http.post<DesginDataModel>(BaseUrl + 'designs', data, { headers: this.headers });
   }
 
   updateDesignForm(data: any, id: number): Observable<DesginDataModel> {
-    return this.http.put<DesginDataModel>(BaseUrl + '/designs/' + id, data, { headers: this.headers });
+    return this.http.put<DesginDataModel>(BaseUrl + 'designs/' + id, data, { headers: this.headers });
   }
 
   getDesgin() {
-    return this.http.get<DesginDataModel[]>(BaseUrl + '/userdesigns?id=' + this.userId, { headers: this.headers });
+    return this.http.get<DesginDataModel[]>(BaseUrl + 'userdesigns?id=' + this.userId, { headers: this.headers });
   }
 
   getDesginDetail(id): Observable<DesginDataModel> {
-    return this.http.get<DesginDataModel>(BaseUrl + '/designs/' + id, { headers: this.headers });
+    return this.http.get<DesginDataModel>(BaseUrl + 'designs/' + id, { headers: this.headers });
   }
 
   deleteDesign(id): Observable<DesginDataModel> {
-    return this.http.delete<DesginDataModel>(BaseUrl + '/designs/' + id, { headers: this.headers });
+    return this.http.delete<DesginDataModel>(BaseUrl + 'designs/' + id, { headers: this.headers });
   }
 
   getSurvey() {
-    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId, { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(BaseUrl + 'usersurveys?id=' + this.userId, { headers: this.headers });
   }
 
   getSurveyDetail(id): Observable<SurveyDataModel> {
-    return this.http.get<SurveyDataModel>(BaseUrl + '/surveys/' + id, { headers: this.headers });
+    return this.http.get<SurveyDataModel>(BaseUrl + 'surveys/' + id, { headers: this.headers });
   }
 
   deleteSurvey(id): Observable<SurveyDataModel> {
-    return this.http.delete<SurveyDataModel>(BaseUrl + '/surveys/' + id, { headers: this.headers });
+    return this.http.delete<SurveyDataModel>(BaseUrl + 'surveys/' + id, { headers: this.headers });
   }
 
   updateSurveyForm(data: any, id: number): Observable<SurveyDataModel> {
-    return this.http.put<SurveyDataModel>(BaseUrl + '/surveys/' + id, data, { headers: this.headers });
+    return this.http.put<SurveyDataModel>(BaseUrl + 'surveys/' + id, data, { headers: this.headers });
   }
 
   getSurveyorSurveys(search : string) {
-    return this.http.get<SurveyDataModel[]>(BaseUrl + '/usersurveys?id=' + this.userId + '&' + search , { headers: this.headers });
+    return this.http.get<SurveyDataModel[]>(BaseUrl + 'usersurveys?id=' + this.userId + '&' + search , { headers: this.headers });
   }
   getDesignSurveys(search : string,limit,skip) {
-    return this.http.get(BaseUrl + '/userdesigns?id=' + this.userId + '&' + search +'&limit='+ limit +'&skip='+ skip, { headers: this.headers });
+    return this.http.get(BaseUrl + 'userdesigns?id=' + this.userId + '&' + search +'&limit='+ limit +'&skip='+ skip, { headers: this.headers });
   }
   getAnalystDesign(search :string){
-    return this.http.get<DesginDataModel[]>(BaseUrl+'/userdesign?id='+this.userId+'&'+search,{headers:this.headers});
+    return this.http.get<DesginDataModel[]>(BaseUrl+'userdesign?id='+this.userId+'&'+search,{headers:this.headers});
   }
   getProfileDetails(){
-    return this.http.get<DesginDataModel[]>(BaseUrl+'/users/me',{headers:this.headers});
+    return this.http.get<DesginDataModel[]>(BaseUrl+'users/me',{headers:this.headers});
   }
   refreshHeader() {
     this.headers = new HttpHeaders({
@@ -232,23 +232,23 @@ export class ApiService {
   }
 
   saveSurvey(data: any): Observable<SurveyDataModel> {
-    return this.http.post<SurveyDataModel>(BaseUrl + '/surveys', data, { headers: this.headers });
+    return this.http.post<SurveyDataModel>(BaseUrl + 'surveys', data, { headers: this.headers });
   }
 
   getSurveyors(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/surveyors?parent_eq=' + this.parentId, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + 'surveyors?parent_eq=' + this.parentId, { headers: this.headers });
   }
 
   getAnalysts(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/analysts?parent_eq=' + this.parentId , { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + 'analysts?parent_eq=' + this.parentId , { headers: this.headers });
   }
 
   searchAllDesgin(searchterm): Observable<SearchModel> {
-    return this.http.get<SearchModel>(BaseUrl + '/globalsearch?term=' + searchterm + '&userid=' + this.userId, { headers: this.headers });
+    return this.http.get<SearchModel>(BaseUrl + 'globalsearch?term=' + searchterm + '&userid=' + this.userId, { headers: this.headers });
   }
 
   getDesigners(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + '/designers?parent_eq=' + this.parentId, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + 'designers?parent_eq=' + this.parentId, { headers: this.headers });
   }
 
   uploadImage(surveyId: number, key: string, blob: Blob, fileName: string) {
@@ -261,7 +261,7 @@ export class ApiService {
 
     console.log("file upload data---"+data);
 
-    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
+    return this.http.post(BaseUrl + 'upload', data, { headers: this.uploadHeaders });
   }
   uploadDeclineImage(designId: number, key: string, blob: Blob, fileName: string) {
     const data = new FormData();
@@ -273,7 +273,7 @@ export class ApiService {
 
     console.log("file upload data---"+data);
 
-    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
+    return this.http.post(BaseUrl + 'upload', data, { headers: this.uploadHeaders });
   }
   uploadlogo(blob: Blob, fileName: string) {
     const data = new FormData();
@@ -284,35 +284,35 @@ export class ApiService {
     data.append('field', 'logo');
     data.append('source', 'users-permissions');
 
-    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
+    return this.http.post(BaseUrl + 'upload', data, { headers: this.uploadHeaders });
   }
   uploaddesign(data) {
-    return this.http.post(BaseUrl + '/upload', data, { headers: this.uploadHeaders });
+    return this.http.post(BaseUrl + 'upload', data, { headers: this.uploadHeaders });
   }
 
   resetpassword(data){
-    return this.http.post(BaseUrl + '/auth/reset-password',data,{ headers: this.uploadHeaders });
+    return this.http.post(BaseUrl + 'auth/reset-password',data,{ headers: this.uploadHeaders });
   }
   changepassword(data){
-    return this.http.post(BaseUrl + '/auth/set-password',data,{ headers: this.uploadHeaders });
+    return this.http.post(BaseUrl + 'auth/set-password',data,{ headers: this.uploadHeaders });
   }
 
   updateresetpassword(userId,data){
-    return this.http.put(BaseUrl + '/users/'+ userId,data,{ headers: this.uploadHeaders });
+    return this.http.put(BaseUrl + 'users/'+ userId,data,{ headers: this.uploadHeaders });
   }
 
   updateUser(id, data){
-    return this.http.put(BaseUrl + '/users/'+ id, data, { headers: this.uploadHeaders } );
+    return this.http.put(BaseUrl + 'users/'+ id, data, { headers: this.uploadHeaders } );
   }
   getCountOfUnreadNotifications(){
-    return this.http.get(BaseUrl+ "/Notifications/count?user=" + this.userId + "&status=unread", { headers: this.headers});
+    return this.http.get(BaseUrl+ "Notifications/count?user=" + this.userId + "&status=unread", { headers: this.headers});
   }
   profileNotification(){
-    return this.http.get(BaseUrl + '/notifications?user=' + this.userId + "&_sort=created_at:DESC",{ headers: this.headers })
+    return this.http.get(BaseUrl + 'notifications?user=' + this.userId + "&_sort=created_at:DESC",{ headers: this.headers })
   }
 
   updateNotification(id,status){
-    return this.http.put(BaseUrl + '/notifications/' + id,status,{ headers: this.headers })
+    return this.http.put(BaseUrl + 'notifications/' + id,status,{ headers: this.headers })
   }
 
   getGoogleImage(lat:number, lng:number): Observable<Blob> {
@@ -333,16 +333,16 @@ export class ApiService {
   }
 
   pestamp_activityDetails(designid){
-    return this.http.get(BaseUrl+ "/pestamps/" + designid, { headers: this.headers});
+    return this.http.get(BaseUrl+ "pestamps/" + designid, { headers: this.headers});
   }
   createPayment(data){
-    return this.http.post(BaseUrl + '/createpayment',data,{ headers: this.uploadHeaders });
+    return this.http.post(BaseUrl + 'createpayment',data,{ headers: this.uploadHeaders });
   }
   recharges(data){
-    return this.http.post(BaseUrl + '/recharges',data,{ headers: this.uploadHeaders });
+    return this.http.post(BaseUrl + 'recharges',data,{ headers: this.uploadHeaders });
   }
   paymentDetail(C_id){
-    return this.http.get(BaseUrl+ "/designs/count?createdby=" + C_id + "&isoutsourced=true&outsourcedto=232", { headers: this.headers});}
+    return this.http.get(BaseUrl+ "designs/count?createdby=" + C_id + "&isoutsourced=true&outsourcedto=232", { headers: this.headers});}
  
    
     prelimCharges(){
@@ -368,7 +368,7 @@ export class ApiService {
   editDesign(id:number, inputData:any): Observable<DesignModel>{
    
     return this.http
-    .put<DesignModel>(BaseUrl + "/designs/"+ id, JSON.stringify(inputData), {
+    .put<DesignModel>(BaseUrl + "designs/"+ id, JSON.stringify(inputData), {
       headers: this.headers,
       
     })
@@ -376,11 +376,11 @@ export class ApiService {
   }
 
   pushtoken(id,data){
-    return this.http.put(BaseUrl + '/users/pushtokens/'+ id, data, { headers: this.uploadHeaders } );
+    return this.http.put(BaseUrl + 'users/pushtokens/'+ id, data, { headers: this.uploadHeaders } );
   }
 
   getTeamData(): Observable<User[]> {
-    return this.http.get<User[]>(BaseUrl + "/users?_sort=created_at:desc&parent="+this.parentId+"&id_ne="+this.parentId, {
+    return this.http.get<User[]>(BaseUrl + "users?_sort=created_at:desc&parent="+this.parentId+"&id_ne="+this.parentId, {
       headers: this.headers,
    
     })
@@ -394,7 +394,7 @@ export class ApiService {
         Authorization: 'Bearer ' + this.storageService.getJWTToken()
       });
       console.log(this.headers);
-      return this.http.get(BaseUrl + '/platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app',{ headers: this.headers})  
+      return this.http.get(BaseUrl + 'platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app',{ headers: this.headers})  
     }
 
     getUpgradeMessage(){
@@ -406,7 +406,7 @@ export class ApiService {
 
     getStatistic(inputData:any):Observable<DesignStatistic[]>{
  
-      return this.http.post<DesignStatistic[]>(BaseUrl + '/designanalytics', inputData, { headers: this.headers });
+      return this.http.post<DesignStatistic[]>(BaseUrl + 'designanalytics', inputData, { headers: this.headers });
     }
   
     getClientSuperadmin(): Observable<User[]> {
@@ -414,42 +414,42 @@ export class ApiService {
      //   headers: this.headers,
      //   observe: "response"
      // });
-     return this.http.get<User[]>(BaseUrl + '/fetchsuperadmins',{headers:this.headers});
+     return this.http.get<User[]>(BaseUrl + 'fetchsuperadmins',{headers:this.headers});
     }
   
     getDesignersDetails(starttime:string, endtime:string, requesttype:string):Observable<DesignersStatistics[]>{
-      return this.http.get<DesignersStatistics[]>(BaseUrl + '/getdesignanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype='+requesttype, {headers:this.headers});
+      return this.http.get<DesignersStatistics[]>(BaseUrl + 'getdesignanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype='+requesttype, {headers:this.headers});
     }
 
     getanalystanalytics(starttime:string, endtime:string, requesttype:string):Observable<AnalystStatistics[]>{
-      return this.http.get<AnalystStatistics[]>(BaseUrl + '/getanalystanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype='+requesttype, { headers: this.headers});
+      return this.http.get<AnalystStatistics[]>(BaseUrl + 'getanalystanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype='+requesttype, { headers: this.headers});
     }
 
     getDesignerDesignsForStats(startdate:string, enddate:string, requesttype:string, id:number){
-      return this.http.get(BaseUrl + '/getdesignerdesigns?status=delivered&designerid='+id+'&startdate='+startdate+'&enddate='+enddate+'&requesttype='+requesttype,{headers: this.headers});
+      return this.http.get(BaseUrl + 'getdesignerdesigns?status=delivered&designerid='+id+'&startdate='+startdate+'&enddate='+enddate+'&requesttype='+requesttype,{headers: this.headers});
     }
 
     getAnalystDesignsForStats(startdate:string, enddate:string, requesttype:string, id:number){
-      return this.http.get(BaseUrl + '/getanalystdesigns?status=delivered&analystid='+id+'&startdate='+startdate+'&enddate='+enddate+'&requesttype='+requesttype,{headers: this.headers});
+      return this.http.get(BaseUrl + 'getanalystdesigns?status=delivered&analystid='+id+'&startdate='+startdate+'&enddate='+enddate+'&requesttype='+requesttype,{headers: this.headers});
     }
 
     sendPrelimEmails(data:any){
-      return this.http.post(BaseUrl+"/designs/send-prelim-design", data,{headers:this.headers})
+      return this.http.post(BaseUrl+"designs/send-prelim-design", data,{headers:this.headers})
     }
 
     sendPermitEmails(data:any){
-      return this.http.post(BaseUrl+"/designs/send-permit-design", data,{headers:this.headers})
+      return this.http.post(BaseUrl + "designs/send-permit-design", data,{headers:this.headers})
     }
 
     getUserData(id){
-      return this.http.get(BaseUrl + "/users/" + id,{headers: this.headers})
+      return this.http.get(BaseUrl + "users/" + id,{headers: this.headers})
     }
     
     getCoupons(data){
-      return this.http.get(BaseUrl + "/getCoupons?userid="+ this.userId+"&requesttype="+data,{headers: this.headers});
+      return this.http.get(BaseUrl + "getCoupons?userid="+ this.userId+"&requesttype="+data,{headers: this.headers});
     }
     sendCoupon(data:any){
-      return this.http.post(BaseUrl+"/getCoupon", data,{headers:this.headers})
+      return this.http.post(BaseUrl+"getCoupon", data,{headers:this.headers})
     }
 
     addUser(
@@ -492,7 +492,7 @@ export class ApiService {
       };
       console.log(postData)
       return this.http
-        .post<User>(BaseUrl + "/users", JSON.stringify(postData), {
+        .post<User>(BaseUrl + "users", JSON.stringify(postData), {
           headers: this.headers,
          // observe: "response"
         })
@@ -512,11 +512,11 @@ export class ApiService {
     }
 
     getClients(){
-      return this.http.get<Clients[]>(BaseUrl + "/getclients",{headers: this.headers});
+      return this.http.get<Clients[]>(BaseUrl + "getclients",{headers: this.headers});
     }
 
     addSiteAssessment(postData){
-      return this.http.post<Pestamp>(BaseUrl + "/pestamps",JSON.stringify(postData),{headers:this.headers});
+      return this.http.post<Pestamp>(BaseUrl + "pestamps",JSON.stringify(postData),{headers:this.headers});
     }
 
     uploadFile(data): Observable<UploadedFile[]> {
@@ -530,7 +530,7 @@ export class ApiService {
       
       // console.log("file upload data---"+data);
 
-      return this.http.post<UploadedFile[]>(BaseUrl + "/upload", data, {
+      return this.http.post<UploadedFile[]>(BaseUrl + "upload", data, {
           headers: this.uploadHeaders,
         })
     }
@@ -538,14 +538,14 @@ export class ApiService {
     /* SEARCH PE STAMP DESIGNS */
     getFilteredDesigns(search:string): Observable<Pestamp[]> {
     
-      return this.http.get<Pestamp[]>(BaseUrl + "/userpestamps?id="+this.storageService.getUser().id+"&"+search, {
+      return this.http.get<Pestamp[]>(BaseUrl + "userpestamps?id="+this.storageService.getUser().id+"&"+search, {
         headers: this.headers,
         //observe: "response"
       })
     }
 
     getPestampDetails(id:number): Observable<Pestamp> {
-      return this.http.get<Pestamp>(BaseUrl + "/pestamps/"+id, {
+      return this.http.get<Pestamp>(BaseUrl + "pestamps/"+id, {
         headers: this.headers
       })
     }
@@ -553,52 +553,52 @@ export class ApiService {
     /* Get Pe Engineers */
     getPeEngineers(peenginertype:string) {
       console.log(peenginertype);
-      return this.http.get(BaseUrl + "/peengineers?pestamptype="+peenginertype+"&parent_eq="+this.storageService.getUser().parent.id, {
+      return this.http.get(BaseUrl + "peengineers?pestamptype="+peenginertype+"&parent_eq="+this.storageService.getUser().parent.id, {
         headers: this.headers,
       })
     }
 
     /* Assign to PeEngineer */
     assignPestamps(id:number,inputData: any): Observable<Pestamp> {
-      return this.http.put<Pestamp>(BaseUrl + "/pestamps/"+id, JSON.stringify(inputData), {
+      return this.http.put<Pestamp>(BaseUrl + "pestamps/"+id, JSON.stringify(inputData), {
           headers: this.headers
         })
       }
 
       updatePestamps(id:number,inputData?: any): Observable<Pestamp> {
-        return this.http.put<Pestamp>(BaseUrl + "/pestamps/"+id, JSON.stringify(inputData), {
+        return this.http.put<Pestamp>(BaseUrl + "pestamps/"+id, JSON.stringify(inputData), {
             headers: this.headers
           })
         }
 
       deletePestamp(id:string): Observable<Pestamp> {
-        return this.http.delete<Pestamp>(BaseUrl + "/pestamps/"+id, {
+        return this.http.delete<Pestamp>(BaseUrl + "pestamps/"+id, {
           headers: this.headers
         })
       }
     getcounts(id){
-      return this.http.get(BaseUrl + '/dashboarddesigncount?id=' + id,{headers: this.headers});
+      return this.http.get(BaseUrl + 'dashboarddesigncount?id=' + id,{headers: this.headers});
     }
 
     getPeStampCharges(searchData)
     {
-      return this.http.get(BaseUrl + '/commonsettings?settingname=' + searchData,{headers:this.headers});
+      return this.http.get(BaseUrl + 'commonsettings?settingname=' + searchData,{headers:this.headers});
     }
 
     createdirectpayment(inputData){
-      return this.http.post<any>(BaseUrl+"/Pestampdirectpayment", inputData,{
+      return this.http.post<any>(BaseUrl+  "Pestampdirectpayment", inputData,{
         headers: this.uploadHeaders
        })
       }
 
       createPestamppayment(inputData:any): Observable<Pestamp>{
-        return this.http.post<Pestamp>(BaseUrl+"/pestampdeliverychargespayment", inputData,{
+        return this.http.post<Pestamp>(BaseUrl+"pestampdeliverychargespayment", inputData,{
          headers: this.uploadHeaders
         })
       }
 
       createCommercialPestamppayment (inputData:any): Observable<Pestamp>{
-        return this.http.post<Pestamp>(BaseUrl+"/deliveredcommercialpestampayment", inputData,{
+        return this.http.post<Pestamp>(BaseUrl+"deliveredcommercialpestampayment", inputData,{
          headers: this.uploadHeaders
         })
       }
