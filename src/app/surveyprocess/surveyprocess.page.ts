@@ -142,6 +142,7 @@ export class SurveyprocessPage implements OnInit {
     surveystoreddata = {};
 
     mainmenuitems: MAINMENU[];
+    originalmainmenuitems: MAINMENU[];
     selectedmainmenuindex = 0;
     selectedsubmenuindex = 0;
     selectedshotindex = 0;
@@ -262,6 +263,7 @@ export class SurveyprocessPage implements OnInit {
     user: any
     hasBatterySystem: boolean;
     reviewForm: boolean = false;
+    isSaveFormCalled: boolean = false;
 
     constructor(
         private cameraPreview: CameraPreview,
@@ -295,9 +297,11 @@ export class SurveyprocessPage implements OnInit {
             this.platformname = "other"
         }
 
-        this.platform.backButton.subscribeWithPriority(10, () => {
-            this.handleSurveyExit();
-            navController.pop();
+        this.platform.backButton.subscribeWithPriority(100, () => {
+            if (!this.isSaveFormCalled) {
+                this.handleSurveyExit();
+                navController.pop();
+            }
         });
 
         if (this.surveytype == "battery") {
@@ -310,7 +314,6 @@ export class SurveyprocessPage implements OnInit {
     }
 
     pvSurveyProcess() {
-        this.totalstepcount = 19;
         this.pvForm = new FormGroup({
             existingsolarsystem: new FormControl('', [Validators.required]),
             batterysystem: new FormControl('', [Validators.required]),
@@ -325,7 +328,7 @@ export class SurveyprocessPage implements OnInit {
             architecturaldesign: new FormControl('', []),
             utilitymeter: new FormControl('', [Validators.required]),
             framing: new FormControl('', [Validators.required]),
-            framingsize: new FormControl('', [Validators.required]),
+            framingsize: new FormControl('', [Validators.required, Validators.pattern(/^([0-9]{1,2}[x][0-9]{1,3})?$/gi)]),
             distancebetweentworafts: new FormControl('', [Validators.required]),
             pvinverterlocation: new FormControl('', []),
             invertermanufacturerandmodel: new FormControl('', []),
@@ -360,6 +363,7 @@ export class SurveyprocessPage implements OnInit {
 
         // this.storage.clear();
         this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
+            console.log(data);
             if (data) {
                 this.mainmenuitems = data.menuitems;
                 this.totalpercent = data.currentprogress;
@@ -386,6 +390,7 @@ export class SurveyprocessPage implements OnInit {
                 });
 
                 this.isdataloaded = true;
+                this.setTotalStepCount();
 
                 this.handleViewModeSwitch();
             } else {
@@ -394,6 +399,7 @@ export class SurveyprocessPage implements OnInit {
                     // tslint:disable-next-line:no-shadowed-variable
                     .subscribe((data) => {
                         this.mainmenuitems = JSON.parse(JSON.stringify(data));
+                        this.originalmainmenuitems = JSON.parse(JSON.stringify(data));
                         this.isdataloaded = true;
 
                         this.mainmenuitems.forEach(element => {
@@ -401,10 +407,21 @@ export class SurveyprocessPage implements OnInit {
                                 this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
                             }
                         });
+                        this.setTotalStepCount();
                     });
             }
         });
         this.getSiteLocationGoogleImageFromService();
+    }
+
+    setTotalStepCount() {
+        let totalSteps = 0;
+        this.mainmenuitems.map(mainmenuitem => {
+            mainmenuitem.children.map(child => {
+                totalSteps += child.shots.length;
+            });
+        });
+        this.totalstepcount = totalSteps;
     }
 
     batterySurveyProcess() {
@@ -1128,11 +1145,13 @@ export class SurveyprocessPage implements OnInit {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
         if (doesexist) {
             this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
         } else {
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
                 element.ispending = false;
                 element.shotstatus = true;
                 element.questionstatus = true;
+                this.updateProgressStatus();
             });
             this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
             this.handleMenuSwitch(false);
@@ -1354,61 +1373,9 @@ export class SurveyprocessPage implements OnInit {
         data.saved = true;
         this.storage.set(this.surveyid + '', data);
         this.utilitieservice.setDataRefresh(true);
-
-        var isutilitymanualinput = false;
-        if (this.surveytype != "pv") {
-            if (this.activeForm.get("utility").value == null || this.activeForm.get("utility").value == "") {
-                if (this.utility.manualinput != "") {
-                    isutilitymanualinput = true;
-                    this.activeForm.get("utility").setValue(this.utility.manualinput);
-                }
-            }
-        }
-
+        this.reviewFormData();
         if (this.activeForm.status == 'INVALID') {
             this.displayIncompleteFormAlert();
-        } else {
-            this.markMainMenuCompletion();
-            if (this.checkProcessCompletion()) {
-                if (this.surveytype != "pv") {
-                    this.utilitieservice.showLoading('Saving Survey').then(() => {
-                        // const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value.name);
-                        if (isutilitymanualinput) {
-                            const data = {
-                                name: this.utility.manualinput,
-                                source: this.platformname,
-                                lastused: this.formatDateInBackendFormat(),
-                                city: this.surveycity,
-                                state: this.surveystate,
-                                addedby: this.storageService.getUserID()
-                            }
-                            this.apiService.addUtility(data).subscribe((data) => {
-                                this.selectedutilityid = data.id;
-                                if (this.surveytype == "battery") {
-                                    this.saveFormData();
-                                } else if (this.surveytype == "pvbattery") {
-                                    this.savePVBatteryFormData();
-                                }
-                            }, (error) => {
-                                this.utilitieservice.hideLoading().then(() => {
-                                    this.utilitieservice.errorSnackBar(JSON.stringify(error));
-                                });
-                            });
-                        } else {
-                            this.selectedutilityid = this.activeForm.get("utility").value.id;
-                            if (this.surveytype == "battery") {
-                                this.saveFormData();
-                            } else if (this.surveytype == "pvbattery") {
-                                this.savePVBatteryFormData();
-                            }
-                        }
-                    });
-                } else {
-                    this.reviewPVFormData();
-                }
-            } else {
-                this.displayAlertForRemainingShots();
-            }
         }
     }
 
@@ -1464,17 +1431,18 @@ export class SurveyprocessPage implements OnInit {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
     }
 
-    reviewPVFormData() {
+    reviewFormData() {
         this.reviewForm = true;
         this.cameraPreview.stopCamera();
         this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
         this.previousmainmenuindex = this.selectedmainmenuindex;
         this.previoussubmenuindex = this.selectedsubmenuindex;
         this.previousshotindex = this.selectedshotindex;
-        this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.NONE;
+        this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.FORM;
     }
 
     savePVFormData() {
+        this.utilitieservice.showLoading('Please wait...');
         const data = {
             existingsolarsystem: this.pvForm.get("existingsolarsystem").value,
             batterysystem: this.pvForm.get("batterysystem").value,
@@ -1577,6 +1545,9 @@ export class SurveyprocessPage implements OnInit {
                 if (control.errors.error !== null && control.errors.error !== undefined) {
                     error = error + control.errors.error;
                 }
+                if (control.errors.pattern !== null && control.errors.pattern !== undefined) {
+                    error = error + 'Invalid pattern for field ' + this.activeFormKeysMap[key] + '. Use the specified pattern only';
+                }
             }
         });
         this.utilitieservice.showAlert(error);
@@ -1612,8 +1583,54 @@ export class SurveyprocessPage implements OnInit {
         if (this.activeForm.status == 'INVALID') {
             this.displayIncompleteFormAlert();
         } else {
+            this.isSaveFormCalled = true;
+            this.markMainMenuCompletion();
+            if (!this.checkProcessCompletion()) {
+                this.displayAlertForRemainingShots();
+                return;
+            }
             if (this.surveytype == 'pv') {
                 this.savePVFormData();
+            } else {
+                let isutilitymanualinput = false;
+                if (this.activeForm.get("utility").value == null || this.activeForm.get("utility").value == "") {
+                    if (this.utility.manualinput != "") {
+                        isutilitymanualinput = true;
+                        this.activeForm.get("utility").setValue(this.utility.manualinput);
+                    }
+                }
+                this.utilitieservice.showLoading('Saving Survey').then(() => {
+                    // const isutilityfound = this.utilities.some(el => el.name === this.batteryForm.get("utility").value.name);
+                    if (isutilitymanualinput) {
+                        const data = {
+                            name: this.utility.manualinput,
+                            source: this.platformname,
+                            lastused: this.formatDateInBackendFormat(),
+                            city: this.surveycity,
+                            state: this.surveystate,
+                            addedby: this.storageService.getUserID()
+                        }
+                        this.apiService.addUtility(data).subscribe((data) => {
+                            this.selectedutilityid = data.id;
+                            if (this.surveytype == "battery") {
+                                this.saveFormData();
+                            } else if (this.surveytype == "pvbattery") {
+                                this.savePVBatteryFormData();
+                            }
+                        }, (error) => {
+                            this.utilitieservice.hideLoading().then(() => {
+                                this.utilitieservice.errorSnackBar(JSON.stringify(error));
+                            });
+                        });
+                    } else {
+                        this.selectedutilityid = this.activeForm.get("utility").value.id;
+                        if (this.surveytype == "battery") {
+                            this.saveFormData();
+                        } else if (this.surveytype == "pvbattery") {
+                            this.savePVBatteryFormData();
+                        }
+                    }
+                });
             }
         }
     }
