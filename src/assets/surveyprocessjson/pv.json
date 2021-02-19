@@ -381,8 +381,8 @@
           {
             "isactive": false,
             "ispending": true,
-            "shotinfo": "Capture obstacles dimensions",
-            "questioninfo": "Note down the obstacle dimensions on a paper and take a shot.",
+            "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
+            "questioninfo": "",
             "shotstatus": false,
             "promptquestion": false,
             "question": "",
@@ -433,7 +433,7 @@
             "questiontype": 1,
             "inputformcontrol": "framing",
             "imagekey": "atticimages",
-            "imagename": "atticimage"
+            "imagename": "atticwideshoturl"
           },
           {
             "isactive": false,
@@ -451,7 +451,7 @@
             "questiontype": 7,
             "inputformcontrol": "framingsize",
             "imagekey": "atticimages",
-            "imagename": "atticimage"
+            "imagename": "atticzoomshoturl"
           },
           {
             "isactive": false,
@@ -469,7 +469,7 @@
             "questiontype": 2,
             "inputformcontrol": "distancebetweentworafts",
             "imagekey": "atticimages",
-            "imagename": "atticimage"
+            "imagename": "atticrequiredshoturl"
           }
         ]
       }
@@ -495,7 +495,7 @@
           {
             "isactive": false,
             "ispending": true,
-            "shotinfo": "Capture all appliances of higher load",
+            "shotinfo": "Capture all appliances of heavy load",
             "questioninfo": "",
             "shotstatus": false,
             "promptquestion": false,
