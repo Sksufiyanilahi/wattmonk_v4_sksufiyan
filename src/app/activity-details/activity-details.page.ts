@@ -33,6 +33,7 @@ designId:any;
     ) {
     this.route.paramMap.subscribe( params =>{ this.designId=params.get('id');
   this.name=params.get('name')});
+  console.log(this.name);
    }
 
   ngOnInit() {
@@ -50,7 +51,9 @@ designId:any;
 
   activitiesList(){
     this.utilities.showLoading('Please wait...').then(()=>{
+      console.log(this.name)
     if(this.name=="design"){
+      debugger;
         this.apiservice.design_activityDetails(this.designId).subscribe(response =>{
           this.utilities.hideLoading().then(()=>{
             this.activity_details=response;

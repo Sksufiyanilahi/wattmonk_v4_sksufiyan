@@ -16,7 +16,7 @@
             <div class="ion-no-padding custom-card" style="height: 100%;">
                 <p class="customer-name" >{{surveyData.name}}
                       <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
-                        {{surveyData.datetime | date: 'hh:mm a'}}
+                        {{utils.formatTimeInDisplayFormat(surveyData.datetime)}}
                     </span>
                       <span *ngIf="surveyData.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                         Pending

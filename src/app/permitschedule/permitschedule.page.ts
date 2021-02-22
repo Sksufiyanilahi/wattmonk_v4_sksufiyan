@@ -113,6 +113,9 @@ export class PermitschedulePage implements OnInit {
 
   userdata:any;
   isEdit : boolean = true
+  data:any;
+  surveydata:any
+  surveydatapresent:boolean=false
 
   solarMakeDisposable: Subscription;
 
@@ -150,6 +153,11 @@ export class PermitschedulePage implements OnInit {
     //private db:AngularFireDatabase
     //private data: DesignFormData
     ) {
+        
+      
+
+
+
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
        const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
@@ -198,6 +206,7 @@ export class PermitschedulePage implements OnInit {
     postalcode: new FormControl(''),
     status: new FormControl('created'),
     attachments: new FormControl([]),
+    issurveycompleted:new FormControl('false'),
     creatorparentid: new FormControl(this.storage.getParentId()),
   })
   // //For Counts
@@ -233,12 +242,29 @@ export class PermitschedulePage implements OnInit {
 
 
   ngOnInit() {
+  this.surveydatapresent=false
+    this.data = this.router.getCurrentNavigation().extras.state;
+    console.log(this.data)
+    if( this.data!=undefined){
+   this.surveydata = this.data.productdetails.queryParams.surveyData;
+   console.log(this.surveydata)
+   this.surveydatapresent=true
+ 
+  
+  }
+
     this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
     console.log(this.userdata)
     this.requestLocationPermission();
     if (this.designId!=0) {
       this.tabsDisabled=true;
+      this.subscription = this.utils.getStaticAddress().subscribe((address) => {
+        this.address = address;
+        this.storage.setData(this.address);
+      });
+    }
+    else if(this.surveydatapresent){
       this.subscription = this.utils.getStaticAddress().subscribe((address) => {
         this.address = address;
         this.storage.setData(this.address);
@@ -272,7 +298,11 @@ export class PermitschedulePage implements OnInit {
         this.getDesignDetails();
       },1000)
 
-    }else{
+    }
+    else if(this.surveydatapresent){
+      this.getsurveydata();
+    }
+    else{
       this.addressValue();
     }
 
@@ -321,6 +351,38 @@ export class PermitschedulePage implements OnInit {
             roofcontrol.updateValueAndValidity();
         });
 
+  }
+
+
+  getsurveydata(){
+
+    this.desginForm.patchValue({
+      name: this.surveydata.name,
+      email: this.surveydata.email,
+      monthlybill: this.surveydata.monthlybill,
+      address: this.surveydata.address,
+      phone:this.surveydata.phonenumber,
+      createdby: this.surveydata.createdby.id,
+      rooftype: this.surveydata.rooftype,
+      mountingtype:this.surveydata.mountingtype,
+      architecturaldesign:this.surveydata.architecturaldesign,
+     jobtype: this.surveydata.jobtype,
+      tiltofgroundmountingsystem: this.surveydata.tiltofgroundmountingsystem,
+   
+      projecttype: this.surveydata.projecttype,
+      latitude: this.surveydata.latitude,
+      longitude: this.surveydata.longitude,
+      country: this.surveydata.country,
+      state: this.surveydata.state,
+      city: this.surveydata.city,
+      postalcode:this.surveydata.postalCode,
+      issurveycompleted:true,
+      //attachments:this.design.attachments,
+  
+      attachments:this.surveydata.attachments,
+     
+    });
+     this.utils.setStaticAddress(this.surveydata.address);
   }
 
   uploadcontrolvalidation(){
@@ -536,20 +598,20 @@ export class PermitschedulePage implements OnInit {
   this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
     console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-      // this.desginForm.get('address').setValue('124/345');
-      // this.desginForm.get('latitude').setValue('24.553333');
-      // this.desginForm.get('longitude').setValue('80.5555555555');
-      // this.desginForm.get('country').setValue('india');
-      // this.desginForm.get('city').setValue('Lucknow');
-      // this.desginForm.get('state').setValue('UP');
-      // this.desginForm.get('postalcode').setValue(3232343);
-     this.desginForm.get('address').setValue(address.address);
-       this.desginForm.get('latitude').setValue(address.lat);
-       this.desginForm.get('longitude').setValue(address.long);
-       this.desginForm.get('country').setValue(address.country);
-     this.desginForm.get('city').setValue(address.city);
-       this.desginForm.get('state').setValue(address.state);
-       this.desginForm.get('postalcode').setValue(address.postalcode);
+      this.desginForm.get('address').setValue('124/345');
+      this.desginForm.get('latitude').setValue('24.553333');
+      this.desginForm.get('longitude').setValue('80.5555555555');
+      this.desginForm.get('country').setValue('india');
+      this.desginForm.get('city').setValue('Lucknow');
+      this.desginForm.get('state').setValue('UP');
+      this.desginForm.get('postalcode').setValue(3232343);
+    //  this.desginForm.get('address').setValue(address.address);
+    //    this.desginForm.get('latitude').setValue(address.lat);
+    //    this.desginForm.get('longitude').setValue(address.long);
+    //    this.desginForm.get('country').setValue(address.country);
+    //  this.desginForm.get('city').setValue(address.city);
+    //    this.desginForm.get('state').setValue(address.state);
+    //    this.desginForm.get('postalcode').setValue(address.postalcode);
   }, (error) => {
     this.desginForm.get('address').setValue('');
     this.desginForm.get('latitude').setValue('');
@@ -824,7 +886,9 @@ saveInverterModel() {
             if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM){
               this.mixpanelService.track("SAVE_PERMITDESIGN_PAGE", {
               });
-              var data = {
+              let data
+              if(this.surveydatapresent){
+               data ={
                           name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
@@ -860,10 +924,52 @@ saveInverterModel() {
                         creatorparentid:this.desginForm.get('creatorparentid').value,
                         outsourcedto:designoutsourcedto,
                         designacceptancestarttime:designacceptancestarttime,
-                        isoutsourced:isoutsourced
+                        isoutsourced:isoutsourced,
+                        issurveycompleted:this.desginForm.get('issurveycompleted').value,
+                        survey:this.surveydata.id
 
-  }
+  }}
 
+else{
+   data = {
+    name:this.desginForm.get('name').value,
+    email:this.desginForm.get('email').value,
+    phonenumber:pnumber.toString(),
+    address:this.desginForm.get('address').value,
+    monthlybill:this.desginForm.get('monthlybill').value,
+    solarmake: this.selectedModuleMakeID,
+    solarmodel:this.selectedModuleModelID,
+    invertermake:this.selectedInverterMakeID,
+    invertermodel:this.selectedInverterModelID,
+    //createdby: this.storage.getUserID(),
+    createdby: this.desginForm.get('createdby').value,
+     //assignedto: this.desginForm.get('assignedto').value,
+     rooftype: this.desginForm.get('rooftype').value,
+   //architecturaldesign: this.desginForm.get('architecturaldesign').value,
+   tiltofgroundmountingsystem: this.desginForm.get('tiltofgroundmountingsystem').value,
+   mountingtype: this.desginForm.get('mountingtype').value,
+    jobtype: this.desginForm.get('jobtype').value,
+    projecttype: this.desginForm.get('projecttype').value,
+    newconstruction: this.desginForm.get('newconstruction').value,
+    source: this.desginForm.get('source').value,
+    comments: this.desginForm.get('comments').value,
+    requesttype: this.desginForm.get('requesttype').value,
+    latitude: this.desginForm.get('latitude').value,
+   longitude: this.desginForm.get('longitude').value,
+   country: this.desginForm.get('country').value,
+   state: this.desginForm.get('state').value,
+  city: this.desginForm.get('city').value,
+   postalcode: this.desginForm.get('postalcode').value,
+  status:designstatus,
+//attachments: this.desginForm.get('attachments').value,
+  deliverydate:tomorrow.toISOString(),
+  //creatorparentid:this.storage.getParentId()
+  creatorparentid:this.desginForm.get('creatorparentid').value,
+  outsourcedto:designoutsourcedto,
+  designacceptancestarttime:designacceptancestarttime,
+  isoutsourced:isoutsourced,
+  
+}}
 
 
 

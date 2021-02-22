@@ -630,7 +630,21 @@ export class UtilitiesService {
 			}
 		);
        
-    }
+	}
+	formatTimeInDisplayFormat(datestring: string) {
+		if (datestring != null) {
+		  var d = new Date(datestring);
+		  var offset = d.getTimezoneOffset();
+		  d.setMinutes(d.getMinutes() + offset);
+		  var formatted = new Intl.DateTimeFormat('en', {
+			hour: 'numeric',
+			minute: 'numeric'
+		  }).format(d);
+		  return formatted;
+		} else {
+		  return "-";
+		}
+	  }
 }
 
 // getcount(){
