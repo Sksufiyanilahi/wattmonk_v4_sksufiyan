@@ -6,7 +6,7 @@ import { ApiService } from '../api.service';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { UtilitiesService } from '../utilities.service';
 import { ScheduleFormEvent } from '../model/constants';
-import { Intercom } from 'ng-intercom';
+ 
 import { CouponOffersModalPage } from '../coupon-offers-modal/coupon-offers-modal.page';
 import { Observable } from 'rxjs';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
@@ -58,7 +58,6 @@ netPay:any
     private route:ActivatedRoute,
     private navController:NavController,
     private utils:UtilitiesService,
-    private intercom:Intercom,
     private alertController:AlertController,
     private modalController:ModalController,
     private db:AngularFireDatabase,
@@ -112,8 +111,7 @@ netPay:any
    
    
     this.userData = this.storageService.getUser();
-    console.log(this.userData)
-    this.utils.showHideIntercom(true);
+    console.log(this.userData);
     this.fetchData();
     this.servicecharges();});
    /* this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
@@ -417,7 +415,6 @@ confirm(){
   }
 
   ionViewWillLeave(){
-    this.utils.showHideIntercom(false);
   }
 
 

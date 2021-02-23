@@ -22,8 +22,8 @@ import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 import * as moment from 'moment';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
-import { Intercom } from 'ng-intercom';
-import { COMETCHAT_CONSTANTS, intercomId } from '../../contants';
+ 
+import { COMETCHAT_CONSTANTS } from '../../contants';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
@@ -100,7 +100,6 @@ export class PermitdesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private storageservice:StorageService,
     private storage:Storage,
-    public intercom: Intercom,
     public alertController: AlertController,
     public modalController: ModalController,
     private socialsharing: SocialSharing,
@@ -147,20 +146,9 @@ export class PermitdesignComponent implements OnInit {
     //  )
   }
 
- 
-  intercomModule(){
-    this.intercom.boot({
-      app_id: intercomId,
-      // Supports all optional configuration.
-      widget: {
-        "activator": "#intercom"
-      }
-    });
-  }
 
 
   ionViewDidEnter() {
-    // this.intercomModule();
     this.apiService.emitUserNameAndRole(this.userData);
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
@@ -416,7 +404,6 @@ this.deactivateNetworkSwitch.unsubscribe();
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
     // this.routeSubscription.unsubscribe();
-    this.utils.showHideIntercom(true);
  // this.dataRefreshSubscription.unsubscribe();
   this.DesignRefreshSubscription.unsubscribe();
   }
@@ -623,9 +610,6 @@ this.deactivateNetworkSwitch.unsubscribe();
   dismissBottomSheet() {
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
     this.utils.setBottomBarHomepage(true);
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
@@ -835,9 +819,6 @@ this.route.navigate(['/payment-modal'], {
 
   openAnalysts(id: number,designData) {
     this.listOfAssignees=[];
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;

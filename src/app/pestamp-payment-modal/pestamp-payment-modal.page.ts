@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
-import { Intercom } from 'ng-intercom';
+ 
 import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { ScheduleFormEvent } from '../model/constants';
@@ -56,7 +56,6 @@ export class PestampPaymentModalPage implements OnInit {
       private route:ActivatedRoute,
       private navController:NavController,
       private utils:UtilitiesService,
-      private intercom:Intercom,
       private alertController:AlertController,
       private modalController:ModalController,
       private db:AngularFireDatabase,
@@ -124,7 +123,6 @@ export class PestampPaymentModalPage implements OnInit {
       console.log(this.userData)
       this.mixpanelService.track('PESTAMP_PAYMENT_PAGE_OPEN', {
       });
-      this.utils.showHideIntercom(true);
        this.fetchData();
       // this.servicecharges();
       if(this.assignValue == 'assign')
@@ -541,7 +539,6 @@ this.router.navigate(['/add-money'], {
     }
   
     ionViewWillLeave(){
-      this.utils.showHideIntercom(false);
     }
 
     createChatGroup(design:Pestamp){

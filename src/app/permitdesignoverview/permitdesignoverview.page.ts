@@ -14,8 +14,8 @@ import { UtilitiesService } from '../utilities.service';
 import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
-import { COMETCHAT_CONSTANTS, intercomId } from '../contants';
-import { Intercom } from 'ng-intercom';
+import { COMETCHAT_CONSTANTS } from '../contants';
+ 
 import { Appversion } from '../appversion';
 
 @Component({
@@ -45,7 +45,6 @@ export class PermitdesignoverviewPage implements OnInit {
     private network: NetworkdetectService,
     private platform: Platform,
     private iab:InAppBrowser,
-    private intercom:Intercom,
     private router:ActivatedRoute 
     ) { 
       let data = localStorage.getItem('type');
@@ -53,7 +52,6 @@ export class PermitdesignoverviewPage implements OnInit {
     }
 
   ngOnInit() {
-    this.intercomModule();
     this.userData = this.storage.getUser();
     this.apiService.emitUserNameAndRole(this.userData);
     this.apiService.version.subscribe(versionInfo=>{
@@ -67,16 +65,6 @@ export class PermitdesignoverviewPage implements OnInit {
     this.route.navigate(['permitdesignoverview/permitnewdesign']);
   }
 
-  intercomModule(){
-    // this.intercom.boot({
-    //   app_id: intercomId,
-    //   // Supports all optional configuration.
-    //   widget: {
-    //     "activator": "#intercom"
-    //   }
-    // });
-  }
- 
 
   ngOnDestroy() {
     this.deactivateNetworkSwitch.unsubscribe();
@@ -179,7 +167,6 @@ searchbar(){
   }
   this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     this.netSwitch = data;
-    this.utilities.showHideIntercom(false);
     console.log(this.netSwitch);
     
   })
@@ -209,6 +196,5 @@ setzero(){
 }
 
 ionViewWillLeave(){
-  this.utilities.showHideIntercom(true);
 }
 }

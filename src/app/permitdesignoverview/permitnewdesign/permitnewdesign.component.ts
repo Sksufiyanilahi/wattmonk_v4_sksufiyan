@@ -12,8 +12,7 @@ import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
-import { intercomId } from 'src/app/contants';
-import { Intercom } from 'ng-intercom';
+ 
 import { StorageService } from 'src/app/storage.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
@@ -48,7 +47,6 @@ export class PermitnewdesignComponent implements OnInit {
     private storage: Storage,
     private apiService: ApiService,
     private router:ActivatedRoute,
-    private intercom:Intercom,
     private storageservice:StorageService
     ) {
       this.userData = this.storageservice.getUser();
@@ -62,7 +60,6 @@ export class PermitnewdesignComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.utils.showHideIntercom(false);
   }
 
   trackdesign(index,design){
@@ -74,27 +71,14 @@ export class PermitnewdesignComponent implements OnInit {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    this.utils.showHideIntercom(true);
     this.designRefreshSubscription.unsubscribe();
    // this.dataRefreshSubscription.unsubscribe();
     // this.unsubscribeMessage.unsubscribe();
     this.cdr.detach();
   }
 
-  intercomModule(){
-    // this.intercom.boot({
-    //   app_id: intercomId,
-    //   // Supports all optional configuration.
-    //   widget: {
-    //     "activator": "#intercom"
-    //   }
-    // });
-  }
-
 
   ionViewDidEnter(){
-
-    this.intercomModule();
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
       this.skip=0;
       this.getDesigns(null);

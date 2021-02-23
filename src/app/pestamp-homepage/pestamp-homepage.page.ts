@@ -77,7 +77,6 @@ export class PestampHomepagePage implements OnInit {
     }
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      this.utils.showHideIntercom(false);
       console.log(this.netSwitch);
       let user= this.storageService.getUser();
       this.apiService.emitUserNameAndRole(user);

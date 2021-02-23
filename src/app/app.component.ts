@@ -13,7 +13,6 @@ import {COMETCHAT_CONSTANTS} from './contants';
 import {UserData} from './model/userData.model';
 import {from, Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
-import {Intercom} from 'ng-intercom';
 import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
 import {MixpanelService} from './utilities/mixpanel.service';
 import {BackgroundMode} from "@ionic-native/background-mode/ngx";
@@ -74,7 +73,6 @@ export class AppComponent {
         private utilities: UtilitiesService,
         private network: NetworkdetectService,
         private router: Router,
-        private intercom: Intercom,
         private db: AngularFireDatabase,
         private changeDetectorRef: ChangeDetectorRef,
         private mix: MixpanelService,
@@ -162,22 +160,11 @@ export class AppComponent {
         });
     }
 
-    // intercomModule(){
-    //   this.intercom.boot({
-    //     app_id: intercomId,
-    //     // Supports all optional configuration.
-    //     widget: {
-    //       "activator": "#intercom"
-    //     }
-    //   });
-    // }
-
     isEmptyObject(obj) {
         return obj && Object.keys(obj).length === 0;
     }
 
     ngOnInit() {
-        // this.intercomModule();
         this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe((data) => {
             this.netSwitch = data;
             console.log(this.netSwitch);

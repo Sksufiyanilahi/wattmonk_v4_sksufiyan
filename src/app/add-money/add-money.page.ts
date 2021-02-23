@@ -9,7 +9,7 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ScheduleFormEvent, INVALID_AMOUNT, INVALID_AMOUNT_FOR_ONBOARDING } from '../model/constants';
-import { Intercom } from 'ng-intercom';
+ 
 import { Observable } from 'rxjs';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 declare var Stripe;
@@ -78,7 +78,6 @@ card:any
     private route:ActivatedRoute ,
     private formBuilder:FormBuilder,
     private navController:NavController,
-    private intercom:Intercom,
     private db:AngularFireDatabase,
     private cdr: ChangeDetectorRef,
     private mixpanelService:MixpanelService
@@ -156,7 +155,6 @@ card:any
 
   
     ngOnInit() {
-   this.utils.showHideIntercom(true);
   //   this.mode= this.route.snapshot.paramMap.get('mode');
   //  this.designId= this.route.snapshot.paramMap.get('id');
   //     this.serviceAmount = this.route.snapshot.paramMap.get('serviceAmount');

@@ -13,13 +13,13 @@ import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
-import { COMETCHAT_CONSTANTS, intercomId, ROLES,version } from '../contants';
+import { COMETCHAT_CONSTANTS,version } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
-import { Intercom } from 'ng-intercom';
+ 
 import { Appversion } from '../appversion';
 
 
@@ -75,7 +75,6 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
     private geolocation: Geolocation,
     private toastController: ToastController,
     public route: Router,
-    private intercom:Intercom,
     private network:NetworkdetectService,
     private iab: InAppBrowser){
      
@@ -89,20 +88,10 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
    
   }
 
-  intercomModule(){
-    // this.intercom.boot({
-    //   app_id: intercomId,
-    //   // Supports all optional configuration.
-    //   widget: {
-    //     "activator": "#intercom"
-    //   }
-    // });
-  }
      
 
   ngOnInit() { 
 
-    this.intercomModule();
     this.userData=this.storage.getUser();
  
     this.apiService.emitUserNameAndRole(this.userData);
@@ -417,7 +406,6 @@ export class AnalystoverviewPage implements OnInit, OnDestroy{
   
     this.deacctivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      this.utilities.showHideIntercom(false);
       console.log(this.netSwitch);
       
     })
@@ -434,7 +422,6 @@ this.network.networkConnect();
   }
 
   ionViewWillLeave() {
-    this.utilities.showHideIntercom(true);
     this.subscription.unsubscribe();
 
   }

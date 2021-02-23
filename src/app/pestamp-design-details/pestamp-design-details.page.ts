@@ -98,7 +98,6 @@ export class PestampDesignDetailsPage implements OnInit {
   }
 
   async deleteDesign() {
-    this.utilities.showHideIntercom(true);
         this.enableDisable= true;
         const toast = await this.toastController.create({
           header: 'Delete Design',

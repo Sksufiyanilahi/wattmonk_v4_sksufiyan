@@ -6,7 +6,7 @@ import { NavController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { StorageService } from '../storage.service';
-import { Intercom } from 'ng-intercom';
+ 
 import { UtilitiesService } from '../utilities.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
 
@@ -27,7 +27,6 @@ designId:any;
   constructor(private apiservice: ApiService, private route: ActivatedRoute,
     private storageService:StorageService,
     private navController: NavController,private datepipe:DatePipe,
-    private intercom:Intercom,
     private utilities:UtilitiesService,
     private mixpanelService:MixpanelService
     ) {
@@ -38,9 +37,6 @@ designId:any;
 
   ngOnInit() {
     this.mixpanelService.track("ACTIVITY_BAR_TOGGLE_PAGE_OPEN", {
-    });
-    this.intercom.update({
-      "hide_default_launcher": true
     });
     this.userData = this.storageService.getUser();
     console.log(this.userData);
@@ -95,9 +91,6 @@ designId:any;
   }
 
   ionViewWillLeave(){
-    this.intercom.update({
-      "hide_default_launcher": false
-    });
   }
 
  

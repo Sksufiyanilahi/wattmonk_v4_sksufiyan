@@ -19,7 +19,7 @@ import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@io
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AddressModel } from '../model/address.model';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { Intercom } from 'ng-intercom';
+ 
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { NetworkdetectService } from '../networkdetect.service';
 import { Clients } from '../model/clients.model';
@@ -146,7 +146,6 @@ export class PermitschedulePage implements OnInit {
     private geolocation: Geolocation,
     private platform: Platform,
     private toastController: ToastController,
-    private intercom:Intercom,
     private cdr:ChangeDetectorRef,
     private network:NetworkdetectService,
     private mixpanelService:MixpanelService
@@ -236,7 +235,6 @@ export class PermitschedulePage implements OnInit {
       this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
         this.netSwitch = data;
         console.log(this.netSwitch);
-        this.utils.showHideIntercom(true);
       })
     }
 
@@ -1815,9 +1813,6 @@ else{
     }
 
     ionViewWillLeave(){
-      this.intercom.update({
-        "hide_default_launcher": false
-      });
     }
 
     createChatGroup(design:DesginDataModel){

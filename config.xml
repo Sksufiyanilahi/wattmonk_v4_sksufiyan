@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.solar.wattmonk" version="1.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.solar.wattmonk" version="1.0.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Wattmonk</name>
     <description>Wattmonk</description>
     <author email="tech@wattmonk.com" href="http://ionicframework.com/">tech@wattmonk.com</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://localhost:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -25,6 +25,9 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+     <preference name="StatusBarOverlaysWebView" value="false" />
+       <preference name="StatusBarBackgroundColor" value="#fffff" />
+         
     <platform name="android">
         <preference name="android-targetSdkVersion" value="29" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">

@@ -12,7 +12,7 @@ import { AssigneeModel } from '../../model/assignee.model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserRoles } from '../../model/constants';
 import { Router, NavigationEnd, ActivatedRoute,NavigationExtras } from '@angular/router';
-import { COMETCHAT_CONSTANTS, intercomId } from '../../contants';
+import { COMETCHAT_CONSTANTS } from '../../contants';
 import { StorageService } from 'src/app/storage.service';
 import { ROLES } from 'src/app/contants';
 import {Storage} from '@ionic/storage';

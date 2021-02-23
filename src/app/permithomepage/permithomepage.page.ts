@@ -25,9 +25,9 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
-import { Intercom } from 'ng-intercom';
+ 
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { COMETCHAT_CONSTANTS, intercomId,version } from '../contants';
+import { COMETCHAT_CONSTANTS,version } from '../contants';
 import { MixpanelService } from '../utilities/mixpanel.service';
 
 
@@ -104,7 +104,6 @@ export class PermithomepagePage implements OnInit {
               private toastController: ToastController,
               private geolocation: Geolocation,
               private nativeGeocoder: NativeGeocoder,
-              private intercom:Intercom,
               private mixpanelService:MixpanelService
               ) {
                 this.setupCometChatUser();
@@ -123,9 +122,7 @@ export class PermithomepagePage implements OnInit {
 
 
   ngOnInit() {
-    this.intercomModule();
     this.setupCometChatUser();
-    this.utils.showHideIntercom(false);
     this.getNotificationCount();
     this.apiService.version.subscribe(versionInfo=>{
       this.update_version = versionInfo;
@@ -183,7 +180,6 @@ export class PermithomepagePage implements OnInit {
     }
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      this.utils.showHideIntercom(false);
       console.log(this.netSwitch);
       let user= this.storageservice.getUser();
       this.apiService.emitUserNameAndRole(user);
@@ -395,16 +391,6 @@ this.network.networkConnect();
 
     ngOndestroy(){
       this.deactivateNetworkSwitch.unsubscribe();
-    }
-
-    intercomModule(){
-      // this.intercom.boot({
-      //   app_id: intercomId,
-      //   // Supports all optional configuration.
-      //   widget: {
-      //     "activator": "#intercom"
-      //   }
-      // });
     }
 
 

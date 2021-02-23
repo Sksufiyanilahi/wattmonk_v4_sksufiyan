@@ -16,7 +16,7 @@ import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd, NavigationExtr
 import {  DesginDataModel, DesignModel } from '../../model/design.model';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
-import { Intercom } from 'ng-intercom';
+ 
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Clients } from 'src/app/model/clients.model';
 import { map, startWith } from "rxjs/operators";
@@ -117,11 +117,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     private camera: Camera,
     private file: File,
     public router:Router,
-    public intercom: Intercom,
     private cdr:ChangeDetectorRef,
     //private db: AngularFireDatabase
   ) {
-    this.utils.showHideIntercom(true);
     var tomorrow=new Date();
     tomorrow.setDate(tomorrow.getDate()+1);
     var d_date=tomorrow.toISOString();
@@ -207,7 +205,6 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter(){
-    this.utils.showHideIntercom(true);
   }
 
   // getmodulename(event){
@@ -229,9 +226,6 @@ export class DesignComponent implements OnInit, OnDestroy {
   ngOnInit() {
       this.fieldDisabled=false;
       this.userdata = this.storage.getUser();
-      this.intercom.update({
-        "hide_default_launcher": true
-      });
     // this.utils.manualInput.subscribe(data=>{
     //     if(this.modulename=='solarmake'){
     //       this.solarmake=data;
@@ -364,7 +358,6 @@ uploadcontrolvalidation(){
 
 
   ngOnDestroy(): void {
-    this.utils.showHideIntercom(false);
     this.subscription.unsubscribe();
     if (this.designId === 0) {
       this.addressSubscription.unsubscribe();
@@ -376,7 +369,6 @@ getDesignDetails() {
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
-          this.utils.showHideIntercom(true);
           this.design = result;
           console.log(this.design);
           this.fieldDisabled=true;

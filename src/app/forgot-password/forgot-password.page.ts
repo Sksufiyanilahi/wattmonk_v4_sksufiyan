@@ -5,7 +5,7 @@ import { NavController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { ErrorModel } from '../model/error.model';
 import { FIELD_REQUIRED, INVALID_EMAIL_MESSAGE } from '../model/constants';
-import { Intercom } from 'ng-intercom';
+ 
 
 
 @Component({
@@ -25,13 +25,11 @@ export class ForgotPasswordPage implements OnInit {
     private formBuilder: FormBuilder,
     private utils: UtilitiesService,
     private navController: NavController,
-    private apiService: ApiService,
-    private intercom:Intercom
+    private apiService: ApiService
   ) {
   }
 
   ngOnInit() {
-   this.utils.showHideIntercom(true);
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.forgotPasswordForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
@@ -70,7 +68,6 @@ export class ForgotPasswordPage implements OnInit {
   }
 
   ionVieWillLeave(){
- this.utils.showHideIntercom(true);
   }
 
 }

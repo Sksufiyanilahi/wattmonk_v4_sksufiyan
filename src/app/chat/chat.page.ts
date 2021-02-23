@@ -10,7 +10,7 @@ import BaseMessage = CometChat.BaseMessage;
 import { UtilitiesService } from '../utilities.service';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 import { File, FileEntry } from '@ionic-native/file/ngx';
-import { Intercom } from 'ng-intercom';
+ 
 import { StorageService } from '../storage.service';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { COMETCHAT_CONSTANTS } from '../contants';
@@ -39,7 +39,6 @@ export class ChatPage implements OnInit {
 		private keyboard: Keyboard,
 		private renderer2: Renderer2,
 		private navController: NavController,
-		private intercom: Intercom,
     private storageService: StorageService,
 	private utils:UtilitiesService,
 	private apiService:ApiService
@@ -72,10 +71,6 @@ export class ChatPage implements OnInit {
 
 	ionViewWillEnter(): void {
 		this.ngOnInit();
-
-		this.intercom.update({
-			hide_default_launcher: true
-		});
 		setTimeout(() => {
 			console.log('scrolled caled');
 			this.content.scrollToBottom(300);
@@ -287,9 +282,6 @@ export class ChatPage implements OnInit {
 	}
 
 	ionViewWillLeave() {
-		this.intercom.update({
-			hide_default_launcher: true
-		});
 	}
 
 	goBack() {

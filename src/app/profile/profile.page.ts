@@ -11,8 +11,7 @@ import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.modul
 import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
 import { AddMoneyPage } from '../add-money/add-money.page';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { Intercom } from 'ng-intercom';
-import { intercomId } from '../contants';
+ 
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Subscription } from 'rxjs';
 import { MixpanelService } from '../utilities/mixpanel.service';
@@ -44,7 +43,6 @@ profile:any;
     private toastController: ToastController,
     public modalController: ModalController,
     public router:Router,
-    private intercom:Intercom,
     private route: ActivatedRoute,
     private mixpanelService:MixpanelService
   ) {
@@ -126,7 +124,6 @@ state: { productdetails: objToSend }
                   this.storage.logout();
                   this.deviceStorage.clear();
                   this.apiService.resetHeaders();
-                  this.utilities.showHideIntercom(true);
                   this.navController.navigateRoot('login');
                 })
               },err=>{
@@ -257,7 +254,6 @@ state: { productdetails: objToSend }
   }
 
   ngOnDestroy(): void {
-    this.utilities.showHideIntercom(false);
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
 

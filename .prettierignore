@@ -1,8 +1,0 @@
-package.json
-package-lock.json
-yarn.lock
-dist
-www
-plugins
-platforms
-e2e

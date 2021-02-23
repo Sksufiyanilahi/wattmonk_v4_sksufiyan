@@ -14,7 +14,7 @@ import {NgxImageCompressService} from 'ngx-image-compress';
 import { CountdownTimerService, countDownTimerConfigModel, countDownTimerTexts } from 'ngx-timer';
 import { User } from '../model/user.model';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { Intercom } from 'ng-intercom';
+ 
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { ErrorModel } from '../model/error.model';
 
@@ -77,13 +77,9 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private countdownservice: CountdownTimerService,
     private iab: InAppBrowser,
     private router:Router,
-    private intercom:Intercom,
     private mixpanelService:MixpanelService
   
   ) {
-    this.intercom.update({
-      "hide_default_launcher": true
-    });
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
       designassignedto: new FormControl('', [Validators.required]),
@@ -280,7 +276,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   async deleteDesign() {
-this.utilities.showHideIntercom(true);
     this.enableDisable= true;
     const toast = await this.toastController.create({
       header: 'Delete Design',
@@ -665,7 +660,6 @@ return blob;
   }
 
   ionViewWillLeave(){
- this.utilities.showHideIntercom(false);
   }
 
 

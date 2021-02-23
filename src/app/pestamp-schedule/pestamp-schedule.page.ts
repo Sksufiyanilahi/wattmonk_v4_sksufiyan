@@ -125,7 +125,6 @@ export class PestampSchedulePage implements OnInit {
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
-      this.utils.showHideIntercom(true);
     })
   }
 

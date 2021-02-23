@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import { User } from './model/user.model';
 import { LoginModel } from './model/login.model';
 import { StorageService } from './storage.service';
-import { Intercom } from 'ng-intercom';
+ 
 import { NumberOnlyDirective } from './schedule/number.directive';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { Router } from '@angular/router';
@@ -71,7 +71,6 @@ export class UtilitiesService {
 		private alertController: AlertController,
 		private modalController: ModalController,
 		private storageService: StorageService,
-		private intercom: Intercom,
 		private router: Router,
 		private navCtrl: NavController,
 		private location: Location
@@ -242,12 +241,6 @@ export class UtilitiesService {
 		} else {
 			return Promise.resolve();
 		}
-	}
-
-	showHideIntercom(value) {
-		this.intercom.update({
-			hide_default_launcher: value
-		});
 	}
 
 	setLoadingMessage(message: string) {

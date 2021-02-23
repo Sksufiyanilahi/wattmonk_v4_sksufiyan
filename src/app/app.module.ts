@@ -33,8 +33,6 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {Intercom, IntercomConfig, IntercomModule} from 'ng-intercom';
-import {intercomId} from './contants';
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
 import {AngularFireModule} from '@angular/fire';
@@ -63,9 +61,6 @@ import {BackgroundMode} from '@ionic-native/background-mode/ngx';
         MatDialogModule,
         MatButtonModule,
         MatProgressSpinnerModule,
-        IntercomModule.forRoot({
-            appId: intercomId
-        }),
         AngularFireDatabaseModule,
         AngularFireModule.initializeApp(environment.firebase)
 
@@ -89,8 +84,6 @@ import {BackgroundMode} from '@ionic-native/background-mode/ngx';
         SocialSharing,
         Dialogs,
         Keyboard,
-        Intercom,
-        IntercomConfig,
         AndroidPermissions,
         Mixpanel,
         MixpanelPeople

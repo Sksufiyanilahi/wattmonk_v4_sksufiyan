@@ -25,7 +25,7 @@ import { PaymentModalPage } from 'src/app/payment-modal/payment-modal.page';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
-import { Intercom } from 'ng-intercom';
+ 
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
@@ -100,7 +100,6 @@ export class WaitingforacceptancePage implements OnInit {
     private socialsharing: SocialSharing,
     private file:File,
     private localnotification:LocalNotifications,
-    private intercom:Intercom,
     private platform:Platform,
     private androidPermissions: AndroidPermissions,
     private transfer: FileTransfer
@@ -428,7 +427,6 @@ this.network.networkConnect();
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
-    this.utils.showHideIntercom(false);
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
 
@@ -548,7 +546,6 @@ this.network.networkConnect();
 
   openDesigners(id: number,designData) {
     this.listOfAssignees=[];
- this.utils.showHideIntercom(true);
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
@@ -592,7 +589,6 @@ this.network.networkConnect();
 
   openAnalysts(id: number,designData) {
     this.listOfAssignees=[];
-    this.utils.showHideIntercom(true);
     console.log("this is",designData);
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;

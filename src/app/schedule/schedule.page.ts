@@ -9,7 +9,7 @@ import { ActivatedRoute, Router, NavigationEnd, RoutesRecognized, NavigationStar
 import { ScheduleFormEvent } from '../model/constants';
 import { Subscription } from 'rxjs';
 import { AddressModel } from '../model/address.model';
-import { Intercom } from 'ng-intercom';
+ 
 import { NetworkdetectService } from '../networkdetect.service';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 
@@ -52,13 +52,11 @@ export class SchedulePage implements OnInit, OnDestroy {
     public router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
-    private intercom:Intercom,
     private network:NetworkdetectService,
     private location:Location
   ) {
   
     
-    this.utilities.showHideIntercom(true);
     const url = this.router.url;
     const splittedUrl = url.split('/');
     console.log(splittedUrl);
@@ -71,7 +69,6 @@ export class SchedulePage implements OnInit, OnDestroy {
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
-      this.utilities.showHideIntercom(true);
     })
   }
 
@@ -100,7 +97,6 @@ this.network.networkConnect();
   }
 
   goBack() {
-    this.utilities.showHideIntercom(true);
     this.navController.pop();
     // this.location.back();
   }
