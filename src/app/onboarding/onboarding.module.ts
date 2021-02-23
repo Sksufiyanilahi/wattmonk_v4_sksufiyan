@@ -8,7 +8,11 @@ import { OnboardingPageRoutingModule } from './onboarding-routing.module';
 
 import { OnboardingPage } from './onboarding.page';
 import { UtilitiesModule } from '../utilities/utilities.module';
-import { MatStepperModule, MatInputModule, MatButtonModule, MatAutocompleteModule } from '@angular/material';
+//import { MatStepperModule, MatInputModule, MatButtonModule, MatAutocompleteModule } from '@angular/material';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [

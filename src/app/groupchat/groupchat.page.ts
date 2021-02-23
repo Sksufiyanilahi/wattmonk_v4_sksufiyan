@@ -8,8 +8,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController } from '@ionic/angular';
 import BaseMessage = CometChat.BaseMessage;
 import { UtilitiesService } from '../utilities.service';
-import { Keyboard } from '@ionic-native/keyboard/ngx';
- 
+import { Plugins } from '@capacitor/core';
+const { Keyboard } = Plugins;
 
 // import { ImageViewerComponent } from './image-viewer/image-viewer.component';
 
@@ -28,15 +28,13 @@ export class GroupchatPage implements OnInit {
 
   @ViewChild('content',{static:false}) content: any;
 
-  constructor(private router: Router, private route: ActivatedRoute, private keyboard: Keyboard, private renderer2: Renderer2,private navCtrl:NavController) { 
+  constructor(private router: Router, private route: ActivatedRoute, private renderer2: Renderer2,private navCtrl:NavController) { 
     const html = document.getElementsByTagName('html').item(0);
-    this.keyboard.onKeyboardHide().subscribe(() => {
-      // this.renderer2.setStyle(html, 'height','101vh');
+    Keyboard.addListener('keyboardWillHide',()=>{
       this.moveToBottom();
     });
 
-    this.keyboard.onKeyboardShow().subscribe(() => {
-      // this.renderer2.setStyle(html, 'height','auto');
+    Keyboard.addListener('keyboardWillShow',()=>{
       this.moveToBottom();
     });
 

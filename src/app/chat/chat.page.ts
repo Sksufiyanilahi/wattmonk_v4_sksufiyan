@@ -1,20 +1,15 @@
-import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { ModalController, NavController } from '@ionic/angular';
+import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
-import { Chooser } from '@ionic-native/chooser/ngx';
-import { ImagePicker } from '@ionic-native/image-picker/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ActionSheetController } from '@ionic/angular';
 import BaseMessage = CometChat.BaseMessage;
 import { UtilitiesService } from '../utilities.service';
-import { ImageViewerComponent } from './image-viewer/image-viewer.component';
-import { File, FileEntry } from '@ionic-native/file/ngx';
  
 import { StorageService } from '../storage.service';
-import { Keyboard } from '@ionic-native/keyboard/ngx';
-import { COMETCHAT_CONSTANTS } from '../contants';
 import { ApiService } from '../api.service';
+import { Plugins } from '@capacitor/core';
+const {Keyboard} = Plugins;
+
 
 @Component({
 	selector: 'app-chat',
@@ -36,7 +31,6 @@ export class ChatPage implements OnInit {
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
-		private keyboard: Keyboard,
 		private renderer2: Renderer2,
 		private navController: NavController,
     private storageService: StorageService,
@@ -45,15 +39,13 @@ export class ChatPage implements OnInit {
 	) {
     
 		const html = document.getElementsByTagName('html').item(0);
-		this.keyboard.onKeyboardHide().subscribe(() => {
-			// this.renderer2.setStyle(html, 'height','101vh');
+		Keyboard.addListener('keyboardWillHide',() =>{
 			this.moveToBottom();
-		});
+		})
 
-		this.keyboard.onKeyboardShow().subscribe(() => {
-			// this.renderer2.setStyle(html, 'height','auto');
+		Keyboard.addListener('keyboardWillShow',() =>{
 			this.moveToBottom();
-		});
+		})
 
 		// this.route.queryParams.subscribe(params => {
 

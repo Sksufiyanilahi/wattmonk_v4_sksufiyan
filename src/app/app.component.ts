@@ -1,13 +1,11 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
 
 import {NavController, Platform} from '@ionic/angular';
-import {SplashScreen} from '@ionic-native/splash-screen/ngx';
-import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {StorageService} from './storage.service';
 import {ApiService} from './api.service';
 import {UtilitiesService} from './utilities.service';
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
-import {Firebase} from '@ionic-native/firebase/ngx';
+import {FirebaseX} from '@ionic-native/firebase-x/ngx';
 import {NetworkdetectService} from './networkdetect.service';
 import {COMETCHAT_CONSTANTS} from './contants';
 import {UserData} from './model/userData.model';
@@ -15,7 +13,8 @@ import {from, Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
 import {MixpanelService} from './utilities/mixpanel.service';
-import {BackgroundMode} from "@ionic-native/background-mode/ngx";
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import {Plugins} from '@capacitor/core';
 
 @Component({
     selector: 'app-root',
@@ -62,14 +61,12 @@ export class AppComponent {
 
     constructor(
         private platform: Platform,
-        private splashScreen: SplashScreen,
-        private statusBar: StatusBar,
         private storageService: StorageService,
         private navController: NavController,
         // private fcm: FCM,
         private apiservice: ApiService,
         private utilitiesService: UtilitiesService,
-        private firebase: Firebase,
+        private firebase: FirebaseX,
         private utilities: UtilitiesService,
         private network: NetworkdetectService,
         private router: Router,
@@ -138,20 +135,13 @@ export class AppComponent {
     initializeApp() {
         this.platform.ready().then(() => {
             setTimeout(() => {
-                this.splashScreen.hide();
+                Plugins.SplashScreen.hide();
             }, 1000);
             this.getFcmToken();
-            if (this.platform.is('ios')) {
-                this.statusBar.overlaysWebView(false);
-                this.statusBar.backgroundColorByHexString('#fffff');
-                this.statusBar.styleDefault();
-            } else if (this.platform.is('android')) {
-                this.statusBar.overlaysWebView(false);
-                this.statusBar.styleDefault();
-                this.statusBar.backgroundColorByHexString('#fffff');
-                this.statusBar.styleLightContent();
-            } else {
-            }
+            Plugins.StatusBar.setOverlaysWebView({
+                overlay: true
+              });
+            Plugins.StatusBar.setBackgroundColor({ color:'#ffffff' });
 
             this.getNotification();
             this.setupCometChat();
@@ -286,7 +276,7 @@ export class AppComponent {
     }
 
     getNotification() {
-        this.firebase.onNotificationOpen().subscribe((data) => {
+        this.firebase.onMessageReceived().subscribe((data) => {
             console.log(`User opened a notification ${data}`, data);
             this.apiservice.emitMessageReceived('pushNotification');
         });

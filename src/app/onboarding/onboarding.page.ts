@@ -4,12 +4,12 @@ import { ROLES } from '../contants';
 import { User } from '../model/user.model';
 import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_COMPANY_NAME, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_PHONE_NUMBER, INVALID_REGISTRATION_NUMBER } from '../model/constants';
 import { MenuController, NavController } from '@ionic/angular';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer, Renderer2, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
-import { MatStepper } from '@angular/material';
+import { MatStepper } from '@angular/material/stepper';
 import { ErrorModel } from '../model/error.model';
 //import { Slides } from 'ionic-angular';
 
@@ -64,7 +64,7 @@ export class OnboardingPage implements OnInit {
   logoSelected: boolean=false;
   checkboxValue:boolean;
 
-  constructor(public renderer:Renderer,
+  constructor(
               private router:Router,
               private formBuilder: FormBuilder,
               private storage:StorageService,
