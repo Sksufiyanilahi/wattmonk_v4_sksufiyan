@@ -631,7 +631,7 @@ export class UtilitiesService {
 		);
        
 	}
-	formatTimeInDisplayFormat(datestring: string) {
+	formatTimeInDisplayFormat(datestring: any) {
 		if (datestring != null) {
 		  var d = new Date(datestring);
 		  var offset = d.getTimezoneOffset();

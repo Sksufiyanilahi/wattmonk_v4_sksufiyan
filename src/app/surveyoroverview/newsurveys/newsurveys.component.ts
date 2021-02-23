@@ -39,7 +39,7 @@ export class NewsurveysComponent implements OnInit {
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef,
-    private utils: UtilitiesService,
+    public utils: UtilitiesService,
     private storage: Storage,
     private storageService:StorageService,
     private el:ElementRef,

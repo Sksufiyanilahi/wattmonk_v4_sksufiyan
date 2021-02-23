@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 import { DatePicker } from '@ionic-native/date-picker/ngx';
+import { UtilitiesService } from 'src/app/utilities.service';
 
 @Component({
   selector: 'app-date-time',
@@ -27,7 +28,8 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
   private onChange: (value: Date) => void;
 
   constructor(
-    private datePicker: DatePicker
+    private datePicker: DatePicker,
+    private utilities:UtilitiesService
   ) {
   }
 
@@ -75,19 +77,27 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
   }
 
   changeTime() {
-    const currentDate = new Date(this.date);
+    const currentDate = new Date();
     console.log(currentDate);
     this.datePicker.show({
       date: new Date(this.date),
-      minDate: new Date(),
+      minDate: new Date().getTime(),
       mode: 'time',
       androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT
     }).then(
       date => {
+        // if(this.date.getTime > currentDate.getTime()){
+        // }
         const oldDate = new Date(this.date);
         oldDate.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds())
-        this.date = oldDate.getTime()
+        this.date = oldDate.getTime();
+         var selected_date=oldDate.getDay();
+       console.log(this.date, currentDate.getTime(),"time");
         this.onChange(oldDate);
+        if(this.date < currentDate.getTime() ){
+          this.utilities.showAlert("Invalid time")
+          this.date = new Date().getTime();
+        }
       },
       err => console.log('Error occurred while getting date: ', err)
     );
