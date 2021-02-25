@@ -419,7 +419,7 @@
             ],
             "result": "",
             "questionstatus": false,
-            "questiontype": 7,
+            "questiontype": 8,
             "inputformcontrol": "framingsize",
             "imagekey": "atticimages",
             "imagename": "atticzoomshoturl"
