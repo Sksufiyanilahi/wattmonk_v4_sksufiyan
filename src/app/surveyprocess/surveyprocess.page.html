@@ -234,23 +234,25 @@
                 <p>
                     {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
                 </p>
-                <form [formGroup]="activeForm" novalidate style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                    <ion-input type="number" class="form-control" autocomplete="off"
-                               formControlName="dimensionA">
-                    </ion-input>
-                    <span>x</span>
-                    <ion-input type="number" class="form-control" autocomplete="off"
-                               formControlName="dimensionB">
-                    </ion-input>
+                <form [formGroup]="activeForm" novalidate>
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                        <ion-input type="number" class="form-control" autocomplete="off"
+                                   formControlName="dimensionA">
+                        </ion-input>
+                        <span>x</span>
+                        <ion-input type="number" class="form-control" autocomplete="off"
+                                   formControlName="dimensionB">
+                        </ion-input>
+                    </div>
                     <div class="error_div">
                         <div
                                 *ngIf="activeForm.get('dimensionA').dirty || activeForm.get('dimensionB').dirty">
-                            <span class="error">Field input is required.</span>
+                            <span class="error">Both dimensions is required.</span>
                         </div>
                     </div>
                 </form>
                 <ion-row class="ion-float-right">
-                    <ion-button fill="clear" size="small" (click)="handleInputTextSubmission(activeForm)">
+                    <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
                         {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
                     </ion-button>
                 </ion-row>
@@ -797,6 +799,28 @@
                                     <ion-col size="12" *ngIf="shot.questiontype == QuestionTypes.INPUT_TEXT">
                                         <ion-input class="form-control" autocomplete="off"
                                                    [formControlName]="shot.inputformcontrol" type="text"></ion-input>
+                                        <div class="error_div">
+                                            <div *ngIf="activeForm.get(shot.inputformcontrol).value === '' && activeForm.get(shot.inputformcontrol).dirty">
+                                                <span class="error">Field input is required.</span>
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                    <ion-col size="12" *ngIf="shot.questiontype == QuestionTypes.INPUT_TWO_DIMENSIONS">
+                                        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                                            <ion-input type="number" class="form-control" autocomplete="off"
+                                                       formControlName="dimensionA">
+                                            </ion-input>
+                                            <span>x</span>
+                                            <ion-input type="number" class="form-control" autocomplete="off"
+                                                       formControlName="dimensionB">
+                                            </ion-input>
+                                        </div>
+                                        <div class="error_div">
+                                            <div
+                                                    *ngIf="activeForm.get('dimensionA').dirty || activeForm.get('dimensionB').dirty">
+                                                <span class="error">Both dimensions is required.</span>
+                                            </div>
+                                        </div>
                                         <div class="error_div">
                                             <div *ngIf="activeForm.get(shot.inputformcontrol).value === '' && activeForm.get(shot.inputformcontrol).dirty">
                                                 <span class="error">Field input is required.</span>
