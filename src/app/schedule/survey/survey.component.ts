@@ -48,12 +48,13 @@ export class SurveyComponent implements OnInit, OnDestroy {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     const EMAILPATTERN =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
+    const mydate:any =new Date().getTime();
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.pattern(EMAILPATTERN)]),
       phonenumber: new FormControl('', [Validators.required,  Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
       jobtype: new FormControl('', [Validators.required]),
-      datetime: new FormControl(new Date().getTime(), [Validators.required]),
+      datetime: new FormControl(mydate),
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
@@ -173,6 +174,15 @@ export class SurveyComponent implements OnInit, OnDestroy {
   }
 
   saveSurvey() {
+    const invalid = [];
+    const controls = this.surveyForm.controls;
+    for (const name in controls) {
+        if (controls[name].invalid) {
+            invalid.push(name);
+        }
+        
+      }
+      console.log(invalid);
     if (this.surveyForm.status === 'INVALID') {
       console.log(this.surveyForm.value);
       if(this.surveyForm.value.name==''){
