@@ -601,6 +601,10 @@ export class SurveyprocessPage implements OnInit {
 
         this.routeroutlet.swipeGesture = false;
         // camera options (Size and location). In the following example, the preview uses the rear camera and display the preview in the back of the webview
+        this.startCameraWithOpts();
+    }
+
+    startCameraWithOpts() {
         this.cameraPreviewOpts = {
             x: 0,
             y: 0,
@@ -1908,7 +1912,7 @@ export class SurveyprocessPage implements OnInit {
         this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-        this.startCameraAfterPermission();
+        this.startCameraWithOpts();
     }
 
     changeBatterySystem() {
