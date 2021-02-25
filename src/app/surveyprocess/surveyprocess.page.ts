@@ -1030,11 +1030,6 @@ export class SurveyprocessPage implements OnInit {
         const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
         const control = form.get(currentIndex.shots[this.selectedshotindex].inputformcontrol);
         if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_TWO_DIMENSIONS) {
-            console.log('------------------------------------------');
-            console.log(form.get('dimensionA').value);
-            console.log(form.get('dimensionB').value);
-            console.log(form.get('dimensionA').value != '' && form.get('dimensionB').value != '');
-            console.log('------------------------------------------');
             if (form.get('dimensionA').value != '' && form.get('dimensionB').value != '') {
                 this.handleAnswerSubmission(`${form.get('dimensionA').value}x${form.get('dimensionB').value}`);
                 form.get('dimensionA').setValue('');
