@@ -1698,7 +1698,7 @@ export class SurveyprocessPage implements OnInit {
             }
         } else {
             this.utilitieservice.hideLoading().then(() => {
-                this.utilitieservice.showSuccessModal('Survey has been Submitted').then((modal) => {
+                this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
                     modal.present();
                     modal.onWillDismiss().then((dismissed) => {
                         this.storage.remove("" + this.surveyid);

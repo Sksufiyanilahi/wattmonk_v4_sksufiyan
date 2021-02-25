@@ -72,6 +72,7 @@ export class SurveyDataModel {
   framingsize:any;
   distancebetweentworafts:any;
   batterysystem:any;
+  isdesignraised:boolean=false;
 }
 
 

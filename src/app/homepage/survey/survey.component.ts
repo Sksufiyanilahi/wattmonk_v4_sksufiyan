@@ -313,11 +313,11 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
             }
           });
           this.listOfSurveyDataHelper=tempData;
-          // this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
-          //   var dateA = new Date(a.date).getTime(),
-          //     dateB = new Date(b.date).getTime();
-          //   return dateB - dateA;
-          // });
+          this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+            var dateA = new Date(a.date).getTime(),
+              dateB = new Date(b.date).getTime();
+            return dateB - dateA;
+          });
           this.cdr.detectChanges();
   }
 
@@ -468,7 +468,7 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     if(this.assignForm.status === 'INVALID' && (this.surveyData.status === 'reviewassigned' || this.surveyData.status === 'reviewfailed' || this.surveyData.status === 'reviewpassed')){
       this.utils.errorSnackBar('Please select a analyst');
     }
-    else if (this.assignForm.status === 'INVALID' && this.surveyData.status === 'requestaccepted') {
+    else if (this.assignForm.status === 'INVALID') {
       this.utils.errorSnackBar('Please select a surveyor');
     }
     else if( this.reviewAssignedTo!=null && (this.selectedDesigner.id==this.reviewAssignedTo.id)){
@@ -701,6 +701,7 @@ this.utils.showLoading('Assigning').then(()=>{
     let objToSend: NavigationExtras = {
       queryParams: {
          surveyData:data,
+         tabsDisabled:true
         },
       skipLocationChange: false,
       fragment: 'top' 
@@ -926,14 +927,14 @@ state: { productdetails: objToSend }
   }
 
   designDownload(designData){
-
+  let pdf=   designData.surveypdf==null ? '': designData.surveypdf;
   this.platform.ready().then(()=>{
     this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
         result => console.log('Has permission?',result.hasPermission),
         err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
       );
-      this.file.checkFile(resolvedDirectory.nativeURL,designData.surveypdf).then(data=>{
+      this.file.checkFile(resolvedDirectory.nativeURL,pdf.url).then(data=>{
         console.log(data);
   
         if(data==true){
@@ -949,7 +950,7 @@ state: { productdetails: objToSend }
         if (err.code == 1) {
           const fileTransfer: FileTransferObject = this.transfer.create();
           this.utils.showLoading('Downloading').then(()=>{
-            fileTransfer.download(url, this.storageDirectory + designData.surveypdf).then((entry) => {
+            fileTransfer.download(url, this.storageDirectory + pdf.url).then((entry) => {
               this.utils.hideLoading().then(()=>{
                 console.log('download complete: ' + entry.toURL());
                 this.utils.showSnackBar("Survey File Downloaded Successfully");
@@ -1008,7 +1009,7 @@ state: { productdetails: objToSend }
    
    fileTransfer.download(url, path + designData.surveypdf.hash + designData.surveypdf.ext).then((entry) => {
      console.log('download complete: ' + entry.toURL());
-     this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+     this.utils.showSnackBar("Survey File Downloaded Successfully");
      
      // this.clickSub = this.localnotification.on('click').subscribe(data => {
      //   console.log(data)

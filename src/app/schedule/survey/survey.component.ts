@@ -47,14 +47,15 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
-    const EMAILPATTERN =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
+    const EMAILPATTERN =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const mydate:any =new Date().getTime();
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.pattern(EMAILPATTERN)]),
       phonenumber: new FormControl('', [Validators.required,  Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
       jobtype: new FormControl('', [Validators.required]),
-      datetime: new FormControl(mydate),
+      surveydatetime: new FormControl(mydate),
+      datetime:new FormControl(''),
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
@@ -91,20 +92,20 @@ export class SurveyComponent implements OnInit, OnDestroy {
     } 
     else {
       this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
-        //  this.surveyForm.get('address').setValue("sdck");
-        //  this.surveyForm.get('latitude').setValue('1111111');
-        //  this.surveyForm.get('longitude').setValue('222222222');
-        //  this.surveyForm.get('country').setValue('India');
-        //  this.surveyForm.get('city').setValue('delhi');
-        // this.surveyForm.get('state').setValue('up');
-        //  this.surveyForm.get('postalcode').setValue(777777777);
-       this.surveyForm.get('address').setValue(address.address);
-       this.surveyForm.get('latitude').setValue(address.lat);
-        this.surveyForm.get('longitude').setValue(address.long);
-        this.surveyForm.get('country').setValue(address.country);
-        this.surveyForm.get('city').setValue(address.city);
-        this.surveyForm.get('state').setValue(address.state);
-        this.surveyForm.get('postalcode').setValue(address.postalcode);
+         this.surveyForm.get('address').setValue("sdck");
+         this.surveyForm.get('latitude').setValue('1111111');
+         this.surveyForm.get('longitude').setValue('222222222');
+         this.surveyForm.get('country').setValue('India');
+         this.surveyForm.get('city').setValue('delhi');
+        this.surveyForm.get('state').setValue('up');
+         this.surveyForm.get('postalcode').setValue(777777777);
+      //  this.surveyForm.get('address').setValue(address.address);
+      //  this.surveyForm.get('latitude').setValue(address.lat);
+      //   this.surveyForm.get('longitude').setValue(address.long);
+      //   this.surveyForm.get('country').setValue(address.country);
+      //   this.surveyForm.get('city').setValue(address.city);
+      //   this.surveyForm.get('state').setValue(address.state);
+      //   this.surveyForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.surveyForm.get('address').setValue('');
         this.surveyForm.get('latitude').setValue('');
@@ -199,6 +200,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       }
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
+        this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
         if (this.surveyId !== 0) {
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
@@ -297,7 +299,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
             email: this.survey.email,
             jobtype: this.survey.jobtype,
             phonenumber: this.survey.phonenumber,
-            datetime: date.getTime(),
+            surveydatetime: date.getTime(),
+            datetime:date,
             comments:this.survey.comments=='' ?'': this.survey.comments[0].message,
             address: this.survey.address,
             source: this.survey.source,

@@ -667,7 +667,7 @@
 
     </ion-grid> -->
 </ion-content>
-<ion-footer *ngIf="((user.role.type=='clientadmin' || user.role.type=='clientsuperadmin')&& survey && survey.status=='created')||(user.role.type=='clientadmin' && survey && survey.status=='surveyassigned')" class="ion-no-border white-bg">
+<ion-footer *ngIf="((user.role.type=='clientadmin' || user.role.type=='bd')&& survey && survey.status=='created')||(user.role.type=='clientadmin' && survey && survey.status=='surveyassigned')" class="ion-no-border white-bg">
     <ion-grid>
         <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
             <ion-col class="ion-no-margin ion-no-padding">

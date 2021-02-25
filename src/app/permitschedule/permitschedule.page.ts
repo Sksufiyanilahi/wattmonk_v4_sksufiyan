@@ -247,6 +247,7 @@ export class PermitschedulePage implements OnInit {
     console.log(this.data)
     if( this.data!=undefined){
    this.surveydata = this.data.productdetails.queryParams.surveyData;
+   this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
    console.log(this.surveydata)
    this.surveydatapresent=true
  
@@ -1314,40 +1315,40 @@ else{
 
           this.utils.errorSnackBar('Please check the field name.');
         }
-        else if(this.desginForm.value.email=='' || this.desginForm.get('email').hasError('pattern')){
+        else if(this.desginForm.value.email=='' || this.desginForm.get('email').hasError('pattern') || this.desginForm.value.email==  undefined){
           this.utils.errorSnackBar('Please check the field email.');
         }
-        else if(this.desginForm.value.phone=='' || this.desginForm.get('phone').hasError('pattern')){
+        else if(this.desginForm.value.phone=='' || this.desginForm.get('phone').hasError('pattern') || this.desginForm.value.phone==undefined){
           this.utils.errorSnackBar('Please check the field phone number');
         }
-        else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern')){
+        else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern') || this.desginForm.value.monthlybill==undefined){
           this.utils.errorSnackBar('Please check the field annual units.');
         }
-        else if(this.desginForm.value.modulemake=='' || this.desginForm.get('modulemake').hasError('pattern')){
+        else if(this.desginForm.value.modulemake=='' || this.desginForm.get('modulemake').hasError('pattern') || this.desginForm.value.modulemake==undefined){
           this.utils.errorSnackBar('Please check the field module make.');
         }
-        else if(this.desginForm.value.modulemodel=='' || this.desginForm.get('modulemodel').hasError('pattern')){
+        else if(this.desginForm.value.modulemodel=='' || this.desginForm.get('modulemodel').hasError('pattern') || this.desginForm.value.modulemodel==undefined){
           this.utils.errorSnackBar('Please check the field module model.');
         }
-        else if(this.desginForm.value.invertermake=='' || this.desginForm.get('invertermake').hasError('pattern')){
+        else if(this.desginForm.value.invertermake=='' || this.desginForm.get('invertermake').hasError('pattern') || this.desginForm.value.invertermake==undefined){
           this.utils.errorSnackBar('Please check the field inverter make.');
         }
-        else if(this.desginForm.value.invertermodel=='' || this.desginForm.get('invertermodel').hasError('pattern')){
+        else if(this.desginForm.value.invertermodel=='' || this.desginForm.get('invertermodel').hasError('pattern') || this.desginForm.value.invertermodel==undefined){
           this.utils.errorSnackBar('Please check the field inverter model.');
         }
-        else if(this.desginForm.value.mountingtype==''){
+        else if(this.desginForm.get('mountingtype').value=='' || this.desginForm.get('mountingtype').value==undefined){
           this.utils.errorSnackBar('Please fill the mounting type.');
         }
-        else if(this.desginForm.value.projecttype==''){
+        else if(this.desginForm.value.projecttype=='' || this.desginForm.value.projecttype==undefined){
           this.utils.errorSnackBar('Please fill the project type.');
         }
-        else if(this.desginForm.value.tiltofgroundmountingsystem=='' || this.desginForm.get('tiltofgroundmountingsystem').hasError('pattern')){
+        else if(this.desginForm.value.tiltofgroundmountingsystem=='' || this.desginForm.get('tiltofgroundmountingsystem').hasError('pattern') || this.desginForm.value.tiltofgroundmountingsystem==undefined){
           this.utils.errorSnackBar('Please check the field tilt for ground mount.');
         }
-        else if(this.desginForm.value.rooftype==''){
+        else if(this.desginForm.value.rooftype=='' || this.desginForm.value.rooftype==undefined){
           this.utils.errorSnackBar('Please fill the rooftype.');
         }
-       else if(this.desginForm.value.architecturaldesign==''){
+       else if(this.desginForm.value.architecturaldesign=='' || this.desginForm.value.architecturaldesign==undefined){
           this.utils.errorSnackBar('Please attach architectural design.');
         }
         else{
