@@ -39,7 +39,7 @@ export class NewsurveysComponent implements OnInit {
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef,
-    private utils: UtilitiesService,
+    public utils: UtilitiesService,
     private storage: Storage,
     private storageService:StorageService,
     private el:ElementRef,
@@ -94,7 +94,7 @@ export class NewsurveysComponent implements OnInit {
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
       // this.utils.showLoading('Getting Surveys').then(()=>{
-        this.apiService.getSurveyorSurveys("status=surveyassigned&status=surveyinprocess").subscribe(response => {
+        this.apiService.getSurveyorSurveys("status=surveyassigned").subscribe(response => {
           // this.utils.hideLoading().then(()=>{
             this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
               console.log(response);

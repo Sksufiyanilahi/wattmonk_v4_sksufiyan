@@ -72,7 +72,7 @@ export class SurveyComponent  {
   storageDirectory: string;
 
   constructor(
-    private utils: UtilitiesService,
+    public utils: UtilitiesService,
     private alertController:AlertController,
     private socialsharing: SocialSharing,
     public modalController: ModalController,

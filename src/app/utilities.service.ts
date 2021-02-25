@@ -631,7 +631,7 @@ export class UtilitiesService {
 		);
        
 	}
-	formatTimeInDisplayFormat(datestring: string) {
+	formatTimeInDisplayFormat(datestring: any) {
 		if (datestring != null) {
 		  var d = new Date(datestring);
 		  var offset = d.getTimezoneOffset();
@@ -641,6 +641,23 @@ export class UtilitiesService {
 			minute: 'numeric'
 		  }).format(d);
 		  return formatted;
+		} else {
+		  return "-";
+		}
+	  }
+
+	  formatDateInDisplayFormat(datestring: any) {
+		if (datestring != null) {
+		  const d = new Date(datestring);
+		  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+		  const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+		  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+		  const today = new Date();
+		  if (d.setHours(0, 0, 0, 0) == today.setHours(0, 0, 0, 0)) {
+			return "Today";
+		  } else {
+			return (`${da} ${mo} ${ye}`);
+		  }
 		} else {
 		  return "-";
 		}

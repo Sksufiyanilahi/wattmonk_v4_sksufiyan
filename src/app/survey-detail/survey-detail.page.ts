@@ -55,7 +55,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   iseditable = true;
 
   constructor(
-    private utilities: UtilitiesService,
+    public utilities: UtilitiesService,
     private apiService: ApiService,
     private route: ActivatedRoute,
     private navController: NavController,

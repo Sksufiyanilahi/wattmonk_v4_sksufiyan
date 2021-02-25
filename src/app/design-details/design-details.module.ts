@@ -10,6 +10,8 @@ import { DesignDetailsPage } from './design-details.page';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { NgxTimerModule } from 'ngx-timer';
+import { LinkifyPipe } from '../linkify.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -19,7 +21,8 @@ import { NgxTimerModule } from 'ngx-timer';
     IonicModule,
     DesignDetailsPageRoutingModule,
     UtilitiesModule,
-    NgxTimerModule
+    NgxTimerModule,
+    SharedModule
   ],
   declarations: [DesignDetailsPage],
   providers: [

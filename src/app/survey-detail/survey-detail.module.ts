@@ -12,6 +12,8 @@ import { UtilitiesModule } from '../utilities/utilities.module';
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 import { ModalPageComponent } from './modal-page/modal-page.component';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { LinkifyPipe } from '../linkify.pipe';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -21,7 +23,8 @@ import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
     IonicModule,
     IonBottomDrawerModule,
     SurveyDetailPageRoutingModule,
-    UtilitiesModule
+    UtilitiesModule,
+    SharedModule
   ],
   declarations: [SurveyDetailPage,ModalPageComponent],
   providers: [
