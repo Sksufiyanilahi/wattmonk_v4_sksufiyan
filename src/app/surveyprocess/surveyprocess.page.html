@@ -114,6 +114,7 @@
                         <ion-row class="stepper-list-row">
                             <p [ngClass]="childshot.questionstatus ? 'stepper-text-active' : 'stepper-text-default'">
                                 {{childshot.questioninfo}}</p>
+                            <ion-icon name="pencil-outline" (click)="handleEditQuestionInput(childshot)"></ion-icon>
                         </ion-row>
                     </ion-col>
                 </ion-row>
@@ -190,10 +191,6 @@
                                 *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
                             <span class="error">Field input is required.</span>
                         </div>
-                        <div
-                                *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value !== '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).errors?.pattern">
-                            <span class="error">Field input does not matches the specified pattern.</span>
-                        </div>
                     </div>
                 </form>
                 <ion-row class="ion-float-right">
@@ -220,9 +217,35 @@
                                 *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
                             <span class="error">Field input is required.</span>
                         </div>
+                    </div>
+                </form>
+                <ion-row class="ion-float-right">
+                    <ion-button fill="clear" size="small" (click)="handleInputTextSubmission(activeForm)">
+                        {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
+                    </ion-button>
+                </ion-row>
+            </ion-col>
+        </ion-row>
+
+        <!-- Row for input two dimensions question -->
+        <ion-row class="questionaireview-row ion-padding-horizontal"
+                 *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_TWO_DIMENSIONS">
+            <ion-col size="12">
+                <p>
+                    {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+                </p>
+                <form [formGroup]="activeForm" novalidate style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <ion-input type="number" class="form-control" autocomplete="off"
+                               formControlName="dimensionA">
+                    </ion-input>
+                    <span>x</span>
+                    <ion-input type="number" class="form-control" autocomplete="off"
+                               formControlName="dimensionB">
+                    </ion-input>
+                    <div class="error_div">
                         <div
-                                *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value !== '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).errors?.pattern">
-                            <span class="error">Field input does not matches the specified pattern.</span>
+                                *ngIf="activeForm.get('dimensionA').dirty || activeForm.get('dimensionB').dirty">
+                            <span class="error">Field input is required.</span>
                         </div>
                     </div>
                 </form>
@@ -769,9 +792,6 @@
                                             <div *ngIf="activeForm.get(shot.inputformcontrol).value === '' && activeForm.get(shot.inputformcontrol).dirty">
                                                 <span class="error">Field input is required.</span>
                                             </div>
-                                            <div *ngIf="activeForm.get(shot.inputformcontrol).value !== '' && activeForm.get(shot.inputformcontrol).errors?.pattern">
-                                                <span class="error">Field input does not matches the specified pattern.</span>
-                                            </div>
                                         </div>
                                     </ion-col>
                                     <ion-col size="12" *ngIf="shot.questiontype == QuestionTypes.INPUT_TEXT">
@@ -780,9 +800,6 @@
                                         <div class="error_div">
                                             <div *ngIf="activeForm.get(shot.inputformcontrol).value === '' && activeForm.get(shot.inputformcontrol).dirty">
                                                 <span class="error">Field input is required.</span>
-                                            </div>
-                                            <div *ngIf="activeForm.get(shot.inputformcontrol).value !== '' && activeForm.get(shot.inputformcontrol).errors?.pattern">
-                                                <span class="error">Field input does not matches the specified pattern.</span>
                                             </div>
                                         </div>
                                     </ion-col>
