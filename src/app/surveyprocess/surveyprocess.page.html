@@ -749,25 +749,6 @@
                                     <ion-col size="12">
                                         <ion-label>{{shot.question}}</ion-label>
                                     </ion-col>
-                                    <ion-col size="12" *ngIf="child.allowmultipleshots == false else multipleshots">
-                                        <ng-container *ngFor="let capturedShot of child.capturedshots">
-                                            <img [src]="capturedShot.shotimage"
-                                                 *ngIf="capturedShot.imagename == shot.imagename"
-                                                 style="width: 100px; height: 100px;"/>
-                                        </ng-container>
-                                    </ion-col>
-                                    <ng-template #multipleshots>
-                                        <ion-col size="12">
-                                            <ng-container *ngFor="let capturedShot of child.capturedshots">
-                                                <div *ngIf="capturedShot.imagekey == shot.imagekey"
-                                                     style="display: flex; flex-direction: column">
-                                                    <img [src]="capturedShot.shotimage"
-                                                         style="width: 100px; height: 100px; margin-right: 0.5rem;"/>
-                                                    <span>{{capturedShot.imagename}}</span>
-                                                </div>
-                                            </ng-container>
-                                        </ion-col>
-                                    </ng-template>
                                     <ion-col size="12" *ngIf="shot.questiontype == QuestionTypes.OPTIONS">
                                         <ion-radio-group [formControlName]="shot.inputformcontrol">
                                             <ion-item *ngFor="let option of shot.actions">
@@ -805,6 +786,25 @@
                                             </div>
                                         </div>
                                     </ion-col>
+                                    <ion-col size="12" *ngIf="child.allowmultipleshots == false else multipleshots">
+                                        <ng-container *ngFor="let capturedShot of child.capturedshots">
+                                            <img [src]="capturedShot.shotimage"
+                                                 *ngIf="capturedShot.imagename == shot.imagename"
+                                                 style="width: 100px; height: 100px;"/>
+                                        </ng-container>
+                                    </ion-col>
+                                    <ng-template #multipleshots>
+                                        <ion-col size="12">
+                                            <ng-container *ngFor="let capturedShot of child.capturedshots">
+                                                <div *ngIf="capturedShot.imagekey == shot.imagekey"
+                                                     style="display: flex; flex-direction: column; margin-right: 0.5rem;">
+                                                    <img [src]="capturedShot.shotimage"
+                                                         style="width: 100px; height: 100px;"/>
+                                                    <span>{{capturedShot.imagename}}</span>
+                                                </div>
+                                            </ng-container>
+                                        </ion-col>
+                                    </ng-template>
                                 </ng-container>
                             </ion-row>
                         </ng-container>
