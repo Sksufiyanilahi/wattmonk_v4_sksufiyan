@@ -265,6 +265,8 @@ export class SurveyprocessPage implements OnInit {
     hasBatterySystem: boolean;
     reviewForm = false;
     isSaveFormCalled = false;
+    editingMode = false;
+    editingModePreviousIndex;
 
     constructor(
         private cameraPreview: CameraPreview,
@@ -968,11 +970,11 @@ export class SurveyprocessPage implements OnInit {
         this.issidemenucollapsed = true;
         this.isgallerymenucollapsed = true;
         const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-        this.activeForm.get(currentIndex.shots[this.selectedshotindex].inputformcontrol).setValue(result);
-        currentIndex.shots[this.selectedshotindex].result = result;
-        currentIndex.shots[this.selectedshotindex].promptquestion = false;
-        currentIndex.shots[this.selectedshotindex].questionstatus = true;
-
+        let shotDetail = currentIndex.shots[this.selectedshotindex];
+        shotDetail.result = result;
+        shotDetail.promptquestion = false;
+        shotDetail.questionstatus = true;
+        this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
         if (this.surveytype == 'pvbattery' && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 0) {
             this.handleGroundShotsVisibility();
         } else if (this.surveytype == 'pvbattery' && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 1) {
@@ -1195,9 +1197,14 @@ export class SurveyprocessPage implements OnInit {
 
         if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
             this.markShotCompletion(this.selectedshotindex);
-            this.updateProgressStatus();
+            if (!this.editingMode) {
+                this.updateProgressStatus();
+            }
             if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1 && selectedSubMenuDoesNotExist != false) {
                 this.selectedshotindex += 1;
+                if (this.editingMode) {
+                    this.selectedshotindex = this.editingModePreviousIndex;
+                }
             } else {
                 if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
                     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
@@ -1264,8 +1271,14 @@ export class SurveyprocessPage implements OnInit {
             if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0) {
                 this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
                 this.markShotCompletion(this.selectedshotindex);
-                this.updateProgressStatus();
+                if (!this.editingMode) {
+                    this.updateProgressStatus();
+                }
             }
+        }
+        if (this.editingMode) {
+            this.editingMode = false;
+            this.editingModePreviousIndex = '';
         }
     }
 
@@ -1897,26 +1910,32 @@ export class SurveyprocessPage implements OnInit {
     }
 
     handleShotDelete() {
-        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0) {
-            if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 1) {
+        const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+        if (currentIndex.capturedshots.length > 0) {
+            if (currentIndex.capturedshots.length == 1) {
                 this.sliderIndex = 0;
             }
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.splice(this.sliderIndex, 1);
-            const imagename = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedmainmenuindex].capturedshots[this.sliderIndex].imagename;
-            const shots = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedmainmenuindex].shots;
+            currentIndex.capturedshots.splice(this.sliderIndex, 1);
+            const imagename = currentIndex.capturedshots[this.sliderIndex].imagename;
+            const shots = currentIndex.shots;
             const filteredShot = shots.filter(shot => shot.imagename === imagename)[0];
             if (filteredShot.inputformcontrol != '') {
                 this.activeForm[filteredShot.inputformcontrol].value = '';
             }
+            currentIndex.shots[this.selectedshotindex].shotstatus = false;
+            currentIndex.shots[this.selectedshotindex].questionstatus = false;
+            currentIndex.shots[this.selectedshotindex].ispending = true;
+            currentIndex.ispending = true;
             this.slideDidChange();
         }
-        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 0) {
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = false;
-            if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == QUESTIONTYPE.NONE) {
-                this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = false;
-            }
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = true;
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+        if (currentIndex.capturedshots.length === 0) {
+            currentIndex.shots[this.selectedshotindex].shotstatus = false;
+            /*if (currentIndex.shots[this.selectedshotindex].questiontype == QUESTIONTYPE.NONE) {
+                currentIndex.shots[this.selectedshotindex].questionstatus = false;
+            }*/
+            currentIndex.shots[this.selectedshotindex].questionstatus = false;
+            currentIndex.shots[this.selectedshotindex].ispending = true;
+            currentIndex.ispending = true;
 
             this.handleGalleryBack();
         }
@@ -1943,7 +1962,12 @@ export class SurveyprocessPage implements OnInit {
         console.log(this.hasBatterySystem);
     }
 
-    handleEditQuestionInput(childShot) {
-        console.log(childShot);
+    handleEditQuestionInput(index) {
+        this.editingMode = true;
+        this.editingModePreviousIndex = this.selectedshotindex;
+        this.selectedshotindex = index;
+        const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index];
+        shotDetail.promptquestion = true;
+        this.iscapturingallowed = false;
     }
 }
