@@ -1911,34 +1911,37 @@ export class SurveyprocessPage implements OnInit {
 
     handleShotDelete() {
         const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-        if (currentIndex.capturedshots.length > 0) {
-            if (currentIndex.capturedshots.length == 1) {
-                this.sliderIndex = 0;
-            }
+        let shot = currentIndex.shots[this.selectedshotindex];
+        console.log(this.selectedshotindex);
+        if (currentIndex.capturedshots.length > 1) {
             currentIndex.capturedshots.splice(this.sliderIndex, 1);
+            console.log(currentIndex.capturedshots[this.sliderIndex]);
+            console.log(currentIndex.capturedshots[this.sliderIndex].imagename);
             const imagename = currentIndex.capturedshots[this.sliderIndex].imagename;
-            const shots = currentIndex.shots;
-            const filteredShot = shots.filter(shot => shot.imagename === imagename)[0];
-            if (filteredShot.inputformcontrol != '') {
-                this.activeForm[filteredShot.inputformcontrol].value = '';
+            this.selectedshotindex = currentIndex.shots.findIndex(s => s.imagename === imagename);
+            shot = currentIndex.shots[this.selectedshotindex];
+            if (shot.inputformcontrol != '') {
+                this.activeForm.get(shot.inputformcontrol).setValue('');
             }
-            currentIndex.shots[this.selectedshotindex].shotstatus = false;
-            currentIndex.shots[this.selectedshotindex].questionstatus = false;
-            currentIndex.shots[this.selectedshotindex].ispending = true;
-            currentIndex.ispending = true;
             this.slideDidChange();
-        }
-        if (currentIndex.capturedshots.length === 0) {
-            currentIndex.shots[this.selectedshotindex].shotstatus = false;
-            /*if (currentIndex.shots[this.selectedshotindex].questiontype == QUESTIONTYPE.NONE) {
-                currentIndex.shots[this.selectedshotindex].questionstatus = false;
-            }*/
-            currentIndex.shots[this.selectedshotindex].questionstatus = false;
-            currentIndex.shots[this.selectedshotindex].ispending = true;
-            currentIndex.ispending = true;
-
+        } else if (currentIndex.capturedshots.length === 1) {
+            this.sliderIndex = 0;
+            currentIndex.capturedshots.splice(this.sliderIndex, 1);
+            this.selectedshotindex = 0;
+            shot = currentIndex.shots[this.selectedshotindex];
+            if (shot.inputformcontrol != '') {
+                this.activeForm.get(shot.inputformcontrol).setValue('');
+            }
+            this.handleGalleryBack();
+        } else if (currentIndex.capturedshots.length === 0) {
+            this.selectedshotindex = 0
+            shot = currentIndex.shots[this.selectedshotindex];
             this.handleGalleryBack();
         }
+        shot.shotstatus = false;
+        shot.questionstatus = false;
+        shot.ispending = true;
+        currentIndex.ispending = true;
     }
 
     async slideDidChange(): Promise<void> {
