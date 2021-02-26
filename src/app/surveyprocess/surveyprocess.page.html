@@ -809,11 +809,11 @@
                                     <ion-col size="12" *ngIf="shot.questiontype == QuestionTypes.INPUT_TWO_DIMENSIONS">
                                         <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
                                             <ion-input type="number" class="form-control" autocomplete="off"
-                                                       formControlName="dimensionA">
+                                                       formControlName="dimensionA" [value]="activeForm.get(shot.inputformcontrol).value.split('x')[0]">
                                             </ion-input>
                                             <span>x</span>
                                             <ion-input type="number" class="form-control" autocomplete="off"
-                                                       formControlName="dimensionB">
+                                                       formControlName="dimensionB" [value]="activeForm.get(shot.inputformcontrol).value.split('x')[1]">
                                             </ion-input>
                                         </div>
                                         <div class="error_div">
