@@ -934,7 +934,8 @@ saveInverterModel() {
                         designacceptancestarttime:designacceptancestarttime,
                         isoutsourced:isoutsourced,
                         issurveycompleted:this.desginForm.get('issurveycompleted').value,
-                        survey:this.surveydata.id
+                        survey:this.surveydata.id,
+                        isdesignraised:true
 
   }}
 
@@ -976,6 +977,7 @@ else{
   outsourcedto:designoutsourcedto,
   designacceptancestarttime:designacceptancestarttime,
   isoutsourced:isoutsourced,
+  isdesignraised:true
   
 }}
 
@@ -1059,6 +1061,7 @@ else{
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
+                        isdesignraised:true
 
 
 
@@ -1169,7 +1172,8 @@ else{
                         creatorparentid:this.desginForm.get('creatorparentid').value,
                         outsourcedto:designoutsourcedto,
                         designacceptancestarttime:designacceptancestarttime,
-                        isoutsourced:isoutsourced
+                        isoutsourced:isoutsourced,
+                        isdesignraised:true
 
   }
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
@@ -1217,7 +1221,7 @@ else{
           }
           else if(this.formValue==='send'){
             this.isEdit = false;
-            var postData = {
+            const postData = {
                           name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
@@ -1249,6 +1253,7 @@ else{
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
+                        isdesignraised:true
 
 
   }
