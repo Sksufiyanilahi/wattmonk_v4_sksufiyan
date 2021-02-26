@@ -313,11 +313,11 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
             }
           });
           this.listOfSurveyDataHelper=tempData;
-          this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
-            var dateA = new Date(a.date).getTime(),
-              dateB = new Date(b.date).getTime();
-            return dateB - dateA;
-          });
+          // this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+          //   var dateA = new Date(a.date).getTime(),
+          //     dateB = new Date(b.date).getTime();
+          //   return dateB - dateA;
+          // });
           this.cdr.detectChanges();
   }
 
@@ -701,7 +701,8 @@ this.utils.showLoading('Assigning').then(()=>{
     let objToSend: NavigationExtras = {
       queryParams: {
          surveyData:data,
-         tabsDisabled:true
+         tabsDisabled:true,
+         nonEditableField:true
         },
       skipLocationChange: false,
       fragment: 'top' 

@@ -128,6 +128,7 @@ export class PermitschedulePage implements OnInit {
   attachmentFileUpload: boolean= false;
   netSwitch: any;
   deactivateNetworkSwitch: Subscription;
+  nonEditableField: any;
   // newpermits: Observable<any>;
   // newpermitsRef: AngularFireObject<any>;
   // newpermitscount = 0;
@@ -248,6 +249,7 @@ export class PermitschedulePage implements OnInit {
     if( this.data!=undefined){
    this.surveydata = this.data.productdetails.queryParams.surveyData;
    this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
+   this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
    console.log(this.surveydata)
    this.surveydatapresent=true
  
@@ -384,6 +386,11 @@ export class PermitschedulePage implements OnInit {
      
     });
      this.utils.setStaticAddress(this.surveydata.address);
+     if(this.desginForm.get('email').value==''){
+      this.fieldDisabled= false;
+     }else{
+       this.fieldDisabled = true;
+     }
   }
 
   uploadcontrolvalidation(){
