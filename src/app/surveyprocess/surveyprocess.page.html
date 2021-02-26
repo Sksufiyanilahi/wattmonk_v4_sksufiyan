@@ -114,7 +114,8 @@
                         <ion-row class="stepper-list-row">
                             <p [ngClass]="childshot.questionstatus ? 'stepper-text-active' : 'stepper-text-default'">
                                 {{childshot.questioninfo}}</p>
-                            <ion-icon name="pencil-outline" (click)="handleEditQuestionInput(childshot)"></ion-icon>
+                            &nbsp;&nbsp;
+                            <ion-icon *ngIf="childshot.questionstatus" name="pencil-outline" (click)="handleEditQuestionInput(i)"></ion-icon>
                         </ion-row>
                     </ion-col>
                 </ion-row>
