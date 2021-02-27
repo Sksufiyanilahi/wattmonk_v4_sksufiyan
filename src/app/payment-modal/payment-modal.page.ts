@@ -13,6 +13,7 @@ import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { DesginDataModel } from '../model/design.model';
 import { ThemeService } from 'ng2-charts';
+import {IPayPalConfig,ICreateOrderRequest } from 'ngx-paypal';
 
 @Component({
   selector: 'app-payment-modal',
@@ -20,6 +21,7 @@ import { ThemeService } from 'ng2-charts';
   styleUrls: ['./payment-modal.page.scss'],
 })
 export class PaymentModalPage implements OnInit {
+public payPalConfig ? : IPayPalConfig;
 user
 id:any
 design:any
@@ -49,6 +51,7 @@ netPay:any
   designData:any;
   fulldesigndata: any;
   delivertime:String="6-12";
+ 
 
    
   constructor( private storageService:StorageService,
@@ -102,6 +105,7 @@ netPay:any
       (err) => console.log(err),
       () => console.log('done!')
     )
+    this.paypalintegration()
      }
 
   ngOnInit() {
@@ -131,6 +135,7 @@ netPay:any
     this.utils.hideLoading();
     this.isShow=true
     }, 2000);
+    
   
   }
   ionViewDidEnter(){
@@ -183,11 +188,11 @@ discountAmount(){
   else if(this.coupondata!=null){ 
     if(this.design=='prelim'){
     this.discount=this.code_discount;
-    this.netPay=this.settingValue-this.code_discount;
+    this.netPay=(this.settingValue-this.code_discount).toFixed(2);
     console.log(this.netPay)}
     if(this.design=='permit'){
-      this.discount=this.code_discount+this.discount;
-      this.netPay=this.netPay-this.discount;
+      this.discount=this.code_discount;
+      this.netPay=(this.netPay-this.discount).toFixed(2);
     }
   }
   else{
@@ -230,6 +235,7 @@ servicecharges(){
           this.netPay=0
           this.isradiodisable=true
         }else{
+          this.delivertime=this.servicePrice.slabname;
           this.netPay=this.servicePrice.paymentamount;
           this.discount=this.servicePrice.slabdiscount;
           this.isradiodisable=false
@@ -266,8 +272,10 @@ confirm(){
       designacceptancestarttime: designacceptancestarttime,
       slabname:this.delivertime,
       slabdiscount:this.servicePrice.slabdiscount,
-      serviceamount:this.servicePrice.servicecharge,
-      amount:this.netPay
+      serviceamount:this.servicePrice.paymentamount,
+      amount:parseInt(this.netPay),
+      paymenttype:"wallet",
+      paymentstatus:null
     };
   }
    
@@ -321,7 +329,7 @@ confirm(){
         fulldesigndata:this.fulldesigndata,
         slabname:this.delivertime,
         slabdiscount:this.servicePrice.slabdiscount,
-        serviceinitialamount:this.servicePrice.servicecharge
+        serviceinitialamount:this.servicePrice.paymentamount
       },
       skipLocationChange: false,
       fragment: 'top' 
@@ -381,7 +389,7 @@ confirm(){
           paymenttype:null,
           slabname:this.delivertime,
           slabdiscount:this.servicePrice.slabdiscount,
-          serviceamount:this.servicePrice.servicecharge,
+          serviceamount:this.servicePrice.paymentamount,
           amount:this.netPay
         };
       }
@@ -483,7 +491,7 @@ confirm(){
   codeDiscountCalculation(data,price:number){
   if(data.discounttype=='percentage'){
     console.log(price)
-    this.code_discount=(data.amount/100)*price;
+    this.code_discount=(data.amount/100)*this.netPay;
   // this.code_discount= this.code_discount.toFixed(2);
   this.discountAmount();
     console.log(this.code_discount)
@@ -566,4 +574,164 @@ this.servicecharges();
 this.removeCoupon();
 
   }
+  
+
+
+ private paypalintegration(){
+    this.payPalConfig = {
+      currency: 'USD',
+      //for testing
+      clientId: 'AV1abOj-_YOVXq_Negcy7Fkc2Esj2GtpY2dRe3nrTwPl4HSX22jbXQ6KKhyJRO7JjPxP__sr7wqi57bg',
+     // for live
+     //  CLIENT_ID: 'AfKOgzK6Le8LRp8bN4vefjNqC9B7qArUHJt0U_wUmed6hlDHlP-TlHYG9olpqTX85VhHHOD3T9pkfKuP',
+
+      createOrderOnClient: (data) =>< ICreateOrderRequest >{
+        intent: 'CAPTURE',
+        purchase_units: [{
+                    amount: {
+                      value: this.netPay
+                    }
+                  }]
+        
+      },
+    
+      advanced: { extraQueryParams: [ { name: "disable-funding", value:"credit,card"} ],
+    commit:'true' } ,
+    
+      style: {
+              size: 'responsive',
+              color: 'silver',
+              shape: 'rect',
+              label: 'pay',
+              tagline:false,
+              
+      },
+
+   
+      onApprove: (data, actions) => {
+          console.log('onApprove - transaction was approved, but not authorized', data, actions);
+          actions.order.get().then(details => {
+         console.log('onApprove - you can get full order details inside onApprove: ', details);
+         var postData={};
+         var designacceptancestarttime = new Date();
+         if(this.design=='prelim'){
+         designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+         postData = {
+           outsourcedto: 232,
+           isoutsourced: "true",
+           status: "outsourced",
+           couponid:this.utils.getCouponId().value,
+           designacceptancestarttime: designacceptancestarttime,
+           paymenttype:"paypal",
+           paymentstatus:"succeeded"
+           
+         };
+         }
+         else{
+           designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+           postData = {
+             outsourcedto: 232,
+             isoutsourced: "true",
+             status: "outsourced",
+             couponid:this.utils.getCouponId().value,
+             designacceptancestarttime: designacceptancestarttime,
+             slabname:this.delivertime,
+             slabdiscount:this.servicePrice.slabdiscount,
+             serviceamount:this.servicePrice.servicecharge,
+             amount:this.netPay,
+             paymenttype:"paypal",
+             paymentstatus:"succeeded"
+           };
+         }
+          
+           this.utils.showLoading("Assigning").then(()=>
+           {
+               this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
+                 if(this.design=='prelim')
+             {
+               this.createChatGroup(value);
+               this.newprelimsRef.update({ count: this.newprelimscount + 1});
+               console.log("hello",this.newprelimscount)
+             }else{
+               this.createChatGroup(value);
+               this.newpermitsRef.update({ count: this.newpermitscount + 1});
+             }
+               this.utils.hideLoading().then(()=>
+              { this.utils.showSnackBar("Design request has been send to wattmonk successfully")
+              //this.navController.pop();
+              if(this.design=='prelim'){
+                this.router.navigate(['/homepage/design'])
+              this.utils.setHomepageDesignRefresh(true);
+              }
+              else{
+               this.router.navigate(['/permithomepage/permitdesign'])
+                this.utils.setHomepagePermitRefresh(true);
+              }
+              })
+             })
+             })
+          });
+
+      },
+      onClientAuthorization: (data) => {
+          console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+          // this.showSuccess = true;
+      },
+      onCancel: (data, actions) => {
+          console.log('OnCancel', data, actions);
+          // this.showCancel = true;
+
+      },
+      onError: err => {
+          console.log('OnError', err);
+          // this.showError = true;
+      },
+      onClick: (data, actions) => {
+          console.log('onClick', data, actions);
+          // this.resetStatus();
+      },
+  };
 }
+
+
+
+    // let _this = this;
+    // setTimeout(() => {
+    //   // Render the PayPal button into #paypal-button-container
+    //   <any>window['paypal'].Buttons({
+     
+    //      style: {
+    //       size: 'responsive',
+    //       color: 'white',
+    //       shape: 'rect',
+    //       label: 'pay',
+    //       tagline:false
+    //   },
+    
+    //     // Set up the transaction
+    //     createOrder: function (data, actions) {
+    //       return actions.order.create({
+    //         purchase_units: [{
+    //           amount: {
+    //             value: _this.netPay
+    //           }
+    //         }]
+    //       });
+    //     },
+
+    //     // Finalize the transaction
+    //     onApprove: function (data, actions) {
+    //       return actions.order.capture()
+    //         .then(function (details) {
+    //           // Show a success message to the buyer
+    //           alert('Transaction completed by ' + details.payer.name.given_name + '!');
+    //         })
+    //         .catch(err => {
+    //           console.log(err);
+    //         })
+    //     }
+    //   }).render('#paypal-button-container');
+    // }, 2000)
+  }
+  
+

@@ -132,7 +132,10 @@
        <ion-item (click)="addWallet('card')" *ngIf="netPay>user?.amount || amounttopay > user?.amount">
         <ion-button  fill="clear"  ><ion-icon name="card-outline" style="color:brown;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Pay via card </ion-label></ion-button>
       </ion-item>
-    </ion-col>
+      <ion-col size="12" *ngIf="netPay>user?.amount || amounttopay > user?.amount">
+        <ngx-paypal class="paypal-button" [config]="payPalConfig"></ngx-paypal></ion-col>
+      </ion-col>
+   
     <ion-col size="12" *ngIf="!user?.ispaymentmodeprepay" >
       <!-- <ion-item  (click)="confirmforPostpaid()" >
         <ion-button  fill="clear"><ion-icon name="checkmark-circle-outline" style="color: blue;"></ion-icon>&nbsp;<ion-label class="black">Confirm</ion-label></ion-button>
