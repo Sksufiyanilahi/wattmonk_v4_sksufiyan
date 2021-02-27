@@ -72,7 +72,7 @@ export class SurveyComponent  {
   storageDirectory: string;
 
   constructor(
-    private utils: UtilitiesService,
+    public utils: UtilitiesService,
     private alertController:AlertController,
     private socialsharing: SocialSharing,
     public modalController: ModalController,
@@ -468,7 +468,7 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     if(this.assignForm.status === 'INVALID' && (this.surveyData.status === 'reviewassigned' || this.surveyData.status === 'reviewfailed' || this.surveyData.status === 'reviewpassed')){
       this.utils.errorSnackBar('Please select a analyst');
     }
-    else if (this.assignForm.status === 'INVALID' && this.surveyData.status === 'requestaccepted') {
+    else if (this.assignForm.status === 'INVALID') {
       this.utils.errorSnackBar('Please select a surveyor');
     }
     else if( this.reviewAssignedTo!=null && (this.selectedDesigner.id==this.reviewAssignedTo.id)){
@@ -701,6 +701,8 @@ this.utils.showLoading('Assigning').then(()=>{
     let objToSend: NavigationExtras = {
       queryParams: {
          surveyData:data,
+         tabsDisabled:true,
+         nonEditableField:true
         },
       skipLocationChange: false,
       fragment: 'top' 
@@ -771,7 +773,7 @@ state: { productdetails: objToSend }
   }
 
   createNewDesignChatGroup(survey:SurveyDataModel) {
-    var GUID = 'survey' + "_" + new Date().getTime();
+    var GUID = survey.chatid;
     var address = survey.address.substring(0, 60);
     var groupName = survey.name + "_" + address;
   
@@ -789,19 +791,19 @@ state: { productdetails: objToSend }
         CometChat.addMembersToGroup(group.getGuid(), membersList, []).then(
           response => {
             // if(design.requesttype == "permit"){
-              let postdata={
-                chatid:GUID
-              // } 
-            }
+            //   let postdata={
+            //     chatid:GUID
+            //   // } 
+            // }
   
-              this.apiService.updateSurveyForm(postdata,this.surveyId).subscribe(res=>{
-                console.log(res);
-                this.chatid=res.chatid;
-                console.log(this.chatid);
+              // this.apiService.updateSurveyForm(postdata,this.surveyId).subscribe(res=>{
+                // console.log(res);
+                // this.chatid=res.chatid;
+                // console.log(this.chatid);
                 this.updatechat_id=true;
-                this.addUserToGroupChat();
+                this.addUserToGroupChat(GUID);
                 
-              })
+              // })
               // this.updateItemInList(LISTTYPE.NEW, design);
             // }else{
               // this.updateItemInPermitList(LISTTYPE.NEW, design);
@@ -818,9 +820,8 @@ state: { productdetails: objToSend }
    
   }
   
-        addUserToGroupChat() {
-          debugger;
-        var GUID = this.chatid;
+        addUserToGroupChat(GUID) {
+         
         var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
         
           // userscope = CometChat.GROUP_MEMBER_SCOPE.ADMIN;
@@ -926,14 +927,14 @@ state: { productdetails: objToSend }
   }
 
   designDownload(designData){
-
+  let pdf=   designData.surveypdf==null ? '': designData.surveypdf;
   this.platform.ready().then(()=>{
     this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
         result => console.log('Has permission?',result.hasPermission),
         err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
       );
-      this.file.checkFile(resolvedDirectory.nativeURL,designData.surveypdf).then(data=>{
+      this.file.checkFile(resolvedDirectory.nativeURL,pdf.url).then(data=>{
         console.log(data);
   
         if(data==true){
@@ -948,9 +949,9 @@ state: { productdetails: objToSend }
         console.log(err);
         if (err.code == 1) {
           const fileTransfer: FileTransferObject = this.transfer.create();
-          this.utils.showLoading('Downloading').then(()=>{
-            fileTransfer.download(url, this.storageDirectory + designData.surveypdf).then((entry) => {
-              this.utils.hideLoading().then(()=>{
+          // this.utils.showLoading('Downloading').then(()=>{
+            fileTransfer.download(url, this.storageDirectory + pdf.url).then((entry) => {
+              // this.utils.hideLoading().then(()=>{
                 console.log('download complete: ' + entry.toURL());
                 this.utils.showSnackBar("Survey File Downloaded Successfully");
                 
@@ -959,13 +960,13 @@ state: { productdetails: objToSend }
                 //   path;
                 // })
                 this.localnotification.schedule({text:'Survey File Downloaded Successfully', foreground:true, vibrate:true })
-              }, (error) => {
-                // handle error
-                console.log(error);
+              // }, (error) => {
+              //   // handle error
+              //   console.log(error);
                 
-              });
+              // });
               })
-          })
+          // })
         }
       })
     })
@@ -1008,7 +1009,7 @@ state: { productdetails: objToSend }
    
    fileTransfer.download(url, path + designData.surveypdf.hash + designData.surveypdf.ext).then((entry) => {
      console.log('download complete: ' + entry.toURL());
-     this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+     this.utils.showSnackBar("Survey File Downloaded Successfully");
      
      // this.clickSub = this.localnotification.on('click').subscribe(data => {
      //   console.log(data)

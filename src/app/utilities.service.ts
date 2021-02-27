@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { AlertController, LoadingController, ModalController, NavController, ToastController } from '@ionic/angular';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
 import { AddressModel } from './model/address.model';
 import { AssigneeModel } from './model/assignee.model';
@@ -77,7 +77,7 @@ export class UtilitiesService {
 		private location: Location
 	) {
 		this.guid$ = this.myMethodSubject.asObservable();
-		this.listencall();
+		// this.listencall();
 		this.user = this.storageService.getUser();
 		this.currentUserSubject = new BehaviorSubject<LoginModel>(this.user);
 		this.currentUser = this.currentUserSubject.asObservable();
@@ -566,72 +566,56 @@ export class UtilitiesService {
 
 		return promise;
 	}
+	setupCometChat(): Observable<any> {
+        const appSetting = new CometChat.AppSettingsBuilder()
+            .subscribePresenceForAllUsers()
+            .setRegion(COMETCHAT_CONSTANTS.REGION)
+            .build();
 
+        return from(CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+            () => {
+                if (this.storageService.getUserID() !== '') {
+                    this.doCometUserLogin();
+                }
+                console.log('Initialization completed successfully');
+                // if(this.utilities.currentUserValue != null){
+                // You can now call login function.
+
+                // }
+            },
+            (error) => {
+                console.log('Initialization failed with error:', error);
+            }
+        ));
+    }
+	
 	doCometUserLogin() {
-		// let userId = this.storageService.getUserID()
-        // const user = new CometChat.User(userId);
-        // user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
-        // const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
-        // CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
-        //   () => {
-        //     console.log('Initialization completed successfully');
-        //     // if(this.utilities.currentUserValue != null){
-        //       // You can now call login function.
-        //       CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
-        //         (user) => {
-        //           console.log('Login Successful:', { user });
-        //         },
-        //         error => {
-        //           console.log('Login failed with exception:', { error });
-        //         }
-        //       );
-        //   // }
-        //   },
-        //   error => {
-        //     console.log('Initialization failed with error:', error);
-        //   }
-        // );
-		CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-			loggedInUser => {
-				console.log('Login Successful:', {loggedInUser});
-				this.listencall();
-			},
-			error => {
-				if (error.code === 'ERR_UID_NOT_FOUND') {
-					const userDetails = new CometChat.User(this.storageService.getUserID());
-					userDetails.setName(this.storageService.getUserName());
-					CometChat.createUser(userDetails, COMETCHAT_CONSTANTS.API_KEY).then(
-						user => {
-							console.log('user created', user);
-							CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-								loggedInUser => {
-									console.log('Login Successful:', {loggedInUser});
-									this.listencall();
-								},
-								error => {
-									console.log('Login failed with exception:', {error});
-								}
-							);
-						},
-						error => {
-							CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-								loggedInUser => {
-									console.log('Login Successful:', {loggedInUser});
-									this.listencall();
-								},
-								error => {
-									console.log('Login failed with exception:', {error});
-								}
-							);
-							console.log('error', error);
-						});
-				}
-				console.log('Login failed with exception:', {error});
-			}
-		);
+	    let userId = this.storageService.getUserID();
+    const user = new CometChat.User(userId);
+    user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
+      },
+      error => {
+        console.log('Initialization failed with error:', error);
+      }
+    );
        
 	}
-	formatTimeInDisplayFormat(datestring: string) {
+	formatTimeInDisplayFormat(datestring: any) {
 		if (datestring != null) {
 		  var d = new Date(datestring);
 		  var offset = d.getTimezoneOffset();
@@ -645,6 +629,42 @@ export class UtilitiesService {
 		  return "-";
 		}
 	  }
+
+	  formatDateInDisplayFormat(datestring: any) {
+		if (datestring != null) {
+		  const d = new Date(datestring);
+		  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+		  const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+		  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+		  const today = new Date();
+		  if (d.setHours(0, 0, 0, 0) == today.setHours(0, 0, 0, 0)) {
+			return "Today";
+		  } else {
+			return (`${da} ${mo} ${ye}`);
+		  }
+		} else {
+		  return "-";
+		}
+	  }
+
+	 formatDate(date) {
+		var d = new Date(date), 
+		hours = d.getHours(),
+		mins = d.getMinutes(),
+		seconds=  d.getSeconds(),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear();
+	
+		if (month.length < 2) 
+			month = '0' + month;
+		if (day.length < 2) 
+			day = '0' + day;
+			
+			
+	
+			return [year, month, day].join('-') + ' ' + [(hours < 10? '0':'') + hours,(mins < 10? '0':'')+ mins, (seconds < 10? '0':'') + seconds].join(':');
+	}
 }
 
 // getcount(){

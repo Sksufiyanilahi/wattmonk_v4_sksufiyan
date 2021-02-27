@@ -139,9 +139,9 @@ export class AppComponent {
 
     initializeApp() {
         this.platform.ready().then(() => {
-            setTimeout(() => {
+            // setTimeout(() => {
                 this.splashScreen.hide();
-            }, 1000);
+            // }, 1000);
             this.getFcmToken();
             if (this.platform.is('ios')) {
                 this.statusBar.overlaysWebView(false);
@@ -156,7 +156,7 @@ export class AppComponent {
             }
 
             this.getNotification();
-            this.setupCometChat();
+            this.utilities.setupCometChat();
             this.mix.initializeMixPanel();
 			this.backgroundMode.enable();
         });

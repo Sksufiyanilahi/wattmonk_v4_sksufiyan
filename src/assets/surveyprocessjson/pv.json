@@ -250,37 +250,6 @@
     "viewmode": 0,
     "children": [
       {
-        "name": "Roof Tilt",
-        "isactive": false,
-        "ispending": true,
-        "isvisible": true,
-        "checkexistence": false,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "allowmultipleshots": false,
-        "capturedshots": [],
-        "shots": [
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture Roof Tilt / Slope",
-            "questioninfo": "Provide Roof Tilt / Slope (degrees)",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "What's the roof tilt / slope?",
-            "actions": [
-              "Confirm"
-            ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 2,
-            "inputformcontrol": "rooftilt",
-            "imagekey": "rooftiltimages",
-            "imagename": "rooftilt"
-          }
-        ]
-      },
-      {
         "name": "Roof Photos",
         "isactive": false,
         "ispending": true,
@@ -295,15 +264,17 @@
             "isactive": false,
             "ispending": true,
             "shotinfo": "Capture roof from all angles",
-            "questioninfo": "",
+            "questioninfo": "Provide Roof Tilt / Slope (degrees)",
             "shotstatus": false,
             "promptquestion": false,
-            "question": "",
-            "actions": [],
+            "question": "What's the roof tilt / slope (in degrees)?",
+            "actions": [
+              "Confirm"
+            ],
             "result": "",
             "questionstatus": false,
-            "questiontype": 0,
-            "inputformcontrol": "",
+            "questiontype": 2,
+            "inputformcontrol": "rooftilt",
             "imagekey": "roofimages",
             "imagename": "roof"
           }
@@ -448,7 +419,7 @@
             ],
             "result": "",
             "questionstatus": false,
-            "questiontype": 7,
+            "questiontype": 8,
             "inputformcontrol": "framingsize",
             "imagekey": "atticimages",
             "imagename": "atticzoomshoturl"
