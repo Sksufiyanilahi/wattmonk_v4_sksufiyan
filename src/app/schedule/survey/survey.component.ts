@@ -137,6 +137,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.utilities.showLoading('Saving Survey').then(() => {
         this.surveyForm.get('status').setValue('surveyinprocess');
         if (this.surveyId !== 0) {
+          this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
