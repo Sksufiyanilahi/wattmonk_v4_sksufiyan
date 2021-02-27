@@ -773,7 +773,7 @@ state: { productdetails: objToSend }
   }
 
   createNewDesignChatGroup(survey:SurveyDataModel) {
-    var GUID = 'survey' + "_" + new Date().getTime();
+    var GUID = survey.chatid;
     var address = survey.address.substring(0, 60);
     var groupName = survey.name + "_" + address;
   
@@ -791,19 +791,19 @@ state: { productdetails: objToSend }
         CometChat.addMembersToGroup(group.getGuid(), membersList, []).then(
           response => {
             // if(design.requesttype == "permit"){
-              let postdata={
-                chatid:GUID
-              // } 
-            }
+            //   let postdata={
+            //     chatid:GUID
+            //   // } 
+            // }
   
-              this.apiService.updateSurveyForm(postdata,this.surveyId).subscribe(res=>{
-                console.log(res);
-                this.chatid=res.chatid;
-                console.log(this.chatid);
+              // this.apiService.updateSurveyForm(postdata,this.surveyId).subscribe(res=>{
+                // console.log(res);
+                // this.chatid=res.chatid;
+                // console.log(this.chatid);
                 this.updatechat_id=true;
-                this.addUserToGroupChat();
+                this.addUserToGroupChat(GUID);
                 
-              })
+              // })
               // this.updateItemInList(LISTTYPE.NEW, design);
             // }else{
               // this.updateItemInPermitList(LISTTYPE.NEW, design);
@@ -820,9 +820,8 @@ state: { productdetails: objToSend }
    
   }
   
-        addUserToGroupChat() {
-          debugger;
-        var GUID = this.chatid;
+        addUserToGroupChat(GUID) {
+         
         var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
         
           // userscope = CometChat.GROUP_MEMBER_SCOPE.ADMIN;

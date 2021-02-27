@@ -67,7 +67,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       state: new FormControl(''),
       city: new FormControl(''),
       postalcode: new FormControl(''),
-      status: new FormControl('created')
+      status: new FormControl('created'),
+      chatid:new FormControl(null)
     });
 
   }
@@ -155,6 +156,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
           this.surveyForm.get('status').setValue('surveyinprocess');
           console.log(this.surveyForm.value);
+          this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
@@ -202,6 +204,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.utilities.showLoading('Saving Survey').then(() => {
         this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
         if (this.surveyId !== 0) {
+          this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.showSnackBar('Survey has been updated');
@@ -227,7 +230,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             this.surveyForm.get('status').setValue('surveyassigned');
           }
           console.log(this.surveyForm.value);
-          debugger;
+          this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
               this.utilities.hideLoading();
