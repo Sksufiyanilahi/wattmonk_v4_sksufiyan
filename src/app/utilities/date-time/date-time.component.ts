@@ -40,8 +40,10 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
   registerOnTouched(fn: any): void {
   }
 
-  writeValue(date: number): void {
+  writeValue(date: any): void {
     this.date = date;
+    console.log(this.date);
+    
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
