@@ -950,9 +950,9 @@ state: { productdetails: objToSend }
         console.log(err);
         if (err.code == 1) {
           const fileTransfer: FileTransferObject = this.transfer.create();
-          this.utils.showLoading('Downloading').then(()=>{
+          // this.utils.showLoading('Downloading').then(()=>{
             fileTransfer.download(url, this.storageDirectory + pdf.url).then((entry) => {
-              this.utils.hideLoading().then(()=>{
+              // this.utils.hideLoading().then(()=>{
                 console.log('download complete: ' + entry.toURL());
                 this.utils.showSnackBar("Survey File Downloaded Successfully");
                 
@@ -961,13 +961,13 @@ state: { productdetails: objToSend }
                 //   path;
                 // })
                 this.localnotification.schedule({text:'Survey File Downloaded Successfully', foreground:true, vibrate:true })
-              }, (error) => {
-                // handle error
-                console.log(error);
+              // }, (error) => {
+              //   // handle error
+              //   console.log(error);
                 
-              });
+              // });
               })
-          })
+          // })
         }
       })
     })
