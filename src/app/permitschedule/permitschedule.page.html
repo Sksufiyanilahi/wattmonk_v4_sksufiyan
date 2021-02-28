@@ -67,7 +67,7 @@
                 <ion-col>
                     <ion-item class="ion-no-padding">
                         <ion-label position="floating">name*</ion-label>
-                        <ion-input type="text" class="form_input" autocapitalize="words"
+                        <ion-input  [disabled]= "nonEditableField" type="text" class="form_input" autocapitalize="words"
                                     formControlName="name"></ion-input>
                     </ion-item>
                     <div style="height: 5px;">
@@ -101,7 +101,7 @@
               <ion-col>
                   <ion-item class="ion-no-padding">
                       <ion-label position="floating">phone*</ion-label>
-                      <ion-input class="form_input" type="tel" autocapitalize="none" autocomplete="off"
+                      <ion-input  [disabled] = "nonEditableField" class="form_input" type="tel" autocapitalize="none" autocomplete="off"
                                   formControlName="phone" maxLength="15" ></ion-input>
                   </ion-item>
                   <div style="height: 5px;">
@@ -243,7 +243,7 @@
           <ion-item class="ion-no-padding">
               <ion-label style="display: none;">Job Type*</ion-label>
               <ion-label position="floating">Job Type*</ion-label>
-              <ion-select class="form_input select_div"
+              <ion-select   [disabled] = "nonEditableField" class="form_input select_div"
                           ok-text=""
                           cancel-text=""
                           formControlName="jobtype" interface="popover">

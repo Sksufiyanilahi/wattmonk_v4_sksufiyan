@@ -34,7 +34,7 @@ export class CompletedsurveysComponent implements OnInit {
   constructor(private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef,
-    private utils: UtilitiesService,
+    public utils: UtilitiesService,
     private storage: Storage,
     private apiService: ApiService) {
       console.log("inside new surveys");
@@ -123,11 +123,12 @@ export class CompletedsurveysComponent implements OnInit {
               }
             }
           });
-          this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
-            var dateA = new Date(a.date).getTime(),
-              dateB = new Date(b.date).getTime();
-            return dateA - dateB;
-          });
+          this.listOfSurveyDataHelper = tempData;
+          // .sort(function (a, b) {
+          //   var dateA = new Date(a.date).getTime(),
+          //     dateB = new Date(b.date).getTime();
+          //   return dateA - dateB;
+          // });
           this.cdr.detectChanges();
   }
 

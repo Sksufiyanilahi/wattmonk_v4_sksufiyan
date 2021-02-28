@@ -11,7 +11,7 @@ export class SurveyDataModel {
   id: number;
   name: string;
   email: string;
-  chatid:number
+  chatid:string;
   phonenumber: string;
   datetime: Date;
   comments: {};
@@ -72,6 +72,7 @@ export class SurveyDataModel {
   framingsize:any;
   distancebetweentworafts:any;
   batterysystem:any;
+  isdesignraised:boolean=false;
 }
 
 

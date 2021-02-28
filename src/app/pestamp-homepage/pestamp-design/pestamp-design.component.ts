@@ -249,12 +249,11 @@ export class PestampDesignComponent implements OnInit {
     });
   }
 
- async formatDesignData(records : Pestamp[]){
+  formatDesignData(records : Pestamp[]){
     this.overdue=[];
     let list:Pestamp[];
     console.log(records);
    list=this.fillinDynamicData(records);
-   await this.chatIcon(list);
    list.forEach(element =>{
      this.listOfDesigns.push(element);
    })
@@ -315,11 +314,12 @@ export class PestampDesignComponent implements OnInit {
             return dateB - dateA;
           });
           console.log(this.listOfDesignsHelper);
-        
+          this.chatIcon(list);
           this.cdr.detectChanges();
           }
   ///chat icon
   chatIcon(list:Pestamp[]){
+
     list.forEach(element => {
       console.log(element);
       var groupMembersRequest = new CometChat.GroupMembersRequestBuilder(element.chatid)

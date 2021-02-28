@@ -134,7 +134,7 @@
                         </ion-row>
                         <ion-row>
                             <ion-col size="6">Scheduled On</ion-col>
-                            <ion-col size="6">{{survey.datetime | date:'MM/dd/yyyy'}} {{utilities.formatTimeInDisplayFormat(survey.datetime)}}</ion-col>
+                            <ion-col size="6">{{utilities.formatDateInDisplayFormat(survey.datetime)}} {{utilities.formatTimeInDisplayFormat(survey.datetime)}}</ion-col>
                         </ion-row>
                
                         <ion-row class="bkg">
@@ -146,7 +146,7 @@
                         
                         
                             <ion-col size="6" *ngFor="let comment of survey.comments">
-                                <p class="comment font" style="text-align:left;margin:0px">{{comment?.message}}</p>
+                                <p  [innerHTML]="comment?.message | linkify" class="comment font" style="text-align:left;margin:0px"></p>
                                 <p class="comment-by" style="text-align:left;margin-top:0px">Posted by {{comment.createdby?.firstname}}
                                     {{comment.createdby?.lastname}}</p>
                             </ion-col>
@@ -282,6 +282,36 @@
                             <div class="swiper-zoom-container">
                                 <h2 class="position-fix">{{roof.name}}</h2>
                                 <img [src]="roof.url" (click)="showimage(roof.url)" />
+                            </div>
+                        </ion-row>
+
+                        </ion-slide>
+                        <ion-slide *ngFor="let roofdimension of survey.roofdimensionimages,let i=index">
+                            <ion-row>
+                                <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->
+                            <div class="swiper-zoom-container">
+                                <h2 class="position-fix">{{roofdimension?.name}}</h2>
+                                <img [src]="roofdimension.url" (click)="showimage(roofdimension.url)" />
+                            </div>
+                        </ion-row>
+
+                        </ion-slide>
+                        <ion-slide *ngFor="let roofobstacle of survey.obstaclesimages,let i=index">
+                            <ion-row>
+                                <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->
+                            <div class="swiper-zoom-container">
+                                <h2 class="position-fix">{{roofobstacle?.name}}</h2>
+                                <img [src]="roofobstacle.url" (click)="showimage(roofobstacle.url)" />
+                            </div>
+                        </ion-row>
+
+                        </ion-slide>
+                        <ion-slide *ngFor="let roofobstacledimension of survey.obstaclesdimensionsimages,let i=index">
+                            <ion-row>
+                                <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->
+                            <div class="swiper-zoom-container">
+                                <h2 class="position-fix">{{roofobstacledimension?.name}}</h2>
+                                <img [src]="roofobstacledimension.url" (click)="showimage(roofobstacledimension.url)" />
                             </div>
                         </ion-row>
 
@@ -637,7 +667,7 @@
 
     </ion-grid> -->
 </ion-content>
-<ion-footer *ngIf="((user.role.type=='clientadmin' || user.role.type=='clientsuperadmin')&& survey && survey.status=='created')||(user.role.type=='clientadmin' && survey && survey.status=='surveyassigned')" class="ion-no-border white-bg">
+<ion-footer *ngIf="((user.role.type=='clientadmin' || user.role.type=='bd')&& survey && survey.status=='created')||(user.role.type=='clientadmin' && survey && survey.status=='surveyassigned')" class="ion-no-border white-bg">
     <ion-grid>
         <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
             <ion-col class="ion-no-margin ion-no-padding">

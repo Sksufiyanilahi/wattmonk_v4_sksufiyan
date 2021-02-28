@@ -11,7 +11,8 @@
 // export const PlatformUpdateUrl =  'https://webops.wattmonk.com/api';
 // export const PlatformUpdateUrl =  ' http://ec2-52-15-220-175.us-east-2.compute.amazonaws.com:1802/';
 
-// export const BaseUrl = ' http://ec2-52-15-220-175.us-east-2.compute.amazonaws.com:1802/';
+// export const BaseUrl = 'http://ec2-52-15-220-175.us-east-2.compute.amazonaws.com:1802/';
+// export const PlatformUpdateUrl = 'http://ec2-52-15-220-175.us-east-2.compute.amazonaws.com:1802/';
 // export const intercomId = 'o52f08q6';
 // export const COMETCHAT_CONSTANTS = {
 //     APP_ID: '190385dcec51285',
