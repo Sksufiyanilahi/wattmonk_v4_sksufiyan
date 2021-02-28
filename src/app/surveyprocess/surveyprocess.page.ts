@@ -1462,23 +1462,11 @@ export class SurveyprocessPage implements OnInit {
 
     handleReviewFormBack() {
         this.reviewForm = false;
-        this.startCameraAfterPermission();
-        this.selectedmainmenuindex = this.previousmainmenuindex;
-        this.selectedsubmenuindex = this.previoussubmenuindex;
-        this.selectedshotindex = this.previousshotindex;
-        this.mainmenuitems[this.selectedmainmenuindex].viewmode = this.previousviewmode;
-        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
     }
 
     reviewFormData() {
         this.reviewForm = true;
         this.cameraPreview.stopCamera();
-        this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
-        this.previousmainmenuindex = this.selectedmainmenuindex;
-        this.previoussubmenuindex = this.selectedsubmenuindex;
-        this.previousshotindex = this.selectedshotindex;
-        this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.FORM;
     }
 
     savePVFormData() {
