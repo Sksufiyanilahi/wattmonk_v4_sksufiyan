@@ -368,7 +368,6 @@ export class SurveyprocessPage implements OnInit {
 
         // this.storage.clear();
         this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
-            console.log(data);
             if (data) {
                 this.mainmenuitems = data.menuitems;
                 this.totalpercent = data.currentprogress;
@@ -1510,7 +1509,6 @@ export class SurveyprocessPage implements OnInit {
             });
         }, (error) => {
             this.utilitieservice.hideLoading().then(() => {
-                console.log(error);
                 // this.utilitieservice.errorSnackBar(JSON.stringify(error));
                 this.utilitieservice.errorSnackBar('There was some error in processing the request');
             });
@@ -1692,11 +1690,8 @@ export class SurveyprocessPage implements OnInit {
     }
 
     uploadImageByIndex(mapOfImages) {
-        console.log(mapOfImages);
-
         if (mapOfImages.length > 0 && mapOfImages.length <= this.totalimagestoupload) {
             const imageToUpload = mapOfImages[0];
-            console.log(imageToUpload);
             if (imageToUpload.shotimage) {
                 const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
                 let filename = '';
@@ -1900,11 +1895,8 @@ export class SurveyprocessPage implements OnInit {
     handleShotDelete() {
         const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
         let shot = currentIndex.shots[this.selectedshotindex];
-        console.log(this.selectedshotindex);
         if (currentIndex.capturedshots.length > 1) {
             currentIndex.capturedshots.splice(this.sliderIndex, 1);
-            console.log(currentIndex.capturedshots[this.sliderIndex]);
-            console.log(currentIndex.capturedshots[this.sliderIndex].imagename);
             const imagename = currentIndex.capturedshots[this.sliderIndex].imagename;
             this.selectedshotindex = currentIndex.shots.findIndex(s => s.imagename === imagename);
             shot = currentIndex.shots[this.selectedshotindex];
@@ -1950,7 +1942,6 @@ export class SurveyprocessPage implements OnInit {
 
     changeBatterySystem() {
         this.hasBatterySystem = eval(this.pvForm.value.batterysystem);
-        console.log(this.hasBatterySystem);
     }
 
     handleEditQuestionInput(index) {
