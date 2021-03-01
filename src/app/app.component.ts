@@ -144,6 +144,7 @@ export class AppComponent {
                 this.splashScreen.hide();
             // }, 1000);
             this.getFcmToken();
+            this.handleBackbutton();
             if (this.platform.is('ios')) {
                 this.statusBar.overlaysWebView(false);
                 this.statusBar.backgroundColorByHexString('#fffff');
