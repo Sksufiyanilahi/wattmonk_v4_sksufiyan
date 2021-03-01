@@ -301,12 +301,12 @@ export class SurveyprocessPage implements OnInit {
             this.platformname = 'other'
         }
 
-        this.platform.backButton.subscribeWithPriority(100, () => {
-            if (!this.isSaveFormCalled) {
-                this.handleSurveyExit();
-                navController.pop();
-            }
-        });
+        // this.platform.backButton.subscribeWithPriority(100, () => {
+        //     if (!this.isSaveFormCalled) {
+        //         this.handleSurveyExit();
+        //         navController.pop();
+        //     }
+        // });
 
         if (this.surveytype == 'battery') {
             this.batterySurveyProcess();
@@ -1975,5 +1975,22 @@ export class SurveyprocessPage implements OnInit {
         const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index];
         shotDetail.promptquestion = true;
         this.iscapturingallowed = false;
+    }
+
+    // handleHardwareBackButton(){
+    //     this.platform.backButton.subscribeWithPriority(10, () => {
+    //         console.log('Handler called to force close!');
+    //         // this.handleSurveyExit();
+    //         this.alertController.getTop().then(r => {
+    //           if (r) {
+    //             navigator['app'].exitApp();
+    //           }
+    //         }).catch(e => {
+    //           console.log(e);
+    //         })
+    //       });
+    // }
+    ionViewDidEnter(){
+        // this.handleHardwareBackButton();
     }
 }

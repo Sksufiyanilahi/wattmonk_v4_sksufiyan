@@ -174,13 +174,13 @@ searchbar(){
 
 this.network.networkDisconnect();
 this.network.networkConnect();
-  this.subscription = this.platform.backButton.subscribe(() => {
-    if (this.showSearchBar === true) {
-      this.showSearchBar = false;
-    } else {
-      (navigator as any).app.exitApp();
-    }
-  });
+  // this.subscription = this.platform.backButton.subscribe(() => {
+  //   if (this.showSearchBar === true) {
+  //     this.showSearchBar = false;
+  //   } else {
+  //     (navigator as any).app.exitApp();
+  //   }
+  // });
 }
 
 getNotificationCount(){
