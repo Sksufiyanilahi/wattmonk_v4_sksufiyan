@@ -1952,4 +1952,21 @@ export class SurveyprocessPage implements OnInit {
         shotDetail.promptquestion = true;
         this.iscapturingallowed = false;
     }
+
+    handleHardwareBackButton(){
+        this.platform.backButton.subscribeWithPriority(10, () => {
+            console.log('Handler called to force close!');
+            // this.handleSurveyExit();
+            this.alertController.getTop().then(r => {
+              if (r) {
+                navigator['app'].exitApp();
+              }
+            }).catch(e => {
+              console.log(e);
+            })
+          });
+    }
+    ionViewDidEnter(){
+        this.handleHardwareBackButton();
+    }
 }
