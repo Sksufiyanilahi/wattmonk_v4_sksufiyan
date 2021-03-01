@@ -1977,20 +1977,19 @@ export class SurveyprocessPage implements OnInit {
         this.iscapturingallowed = false;
     }
 
-    // handleHardwareBackButton(){
-    //     this.platform.backButton.subscribeWithPriority(10, () => {
-    //         console.log('Handler called to force close!');
-    //         // this.handleSurveyExit();
-    //         this.alertController.getTop().then(r => {
-    //           if (r) {
-    //             navigator['app'].exitApp();
-    //           }
-    //         }).catch(e => {
-    //           console.log(e);
-    //         })
-    //       });
-    // }
+    handleBackbutton(){
+        this.platform.backButton.subscribeWithPriority(10, () => {
+            console.log('Handler called to force close!');
+            this.alertController.getTop().then(r => {
+              if (r) {
+                navigator['app'].exitApp();
+              }
+            }).catch(e => {
+              console.log(e);
+            })
+          });
+    }
     ionViewDidEnter(){
-        // this.handleHardwareBackButton();
+        this.handleBackbutton();
     }
 }
