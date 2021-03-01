@@ -300,12 +300,12 @@ export class SurveyprocessPage implements OnInit {
             this.platformname = 'other'
         }
 
-        this.platform.backButton.subscribeWithPriority(100, () => {
-            if (!this.isSaveFormCalled) {
-                this.handleSurveyExit();
-                navController.pop();
-            }
-        });
+        // this.platform.backButton.subscribeWithPriority(100, () => {
+        //     if (!this.isSaveFormCalled) {
+        //         this.handleSurveyExit();
+        //         navController.pop();
+        //     }
+        // });
 
         if (this.surveytype == 'battery') {
             this.batterySurveyProcess();
@@ -1953,20 +1953,20 @@ export class SurveyprocessPage implements OnInit {
         this.iscapturingallowed = false;
     }
 
-    handleHardwareBackButton(){
-        this.platform.backButton.subscribeWithPriority(10, () => {
-            console.log('Handler called to force close!');
-            // this.handleSurveyExit();
-            this.alertController.getTop().then(r => {
-              if (r) {
-                navigator['app'].exitApp();
-              }
-            }).catch(e => {
-              console.log(e);
-            })
-          });
-    }
+    // handleHardwareBackButton(){
+    //     this.platform.backButton.subscribeWithPriority(10, () => {
+    //         console.log('Handler called to force close!');
+    //         // this.handleSurveyExit();
+    //         this.alertController.getTop().then(r => {
+    //           if (r) {
+    //             navigator['app'].exitApp();
+    //           }
+    //         }).catch(e => {
+    //           console.log(e);
+    //         })
+    //       });
+    // }
     ionViewDidEnter(){
-        this.handleHardwareBackButton();
+        // this.handleHardwareBackButton();
     }
 }
