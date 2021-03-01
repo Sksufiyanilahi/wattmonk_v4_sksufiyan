@@ -23,11 +23,14 @@ export class ChatPage implements OnInit {
 	currentTypingUserIndicator: any;
 	public messageText: string;
 	loggedInUserData: any;
+	designData:any;
+	callAcceptedByReceiver:boolean;
  
 	@ViewChild('content', { static: false })
 	content: any;
 	userData: any;
 	sessionID: string;
+	audio: HTMLAudioElement;
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
@@ -35,7 +38,8 @@ export class ChatPage implements OnInit {
 		private navController: NavController,
     private storageService: StorageService,
 	private utils:UtilitiesService,
-	private apiService:ApiService
+	private apiService:ApiService,
+	private navCtrl: NavController
 	) {
     
 		const html = document.getElementsByTagName('html').item(0);
@@ -56,7 +60,7 @@ export class ChatPage implements OnInit {
 		console.log(this.currentGroupData);
 		localStorage.setItem('gid',this.currentGroupData);
     this.apiService.listencall(this.currentGroupData);
-		// }
+			// }
 
 		// });
 	}
@@ -316,8 +320,11 @@ export class ChatPage implements OnInit {
 
 	dialcall() {
 		var receiverID = this.currentGroupData;
+		console.log(receiverID);
 		var callType = CometChat.CALL_TYPE.AUDIO;
+		console.log(callType);
 		var receiverType = CometChat.RECEIVER_TYPE.GROUP;
+		console.log(receiverType);
 
 		var call = new CometChat.Call(receiverID, callType, receiverType);
 
@@ -325,9 +332,11 @@ export class ChatPage implements OnInit {
 			(outGoingCall) => {
 				console.log('Call initiated successfully:', outGoingCall);
         this.sessionID = outGoingCall.getSessionId();
-		this.utils.callData = outGoingCall;
+		console.log("Hello",this.sessionID);
+		this.apiService.callData = outGoingCall;
+		//this.apiService.callData = outGoingCall;
 					localStorage.setItem('showHideButton','true');
-        this.router.navigate(['/callingscreen']);
+        this.router.navigate(['/','callingscreen']);
 				// perform action on success. Like show your calling screen.
 			},
 			(error) => {
@@ -346,7 +355,8 @@ export class ChatPage implements OnInit {
 			(outGoingCall) => {
 				console.log('Call initiated successfully:', outGoingCall);
 
-				this.utils.callData = outGoingCall;
+				//this.utils.callData = outGoingCall;
+				this.apiService.callData = outGoingCall;
 				localStorage.setItem('showHideButton','true');
 				this.router.navigate(['/callingscreen']);
 				// perform action on success. Like show your calling screen.
@@ -371,7 +381,7 @@ export class ChatPage implements OnInit {
 			}
 		);
 	}
-
+	
 	rejectincomingcall() {
 		var sessionID = this.sessionID;
 		var status = CometChat.CALL_STATUS.REJECTED;
@@ -384,5 +394,8 @@ export class ChatPage implements OnInit {
 				console.log('Call rejection failed with error:', error, status);
 			}
 		);
+	}
+	pauseAudio() {
+		this.audio.pause();
 	}
 }

@@ -108,7 +108,7 @@ this.network.networkConnect();
                   this.apiService.refreshHeader();
                   // this.navController.navigateRoot(['homepage']);
                   this.navController.navigateRoot(['surveyoroverview']);
-                  this.utils.doCometUserLogin();
+                  this.apiService.doCometUserLogin();
                 }
               } else if(response.user.role.id == ROLES.Designer){
                 // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
@@ -124,7 +124,7 @@ this.network.networkConnect();
                   this.storageService.setUser(response.user, response.jwt);
                   this.apiService.refreshHeader();
                   this.navController.navigateRoot(['permitdesignoverview']);
-                  this.utils.doCometUserLogin();
+                  this.apiService.doCometUserLogin();
                 }
               }
 
@@ -141,7 +141,7 @@ this.network.networkConnect();
                     this.storageService.setUser(response.user, response.jwt);
                     this.apiService.refreshHeader();
                     this.navController.navigateRoot(['analystoverview']);
-                    this.utils.doCometUserLogin();
+                    this.apiService.doCometUserLogin();
                   }
               }
               else if(response.user.role.id == ROLES.Peengineer)
@@ -157,7 +157,7 @@ this.network.networkConnect();
                     this.storageService.setUser(response.user, response.jwt);
                     this.apiService.refreshHeader();
                     this.navController.navigateRoot(['peengineer']);
-                    this.utils.doCometUserLogin();
+                    this.apiService.doCometUserLogin();
                   }
               }
               else{
@@ -175,11 +175,11 @@ this.network.networkConnect();
                   if(response.user.role.type==='clientsuperadmin' && (response.user.isonboardingcompleted == null || response.user.isonboardingcompleted == false)){
 
                     this.navController.navigateRoot('onboarding');
-                    this.utils.doCometUserLogin();
+                    this.apiService.doCometUserLogin();
                   }
                   else{
                    this.navController.navigateRoot(['/dashboard'])
-                   this.utils.doCometUserLogin();
+                   this.apiService.doCometUserLogin();
                  }
                 }
               }

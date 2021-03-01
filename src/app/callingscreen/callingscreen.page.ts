@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { Location } from '@angular/common';
 import { NavController } from '@ionic/angular';
 import { ApiService } from '../api.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { INCOMING_CALL_ALERT } from 'src/audio/incomingCallAlert';
 
 @Component({
@@ -20,7 +20,6 @@ export class CallingscreenPage implements OnInit, OnChanges {
 	audio: HTMLAudioElement;
 	video:HTMLVideoElement;
 	name: any;
-
 	constructor(
 		private utils: UtilitiesService,
 		private location: Location,
@@ -29,7 +28,6 @@ export class CallingscreenPage implements OnInit, OnChanges {
 		private router: Router
 	) {
 		this.showHideCallButtton = false;
-
 		let data = localStorage.getItem('showHideButton');
 		// let data  =this.router.getCurrentNavigation().extras.state.data.queryParams.value;
 		console.log(data);
@@ -40,27 +38,35 @@ export class CallingscreenPage implements OnInit, OnChanges {
 
 	ngOnChanges() {
 		this.apiService.listencall(localStorage.getItem('gid'));
+		console.log("HELLO",localStorage.getItem('gid'));
 	}
 	ngOnInit() {
+		
 		this.loadAudio();
 	}
 
 	ionViewDidEnter() {
+		//this.startcall();
 		let that = this;
 		// this.calldeactivate =  that.utils.callData;
-		that.calldata = that.utils.getCallData();
+		that.calldata = that.apiService.getCallData();
+		console.log("hhll",that.calldata);
 		this.name = (that.calldata.receiver.name).slice(0,2);
 		console.log(that.calldata.receiver.name, '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+		
 	}
 
 	acceptcall() {
 		var sessionID = this.calldata.sessionId;
-
+		console.log("aa",sessionID);
+		
 		CometChat.acceptCall(sessionID).then(
 			(call) => {
 				console.log('Call accepted successfully:', call);
 				// start the call using the startCall() method
-				this.startcall();
+				console.log(call,"asd")
+				//this.startcall();
+				this.startcall(call);
 				this.showHideCallButtton = true;
 			},
 			(error) => {
@@ -71,7 +77,7 @@ export class CallingscreenPage implements OnInit, OnChanges {
 	}
 
 	rejectcall() {
-		UtilitiesService.rejectCall(this.calldata.sessionId, CometChat.CALL_STATUS.REJECTED).then((res) => {
+		ApiService.rejectCall(this.calldata.sessionId, CometChat.CALL_STATUS.REJECTED).then((res) => {
 			console.log(res);
 		});
 		var sessionID = this.calldata.sessionId;
@@ -93,12 +99,14 @@ export class CallingscreenPage implements OnInit, OnChanges {
 		);
 	}
 
-	startcall() {
+	startcall(call) {
 		/**
         * You can get the call Object from the success of acceptCall() or from the onOutgoingCallAccepted() callback of the CallListener.
         */
-		var sessionId = this.calldata.sessionId;
-		var callType = this.calldata.type;
+		// var sessionId = this.calldata.sessionId;
+		// var callType = this.calldata.type;
+		var sessionId = call.sessionId;
+		var callType = call.type;
 		let callListener = new CometChat.OngoingCallListener({
 			onUserJoined: (user) => {
 				console.log('User joined call:', user);
@@ -112,7 +120,7 @@ export class CallingscreenPage implements OnInit, OnChanges {
 			onCallEnded: (call) => {
 				console.log('Call ended listener', call);
 				this.navCtrl.pop();
-				// this.pauseAudio();
+				this.pauseAudio();
 			}
 		});
 		var callSettings = new CometChat.CallSettingsBuilder()

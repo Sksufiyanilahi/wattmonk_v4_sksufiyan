@@ -291,7 +291,7 @@ export class AppComponent {
         return from(CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
             () => {
                 if (this.storageService.getUserID() !== '') {
-                    this.utilities.doCometUserLogin();
+                    this.apiservice.doCometUserLogin();
                 }
                 console.log('Initialization completed successfully');
                 // if(this.utilities.currentUserValue != null){
