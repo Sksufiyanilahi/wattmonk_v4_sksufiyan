@@ -336,15 +336,15 @@ export class AppComponent {
     }
 
     handleBackbutton(){
-        this.platform.backButton.subscribeWithPriority(10, () => {
-            console.log('Handler called to force close!');
-            this.alertController.getTop().then(r => {
-              if (r) {
-                navigator['app'].exitApp();
-              }
-            }).catch(e => {
-              console.log(e);
-            })
-          });
+        // this.platform.backButton.subscribeWithPriority(10, () => {
+        //     console.log('Handler called to force close!');
+        //     this.alertController.getTop().then(r => {
+        //       if (r) {
+        //         navigator['app'].exitApp();
+        //       }
+        //     }).catch(e => {
+        //       console.log(e);
+        //     })
+        //   });
     }
 }
