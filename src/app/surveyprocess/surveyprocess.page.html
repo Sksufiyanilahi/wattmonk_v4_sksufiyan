@@ -260,6 +260,42 @@
             </ion-col>
         </ion-row>
 
+        <!-- Row for input inverter manufacturer and model question -->
+        <ion-row class="questionaireview-row ion-padding-horizontal"
+                 *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_INVERTER_DETAILS">
+            <ion-col size="12">
+                <p>
+                    {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+                </p>
+                <form [formGroup]="activeForm" novalidate>
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                        <ion-input type="text" class="form-control" autocomplete="off" placeholder="Inverter Manufacturer"
+                                   formControlName="invertermake">
+                        </ion-input>
+                        <span>&nbsp;&nbsp;</span>
+                        <ion-input type="text" class="form-control" autocomplete="off" placeholder="Inverter Model"
+                                   formControlName="invertermodel">
+                        </ion-input>
+                    </div>
+                    <div class="error_div">
+                        <div
+                                *ngIf="activeForm.get('invertermodel').dirty">
+                            <span class="error">Inverter manufacturer and model is required.</span>
+                        </div>
+                        <div
+                                *ngIf="activeForm.get('invertermake').dirty">
+                            <span class="error">Inverter manufacturer and model is required.</span>
+                        </div>
+                    </div>
+                </form>
+                <ion-row class="ion-float-right">
+                    <ion-button fill="clear" size="small" (click)="handleInputTextSubmission(activeForm)">
+                        {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
+                    </ion-button>
+                </ion-row>
+            </ion-col>
+        </ion-row>
+
         <!-- Row for question type 5 -->
         <ion-row class="questionaireview-row ion-padding-horizontal"
                  *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_SHOT_NAME">
@@ -825,6 +861,29 @@
                                         <div class="error_div">
                                             <div *ngIf="activeForm.get(shot.inputformcontrol).value === '' && activeForm.get(shot.inputformcontrol).dirty">
                                                 <span class="error">Field input is required.</span>
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                    <ion-col size="12" *ngIf="shot.questiontype == QuestionTypes.INPUT_INVERTER_DETAILS">
+                                        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                                            <ion-input type="text" class="form-control" autocomplete="off"
+                                                       formControlName="invertermake">
+                                            </ion-input>
+                                            <span>&nbsp;&nbsp;</span>
+                                            <ion-input type="number" class="form-control" autocomplete="off"
+                                                       formControlName="invertermodel">
+                                            </ion-input>
+                                        </div>
+                                        <div class="error_div">
+                                            <div
+                                                    *ngIf="activeForm.get('invertermake').value === '' && activeForm.get('invertermake').dirty">
+                                                <span class="error">Inverter manufacturer is required.</span>
+                                            </div>
+                                        </div>
+                                        <div class="error_div">
+                                            <div
+                                                    *ngIf="activeForm.get('invertermodel').value === '' && activeForm.get('invertermodel').dirty">
+                                                <span class="error">Inverter model is required.</span>
                                             </div>
                                         </div>
                                     </ion-col>
