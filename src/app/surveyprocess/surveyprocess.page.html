@@ -247,8 +247,14 @@
                     </div>
                     <div class="error_div">
                         <div
-                                *ngIf="activeForm.get('dimensionA').dirty || activeForm.get('dimensionB').dirty">
-                            <span class="error">Both dimensions is required.</span>
+                                *ngIf="activeForm.get('dimensionA').value === '' && activeForm.get('dimensionA').dirty">
+                            <span class="error">First dimension is required.</span>
+                        </div>
+                    </div>
+                    <div class="error_div">
+                        <div
+                                *ngIf="activeForm.get('dimensionB').value === '' && activeForm.get('dimensionB').dirty">
+                            <span class="error">Second dimension is required.</span>
                         </div>
                     </div>
                 </form>
@@ -279,11 +285,11 @@
                     </div>
                     <div class="error_div">
                         <div
-                                *ngIf="activeForm.get('invertermodel').dirty">
+                                *ngIf="activeForm.get('invertermodel').value === '' && activeForm.get('invertermodel').dirty">
                             <span class="error">Inverter manufacturer and model is required.</span>
                         </div>
                         <div
-                                *ngIf="activeForm.get('invertermake').dirty">
+                                *ngIf="activeForm.get('invertermake').value === '' && activeForm.get('invertermake').dirty">
                             <span class="error">Inverter manufacturer and model is required.</span>
                         </div>
                     </div>
@@ -853,14 +859,15 @@
                                             </ion-input>
                                         </div>
                                         <div class="error_div">
-                                            <div
-                                                    *ngIf="activeForm.get('dimensionA').dirty || activeForm.get('dimensionB').dirty">
-                                                <span class="error">Both dimensions is required.</span>
+                                            <div class="error_div">
+                                                <div *ngIf="activeForm.get('dimensionA').value === '' && activeForm.get('dimensionA').dirty">
+                                                    <span class="error">First dimension is required.</span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="error_div">
-                                            <div *ngIf="activeForm.get(shot.inputformcontrol).value === '' && activeForm.get(shot.inputformcontrol).dirty">
-                                                <span class="error">Field input is required.</span>
+                                            <div *ngIf="activeForm.get('dimensionB').value === '' && activeForm.get('dimensionB').dirty">
+                                                <span class="error">Second dimension is required.</span>
                                             </div>
                                         </div>
                                     </ion-col>
