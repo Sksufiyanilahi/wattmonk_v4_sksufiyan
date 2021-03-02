@@ -572,7 +572,9 @@ export class ApiService {
         }
 
       deletePestamp(id:string): Observable<Pestamp> {
-        return this.http.delete<Pestamp>(BaseUrl + "pestamps/"+id, {
+        console.log(id);
+        
+        return this.http.delete<Pestamp>(BaseUrl + "upload/files/"+id, {
           headers: this.headers
         })
       }

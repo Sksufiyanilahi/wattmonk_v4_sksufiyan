@@ -57,6 +57,14 @@ export class PestampSchedulePage implements OnInit {
   permitPlanData:any;
   tabsDisabled = false;
   buttonValueCheck:string;
+
+  indexOfatticphotos=[];
+  indexOfroofphotos=[];
+  indexOfpermitPlanphotos=[];
+
+  isRoofFileDelete:boolean=false;
+  isAtticFileDelete:boolean=false;
+  isPermitPlanFileDelete:boolean=false;
   
   // GoogleAutocomplete: google.maps.places.AutocompleteService;
   // autocompleteItems: any[];
@@ -152,9 +160,9 @@ export class PestampSchedulePage implements OnInit {
           this.design = result;
           console.log(this.design);
           this.fieldDisabled=true;
-          // this.atticData = this.design.atticphotos;
-          // this.roofData = this.design.roofphotos;
-          // this.permitPlanData = this.design.permitplan;
+          this.atticData = this.design.atticphotos;
+          this.roofData = this.design.roofphotos;
+          this.permitPlanData = this.design.permitplan;
           console.log(this.permitPlanData)
           this.firstFormGroup.patchValue({
             name: this.design.personname,
@@ -213,7 +221,7 @@ export class PestampSchedulePage implements OnInit {
         console.log("file upload data---"+data);
        }
      }
-     this.utils.showLoading("Attic File Uploading...").then(()=>{
+     this.utils.showLoading("Attic File Uploading").then(()=>{
      this.apiService.uploadFile(data).subscribe(res=>{
        this.utils.hideLoading();
       if(this.isRoofFileUpload)
@@ -256,7 +264,7 @@ export class PestampSchedulePage implements OnInit {
         console.log("file upload data---"+data);
        }
      }
-     this.utils.showLoading("Roof File Uploading...").then(()=>{
+     this.utils.showLoading("Roof File Uploading").then(()=>{
      this.apiService.uploadFile(data).subscribe(res=>{
        this.utils.hideLoading();
       if(this.isPermitPlanFileUpload)
@@ -299,7 +307,7 @@ export class PestampSchedulePage implements OnInit {
         console.log("file upload data---"+data);
        }
      }
-     this.utils.showLoading("Permit Plan Uploading...").then(()=>{
+     this.utils.showLoading("Permit Plan Uploading").then(()=>{
      this.apiService.uploadFile(data).subscribe(res=>{
       this.utils.hideLoading();
       if(this.buttonValueCheck == 'save'){
@@ -931,6 +939,92 @@ this.utils.showLoading('Saving').then(() => {
 //     uploadAtticphotos(recordid: number, fileobj: File, index){
 
 //     }
+
+removeattachment(arc,i,value){
+  console.log(arc,i,value)
+  if(value=='attic'){
+  this.indexOfatticphotos.push(arc.id)
+  console.log(this.indexOfatticphotos)
+  this.atticData.splice(i,1);
+  // this.isAtticFileDelete=true;
+  // console.log(this.isAtticFileDelete)
+  this.deleteAtticFile(this.indexOfatticphotos);
+  }
+  else if(value=='roof'){
+  this.indexOfroofphotos.push(arc.id)
+  console.log(this.indexOfroofphotos)
+  this.roofData.splice(i,1);
+  // this.isRoofFileDelete=true;
+  this.deleteRoofFile(this.indexOfroofphotos);
+  
+  }
+  else {
+  this.indexOfpermitPlanphotos.push(arc.id)
+  console.log(this.indexOfpermitPlanphotos)
+  this.permitPlanData.splice(i,1);
+  // this.isPermitPlanFileDelete=true;
+  this.deletePermitPlan(this.indexOfpermitPlanphotos);
+  }
+  }
+
+  deleteAtticFile(index){
+       for(var i=0; i< index.length;i++){
+         var id = index[i];
+         this.utils.showLoading("Deleting Attic File").then(()=>{
+         this.apiService.deletePestamp(id).subscribe(res=>{
+        this.utils.hideLoading().then(()=>{
+          console.log("hello",res)
+        });
+        })
+     });
+   (error)=>{
+     this.utils.hideLoading().then(()=> {
+       this.utils.errorSnackBar('some Error Occured');
+     });
+   }}
+    //this.utils.setPermitDesignDetailsRefresh(true);   
+ }
+
+ deleteRoofFile(index){
+   console.log(index)
+  for(var i=0; i< index.length;i++){
+    var id = index[i];
+    console.log(id);
+    this.utils.showLoading("Deleting Roof File").then(()=>{
+    this.apiService.deletePestamp(id).subscribe(res=>{
+   this.utils.hideLoading().then(()=>{
+     console.log("hello",res)
+   });
+   })
+});
+(error)=>{
+this.utils.hideLoading().then(()=> {
+  this.utils.errorSnackBar('some Error Occured');
+});
+}}
+//this.utils.setPermitDesignDetailsRefresh(true);   
+}
+
+deletePermitPlan(index){
+  console.log(index);  
+  for(var i=0; i< index.length;i++){
+    var id = index[i];
+    console.log(id);
+    this.utils.showLoading("Deleting Permit Plan").then(()=>{
+    this.apiService.deletePestamp(id).subscribe(res=>{
+   this.utils.hideLoading().then(()=>{
+     console.log("hello",res)
+   });
+   })
+});
+(error)=>{
+this.utils.hideLoading().then(()=> {
+  this.utils.errorSnackBar('some Error Occured');
+});
+}}
+//this.utils.setPermitDesignDetailsRefresh(true);   
+}
+
 createChatGroup(design:Pestamp){
   var GUID = 'permit' + "_" + new Date().getTime();
 
