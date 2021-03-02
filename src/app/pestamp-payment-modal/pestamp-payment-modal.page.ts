@@ -12,6 +12,7 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import {IPayPalConfig,ICreateOrderRequest } from 'ngx-paypal';
 
 @Component({
   selector: 'app-pestamp-payment-modal',
@@ -19,7 +20,7 @@ import { MixpanelService } from '../utilities/mixpanel.service';
   styleUrls: ['./pestamp-payment-modal.page.scss'],
 })
 export class PestampPaymentModalPage implements OnInit {
-
+  public payPalConfig ? : IPayPalConfig;
   user
   id:any
   design = 'pestamp';
@@ -115,7 +116,7 @@ export class PestampPaymentModalPage implements OnInit {
       //     console.log(this.designData)
       //   }
       // });
-     
+     this.paypalintegration();
      this.utils.showLoading("Please wait....").then(()=>{
      
      
@@ -682,6 +683,154 @@ this.router.navigate(['/add-money'], {
     //   this.discountAmount();
     //   this.utils.setCouponId(null);
     // }
+    private paypalintegration(){
+
+      var overallAmount
+      
+      this.payPalConfig = {
+        currency: 'USD',
+        //for testing
+        clientId: 'AV1abOj-_YOVXq_Negcy7Fkc2Esj2GtpY2dRe3nrTwPl4HSX22jbXQ6KKhyJRO7JjPxP__sr7wqi57bg',
+       // for live
+      //  CLIENT_ID: 'AfKOgzK6Le8LRp8bN4vefjNqC9B7qArUHJt0U_wUmed6hlDHlP-TlHYG9olpqTX85VhHHOD3T9pkfKuP',
+
+        createOrderOnClient: (data) =>< ICreateOrderRequest >{
+          intent: 'CAPTURE',
+          purchase_units: [{
+                   
+                      amount: {
+                        value: overallAmount
+                      }
+                    }]
+          
+        },
+      
+        advanced: { extraQueryParams: [ { name: "disable-funding", value:"credit,card"} ],
+      commit:'true' } ,
+      
+        style: {
+                size: 'responsive',
+                color: 'silver',
+                shape: 'rect',
+                label: 'pay',
+                tagline:false,
+                
+        },
   
+     
+        onApprove: (data, actions) => {
+            console.log('onApprove - transaction was approved, but not authorized', data, actions);
+            actions.order.get().then(details => {
+           console.log('onApprove - you can get full order details inside onApprove: ', details);
+           //after payment approve
+           if(this.assignValue == 'clearDues'){
+            const inputData = {
+              paymenttype: "paypal",
+              pestampid: this.data.id,
+              user: this.user.id,
+             
+            }
+            if (this.data.propertytype == 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+              this.makeCommercialpayment(inputData);
+            }
+            else if (this.data.propertytype == 'commercial' && this.data.modeofstamping == 'ecopy') {
+              this.makeCommercialpayment(inputData);
+            }
+            else if (this.data.propertytype != 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+              this.makepayment(inputData);
+            }
+          }
+          else{
+        var postData={};
+        var pestampacceptancestarttime = new Date();
+        pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
+        // if(this.design=='prelim'){
+        // designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+        // }
+        // else{
+        //   designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+        // }
+          postData = {
+            outsourcedto: 232,
+            isoutsourced: "true",
+            status: "outsourced",
+            pestampacceptancestarttime: pestampacceptancestarttime,
+            paymenttype:"paypal",
+            paymentstatus:"succeeded"
+          };
+          this.utils.showLoading("Assigning").then(()=>
+          {
+              this.apiService.updatePestamps(this.data.id,postData).subscribe(value=>{
+                this.createChatGroup(value);
+            //     if(this.design=='prelim')
+            // {
+            //   this.newprelimsRef.update({ count: this.newprelimscount + 1});
+            //   console.log("hello",this.newprelimscount)
+            // }else{
+            //   this.newpermitsRef.update({ count: this.newpermitscount + 1});
+            this.newpestampRef.update({ count: this.newpestampscount + 1});
+            // }
+              this.utils.hideLoading().then(()=>
+             { this.utils.showSnackBar("pe stamp request has been send to wattmonk successfully")
+             //this.navController.pop();
+            //  if(this.design=='prelim'){
+            //    this.router.navigate(['/homepage/design'])
+            //  this.utils.setHomepageDesignRefresh(true);
+            //  }
+            //  else{
+            //   this.router.navigate(['/permithomepage/permitdesign'])
+            //    this.utils.setHomepagePermitRefresh(true);
+            //  }
+            this.router.navigate(['/pestamp-homepage/pestamp-design']);
+            this.utils.setPeStampRefresh(true);
+             })
+            })
+            })//}
+            // else{
+            //   if(this.design=='prelim'){
+            //     this.utils.setPaymentMode("wallet");
+            //   this.utils.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
+            //   }
+            //   else{
+            //     this.utils.setPaymentMode("wallet");
+            //     this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
+            //   }
+            // }
+          }
+         
+           })
+      
+        },
+        onClientAuthorization: (data) => {
+            console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+            // this.showSuccess = true;
+        },
+        onCancel: (data, actions) => {
+            console.log('OnCancel', data, actions);
+            // this.showCancel = true;
+  
+        },
+        onError: err => {
+            console.log('OnError', err);
+            // this.showError = true;
+        },
+        onClick: (data, actions) => {
+         
+          if(this.netPay!=null && this.assignValue !='clearDues'){
+            overallAmount=this.netPay
+          }
+          else if( this.netPay==null && this.assignValue !='clearDues'){
+            overallAmount=this.settingValue
+          }
+          else if(this.amounttopay!=null && this.assignValue =='clearDues'){
+           overallAmount=this.amounttopay
+          } 
+            console.log('onClick', data, actions);
+            // this.resetStatus();
+        },
+    };
+  }
+
+
   }
   

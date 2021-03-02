@@ -45,7 +45,7 @@
 //    }
 
 //Development Server
-export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api';
+export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api/';
 export const BaseUrl = 'https://devspace.wattmonk.com/api/';
 export const intercomId = 'c6w73e4e';
 export const COMETCHAT_CONSTANTS = {
