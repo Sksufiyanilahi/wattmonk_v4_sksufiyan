@@ -210,8 +210,8 @@ export class PestampDesignDetailsPage implements OnInit {
             this.utilities.hideLoading().then(() => {
               this.uploadStampedFiles(res.id,this.stampfile[0])
               console.log(res);
-              this.navController.pop();
-              this.utilities.setPeStampRefresh(true);
+              // this.navController.pop();
+              // this.utilities.setPeStampRefresh(true);
             })
           },err=>{
             console.log(err);
@@ -238,9 +238,10 @@ export class PestampDesignDetailsPage implements OnInit {
 
         files(event){
           console.log(event.target.files);
-           for(var i=0; i< event.target.files.length;i++){
-             this.stampfile.push(event.target.files[i]) 
-           }
+          //  for(var i=0; i< event.target.files.length;i++){
+          //    this.stampfile.push(event.target.files[i]) 
+          //  }
+          this.stampfile = event.target.files;
            console.log(this.stampfile);
          }
 
@@ -261,13 +262,15 @@ export class PestampDesignDetailsPage implements OnInit {
             console.log("file upload data---"+data);
            }
          }
-         this.utilities.uploadingSnackBar("Stamped File Uploading...").then(()=>{
+         this.utilities.showLoading("Stamped File Uploading").then(()=>{
          this.apiService.uploadFile(data).subscribe(res=>{
-           this.utilities.hideUploadingLoading();
+           this.utilities.hideLoading();
            console.log(res);
+           this.navController.pop();
+              this.utilities.setPeStampRefresh(true);
     
          }, responseError => {
-          this.utilities.hideUploadingLoading();
+          this.utilities.hideLoading();
           const error: ErrorModel = responseError.error;
           this.utilities.errorSnackBar(error.message[0].messages[0].message);
         })

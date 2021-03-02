@@ -541,8 +541,8 @@ else if(data.discounttype=='amount'){
 
     }
 
-    var address = design.address.substring(0, 60);
-    var groupName = design.name + "_" + address;
+    var address = this.fulldesigndata.address.substring(0, 60);
+    var groupName = this.fulldesigndata.name + "_" + address;
 
     var groupType = CometChat.GROUP_TYPE.PRIVATE;
     var password = "";
@@ -551,7 +551,7 @@ else if(data.discounttype=='amount'){
 
     CometChat.createGroup(group).then(group=>{
       let membersList = [
-        new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+        new CometChat.GroupMember("" + this.fulldesigndata.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
       ];
       CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
         this.cdr.detectChanges();

@@ -56,6 +56,7 @@ export class PestampSchedulePage implements OnInit {
   roofData:any;
   permitPlanData:any;
   tabsDisabled = false;
+  buttonValueCheck:string;
   
   // GoogleAutocomplete: google.maps.places.AutocompleteService;
   // autocompleteItems: any[];
@@ -197,29 +198,30 @@ export class PestampSchedulePage implements OnInit {
    }
 
    /* FOR UPLOAD ATTIC PHOTOS OR FILES */
-   uploadAtticFiles(recordid: number){
+   uploadAtticFiles(response: any){
+     console.log("hello",response)
      const data = new FormData();
      for(var i=0; i< this.atticPhotosList.length;i++){
        data.append("files",this.atticPhotosList[i]);
        if(i ==0){
         //data.append('files', file);
-        data.append('path', "pestamp/" + recordid);
-        data.append('refId', ""+recordid);
+        data.append('path', "pestamp/" + response.id);
+        data.append('refId', ""+response.id);
         data.append('ref', "pestamp");
         data.append('field', "atticphotos");
         
         console.log("file upload data---"+data);
        }
      }
-     this.utils.uploadingSnackBar("Attic File Uploading...").then(()=>{
+     this.utils.showLoading("Attic File Uploading...").then(()=>{
      this.apiService.uploadFile(data).subscribe(res=>{
-       this.utils.hideUploadingLoading();
+       this.utils.hideLoading();
       if(this.isRoofFileUpload)
       {
-        this.uploadRoofFiles(recordid)
+        this.uploadRoofFiles(response)
       }
      }, responseError => {
-      this.utils.hideUploadingLoading();
+      this.utils.hideLoading();
       const error: ErrorModel = responseError.error;
       this.utils.errorSnackBar(error.message[0].messages[0].message);
     })
@@ -240,29 +242,29 @@ export class PestampSchedulePage implements OnInit {
    }
 
    /* FOR UPLOAD ROOF PHOTOS OR FILES */
-   uploadRoofFiles(recordid: number){
+   uploadRoofFiles(response: any){
      const data = new FormData();
      for(var i=0; i< this.roofPhotosList.length;i++){
        data.append("files",this.roofPhotosList[i]);
        if(i ==0){
         //data.append('files', file);
-        data.append('path', "pestamp/" + recordid);
-        data.append('refId', ""+recordid);
+        data.append('path', "pestamp/" + response.id);
+        data.append('refId', ""+response.id);
         data.append('ref', "pestamp");
         data.append('field', "roofphotos");
         
         console.log("file upload data---"+data);
        }
      }
-     this.utils.uploadingSnackBar("Roof File Uploading...").then(()=>{
+     this.utils.showLoading("Roof File Uploading...").then(()=>{
      this.apiService.uploadFile(data).subscribe(res=>{
-       this.utils.hideUploadingLoading();
+       this.utils.hideLoading();
       if(this.isPermitPlanFileUpload)
       {
-        this.uploadPermitPlanFiles(recordid);
+        this.uploadPermitPlanFiles(response);
       }
      }, responseError => {
-      this.utils.hideUploadingLoading();
+      this.utils.hideLoading();
       const error: ErrorModel = responseError.error;
       this.utils.errorSnackBar(error.message[0].messages[0].message);
     })
@@ -283,25 +285,50 @@ export class PestampSchedulePage implements OnInit {
    }
 
    /* FOR UPLOAD PERMIT PLAN PHOTOS OR FILES */
-   uploadPermitPlanFiles(recordid: number){
+   uploadPermitPlanFiles(response: any){
      const data = new FormData();
      for(var i=0; i< this.permitPlanList.length;i++){
        data.append("files",this.permitPlanList[i]);
        if(i ==0){
         //data.append('files', file);
-        data.append('path', "pestamp/" + recordid);
-        data.append('refId', ""+recordid);
+        data.append('path', "pestamp/" + response.id);
+        data.append('refId', ""+response.id);
         data.append('ref', "pestamp");
         data.append('field', "permitplan");
         
         console.log("file upload data---"+data);
        }
      }
-     this.utils.uploadingSnackBar("Permit Plan Uploading...").then(()=>{
+     this.utils.showLoading("Permit Plan Uploading...").then(()=>{
      this.apiService.uploadFile(data).subscribe(res=>{
-      this.utils.hideUploadingLoading();
+      this.utils.hideLoading();
+      if(this.buttonValueCheck == 'save'){
+      this.router.navigate(['/pestamp-homepage'])
+      if(this.designId==0){
+          this.utils.showSnackBar('Pe Stamp have been Created');
+      }
+      else{
+        this.utils.showSnackBar('Pe Stamp have been updated');
+      }
+          // this.utils.showSnackBar('Design have been saved');
+          this.utils.setPeStampRefresh(true);
+      }else{
+        let objToSend: NavigationExtras = {
+          queryParams: {
+          designData:response,
+          value:'assign'
+          },
+          skipLocationChange: false,
+          fragment: 'top' 
+      };
+  
+  
+  this.router.navigate(['/pestamp-payment-modal'], { 
+    state: { productdetails: objToSend }
+  });
+      }
      }, responseError => {
-      this.utils.hideUploadingLoading();
+      this.utils.hideLoading();
       const error: ErrorModel = responseError.error;
       this.utils.errorSnackBar(error.message[0].messages[0].message);
     })
@@ -447,6 +474,7 @@ export class PestampSchedulePage implements OnInit {
   /* FOR SUBMIT FORM */
   submitForm(e){
     console.log(e)
+    this.buttonValueCheck = e;
     if(this.firstFormGroup.status=='VALID')
     {
       var tomorrow = new Date();
@@ -482,34 +510,16 @@ export class PestampSchedulePage implements OnInit {
     }
     this.utils.showLoading('Saving').then(() => {
       this.apiService.addSiteAssessment(data).subscribe(res => {
+        this.utils.hideLoading();
         if(stampingType=='structural' || stampingType == 'both')
           {
-            this.uploadAtticFiles(res.id)
+            this.uploadAtticFiles(res)
           }
           //if(stampingType=='electrical')
           else
           {
-            this.uploadPermitPlanFiles(res.id);
+            this.uploadPermitPlanFiles(res);
           }
-          setTimeout(()=>{
-            this.utils.hideLoading().then(() => {
-              console.log('Res', res);
-              //this.createChatGroup(response);
-              this.router.navigate(['/pestamp-homepage'])
-              this.utils.showSnackBar('Pe Stamp have been Created');
-              // this.utils.showSnackBar('Design have been saved');
-              this.utils.setPeStampRefresh(true);
-              // this.navController.pop();
-              // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-              //   modal.present();
-              //   modal.onWillDismiss().then((dismissed) => {
-                  // this.utils.setHomepageDesignRefresh(true);
-              //     this.navController.pop();
-              //   });
-              // });
-
-            });
-          },2000)
       },
       responseError => {
        this.utils.hideLoading().then(() => {
@@ -550,27 +560,27 @@ export class PestampSchedulePage implements OnInit {
     console.log(res);
     if(stampingType=='structural' || stampingType == 'both')
     {
-      this.uploadAtticFiles(res.id)
+      this.uploadAtticFiles(res)
     }
     //if(stampingType=='electrical')
     else
     {
-      this.uploadPermitPlanFiles(res.id);
+      this.uploadPermitPlanFiles(res);
     }
           //this.router.navigate(['pestamp-payment-modal',{isConfirmed: false, isLater: false, ispestamp: true, pestampid: res.id}]);
-          let objToSend: NavigationExtras = {
-            queryParams: {
-            designData:res,
-            value:'assign'
-            },
-            skipLocationChange: false,
-            fragment: 'top' 
-        };
+    //       let objToSend: NavigationExtras = {
+    //         queryParams: {
+    //         designData:res,
+    //         value:'assign'
+    //         },
+    //         skipLocationChange: false,
+    //         fragment: 'top' 
+    //     };
     
     
-    this.router.navigate(['/pestamp-payment-modal'], { 
-      state: { productdetails: objToSend }
-    });
+    // this.router.navigate(['/pestamp-payment-modal'], { 
+    //   state: { productdetails: objToSend }
+    // });
         },
   responseError => {
    this.utils.hideLoading().then(() => {
@@ -607,34 +617,35 @@ export class PestampSchedulePage implements OnInit {
 }
 this.utils.showLoading('Saving').then(() => {
   this.apiService.updatePestamps(this.designId,data).subscribe(res => {
+    this.utils.hideLoading();
     if(stampingType=='structural' || stampingType == 'both')
           {
-            this.uploadAtticFiles(res.id)
+            this.uploadAtticFiles(res)
           }
           //if(stampingType=='electrical')
           else
           {
-            this.uploadPermitPlanFiles(res.id);
+            this.uploadPermitPlanFiles(res);
           }
-      setTimeout(()=>{
-        this.utils.hideLoading().then(() => {
-          console.log('Res', res);
-          //this.createChatGroup(response);
-          this.router.navigate(['/pestamp-homepage'])
-          this.utils.showSnackBar('Pe Stamp have been updated');
-          // this.utils.showSnackBar('Design have been saved');
-          this.utils.setPeStampRefresh(true);
-          // this.navController.pop();
-          // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-          //   modal.present();
-          //   modal.onWillDismiss().then((dismissed) => {
-              // this.utils.setHomepageDesignRefresh(true);
-          //     this.navController.pop();
-          //   });
-          // });
+      // setTimeout(()=>{
+      //   this.utils.hideLoading().then(() => {
+      //     console.log('Res', res);
+      //     //this.createChatGroup(response);
+      //     this.router.navigate(['/pestamp-homepage'])
+      //     this.utils.showSnackBar('Pe Stamp have been updated');
+      //     // this.utils.showSnackBar('Design have been saved');
+      //     this.utils.setPeStampRefresh(true);
+      //     // this.navController.pop();
+      //     // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+      //     //   modal.present();
+      //     //   modal.onWillDismiss().then((dismissed) => {
+      //         // this.utils.setHomepageDesignRefresh(true);
+      //     //     this.navController.pop();
+      //     //   });
+      //     // });
 
-        });
-      },2000)
+      //   });
+      // },2000)
   },
   responseError => {
    this.utils.hideLoading().then(() => {
@@ -672,26 +683,26 @@ this.utils.showLoading('Saving').then(() => {
     console.log(res);
     if(stampingType=='structural' || stampingType == 'both')
     {
-      this.uploadAtticFiles(res.id)
+      this.uploadAtticFiles(res)
     }
     //if(stampingType=='electrical')
     else
     {
-      this.uploadPermitPlanFiles(res.id);
+      this.uploadPermitPlanFiles(res);
     }
-          let objToSend: NavigationExtras = {
-            queryParams: {
-            designData:res,
-            value:'assign'
-            },
-            skipLocationChange: false,
-            fragment: 'top' 
-        };
+    //       let objToSend: NavigationExtras = {
+    //         queryParams: {
+    //         designData:res,
+    //         value:'assign'
+    //         },
+    //         skipLocationChange: false,
+    //         fragment: 'top' 
+    //     };
     
     
-    this.router.navigate(['/pestamp-payment-modal'], { 
-      state: { productdetails: objToSend }
-    });
+    // this.router.navigate(['/pestamp-payment-modal'], { 
+    //   state: { productdetails: objToSend }
+    // });
   },
   responseError => {
    this.utils.hideLoading().then(() => {
