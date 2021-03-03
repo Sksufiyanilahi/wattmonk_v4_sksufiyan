@@ -27,17 +27,21 @@
   </ion-row>
 
 <ion-row  class="ion-no-padding position-absolute header-icon-position full-width">
-<ion-col class="flex-center" *ngIf="activity_details?.type=='design'">
+<ion-col class="flex-center" *ngIf="activity_details?.requesttype=='prelim'">
 
-  <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
+  <ion-img src="/assets/detailpage/Prelim.svg" class="header-icon"></ion-img>
+</ion-col>
+<ion-col class="flex-center" *ngIf="activity_details?.requesttype=='permit'">
+
+  <ion-img src="/assets/detailpage/Permit.svg" class="header-icon"></ion-img>
 </ion-col>
 <ion-col class="flex-center" *ngIf="activity_details?.type=='survey'">
 
-  <ion-img src="/assets/images/survey.svg" class="header-icon"></ion-img>
+  <ion-img src="/assets/detailpage/Survey.svg" class="header-icon"></ion-img>
 </ion-col>
 <ion-col class="flex-center" *ngIf="name=='pestamp'">
 
-  <ion-img src="/assets/images/stamp.svg" class="header-icon"></ion-img>
+  <ion-img src="/assets/detailpage/PEStamping.svg" class="header-icon"></ion-img>
 </ion-col>
 </ion-row></ion-grid>
 
