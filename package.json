@@ -115,7 +115,7 @@
     "ng-intercom": "^8.0.2",
     "ng2-charts": "^2.4.2",
     "ngx-image-compress": "8.0.4",
-    "ngx-paypal": "4.0.2",
+    "ngx-paypal": "^6.1.0",
     "ngx-pinch-zoom": "2.4.4",
     "ngx-timer": "1.0.6",
     "recursive-readdir": "2.2.2",
@@ -208,13 +208,16 @@
       "cordova-plugin-telerik-imagepicker": {
         "PHOTO_LIBRARY_USAGE_DESCRIPTION": " "
       },
-      "cordova-plugin-firebase": {},
       "cordova-plugin-local-notification": {},
       "cordova-plugin-file-opener2": {
         "ANDROID_SUPPORT_V4_VERSION": "27.+"
       },
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-mixpanel": {}
+      "cordova-plugin-mixpanel": {
+        "PLAY_SERVICES_VERSION": "+",
+        "FIREBASE_VERSION": "+"
+      },
+      "cordova-plugin-firebase": {}
     },
     "husky": {
       "hooks": {
