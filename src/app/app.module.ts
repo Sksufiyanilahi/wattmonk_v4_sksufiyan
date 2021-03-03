@@ -8,7 +8,7 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {AuthGuardService} from './auth-guard.service';
 import {StorageService} from './storage.service';
 import {UtilitiesModule} from './utilities/utilities.module';
@@ -41,12 +41,14 @@ import {AngularFireModule} from '@angular/fire';
 import {environment} from 'src/environments/environment';
 import {Mixpanel, MixpanelPeople} from '@ionic-native/mixpanel/ngx';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
+import { MyLoaderComponent } from './components/my-loader/my-loader.component';
+import { LoaderInterceptorService } from './interceptors/loader-interceptor.service';
 
 // import { LinkifyPipe } from './linkify.pipe';
 
 
 @NgModule({
-    declarations: [AppComponent, SuccessModalComponent],
+    declarations: [AppComponent, SuccessModalComponent,MyLoaderComponent],
     entryComponents: [SuccessModalComponent],
     imports: [
         BrowserModule,
@@ -75,6 +77,7 @@ import {BackgroundMode} from '@ionic-native/background-mode/ngx';
         SplashScreen,
         // FCM,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+        // { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptorService, multi: true },
         HttpClient,
         StorageService,
         AuthGuardService,
