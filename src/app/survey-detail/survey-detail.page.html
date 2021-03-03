@@ -47,7 +47,7 @@
         </ion-row>
         <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
             <ion-col class="flex-center">
-                <ion-img src="/assets/images/survey.svg" class="header-icon"></ion-img>
+                <ion-img src="/assets/detailpage/Survey.svg" class="header-icon"></ion-img>
             </ion-col>
         </ion-row>
     </ion-grid>
@@ -144,610 +144,592 @@
                                 <!-- </ion-item> -->
                             </ion-col>
                         
-                        
-                            <ion-col size="6" *ngFor="let comment of survey.comments">
-                                <p  [innerHTML]="comment?.message | linkify" class="comment font" style="text-align:left;margin:0px"></p>
-                                <p class="comment-by" style="text-align:left;margin-top:0px">Posted by {{comment.createdby?.firstname}}
-                                    {{comment.createdby?.lastname}}</p>
-                            </ion-col>
-                            <!-- <ion-col style="text-align: right;">{{comments.createdBy.firstname}} &nbsp;{{comments.createdBy.lastname}} </ion-col>
-                            <ion-col style="text-align: right;">{{comments.createdBy.updated_at | date:'dd/MM/yyyy'}}</ion-col> -->
-                        </ion-row>
-               
-                        <ion-row *ngIf="survey.reviewissues || survey.reviewissues !==null  " class="ion-no-padding ion-margin-top">
-                            <ion-col size="6">
-                                <span class="models font"> Review Comments</span>
-                            </ion-col>
-                            <!-- <div> -->
-                
-                            <ion-col size="6"  class="ion-no-padding">
-                                <div >
-                                    <p class="comment font" style="text-align: right;margin:0px">{{survey?.reviewissues}}</p>
-                                    <p class="comment-by" style="text-align: right;margin-top:0px">Posted by {{survey.reviewassignedto?.firstname}}
-                                        {{survey.reviewassignedto?.lastname}}</p>
-                                </div>
-                            </ion-col>
-                            <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
-                                         
-                                        </ion-col> -->
-                
-                            <!-- </div> -->
-                
-                        </ion-row>
+                            <ion-col size="6" *ngFor="let comment of survey.comments">	
+                                <p  [innerHTML]="comment?.message | linkify" class="comment font" style="text-align:left;margin:0px"></p>	
+                                <p class="comment-by" style="text-align:left;margin-top:0px">Posted by {{comment.createdby?.firstname}}	
+                                    {{comment.createdby?.lastname}}</p>	
+                            </ion-col>	
+                            <!-- <ion-col style="text-align: right;">{{comments.createdBy.firstname}} &nbsp;{{comments.createdBy.lastname}} </ion-col>	
+                            <ion-col style="text-align: right;">{{comments.createdBy.updated_at | date:'dd/MM/yyyy'}}</ion-col> -->	
+                        </ion-row>	
 
-                        <ion-row class="bkg">
-                            <ion-col class="hgt-margin">
-                                <!-- <ion-item> -->
-                                    <label>Assignee Details</label>
-                                <!-- </ion-item> -->
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <ion-col size="6">Assigned To</ion-col>
-                            <ion-col size="6">{{survey.assignedto?.firstname}} &nbsp; {{survey.assignedto?.lastname}}</ion-col>
-                        </ion-row>
-                    </ion-grid>
-                    
-                   <ion-grid *ngSwitchCase="'electricals'">
-                    <ion-row>
-                        <ion-col>
-                            <ion-segment scrollable [(ngModel)]="electricals" class="segment-btn">
-                                <ion-segment-button class="wd140" value="MSB">
-                                    <ion-label>MSP</ion-label>
-                                </ion-segment-button>
-                                <ion-segment-button value="utilityMeter" class="wd140">
-                                    <ion-label>Utility Meter</ion-label>
-                                </ion-segment-button>
-                                <ion-segment-button *ngIf="survey.existingsolarsystem" value="pvMeter" class="wd140">
-                                    <ion-label>PV Inverter</ion-label>
-                                </ion-segment-button>
-                                <ion-segment-button value="acDisconnect" class="wd140" *ngIf="survey.existingsolarsystem">
-                                    <ion-label>AC Disconnected</ion-label>
-                                </ion-segment-button>
-                            </ion-segment>
-                        </ion-col>
-                    </ion-row>
-                            <div [ngSwitch]="electricals">
-                                <div *ngSwitchCase="'MSB'">
-                                  
-                                    
-                                    <ion-slides pager="true" zoom [options]="slideOpts" class="image-slider">
-                                        
-                                        <ion-slide *ngFor="let elecmsb of survey.mspimages,let i=index">
-                                            <ion-row><ion-col size="12" *ngIf="i=='0'"><span>MSP is located :</span>&nbsp;<span>{{survey.msplocation | titlecase}} for this site</span></ion-col>
-                                                <ion-col size="12" *ngIf="i=='1'"><span>MSP/BUS Rating is :</span>&nbsp;<span>{{survey.msprating}} </span></ion-col>
-                                                <ion-col size="12" *ngIf="i=='2'"><span>Main breaker size is :</span>&nbsp;<span>{{survey.mainbreakersize}} for this site </span></ion-col>
-                                                <ion-col size="12" *ngIf="i=='3'"><span>Main Breaker location in MSP is :</span>&nbsp;<span>{{survey.mspbreaker | titlecase}} for this site </span></ion-col>
-                                            <div class="swiper-zoom-container">
-                                                
-                                                <img [src]="elecmsb.url" (click)="showimage(elecmsb.url)" />
-                                            </div>
-                                        </ion-row>
-                                        </ion-slide>
-                                    </ion-slides>
-                                </div>
-                                <div *ngSwitchCase="'utilityMeter'">
-                                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
-                                        <ion-slide *ngFor="let elecutility of survey.utilitymeterimages,let i=index">
-                                            <ion-row><ion-col size="12" *ngIf="i=='0'"><span>Utility meter is :</span>&nbsp;<span>{{survey.utilitymeter | titlecase}} to MSP </span></ion-col>
-                                            <div class="swiper-zoom-container">
-                                                <img [src]="elecutility.url" (click)="showimage(elecutility.url)" width='100%'/>
-                                            </div>
-                                        </ion-row>
-                                        </ion-slide>
-                                    </ion-slides>
-                                </div>
-                                <div *ngSwitchCase="'pvMeter'">
-                                    <ion-slides pager="true" [options]="slideOpts" zom="true">
-                                        
-                                        <ion-slide *ngFor="let elecpvmeter of survey.pvmeterimages,let i=index">
-                                            <ion-row><ion-col size ="12"><span>PV inverter is located :</span>&nbsp;<span>{{survey.pvinverterlocation | titlecase}} the site </span></ion-col>
-                                                <ion-col size ="12"><span>Inverter manufacturer and Model is :</span>&nbsp;<span>{{survey.invertermanufacturerandmodel | titlecase}}</span></ion-col>
-                                               
-                                            <div class="swiper-zoom-container">
-                                                <img [src]="elecpvmeter.url" (click)="showimage(elecpvmeter.url)" width='100%'/>
-                                            </div>
-                                        </ion-row>
-                                        </ion-slide>
-                                    </ion-slides>
-                                </div>
-                                <div *ngSwitchCase="'acDisconnect'">
-                                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
-                                        <ion-slide *ngFor="let elecacdisconnect of survey.acdisconnectimages">
-                                            <div class="swiper-zoom-container">
-                                                <img [src]="elecacdisconnect.url" (click)="showimage(elecacdisconnect.url)" width='100%'/>
-                                            </div>
+                        <ion-row *ngIf="survey.reviewissues || survey.reviewissues !==null  " class="ion-no-padding ion-margin-top">	
+                            <ion-col size="6">	
+                                <span class="models font"> Review Comments</span>	
+                            </ion-col>	
+                            <!-- <div> -->	
 
-                                        </ion-slide>
-                                    </ion-slides>
-                                </div>
-                            </div>
-                     
-                 </ion-grid>
-                   <ion-grid *ngSwitchCase="'solarPanel'">
-                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
-                        <ion-slide *ngFor="let solarpanel of survey.solarpanelsimages">
-                            <div class="swiper-zoom-container">
-                            <h2 class="position-fix">{{solarpanel.name}}</h2>
-                                <img [src]="solarpanel.url" (click)="showimage(solarpanel.url)"/>
-                            </div>
-                        </ion-slide>
-                    </ion-slides>
-                 </ion-grid>
-                   <ion-grid *ngSwitchCase="'roof'">
-                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
-                        <ion-slide *ngFor="let roof of survey.roofimages,let i=index">
-                            <ion-row>
-                                <ion-col size ="12"><span *ngIf="i=='0'">Roof Tilt :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col>
-                            <div class="swiper-zoom-container">
-                                <h2 class="position-fix">{{roof.name}}</h2>
-                                <img [src]="roof.url" (click)="showimage(roof.url)" />
-                            </div>
-                        </ion-row>
+                            <ion-col size="6"  class="ion-no-padding">	
+                                <div >	
+                                    <p class="comment font" style="text-align: right;margin:0px">{{survey?.reviewissues}}</p>	
+                                    <p class="comment-by" style="text-align: right;margin-top:0px">Posted by {{survey.reviewassignedto?.firstname}}	
+                                        {{survey.reviewassignedto?.lastname}}</p>	
+                                </div>	
+                            </ion-col>	
+                            <!-- <ion-col size="12" class="ion-no-padding ion-text-end">	
+                                         	
+                                        </ion-col> -->	
 
-                        </ion-slide>
-                        <ion-slide *ngFor="let roofdimension of survey.roofdimensionimages,let i=index">
-                            <ion-row>
-                                <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->
-                            <div class="swiper-zoom-container">
-                                <h2 class="position-fix">{{roofdimension?.name}}</h2>
-                                <img [src]="roofdimension.url" (click)="showimage(roofdimension.url)" />
-                            </div>
-                        </ion-row>
+                            <!-- </div> -->	
 
-                        </ion-slide>
-                        <ion-slide *ngFor="let roofobstacle of survey.obstaclesimages,let i=index">
-                            <ion-row>
-                                <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->
-                            <div class="swiper-zoom-container">
-                                <h2 class="position-fix">{{roofobstacle?.name}}</h2>
-                                <img [src]="roofobstacle.url" (click)="showimage(roofobstacle.url)" />
-                            </div>
-                        </ion-row>
+                        </ion-row>	
 
-                        </ion-slide>
-                        <ion-slide *ngFor="let roofobstacledimension of survey.obstaclesdimensionsimages,let i=index">
-                            <ion-row>
-                                <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->
-                            <div class="swiper-zoom-container">
-                                <h2 class="position-fix">{{roofobstacledimension?.name}}</h2>
-                                <img [src]="roofobstacledimension.url" (click)="showimage(roofobstacledimension.url)" />
-                            </div>
-                        </ion-row>
+                        <ion-row class="bkg">	
+                            <ion-col class="hgt-margin">	
+                                <!-- <ion-item> -->	
+                                    <label>Assignee Details</label>	
+                                <!-- </ion-item> -->	
+                            </ion-col>	
+                        </ion-row>	
+                        <ion-row>	
+                            <ion-col size="6">Assigned To</ion-col>	
+                            <ion-col size="6">{{survey.assignedto?.firstname}} &nbsp; {{survey.assignedto?.lastname}}</ion-col>	
+                        </ion-row>	
+                    </ion-grid>	
 
-                        </ion-slide>
-                    </ion-slides>
-                 </ion-grid>
-                 <ion-grid *ngSwitchCase="'attic'">
-                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
-                        <ion-slide *ngFor="let attic of survey.atticimages,let i=index">
-                            <ion-row>
-                                <ion-col size ="12" *ngIf="i=='0'"><span >Framing is :</span>&nbsp;<span>{{survey.framing}} </span></ion-col>
-                                <ion-col size ="12" *ngIf="i=='1'"><span >Framing size is : </span>&nbsp;<span>{{survey.framingsize}} </span></ion-col>
-                                <ion-col size ="12" *ngIf="i=='2'"><span >Distance between two rafts : </span>&nbsp;<span>{{survey.distancebetweentworafts}} </span></ion-col>
-                            <div class="swiper-zoom-container">
-                               
-                                <img [src]="attic.url" (click)="showimage(attic.url)" />
-                            </div>
-                        </ion-row>
-
-                        </ion-slide>
-                    </ion-slides>
-                 </ion-grid>
-                   <ion-grid *ngSwitchCase="'appliances'">
-                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
-                        <ion-slide *ngFor="let appliance of survey.appliancesimages">
-                            <ion-row>
-                                <ion-col size="12"><span>Appliance name is:</span>&nbsp;<span>{{appliance.name}}</span> </ion-col>
-                            <div class="swiper-zoom-container">
-                                <h2 class="position-fix">{{appliance.name}}</h2>
-                                <img [src]="appliance.url"  (click)="showimage(appliance.url)"/>
-                            </div>
-                        </ion-row>
-                        </ion-slide>
-                    </ion-slides>
-                 </ion-grid>
-                   <ion-grid *ngSwitchCase="'equipmentMarketing'">
-                    <ion-slides pager="true" [options]="slideOpts" zoom="true">
-                        <ion-slide >
-                            <div class="swiper-zoom-container">
-                                <h2 class="position-fix">{{survey.electricalslocation.name}}</h2>
-                                <img [src]="survey.electricalslocation.url"  (click)="showimage(survey.electricalslocation.url)"/>
-                            </div>
-                        </ion-slide>
-                    </ion-slides>
-                 </ion-grid>
-                   <ion-grid *ngSwitchCase="'generalInfo'">
-                    <ion-row class="bkg">
-                        <ion-col class="hgt-margin">
-                            <!-- <ion-item> -->
-                                <label>Details</label>
-                            <!-- </ion-item> -->
-                        </ion-col>
-                    </ion-row>
-                    <!-- <ion-row>
-                        <ion-col size="6">Existing Modules Brand</ion-col>
-                        <ion-col size="6">{{survey.modulemake.name}}</ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col size="6">Existing Modules Model</ion-col>
-                        <ion-col size="6">{{survey.modulemodel.name}}</ion-col>
-                    </ion-row> -->
-                    <ion-row>
-                        <ion-col size="6">Battery System</ion-col>
-                        <ion-col size="6">{{survey.batterysystem}}</ion-col>
-                    </ion-row>
-                    <ion-row *ngIf="survey.batterysystem=='true'">
-                        <ion-col size="6">Comments</ion-col>
-                        <ion-col size="6">{{survey.comments[0]?.message}}</ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col size="6">Existing Solar System</ion-col>
-                        <ion-col size="6">{{survey.existingsolarsystem}}</ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col size="6">Interconnection</ion-col>
-                        <ion-col size="6">{{survey.interconnection}}</ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col size="6">Service Feed Source</ion-col>
-                        <ion-col size="6">{{survey?.servicefeedsource}}</ion-col>
-                    </ion-row>
-                    
-                 </ion-grid>
-                </div>
-
-               
-                <!-- <ion-content [fullscreen]="true" class="ion-padding"> -->
-              
-
-                <!-- </ion-content> -->
-            <!-- </ion-col> -->
-        <!-- </ion-row> -->
-    <!-- </ion-grid> -->
-    <!-- <ion-grid *ngIf="survey" class="page-text-color">
-        <ion-row>
-            <ion-col size="12">
-                <span (click)="openAddressOnMap(survey.address)" class="address">{{survey.address}}</span>
-            </ion-col>
-        </ion-row>
-        <ion-row class="ion-margin-top">
-            <ion-col size="12">
-                <span class="input-placeholder">date and time</span>
-            </ion-col>
-            <ion-col>
-                <div class="d-flex">
-                    <div class="d-flex flex-column">
-                        <div class="main-background d-flex flex-row align-center justify-center">
-                            <div class="d-flex flex-column align-center justify-center ion-padding date-background">
-                                <span class="month">{{survey.datetime | date: 'MMM'}}</span>
-                                <span class="day">{{survey.datetime | date: 'dd'}}</span>
-                            </div>
-                            <div class="ion-padding">
-                                <span class="time">{{survey.datetime | date: 'hh : mm a'}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ion-col>
-            <ion-col size="auto" *ngIf="iseditable">
-                <div class="d-flex flex-column align-center justify-center" (click)="reschedule()">
-                    <ion-img src="/assets/images/schedule.svg" class="reschedule-icon"></ion-img>
-                    <span>Reschedule</span>
-                </div>
-            </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-no-padding">
-            <ion-col><span class="model-type">jobtype</span></ion-col>
-            <ion-col size="auto">
-                <span class="model-name">{{survey.jobtype}}</span>
-            </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-margin-top">
-            <ion-col size="12">
-                <span class="models">Solar Details</span>
-            </ion-col>
-            <ion-col>
-                <ion-grid class="ion-no-padding">
-                    <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type">make</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.modulemake">{{survey.modulemake.name}}</span>
-                            <span class="model-name" *ngIf="!survey.modulemake">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span class="model-type">model</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.modulemodel">{{survey.modulemodel.name}}</span>
-                            <span class="model-name" *ngIf="!survey.modulemodel">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-margin-top">
-            <ion-col size="12">
-                <span class="models">Inverter Details</span>
-            </ion-col>
-            <ion-col>
-                <ion-grid class="ion-no-padding">
-                    <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type">make</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.invertermake">{{survey.invertermake}}</span>
-                            <span class="model-name" *ngIf="!survey.invertermake">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span class="model-type">model</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.invertermodel">{{survey.invertermodel}}</span>
-                            <span class="model-name" *ngIf="!survey.invertermodel">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-margin-top">
-            <ion-col>
-                <ion-grid class="ion-no-padding">
-                    <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type">utility</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.utility">{{survey.utility.name}}</span>
-                            <span class="model-name" *ngIf="!survey.utility">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type">msp location</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.msplocation">{{survey.msplocation}}</span>
-                            <span class="model-name" *ngIf="!survey.msplocation">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span class="model-type">msp breaker</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.mspbreaker">{{survey.mspbreaker}}</span>
-                            <span class="model-name" *ngIf="!survey.mspbreaker">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span class="model-type">msp rating</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.msprating">{{survey.msprating}}</span>
-                            <span class="model-name" *ngIf="!survey.msprating">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span class="model-type">main breaker size</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.mainbreakersize">{{survey.mainbreakersize}}</span>
-                            <span class="model-name" *ngIf="!survey.mainbreakersize">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-margin-top">
-            <ion-col>
-                <ion-grid class="ion-no-padding">
-                    <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type">pv meter</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.pvmeter">{{survey.pvmeter}}</span>
-                            <span class="model-name" *ngIf="!survey.pvmeter">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span class="model-type">pv inverter location</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name"
-                                  *ngIf="survey.pvinverterlocation">{{survey.pvinverterlocation}}</span>
-                            <span class="model-name" *ngIf="!survey.pvinverterlocation">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-margin-top">
-            <ion-col>
-                <ion-grid class="ion-no-padding">
-                    <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type">utility meter</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.utilitymeter">{{survey.utilitymeter}}</span>
-                            <span class="model-name" *ngIf="!survey.utilitymeter">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span class="model-type">ac disconnect</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.acdisconnect">{{survey.acdisconnect}}</span>
-                            <span class="model-name" *ngIf="!survey.acdisconnect">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span class="model-type">no of modules</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name" *ngIf="survey.numberofmodules">{{survey.numberofmodules}}</span>
-                            <span class="model-name" *ngIf="!survey.numberofmodules">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span class="model-type">service feed source</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name"
-                                  *ngIf="survey.servicefeedsource">{{survey.servicefeedsource}}</span>
-                            <span class="model-name" *ngIf="!survey.servicefeedsource">n/a</span>
-                        </ion-col>
-                    </ion-row>
-                    <ion-row>
-                        <ion-col><span class="model-type">service feed source</span></ion-col>
-                        <ion-col size="auto">
-                            <span class="model-name"
-                                  *ngIf="survey.interconnection">{{survey.interconnection}}</span>
-                            <span class="model-name" *ngIf="!survey.interconnection">n/a</span>
-                        </ion-col>
-                    </ion-row>
-
-                </ion-grid>
-            </ion-col>
-        </ion-row>
+                   <ion-grid *ngSwitchCase="'electricals'">	
+                    <ion-row>	
+                        <ion-col>	
+                            <ion-segment scrollable [(ngModel)]="electricals" class="segment-btn">	
+                                <ion-segment-button class="wd140" value="MSB">	
+                                    <ion-label>MSP</ion-label>	
+                                </ion-segment-button>	
+                                <ion-segment-button value="utilityMeter" class="wd140">	
+                                    <ion-label>Utility Meter</ion-label>	
+                                </ion-segment-button>	
+                                <ion-segment-button *ngIf="survey.existingsolarsystem" value="pvMeter" class="wd140">	
+                                    <ion-label>PV Inverter</ion-label>	
+                                </ion-segment-button>	
+                                <ion-segment-button value="acDisconnect" class="wd140" *ngIf="survey.existingsolarsystem">	
+                                    <ion-label>AC Disconnected</ion-label>	
+                                </ion-segment-button>	
+                            </ion-segment>	
+                        </ion-col>	
+                    </ion-row>	
+                            <div [ngSwitch]="electricals">	
+                                <div *ngSwitchCase="'MSB'">	
 
 
-        <ion-row class="ion-align-items-center ion-justify-content-center ion-margin-top">
-            <ion-col class="ion-no-padding">
-                <span class="data-header">gallery</span>
-            </ion-col>
-            <ion-col size="auto" [routerLink]="['/gallery/', surveyId]"
-                     routerDirection="forward">
-                <span>View all</span>
-            </ion-col>
-            <ion-col class="ion-align-items-center d-flex" size="12">
-                <img src="/assets/images/images.svg" class="image-count">
-                <span>{{getSurveyImages()}} images</span>
-            </ion-col>
-        </ion-row>
+                                    <ion-slides pager="true" zoom [options]="slideOpts" class="image-slider">	
 
-        <ion-row class="ion-no-padding ion-margin-top">
-            <ion-col size="12" class="ion-no-padding">
-                <span class="data-header">comments</span>
-            </ion-col>
-            <ion-col size="12" class="ion-no-padding">
-                <span class="data-point">"{{survey.comments}}"</span>
-            </ion-col>
-            <ion-col size="12" class="ion-no-padding ion-text-end">
-                <span class="comment-by">Posted by {{survey.createdby.firstname}} {{survey.createdby.lastname}}</span>
-            </ion-col>
-        </ion-row>
+                                        <ion-slide *ngFor="let elecmsb of survey.mspimages,let i=index">	
+                                            <ion-row><ion-col size="12" *ngIf="i=='0'"><span>MSP is located :</span>&nbsp;<span>{{survey.msplocation | titlecase}} for this site</span></ion-col>	
+                                                <ion-col size="12" *ngIf="i=='1'"><span>MSP/BUS Rating is :</span>&nbsp;<span>{{survey.msprating}} </span></ion-col>	
+                                                <ion-col size="12" *ngIf="i=='2'"><span>Main breaker size is :</span>&nbsp;<span>{{survey.mainbreakersize}} for this site </span></ion-col>	
+                                                <ion-col size="12" *ngIf="i=='3'"><span>Main Breaker location in MSP is :</span>&nbsp;<span>{{survey.mspbreaker | titlecase}} for this site </span></ion-col>	
+                                            <div class="swiper-zoom-container">	
 
-        <ion-row>
-            <ion-col><span class="model-type">created at</span></ion-col>
-            <ion-col size="auto">
-                <span class="model-name">{{survey.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
-            </ion-col>
-        </ion-row>
+                                                <img [src]="elecmsb.url" (click)="showimage(elecmsb.url)" />	
+                                            </div>	
+                                        </ion-row>	
+                                        </ion-slide>	
+                                    </ion-slides>	
+                                </div>	
+                                <div *ngSwitchCase="'utilityMeter'">	
+                                    <ion-slides pager="true" [options]="slideOpts" zoom="true">	
+                                        <ion-slide *ngFor="let elecutility of survey.utilitymeterimages,let i=index">	
+                                            <ion-row><ion-col size="12" *ngIf="i=='0'"><span>Utility meter is :</span>&nbsp;<span>{{survey.utilitymeter | titlecase}} to MSP </span></ion-col>	
+                                            <div class="swiper-zoom-container">	
+                                                <img [src]="elecutility.url" (click)="showimage(elecutility.url)" width='100%'/>	
+                                            </div>	
+                                        </ion-row>	
+                                        </ion-slide>	
+                                    </ion-slides>	
+                                </div>	
+                                <div *ngSwitchCase="'pvMeter'">	
+                                    <ion-slides pager="true" [options]="slideOpts" zom="true">	
 
-        <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
-                 *ngIf="assigned">
-            <ion-col class="ion-justify-content-center ion-align-items-center"><span
-                    class="model-type">assigned to</span></ion-col>
-            <ion-col size="auto">
-                <div class="selected d-flex">
-                    <img *ngIf="survey.assignedto.contractorlogo && survey.assignedto.contractorlogo.logo" [src]="survey.assignedto.contractorlogo.logo.url"
-                         class="assignee-image"/>
-                    <div *ngIf="!survey.assignedto.contractorlogo || !survey.assignedto.contractorlogo.logo"
-                         class="assignee-image d-flex flex-row align-center justify-center">
-                        <div class="name_div">
-                            <span style="text-transform: capitalize;">{{survey.assignedto.firstname.substring(0, 1)}}{{survey.assignedto.lastname.substring(0, 1)}}</span>
-                        </div>
-                    </div>
-                </div>
-            </ion-col>
-        </ion-row>
+                                        <ion-slide *ngFor="let elecpvmeter of survey.pvmeterimages,let i=index">	
+                                            <ion-row><ion-col size ="12"><span>PV inverter is located :</span>&nbsp;<span>{{survey.pvinverterlocation | titlecase}} the site </span></ion-col>	
+                                                <ion-col size ="12"><span>Inverter manufacturer and Model is :</span>&nbsp;<span>{{survey.invertermanufacturerandmodel | titlecase}}</span></ion-col>	
 
-        <ion-row class="ion-no-padding ion-margin-top" *ngIf="!assigned">
-            <ion-col size="12">
-                <form novalidate [formGroup]="assigneeForm">
-                    <ion-item class="ion-no-padding no-border" lines="none">
-                        <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
-                                           formControlName="assignto"></app-user-selector>
-                    </ion-item>
-                </form>
-            </ion-col>
-        </ion-row>
+                                            <div class="swiper-zoom-container">	
+                                                <img [src]="elecpvmeter.url" (click)="showimage(elecpvmeter.url)" width='100%'/>	
+                                            </div>	
+                                        </ion-row>	
+                                        </ion-slide>	
+                                    </ion-slides>	
+                                </div>	
+                                <div *ngSwitchCase="'acDisconnect'">	
+                                    <ion-slides pager="true" [options]="slideOpts" zoom="true">	
+                                        <ion-slide *ngFor="let elecacdisconnect of survey.acdisconnectimages">	
+                                            <div class="swiper-zoom-container">	
+                                                <img [src]="elecacdisconnect.url" (click)="showimage(elecacdisconnect.url)" width='100%'/>	
+                                            </div>	
 
-    </ion-grid> -->
-</ion-content>
-<ion-footer *ngIf="((user.role.type=='clientadmin' || user.role.type=='bd')&& survey && survey.status=='created')||(user.role.type=='clientadmin' && survey && survey.status=='surveyassigned')" class="ion-no-border white-bg">
-    <ion-grid>
-        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
-            <ion-col class="ion-no-margin ion-no-padding">
-                <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
-                     <ion-button class="ion-no-margin ion-no-padding" style="float: right;margin-right: 10%;
-                     margin-bottom: 5%;" fill="clear"  (click)="assignedTo(survey)">
-                     Start Survey
-                 </ion-button>
-                 </ion-col>
-        </ion-row>
-    </ion-grid>
+                                        </ion-slide>	
+                                    </ion-slides>	
+                                </div>	
+                            </div>	
 
-</ion-footer>
-<ion-footer *ngIf="(user.role.type=='qcinspector'&& survey && survey.status=='reviewassigned')||(survey && survey.status=='reviewassigned' && survey.reviewassignedto.id==user.id)" class="ion-no-border white-bg">
-    <ion-grid>
-        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
-            <ion-col size="auto">
-                <ion-button class="action-button-color" fill="clear" style="float: left;" (click)="openreviewPassed('fail')">Failed</ion-button>
-                <ion-button class="action-button-color" fill="clear" style="float: right ;" (click)="openreviewPassed('pass')">Passed</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+                 </ion-grid>	
+                   <ion-grid *ngSwitchCase="'solarPanel'">	
+                    <ion-slides pager="true" [options]="slideOpts" zoom="true">	
+                        <ion-slide *ngFor="let solarpanel of survey.solarpanelsimages">	
+                            <div class="swiper-zoom-container">	
+                            <h2 class="position-fix">{{solarpanel.name}}</h2>	
+                                <img [src]="solarpanel.url" (click)="showimage(solarpanel.url)"/>	
+                            </div>	
+                        </ion-slide>	
+                    </ion-slides>	
+                 </ion-grid>	
+                   <ion-grid *ngSwitchCase="'roof'">	
+                    <ion-slides pager="true" [options]="slideOpts" zoom="true">	
+                        <ion-slide *ngFor="let roof of survey.roofimages,let i=index">	
+                            <ion-row>	
+                                <ion-col size ="12"><span *ngIf="i=='0'">Roof Tilt :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col>	
+                            <div class="swiper-zoom-container">	
+                                <h2 class="position-fix">{{roof.name}}</h2>	
+                                <img [src]="roof.url" (click)="showimage(roof.url)" />	
+                            </div>	
+                        </ion-row>	
 
-</ion-footer>
+                        </ion-slide>	
+                        <ion-slide *ngFor="let roofdimension of survey.roofdimensionimages,let i=index">	
+                            <ion-row>	
+                                <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->	
+                            <div class="swiper-zoom-container">	
+                                <h2 class="position-fix">{{roofdimension?.name}}</h2>	
+                                <img [src]="roofdimension.url" (click)="showimage(roofdimension.url)" />	
+                            </div>	
+                        </ion-row>	
 
-<!-- <ion-footer *ngIf="!assigned && survey" class="ion-no-border white-bg">
-    <ion-grid>
-        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
-            <ion-col size="auto">
-                <ion-button class="action-button-color" fill="clear" (click)="updateAssignee()">Done</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+                        </ion-slide>	
+                        <ion-slide *ngFor="let roofobstacle of survey.obstaclesimages,let i=index">	
+                            <ion-row>	
+                                <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->	
+                            <div class="swiper-zoom-container">	
+                                <h2 class="position-fix">{{roofobstacle?.name}}</h2>	
+                                <img [src]="roofobstacle.url" (click)="showimage(roofobstacle.url)" />	
+                            </div>	
+                        </ion-row>	
 
-</ion-footer> -->
+                        </ion-slide>	
+                        <ion-slide *ngFor="let roofobstacledimension of survey.obstaclesdimensionsimages,let i=index">	
+                            <ion-row>	
+                                <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->	
+                            <div class="swiper-zoom-container">	
+                                <h2 class="position-fix">{{roofobstacledimension?.name}}</h2>	
+                                <img [src]="roofobstacledimension.url" (click)="showimage(roofobstacledimension.url)" />	
+                            </div>	
+                        </ion-row>	
 
-<!-- <ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"
-                   shouldBounce="false" distanceTop="0" class="drawer">
-    <form [formGroup]="rescheduleForm">
-        <ion-grid class="drawer">
-            <ion-row>
-                <ion-col size="12">
-                    <span>date and time</span>
-                </ion-col>
-                <ion-col *ngIf="survey" size="auto">
-                    <ion-item lines="none" class="date-picker" (click)="changeDate()">
-                        {{date | date: 'dd MMM'}}
-                    </ion-item>
-                </ion-col>
-                <ion-col *ngIf="survey" size="auto">
-                    <ion-item lines="none" class="date-picker" (click)="changeTime()">
-                        {{date | date: 'hh:mm a'}}
-                    </ion-item>
-                </ion-col>
-            </ion-row>
+                        </ion-slide>	
+                    </ion-slides>	
+                 </ion-grid>	
+                 <ion-grid *ngSwitchCase="'attic'">	
+                    <ion-slides pager="true" [options]="slideOpts" zoom="true">	
+                        <ion-slide *ngFor="let attic of survey.atticimages,let i=index">	
+                            <ion-row>	
+                                <ion-col size ="12" *ngIf="i=='0'"><span >Framing is :</span>&nbsp;<span>{{survey.framing}} </span></ion-col>	
+                                <ion-col size ="12" *ngIf="i=='1'"><span >Framing size is : </span>&nbsp;<span>{{survey.framingsize}} </span></ion-col>	
+                                <ion-col size ="12" *ngIf="i=='2'"><span >Distance between two rafts : </span>&nbsp;<span>{{survey.distancebetweentworafts}} </span></ion-col>	
+                            <div class="swiper-zoom-container">	
 
-            <ion-row>
-                <ion-col size="12">
-                    <span>comments</span>
-                </ion-col>
-                <ion-col size="12">
-                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" formControlName="comments"
-                                  rows="3"></ion-textarea>
-                </ion-col>
-            </ion-row>
+                                <img [src]="attic.url" (click)="showimage(attic.url)" />	
+                            </div>	
+                        </ion-row>	
 
-            <ion-row>
-                <ion-col size="auto">
-                    <ion-button class="buttom-drawer-button" (click)="rescheduleSurvey()">
-                        Confirm
-                    </ion-button>
-                </ion-col>
-                <ion-col size="auto">
-                    <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
-                        Cancel
-                    </ion-button>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </form>
+                        </ion-slide>	
+                    </ion-slides>	
+                 </ion-grid>	
+                   <ion-grid *ngSwitchCase="'appliances'">	
+                    <ion-slides pager="true" [options]="slideOpts" zoom="true">	
+                        <ion-slide *ngFor="let appliance of survey.appliancesimages">	
+                            <ion-row>	
+                                <ion-col size="12"><span>Appliance name is:</span>&nbsp;<span>{{appliance.name}}</span> </ion-col>	
+                            <div class="swiper-zoom-container">	
+                                <h2 class="position-fix">{{appliance.name}}</h2>	
+                                <img [src]="appliance.url"  (click)="showimage(appliance.url)"/>	
+                            </div>	
+                        </ion-row>	
+                        </ion-slide>	
+                    </ion-slides>	
+                 </ion-grid>	
+                   <ion-grid *ngSwitchCase="'equipmentMarketing'">	
+                    <ion-slides pager="true" [options]="slideOpts" zoom="true">	
+                        <ion-slide >	
+                            <div class="swiper-zoom-container">	
+                                <h2 class="position-fix">{{survey.electricalslocation.name}}</h2>	
+                                <img [src]="survey.electricalslocation.url"  (click)="showimage(survey.electricalslocation.url)"/>	
+                            </div>	
+                        </ion-slide>	
+                    </ion-slides>	
+                 </ion-grid>	
+                   <ion-grid *ngSwitchCase="'generalInfo'">	
+                    <ion-row class="bkg">	
+                        <ion-col class="hgt-margin">	
+                            <!-- <ion-item> -->	
+                                <label>Details</label>	
+                            <!-- </ion-item> -->	
+                        </ion-col>	
+                    </ion-row>	
+                    <!-- <ion-row>	
+                        <ion-col size="6">Existing Modules Brand</ion-col>	
+                        <ion-col size="6">{{survey.modulemake.name}}</ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col size="6">Existing Modules Model</ion-col>	
+                        <ion-col size="6">{{survey.modulemodel.name}}</ion-col>	
+                    </ion-row> -->	
+                    <ion-row>	
+                        <ion-col size="6">Battery System</ion-col>	
+                        <ion-col size="6">{{survey.batterysystem}}</ion-col>	
+                    </ion-row>	
+                    <ion-row *ngIf="survey.batterysystem=='true'">	
+                        <ion-col size="6">Comments</ion-col>	
+                        <ion-col size="6">{{survey.comments[0]?.message}}</ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col size="6">Existing Solar System</ion-col>	
+                        <ion-col size="6">{{survey.existingsolarsystem}}</ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col size="6">Interconnection</ion-col>	
+                        <ion-col size="6">{{survey.interconnection}}</ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col size="6">Service Feed Source</ion-col>	
+                        <ion-col size="6">{{survey?.servicefeedsource}}</ion-col>	
+                    </ion-row>	
 
+                 </ion-grid>	
+                </div>	
+
+
+                <!-- <ion-content [fullscreen]="true" class="ion-padding"> -->	
+
+
+                <!-- </ion-content> -->	
+            <!-- </ion-col> -->	
+        <!-- </ion-row> -->	
+    <!-- </ion-grid> -->	
+    <!-- <ion-grid *ngIf="survey" class="page-text-color">	
+        <ion-row>	
+            <ion-col size="12">	
+                <span (click)="openAddressOnMap(survey.address)" class="address">{{survey.address}}</span>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-margin-top">	
+            <ion-col size="12">	
+                <span class="input-placeholder">date and time</span>	
+            </ion-col>	
+            <ion-col>	
+                <div class="d-flex">	
+                    <div class="d-flex flex-column">	
+                        <div class="main-background d-flex flex-row align-center justify-center">	
+                            <div class="d-flex flex-column align-center justify-center ion-padding date-background">	
+                                <span class="month">{{survey.datetime | date: 'MMM'}}</span>	
+                                <span class="day">{{survey.datetime | date: 'dd'}}</span>	
+                            </div>	
+                            <div class="ion-padding">	
+                                <span class="time">{{survey.datetime | date: 'hh : mm a'}}</span>	
+                            </div>	
+                        </div>	
+                    </div>	
+                </div>	
+            </ion-col>	
+            <ion-col size="auto" *ngIf="iseditable">	
+                <div class="d-flex flex-column align-center justify-center" (click)="reschedule()">	
+                    <ion-img src="/assets/images/schedule.svg" class="reschedule-icon"></ion-img>	
+                    <span>Reschedule</span>	
+                </div>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-no-padding">	
+            <ion-col><span class="model-type">jobtype</span></ion-col>	
+            <ion-col size="auto">	
+                <span class="model-name">{{survey.jobtype}}</span>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-margin-top">	
+            <ion-col size="12">	
+                <span class="models">Solar Details</span>	
+            </ion-col>	
+            <ion-col>	
+                <ion-grid class="ion-no-padding">	
+                    <ion-row class="ion-no-padding">	
+                        <ion-col><span class="model-type">make</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.modulemake">{{survey.modulemake.name}}</span>	
+                            <span class="model-name" *ngIf="!survey.modulemake">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col><span class="model-type">model</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.modulemodel">{{survey.modulemodel.name}}</span>	
+                            <span class="model-name" *ngIf="!survey.modulemodel">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                </ion-grid>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-margin-top">	
+            <ion-col size="12">	
+                <span class="models">Inverter Details</span>	
+            </ion-col>	
+            <ion-col>	
+                <ion-grid class="ion-no-padding">	
+                    <ion-row class="ion-no-padding">	
+                        <ion-col><span class="model-type">make</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.invertermake">{{survey.invertermake}}</span>	
+                            <span class="model-name" *ngIf="!survey.invertermake">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col><span class="model-type">model</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.invertermodel">{{survey.invertermodel}}</span>	
+                            <span class="model-name" *ngIf="!survey.invertermodel">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                </ion-grid>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-margin-top">	
+            <ion-col>	
+                <ion-grid class="ion-no-padding">	
+                    <ion-row class="ion-no-padding">	
+                        <ion-col><span class="model-type">utility</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.utility">{{survey.utility.name}}</span>	
+                            <span class="model-name" *ngIf="!survey.utility">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row class="ion-no-padding">	
+                        <ion-col><span class="model-type">msp location</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.msplocation">{{survey.msplocation}}</span>	
+                            <span class="model-name" *ngIf="!survey.msplocation">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col><span class="model-type">msp breaker</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.mspbreaker">{{survey.mspbreaker}}</span>	
+                            <span class="model-name" *ngIf="!survey.mspbreaker">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col><span class="model-type">msp rating</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.msprating">{{survey.msprating}}</span>	
+                            <span class="model-name" *ngIf="!survey.msprating">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col><span class="model-type">main breaker size</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.mainbreakersize">{{survey.mainbreakersize}}</span>	
+                            <span class="model-name" *ngIf="!survey.mainbreakersize">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                </ion-grid>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-margin-top">	
+            <ion-col>	
+                <ion-grid class="ion-no-padding">	
+                    <ion-row class="ion-no-padding">	
+                        <ion-col><span class="model-type">pv meter</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.pvmeter">{{survey.pvmeter}}</span>	
+                            <span class="model-name" *ngIf="!survey.pvmeter">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col><span class="model-type">pv inverter location</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name"	
+                                  *ngIf="survey.pvinverterlocation">{{survey.pvinverterlocation}}</span>	
+                            <span class="model-name" *ngIf="!survey.pvinverterlocation">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                </ion-grid>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-margin-top">	
+            <ion-col>	
+                <ion-grid class="ion-no-padding">	
+                    <ion-row class="ion-no-padding">	
+                        <ion-col><span class="model-type">utility meter</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.utilitymeter">{{survey.utilitymeter}}</span>	
+                            <span class="model-name" *ngIf="!survey.utilitymeter">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col><span class="model-type">ac disconnect</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.acdisconnect">{{survey.acdisconnect}}</span>	
+                            <span class="model-name" *ngIf="!survey.acdisconnect">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col><span class="model-type">no of modules</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name" *ngIf="survey.numberofmodules">{{survey.numberofmodules}}</span>	
+                            <span class="model-name" *ngIf="!survey.numberofmodules">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col><span class="model-type">service feed source</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name"	
+                                  *ngIf="survey.servicefeedsource">{{survey.servicefeedsource}}</span>	
+                            <span class="model-name" *ngIf="!survey.servicefeedsource">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                    <ion-row>	
+                        <ion-col><span class="model-type">service feed source</span></ion-col>	
+                        <ion-col size="auto">	
+                            <span class="model-name"	
+                                  *ngIf="survey.interconnection">{{survey.interconnection}}</span>	
+                            <span class="model-name" *ngIf="!survey.interconnection">n/a</span>	
+                        </ion-col>	
+                    </ion-row>	
+                </ion-grid>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-align-items-center ion-justify-content-center ion-margin-top">	
+            <ion-col class="ion-no-padding">	
+                <span class="data-header">gallery</span>	
+            </ion-col>	
+            <ion-col size="auto" [routerLink]="['/gallery/', surveyId]"	
+                     routerDirection="forward">	
+                <span>View all</span>	
+            </ion-col>	
+            <ion-col class="ion-align-items-center d-flex" size="12">	
+                <img src="/assets/images/images.svg" class="image-count">	
+                <span>{{getSurveyImages()}} images</span>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-no-padding ion-margin-top">	
+            <ion-col size="12" class="ion-no-padding">	
+                <span class="data-header">comments</span>	
+            </ion-col>	
+            <ion-col size="12" class="ion-no-padding">	
+                <span class="data-point">"{{survey.comments}}"</span>	
+            </ion-col>	
+            <ion-col size="12" class="ion-no-padding ion-text-end">	
+                <span class="comment-by">Posted by {{survey.createdby.firstname}} {{survey.createdby.lastname}}</span>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row>	
+            <ion-col><span class="model-type">created at</span></ion-col>	
+            <ion-col size="auto">	
+                <span class="model-name">{{survey.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"	
+                 *ngIf="assigned">	
+            <ion-col class="ion-justify-content-center ion-align-items-center"><span	
+                    class="model-type">assigned to</span></ion-col>	
+            <ion-col size="auto">	
+                <div class="selected d-flex">	
+                    <img *ngIf="survey.assignedto.contractorlogo && survey.assignedto.contractorlogo.logo" [src]="survey.assignedto.contractorlogo.logo.url"	
+                         class="assignee-image"/>	
+                    <div *ngIf="!survey.assignedto.contractorlogo || !survey.assignedto.contractorlogo.logo"	
+                         class="assignee-image d-flex flex-row align-center justify-center">	
+                        <div class="name_div">	
+                            <span style="text-transform: capitalize;">{{survey.assignedto.firstname.substring(0, 1)}}{{survey.assignedto.lastname.substring(0, 1)}}</span>	
+                        </div>	
+                    </div>	
+                </div>	
+            </ion-col>	
+        </ion-row>	
+        <ion-row class="ion-no-padding ion-margin-top" *ngIf="!assigned">	
+            <ion-col size="12">	
+                <form novalidate [formGroup]="assigneeForm">	
+                    <ion-item class="ion-no-padding no-border" lines="none">	
+                        <app-user-selector placeholder="assign" [assignees]="listOfAssignees"	
+                                           formControlName="assignto"></app-user-selector>	
+                    </ion-item>	
+                </form>	
+            </ion-col>	
+        </ion-row>	
+    </ion-grid> -->	
+</ion-content>	
+<ion-footer *ngIf="((user.role.type=='clientadmin' || user.role.type=='bd')&& survey && survey.status=='created')||(user.role.type=='clientadmin' && survey && survey.status=='surveyassigned')" class="ion-no-border white-bg">	
+    <ion-grid>	
+        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">	
+            <ion-col class="ion-no-margin ion-no-padding">	
+                <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->	
+                     <ion-button class="ion-no-margin ion-no-padding" style="float: right;margin-right: 10%;	
+                     margin-bottom: 5%;" fill="clear"  (click)="assignedTo(survey)">	
+                     Start Survey	
+                 </ion-button>	
+                 </ion-col>	
+        </ion-row>	
+    </ion-grid>	
+
+</ion-footer>	
+<ion-footer *ngIf="(user.role.type=='qcinspector'&& survey && survey.status=='reviewassigned')||(survey && survey.status=='reviewassigned' && survey.reviewassignedto.id==user.id)" class="ion-no-border white-bg">	
+    <ion-grid>	
+        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">	
+            <ion-col size="auto">	
+                <ion-button class="action-button-color" fill="clear" style="float: left;" (click)="openreviewPassed('fail')">Failed</ion-button>	
+                <ion-button class="action-button-color" fill="clear" style="float: right ;" (click)="openreviewPassed('pass')">Passed</ion-button>	
+            </ion-col>	
+        </ion-row>	
+    </ion-grid>	
+
+</ion-footer>	
+
+<!-- <ion-footer *ngIf="!assigned && survey" class="ion-no-border white-bg">	
+    <ion-grid>	
+        <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">	
+            <ion-col size="auto">	
+                <ion-button class="action-button-color" fill="clear" (click)="updateAssignee()">Done</ion-button>	
+            </ion-col>	
+        </ion-row>	
+    </ion-grid>	
+</ion-footer> -->	
+
+<!-- <ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="300" draggable="false" disableDrag="true"	
+                   shouldBounce="false" distanceTop="0" class="drawer">	
+    <form [formGroup]="rescheduleForm">	
+        <ion-grid class="drawer">	
+            <ion-row>	
+                <ion-col size="12">	
+                    <span>date and time</span>	
+                </ion-col>	
+                <ion-col *ngIf="survey" size="auto">	
+                    <ion-item lines="none" class="date-picker" (click)="changeDate()">	
+                        {{date | date: 'dd MMM'}}	
+                    </ion-item>	
+                </ion-col>	
+                <ion-col *ngIf="survey" size="auto">	
+                    <ion-item lines="none" class="date-picker" (click)="changeTime()">	
+                        {{date | date: 'hh:mm a'}}	
+                    </ion-item>	
+                </ion-col>	
+            </ion-row>	
+            <ion-row>	
+                <ion-col size="12">	
+                    <span>comments</span>	
+                </ion-col>	
+                <ion-col size="12">	
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" formControlName="comments"	
+                                  rows="3"></ion-textarea>	
+                </ion-col>	
+            </ion-row>	
+            <ion-row>	
+                <ion-col size="auto">	
+                    <ion-button class="buttom-drawer-button" (click)="rescheduleSurvey()">	
+                        Confirm	
+                    </ion-button>	
+                </ion-col>	
+                <ion-col size="auto">	
+                    <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">	
+                        Cancel	
+                    </ion-button>	
+                </ion-col>	
+            </ion-row>	
+        </ion-grid>	
+    </form>	
 </ion-bottom-drawer> -->
+        
 
