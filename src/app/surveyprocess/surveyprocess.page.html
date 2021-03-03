@@ -168,6 +168,9 @@
                 <p>
                     {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
                 </p>
+                <p *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value != ''">
+                    You have previously selected {{activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value}}
+                </p>
                 <ion-row class="ion-float-right">
                     <ion-button fill="clear" size="small"
                                 *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions"
@@ -748,7 +751,14 @@
                 (ionSlideDidChange)="slideDidChange();">
         <ion-slide
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
-            <img class="slideimage" [src]="shot.shotimage"/>
+            <ion-col size="12" class="actionareacol">
+                <ion-row class="ion-justify-content-center ion-align-items-center">
+                    <p class="shotinfo" style="position: absolute; top: 1rem;">
+                        {{this.mainmenuitems[shot.menuindex].children[shot.submenuindex].shots[shot.shotindex].capturedshotinfo}}
+                    </p>
+                    <img class="slideimage" [src]="shot.shotimage"/>
+                </ion-row>
+            </ion-col>
         </ion-slide>
     </ion-slides>
     <ion-button fill="clear" class="backbutton z-top" (click)="handleGalleryBack()">

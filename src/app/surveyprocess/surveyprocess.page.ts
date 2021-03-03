@@ -49,6 +49,7 @@ export interface SHOT {
     isactive: boolean;
     ispending: boolean;
     shotinfo: string;
+    capturedshotinfo?: string;
     questioninfo: string;
     shotstatus: boolean;
     promptquestion: boolean;
@@ -1924,18 +1925,18 @@ export class SurveyprocessPage implements OnInit {
             const imagename = currentIndex.capturedshots[this.sliderIndex].imagename;
             this.selectedshotindex = currentIndex.shots.findIndex(s => s.imagename === imagename);
             shot = currentIndex.shots[this.selectedshotindex];
-            if (shot.inputformcontrol != '') {
+            /*if (shot.inputformcontrol != '') {
                 this.activeForm.get(shot.inputformcontrol).setValue('');
-            }
+            }*/
             this.slideDidChange();
         } else if (currentIndex.capturedshots.length === 1) {
             this.sliderIndex = 0;
             currentIndex.capturedshots.splice(this.sliderIndex, 1);
             this.selectedshotindex = 0;
             shot = currentIndex.shots[this.selectedshotindex];
-            if (shot.inputformcontrol != '') {
+            /*if (shot.inputformcontrol != '') {
                 this.activeForm.get(shot.inputformcontrol).setValue('');
-            }
+            }*/
             this.handleGalleryBack();
         } else if (currentIndex.capturedshots.length === 0) {
             this.selectedshotindex = 0
