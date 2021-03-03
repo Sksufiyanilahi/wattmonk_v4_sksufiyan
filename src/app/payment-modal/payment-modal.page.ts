@@ -50,7 +50,7 @@ netPay:any
   newprelimscount = 0;
   designData:any;
   fulldesigndata: any;
-  delivertime:String="6-12";
+  delivertime:String;
  
 
    

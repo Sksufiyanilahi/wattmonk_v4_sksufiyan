@@ -653,4 +653,9 @@ export class ApiService {
       getCallData(): Observable<any> {
         return this.callData;
   }
+  getStripeSessionID(inputData: any): Observable<any>{
+    return this.http.post<any>(BaseUrl + "walletrecharge", inputData,{
+      headers: this.uploadHeaders}
+     ) }
 }
+

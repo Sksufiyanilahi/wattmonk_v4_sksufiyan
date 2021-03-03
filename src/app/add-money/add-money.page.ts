@@ -16,7 +16,7 @@ declare var Stripe;
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { DesginDataModel } from '../model/design.model';
 import { MixpanelService } from '../utilities/mixpanel.service';
-
+import { loadStripe } from '@stripe/stripe-js';
 
 
 @Component({
@@ -33,7 +33,8 @@ amountChecking:boolean=false;
 amountCheckingForOnboarding:boolean=false;
 card:any
   token:any;
-  stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
+  
+   stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
   // stripe= Stripe('sk_test_51HQ4SfBlSfQmxsSflRlcq7ntq1xMbhlBVW03jzMCd1WiOZMqjglO0jO2FV6IHDSiFfDnesYt2feU7w4uEe34PfPR00iLg5qpLm'); // stripe= Stripe('sk_test_51HQ4SfBlSfQmxsSflRlcq7ntq1xMbhlBVW03jzMCd1WiOZMqjglO0jO2FV6IHDSiFfDnesYt2feU7w4uEe34PfPR00iLg5qpLm');
  userData:User;
  mode:any;
@@ -61,6 +62,7 @@ card:any
  //newprelimsRef:any;
  newprelimscount = 0;
  createpayment:any;
+ stripePromise = loadStripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
 
  //Pestamp count
  newpestamp: Observable<any>;
@@ -210,10 +212,11 @@ card:any
       }
     });
 
-    var form = document.getElementById('payment-form');
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      console.log(event)
+   
+    // var form = document.getElementById('payment-form');
+    // form.addEventListener('submit', event => {
+    //   event.preventDefault();
+    //   console.log(event)
       // if(this.onBoarding == 'true' || this.onBoarding =='false'){
       //   if(this.amountForm.get('amount').value >=100 && this.amountForm.get('amount').value <= 5000)
       //   {
@@ -234,26 +237,48 @@ card:any
       //   }
       // }
      // else{
-      if(this.amountForm.get('amount').value >=1 && this.amountForm.get('amount').value <=10000)
-      {
-      this.stripe.createToken(this.card).then(result => {
-        if (result.error) {
-          var errorElement = document.getElementById('card-errors');
-          errorElement.textContent = result.error.message;
-        } else {
-          console.log(result);
-          this.token=result;
-          console.log(this.token.token.id);
-          this.addMoney();
+    //   if(this.amountForm.get('amount').value >=1 && this.amountForm.get('amount').value <=10000)
+    //   {
+    //   this.stripe.createToken(this.card).then(result => {
+    //     if (result.error) {
+    //       var errorElement = document.getElementById('card-errors');
+    //       errorElement.textContent = result.error.message;
+    //     } else {
+    //       console.log(result);
+    //       this.token=result;
+    //       console.log(this.token.token.id);
+    //       this.addMoney();
          
-        }
-      });
-    }else{
-      this.utils.errorSnackBar("Please Enter Valid Amount");
-    }
-      //}
-    });
+    //     }
+    //   });
+    // }else{
+    //   this.utils.errorSnackBar("Please Enter Valid Amount");
+    // }
+    //   //}
+    // });
   }
+
+
+
+  async getSessionID()
+  {
+   var inputdata = {
+     email: this.userData.email,
+     userid: this.userData.id,
+     amount: this.amountForm.get('amount').value
+   }
+   const stripe = await this.stripePromise;
+   this.apiService.getStripeSessionID(inputdata).subscribe(
+     response => {
+       console.log(response);
+       return stripe.redirectToCheckout({ sessionId: response.id });
+     },
+     error => {
+       this.utils.errorSnackBar("error");
+     }
+   );
+ }
+
 //  setupStripe() {
 //     let elements = this.stripe.elements();
 //     var style = {
