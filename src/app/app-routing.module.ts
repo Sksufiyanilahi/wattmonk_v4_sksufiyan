@@ -277,7 +277,11 @@ const routes: Routes = [
     {
         path: 'callingscreen',
         loadChildren: () => import('./callingscreen/callingscreen.module').then(m => m.CallingscreenPageModule)
-    },
+    },  {
+    path: 'sales-proposal',
+    loadChildren: () => import('./sales-proposal/sales-proposal.module').then( m => m.SalesProposalPageModule)
+  },
+
 ];
 
 @NgModule({
