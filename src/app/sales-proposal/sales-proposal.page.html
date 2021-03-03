@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{stepNumber === 1 ? 'Add Prelim' : 'Sales Proposal' }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+ <form *ngIf="stepNumber === 1">
+
+  <ion-button (click)="goToStep2()"> Click</ion-button>
+ </form>
+ <form *ngIf="stepNumber === 2">
+  Bye
+ </form>
+</ion-content>

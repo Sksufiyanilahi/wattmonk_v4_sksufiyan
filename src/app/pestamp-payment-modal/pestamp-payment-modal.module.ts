@@ -8,6 +8,7 @@ import { PestampPaymentModalPageRoutingModule } from './pestamp-payment-modal-ro
 
 import { PestampPaymentModalPage } from './pestamp-payment-modal.page';
 import { SharedModule } from '../shared/shared.module';
+import { NgxPayPalModule } from 'ngx-paypal';
 // import { PaymentModalPage } from '../payment-modal/payment-modal.page';
 
 @NgModule({
@@ -17,7 +18,8 @@ import { SharedModule } from '../shared/shared.module';
     FormsModule,
     IonicModule,
     PestampPaymentModalPageRoutingModule,
-    SharedModule
+    SharedModule,
+    NgxPayPalModule
   ],
   declarations: [PestampPaymentModalPage]
 })
