@@ -9,6 +9,8 @@ import { PaymentModalPageRoutingModule } from './payment-modal-routing.module';
 import { PaymentModalPage } from './payment-modal.page';
 import { SharedModule } from '../shared/shared.module';
 import { CouponOffersModalPage } from '../coupon-offers-modal/coupon-offers-modal.page';
+import { NgxPayPalModule } from 'ngx-paypal';
+
 
 @NgModule({
   entryComponents:[PaymentModalPage,CouponOffersModalPage],
@@ -17,7 +19,8 @@ import { CouponOffersModalPage } from '../coupon-offers-modal/coupon-offers-moda
     FormsModule,
     IonicModule,
     PaymentModalPageRoutingModule,
-    SharedModule
+    SharedModule,
+    NgxPayPalModule
   ],
   declarations: [PaymentModalPage]
 })
