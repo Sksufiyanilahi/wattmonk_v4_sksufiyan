@@ -173,8 +173,8 @@
                       <mat-label>Utility Rate</mat-label>
                       <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto" autocomplete="off" formControlName="utilityrate" required>
                       <!-- <mat-autocomplete #auto="matAutocomplete">
-                        <mat-option *ngFor="let modulemake of filteredModuleMakes | async" [value]="modulemake.name"
-                        (onSelectionChange)="fetchModuleModelsData($event,modulemake)" class="font"></mat-option>
+                        <mat-option *ngFor="let modulemake of filterIncentive | async" [value]="modulemake.name"
+                     class="font"></mat-option>
                       </mat-autocomplete> -->
                     </mat-form-field>
                 </ion-item>
