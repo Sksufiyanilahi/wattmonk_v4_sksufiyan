@@ -49,6 +49,7 @@ export interface SHOT {
     isactive: boolean;
     ispending: boolean;
     shotinfo: string;
+    capturedshotinfo?: string;
     questioninfo: string;
     shotstatus: boolean;
     promptquestion: boolean;
@@ -88,7 +89,9 @@ export enum QUESTIONTYPE {
     INPUT_INVERTER_AUTOCOMPLETE = 4,
     INPUT_SHOT_NAME = 5,
     INPUT_ROOF_MATERIAL_AUTOCOMPLETE = 6,
-    INPUT_TEXT = 7
+    INPUT_TEXT = 7,
+    INPUT_TWO_DIMENSIONS = 8,
+    INPUT_INVERTER_DETAILS = 9,
 }
 
 export enum VIEWMODE {
@@ -137,7 +140,7 @@ export class SurveyprocessPage implements OnInit {
         speed: 400
     };
 
-    protected sliderIndex: number = 0;
+    protected sliderIndex = 0;
 
     surveystoreddata = {};
 
@@ -153,8 +156,8 @@ export class SurveyprocessPage implements OnInit {
     previousviewmode = 0;
 
     pendingmenuitems: PENDING_MENU[];
-    viewpendingitems: boolean = false;
-    ispendingitemsmode: boolean = false;
+    viewpendingitems = false;
+    ispendingitemsmode = false;
 
     cameraPreviewOpts: CameraPreviewOptions;
     capturedImage: string;
@@ -203,37 +206,37 @@ export class SurveyprocessPage implements OnInit {
 
     equipments: Equipment[] = [{
         id: 3,
-        name: "MSP",
-        color: "#ff0000",
-        disabledcolor: "#ff000080",
+        name: 'MSP',
+        color: '#ff0000',
+        disabledcolor: '#ff000080',
         enabled: true,
         event: null
     }, {
         id: 4,
-        name: "INV",
-        color: "#6d9eeb",
-        disabledcolor: "#6d9eeb80",
+        name: 'INV',
+        color: '#6d9eeb',
+        disabledcolor: '#6d9eeb80',
         enabled: true,
         event: null
     }, {
         id: 5,
-        name: "BT",
-        color: "#ff00ff",
-        disabledcolor: "#ff00ff80",
+        name: 'BT',
+        color: '#ff00ff',
+        disabledcolor: '#ff00ff80',
         enabled: true,
         event: null
     }, {
         id: 6,
-        name: "GP",
-        color: "#00ffff",
-        disabledcolor: "#00ffff80",
+        name: 'GP',
+        color: '#00ffff',
+        disabledcolor: '#00ffff80',
         enabled: true,
         event: null
     }, {
         id: 7,
-        name: "EEQ",
-        color: "#ffff00",
-        disabledcolor: "#ffff0080",
+        name: 'EEQ',
+        color: '#ffff00',
+        disabledcolor: '#ffff0080',
         enabled: true,
         event: null
     }
@@ -241,18 +244,18 @@ export class SurveyprocessPage implements OnInit {
 
     acdisconnectequipment: Equipment = {
         id: 1,
-        name: "ACD",
-        color: "#fec412",
-        disabledcolor: "#fec41280",
+        name: 'ACD',
+        color: '#fec412',
+        disabledcolor: '#fec41280',
         enabled: true,
         event: null
     }
 
     pvmeterequipment: Equipment = {
         id: 2,
-        name: "PVM",
-        color: "#6aa84f",
-        disabledcolor: "#6aa84f80",
+        name: 'PVM',
+        color: '#6aa84f',
+        disabledcolor: '#6aa84f80',
         enabled: true,
         event: null
     }
@@ -262,8 +265,10 @@ export class SurveyprocessPage implements OnInit {
     hasExistingSolarSystem: boolean;
     user: any
     hasBatterySystem: boolean;
-    reviewForm: boolean = false;
-    isSaveFormCalled: boolean = false;
+    reviewForm = false;
+    isSaveFormCalled = false;
+    editingMode = false;
+    editingModePreviousIndex;
 
     constructor(
         private cameraPreview: CameraPreview,
@@ -290,25 +295,25 @@ export class SurveyprocessPage implements OnInit {
         this.longitude = +this.route.snapshot.paramMap.get('long');
 
         if (this.platform.is('ios')) {
-            this.platformname = "iphone"
+            this.platformname = 'iphone'
         } else if (this.platform.is('android')) {
-            this.platformname = "android"
+            this.platformname = 'android'
         } else {
-            this.platformname = "other"
+            this.platformname = 'other'
         }
 
-        this.platform.backButton.subscribeWithPriority(100, () => {
-            if (!this.isSaveFormCalled) {
-                this.handleSurveyExit();
-                navController.pop();
-            }
-        });
+        // this.platform.backButton.subscribeWithPriority(100, () => {
+        //     if (!this.isSaveFormCalled) {
+        //         this.handleSurveyExit();
+        //         navController.pop();
+        //     }
+        // });
 
-        if (this.surveytype == "battery") {
+        if (this.surveytype == 'battery') {
             this.batterySurveyProcess();
-        } else if (this.surveytype == "pvbattery") {
+        } else if (this.surveytype == 'pvbattery') {
             this.pvBatterySurveyProcess();
-        } else if (this.surveytype == "pv") {
+        } else if (this.surveytype == 'pv') {
             this.pvSurveyProcess();
         }
     }
@@ -328,12 +333,14 @@ export class SurveyprocessPage implements OnInit {
             architecturaldesign: new FormControl('', []),
             utilitymeter: new FormControl('', [Validators.required]),
             framing: new FormControl('', [Validators.required]),
-            framingsize: new FormControl('', [Validators.required, Validators.pattern(/^([0-9]{1,2}[x][0-9]{1,3})?$/gi)]),
+            framingsize: new FormControl('', [Validators.required]),
             distancebetweentworafts: new FormControl('', [Validators.required]),
             pvinverterlocation: new FormControl('', []),
             invertermanufacturerandmodel: new FormControl('', []),
             additionalnotes: new FormControl('', []),
             rooftilt: new FormControl('', []),
+            dimensionA: new FormControl('', []),
+            dimensionB: new FormControl('', []),
             shotname: new FormControl('', [])
         });
 
@@ -363,7 +370,6 @@ export class SurveyprocessPage implements OnInit {
 
         // this.storage.clear();
         this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
-            console.log(data);
             if (data) {
                 this.mainmenuitems = data.menuitems;
                 this.totalpercent = data.currentprogress;
@@ -490,7 +496,7 @@ export class SurveyprocessPage implements OnInit {
                 });
             } else {
                 this.http
-                    .get("assets/surveyprocessjson/battery.json")
+                    .get('assets/surveyprocessjson/battery.json')
                     .subscribe((data) => {
                         this.mainmenuitems = JSON.parse(JSON.stringify(data));
                         this.isdataloaded = true;
@@ -571,7 +577,7 @@ export class SurveyprocessPage implements OnInit {
                 this.handleViewModeSwitch();
             } else {
                 this.http
-                    .get("assets/surveyprocessjson/pvbattery.json")
+                    .get('assets/surveyprocessjson/pvbattery.json')
                     .subscribe((data) => {
                         this.mainmenuitems = JSON.parse(JSON.stringify(data));
                         this.isdataloaded = true;
@@ -602,6 +608,10 @@ export class SurveyprocessPage implements OnInit {
         this.routeroutlet.swipeGesture = false;
       // tslint:disable-next-line:max-line-length
         // camera options (Size and location). In the following example, the preview uses the rear camera and display the preview in the back of the webview
+        this.startCameraWithOpts();
+    }
+
+    startCameraWithOpts() {
         this.cameraPreviewOpts = {
             x: 0,
             y: 0,
@@ -754,30 +764,30 @@ export class SurveyprocessPage implements OnInit {
         this.issidemenucollapsed = true;
         this.isgallerymenucollapsed = true;
 
-        //Retaining previous state
+        // Retaining previous state
         this.previousmainmenuindex = this.selectedmainmenuindex;
         this.previoussubmenuindex = this.selectedsubmenuindex;
         this.previousshotindex = this.selectedshotindex;
 
-        //Set questionstatus true for question type 5
+        // Set questionstatus true for question type 5
         if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
         }
 
-        //Unset previous menu and select new one
+        // Unset previous menu and select new one
         this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
         this.selectedmainmenuindex = index;
         this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
 
         if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
-            var issubmenuset = false;
+            let issubmenuset = false;
             this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
                 if (element.ispending && !issubmenuset) {
                     element.isactive = true;
                     issubmenuset = true;
                     this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
-                    var isshotmenuset = false;
+                    let isshotmenuset = false;
                     element.shots.forEach(shot => {
                         if (shot.ispending && !isshotmenuset) {
                             shot.isactive = true;
@@ -893,49 +903,50 @@ export class SurveyprocessPage implements OnInit {
                 quality: 0
             }).then((photo) => {
                     this.capturedImage = 'data:image/png;base64,' + photo;
-                    if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
-                        var captureshot: CAPTUREDSHOT = {
+                    const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+                    if (!currentIndex.allowmultipleshots) {
+                        const captureshot: CAPTUREDSHOT = {
                             menuindex: this.selectedmainmenuindex,
                             submenuindex: this.selectedsubmenuindex,
                             shotindex: this.selectedshotindex,
                             shotimage: this.capturedImage,
-                            imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
-                            imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename
+                            imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
+                            imagename: currentIndex.shots[this.selectedshotindex].imagename
                         }
-                        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
+                        currentIndex.capturedshots.push(captureshot);
                     } else {
-                        var captureshot: CAPTUREDSHOT = {
+                        const captureshot: CAPTUREDSHOT = {
                             menuindex: this.selectedmainmenuindex,
                             submenuindex: this.selectedsubmenuindex,
                             shotindex: this.selectedshotindex,
                             shotimage: this.capturedImage,
-                            imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
-                            imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename + (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length + 1)
+                            imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
+                            imagename: currentIndex.shots[this.selectedshotindex].imagename + (currentIndex.capturedshots.length + 1)
                         }
-                        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
+                        currentIndex.capturedshots.push(captureshot);
                     }
-                    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
-                    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
-                        if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus) {
-                            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
+                    currentIndex.shots[this.selectedshotindex].shotstatus = true;
+                    if (currentIndex.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
+                        if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
+                            currentIndex.shots[this.selectedshotindex].promptquestion = true;
                             this.iscapturingallowed = false;
-                            if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
+                            if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
                                 this.getUtilities();
-                            } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
+                            } else if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
                                 this.getInverterMakes();
-                            } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
+                            } else if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
                                 this.getRoofMaterials();
                             }
                         } else {
                             this.markShotCompletion(this.selectedshotindex);
                         }
                     } else {
-                        if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
-                            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+                        if (!currentIndex.allowmultipleshots) {
+                            currentIndex.shots[this.selectedshotindex].questionstatus = true;
                             this.handleMenuSwitch();
                         } else {
-                            if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus) {
-                                this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+                            if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
+                                currentIndex.shots[this.selectedshotindex].questionstatus = true;
                                 this.markShotCompletion(this.selectedshotindex);
                                 this.updateProgressStatus();
                             }
@@ -951,7 +962,7 @@ export class SurveyprocessPage implements OnInit {
     }
 
     architecturalfiles(event) {
-        for (var i = 0; i < event.target.files.length; i++) {
+        for (let i = 0; i < event.target.files.length; i++) {
             this.archFiles.push(event.target.files[i])
         }
     }
@@ -960,14 +971,15 @@ export class SurveyprocessPage implements OnInit {
         this.iscapturingallowed = true;
         this.issidemenucollapsed = true;
         this.isgallerymenucollapsed = true;
-        this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).setValue(result);
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result = result;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
-
-        if (this.surveytype == "pvbattery" && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 0) {
+        const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+        let shotDetail = currentIndex.shots[this.selectedshotindex];
+        shotDetail.result = result;
+        shotDetail.promptquestion = false;
+        shotDetail.questionstatus = true;
+        this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
+        if (this.surveytype == 'pvbattery' && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 0) {
             this.handleGroundShotsVisibility();
-        } else if (this.surveytype == "pvbattery" && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 1) {
+        } else if (this.surveytype == 'pvbattery' && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 1) {
             this.handleAtticSectionVisibility();
         }
 
@@ -975,8 +987,8 @@ export class SurveyprocessPage implements OnInit {
     }
 
     handleGroundShotsVisibility() {
-        var mountingtypecontrol = this.activeForm.get("mountingtype");
-        if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "ground") {
+        const mountingtypecontrol = this.activeForm.get('mountingtype');
+        if (mountingtypecontrol.value == 'both' || mountingtypecontrol.value == 'ground') {
             this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = true;
             this.mainmenuitems[this.selectedmainmenuindex].children[1].ispending = true;
             this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].ispending = true;
@@ -990,8 +1002,8 @@ export class SurveyprocessPage implements OnInit {
     }
 
     handleAtticSectionVisibility() {
-        var mountingtypecontrol = this.activeForm.get("rooftype");
-        if (mountingtypecontrol.value == "both" || mountingtypecontrol.value == "pitch") {
+        const mountingtypecontrol = this.activeForm.get('rooftype');
+        if (mountingtypecontrol.value == 'both' || mountingtypecontrol.value == 'pitch') {
             this.mainmenuitems[2].isvisible = true;
             this.mainmenuitems[2].ispending = true;
             this.mainmenuitems[2].children[0].ispending = true;
@@ -1000,9 +1012,9 @@ export class SurveyprocessPage implements OnInit {
                 element.questionstatus = false;
                 element.shotstatus = false;
             });
-            this.activeForm.get("framing").setValidators([Validators.required]);
-            this.activeForm.get("framingsize").setValidators([Validators.required]);
-            this.activeForm.get("distancebetweentworafts").setValidators([Validators.required]);
+            this.activeForm.get('framing').setValidators([Validators.required]);
+            this.activeForm.get('framingsize').setValidators([Validators.required]);
+            this.activeForm.get('distancebetweentworafts').setValidators([Validators.required]);
         } else {
             this.mainmenuitems[2].isvisible = false;
             this.mainmenuitems[2].ispending = false;
@@ -1012,45 +1024,82 @@ export class SurveyprocessPage implements OnInit {
                 element.questionstatus = true;
                 element.shotstatus = true;
             });
-            this.activeForm.get("framing").clearValidators();
-            this.activeForm.get("framingsize").clearValidators();
-            this.activeForm.get("distancebetweentworafts").clearValidators();
+            this.activeForm.get('framing').clearValidators();
+            this.activeForm.get('framingsize').clearValidators();
+            this.activeForm.get('distancebetweentworafts').clearValidators();
         }
     }
 
     handleInputSubmission(form: FormGroup) {
-        var control = form.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol);
-        if (control.value != "") {
-            this.handleAnswerSubmission(control.value);
+        const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+        const control = form.get(currentIndex.shots[this.selectedshotindex].inputformcontrol);
+        if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_TWO_DIMENSIONS) {
+            if (form.get('dimensionA').value != '' && form.get('dimensionB').value != '') {
+                this.handleAnswerSubmission(`${form.get('dimensionA').value}x${form.get('dimensionB').value}`);
+                form.get('dimensionA').setValue('');
+                form.get('dimensionB').setValue('');
+            } else {
+                if (form.get('dimensionA').value == '' || form.get('dimensionA').value == undefined) {
+                    form.get('dimensionA').markAsTouched();
+                    form.get('dimensionA').markAsDirty();
+                }
+                if (form.get('dimensionB').value == '' || form.get('dimensionB').value == undefined) {
+                    form.get('dimensionB').markAsTouched();
+                    form.get('dimensionB').markAsDirty();
+                }
+            }
         } else {
-            control.markAsTouched();
-            control.markAsDirty();
+            if (control.value != '') {
+                this.handleAnswerSubmission(control.value);
+            } else {
+                control.markAsTouched();
+                control.markAsDirty();
+            }
         }
     }
 
     handleInputTextSubmission(form: FormGroup) {
-        var control = form.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol);
-        if (control.value != "") {
-            this.handleAnswerSubmission(control.value);
+        const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+        const control = form.get(currentIndex.shots[this.selectedshotindex].inputformcontrol);
+        if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_DETAILS) {
+            const inverterMake = form.get('invertermake');
+            const inverterModel = form.get('invertermodel');
+            if (inverterMake.value != '' && inverterModel.value != '') {
+                this.handleAnswerSubmission(`${inverterMake.value},${inverterModel.value}`);
+            } else {
+                if (inverterMake.value == '' || inverterMake.value == undefined) {
+                    inverterMake.markAllAsTouched();
+                    inverterMake.markAsDirty();
+                }
+                if (inverterModel.value == '' || inverterModel.value == undefined) {
+                    inverterModel.markAllAsTouched();
+                    inverterModel.markAsDirty();
+                }
+            }
         } else {
-            control.markAsTouched();
-            control.markAsDirty();
+            if (control.value != '') {
+                this.handleAnswerSubmission(control.value);
+            } else {
+                control.markAsTouched();
+                control.markAsDirty();
+            }
         }
     }
 
     handleShotNameSubmission(form: FormGroup) {
-        var shotnameformcontrol = form.get("shotname");
-        if (shotnameformcontrol.value != "") {
-            var shots = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots;
+        const shotnameformcontrol = form.get('shotname');
+        if (shotnameformcontrol.value != '') {
+            const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+            const shots = currentIndex.capturedshots;
             shots[shots.length - 1].imagename = shotnameformcontrol.value;
             this.iscapturingallowed = true;
             this.issidemenucollapsed = true;
             this.isgallerymenucollapsed = true;
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
-            form.get("shotname").setValue("");
+            currentIndex.shots[this.selectedshotindex].promptquestion = false;
+            form.get('shotname').setValue('');
 
-            if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 1) {
-                this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+            if (currentIndex.capturedshots.length == 1) {
+                currentIndex.ispending = false;
                 this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
                 this.updateProgressStatus();
             }
@@ -1061,11 +1110,12 @@ export class SurveyprocessPage implements OnInit {
     }
 
     handleInverterFieldsSubmission() {
-        var invertermakecontrol = this.activeForm.get("invertermake");
-        var invertermodelcontrol = this.activeForm.get("invertermodel");
-        if (invertermakecontrol.value != "" && invertermodelcontrol.value != "") {
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+        const invertermakecontrol = this.activeForm.get('invertermake');
+        const invertermodelcontrol = this.activeForm.get('invertermodel');
+        if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
+            const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+            currentIndex.shots[this.selectedshotindex].promptquestion = false;
+            currentIndex.shots[this.selectedshotindex].questionstatus = true;
             this.handleMenuSwitch();
         } else {
             invertermakecontrol.markAsTouched();
@@ -1076,10 +1126,11 @@ export class SurveyprocessPage implements OnInit {
     }
 
     handleUtilitySubmission() {
-        var utilitycontrol = this.activeForm.get("utility");
-        if (utilitycontrol.value != "") {
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+        const utilitycontrol = this.activeForm.get('utility');
+        if (utilitycontrol.value != '') {
+            const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+            currentIndex.shots[this.selectedshotindex].promptquestion = false;
+            currentIndex.shots[this.selectedshotindex].questionstatus = true;
             this.handleMenuSwitch();
         } else {
             utilitycontrol.markAsTouched();
@@ -1088,11 +1139,12 @@ export class SurveyprocessPage implements OnInit {
     }
 
     handleRoofMaterialSubmission() {
-        var roofmaterialcontrol = this.activeForm.get("roofmaterial");
-        if (roofmaterialcontrol.value != "") {
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots = true;
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+        const roofmaterialcontrol = this.activeForm.get('roofmaterial');
+        if (roofmaterialcontrol.value != '') {
+            const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+            currentIndex.allowmultipleshots = true;
+            currentIndex.shots[this.selectedshotindex].promptquestion = false;
+            currentIndex.shots[this.selectedshotindex].questionstatus = true;
             this.handleMenuSwitch();
         } else {
             roofmaterialcontrol.markAsTouched();
@@ -1102,12 +1154,13 @@ export class SurveyprocessPage implements OnInit {
 
     handleSurveyExit() {
         this.cameraPreview.stopCamera();
+        this.stopCamera();
 
         const data = this.preparesurveystorage();
         data.saved = true;
         this.storage.set(this.surveyid + '', data);
 
-        if (this.user.role.type == "surveyors") {
+        if (this.user.role.type == 'surveyors') {
 
             this.utilitieservice.setDataRefresh(true);
             this.navController.navigateBack('surveyoroverview');
@@ -1162,20 +1215,25 @@ export class SurveyprocessPage implements OnInit {
     handleMenuSwitch(selectedSubMenuDoesNotExist?) {
         this.iscapturingallowed = true;
 
-        //Retaining previous shots
+        // Retaining previous shots
         this.previousmainmenuindex = this.selectedmainmenuindex;
         this.previoussubmenuindex = this.selectedsubmenuindex;
         this.previousshotindex = this.selectedshotindex;
 
         if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
             this.markShotCompletion(this.selectedshotindex);
-            this.updateProgressStatus();
+            if (!this.editingMode) {
+                this.updateProgressStatus();
+            }
             if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1 && selectedSubMenuDoesNotExist != false) {
                 this.selectedshotindex += 1;
+                if (this.editingMode) {
+                    this.selectedshotindex = this.editingModePreviousIndex;
+                }
             } else {
                 if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
                     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-                    var nextvisibleitemfound = false;
+                    let nextvisibleitemfound = false;
                     for (let index = this.selectedsubmenuindex; index < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1; index++) {
                         const element = this.mainmenuitems[this.selectedmainmenuindex].children[index + 1];
                         if (element.isvisible && !nextvisibleitemfound) {
@@ -1189,10 +1247,10 @@ export class SurveyprocessPage implements OnInit {
 
                     if (!nextvisibleitemfound) {
                         if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
-                            //Unset previous menu and select new one
+                            // Unset previous menu and select new one
                             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
                             this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-                            var nextvisiblemainitemfound = false;
+                            let nextvisiblemainitemfound = false;
                             for (let index = this.selectedmainmenuindex; index < this.mainmenuitems.length - 1; index++) {
                                 const element = this.mainmenuitems[index + 1];
                                 if (element.isvisible && !nextvisiblemainitemfound) {
@@ -1210,10 +1268,10 @@ export class SurveyprocessPage implements OnInit {
                     }
                 } else {
                     if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
-                        //Unset previous menu and select new one
+                        // Unset previous menu and select new one
                         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
                         this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-                        var nextvisiblemainitemfound = false;
+                        let nextvisiblemainitemfound = false;
                         for (let index = this.selectedmainmenuindex; index < this.mainmenuitems.length - 1; index++) {
                             const element = this.mainmenuitems[index + 1];
                             if (element.isvisible && !nextvisiblemainitemfound) {
@@ -1238,22 +1296,28 @@ export class SurveyprocessPage implements OnInit {
             if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0) {
                 this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
                 this.markShotCompletion(this.selectedshotindex);
-                this.updateProgressStatus();
+                if (!this.editingMode) {
+                    this.updateProgressStatus();
+                }
             }
+        }
+        if (this.editingMode) {
+            this.editingMode = false;
+            this.editingModePreviousIndex = '';
         }
     }
 
     scrollToSubmenuElement(index) {
-        var el = document.getElementById("submenu" + index);
-        var rect = el.getBoundingClientRect();
+        const el = document.getElementById('submenu' + index);
+        const rect = el.getBoundingClientRect();
         // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
 
         this.submenuscroll.nativeElement.scrollLeft = rect.left;
     }
 
     scrollToMainmenuElement(index) {
-        var el = document.getElementById("mainmenu" + index);
-        var rect = el.getBoundingClientRect();
+        const el = document.getElementById('mainmenu' + index);
+        const rect = el.getBoundingClientRect();
         // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
 
         this.mainscroll.nativeElement.scrollLeft = rect.left;
@@ -1264,7 +1328,7 @@ export class SurveyprocessPage implements OnInit {
             if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus) {
                 this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].ispending = false;
 
-                var ispendingset = false;
+                let ispendingset = false;
                 this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
                 this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
                     if (element.ispending && !ispendingset) {
@@ -1281,7 +1345,7 @@ export class SurveyprocessPage implements OnInit {
     }
 
     markMainMenuCompletion() {
-        var ispendingset = false;
+        let ispendingset = false;
         if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
             this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
             this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
@@ -1301,8 +1365,8 @@ export class SurveyprocessPage implements OnInit {
     }
 
     checkProcessCompletion(): boolean {
-        var ispendingset = false;
-        var checkstatus = true;
+        let ispendingset = false;
+        let checkstatus = true;
         this.mainmenuitems.forEach(element => {
             if (element.ispending && !ispendingset) {
                 ispendingset = true;
@@ -1320,7 +1384,7 @@ export class SurveyprocessPage implements OnInit {
 
             if (element.ispending) {
                 if (element.children.length > 0) {
-                    var menu: PENDING_MENU = {
+                    const menu: PENDING_MENU = {
                         index: mainindex,
                         pendingchilds: [],
                         name: element.name
@@ -1329,7 +1393,7 @@ export class SurveyprocessPage implements OnInit {
                         const child = element.children[childindex];
                         if (child.ispending) {
                             if (child.shots.length > 0) {
-                                var childitem: PENDING_CHILD = {
+                                const childitem: PENDING_CHILD = {
                                     index: childindex,
                                     pendingshots: [],
                                     name: child.name
@@ -1337,7 +1401,7 @@ export class SurveyprocessPage implements OnInit {
                                 for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
                                     const shot = child.shots[shotindex];
                                     if (shot.ispending) {
-                                        var shotitem: PENDING_SHOT = {
+                                        const shotitem: PENDING_SHOT = {
                                             index: shotindex,
                                             name: shot.shotinfo
                                         }
@@ -1346,7 +1410,7 @@ export class SurveyprocessPage implements OnInit {
                                 }
                                 menu.pendingchilds.push(childitem);
                             } else {
-                                var childitem: PENDING_CHILD = {
+                                const childitem: PENDING_CHILD = {
                                     index: childindex,
                                     pendingshots: [],
                                     name: child.name
@@ -1357,7 +1421,7 @@ export class SurveyprocessPage implements OnInit {
                     }
                     this.pendingmenuitems.push(menu);
                 } else {
-                    var menu: PENDING_MENU = {
+                    const menu: PENDING_MENU = {
                         index: mainindex,
                         pendingchilds: [],
                         name: element.name
@@ -1369,7 +1433,7 @@ export class SurveyprocessPage implements OnInit {
     }
 
     handleCompleteSurveyDataSubmission() {
-        //Code to save current status
+        // Code to save current status
         const data = this.preparesurveystorage();
         data.saved = true;
         this.storage.set(this.surveyid + '', data);
@@ -1382,24 +1446,24 @@ export class SurveyprocessPage implements OnInit {
 
     saveFormData() {
         const data = {
-            modulemake: this.batteryForm.get("modulemake").value.id,
-            modulemodel: this.batteryForm.get("modulemodel").value.id,
-            invertermake: this.batteryForm.get("invertermake").value.name,
-            invertermodel: this.batteryForm.get("invertermodel").value.name,
-            numberofmodules: parseInt(this.batteryForm.get("numberofmodules").value),
-            additionalnotes: this.batteryForm.get("additionalnotes").value,
-            batterybackup: this.batteryForm.get("batterybackup").value,
-            servicefeedsource: this.batteryForm.get("servicefeedsource").value,
-            mainbreakersize: parseInt(this.batteryForm.get("mainbreakersize").value),
-            msprating: parseInt(this.batteryForm.get("msprating").value),
-            msplocation: this.batteryForm.get("msplocation").value,
-            mspbreaker: this.batteryForm.get("mspbreaker").value,
-            utilitymeter: this.batteryForm.get("utilitymeter").value,
+            modulemake: this.batteryForm.get('modulemake').value.id,
+            modulemodel: this.batteryForm.get('modulemodel').value.id,
+            invertermake: this.batteryForm.get('invertermake').value.name,
+            invertermodel: this.batteryForm.get('invertermodel').value.name,
+            numberofmodules: parseInt(this.batteryForm.get('numberofmodules').value),
+            additionalnotes: this.batteryForm.get('additionalnotes').value,
+            batterybackup: this.batteryForm.get('batterybackup').value,
+            servicefeedsource: this.batteryForm.get('servicefeedsource').value,
+            mainbreakersize: parseInt(this.batteryForm.get('mainbreakersize').value),
+            msprating: parseInt(this.batteryForm.get('msprating').value),
+            msplocation: this.batteryForm.get('msplocation').value,
+            mspbreaker: this.batteryForm.get('mspbreaker').value,
+            utilitymeter: this.batteryForm.get('utilitymeter').value,
             utility: this.selectedutilityid,
-            pvinverterlocation: this.batteryForm.get("pvinverterlocation").value,
-            pvmeter: JSON.parse(this.batteryForm.get("pvmeter").value),
-            acdisconnect: JSON.parse(this.batteryForm.get("acdisconnect").value),
-            interconnection: this.batteryForm.get("interconnection").value,
+            pvinverterlocation: this.batteryForm.get('pvinverterlocation').value,
+            pvmeter: JSON.parse(this.batteryForm.get('pvmeter').value),
+            acdisconnect: JSON.parse(this.batteryForm.get('acdisconnect').value),
+            interconnection: this.batteryForm.get('interconnection').value,
             status: 'surveycompleted'
         }
         this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
@@ -1423,49 +1487,37 @@ export class SurveyprocessPage implements OnInit {
 
     handleReviewFormBack() {
         this.reviewForm = false;
-        this.startCameraAfterPermission();
-        this.selectedmainmenuindex = this.previousmainmenuindex;
-        this.selectedsubmenuindex = this.previoussubmenuindex;
-        this.selectedshotindex = this.previousshotindex;
-        this.mainmenuitems[this.selectedmainmenuindex].viewmode = this.previousviewmode;
-        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
     }
 
     reviewFormData() {
         this.reviewForm = true;
         this.cameraPreview.stopCamera();
-        this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
-        this.previousmainmenuindex = this.selectedmainmenuindex;
-        this.previoussubmenuindex = this.selectedsubmenuindex;
-        this.previousshotindex = this.selectedshotindex;
-        this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.FORM;
     }
 
     savePVFormData() {
         this.utilitieservice.showLoading('Please wait...');
         const data = {
-            existingsolarsystem: this.pvForm.get("existingsolarsystem").value,
-            batterysystem: this.pvForm.get("batterysystem").value,
-            detailsofbatterysystem: this.pvForm.get("detailsofbatterysystem").value,
-            interconnection: this.pvForm.get("interconnection").value,
-            interconnectiondetails: this.pvForm.get("interconnection_input").value,
-            servicefeedsource: this.pvForm.get("servicefeedsource").value,
-            additionalnotes: this.pvForm.get("additionalnotes").value,
+            existingsolarsystem: this.pvForm.get('existingsolarsystem').value,
+            batterysystem: this.pvForm.get('batterysystem').value,
+            detailsofbatterysystem: this.pvForm.get('detailsofbatterysystem').value,
+            interconnection: this.pvForm.get('interconnection').value,
+            interconnectiondetails: this.pvForm.get('interconnection_input').value,
+            servicefeedsource: this.pvForm.get('servicefeedsource').value,
+            additionalnotes: this.pvForm.get('additionalnotes').value,
             status: 'surveycompleted',
-            mainbreakersize: this.pvForm.get("mainbreakersize").value,
-            msprating: this.pvForm.get("msprating").value,
-            msplocation: this.pvForm.get("msplocation").value,
-            mspbreaker: this.pvForm.get("mspbreaker").value,
-            architecturaldesign: this.pvForm.get("architecturaldesign").value,
-            utilitymeter: this.pvForm.get("utilitymeter").value,
-            framing: this.pvForm.get("framing").value,
-            framingsize: this.pvForm.get("framingsize").value,
-            distancebetweentworafts: this.pvForm.get("distancebetweentworafts").value,
-            pvinverterlocation: this.pvForm.get("pvinverterlocation").value == '' ? null : this.pvForm.get("pvinverterlocation").value,
-            invertermanufacturerandmodel: this.pvForm.get("invertermanufacturerandmodel").value == '' ? null : this.pvForm.get("invertermanufacturerandmodel").value,
-            rooftilt: this.pvForm.get("rooftilt").value,
-            shotname: this.pvForm.get("shotname").value,
+            mainbreakersize: this.pvForm.get('mainbreakersize').value,
+            msprating: this.pvForm.get('msprating').value,
+            msplocation: this.pvForm.get('msplocation').value,
+            mspbreaker: this.pvForm.get('mspbreaker').value,
+            architecturaldesign: this.pvForm.get('architecturaldesign').value,
+            utilitymeter: this.pvForm.get('utilitymeter').value,
+            framing: this.pvForm.get('framing').value,
+            framingsize: this.pvForm.get('framingsize').value,
+            distancebetweentworafts: this.pvForm.get('distancebetweentworafts').value,
+            pvinverterlocation: this.pvForm.get('pvinverterlocation').value == '' ? null : this.pvForm.get('pvinverterlocation').value,
+            invertermanufacturerandmodel: this.pvForm.get('invertermanufacturerandmodel').value == '' ? null : this.pvForm.get('invertermanufacturerandmodel').value,
+            rooftilt: this.pvForm.get('rooftilt').value,
+            shotname: this.pvForm.get('shotname').value,
 
         }
 
@@ -1483,7 +1535,6 @@ export class SurveyprocessPage implements OnInit {
             });
         }, (error) => {
             this.utilitieservice.hideLoading().then(() => {
-                console.log(error);
                 // this.utilitieservice.errorSnackBar(JSON.stringify(error));
                 this.utilitieservice.errorSnackBar('There was some error in processing the request');
             });
@@ -1492,22 +1543,22 @@ export class SurveyprocessPage implements OnInit {
 
     savePVBatteryFormData() {
         const data = {
-            msplocation: this.activeForm.get("msplocation").value,
-            msprating: parseInt(this.activeForm.get("msprating").value),
-            mainbreakersize: parseInt(this.activeForm.get("mainbreakersize").value),
-            mspbreaker: this.activeForm.get("mspbreaker").value,
-            utilitymeter: this.activeForm.get("utilitymeter").value,
-            framing: this.activeForm.get("framing").value,
-            framingsize: this.activeForm.get("framingsize").value,
-            distancebetweentworafts: this.activeForm.get("distancebetweentworafts").value,
+            msplocation: this.activeForm.get('msplocation').value,
+            msprating: parseInt(this.activeForm.get('msprating').value),
+            mainbreakersize: parseInt(this.activeForm.get('mainbreakersize').value),
+            mspbreaker: this.activeForm.get('mspbreaker').value,
+            utilitymeter: this.activeForm.get('utilitymeter').value,
+            framing: this.activeForm.get('framing').value,
+            framingsize: this.activeForm.get('framingsize').value,
+            distancebetweentworafts: this.activeForm.get('distancebetweentworafts').value,
             utility: this.selectedutilityid,
-            batterybackup: this.activeForm.get("batterybackup").value,
-            servicefeedsource: this.activeForm.get("servicefeedsource").value,
-            interconnection: this.activeForm.get("interconnection").value,
-            mountingtype: this.activeForm.get("mountingtype").value,
-            rooftype: this.activeForm.get("rooftype").value,
-            roofmaterial: this.activeForm.get("roofmaterial").value.id,
-            additionalnotes: this.activeForm.get("additionalnotes").value,
+            batterybackup: this.activeForm.get('batterybackup').value,
+            servicefeedsource: this.activeForm.get('servicefeedsource').value,
+            interconnection: this.activeForm.get('interconnection').value,
+            mountingtype: this.activeForm.get('mountingtype').value,
+            rooftype: this.activeForm.get('rooftype').value,
+            roofmaterial: this.activeForm.get('roofmaterial').value.id,
+            additionalnotes: this.activeForm.get('additionalnotes').value,
             status: 'surveycompleted'
         }
         this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
@@ -1594,10 +1645,10 @@ export class SurveyprocessPage implements OnInit {
                 this.savePVFormData();
             } else {
                 let isutilitymanualinput = false;
-                if (this.activeForm.get("utility").value == null || this.activeForm.get("utility").value == "") {
-                    if (this.utility.manualinput != "") {
+                if (this.activeForm.get('utility').value == null || this.activeForm.get('utility').value == '') {
+                    if (this.utility.manualinput != '') {
                         isutilitymanualinput = true;
-                        this.activeForm.get("utility").setValue(this.utility.manualinput);
+                        this.activeForm.get('utility').setValue(this.utility.manualinput);
                     }
                 }
                 this.utilitieservice.showLoading('Saving Survey').then(() => {
@@ -1613,9 +1664,9 @@ export class SurveyprocessPage implements OnInit {
                         }
                         this.apiService.addUtility(data).subscribe((data) => {
                             this.selectedutilityid = data.id;
-                            if (this.surveytype == "battery") {
+                            if (this.surveytype == 'battery') {
                                 this.saveFormData();
-                            } else if (this.surveytype == "pvbattery") {
+                            } else if (this.surveytype == 'pvbattery') {
                                 this.savePVBatteryFormData();
                             }
                         }, (error) => {
@@ -1624,10 +1675,10 @@ export class SurveyprocessPage implements OnInit {
                             });
                         });
                     } else {
-                        this.selectedutilityid = this.activeForm.get("utility").value.id;
-                        if (this.surveytype == "battery") {
+                        this.selectedutilityid = this.activeForm.get('utility').value.id;
+                        if (this.surveytype == 'battery') {
                             this.saveFormData();
-                        } else if (this.surveytype == "pvbattery") {
+                        } else if (this.surveytype == 'pvbattery') {
                             this.savePVBatteryFormData();
                         }
                     }
@@ -1637,7 +1688,7 @@ export class SurveyprocessPage implements OnInit {
     }
 
     uploadImagesToServer() {
-        var imagesArray = [];
+        const imagesArray = [];
         this.mainmenuitems.forEach(mainmenu => {
             mainmenu.children.forEach(child => {
                 child.capturedshots.forEach(shot => {
@@ -1665,11 +1716,8 @@ export class SurveyprocessPage implements OnInit {
     }
 
     uploadImageByIndex(mapOfImages) {
-        console.log(mapOfImages);
-
         if (mapOfImages.length > 0 && mapOfImages.length <= this.totalimagestoupload) {
             const imageToUpload = mapOfImages[0];
-            console.log(imageToUpload);
             if (imageToUpload.shotimage) {
                 const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
                 let filename = '';
@@ -1695,10 +1743,10 @@ export class SurveyprocessPage implements OnInit {
             }
         } else {
             this.utilitieservice.hideLoading().then(() => {
-                this.utilitieservice.showSuccessModal('Survey has been Submitted').then((modal) => {
+                this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
                     modal.present();
                     modal.onWillDismiss().then((dismissed) => {
-                        this.storage.remove("" + this.surveyid);
+                        this.storage.remove('' + this.surveyid);
                         if (this.user.role.type == 'surveyors') {
                             this.utilitieservice.sethomepageSurveyRefresh(true);
                             this.navController.navigateRoot('surveyoroverview');
@@ -1729,10 +1777,10 @@ export class SurveyprocessPage implements OnInit {
             }
         } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP) {
             this.cameraPreview.stopCamera();
-            if (JSON.parse(this.activeForm.get("acdisconnect").value)) {
+            if (JSON.parse(this.activeForm.get('acdisconnect').value)) {
                 this.equipments.splice(0, 0, this.acdisconnectequipment);
             }
-            if (JSON.parse(this.activeForm.get("pvmeter").value)) {
+            if (JSON.parse(this.activeForm.get('pvmeter').value)) {
                 this.equipments.splice(1, 0, this.pvmeterequipment);
             }
         }
@@ -1805,7 +1853,7 @@ export class SurveyprocessPage implements OnInit {
     }
 
     createImageFromBlob(image: Blob) {
-        let reader = new FileReader();
+        const reader = new FileReader();
         if (image) {
             reader.readAsDataURL(image);
         }
@@ -1860,7 +1908,7 @@ export class SurveyprocessPage implements OnInit {
         this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
         this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.GALLERY;
         setTimeout(() => {
-            var activeshot = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.indexOf(shot);
+            const activeshot = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.indexOf(shot);
             this.slider.slideTo(activeshot, 0);
         });
     }
@@ -1871,29 +1919,35 @@ export class SurveyprocessPage implements OnInit {
     }
 
     handleShotDelete() {
-        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0) {
-            if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 1) {
-                this.sliderIndex = 0;
-            }
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.splice(this.sliderIndex, 1);
-            const imagename = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedmainmenuindex].capturedshots[this.sliderIndex].imagename;
-            const shots = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedmainmenuindex].shots;
-            const filteredShot = shots.filter(shot => shot.imagename === imagename)[0];
-            if (filteredShot.inputformcontrol != '') {
-                this.activeForm[filteredShot.inputformcontrol].value = '';
-            }
+        const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+        let shot = currentIndex.shots[this.selectedshotindex];
+        if (currentIndex.capturedshots.length > 1) {
+            currentIndex.capturedshots.splice(this.sliderIndex, 1);
+            const imagename = currentIndex.capturedshots[this.sliderIndex].imagename;
+            this.selectedshotindex = currentIndex.shots.findIndex(s => s.imagename === imagename);
+            shot = currentIndex.shots[this.selectedshotindex];
+            /*if (shot.inputformcontrol != '') {
+                this.activeForm.get(shot.inputformcontrol).setValue('');
+            }*/
             this.slideDidChange();
-        }
-        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length == 0) {
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = false;
-            if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == QUESTIONTYPE.NONE) {
-                this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = false;
-            }
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = true;
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
-
+        } else if (currentIndex.capturedshots.length === 1) {
+            this.sliderIndex = 0;
+            currentIndex.capturedshots.splice(this.sliderIndex, 1);
+            this.selectedshotindex = 0;
+            shot = currentIndex.shots[this.selectedshotindex];
+            /*if (shot.inputformcontrol != '') {
+                this.activeForm.get(shot.inputformcontrol).setValue('');
+            }*/
+            this.handleGalleryBack();
+        } else if (currentIndex.capturedshots.length === 0) {
+            this.selectedshotindex = 0
+            shot = currentIndex.shots[this.selectedshotindex];
             this.handleGalleryBack();
         }
+        shot.shotstatus = false;
+        shot.questionstatus = false;
+        shot.ispending = true;
+        currentIndex.ispending = true;
     }
 
     async slideDidChange(): Promise<void> {
@@ -1909,11 +1963,35 @@ export class SurveyprocessPage implements OnInit {
         this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-        this.startCameraAfterPermission();
+        this.startCameraWithOpts();
     }
 
     changeBatterySystem() {
         this.hasBatterySystem = eval(this.pvForm.value.batterysystem);
-        console.log(this.hasBatterySystem);
+    }
+
+    handleEditQuestionInput(index) {
+        this.editingMode = true;
+        this.editingModePreviousIndex = this.selectedshotindex;
+        this.selectedshotindex = index;
+        const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index];
+        shotDetail.promptquestion = true;
+        this.iscapturingallowed = false;
+    }
+
+    handleBackbutton(){
+        this.platform.backButton.subscribeWithPriority(10, () => {
+            console.log('Handler called to force close!');
+            this.alertController.getTop().then(r => {
+              if (r) {
+                navigator['app'].exitApp();
+              }
+            }).catch(e => {
+              console.log(e);
+            })
+          });
+    }
+    ionViewDidEnter(){
+        this.handleBackbutton();
     }
 }

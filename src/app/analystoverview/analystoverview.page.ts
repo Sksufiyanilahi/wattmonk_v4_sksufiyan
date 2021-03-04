@@ -1,21 +1,26 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {UtilitiesService} from '../utilities.service';
-import {ApiService} from '../api.service';
-import {DatePipe} from '@angular/common';
-import {StorageService} from '../storage.service';
-import {Diagnostic} from '@ionic-native/diagnostic/ngx';
-import {AlertController, Platform, ToastController} from '@ionic/angular';
-import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult} from '@ionic-native/native-geocoder/ngx';
-import {AddressModel} from '../model/address.model';
-import {Subscription} from 'rxjs';
-import {DrawerState} from 'ion-bottom-drawer';
-import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
-import {Router} from '@angular/router';
-import {COMETCHAT_CONSTANTS, version} from '../contants';
-import {NetworkdetectService} from '../networkdetect.service';
-import {InAppBrowser} from '@ionic-native/in-app-browser/ngx';
-import {UserData} from '../model/userData.model';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { UtilitiesService } from '../utilities.service';
+import { ApiService } from '../api.service';
+import { DatePipe } from '@angular/common';
+import { StorageService } from '../storage.service';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import { AddressModel } from '../model/address.model';
+import { Subscription } from 'rxjs';
+import { DrawerState } from 'ion-bottom-drawer';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { COMET_CHAT_AUTH_KEY } from '../model/constants';
+import { Router } from '@angular/router';
+import { COMETCHAT_CONSTANTS, intercomId, ROLES,version } from '../contants';
+import { NetworkdetectService } from '../networkdetect.service';
+import { FindValueSubscriber } from 'rxjs/internal/operators/find';
+import { environment } from 'src/environments/environment';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { UserData } from '../model/userData.model';
+import { Intercom } from 'ng-intercom';
+import { Appversion } from '../appversion';
 
 
 @Component({
@@ -23,7 +28,7 @@ import {UserData} from '../model/userData.model';
   templateUrl: './analystoverview.page.html',
   styleUrls: ['./analystoverview.page.scss'],
 })
-export class AnalystoverviewPage implements OnInit, OnDestroy {
+export class AnalystoverviewPage implements OnInit, OnDestroy{
   private version = version;
   @Output() ionInput = new EventEmitter();
 
@@ -31,7 +36,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy {
   searchQuery = '';
   searchbarElement = '';
   items: string[];
-
+  
   //isUserSurveyor = false ;
   //isUserDesigner= false ;
   //isUserAnalyst = false;
@@ -46,49 +51,60 @@ export class AnalystoverviewPage implements OnInit, OnDestroy {
     maxResults: 5
   };
 
-  searchDesginItem = [];
-  searchSurveyItem = [];
+  searchDesginItem: [] = [];
+  searchSurveyItem: [] = [];
 
   private subscription: Subscription;
   drawerState = DrawerState.Docked;
   name: any;
   userRole: any;
   netSwitch: any;
-  update_version: string;
+  update_version:string;
   unreadCount: any;
-  userData: UserData;
+  userData: UserData
   deacctivateNetworkSwitch: Subscription;
 
   constructor(private utilities: UtilitiesService,
-              private apiService: ApiService,
-              private nativeGeocoder: NativeGeocoder,
-              private platform: Platform,
-              private datePipe: DatePipe,
-              private storage: StorageService,
-              private diagnostic: Diagnostic,
-              private alertController: AlertController,
-              private geolocation: Geolocation,
-              private toastController: ToastController,
-              public route: Router,
-              private network: NetworkdetectService,
-              private iab: InAppBrowser) {
-
+    private apiService: ApiService,
+    private nativeGeocoder: NativeGeocoder,
+    private platform: Platform,
+    private datePipe: DatePipe,
+    private storage: StorageService,
+    private diagnostic: Diagnostic,
+    private alertController: AlertController,
+    private geolocation: Geolocation,
+    private toastController: ToastController,
+    public route: Router,
+    private intercom:Intercom,
+    private network:NetworkdetectService,
+    private iab: InAppBrowser){
+     
   }
-
-  getNotificationCount() {
-    this.apiService.getCountOfUnreadNotifications().subscribe((count) => {
-      console.log("count", count);
-      this.unreadCount = count;
+  getNotificationCount(){
+    this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+      console.log("count",count);
+     this.unreadCount= count;
     });
 
-
+   
   }
 
+  intercomModule(){
+    // this.intercom.boot({
+    //   app_id: intercomId,
+    //   // Supports all optional configuration.
+    //   widget: {
+    //     "activator": "#intercom"
+    //   }
+    // });
+  }
+     
 
-  ngOnInit() {
+  ngOnInit() { 
 
-    this.userData = this.storage.getUser();
-
+    this.intercomModule();
+    this.userData=this.storage.getUser();
+ 
     this.apiService.emitUserNameAndRole(this.userData);
     this.getNotificationCount();
     this.setupCometChat();
@@ -97,29 +113,32 @@ export class AnalystoverviewPage implements OnInit, OnDestroy {
     this.route.navigate(['analystoverview/permitdesign']);
     this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
-    });
-
-
+      });
+    
+    
     //  this.isUserAnalyst = true;
     //  // this.isUserSurveyor = true;
     //   //this.isUserDesigner = true;
-
-
+      
+      
+     
+     
+    
   }
 
-  updateUserPushToken() {
-    this.apiService.pushtoken(this.storage.getUserID(), {"newpushtoken": localStorage.getItem("pushtoken")}).subscribe((data) => {
+  updateUserPushToken(){
+    this.apiService.pushtoken(this.storage.getUserID(), {"newpushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
     }, (error) => {
     });
   }
 
-  setzero() {
-    this.unreadCount = 0;
+  setzero(){
+    this.unreadCount= 0;
   }
 
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    // this.subscription.unsubscribe();
     this.deacctivateNetworkSwitch.unsubscribe();
   }
 
@@ -139,16 +158,16 @@ export class AnalystoverviewPage implements OnInit, OnDestroy {
       () => {
         console.log('Initialization completed successfully');
         // if(this.utilities.currentUserValue != null){
-        // You can now call login function.
-        CometChat.login(userId, COMETCHAT_CONSTANTS.API_KEY).then(
-          (user) => {
-            console.log('Login Successful:', {user});
-          },
-          error => {
-            console.log('Login failed with exception:', {error});
-          }
-        );
-        // }
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
       },
       error => {
         console.log('Initialization failed with error:', error);
@@ -188,8 +207,8 @@ export class AnalystoverviewPage implements OnInit, OnDestroy {
               this.searchDesginItem = searchModel;
               // console.log(this.searchDesginItem);
 
-            } else {
-              this.searchSurveyItem = searchModel;
+            } else {    
+                this.searchSurveyItem = searchModel;
             }
           });
           console.log(this.searchDesginItem);
@@ -206,14 +225,14 @@ export class AnalystoverviewPage implements OnInit, OnDestroy {
 
   }
 
-  getdesigndata(serchTermData: any = {'type': ''}) {
+  getdesigndata(serchTermData: any = { 'type': '' }) {
     console.log(serchTermData.name);
     this.name = serchTermData.name;
     this.searchbarElement = this.name;
     if (serchTermData.type == 'design') {
-      this.route.navigate(['homepage/design'], {queryParams: {serchTerm: serchTermData.id}});
+      this.route.navigate(['homepage/design'], { queryParams: { serchTerm: serchTermData.id } });
     } else if (serchTermData.type == 'survey') {
-      this.route.navigate(['homepage/survey'], {queryParams: {serchTerm: serchTermData.id}});
+      this.route.navigate(['homepage/survey'], { queryParams: { serchTerm: serchTermData.id } });
     } else {
       this.route.navigate(['homepage/design']);
     }
@@ -221,7 +240,7 @@ export class AnalystoverviewPage implements OnInit, OnDestroy {
     this.searchSurveyItem = [];
   }
 
-  searchbar() {
+  searchbar(){
     this.route.navigate(['/search-bar1']);
   }
 
@@ -395,34 +414,35 @@ export class AnalystoverviewPage implements OnInit, OnDestroy {
   }
 
   ionViewDidEnter() {
-
-    this.deacctivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
+  
+    this.deacctivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
+      this.utilities.showHideIntercom(false);
       console.log(this.netSwitch);
-
+      
     })
 
-    this.network.networkDisconnect();
-    this.network.networkConnect();
-    this.subscription = this.platform.backButton.subscribe(() => {
-      if (this.showSearchBar === true) {
-        this.showSearchBar = false;
-      } else {
-        (navigator as any).app.exitApp();
-      }
-    });
+this.network.networkDisconnect();
+this.network.networkConnect();
+    // this.subscription = this.platform.backButton.subscribe(() => {
+    //   if (this.showSearchBar === true) {
+    //     this.showSearchBar = false;
+    //   } else {
+    //     (navigator as any).app.exitApp();
+    //   }
+    // });
   }
 
   ionViewWillLeave() {
+    this.utilities.showHideIntercom(true);
     this.subscription.unsubscribe();
 
   }
-
-  scheduledPage() {
-
-    if (this.route.url == '/analystoverview/design') {
+  scheduledPage(){
+    
+    if(this.route.url=='/analystoverview/design'){
       this.route.navigate(['/schedule/design'])
-    } else {
+    }else{
       this.route.navigate(['/schedule/survey'])
     }
   }

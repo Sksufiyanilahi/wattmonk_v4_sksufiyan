@@ -47,13 +47,15 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
-    const EMAILPATTERN =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
+    const EMAILPATTERN =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const mydate:any =new Date().getTime();
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.pattern(EMAILPATTERN)]),
       phonenumber: new FormControl('', [Validators.required,  Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
       jobtype: new FormControl('', [Validators.required]),
-      datetime: new FormControl(new Date().getTime(), [Validators.required]),
+      surveydatetime: new FormControl(mydate),
+      datetime:new FormControl(''),
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
@@ -65,7 +67,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       state: new FormControl(''),
       city: new FormControl(''),
       postalcode: new FormControl(''),
-      status: new FormControl('created')
+      status: new FormControl('created'),
+      chatid:new FormControl(null)
     });
 
   }
@@ -90,20 +93,20 @@ export class SurveyComponent implements OnInit, OnDestroy {
     } 
     else {
       this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
-        //  this.surveyForm.get('address').setValue("sdck");
-        //  this.surveyForm.get('latitude').setValue('1111111');
-        //  this.surveyForm.get('longitude').setValue('222222222');
-        //  this.surveyForm.get('country').setValue('India');
-        //  this.surveyForm.get('city').setValue('delhi');
-        // this.surveyForm.get('state').setValue('up');
-        //  this.surveyForm.get('postalcode').setValue(777777777);
-       this.surveyForm.get('address').setValue(address.address);
-       this.surveyForm.get('latitude').setValue(address.lat);
-        this.surveyForm.get('longitude').setValue(address.long);
-        this.surveyForm.get('country').setValue(address.country);
-        this.surveyForm.get('city').setValue(address.city);
-        this.surveyForm.get('state').setValue(address.state);
-        this.surveyForm.get('postalcode').setValue(address.postalcode);
+         this.surveyForm.get('address').setValue("sdck");
+         this.surveyForm.get('latitude').setValue('1111111');
+         this.surveyForm.get('longitude').setValue('222222222');
+         this.surveyForm.get('country').setValue('India');
+         this.surveyForm.get('city').setValue('delhi');
+        this.surveyForm.get('state').setValue('up');
+         this.surveyForm.get('postalcode').setValue(777777777);
+      //  this.surveyForm.get('address').setValue(address.address);
+      //  this.surveyForm.get('latitude').setValue(address.lat);
+      //   this.surveyForm.get('longitude').setValue(address.long);
+      //   this.surveyForm.get('country').setValue(address.country);
+      //   this.surveyForm.get('city').setValue(address.city);
+      //   this.surveyForm.get('state').setValue(address.state);
+      //   this.surveyForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.surveyForm.get('address').setValue('');
         this.surveyForm.get('latitude').setValue('');
@@ -134,6 +137,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.utilities.showLoading('Saving Survey').then(() => {
         this.surveyForm.get('status').setValue('surveyinprocess');
         if (this.surveyId !== 0) {
+          this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
@@ -153,6 +157,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
           this.surveyForm.get('status').setValue('surveyinprocess');
           console.log(this.surveyForm.value);
+          this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
@@ -173,6 +178,15 @@ export class SurveyComponent implements OnInit, OnDestroy {
   }
 
   saveSurvey() {
+    const invalid = [];
+    const controls = this.surveyForm.controls;
+    for (const name in controls) {
+        if (controls[name].invalid) {
+            invalid.push(name);
+        }
+        
+      }
+      console.log(invalid);
     if (this.surveyForm.status === 'INVALID') {
       console.log(this.surveyForm.value);
       if(this.surveyForm.value.name==''){
@@ -189,7 +203,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
       }
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
+        this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
         if (this.surveyId !== 0) {
+          this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.showSnackBar('Survey has been updated');
@@ -215,7 +231,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             this.surveyForm.get('status').setValue('surveyassigned');
           }
           console.log(this.surveyForm.value);
-          debugger;
+          this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
               this.utilities.hideLoading();
@@ -287,7 +303,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
             email: this.survey.email,
             jobtype: this.survey.jobtype,
             phonenumber: this.survey.phonenumber,
-            datetime: date.getTime(),
+            surveydatetime: date.getTime(),
+            datetime:date,
             comments:this.survey.comments=='' ?'': this.survey.comments[0].message,
             address: this.survey.address,
             source: this.survey.source,

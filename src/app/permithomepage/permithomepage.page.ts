@@ -188,13 +188,13 @@ export class PermithomepagePage implements OnInit {
 
 this.network.networkDisconnect();
 this.network.networkConnect();
-    this.subscription = this.platform.backButton.subscribe(() => {
-      if (this.showSearchBar === true) {
-        this.showSearchBar = false;
-      } else {
-        (navigator as any).app.exitApp();
-      }
-    });
+    // this.subscription = this.platform.backButton.subscribe(() => {
+    //   if (this.showSearchBar === true) {
+    //     this.showSearchBar = false;
+    //   } else {
+    //     (navigator as any).app.exitApp();
+    //   }
+    // });
     this.mixpanelService.setUserDetails(this.userData.email,this.userData.firstname+" "+this.userData.lastname,this.userData.id)
     this.mixpanelService.track("PERMITDESIGN_PAGE_OPEN", {
       $id: this.userData.id,

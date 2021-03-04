@@ -1,25 +1,27 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
 
-import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
-import {Router} from '@angular/router';
-import {Plugins} from '@capacitor/core';
-import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
-import { BackgroundMode } from '@ionic-native/background-mode/ngx';
-import {FirebaseX} from '@ionic-native/firebase-x';
-import {NavController, Platform} from '@ionic/angular';
-import {from, Observable, Subscription} from 'rxjs';
+import {AlertController, NavController, Platform} from '@ionic/angular';
+import {SplashScreen} from '@ionic-native/splash-screen/ngx';
+import {StatusBar} from '@ionic-native/status-bar/ngx';
+import {StorageService} from './storage.service';
 import {ApiService} from './api.service';
+import {UtilitiesService} from './utilities.service';
+import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
+import {Firebase} from '@ionic-native/firebase/ngx';
+import {NetworkdetectService} from './networkdetect.service';
 import {COMETCHAT_CONSTANTS} from './contants';
 import {UserData} from './model/userData.model';
-import {NetworkdetectService} from './networkdetect.service';
-import {StorageService} from './storage.service';
-import {UtilitiesService} from './utilities.service';
+import {from, Observable, Subscription} from 'rxjs';
+import {Router} from '@angular/router';
+import {Intercom} from 'ng-intercom';
+import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
 import {MixpanelService} from './utilities/mixpanel.service';
+import {BackgroundMode} from "@ionic-native/background-mode/ngx";
 
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
-    styleUrls: ['app.component.scss'],
+    styleUrls: ['app.component.scss']
 })
 export class AppComponent {
     homeimage: any;
@@ -27,12 +29,14 @@ export class AppComponent {
     public appPages = [
         {
             title: 'Home',
-            url: '/homepage/design',
+            url: '/homepage/design'
+            //icon: 'home'
         },
         {
             title: 'Statistics',
-            url: '/statistics',
-        },
+            url: '/statistics'
+            //icon: 'statistic'
+        }
     ];
     user: any;
     ischatuserloggedin = false;
@@ -59,19 +63,23 @@ export class AppComponent {
 
     constructor(
         private platform: Platform,
+        private splashScreen: SplashScreen,
+        private statusBar: StatusBar,
         private storageService: StorageService,
         private navController: NavController,
         // private fcm: FCM,
         private apiservice: ApiService,
         private utilitiesService: UtilitiesService,
-        private firebase: FirebaseX,
+        private firebase: Firebase,
         private utilities: UtilitiesService,
         private network: NetworkdetectService,
         private router: Router,
+        private intercom: Intercom,
         private db: AngularFireDatabase,
         private changeDetectorRef: ChangeDetectorRef,
         private mix: MixpanelService,
-        private backgroundMode: BackgroundMode
+        private backgroundMode: BackgroundMode,
+        private alertController:AlertController
     ) {
         this.initializeApp();
         if (!navigator.onLine) {
@@ -132,27 +140,46 @@ export class AppComponent {
 
     initializeApp() {
         this.platform.ready().then(() => {
-            setTimeout(() => {
-                Plugins.SplashScreen.hide();
-            }, 1000);
+            // setTimeout(() => {
+                this.splashScreen.hide();
+            // }, 1000);
             this.getFcmToken();
-            Plugins.StatusBar.setOverlaysWebView({
-                overlay: true
-              });
-            Plugins.StatusBar.setBackgroundColor({ color:'#ffffff' });
+            this.handleBackbutton();
+            if (this.platform.is('ios')) {
+                this.statusBar.overlaysWebView(false);
+                this.statusBar.backgroundColorByHexString('#fffff');
+                this.statusBar.styleDefault();
+            } else if (this.platform.is('android')) {
+                this.statusBar.overlaysWebView(false);
+                this.statusBar.styleDefault();
+                this.statusBar.backgroundColorByHexString('#fffff');
+                this.statusBar.styleLightContent();
+            } else {
+            }
 
             this.getNotification();
-            this.setupCometChat();
+            this.utilities.setupCometChat();
             this.mix.initializeMixPanel();
 			this.backgroundMode.enable();
         });
     }
+
+    // intercomModule(){
+    //   this.intercom.boot({
+    //     app_id: intercomId,
+    //     // Supports all optional configuration.
+    //     widget: {
+    //       "activator": "#intercom"
+    //     }
+    //   });
+    // }
 
     isEmptyObject(obj) {
         return obj && Object.keys(obj).length === 0;
     }
 
     ngOnInit() {
+        // this.intercomModule();
         this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe((data) => {
             this.netSwitch = data;
             console.log(this.netSwitch);
@@ -248,8 +275,11 @@ export class AppComponent {
             }
         } else if (this.userData.role.type == 'qcinspector' && type == 'survey') {
             this.router.navigate(['/analystoverview/survey']);
-        } else if (this.userData.role.type !== 'clientsuperadmin') {
+        } else if (this.userData.role.type !== 'clientsuperadmin' && type=='statistics') {
             this.router.navigate(['/statistics']);
+        } else if(this.userData.role.type !== 'designer' && this.userData.role.type !== 'qcinspector' && this.userData.role.type !== 'peengineer' && type=='team')
+        {
+            this.router.navigate(['/teammodule'])
         }
     }
 
@@ -274,7 +304,7 @@ export class AppComponent {
     }
 
     getNotification() {
-        this.firebase.onMessageReceived().subscribe((data) => {
+        this.firebase.onNotificationOpen().subscribe((data) => {
             console.log(`User opened a notification ${data}`, data);
             this.apiservice.emitMessageReceived('pushNotification');
         });
@@ -289,7 +319,7 @@ export class AppComponent {
         return from(CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
             () => {
                 if (this.storageService.getUserID() !== '') {
-                    this.apiservice.doCometUserLogin();
+                    this.utilities.doCometUserLogin();
                 }
                 console.log('Initialization completed successfully');
                 // if(this.utilities.currentUserValue != null){
@@ -306,5 +336,18 @@ export class AppComponent {
     ngOndestroy() {
         this.deactivateGetUserData.unsubscribe();
         this.deactivateNetworkSwitch.unsubscribe();
+    }
+
+    handleBackbutton(){
+        // this.platform.backButton.subscribeWithPriority(10, () => {
+        //     console.log('Handler called to force close!');
+        //     this.alertController.getTop().then(r => {
+        //       if (r) {
+        //         navigator['app'].exitApp();
+        //       }
+        //     }).catch(e => {
+        //       console.log(e);
+        //     })
+        //   });
     }
 }

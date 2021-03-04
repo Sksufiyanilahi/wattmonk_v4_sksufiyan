@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { AlertController, LoadingController, ModalController, NavController, ToastController } from '@ionic/angular';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
 import { AddressModel } from './model/address.model';
 import { AssigneeModel } from './model/assignee.model';
@@ -9,13 +9,12 @@ import * as moment from 'moment';
 import { User } from './model/user.model';
 import { LoginModel } from './model/login.model';
 import { StorageService } from './storage.service';
- 
+import { Intercom } from 'ng-intercom';
 import { NumberOnlyDirective } from './schedule/number.directive';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { COMETCHAT_CONSTANTS } from './contants.prod';
-import { ApiService } from './api.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -23,7 +22,6 @@ import { ApiService } from './api.service';
 export class UtilitiesService {
 	guid$: Observable<any>;
 	private myMethodSubject = new Subject<any>();
-	audio: HTMLAudioElement;
 
 	loading: HTMLIonLoadingElement;
 	isLoading = false;
@@ -63,7 +61,7 @@ export class UtilitiesService {
 	private passwordLength = 6;
 	designlistofdesignDetail: any;
 	groupid: any;
-	//callData: any;
+	callData: any;
 
 	toast:any;
 
@@ -73,11 +71,13 @@ export class UtilitiesService {
 		private alertController: AlertController,
 		private modalController: ModalController,
 		private storageService: StorageService,
+		private intercom: Intercom,
 		private router: Router,
 		private navCtrl: NavController,
 		private location: Location
 	) {
 		this.guid$ = this.myMethodSubject.asObservable();
+		// this.listencall();
 		this.user = this.storageService.getUser();
 		this.currentUserSubject = new BehaviorSubject<LoginModel>(this.user);
 		this.currentUser = this.currentUserSubject.asObservable();
@@ -242,6 +242,12 @@ export class UtilitiesService {
 		} else {
 			return Promise.resolve();
 		}
+	}
+
+	showHideIntercom(value) {
+		this.intercom.update({
+			hide_default_launcher: value
+		});
 	}
 
 	setLoadingMessage(message: string) {
@@ -440,7 +446,7 @@ export class UtilitiesService {
 		await alert.present();
 	}
 
-	formatDateInTimeAgo(datestring: string) {
+	formatDateInTimeAgo(datestring: any) {
 		return moment(datestring, 'YYYY-MM-DD HH:mm:ss GMT Z').fromNow();
 	}
 
@@ -513,156 +519,102 @@ export class UtilitiesService {
 	//   this.count = data;
 	// })
 
-	// listencall() {
-	// 	var listnerID = this.groupid;
-	// 	const that = this;
-	// 	CometChat.addCallListener(
-	// 		listnerID,
-	// 		new CometChat.CallListener({
-	// 			onIncomingCallReceived(call) {
-	// 				console.log('Incoming call kkkkkkkk:', call);
-	// 				that.callData = call;
-	// 				// if(call.status=='initiated'){
-	// 				that.router.navigate([ '/', 'callingscreen' ]);
-	// 				// }
-	// 				// Handle incoming call
-	// 			},
-	// 			onOutgoingCallAccepted(call) {
-	// 				console.log('Outgoing call accepted fffffff:', call);
-	// 				that.callData = call;
-	// 				console.log(call);
-	// 				that.startcall();
-	// 				// Outgoing Call Accepted
-	// 			},
-	// 			onOutgoingCallRejected(call) {
-	// 				console.log('Outgoing call rejected ooooooooo:', call);
-	// 				that.callData = call;
-	// 				// Outgoing Call Rejected
-	// 				that.navCtrl.pop();
-	// 			},
-	// 			onIncomingCallCancelled(call) {
-	// 				console.log('Incoming call calcelled:', call);
-	// 				that.callData = call;
+	listencall() {
+		var listnerID = this.groupid;
+		const that = this;
+		CometChat.addCallListener(
+			listnerID,
+			new CometChat.CallListener({
+				onIncomingCallReceived(call) {
+					console.log('Incoming call:', call);
+					that.callData = call;
+					// if(call.status=='initiated'){
+					that.router.navigate([ '/', 'callingscreen' ]);
+					// }
+					// Handle incoming call
+				},
+				onOutgoingCallAccepted(call) {
+					console.log('Outgoing call accepted:', call);
+					that.callData = call;
+					// Outgoing Call Accepted
+				},
+				onOutgoingCallRejected(call) {
+					console.log('Outgoing call rejected:', call);
+					that.callData = call;
+					// Outgoing Call Rejected
+					that.navCtrl.pop();
+				},
+				onIncomingCallCancelled(call) {
+					console.log('Incoming call calcelled:', call);
+					that.callData = call;
 
-	// 				// that.location.back();
-	// 				that.navCtrl.pop();
-	// 			}
-	// 		})
-	// 	);
-	// }
+					// that.location.back();
+					that.navCtrl.pop();
+				}
+			})
+		);
+	}
 
-	// getCallData(): Observable<any> {
-	// 	return this.callData;
-	// }
+	getCallData(): Observable<any> {
+		return this.callData;
+	}
 
-	// startcall() {
-	// 	/**
-    //     * You can get the call Object from the success of acceptCall() or from the onOutgoingCallAccepted() callback of the CallListener.
-    //     */
-	// 	var sessionId = this.callData.sessionId;
-	// 	var callType = this.callData.type;
-	// 	let callListener = new CometChat.OngoingCallListener({
-	// 		onUserJoined: (user) => {
-	// 			console.log('User joined call:', user);
-	// 			this.pauseAudio();
-	// 		},
-	// 		onUserLeft: (user) => {
-	// 			console.log('User left call:', user);
-	// 			this.navCtrl.pop();
-	// 			// this.pauseAudio();
-	// 		},
-	// 		onCallEnded: (call) => {
-	// 			console.log('Call ended listener', call);
-	// 			this.navCtrl.pop();
-	// 			this.pauseAudio();
-	// 		}
-	// 	});
-	// 	var callSettings = new CometChat.CallSettingsBuilder()
-	// 		.setSessionID(sessionId)
-	// 		.enableDefaultLayout(true)
-	// 		.setIsAudioOnlyCall(callType == 'audio' ? true : false)
-	// 		.setCallEventListener(callListener)
-	// 		.build();
-	// 		console.log(callSettings,">>>>");
-	// 	CometChat.startCall(callSettings);
-	// }
+	static rejectCall(sessionId, rejectStatus) {
+		let promise = new Promise((resolve, reject) => {
+			CometChat.rejectCall(sessionId, rejectStatus).then((call) => resolve(call), (error) => reject(error));
+		});
 
-	// static rejectCall(sessionId, rejectStatus) {
-	// 	let promise = new Promise((resolve, reject) => {
-	// 		CometChat.rejectCall(sessionId, rejectStatus).then((call) => resolve(call), (error) => reject(error));
-	// 	});
+		return promise;
+	}
+	setupCometChat(): Observable<any> {
+        const appSetting = new CometChat.AppSettingsBuilder()
+            .subscribePresenceForAllUsers()
+            .setRegion(COMETCHAT_CONSTANTS.REGION)
+            .build();
 
-	// 	return promise;
-	// }
+        return from(CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+            () => {
+                if (this.storageService.getUserID() !== '') {
+                    this.doCometUserLogin();
+                }
+                console.log('Initialization completed successfully');
+                // if(this.utilities.currentUserValue != null){
+                // You can now call login function.
 
-	// pauseAudio() {
-	// 	this.audio.pause();
-	// }
-
-	// doCometUserLogin() {
-	// 	// let userId = this.storageService.getUserID()
-    //     // const user = new CometChat.User(userId);
-    //     // user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
-    //     // const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
-    //     // CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
-    //     //   () => {
-    //     //     console.log('Initialization completed successfully');
-    //     //     // if(this.utilities.currentUserValue != null){
-    //     //       // You can now call login function.
-    //     //       CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
-    //     //         (user) => {
-    //     //           console.log('Login Successful:', { user });
-    //     //         },
-    //     //         error => {
-    //     //           console.log('Login failed with exception:', { error });
-    //     //         }
-    //     //       );
-    //     //   // }
-    //     //   },
-    //     //   error => {
-    //     //     console.log('Initialization failed with error:', error);
-    //     //   }
-    //     // );
-	// 	CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-	// 		loggedInUser => {
-	// 			console.log('Login Successful:', {loggedInUser});
-	// 			this.apiService.listencall();
-	// 		},
-	// 		error => {
-	// 			if (error.code === 'ERR_UID_NOT_FOUND') {
-	// 				const userDetails = new CometChat.User(this.storageService.getUserID());
-	// 				userDetails.setName(this.storageService.getUserName());
-	// 				CometChat.createUser(userDetails, COMETCHAT_CONSTANTS.API_KEY).then(
-	// 					user => {
-	// 						console.log('user created', user);
-	// 						CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-	// 							loggedInUser => {
-	// 								console.log('Login Successful:', {loggedInUser});
-	// 								this.apiService.listencall();
-	// 							},
-	// 							error => {
-	// 								console.log('Login failed with exception:', {error});
-	// 							}
-	// 						);
-	// 					},
-	// 					error => {
-	// 						CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-	// 							loggedInUser => {
-	// 								console.log('Login Successful:', {loggedInUser});
-	// 								this.apiService.listencall();
-	// 							},
-	// 							error => {
-	// 								console.log('Login failed with exception:', {error});
-	// 							}
-	// 						);
-	// 						console.log('error', error);
-	// 					});
-	// 			}
-	// 			console.log('Login failed with exception:', {error});
-	// 		}
-	// 	);
+                // }
+            },
+            (error) => {
+                console.log('Initialization failed with error:', error);
+            }
+        ));
+    }
+	
+	doCometUserLogin() {
+	    let userId = this.storageService.getUserID();
+    const user = new CometChat.User(userId);
+    user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
+    const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
+    CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
+      () => {
+        console.log('Initialization completed successfully');
+        // if(this.utilities.currentUserValue != null){
+          // You can now call login function.
+          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
+            (user) => {
+              console.log('Login Successful:', { user });
+            },
+            error => {
+              console.log('Login failed with exception:', { error });
+            }
+          );
+      // }
+      },
+      error => {
+        console.log('Initialization failed with error:', error);
+      }
+    );
        
-	// }
+	}
 	formatTimeInDisplayFormat(datestring: any) {
 		if (datestring != null) {
 		  var d = new Date(datestring);
@@ -677,6 +629,42 @@ export class UtilitiesService {
 		  return "-";
 		}
 	  }
+
+	  formatDateInDisplayFormat(datestring: any) {
+		if (datestring != null) {
+		  const d = new Date(datestring);
+		  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+		  const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+		  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+		  const today = new Date();
+		  if (d.setHours(0, 0, 0, 0) == today.setHours(0, 0, 0, 0)) {
+			return "Today";
+		  } else {
+			return (`${da} ${mo} ${ye}`);
+		  }
+		} else {
+		  return "-";
+		}
+	  }
+
+	 formatDate(date) {
+		var d = new Date(date), 
+		hours = d.getHours(),
+		mins = d.getMinutes(),
+		seconds=  d.getSeconds(),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear();
+	
+		if (month.length < 2) 
+			month = '0' + month;
+		if (day.length < 2) 
+			day = '0' + day;
+			
+			
+	
+			return [year, month, day].join('-') + ' ' + [(hours < 10? '0':'') + hours,(mins < 10? '0':'')+ mins, (seconds < 10? '0':'') + seconds].join(':');
+	}
 }
 
 // getcount(){

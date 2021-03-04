@@ -31,6 +31,7 @@
                       <!-- <span *ngIf="surveyData.lateby > 1" class="latebystyle" style="font-size: 10px;"><strong>Late by {{surveyData.lateby}} days</strong></span>
                       <span *ngIf="surveyData.lateby == 1" class="latebystyle" style="font-size: 10px;"><strong>Late by a day</strong></span> -->
             </p>
+            <span class="recordupdatedon">Updated {{surveyData.recordupdatedon}}</span>
                 <a href="tel:{{surveyData?.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
                 <span class="customer-address z-100"
@@ -53,9 +54,9 @@
                         <ion-button *ngIf="surveyData.status=='surveyassigned'" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="assignedTo(surveyData)">
                         Start Survey
                     </ion-button>
-                        <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]">
+                        <!-- <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]">
                         Resume Survey
-                    </ion-button>
+                    </ion-button> -->
                     </ion-col>
                 </ion-row> 
                 <ion-progress-bar [value]="surveyData.totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>

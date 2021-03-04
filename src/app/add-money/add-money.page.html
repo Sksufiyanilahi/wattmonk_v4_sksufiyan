@@ -59,13 +59,13 @@
   <ion-row class="ion-align-items-center ion-justify-content-center">
   <ion-col style="padding: 15px;">
       <ion-item class="ion-no-padding " *ngIf="mode=='wallet'">
-          <ion-label position="floating">Amount*</ion-label>
+          <ion-label position="floating"> Enter Amount*</ion-label>
           <ion-input class="form_input" type="number" style="width: 330px;" autocapitalize="none" autocomplete="off"
                 formControlName="amount" (ionChange)="amountCheck($event)"></ion-input>
                 
       </ion-item>
       <ion-item class="ion-no-padding" *ngIf="mode=='card'">
-        <ion-label position="floating">Amount*</ion-label>
+        <ion-label position="floating"> Enter Amount*</ion-label>
         <ion-input class="form_input" type="number" style="width: 330px;" autocapitalize="none" formControlName ="amount" autocomplete="off"
          [disabled]=true  ></ion-input>
     </ion-item>
@@ -81,16 +81,23 @@
   </ion-col>
 </ion-row>
 </form>
-<form  id="payment-form">
+<ion-row>
+<ion-col size="10" offset='1'>
+<ngx-paypal class="paypal-button" [config]="payPalConfig"></ngx-paypal>
+</ion-col>
+</ion-row>
+<!-- <form  id="payment-form">
   <div class="form-row" style="padding: 15px;">
-    <div id="card-element"> <!-- a Stripe Element will be inserted here. --> </div>
+    <div id="card-element"> -->
+       <!-- a Stripe Element will be inserted here. --> 
+      <!-- </div> -->
     <!-- Used to display Element errors -->
-    <div id="card-errors" class="stripeerror" role="alert"></div>
+    <!-- <div id="card-errors" class="stripeerror" role="alert"></div>
   </div>
   <div class="ion-margin" style="margin-top:30px ;">
   
-      <ion-button type="submit" color="success"  class="ion-padding" expand="block" fill="solid" size="small"><ion-label style="color: #fff;">Make Payment</ion-label></ion-button>
+      <ion-button type="submit" color="success" (click)="getSessionID()" class="ion-padding" expand="block" fill="solid" size="small"><ion-label style="color: #fff;">Make Payment</ion-label></ion-button>
 
   </div>
-</form>
+</form> -->
 </ion-content>

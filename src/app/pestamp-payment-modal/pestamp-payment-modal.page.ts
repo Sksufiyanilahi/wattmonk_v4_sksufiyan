@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
-
+import { Intercom } from 'ng-intercom';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { ScheduleFormEvent } from '../model/constants';
@@ -12,6 +12,7 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import {IPayPalConfig,ICreateOrderRequest } from 'ngx-paypal';
 
 @Component({
   selector: 'app-pestamp-payment-modal',
@@ -19,7 +20,7 @@ import { MixpanelService } from '../utilities/mixpanel.service';
   styleUrls: ['./pestamp-payment-modal.page.scss'],
 })
 export class PestampPaymentModalPage implements OnInit {
-
+  public payPalConfig ? : IPayPalConfig;
   user
   id:any
   design = 'pestamp';
@@ -29,7 +30,7 @@ export class PestampPaymentModalPage implements OnInit {
     servicePrice: any=0;
     settingValue:any=0;
     freeCharges:any;
-    value:number=50;
+    value:number=50; 
     coupondata=null;
     code_discount:any
     discount:any
@@ -48,14 +49,15 @@ export class PestampPaymentModalPage implements OnInit {
     amounttopay:any;
     createpayment:any;
     deliveryCharges:any;
-
+     
     constructor( private storageService:StorageService,
-
+      
       private apiService:ApiService,
       public router:Router,
       private route:ActivatedRoute,
       private navController:NavController,
       private utils:UtilitiesService,
+      private intercom:Intercom,
       private alertController:AlertController,
       private modalController:ModalController,
       private db:AngularFireDatabase,
@@ -106,7 +108,7 @@ export class PestampPaymentModalPage implements OnInit {
       () => console.log('done!')
     )
        }
-
+  
     ngOnInit() {
       // this.route.queryParams.subscribe(params => {
       //   if (params && params.special) {
@@ -114,15 +116,16 @@ export class PestampPaymentModalPage implements OnInit {
       //     console.log(this.designData)
       //   }
       // });
-
+     this.paypalintegration();
      this.utils.showLoading("Please wait....").then(()=>{
-
-
-
+     
+     
+     
       this.userData = this.storageService.getUser();
       console.log(this.userData)
       this.mixpanelService.track('PESTAMP_PAYMENT_PAGE_OPEN', {
       });
+      this.utils.showHideIntercom(true);
        this.fetchData();
       // this.servicecharges();
       if(this.assignValue == 'assign')
@@ -140,14 +143,14 @@ export class PestampPaymentModalPage implements OnInit {
       })});
       this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
       this.design=params.get('designData')});
-
+  
       console.log(this.id);
      console.log(this.design);*/
      setTimeout(() => {
       this.utils.hideLoading();
       this.isShow=true
       }, 2000);
-
+    
     }
     ionViewDidEnter(){
       this.fetchData();
@@ -202,7 +205,7 @@ export class PestampPaymentModalPage implements OnInit {
         {
           console.log("hello");
           this.settingValue = 0;
-          this.netPay = this.settingValue;
+          this.netPay = this.settingValue;    
         }
         else{
           this.settingValue = res[0].settingvalue + bothtypepestampcharges;
@@ -237,33 +240,33 @@ export class PestampPaymentModalPage implements OnInit {
         this.amounttopay = this.data.deliverycharges
       }
     }
-
+  
   fetchData(){
     // this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
     // this.design=params.get('designData')});
-
-
+  
+  
     this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
       console.log(this.user)
       });
-
-
+    
+  
       // this.apiService.freeCharges().subscribe(res=>{
       //   this.freeDesigns=res;
       //   this.freeDesigns.forEach(element => {
       //     this.freeCharges = element.settingvalue;
       //   })
       //   console.log("daadd",this.freeCharges);
-
+        
       // })
-
-
+     
+  
     //   console.log(this.id);
     //  console.log(this.design);
-
-
+    
+    
   }
-
+    
   // discountAmount(){
   //   if(this.freeCharges>this.count){
   //     this.discount=this.settingValue;
@@ -280,7 +283,7 @@ export class PestampPaymentModalPage implements OnInit {
   //     console.log(this.netPay)
   //   }
   // }
-
+  
   // servicecharges(){
   //   if(this.design=='prelim'){
   //     this.apiService.prelimCharges().subscribe(res=>{
@@ -300,9 +303,9 @@ export class PestampPaymentModalPage implements OnInit {
   //       })
   //     }
   //     this.discountAmount();
-
+      
   // }
-
+  
   confirm(){
     //if(this.data.id!=null){
       if(this.assignValue == 'clearDues'){
@@ -378,7 +381,7 @@ export class PestampPaymentModalPage implements OnInit {
         // }
       }
   }
-
+  
     addWallet(value){
       if(this.assignValue == 'assign'){
         console.log("assign")
@@ -394,13 +397,13 @@ export class PestampPaymentModalPage implements OnInit {
         //value:'assign'
         },
         skipLocationChange: false,
-        fragment: 'top'
+        fragment: 'top' 
     };
 
 
-this.router.navigate(['/add-money'], {
+this.router.navigate(['/add-money'], { 
   state: { productdetails: objToSend }
-});
+});  
     }
       else{
         console.log("deliver")
@@ -416,18 +419,18 @@ this.router.navigate(['/add-money'], {
         //value:'assign'
         },
         skipLocationChange: false,
-        fragment: 'top'
+        fragment: 'top' 
     };
 
 
-this.router.navigate(['/add-money'], {
+this.router.navigate(['/add-money'], { 
   state: { productdetails: objToSend }
 });
       }
     }
-
+  
     cancel(){
-
+     
         // if(this.design ==='prelim'){
         // this.router.navigate(['/homepage/design'])
         // this.utils.setHomepageDesignRefresh(true);
@@ -438,9 +441,9 @@ this.router.navigate(['/add-money'], {
         // }
         this.router.navigate(['/pestamp-homepage/pestamp-design']);
         this.utils.setPeStampRefresh(true);
-
+     
     }
-    refreshDesigns(event) {
+    refreshDesigns(event: CustomEvent) {
       let showLoader = true;
       if (event !== null && event !== undefined) {
         showLoader = false;
@@ -466,7 +469,7 @@ this.router.navigate(['/add-money'], {
       })
     })
     }
-
+    
     makeCommercialpayment(inputData) {
       this.utils.showLoading("Adding").then(()=>{
       this.apiService.createCommercialPestamppayment(inputData).subscribe(response => {
@@ -486,8 +489,8 @@ this.router.navigate(['/add-money'], {
     })
     }
 
-
-
+    
+  
     confirmforPostpaid(){
      // if(this.id!=null){
         var postData={};
@@ -537,8 +540,9 @@ this.router.navigate(['/add-money'], {
             //   }
             // }
     }
-
+  
     ionViewWillLeave(){
+      this.utils.showHideIntercom(false);
     }
 
     createChatGroup(design:Pestamp){
@@ -547,17 +551,17 @@ this.router.navigate(['/add-money'], {
       //   var GUID = 'prelim' + "_" + new Date().getTime();
       // }else if(this.design=='permit'){
       //   var GUID = 'permit' + "_" + new Date().getTime();
-
+  
       // }
       var GUID = 'pestamp' + "_" + new Date().getTime();
       //var address = design.deliveryaddress.substring(0, 60);
       var groupName = design.personname// + "_" + address;
-
+  
       var groupType = CometChat.GROUP_TYPE.PRIVATE;
       var password = "";
-
+  
       var group = new CometChat.Group(GUID, groupName, groupType, password);
-
+  
       CometChat.createGroup(group).then(group=>{
         let membersList = [
           new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
@@ -567,10 +571,10 @@ this.router.navigate(['/add-money'], {
         })
       })
     }
-
-
+  
+  
     // async Congratulations(){
-
+  
     //    const alert = await this.alertController.create({
     //     cssClass: 'CogratulationalertClass',
     //      header: 'Congratulations!',
@@ -609,7 +613,7 @@ this.router.navigate(['/add-money'], {
     //     //   //       //     ;
     //     //   //       //     console.log('reach ', value);
     //     //   //       //    this.utils.showSnackBar('Design request has been delivered successfully');
-
+  
     //     //   //       //     this.utils.setHomepageDesignRefresh(true);
     //     //   //       //   })
     //     //   //       // }, (error) => {
@@ -620,14 +624,14 @@ this.router.navigate(['/add-money'], {
     //     //   }
     //     // ]
     //   });
-
+  
     //     await alert.present();
     //     setTimeout(()=>alert.dismiss(),1000);
-
-
-
+  
+  
+  
     // }
-
+  
   //   codeDiscountCalculation(data,price:number){
   //   if(data.discounttype=='percentage'){
   //     console.log(price)
@@ -644,7 +648,7 @@ this.router.navigate(['/add-money'], {
   //    this.Congratulations();
   // }
   //   }
-
+  
     //  async openModal(){
     //   const modal = await this.modalController.create({
     //     component: CouponOffersModalPage,
@@ -662,7 +666,7 @@ this.router.navigate(['/add-money'], {
     //     this.coupondata=data.data.data;
     //     console.log(this.coupondata);
     //     this.utils.setCouponId(this.coupondata.id);
-
+        
     //     this.codeDiscountCalculation(this.coupondata,this.settingValue);
     //     }
     // });
@@ -672,12 +676,161 @@ this.router.navigate(['/add-money'], {
     //   // });
     //   return await modal.present();
     // }
-
-
+  
+  
     // removeCoupon(){
     //   this.coupondata=null;
     //   this.discountAmount();
     //   this.utils.setCouponId(null);
     // }
+    private paypalintegration(){
+
+      var overallAmount
+      
+      this.payPalConfig = {
+        currency: 'USD',
+        //for testing
+        clientId: 'AV1abOj-_YOVXq_Negcy7Fkc2Esj2GtpY2dRe3nrTwPl4HSX22jbXQ6KKhyJRO7JjPxP__sr7wqi57bg',
+       // for live
+      //  CLIENT_ID: 'AfKOgzK6Le8LRp8bN4vefjNqC9B7qArUHJt0U_wUmed6hlDHlP-TlHYG9olpqTX85VhHHOD3T9pkfKuP',
+
+        createOrderOnClient: (data) =>< ICreateOrderRequest >{
+          intent: 'CAPTURE',
+          purchase_units: [{
+                   
+                      amount: {
+                        value: overallAmount
+                      }
+                    }]
+          
+        },
+      
+        advanced: { extraQueryParams: [ { name: "disable-funding", value:"credit,card"} ],
+      commit:'true' } ,
+      
+        style: {
+                size: 'responsive',
+                color: 'silver',
+                shape: 'rect',
+                label: 'pay',
+                tagline:false,
+                
+        },
+  
+     
+        onApprove: (data, actions) => {
+            console.log('onApprove - transaction was approved, but not authorized', data, actions);
+            actions.order.get().then(details => {
+           console.log('onApprove - you can get full order details inside onApprove: ', details);
+           //after payment approve
+           if(this.assignValue == 'clearDues'){
+            const inputData = {
+              paymenttype: "paypal",
+              pestampid: this.data.id,
+              user: this.user.id,
+             
+            }
+            if (this.data.propertytype == 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+              this.makeCommercialpayment(inputData);
+            }
+            else if (this.data.propertytype == 'commercial' && this.data.modeofstamping == 'ecopy') {
+              this.makeCommercialpayment(inputData);
+            }
+            else if (this.data.propertytype != 'commercial' && (this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping == 'both')) {
+              this.makepayment(inputData);
+            }
+          }
+          else{
+        var postData={};
+        var pestampacceptancestarttime = new Date();
+        pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
+        // if(this.design=='prelim'){
+        // designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
+        // }
+        // else{
+        //   designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+        // }
+          postData = {
+            outsourcedto: 232,
+            isoutsourced: "true",
+            status: "outsourced",
+            pestampacceptancestarttime: pestampacceptancestarttime,
+            paymenttype:"paypal",
+            paymentstatus:"succeeded"
+          };
+          this.utils.showLoading("Assigning").then(()=>
+          {
+              this.apiService.updatePestamps(this.data.id,postData).subscribe(value=>{
+                this.createChatGroup(value);
+            //     if(this.design=='prelim')
+            // {
+            //   this.newprelimsRef.update({ count: this.newprelimscount + 1});
+            //   console.log("hello",this.newprelimscount)
+            // }else{
+            //   this.newpermitsRef.update({ count: this.newpermitscount + 1});
+            this.newpestampRef.update({ count: this.newpestampscount + 1});
+            // }
+              this.utils.hideLoading().then(()=>
+             { this.utils.showSnackBar("pe stamp request has been send to wattmonk successfully")
+             //this.navController.pop();
+            //  if(this.design=='prelim'){
+            //    this.router.navigate(['/homepage/design'])
+            //  this.utils.setHomepageDesignRefresh(true);
+            //  }
+            //  else{
+            //   this.router.navigate(['/permithomepage/permitdesign'])
+            //    this.utils.setHomepagePermitRefresh(true);
+            //  }
+            this.router.navigate(['/pestamp-homepage/pestamp-design']);
+            this.utils.setPeStampRefresh(true);
+             })
+            })
+            })//}
+            // else{
+            //   if(this.design=='prelim'){
+            //     this.utils.setPaymentMode("wallet");
+            //   this.utils.setScheduleFormEvent(ScheduleFormEvent.PAY_EVENT);
+            //   }
+            //   else{
+            //     this.utils.setPaymentMode("wallet");
+            //     this.utils.setScheduleFormEvent(ScheduleFormEvent.SEND_PERMIT_FORM);
+            //   }
+            // }
+          }
+         
+           })
+      
+        },
+        onClientAuthorization: (data) => {
+            console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+            // this.showSuccess = true;
+        },
+        onCancel: (data, actions) => {
+            console.log('OnCancel', data, actions);
+            // this.showCancel = true;
+  
+        },
+        onError: err => {
+            console.log('OnError', err);
+            // this.showError = true;
+        },
+        onClick: (data, actions) => {
+         
+          if(this.netPay!=null && this.assignValue !='clearDues'){
+            overallAmount=this.netPay
+          }
+          else if( this.netPay==null && this.assignValue !='clearDues'){
+            overallAmount=this.settingValue
+          }
+          else if(this.amounttopay!=null && this.assignValue =='clearDues'){
+           overallAmount=this.amounttopay
+          } 
+            console.log('onClick', data, actions);
+            // this.resetStatus();
+        },
+    };
+  }
+
 
   }
+  

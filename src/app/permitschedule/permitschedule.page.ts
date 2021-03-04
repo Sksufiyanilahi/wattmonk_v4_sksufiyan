@@ -19,7 +19,7 @@ import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@io
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AddressModel } from '../model/address.model';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-
+import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { NetworkdetectService } from '../networkdetect.service';
 import { Clients } from '../model/clients.model';
@@ -107,9 +107,9 @@ export class PermitschedulePage implements OnInit {
   isEditMode:boolean=false;
   isArcFileDelete:boolean=false;
   indexOfArcFiles=[];
+  indexOfAttachmentFiles=[];
   isAttachememtDelete:boolean=false;
   //data:DesignFormData;
-  indexOfAtaachementFiles=[];
 
   userdata:any;
   isEdit : boolean = true
@@ -128,11 +128,12 @@ export class PermitschedulePage implements OnInit {
   attachmentFileUpload: boolean= false;
   netSwitch: any;
   deactivateNetworkSwitch: Subscription;
+  nonEditableField: any;
   // newpermits: Observable<any>;
   // newpermitsRef: AngularFireObject<any>;
   // newpermitscount = 0;
 
-
+  
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -146,14 +147,15 @@ export class PermitschedulePage implements OnInit {
     private geolocation: Geolocation,
     private platform: Platform,
     private toastController: ToastController,
+    private intercom:Intercom,
     private cdr:ChangeDetectorRef,
     private network:NetworkdetectService,
     private mixpanelService:MixpanelService
     //private db:AngularFireDatabase
     //private data: DesignFormData
     ) {
-
-
+        
+      
 
 
 
@@ -235,6 +237,7 @@ export class PermitschedulePage implements OnInit {
       this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
         this.netSwitch = data;
         console.log(this.netSwitch);
+        this.utils.showHideIntercom(true);
       })
     }
 
@@ -245,10 +248,12 @@ export class PermitschedulePage implements OnInit {
     console.log(this.data)
     if( this.data!=undefined){
    this.surveydata = this.data.productdetails.queryParams.surveyData;
+   this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
+   this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
    console.log(this.surveydata)
    this.surveydatapresent=true
-
-
+ 
+  
   }
 
     this.fieldDisabled=false;
@@ -286,7 +291,7 @@ export class PermitschedulePage implements OnInit {
      this.sendtowattmonk();
       }
     });
-
+    
 
 
     //this.addressValue();
@@ -366,7 +371,7 @@ export class PermitschedulePage implements OnInit {
       architecturaldesign:this.surveydata.architecturaldesign,
      jobtype: this.surveydata.jobtype,
       tiltofgroundmountingsystem: this.surveydata.tiltofgroundmountingsystem,
-
+   
       projecttype: this.surveydata.projecttype,
       latitude: this.surveydata.latitude,
       longitude: this.surveydata.longitude,
@@ -376,11 +381,16 @@ export class PermitschedulePage implements OnInit {
       postalcode:this.surveydata.postalCode,
       issurveycompleted:true,
       //attachments:this.design.attachments,
-
+  
       attachments:this.surveydata.attachments,
-
+     
     });
      this.utils.setStaticAddress(this.surveydata.address);
+     if(this.desginForm.get('email').value==''){
+      this.fieldDisabled= false;
+     }else{
+       this.fieldDisabled = true;
+     }
   }
 
   uploadcontrolvalidation(){
@@ -581,7 +591,7 @@ export class PermitschedulePage implements OnInit {
     this.mixpanelService.track("PERMITDESIGN_PAGE_CLOSE", {
     });
    this.navController.pop();
-
+   
   }
 
   eventcheck(e){
@@ -596,20 +606,20 @@ export class PermitschedulePage implements OnInit {
   this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
     console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-      // this.desginForm.get('address').setValue('124/345');
-      // this.desginForm.get('latitude').setValue('24.553333');
-      // this.desginForm.get('longitude').setValue('80.5555555555');
-      // this.desginForm.get('country').setValue('india');
-      // this.desginForm.get('city').setValue('Lucknow');
-      // this.desginForm.get('state').setValue('UP');
-      // this.desginForm.get('postalcode').setValue(3232343);
-     this.desginForm.get('address').setValue(address.address);
-       this.desginForm.get('latitude').setValue(address.lat);
-       this.desginForm.get('longitude').setValue(address.long);
-       this.desginForm.get('country').setValue(address.country);
-     this.desginForm.get('city').setValue(address.city);
-       this.desginForm.get('state').setValue(address.state);
-       this.desginForm.get('postalcode').setValue(address.postalcode);
+      this.desginForm.get('address').setValue('124/345');
+      this.desginForm.get('latitude').setValue('24.553333');
+      this.desginForm.get('longitude').setValue('80.5555555555');
+      this.desginForm.get('country').setValue('india');
+      this.desginForm.get('city').setValue('Lucknow');
+      this.desginForm.get('state').setValue('UP');
+      this.desginForm.get('postalcode').setValue(3232343);
+    //  this.desginForm.get('address').setValue(address.address);
+    //    this.desginForm.get('latitude').setValue(address.lat);
+    //    this.desginForm.get('longitude').setValue(address.long);
+    //    this.desginForm.get('country').setValue(address.country);
+    //  this.desginForm.get('city').setValue(address.city);
+    //    this.desginForm.get('state').setValue(address.state);
+    //    this.desginForm.get('postalcode').setValue(address.postalcode);
   }, (error) => {
     this.desginForm.get('address').setValue('');
     this.desginForm.get('latitude').setValue('');
@@ -924,7 +934,8 @@ saveInverterModel() {
                         designacceptancestarttime:designacceptancestarttime,
                         isoutsourced:isoutsourced,
                         issurveycompleted:this.desginForm.get('issurveycompleted').value,
-                        survey:this.surveydata.id
+                        survey:this.surveydata.id,
+                        isdesignraised:true
 
   }}
 
@@ -966,7 +977,8 @@ else{
   outsourcedto:designoutsourcedto,
   designacceptancestarttime:designacceptancestarttime,
   isoutsourced:isoutsourced,
-
+  isdesignraised:true
+  
 }}
 
 
@@ -974,42 +986,49 @@ else{
              // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
               this.utils.showLoading('Saving').then(() => {
               this.apiService.addDesginForm(data).subscribe(response => {
+                this.utils.hideLoading().then(()=>{
                 if(newConstruction=='true'){
                // if(this.architecturalFileUpload){
-                  this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                  this.uploaarchitecturedesign(response,'architecturaldesign');
                // }
               }
-              else{
+              else if(newConstruction=='false'){
                 if(this.attachmentFileUpload){
-                  this.uploadAttachmentDesign(response.id,'attachments')
+                  this.uploadAttachmentDesign(response,'attachments')
                 }
               }
-                  setTimeout(()=>{
-                    this.utils.hideLoading().then(() => {
-                      console.log('Res', response);
-                      // this.createChatGroup(response);
-                      this.router.navigate(['/permithomepage'])
-                      this.utils.showSnackBar('Design have been Created');
-                      // this.utils.showSnackBar('Design have been saved');
-                      this.utils.setHomepagePermitRefresh(true);
-                      // this.navController.pop();
-                      // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-                      //   modal.present();
-                      //   modal.onWillDismiss().then((dismissed) => {
-                          // this.utils.setHomepageDesignRefresh(true);
-                      //     this.navController.pop();
-                      //   });
-                      // });
-
-                    });
-                  },2000)
+              else{
+                this.router.navigate(['/permithomepage'])
+                    this.utils.showSnackBar('Design have been Created');
+                    // this.utils.showSnackBar('Design have been saved');
+                    this.utils.setHomepagePermitRefresh(true);
+              }
+                  // setTimeout(()=>{
+                  //   this.utils.hideLoading().then(() => {
+                  //     console.log('Res', response);
+                  //     // this.createChatGroup(response);
+                  //     this.router.navigate(['/permithomepage'])
+                  //     this.utils.showSnackBar('Design have been Created');
+                  //     // this.utils.showSnackBar('Design have been saved');
+                  //     this.utils.setHomepagePermitRefresh(true);
+                  //     // this.navController.pop();
+                  //     // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+                  //     //   modal.present();
+                  //     //   modal.onWillDismiss().then((dismissed) => {
+                  //         // this.utils.setHomepageDesignRefresh(true);
+                  //     //     this.navController.pop();
+                  //     //   });
+                  //     // });
+    
+                     });
+                  // },2000)
               }, responseError => {
                 this.utils.hideLoading();
                   const error: ErrorModel = responseError.error;
                   this.utils.errorSnackBar(error.message);
                 });
 
-
+              
               });
 
               }
@@ -1049,6 +1068,7 @@ else{
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
+                        isdesignraised:true
 
 
 
@@ -1065,35 +1085,53 @@ else{
                 // if(this.attachmentFileUpload){
                 //   this.uploadAttachmentDesign(response.id,'attachments')
                 // }
+                this.utils.hideLoading().then(()=>{
+                this.value = response.id;
                 if(newConstruction=='true'){
                   // if(this.architecturalFileUpload){
-                     this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                     this.uploaarchitecturedesign(response,'architecturaldesign');
                   // }
                  }
-                 else{
+                 else if(newConstruction=='false'){
                    if(this.attachmentFileUpload){
-                     this.uploadAttachmentDesign(response.id,'attachments')
+                     this.uploadAttachmentDesign(response,'attachments')
                    }
                  }
-                this.utils.hideLoading().then(() => {
-                  // this.createChatGroup(response);
-                  console.log('Res', response);
-                  this.value = response.id;
-                  //this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
+                 else{
                   let objToSend: NavigationExtras = {
-                    queryParams: {
-                      id:response.id,
-                      designData:"permit",
-                      fulldesigndata:response
-                    },
-                    skipLocationChange: false,
-                    fragment: 'top'
-                };
-
-
-            this.router.navigate(['/payment-modal'], {
-              state: { productdetails: objToSend }
-            });
+                            queryParams: {
+                              id:response.id,
+                              designData:"permit",
+                              fulldesigndata:response
+                            },
+                            skipLocationChange: false,
+                            fragment: 'top' 
+                        };
+                    
+                    
+                    this.router.navigate(['/payment-modal'], { 
+                      state: { productdetails: objToSend }
+                    });
+                 }
+                // this.utils.hideLoading().then(() => {
+                //   // this.createChatGroup(response);
+                //   console.log('Res', response);
+                //   this.value = response.id;
+                  //this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
+            //       let objToSend: NavigationExtras = {
+            //         queryParams: {
+            //           id:response.id,
+            //           designData:"permit",
+            //           fulldesigndata:response
+            //         },
+            //         skipLocationChange: false,
+            //         fragment: 'top' 
+            //     };
+            
+            
+            // this.router.navigate(['/payment-modal'], { 
+            //   state: { productdetails: objToSend }
+            // });
                   // this.sendtowattmonk();
 
                  // this.router.navigate(['/homepage'])
@@ -1159,7 +1197,8 @@ else{
                         creatorparentid:this.desginForm.get('creatorparentid').value,
                         outsourcedto:designoutsourcedto,
                         designacceptancestarttime:designacceptancestarttime,
-                        isoutsourced:isoutsourced
+                        isoutsourced:isoutsourced,
+                        isdesignraised:true
 
   }
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
@@ -1169,30 +1208,37 @@ else{
               // if(this.attachmentFileUpload){
               //   this.uploadAttachmentDesign(response.id,'attachments')
               // }
+              this.utils.hideLoading().then(()=>{
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
-                   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                   this.uploaarchitecturedesign(response,'architecturaldesign');
                 // }
                }
-               else{
+               else if(newConstruction=='false'){
                  if(this.attachmentFileUpload){
-                   this.uploadAttachmentDesign(response.id,'attachments')
+                   this.uploadAttachmentDesign(response,'attachments')
                  }
                }
-              if(this.isArcFileDelete){
-                this.deleteArcFile(this.indexOfArcFiles);
-              }
+               else{
+                this.router.navigate(['/permithomepage'])
+                this.utils.showSnackBar('Design have been Created');
+                // this.utils.showSnackBar('Design have been saved');
+                this.utils.setHomepagePermitRefresh(true);
+               }
+              // if(this.isArcFileDelete){
+              //   this.deleteArcFile(this.indexOfArcFiles);
+              // }
+              
+              // this.utils.hideLoading().then(() => {
+              //   console.log('Res', response);
+              //   this.utils.showSnackBar('Design have been updated');
+              //   if(!this.isArcFileDelete){
+              //     this.utils.setPermitDesignDetailsRefresh(true);
+              //   }
+              //   //this.navController.pop();
+              //   // this.router.navigate(['/permit-design-details/',this.designId])
 
-              this.utils.hideLoading().then(() => {
-                console.log('Res', response);
-                this.utils.showSnackBar('Design have been updated');
-                if(!this.isArcFileDelete){
-                  this.utils.setPermitDesignDetailsRefresh(true);
-                }
-                //this.navController.pop();
-                // this.router.navigate(['/permit-design-details/',this.designId])
-
-              });
+               });
             },
              responseError => {
               this.utils.hideLoading().then(() => {
@@ -1201,13 +1247,13 @@ else{
               });
 
             });
-
+              
               });
 
           }
           else if(this.formValue==='send'){
             this.isEdit = false;
-            var postData = {
+            const postData = {
                           name:this.desginForm.get('name').value,
                           email:this.desginForm.get('email').value,
                           phonenumber:pnumber.toString(),
@@ -1239,6 +1285,7 @@ else{
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
+                        isdesignraised:true
 
 
   }
@@ -1249,39 +1296,57 @@ else{
               // if(this.attachmentFileUpload){
               //   this.uploadAttachmentDesign(response.id,'attachments')
               // }
+              this.utils.hideLoading().then(()=>{
+              this.value=response.id;
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
-                   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                   this.uploaarchitecturedesign(response,'architecturaldesign');
                 // }
                }
-               else{
+               else if(newConstruction=='false'){
                  if(this.attachmentFileUpload){
-                   this.uploadAttachmentDesign(response.id,'attachments')
+                   this.uploadAttachmentDesign(response,'attachments')
                  }
                }
-              if(this.isArcFileDelete){
-                console.log("hello");
-                this.deleteArcFile(this.indexOfArcFiles);
-              }
-              this.utils.hideLoading().then(() => {
-                console.log('Res', response);
-                this.value=response.id;
-                this.utils.showSnackBar('Design have been updated');
-               // this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
-               let objToSend: NavigationExtras = {
-                queryParams: {
-                  id:response.id,
-                  designData:"permit",
-                  fulldesigndata:response
-                },
-                skipLocationChange: false,
-                fragment: 'top'
-            };
-
-
-        this.router.navigate(['/payment-modal'], {
-          state: { productdetails: objToSend }
-        });
+               else{
+                let objToSend: NavigationExtras = {
+                  queryParams: {
+                    id:response.id,
+                    designData:"permit",
+                    fulldesigndata:response
+                  },
+                  skipLocationChange: false,
+                  fragment: 'top' 
+              };
+          
+          
+          this.router.navigate(['/payment-modal'], { 
+            state: { productdetails: objToSend }
+          });
+               }
+              // if(this.isArcFileDelete){
+              //   console.log("hello");
+              //   this.deleteArcFile(this.indexOfArcFiles);
+              // }
+        //       this.utils.hideLoading().then(() => {
+        //         console.log('Res', response);
+                
+        //         this.utils.showSnackBar('Design have been updated');
+        //        // this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
+        //        let objToSend: NavigationExtras = {
+        //         queryParams: {
+        //           id:response.id,
+        //           designData:"permit",
+        //           fulldesigndata:response
+        //         },
+        //         skipLocationChange: false,
+        //         fragment: 'top' 
+        //     };
+        
+        
+        // this.router.navigate(['/payment-modal'], { 
+        //   state: { productdetails: objToSend }
+        // });
 
               });
             },
@@ -1296,7 +1361,7 @@ else{
           }
         }
 
-
+        
 
       } else {
         this.error();
@@ -1312,40 +1377,40 @@ else{
 
           this.utils.errorSnackBar('Please check the field name.');
         }
-        else if(this.desginForm.value.email=='' || this.desginForm.get('email').hasError('pattern')){
+        else if(this.desginForm.value.email=='' || this.desginForm.get('email').hasError('pattern') || this.desginForm.value.email==  undefined){
           this.utils.errorSnackBar('Please check the field email.');
         }
-        else if(this.desginForm.value.phone=='' || this.desginForm.get('phone').hasError('pattern')){
+        else if(this.desginForm.value.phone=='' || this.desginForm.get('phone').hasError('pattern') || this.desginForm.value.phone==undefined){
           this.utils.errorSnackBar('Please check the field phone number');
         }
-        else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern')){
+        else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern') || this.desginForm.value.monthlybill==undefined){
           this.utils.errorSnackBar('Please check the field annual units.');
         }
-        else if(this.desginForm.value.modulemake=='' || this.desginForm.get('modulemake').hasError('pattern')){
+        else if(this.desginForm.value.modulemake=='' || this.desginForm.get('modulemake').hasError('pattern') || this.desginForm.value.modulemake==undefined){
           this.utils.errorSnackBar('Please check the field module make.');
         }
-        else if(this.desginForm.value.modulemodel=='' || this.desginForm.get('modulemodel').hasError('pattern')){
+        else if(this.desginForm.value.modulemodel=='' || this.desginForm.get('modulemodel').hasError('pattern') || this.desginForm.value.modulemodel==undefined){
           this.utils.errorSnackBar('Please check the field module model.');
         }
-        else if(this.desginForm.value.invertermake=='' || this.desginForm.get('invertermake').hasError('pattern')){
+        else if(this.desginForm.value.invertermake=='' || this.desginForm.get('invertermake').hasError('pattern') || this.desginForm.value.invertermake==undefined){
           this.utils.errorSnackBar('Please check the field inverter make.');
         }
-        else if(this.desginForm.value.invertermodel=='' || this.desginForm.get('invertermodel').hasError('pattern')){
+        else if(this.desginForm.value.invertermodel=='' || this.desginForm.get('invertermodel').hasError('pattern') || this.desginForm.value.invertermodel==undefined){
           this.utils.errorSnackBar('Please check the field inverter model.');
         }
-        else if(this.desginForm.value.mountingtype==''){
+        else if(this.desginForm.get('mountingtype').value=='' || this.desginForm.get('mountingtype').value==undefined){
           this.utils.errorSnackBar('Please fill the mounting type.');
         }
-        else if(this.desginForm.value.projecttype==''){
+        else if(this.desginForm.value.projecttype=='' || this.desginForm.value.projecttype==undefined){
           this.utils.errorSnackBar('Please fill the project type.');
         }
-        else if(this.desginForm.value.tiltofgroundmountingsystem=='' || this.desginForm.get('tiltofgroundmountingsystem').hasError('pattern')){
+        else if(this.desginForm.value.tiltofgroundmountingsystem=='' || this.desginForm.get('tiltofgroundmountingsystem').hasError('pattern') || this.desginForm.value.tiltofgroundmountingsystem==undefined){
           this.utils.errorSnackBar('Please check the field tilt for ground mount.');
         }
-        else if(this.desginForm.value.rooftype==''){
+        else if(this.desginForm.value.rooftype=='' || this.desginForm.value.rooftype==undefined){
           this.utils.errorSnackBar('Please fill the rooftype.');
         }
-       else if(this.desginForm.value.architecturaldesign==''){
+       else if(this.desginForm.value.architecturaldesign=='' || this.desginForm.value.architecturaldesign==undefined){
           this.utils.errorSnackBar('Please attach architectural design.');
         }
         else{
@@ -1383,28 +1448,60 @@ else{
 
      }
 
-    uploaarchitecturedesign(designId?: number, key?: string){
+    uploaarchitecturedesign(response?: any, key?: string){
      // console.log(this.archFiles);
       const imageData = new FormData();
       for(var i=0; i< this.archFiles.length;i++){
         imageData.append("files",this.archFiles[i]);
         if(i ==0){
-          imageData.append('path', 'designs/' + designId);
-          imageData.append('refId', designId + '');
+          imageData.append('path', 'designs/' + response.id);
+          imageData.append('refId', response.id + '');
           imageData.append('ref', 'design');
           imageData.append('field', key);
         }
       }
-      this.utils.uploadingSnackBar("Architectural File Uploading...").then(()=>{
+      this.utils.showLoading("Architectural File Uploading...").then(()=>{
       this.apiService.uploaddesign(imageData).subscribe(res=>{
         console.log(res);
-        this.utils.hideUploadingLoading();
+        this.utils.hideLoading();
         if(this.attachmentFileUpload){
-          this.uploadAttachmentDesign(designId,'attachments')
+          this.uploadAttachmentDesign(response,'attachments')
+        }
+        else{
+          if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM)
+          {
+            if(this.designId==0){
+          this.router.navigate(['/permithomepage'])
+                      this.utils.showSnackBar('Design have been Created');
+                      // this.utils.showSnackBar('Design have been saved');
+                      this.utils.setHomepagePermitRefresh(true);
+            }
+            else{
+              this.router.navigate(['/permithomepage'])
+              this.utils.showSnackBar('Design have been updated');
+              this.utils.setHomepagePermitRefresh(true);
+            }
+          }
+          else{
+            let objToSend: NavigationExtras = {
+              queryParams: {
+                id:response.id,
+                designData:"permit",
+                fulldesigndata:response
+              },
+              skipLocationChange: false,
+              fragment: 'top' 
+          };
+      
+      
+      this.router.navigate(['/payment-modal'], { 
+        state: { productdetails: objToSend }
+      });
+          }
         }
 
       }, responseError => {
-        this.utils.hideUploadingLoading();
+        this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
         this.utils.errorSnackBar(error.message[0].messages[0].message);
       })
@@ -1412,26 +1509,55 @@ else{
 
     }
 
-    uploadAttachmentDesign(designId?: number, key?: string,filearray?:File[]){
+    uploadAttachmentDesign(response?: any, key?: string,filearray?:File[]){
       console.log(this.permitFiles);
       const imageData = new FormData();
       for(var i=0; i< this.permitFiles.length;i++){
         imageData.append("files",this.permitFiles[i]);
         if(i ==0){
-          imageData.append('path', 'designs/' + designId);
-          imageData.append('refId', designId + '');
+          imageData.append('path', 'designs/' + response.id);
+          imageData.append('refId', response.id + '');
           imageData.append('ref', 'design');
           imageData.append('field', key);
         }
       }
-      this.utils.uploadingSnackBar("Attachment File Uploading...").then(()=>{
+      this.utils.showLoading("Attachment File Uploading").then(()=>{
       this.apiService.uploaddesign(imageData).subscribe(res=>{
         console.log(res);
-        this.utils.hideUploadingLoading();
-
+        this.utils.hideLoading();
+        if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM)
+        {
+          if(this.designId==0){
+            this.router.navigate(['/permithomepage'])
+                        this.utils.showSnackBar('Design have been Created');
+                        // this.utils.showSnackBar('Design have been saved');
+                        this.utils.setHomepagePermitRefresh(true);
+              }
+              else{
+                this.router.navigate(['/permithomepage'])
+                this.utils.showSnackBar('Design have been updated');
+                this.utils.setHomepagePermitRefresh(true);
+              }
+        }
+        else{
+          let objToSend: NavigationExtras = {
+            queryParams: {
+              id:response.id,
+              designData:"permit",
+              fulldesigndata:response
+            },
+            skipLocationChange: false,
+            fragment: 'top' 
+        };
+    
+    
+    this.router.navigate(['/payment-modal'], { 
+      state: { productdetails: objToSend }
+    });
+        }
       }, responseError => {
         this.utils.hideLoading();
-        this.utils.hideUploadingLoading();
+        //this.utils.hideUploadingLoading();
         const error: ErrorModel = responseError.error;
         this.utils.errorSnackBar(error.message[0].messages[0].message);
       })
@@ -1457,7 +1583,7 @@ else{
       //   this.utils.showSnackBar('File deleted successfully');
       //   this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
         // this.utils.setHomepagePermitRefresh(true);
-
+       
     //   });
     //   },
     // (error)=>{
@@ -1475,59 +1601,67 @@ else{
     console.log(this.indexOfArcFiles);
     console.log(this.architecturalData);
     console.log(i);
-
+    
     this.architecturalData.splice(i, 1);
+    this.deleteArcFile(this.indexOfArcFiles);
 
     }
 
     removeattachment(attachment,i){
-
-      this.indexOfArcFiles.push( attachment.id);
-
+    
+      this.indexOfAttachmentFiles.push( attachment.id);
+  
       this.isArcFileDelete=true;
       console.log(this.isArcFileDelete);
-      console.log(this.indexOfArcFiles);
+      console.log(this.indexOfAttachmentFiles);
       console.log(this.attachmentData);
       console.log(i);
-
+      
       this.attachmentData.splice(i, 1);
+      this.deleteAttachmentFile(this.indexOfAttachmentFiles);
     }
 
 
 
     deleteArcFile(index){
-
-
+     
+      
      // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
         for(var i=0; i< index.length;i++){
           var id = index[i];
-          this.apiService.deletePrelimImage(id).subscribe(res=>{console.log("hello",res)
-
+          this.utils.showLoading("Deleting Architectural File").then(()=>{
+          this.apiService.deletePrelimImage(id).subscribe(res=>{
+         this.utils.hideLoading().then(()=>{console.log("hello",res)})
+          })
       });
-
-    // this.utils.hideLoading().then(()=>{
-    //   //   this.utils.showSnackBar('File deleted successfully');
-    //     // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
-
-    //    // this.utils.setPermitDesignDetailsRefresh(true);
-    //  // });
-    //   },
     (error)=>{
       this.utils.hideLoading().then(()=> {
         this.utils.errorSnackBar('some Error Occured');
       });
     }}
 
-   // });
-
-
-     this.utils.setPermitDesignDetailsRefresh(true);
-
-
-
-
-
+   // })
   }
+
+  deleteAttachmentFile(index){
+    
+      
+    // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+       for(var i=0; i< index.length;i++){
+         var id = index[i];
+         this.utils.showLoading("Deleting Attachment File").then(()=>{
+         this.apiService.deletePrelimImage(id).subscribe(res=>{
+        this.utils.hideLoading().then(()=>{console.log("hello",res)});
+         })
+     });
+   (error)=>{
+     this.utils.hideLoading().then(()=> {
+       this.utils.errorSnackBar('some Error Occured');
+     });
+   }}
+
+  // })
+ }
 
     sendtowattmonk(){
       var designacceptancestarttime = new Date();
@@ -1551,7 +1685,7 @@ else{
 
               this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
               this.router.navigate(['/permithomepage'])
-
+             
               this.utils.setHomepagePermitRefresh(this.isEdit);
             })
           }, (error) => {
@@ -1568,7 +1702,7 @@ else{
      this.deactivateNetworkSwitch.unsubscribe();
     }
 
-    // segmentChanged(event) {
+    // segmentChanged(event: CustomEvent) {
     //   console.log(event);
     //   this.currentTab = event.detail.value;
     //   this.tabs.select(event.detail.value);
@@ -1813,19 +1947,22 @@ else{
     }
 
     ionViewWillLeave(){
+      this.intercom.update({
+        "hide_default_launcher": false
+      });
     }
 
     createChatGroup(design:DesginDataModel){
       var GUID = 'permit' + "_" + new Date().getTime();
-
+    
       var address = design.address.substring(0, 90);
       var groupName = design.name + "_" + address;
-
+    
       var groupType = CometChat.GROUP_TYPE.PRIVATE;
       var password = "";
-
+    
       var group = new CometChat.Group(GUID, groupName, groupType, password);
-
+    
       CometChat.createGroup(group).then(group=>{
         let membersList = [
           new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
@@ -1852,10 +1989,10 @@ else{
     );
     }
 
-    proxyValue: any; onCompanyChanged(event$) {
+    proxyValue: any; onCompanyChanged(event$) { 
       console.log(event$);
-      this.proxyValue = event$.detail.value.companyname;
-      this.designCreatedBy = event$.detail.value.companyid;
+      this.proxyValue = event$.detail.value.companyname; 
+      this.designCreatedBy = event$.detail.value.companyid; 
       this.designCreatedByUserParent = event$.detail.value.parentid;
       if(this.designCreatedBy !== null && this.designCreatedByUserParent !== null){
         this.desginForm.patchValue({createdby:this.designCreatedBy,

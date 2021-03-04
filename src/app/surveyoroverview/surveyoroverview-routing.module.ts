@@ -20,10 +20,10 @@ const routes: Routes = [
         path: 'completedsurveys',
         component: CompletedsurveysComponent
       },
-      // {
-      //   path: 'inreviewsurveys',
-      //   component: InreviewsurveysComponent
-      // },
+      {
+        path: 'inreviewsurveys',
+        component: InreviewsurveysComponent
+      },
       // {
       //   path: 'deliveredsurveys',
       //   component: DeliveredsurveysComponent

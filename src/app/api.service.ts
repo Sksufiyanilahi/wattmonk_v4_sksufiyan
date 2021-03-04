@@ -35,7 +35,6 @@ import { UploadedFile } from './model/uploadedfile.model';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { COMETCHAT_CONSTANTS } from './contants.prod';
 
 
 @Injectable({
@@ -53,7 +52,6 @@ export class ApiService {
   public _OnMessageReceivedSubject: Subject<string>;
   public design : Observable<DesignModel>;
   public showUserName:Subject<any>;
-  audio: HTMLAudioElement;
 
   public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
   version = new BehaviorSubject<string>('');
@@ -68,7 +66,7 @@ export class ApiService {
     private router:Router,
     // private route: ActivatedRoute
   ) {
-    this.listencall();
+    // this.listencall();
     this.getUpgradeMessage();
     if (!navigator.onLine) {
       // this.utilities.showSnackBar('No internet connection');
@@ -574,7 +572,9 @@ export class ApiService {
         }
 
       deletePestamp(id:string): Observable<Pestamp> {
-        return this.http.delete<Pestamp>(BaseUrl + "pestamps/"+id, {
+        console.log(id);
+        
+        return this.http.delete<Pestamp>(BaseUrl + "upload/files/"+id, {
           headers: this.headers
         })
       }
@@ -610,16 +610,20 @@ export class ApiService {
           headers: this.headers
         })
       }
+      generatePdf(id){
+        return this.http.get(BaseUrl + "surveypdf?id=" + id,  {
+          headers: this.headers
+        })
+      }
 
-      listencall(listnerID?) {
-      // let listnerID = localStorage.getItem('gid')
-      console.log(listnerID,"is listener id");
+      listencall(listnerID) {
+      // let listnerID = localStorage.getItem('gid');
         const that= this;
         CometChat.addCallListener(
           listnerID,
           new CometChat.CallListener({
             onIncomingCallReceived(call) {
-              console.log('Incoming call lllllll:', call);
+              console.log('Incoming call:', call);
               that.callData = call;
               // if(call.status=='initiated'){
                 that.router.navigate(['/', 'callingscreen']);
@@ -627,9 +631,8 @@ export class ApiService {
               // Handle incoming call
             },
             onOutgoingCallAccepted(call) {
-              console.log('Outgoing call accepted hhhhhh:', call);
+              console.log('Outgoing call accepted:', call);
               that.callData = call;
-              that.startcall();
               // Outgoing Call Accepted
             },
             onOutgoingCallRejected(call) {
@@ -657,113 +660,9 @@ export class ApiService {
       getCallData(): Observable<any> {
         return this.callData;
   }
-
-  startcall() {
-		/**
-        * You can get the call Object from the success of acceptCall() or from the onOutgoingCallAccepted() callback of the CallListener.
-        */
-		var sessionId = this.callData.sessionId;
-		var callType = this.callData.type;
-		let callListener = new CometChat.OngoingCallListener({
-			onUserJoined: (user) => {
-				console.log('User joined call:', user);
-				this.pauseAudio();
-			},
-			onUserLeft: (user) => {
-				console.log('User left call:', user);
-				this.navCtrl.pop();
-				// this.pauseAudio();
-			},
-			onCallEnded: (call) => {
-				console.log('Call ended listener', call);
-				this.navCtrl.pop();
-				this.pauseAudio();
-			}
-		});
-		var callSettings = new CometChat.CallSettingsBuilder()
-			.setSessionID(sessionId)
-			.enableDefaultLayout(true)
-			.setIsAudioOnlyCall(callType == 'audio' ? true : false)
-			.setCallEventListener(callListener)
-			.build();
-			console.log(callSettings,">>>>");
-		CometChat.startCall(callSettings);
-	}
-
-  pauseAudio() {
-		this.audio.pause();
-	}
-
-  static rejectCall(sessionId, rejectStatus) {
-    	let promise = new Promise((resolve, reject) => {
-    		CometChat.rejectCall(sessionId, rejectStatus).then((call) => resolve(call), (error) => reject(error));
-    	});
-  
-    	return promise;
-    }
-
-    doCometUserLogin() {
-      // let userId = this.storageService.getUserID()
-          // const user = new CometChat.User(userId);
-          // user.setName(this.storageService.getUser().firstname + ' ' + this.storageService.getUser().lastname);
-          // const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
-          // CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
-          //   () => {
-          //     console.log('Initialization completed successfully');
-          //     // if(this.utilities.currentUserValue != null){
-          //       // You can now call login function.
-          //       CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
-          //         (user) => {
-          //           console.log('Login Successful:', { user });
-          //         },
-          //         error => {
-          //           console.log('Login failed with exception:', { error });
-          //         }
-          //       );
-          //   // }
-          //   },
-          //   error => {
-          //     console.log('Initialization failed with error:', error);
-          //   }
-          // );
-      CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-        loggedInUser => {
-          console.log('Login Successful:', {loggedInUser});
-          this.listencall();
-        },
-        error => {
-          if (error.code === 'ERR_UID_NOT_FOUND') {
-            const userDetails = new CometChat.User(this.storageService.getUserID());
-            userDetails.setName(this.storageService.getUserName());
-            CometChat.createUser(userDetails, COMETCHAT_CONSTANTS.API_KEY).then(
-              user => {
-                console.log('user created', user);
-                CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-                  loggedInUser => {
-                    console.log('Login Successful:', {loggedInUser});
-                    this.listencall();
-                  },
-                  error => {
-                    console.log('Login failed with exception:', {error});
-                  }
-                );
-              },
-              error => {
-                CometChat.login(this.storageService.getUserID(), COMETCHAT_CONSTANTS.API_KEY).then(
-                  loggedInUser => {
-                    console.log('Login Successful:', {loggedInUser});
-                    this.listencall();
-                  },
-                  error => {
-                    console.log('Login failed with exception:', {error});
-                  }
-                );
-                console.log('error', error);
-              });
-          }
-          console.log('Login failed with exception:', {error});
-        }
-      );
-         
-    }
+  getStripeSessionID(inputData: any): Observable<any>{
+    return this.http.post<any>(BaseUrl + "walletrecharge", inputData,{
+      headers: this.uploadHeaders}
+     ) }
 }
+

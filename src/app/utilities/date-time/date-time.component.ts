@@ -22,7 +22,7 @@ import { UtilitiesService } from 'src/app/utilities.service';
 })
 export class DateTimeComponent implements ControlValueAccessor, Validator {
 
-  @Input() date: number;
+  @Input() date: any;
   @Input() placeholder = '';
 
   private onChange: (value: Date) => void;
@@ -40,8 +40,10 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
   registerOnTouched(fn: any): void {
   }
 
-  writeValue(date: number): void {
+  writeValue(date: any): void {
     this.date = date;
+    console.log(this.date);
+    
   }
 
   validate(control: AbstractControl): ValidationErrors | null {

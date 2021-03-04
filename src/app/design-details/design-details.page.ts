@@ -161,26 +161,28 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.showLoading('Submitting').then(()=>{
         
         this.apiService.updateDesignForm(data,this.designId).subscribe((success)=>{
+          this.utilities.hideLoading().then(()=>{
+          this.setData(success);
           this.uploadpreliumdesign(this.designId,'prelimdesign');
-          this.utilities.hideLoading().then(() => {
+          // this.utilities.hideLoading().then(() => {
             console.log("suc",success);
-            this.setData(success);
+            
             // this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
             // this.utilities.setHomepageDesignRefresh(true);
-            this.utilities.getDesignDetailsRefresh();
-            if(this.isprelimUpdate){
-              this.utilities.setHomepageDesignRefresh(true);
-              // this.router.navigate(['designoverview/inreviewdesigns']);
-              this.navController.pop();
+          //   this.utilities.getDesignDetailsRefresh();
+          //   if(this.isprelimUpdate){
+          //     this.utilities.setHomepageDesignRefresh(true);
+          //     // this.router.navigate(['designoverview/inreviewdesigns']);
+          //     this.navController.pop();
               
-            }
+          //   }
 
-            else
-            {
-              this.utilities.setHomepageDesignRefresh(true);
-              //this.router.navigate(['designoverview/completeddesigns'])
-            this.navController.pop();
-          }
+          //   else
+          //   {
+          //     this.utilities.setHomepageDesignRefresh(true);
+          //     //this.router.navigate(['designoverview/completeddesigns'])
+          //   this.navController.pop();
+          // }
             // this.navController.navigateRoot(['homepage']);
           });
         },(error) => {
@@ -507,9 +509,9 @@ return blob;
           imageData.append('field', key);
         // }
       } 
-        this.utilities.uploadingSnackBar("Prelim File Uploading...").then(()=>{
+        this.utilities.showLoading("Prelim File Uploading").then(()=>{
           this.apiService.uploaddesign(imageData).subscribe(res=>{
-            this.utilities.hideUploadingLoading();
+           // this.utilities.hideUploadingLoading();
             this.utilities.hideLoading().then(()=>{
               console.log(res); 
               this.imagebox= false;
@@ -520,9 +522,23 @@ return blob;
               //   console.log(res,">>");
                 
               // })
-              if(this.isSelfUpdate){
-                this.reportDesignReviewSuccess();
-              }//else{
+              //this.utilities.getDesignDetailsRefresh();
+            if(this.isprelimUpdate){
+              // this.router.navigate(['designoverview/inreviewdesigns']);
+              this.navController.pop();
+              this.utilities.setHomepageDesignRefresh(true);
+              
+            }
+            else if(this.isSelfUpdate){
+              this.reportDesignReviewSuccess();
+            }
+            else
+            {
+              this.utilities.setHomepageDesignRefresh(true);
+              //this.router.navigate(['designoverview/completeddesigns'])
+            this.navController.pop();
+          }
+              //else{
                // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res) =>{
              // this.utilities.getDesignDetailsRefresh();
               
@@ -605,8 +621,8 @@ return blob;
     if(this.isSelfUpdate && this.prelimFiles.length > 0)
     {
       if(this.prelimFileSize<=25000000){
-      this.utilities.showLoading("Uploading").then(()=>
-      {this.uploadpreliumdesign(this.designId,'permitdesign' );})
+      // this.utilities.showLoading("Uploading").then(()=>
+      this.uploadpreliumdesign(this.designId,'permitdesign' );//})
       }else{
         this.utilities.errorSnackBar("File is greater than 25MB")
       }

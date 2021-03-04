@@ -1,67 +1,76 @@
-<ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull down to refresh" refreshingSpinner="lines"></ion-refresher-content>
-  </ion-refresher>
-  <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
-    <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
-        <ion-col size="12" class="ion-margin-top">
-                <span class="ion-padding" *ngIf="today === item.date">
-                    Today
+<ion-content [scrollEvents]="true">
+    <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull down to refresh" refreshingSpinner="lines"></ion-refresher-content>
+    </ion-refresher>
+    <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
+      <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
+          <ion-col size="12" class="ion-margin-top">
+                  <span class="ion-padding" *ngIf="today == item.date">
+                      Today
+                    </span>
+              <span class="ion-padding" *ngIf="today != item.date">
+                        {{item.date | date: 'dd MMM yyyy'}}
                   </span>
-            <span class="ion-padding" *ngIf="today !== item.date">
-                      {{item.date | date: 'dd MMM yyyy'}}
-                </span>
-        </ion-col>
-        <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
-            <div class="ion-no-padding custom-card" style="height: 100%;">
-                <p class="customer-name">{{surveyData.name}}
-                      <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
-                        {{surveyData.datetime | date: 'hh:mm a'}}
-                    </span>
-                    <span fill="clear" background-border="clear" [routerLink]="['/','activity',surveyData.id,'survey']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
-                    <span *ngIf="surveyData.status=='reviewassigned'" class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
-                        In review
-                    </span>
-                    <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span>
-            </p>
-            <p style="margin:0px">
-
-                <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
-                      routerDirection="forward">{{surveyData.email}}</span>
-                      <span *ngIf="surveyData.lateby > 1" class="latebystyle" style="font-size: 10px;"><strong>Late by {{surveyData.lateby}} days</strong></span>
-                      <span *ngIf="surveyData.lateby == 1" class="latebystyle" style="font-size: 10px;"><strong>Late by a day</strong></span>
-            </p>
-                <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
-                    <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
-                <span class="customer-address z-100"
-                      (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
-
-                <ion-row style="margin-bottom: 8px;" [routerLink]="['/survey-detail/',surveyData.id]">
-                    <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
-                    <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
-                      <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.status == 'reviewfailed'">Failed</span>
-                      <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="surveyData.status == 'reviewpassed'">Passed</span>
-                </ion-row>
-                <ion-row class="ion-no-margin ion-no-margin" *ngIf="surveyData.status == 'reviewfailed'">
-                    <ion-col></ion-col>
-                    <ion-col class="ion-no-margin ion-no-padding">
-                        <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]"
-                        routerDirection="forward">
-                            Restart Survey
-                        </ion-button>
-                    </ion-col>
-                </ion-row>
-                <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
-            </div>
-        </ion-col>
-    </ion-row>
-    <ion-row>
-        <ion-col size="12" style="height: 100px;">
-        </ion-col>
-    </ion-row>
-</ion-grid>
-
-<div *ngIf="listOfSurveyDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
-    <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
-</div>
-</ion-content>
+          </ion-col>
+          <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
+              <div class="ion-no-padding custom-card" style="height: 100%;">
+                  <p class="customer-name" >{{surveyData.name}}
+                        <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
+                          {{utils.formatTimeInDisplayFormat(surveyData.datetime)}}
+                      </span>
+                        <span *ngIf="surveyData.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
+                          Pending
+                      </span>
+                      <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span> -->
+                      <span fill="clear" background-border="clear"    [routerLink]="['/','activity',surveyData.id,'survey']"  class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
+                  </p>
+              <p style="margin:0px">
+  
+                  <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
+                        routerDirection="forward">{{surveyData.email}}</span>
+                        <!-- <span *ngIf="surveyData.lateby > 1" class="latebystyle" style="font-size: 10px;"><strong>Late by {{surveyData.lateby}} days</strong></span>
+                        <span *ngIf="surveyData.lateby == 1" class="latebystyle" style="font-size: 10px;"><strong>Late by a day</strong></span> -->
+              </p>
+              <span class="recordupdatedon">Updated {{surveyData.recordupdatedon}}</span>
+                  <a href="tel:{{surveyData?.phonenumber}}" style="text-decoration: none;" class="z-100">
+                      <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
+                  <span class="customer-address z-100"
+                        (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
+  
+                  <ion-row class="ion-no-margin ion-no-margin"  >
+                      <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
+                      
+                      <span class="chipdetail" style="background-color: #95afc0;" [routerLink]="['/survey-detail/',surveyData.id]">{{surveyData.source}}</span>
+                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{surveyData?.jobtype=='pvbattery' ? 'PV + Battery' : surveyData?.jobtype}}</span>
+                  
+                  <!-- <ion-col>
+                      
+                  </ion-col> -->
+                  </ion-row>
+                   <ion-row class="ion-no-margin ion-no-margin">
+                      <ion-col></ion-col>
+                      <ion-col class="ion-no-margin ion-no-padding">
+                     <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
+                          <!-- <ion-button *ngIf="surveyData.status=='surveyassigned'" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="assignedTo(surveyData)">
+                          Start Survey
+                      </ion-button> -->
+                          <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]">
+                          Resume Survey
+                      </ion-button>
+                      </ion-col>
+                  </ion-row> 
+                  <ion-progress-bar [value]="surveyData.totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
+              </div>
+          </ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col size="12" style="height: 100px;">
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+  
+  <div *ngIf="listOfSurveyDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
+      <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+  </div>
+  </ion-content>
+  

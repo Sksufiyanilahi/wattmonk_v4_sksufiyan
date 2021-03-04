@@ -41,7 +41,7 @@
         </ion-row>
         <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
             <ion-col class="flex-center">
-                <ion-img src="/assets/images/blueprint.svg" class="header-icon"></ion-img>
+                <ion-img src="/assets/detailpage/Prelim.svg" class="header-icon"></ion-img>
             </ion-col>
         </ion-row>
         <ion-row class="ion-no-padding" *ngIf="user.role.type=='designer' || user.role.type=='qcinspector'||(design.status=='reviewassigned' && design.reviewassignedto.id==user.id)">
@@ -385,7 +385,7 @@
       </ion-row>
 
 
-    <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
+    <!-- <ion-row class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
     *ngIf="design.status=='reviewassigned'||design.status=='delivered'">
     <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned
             to</span></ion-col>
@@ -402,7 +402,7 @@
             </div>
         </div>
     </ion-col>
-</ion-row>
+</ion-row> -->
 
 
         <ion-row class="ion-no-padding ion-margin-top" *ngIf="design && design.type !=='design'">

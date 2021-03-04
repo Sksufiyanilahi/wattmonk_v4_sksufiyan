@@ -188,26 +188,15 @@ export class PermitDesignDetailsPage implements OnInit {
       this.utilities.showLoading('Submitting').then(()=>{
 
         this.apiService.updateDesignForm(data,this.designId).subscribe((success)=>{
-          this.uploadpreliumdesign(this.designId,'permitdesign');
-          this.utilities.hideLoading().then(() => {
-            console.log("suc",success);
+          this.utilities.hideLoading().then(()=>{
             this.setData(success);
+          this.uploadpreliumdesign(this.designId,'permitdesign');
+          // this.utilities.hideLoading().then(() => {
+            console.log("suc",success);
+            
             // this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
             // this.utilities.setHomepageDesignRefresh(true);
-            this.utilities.getPermitDesignDetailsRefresh();
-            if(this.ispermitUpdate){
-              this.utilities.setHomepagePermitRefresh(true);
-              this.router.navigate(['permitdesignoverview/permitInreview']);
-
-
-            }
-
-            else
-            {
-              this.router.navigate(['permitdesignoverview/permitcompleted'])
-              // this.utilities.setHomepagePermitRefresh(true);
-
-          }
+            
             // this.navController.navigateRoot(['homepage']);
           });
         },(error) => {
@@ -566,9 +555,9 @@ return blob;
           imageData.append('field', key);
         // }
       }
-      this.utilities.uploadingSnackBar("Permit File Uploading...").then(()=>{
+      this.utilities.showLoading("Permit File Uploading").then(()=>{
           this.apiService.uploaddesign(imageData).subscribe(res=>{
-            this.utilities.hideUploadingLoading();
+            //this.utilities.hideUploadingLoading();
             this.utilities.hideLoading().then(()=>{
               console.log(res);
               this.imagebox= false;
@@ -579,9 +568,24 @@ return blob;
               //   console.log(res,">>");
 
               // })
-              if(this.isSelfUpdate){
-                this.reportDesignReviewSuccess();
-              }//else{
+              //this.utilities.getPermitDesignDetailsRefresh();
+            if(this.ispermitUpdate){
+              console.log("hello")
+              this.router.navigate(['permitdesignoverview/permitInreview']);
+              this.utilities.setHomepagePermitRefresh(true);
+
+            }
+            else if(this.isSelfUpdate){
+              this.reportDesignReviewSuccess();
+            }
+            else
+            {
+              console.log('hii')
+              this.router.navigate(['permitdesignoverview/permitcompleted'])
+               this.utilities.setHomepagePermitRefresh(true);
+
+          }
+              //else{
                // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res) =>{
              // this.utilities.getDesignDetailsRefresh();
 
@@ -592,7 +596,7 @@ return blob;
            // });
         //  }
       },err=>{
-        this.utilities.hideUploadingLoading();
+        //this.utilities.hideUploadingLoading();
             this.utilities.hideLoading().then(()=>{
               console.log(err);
 
@@ -661,10 +665,10 @@ return blob;
     if(this.isSelfUpdate && this.permitFiles.length > 0)
     {
       if(this.permitFileSize <= 25000000){
-       this.utilities.showLoading("Uploading").then(()=>
-      {
+      //  this.utilities.showLoading("Uploading").then(()=>
+      // {
         this.uploadpreliumdesign(this.designId,'permitdesign' );
-      })
+      // })
 
     }
     else{

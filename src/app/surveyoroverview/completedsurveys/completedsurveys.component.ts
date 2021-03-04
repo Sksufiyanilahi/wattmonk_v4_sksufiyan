@@ -135,6 +135,7 @@ export class CompletedsurveysComponent implements OnInit {
   fillinDynamicData(records : SurveyDataModel[]) : SurveyDataModel[]{
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
+      element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       this.storage.get(''+element.id).then((data: SurveyStorageModel) => {
         console.log(data);
         if (data) {

@@ -277,20 +277,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
-        //  this.desginForm.get('address').setValue('124/345');
-        //  this.desginForm.get('latitude').setValue('24.553333');
-        //  this.desginForm.get('longitude').setValue('80.5555555555');
-        //  this.desginForm.get('country').setValue('india');
-        //  this.desginForm.get('city').setValue('Lucknow');
-        //  this.desginForm.get('state').setValue('UP');
-        //  this.desginForm.get('postalcode').setValue(3232343);
-         this.desginForm.get('address').setValue(address.address);
-           this.desginForm.get('latitude').setValue(address.lat);
-           this.desginForm.get('longitude').setValue(address.long);
-           this.desginForm.get('country').setValue(address.country);
-         this.desginForm.get('city').setValue(address.city);
-           this.desginForm.get('state').setValue(address.state);
-           this.desginForm.get('postalcode').setValue(address.postalcode);
+         this.desginForm.get('address').setValue('124/345');
+         this.desginForm.get('latitude').setValue('24.553333');
+         this.desginForm.get('longitude').setValue('80.5555555555');
+         this.desginForm.get('country').setValue('india');
+         this.desginForm.get('city').setValue('Lucknow');
+         this.desginForm.get('state').setValue('UP');
+         this.desginForm.get('postalcode').setValue(3232343);
+        //  this.desginForm.get('address').setValue(address.address);
+        //    this.desginForm.get('latitude').setValue(address.lat);
+        //    this.desginForm.get('longitude').setValue(address.long);
+        //    this.desginForm.get('country').setValue(address.country);
+        //  this.desginForm.get('city').setValue(address.city);
+        //    this.desginForm.get('state').setValue(address.state);
+        //    this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -694,32 +694,38 @@ deleteArcFile(index){
             this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
               // this.uploaarchitecturedesign(response.id,'architecturaldesign');
               // this.uploadpreliumdesign(response.id,'attachments')
+              this.utils.hideLoading().then(()=>{
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
-                   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                   this.uploaarchitecturedesign(response,'architecturaldesign');
                 // }
                }
                else{
                  if(this.attachmentFileUpload){
-                   this.uploadpreliumdesign(response.id,'attachments')
+                   this.uploadpreliumdesign(response,'attachments')
+                 }
+                 else{
+                  this.router.navigate(['/homepage/design'])
+                  // this.utils.showSnackBar('Design have been saved');
+                  this.utils.setHomepageDesignRefresh(true);
                  }
                }
-              this.utils.hideLoading().then(() => {
-                console.log('Res', response);
-                this.createChatGroup(response);
-                this.router.navigate(['/homepage/design'])
-                // this.utils.showSnackBar('Design have been saved');
-                this.utils.setHomepageDesignRefresh(true);
-                // this.navController.pop();
-                // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-                //   modal.present();
-                //   modal.onWillDismiss().then((dismissed) => {
-                    // this.utils.setHomepageDesignRefresh(true);
-                //     this.navController.pop();
-                //   });
-                // });
+              // this.utils.hideLoading().then(() => {
+              //   console.log('Res', response);
+              //   this.createChatGroup(response);
+              //   this.router.navigate(['/homepage/design'])
+              //   // this.utils.showSnackBar('Design have been saved');
+              //   this.utils.setHomepageDesignRefresh(true);
+              //   // this.navController.pop();
+              //   // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+              //   //   modal.present();
+              //   //   modal.onWillDismiss().then((dismissed) => {
+              //       // this.utils.setHomepageDesignRefresh(true);
+              //   //     this.navController.pop();
+              //   //   });
+              //   // });
               
-              });
+               });
             }, responseError => {
               this.utils.hideLoading();
                 const error: ErrorModel = responseError.error;
@@ -730,35 +736,33 @@ deleteArcFile(index){
             else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
               this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
                 console.log(response.id);
-               this.uploaarchitecturedesign(response.id,'architecturaldesign');
-                this.uploadpreliumdesign(response.id,'attachments')
-                
-                this.utils.hideLoading().then(() => {
-                  this.value = response.id;
-                  //this.createChatGroup(response);
-                  // this.sendtowattmonk();  
-                  //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
-                  let objToSend: NavigationExtras = {
-                    queryParams: {
-                      id:response.id,
-                      designData:"prelim",
-                      fulldesigndata:response
-                    },
-                    skipLocationChange: false,
-                    fragment: 'top' 
-                };
-            
-            
-            this.router.navigate(['/payment-modal'], { 
-              state: { productdetails: objToSend }
-            });
-                 // console.log('Res', response);
-                 // this.router.navigate(['/homepage'])
-                  // this.utils.showSnackBar('Design have been saved');
-                 // this.utils.setHomepageDesignRefresh(true);
-                 
-                  
-                });
+                this.utils.hideLoading().then(()=>{
+                if(newConstruction == 'true')
+                {
+               this.uploaarchitecturedesign(response,'architecturaldesign');
+                }
+                else{
+                  if(this.attachmentFileUpload){
+                    this.uploadpreliumdesign(response,'attachments')
+                  }
+                  else{
+                    let objToSend: NavigationExtras = {
+                              queryParams: {
+                                id:response.id,
+                                designData:"prelim",
+                                fulldesigndata:response
+                              },
+                              skipLocationChange: false,
+                              fragment: 'top' 
+                          };
+                      
+                      
+                      this.router.navigate(['/payment-modal'], { 
+                        state: { productdetails: objToSend }
+                      });
+                  }
+                }
+              })
               }
             , responseError => {
                 this.utils.hideLoading();
@@ -772,20 +776,26 @@ deleteArcFile(index){
           if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
             this.utils.showLoading('Saving').then(() => {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
-            this.uploaarchitecturedesign(response.id,'architecturaldesign');
-            this.uploadpreliumdesign(response.id,'attachments')
-            if(this.isArcFileDelete){
-              console.log("hello");
-              this.deleteArcFile(this.indexOfArcFiles);
+            this.utils.hideLoading().then(()=>{
+            if(newConstruction=='true')
+            {
+            this.uploaarchitecturedesign(response,'architecturaldesign');
             }
-            setTimeout(()=>{
-              this.utils.hideLoading().then(() => {
-                console.log('Res', response);
+            else{
+              if(this.attachmentFileUpload){
+            this.uploadpreliumdesign(response,'attachments')
+              }
+              else{
                 this.utils.showSnackBar('Design have been updated');
                 this.utils.setDesignDetailsRefresh(true);
                 this.navController.pop();
+              }
+            }
+            if(this.isArcFileDelete){
+              this.deleteArcFile(this.indexOfArcFiles);
+            }
+               
               });
-            },2000)
           },
            responseError => {
             this.utils.hideLoading().then(() => {
@@ -798,35 +808,46 @@ deleteArcFile(index){
         }
         else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
-            this.uploaarchitecturedesign(response.id,'architecturaldesign');
-            this.uploadpreliumdesign(response.id,'attachments');
+            this.utils.hideLoading().then(()=>{
+            if(newConstruction=='true')
+            {
+            this.uploaarchitecturedesign(response,'architecturaldesign');
+            }
+            else{
+              if(this.attachmentFileUpload){
+            this.uploadpreliumdesign(response,'attachments');
+              }
+              else{
+                let objToSend: NavigationExtras = {
+                  queryParams: {
+                    id:response.id,
+                    designData:"prelim",
+                    fulldesigndata:response
+                  },
+                  skipLocationChange: false,
+                  fragment: 'top' 
+              };
+          
+          
+          this.router.navigate(['/payment-modal'], { 
+            state: { productdetails: objToSend }
+          });
+              }
+            }
             if(this.isArcFileDelete){
               console.log("hello");
               this.deleteArcFile(this.indexOfArcFiles);
             }
-            this.utils.hideLoading().then(() => {
-              console.log('Res', response);
-              this.value=response.id;
+            // this.utils.hideLoading().then(() => {
+            //   console.log('Res', response);
+            //   this.value=response.id;
               
-              this.utils.showSnackBar('Design have been updated');
-              //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
-              let objToSend: NavigationExtras = {
-                queryParams: {
-                  id:response.id,
-                  designData:"prelim",
-                  fulldesigndata:response
-                },
-                skipLocationChange: false,
-                fragment: 'top' 
-            };
-        
-        
-        this.router.navigate(['/payment-modal'], { 
-          state: { productdetails: objToSend }
-        });
+            //   this.utils.showSnackBar('Design have been updated');
+            //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
+              
               
       
-            });
+             });
           }, responseError => {
             this.utils.hideLoading().then(() => {
               const error: ErrorModel = responseError.error;
@@ -1036,26 +1057,55 @@ ioniViewDidEnter(){
   }
   
 
-  uploaarchitecturedesign(designId?: number, key?: string){
+  uploaarchitecturedesign(response?: any, key?: string){
     console.log(this.archFiles);
     const imageData = new FormData();
     for(var i=0; i< this.archFiles.length;i++){
       imageData.append("files",this.archFiles[i]);
       if(i ==0){
-        imageData.append('path', 'designs/' + designId);
-        imageData.append('refId', designId + '');
+        imageData.append('path', 'designs/' + response.id);
+        imageData.append('refId', response.id + '');
         imageData.append('ref', 'design');
         imageData.append('field', key);
       }
     } 
-    this.utils.uploadingSnackBar("Architectural File Uploading...").then(()=>{
+    this.utils.showLoading("Architectural File Uploading").then(()=>{
     this.apiService.uploaddesign(imageData).subscribe(res=>{
       console.log(res); 
-      this.utils.hideUploadingLoading();
-      this.uploadpreliumdesign(designId,'attachments');
-      
+      this.utils.hideLoading();
+      if(this.attachmentFileUpload){
+      this.uploadpreliumdesign(response,'attachments');
+      }
+      else{
+        if(this.send === ScheduleFormEvent.SAVE_DESIGN_FORM ){
+        this.router.navigate(['/homepage/design'])
+        if(this.designId==0){
+                 this.utils.showSnackBar('Design have been saved');
+        }
+        else{
+          this.utils.showSnackBar('Design have been updated')
+        }
+                this.utils.setHomepageDesignRefresh(true);
+        }
+        else{
+          let objToSend: NavigationExtras = {
+                    queryParams: {
+                      id:response.id,
+                      designData:"prelim",
+                      fulldesigndata:response
+                    },
+                    skipLocationChange: false,
+                    fragment: 'top' 
+                };
+            
+            
+            this.router.navigate(['/payment-modal'], { 
+              state: { productdetails: objToSend }
+            });
+        }
+      }
     }, responseError => {
-      this.utils.hideUploadingLoading();
+      this.utils.hideLoading();
       const error: ErrorModel = responseError.error;
       this.utils.errorSnackBar(error.message[0].messages[0].message);
     })
@@ -1064,26 +1114,54 @@ ioniViewDidEnter(){
 
   }
 
-  uploadpreliumdesign(designId?: number, key?: string,filearray?:File[]){
+  uploadpreliumdesign(response?: any, key?: string,filearray?:File[]){
     console.log(this.prelimFiles);
     const imageData = new FormData();
     for(var i=0; i< this.prelimFiles.length;i++){
       imageData.append("files",this.prelimFiles[i]);
       if(i ==0){
-        imageData.append('path', 'designs/' + designId);
-        imageData.append('refId', designId + '');
+        imageData.append('path', 'designs/' + response.id);
+        imageData.append('refId', response.id + '');
         imageData.append('ref', 'design');
         imageData.append('field', key);
       }
     } 
-    this.utils.uploadingSnackBar("Attachment File Uploading...").then(()=>{
+    this.utils.showLoading("Attachment File Uploading").then(()=>{
     this.apiService.uploaddesign(imageData).subscribe(res=>{
       console.log(res); 
-      this.utils.hideUploadingLoading();
+      this.utils.hideLoading();
+      if(this.send === ScheduleFormEvent.SAVE_DESIGN_FORM)
+      {
+      this.router.navigate(['/homepage/design'])
+      if(this.designId==0)
+      {
+                 this.utils.showSnackBar('Design have been saved');
+      }
+      else{
+        this.utils.showSnackBar('Design have been updated');
+      }
+                this.utils.setHomepageDesignRefresh(true);
+      }
+      else{
+        let objToSend: NavigationExtras = {
+          queryParams: {
+            id:response.id,
+            designData:"prelim",
+            fulldesigndata:response
+          },
+          skipLocationChange: false,
+          fragment: 'top' 
+      };
+  
+  
+  this.router.navigate(['/payment-modal'], { 
+    state: { productdetails: objToSend }
+  });
+      }
       
     }, responseError => {
       this.utils.hideLoading();
-      this.utils.hideUploadingLoading();
+      //this.utils.hideUploadingLoading();
       const error: ErrorModel = responseError.error;
       this.utils.errorSnackBar(error.message[0].messages[0].message);
     })
