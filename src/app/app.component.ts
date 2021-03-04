@@ -273,8 +273,11 @@ export class AppComponent {
             }
         } else if (this.userData.role.type == 'qcinspector' && type == 'survey') {
             this.router.navigate(['/analystoverview/survey']);
-        } else if (this.userData.role.type !== 'clientsuperadmin') {
+        } else if (this.userData.role.type !== 'clientsuperadmin' && type=='statistics') {
             this.router.navigate(['/statistics']);
+        } else if(this.userData.role.type !== 'designer' && this.userData.role.type !== 'qcinspector' && this.userData.role.type !== 'peengineer' && type=='team')
+        {
+            this.router.navigate(['/teammodule'])
         }
     }
 

@@ -277,7 +277,15 @@ const routes: Routes = [
     {
         path: 'callingscreen',
         loadChildren: () => import('./callingscreen/callingscreen.module').then(m => m.CallingscreenPageModule)
-    },
+    },  {
+    path: 'teammodule',
+    loadChildren: () => import('./teammodule/teammodule.module').then( m => m.TeammodulePageModule)
+  },
+  {
+    path: 'teamschedule',
+    loadChildren: () => import('./teamschedule/teamschedule.module').then( m => m.TeamschedulePageModule)
+  },
+
 ];
 
 @NgModule({
