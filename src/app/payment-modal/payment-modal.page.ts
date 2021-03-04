@@ -157,6 +157,7 @@ this.isradiodisable=false
 
   this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
     console.log(this.user)
+    this.delivertime=this.user.slabname
     this.apiService.paymentDetail(this.user.parent.id).subscribe(res=>{
       this.count=res;
       console.log(this.count);

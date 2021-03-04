@@ -17,6 +17,7 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { DesginDataModel } from '../model/design.model';
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { loadStripe } from '@stripe/stripe-js';
+import {IPayPalConfig,ICreateOrderRequest } from 'ngx-paypal';
 
 
 @Component({
@@ -25,7 +26,7 @@ import { loadStripe } from '@stripe/stripe-js';
   styleUrls: ['./add-money.page.scss'],
 })
 export class AddMoneyPage implements OnInit {
-
+  public payPalConfig ? : IPayPalConfig;
   invalidAmount = INVALID_AMOUNT;
   invalidAmountForOnboarding = INVALID_AMOUNT_FOR_ONBOARDING;
 
@@ -68,7 +69,7 @@ card:any
  newpestamp: Observable<any>;
      newpestampRef: AngularFireObject<any>;
      newpestampscount = 0;
-
+sessionId:number
  designData:any;
   fulldesigndata: any;
 
@@ -86,6 +87,7 @@ card:any
     private mixpanelService:MixpanelService
     //private stripe:Stripe
     ) {
+      this.paypalintegration()
       this.designData = this.router.getCurrentNavigation().extras.state;
       console.log(this.designData)
       this.mode = this.designData.productdetails.queryParams.mode;
@@ -169,7 +171,7 @@ card:any
 
       
     this.userData = this.storageService.getUser();
-    this.setupStripe();
+    // this.setupStripe();
     console.log(this.mode)
     console.log(this.designId);
     console.log(this.design);
@@ -181,36 +183,36 @@ card:any
     }
     
   }
- setupStripe() {
-    let elements = this.stripe.elements();
-    var style = {
-      base: {
-        color: '#32325d',
-        lineHeight: '24px',
-        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        fontSmoothing: 'antialiased',
-        fontSize: '16px',
-        '::placeholder': {
-          color: '#111'
-        }
-      },
-      invalid: {
-        color: '#fa755a',
-        iconColor: '#fa755a'
-      }
-    };
-    this.card = elements.create('card', { style: style });
-    console.log(this.card);
-    this.card.mount('#card-element');
+//  setupStripe() {
+//     let elements = this.stripe.elements();
+//     var style = {
+//       base: {
+//         color: '#32325d',
+//         lineHeight: '24px',
+//         fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+//         fontSmoothing: 'antialiased',
+//         fontSize: '16px',
+//         '::placeholder': {
+//           color: '#111'
+//         }
+//       },
+//       invalid: {
+//         color: '#fa755a',
+//         iconColor: '#fa755a'
+//       }
+//     };
+//     this.card = elements.create('card', { style: style });
+//     console.log(this.card);
+//     this.card.mount('#card-element');
 
-    this.card.addEventListener('change', event => {
-      var displayError = document.getElementById('card-errors');
-      if (event.error) {
-        displayError.textContent = event.error.message;
-      } else {
-        displayError.textContent = '';
-      }
-    });
+//     this.card.addEventListener('change', event => {
+//       var displayError = document.getElementById('card-errors');
+//       if (event.error) {
+//         displayError.textContent = event.error.message;
+//       } else {
+//         displayError.textContent = '';
+//       }
+//     });
 
    
     // var form = document.getElementById('payment-form');
@@ -256,7 +258,7 @@ card:any
     // }
     //   //}
     // });
-  }
+  // }
 
 
 
@@ -759,6 +761,111 @@ createChatGroup(design){
     })
   }
 }
+
+
+private paypalintegration(){
+  this.payPalConfig = {
+    currency: 'USD',
+    //for testing
+    clientId: 'AV1abOj-_YOVXq_Negcy7Fkc2Esj2GtpY2dRe3nrTwPl4HSX22jbXQ6KKhyJRO7JjPxP__sr7wqi57bg',
+   // for live
+   //  CLIENT_ID: 'AfKOgzK6Le8LRp8bN4vefjNqC9B7qArUHJt0U_wUmed6hlDHlP-TlHYG9olpqTX85VhHHOD3T9pkfKuP',
+
+    createOrderOnClient: (data) =>< ICreateOrderRequest >{
+      intent: 'CAPTURE',
+      purchase_units: [{
+                  amount: {
+                    value: this.amountForm.get('amount').value
+                  }
+                }]
+      
+    },
+  
+    advanced: { extraQueryParams: [ { name: "disable-funding", value:"credit,card"} ],
+  commit:'true' } ,
+  
+    style: {
+            size: 'responsive',
+            color: 'silver',
+            shape: 'rect',
+            label: 'paypal',
+            tagline:false,
+            
+    },
+
+ 
+    onApprove: (data, actions) => {
+        console.log('onApprove - transaction was approved, but not authorized', data, actions);
+        actions.order.get().then(details => {
+       console.log('onApprove - you can get full order details inside onApprove: ', details);
+
+
+         var rechargeData={}
+       this.utils.showLoading("Adding").then(()=>{
+          var sessionId:number
+          var dates=new Date();
+         console.log(dates)
+         if(this.onBoarding=='true' && this.amountForm.get('amount').value > 1000){
+          rechargeData={
+            amount:this.amountForm.get('amount').value + 100,
+            datetime: dates,
+            paymenttype: "paypal",
+            type: "succeeded",
+          user: this.userData.id,
+          sessionid:this.sessionId
+          }
+         }
+         else{
+    rechargeData={
+      amount:this.amountForm.get('amount').value,
+      datetime: dates,
+      paymenttype: "paypal",
+      type: "succeeded",
+    user: this.userData.id,
+    sessionid:''
+   
+    }
+         }
+    this.apiService.recharges(rechargeData).subscribe((res:any)=>{
+      this.utils.hideLoading().then(()=>{ 
+      this.responseData = res;
+      let token=  this.storageService.getJWTToken();
+              this.storageService.setUser(res.user,token);
+      console.log(res);
+      this.utils.showSnackBar("$"+this.responseData.amount +" added in your wallet successfully");
+      this.goBack();
+      this.utils.setHomepageDesignRefresh(true);
+    }),error=>{
+      this.utils.hideLoading().then(()=>{      
+        console.log("payment was unsuccessful");
+         this.utils.errorSnackBar(error);
+        })
+        };
+      });
+        this.token=''
+      });
+        })
+    },
+    onClientAuthorization: (data) => {
+        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+        // this.showSuccess = true;
+    },
+    onCancel: (data, actions) => {
+        console.log('OnCancel', data, actions);
+        // this.showCancel = true;
+
+    },
+    onError: err => {
+        console.log('OnError', err);
+        // this.showError = true;
+    },
+    onClick: (data, actions) => {
+        console.log('onClick', data, actions);
+        // this.resetStatus();
+    },
+};
+}
+
 }
 
 

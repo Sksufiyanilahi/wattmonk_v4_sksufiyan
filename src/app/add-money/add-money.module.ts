@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { AddMoneyPageRoutingModule } from './add-money-routing.module';
 
 import { AddMoneyPage } from './add-money.page';
+import { NgxPayPalModule } from 'ngx-paypal';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { AddMoneyPage } from './add-money.page';
     FormsModule,
     IonicModule,
     AddMoneyPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxPayPalModule
    
   ],
   declarations: [AddMoneyPage]
