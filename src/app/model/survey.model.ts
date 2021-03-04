@@ -73,6 +73,7 @@ export class SurveyDataModel {
   distancebetweentworafts:any;
   batterysystem:any;
   isdesignraised:boolean=false;
+  recordupdatedon:any;
 }
 
 

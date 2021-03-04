@@ -324,6 +324,7 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
   fillinDynamicData(records : SurveyDataModel[]) : SurveyDataModel[]{
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
+      element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       this.storage.get(''+element.id).then((data: SurveyStorageModel) => {
         console.log(data);
         if (data) {
@@ -555,9 +556,20 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
         this.showBottomDraw = false;
       });
     })
-    }
-
-
+    }  
+  }
+  generatePdf(id){
+    this.utils.showLoading('Generating PDF').then(()=>{
+      this.apiService.generatePdf(id).subscribe(res=>{
+        this.utils.hideLoading();
+        console.log(res);
+        this.utils.sethomepageSurveyRefresh(true);
+        
+      },err=>{
+        this.utils.hideLoading();
+        this.utils.showSnackBar('Error in generating PDF');
+      })
+    });
   }
 
 
