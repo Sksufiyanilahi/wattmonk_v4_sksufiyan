@@ -53,7 +53,6 @@ designId:any;
     this.utilities.showLoading('Please wait...').then(()=>{
       console.log(this.name)
     if(this.name=="design"){
-      debugger;
         this.apiservice.design_activityDetails(this.designId).subscribe(response =>{
           this.utilities.hideLoading().then(()=>{
             this.activity_details=response;

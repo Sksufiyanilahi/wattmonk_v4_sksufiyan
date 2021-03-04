@@ -572,7 +572,9 @@ export class ApiService {
         }
 
       deletePestamp(id:string): Observable<Pestamp> {
-        return this.http.delete<Pestamp>(BaseUrl + "pestamps/"+id, {
+        console.log(id);
+        
+        return this.http.delete<Pestamp>(BaseUrl + "upload/files/"+id, {
           headers: this.headers
         })
       }
@@ -605,6 +607,11 @@ export class ApiService {
 
       getPendingPaymentstatus(){
         return this.http.get(BaseUrl + "paymentpendingpestamps?creatorparentid="+this.storageService.getUser().parent.id, {
+          headers: this.headers
+        })
+      }
+      generatePdf(id){
+        return this.http.get(BaseUrl + "surveypdf?id=" + id,  {
           headers: this.headers
         })
       }
