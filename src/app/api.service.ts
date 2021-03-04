@@ -611,6 +611,24 @@ export class ApiService {
         })
       }
 
+      salesIncentives(){
+        return this.http.get(BaseUrl + 'incentives', {
+          headers: this.headers
+        })
+      }
+      utilitiesNames(){
+        return this.http.get(BaseUrl + 'utilities?_sort=name:ASC', {
+          headers: this.headers
+        })
+      }
+      utilitiesRate(utilityid){
+        return this.http.get(BaseUrl + 'utilityrates?utility=' +  utilityid, {
+          headers: this.headers
+        })
+      }
+   
+     
+
       listencall(listnerID) {
       // let listnerID = localStorage.getItem('gid');
         const that= this;

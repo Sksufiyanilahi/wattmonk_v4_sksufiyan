@@ -6,6 +6,7 @@ import { DesignComponent } from './design/design.component';
 import { SurveyComponent } from './survey/survey.component';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
+import { SalesproposalComponent } from './salesproposal/salesproposal.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
       {
         path: 'survey',
         component: SurveyComponent
+      },
+      {
+        path: 'salesproposal',
+        component: SalesproposalComponent
       },
       {
         path: '',
