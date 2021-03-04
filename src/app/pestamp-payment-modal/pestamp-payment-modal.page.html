@@ -129,9 +129,9 @@
       <ion-item (click)="addWallet('wallet')" *ngIf="netPay>user?.amount || amounttopay > user?.amount" >
         <ion-button  fill="clear" ><ion-icon name="cash-outline" style="color:green;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Add Money</ion-label></ion-button>
       </ion-item>
-       <ion-item (click)="addWallet('card')" *ngIf="netPay>user?.amount || amounttopay > user?.amount">
+       <!-- <ion-item (click)="addWallet('card')" *ngIf="netPay>user?.amount || amounttopay > user?.amount">
         <ion-button  fill="clear"  ><ion-icon name="card-outline" style="color:brown;font-size:25px"></ion-icon>&nbsp;<ion-label class="black">Pay via card </ion-label></ion-button>
-      </ion-item>
+      </ion-item> -->
       <ion-col size="12" *ngIf="netPay>user?.amount || amounttopay > user?.amount">
         <ngx-paypal class="paypal-button" [config]="payPalConfig"></ngx-paypal></ion-col>
       </ion-col>
