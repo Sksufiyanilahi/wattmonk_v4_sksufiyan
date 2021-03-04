@@ -1,0 +1,116 @@
+
+<ion-row>
+  <ion-col>
+    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;">Add Team Member </h5>
+  </ion-col>
+<ion-col size="auto" style="align-self: center;">
+  <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+      <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+  </ion-button>
+</ion-col>
+</ion-row>
+
+
+<ion-content>
+  <form [formGroup]="teamForm" novalidate style="overflow:scroll">
+    <ion-grid style="position: relative;">
+      <ion-row>
+        <ion-col size="12">
+          <ion-item class="ion-no-padding">
+          <ion-label position="floating">First Name*</ion-label>
+                    <ion-input type="text" class="form_input" formControlName="firstname" autocapitalize="words"
+                                required></ion-input>
+                              </ion-item>
+                              <!-- <div style="height: 5px;">
+                                <div *ngIf="thirdFormGroup.get('firstname').hasError('pattern') && thirdFormGroup.get('firstname').dirty">
+                                    <span class="error">{{firstnameError}}</span>
+                                </div>
+                                <div *ngIf="thirdFormGroup.get('firstname').value === '' && thirdFormGroup.get('firstname').dirty">
+                                    <span class="error">{{fieldRequired}}</span>
+                                </div>
+                            </div> -->
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="ion-no-padding">
+          <ion-label position="floating">Last Name*</ion-label>
+                    <ion-input type="text" class="form_input" formControlName="lastname" autocapitalize="words"
+                                ></ion-input>
+                              </ion-item>
+                              <!-- <div style="height: 5px;">
+                                <div *ngIf="thirdFormGroup.get('lastname').hasError('pattern') && thirdFormGroup.get('lastname').dirty">
+                                    <span class="error">{{lastnameError}}</span>
+                                </div>
+                                <div *ngIf="thirdFormGroup.get('lastname').value === '' && thirdFormGroup.get('lastname').dirty">
+                                    <span class="error">{{fieldRequired}}</span>
+                                </div>
+                            </div> -->
+        </ion-col>
+      </ion-row>
+      <ion-row >
+        <ion-col>
+            <ion-item class="ion-no-padding">
+                <ion-label position="floating">Work Email*</ion-label>
+                <ion-input type="text" class="form_input" formControlName="workemail"
+                            ></ion-input>
+            </ion-item>
+            <!-- <div style="height: 5px;">
+              <div *ngIf="thirdFormGroup.get('workemail').hasError('pattern') && thirdFormGroup.get('workemail').dirty">
+                  <span class="error">{{emailError}}</span>
+              </div>
+              <div *ngIf="thirdFormGroup.get('workemail').value === '' && thirdFormGroup.get('workemail').dirty">
+                  <span class="error">{{fieldRequired}}</span>
+              </div>
+          </div> -->
+        </ion-col>
+    </ion-row>
+    <br>
+    <ion-label>User Role</ion-label>
+          <ion-radio-group formControlName="userrole" >
+            <ion-row >
+              <ion-col size="6">
+            <ion-item lines="none">
+              <ion-label class="margin" style="font-size: small;">Admin</ion-label>
+              <ion-radio slot="start" value="7" ></ion-radio>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item lines="none">
+              <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Design Manager</ion-label>
+              <ion-radio slot="start"  value="3" ></ion-radio>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item lines="none">
+              <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Designer</ion-label>
+              <ion-radio slot="start"  value="8" ></ion-radio>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item lines="none">
+              <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Surveyor</ion-label>
+              <ion-radio slot="start"  value="9" ></ion-radio>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item lines="none">
+              <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Analyst</ion-label>
+              <ion-radio slot="start"  value="10" ></ion-radio>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item lines="none">
+              <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Pe Engineer</ion-label>
+              <ion-radio slot="start"  value="11" ></ion-radio>
+            </ion-item>
+          </ion-col>
+          </ion-row>
+          </ion-radio-group>
+    </ion-grid>
+    </form>
+</ion-content>
+<ion-row>
+  <ion-col></ion-col>
+  <ion-col size="auto">
+      <ion-button class="action-button-color" fill="clear">Confirm</ion-button>
+      </ion-col>
+      </ion-row>  

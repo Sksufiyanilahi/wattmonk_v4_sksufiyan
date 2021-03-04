@@ -47,6 +47,10 @@
                         <ion-img src="/assets/icon/PEStamping.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>PE Stamps 
                         <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpestampscount > 0">{{ newpestampscount }}</span></p>
                       </ion-item>
+                      <ion-item  (click)="SwitchMenuAccordingtoRoles('team')" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector'" routerDirection="forward">
+                        <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team 
+                        <!-- <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpestampscount > 0">{{ newpestampscount }}</span></p> -->
+                      </ion-item>
               </ion-menu-toggle>
           </ion-list>
       </ion-content>
