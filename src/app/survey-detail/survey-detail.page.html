@@ -181,7 +181,7 @@
                                 <!-- </ion-item> -->	
                             </ion-col>	
                         </ion-row>	
-                        <ion-row>	
+                        <ion-row *ngIf="survey.assignedto!== null">	
                             <ion-col size="6">Assigned To</ion-col>	
                             <ion-col size="6">{{survey.assignedto?.firstname}} &nbsp; {{survey.assignedto?.lastname}}</ion-col>	
                         </ion-row>	
@@ -241,7 +241,7 @@
 
                                         <ion-slide *ngFor="let elecpvmeter of survey.pvmeterimages,let i=index">	
                                             <ion-row><ion-col size ="12"><span>PV inverter is located :</span>&nbsp;<span>{{survey.pvinverterlocation | titlecase}} the site </span></ion-col>	
-                                                <ion-col size ="12"><span>Inverter manufacturer and Model is :</span>&nbsp;<span>{{survey.invertermanufacturerandmodel | titlecase}}</span></ion-col>	
+                                                <ion-col size ="12"><span>Inverter manufacturer and Model is :</span>&nbsp;<span>{{survey.invertermake | titlecase}} {{survey.invertermodel | titlecase}}</span></ion-col>	
 
                                             <div class="swiper-zoom-container">	
                                                 <img [src]="elecpvmeter.url" (click)="showimage(elecpvmeter.url)" width='100%'/>	
@@ -277,7 +277,7 @@
                     <ion-slides pager="true" [options]="slideOpts" zoom="true">	
                         <ion-slide *ngFor="let roof of survey.roofimages,let i=index">	
                             <ion-row>	
-                                <ion-col size ="12"><span *ngIf="i=='0'">Roof Tilt :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col>	
+                                <ion-col size ="12"><span *ngIf="i=='0'">Roof Tilt :</span>&nbsp;<span>{{survey.rooftilt + ' ' + 'degrees'}} </span></ion-col>	
                             <div class="swiper-zoom-container">	
                                 <h2 class="position-fix">{{roof.name}}</h2>	
                                 <img [src]="roof.url" (click)="showimage(roof.url)" />	

@@ -610,6 +610,11 @@ export class ApiService {
           headers: this.headers
         })
       }
+      generatePdf(id){
+        return this.http.get(BaseUrl + "surveypdf?id=" + id,  {
+          headers: this.headers
+        })
+      }
 
       listencall(listnerID) {
       // let listnerID = localStorage.getItem('gid');
