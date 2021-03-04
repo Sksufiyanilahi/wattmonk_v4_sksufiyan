@@ -30,6 +30,9 @@ import { map, startWith } from "rxjs/operators";
 })
 export class SalesproposalComponent implements OnInit {
 
+  myControl = new FormControl();
+  option: string[] = ['One', 'Two', 'Three'];
+
   desginForm: FormGroup;
 
   listOfAssignees: AssigneeModel[] = [];
@@ -99,8 +102,12 @@ export class SalesproposalComponent implements OnInit {
   userdata:any;
 
   attachmentFileUpload: boolean= false;
-  incentives: Object;
-  utilitiesName: Object;
+  incentives: any;
+  utilitiesName: any;
+  modulemakes: any;
+  filteredModuleMakes: Observable<any>;
+  filterUtilityRate: Observable<any>;
+  filterIncentive: Observable<any>;
 
   // newprelims: Observable<any>;
   // newprelimsRef: AngularFireObject<any>;
@@ -217,14 +224,15 @@ export class SalesproposalComponent implements OnInit {
 
   ionViewDidEnter(){
     this.utils.showHideIntercom(true);
-    this.getincentives();
-    this.getutilitiesName();
+    // this.getincentives();
+    // this.getutilitiesName();
+    this.fetchIncentive();
   }
 
   getincentives(){
     this.apiService.salesIncentives().subscribe(res=>{
       console.log(res,"salesinc");
-      this.incentives  = res;
+      // this.incentives  = res;
     })
   }
 
@@ -234,6 +242,55 @@ export class SalesproposalComponent implements OnInit {
       this.utilitiesName = res;
       
     })
+  }
+
+  fetchModuleMakesData() {
+    this.apiService.utilitiesNames().subscribe(
+      response => {
+        console.log("Hiii");
+        this.modulemakes = response;
+        this.filteredModuleMakes = this.desginForm.get('utility').valueChanges.pipe(
+          startWith(""),
+          map(value => (typeof value === "string" ? value : value.name)),
+          map(name => (name ? this._filterModuleMake(name) : this.modulemakes.slice()))
+        );
+      },
+      error => {
+        this.utils.errorSnackBar("Error");
+      }
+    );
+  }
+
+  fetchIncentive() {
+    this.apiService.salesIncentives().subscribe(
+      response => {
+        console.log("Hiii");
+        this.incentives = response;
+        this.filterIncentive = this.desginForm.get('utility').valueChanges.pipe(
+          startWith(""),
+          map(value => (typeof value === "string" ? value : value.title)),
+          map(title => (title ? this._filterincentive(title) : this.incentives.slice()))
+        );
+      },
+      error => {
+        this.utils.errorSnackBar("Error");
+      }
+    );
+  }
+
+  private _filterModuleMake(name: string) {
+    const filterValue = name.toLowerCase();
+    return this.modulemakes.filter(
+      modulemake => modulemake.name.toLowerCase().indexOf(filterValue) != -1
+    );
+  }
+
+  private _filterincentive(title: string) {
+    const filterValue = title.toLowerCase();
+
+    return this.incentives.filter(
+      incentive => incentive.title.toLowerCase().indexOf(filterValue) != -1
+    );
   }
 
   // getmodulename(event){
@@ -255,6 +312,7 @@ export class SalesproposalComponent implements OnInit {
   ngOnInit() {
       this.fieldDisabled=false;
       this.userdata = this.storage.getUser();
+      this.fetchModuleMakesData();
       this.intercom.update({
         "hide_default_launcher": true
       });
