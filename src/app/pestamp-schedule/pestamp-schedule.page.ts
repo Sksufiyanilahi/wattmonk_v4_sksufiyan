@@ -1,4 +1,4 @@
-  
+
 import { Component, NgZone, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
@@ -34,14 +34,14 @@ export class PestampSchedulePage implements OnInit {
   contactError = INVALID_PHONE_NUMBER;
   hardCopiesError = "Maximum value of hardcopy cannot exceed 10";
   hardCopiesPatternError = "Value of hardcopy should be a valid number";
-  
+
   atticPhotosList: string[]=[];
   roofPhotosList:string[]=[];
   permitPlanList:string[]=[];
 
   stampingTypeValue:any;
   isElectrical:boolean = false;
-  
+
   stampingModeValue:any;
   isECopy:boolean = false;
 
@@ -56,7 +56,7 @@ export class PestampSchedulePage implements OnInit {
   roofData:any;
   permitPlanData:any;
   tabsDisabled = false;
-  
+
   // GoogleAutocomplete: google.maps.places.AutocompleteService;
   // autocompleteItems: any[];
 
@@ -87,8 +87,8 @@ export class PestampSchedulePage implements OnInit {
               private navController:NavController,
               private cdr:ChangeDetectorRef,
               private router:Router,
-              private mixpanelService:MixpanelService) 
-              { 
+              private mixpanelService:MixpanelService)
+              {
     const MAILFORMAT = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     this.firstFormGroup = this.formBuilder.group({
       name:new FormControl('',[Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
@@ -112,11 +112,11 @@ export class PestampSchedulePage implements OnInit {
     propertytype:new FormControl('',[Validators.required])
     // })
     // this.secondFormGroup = this.formBuilder.group({
-     
+
     })
     this.designId = +this.route.snapshot.paramMap.get('id');
 
-   
+
     // this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     // this.autocompleteItems = [];
   }
@@ -206,7 +206,7 @@ export class PestampSchedulePage implements OnInit {
         data.append('refId', ""+recordid);
         data.append('ref', "pestamp");
         data.append('field', "atticphotos");
-        
+
         console.log("file upload data---"+data);
        }
      }
@@ -225,7 +225,7 @@ export class PestampSchedulePage implements OnInit {
     })
 
    }
-  
+
    /* FOR SELECT ROOF FILES OR PHOTOS FROM DEVICE */
    roofFiles(event){
     console.log(event);
@@ -249,7 +249,7 @@ export class PestampSchedulePage implements OnInit {
         data.append('refId', ""+recordid);
         data.append('ref', "pestamp");
         data.append('field', "roofphotos");
-        
+
         console.log("file upload data---"+data);
        }
      }
@@ -292,7 +292,7 @@ export class PestampSchedulePage implements OnInit {
         data.append('refId', ""+recordid);
         data.append('ref', "pestamp");
         data.append('field', "permitplan");
-        
+
         console.log("file upload data---"+data);
        }
      }
@@ -342,7 +342,7 @@ export class PestampSchedulePage implements OnInit {
       roof.clearValidators();
       roof.reset();
       permitplan.setValidators([Validators.required]);
-      
+
     }
     else{
       attic.clearValidators();
@@ -359,7 +359,7 @@ export class PestampSchedulePage implements OnInit {
     // else{
     //   this.isElectrical = false;
     // }
-    
+
   }
 
   // ngOnDestroy(): void {
@@ -440,7 +440,7 @@ export class PestampSchedulePage implements OnInit {
     this.mixpanelService.track("PESTAMP_PAGE_CLOSE", {
     });
     this.navController.pop();
-    
+
    }
 
   /* FOR SUBMIT FORM */
@@ -563,11 +563,11 @@ export class PestampSchedulePage implements OnInit {
             value:'assign'
             },
             skipLocationChange: false,
-            fragment: 'top' 
+            fragment: 'top'
         };
-    
-    
-    this.router.navigate(['/pestamp-payment-modal'], { 
+
+
+    this.router.navigate(['/pestamp-payment-modal'], {
       state: { productdetails: objToSend }
     });
         },
@@ -684,11 +684,11 @@ this.utils.showLoading('Saving').then(() => {
             value:'assign'
             },
             skipLocationChange: false,
-            fragment: 'top' 
+            fragment: 'top'
         };
-    
-    
-    this.router.navigate(['/pestamp-payment-modal'], { 
+
+
+    this.router.navigate(['/pestamp-payment-modal'], {
       state: { productdetails: objToSend }
     });
   },
@@ -738,7 +738,7 @@ this.utils.showLoading('Saving').then(() => {
       {
         this.utils.errorSnackBar("Please select property type");
       }
-      
+
       else if(this.firstFormGroup.value.atticphotos == '' && (this.stampingTypeValue == 'structural' || this.stampingTypeValue == 'both'))
       {
         this.utils.errorSnackBar("Please check the field attic photos")
@@ -760,7 +760,7 @@ this.utils.showLoading('Saving').then(() => {
 
   //// For Address
 //   /* FOR SEARCH SHIPPING ADDRESS */
-//   updateSearchResults(event: CustomEvent) {
+//   updateSearchResults(event) {
 //     //this.autoCompleteOff = true;
 //     console.log(this.autoCompleteOff);
 //     const input = event.detail.value;
@@ -784,7 +784,7 @@ this.utils.showLoading('Saving').then(() => {
 //   forAutoComplete(e){
 //     console.log("hello",e);
 //     this.autoCompleteOff = true;
-    
+
 //   }
 
 //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
@@ -875,7 +875,7 @@ this.utils.showLoading('Saving').then(() => {
 //     // }
 //     this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
 //       console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    
+
 //         // this.firstFormGroup.get('address').setValue('124/345');
 //         // this.firstFormGroup.get('latitude').setValue('24.553333');
 //         // this.firstFormGroup.get('longitude').setValue('80.5555555555');
@@ -906,7 +906,7 @@ this.utils.showLoading('Saving').then(() => {
 //     this.autoCompleteOff = false;
 //     console.log(this.autoCompleteOff);
 //     //this.getSolarMake();
-  
+
 //     }
 
 //     onBlur()

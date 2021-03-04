@@ -52,7 +52,7 @@ export class NewdesignComponent implements OnInit {
      private storageservice :StorageService) {
 
       this.user=this.storageservice.getUser();
-      
+
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -69,7 +69,7 @@ console.log(this.currentDate.toISOString());
 this.apiService.version.subscribe(versionInfo=>{
   this.update_version = versionInfo;
 })
- 
+
   }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -83,12 +83,12 @@ this.apiService.version.subscribe(versionInfo=>{
 
   ionViewDidEnter(){
     // if(this.version !== this.update_version && this.update_version !==''){
-      
+
     //   setTimeout(()=>{
-    
+
     //     this.utils.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
     //       text:'Ok',
-        
+
     //       handler:()=>{
     //         this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
     //        this.ionViewDidEnter();
@@ -96,7 +96,7 @@ this.apiService.version.subscribe(versionInfo=>{
     //     }]);
     //   },2000)
     // }
-  
+
     this.designRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
       this.skip=0;
       this.getDesigns(null);
@@ -109,7 +109,7 @@ this.apiService.version.subscribe(versionInfo=>{
     });
   }
 
-  getDesigns(event?: CustomEvent) {
+  getDesigns(event?) {
     this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -159,7 +159,7 @@ this.apiService.version.subscribe(versionInfo=>{
       this.listOfDesignData.push(element);
     })
     console.log(this.listOfDesignData);
-    
+
     const tempData: DesginDataHelper[] = [];
           this.listOfDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
@@ -285,7 +285,7 @@ this.apiService.version.subscribe(versionInfo=>{
         }
         this.startAllTimers();
       });
-  
+
 
     });
 
@@ -297,7 +297,7 @@ this.apiService.version.subscribe(versionInfo=>{
     this.apiService.getDesignSurveys("requesttype=prelim&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignsFound= "No Designs Found"
@@ -312,20 +312,20 @@ this.apiService.version.subscribe(versionInfo=>{
           }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
-      
+
       });
-      
+
     }
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
-    this.overdue = lateby;  
+    this.overdue = lateby;
   }
 
   startAllTimers(){
     this.listOfDesignData.forEach(element => {
-    
+
       var reviewdate = new Date(element.designstarttime);
       reviewdate.setHours(reviewdate.getHours() + 2);
       element.designremainingtime = this.utils.getRemainingTime(reviewdate.toString());

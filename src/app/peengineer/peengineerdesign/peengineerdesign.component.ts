@@ -69,7 +69,7 @@ export class PEengineerdesignComponent implements OnInit {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
-  
+
   constructor(private storageService: StorageService,
               private utils: UtilitiesService,
               private apiService:ApiService,
@@ -114,18 +114,18 @@ export class PEengineerdesignComponent implements OnInit {
                   this.netSwitch = data;
                   console.log(this.netSwitch);
                   //this.newpermitsRef.update({ count: 0 });
-            
+
                 })
-            
+
             this.network.networkDisconnect();
             this.network.networkConnect();
             this.deactivateNetworkSwitch.unsubscribe();
-            
+
               }
 
                segmentChanged(event){
                 // this.skip=0;
-             
+
                 if(event.target.value=='InStamping'){
                       this.segments ="status=assigned&status=declined";
                       // return this.segments;
@@ -143,19 +143,19 @@ export class PEengineerdesignComponent implements OnInit {
                     }
                     this.getDesigns(null);
                     // return this.segments;
-              
+
                   // this.getsegmentdata(event.target.value);
                   console.log((event.target.value));
                   // this.segments = event.target.value;
                   // this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
                   // });
-              
+
                   // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
                   //   if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
                   //     this.formatDesignData(this.listOfDesigns);
                   //   }
                   // });
-              
+
                 }
 
   ngOnInit() {
@@ -166,9 +166,9 @@ export class PEengineerdesignComponent implements OnInit {
   })
   }
 
- 
 
-   getDesigns(event: CustomEvent) {
+
+   getDesigns(event) {
      this.skip = 0;
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -193,7 +193,7 @@ export class PEengineerdesignComponent implements OnInit {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignFound= "No Designs Found"
@@ -227,7 +227,7 @@ export class PEengineerdesignComponent implements OnInit {
 
     const tempData: DesginDataHelper[] = [];
 
-   
+
 
       this.listOfDesigns.forEach((designItem:any,i) => {
         console.log(i);
@@ -340,7 +340,7 @@ export class PEengineerdesignComponent implements OnInit {
       var acceptancedate = new Date(element.pestampstarttime);
       acceptancedate.setHours(acceptancedate.getHours() + 2);
       element.designremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
-      
+
       if(element.designremainingtime == "0h : 0m"){
         element.isoverdue = true;
       }
@@ -383,7 +383,7 @@ export class PEengineerdesignComponent implements OnInit {
         pestampstarttime.setHours(pestampstarttime.getHours() + additonalhours);
         pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
         console.log(this.designId);
-     
+
         var postData = {
           assignedto: this.selectedPeEngineer.id,
           status: "assigned",
@@ -422,7 +422,7 @@ export class PEengineerdesignComponent implements OnInit {
     this.utils.showLoading("accepting").then(()=>{
        this.apiService.assignPestamps(id,postData).subscribe((res:any)=>{
          this.utils.hideLoading().then(()=>{
-        
+
               this.utils.showSnackBar("PE stamp request has been accepted successfully.")
               this.utils.setPeStampRefresh(true);
         })})
@@ -444,11 +444,11 @@ export class PEengineerdesignComponent implements OnInit {
         designData:designData
         },
         skipLocationChange: false,
-        fragment: 'top' 
+        fragment: 'top'
     };
 
 
-this.route.navigate(['/pestamp-payment-modal'], { 
+this.route.navigate(['/pestamp-payment-modal'], {
   state: { productdetails: objToSend }
 });
 
@@ -499,7 +499,7 @@ this.route.navigate(['/pestamp-payment-modal'], {
     }
   }
 
-  refreshDesigns(event: CustomEvent) {
+  refreshDesigns(event) {
     //this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
@@ -661,14 +661,14 @@ designDownload(designData){
       );
       this.file.checkFile(resolvedDirectory.nativeURL,designData.stampedfiles.hash).then(data=>{
         console.log(data);
-  
+
         if(data==true){
-  
+
         }else{
           console.log('not found!');
           throw { code: 1, message: 'NOT_FOUND_ERR' };
         }
-        
+
       }).catch(async err=>{
         console.log('Error occurred while checking local files:');
         console.log(err);
@@ -679,7 +679,7 @@ designDownload(designData){
               this.utils.hideLoading().then(()=>{
                 console.log('download complete: ' + entry.toURL());
                 this.utils.showSnackBar("Stamped File Downloaded Successfully");
-                
+
                 // this.clickSub = this.localnotification.on('click').subscribe(data => {
                 //   console.log(data)
                 //   path;
@@ -688,7 +688,7 @@ designDownload(designData){
               }, (error) => {
                 // handle error
                 console.log(error);
-                
+
               });
               })
           })
@@ -696,22 +696,22 @@ designDownload(designData){
       })
     })
   })
-  
+
     let dir_name = 'Wattmonk';
     let path = '';
     const url = designData.stampedfiles.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
-   
-   
+
+
    let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
   result.then((resp) => {
    path = resp.toURL();
-   console.log(path); 
-   
+   console.log(path);
+
    fileTransfer.download(url, path + designData.stampedfiles.hash + designData.stampedfiles.ext).then((entry) => {
      console.log('download complete: ' + entry.toURL());
      this.utils.showSnackBar("Stamped File Downloaded Successfully");
-     
+
      // this.clickSub = this.localnotification.on('click').subscribe(data => {
      //   console.log(data)
      //   path;
@@ -721,8 +721,8 @@ designDownload(designData){
      // handle error
    });
   })
-  
-  
+
+
   }
 
   async openreviewPassed(id,designData){
@@ -825,10 +825,10 @@ createChatGroup(design:DesginDataModel){
 //       ];
 //       CometChat.addMembersToGroup(GUID, membersList, []).then(
 //         response => {
-          
+
 //         },
 //         error => {
-        
+
 //         }
 //       );
 //       }
@@ -877,17 +877,17 @@ directAssignToWattmonk(id:number){
   //           this.utils.hideLoading().then(()=>{
   //             ;
   //             console.log('reach ', value);
-    
+
   //           //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
   //           //  {
   //           //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
   //           //  }else{
   //             this.utils.showSnackBar('Design request has been reassigned to wattmonk successfully');
-             
+
   //             //this.dismissBottomSheet();
   //             //this.showBottomDraw = false;
   //             this.utils.setHomepagePermitRefresh(true);
-    
+
   //           })
   //         }, (error) => {
   //           this.utils.hideLoading();

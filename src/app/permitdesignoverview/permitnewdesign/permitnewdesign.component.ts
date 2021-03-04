@@ -12,7 +12,7 @@ import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
- 
+
 import { StorageService } from 'src/app/storage.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
@@ -67,7 +67,7 @@ export class PermitnewdesignComponent implements OnInit {
   }
 
 
-  
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
@@ -92,7 +92,7 @@ export class PermitnewdesignComponent implements OnInit {
     // });
   }
 
-  getDesigns(event?: CustomEvent) {
+  getDesigns(event?) {
     this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -142,7 +142,7 @@ export class PermitnewdesignComponent implements OnInit {
       this.listOfDesignData.push(element);
     })
     console.log(this.listOfDesignData);
-    
+
     const tempData: DesginDataHelper[] = [];
           this.listOfDesignData.forEach((designItem:any) => {
             if (tempData.length === 0) {
@@ -267,7 +267,7 @@ export class PermitnewdesignComponent implements OnInit {
         }
         this.startAllTimers();
       });
-  
+
 
     });
 
@@ -278,7 +278,7 @@ export class PermitnewdesignComponent implements OnInit {
     this.apiService.getDesignSurveys("requesttype=permit&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignsFound= "No Designs Found"
@@ -293,9 +293,9 @@ export class PermitnewdesignComponent implements OnInit {
           }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
-      
+
       });
-      
+
     }
 
 
@@ -303,12 +303,12 @@ export class PermitnewdesignComponent implements OnInit {
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
-    this.overdue = lateby;  
+    this.overdue = lateby;
   }
 
   startAllTimers(){
     this.listOfDesignData.forEach(element => {
-    
+
       var reviewdate = new Date(element.designstarttime);
       reviewdate.setHours(reviewdate.getHours() + 6);
       element.designremainingtime = this.utils.getRemainingTime(reviewdate.toString());

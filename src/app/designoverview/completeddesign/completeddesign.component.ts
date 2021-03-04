@@ -66,7 +66,7 @@ export class CompleteddesignComponent implements OnInit {
     });
   }
 
-  getDesigns(event: CustomEvent) {
+  getDesigns(event) {
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -199,7 +199,7 @@ export class CompleteddesignComponent implements OnInit {
     this.apiService.getDesignSurveys("requesttype=prelim&status=designcompleted",this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignFound= "No Designs Found"
@@ -214,9 +214,9 @@ export class CompleteddesignComponent implements OnInit {
           }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
-      
+
       });
-      
+
     }
 
 
@@ -224,7 +224,7 @@ export class CompleteddesignComponent implements OnInit {
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
-    this.overdue = lateby;  
+    this.overdue = lateby;
   }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.

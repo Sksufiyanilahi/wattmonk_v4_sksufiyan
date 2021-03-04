@@ -41,7 +41,7 @@ export class DesignComponent implements OnInit {
   designId = 0;
   showBottomDraw: boolean = false;
   roleType: any;
-  myFiles: string[] = [];  
+  myFiles: string[] = [];
   segments:any;
   limit:number=10;
   skip:number=0;
@@ -72,7 +72,7 @@ export class DesignComponent implements OnInit {
     private storageService:StorageService,
     private network:NetworkdetectService,
     private socialsharing: SocialSharing,
-    private social: SocialSharing) { 
+    private social: SocialSharing) {
       this.segments ='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed';
       const latestDate = new Date();
       this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -88,17 +88,17 @@ export class DesignComponent implements OnInit {
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
-      
+
     })
 
 this.network.networkDisconnect();
 this.network.networkConnect();
-    
+
   }
 
   segmentChanged(event){
     this.skip=0;
-    if(this.userData.role.type=='qcinspector'){ 
+    if(this.userData.role.type=='qcinspector'){
      if(event.target.value=='InReview'){
         this.segments ="requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed";
         // return this.segments;
@@ -108,13 +108,13 @@ this.network.networkConnect();
       }
       this.getDesigns(null);
       // return this.segments;
-  
+
     }
     // this.getsegmentdata(event.target.value);
     console.log((event.target.value));
    // console.log((event.target.value));
    // this.pending(event.target.value);
-    
+
    // this.segments = event.target.value;
     //this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
     //  this.getDesigns(null);
@@ -125,12 +125,12 @@ this.network.networkConnect();
       //  this.formatDesignData(this.listOfDesigns);
      // }
     //});
-    
+
   }
 
   ngOnInit() {this.userData = this.storageService.getUser();
     console.log(this.userData);
-    
+
     // this.router.navigate(['homepage/design/pending']);
     // this.routeSubscription = this.router.events.subscribe((event) => {
     //   if (event instanceof NavigationEnd) {
@@ -166,7 +166,7 @@ this.network.networkConnect();
     });}
 
 
-  getDesigns(event: CustomEvent) {
+  getDesigns(event) {
     //debugger;
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -209,11 +209,11 @@ this.network.networkConnect();
   //   this.overdue=[];
   //   this.listOfDesigns = this.fillinDynamicData(records);
   //   console.log(this.listOfDesigns);
-    
+
   //   const tempData: DesginDataHelper[] = [];
-  //         this.listOfDesigns.forEach((designItem:any,i) => { 
+  //         this.listOfDesigns.forEach((designItem:any,i) => {
   //           console.log(i);
-            
+
   //           if (tempData.length === 0) {
   //             this.sDatePassed(designItem.deliverydate,i);
   //             const listOfDesign = new DesginDataHelper();
@@ -222,16 +222,16 @@ this.network.networkConnect();
   //             listOfDesign.listOfDesigns.push(designItem);
   //             tempData.push(listOfDesign);
   //             console.log(tempData);
-              
-              
+
+
   //           } else {
-             
+
   //             let added = false;
   //             tempData.forEach((DesignList) => {
   //               // DesignList['listOfDesigns'].forEach(element=>{
-                  
+
   //               //   console.log(element.deliverydate,":::::::::::::");
-                  
+
   //               //   this.sDatePassed(element.deliverydate);
   //               // })
   //               if (!added) {
@@ -267,9 +267,9 @@ this.network.networkConnect();
     this.listOfDesigns = this.fillinDynamicData(records);
 
     console.log(this.listOfDesigns);
-    
+
     const tempData: DesginDataHelper[] = [];
-          this.listOfDesigns.forEach((designItem:any,i) => { 
+          this.listOfDesigns.forEach((designItem:any,i) => {
             console.log(i);
             designItem.lateby = this.utils.getTheLatebyString(designItem.deliverydate)
             if (tempData.length === 0) {
@@ -278,17 +278,17 @@ this.network.networkConnect();
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
               console.log(tempData);
-              
-              
+
+
 ;
             } else {
-             
+
               let added = false;
               tempData.forEach((DesignList) => {
                 // DesignList['listOfDesigns'].forEach(element=>{
-                  
+
                 //   console.log(element.deliverydate,":::::::::::::");
-                  
+
                 //   this.sDatePassed(element.deliverydate);
                 // })
                 if (!added) {
@@ -392,7 +392,7 @@ this.network.networkConnect();
 
   //   this.listOfDesignsData = [];
   //   this.listOfDesignDataHelper = [];
-    
+
   //   this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting designs').then((success) => {
   //     // debugger;
   //     this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
@@ -404,10 +404,10 @@ this.network.networkConnect();
   //         console.log(response, '>>');
   //         this.listOfDesignsData = response;
   //          response.forEach(element => {
-  //             this.roleType = element.type;            
+  //             this.roleType = element.type;
   //         });;
   //         console.log(this.roleType);
-          
+
   //         const tempData: DesginDataHelper[] = [];
   //         this.listOfDesignsData.forEach((desginItem) => {
   //           if (tempData.length === 0) {
@@ -476,7 +476,7 @@ this.network.networkConnect();
     this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignFound= "No Designs Found"
@@ -491,9 +491,9 @@ this.network.networkConnect();
           }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
-      
+
       });
-      
+
     }
 
   dismissBottomSheet() {
@@ -504,12 +504,12 @@ this.network.networkConnect();
 
   assignToDesigner() {
       console.log(this.designerData.createdby.id);
-      
+
     if (this.assignForm.status === 'INVALID') {
       this.utils.errorSnackBar('Please select a designer');
     } else {
-      
-     
+
+
       var designstarttime = new Date();
     var additonalhours = 0;
     if(this.designerData.requesttype == "prelim"){
@@ -545,7 +545,7 @@ this.network.networkConnect();
     this.utils.showLoading('Assigning').then(()=>{
       this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
         this.utils.hideLoading().then(()=>{
-          debugger; 
+          debugger;
           console.log('reach ', value);
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + value.name + ' ' + 'successfully');
           this.dismissBottomSheet();
@@ -608,7 +608,7 @@ this.network.networkConnect();
     }
   }
 
-  refreshDesigns(event: CustomEvent) {
+  refreshDesigns(event) {
     this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
@@ -654,7 +654,7 @@ sDatePassed(datestring: string,i){
   var checkdate = moment(datestring, "YYYYMMDD");
   var todaydate = moment(new Date(), "YYYYMMDD");
   var lateby = todaydate.diff(checkdate, "days");
-  this.overdue = lateby;  
+  this.overdue = lateby;
 }
 
 
@@ -670,7 +670,7 @@ pending(value){
 
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
-  
+
 }
 
 shareWhatsapp(designData){
@@ -685,7 +685,7 @@ shareWhatsapp(designData){
       id:id,
       designData:designData
     },
-    
+
   });
   modal.onDidDismiss().then((data) => {
     console.log(data)

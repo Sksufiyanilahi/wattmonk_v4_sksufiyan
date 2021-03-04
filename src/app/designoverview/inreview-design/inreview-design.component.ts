@@ -44,7 +44,7 @@ user:any
      private storageservice:StorageService) {
 
       this.user=this.storageservice.getUser();
-      
+
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
     console.log('date', this.today);
@@ -70,7 +70,7 @@ user:any
     this.cdr.detach();
   }
 
-  getDesigns(event: CustomEvent) {
+  getDesigns(event) {
     this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -204,7 +204,7 @@ user:any
     this.apiService.getDesignSurveys("requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed",this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignsFound= "No Designs Found"
@@ -219,16 +219,16 @@ user:any
           }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
-      
+
       });
-      
+
     }
 
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
-    this.overdue = lateby;  
+    this.overdue = lateby;
   }
 
   trackdesign(index,design){

@@ -47,7 +47,7 @@ export class SurveyComponent implements OnInit {
   userData: any;
   netSwitch: any;
   deactivateNetworkSwitch: Subscription;
- 
+
   constructor(private utils: UtilitiesService,
     private apiService: ApiService,
     private datePipe: DatePipe,
@@ -59,8 +59,8 @@ export class SurveyComponent implements OnInit {
     private route: ActivatedRoute,
     private storage: Storage,
     private storageService:StorageService,
-    private network:NetworkdetectService) 
-    { 
+    private network:NetworkdetectService)
+    {
       this.segments='status=reviewassigned&status=reviewpassed&status=reviewfailed';
       const latestDate = new Date();
       this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -73,7 +73,7 @@ export class SurveyComponent implements OnInit {
 
     segmentChanged(event){
 
-      if(this.userData.role.type=='qcinspector'){ 
+      if(this.userData.role.type=='qcinspector'){
         if(event.target.value=='InReview'){
            this.segments ="status=reviewassigned&status=reviewpassed&status=reviewfailed";
            // return this.segments;
@@ -83,37 +83,37 @@ export class SurveyComponent implements OnInit {
          }
          this.getSurveys(null);
          // return this.segments;
-     
+
        }
        // this.getsegmentdata(event.target.value);
        console.log((event.target.value));
       // this.segments= event.target.value;
       // this.getSurveys(event);
-  
+
       // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
       //   this.getSurveys(null);
       // });
-  
+
       // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       //   if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
       //     this.formatSurveyData(this.listOfSurveyData);
       //   }
       // });
     }
-  
+
     ionViewDidEnter() {
       this.network.networkDisconnect();
   this.network.networkConnect();
   this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
         this.netSwitch = data;
         console.log(this.netSwitch);
-        
+
       })
       this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-  
+
         this.getSurveys(null);
       });
-  
+
       this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
         if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
           this.formatSurveyData(this.listOfSurveyData);
@@ -128,7 +128,7 @@ export class SurveyComponent implements OnInit {
     console.log(this.userData);
   }
 
-  getSurveys(event?: CustomEvent) {
+  getSurveys(event?) {
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -197,7 +197,7 @@ export class SurveyComponent implements OnInit {
   formatSurveyData(records : SurveyDataModel[]){
     this.listOfSurveyData = this.fillinDynamicData(records);
     console.log(this.listOfSurveyData);
-    
+
     const tempData: SurveyDataHelper[] = [];
           this.listOfSurveyData.forEach((surveyItem,i) => {
             this.sDatePassed(surveyItem.datetime,i);
@@ -405,7 +405,7 @@ export class SurveyComponent implements OnInit {
 
   }
 
-  // getSurveys(event: CustomEvent) {
+  // getSurveys(event) {
   //   let showLoader = true;
   //   if (event != null && event !== undefined) {
   //     showLoader = false;
@@ -421,10 +421,10 @@ export class SurveyComponent implements OnInit {
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
-    this.overdue = lateby;  
+    this.overdue = lateby;
     debugger;
     console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
-    
+
   }
 
 }

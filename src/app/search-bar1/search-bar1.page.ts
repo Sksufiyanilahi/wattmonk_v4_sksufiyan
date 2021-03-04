@@ -43,7 +43,7 @@ showBottomDraw: boolean = false;
 designId=0;
 userData:any;
   selectedDesigner: any;
-  
+
   constructor( private apiService:ApiService,private navController: NavController,private formBuilder:FormBuilder,
     private storage: Storage,
     private storageService:StorageService,
@@ -56,8 +56,8 @@ userData:any;
         assignedto: new FormControl('', [Validators.required]),
         comment: new FormControl('')
       });
-       
-     
+
+
      }
 
   ngOnInit() {this.userData = this.storageService.getUser();
@@ -67,7 +67,7 @@ userData:any;
   }
 
   searchfor(event){
-    
+
  if (this.searchElement !==''){
  this.apiService.searchAllDesgin(this.searchElement).subscribe((dataModel:any) =>{
 console.log("inside this",dataModel);
@@ -80,7 +80,7 @@ if(this.Type=="survey"){
 if(this.Type=="design"){
   this.sample=this.fillinDynamicData(dataModel.design);
   this.DesignModel=this.sample;
- 
+
   this.SortedModel=this.DesignModel;
 }
 if(this.Type=="both"){
@@ -105,12 +105,12 @@ this.DesignModel=this.sample1;
     console.log( "that",records);
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
-      
+
     });
 
     return records;
   }
-  
+
   goBack() {
     this.mixpanelService.track("SEARCH_PAGE_CLOSE", {
     });
@@ -119,7 +119,7 @@ this.DesignModel=this.sample1;
 
 
 
-  getDesigns(event: CustomEvent) {
+  getDesigns(event) {
     debugger;
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -136,7 +136,7 @@ this.DesignModel=this.sample1;
       // this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
       //   this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
       //     console.log(response);
-         
+
       //     if (event !== null) {
       //       event.target.complete();
       //     }
@@ -159,7 +159,7 @@ this.DesignModel=this.sample1;
     this.SearchData=designData;
     console.log(designData);
     if (this.listOfAssignees.length === 0) {
-  
+
       this.utils.showLoading('Getting Designers').then(() => {
         this.apiService.getDesigners().subscribe(assignees => {
           this.utils.hideLoading().then(() => {
@@ -181,7 +181,7 @@ this.DesignModel=this.sample1;
           });
         });
       });
-    
+
     } else {
       this.designId = id;
       this.utils.setBottomBarHomepage(false);
@@ -228,7 +228,7 @@ this.DesignModel=this.sample1;
         assignedto: ''
       });
     }
-  
+
 
   }
 
@@ -272,7 +272,7 @@ this.DesignModel=this.sample1;
 
 
 
-  async openreviewPassed(id,designData){ 
+  async openreviewPassed(id,designData){
     this.designId=id;
     let data=designData;
     const alert = await this.alertController.create({
@@ -305,10 +305,10 @@ this.DesignModel=this.sample1;
                if(data.type=="design"){
                this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
-                  ; 
+                  ;
                   console.log('reach ', value);
                  this.utils.showSnackBar('Design request has been delivered successfully');
-                 
+
                   this.utils.setHomepageDesignRefresh(true);
                 })
               }, (error) => {
@@ -318,10 +318,10 @@ this.DesignModel=this.sample1;
               if(data.type=="survey"){
               this.apiService.updateSurveyForm(postData, this.designId).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
-                  ; 
+                  ;
                   console.log('reach ', value);
                  this.utils.showSnackBar('Survey request has been delivered successfully');
-                 
+
                   this.utils.setHomepageDesignRefresh(true);
                 })
               }, (error) => {
@@ -334,9 +334,9 @@ this.DesignModel=this.sample1;
     });
 
     await alert.present();
-  
-     
-    
+
+
+
   }
 
 
@@ -352,8 +352,8 @@ this.DesignModel=this.sample1;
 
   getassignedata(asssignedata){
     this.selectedDesigner = asssignedata;
-   
-    
+
+
   }
 
  accept(id,data:string){
@@ -362,10 +362,10 @@ this.DesignModel=this.sample1;
       status:data
     }
     this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
-      
-    }) 
+
+    })
     this.searchfor(event);
-    
+
   }
 
 
@@ -391,7 +391,7 @@ this.DesignModel=this.sample1;
     // });
     return await modal.present();
   }
-  
+
 
   dismissBottomSheet() {
     console.log('this', this.drawerState);
@@ -411,7 +411,7 @@ assignToSurveyor(){
     if(this.surveyData.requesttype == "prelim"){
       console.log(parseInt(this.selectedDesigner.jobcount) );
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
-      
+
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
     }else{
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
@@ -426,17 +426,17 @@ assignToSurveyor(){
             reviewassignedto: this.selectedDesigner.id,
             status: "reviewassigned",
             reviewstarttime: milisecond
-          }; 
+          };
         }
        if(this.selectedDesigner.role.type=="surveyor") { postData = {
           designassignedto: this.selectedDesigner.id,
           isoutsourced: "false",
           status: "surveyassigned",
           designstarttime: designstarttime
-        }; 
-        
+        };
+
       }
-      
+
       }
       else {
         postData = {
@@ -462,7 +462,7 @@ assignToSurveyor(){
     this.utils.showLoading('Assigning').then(()=>{
       this.apiService.updateSurveyForm(postData, this.surveyId).subscribe((value) => {
         this.utils.hideLoading().then(()=>{
-          ; 
+          ;
           console.log('reach ', value);
           this.utils.showSnackBar('Survey request has been assigned to' + ' ' + this.selectedDesigner.firstname + ' ' +this.selectedDesigner.lastname +' ' +'successfully');
           this.dismissBottomSheet();
@@ -482,15 +482,15 @@ assignToSurveyor(){
 //assigning to designer
   assignToDesigner() {
     console.log(this.designerData.createdby.id);
-    
+
     if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
       this.utils.errorSnackBar('Please select a analyst');
     }
     else if (this.assignForm.status === 'INVALID' && ( this.designerData.status === 'created'|| this.designerData.status === 'requestaccepted'|| this.designerData.status === 'designassigned')) {
       this.utils.errorSnackBar('Please select a designer');
     } else {
-    
-   
+
+
     var designstarttime = new Date();
     var milisecond = designstarttime.getTime();
     var additonalhours = 0;
@@ -516,10 +516,10 @@ assignToSurveyor(){
         isoutsourced: "false",
         status: "designassigned",
         designstarttime: designstarttime
-      }; 
-      
+      };
+
     }
-    
+
     }
     else {
       postData = {
@@ -545,7 +545,7 @@ assignToSurveyor(){
   this.utils.showLoading('Assigning').then(()=>{
     this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
       this.utils.hideLoading().then(()=>{
-        ; 
+        ;
         console.log('reach ', value);
         this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname + ' ' +this.selectedDesigner.lastname +' ' +'successfully');
         this.dismissBottomSheet();
@@ -567,7 +567,7 @@ assign(){
   if(this.assignForm.status=='INVALID'){
     this.utils.errorSnackBar('Please select a analyst');
   }
-  
+
   else{if(this.selectedDesigner.role.type=="designer"){
     this.assignToDesigner();
   }
@@ -595,7 +595,7 @@ shareWhatsapp(designData){
       id:id,
       designData:designData
     },
-    
+
   });
   modal.onDidDismiss().then((data) => {
     console.log(data)
@@ -607,7 +607,7 @@ shareWhatsapp(designData){
     return await modal.present();
  }
 
- refreshData(event: CustomEvent) {
+ refreshData(event) {
   let showLoader = true;
   if (event !== null && event !== undefined) {
     showLoader = false;
@@ -624,5 +624,5 @@ export class DesginDataHelper {
   constructor() {
     this.listOfDesigns = [];
   }
-  
+
 }

@@ -70,14 +70,14 @@ export class SurveyComponent implements OnInit {
   //   });
   // }
   ngOnInit() {
-  
+
     this.filterData(this.filterDataArray);
     this.routeSubscription = this.router.events.subscribe((event) => {
       console.log("//",event);
       console.log(this.router.url.indexOf('page'));
       if (event instanceof NavigationEnd) {
         console.log(event.url);
-        
+
         // Trick the Router into believing it's last link wasn't previously loaded
         if (this.router.url.indexOf('page') >= -1) {
           this.router.navigated = false;
@@ -90,7 +90,7 @@ export class SurveyComponent implements OnInit {
             } else {
               // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
                 // this.getSurveys(null);
-                
+
               // });
             }
           });
@@ -118,7 +118,7 @@ export class SurveyComponent implements OnInit {
     //   }
     // });
     // this.getSurveys(null);
-    
+
   }
 
 
@@ -309,7 +309,7 @@ export class SurveyComponent implements OnInit {
 
   }
 
-  getSurveys(event: CustomEvent) {
+  getSurveys(event) {
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;

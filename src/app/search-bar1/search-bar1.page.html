@@ -4,19 +4,19 @@
       <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
           <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img></ion-button></ion-col>
           <ion-col  size="9" style="text-align:center;font-size: x-large;position: absolute;">Search</ion-col>
-     
+
  <ion-button style="float: right;" fill="clear" ><ion-icon name="filter-outline"></ion-icon>&nbsp;<ion-select value="both" (ionChange)="searchfor($event)" style="padding-left: 0px;text-transform: none;" interface="popover"  [(ngModel)]="Type">
    <ion-select-option  #d name="Designs" value="design" >{{'Designs' | lowercase}}</ion-select-option>
    <ion-select-option #s  name="Surveys" value="survey">{{'Surveys' | lowercase}}</ion-select-option>
    <ion-select-option  value="both">{{'Both' | lowercase}}</ion-select-option>
  </ion-select></ion-button>
- 
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 <ion-searchbar class="searchStyle" debounce="0" placeholder="Search Here" (ionChange)="searchfor($event)" [(ngModel)]="searchElement"></ion-searchbar>
-<ion-refresher slot="fixed" (ionRefresh)="refreshData($event)">    
+<ion-refresher slot="fixed" (ionRefresh)="refreshData($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 <ion-card *ngFor="let search of SortedModel" class="custom-card">
@@ -60,7 +60,7 @@
               On Hold
               </ion-col>
           </span>
-        
+
           <span *ngIf="search?.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id,search)"
           >Reassign</span>
       </ion-col>
@@ -84,7 +84,7 @@
       </ion-col>
        -->
   </ion-row>
-     
+
     </p>
     <p *ngIf="search?.type=='survey'">
       <span style="float: left;font-size: medium;color: black;font-size: medium;font-weight: 100; ">{{search?.name}}</span>
@@ -123,7 +123,7 @@
                 Decline
                 </ion-col>
             </span>
-          
+
             <span *ngIf="search?.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id,search)"
             >Reassign</span>
         </ion-col>
@@ -148,12 +148,12 @@
          -->
     </ion-row>
       </p>
-     
+
 </ion-card>
 
 </ion-content>
-<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="320" draggable="false" disableDrag="true"
-                   shouldBounce="true" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
+<ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false" [disableDrag]="true"
+                   [shouldBounce]="true" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
     <form [formGroup]="assignForm">
         <ion-grid class="drawer">
             <ion-row>

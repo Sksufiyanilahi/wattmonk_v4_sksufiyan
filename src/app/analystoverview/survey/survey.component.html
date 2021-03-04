@@ -20,8 +20,8 @@
   <ion-refresher slot="fixed" (ionRefresh)="getSurveys($event)">
       <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  
-     
+
+
           <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
               <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
                   <ion-col size="12" class="ion-margin-top">
@@ -62,23 +62,23 @@
                                 <ion-row style="margin-bottom: 8px;"  [routerLink]="['/survey-detail/',surveyData.id]" class="m-0">
                                   <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
                                   <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
-                                 
+
                               </ion-row>
                           <ion-row class="ion-no-margin">
                               <ion-col></ion-col>
                               <!-- <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type !=='wattmonkadmins'">
-                                       <ion-button  class="ion-no-margin ion-no-padding z-100" fill="clear" 
+                                       <ion-button  class="ion-no-margin ion-no-padding z-100" fill="clear"
                                        [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                        routerDirection="forward">
                                        Start Survey
                                        </ion-button>
-                                  <span class="ion-text-end action-button-color" >Start Survey</span> 
+                                  <span class="ion-text-end action-button-color" >Start Survey</span>
                                </ion-col>  <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type !=='wattmonkadmins'"> -->
-                                       <!-- <ion-button  class="ion-no-margin ion-no-padding z-100" fill="clear" 
+                                       <!-- <ion-button  class="ion-no-margin ion-no-padding z-100" fill="clear"
                                        [routerLink]="['/surveyprocess/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                        routerDirection="forward">
                                        Start Survey
-                                       </ion-button> --> 
+                                       </ion-button> -->
                                   <!-- <span class="ion-text-end action-button-color" >Start Survey</span> -->
                               <!-- </ion-col> -->
                       <!-- <ion-col></ion-col> -->
@@ -118,9 +118,9 @@
                           <!-- <span class="ion-text-end timestamp" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                               {{surveyData.datetime | date: 'hh:mm a'}}
                           </span> -->
-      
+
                       </div>
-      
+
                   </ion-col>
               </ion-row>
               <ion-row>
@@ -128,19 +128,19 @@
                   </ion-col>
               </ion-row>
           </ion-grid>
-      
+
           <div *ngIf="listOfSurveyDataHelper.length === 0" class="h-100 d-flex flex-column align-center justify-center">
               <div *ngIf="!netSwitch">
                   No internet Connection
               </div>
               <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
           </div>
- 
+
 
 </ion-content>
 
-<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="320" draggable="false" disableDrag="true"
-                 shouldBounce="false" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
+<ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false" [disableDrag]="true"
+                 [shouldBounce]="false" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
   <form [formGroup]="assignForm">
       <ion-grid class="drawer">
           <ion-row>

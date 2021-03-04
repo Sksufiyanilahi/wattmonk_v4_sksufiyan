@@ -9,7 +9,7 @@ import { ActivatedRoute, Router, NavigationEnd, RoutesRecognized, NavigationStar
 import { ScheduleFormEvent } from '../model/constants';
 import { Subscription } from 'rxjs';
 import { AddressModel } from '../model/address.model';
- 
+
 import { NetworkdetectService } from '../networkdetect.service';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 
@@ -55,8 +55,8 @@ export class SchedulePage implements OnInit, OnDestroy {
     private network:NetworkdetectService,
     private location:Location
   ) {
-  
-    
+
+
     const url = this.router.url;
     const splittedUrl = url.split('/');
     console.log(splittedUrl);
@@ -73,10 +73,10 @@ export class SchedulePage implements OnInit, OnDestroy {
   }
 
 ngOnInit() {
-  
+
   this.network.networkDisconnect();
 this.network.networkConnect();
- 
+
    this.userdata = this.storage.getUser();
     this.requestLocationPermission();
     if (this.tabsDisabled) {
@@ -107,7 +107,7 @@ this.network.networkConnect();
     this.deactivateNetworkSwitch.unsubscribe();
   }
 
-  segmentChanged(event: CustomEvent) {
+  segmentChanged(event) {
     console.log(event);
     this.currentTab = event.detail.value;
     this.tabs.select(event.detail.value);
@@ -131,7 +131,7 @@ this.network.networkConnect();
       }).catch((error) => {
         this.utilities.hideLoading();
         this.utilities.errorSnackBar('Unable to get location');
-        
+
         console.log('Error getting location', error);
         this.showNoLocation();
       });
@@ -297,7 +297,7 @@ this.network.networkConnect();
         if (status === true) {
           this.getGeoLocation();
           // this.utilities.showLoading('Getting Location').then(() => {
-           
+
           // });
         } else {
           this.askToChangeSettings();

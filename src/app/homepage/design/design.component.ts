@@ -25,7 +25,7 @@ import { PaymentModalPage } from 'src/app/payment-modal/payment-modal.page';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
- 
+
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
@@ -106,7 +106,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     private androidPermissions: AndroidPermissions,
     private transfer: FileTransfer,
     private mixpanelService:MixpanelService
-  
+
   ) {
     this.userData = this.storageService.getUser();
 
@@ -186,7 +186,7 @@ this.network.networkConnect();
   }
 
 
-  
+
   segmentChanged(event){
      this.skip=0;
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
@@ -286,7 +286,7 @@ this.network.networkConnect();
       this.getDesigns(null);
 
     });
-    
+
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
       if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
@@ -296,7 +296,7 @@ this.network.networkConnect();
     });
   }
 
-  getDesigns(event: CustomEvent) {
+  getDesigns(event) {
 
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -337,17 +337,17 @@ this.network.networkConnect();
         ];
         CometChat.addMembersToGroup(GUID, membersList, []).then(
           response => {
-            
+
           },
           error => {
-          
+
           }
         );
       }
 
 
    fetchPendingDesigns(event, showLoader: boolean) {
- 
+
      this.noDesignFound= "";
     console.log("inside fetch Designs");
     this.listOfDesigns = [];
@@ -357,9 +357,9 @@ this.network.networkConnect();
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
-            
+
             this.formatDesignData(response);
-            
+
           }else{
             this.noDesignFound= "No Designs Found";
           }
@@ -379,7 +379,7 @@ this.network.networkConnect();
     });
   }
 
-  
+
 
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
@@ -809,11 +809,11 @@ this.network.networkConnect();
           fulldesigndata:this.designerData
         },
         skipLocationChange: false,
-        fragment: 'top' 
+        fragment: 'top'
     };
 
 console.log(objToSend);
-this.router.navigate(['/payment-modal'], { 
+this.router.navigate(['/payment-modal'], {
   state: { productdetails: objToSend }
 });
 }
@@ -970,15 +970,15 @@ this.router.navigate(['/payment-modal'], {
     this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
-          
+
             this.formatDesignData(response);
           }else{
             this.noDesignFound= "No Designs Found"
           }
           if ($event !== null) {
             $event.target.complete();
-          } 
-          
+          }
+
         },
      (responseError:any) => {
         if ($event !== null) {
@@ -986,12 +986,12 @@ this.router.navigate(['/payment-modal'], {
           }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
-      
+
       });
-      
+
     }
 
-  refreshDesigns(event: CustomEvent) {
+  refreshDesigns(event) {
     this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
@@ -1175,7 +1175,7 @@ this.platform.ready().then(()=>{
         console.log('not found!');
         throw { code: 1, message: 'NOT_FOUND_ERR' };
       }
-      
+
     }).catch(async err=>{
       console.log('Error occurred while checking local files:');
       console.log(err);
@@ -1186,7 +1186,7 @@ this.platform.ready().then(()=>{
             this.utils.hideLoading().then(()=>{
               console.log('download complete: ' + entry.toURL());
               this.utils.showSnackBar("Prelim Design Downloaded Successfully");
-              
+
               // this.clickSub = this.localnotification.on('click').subscribe(data => {
               //   console.log(data)
               //   path;
@@ -1195,7 +1195,7 @@ this.platform.ready().then(()=>{
             }, (error) => {
               // handle error
               console.log(error);
-              
+
             });
             })
         })
@@ -1232,17 +1232,17 @@ this.platform.ready().then(()=>{
   let path = '';
   const url = designData.prelimdesign.url;
  const fileTransfer: FileTransferObject = this.transfer.create();
- 
- 
+
+
  let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
 result.then((resp) => {
  path = resp.toURL();
- console.log(path); 
- 
+ console.log(path);
+
  fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
    console.log('download complete: ' + entry.toURL());
    this.utils.showSnackBar("Prelim Design Downloaded Successfully");
-   
+
    // this.clickSub = this.localnotification.on('click').subscribe(data => {
    //   console.log(data)
    //   path;
@@ -1307,10 +1307,10 @@ createNewDesignChatGroup(design:DesginDataModel) {
 // ];
 // CometChat.addMembersToGroup(GUID, membersList, []).then(
 //   response => {
-    
+
 //   },
 //   error => {
-  
+
 //   }
 // );
 // }
@@ -1360,17 +1360,17 @@ directAssignToWattmonk(id:number){
             this.utils.hideLoading().then(()=>{
               ;
               console.log('reach ', value);
-    
+
             //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
             //  {
             //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
             //  }else{
               this.utils.showSnackBar('Design request has been reassigned to wattmonk successfully');
-             
+
               //this.dismissBottomSheet();
               //this.showBottomDraw = false;
               this.utils.setHomepageDesignRefresh(true);
-    
+
             })
           }, (error) => {
             this.utils.hideLoading();

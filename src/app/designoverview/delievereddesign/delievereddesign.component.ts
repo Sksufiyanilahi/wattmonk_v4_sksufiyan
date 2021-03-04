@@ -77,7 +77,7 @@ user:any
     this.cdr.detach();
   }
 
-  getDesigns(event: CustomEvent) {
+  getDesigns(event) {
     this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -209,18 +209,18 @@ user:any
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
-    this.overdue = lateby;  
+    this.overdue = lateby;
   }
   shareWhatsapp(designData){
     this.socialsharing.share(designData.prelimdesign.url);
   }
-  
+
   doInfinite($event){
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys("requesttype=prelim&status=delivered",this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignFound= "No Designs Found"
@@ -235,9 +235,9 @@ user:any
           }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
-      
+
       });
-      
+
     }
 
    async shareViaEmails(id,designData){
@@ -248,7 +248,7 @@ user:any
         id:id,
         designData:designData
       },
-      
+
     });
     modal.onDidDismiss().then((data) => {
       console.log(data)

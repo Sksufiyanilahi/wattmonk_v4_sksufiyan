@@ -38,7 +38,7 @@ export class DesignComponent implements OnInit {
   designId = 0;
   showBottomDraw: boolean = false;
   roleType: any;
-  myFiles: string[] = [];  
+  myFiles: string[] = [];
   @Input()
   parentSubject:Subject<any>;
   isRequest= false;
@@ -65,12 +65,12 @@ export class DesignComponent implements OnInit {
   }
 
   ionViewDidEnter() {
-    // this.routeSubscription.unsubscribe();  
+    // this.routeSubscription.unsubscribe();
   }
 
 
   ngOnInit() {
-    
+
     // this.parentSubject.subscribe(event=>{
     //   this.filterData(event.serchTermData.id);
     // })
@@ -80,7 +80,7 @@ export class DesignComponent implements OnInit {
       console.log(this.router.url.indexOf('page'));
       if (event instanceof NavigationEnd) {
         console.log(event.url);
-        
+
         // Trick the Router into believing it's last link wasn't previously loaded
         if (this.router.url.indexOf('page') >= -1) {
           this.router.navigated = false;
@@ -92,9 +92,9 @@ export class DesignComponent implements OnInit {
               this.filterData(_res.serchTerm);
             } else {
               // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-           
+
                   this.getDesign(null, false);
-                
+
               // });
             }
           });
@@ -148,7 +148,7 @@ export class DesignComponent implements OnInit {
 this.isRequest= true;
     this.listOfDesignsData = [];
     this.listOfDesignDataHelper = [];
-    
+
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting designs').then((success) => {
       // debugger;
       this.apiService.getDesgin().subscribe((response:any) => {
@@ -160,10 +160,10 @@ this.isRequest= true;
           console.log(response, '>>');
           this.listOfDesignsData = response;
            response.forEach(element => {
-              this.roleType = element.type;            
+              this.roleType = element.type;
           });;
           console.log(this.roleType);
-          
+
           const tempData: DesginDataHelper[] = [];
           this.listOfDesignsData.forEach((desginItem) => {
             if (tempData.length === 0) {
@@ -295,7 +295,7 @@ this.isRequest= true;
     }
   }
 
-  refreshDesigns(event: CustomEvent) {
+  refreshDesigns(event) {
     let showLoader = true;
     if (event !== null && event !== undefined) {
       showLoader = false;

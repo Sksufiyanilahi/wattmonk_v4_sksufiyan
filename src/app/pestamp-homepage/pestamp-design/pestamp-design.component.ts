@@ -74,7 +74,7 @@ export class PestampDesignComponent implements OnInit {
   };
 
   //showLoader= true;
-  
+
   constructor(private storageService: StorageService,
               private utils: UtilitiesService,
               private apiService:ApiService,
@@ -119,13 +119,13 @@ export class PestampDesignComponent implements OnInit {
                   this.netSwitch = data;
                   console.log(this.netSwitch);
                   //this.newpermitsRef.update({ count: 0 });
-            
+
                 })
-            
+
             this.network.networkDisconnect();
             this.network.networkConnect();
             this.deactivateNetworkSwitch.unsubscribe();
-            
+
               }
 
                segmentChanged(event){
@@ -152,7 +152,7 @@ export class PestampDesignComponent implements OnInit {
                     }
                     this.getDesigns(null);
                     // return this.segments;
-              
+
                   }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin' ){
                     if(event.target.value=='newpestamp'){
                       this.segments ='status=created&status=outsourced&status=accepted&&status=declined';
@@ -180,18 +180,18 @@ export class PestampDesignComponent implements OnInit {
                   // this.segments = event.target.value;
                   // this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
                   // });
-              
+
                   // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
                   //   if(this.listOfDesigns != null && this.listOfDesigns.length > 0){
                   //     this.formatDesignData(this.listOfDesigns);
                   //   }
                   // });
-              
+
                 }
 
   ngOnInit() {
     //this.userData = this.storageService.getUser();
-    this.mixpanelService.track("PESTAMP_PAGE_OPEN", {   
+    this.mixpanelService.track("PESTAMP_PAGE_OPEN", {
     });
     this.makeDirectory();
     this.setupCometChat();
@@ -200,9 +200,9 @@ export class PestampDesignComponent implements OnInit {
   })
   }
 
- 
 
-   getDesigns(event: CustomEvent) {
+
+   getDesigns(event) {
      this.skip = 0;
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -228,7 +228,7 @@ export class PestampDesignComponent implements OnInit {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignFound= "No PE Stamp Found"
@@ -262,7 +262,7 @@ export class PestampDesignComponent implements OnInit {
 
     const tempData: DesginDataHelper[] = [];
 
-   
+
 
       this.listOfDesigns.forEach((designItem:any,i) => {
         console.log(i);
@@ -329,7 +329,7 @@ export class PestampDesignComponent implements OnInit {
         groupMembers => {
           console.log(groupMembers);
           element.addedtogroupchat=true;
-          
+
         },
         error => {
           console.log("Group Member list fetching failed with exception:", error);
@@ -340,7 +340,7 @@ export class PestampDesignComponent implements OnInit {
    // console.log("hello loader");
    // this.utils.hideLoadingWithPullRefreshSupport(this.showLoader);
   // }, 2000);
-    
+
   }
 
   fillinDynamicData(records : Pestamp[]) : Pestamp[]{
@@ -382,7 +382,7 @@ export class PestampDesignComponent implements OnInit {
       var acceptancedate = new Date(element.pestampstarttime);
       acceptancedate.setHours(acceptancedate.getHours() + 2);
       element.designremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
-      
+
       if(element.designremainingtime == "0h : 0m"){
         element.isoverdue = true;
       }
@@ -429,7 +429,7 @@ export class PestampDesignComponent implements OnInit {
         pestampstarttime.setHours(pestampstarttime.getHours() + additonalhours);
         pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
         console.log(this.designId);
-     
+
         var postData = {
           assignedto: this.selectedPeEngineer.id,
           status: "assigned",
@@ -498,11 +498,11 @@ export class PestampDesignComponent implements OnInit {
         value:'assign'
         },
         skipLocationChange: false,
-        fragment: 'top' 
+        fragment: 'top'
     };
 
 
-this.route.navigate(['/pestamp-payment-modal'], { 
+this.route.navigate(['/pestamp-payment-modal'], {
   state: { productdetails: objToSend }
 });
 
@@ -553,7 +553,7 @@ this.route.navigate(['/pestamp-payment-modal'], {
     }
   }
 
-  refreshDesigns(event: CustomEvent) {
+  refreshDesigns(event) {
     //this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
@@ -600,7 +600,7 @@ async decline(id,e){
     componentProps: {
       id:id,
       value:status
-      
+
     },
     backdropDismiss:false
   });
@@ -718,14 +718,14 @@ designDownload(designData){
       );
       this.file.checkFile(resolvedDirectory.nativeURL,designData.stampedfiles.hash).then(data=>{
         console.log(data);
-  
+
         if(data==true){
-  
+
         }else{
           console.log('not found!');
           throw { code: 1, message: 'NOT_FOUND_ERR' };
         }
-        
+
       }).catch(async err=>{
         console.log('Error occurred while checking local files:');
         console.log(err);
@@ -736,7 +736,7 @@ designDownload(designData){
               this.utils.hideLoading().then(()=>{
                 console.log('download complete: ' + entry.toURL());
                 this.utils.showSnackBar("Stamped File Downloaded Successfully");
-                
+
                 // this.clickSub = this.localnotification.on('click').subscribe(data => {
                 //   console.log(data)
                 //   path;
@@ -745,7 +745,7 @@ designDownload(designData){
               }, (error) => {
                 // handle error
                 console.log(error);
-                
+
               });
               })
           })
@@ -753,22 +753,22 @@ designDownload(designData){
       })
     })
   })
-  
+
     let dir_name = 'Wattmonk';
     let path = '';
     const url = designData.stampedfiles.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
-   
-   
+
+
    let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
   result.then((resp) => {
    path = resp.toURL();
-   console.log(path); 
-   
+   console.log(path);
+
    fileTransfer.download(url, path + designData.stampedfiles.hash + designData.stampedfiles.ext).then((entry) => {
      console.log('download complete: ' + entry.toURL());
      this.utils.showSnackBar("Stamped File Downloaded Successfully");
-     
+
      // this.clickSub = this.localnotification.on('click').subscribe(data => {
      //   console.log(data)
      //   path;
@@ -778,8 +778,8 @@ designDownload(designData){
      // handle error
    });
   })
-  
-  
+
+
   }
 
   // async openreviewPassed(id,designData){
@@ -810,7 +810,7 @@ designDownload(designData){
     //   header: 'Confirm!',
     //  // message:'Would you like to  Add Comments!!',
     //   inputs:
-    //    [ 
+    //    [
     //      {name:'charges',
     //    id:'charges',
     //    type:'text',
@@ -894,11 +894,11 @@ designDownload(designData){
       value:'clearDues'
       },
       skipLocationChange: false,
-      fragment: 'top' 
+      fragment: 'top'
   };
 
 
-this.route.navigate(['/pestamp-payment-modal'], { 
+this.route.navigate(['/pestamp-payment-modal'], {
 state: { productdetails: objToSend }
 });
   }
@@ -978,10 +978,10 @@ createNewDesignChatGroup(design:Pestamp) {
       ];
       CometChat.addMembersToGroup(GUID, membersList, []).then(
         response => {
-          
+
         },
         error => {
-        
+
         }
       );
       }
@@ -1043,17 +1043,17 @@ directAssignToWattmonk(id:number,design){
             this.utils.hideLoading().then(()=>{
               ;
               console.log('reach ', value);
-    
+
             //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
             //  {
             //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
             //  }else{
               this.utils.showSnackBar('Pe Stamp request has been reassigned to wattmonk successfully');
-             
+
               //this.dismissBottomSheet();
               //this.showBottomDraw = false;
               this.utils.setPeStampRefresh(true);
-    
+
             })
           }, (error) => {
             this.utils.hideLoading();

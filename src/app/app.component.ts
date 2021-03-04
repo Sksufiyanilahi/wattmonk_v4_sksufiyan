@@ -1,25 +1,25 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
 
-import {NavController, Platform} from '@ionic/angular';
-import {StorageService} from './storage.service';
-import {ApiService} from './api.service';
-import {UtilitiesService} from './utilities.service';
+import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
+import {Router} from '@angular/router';
+import {Plugins} from '@capacitor/core';
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
-import {FirebaseX} from '@ionic-native/firebase-x/ngx';
-import {NetworkdetectService} from './networkdetect.service';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import {FirebaseX} from '@ionic-native/firebase-x';
+import {NavController, Platform} from '@ionic/angular';
+import {from, Observable, Subscription} from 'rxjs';
+import {ApiService} from './api.service';
 import {COMETCHAT_CONSTANTS} from './contants';
 import {UserData} from './model/userData.model';
-import {from, Observable, Subscription} from 'rxjs';
-import {Router} from '@angular/router';
-import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
+import {NetworkdetectService} from './networkdetect.service';
+import {StorageService} from './storage.service';
+import {UtilitiesService} from './utilities.service';
 import {MixpanelService} from './utilities/mixpanel.service';
-import { BackgroundMode } from '@ionic-native/background-mode/ngx';
-import {Plugins} from '@capacitor/core';
 
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
-    styleUrls: ['app.component.scss']
+    styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
     homeimage: any;
@@ -27,14 +27,12 @@ export class AppComponent {
     public appPages = [
         {
             title: 'Home',
-            url: '/homepage/design'
-            //icon: 'home'
+            url: '/homepage/design',
         },
         {
             title: 'Statistics',
-            url: '/statistics'
-            //icon: 'statistic'
-        }
+            url: '/statistics',
+        },
     ];
     user: any;
     ischatuserloggedin = false;

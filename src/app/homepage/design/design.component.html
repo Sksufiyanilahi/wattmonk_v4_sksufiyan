@@ -44,7 +44,7 @@
                           {{designData.deliverydate | date: 'hh:mm a'}}
                       </span> -->
 
-                   
+
                       <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                       <ng-container *ngIf="designData?.chatid!==null && designData?.addedtogroupchat">
                         <span fill="clear" background-border="clear" [routerLink]="['/','chat',designData.chatid]" class="chatbutton"  size="small"  ><img  style= "height:20px" src="assets/images/chat.svg" /></span>
@@ -77,9 +77,9 @@
               </p>
                         <!-- <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                             <span class="customer-phone">{{designData.phonenumber}}</span></a> -->
-            
+
                                 <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
-                           
+
                         <span class="customer-address z-100"
                                 (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}
 
@@ -93,7 +93,7 @@
                             <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')" style="font-size: 0.8em;">
                                 <span><strong>Assigned to : {{designData.reviewassignedto.firstname | titlecase}} {{designData.reviewassignedto.lastname | titlecase}}</strong></span>
                             </ion-col>
-                        
+
                         <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
                                 <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
                                     {{designData.designremainingtime}}</span></ion-col>
@@ -175,14 +175,14 @@
                 </ion-col>
             <!-- </ion-virtual-scroll> -->
             </ion-row>
-            
+
         <!-- </ion-virtual-scroll> -->
         <!-- <ion-row>
             <ion-col size="12" style="height: 100px;">
 
             </ion-col>
         </ion-row> -->
-        
+
         </ion-grid>
      <ng-template #nodesignFound>
         <div *ngIf="listOfDesignsHelper.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
@@ -203,8 +203,8 @@
 
 </ion-content>
 
-<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="320" draggable="false" disableDrag="true"
-                   shouldBounce="true" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
+<ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false" [disableDrag]="true"
+                   [shouldBounce]="true" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
     <form [formGroup]="assignForm">
         <ion-grid class="drawer">
             <ion-row>

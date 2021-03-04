@@ -22,7 +22,7 @@ import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 import * as moment from 'moment';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
- 
+
 import { COMETCHAT_CONSTANTS } from '../../contants';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import {File } from '@ionic-native/file/ngx';
@@ -37,7 +37,7 @@ import { MixpanelService } from 'src/app/utilities/mixpanel.service';
 @Component({
   selector: 'app-permitdesign',
   templateUrl: './permitdesign.component.html',
-  styleUrls: ['./permitdesign.component.scss'], 
+  styleUrls: ['./permitdesign.component.scss'],
 })
 export class PermitdesignComponent implements OnInit {
 
@@ -112,12 +112,12 @@ export class PermitdesignComponent implements OnInit {
     private router:ActivatedRoute,
     private mixpanel:MixpanelService,
    // private db:AngularFireDatabase,
-    
+
    // private fileopener:FileOpener
    ) {
-    
+
     this.userData =this.storageservice.getUser(); // get data from resolver
-    
+
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       this.segments= 'requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -169,7 +169,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   segmentChanged(event){
-   
+
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       if(event.target.value=='newDesign'){
         this.segments ='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined';
@@ -244,9 +244,9 @@ this.deactivateNetworkSwitch.unsubscribe();
     // });
   }
 
-  getDesigns(event: CustomEvent) {
+  getDesigns(event) {
     this.skip=0;
-   
+
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -289,7 +289,7 @@ this.deactivateNetworkSwitch.unsubscribe();
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignFound= "No Designs Found"
@@ -322,7 +322,7 @@ this.deactivateNetworkSwitch.unsubscribe();
 
     const tempData: DesginDataHelper[] = [];
 
-   
+
 
       this.listOfDesigns.forEach((designItem:any,i) => {
         console.log(i);
@@ -734,7 +734,7 @@ this.deactivateNetworkSwitch.unsubscribe();
   this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
        console.log(response);
         if(response.length){
-       
+
           this.formatDesignData(response);
         }else{
           this.noDesignFound= "No Designs Found"
@@ -752,9 +752,9 @@ this.deactivateNetworkSwitch.unsubscribe();
         }
         const error: ErrorModel = responseError.error;
         this.utils.errorSnackBar(error.message[0].messages[0].message);
-    
+
     });
-    
+
   }
 
 
@@ -775,11 +775,11 @@ this.deactivateNetworkSwitch.unsubscribe();
           fulldesigndata:this.designerData
         },
         skipLocationChange: false,
-        fragment: 'top' 
+        fragment: 'top'
     };
 
 
-this.route.navigate(['/payment-modal'], { 
+this.route.navigate(['/payment-modal'], {
   state: { productdetails: objToSend }
 });
     }
@@ -930,7 +930,7 @@ this.route.navigate(['/payment-modal'], {
   }
 
 
-  refreshDesigns(event: CustomEvent) {
+  refreshDesigns(event) {
     this.skip=0;
     let showLoader = true;
     if (event !== null && event !== undefined) {
@@ -1116,14 +1116,14 @@ designDownload(designData){
       );
       this.file.checkFile(resolvedDirectory.nativeURL,designData.permitdesign.hash).then(data=>{
         console.log(data);
-  
+
         if(data==true){
-  
+
         }else{
           console.log('not found!');
           throw { code: 1, message: 'NOT_FOUND_ERR' };
         }
-        
+
       }).catch(async err=>{
         console.log('Error occurred while checking local files:');
         console.log(err);
@@ -1134,7 +1134,7 @@ designDownload(designData){
               this.utils.hideLoading().then(()=>{
                 console.log('download complete: ' + entry.toURL());
                 this.utils.showSnackBar("Permit Design Downloaded Successfully");
-                
+
                 // this.clickSub = this.localnotification.on('click').subscribe(data => {
                 //   console.log(data)
                 //   path;
@@ -1143,7 +1143,7 @@ designDownload(designData){
               }, (error) => {
                 // handle error
                 console.log(error);
-                
+
               });
               })
           })
@@ -1151,46 +1151,46 @@ designDownload(designData){
       })
     })
   })
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     let dir_name = 'Wattmonk';
     let path = '';
     const url = designData.permitdesign.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
-   
-   
+
+
    let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
   result.then((resp) => {
    path = resp.toURL();
-   console.log(path); 
-   
+   console.log(path);
+
    fileTransfer.download(url, path + designData.permitdesign.hash + designData.permitdesign.ext).then((entry) => {
      console.log('download complete: ' + entry.toURL());
      this.utils.showSnackBar("Permit Design Downloaded Successfully");
-     
+
      // this.clickSub = this.localnotification.on('click').subscribe(data => {
      //   console.log(data)
      //   path;
@@ -1200,8 +1200,8 @@ designDownload(designData){
      // handle error
    });
   })
-  
-  
+
+
   }
 
 createChatGroup(design:DesginDataModel){
@@ -1278,10 +1278,10 @@ createNewDesignChatGroup(design:DesginDataModel) {
       ];
       CometChat.addMembersToGroup(GUID, membersList, []).then(
         response => {
-          
+
         },
         error => {
-        
+
         }
       );
       }
@@ -1332,17 +1332,17 @@ directAssignToWattmonk(id:number){
             this.utils.hideLoading().then(()=>{
               ;
               console.log('reach ', value);
-    
+
             //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
             //  {
             //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
             //  }else{
               this.utils.showSnackBar('Design request has been reassigned to wattmonk successfully');
-             
+
               //this.dismissBottomSheet();
               //this.showBottomDraw = false;
               this.utils.setHomepagePermitRefresh(true);
-    
+
             })
           }, (error) => {
             this.utils.hideLoading();
@@ -1369,6 +1369,6 @@ export class DesginDataHelper {
 
   }
 
- 
+
 
 }

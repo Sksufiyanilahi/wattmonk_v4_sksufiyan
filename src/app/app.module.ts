@@ -4,42 +4,37 @@ import {RouteReuseStrategy} from '@angular/router';
 
 import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
 
-import {AppComponent} from './app.component';
-import {AppRoutingModule} from './app-routing.module';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {AngularFireModule} from '@angular/fire';
+import {AngularFireDatabaseModule} from '@angular/fire/database';
+import {FormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import {Camera} from '@ionic-native/camera/ngx';
+import {Dialogs} from '@ionic-native/dialogs/ngx';
+import {FirebaseX} from '@ionic-native/firebase-x';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+import {InAppBrowser} from '@ionic-native/in-app-browser/ngx';
+import {Mixpanel, MixpanelPeople} from '@ionic-native/mixpanel/ngx';
+import {Network} from '@ionic-native/network/ngx';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
+import {Stripe} from '@ionic-native/stripe/ngx';
+import {IonicStorageModule} from '@ionic/storage';
+import {ChartsModule} from 'ng2-charts';
+import {NgxImageCompressService} from 'ngx-image-compress';
+import {environment} from 'src/environments/environment';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
 import {AuthGuardService} from './auth-guard.service';
 import {StorageService} from './storage.service';
-import {UtilitiesModule} from './utilities/utilities.module';
 import {SuccessModalComponent} from './utilities/success-modal/success-modal.component';
-// import { FCM } from '@ionic-native/fcm/ngx';
-import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {IonicStorageModule} from '@ionic/storage';
-import {FirebaseX} from '@ionic-native/firebase-x/ngx';
-import {NgxImageCompressService} from 'ngx-image-compress';
-import {Camera} from '@ionic-native/camera/ngx';
-import {InAppBrowser} from '@ionic-native/in-app-browser/ngx';
-import {Network} from '@ionic-native/network/ngx';
-import {Stripe} from '@ionic-native/stripe/ngx';
-import {SocialSharing} from '@ionic-native/social-sharing/ngx';
-import {Dialogs} from '@ionic-native/dialogs/ngx';
-import {ChartsModule} from 'ng2-charts';
-import {FormsModule} from '@angular/forms';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatCardModule} from '@angular/material/card';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
-import {AngularFireDatabaseModule} from '@angular/fire/database';
-import {AngularFireModule} from '@angular/fire';
-import {environment} from 'src/environments/environment';
-import {Mixpanel, MixpanelPeople} from '@ionic-native/mixpanel/ngx';
-//import {BackgroundMode} from '@ionic-native/background-mode/ngx';
-import { BackgroundMode } from '@ionic-native/background-mode/ngx';
-
-// import { LinkifyPipe } from './linkify.pipe';
-
+import {UtilitiesModule} from './utilities/utilities.module';
 
 @NgModule({
     declarations: [AppComponent, SuccessModalComponent],

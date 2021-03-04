@@ -15,7 +15,7 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
 import { COMETCHAT_CONSTANTS } from '../contants';
- 
+
 import { Appversion } from '../appversion';
 
 @Component({
@@ -34,7 +34,7 @@ export class PermitdesignoverviewPage implements OnInit {
   userData: UserData
   deactivateNetworkSwitch: Subscription;
   //showSearchBar = false;
-  
+
 
   constructor(public route: Router,
     private storage: StorageService,
@@ -45,8 +45,8 @@ export class PermitdesignoverviewPage implements OnInit {
     private network: NetworkdetectService,
     private platform: Platform,
     private iab:InAppBrowser,
-    private router:ActivatedRoute 
-    ) { 
+    private router:ActivatedRoute
+    ) {
       let data = localStorage.getItem('type');
       console.log(data,"dataa");
     }
@@ -106,18 +106,18 @@ export class PermitdesignoverviewPage implements OnInit {
   }
     this.apiService.pushtoken(userid, {"newpushtoken":token}).subscribe((data) => {
     console.log(data, "fcm data");
-    
+
     }, (error) => {
     });
   }
-  
-  getDesigns(event: CustomEvent) {
-    
+
+  getDesigns(event) {
+
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
     }
-   
+
   }
 
 shareWhatsapp(designData){
@@ -136,7 +136,7 @@ searchbar(){
       id:id,
       designData:designData
     },
-    
+
   });
   modal.onDidDismiss().then((data) => {
     console.log(data)
@@ -150,14 +150,14 @@ searchbar(){
 
  ionViewDidEnter() {
 
-   
+
   if(this.version !== this.update_version && this.update_version !==''){
-      
+
     setTimeout(()=>{
-  
+
       this.utilities.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
         text:'Ok',
-      
+
         handler:()=>{
           this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
          this.ionViewDidEnter();
@@ -168,7 +168,7 @@ searchbar(){
   this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     this.netSwitch = data;
     console.log(this.netSwitch);
-    
+
   })
 
 this.network.networkDisconnect();
@@ -188,7 +188,7 @@ getNotificationCount(){
    this.unreadCount= count;
   });
 
- 
+
 }
 
 setzero(){

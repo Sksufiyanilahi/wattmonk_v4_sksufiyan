@@ -54,7 +54,7 @@ export class DeliveredsurveysComponent implements OnInit {
     });
   }
 
-  getSurveys(event: CustomEvent) {
+  getSurveys(event) {
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -149,9 +149,9 @@ export class DeliveredsurveysComponent implements OnInit {
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
-    this.overdue = lateby;  
+    this.overdue = lateby;
     console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
-    
+
   }
   ngOnDestroy(): void {
     // this.refreshSubscription.unsubscribe();

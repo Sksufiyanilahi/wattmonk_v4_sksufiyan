@@ -60,7 +60,7 @@ limit:number=10;
     this.designRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
      this.skip=0;
       this.getDesigns(null);
-      
+
     });
 
     this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
@@ -77,7 +77,7 @@ limit:number=10;
     this.cdr.detach();
   }
 
-  getDesigns(event: CustomEvent) {
+  getDesigns(event) {
     this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -210,7 +210,7 @@ limit:number=10;
     this.apiService.getDesignSurveys("requesttype=permit&status=delivered",this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignsFound= "No Designs Found"
@@ -225,9 +225,9 @@ limit:number=10;
           }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
-      
+
       });
-      
+
     }
 
 
@@ -235,12 +235,12 @@ limit:number=10;
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
-    this.overdue = lateby;  
+    this.overdue = lateby;
   }
   shareWhatsapp(designData){
     this.socialsharing.share(designData.permitdesign.url);
   }
-  
+
    async shareViaEmails(id,designData){
     const modal = await this.modalController.create({
       component: EmailModelPage,
@@ -249,7 +249,7 @@ limit:number=10;
         id:id,
         designData:designData
       },
-      
+
     });
     modal.onDidDismiss().then((data) => {
       console.log(data)

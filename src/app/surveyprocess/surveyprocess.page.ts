@@ -600,6 +600,7 @@ export class SurveyprocessPage implements OnInit {
     ngOnInit() {
 
         this.routeroutlet.swipeGesture = false;
+      // tslint:disable-next-line:max-line-length
         // camera options (Size and location). In the following example, the preview uses the rear camera and display the preview in the back of the webview
         this.cameraPreviewOpts = {
             x: 0,
@@ -611,7 +612,7 @@ export class SurveyprocessPage implements OnInit {
             tapFocus: true,
             previewDrag: true,
             toBack: true,
-            alpha: 1
+            alpha: 1,
         }
 
         this.startCamera();

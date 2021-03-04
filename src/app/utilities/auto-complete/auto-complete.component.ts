@@ -27,7 +27,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   @Input() mode = 'id'; //id or object
   @Input() name='';
   @Output() modulename= new EventEmitter();
- 
+
 
 
   private onChange: (data: any) => void;
@@ -107,7 +107,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
       if (this.sortedList[0].name.toLowerCase() === event.detail.value.toLowerCase()) {
         // this.onChange(event.target.value);
         this.sortedList = [];
-       
+
       }
     }
     else{
@@ -124,7 +124,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
     this.selectedDataId = data.id;
     this.selectedDataName = data.name;
     console.log(data,"KK");
-    
+
 
     if (this.mode === 'id') {
       this.onChange(data.id);
@@ -133,7 +133,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
     }
   }
 
-  onFocus(event: CustomEvent) {
+  onFocus(event) {
     this.sortedList=[];
     // this.selectedDataName= event.detail.value;
     this.sortedList = this.dataList.filter((item) => {
@@ -149,13 +149,13 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
       // } else {
         // }
         if (this.sortedList[0].name.toLowerCase() === this.selectedDataName.toLowerCase()) {
-       
+
         this.sortedList = [];
       }
     }
   }
 
-  onBlur(event: CustomEvent) {
+  onBlur(event) {
     setTimeout(() => {
       this.sortedList = [];
     }, 100);

@@ -8,7 +8,7 @@ import { AddressModel } from '../model/address.model';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { StorageService } from '../storage.service';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
- 
+
 
 
 declare var google;
@@ -54,13 +54,13 @@ export class MapPagePage implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
 
   ionViewDidEnter(){
   }
 
-  updateSearchResults(event: CustomEvent) {
+  updateSearchResults(event) {
     const input = event.detail.value;
     if (input === '') {
       this.autocompleteItems = [];

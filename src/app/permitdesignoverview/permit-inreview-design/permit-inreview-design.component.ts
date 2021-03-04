@@ -68,7 +68,7 @@ export class PermitInreviewDesignComponent implements OnInit {
     this.cdr.detach();
   }
 
-  getDesigns(event: CustomEvent) {
+  getDesigns(event) {
    this.skip=0;
     let showLoader = true;
     if (event != null && event !== undefined) {
@@ -202,7 +202,7 @@ export class PermitInreviewDesignComponent implements OnInit {
     this.apiService.getDesignSurveys("requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed",this.limit,this.skip).subscribe((response:any) => {
          console.log(response);
           if(response.length){
-       
+
             this.formatDesignData(response);
           }else{
             this.noDesignsFound= "No Designs Found"
@@ -217,16 +217,16 @@ export class PermitInreviewDesignComponent implements OnInit {
           }
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
-      
+
       });
-      
+
     }
 
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
-    this.overdue = lateby;  
+    this.overdue = lateby;
   }
 
   trackdesign(index,design){

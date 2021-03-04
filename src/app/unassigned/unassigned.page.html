@@ -46,9 +46,9 @@
         </p>
                   <!-- <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                       <span class="customer-phone">{{designData.phonenumber}}</span></a> -->
-      
+
                           <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
-                     
+
                   <span class="customer-address z-100"
                           (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}
 
@@ -141,14 +141,14 @@
           </ion-col>
       <!-- </ion-virtual-scroll> -->
       </ion-row>
-      
+
   <!-- </ion-virtual-scroll> -->
   <!-- <ion-row>
       <ion-col size="12" style="height: 100px;">
 
       </ion-col>
   </ion-row> -->
-  
+
   </ion-grid>
 <ng-template #nodesignFound>
   <div *ngIf="listOfDesignsHelper.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
@@ -169,8 +169,8 @@
 
 </ion-content>
 
-<ion-bottom-drawer [(state)]="drawerState" minimumHeight="0" dockedHeight="320" draggable="false" disableDrag="true"
-             shouldBounce="true" distanceTop="0" class="drawer" style="z-index: 9999 !important;">
+<ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false" [disableDrag]="true"
+             [shouldBounce]="true" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
 <form [formGroup]="assignForm">
   <ion-grid class="drawer">
       <ion-row>

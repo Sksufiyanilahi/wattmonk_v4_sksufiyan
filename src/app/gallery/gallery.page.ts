@@ -139,7 +139,7 @@ export class GalleryPage implements OnInit {
     console.log(this.image);
   }
 
-  onTabSelected(event: CustomEvent) {
+  onTabSelected(event) {
     console.log(event.detail.value);
     this.selectedTab = event.detail.value;
     this.setImageSource();
