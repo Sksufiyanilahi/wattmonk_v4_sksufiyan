@@ -185,7 +185,7 @@
             ],
             "result": "",
             "questionstatus": false,
-            "questiontype": 7,
+            "questiontype": 9,
             "inputformcontrol": "invertermanufacturerandmodel",
             "imagekey": "pvinverterimages",
             "imagename": "pvinverterzoomshoturl"

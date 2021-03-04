@@ -89,7 +89,8 @@ export enum QUESTIONTYPE {
     INPUT_SHOT_NAME = 5,
     INPUT_ROOF_MATERIAL_AUTOCOMPLETE = 6,
     INPUT_TEXT = 7,
-    INPUT_TWO_DIMENSIONS = 8
+    INPUT_TWO_DIMENSIONS = 8,
+    INPUT_INVERTER_DETAILS = 9,
 }
 
 export enum VIEWMODE {
@@ -300,12 +301,12 @@ export class SurveyprocessPage implements OnInit {
             this.platformname = 'other'
         }
 
-        this.platform.backButton.subscribeWithPriority(100, () => {
-            if (!this.isSaveFormCalled) {
-                this.handleSurveyExit();
-                navController.pop();
-            }
-        });
+        // this.platform.backButton.subscribeWithPriority(100, () => {
+        //     if (!this.isSaveFormCalled) {
+        //         this.handleSurveyExit();
+        //         navController.pop();
+        //     }
+        // });
 
         if (this.surveytype == 'battery') {
             this.batterySurveyProcess();
@@ -1036,8 +1037,14 @@ export class SurveyprocessPage implements OnInit {
                 form.get('dimensionA').setValue('');
                 form.get('dimensionB').setValue('');
             } else {
-                control.markAsTouched();
-                control.markAsDirty();
+                if (form.get('dimensionA').value == '' || form.get('dimensionA').value == undefined) {
+                    form.get('dimensionA').markAsTouched();
+                    form.get('dimensionA').markAsDirty();
+                }
+                if (form.get('dimensionB').value == '' || form.get('dimensionB').value == undefined) {
+                    form.get('dimensionB').markAsTouched();
+                    form.get('dimensionB').markAsDirty();
+                }
             }
         } else {
             if (control.value != '') {
@@ -1052,11 +1059,28 @@ export class SurveyprocessPage implements OnInit {
     handleInputTextSubmission(form: FormGroup) {
         const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
         const control = form.get(currentIndex.shots[this.selectedshotindex].inputformcontrol);
-        if (control.value != '') {
-            this.handleAnswerSubmission(control.value);
+        if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_DETAILS) {
+            const inverterMake = form.get('invertermake');
+            const inverterModel = form.get('invertermodel');
+            if (inverterMake.value != '' && inverterModel.value != '') {
+                this.handleAnswerSubmission(`${inverterMake.value},${inverterModel.value}`);
+            } else {
+                if (inverterMake.value == '' || inverterMake.value == undefined) {
+                    inverterMake.markAllAsTouched();
+                    inverterMake.markAsDirty();
+                }
+                if (inverterModel.value == '' || inverterModel.value == undefined) {
+                    inverterModel.markAllAsTouched();
+                    inverterModel.markAsDirty();
+                }
+            }
         } else {
-            control.markAsTouched();
-            control.markAsDirty();
+            if (control.value != '') {
+                this.handleAnswerSubmission(control.value);
+            } else {
+                control.markAsTouched();
+                control.markAsDirty();
+            }
         }
     }
 
@@ -1951,5 +1975,21 @@ export class SurveyprocessPage implements OnInit {
         const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index];
         shotDetail.promptquestion = true;
         this.iscapturingallowed = false;
+    }
+
+    handleBackbutton(){
+        this.platform.backButton.subscribeWithPriority(10, () => {
+            console.log('Handler called to force close!');
+            this.alertController.getTop().then(r => {
+              if (r) {
+                navigator['app'].exitApp();
+              }
+            }).catch(e => {
+              console.log(e);
+            })
+          });
+    }
+    ionViewDidEnter(){
+        this.handleBackbutton();
     }
 }

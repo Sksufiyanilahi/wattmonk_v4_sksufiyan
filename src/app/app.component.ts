@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
 
-import {NavController, Platform} from '@ionic/angular';
+import {AlertController, NavController, Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {StorageService} from './storage.service';
@@ -78,7 +78,8 @@ export class AppComponent {
         private db: AngularFireDatabase,
         private changeDetectorRef: ChangeDetectorRef,
         private mix: MixpanelService,
-        private backgroundMode: BackgroundMode
+        private backgroundMode: BackgroundMode,
+        private alertController:AlertController
     ) {
         this.initializeApp();
         if (!navigator.onLine) {
@@ -143,6 +144,7 @@ export class AppComponent {
                 this.splashScreen.hide();
             // }, 1000);
             this.getFcmToken();
+            this.handleBackbutton();
             if (this.platform.is('ios')) {
                 this.statusBar.overlaysWebView(false);
                 this.statusBar.backgroundColorByHexString('#fffff');
@@ -334,5 +336,18 @@ export class AppComponent {
     ngOndestroy() {
         this.deactivateGetUserData.unsubscribe();
         this.deactivateNetworkSwitch.unsubscribe();
+    }
+
+    handleBackbutton(){
+        // this.platform.backButton.subscribeWithPriority(10, () => {
+        //     console.log('Handler called to force close!');
+        //     this.alertController.getTop().then(r => {
+        //       if (r) {
+        //         navigator['app'].exitApp();
+        //       }
+        //     }).catch(e => {
+        //       console.log(e);
+        //     })
+        //   });
     }
 }
