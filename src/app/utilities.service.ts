@@ -446,7 +446,7 @@ export class UtilitiesService {
 		await alert.present();
 	}
 
-	formatDateInTimeAgo(datestring: string) {
+	formatDateInTimeAgo(datestring: any) {
 		return moment(datestring, 'YYYY-MM-DD HH:mm:ss GMT Z').fromNow();
 	}
 

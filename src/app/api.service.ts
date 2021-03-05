@@ -613,6 +613,11 @@ export class ApiService {
           headers: this.headers
         })
       }
+      generatePdf(id){
+        return this.http.get(BaseUrl + "surveypdf?id=" + id,  {
+          headers: this.headers
+        })
+      }
 
       salesIncentives(){
         return this.http.get(BaseUrl + 'incentives', {
@@ -686,4 +691,9 @@ export class ApiService {
       getCallData(): Observable<any> {
         return this.callData;
   }
+  getStripeSessionID(inputData: any): Observable<any>{
+    return this.http.post<any>(BaseUrl + "walletrecharge", inputData,{
+      headers: this.uploadHeaders}
+     ) }
 }
+

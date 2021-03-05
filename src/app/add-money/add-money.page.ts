@@ -16,7 +16,8 @@ declare var Stripe;
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { DesginDataModel } from '../model/design.model';
 import { MixpanelService } from '../utilities/mixpanel.service';
-
+import { loadStripe } from '@stripe/stripe-js';
+import {IPayPalConfig,ICreateOrderRequest } from 'ngx-paypal';
 
 
 @Component({
@@ -25,7 +26,7 @@ import { MixpanelService } from '../utilities/mixpanel.service';
   styleUrls: ['./add-money.page.scss'],
 })
 export class AddMoneyPage implements OnInit {
-
+  public payPalConfig ? : IPayPalConfig;
   invalidAmount = INVALID_AMOUNT;
   invalidAmountForOnboarding = INVALID_AMOUNT_FOR_ONBOARDING;
 
@@ -33,7 +34,8 @@ amountChecking:boolean=false;
 amountCheckingForOnboarding:boolean=false;
 card:any
   token:any;
-  stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
+  
+   stripe=Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
   // stripe= Stripe('sk_test_51HQ4SfBlSfQmxsSflRlcq7ntq1xMbhlBVW03jzMCd1WiOZMqjglO0jO2FV6IHDSiFfDnesYt2feU7w4uEe34PfPR00iLg5qpLm'); // stripe= Stripe('sk_test_51HQ4SfBlSfQmxsSflRlcq7ntq1xMbhlBVW03jzMCd1WiOZMqjglO0jO2FV6IHDSiFfDnesYt2feU7w4uEe34PfPR00iLg5qpLm');
  userData:User;
  mode:any;
@@ -61,12 +63,13 @@ card:any
  //newprelimsRef:any;
  newprelimscount = 0;
  createpayment:any;
+ stripePromise = loadStripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
 
  //Pestamp count
  newpestamp: Observable<any>;
      newpestampRef: AngularFireObject<any>;
      newpestampscount = 0;
-
+sessionId:number
  designData:any;
   fulldesigndata: any;
 
@@ -84,6 +87,7 @@ card:any
     private mixpanelService:MixpanelService
     //private stripe:Stripe
     ) {
+      this.paypalintegration()
       this.designData = this.router.getCurrentNavigation().extras.state;
       console.log(this.designData)
       this.mode = this.designData.productdetails.queryParams.mode;
@@ -167,7 +171,7 @@ card:any
 
       
     this.userData = this.storageService.getUser();
-    this.setupStripe();
+    // this.setupStripe();
     console.log(this.mode)
     console.log(this.designId);
     console.log(this.design);
@@ -179,41 +183,42 @@ card:any
     }
     
   }
- setupStripe() {
-    let elements = this.stripe.elements();
-    var style = {
-      base: {
-        color: '#32325d',
-        lineHeight: '24px',
-        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-        fontSmoothing: 'antialiased',
-        fontSize: '16px',
-        '::placeholder': {
-          color: '#111'
-        }
-      },
-      invalid: {
-        color: '#fa755a',
-        iconColor: '#fa755a'
-      }
-    };
-    this.card = elements.create('card', { style: style });
-    console.log(this.card);
-    this.card.mount('#card-element');
+//  setupStripe() {
+//     let elements = this.stripe.elements();
+//     var style = {
+//       base: {
+//         color: '#32325d',
+//         lineHeight: '24px',
+//         fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+//         fontSmoothing: 'antialiased',
+//         fontSize: '16px',
+//         '::placeholder': {
+//           color: '#111'
+//         }
+//       },
+//       invalid: {
+//         color: '#fa755a',
+//         iconColor: '#fa755a'
+//       }
+//     };
+//     this.card = elements.create('card', { style: style });
+//     console.log(this.card);
+//     this.card.mount('#card-element');
 
-    this.card.addEventListener('change', event => {
-      var displayError = document.getElementById('card-errors');
-      if (event.error) {
-        displayError.textContent = event.error.message;
-      } else {
-        displayError.textContent = '';
-      }
-    });
+//     this.card.addEventListener('change', event => {
+//       var displayError = document.getElementById('card-errors');
+//       if (event.error) {
+//         displayError.textContent = event.error.message;
+//       } else {
+//         displayError.textContent = '';
+//       }
+//     });
 
-    var form = document.getElementById('payment-form');
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      console.log(event)
+   
+    // var form = document.getElementById('payment-form');
+    // form.addEventListener('submit', event => {
+    //   event.preventDefault();
+    //   console.log(event)
       // if(this.onBoarding == 'true' || this.onBoarding =='false'){
       //   if(this.amountForm.get('amount').value >=100 && this.amountForm.get('amount').value <= 5000)
       //   {
@@ -234,26 +239,48 @@ card:any
       //   }
       // }
      // else{
-      if(this.amountForm.get('amount').value >=1 && this.amountForm.get('amount').value <=10000)
-      {
-      this.stripe.createToken(this.card).then(result => {
-        if (result.error) {
-          var errorElement = document.getElementById('card-errors');
-          errorElement.textContent = result.error.message;
-        } else {
-          console.log(result);
-          this.token=result;
-          console.log(this.token.token.id);
-          this.addMoney();
+    //   if(this.amountForm.get('amount').value >=1 && this.amountForm.get('amount').value <=10000)
+    //   {
+    //   this.stripe.createToken(this.card).then(result => {
+    //     if (result.error) {
+    //       var errorElement = document.getElementById('card-errors');
+    //       errorElement.textContent = result.error.message;
+    //     } else {
+    //       console.log(result);
+    //       this.token=result;
+    //       console.log(this.token.token.id);
+    //       this.addMoney();
          
-        }
-      });
-    }else{
-      this.utils.errorSnackBar("Please Enter Valid Amount");
-    }
-      //}
-    });
-  }
+    //     }
+    //   });
+    // }else{
+    //   this.utils.errorSnackBar("Please Enter Valid Amount");
+    // }
+    //   //}
+    // });
+  // }
+
+
+
+  async getSessionID()
+  {
+   var inputdata = {
+     email: this.userData.email,
+     userid: this.userData.id,
+     amount: this.amountForm.get('amount').value
+   }
+   const stripe = await this.stripePromise;
+   this.apiService.getStripeSessionID(inputdata).subscribe(
+     response => {
+       console.log(response);
+       return stripe.redirectToCheckout({ sessionId: response.id });
+     },
+     error => {
+       this.utils.errorSnackBar("error");
+     }
+   );
+ }
+
 //  setupStripe() {
 //     let elements = this.stripe.elements();
 //     var style = {
@@ -734,6 +761,111 @@ createChatGroup(design){
     })
   }
 }
+
+
+private paypalintegration(){
+  this.payPalConfig = {
+    currency: 'USD',
+    //for testing
+    clientId: 'AV1abOj-_YOVXq_Negcy7Fkc2Esj2GtpY2dRe3nrTwPl4HSX22jbXQ6KKhyJRO7JjPxP__sr7wqi57bg',
+   // for live
+   //  CLIENT_ID: 'AfKOgzK6Le8LRp8bN4vefjNqC9B7qArUHJt0U_wUmed6hlDHlP-TlHYG9olpqTX85VhHHOD3T9pkfKuP',
+
+    createOrderOnClient: (data) =>< ICreateOrderRequest >{
+      intent: 'CAPTURE',
+      purchase_units: [{
+                  amount: {
+                    value: this.amountForm.get('amount').value
+                  }
+                }]
+      
+    },
+  
+    advanced: { extraQueryParams: [ { name: "disable-funding", value:"credit,card"} ],
+  commit:'true' } ,
+  
+    style: {
+            size: 'responsive',
+            color: 'silver',
+            shape: 'rect',
+            label: 'paypal',
+            tagline:false,
+            
+    },
+
+ 
+    onApprove: (data, actions) => {
+        console.log('onApprove - transaction was approved, but not authorized', data, actions);
+        actions.order.get().then(details => {
+       console.log('onApprove - you can get full order details inside onApprove: ', details);
+
+
+         var rechargeData={}
+       this.utils.showLoading("Adding").then(()=>{
+          var sessionId:number
+          var dates=new Date();
+         console.log(dates)
+         if(this.onBoarding=='true' && this.amountForm.get('amount').value > 1000){
+          rechargeData={
+            amount:this.amountForm.get('amount').value + 100,
+            datetime: dates,
+            paymenttype: "paypal",
+            type: "succeeded",
+          user: this.userData.id,
+          sessionid:this.sessionId
+          }
+         }
+         else{
+    rechargeData={
+      amount:this.amountForm.get('amount').value,
+      datetime: dates,
+      paymenttype: "paypal",
+      type: "succeeded",
+    user: this.userData.id,
+    sessionid:''
+   
+    }
+         }
+    this.apiService.recharges(rechargeData).subscribe((res:any)=>{
+      this.utils.hideLoading().then(()=>{ 
+      this.responseData = res;
+      let token=  this.storageService.getJWTToken();
+              this.storageService.setUser(res.user,token);
+      console.log(res);
+      this.utils.showSnackBar("$"+this.responseData.amount +" added in your wallet successfully");
+      this.goBack();
+      this.utils.setHomepageDesignRefresh(true);
+    }),error=>{
+      this.utils.hideLoading().then(()=>{      
+        console.log("payment was unsuccessful");
+         this.utils.errorSnackBar(error);
+        })
+        };
+      });
+        this.token=''
+      });
+        })
+    },
+    onClientAuthorization: (data) => {
+        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+        // this.showSuccess = true;
+    },
+    onCancel: (data, actions) => {
+        console.log('OnCancel', data, actions);
+        // this.showCancel = true;
+
+    },
+    onError: err => {
+        console.log('OnError', err);
+        // this.showError = true;
+    },
+    onClick: (data, actions) => {
+        console.log('onClick', data, actions);
+        // this.resetStatus();
+    },
+};
+}
+
 }
 
 

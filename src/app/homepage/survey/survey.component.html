@@ -61,11 +61,12 @@
                                 days</strong></span>
                         <span *ngIf="surveyData.lateby == 1" class="latebystyle"><strong>Late by a day</strong></span>
                     </p>
+                    <span class="recordupdatedon">Updated {{surveyData.recordupdatedon}}</span>
                     <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
                         <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
                     <span class="customer-address z-100 m-0"
                         (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
-                    <p style="margin: 0px;" class="ion-no-padding" *ngIf="segments=='status=surveyassigned&status=surveyinprocess'">
+                    <p style="margin: 0px;" class="ion-no-padding" *ngIf="segments=='status=surveyassigned&status=surveyinprocess' || segments=='status=surveycompleted'">
                         <!-- <ion-col style="font-size: 0.8em;"> -->
                             <span><strong>Assigned to : {{surveyData.assignedto.firstname | titlecase}} {{surveyData.assignedto.lastname | titlecase}}</strong></span>
                         <!-- </ion-col> -->
@@ -125,10 +126,13 @@
                         </ion-col>
                         <ion-col size="auto" class=" "
                             *ngIf="segments=='status=surveycompleted'" style="margin-bottom: 5px;">
-                            <span style="float:right !important;" class="ion-text-end action-button-color" (click)="designDownload(surveyData)">
+                            <span *ngIf="surveyData.surveypdf!== null" style="float:right !important;" class="ion-text-end action-button-color" (click)="designDownload(surveyData)">
                                 <ion-icon name="cloud-download-outline"></ion-icon></span>
+                            <span *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin') && (surveyData.surveypdf== null)" style="float:right !important;" class="ion-text-end action-button-color" (click)="generatePdf(surveyData.id)">
+                                    Generate PDF  &nbsp; &nbsp;</span>
                                 <span *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin') && (surveyData.isdesignraised==false || surveyData.isdesignraised==null)" style="float:right !important;" class="ion-text-end action-button-color" (click)="raisepermit(surveyData)">
                                     Raise Permit  &nbsp; &nbsp;</span>
+                               
                             <!-- <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;"
                                 class="ion-text-end action-button-color" (click)="selfAssign(surveyData.id,surveyData)">
                                 &nbsp; Self Assign</span>

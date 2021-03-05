@@ -50,7 +50,7 @@ netPay:any
   newprelimscount = 0;
   designData:any;
   fulldesigndata: any;
-  delivertime:String="6-12";
+  delivertime:String;
   designType:any;
  
 
@@ -159,6 +159,7 @@ this.isradiodisable=false
 
   this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
     console.log(this.user)
+    this.delivertime=this.user.slabname
     this.apiService.paymentDetail(this.user.parent.id).subscribe(res=>{
       this.count=res;
       console.log(this.count);
@@ -271,7 +272,10 @@ confirm(){
     status: "outsourced",
     couponid:this.utils.getCouponId().value,
     designacceptancestarttime: designacceptancestarttime,
-    
+    paymenttype:"wallet",
+    amount:parseInt(this.netPay),
+    serviceamount:this.settingValue,
+    paymentstatus:null
   };
   }
   else{
@@ -357,11 +361,11 @@ confirm(){
    
       if(this.design ==='prelim'){
       this.router.navigate(['/homepage/design'])
-      this.utils.setHomepageDesignRefresh(true);
+      // this.utils.setHomepageDesignRefresh(true);
       }
       else{
         this.router.navigate(['permithomepage/permitdesign'])
-        this.utils.setHomepagePermitRefresh(true);
+        // this.utils.setHomepagePermitRefresh(true);
       }
    
   }
