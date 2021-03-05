@@ -198,7 +198,8 @@ blob:Blob;
       incentive : new FormControl(null,[Validators.required]),
       costofsystem : new FormControl(null,[Validators.required]),
       personname : new FormControl(null,[Validators.required]),
-      companylogo : new FormControl(null)
+      companylogo : new FormControl(null),
+      requirementtype : new FormControl('proposal')
       // uploadbox:new FormControl('')
     });
       

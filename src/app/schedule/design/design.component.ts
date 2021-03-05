@@ -167,7 +167,8 @@ export class DesignComponent implements OnInit, OnDestroy {
       creatorparentid:new FormControl(this.storage.getParentId()),
       //isonpriority:new FormControl('false'),
       paymentstatus:new FormControl(null),
-      paymenttype:new FormControl(null)
+      paymenttype:new FormControl(null),
+      requirementtype : new FormControl('assessment')
       // uploadbox:new FormControl('')
     });
       
