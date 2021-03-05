@@ -70,6 +70,12 @@
 
             </ion-col>
         </ion-row>
+        <ion-row *ngIf="design.company!== null && design.company!== ''" class="ion-no-padding">
+            <ion-col><span class="model-type font">Company</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name font fontwt_size"><strong>{{design?.company}}</strong></span>
+            </ion-col>
+        </ion-row>
 
         <ion-row class="ion-margin-top">
             <ion-col size="12">
@@ -190,10 +196,40 @@
                 </ion-grid>
             </ion-col>
         </ion-row>
+        <ion-row *ngIf="design.costofsystem !== null && design.costofsystem !== ''">
+            <ion-col><span class="model-type font">Cost of System</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name font">{{design?.costofsystem}}</span>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="design.incentive !== null && design.incentive !== ''">
+            <ion-col><span class="model-type font">Incentive</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name font">{{design.incentive?.title}}</span>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="design.utility !== null && design.utility !== ''">
+            <ion-col><span class="model-type font">Utility Name</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name font">{{design.utility?.name}}</span>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="design.utilityrate !== null && design.utilityrate !== ''">
+            <ion-col><span class="model-type font">Utility Rate</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name font">{{design.utilityrate?.rate}}</span>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="design.annualutilityescalation !== null && design.utilityrate !== ''">
+            <ion-col><span class="model-type font">Annual utility Escalation</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name font">{{design?.annualutilityescalation}}</span>
+            </ion-col>
+        </ion-row>
 
-        <ion-row *ngIf="design.comments || design.comments !==null  " class="ion-no-padding ion-margin-top">
+        <ion-row *ngIf="design.comments && design.comments?.length !==0" class="ion-no-padding ion-margin-top">
             <ion-col size="6">
-                <span class="models font">comments</span>
+                <span class="models font">Comments</span>
             </ion-col>
             <!-- <div> -->
 
@@ -419,7 +455,7 @@
 
             <form novalidate [formGroup]="commentsForm" style="width:100%">
                 <ion-col size="12">
-                    <span class="input-placeholder">comments</span>
+                    <span class="input-placeholder">Comments</span>
                 </ion-col>
                 <ion-col size="12" style="padding-top: 0px;">
                     <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
