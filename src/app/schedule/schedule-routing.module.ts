@@ -34,6 +34,10 @@ const routes: Routes = [
         component: SalesproposalComponent
       },
       {
+        path: 'salesproposal/:id',
+        component: SalesproposalComponent
+      },
+      {
         path: '',
         redirectTo: 'design',
         pathMatch: 'full'
