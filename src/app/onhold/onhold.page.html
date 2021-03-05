@@ -40,7 +40,7 @@
                   routerDirection="forward">{{designData.name}}
 
                 <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'"  [routerLink]="['/design-details/',designData.id]">On Hold</span>
-                <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+                <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
 
         </p>
 

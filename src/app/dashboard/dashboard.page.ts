@@ -38,6 +38,7 @@ export class DashboardPage implements OnInit {
   ionViewDidEnter()
   {
     this.getCount();
+    this.apiService.emitUserNameAndRole(this.userData);
   }
 
   getCount(){
