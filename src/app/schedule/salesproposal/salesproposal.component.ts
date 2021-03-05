@@ -20,6 +20,7 @@ import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Clients } from 'src/app/model/clients.model';
 import { map, startWith } from "rxjs/operators";
+import { UtilityRates } from 'src/app/model/utilityrate.model';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFirestore} from '@angular/fire/firestore';
 
@@ -29,6 +30,8 @@ import { map, startWith } from "rxjs/operators";
   styleUrls: ['./salesproposal.component.scss'],
 })
 export class SalesproposalComponent implements OnInit {
+
+  //@ViewChild('fileInput',{static:false}) el: ElementRef;
 
   myControl = new FormControl();
   option: string[] = ['One', 'Two', 'Three'];
@@ -82,6 +85,7 @@ export class SalesproposalComponent implements OnInit {
   mediaType: this.camera.MediaType.PICTURE
 }
   fileName: any;
+  logoFileName:any;
   moduledata: any;
   // solarmake:string='solarmake';
   // solarmade:string='solarmade';
@@ -105,7 +109,9 @@ export class SalesproposalComponent implements OnInit {
   incentives: any;
   utilitiesName: any;
   modulemakes: any;
+  modulemodels: UtilityRates[]=[];
   filteredModuleMakes: Observable<any>;
+  filteredModuleModels: Observable<any>;
   filterUtilityRate: Observable<any>;
   filterIncentive: Observable<any>;
 
@@ -113,6 +119,16 @@ export class SalesproposalComponent implements OnInit {
   // newprelimsRef: AngularFireObject<any>;
   // //newprelimsRef:any;
   // newprelimscount = 0;
+
+  number: number;
+color: string;
+
+isEditMode:boolean=false;
+selectedUtilityId:number;
+selectedUtilityRateId:number;
+logoSelected: boolean=false;
+logo: any ;
+blob:Blob;
 
 
   constructor(
@@ -138,7 +154,7 @@ export class SalesproposalComponent implements OnInit {
     const NUMBERPATTERN = '^[0-9]*$';
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.desginForm = this.formBuilder.group({
-      companyname: new FormControl(''),
+      company: new FormControl(''),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       solarmake: new FormControl('', [Validators.required]),
@@ -176,13 +192,12 @@ export class SalesproposalComponent implements OnInit {
       //isonpriority:new FormControl('false'),
       paymentstatus:new FormControl(null),
       paymenttype:new FormControl(null),
-      utility: new FormControl(null,[Validators.required]),
-      utilityrate : new FormControl(null,[Validators.required]),
+      utility: new FormControl("",[Validators.required]),
+      utilityrate : new FormControl("",[Validators.required]),
       annualutilityescalation : new FormControl(null,[Validators.required]),
       incentive : new FormControl(null,[Validators.required]),
       costofsystem : new FormControl(null,[Validators.required]),
       personname : new FormControl(null,[Validators.required]),
-      companyName : new FormControl(null),
       companylogo : new FormControl(null)
       // uploadbox:new FormControl('')
     });
@@ -266,11 +281,11 @@ export class SalesproposalComponent implements OnInit {
       response => {
         console.log("Hiii");
         this.incentives = response;
-        this.filterIncentive = this.desginForm.get('utility').valueChanges.pipe(
-          startWith(""),
-          map(value => (typeof value === "string" ? value : value.title)),
-          map(title => (title ? this._filterincentive(title) : this.incentives.slice()))
-        );
+        // this.filterIncentive = this.desginForm.get('utility').valueChanges.pipe(
+        //   startWith(""),
+        //   map(value => (typeof value === "string" ? value : value.title)),
+        //   map(title => (title ? this._filterincentive(title) : this.incentives.slice()))
+        // );
       },
       error => {
         this.utils.errorSnackBar("Error");
@@ -291,6 +306,148 @@ export class SalesproposalComponent implements OnInit {
     return this.incentives.filter(
       incentive => incentive.title.toLowerCase().indexOf(filterValue) != -1
     );
+  }
+
+  fetchUtilityData(_event: any, make) {
+    //this.desginForm.patchValue({ uti: " " })
+    if (_event.isUserInput) {
+      console.log(_event,"hello");
+      this.desginForm.get('utilityrate').setValue("");
+     if (this.isEditMode) {
+       this.selectedUtilityRateId = null;
+     }
+      this.modulemodels = [];
+      this.selectedUtilityId = make.id;
+      this.apiService.utilitiesRate(make.id).subscribe(
+        (response:any) =>{
+          console.log("Hiii",response);
+          this.modulemodels = response;
+          console.log(this.modulemodels)
+          this.filteredModuleModels = this.desginForm.get('utilityrate').valueChanges.pipe(
+            startWith(""),
+            map(value => (typeof value === "string" ? value : value.rate)),
+            map(rate => (rate ? this._filterModuleModel(rate) : this.modulemodels.slice()))
+          );
+        },
+        error => {
+          this.utils.errorSnackBar("Error");
+        }
+      );
+    }
+  }
+
+  setSelectedUtilityRate(module)
+  {
+    console.log(module);
+    this.selectedUtilityRateId = module.id;
+  }
+
+  displayFnModuleModel(modulemodel:any): string {
+    return modulemodel && modulemodel.name ? modulemodel.name : "";
+  }
+
+  private _filterModuleModel(rate: string) {
+    const filterValue = rate.toLowerCase();
+
+    return this.modulemodels.filter(
+      modulemodel => modulemodel.rate.toLowerCase().indexOf(filterValue) != -1
+    );
+  }
+
+  saveUtilityName() {
+    console.log(this.modulemakes)
+    console.log("g",this.desginForm.get("utility").value);
+    const found = this.modulemakes.some(el => el.name === this.desginForm.get("utility").value);
+    if (!found) {
+      console.log("hello");
+      let data={
+  
+        
+        name:this.desginForm.get('utility').value
+      }
+      this.apiService
+        .postUtilitiesNames(
+          data
+        )
+        .subscribe(
+          (response:any) => {
+            console.log(response);
+            this.selectedUtilityId = response.id;
+            this.saveUtilityRate();
+          },
+          error => {
+            this.utils.errorSnackBar(
+  
+              "Error"
+            );
+          }
+        );
+    } else {
+      this.saveUtilityRate();
+    }
+  }
+  
+  saveUtilityRate() {
+    console.log(this.modulemodels);
+    console.log(this.desginForm.get("utilityrate").value)
+    const ismakefound = this.modulemakes.some(el => el.name === this.desginForm.get("utility").value);
+    console.log(ismakefound);
+    const found = this.modulemodels.some(el => el.rate === this.desginForm.get("utilityrate").value);
+   console.log(found);
+    if (!ismakefound || !found) {
+      let data={
+        utilityid:this.selectedUtilityId,
+        rate:this.desginForm.get('utilityrate').value
+  
+      }
+      this.apiService
+        .postUtilitiesRate(
+          data
+        )
+        .subscribe(
+          (response:any) => {
+            this.selectedUtilityRateId = response.id;
+            this.submitform();
+          },
+          error => {
+            this.utils.errorSnackBar(
+              "Error"
+            );
+          }
+        );
+    } else {
+      this.submitform();
+    }
+  }
+
+  uploadFile(event) {
+    this.logoSelected=true;
+    this.logoFileName= event.target.files[0].name;
+    console.log(this.logoFileName);
+    
+    let reader = new FileReader(); // HTML5 FileReader API
+    let file = event.target.files[0];
+    if (event.target.files && event.target.files[0]) {
+      reader.readAsDataURL(file);
+
+      // When file uploads set it to file formcontrol
+      reader.onload = () => {
+        this.logo = reader.result;
+        this.blob= this.utils.b64toBlob(this.logo);
+        console.log(this.blob);
+        
+        this.desginForm.patchValue({
+          companylogo: this.logoFileName
+        });
+
+        console.log(this.desginForm.value);
+        
+        // this.editFile = false;
+        // this.removeUpload = true;
+      }
+      // ChangeDetectorRef since file is loading outside the zone
+      this.cdr.markForCheck();        
+    }
   }
 
   // getmodulename(event){
@@ -339,7 +496,7 @@ export class SalesproposalComponent implements OnInit {
     // })
     this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
-      if (event === ScheduleFormEvent.SAVE_DESIGN_FORM || event === ScheduleFormEvent.SEND_DESIGN_FORM) {
+      if (event === ScheduleFormEvent.SAVE_SALES_FORM || event === ScheduleFormEvent.SEND_SALES_FORM) {
         this.send=event;
         this.addForm();
       
@@ -768,10 +925,11 @@ deleteArcFile(index){
   this.onFormSubmit=false;
   // this.saveModuleMake();
    debugger;
-    console.log('Reach', this.desginForm);
+    console.log('Reach', this.desginForm.value);
     // debugger;
     // this.saveModuleMake();
-    this.submitform();
+    this.saveUtilityName();
+    
 
   }
 
@@ -779,14 +937,16 @@ deleteArcFile(index){
     if (this.desginForm.status === 'VALID') {
       var newConstruction = this.desginForm.get("newconstruction").value;
         if (this.designId === 0) {
-
-          if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
+          this.desginForm.get('utility').setValue(this.selectedUtilityId);
+          this.desginForm.get('utilityrate').setValue(this.selectedUtilityRateId);
+          if(this.send===ScheduleFormEvent.SAVE_SALES_FORM){
             debugger;
             this.utils.showLoading('Saving').then(() => {
             this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
               // this.uploaarchitecturedesign(response.id,'architecturaldesign');
               // this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(()=>{
+              this.updateLogo();
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
                    this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -797,6 +957,7 @@ deleteArcFile(index){
                    this.uploadpreliumdesign(response,'attachments')
                  }
                  else{
+                   console.log('Redirect.....')
                   this.router.navigate(['/homepage/design'])
                   // this.utils.showSnackBar('Design have been saved');
                   this.utils.setHomepageDesignRefresh(true);
@@ -825,10 +986,11 @@ deleteArcFile(index){
               });
             });
             }
-            else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
+            else if(this.send===ScheduleFormEvent.SEND_SALES_FORM){
               this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
                 console.log(response.id);
                 this.utils.hideLoading().then(()=>{
+                  // this.updateLogo();
                 if(newConstruction == 'true')
                 {
                this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -842,7 +1004,8 @@ deleteArcFile(index){
                               queryParams: {
                                 id:response.id,
                                 designData:"prelim",
-                                fulldesigndata:response
+                                fulldesigndata:response,
+                                designType:"siteproposal"
                               },
                               skipLocationChange: false,
                               fragment: 'top' 
@@ -865,10 +1028,11 @@ deleteArcFile(index){
           
 
         } else {
-          if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
+          if(this.send===ScheduleFormEvent.SAVE_SALES_FORM){
             this.utils.showLoading('Saving').then(() => {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
+              this.updateLogo();
             if(newConstruction=='true')
             {
             this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -898,9 +1062,10 @@ deleteArcFile(index){
           });
         });
         }
-        else if(this.send===ScheduleFormEvent.SEND_DESIGN_FORM){
+        else if(this.send===ScheduleFormEvent.SEND_SALES_FORM){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
+              this.updateLogo();
             if(newConstruction=='true')
             {
             this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1260,6 +1425,19 @@ ioniViewDidEnter(){
   })
   }
 
+  updateLogo(){
+
+    console.log(this.blob,this.logoFileName)
+    this.apiService.uploadlogo(this.blob,this.logoFileName).subscribe(res=>{
+      console.log(res);
+    }, responseError => {
+      //this.utils.hideUploadingLoading();
+      const error: ErrorModel = responseError.error;
+      this.utils.errorSnackBar(error.message[0].messages[0].message);
+    }
+    )
+  }
+
   // pickarchitecturaldesign(){
   //   this.camera.getPicture(this.options).then((imageData) => {
   //     let base64Image = 'data:image/jpeg;base64,' + imageData;
@@ -1431,5 +1609,24 @@ state: { productdetails: objToSend }
     return this.getCompanies.filter(
       company => company.companyname.toLowerCase().indexOf(companyname) != -1
     );
+  }
+
+  onRangeChangeHandler() {
+    this.number = this.desginForm.get('annualutilityescalation').value;
+    console.log(this.number);
+    
+
+    if (this.desginForm.get('annualutilityescalation').value > 0 && this.desginForm.get('annualutilityescalation').value < 1) {
+        this.color = 'dark';
+    }
+    else if (this.desginForm.get('annualutilityescalation').value > 2 && this.desginForm.get('annualutilityescalation').value < 3) {
+      this.color = 'primary';
+    }
+    else if (this.desginForm.get('annualutilityescalation').value > 3 && this.desginForm.get('annualutilityescalation').value < 4) {
+      this.color = 'secondary';
+    }
+    else {
+      this.color = 'danger';
+    }
   }
 }

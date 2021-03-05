@@ -348,6 +348,9 @@ export class ApiService {
     prelimCharges(){
       return this.http.get(BaseUrl+ "commonsettings?settingname=prelimdesigncharges", { headers: this.headers});}
 
+      prelimSalesCharges(){
+        return this.http.get(BaseUrl+ "commonsettings?settingname=siteproposaldesigncharges", { headers: this.headers});}
+
       permitinitcharges(){
         return this.http.get(BaseUrl+ "commonsettings?settingname=permitdesigncharges", { headers: this.headers});}
    
@@ -623,6 +626,16 @@ export class ApiService {
       }
       utilitiesRate(utilityid){
         return this.http.get(BaseUrl + 'utilityrates?utility=' +  utilityid, {
+          headers: this.headers
+        })
+      }
+      postUtilitiesNames(name){
+        return this.http.post(BaseUrl + 'utilities',name, {
+          headers: this.headers
+        })
+      }
+      postUtilitiesRate(utilityid){
+        return this.http.post(BaseUrl + 'utilityrates',utilityid, {
           headers: this.headers
         })
       }

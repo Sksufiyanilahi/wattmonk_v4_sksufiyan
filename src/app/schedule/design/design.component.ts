@@ -758,7 +758,8 @@ deleteArcFile(index){
                               queryParams: {
                                 id:response.id,
                                 designData:"prelim",
-                                fulldesigndata:response
+                                fulldesigndata:response,
+                                designType:"siteassesment"
                               },
                               skipLocationChange: false,
                               fragment: 'top' 

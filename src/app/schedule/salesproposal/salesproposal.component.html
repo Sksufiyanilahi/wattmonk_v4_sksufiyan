@@ -155,12 +155,12 @@
             <ion-col size="12">
                 <ion-item class="ion-no-padding">
                     <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
-                        <mat-label>Utility</mat-label>
+                        <mat-label>Utility Name</mat-label>
                         <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto" autocomplete="off" formControlName="utility" required>
                        
                         <mat-autocomplete #auto="matAutocomplete">
-                          <mat-option *ngFor="let modulemake of filteredModuleMakes | async" [value]="modulemake.name"
-                           class="font">{{modulemake.name}}</mat-option>
+                          <mat-option *ngFor="let utility of filteredModuleMakes | async" [value]="utility.name"
+                          (onSelectionChange)="fetchUtilityData($event,utility)" class="font">{{utility.name}}</mat-option>
                         </mat-autocomplete>
                       </mat-form-field>
                 </ion-item>
@@ -171,17 +171,17 @@
                 <ion-item class="ion-no-padding">
                     <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                       <mat-label>Utility Rate</mat-label>
-                      <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto" autocomplete="off" formControlName="utilityrate" required>
-                      <!-- <mat-autocomplete #auto="matAutocomplete">
-                        <mat-option *ngFor="let modulemake of filterIncentive | async" [value]="modulemake.name"
-                     class="font"></mat-option>
-                      </mat-autocomplete> -->
+                      <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto1" autocomplete="off" formControlName="utilityrate" required>
+                      <mat-autocomplete #auto1="matAutocomplete">
+                        <mat-option *ngFor="let module of filteredModuleModels | async" [value]="module.rate"
+                        (onSelectionChange)="setSelectedUtilityRate(module)" class="font">{{module.rate}}</mat-option>
+                      </mat-autocomplete>
                     </mat-form-field>
                 </ion-item>
             </ion-col>
         </ion-row>
 
-        <ion-row class="ion-align-items-center ion-justify-content-center">
+        <!-- <ion-row class="ion-align-items-center ion-justify-content-center">
           <ion-col style="margin-top: 15px;">
               <ion-label>Annual Utility Escalation*</ion-label>
               <ion-range [color]="color"
@@ -190,7 +190,30 @@
                 <ion-label slot="end">5.0%</ion-label>
               </ion-range>
           </ion-col>
-    </ion-row>
+    </ion-row> -->
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+        <ion-col>
+            <ion-item class="ion-no-padding">
+            <ion-label position="floating">Annual Utility Escalation*</ion-label>
+            <ion-select  class="form_input select_div" 
+            ok-text=""
+        cancel-text=""
+        formControlName="annualutilityescalation" interface="popover" >
+        <ion-select-option  value=0>0 %</ion-select-option>
+<ion-select-option  value=0.5>0.5 %</ion-select-option>
+<ion-select-option  value=1>1 %</ion-select-option>
+<ion-select-option  value=1.5>1.5 %</ion-select-option>
+<ion-select-option  value=2>2 %</ion-select-option>
+<ion-select-option  value=2.5>2.5 %</ion-select-option>
+<ion-select-option  value=3>3 %</ion-select-option>
+<ion-select-option  value=3.5>3.5 %</ion-select-option>
+<ion-select-option  value=4>4 %</ion-select-option>
+<ion-select-option  value=4.5>4.5 %</ion-select-option>
+<ion-select-option  value=5>5 %</ion-select-option>
+</ion-select>
+</ion-item>
+        </ion-col>
+  </ion-row>
     <ion-row class="ion-align-items-center ion-justify-content-center">
       <ion-col>
             <ion-item class="ion-no-padding">
@@ -198,23 +221,23 @@
                 <ion-select class="form_input select_div"
                 ok-text="" cancel-text=""
                 formControlName="incentive" interface="popover" >
-        <ion-select-option></ion-select-option>
+        <ion-select-option *ngFor="let incentive of incentives" [value]="incentive.id">{{incentive.title}}</ion-select-option>
   </ion-select>
           </ion-item>
       </ion-col>
   </ion-row>
   <ion-row class="ion-align-items-center ion-justify-content-center">
-    <ion-col>
+    <ion-col size="6">
         <ion-item class="ion-no-padding">
-            <ion-label position="floating">Cost of system* (Watt)</ion-label>
-            <ion-input type="text" class="form_input" autocapitalize="words"
+            <ion-label position="floating">Cost of System* (Watt)</ion-label>
+            <ion-input type="number" class="form_input"
             formControlName="costofsystem"></ion-input>
         </ion-item>
     </ion-col>
-</ion-row>
+<!-- </ion-row>
 
-<ion-row class="ion-align-items-center ion-justify-content-center">
-  <ion-col>
+<ion-row class="ion-align-items-center ion-justify-content-center"> -->
+  <ion-col size="6">
       <ion-item class="ion-no-padding">
           <ion-label position="floating">Installer Name*</ion-label>
           <ion-input type="text" class="form_input" autocapitalize="words"
@@ -227,19 +250,31 @@
       <ion-item class="ion-no-padding">
           <ion-label position="floating">Company Name</ion-label>
           <ion-input  type="text" class="form_input" autocapitalize="words"
-          formControlName="companyName"></ion-input>
+          formControlName="company"></ion-input>
       </ion-item>
   </ion-col>
 </ion-row> 
 
 <ion-row class="ion-align-items-center ion-justify-content-center">
-  <ion-col>
+  <!-- <ion-col>
       <ion-item class="ion-no-padding">
           <ion-label position="floating">Company Logo</ion-label>
           <ion-input  type="text" class="form_input" autocapitalize="words"
           formControlName="companylogo"></ion-input>
       </ion-item>
-  </ion-col>
+  </ion-col> -->
+  <ion-col size="12" (click)="fileInput.click()">
+    <ion-item  class="ion-no-padding">
+      <ion-label position="floating">Upload Logo</ion-label>
+      <input type='file' id="imageUpload" placeholder="Upload logo" accept="image/" #fileInput (change)="uploadFile($event)" />
+      </ion-item>
+   
+        <div *ngIf="logo !=null && logo !=''" class="avatar-upload" style="text-align: center;">
+            <img [src]=logo height="100px" width="100px" />
+      </div>
+    
+  <!-- </ion-item> -->
+</ion-col>
 </ion-row>  
   
           <ion-row class="ion-align-items-center ion-justify-content-center">
