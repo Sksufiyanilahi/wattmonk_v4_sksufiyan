@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, resolveForwardRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from 'src/app/model/assignee.model';
 import { SolarMake } from 'src/app/model/solar-make.model';
@@ -21,6 +21,8 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Clients } from 'src/app/model/clients.model';
 import { map, startWith } from "rxjs/operators";
 import { UtilityRates } from 'src/app/model/utilityrate.model';
+import { Incentive } from 'src/app/model/incentive.model';
+import { Utility } from 'src/app/model/utility.model';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFirestore} from '@angular/fire/firestore';
 
@@ -106,9 +108,9 @@ export class SalesproposalComponent implements OnInit {
   userdata:any;
 
   attachmentFileUpload: boolean= false;
-  incentives: any;
+  incentives: Incentive[]=[];
   utilitiesName: any;
-  modulemakes: any;
+  modulemakes: Utility[]=[];
   modulemodels: UtilityRates[]=[];
   filteredModuleMakes: Observable<any>;
   filteredModuleModels: Observable<any>;
@@ -198,7 +200,8 @@ blob:Blob;
       incentive : new FormControl(null,[Validators.required]),
       costofsystem : new FormControl(null,[Validators.required]),
       personname : new FormControl(null,[Validators.required]),
-      companylogo : new FormControl(null)
+      companylogo : new FormControl(null),
+      requirementtype : new FormControl('proposal')
       // uploadbox:new FormControl('')
     });
       
@@ -261,7 +264,7 @@ blob:Blob;
 
   fetchModuleMakesData() {
     this.apiService.utilitiesNames().subscribe(
-      response => {
+      (response:any) => {
         console.log("Hiii");
         this.modulemakes = response;
         this.filteredModuleMakes = this.desginForm.get('utility').valueChanges.pipe(
@@ -278,7 +281,7 @@ blob:Blob;
 
   fetchIncentive() {
     this.apiService.salesIncentives().subscribe(
-      response => {
+      (response:any) => {
         console.log("Hiii");
         this.incentives = response;
         // this.filterIncentive = this.desginForm.get('utility').valueChanges.pipe(
@@ -297,14 +300,6 @@ blob:Blob;
     const filterValue = name.toLowerCase();
     return this.modulemakes.filter(
       modulemake => modulemake.name.toLowerCase().indexOf(filterValue) != -1
-    );
-  }
-
-  private _filterincentive(title: string) {
-    const filterValue = title.toLowerCase();
-
-    return this.incentives.filter(
-      incentive => incentive.title.toLowerCase().indexOf(filterValue) != -1
     );
   }
 
@@ -554,6 +549,13 @@ blob:Blob;
      
       
     }
+
+    setTimeout(()=>{
+      this.fetchModuleMakesData();
+      if (this.designId !== 0) {
+        this.loadModuleModelsData();
+      }
+    });
 this.formControlValueChanged();
 this.uploadcontrolvalidation();
 
@@ -603,6 +605,23 @@ uploadcontrolvalidation(){
   })
 }
 
+loadModuleModelsData() {
+  this.modulemodels = [];
+  this.apiService.utilitiesRate(this.selectedUtilityId).subscribe(
+    (response:any) => {
+      console.log("Hiii");
+      this.modulemodels = response;
+      this.filteredModuleModels = this.desginForm.get('modulemodel').valueChanges.pipe(
+        startWith(""),
+        map(value => (typeof value === "string" ? value : value.name)),
+        map(name => (name ? this._filterModuleModel(name) : this.modulemodels.slice()))
+      );
+    },
+    error => {
+      this.utils.errorSnackBar("Error");
+    }
+  );
+}
 
   ngOnDestroy(): void {
     this.utils.showHideIntercom(false);
@@ -652,7 +671,15 @@ getDesignDetails() {
             solarmodel:this.design.solarmodel,
             invertermake:this.design.invertermake,
             invertermodel:this.design.invertermodel,
-            status:this.design.status
+            status:this.design.status,
+            utility: this.design.utility.name,
+            utilityrate : this.design.utilityrate.rate,
+            annualutilityescalation : this.design.annualutilityescalation,
+            incentive : this.design.incentive.title,
+            costofsystem : this.design.costofsystem,
+            personname : this.design.personname,
+            companylogo : this.design.companylogo,
+            requirementtype : this.design.requirementtype
           });
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
@@ -921,6 +948,7 @@ deleteArcFile(index){
  
 }
 
+
   addForm() {
   this.onFormSubmit=false;
   // this.saveModuleMake();
@@ -936,9 +964,11 @@ deleteArcFile(index){
   submitform(){
     if (this.desginForm.status === 'VALID') {
       var newConstruction = this.desginForm.get("newconstruction").value;
-        if (this.designId === 0) {
-          this.desginForm.get('utility').setValue(this.selectedUtilityId);
+      this.desginForm.get('utility').setValue(this.selectedUtilityId);
           this.desginForm.get('utilityrate').setValue(this.selectedUtilityRateId);
+          
+        if (this.designId === 0) {
+          
           if(this.send===ScheduleFormEvent.SAVE_SALES_FORM){
             debugger;
             this.utils.showLoading('Saving').then(() => {
@@ -946,7 +976,7 @@ deleteArcFile(index){
               // this.uploaarchitecturedesign(response.id,'architecturaldesign');
               // this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(()=>{
-              this.updateLogo();
+              //this.updateLogo();
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
                    this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1032,7 +1062,7 @@ deleteArcFile(index){
             this.utils.showLoading('Saving').then(() => {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
-              this.updateLogo();
+              //this.updateLogo();
             if(newConstruction=='true')
             {
             this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1065,7 +1095,7 @@ deleteArcFile(index){
         else if(this.send===ScheduleFormEvent.SEND_SALES_FORM){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
-              this.updateLogo();
+              //this.updateLogo();
             if(newConstruction=='true')
             {
             this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1079,7 +1109,8 @@ deleteArcFile(index){
                   queryParams: {
                     id:response.id,
                     designData:"prelim",
-                    fulldesigndata:response
+                    fulldesigndata:response,
+                    designType:"siteproposal"
                   },
                   skipLocationChange: false,
                   fragment: 'top' 

@@ -199,17 +199,17 @@
             ok-text=""
         cancel-text=""
         formControlName="annualutilityescalation" interface="popover" >
-        <ion-select-option  value=0>0 %</ion-select-option>
-<ion-select-option  value=0.5>0.5 %</ion-select-option>
-<ion-select-option  value=1>1 %</ion-select-option>
-<ion-select-option  value=1.5>1.5 %</ion-select-option>
-<ion-select-option  value=2>2 %</ion-select-option>
-<ion-select-option  value=2.5>2.5 %</ion-select-option>
-<ion-select-option  value=3>3 %</ion-select-option>
-<ion-select-option  value=3.5>3.5 %</ion-select-option>
-<ion-select-option  value=4>4 %</ion-select-option>
-<ion-select-option  value=4.5>4.5 %</ion-select-option>
-<ion-select-option  value=5>5 %</ion-select-option>
+        <ion-select-option  [value]="0">0 %</ion-select-option>
+<ion-select-option [value]="0.5">0.5 %</ion-select-option>
+<ion-select-option  [value]="1">1 %</ion-select-option>
+<ion-select-option  [value]="1.5">1.5 %</ion-select-option>
+<ion-select-option  [value]="2">2 %</ion-select-option>
+<ion-select-option  [value]="2.5">2.5 %</ion-select-option>
+<ion-select-option  [value]="3">3 %</ion-select-option>
+<ion-select-option  [value]="3.5">3.5 %</ion-select-option>
+<ion-select-option  [value]="4">4 %</ion-select-option>
+<ion-select-option  [value]="4.5">4.5 %</ion-select-option>
+<ion-select-option  [value]="5">5 %</ion-select-option>
 </ion-select>
 </ion-item>
         </ion-col>
@@ -218,7 +218,7 @@
       <ion-col>
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Any Incentives*</ion-label>
-                <ion-select class="form_input select_div"
+                <ion-select class="form_input select_div" 
                 ok-text="" cancel-text=""
                 formControlName="incentive" interface="popover" >
         <ion-select-option *ngFor="let incentive of incentives" [value]="incentive.id">{{incentive.title}}</ion-select-option>
