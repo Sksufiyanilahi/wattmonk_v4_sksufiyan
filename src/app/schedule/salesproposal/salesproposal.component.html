@@ -220,7 +220,7 @@
                 <ion-label position="floating">Any Incentives*</ion-label>
                 <ion-select class="form_input select_div" 
                 ok-text="" cancel-text=""
-                formControlName="incentive" interface="popover" >
+                formControlName="incentive" interface="popover" [value]= incentive>
         <ion-select-option *ngFor="let incentive of incentives" [value]="incentive.id">{{incentive.title}}</ion-select-option>
   </ion-select>
           </ion-item>

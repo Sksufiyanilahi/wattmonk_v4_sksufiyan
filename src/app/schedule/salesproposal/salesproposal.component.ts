@@ -675,7 +675,7 @@ getDesignDetails() {
             utility: this.design.utility.name,
             utilityrate : this.design.utilityrate.rate,
             annualutilityescalation : this.design.annualutilityescalation,
-            incentive : this.design.incentive.title,
+            incentive : this.design.incentive.id,
             costofsystem : this.design.costofsystem,
             personname : this.design.personname,
             companylogo : this.design.companylogo,
