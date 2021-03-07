@@ -224,7 +224,7 @@ export class UtilitiesService {
 		this.loading = await this.loadingController.create({
 			message: finalMessage
 		});
-		return this.loading.present();
+		return await this.loading.present();
 	}
 
 	async showLoadingWithPullRefreshSupport(showPopup: boolean, message?: string) {
@@ -254,8 +254,8 @@ export class UtilitiesService {
 		this.loading.message = message;
 	}
 
-	hideLoading(): Promise<boolean> {
-		return this.loading.dismiss();
+	async hideLoading(): Promise<boolean> {
+		return await this.loading.dismiss();
 	}
 
 	hideLoadingWithPullRefreshSupport(showPopup: boolean): Promise<boolean> {
