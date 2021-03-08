@@ -212,8 +212,8 @@ discountAmount(){
 }
 
 servicecharges(){
-  console.log(this.designType,this.design);
-  if(this.design=='prelim' && this.designType=='siteassesment'){
+  console.log(this.fulldesigndata,this.design);
+  if(this.design=='prelim' && this.fulldesigndata.requirementtype=="assessment"){
     this.apiService.prelimCharges().subscribe(res=>{
       this.servicePrice=res;
       this.servicePrice.forEach(element => {
@@ -222,7 +222,7 @@ servicecharges(){
       console.log("ddd",this.settingValue)
       this.discountAmount();
     })}
-    else if(this.design=='prelim' && this.designType == 'siteproposal')
+    else if(this.design=='prelim' && this.fulldesigndata.requirementtype == "proposal")
     {
       this.apiService.prelimSalesCharges().subscribe(res=>{
         this.servicePrice=res;

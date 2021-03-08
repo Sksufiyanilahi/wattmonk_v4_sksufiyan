@@ -9,7 +9,7 @@ import { SolarMadeModel } from 'src/app/model/solar-made.model';
 import { InverterMakeModel } from 'src/app/model/inverter-make.model';
 import { NavController } from '@ionic/angular';
 import { InverterMadeModel } from 'src/app/model/inverter-made.model';
-import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE, INVALID_ANNUAL_UNIT, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_COMPANY_NAME } from '../../model/constants';
+import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE, INVALID_ANNUAL_UNIT, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_COMPANY_NAME, INVALID_MODULE_AND_INVERTER } from '../../model/constants';
 import { Observable, Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd, NavigationExtras } from '@angular/router';
@@ -61,6 +61,7 @@ export class SalesproposalComponent implements OnInit {
   annualunitError = INVALID_ANNUAL_UNIT;
   tiltforgroundError = INVALID_TILT_FOR_GROUND_MOUNT;
   companyError = INVALID_COMPANY_NAME;
+  moduleAndInverterError = INVALID_MODULE_AND_INVERTER;
 
   fieldRequired = FIELD_REQUIRED;
 
@@ -156,7 +157,7 @@ blob:Blob;
     const NUMBERPATTERN = '^[0-9]*$';
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.desginForm = this.formBuilder.group({
-      company: new FormControl(''),
+      company: new FormControl('',[Validators.pattern(COMPANYFORMAT)]),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       solarmake: new FormControl('', [Validators.required]),
@@ -194,12 +195,12 @@ blob:Blob;
       //isonpriority:new FormControl('false'),
       paymentstatus:new FormControl(null),
       paymenttype:new FormControl(null),
-      utility: new FormControl("",[Validators.required]),
-      utilityrate : new FormControl("",[Validators.required]),
+      utility: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      utilityrate : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
       annualutilityescalation : new FormControl(null,[Validators.required]),
       incentive : new FormControl(null,[Validators.required]),
-      costofsystem : new FormControl(null,[Validators.required]),
-      personname : new FormControl(null,[Validators.required]),
+      costofsystem : new FormControl(null,[Validators.required,Validators.max(2)]),
+      personname : new FormControl(null,[Validators.required,Validators.pattern(NAMEPATTERN)]),
       companylogo : new FormControl(null),
       requirementtype : new FormControl('proposal')
       // uploadbox:new FormControl('')
@@ -1035,7 +1036,7 @@ deleteArcFile(index){
                                 id:response.id,
                                 designData:"prelim",
                                 fulldesigndata:response,
-                                designType:"siteproposal"
+                               
                               },
                               skipLocationChange: false,
                               fragment: 'top' 
@@ -1110,7 +1111,6 @@ deleteArcFile(index){
                     id:response.id,
                     designData:"prelim",
                     fulldesigndata:response,
-                    designType:"siteproposal"
                   },
                   skipLocationChange: false,
                   fragment: 'top' 
