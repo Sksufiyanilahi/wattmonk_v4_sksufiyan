@@ -164,6 +164,11 @@
                         </mat-autocomplete>
                       </mat-form-field>
                 </ion-item>
+                <div style="height: 5px;">
+                    <div *ngIf="desginForm.get('utility').hasError('pattern') && desginForm.get('utility').dirty">
+                        <span class="error">{{moduleAndInverterError}}</span>
+                    </div>
+                </div>
             </ion-col>    
           </ion-row >
           <ion-row>
@@ -178,6 +183,11 @@
                       </mat-autocomplete>
                     </mat-form-field>
                 </ion-item>
+                <div style="height: 5px;">
+                    <div *ngIf="desginForm.get('utilityrate').hasError('pattern') && desginForm.get('utilityrate').dirty">
+                        <span class="error">{{moduleAndInverterError}}</span>
+                    </div>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -198,7 +208,7 @@
             <ion-select  class="form_input select_div" 
             ok-text=""
         cancel-text=""
-        formControlName="annualutilityescalation" interface="popover" >
+        formControlName="annualutilityescalation" interface="popover" [value]="3.5">
         <ion-select-option  [value]="0">0 %</ion-select-option>
 <ion-select-option [value]="0.5">0.5 %</ion-select-option>
 <ion-select-option  [value]="1">1 %</ion-select-option>
@@ -239,10 +249,18 @@
 <ion-row class="ion-align-items-center ion-justify-content-center"> -->
   <ion-col size="6">
       <ion-item class="ion-no-padding">
-          <ion-label position="floating">Installer Name*</ion-label>
+          <ion-label position="floating">Representative Name*</ion-label>
           <ion-input type="text" class="form_input" autocapitalize="words"
           formControlName="personname"></ion-input>
       </ion-item>
+      <div style="height: 5px;">
+        <div *ngIf="desginForm.get('personname').hasError('pattern') && desginForm.get('personname').dirty">
+            <span class="error">{{nameError}}</span>
+        </div>
+        <div *ngIf="desginForm.get('personname').value === '' && desginForm.get('personname').dirty">
+            <span class="error">{{fieldRequired}}</span>
+        </div>
+    </div>
   </ion-col>
 </ion-row>  
 <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -252,6 +270,11 @@
           <ion-input  type="text" class="form_input" autocapitalize="words"
           formControlName="company"></ion-input>
       </ion-item>
+      <div style="height: 5px;">
+        <div *ngIf="desginForm.get('company').hasError('pattern') && desginForm.get('company').dirty">
+            <span class="error">{{companyError}}</span>
+        </div>
+    </div>
   </ion-col>
 </ion-row> 
 
