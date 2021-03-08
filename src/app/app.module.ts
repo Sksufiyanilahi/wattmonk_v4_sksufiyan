@@ -43,13 +43,14 @@ import {Mixpanel, MixpanelPeople} from '@ionic-native/mixpanel/ngx';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import { MyLoaderComponent } from './components/my-loader/my-loader.component';
 import { LoaderInterceptorService } from './interceptors/loader-interceptor.service';
+import { PopoverComponentComponent } from './popover-component/popover-component.component';
 
 // import { LinkifyPipe } from './linkify.pipe';
 
 
 @NgModule({
-    declarations: [AppComponent, SuccessModalComponent,MyLoaderComponent],
-    entryComponents: [SuccessModalComponent],
+    declarations: [AppComponent, SuccessModalComponent,MyLoaderComponent,PopoverComponentComponent],
+    entryComponents: [SuccessModalComponent,PopoverComponentComponent],
     imports: [
         BrowserModule,
         IonicModule.forRoot(),

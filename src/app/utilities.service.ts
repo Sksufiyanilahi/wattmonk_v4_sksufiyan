@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { AlertController, LoadingController, ModalController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, NavController, PopoverController, ToastController } from '@ionic/angular';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
@@ -15,6 +15,7 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { COMETCHAT_CONSTANTS } from './contants.prod';
+import { PopoverComponentComponent } from './popover-component/popover-component.component';
 
 @Injectable({
 	providedIn: 'root'
@@ -64,6 +65,7 @@ export class UtilitiesService {
 	callData: any;
 
 	toast:any;
+	popover: HTMLIonPopoverElement;
 
 	constructor(
 		public loadingController: LoadingController,
@@ -74,7 +76,8 @@ export class UtilitiesService {
 		private intercom: Intercom,
 		private router: Router,
 		private navCtrl: NavController,
-		private location: Location
+		private location: Location,
+		private popoverController : PopoverController
 	) {
 		this.guid$ = this.myMethodSubject.asObservable();
 		// this.listencall();
@@ -445,6 +448,22 @@ export class UtilitiesService {
 
 		await alert.present();
 	}
+
+	async presentPopover(ev: any) {
+		console.log(ev);
+		
+		this.popover = await this.popoverController.create({
+		  component: PopoverComponentComponent,
+		  cssClass: 'my-custom',
+		  event: ev,
+		  translucent: true
+		});
+		return await this.popover.present();
+	  }
+
+	  async dismissPopover(){
+		this.popover.dismiss();
+	  }
 
 	formatDateInTimeAgo(datestring: any) {
 		return moment(datestring, 'YYYY-MM-DD HH:mm:ss GMT Z').fromNow();
