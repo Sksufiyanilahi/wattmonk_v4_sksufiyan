@@ -53,6 +53,7 @@ export const COMETCHAT_CONSTANTS = {
    REGION: 'US',
    API_KEY: '83ac811da8283c9e235ab912bf7a6213c207dd4d'
 }
+
 export const version='1.1.3'
 export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
 
