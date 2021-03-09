@@ -74,6 +74,7 @@ export class SurveyDataModel {
   batterysystem:any;
   isdesignraised:boolean=false;
   recordupdatedon:any;
+  rooftilt:any;
 }
 
 

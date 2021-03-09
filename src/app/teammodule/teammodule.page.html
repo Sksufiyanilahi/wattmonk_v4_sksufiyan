@@ -10,8 +10,8 @@
   </ion-toolbar>
 
 
-<ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;">
-  <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+<ion-content style="padding-bottom: 250px;position: sticky;">
+  <ion-refresher slot="fixed">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 <ion-grid >
@@ -27,7 +27,7 @@
                         {{item.date | date: 'dd MMM yyyy'}}
                 </span>
         </ion-col> -->
-        <ion-col *ngFor="let designData of teamData;let i = index;trackBy: trackdesign" size="12">
+        <ion-col *ngFor="let designData of teamData;let i = index" size="12">
             <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
                 <p class="customer-name"
                 routerDirection="forward">{{designData.firstname}} {{designData.lastname}}
