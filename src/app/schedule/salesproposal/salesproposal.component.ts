@@ -171,7 +171,7 @@ blob:Blob;
       rooftype: new FormControl(''),
       //prelimdesign: new FormControl(null),
       architecturaldesign: new FormControl(''),
-      tiltofgroundmountingsystem: new FormControl(''),
+      tiltgroundmount: new FormControl(''),
       mountingtype: new FormControl('', [Validators.required]),
       // jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
@@ -197,9 +197,9 @@ blob:Blob;
       paymenttype:new FormControl(null),
       utility: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
       utilityrate : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
-      annualutilityescalation : new FormControl(null,[Validators.required]),
-      incentive : new FormControl(null,[Validators.required]),
-      costofsystem : new FormControl(null,[Validators.required,Validators.max(2)]),
+      annualutilityescalation : new FormControl('',[Validators.required]),
+      incentive : new FormControl('',[Validators.required]),
+      costofsystem : new FormControl(null,[Validators.required]),
       personname : new FormControl(null,[Validators.required,Validators.pattern(NAMEPATTERN)]),
       companylogo : new FormControl(null),
       requirementtype : new FormControl('proposal')
@@ -392,7 +392,7 @@ blob:Blob;
    console.log(found);
     if (!ismakefound || !found) {
       let data={
-        utilityid:this.selectedUtilityId,
+        utility:this.selectedUtilityId,
         rate:this.desginForm.get('utilityrate').value
   
       }
@@ -564,7 +564,7 @@ this.uploadcontrolvalidation();
   
 formControlValueChanged() {
   const NUMBERPATTERN = '^[0-9]*$';
-  const tiltControl = this.desginForm.get('tiltofgroundmountingsystem');
+  const tiltControl = this.desginForm.get('tiltgroundmount');
   const roofcontrol = this.desginForm.get('rooftype');
   this.desginForm.get('mountingtype').valueChanges.subscribe(
       (mode: string) => {
@@ -654,7 +654,7 @@ getDesignDetails() {
             mountingtype:this.design.mountingtype,
             architecturaldesign:this.design.architecturaldesign,
             // jobtype: this.design.jobtype,
-            tiltofgroundmountingsystem: this.design.tiltofgroundmountingsystem,
+            tiltgroundmount: this.design.tiltgroundmount,
             comments: this.design.comments==''? '': this.design.comments[0].message,
             projecttype: this.design.projecttype,
             latitude: this.design.latitude,
@@ -673,8 +673,8 @@ getDesignDetails() {
             invertermake:this.design.invertermake,
             invertermodel:this.design.invertermodel,
             status:this.design.status,
-            utility: this.design.utility.name,
-            utilityrate : this.design.utilityrate.rate,
+            utility: this.design.utility.id,
+            utilityrate : this.design.utilityrate.id,
             annualutilityescalation : this.design.annualutilityescalation,
             incentive : this.design.incentive.id,
             costofsystem : this.design.costofsystem,
@@ -963,8 +963,19 @@ deleteArcFile(index){
   }
 
   submitform(){
-    if (this.desginForm.status === 'VALID') {
+    console.log(this.desginForm);
+    // const invalid = [];
+    // const controls = this.desginForm.controls;
+    // for (const name in controls) {
+    //     if (controls[name].invalid) {
+    //         invalid.push(name);
+    //     }
+    // }
+    // console.log('hey',invalid)
+    // return invalid;
+    if (this.desginForm.status == 'VALID') {
       var newConstruction = this.desginForm.get("newconstruction").value;
+      console.log(this.selectedUtilityId)
       this.desginForm.get('utility').setValue(this.selectedUtilityId);
           this.desginForm.get('utilityrate').setValue(this.selectedUtilityRateId);
           
@@ -977,7 +988,7 @@ deleteArcFile(index){
               // this.uploaarchitecturedesign(response.id,'architecturaldesign');
               // this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(()=>{
-              //this.updateLogo();
+              this.updateLogo();
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
                    this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1171,13 +1182,34 @@ deleteArcFile(index){
       else if(this.desginForm.value.invertermodel=='' || this.desginForm.get('invertermodel').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field inverter model.');
       }
+      else if(this.desginForm.value.utility=='' || this.desginForm.get('utility').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field utility name.');
+      }
+      else if(this.desginForm.value.utilityrate=='' || this.desginForm.get('utilityrate').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field utility rate.');
+      }
+      else if(this.desginForm.value.mountingtype==''){
+        this.utils.errorSnackBar('Please fill the mounting type.');
+      }
+      else if(this.desginForm.value.annualutilityescalation==''){
+        this.utils.errorSnackBar('Please fill the annual utility escalation.');
+      }
+      else if(this.desginForm.value.incentive==''){
+        this.utils.errorSnackBar('Please fill the incentive.');
+      }
+      else if(this.desginForm.value.costofsystem==''){
+        this.utils.errorSnackBar('Please fill the cost of system');
+      }
+      else if(this.desginForm.value.personname==''){
+        this.utils.errorSnackBar('Please fill the representative name.');
+      }
       else if(this.desginForm.value.mountingtype==''){
         this.utils.errorSnackBar('Please fill the mounting type.');
       }
       else if(this.desginForm.value.projecttype==''){
         this.utils.errorSnackBar('Please fill the project type.');
       }
-      else if(this.desginForm.value.tiltofgroundmountingsystem=='' || this.desginForm.get('tiltofgroundmountingsystem').hasError('pattern')){
+      else if(this.desginForm.value.tiltgroundmount=='' || this.desginForm.get('tiltgroundmount').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field tilt for ground mount.');
       }
       else if(this.desginForm.value.rooftype==''){
@@ -1564,7 +1596,7 @@ state: { productdetails: objToSend }
       else if(this.desginForm.value.projecttype==''){
         this.utils.errorSnackBar('Please fill the project type.');
       }
-      else if(this.desginForm.value.tiltofgroundmountingsystem=='' || this.desginForm.get('tiltofgroundmountingsystem').hasError('pattern')){
+      else if(this.desginForm.value.tiltgroundmount=='' || this.desginForm.get('tiltgroundmount').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field tilt for ground mount.');
       }
       else if(this.desginForm.value.rooftype==''){

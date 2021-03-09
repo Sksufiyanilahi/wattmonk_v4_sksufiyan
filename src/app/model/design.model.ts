@@ -140,6 +140,7 @@ export class DesginDataModel {
   costofsystem : number;
   personname : string;
   companylogo : any;
+  tiltgroundmount:string;
 }
 
 export class PrelimDesign{
