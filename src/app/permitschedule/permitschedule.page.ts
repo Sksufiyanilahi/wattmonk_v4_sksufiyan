@@ -19,7 +19,6 @@ import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@io
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AddressModel } from '../model/address.model';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
-import { Intercom } from 'ng-intercom';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { NetworkdetectService } from '../networkdetect.service';
 import { Clients } from '../model/clients.model';
@@ -88,8 +87,8 @@ export class PermitschedulePage implements OnInit {
   fieldRequired = FIELD_REQUIRED;
 
   fileName: any;
-  archFiles: string[]=[];
-  permitFiles: string[]=[];
+  archFiles: any=[];
+  permitFiles: any=[];
   designId=0;
   design: DesginDataModel = null;
   onFormSubmit:boolean=true;
@@ -133,7 +132,7 @@ export class PermitschedulePage implements OnInit {
   // newpermitsRef: AngularFireObject<any>;
   // newpermitscount = 0;
 
-  
+
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -147,15 +146,15 @@ export class PermitschedulePage implements OnInit {
     private geolocation: Geolocation,
     private platform: Platform,
     private toastController: ToastController,
-    private intercom:Intercom,
+
     private cdr:ChangeDetectorRef,
     private network:NetworkdetectService,
     private mixpanelService:MixpanelService
     //private db:AngularFireDatabase
     //private data: DesignFormData
     ) {
-        
-      
+
+
 
 
 
@@ -237,7 +236,6 @@ export class PermitschedulePage implements OnInit {
       this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
         this.netSwitch = data;
         console.log(this.netSwitch);
-        this.utils.showHideIntercom(true);
       })
     }
 
@@ -252,8 +250,8 @@ export class PermitschedulePage implements OnInit {
    this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
    console.log(this.surveydata)
    this.surveydatapresent=true
- 
-  
+
+
   }
 
     this.fieldDisabled=false;
@@ -291,7 +289,7 @@ export class PermitschedulePage implements OnInit {
      this.sendtowattmonk();
       }
     });
-    
+
 
 
     //this.addressValue();
@@ -371,7 +369,7 @@ export class PermitschedulePage implements OnInit {
       architecturaldesign:this.surveydata.architecturaldesign,
      jobtype: this.surveydata.jobtype,
       tiltofgroundmountingsystem: this.surveydata.tiltofgroundmountingsystem,
-   
+
       projecttype: this.surveydata.projecttype,
       latitude: this.surveydata.latitude,
       longitude: this.surveydata.longitude,
@@ -381,9 +379,9 @@ export class PermitschedulePage implements OnInit {
       postalcode:this.surveydata.postalCode,
       issurveycompleted:true,
       //attachments:this.design.attachments,
-  
+
       attachments:this.surveydata.attachments,
-     
+
     });
      this.utils.setStaticAddress(this.surveydata.address);
      if(this.desginForm.get('email').value==''){
@@ -591,7 +589,7 @@ export class PermitschedulePage implements OnInit {
     this.mixpanelService.track("PERMITDESIGN_PAGE_CLOSE", {
     });
    this.navController.pop();
-   
+
   }
 
   eventcheck(e){
@@ -978,7 +976,7 @@ else{
   designacceptancestarttime:designacceptancestarttime,
   isoutsourced:isoutsourced,
   isdesignraised:true
-  
+
 }}
 
 
@@ -1019,7 +1017,7 @@ else{
                   //     //     this.navController.pop();
                   //     //   });
                   //     // });
-    
+
                      });
                   // },2000)
               }, responseError => {
@@ -1028,7 +1026,7 @@ else{
                   this.utils.errorSnackBar(error.message);
                 });
 
-              
+
               });
 
               }
@@ -1105,11 +1103,11 @@ else{
                               fulldesigndata:response
                             },
                             skipLocationChange: false,
-                            fragment: 'top' 
+                            fragment: 'top'
                         };
-                    
-                    
-                    this.router.navigate(['/payment-modal'], { 
+
+
+                    this.router.navigate(['/payment-modal'], {
                       state: { productdetails: objToSend }
                     });
                  }
@@ -1125,11 +1123,11 @@ else{
             //           fulldesigndata:response
             //         },
             //         skipLocationChange: false,
-            //         fragment: 'top' 
+            //         fragment: 'top'
             //     };
-            
-            
-            // this.router.navigate(['/payment-modal'], { 
+
+
+            // this.router.navigate(['/payment-modal'], {
             //   state: { productdetails: objToSend }
             // });
                   // this.sendtowattmonk();
@@ -1228,7 +1226,7 @@ else{
               // if(this.isArcFileDelete){
               //   this.deleteArcFile(this.indexOfArcFiles);
               // }
-              
+
               // this.utils.hideLoading().then(() => {
               //   console.log('Res', response);
               //   this.utils.showSnackBar('Design have been updated');
@@ -1247,7 +1245,7 @@ else{
               });
 
             });
-              
+
               });
 
           }
@@ -1316,11 +1314,11 @@ else{
                     fulldesigndata:response
                   },
                   skipLocationChange: false,
-                  fragment: 'top' 
+                  fragment: 'top'
               };
-          
-          
-          this.router.navigate(['/payment-modal'], { 
+
+
+          this.router.navigate(['/payment-modal'], {
             state: { productdetails: objToSend }
           });
                }
@@ -1330,7 +1328,7 @@ else{
               // }
         //       this.utils.hideLoading().then(() => {
         //         console.log('Res', response);
-                
+
         //         this.utils.showSnackBar('Design have been updated');
         //        // this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
         //        let objToSend: NavigationExtras = {
@@ -1340,11 +1338,11 @@ else{
         //           fulldesigndata:response
         //         },
         //         skipLocationChange: false,
-        //         fragment: 'top' 
+        //         fragment: 'top'
         //     };
-        
-        
-        // this.router.navigate(['/payment-modal'], { 
+
+
+        // this.router.navigate(['/payment-modal'], {
         //   state: { productdetails: objToSend }
         // });
 
@@ -1361,7 +1359,7 @@ else{
           }
         }
 
-        
+
 
       } else {
         this.error();
@@ -1490,11 +1488,11 @@ else{
                 fulldesigndata:response
               },
               skipLocationChange: false,
-              fragment: 'top' 
+              fragment: 'top'
           };
-      
-      
-      this.router.navigate(['/payment-modal'], { 
+
+
+      this.router.navigate(['/payment-modal'], {
         state: { productdetails: objToSend }
       });
           }
@@ -1547,11 +1545,11 @@ else{
               fulldesigndata:response
             },
             skipLocationChange: false,
-            fragment: 'top' 
+            fragment: 'top'
         };
-    
-    
-    this.router.navigate(['/payment-modal'], { 
+
+
+    this.router.navigate(['/payment-modal'], {
       state: { productdetails: objToSend }
     });
         }
@@ -1583,7 +1581,7 @@ else{
       //   this.utils.showSnackBar('File deleted successfully');
       //   this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
         // this.utils.setHomepagePermitRefresh(true);
-       
+
     //   });
     //   },
     // (error)=>{
@@ -1601,22 +1599,22 @@ else{
     console.log(this.indexOfArcFiles);
     console.log(this.architecturalData);
     console.log(i);
-    
+
     this.architecturalData.splice(i, 1);
     this.deleteArcFile(this.indexOfArcFiles);
 
     }
 
     removeattachment(attachment,i){
-    
+
       this.indexOfAttachmentFiles.push( attachment.id);
-  
+
       this.isArcFileDelete=true;
       console.log(this.isArcFileDelete);
       console.log(this.indexOfAttachmentFiles);
       console.log(this.attachmentData);
       console.log(i);
-      
+
       this.attachmentData.splice(i, 1);
       this.deleteAttachmentFile(this.indexOfAttachmentFiles);
     }
@@ -1624,8 +1622,8 @@ else{
 
 
     deleteArcFile(index){
-     
-      
+
+
      // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
         for(var i=0; i< index.length;i++){
           var id = index[i];
@@ -1644,8 +1642,8 @@ else{
   }
 
   deleteAttachmentFile(index){
-    
-      
+
+
     // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
        for(var i=0; i< index.length;i++){
          var id = index[i];
@@ -1685,7 +1683,7 @@ else{
 
               this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
               this.router.navigate(['/permithomepage'])
-             
+
               this.utils.setHomepagePermitRefresh(this.isEdit);
             })
           }, (error) => {
@@ -1702,7 +1700,7 @@ else{
      this.deactivateNetworkSwitch.unsubscribe();
     }
 
-    // segmentChanged(event: CustomEvent) {
+    // segmentChanged(event) {
     //   console.log(event);
     //   this.currentTab = event.detail.value;
     //   this.tabs.select(event.detail.value);
@@ -1947,22 +1945,19 @@ else{
     }
 
     ionViewWillLeave(){
-      this.intercom.update({
-        "hide_default_launcher": false
-      });
     }
 
     createChatGroup(design:DesginDataModel){
       var GUID = 'permit' + "_" + new Date().getTime();
-    
+
       var address = design.address.substring(0, 90);
       var groupName = design.name + "_" + address;
-    
+
       var groupType = CometChat.GROUP_TYPE.PRIVATE;
       var password = "";
-    
+
       var group = new CometChat.Group(GUID, groupName, groupType, password);
-    
+
       CometChat.createGroup(group).then(group=>{
         let membersList = [
           new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
@@ -1989,10 +1984,10 @@ else{
     );
     }
 
-    proxyValue: any; onCompanyChanged(event$) { 
+    proxyValue: any; onCompanyChanged(event$) {
       console.log(event$);
-      this.proxyValue = event$.detail.value.companyname; 
-      this.designCreatedBy = event$.detail.value.companyid; 
+      this.proxyValue = event$.detail.value.companyname;
+      this.designCreatedBy = event$.detail.value.companyid;
       this.designCreatedByUserParent = event$.detail.value.parentid;
       if(this.designCreatedBy !== null && this.designCreatedByUserParent !== null){
         this.desginForm.patchValue({createdby:this.designCreatedBy,

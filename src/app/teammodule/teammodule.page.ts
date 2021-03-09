@@ -26,7 +26,7 @@ export class TeammodulePage implements OnInit {
   private subscription: Subscription;
   deactivateNetworkSwitch: Subscription;
   showFooter=true;
-  
+
   constructor(private apiService : ApiService,
               private utils:UtilitiesService,
               private storageservice:StorageService,
@@ -57,7 +57,7 @@ export class TeammodulePage implements OnInit {
         // })
       this.teamData = res;
       console.log(this.teamData);
-      
+
       }
     })
     })
@@ -82,7 +82,6 @@ export class TeammodulePage implements OnInit {
     // }
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      this.utils.showHideIntercom(false);
       console.log(this.netSwitch);
       let user= this.storageservice.getUser();
       this.apiService.emitUserNameAndRole(user);
@@ -113,5 +112,5 @@ this.network.networkConnect();
 
     }
 
-  
+
 }

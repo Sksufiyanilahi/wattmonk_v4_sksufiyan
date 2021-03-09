@@ -12,7 +12,6 @@
 //  export const PlatformUpdateUrl =  'http://ec2-52-15-220-175.us-east-2.compute.amazonaws.com:1802/';
 
 // export const BaseUrl = 'http://ec2-52-15-220-175.us-east-2.compute.amazonaws.com:1802/';
-// export const intercomId = 'o52f08q6';
 // export const COMETCHAT_CONSTANTS = {
 //     APP_ID: '190385dcec51285',
 //     REGION: 'US',
@@ -25,7 +24,6 @@
 // Test Server
 //   export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';
 //   export const BaseUrl = 'https://testorbit.wattmonk.com/api';
-// export const intercomId = 'c6w73e4e';
 //   export const COMETCHAT_CONSTANTS = {
 //       APP_ID: '22738c62a78b107',
 //        REGION: 'US',
@@ -37,7 +35,6 @@
 // Test Server
 //   export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';
 //   export const BaseUrl = 'https://testorbit.wattmonk.com/api';
-// export const intercomId = 'c6w73e4e';
 //   export const COMETCHAT_CONSTANTS = {
 //       APP_ID: '22738c62a78b107',
 //        REGION: 'US',
@@ -47,7 +44,6 @@
 //Development Server
 export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api/';
 export const BaseUrl = 'https://devspace.wattmonk.com/api/';
-export const intercomId = 'c6w73e4e';
 export const COMETCHAT_CONSTANTS = {
    APP_ID: '2145560cac03137',
    REGION: 'US',

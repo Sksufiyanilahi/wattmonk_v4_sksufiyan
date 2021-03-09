@@ -15,10 +15,10 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
-import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {Camera} from '@ionic-native/camera/ngx';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
-import {FirebaseX} from '@ionic-native/firebase-x';
+import {FirebaseX} from '@ionic-native/firebase-x/ngx';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {InAppBrowser} from '@ionic-native/in-app-browser/ngx';
 import {Mixpanel, MixpanelPeople} from '@ionic-native/mixpanel/ngx';
@@ -37,51 +37,51 @@ import {SuccessModalComponent} from './utilities/success-modal/success-modal.com
 import {UtilitiesModule} from './utilities/utilities.module';
 
 @NgModule({
-    declarations: [AppComponent, SuccessModalComponent],
-    entryComponents: [SuccessModalComponent],
-    imports: [
-        BrowserModule,
-        IonicModule.forRoot(),
-        AppRoutingModule,
-        HttpClientModule,
-        UtilitiesModule,
-        IonicStorageModule.forRoot(),
-        ChartsModule,
-        FormsModule,
-        BrowserAnimationsModule,
-        MatCardModule,
-        MatProgressBarModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatProgressSpinnerModule,
-        AngularFireDatabaseModule,
-        AngularFireModule.initializeApp(environment.firebase)
+  declarations: [AppComponent, SuccessModalComponent],
+  entryComponents: [SuccessModalComponent],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    HttpClientModule,
+    UtilitiesModule,
+    IonicStorageModule.forRoot(),
+    ChartsModule,
+    FormsModule,
+    BrowserAnimationsModule,
+    MatCardModule,
+    MatProgressBarModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    AngularFireDatabaseModule,
+    AngularFireModule.initializeApp(environment.firebase)
 
-    ],
-    providers: [
-        // FCM,
-        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-        HttpClient,
-        StorageService,
-        AuthGuardService,
-        Geolocation,
-        FirebaseX,
-        NgxImageCompressService,
-        BackgroundMode,
-        Camera,
-        InAppBrowser,
-        Network,
-        Stripe,
-        SocialSharing,
-        Dialogs,
-        AndroidPermissions,
-        Mixpanel,
-        MixpanelPeople
-    ],
-    exports: [
-        UtilitiesModule
-    ],
-    bootstrap: [AppComponent]
+  ],
+  providers: [
+    // FCM,
+    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    HttpClient,
+    StorageService,
+    AuthGuardService,
+    Geolocation,
+    FirebaseX,
+    NgxImageCompressService,
+    BackgroundMode,
+    Camera,
+    InAppBrowser,
+    Network,
+    Stripe,
+    SocialSharing,
+    Dialogs,
+    AndroidPermissions,
+    Mixpanel,
+    MixpanelPeople
+  ],
+  exports: [
+    UtilitiesModule
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

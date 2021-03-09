@@ -10,8 +10,8 @@
   </ion-toolbar>
 
 
-<ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;">
-  <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+<ion-content style="padding-bottom: 250px;position: sticky;">
+  <ion-refresher slot="fixed">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 <ion-grid >
@@ -27,7 +27,7 @@
                         {{item.date | date: 'dd MMM yyyy'}}
                 </span>
         </ion-col> -->
-        <ion-col *ngFor="let designData of teamData;let i = index;trackBy: trackdesign" size="12">
+        <ion-col *ngFor="let designData of teamData;let i = index;" size="12">
             <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
                 <p class="customer-name"
                 routerDirection="forward">{{designData.firstname}} {{designData.lastname}}
@@ -63,11 +63,11 @@
                     <span class="customer-phone" *ngIf="designData.contactnumber != null && designData.contactnumber != ''">{{designData.contactnumber}}</span></a>
                     <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
                   </p>
-                <span class="customer-address z-100" *ngIf="designData.deliveryaddress != null && designData.deliveryaddress != ''" 
+                <span class="customer-address z-100" *ngIf="designData.deliveryaddress != null && designData.deliveryaddress != ''"
                         (click)="openAddressOnMap(designData.address)">{{(designData.deliveryaddress | slice:0:60) + (designData.deliveryaddress.length > 60 ? '...' : '')}}
 
                              <ion-col>
-                                
+
                                 </ion-col>
 
                     </span> -->
@@ -79,9 +79,9 @@
                                     <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
                                         {{designData.pestampacceptanceremainingtime}}</span></ion-col>
                     </ion-row> -->
-                                
-                
-               
+
+
+
                 <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
                   <!-- <span class="ion-text-end timestamp" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
                         {{designData.deliverydate | date: 'hh:mm a'}}
@@ -95,16 +95,16 @@
 <!-- <ng-template #nodesignFound>
     <div *ngIf="teamData.length === 0 " class="h-100 d-flex flex-column align-center justify-center"> -->
             <!-- <div *ngIf="!netSwitch"> -->
-                
+
               <!-- {{noDesignFound}} -->
             <!-- </div> -->
-  
+
         <!-- <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
     </div>
 </ng-template> -->
-    
-      
-    
+
+
+
 </ion-content>
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">

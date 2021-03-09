@@ -108,7 +108,6 @@ export class PEengineerdesignComponent implements OnInit {
                }
 
                ionViewDidEnter() {
-                // this.intercomModule();
                 this.apiService.emitUserNameAndRole(this.userData);
                 this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
                   this.netSwitch = data;
@@ -358,9 +357,6 @@ export class PEengineerdesignComponent implements OnInit {
   dismissBottomSheet() {
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
-    // this.intercom.update({
-    //   "hide_default_launcher": false
-    // });
     this.utils.setBottomBarHomepage(true);
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];

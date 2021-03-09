@@ -45,9 +45,9 @@ export class NewsurveysComponent implements OnInit {
     private el:ElementRef,
     private router:Router,
     private apiService: ApiService) {
-      
+
     }
-    
+
     ngOnInit() {
 
       this.userData= this.storageService.getUser();
@@ -69,7 +69,7 @@ export class NewsurveysComponent implements OnInit {
 
 
   ionViewDidEnter(){
-    
+
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
       this.getSurveys(null);
     });
@@ -81,7 +81,7 @@ export class NewsurveysComponent implements OnInit {
     });
   }
 
-  getSurveys(event?: CustomEvent) {
+  getSurveys(event?) {
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -124,7 +124,7 @@ export class NewsurveysComponent implements OnInit {
 
   formatSurveyData(records : SurveyDataModel[]){
     this.listOfSurveyData = this.fillinDynamicData(records);
-    
+
     const tempData: SurveyDataHelper[] = [];
           this.listOfSurveyData.forEach((surveyItem,i) => {
             this.sDatePassed(surveyItem.datetime,i);
@@ -135,7 +135,7 @@ export class NewsurveysComponent implements OnInit {
               listOfSurvey.listOfSurveys.push(surveyItem);
               tempData.push(listOfSurvey);
               console.log(tempData);
-              
+
             } else {
               let added = false;
               tempData.forEach((surveyList) => {
@@ -144,19 +144,19 @@ export class NewsurveysComponent implements OnInit {
                     surveyList.listOfSurveys.push(surveyItem);
                     added = true;
                     console.log(surveyList.listOfSurveys);
-                    
+
                   }
                 }
               });
               if (!added) {
-              
+
                 const listOfSurvey = new SurveyDataHelper();
                 listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
                 listOfSurvey.listOfSurveys.push(surveyItem);
                 tempData.push(listOfSurvey);
                 added = true;
                 console.log(tempData);
-                
+
               }
             }
           });
@@ -181,7 +181,7 @@ export class NewsurveysComponent implements OnInit {
           element.totalpercent = 0;
           console.log(element);
         }
-       
+
       });
     });
 
@@ -192,9 +192,9 @@ export class NewsurveysComponent implements OnInit {
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
-    this.overdue = lateby;  
+    this.overdue = lateby;
     console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
-    
+
   }
 
   ngOnDestroy(): void {
@@ -243,7 +243,7 @@ export class NewsurveysComponent implements OnInit {
     })
     this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
 
- 
+
   }
 
 }

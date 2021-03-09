@@ -19,8 +19,8 @@ import { DesignComponent } from '../homepage/design/design.component';
 @Component({
   selector: 'app-searchbar',
   templateUrl: './searchbar.page.html',
-  styleUrls: ['./searchbar.page.scss'],  
-  
+  styleUrls: ['./searchbar.page.scss'],
+
 })
 export class SearchbarPage implements OnInit {
   parentSubject:Subject<any> = new Subject();
@@ -41,8 +41,8 @@ export class SearchbarPage implements OnInit {
     maxResults: 5
   };
 
-  searchDesginItem: [] = [];
-  searchSurveyItem: [] = [];
+  searchDesginItem: any = [];
+  searchSurveyItem: any = [];
 
   private subscription: Subscription;
   // drawerState = DrawerState.Docked;
@@ -93,9 +93,9 @@ export class SearchbarPage implements OnInit {
       this.route.navigate(['searchbar/design']);
     }
   }
- 
 
- 
+
+
 
 
   ngOnDestroy() {
@@ -166,7 +166,7 @@ export class SearchbarPage implements OnInit {
       this.pageType='Survey';
       // this.parentSubject.next(serchTermData.id);
      this.route.navigate(['/searchbar/survey'], { queryParams: { serchTerm: serchTermData.id } });
-    } 
+    }
     else {
 
       if(this.pageType == 'Survey'){
@@ -369,7 +369,7 @@ export class SearchbarPage implements OnInit {
 
   showHom() {
     // this.someEvent.emit('cancle');
-   
+
     this.showHome = true;
     this.showSearchBar = false;
     this.searchSurveyItem = [];

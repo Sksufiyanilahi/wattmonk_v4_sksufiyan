@@ -26,7 +26,7 @@ export class DeclinepagePage implements OnInit {
   userData: any;
   value:any;
   declinedbypeengineer:boolean;
-  pestampDeclineList:string[]=[];
+  pestampDeclineList:any=[];
   pestampDeclineFileUpload:boolean = false;
 
   constructor(private camera: Camera,
@@ -56,7 +56,7 @@ export class DeclinepagePage implements OnInit {
 
 
   selectAttachment(){
-    
+
   //else{
     this.exceedfileSize=0;
     // const options: CameraOptions = {
@@ -196,7 +196,7 @@ export class DeclinepagePage implements OnInit {
               isoutsourced : "false",
               designacceptanceendtime:milisecond,
                    }
-        
+
             console.log(data);
 
             this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
@@ -225,7 +225,7 @@ export class DeclinepagePage implements OnInit {
 
    removeArc(i) {
    this.pestampDeclineList.splice(i, 1);
-    
+
  }
 
    pestampDeclineFile(){
@@ -239,7 +239,7 @@ export class DeclinepagePage implements OnInit {
         data.append('refId', ""+this.id);
         data.append('ref', "pestamp");
         data.append('field', "requestdeclineattachment");
-        
+
         console.log("file upload data---"+data);
        }
      }
@@ -327,12 +327,12 @@ export class DeclinepagePage implements OnInit {
     var GUID = 'prelim' + "_" + new Date().getTime();
     var address = design.address.substring(0, 60);
     var groupName = design.name + "_" + address;
-  
+
     var groupType = CometChat.GROUP_TYPE.PRIVATE;
     var password = "";
-  
+
     var group = new CometChat.Group(GUID, groupName, groupType, password);
-  
+
     CometChat.createGroup(group).then(
       group => {
         debugger;
@@ -346,10 +346,10 @@ export class DeclinepagePage implements OnInit {
               let postdata={
                 chatid:GUID
               }
-  
+
               this.apiservice.updateDesignForm(postdata,this.id).subscribe(res=>{
                 console.log(res);
-                
+
               })
               // this.updateItemInList(LISTTYPE.NEW, design);
             }else{
@@ -358,15 +358,15 @@ export class DeclinepagePage implements OnInit {
           },
           error => {
             console.log(error);
-            
+
           }
         );
       },
       error => {
 
         console.log(error);
-        
-  
+
+
       }
     );
   }

@@ -46,8 +46,8 @@ export class HomepagePage implements OnInit, OnDestroy {
 		maxResults: 5
 	};
 
-	searchDesginItem: [] = [];
-	searchSurveyItem: [] = [];
+	searchDesginItem: any = [];
+	searchSurveyItem: any = [];
 
 	private subscription: Subscription;
 	drawerState = DrawerState.Docked;

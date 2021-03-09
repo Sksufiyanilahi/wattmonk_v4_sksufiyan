@@ -27,7 +27,7 @@ export class Pestamp{
     created_at : string;
     updated_at : string;
     paymentstatus:string;
-    comments: {};
+    comments: any;
     activities : Activity[];
     source: string;
     status : string;
@@ -38,7 +38,7 @@ export class Pestamp{
     pestampendtime: string;
     pestampacceptancestarttime : string;
     pestampacceptanceendtime : string;
-    stampedfiles:UploadedFile;
+    stampedfiles:any;
     mountingtype:string;
     latitude: number;
   longitude: number;

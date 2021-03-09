@@ -9,7 +9,6 @@
 // Production Server
 // export const PlatformUpdateUrl =  'https://admin.wattmonk.com/api/';
 // export const BaseUrl = 'https://admin.wattmonk.com/api/';
-// export const intercomId = 'o52f08q6';
 // export const COMETCHAT_CONSTANTS = {
 //     APP_ID: '190385dcec51285',
 //     REGION: 'US',
@@ -21,7 +20,6 @@
 // Test Server
 export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';
 export const BaseUrl = 'https://testorbit.wattmonk.com/api';
-export const intercomId = 'c6w73e4e';
 export const COMETCHAT_CONSTANTS = {
     APP_ID: '22738c62a78b107',
      REGION: 'US',
@@ -32,7 +30,6 @@ export const version='1.1.3'
 //Development Server
 // export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api';
 // export const BaseUrl = 'https://devspace.wattmonk.com/api';
-// export const intercomId = 'c6w73e4e';
 // export const COMETCHAT_CONSTANTS = {
 //    APP_ID: '2145560cac03137',
 //    REGION: 'US',

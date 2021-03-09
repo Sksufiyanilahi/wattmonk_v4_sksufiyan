@@ -16,7 +16,7 @@ import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd, NavigationExtr
 import {  DesginDataModel, DesignModel } from '../../model/design.model';
 import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
- 
+
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Clients } from 'src/app/model/clients.model';
 import { map, startWith } from "rxjs/operators";
@@ -62,10 +62,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   address: string;
   showValue: any;
   uploadbox: any;
-  archFiles: string[]=[];
-  prelimFiles: string[]=[];
+  archFiles: any =[];
+  prelimFiles: any =[];
  imageName:any;
- 
+
  indexOfArcFiles=[]
  isArcFileDelete:boolean=false;
   //attachmentName = this.desginForm.get('attachments').value;
@@ -168,7 +168,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       paymenttype:new FormControl(null)
       // uploadbox:new FormControl('')
     });
-      
+
     // this.newprelimsRef = db.object('newprelimdesigns');
     // this.newprelims = this.newprelimsRef.valueChanges();
     // this.newprelims.subscribe(
@@ -193,7 +193,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     //   (err) => console.log(err),
     //   () => console.log('done!')
     // )
-    
+
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.getAssignees();
 
@@ -201,17 +201,17 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   numberfield(event){
     console.log(event);
-    
+
   }
 
   ionViewDidEnter(){
   }
 
   // getmodulename(event){
-   
+
   //     this.modulename= event;
   //     console.log(this.modulename);
-      
+
   // }
 
 
@@ -236,23 +236,23 @@ export class DesignComponent implements OnInit, OnDestroy {
           // this.solarMakeDisposable = this.desginForm.get('solarmake').valueChanges.subscribe(val => {
           //   this.getSolarMade();
           // });
-          
+
         // }else if(this.modulename=='solarmade'){
         // this.solarmade=data;
         // }else if(this.modulename=='invertermake'){
         //   this.invertermake = data;
         // }else if(this.modulename=='invertermade'){
-        //   this.invertermade= data; 
+        //   this.invertermade= data;
         // }
-        
-      
+
+
     // })
     this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_DESIGN_FORM || event === ScheduleFormEvent.SEND_DESIGN_FORM) {
         this.send=event;
         this.addForm();
-      
+
       }
       if(event===ScheduleFormEvent.PAY_EVENT){
         this.sendtowattmonk();
@@ -276,7 +276,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       // }
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        
+
          this.desginForm.get('address').setValue('124/345');
          this.desginForm.get('latitude').setValue('24.553333');
          this.desginForm.get('longitude').setValue('80.5555555555');
@@ -304,14 +304,14 @@ export class DesignComponent implements OnInit, OnDestroy {
         createdby: this.storage.getUserID()
       });
       this.getSolarMake();
-     
-      
+
+
     }
 this.formControlValueChanged();
 this.uploadcontrolvalidation();
 
   }
-  
+
 formControlValueChanged() {
   const NUMBERPATTERN = '^[0-9]*$';
   const tiltControl = this.desginForm.get('tiltofgroundmountingsystem');
@@ -365,7 +365,7 @@ uploadcontrolvalidation(){
   }
 
 getDesignDetails() {
-  
+
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
@@ -397,7 +397,7 @@ getDesignDetails() {
             newconstruction: this.design.newconstruction + '',
             prelimdesign:null,
             //attachments:this.design.attachments,
-            
+
             attachments:this.design.attachments,
             solarmake:this.design.solarmake,
             solarmodel:this.design.solarmodel,
@@ -418,7 +418,7 @@ getDesignDetails() {
           this.getInverterMakeForForm();
         },500)
         });
-      
+
       }, (error) => {
         this.utils.hideLoading();
       });
@@ -426,7 +426,7 @@ getDesignDetails() {
   }
 
   getSolarMakeForForm() {
- 
+
     this.apiService.getSolarMake().subscribe(response => {
       this.listOfSolarMake = response;
 
@@ -448,7 +448,7 @@ getDesignDetails() {
           }, 500);
         // });
       }, solarResponseError => {
-      
+
         const error: ErrorModel = solarResponseError.error;
         if (error.message instanceof String) {
           this.utils.errorSnackBar(error.message);
@@ -490,7 +490,7 @@ getDesignDetails() {
 
 
       }, makeResponseError => {
-   
+
         const error: ErrorModel = makeResponseError.error;
         if (error.message instanceof String) {
           this.utils.errorSnackBar(error.message);
@@ -514,7 +514,7 @@ getDesignDetails() {
 );
 
   console.log(found);
-  
+
     if(!found){
       let solarmakedata={
         name:this.solarmake
@@ -526,7 +526,7 @@ getDesignDetails() {
         this.saveModuleModel();
       },err=>{
         console.log(err,'err in savemodulemake');
-        
+
       })
 
     }else{
@@ -546,7 +546,7 @@ getDesignDetails() {
         solarmake:this.desginForm.get('solarmake').value
       }
       console.log(solarmadedata);
-      
+
       this.apiService.postSolarMade(solarmadedata).subscribe((response:any)=>{
         this.desginForm.patchValue({
           solarmade:response.id
@@ -587,7 +587,7 @@ getDesignDetails() {
         invertermake:this.desginForm.get('invertermake').value
       }
       console.log(invertermadedata);
-      
+
       this.apiService.postInverterMade(invertermadedata).subscribe((response:any)=>{
           this.desginForm.patchValue({
             invertermade:response.id
@@ -629,7 +629,7 @@ this.architecturalData.splice(i, 1);
 }
 
 removeattachment(attachment,i){
-    
+
   this.indexOfArcFiles.push( attachment.id);
 
   this.isArcFileDelete=true;
@@ -637,24 +637,24 @@ removeattachment(attachment,i){
   console.log(this.indexOfArcFiles);
   console.log(this.attachmentData);
   console.log(i);
-  
+
   this.attachmentData.splice(i, 1);
 }
 
 deleteArcFile(index){
-     
-      
+
+
   // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
      for(var i=0; i< index.length;i++){
        var id = index[i];
        this.apiService.deletePrelimImage(id).subscribe(res=>{console.log("hello",res)
-      
+
    });
- 
+
  // this.utils.hideLoading().then(()=>{
  //   //   this.utils.showSnackBar('File deleted successfully');
  //     // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
-     
+
  //    // this.utils.setPermitDesignDetailsRefresh(true);
  //  // });
  //   },
@@ -666,10 +666,10 @@ deleteArcFile(index){
 
 // });
  //this.utils.setHomepageDesignRefresh(true);
- 
 
-  
- 
+
+
+
 }
 
   addForm() {
@@ -724,7 +724,7 @@ deleteArcFile(index){
               //   //     this.navController.pop();
               //   //   });
               //   // });
-              
+
                });
             }, responseError => {
               this.utils.hideLoading();
@@ -753,11 +753,11 @@ deleteArcFile(index){
                                 fulldesigndata:response
                               },
                               skipLocationChange: false,
-                              fragment: 'top' 
+                              fragment: 'top'
                           };
-                      
-                      
-                      this.router.navigate(['/payment-modal'], { 
+
+
+                      this.router.navigate(['/payment-modal'], {
                         state: { productdetails: objToSend }
                       });
                   }
@@ -770,7 +770,7 @@ deleteArcFile(index){
                   this.utils.errorSnackBar(error.message);
                 });
               }
-          
+
 
         } else {
           if(this.send===ScheduleFormEvent.SAVE_DESIGN_FORM){
@@ -794,7 +794,7 @@ deleteArcFile(index){
             if(this.isArcFileDelete){
               this.deleteArcFile(this.indexOfArcFiles);
             }
-               
+
               });
           },
            responseError => {
@@ -825,11 +825,11 @@ deleteArcFile(index){
                     fulldesigndata:response
                   },
                   skipLocationChange: false,
-                  fragment: 'top' 
+                  fragment: 'top'
               };
-          
-          
-          this.router.navigate(['/payment-modal'], { 
+
+
+          this.router.navigate(['/payment-modal'], {
             state: { productdetails: objToSend }
           });
               }
@@ -841,12 +841,12 @@ deleteArcFile(index){
             // this.utils.hideLoading().then(() => {
             //   console.log('Res', response);
             //   this.value=response.id;
-              
+
             //   this.utils.showSnackBar('Design have been updated');
             //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
-              
-              
-      
+
+
+
              });
           }, responseError => {
             this.utils.hideLoading().then(() => {
@@ -858,7 +858,7 @@ deleteArcFile(index){
         }
       }
 
-    
+
 
     } else {
       if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
@@ -961,7 +961,7 @@ deleteArcFile(index){
 
   }
 ioniViewDidEnter(){
- 
+
 
 }
   getSolarMake() {
@@ -969,7 +969,7 @@ ioniViewDidEnter(){
 
     this.apiService.getSolarMake().subscribe(response => {
       this.listOfSolarMake = response;
-      
+
     }, responseError => {
       const error: ErrorModel = responseError.error;
       console.log(error);
@@ -1020,19 +1020,19 @@ ioniViewDidEnter(){
   eventcheck(e){
     this.showValue = e.target.value;
     console.log(this.showValue);
-    
+
   }
   showUpload(e){
     this.uploadbox = e.target.value;
 
-    
+
   }
 
 
   files(event){
    console.log(event.target.files);
     for(var i=0; i< event.target.files.length;i++){
-      this.archFiles.push(event.target.files[i]) 
+      this.archFiles.push(event.target.files[i])
     }
     console.log(this.archFiles);
   }
@@ -1040,22 +1040,22 @@ ioniViewDidEnter(){
   prelimfiles(event){
     console.log(event.target.files);
     for(var i=0; i< event.target.files.length;i++){
-      this.prelimFiles.push(event.target.files[i]) 
+      this.prelimFiles.push(event.target.files[i])
     }
     this.attachmentFileUpload= true;
     if(this.prelimFiles.length==1){
       this.fileName= event.target.files[0].name;
       console.log(this.fileName);
-      
+
     }else if(this.prelimFiles.length >1){
       this.fileName= this.prelimFiles.length;
     }else{
       this.fileName='';
     }
-  
-   
+
+
   }
-  
+
 
   uploaarchitecturedesign(response?: any, key?: string){
     console.log(this.archFiles);
@@ -1068,10 +1068,10 @@ ioniViewDidEnter(){
         imageData.append('ref', 'design');
         imageData.append('field', key);
       }
-    } 
+    }
     this.utils.showLoading("Architectural File Uploading").then(()=>{
     this.apiService.uploaddesign(imageData).subscribe(res=>{
-      console.log(res); 
+      console.log(res);
       this.utils.hideLoading();
       if(this.attachmentFileUpload){
       this.uploadpreliumdesign(response,'attachments');
@@ -1095,11 +1095,11 @@ ioniViewDidEnter(){
                       fulldesigndata:response
                     },
                     skipLocationChange: false,
-                    fragment: 'top' 
+                    fragment: 'top'
                 };
-            
-            
-            this.router.navigate(['/payment-modal'], { 
+
+
+            this.router.navigate(['/payment-modal'], {
               state: { productdetails: objToSend }
             });
         }
@@ -1125,10 +1125,10 @@ ioniViewDidEnter(){
         imageData.append('ref', 'design');
         imageData.append('field', key);
       }
-    } 
+    }
     this.utils.showLoading("Attachment File Uploading").then(()=>{
     this.apiService.uploaddesign(imageData).subscribe(res=>{
-      console.log(res); 
+      console.log(res);
       this.utils.hideLoading();
       if(this.send === ScheduleFormEvent.SAVE_DESIGN_FORM)
       {
@@ -1150,15 +1150,15 @@ ioniViewDidEnter(){
             fulldesigndata:response
           },
           skipLocationChange: false,
-          fragment: 'top' 
+          fragment: 'top'
       };
-  
-  
-  this.router.navigate(['/payment-modal'], { 
+
+
+  this.router.navigate(['/payment-modal'], {
     state: { productdetails: objToSend }
   });
       }
-      
+
     }, responseError => {
       this.utils.hideLoading();
       //this.utils.hideUploadingLoading();
@@ -1199,14 +1199,14 @@ ioniViewDidEnter(){
         paymenttype: this.utils.getPaymentMode().value,
         couponid:this.utils.getCouponId().value
       };
-  
+
       this.utils.showLoading('Assigning').then(()=>{
         //this.newprelimsRef.update({ count: this.newprelimscount + 1});
         this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
           this.utils.hideLoading().then(()=>{
-            ; 
+            ;
             console.log('reach ', value);
-           
+
             this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
             this.router.navigate(['/homepage/design'])
             this.utils.setHomepageDesignRefresh(true);
@@ -1227,11 +1227,11 @@ ioniViewDidEnter(){
         designData:"prelim"
       },
       skipLocationChange: false,
-      fragment: 'top' 
+      fragment: 'top'
   };
 
 
-this.router.navigate(['/payment-modal'], { 
+this.router.navigate(['/payment-modal'], {
 state: { productdetails: objToSend }
 });
     }else {
@@ -1317,10 +1317,10 @@ state: { productdetails: objToSend }
   );
   }
 
-  proxyValue: any; onCompanyChanged(event$) { 
+  proxyValue: any; onCompanyChanged(event$) {
     console.log(event$);
-    this.proxyValue = event$.detail.value.companyname; 
-    this.designCreatedBy = event$.detail.value.companyid; 
+    this.proxyValue = event$.detail.value.companyname;
+    this.designCreatedBy = event$.detail.value.companyid;
     this.designCreatedByUserParent = event$.detail.value.parentid;
     if(this.designCreatedBy !== null && this.designCreatedByUserParent !== null){
       var designacceptancestarttime = new Date();

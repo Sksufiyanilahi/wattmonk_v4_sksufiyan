@@ -18,14 +18,14 @@ import { ErrorModel } from '../model/error.model';
   styleUrls: ['./pestamp-design-details.page.scss'],
 })
 export class PestampDesignDetailsPage implements OnInit {
-  
+
   designId:any;
   design:Pestamp;
   enableDisable:boolean=false;
   user:User;
   pestampForm:FormGroup;
   commentform:FormGroup;
-  stampfile: string[]=[];
+  stampfile: any=[];
   designstartdatetime: number;
   designenddatetime: number;
   imageName:any;
@@ -47,7 +47,7 @@ export class PestampDesignDetailsPage implements OnInit {
               private navctrl:NavController,
               private iab: InAppBrowser,
               private launchNavigator: LaunchNavigator,
-              private mixpanelService:MixpanelService) { 
+              private mixpanelService:MixpanelService) {
                 this.pestampForm= this.formbuilder.group({
                   workinghours: new FormControl(null,[Validators.required]),
                  // comments:new FormControl(null),
@@ -57,8 +57,8 @@ export class PestampDesignDetailsPage implements OnInit {
                 this.commentform = this.formbuilder.group({
                   comments:new FormControl(null)
                 })
-             
-     
+
+
     this.designId = +this.route.snapshot.paramMap.get('id');
     console.log(this.designId);
   }
@@ -70,7 +70,7 @@ export class PestampDesignDetailsPage implements OnInit {
     });
     this.getDesignDetails();
 
-    
+
 
   }
 
@@ -133,7 +133,7 @@ export class PestampDesignDetailsPage implements OnInit {
             this.utilities.hideLoading().then(() => {
               this.utilities.errorSnackBar('Some Error Occurred');
             });
-    
+
           });
         });
       }
@@ -214,7 +214,7 @@ export class PestampDesignDetailsPage implements OnInit {
             })
           },err=>{
             console.log(err);
-            
+
           })
         })
         }
@@ -225,20 +225,20 @@ export class PestampDesignDetailsPage implements OnInit {
       }
 
       remove(stamp,i){
-    
+
         console.log(stamp);
         this.indexOfstampFiles.push( stamp.id);
-        
+
         console.log(i);
-        
+
         this.stampfile.splice(i, 1);
-        
+
         }
 
         files(event){
           console.log(event.target.files);
           //  for(var i=0; i< event.target.files.length;i++){
-          //    this.stampfile.push(event.target.files[i]) 
+          //    this.stampfile.push(event.target.files[i])
           //  }
           this.stampfile = event.target.files;
            console.log(this.stampfile);
@@ -257,7 +257,7 @@ export class PestampDesignDetailsPage implements OnInit {
             data.append('refId', ""+recordid);
             data.append('ref', "pestamp");
             data.append('field', "stampedfiles");
-            
+
             console.log("file upload data---"+data);
            }
          }
@@ -267,17 +267,17 @@ export class PestampDesignDetailsPage implements OnInit {
            console.log(res);
            this.navController.pop();
               this.utilities.setPeStampRefresh(true);
-    
+
          }, responseError => {
           this.utilities.hideLoading();
           const error: ErrorModel = responseError.error;
           this.utilities.errorSnackBar(error.message[0].messages[0].message);
         })
       })
-    
+
        }
 
-         
+
       showreasonImage(attachmentFile:any){
         const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
       }
@@ -313,8 +313,8 @@ export class PestampDesignDetailsPage implements OnInit {
       //    //this.architecturalFileUpload= true;
       //    console.log(this.atticPhotosList);
       //  }
-    
-      
-      
+
+
+
 }
 

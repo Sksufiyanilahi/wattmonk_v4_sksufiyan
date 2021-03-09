@@ -7,7 +7,10 @@ import { IonicModule } from '@ionic/angular';
 import { SalesProposalPageRoutingModule } from './sales-proposal-routing.module';
 
 import { SalesProposalPage } from './sales-proposal.page';
-import { MatStepperModule, MatInputModule, MatButtonModule, MatAutocompleteModule } from '@angular/material';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [

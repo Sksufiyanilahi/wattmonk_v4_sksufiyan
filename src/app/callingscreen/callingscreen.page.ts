@@ -41,7 +41,7 @@ export class CallingscreenPage implements OnInit, OnChanges {
 		console.log("HELLO",localStorage.getItem('gid'));
 	}
 	ngOnInit() {
-		
+
 		this.loadAudio();
 	}
 
@@ -53,13 +53,13 @@ export class CallingscreenPage implements OnInit, OnChanges {
 		console.log("hhll",that.calldata);
 		this.name = (that.calldata.receiver.name).slice(0,2);
 		console.log(that.calldata.receiver.name, '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-		
+
 	}
 
 	acceptcall() {
 		var sessionID = this.calldata.sessionId;
 		console.log("aa",sessionID);
-		
+
 		CometChat.acceptCall(sessionID).then(
 			(call) => {
 				console.log('Call accepted successfully:', call);
@@ -77,9 +77,9 @@ export class CallingscreenPage implements OnInit, OnChanges {
 	}
 
 	rejectcall() {
-		ApiService.rejectCall(this.calldata.sessionId, CometChat.CALL_STATUS.REJECTED).then((res) => {
+		/*ApiService.rejectCall(this.calldata.sessionId, CometChat.CALL_STATUS.REJECTED).then((res) => {
 			console.log(res);
-		});
+		});*/
 		var sessionID = this.calldata.sessionId;
 
 		console.log(sessionID);
@@ -191,5 +191,5 @@ export class CallingscreenPage implements OnInit, OnChanges {
 	pauseAudio() {
 		this.audio.pause();
 	}
-	
+
 }

@@ -24,7 +24,7 @@ searchElement='';
 DesignModel:any;
 SurveyModel:[];
 MixModel:[];
-SortedModel:[];
+SortedModel:any;
 sample:any;
 sample1:any;
 SearchData:any;

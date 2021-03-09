@@ -85,7 +85,7 @@ export class DesginDataModel {
   jobtype: string;
   newconstruction: any;
   projecttype: string;
-  comments: {};
+  comments: any;
   source: string;
   solarmake: Solarmake;
   solarmodel: Solarmodel;

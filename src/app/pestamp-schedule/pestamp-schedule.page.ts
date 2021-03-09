@@ -35,9 +35,9 @@ export class PestampSchedulePage implements OnInit {
   hardCopiesError = "Maximum value of hardcopy cannot exceed 10";
   hardCopiesPatternError = "Value of hardcopy should be a valid number";
 
-  atticPhotosList: string[] = [];
-  roofPhotosList: string[] = [];
-  permitPlanList: string[] = [];
+  atticPhotosList: any = [];
+  roofPhotosList: any = [];
+  permitPlanList: any = [];
 
   stampingTypeValue: any;
   isElectrical: boolean = false;
@@ -133,7 +133,6 @@ export class PestampSchedulePage implements OnInit {
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
       console.log(this.netSwitch);
-      this.utils.showHideIntercom(true);
     })
   }
 
@@ -230,7 +229,7 @@ export class PestampSchedulePage implements OnInit {
         this.apiService.uploadFile(data).subscribe(res => {
           this.utils.hideLoading();
             this.uploadRoofFiles(response)
-          
+
           // else if(!this.isRoofFileUpload || (!this.isRoofFileUpload && !this.isPermitPlanFileUpload))
           // {
 
@@ -280,9 +279,9 @@ export class PestampSchedulePage implements OnInit {
       this.utils.showLoading("Roof File Uploading").then(() => {
         this.apiService.uploadFile(data).subscribe(res => {
           this.utils.hideLoading();
-          
+
             this.uploadPermitPlanFiles(response);
-          
+
         }, responseError => {
           this.utils.hideLoading();
           const error: ErrorModel = responseError.error;
@@ -417,7 +416,6 @@ export class PestampSchedulePage implements OnInit {
   }
 
   // ngOnDestroy(): void {
-  //   //this.utils.showHideIntercom(false);
   //   //this.subscription.unsubscribe();
   //   // if (this.designId === 0) {
   //     this.addressSubscription.unsubscribe();
@@ -593,11 +591,11 @@ export class PestampSchedulePage implements OnInit {
             //         value:'assign'
             //         },
             //         skipLocationChange: false,
-            //         fragment: 'top' 
+            //         fragment: 'top'
             //     };
 
 
-            // this.router.navigate(['/pestamp-payment-modal'], { 
+            // this.router.navigate(['/pestamp-payment-modal'], {
             //   state: { productdetails: objToSend }
             // });
           },
@@ -725,11 +723,11 @@ export class PestampSchedulePage implements OnInit {
             //         value:'assign'
             //         },
             //         skipLocationChange: false,
-            //         fragment: 'top' 
+            //         fragment: 'top'
             //     };
 
 
-            // this.router.navigate(['/pestamp-payment-modal'], { 
+            // this.router.navigate(['/pestamp-payment-modal'], {
             //   state: { productdetails: objToSend }
             // });
           },
@@ -792,7 +790,7 @@ export class PestampSchedulePage implements OnInit {
 
   //// For Address
   //   /* FOR SEARCH SHIPPING ADDRESS */
-  //   updateSearchResults(event: CustomEvent) {
+  //   updateSearchResults(event) {
   //     //this.autoCompleteOff = true;
   //     console.log(this.autoCompleteOff);
   //     const input = event.detail.value;
@@ -995,7 +993,7 @@ export class PestampSchedulePage implements OnInit {
         });
       }
     }
-    //this.utils.setPermitDesignDetailsRefresh(true);   
+    //this.utils.setPermitDesignDetailsRefresh(true);
   }
 
   deleteRoofFile(index) {
@@ -1016,7 +1014,7 @@ export class PestampSchedulePage implements OnInit {
         });
       }
     }
-    //this.utils.setPermitDesignDetailsRefresh(true);   
+    //this.utils.setPermitDesignDetailsRefresh(true);
   }
 
   deletePermitPlan(index) {
@@ -1037,7 +1035,7 @@ export class PestampSchedulePage implements OnInit {
         });
       }
     }
-    //this.utils.setPermitDesignDetailsRefresh(true);   
+    //this.utils.setPermitDesignDetailsRefresh(true);
   }
 
   createChatGroup(design: Pestamp) {

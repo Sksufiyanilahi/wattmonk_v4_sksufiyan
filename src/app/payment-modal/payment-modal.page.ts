@@ -6,7 +6,6 @@ import { ApiService } from '../api.service';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { UtilitiesService } from '../utilities.service';
 import { ScheduleFormEvent } from '../model/constants';
-import { Intercom } from 'ng-intercom';
 import { CouponOffersModalPage } from '../coupon-offers-modal/coupon-offers-modal.page';
 import { Observable } from 'rxjs';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
@@ -31,7 +30,7 @@ netPay:any
   servicePrice: any=0;
   settingValue:any=0;
   freeCharges:any;
-  value:number=50; 
+  value:number=50;
   coupondata=null;
   code_discount:any
   discount:any
@@ -51,17 +50,17 @@ netPay:any
   designData:any;
   fulldesigndata: any;
   delivertime:String;
- 
 
-   
+
+
   constructor( private storageService:StorageService,
-    
+
     private apiService:ApiService,
     public router:Router,
     private route:ActivatedRoute,
     private navController:NavController,
     private utils:UtilitiesService,
-    private intercom:Intercom,
+
     private alertController:AlertController,
     private modalController:ModalController,
     private db:AngularFireDatabase,
@@ -109,15 +108,14 @@ netPay:any
      }
 
   ngOnInit() {
-   
-   
+
+
    this.utils.showLoading("Please wait....").then(()=>{
-   
-   
-   
+
+
+
     this.userData = this.storageService.getUser();
     console.log(this.userData)
-    this.utils.showHideIntercom(true);
     this.fetchData();
     this.servicecharges();});
    /* this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
@@ -135,8 +133,8 @@ netPay:any
     this.utils.hideLoading();
     this.isShow=true
     }, 2000);
-    
-  
+
+
   }
   ionViewDidEnter(){
     this.fetchData();
@@ -152,7 +150,7 @@ fetchData(){
   // const navigation = this.router.getCurrentNavigation()
   // console.log(navigation)
   // console.log(this.router.getCurrentNavigation().extras.state)
- 
+
 this.isradiodisable=false
 
   this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
@@ -163,7 +161,7 @@ this.isradiodisable=false
       console.log(this.count);
       this.servicecharges();
     })});
-  
+
 
     this.apiService.freeCharges().subscribe(res=>{
       this.freeDesigns=res;
@@ -171,22 +169,22 @@ this.isradiodisable=false
         this.freeCharges = element.settingvalue;
       })
       console.log(this.freeCharges);
-      
+
     })
-   
+
 
     console.log(this.id);
    console.log(this.design);
-  
-  
+
+
 }
-  
+
 discountAmount(){
   if(this.freeCharges>this.count){
     this.discount=this.settingValue;
     this.netPay=this.settingValue-this.discount;
   }
-  else if(this.coupondata!=null){ 
+  else if(this.coupondata!=null){
     if(this.design=='prelim'){
     this.discount=this.code_discount;
     this.netPay=(this.settingValue-this.code_discount).toFixed(2);
@@ -228,8 +226,8 @@ servicecharges(){
         this.servicePrice=res;
        this.settingValue=this.servicePrice.servicecharge
         console.log("ddd",this.settingValue)
-        
-        
+
+
         if(this.servicePrice.freedesign==true){
           this.delivertime="24-48";
           this.discount=this.servicePrice.slabdiscount;
@@ -241,11 +239,11 @@ servicecharges(){
           this.discount=this.servicePrice.slabdiscount;
           this.isradiodisable=false
         }
-      
+
       })
     }
-    
-    
+
+
 }
 
 confirm(){
@@ -260,7 +258,7 @@ confirm(){
     status: "outsourced",
     couponid:this.utils.getCouponId().value,
     designacceptancestarttime: designacceptancestarttime,
-    
+
   };
   }
   else{
@@ -279,7 +277,7 @@ confirm(){
       paymentstatus:null
     };
   }
-   
+
     this.utils.showLoading("Assigning").then(()=>
     {
         this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
@@ -319,7 +317,7 @@ confirm(){
 }
 
   addWallet(value){
-    
+
     //this.router.navigate(['/add-money',{mode:value,id:this.id,serviceAmount:this.netPay,design:this.design}])
     let objToSend: NavigationExtras = {
       queryParams: {
@@ -333,17 +331,17 @@ confirm(){
         serviceinitialamount:this.servicePrice.paymentamount
       },
       skipLocationChange: false,
-      fragment: 'top' 
+      fragment: 'top'
   };
-  
-  
-  this.router.navigate(['/add-money'], { 
+
+
+  this.router.navigate(['/add-money'], {
   state: { productdetails: objToSend }
   });
   }
 
   cancel(){
-   
+
       if(this.design ==='prelim'){
       this.router.navigate(['/homepage/design'])
       this.utils.setHomepageDesignRefresh(true);
@@ -352,9 +350,9 @@ confirm(){
         this.router.navigate(['permithomepage/permitdesign'])
         this.utils.setHomepagePermitRefresh(true);
       }
-   
+
   }
-  refreshDesigns(event: CustomEvent) {
+  refreshDesigns(event) {
     let showLoader = true;
     if (event !== null && event !== undefined) {
       showLoader = false;
@@ -376,7 +374,7 @@ confirm(){
         designacceptancestarttime: designacceptancestarttime,
         couponid:this.utils.getCouponId().value,
         paymenttype:null,
-        
+
       };
       }
       else{
@@ -394,7 +392,7 @@ confirm(){
           amount:this.netPay
         };
       }
-        
+
         this.utils.showLoading("Assigning").then(()=>
           {this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
             this.utils.hideLoading().then(()=>
@@ -426,7 +424,6 @@ confirm(){
   }
 
   ionViewWillLeave(){
-    this.utils.showHideIntercom(false);
   }
 
 
@@ -523,7 +520,7 @@ else if(data.discounttype=='amount'){
       this.coupondata=data.data.data;
       console.log(this.coupondata);
       this.utils.setCouponId(this.coupondata.id);
-      
+
       this.codeDiscountCalculation(this.coupondata,this.settingValue);
       }
   });
@@ -569,13 +566,13 @@ else if(data.discounttype=='amount'){
   }
 
   checkboxClicking(event){
-    
+
 console.log(this.delivertime);
 this.servicecharges();
 this.removeCoupon();
 
   }
-  
+
 
 
  private paypalintegration(){
@@ -593,22 +590,22 @@ this.removeCoupon();
                       value: this.netPay
                     }
                   }]
-        
+
       },
-    
+
       advanced: { extraQueryParams: [ { name: "disable-funding", value:"credit,card"} ],
     commit:'true' } ,
-    
+
       style: {
               size: 'responsive',
               color: 'silver',
               shape: 'rect',
               label: 'pay',
               tagline:false,
-              
+
       },
 
-   
+
       onApprove: (data, actions) => {
           console.log('onApprove - transaction was approved, but not authorized', data, actions);
           actions.order.get().then(details => {
@@ -625,7 +622,7 @@ this.removeCoupon();
            designacceptancestarttime: designacceptancestarttime,
            paymenttype:"paypal",
            paymentstatus:"succeeded"
-           
+
          };
          }
          else{
@@ -644,7 +641,7 @@ this.removeCoupon();
              paymentstatus:"succeeded"
            };
          }
-          
+
            this.utils.showLoading("Assigning").then(()=>
            {
                this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
@@ -700,7 +697,7 @@ this.removeCoupon();
     // setTimeout(() => {
     //   // Render the PayPal button into #paypal-button-container
     //   <any>window['paypal'].Buttons({
-     
+
     //      style: {
     //       size: 'responsive',
     //       color: 'white',
@@ -708,7 +705,7 @@ this.removeCoupon();
     //       label: 'pay',
     //       tagline:false
     //   },
-    
+
     //     // Set up the transaction
     //     createOrder: function (data, actions) {
     //       return actions.order.create({
@@ -734,5 +731,5 @@ this.removeCoupon();
     //   }).render('#paypal-button-container');
     // }, 2000)
   }
-  
+
 

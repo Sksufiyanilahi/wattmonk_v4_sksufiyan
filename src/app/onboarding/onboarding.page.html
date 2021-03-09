@@ -5,10 +5,10 @@
     </ion-buttons>
     <ion-title>Dashboard</ion-title>
     <ion-buttons slot="end">
-      <ion-icon name="close-outline" [routerLink]="['/permithomepage']" routerDirection="backward" style="font-size: 25px;padding: 5px;"></ion-icon>
+      <ion-icon name="close-outline" [routerLink]="['/permithomepage']" routerDirection="back" style="font-size: 25px;padding: 5px;"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
-</ion-header> 
+</ion-header>
 
 <ion-content>
 
@@ -16,10 +16,10 @@
   <mat-vertical-stepper labelPosition="bottom" [linear]="isLinear" #stepper>
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
-      
+
       <ng-template matStepLabel>Profile Information <button class="action-button-color" *ngIf="this.stepper.selectedIndex==0" style="float: right;" mat-button (click)="move($event,1)" matStepperNext>Skip</button></ng-template>
-      
-      
+
+
         <mat-label>Type of User</mat-label>
         <ion-radio-group formControlName="usertype" >
           <ion-row >
@@ -38,7 +38,7 @@
         </ion-row>
         </ion-radio-group>
         <ion-row *ngIf="isCompany">
-          
+
           <!--  -->
           <ion-col >
             <ion-item class="ion-no-padding">
@@ -106,7 +106,7 @@
       </div>
     </ion-col>
   </ion-row>
-      
+
         <!--End-->
         <ion-row *ngIf="isCompany">
         <ion-col size="12">
@@ -144,11 +144,11 @@
                 <ion-label position="floating">Upload Logo</ion-label>
                 <input type='file' id="imageUpload" placeholder="Upload logo" accept="image/" #fileInput (change)="uploadFile($event)" />
                 </ion-item>
-             
+
                   <div *ngIf="logo !=null && logo !=''" class="avatar-upload" style="text-align: center;">
                       <img [src]=logo height="100px" width="100px" />
                 </div>
-              
+
             <!-- </ion-item> -->
         </ion-col>
     </ion-row>
@@ -179,13 +179,13 @@
   </ion-col>
   </ion-row>
   </ion-radio-group> -->
-      
-      
+
+
     </form>
     <div >
       <button (click)="firstStepper()" [ngClass]="{'colorChange':firstFormGroup.valid}" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext [disabled]="!firstFormGroup.valid">Next</button>
       <!-- <ion-button  fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
-      
+
     </div>
   </mat-step>
   <mat-step [stepControl]="secondFormGroup">
@@ -248,14 +248,14 @@
  <ion-toggle formControlName="designdeliverednotification" (ionChange)="onChange($event,'delivered')"></ion-toggle>
 </ion-item>
 
-      
+
     </form>
     <div>
       <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext>Next</button>
       <!-- <ion-button (click)="secondStepper()" fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
       <!-- <button  class="action-button-color" mat-button matStepperNext style="float: right;">Next</button> -->
       <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
-      
+
     </div>
   </mat-step>
   <mat-step *ngIf="isCompany" [stepControl]="thirdFormGroup">
@@ -274,7 +274,7 @@
   </ion-row>
     <ion-content style="height: 160px;" [scrollEvents]="true">
     <ion-list>
-      
+
       <ion-item  *ngFor="let team of teamMember;" style="text-align: center; font-size: small;" >
          <ion-col size="4">
          <ion-label style="float: left" >{{team.firstname}}<br>{{team.lastname}}</ion-label>
@@ -355,7 +355,7 @@
         </ion-col>
         </ion-row>
         </ion-radio-group>
-    
+
   </form>
   <div>
     <button class="action-button-color" mat-button (click)="$event.stopPropagation()" style="float: right;" matStepperNext>Next</button>
@@ -370,7 +370,7 @@
     <div style="color: #111 !important;padding-left: 0px;">
       <ion-label style="color:#111 !important;">Service Charges</ion-label>
     </div>
-  
+
     <ion-row style="margin-top: 3%;">
       <ion-col><ion-label>Prelim Design</ion-label></ion-col>
       <ion-col><ion-label>${{prelimSettingValue}}</ion-label></ion-col>
@@ -379,16 +379,16 @@
       <ion-col><ion-label>Permit Design</ion-label></ion-col>
       <ion-col><ion-label>${{permitSettingValue}}</ion-label></ion-col>
     </ion-row>
-  
-  
+
+
         <div *ngIf="firstFormGroup.get('ispaymentmodeprepay').value">
     <ion-row *ngIf="user.amount == 0">
       <ion-col>
       <h6 style="font-size: small;color:#6C6C6C">Recharge your wallet right now with more than $1000 and get an additional benefit of $100</h6>
       </ion-col>
     </ion-row>
-   
-  
+
+
     <ion-row >
       <ion-col style="text-align: center;">
         <ion-button style="height: 90%;" (click)="goToWallet()">Recharge Wallet</ion-button>
@@ -423,7 +423,7 @@
     <!-- <div> -->
       <!-- <button class="action-button-color" mat-button style="float: right;">Save</button> -->
       <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button>
-      
+
     </div> -->
   </mat-step>
 </mat-vertical-stepper>

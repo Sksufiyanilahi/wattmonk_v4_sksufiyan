@@ -23,7 +23,7 @@ export class ResendpagedialogPage implements OnInit {
   requestType:any;
   userData:any;
 
-  pestampResendList:string[]=[];
+  pestampResendList:any=[];
   pestampResendFileUpload:boolean = false;
 
   constructor(private camera: Camera,
@@ -42,11 +42,11 @@ export class ResendpagedialogPage implements OnInit {
     console.log(this.id);
     this.requestType = this.nav.get('requesttype');
     console.log(this.requestType)
-    
+
   }
 
 
-  
+
 
   selectAttachment(){
     this.exceedfileSize=0;
@@ -61,7 +61,7 @@ export class ResendpagedialogPage implements OnInit {
     // }
 
     this.chooser.getFile()
-  .then((file) => 
+  .then((file) =>
     {
       console.log(file, 'canceled')
         this.filename= file.name;
@@ -81,15 +81,15 @@ export class ResendpagedialogPage implements OnInit {
                 this.blob= this.utilities.b64toBlob(base64file);
                 console.log(this.blob);
             });
-            
+
            }
-           
+
           })
       })
 
 
     }
-    
+
     )
   .catch((error: any) => console.error(error));
 
@@ -100,7 +100,7 @@ export class ResendpagedialogPage implements OnInit {
     //   let base64Image = 'data:image/jpeg;base64,' + imageData;
     //   this.blob = this.utilities.b64tBlob(base64Image);
     //   console.log(this.blob);
-      
+
     //   this.filename = Date.now().toString() + '.png';
     //   if(this.blob){
     //     this.uploadFile();
@@ -122,7 +122,7 @@ export class ResendpagedialogPage implements OnInit {
     if(this.reason==undefined || this.reason==''){
       this.enableDisable= true;
     }else{
-  
+
         this.enableDisable= false;
     }
   }
@@ -137,11 +137,11 @@ export class ResendpagedialogPage implements OnInit {
       else{
       this.uploadFile();
       }
-    
+
     }else if(this.filename !=='' && this.exceedfileSize > 1048576){
 
       console.log('could not submit');
-      
+
     }else{
       if(this.requestType=='pestamp')
       {
@@ -166,7 +166,7 @@ export class ResendpagedialogPage implements OnInit {
     };
       this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>
       {
-        this.utilities.showSnackBar("Pestamp request has been send for revision successfully."); 
+        this.utilities.showSnackBar("Pestamp request has been send for revision successfully.");
         this.modalCtrl.dismiss({
           'dismissed': true
         });
@@ -186,7 +186,7 @@ export class ResendpagedialogPage implements OnInit {
         isoutsourced: "true",
         revisioncomments: this.reason,
          status: "outsourced"
-          
+
         }
       }else{
         var tomorrow = new Date();
@@ -200,12 +200,12 @@ export class ResendpagedialogPage implements OnInit {
         isoutsourced: "true",
         revisioncomments: this.reason,
          status: "outsourced"
-          
+
         }
       }
-    
+
       console.log(data);
-      
+
       this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
           this.modalCtrl.dismiss({
             'dismissed': true
@@ -231,7 +231,7 @@ export class ResendpagedialogPage implements OnInit {
 
    removeArc(i) {
    this.pestampResendList.splice(i, 1);
-    
+
  }
 
  pestampResendFile(){
@@ -245,7 +245,7 @@ export class ResendpagedialogPage implements OnInit {
     data.append('refId', ""+this.id);
     data.append('ref', "pestamp");
     data.append('field', "revisionattachments");
-    
+
     console.log("file upload data---"+data);
    }
  }
@@ -278,10 +278,10 @@ export class ResendpagedialogPage implements OnInit {
         acceptedbypeengineer: false,
         declinedbypeengineer: false
         }
-        this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{ 
+        this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{
         //this.createNewDesignChatGroup(res);
         console.log(res);
-        this.utilities.showSnackBar("Pestamp request has been send for revision successfully."); 
+        this.utilities.showSnackBar("Pestamp request has been send for revision successfully.");
         this.modalCtrl.dismiss({
           'dismissed' : true
         })
@@ -301,7 +301,7 @@ export class ResendpagedialogPage implements OnInit {
     this.utilities.showLoading('Uploading').then(()=>{
       this.apiservice.uploadDeclineImage(this.id,'revisionattachments',this.blob,this.filename).subscribe((res:any)=>{
         this.utilities.hideLoading().then(()=>{
-             
+
           let data={
             deliverydate: null,
             designacceptancestarttime:  designacceptancestarttime,
@@ -309,13 +309,13 @@ export class ResendpagedialogPage implements OnInit {
             isoutsourced: "true",
             revisioncomments: this.reason,
              status: "outsourced"
-              
+
             }
-          
+
               console.log(data);
-              
+
               this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
-                this.utilities.showSnackBar("Design request has been send for revision successfully.");  
+                this.utilities.showSnackBar("Design request has been send for revision successfully.");
                 this.modalCtrl.dismiss({
                     'dismissed': true
                   });

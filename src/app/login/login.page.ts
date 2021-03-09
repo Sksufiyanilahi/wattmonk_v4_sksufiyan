@@ -27,7 +27,6 @@ import { INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../model/constants';
 import { Router } from '@angular/router';
 import { ROLES } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
-import { Intercom } from 'ng-intercom';
 import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
@@ -52,15 +51,13 @@ export class LoginPage implements OnInit {
     private storageService: StorageService,
     private router: Router,
     private network:NetworkdetectService,
-    private intercom:Intercom,
+
     private navController: NavController,
     private mixpanelService:MixpanelService) {
     this.isLoggedInOnce = this.storageService.isLoggedInOnce();
   }
 
   ngOnInit() {
- this.utils.showHideIntercom(true);
-    this.intercom.shutdown();
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.loginForm = this.formBuilder.group({
       identifier: new FormControl(this.storageService.getUserName(), [Validators.required, Validators.pattern(EMAILPATTERN)]),
@@ -71,7 +68,6 @@ export class LoginPage implements OnInit {
   }
 
   ionViewDidEnter(){
-    this.utils.showHideIntercom(true);
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       console.log(this.netSwitch);
@@ -174,7 +170,7 @@ this.network.networkConnect();
                   }
               }
               else{
-                
+
                  // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
                  this.storageService.setUserName(this.loginForm.get('identifier').value);
                  this.storageService.setPassword(this.loginForm.get('password').value);
@@ -202,7 +198,7 @@ this.network.networkConnect();
               }
             });
             this.apiService.emitUserNameAndRole(response.user);
-          
+
           }, responseError => {
             this.utils.hideLoading().then(() => {
               this.apiService.resetHeaders();
@@ -239,5 +235,5 @@ this.network.networkConnect();
     this.router.navigate(['/changepassword'])
   }
 
-  
+
 }

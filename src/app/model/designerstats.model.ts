@@ -10,4 +10,5 @@ export class DesignersStatistics {
   monthlyrating: number;
   designer: string;
   avgdesigncompletiontimestamp?: any;
+  id?: any;
 }

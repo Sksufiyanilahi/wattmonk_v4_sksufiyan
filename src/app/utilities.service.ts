@@ -9,7 +9,6 @@ import * as moment from 'moment';
 import { User } from './model/user.model';
 import { LoginModel } from './model/login.model';
 import { StorageService } from './storage.service';
-import { Intercom } from 'ng-intercom';
 import { NumberOnlyDirective } from './schedule/number.directive';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { Router } from '@angular/router';
@@ -71,7 +70,6 @@ export class UtilitiesService {
 		private alertController: AlertController,
 		private modalController: ModalController,
 		private storageService: StorageService,
-		private intercom: Intercom,
 		private router: Router,
 		private navCtrl: NavController,
 		private location: Location
@@ -242,12 +240,6 @@ export class UtilitiesService {
 		} else {
 			return Promise.resolve();
 		}
-	}
-
-	showHideIntercom(value) {
-		this.intercom.update({
-			hide_default_launcher: value
-		});
 	}
 
 	setLoadingMessage(message: string) {
@@ -588,7 +580,7 @@ export class UtilitiesService {
             }
         ));
     }
-	
+
 	doCometUserLogin() {
 	    let userId = this.storageService.getUserID();
     const user = new CometChat.User(userId);
@@ -613,7 +605,7 @@ export class UtilitiesService {
         console.log('Initialization failed with error:', error);
       }
     );
-       
+
 	}
 	formatTimeInDisplayFormat(datestring: any) {
 		if (datestring != null) {
@@ -648,21 +640,21 @@ export class UtilitiesService {
 	  }
 
 	 formatDate(date) {
-		var d = new Date(date), 
+		var d = new Date(date),
 		hours = d.getHours(),
 		mins = d.getMinutes(),
 		seconds=  d.getSeconds(),
 			month = '' + (d.getMonth() + 1),
 			day = '' + d.getDate(),
 			year = d.getFullYear();
-	
-		if (month.length < 2) 
+
+		if (month.length < 2)
 			month = '0' + month;
-		if (day.length < 2) 
+		if (day.length < 2)
 			day = '0' + day;
-			
-			
-	
+
+
+
 			return [year, month, day].join('-') + ' ' + [(hours < 10? '0':'') + hours,(mins < 10? '0':'')+ mins, (seconds < 10? '0':'') + seconds].join(':');
 	}
 }

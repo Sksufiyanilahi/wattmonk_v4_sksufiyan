@@ -14,7 +14,7 @@ export class SurveyDataModel {
   chatid:string;
   phonenumber: string;
   datetime: Date;
-  comments: {};
+  comments: any;
   created_at: Date;
   updated_at: Date;
   address: string;
@@ -74,6 +74,8 @@ export class SurveyDataModel {
   batterysystem:any;
   isdesignraised:boolean=false;
   recordupdatedon:any;
+  surveypdf?: any;
+  rooftilt?: any;
 }
 
 
