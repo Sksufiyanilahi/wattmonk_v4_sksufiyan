@@ -36,9 +36,7 @@ export class SalesproposalComponent implements OnInit {
   //@ViewChild('fileInput',{static:false}) el: ElementRef;
 
   myControl = new FormControl();
-  option: string[] = ['One', 'Two', 'Three'];
-
-  desginForm: FormGroup;
+    desginForm: FormGroup;
 
   listOfAssignees: AssigneeModel[] = [];
 
@@ -132,6 +130,9 @@ selectedUtilityRateId:number;
 logoSelected: boolean=false;
 logo: any ;
 blob:Blob;
+  userId: string;
+  uploadLogo: any;
+  firstFormGroup: FormGroup;
 
 
   constructor(
@@ -156,6 +157,11 @@ blob:Blob;
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     const NUMBERPATTERN = '^[0-9]*$';
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
+
+    this.firstFormGroup=this.formBuilder.group({
+    
+    })
+
     this.desginForm = this.formBuilder.group({
       company: new FormControl('',[Validators.pattern(COMPANYFORMAT)]),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
@@ -420,8 +426,8 @@ blob:Blob;
 
   uploadFile(event) {
     this.logoSelected=true;
-    this.logoFileName= event.target.files[0].name;
-    console.log(this.logoFileName);
+    this.uploadLogo= event.target.files[0].name;
+    console.log(this.uploadLogo);
     
     let reader = new FileReader(); // HTML5 FileReader API
     let file = event.target.files[0];
@@ -434,14 +440,9 @@ blob:Blob;
         this.blob= this.utils.b64toBlob(this.logo);
         console.log(this.blob);
         
-        this.desginForm.patchValue({
-          companylogo: this.logoFileName
-        });
-
-        console.log(this.desginForm.value);
-        
-        // this.editFile = false;
-        // this.removeUpload = true;
+        this.firstFormGroup.patchValue({
+          logo: this.uploadLogo
+        });    
       }
       // ChangeDetectorRef since file is loading outside the zone
       this.cdr.markForCheck();        
@@ -465,6 +466,7 @@ blob:Blob;
   // }
 
   ngOnInit() {
+    this.userId= this.storage.getUserID();
       this.fieldDisabled=false;
       this.userdata = this.storage.getUser();
       this.fetchModuleMakesData();
@@ -991,7 +993,7 @@ deleteArcFile(index){
               // this.uploaarchitecturedesign(response.id,'architecturaldesign');
               // this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(()=>{
-              //this.updateLogo();
+              this.updateLogo();
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
                    this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1035,7 +1037,7 @@ deleteArcFile(index){
               this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
                 console.log(response.id);
                 this.utils.hideLoading().then(()=>{
-                  // this.updateLogo();
+                  this.updateLogo();
                 if(newConstruction == 'true')
                 {
                this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1077,7 +1079,7 @@ deleteArcFile(index){
             this.utils.showLoading('Saving').then(() => {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
-              //this.updateLogo();
+              this.updateLogo();
             if(newConstruction=='true')
             {
             this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1110,7 +1112,7 @@ deleteArcFile(index){
         else if(this.send===ScheduleFormEvent.SEND_SALES_FORM){
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
-              //this.updateLogo();
+              this.updateLogo();
             if(newConstruction=='true')
             {
             this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1493,15 +1495,15 @@ ioniViewDidEnter(){
 
   updateLogo(){
 
-    console.log(this.blob,this.logoFileName)
-    this.apiService.uploadlogo(this.blob,this.logoFileName).subscribe(res=>{
+    this.apiService.uploadlogo(this.blob,this.uploadLogo).subscribe(res=>{
       console.log(res);
-    }, responseError => {
-      //this.utils.hideUploadingLoading();
-      const error: ErrorModel = responseError.error;
-      this.utils.errorSnackBar(error.message[0].messages[0].message);
-    }
-    )
+        this.apiService.updateUser(this.userId,this.uploadLogo).subscribe((res:any)=>{
+          console.log('updated',res);
+          
+         let token=  this.storage.getJWTToken();
+          this.storage.setUser(res,token);
+        })
+    })
   }
 
   // pickarchitecturaldesign(){
