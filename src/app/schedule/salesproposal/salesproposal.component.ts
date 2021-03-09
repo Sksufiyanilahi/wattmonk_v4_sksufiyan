@@ -195,10 +195,10 @@ blob:Blob;
       //isonpriority:new FormControl('false'),
       paymentstatus:new FormControl(null),
       paymenttype:new FormControl(null),
-      utility1: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
-      utility: new FormControl("",[Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
-      utilityrate : new FormControl("",[Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
-      utilityrate1 : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      utility: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      //utility: new FormControl("",[Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      //utilityrate : new FormControl("",[Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      utilityrate : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
       annualutilityescalation : new FormControl('',[Validators.required]),
       incentive : new FormControl('',[Validators.required]),
       costofsystem : new FormControl(null,[Validators.required]),
@@ -270,7 +270,7 @@ blob:Blob;
       (response:any) => {
         console.log("Hiii");
         this.modulemakes = response;
-        this.filteredModuleMakes = this.desginForm.get('utility1').valueChanges.pipe(
+        this.filteredModuleMakes = this.desginForm.get('utility').valueChanges.pipe(
           startWith(""),
           map(value => (typeof value === "string" ? value : value.name)),
           map(name => (name ? this._filterModuleMake(name) : this.modulemakes.slice()))
@@ -308,9 +308,10 @@ blob:Blob;
 
   fetchUtilityData(_event: any, make) {
     //this.desginForm.patchValue({ uti: " " })
+    this.desginForm.patchValue({ utilityrate: " " })
     if (_event.isUserInput) {
       console.log(_event,"hello");
-      this.desginForm.get('utilityrate1').setValue("");
+      this.desginForm.get('utilityrate').setValue("");
      if (this.isEditMode) {
        this.selectedUtilityRateId = null;
      }
@@ -321,7 +322,7 @@ blob:Blob;
           console.log("Hiii",response);
           this.modulemodels = response;
           console.log(this.modulemodels)
-          this.filteredModuleModels = this.desginForm.get('utilityrate1').valueChanges.pipe(
+          this.filteredModuleModels = this.desginForm.get('utilityrate').valueChanges.pipe(
             startWith(""),
             map(value => (typeof value === "string" ? value : value.rate)),
             map(rate => (rate ? this._filterModuleModel(rate) : this.modulemodels.slice()))
@@ -354,14 +355,14 @@ blob:Blob;
 
   saveUtilityName() {
     console.log(this.modulemakes)
-    console.log("g",this.desginForm.get("utility1").value);
-    const found = this.modulemakes.some(el => el.name === this.desginForm.get("utility1").value);
+    console.log("g",this.desginForm.get("utility").value);
+    const found = this.modulemakes.some(el => el.name === this.desginForm.get("utility").value);
     if (!found) {
       console.log("hello");
       let data={
   
         
-        name:this.desginForm.get('utility1').value
+        name:this.desginForm.get('utility').value
       }
       this.apiService
         .postUtilitiesNames(
@@ -387,15 +388,15 @@ blob:Blob;
   
   saveUtilityRate() {
     console.log(this.modulemodels);
-    console.log(this.desginForm.get("utilityrate1").value)
-    const ismakefound = this.modulemakes.some(el => el.name === this.desginForm.get("utility1").value);
+    console.log(this.desginForm.get("utilityrate").value)
+    const ismakefound = this.modulemakes.some(el => el.name === this.desginForm.get("utility").value);
     console.log(ismakefound);
-    const found = this.modulemodels.some(el => el.rate === this.desginForm.get("utilityrate1").value);
+    const found = this.modulemodels.some(el => el.rate === this.desginForm.get("utilityrate").value);
    console.log(found);
     if (!ismakefound || !found) {
       let data={
         utility:this.selectedUtilityId,
-        rate:this.desginForm.get('utilityrate1').value
+        rate:this.desginForm.get('utilityrate').value
   
       }
       this.apiService
@@ -467,7 +468,7 @@ blob:Blob;
   ngOnInit() {
       this.fieldDisabled=false;
       this.userdata = this.storage.getUser();
-      this.fetchModuleMakesData();
+      //this.fetchModuleMakesData();
       this.intercom.update({
         "hide_default_launcher": true
       });
@@ -614,10 +615,10 @@ loadModuleModelsData() {
     (response:any) => {
       console.log("Hiii");
       this.modulemodels = response;
-      this.filteredModuleModels = this.desginForm.get('utilityrate1').valueChanges.pipe(
+      this.filteredModuleModels = this.desginForm.get('utilityrate').valueChanges.pipe(
         startWith(""),
         map(value => (typeof value === "string" ? value : value.rate)),
-        map(name => (name ? this._filterModuleModel(name) : this.modulemodels.slice()))
+        map(rate => (rate ? this._filterModuleModel(rate) : this.modulemodels.slice()))
       );
     },
     error => {
@@ -675,8 +676,8 @@ getDesignDetails() {
             invertermake:this.design.invertermake,
             invertermodel:this.design.invertermodel,
             status:this.design.status,
-            utility1: this.design.utility.name,
-            utilityrate1 : this.design.utilityrate.rate,
+            utility: this.design.utility.name,
+            utilityrate : this.design.utilityrate.rate,
             annualutilityescalation : this.design.annualutilityescalation,
             incentive : this.design.incentive.id,
             costofsystem : this.design.costofsystem,
@@ -980,14 +981,65 @@ deleteArcFile(index){
     if (this.desginForm.status == 'VALID') {
       var newConstruction = this.desginForm.get("newconstruction").value;
       console.log(this.selectedUtilityId)
-      this.desginForm.get('utilityrate').setValue(this.selectedUtilityRateId);
-      this.desginForm.get('utility').setValue(this.selectedUtilityId);
+     // this.desginForm.get('utilityrate').setValue(this.selectedUtilityRateId);
+     // this.desginForm.get('utility').setValue(this.selectedUtilityId);
+     let postData;
         if (this.designId === 0) {
           
           if(this.send===ScheduleFormEvent.SAVE_SALES_FORM){
             debugger;
+            postData = {
+              company: this.desginForm.get('company').value,
+              name: this.desginForm.get('name').value,
+              email: this.desginForm.get('email').value,
+              solarmake: this.desginForm.get('solarmake').value,
+              solarmodel: this.desginForm.get('solarmodel').value,
+              invertermake: this.desginForm.get('invertermake').value,
+              invertermodel: this.desginForm.get('invertermodel').value,
+              monthlybill: this.desginForm.get('monthlybill').value,
+              address: this.desginForm.get('address').value,
+              createdby: this.desginForm.get('createdby').value,
+              assignedto: this.desginForm.get('assignedto').value,
+              rooftype: this.desginForm.get('rooftype').value,
+              //prelimdesign: new FormControl(null),
+              architecturaldesign: this.desginForm.get('architecturaldesign').value,
+              tiltgroundmount: this.desginForm.get('tiltgroundmount').value,
+              mountingtype: this.desginForm.get('mountingtype').value,
+              // jobtype: new FormControl('', [Validators.required]),
+              projecttype: this.desginForm.get('projecttype').value,
+              newconstruction: this.desginForm.get('newconstruction').value,
+              source: this.desginForm.get('source').value,
+              comments: this.desginForm.get('comments').value,
+              requesttype: this.desginForm.get('requesttype').value,
+              latitude: this.desginForm.get('latitude').value,
+              longitude: this.desginForm.get('longitude').value,
+              country:this.desginForm.get('country').value,
+              state: this.desginForm.get('state').value,
+              city: this.desginForm.get('city').value,
+              postalcode:this.desginForm.get('postalcode').value,
+              status: this.desginForm.get('status').value,
+              attachments: this.desginForm.get('attachments').value,
+              deliverydate:this.desginForm.get('deliverydate').value,
+              outsourcedto:this.desginForm.get('outsourcedto').value,
+              isoutsourced:this.desginForm.get('isoutsourced').value,
+              designacceptancestarttime:this.desginForm.get('designacceptancestarttime').value,
+              creatorparentid:this.desginForm.get('creatorparentid').value,
+              //isonpriority:new FormControl('false'),
+              paymentstatus:this.desginForm.get('paymentstatus').value,
+              paymenttype:this.desginForm.get('paymenttype').value,
+             // utility1: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+              utility:this.selectedUtilityId,
+              utilityrate : this.selectedUtilityRateId,
+             // utilityrate1 : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+              annualutilityescalation :this.desginForm.get('annualutilityescalation').value,
+              incentive : this.desginForm.get('incentive').value,
+              costofsystem : this.desginForm.get('costofsystem').value,
+              personname : this.desginForm.get('personname').value,
+              requirementtype :this.desginForm.get('requirementtype').value,
+            }
             this.utils.showLoading('Saving').then(() => {
-            this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
+            // this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
+              this.apiService.addDesginForm(postData).subscribe((response) => {
               // this.uploaarchitecturedesign(response.id,'architecturaldesign');
               // this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(()=>{
@@ -1032,7 +1084,56 @@ deleteArcFile(index){
             });
             }
             else if(this.send===ScheduleFormEvent.SEND_SALES_FORM){
-              this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
+              postData = {
+                company: this.desginForm.get('company').value,
+                name: this.desginForm.get('name').value,
+                email: this.desginForm.get('email').value,
+                solarmake: this.desginForm.get('solarmake').value,
+                solarmodel: this.desginForm.get('solarmodel').value,
+                invertermake: this.desginForm.get('invertermake').value,
+                invertermodel: this.desginForm.get('invertermodel').value,
+                monthlybill: this.desginForm.get('monthlybill').value,
+                address: this.desginForm.get('address').value,
+                createdby: this.desginForm.get('createdby').value,
+                assignedto: this.desginForm.get('assignedto').value,
+                rooftype: this.desginForm.get('rooftype').value,
+                //prelimdesign: new FormControl(null),
+                architecturaldesign: this.desginForm.get('architecturaldesign').value,
+                tiltgroundmount: this.desginForm.get('tiltgroundmount').value,
+                mountingtype: this.desginForm.get('mountingtype').value,
+                // jobtype: new FormControl('', [Validators.required]),
+                projecttype: this.desginForm.get('projecttype').value,
+                newconstruction: this.desginForm.get('newconstruction').value,
+                source: this.desginForm.get('source').value,
+                comments: this.desginForm.get('comments').value,
+                requesttype: this.desginForm.get('requesttype').value,
+                latitude: this.desginForm.get('latitude').value,
+                longitude: this.desginForm.get('longitude').value,
+                country:this.desginForm.get('country').value,
+                state: this.desginForm.get('state').value,
+                city: this.desginForm.get('city').value,
+                postalcode:this.desginForm.get('postalcode').value,
+                status: this.desginForm.get('status').value,
+                attachments: this.desginForm.get('attachments').value,
+                deliverydate:this.desginForm.get('deliverydate').value,
+                outsourcedto:this.desginForm.get('outsourcedto').value,
+                isoutsourced:this.desginForm.get('isoutsourced').value,
+                designacceptancestarttime:this.desginForm.get('designacceptancestarttime').value,
+                creatorparentid:this.desginForm.get('creatorparentid').value,
+                //isonpriority:new FormControl('false'),
+                paymentstatus:this.desginForm.get('paymentstatus').value,
+                paymenttype:this.desginForm.get('paymenttype').value,
+               // utility1: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+                utility:this.selectedUtilityId,
+                utilityrate : this.selectedUtilityRateId,
+               // utilityrate1 : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+                annualutilityescalation :this.desginForm.get('annualutilityescalation').value,
+                incentive : this.desginForm.get('incentive').value,
+                costofsystem : this.desginForm.get('costofsystem').value,
+                personname : this.desginForm.get('personname').value,
+                requirementtype :this.desginForm.get('requirementtype').value,
+              }
+              this.apiService.addDesginForm(postData).subscribe((response) => {
                 console.log(response.id);
                 this.utils.hideLoading().then(()=>{
                   // this.updateLogo();
@@ -1074,8 +1175,57 @@ deleteArcFile(index){
 
         } else {
           if(this.send===ScheduleFormEvent.SAVE_SALES_FORM){
+            postData = {
+              company: this.desginForm.get('company').value,
+              name: this.desginForm.get('name').value,
+              email: this.desginForm.get('email').value,
+              solarmake: this.desginForm.get('solarmake').value,
+              solarmodel: this.desginForm.get('solarmodel').value,
+              invertermake: this.desginForm.get('invertermake').value,
+              invertermodel: this.desginForm.get('invertermodel').value,
+              monthlybill: this.desginForm.get('monthlybill').value,
+              address: this.desginForm.get('address').value,
+              createdby: this.desginForm.get('createdby').value,
+              assignedto: this.desginForm.get('assignedto').value,
+              rooftype: this.desginForm.get('rooftype').value,
+              //prelimdesign: new FormControl(null),
+              architecturaldesign: this.desginForm.get('architecturaldesign').value,
+              tiltgroundmount: this.desginForm.get('tiltgroundmount').value,
+              mountingtype: this.desginForm.get('mountingtype').value,
+              // jobtype: new FormControl('', [Validators.required]),
+              projecttype: this.desginForm.get('projecttype').value,
+              newconstruction: this.desginForm.get('newconstruction').value,
+              source: this.desginForm.get('source').value,
+              comments: this.desginForm.get('comments').value,
+              requesttype: this.desginForm.get('requesttype').value,
+              latitude: this.desginForm.get('latitude').value,
+              longitude: this.desginForm.get('longitude').value,
+              country:this.desginForm.get('country').value,
+              state: this.desginForm.get('state').value,
+              city: this.desginForm.get('city').value,
+              postalcode:this.desginForm.get('postalcode').value,
+              status: this.desginForm.get('status').value,
+              attachments: this.desginForm.get('attachments').value,
+              deliverydate:this.desginForm.get('deliverydate').value,
+              outsourcedto:this.desginForm.get('outsourcedto').value,
+              isoutsourced:this.desginForm.get('isoutsourced').value,
+              designacceptancestarttime:this.desginForm.get('designacceptancestarttime').value,
+              creatorparentid:this.desginForm.get('creatorparentid').value,
+              //isonpriority:new FormControl('false'),
+              paymentstatus:this.desginForm.get('paymentstatus').value,
+              paymenttype:this.desginForm.get('paymenttype').value,
+             // utility1: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+              utility:this.selectedUtilityId,
+              utilityrate : this.selectedUtilityRateId,
+             // utilityrate1 : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+              annualutilityescalation :this.desginForm.get('annualutilityescalation').value,
+              incentive : this.desginForm.get('incentive').value,
+              costofsystem : this.desginForm.get('costofsystem').value,
+              personname : this.desginForm.get('personname').value,
+              requirementtype :this.desginForm.get('requirementtype').value,
+            }
             this.utils.showLoading('Saving').then(() => {
-          this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
+          this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
               //this.updateLogo();
             if(newConstruction=='true')
@@ -1108,7 +1258,56 @@ deleteArcFile(index){
         });
         }
         else if(this.send===ScheduleFormEvent.SEND_SALES_FORM){
-          this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
+          postData = {
+            company: this.desginForm.get('company').value,
+            name: this.desginForm.get('name').value,
+            email: this.desginForm.get('email').value,
+            solarmake: this.desginForm.get('solarmake').value,
+            solarmodel: this.desginForm.get('solarmodel').value,
+            invertermake: this.desginForm.get('invertermake').value,
+            invertermodel: this.desginForm.get('invertermodel').value,
+            monthlybill: this.desginForm.get('monthlybill').value,
+            address: this.desginForm.get('address').value,
+            createdby: this.desginForm.get('createdby').value,
+            assignedto: this.desginForm.get('assignedto').value,
+            rooftype: this.desginForm.get('rooftype').value,
+            //prelimdesign: new FormControl(null),
+            architecturaldesign: this.desginForm.get('architecturaldesign').value,
+            tiltgroundmount: this.desginForm.get('tiltgroundmount').value,
+            mountingtype: this.desginForm.get('mountingtype').value,
+            // jobtype: new FormControl('', [Validators.required]),
+            projecttype: this.desginForm.get('projecttype').value,
+            newconstruction: this.desginForm.get('newconstruction').value,
+            source: this.desginForm.get('source').value,
+            comments: this.desginForm.get('comments').value,
+            requesttype: this.desginForm.get('requesttype').value,
+            latitude: this.desginForm.get('latitude').value,
+            longitude: this.desginForm.get('longitude').value,
+            country:this.desginForm.get('country').value,
+            state: this.desginForm.get('state').value,
+            city: this.desginForm.get('city').value,
+            postalcode:this.desginForm.get('postalcode').value,
+            status: this.desginForm.get('status').value,
+            attachments: this.desginForm.get('attachments').value,
+            deliverydate:this.desginForm.get('deliverydate').value,
+            outsourcedto:this.desginForm.get('outsourcedto').value,
+            isoutsourced:this.desginForm.get('isoutsourced').value,
+            designacceptancestarttime:this.desginForm.get('designacceptancestarttime').value,
+            creatorparentid:this.desginForm.get('creatorparentid').value,
+            //isonpriority:new FormControl('false'),
+            paymentstatus:this.desginForm.get('paymentstatus').value,
+            paymenttype:this.desginForm.get('paymenttype').value,
+           // utility1: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+            utility:this.selectedUtilityId,
+            utilityrate : this.selectedUtilityRateId,
+           // utilityrate1 : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+            annualutilityescalation :this.desginForm.get('annualutilityescalation').value,
+            incentive : this.desginForm.get('incentive').value,
+            costofsystem : this.desginForm.get('costofsystem').value,
+            personname : this.desginForm.get('personname').value,
+            requirementtype :this.desginForm.get('requirementtype').value,
+          }
+          this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
               //this.updateLogo();
             if(newConstruction=='true')

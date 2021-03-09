@@ -156,7 +156,7 @@
                 <ion-item class="ion-no-padding">
                     <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                         <mat-label>Utility Name</mat-label>
-                        <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto" autocomplete="off" formControlName="utility1" required>
+                        <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto" autocomplete="off" formControlName="utility" required>
                        
                         <mat-autocomplete #auto="matAutocomplete">
                           <mat-option *ngFor="let utility of filteredModuleMakes | async" [value]="utility.name"
@@ -176,7 +176,7 @@
                 <ion-item class="ion-no-padding">
                     <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
                       <mat-label>Utility Rate</mat-label>
-                      <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto1" autocomplete="off" formControlName="utilityrate1" required>
+                      <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto1" autocomplete="off" formControlName="utilityrate" required>
                       <mat-autocomplete #auto1="matAutocomplete">
                         <mat-option *ngFor="let module of filteredModuleModels | async" [value]="module.rate"
                         (onSelectionChange)="setSelectedUtilityRate(module)" class="font">{{module.rate}}</mat-option>
