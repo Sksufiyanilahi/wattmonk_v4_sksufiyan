@@ -195,8 +195,10 @@ blob:Blob;
       //isonpriority:new FormControl('false'),
       paymentstatus:new FormControl(null),
       paymenttype:new FormControl(null),
-      utility: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
-      utilityrate : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      utility1: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      utility: new FormControl("",[Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      utilityrate : new FormControl("",[Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      utilityrate1 : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
       annualutilityescalation : new FormControl('',[Validators.required]),
       incentive : new FormControl('',[Validators.required]),
       costofsystem : new FormControl(null,[Validators.required]),
@@ -268,7 +270,7 @@ blob:Blob;
       (response:any) => {
         console.log("Hiii");
         this.modulemakes = response;
-        this.filteredModuleMakes = this.desginForm.get('utility').valueChanges.pipe(
+        this.filteredModuleMakes = this.desginForm.get('utility1').valueChanges.pipe(
           startWith(""),
           map(value => (typeof value === "string" ? value : value.name)),
           map(name => (name ? this._filterModuleMake(name) : this.modulemakes.slice()))
@@ -308,7 +310,7 @@ blob:Blob;
     //this.desginForm.patchValue({ uti: " " })
     if (_event.isUserInput) {
       console.log(_event,"hello");
-      this.desginForm.get('utilityrate').setValue("");
+      this.desginForm.get('utilityrate1').setValue("");
      if (this.isEditMode) {
        this.selectedUtilityRateId = null;
      }
@@ -319,7 +321,7 @@ blob:Blob;
           console.log("Hiii",response);
           this.modulemodels = response;
           console.log(this.modulemodels)
-          this.filteredModuleModels = this.desginForm.get('utilityrate').valueChanges.pipe(
+          this.filteredModuleModels = this.desginForm.get('utilityrate1').valueChanges.pipe(
             startWith(""),
             map(value => (typeof value === "string" ? value : value.rate)),
             map(rate => (rate ? this._filterModuleModel(rate) : this.modulemodels.slice()))
@@ -352,14 +354,14 @@ blob:Blob;
 
   saveUtilityName() {
     console.log(this.modulemakes)
-    console.log("g",this.desginForm.get("utility").value);
-    const found = this.modulemakes.some(el => el.name === this.desginForm.get("utility").value);
+    console.log("g",this.desginForm.get("utility1").value);
+    const found = this.modulemakes.some(el => el.name === this.desginForm.get("utility1").value);
     if (!found) {
       console.log("hello");
       let data={
   
         
-        name:this.desginForm.get('utility').value
+        name:this.desginForm.get('utility1').value
       }
       this.apiService
         .postUtilitiesNames(
@@ -385,15 +387,15 @@ blob:Blob;
   
   saveUtilityRate() {
     console.log(this.modulemodels);
-    console.log(this.desginForm.get("utilityrate").value)
-    const ismakefound = this.modulemakes.some(el => el.name === this.desginForm.get("utility").value);
+    console.log(this.desginForm.get("utilityrate1").value)
+    const ismakefound = this.modulemakes.some(el => el.name === this.desginForm.get("utility1").value);
     console.log(ismakefound);
-    const found = this.modulemodels.some(el => el.rate === this.desginForm.get("utilityrate").value);
+    const found = this.modulemodels.some(el => el.rate === this.desginForm.get("utilityrate1").value);
    console.log(found);
     if (!ismakefound || !found) {
       let data={
         utility:this.selectedUtilityId,
-        rate:this.desginForm.get('utilityrate').value
+        rate:this.desginForm.get('utilityrate1').value
   
       }
       this.apiService
@@ -612,9 +614,9 @@ loadModuleModelsData() {
     (response:any) => {
       console.log("Hiii");
       this.modulemodels = response;
-      this.filteredModuleModels = this.desginForm.get('modulemodel').valueChanges.pipe(
+      this.filteredModuleModels = this.desginForm.get('utilityrate1').valueChanges.pipe(
         startWith(""),
-        map(value => (typeof value === "string" ? value : value.name)),
+        map(value => (typeof value === "string" ? value : value.rate)),
         map(name => (name ? this._filterModuleModel(name) : this.modulemodels.slice()))
       );
     },
@@ -673,8 +675,8 @@ getDesignDetails() {
             invertermake:this.design.invertermake,
             invertermodel:this.design.invertermodel,
             status:this.design.status,
-            utility: this.design.utility.id,
-            utilityrate : this.design.utilityrate.id,
+            utility1: this.design.utility.name,
+            utilityrate1 : this.design.utilityrate.rate,
             annualutilityescalation : this.design.annualutilityescalation,
             incentive : this.design.incentive.id,
             costofsystem : this.design.costofsystem,
@@ -973,12 +975,13 @@ deleteArcFile(index){
     // }
     // console.log('hey',invalid)
     // return invalid;
+    
+         
     if (this.desginForm.status == 'VALID') {
       var newConstruction = this.desginForm.get("newconstruction").value;
       console.log(this.selectedUtilityId)
+      this.desginForm.get('utilityrate').setValue(this.selectedUtilityRateId);
       this.desginForm.get('utility').setValue(this.selectedUtilityId);
-          this.desginForm.get('utilityrate').setValue(this.selectedUtilityRateId);
-          
         if (this.designId === 0) {
           
           if(this.send===ScheduleFormEvent.SAVE_SALES_FORM){
@@ -988,7 +991,7 @@ deleteArcFile(index){
               // this.uploaarchitecturedesign(response.id,'architecturaldesign');
               // this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(()=>{
-              this.updateLogo();
+              //this.updateLogo();
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
                    this.uploaarchitecturedesign(response,'architecturaldesign');
