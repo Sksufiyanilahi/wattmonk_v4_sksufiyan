@@ -7,25 +7,25 @@
 // }
 
 // Production Server
-// export const PlatformUpdateUrl =  'https://admin.wattmonk.com/api/';
-// export const BaseUrl = 'https://admin.wattmonk.com/api/';
-// export const COMETCHAT_CONSTANTS = {
-//     APP_ID: '190385dcec51285',
-//     REGION: 'US',
-//     API_KEY: '5cafae1939d4fc620698c50ae3f25e727fc90213',
-//     REST_API_KEY: "4f441010f9ace69fc5e2471c20e9f1c21ca56402"
-// }
-// export const version='1.1.3'
+export const PlatformUpdateUrl =  'https://admin.wattmonk.com/api/';
+export const BaseUrl = 'https://admin.wattmonk.com/api/';
+export const COMETCHAT_CONSTANTS = {
+    APP_ID: '190385dcec51285',
+    REGION: 'US',
+    API_KEY: '5cafae1939d4fc620698c50ae3f25e727fc90213',
+    REST_API_KEY: "4f441010f9ace69fc5e2471c20e9f1c21ca56402"
+}
+export const version='1.1.3'
 
 // Test Server
-export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';
-export const BaseUrl = 'https://testorbit.wattmonk.com/api';
-export const COMETCHAT_CONSTANTS = {
-    APP_ID: '22738c62a78b107',
-     REGION: 'US',
-     API_KEY: '3afc04a7495edb03f4c7c802096a954faf7e3a27'
- }
-export const version='1.1.3'
+// export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';
+// export const BaseUrl = 'https://testorbit.wattmonk.com/api';
+// export const COMETCHAT_CONSTANTS = {
+//     APP_ID: '22738c62a78b107',
+//      REGION: 'US',
+//      API_KEY: '3afc04a7495edb03f4c7c802096a954faf7e3a27'
+//  }
+// export const version='1.1.3'
 
 //Development Server
 // export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api';

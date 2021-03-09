@@ -14,6 +14,9 @@ import {Router} from '@angular/router';
 import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
 import {MixpanelService} from './utilities/mixpanel.service';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
+import {Plugins, StatusBarStyle} from '@capacitor/core';
+
+const { StatusBar, SplashScreen } = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -140,6 +143,8 @@ export class AppComponent {
       this.utilities.setupCometChat();
       this.mix.initializeMixPanel();
       this.backgroundMode.enable();
+      SplashScreen.hide();
+      StatusBar.hide();
     });
   }
 
