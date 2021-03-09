@@ -33,7 +33,7 @@
                     </ion-col>
             <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
                 <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
-                    <p class="customer-name">{{surveyData.name}}
+                    <p class="customer-name"><span [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">{{surveyData.name}}</span>
                         <span fill="clear" background-border="clear"    [routerLink]="['/','activity',surveyData.id,'survey']"  class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                     </p>
                     <p style="margin:0px">
