@@ -240,7 +240,7 @@
     <ion-col size="6">
         <ion-item class="ion-no-padding">
             <ion-label position="floating">Cost of System* (Watt)</ion-label>
-            <ion-input type="number" class="form_input"
+            <ion-input type="text" class="form_input"
             formControlName="costofsystem"></ion-input>
         </ion-item>
     </ion-col>
@@ -336,13 +336,13 @@
               <ion-col size="6" *ngIf='(showValue=="ground" || showValue=="both")'>
                       <ion-item class="ion-no-padding">
                           <ion-label position="floating" style="font-size: 13px;">Tilt for ground mount*</ion-label>
-                          <ion-input class="form_input"  type="tel" formControlName="tiltofgroundmountingsystem" maxlength="5"></ion-input>
+                          <ion-input class="form_input"  type="tel" formControlName="tiltgroundmount" maxlength="5"></ion-input>
                       </ion-item>
                       <div style="height: 5px;">
-                          <div *ngIf="desginForm.get('tiltofgroundmountingsystem').dirty && desginForm.get('tiltofgroundmountingsystem').hasError('pattern')">
+                          <div *ngIf="desginForm.get('tiltgroundmount').dirty && desginForm.get('tiltgroundmount').hasError('pattern')">
                               <span class="error">{{"It should be a valid number"}}</span>
                           </div>
-                          <div *ngIf="desginForm.get('tiltofgroundmountingsystem').hasError('pattern') && desginForm.get('tiltofgroundmountingsystem').dirty">
+                          <div *ngIf="desginForm.get('tiltgroundmount').hasError('pattern') && desginForm.get('tiltgroundmount').dirty">
                               <span class="error">{{tiltforgroundError}}</span>
                           </div>
                       </div>
