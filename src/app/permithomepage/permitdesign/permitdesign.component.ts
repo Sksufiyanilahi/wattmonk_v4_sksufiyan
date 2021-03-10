@@ -254,7 +254,8 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.fetchPendingDesigns(event, showLoader);
   }
 
-     accept(id,data:string){
+     accept(id,data:string,event){
+       event.stopPropagation();
       this.mixpanel.track("ACCEPT_PERMIT_DESIGN_PAGE_OPEN", {
       });
       this.acceptid= id;
@@ -603,7 +604,8 @@ this.deactivateNetworkSwitch.unsubscribe();
   //   });
   // }
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -758,7 +760,8 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
 
-  openDesigners(id: number,designData) {
+  openDesigners(id: number,designData,event) {
+    event.stopPropagation();
     debugger;
     this.mixpanel.track("ASSIGN_PERMIT_DESIGN_PAGE_OPEN", {
     });
@@ -817,7 +820,8 @@ this.route.navigate(['/payment-modal'], {
     }}
   }
 
-  openAnalysts(id: number,designData) {
+  openAnalysts(id: number,designData,event) {
+    event.stopPropagation();
     this.listOfAssignees=[];
     console.log("this is",designData);
     this.designerData = designData;
@@ -869,7 +873,8 @@ this.route.navigate(['/payment-modal'], {
 
 
 
-  async openreviewPassed(id,designData){
+  async openreviewPassed(id,designData,event){
+    event.stopPropagation();
     this.mixpanel.track("DELIVER_PERMIT_PAGE_OPEN", {
     });
     this.designId=id
@@ -966,7 +971,8 @@ this.route.navigate(['/payment-modal'], {
   }
 */
 
-async decline(id){
+async decline(id,event){
+  event.stopPropagation();
   this.mixpanel.track("DECLINE_PERMIT_DESIGN_PAGE_OPEN", {
   });
   const modal = await this.modalController.create({
@@ -992,7 +998,8 @@ async decline(id){
 }
 
 
-async Resend(id, type){
+async Resend(id, type,event){
+  event.stopPropagation();
   this.mixpanel.track("RESEND_PERMIT_DESIGN_PAGE_OPEN", {
   });
   const modal = await this.modalController.create({
@@ -1027,7 +1034,8 @@ sDatePassed(datestring: string,i){
 
 }
 
-selfAssign(id,designData){
+selfAssign(id,designData,event){
+  event.stopPropagation();
   // this.mixpanel.track("SelfAssign_Permit_Design_PAGE_OPEN", {
   // });
   var designstarttime = new Date();
@@ -1069,11 +1077,13 @@ getassignedata(asssignedata){
 
 }
 
-shareWhatsapp(designData){
+shareWhatsapp(designData,event){
+  event.stopPropagation();
   this.socialsharing.share(designData.permitdesign.url);
 }
 
- async shareViaEmails(id,designData){
+ async shareViaEmails(id,designData,event){
+   event.stopPropagation();
   const modal = await this.modalController.create({
     component: EmailModelPage,
     cssClass: 'email-modal-css',
@@ -1105,7 +1115,8 @@ shareWhatsapp(designData){
   });
 }
 
-designDownload(designData){
+designDownload(designData,event){
+  event.stopPropagation();
   this.mixpanel.track("DOWNLOAD_PERMIT_PAGE_OPEN", {
   });
   this.platform.ready().then(()=>{
@@ -1314,7 +1325,8 @@ createNewDesignChatGroup(design:DesginDataModel) {
       }
 
 
-directAssignToWattmonk(id:number){
+directAssignToWattmonk(id:number,event){
+  event.stopPropagation();
   this.mixpanel.track("REASSIGN_PERMIT_DESIGN_PAGE_OPEN", {
   });
   this.designId = id;
@@ -1354,6 +1366,20 @@ directAssignToWattmonk(id:number){
 trackdesign(index,design){
   return design.id;
 }
+
+gotoActivity(designData,event){
+  console.log(event)
+      event.stopPropagation();
+    this.route.navigate(['/activity' + '/' + designData.id + '/design'])
+  
+  }
+  
+  gotoDetails(designData,$event){
+    // $event.preventDefault();
+    // $event.stopPropagation();
+    this.route.navigate(['/design-details/' + designData.id])
+  }
+
 }
 
 export class DesginDataHelper {
