@@ -44,7 +44,7 @@
                     </span>
                         <span  routerDirection="forward"
                         *ngIf="surveyData.status=='surveyassigned'" class="chipdetail"
-                        style="background-color: #3C78D8;" 
+                        style="background-color: #3C78D8;"
                         routerDirection="forward">
                         pending
                     </span>
@@ -55,7 +55,7 @@
                     </p>
                     <p style="margin:0px">
 
-                        <span class="customer-email" 
+                        <span class="customer-email"
                             routerDirection="forward">{{surveyData.email}}</span>
                         <span *ngIf="surveyData.lateby > 1" class="latebystyle"><strong>Late by {{surveyData.lateby}}
                                 days</strong></span>
@@ -65,7 +65,7 @@
                     <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
                         <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
                     <span class="customer-address z-100 m-0"
-                        (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
+                        (click)="openAddressOnMap(surveyData.address, $event)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
                     <p style="margin: 0px;" class="ion-no-padding" *ngIf="segments=='status=surveyassigned&status=surveyinprocess' || segments=='status=surveycompleted'">
                         <!-- <ion-col style="font-size: 0.8em;"> -->
                             <span><strong>Assigned to : {{surveyData.assignedto.firstname | titlecase}} {{surveyData.assignedto.lastname | titlecase}}</strong></span>
@@ -126,13 +126,13 @@
                         </ion-col>
                         <ion-col size="auto" class=" "
                             *ngIf="segments=='status=surveycompleted'" style="margin-bottom: 5px;">
-                            <span *ngIf="surveyData.surveypdf!== null" style="float:right !important;" class="ion-text-end action-button-color" (click)="designDownload(surveyData,$event)">
+                            <span *ngIf="surveyData.surveypdf!== null" style="float:right !important;" class="ion-text-end action-button-color" (click)="designDownload(surveyData)">
                                 <ion-icon name="cloud-download-outline"></ion-icon></span>
                             <span *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin') && (surveyData.surveypdf== null)" style="float:right !important;" class="ion-text-end action-button-color" (click)="generatePdf(surveyData.id,$event)">
                                     Generate PDF  &nbsp; &nbsp;</span>
                                 <span *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin') && (surveyData.isdesignraised==false || surveyData.isdesignraised==null)" style="float:right !important;" class="ion-text-end action-button-color" (click)="raisepermit(surveyData,$event)">
                                     Raise Permit  &nbsp; &nbsp;</span>
-                               
+
                             <!-- <span *ngIf="userData.role.type !='clientsuperadmin'" style="float:right !important;"
                                 class="ion-text-end action-button-color" (click)="selfAssign(surveyData.id,surveyData)">
                                 &nbsp; Self Assign</span>

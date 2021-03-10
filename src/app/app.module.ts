@@ -35,10 +35,12 @@ import {AuthGuardService} from './auth-guard.service';
 import {StorageService} from './storage.service';
 import {SuccessModalComponent} from './utilities/success-modal/success-modal.component';
 import {UtilitiesModule} from './utilities/utilities.module';
+import {PopoverComponentComponent} from './popover-component/popover-component.component';
+import {MyLoaderComponent} from './components/my-loader/my-loader.component';
 
 @NgModule({
-  declarations: [AppComponent, SuccessModalComponent],
-  entryComponents: [SuccessModalComponent],
+  declarations: [AppComponent, SuccessModalComponent, MyLoaderComponent, PopoverComponentComponent],
+  entryComponents: [SuccessModalComponent, PopoverComponentComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -56,7 +58,6 @@ import {UtilitiesModule} from './utilities/utilities.module';
     MatProgressSpinnerModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase)
-
   ],
   providers: [
     // FCM,

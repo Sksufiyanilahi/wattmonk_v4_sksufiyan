@@ -72,6 +72,7 @@ export class PestampSchedulePage implements OnInit {
   isAtticFileUpload: boolean = false;
   isRoofFileUpload: boolean = false;
   isPermitPlanFileUpload: boolean = false;
+  nonEditableField: boolean = false;
   //user: User
   // isEditMode:boolean=false;
   // formatted_address:string;
