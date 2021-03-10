@@ -264,6 +264,16 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   }
 
+  scheduleRoute(design){
+    console.log("hello",design)
+    if(design.requirementtype=="assessment"){
+      this.router.navigate(['/schedule/design/' + design.id]);
+    }
+    else if(design.requirementtype=='proposal'){
+      this.router.navigate(['/schedule/salesproposal/' + design.id]);
+    }
+  }
+
   setData(result: DesginDataModel) {
     this.design = result;
     console.log(this.design,">>>>>>>>>>>>>>>>");

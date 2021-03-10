@@ -85,7 +85,7 @@ export class OnboardingPage implements OnInit {
                   ispaymentmodeprepay:new FormControl(null),
                   // logo:new FormControl(null, [Validators.required]),
                   registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9-]*')]),
-                  isonboardingcompleted: new FormControl(false)
+                  isonboardingcompleted: new FormControl(true)
                 })
                 this.secondFormGroup = this.formBuilder.group({
                   //For Emails

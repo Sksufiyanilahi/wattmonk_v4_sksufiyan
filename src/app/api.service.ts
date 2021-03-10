@@ -348,6 +348,9 @@ export class ApiService {
     prelimCharges(){
       return this.http.get(BaseUrl+ "commonsettings?settingname=prelimdesigncharges", { headers: this.headers});}
 
+      prelimSalesCharges(){
+        return this.http.get(BaseUrl+ "commonsettings?settingname=siteproposaldesigncharges", { headers: this.headers});}
+
       permitinitcharges(){
         return this.http.get(BaseUrl+ "commonsettings?settingname=permitdesigncharges", { headers: this.headers});}
    
@@ -615,6 +618,34 @@ export class ApiService {
           headers: this.headers
         })
       }
+
+      salesIncentives(){
+        return this.http.get(BaseUrl + 'incentives', {
+          headers: this.headers
+        })
+      }
+      utilitiesNames(){
+        return this.http.get(BaseUrl + 'utilities?_sort=name:ASC', {
+          headers: this.headers
+        })
+      }
+      utilitiesRate(utilityid){
+        return this.http.get(BaseUrl + 'utilityrates?utility=' +  utilityid, {
+          headers: this.headers
+        })
+      }
+      postUtilitiesNames(name){
+        return this.http.post(BaseUrl + 'utilities',name, {
+          headers: this.headers
+        })
+      }
+      postUtilitiesRate(utilityid){
+        return this.http.post(BaseUrl + 'utilityrates',utilityid, {
+          headers: this.headers
+        })
+      }
+   
+     
 
       listencall(listnerID) {
       // let listnerID = localStorage.getItem('gid');
