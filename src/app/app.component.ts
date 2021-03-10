@@ -145,9 +145,12 @@ export class AppComponent {
       this.backgroundMode.enable();
       SplashScreen.hide();
       StatusBar.setStyle({
-        style: StatusBarStyle.Dark
+        style: StatusBarStyle.Light
       });
-      StatusBar.hide();
+      StatusBar.setOverlaysWebView({
+        overlay: true
+      });
+      // StatusBar.hide();
     });
   }
 

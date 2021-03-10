@@ -1,21 +1,20 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Dashboard</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
 <ion-grid>
+  <ion-row class="ion-align-items-center">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>Dashboard</ion-title>
+    </ion-toolbar>
+  </ion-row>
   <ion-row>
     <ion-col size="6">
       <ion-card class=" card" [routerLink]="['/onhold']">
         <ion-card-header class="top">
           On Hold
         </ion-card-header>
-        <ion-badge color="success">{{count.putonhold}}</ion-badge>  
+        <ion-badge color="success">{{count.putonhold}}</ion-badge>
         <ion-card-content></ion-card-content>
       </ion-card>
     </ion-col>
@@ -23,19 +22,19 @@
       <ion-card class=" card" [routerLink]="['/revision']">
         <ion-card-header class="top">
           Revision
-        </ion-card-header>  
+        </ion-card-header>
         <ion-badge color="success">{{count.isinrevisionstatecount}}</ion-badge>
         <ion-card-content></ion-card-content>
       </ion-card>
     </ion-col>
   </ion-row>
-  <ion-row> 
+  <ion-row>
     <ion-col size="6" *ngIf="userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin' || userData.role.name=='SuperAdmin' || userData.role.type=='wattmonkadmins'">
       <ion-card class=" card"  [routerLink]="['/waitingforacceptance']">
         <ion-card-header class="top">
           Waiting for acceptance
-        </ion-card-header>  
-        <ion-badge color="success">{{count.waitingforacceptance}}</ion-badge>  
+        </ion-card-header>
+        <ion-badge color="success">{{count.waitingforacceptance}}</ion-badge>
         <ion-card-content></ion-card-content>
       </ion-card>
     </ion-col>
@@ -43,7 +42,7 @@
       <ion-card class=" card"  [routerLink]="['/unassigned']">
         <ion-card-header class="top">
           Unassigned
-        </ion-card-header>  
+        </ion-card-header>
         <ion-badge color="success">{{count.unassigned}}</ion-badge>
         <ion-card-content></ion-card-content>
       </ion-card>
