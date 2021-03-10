@@ -32,7 +32,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   private survey: SurveyDataModel;
   address: string;
   userData: any;
-  
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -90,23 +90,23 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
     if (this.surveyId !== 0) {
       this.getSurveyDetails();
-    } 
+    }
     else {
       this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
-         this.surveyForm.get('address').setValue("sdck");
-         this.surveyForm.get('latitude').setValue('1111111');
-         this.surveyForm.get('longitude').setValue('222222222');
-         this.surveyForm.get('country').setValue('India');
-         this.surveyForm.get('city').setValue('delhi');
-        this.surveyForm.get('state').setValue('up');
-         this.surveyForm.get('postalcode').setValue(777777777);
-      //  this.surveyForm.get('address').setValue(address.address);
-      //  this.surveyForm.get('latitude').setValue(address.lat);
-      //   this.surveyForm.get('longitude').setValue(address.long);
-      //   this.surveyForm.get('country').setValue(address.country);
-      //   this.surveyForm.get('city').setValue(address.city);
-      //   this.surveyForm.get('state').setValue(address.state);
-      //   this.surveyForm.get('postalcode').setValue(address.postalcode);
+         // this.surveyForm.get('address').setValue("sdck");
+         // this.surveyForm.get('latitude').setValue('1111111');
+         // this.surveyForm.get('longitude').setValue('222222222');
+         // this.surveyForm.get('country').setValue('India');
+         // this.surveyForm.get('city').setValue('delhi');
+        // this.surveyForm.get('state').setValue('up');
+        //  this.surveyForm.get('postalcode').setValue(777777777);
+       this.surveyForm.get('address').setValue(address.address);
+       this.surveyForm.get('latitude').setValue(address.lat);
+        this.surveyForm.get('longitude').setValue(address.long);
+        this.surveyForm.get('country').setValue(address.country);
+        this.surveyForm.get('city').setValue(address.city);
+        this.surveyForm.get('state').setValue(address.state);
+        this.surveyForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.surveyForm.get('address').setValue('');
         this.surveyForm.get('latitude').setValue('');
@@ -184,7 +184,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
         if (controls[name].invalid) {
             invalid.push(name);
         }
-        
+
       }
       console.log(invalid);
     if (this.surveyForm.status === 'INVALID') {
@@ -342,6 +342,6 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
     })
 
- 
+
   }
 }

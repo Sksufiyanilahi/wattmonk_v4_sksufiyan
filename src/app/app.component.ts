@@ -144,6 +144,9 @@ export class AppComponent {
       this.mix.initializeMixPanel();
       this.backgroundMode.enable();
       SplashScreen.hide();
+      StatusBar.setStyle({
+        style: StatusBarStyle.Dark
+      });
       StatusBar.hide();
     });
   }
