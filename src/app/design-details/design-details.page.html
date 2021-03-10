@@ -70,7 +70,7 @@
 
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="design.company!== null && design.company!== ''" class="ion-no-padding">
+        <ion-row *ngIf="design.company!== null" class="ion-no-padding">
             <ion-col><span class="model-type font">Company</span></ion-col>
             <ion-col size="auto">
                 <span class="model-name font fontwt_size"><strong>{{design?.company}}</strong></span>
@@ -131,7 +131,7 @@
                         </ion-col>
                     </ion-row>
                     <ion-row class="ion-no-padding font">
-                        <ng-container *ngIf="design.attachments.length > 0"> 
+                        <ng-container *ngIf="design.attachments.length > 0">
                             <ion-col><span class="model-type font">Attachments</span></ion-col>
                             <ion-col size="auto" >
                                 <div *ngFor="let attachment of design.attachments;let i=index" style="display: flex;justify-content: flex-end;">
@@ -141,7 +141,7 @@
                         </ng-container>
                     </ion-row>
                     <ion-row *ngIf="design.newconstruction=='Yes'" class="ion-no-padding font">
-                        <ng-container *ngIf="design.architecturaldesign !=[]"> 
+                        <ng-container *ngIf="design.architecturaldesign !=[]">
                             <ion-col ><span class="model-type font">Architectural design</span></ion-col>
                             <ion-col   size="auto">
                                 <div  *ngFor="let archdesign of design.architecturaldesign;let i=index" style="display: flex;justify-content: flex-end;">
@@ -196,31 +196,31 @@
                 </ion-grid>
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="design.costofsystem !== null && design.costofsystem !== ''">
+        <ion-row *ngIf="design.costofsystem !== null">
             <ion-col><span class="model-type font">Cost of System</span></ion-col>
             <ion-col size="auto">
                 <span class="model-name font">{{design?.costofsystem}}</span>
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="design.incentive !== null && design.incentive !== ''">
+        <ion-row *ngIf="design.incentive !== null">
             <ion-col><span class="model-type font">Incentive</span></ion-col>
             <ion-col size="auto">
                 <span class="model-name font">{{design.incentive?.title}}</span>
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="design.utility !== null && design.utility !== ''">
+        <ion-row *ngIf="design.utility !== null">
             <ion-col><span class="model-type font">Utility Name</span></ion-col>
             <ion-col size="auto">
                 <span class="model-name font">{{design.utility?.name}}</span>
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="design.utilityrate !== null && design.utilityrate !== ''">
+        <ion-row *ngIf="design.utilityrate !== null">
             <ion-col><span class="model-type font">Utility Rate</span></ion-col>
             <ion-col size="auto">
                 <span class="model-name font">{{design.utilityrate?.rate}}</span>
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="design.annualutilityescalation !== null && design.utilityrate !== ''">
+        <ion-row *ngIf="design.annualutilityescalation !== null">
             <ion-col><span class="model-type font">Annual utility Escalation</span></ion-col>
             <ion-col size="auto">
                 <span class="model-name font">{{design?.annualutilityescalation}}</span>
@@ -241,7 +241,7 @@
                 </div>
             </ion-col>
             <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
-                         
+
                         </ion-col> -->
 
             <!-- </div> -->
@@ -264,7 +264,7 @@
                 </div>
             </ion-col>
             <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
-                         
+
                         </ion-col> -->
 
             <!-- </div> -->
@@ -287,50 +287,50 @@
                            Prelim Design
                         </ion-col>
                             <ion-col size="9"  class="model-name font flx" style="justify-content: flex-end;">
-                             
+
 
                                   <input type="file" *ngIf="imageName.length==0"  (change)="prelimfiles($event)" formControlName="prelimdesign" style="width: 76px;"/>
                                    {{imageName}}&nbsp;
                                    <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 " (click)="remove()"></ion-icon>
                                 <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
                                 <!-- <ion-icon name="cloud-upload-outline" *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')" style="font-size: 20px;margin-left: 10px;color:green"></ion-icon> -->
-                            
+
                             </ion-col>
-                            
+
                         <!-- </span> -->
                     </ion-row>
                     <div *ngIf="user.role.type=='designer' && design.status=='reviewfailed'">
                         <ion-row *ngIf="isprelimUpdate" style="width: 125%">
                              <!-- <span> -->
                                          <ion-col size="9" class="model-name font flx" style="justify-content: flex-end;">
-                                          
-             
+
+
                                              <ion-input type="file" formControlName="prelimdesign" readonly (change)="prelimupdate($event)" style="border-bottom:1px solid grey; width: max-content; flex: auto;" multiple="false"> <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon></ion-input>
-                                         
-                                                
-                                             
-                                             
-                                             
+
+
+
+
+
                                          </ion-col>
-                                         
-                                     <!-- </span> --> 
+
+                                     <!-- </span> -->
                                  </ion-row>
                              </div>
                     <div *ngIf="(user.role.type=='qcinspector' && design.status=='reviewassigned')||(design.status=='reviewassigned' && design.reviewassignedto.id==user.id)">
                         <ion-row *ngIf="isSelfUpdate" style="width: 125%">
                              <!-- <span> -->
                                          <ion-col size="9" class="model-name font flx" style="justify-content: flex-end;">
-                                          
-             
+
+
                                              <ion-input type="file" readonly (change)="prelimupdate($event)" style="border-bottom:1px solid grey; width: max-content; flex: auto;" multiple="false"> <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon></ion-input>
-                                         
-                                                
-                                             
-                                             
-                                             
+
+
+
+
+
                                          </ion-col>
-                                         
-                                     <!-- </span> --> 
+
+                                     <!-- </span> -->
                                  </ion-row>
                              </div>
                 </form>
@@ -341,7 +341,7 @@
                 <ion-col size="auto"  style="float: right;">
                     <span class="model-name font" style="text-align:right;color:#3c78d8 !important" (click)="showDesignImage()">{{imageName.length > 40 ? (imageName | slice: 0:40) + '...': imageName}}</span>
                         <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 " (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
-                </ion-col> 
+                </ion-col>
             </ng-template></div>
            <!-- <ion-row *ngIf="(design.status=='reviewfailed') && user.role.type=='designer'">
                  <span> -->
@@ -350,17 +350,17 @@
                           upload Prelim Design
                         </ion-col>
                             <ion-col size="9"  class="model-name font flx" style="justify-content: flex-end;">
-                             
+
 
                                   <input type="file"  *ngIf="imageName.length==0"  (change)="prelimfiles($event)"  style="width: 76px;"/>
                                   {{imageName}}&nbsp;
                                    <ion-icon style="font-size: medium;" name="close-circle-outline" *ngIf="imageName.length>0 && user.role.type !='qcinspector'" (click)="remove()"></ion-icon>
                                  <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 && !imagebox" (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
                                 <!-- <ion-icon name="cloud-upload-outline" *ngIf="imageName.length>0 && imagebox" (click)="uploadpreliumdesign(designId,'prelimdesign')" style="font-size: 20px;margin-left: 10px;color:green"></ion-icon> -->
-                            
+
                            <!-- </ion-col>
-                            
-                       </span> 
+
+                       </span>
                         </ion-row>-->
             <ion-row *ngIf="design.isinrevisionstate" class="ion-no-padding ion-margin-top">
             <ion-col size="6"  >
@@ -368,20 +368,20 @@
                 <ion-col size="6"  class="ion-no-padding">
                     <div>
                         <p class="comment font" style="text-align: right;margin:0px">{{design.revisioncomments}}</p>
-                    
+
                     </div>
-                   
+
                    </ion-col>
             </ion-row>
               <ion-row *ngIf="design.isinrevisionstate && design.revisionattachments.length > 0">
              <ion-col > <span class="model-type font">Revision Attachments</span></ion-col>
              <ion-col size="6"  style="float: right;" *ngFor="let attachmentfile of design.revisionattachments">
-              
+
                 <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ? (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}{{attachmentfile.ext}}</span>
               </ion-col>
-              
+
             </ion-row>
-        
+
 
             <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
             *ngIf="design.status=='designassigned'||design.status=='completed'">
@@ -400,8 +400,8 @@
                 </div>
             </ion-col>
         </ion-row>
-      
-      
+
+
         <ion-row style="margin-top: 40px !important;" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
         *ngIf="design.status=='reviewassigned'||design.status=='delivered'">
         <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned to</span></ion-col>
@@ -468,7 +468,7 @@
         <ion-row class="ion-no-padding ion-margin-top" *ngIf="(user.role.type=='qcinspector' && design && design.status =='reviewassigned') || (design && design.status=='reviewassigned' && design.reviewassignedto.id==user.id)">
 
             <form  [formGroup]="reviewIssuesForm" style="width:100%">
-                
+
                     <ion-col size="12" class="ion-no-padding">
                         <span class="input-placeholder">Issues*</span>
                     </ion-col>
@@ -476,7 +476,7 @@
                         <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
                                       formControlName="reviewIssues" ></ion-textarea>
                     </ion-col>
-                
+
                 </form>
         </ion-row>
     </ion-grid>
