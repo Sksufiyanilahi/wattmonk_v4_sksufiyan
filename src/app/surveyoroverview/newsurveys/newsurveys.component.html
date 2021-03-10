@@ -13,20 +13,20 @@
                 </span>
         </ion-col>
         <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
-            <div class="ion-no-padding custom-card" style="height: 100%;">
+            <div class="ion-no-padding custom-card" style="height: 100%;" (click)="gotoDetails(surveyData,$event)">
                 <p class="customer-name" >{{surveyData.name}}
-                      <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
+                      <span class="chipdetail" style="background-color: #1289A7;"  routerDirection="forward">
                         {{utils.formatTimeInDisplayFormat(surveyData.datetime)}}
                     </span>
-                      <span *ngIf="surveyData.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
+                      <span *ngIf="surveyData.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;"  routerDirection="forward">
                         Pending
                     </span>
                     <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span> -->
-                    <span fill="clear" background-border="clear"    [routerLink]="['/','activity',surveyData.id,'survey']"  class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
+                    <span fill="clear" background-border="clear"    (click)="gotoActivity(surveyData,$event)"  class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                 </p>
             <p style="margin:0px">
 
-                <span class="customer-email" [routerLink]="['/survey-detail/',surveyData.id]"
+                <span class="customer-email" 
                       routerDirection="forward">{{surveyData.email}}</span>
                       <!-- <span *ngIf="surveyData.lateby > 1" class="latebystyle" style="font-size: 10px;"><strong>Late by {{surveyData.lateby}} days</strong></span>
                       <span *ngIf="surveyData.lateby == 1" class="latebystyle" style="font-size: 10px;"><strong>Late by a day</strong></span> -->
@@ -35,12 +35,12 @@
                 <a href="tel:{{surveyData?.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
                 <span class="customer-address z-100"
-                      (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
+                      (click)="openAddressOnMap(surveyData.address,$event)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
 
                 <ion-row class="ion-no-margin ion-no-margin"  >
                     <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
                     
-                    <span class="chipdetail" style="background-color: #95afc0;" [routerLink]="['/survey-detail/',surveyData.id]">{{surveyData.source}}</span>
+                    <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.source}}</span>
                     <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{surveyData?.jobtype=='pvbattery' ? 'PV + Battery' : surveyData?.jobtype}}</span>
                 
                 <!-- <ion-col>
@@ -51,7 +51,7 @@
                     <ion-col></ion-col>
                     <ion-col class="ion-no-margin ion-no-padding">
                    <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
-                        <ion-button *ngIf="surveyData.status=='surveyassigned'" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="assignedTo(surveyData)">
+                        <ion-button *ngIf="surveyData.status=='surveyassigned'" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="assignedTo(surveyData,$event)">
                         Start Survey
                     </ion-button>
                         <!-- <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]">

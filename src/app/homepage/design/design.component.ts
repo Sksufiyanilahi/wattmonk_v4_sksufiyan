@@ -306,7 +306,8 @@ this.network.networkConnect();
     this.fetchPendingDesigns(event, showLoader);
   }
 
-     accept(id,data:string){
+     accept(id,data:string,event){
+       event.stopPropagation();
       this.mixpanelService.track("ACCEPT_PRELIM_DESIGN_PAGE_OPEN", {
       });
         this.acceptid = id;
@@ -668,7 +669,8 @@ this.network.networkConnect();
   //   });
   // }
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,$event) {
+    $event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -794,7 +796,8 @@ this.network.networkConnect();
 
 
 
-  openDesigners(id: number,designData) {
+  openDesigners(id: number,designData,event) {
+    event.stopPropagation();
     this.mixpanelService.track("ASSIGN_PRELIM_DESIGN_PAGE_OPEN", {
     });
     this.listOfAssignees=[];
@@ -854,7 +857,8 @@ this.router.navigate(['/payment-modal'], {
     }}
   }
 
-  openAnalysts(id: number,designData) {
+  openAnalysts(id: number,designData,event) {
+    event.stopPropagation();
     this.listOfAssignees=[];
     this.utils.showHideIntercom(true);
     console.log("this is",designData);
@@ -907,7 +911,8 @@ this.router.navigate(['/payment-modal'], {
 
 
 
-  async openreviewPassed(id,designData){
+  async openreviewPassed(id,designData,event){
+    event.stopPropagation();
     this.mixpanelService.track("DELIVER_PRELIM_PAGE_OPEN", {
     });
     this.designId=id
@@ -1031,7 +1036,8 @@ this.router.navigate(['/payment-modal'], {
   }
 
 
-async decline(id){
+async decline(id,event){
+  event.stopPropagation();
   this.mixpanelService.track("DECLINE_PRELIM_PAGE_OPEN", {
   });
   const modal = await this.modalController.create({
@@ -1057,7 +1063,8 @@ async decline(id){
 }
 
 
-async Resend(id, type){
+async Resend(id, type,event){
+  event.stopPropagation();
   this.mixpanelService.track("RESEND_PRELIM_PAGE_OPEN", {
   });
   const modal = await this.modalController.create({
@@ -1092,7 +1099,8 @@ sDatePassed(datestring: string,i){
 
 }
 
-selfAssign(id,designData){
+selfAssign(id,designData,event){
+  event.stopPropagation();
   // this.mixpanelService.track("SelfAssign_Pestamp_PAGE_OPEN", {
   // });
   var designstarttime = new Date();
@@ -1135,11 +1143,13 @@ getassignedata(asssignedata){
 
 }
 
-shareWhatsapp(designData){
+shareWhatsapp(designData,event){
+  event.stopPropagation();
   this.socialsharing.share(designData.prelimdesign.url);
 }
 
- async shareViaEmails(id,designData){
+ async shareViaEmails(id,designData,event){
+   event.stopPropagation();
   const modal = await this.modalController.create({
     component: EmailModelPage,
     cssClass: 'email-modal-css',
@@ -1159,7 +1169,8 @@ shareWhatsapp(designData){
     return await modal.present();
  }
 
- designDownload(designData){
+ designDownload(designData,event){
+   event.stopPropagation();
   this.mixpanelService.track("DOWNLOAD_PRELIM_PAGE_OPEN", {
   });
 
@@ -1346,7 +1357,8 @@ setupCometChat() {
   );
 }
 
-directAssignToWattmonk(id:number){
+directAssignToWattmonk(id:number,event){
+  event.stopPropagation();
   this.mixpanelService.track("REASSIGN_PRELIM_DESIGN_PAGE_OPEN", {
   });
   this.designId = id;
@@ -1383,6 +1395,21 @@ directAssignToWattmonk(id:number){
           });
         })
 }
+
+
+gotoActivity(designData,event){
+  console.log(event)
+      event.stopPropagation();
+    this.router.navigate(['/activity' + '/' + designData.id + '/design'])
+  
+  }
+  
+  gotoDetails(designData,$event){
+    // $event.preventDefault();
+    // $event.stopPropagation();
+    this.router.navigate(['/design-details/' + designData.id])
+  }
+
 }
 
 export class DesginDataHelper {

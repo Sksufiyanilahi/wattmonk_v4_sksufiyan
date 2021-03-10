@@ -449,7 +449,8 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
   //   });
   // }
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -558,7 +559,8 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     })
     }  
   }
-  generatePdf(id){
+  generatePdf(id,event){
+    event.stopPropagation();
     this.utils.showLoading('Generating PDF').then(()=>{
       this.apiService.generatePdf(id).subscribe(res=>{
         this.utils.hideLoading();
@@ -616,7 +618,8 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     }
   
 
-  openSurveyors(id: number,surveyData) {
+  openSurveyors(id: number,surveyData,event) {
+    event.stopPropagation();
     this.listOfAssignees=[];
     console.log(surveyData);
     console.log(this.listOfAssignees);
@@ -709,7 +712,8 @@ this.utils.showLoading('Assigning').then(()=>{
   }
    
 
-  raisepermit(data:any){
+  raisepermit(data:any,event){
+    event.stopPropagation();
     let objToSend: NavigationExtras = {
       queryParams: {
          surveyData:data,
@@ -913,8 +917,8 @@ state: { productdetails: objToSend }
   });
       return await modal.present();
    }
-   assignedTo(surveyData){
-
+   assignedTo(surveyData,event){
+   event.stopPropagation();
     let postData = {
       assignedto: this.userData.id,
       status: "surveyinprocess"
@@ -1035,6 +1039,25 @@ state: { productdetails: objToSend }
   
   
   }
+
+  resumeSurvey(surveyData,event){
+    event.stopPropagation();
+    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
+  }
+
+  gotoActivity(surveyData,event){
+    console.log(event)
+        event.stopPropagation();
+      this.router.navigate(['/activity' + '/' + surveyData.id + '/survey'])
+    
+    }
+    
+    gotoDetails(surveyData,$event){
+      // $event.preventDefault();
+      // $event.stopPropagation();
+      this.router.navigate(['/survey-detail/' + surveyData.id])
+    }
+
 
 }
 
