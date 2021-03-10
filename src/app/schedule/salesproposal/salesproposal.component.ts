@@ -23,6 +23,7 @@ import { map, startWith } from "rxjs/operators";
 import { UtilityRates } from 'src/app/model/utilityrate.model';
 import { Incentive } from 'src/app/model/incentive.model';
 import { Utility } from 'src/app/model/utility.model';
+import { throwMatDuplicatedDrawerError } from '@angular/material';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFirestore} from '@angular/fire/firestore';
 
@@ -209,7 +210,7 @@ blob:Blob;
       incentive : new FormControl('',[Validators.required]),
       costofsystem : new FormControl(null,[Validators.required]),
       personname : new FormControl(null,[Validators.required,Validators.pattern(NAMEPATTERN)]),
-      companylogo : new FormControl(null),
+      // companylogo : new FormControl(null),
       requirementtype : new FormControl('proposal')
       // uploadbox:new FormControl('')
     });
@@ -470,6 +471,7 @@ blob:Blob;
     this.userId= this.storage.getUserID();
       this.fieldDisabled=false;
       this.userdata = this.storage.getUser();
+      this.byDefaultData();
       //this.fetchModuleMakesData();
       this.intercom.update({
         "hide_default_launcher": true
@@ -560,11 +562,23 @@ blob:Blob;
       this.fetchModuleMakesData();
       if (this.designId !== 0) {
         this.loadModuleModelsData();
+        this.byDefaultData();
       }
     });
 this.formControlValueChanged();
 this.uploadcontrolvalidation();
 
+  }
+
+  byDefaultData()
+  {
+    console.log(this.userdata)
+    this.desginForm.patchValue({
+      company:this.userdata.company
+    })
+    if(this.userdata.logo != null){
+    this.logo = this.userdata.logo.url
+    }
   }
   
 formControlValueChanged() {
@@ -684,7 +698,6 @@ getDesignDetails() {
             incentive : this.design.incentive.id,
             costofsystem : this.design.costofsystem,
             personname : this.design.personname,
-            companylogo : this.design.companylogo,
             requirementtype : this.design.requirementtype
           });
           //console.log("attachments",this.desginForm.get('attachments').value)
@@ -1029,10 +1042,8 @@ deleteArcFile(index){
               //isonpriority:new FormControl('false'),
               paymentstatus:this.desginForm.get('paymentstatus').value,
               paymenttype:this.desginForm.get('paymenttype').value,
-             // utility1: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
               utility:this.selectedUtilityId,
               utilityrate : this.selectedUtilityRateId,
-             // utilityrate1 : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
               annualutilityescalation :this.desginForm.get('annualutilityescalation').value,
               incentive : this.desginForm.get('incentive').value,
               costofsystem : this.desginForm.get('costofsystem').value,
@@ -1045,7 +1056,9 @@ deleteArcFile(index){
               // this.uploaarchitecturedesign(response.id,'architecturaldesign');
               // this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(()=>{
+                if(this.logoSelected){
               this.updateLogo();
+                }
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
                    this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1125,10 +1138,8 @@ deleteArcFile(index){
                 //isonpriority:new FormControl('false'),
                 paymentstatus:this.desginForm.get('paymentstatus').value,
                 paymenttype:this.desginForm.get('paymenttype').value,
-               // utility1: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
                 utility:this.selectedUtilityId,
                 utilityrate : this.selectedUtilityRateId,
-               // utilityrate1 : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
                 annualutilityescalation :this.desginForm.get('annualutilityescalation').value,
                 incentive : this.desginForm.get('incentive').value,
                 costofsystem : this.desginForm.get('costofsystem').value,
@@ -1138,7 +1149,9 @@ deleteArcFile(index){
               this.apiService.addDesginForm(postData).subscribe((response) => {
                 console.log(response.id);
                 this.utils.hideLoading().then(()=>{
+                  if(this.logoSelected){
                   this.updateLogo();
+                  }
                 if(newConstruction == 'true')
                 {
                this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1216,10 +1229,8 @@ deleteArcFile(index){
               //isonpriority:new FormControl('false'),
               paymentstatus:this.desginForm.get('paymentstatus').value,
               paymenttype:this.desginForm.get('paymenttype').value,
-             // utility1: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
               utility:this.selectedUtilityId,
               utilityrate : this.selectedUtilityRateId,
-             // utilityrate1 : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
               annualutilityescalation :this.desginForm.get('annualutilityescalation').value,
               incentive : this.desginForm.get('incentive').value,
               costofsystem : this.desginForm.get('costofsystem').value,
@@ -1229,7 +1240,9 @@ deleteArcFile(index){
             this.utils.showLoading('Saving').then(() => {
           this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
+              if(this.logoSelected){
               this.updateLogo();
+              }
             if(newConstruction=='true')
             {
             this.uploaarchitecturedesign(response,'architecturaldesign');
@@ -1299,10 +1312,8 @@ deleteArcFile(index){
             //isonpriority:new FormControl('false'),
             paymentstatus:this.desginForm.get('paymentstatus').value,
             paymenttype:this.desginForm.get('paymenttype').value,
-           // utility1: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
             utility:this.selectedUtilityId,
             utilityrate : this.selectedUtilityRateId,
-           // utilityrate1 : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
             annualutilityescalation :this.desginForm.get('annualutilityescalation').value,
             incentive : this.desginForm.get('incentive').value,
             costofsystem : this.desginForm.get('costofsystem').value,
@@ -1311,7 +1322,9 @@ deleteArcFile(index){
           }
           this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
+              if(this.logoSelected){
               this.updateLogo();
+              }
             if(newConstruction=='true')
             {
             this.uploaarchitecturedesign(response,'architecturaldesign');
