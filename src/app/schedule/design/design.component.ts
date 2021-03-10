@@ -1312,7 +1312,7 @@ state: { productdetails: objToSend }
       );
     },
     error => {
-      this.utils.errorSnackBar("Error");
+      // this.utils.errorSnackBar("Error");
     }
   );
   }

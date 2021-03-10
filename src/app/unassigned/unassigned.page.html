@@ -34,8 +34,8 @@
                 </span> -->
                 <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/design-details/',designData.id]">Unassigned</span>
                 <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" [routerLink]="['/design-details/',designData.id]">Overdue</span>
-                <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
-
+                <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
+                <span class="chipdetail" style="background-color: #1c12a7;float:right;margin-right: 1rem;" *ngIf="designData.company !== null || designData.company!== ''" [routerLink]="['/design-details/',designData.id]">{{designData.company}}</span>
         </p>
 
         <p style="margin:0px">
@@ -75,8 +75,8 @@
                   </ion-row>
 
                   <ion-row class="ion-no-margin ion-no-margin">
-                      <ion-col *ngIf="segments=='status=created'">
-                          <span *ngIf="designData.status == 'created' || (designData.status == 'requestaccepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')) " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
+                      <ion-col>
+                          <span style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
                           >Assign</span>
                           <span style="float: right;">
                               <ng-container *ngIf="userData.role.type !=='clientsuperadmin' && userData.role.type !== 'clientadmin'">

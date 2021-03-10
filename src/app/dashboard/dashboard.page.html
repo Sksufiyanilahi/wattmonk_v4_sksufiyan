@@ -30,7 +30,7 @@
     </ion-col>
   </ion-row>
   <ion-row> 
-    <ion-col size="6" *ngIf="userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin' || userData.role.name=='SuperAdmin'">
+    <ion-col size="6" *ngIf="userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin' || userData.role.name=='SuperAdmin' || userData.role.type=='wattmonkadmins'">
       <ion-card class=" card"  [routerLink]="['/waitingforacceptance']">
         <ion-card-header class="top">
           Waiting for acceptance

@@ -258,7 +258,10 @@ confirm(){
     status: "outsourced",
     couponid:this.utils.getCouponId().value,
     designacceptancestarttime: designacceptancestarttime,
-
+    paymenttype:"wallet",
+    amount:parseInt(this.netPay),
+    serviceamount:this.settingValue,
+    paymentstatus:null
   };
   }
   else{
@@ -344,11 +347,11 @@ confirm(){
 
       if(this.design ==='prelim'){
       this.router.navigate(['/homepage/design'])
-      this.utils.setHomepageDesignRefresh(true);
+      // this.utils.setHomepageDesignRefresh(true);
       }
       else{
         this.router.navigate(['permithomepage/permitdesign'])
-        this.utils.setHomepagePermitRefresh(true);
+        // this.utils.setHomepagePermitRefresh(true);
       }
 
   }

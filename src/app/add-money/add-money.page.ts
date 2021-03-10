@@ -51,7 +51,7 @@ export class AddMoneyPage implements OnInit {
   responseData: any;
   slabdiscount: any;
   slabtime: any;
-  initialamount: any
+  initialamount: any;
   //counts
   newpermits: Observable<any>;
   newpermitsRef: AngularFireObject<any>;
