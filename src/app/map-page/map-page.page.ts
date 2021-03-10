@@ -33,7 +33,11 @@ export class MapPagePage implements OnInit {
     maxResults: 5
   };
 
+  public Text:string;
+
   geocoder = new google.maps.Geocoder();
+  isSelectFromList:boolean = false;
+  listSelectedAddress:string;
 
   constructor(
     private geoLocation: Geolocation,
@@ -62,6 +66,8 @@ export class MapPagePage implements OnInit {
 
   updateSearchResults(event) {
     const input = event.detail.value;
+    console.log(event);
+    console.log(event.isUserInput)
     if (input === '') {
       this.autocompleteItems = [];
       return;
@@ -81,6 +87,9 @@ export class MapPagePage implements OnInit {
 
   selectSearchResult(item) {
     console.log(item);
+    console.log("hello")
+    this.isSelectFromList = true;
+    this.listSelectedAddress = item;
     this.geocoder.geocode({
       placeId: item.place_id
     }, (responses, status) => {
@@ -262,4 +271,59 @@ export class MapPagePage implements OnInit {
 
   ionViewWillLeave(){
   }
+
+  round()
+  {
+    console.log(this.Text)
+    if(this.isSelectFromList)
+    {
+      console.log(this.isSelectFromList)
+      this.selectSearchResult(this.listSelectedAddress);
+    }
+    else{
+      console.log(this.Text)
+     let latitude = null;
+     let longitude = null;
+      this.utilities.showLoading('Loading').then(() => {
+        this.nativeGeocoder.reverseGeocode(latitude, longitude)
+          .then((result: NativeGeocoderResult[]) => {
+            let add = '';
+            if (this.Text === '') {
+              add = this.generateAddress(result[0]);
+            } else {
+              add = this.Text;
+            }
+            this.utilities.hideLoading().then(() => {
+              console.log('resu', result);
+              const address: AddressModel = {
+                address: add,
+                lat: latitude,
+                long: longitude,
+                country: result[0].countryName,
+                state: result[0].administrativeArea,
+                city: result[0].locality,
+                postalcode: result[0].postalCode
+              };
+              this.utilities.setAddress(address);
+              this.goBack();
+            });
+  
+          })
+          .catch((error: any) => {
+            this.utilities.hideLoading().then(() => {
+              alert('Error getting location' + JSON.stringify(error));
+            });
+  
+          });
+      });
+    }
+    //this.goBack();
+  }
+
+  // select(item)
+  // {
+  //   console.log("hello")
+  //   this.isSelectFromList = true;
+  //   this.listSelectedAddress = item;
+  // }
 }
