@@ -358,7 +358,14 @@ this.network.networkConnect();
 
   saveDesignForm() {
     console.log('posting value');
+    console.log(this.router.url);
+    if(this.router.url=='/schedule/design'){
     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
+    }
+    else
+    {
+      this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SALES_FORM);
+    }
   }
 
   saveSurveyForm() {
@@ -372,6 +379,11 @@ this.network.networkConnect();
   }
 
   sendDesignForm(){
+    if(this.router.url=='/schedule/design'){
      this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
   }
+  else{
+    this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_SALES_FORM);
+  }
+}
 }

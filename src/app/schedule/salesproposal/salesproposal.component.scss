@@ -1,0 +1,66 @@
+.user-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  ion-range {
+    --bar-background: #CBCBCB;
+    --bar-background-active: #CBCBCB;
+    --knob-background: #3c78d8;
+    --knob-border-radius: 2px solid white;
+    --knob-size: 20px;
+    --knob-border-radius: 50%;
+    --pin-color: #E1E1E1;
+  }
+  
+  .solar-data {
+    position: absolute;
+    margin-top: 50px;
+    width: 146px;
+    max-width: 150px;
+    z-index: 3;
+    margin-left: 0px;
+    max-height: 200px;
+    overflow: auto;
+  }
+  
+  .solar-made {
+    position: absolute;
+    width: 172px;
+    max-width: 175px;
+    z-index: 3;
+    margin-left: 0px;
+    max-height: 200px;
+    overflow: auto;
+    margin-top: 2px;
+  }
+  
+  ion-label {
+    color: #6C6C6C !important;
+  }
+  
+  .error {
+    color: rgb(223, 62, 62);
+    font-size: 11px;
+  }
+  
+  .select_div {
+    border-bottom: 1px solid #E1E1E1;
+  }
+  
+  ion-select{
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 0px !important;
+  }
+  input[type="file"]{
+    visibility:hidden;
+  }
+  .font{
+    font-size: 10px;
+  }
+  
+  
+  

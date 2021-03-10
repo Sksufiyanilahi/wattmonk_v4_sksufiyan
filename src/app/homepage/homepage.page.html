@@ -20,6 +20,11 @@
                     <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
                 </div>
             </ion-col>
+            <ion-col size="auto"  *ngIf="showFooter">
+                <div class="notification-padding" (click)="scheduledPage()">
+                    <ion-icon name="add-circle"></ion-icon>
+                </div>
+            </ion-col>
             <ion-col size="auto" style="position: relative;">
                 <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward" (click)="setzero()">
                     <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
@@ -126,12 +131,12 @@
 </ion-tabs>
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
-    <div class="position-relative">
-        <ion-fab horizontal="start" class="fab-position position-absolute" >
+    <!-- <div class="position-relative"> -->
+        <!-- <ion-fab horizontal="start" class="fab-position position-absolute" >
             <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md" class="ht_wt">
                 <ion-icon name="add"></ion-icon>
             </ion-fab-button>
-        </ion-fab>
+        </ion-fab> -->
         <!-- <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
             <ion-row>
                 <ion-col size="4">
@@ -154,7 +159,7 @@
                 </ion-col>
             </ion-row>
         </ion-grid> -->
-    </div>
+    <!-- </div> -->
 
 </ion-footer>
 

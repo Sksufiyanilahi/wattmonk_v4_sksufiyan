@@ -48,6 +48,7 @@ export class Pestamp{
   postalcode: string;
   modeofstamping:string;
   propertytype:string;
+  jobtype:string;
   workinghours:any;
   requestdeclinereason:string;
   requestdeclineattachment:UploadedFile[];

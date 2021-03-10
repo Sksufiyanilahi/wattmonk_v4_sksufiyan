@@ -156,8 +156,6 @@ export class PermitschedulePage implements OnInit {
 
 
 
-
-
        const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
        const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;

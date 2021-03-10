@@ -158,11 +158,23 @@ export class PestampPaymentModalPage implements OnInit {
     {
       var searchdata;
       var bothtypepestampcharges = 0;
-    if (this.data.propertytype == 'commercial') {
-      searchdata = "commercialanymountingpecharges"
+    if (this.data.propertytype == 'commercial' && this.data.type == 'structural') {
+      searchdata = "structuralcommercialpecharges"
     }
-    else if (this.data.type == 'electrical') {
-      searchdata = "electricalanymountingpecharges"
+    else if (this.data.propertytype == 'commercial' && this.data.type =='electrical') {
+      searchdata = "electricalcommercialpecharges"
+    }
+    // else if (this.data.type == 'electrical') {
+    //   searchdata = "electricalanymountingpecharges"
+    // }
+    else if (this.data.type == 'electrical' && this.data.jobtype=='pv') {
+      searchdata = "electricalpvpecharges"
+    }
+    else if (this.data.type == 'electrical' && this.data.jobtype=='pvbattery') {
+      searchdata = "electricalpvbatterypecharges"
+    }
+    else if (this.data.type == 'electrical' && this.data.jobtype=='battery') {
+      searchdata = "electricalbatterypecharges"
     }
     else if (this.data.type == 'structural' && this.data.mountingtype == 'both') {
       searchdata = "structuralbothpecharges"
@@ -174,7 +186,16 @@ export class PestampPaymentModalPage implements OnInit {
       searchdata = "structuralroofpecharges"
     }
     else if (this.data.type == "both") {
-      searchdata = "electricalanymountingpecharges"
+      //searchdata = "electricalanymountingpecharges"
+      if(this.data.jobtype=='pv'){
+        searchdata="electricalpvpecharges";
+       }
+       else if(this.data.jobtype=='pvbattery'){
+         searchdata="electricalpvbatterymountcharges";
+       }
+       else if(this.data.jobtype=='battery'){
+         searchdata="electricalbatterypecharges";
+       }
       var structuralsearchdata;
       if (this.data.mountingtype == 'both') {
         structuralsearchdata = "structural" + this.data.mountingtype + "pecharges"

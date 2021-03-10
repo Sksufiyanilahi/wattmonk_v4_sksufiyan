@@ -50,6 +50,7 @@ netPay:any
   designData:any;
   fulldesigndata: any;
   delivertime:String;
+  designType:any;
 
 
 
@@ -60,7 +61,6 @@ netPay:any
     private route:ActivatedRoute,
     private navController:NavController,
     private utils:UtilitiesService,
-
     private alertController:AlertController,
     private modalController:ModalController,
     private db:AngularFireDatabase,
@@ -77,6 +77,7 @@ netPay:any
       this.id = this.designData.productdetails.queryParams.id;
       this.design = this.designData.productdetails.queryParams.designData;
       this.fulldesigndata = this.designData.productdetails.queryParams.fulldesigndata;
+      this.designType = this.designData.productdetails.queryParams.designType;
 
       console.log(this.fulldesigndata);
 
@@ -208,7 +209,8 @@ discountAmount(){
 }
 
 servicecharges(){
-  if(this.design=='prelim'){
+  console.log(this.fulldesigndata,this.design);
+  if(this.design=='prelim' && this.fulldesigndata.requirementtype=="assessment"){
     this.apiService.prelimCharges().subscribe(res=>{
       this.servicePrice=res;
       this.servicePrice.forEach(element => {
@@ -217,6 +219,15 @@ servicecharges(){
       console.log("ddd",this.settingValue)
       this.discountAmount();
     })}
+    else if(this.design=='prelim' && this.fulldesigndata.requirementtype == "proposal")
+    {
+      this.apiService.prelimSalesCharges().subscribe(res=>{
+        this.servicePrice=res;
+        this.servicePrice.forEach(element => {
+          this.settingValue = element.settingvalue;
+        });
+      })
+    }
     else{
       var postData={
         userparentid:this.user.parent.id,

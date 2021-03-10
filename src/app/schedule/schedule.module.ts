@@ -16,6 +16,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import { SalesproposalComponent } from './salesproposal/salesproposal.component';
 
 
 
@@ -37,7 +38,8 @@ import {MatInputModule} from '@angular/material/input';
     SchedulePage,
     SurveyComponent,
     DesignComponent,
-    NumberOnlyDirective
+    NumberOnlyDirective,
+    SalesproposalComponent
   ],
   providers: [
     Diagnostic,
