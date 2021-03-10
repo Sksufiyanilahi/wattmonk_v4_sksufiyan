@@ -8,61 +8,44 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 })
 export class SalesProposalPage implements OnInit {
 
-  prelimDetailsFormGroup: FormGroup;
-  salesProposalFormGroup: FormGroup;
-  stepNumber: number;
+  salesProposal:FormGroup;
+  number: number;
+color: string;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder) {
+    this.salesProposal = this.formBuilder.group({
+      utilityName : new FormControl(null, [Validators.required]),
+      utilityRate:  new FormControl(null, [Validators.required]),
+      annualUtilityEscalation : new FormControl(3, [Validators.required]),
+      incentives :  new FormControl(null, [Validators.required]),
+      costOfSystem :  new FormControl(null, [Validators.required]),
+      name : new FormControl(null, [Validators.required]),
+      logo : new FormControl(null, [Validators.required]),
+      companyName :  new FormControl(null, [Validators.required])
+    })
+  }
 
   ngOnInit() {
-    this.stepNumber = 1;
-    this.prelimDetailsFormGroup = this.formBuilder.group({
-      companyname: new FormControl(''),
-      name: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required]),
-      solarmake: new FormControl('', [Validators.required]),
-      solarmodel: new FormControl('', [Validators.required]),
-      invertermake: new FormControl('', [Validators.required]),
-      invertermodel: new FormControl('', [Validators.required]),
-      monthlybill: new FormControl('',[Validators.required,Validators.min(0)]),
-      address: new FormControl('',[Validators.required]),
-      createdby: new FormControl(''),
-      assignedto: new FormControl(''),
-      rooftype: new FormControl(''),
-      //prelimdesign: new FormControl(null),
-      architecturaldesign: new FormControl(''),
-      tiltofgroundmountingsystem: new FormControl(''),
-      mountingtype: new FormControl('', [Validators.required]),
-      // jobtype: new FormControl('', [Validators.required]),
-      projecttype: new FormControl('', [Validators.required]),
-      newconstruction: new FormControl(false),
-      source: new FormControl('android', [Validators.required]),
-      comments: new FormControl(''),
-      requesttype: new FormControl('prelim'),
-      latitude: new FormControl(''),
-      longitude: new FormControl(''),
-      country: new FormControl(''),
-      state: new FormControl(''),
-      city: new FormControl(''),
-      postalcode: new FormControl(''),
-      status: new FormControl('created'),
-      attachments: new FormControl([]),
-      deliverydate:new FormControl(),
-      outsourcedto:new FormControl(null),
-      isoutsourced:new FormControl('false'),
-      designacceptancestarttime:new FormControl(null),
-      creatorparentid:new FormControl(),
-      //isonpriority:new FormControl('false'),
-      paymentstatus:new FormControl(null),
-      paymenttype:new FormControl(null)
-      // uploadbox:new FormControl('')
-    });
-    this.salesProposalFormGroup = this.formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
   }
 
-  goToStep2(){
-    this.stepNumber = 2;
+  onRangeChangeHandler() {
+    this.number = this.salesProposal.get('annualUtilityEscalation').value;
+    console.log(this.number);
+    
+
+    if (this.salesProposal.get('annualUtilityEscalation').value > 0 && this.salesProposal.get('annualUtilityEscalation').value < 1) {
+        this.color = 'dark';
+    }
+    else if (this.salesProposal.get('annualUtilityEscalation').value > 2 && this.salesProposal.get('annualUtilityEscalation').value < 3) {
+      this.color = 'primary';
+    }
+    else if (this.salesProposal.get('annualUtilityEscalation').value > 3 && this.salesProposal.get('annualUtilityEscalation').value < 4) {
+      this.color = 'secondary';
+    }
+    else {
+      this.color = 'danger';
+    }
   }
+
+
 }

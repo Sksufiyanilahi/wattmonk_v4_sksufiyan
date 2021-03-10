@@ -117,7 +117,8 @@ export class PestampSchedulePage implements OnInit {
       city: new FormControl(''),
       postalcode: new FormControl(''),
       mountingtype: new FormControl('', [Validators.required]),
-      propertytype: new FormControl('', [Validators.required])
+      propertytype: new FormControl('', [Validators.required]),
+      jobtype: new FormControl('')
       // })
       // this.secondFormGroup = this.formBuilder.group({
 
@@ -177,6 +178,7 @@ export class PestampSchedulePage implements OnInit {
             createdby: this.design.createdby,
             mountingtype: this.design.mountingtype,
             propertytype: this.design.propertytype,
+            jobtype:this.design.jobtype,
             // architecturaldesign:this.design.architecturaldesign,
             comment: this.design.comments == '' ? '' : this.design.comments[0].message,
             // type: this.design.type,
@@ -385,10 +387,13 @@ export class PestampSchedulePage implements OnInit {
     const attic = this.firstFormGroup.get('atticphotos');
     const roof = this.firstFormGroup.get('roofphotos');
     const permitplan = this.firstFormGroup.get('permitplanphotos');
+    const job=this.firstFormGroup.get('jobtype');
     if (this.stampingTypeValue == 'structural' || this.stampingTypeValue == 'both') {
       attic.setValidators([Validators.required]);
       roof.setValidators([Validators.required]);
       permitplan.setValidators([Validators.required]);
+      job.clearValidators();
+      job.reset();
     }
     else if (this.stampingTypeValue == 'electrical') {
       attic.clearValidators();
@@ -396,6 +401,7 @@ export class PestampSchedulePage implements OnInit {
       roof.clearValidators();
       roof.reset();
       permitplan.setValidators([Validators.required]);
+      job.setValidators([Validators.required]);
 
     }
     else {
@@ -405,6 +411,8 @@ export class PestampSchedulePage implements OnInit {
       roof.updateValueAndValidity();
       permitplan.clearValidators();
       permitplan.updateValueAndValidity();
+      job.clearValidators();
+      job.updateValueAndValidity();
     }
     // if(this.stampingTypeValue == 'electrical')
     // {
@@ -524,6 +532,7 @@ export class PestampSchedulePage implements OnInit {
             latitude: this.firstFormGroup.get('latitude').value,
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
+            jobtype:this.firstFormGroup.get('jobtype').value,
             source: "android",
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
@@ -569,6 +578,7 @@ export class PestampSchedulePage implements OnInit {
             latitude: this.firstFormGroup.get('latitude').value,
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
+            jobtype:this.firstFormGroup.get('jobtype').value,
             source: "android",
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
@@ -626,6 +636,7 @@ export class PestampSchedulePage implements OnInit {
             latitude: this.firstFormGroup.get('latitude').value,
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
+            jobtype:this.firstFormGroup.get('jobtype').value,
             source: "android",
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
@@ -702,6 +713,7 @@ export class PestampSchedulePage implements OnInit {
             latitude: this.firstFormGroup.get('latitude').value,
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
+            jobtype:this.firstFormGroup.get('jobtype').value,
             source: "android",
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
@@ -770,8 +782,8 @@ export class PestampSchedulePage implements OnInit {
       else if (this.firstFormGroup.value.mountingtype == '') {
         this.utils.errorSnackBar("Please select mounting type");
       }
-      else if (this.firstFormGroup.value.propertytype == '') {
-        this.utils.errorSnackBar("Please select property type");
+      else if (this.firstFormGroup.value.jobtype == '') {
+        this.utils.errorSnackBar("Please select job type");
       }
 
       else if (this.firstFormGroup.value.atticphotos == '' && (this.stampingTypeValue == 'structural' || this.stampingTypeValue == 'both')) {

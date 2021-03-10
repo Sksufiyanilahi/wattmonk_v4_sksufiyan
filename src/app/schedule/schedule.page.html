@@ -2,7 +2,8 @@
     <!-- <ion-grid style="overflow:hidden;" scroll="false"> -->
         <ion-row class="ion-align-items-center ion-padding-start">
             <ion-col>
-                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/design'">Add Prelim Design</h5>
+                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/design'">Add Site Assessment</h5>
+                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/salesproposal'">Add Sales Proposal</h5>
                 <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/survey'">Schedule Survey</h5>
                 <h4 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit </h4>
             </ion-col>
@@ -92,7 +93,7 @@
 <!-- </ion-content> -->
 
 <ion-footer class="ion-no-border white-bg">
-    <ion-grid *ngIf="currentTab === 'design'">
+    <ion-grid *ngIf="currentTab === 'design' || currentTab==='salesproposal'">
         <ion-row>
             <ion-col></ion-col>
             <ion-col size="auto">

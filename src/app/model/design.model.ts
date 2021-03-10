@@ -1,4 +1,7 @@
+import { Incentive } from './incentive.model';
 import { User } from './user.model';
+import { Utility } from './utility.model';
+import { UtilityRates } from './utilityrate.model';
 
 export class DesignModel {
   date: string;
@@ -129,6 +132,15 @@ export class DesginDataModel {
   requesttype:string;
   recordupdatedon:any;
   addedtogroupchat:boolean;
+  requirementtype:string;
+  utility: Utility;
+  utilityrate : UtilityRates
+  annualutilityescalation : string;
+  incentive : Incentive
+  costofsystem : number;
+  personname : string;
+  companylogo : any;
+  tiltgroundmount:string;
 }
 
 export class PrelimDesign{
