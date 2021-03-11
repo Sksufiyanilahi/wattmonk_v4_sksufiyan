@@ -392,7 +392,8 @@ export class PestampDesignComponent implements OnInit {
     return records;
   }
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -454,7 +455,8 @@ export class PestampDesignComponent implements OnInit {
     }
   }
 
-  accept(id,data:string){
+  accept(id,data:string,event){
+    event.stopPropagation();
     this.mixpanelService.track("ACCEPT_PESTAMP_DESIGN_PAGE_OPEN", {
     });
     this.acceptid= id;
@@ -478,7 +480,8 @@ export class PestampDesignComponent implements OnInit {
 
      }
 
-  openDesigners(id: number,designData) {
+  openDesigners(id: number,designData,event) {
+    event.stopPropagation();
     debugger;
     this.mixpanelService.track("ASSIGN_PESTAMP_DESIGN_PAGE_OPEN", {
     });
@@ -585,7 +588,8 @@ this.route.navigate(['/pestamp-payment-modal'], {
   }
 */
 
-async decline(id,e){
+async decline(id,e,event){
+  event.stopPropagation();
   this.mixpanelService.track("DECLINE_PESTAMP_DESIGN_PAGE_OPEN", {
   });
   let status = e;
@@ -615,7 +619,8 @@ async decline(id,e){
 }
 
 
-async Resend(id, type){
+async Resend(id, type,event){
+  event.stopPropagation();
   this.mixpanelService.track("RESEND_PESTAMP_DESIGN_PAGE_OPEN", {
   });
   console.log(type);
@@ -703,7 +708,8 @@ shareWhatsapp(designData){
   });
 }
 
-designDownload(designData){
+designDownload(designData,event){
+  event.stopPropagation();
   this.mixpanelService.track("DOWNLOAD_PESTAMP_PAGE_OPEN", {
   });
   this.platform.ready().then(()=>{
@@ -881,7 +887,8 @@ designDownload(designData){
 
   //}
 
-  clearPendingPayments(designData){
+  clearPendingPayments(designData,event){
+    event.stopPropagation();
     this.mixpanelService.track("PESTAMP_PENDING_PAYMENTS_PAGE_OPEN", {
     });
     let objToSend: NavigationExtras = {
@@ -1010,7 +1017,8 @@ createNewDesignChatGroup(design:Pestamp) {
       }
 
 
-directAssignToWattmonk(id:number,design){
+directAssignToWattmonk(id:number,design,event){
+  event.stopPropagation();
   this.mixpanelService.track("REASSIGN_PESTAMP_DESIGN_PAGE_OPEN", {
   });
   this.designId = id;
@@ -1061,6 +1069,25 @@ directAssignToWattmonk(id:number,design){
 trackdesign(index,design){
   return design.id;
 }
+
+gotoActivity(designData,event){
+  console.log(event)
+      event.stopPropagation();
+    this.route.navigate(['/activity' + '/' + designData.id + '/pestamp'])
+  
+  }
+  
+  gotoDetails(designData,$event){
+    // $event.preventDefault();
+    // $event.stopPropagation();
+    this.route.navigate(['/pestamp-design-details/' + designData.id])
+  }
+
+gotoChats(designData,event){
+  event.stopPropagation();
+  this.route.navigate(['/chat/' + designData.chatid])
+}
+
 }
 
 export class DesginDataHelper {

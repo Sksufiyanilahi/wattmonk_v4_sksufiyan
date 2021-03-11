@@ -11,7 +11,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import * as moment from 'moment';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { StorageService } from 'src/app/storage.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
@@ -46,7 +46,7 @@ export class PermitnewdesignComponent implements OnInit {
     private utils: UtilitiesService,
     private storage: Storage,
     private apiService: ApiService,
-    private router:ActivatedRoute,
+    private router:Router,
     private storageservice:StorageService
     ) {
       this.userData = this.storageservice.getUser();
@@ -130,7 +130,8 @@ export class PermitnewdesignComponent implements OnInit {
     });
   }
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -273,6 +274,24 @@ export class PermitnewdesignComponent implements OnInit {
 
     return records;
   }
+
+  gotoActivity(designData,event){
+    console.log(event)
+        event.stopPropagation();
+      this.router.navigate(['/activity' + '/' + designData.id + '/design'])
+    
+    }
+    
+    gotoDetails(designData,$event){
+      // $event.preventDefault();
+      // $event.stopPropagation();
+      this.router.navigate(['/permit-design-details/' + designData.id])
+    }
+    gotoChats(designData,event){
+      event.stopPropagation();
+      this.router.navigate(['/chat/' + designData.chatid])
+    }
+
   doInfinite($event){
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys("requesttype=permit&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
@@ -299,6 +318,8 @@ export class PermitnewdesignComponent implements OnInit {
     }
 
 
+    
+
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
@@ -306,6 +327,8 @@ export class PermitnewdesignComponent implements OnInit {
     this.overdue = lateby;
   }
 
+
+  
   startAllTimers(){
     this.listOfDesignData.forEach(element => {
 

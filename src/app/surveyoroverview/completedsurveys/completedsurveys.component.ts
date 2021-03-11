@@ -10,6 +10,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-completedsurveys',
@@ -36,7 +37,8 @@ export class CompletedsurveysComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     public utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+    private router :Router) {
       console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -164,5 +166,24 @@ export class CompletedsurveysComponent implements OnInit {
    this.surveyRefreshSubscription.unsubscribe();
    this.cdr.detach();
    }
+
+   resumeSurvey(surveyData,event){
+    event.stopPropagation();
+    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
+  }
+
+  gotoActivity(surveyData,event){
+    console.log(event)
+        event.stopPropagation();
+      this.router.navigate(['/activity' + '/' + surveyData.id + '/survey'])
+    
+    }
+    
+    gotoDetails(surveyData,$event){
+      // $event.preventDefault();
+      // $event.stopPropagation();
+      this.router.navigate(['/survey-detail/' + surveyData.id])
+    }
+
 
 }
