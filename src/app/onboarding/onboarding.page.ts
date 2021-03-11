@@ -38,8 +38,8 @@ export class OnboardingPage implements OnInit {
   registrationError = INVALID_REGISTRATION_NUMBER;
   companyError = INVALID_COMPANY_NAME;
   phoneError = INVALID_PHONE_NUMBER;
-  
-  
+
+
   logo: any ;
   editFile: boolean = true;
   removeUpload: boolean = false;
@@ -120,6 +120,7 @@ export class OnboardingPage implements OnInit {
                }
 
   ngOnInit() {
+    console.log("onboarding")
     this.menu.enable(false);
     this.user = this.storage.getUser();
     this.userId= this.storage.getUserID();
@@ -143,7 +144,7 @@ export class OnboardingPage implements OnInit {
   }
 
   ngOnDestroy(){
-    
+
   }
 
   ionViewWillLeave(){
@@ -170,7 +171,7 @@ export class OnboardingPage implements OnInit {
         ispaymentmodeprepay:res.ispaymentmodeprepay,
         registrationnumber:res.registrationnumber,
         logo:res.logo,
-        
+
       })
       this.secondFormGroup.patchValue({
         //For Emails
@@ -194,7 +195,7 @@ export class OnboardingPage implements OnInit {
         requestacknowledgementnotification:res.requestacknowledgementnotification,
         requestindesigningnotification:res.requestindesigningnotification
       })
-    
+
     })
   }
 
@@ -208,7 +209,7 @@ export class OnboardingPage implements OnInit {
     this.firstFormGroup.patchValue({
       phone:'',
       billingaddress:'',
-      
+
     })
     }
     else{
@@ -226,7 +227,7 @@ export class OnboardingPage implements OnInit {
       //this.firstFormGroup.get('company').reset();
       this.firstFormGroup.get('registrationnumber').clearValidators();
       //this.firstFormGroup.get('registrationnumber').reset();
-      
+
     }
     this.firstFormGroup.get('companyaddress').updateValueAndValidity();
     this.firstFormGroup.get('company').updateValueAndValidity();
@@ -258,7 +259,7 @@ export class OnboardingPage implements OnInit {
       // if(this.logoUploaded){
       //   this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
       //     console.log('updated',res);
-          
+
       //    let token=  this.storage.getJWTToken();
       //     this.storage.setUser(res,token);
       //   })
@@ -267,7 +268,7 @@ export class OnboardingPage implements OnInit {
         console.log(this.firstFormGroup.value);
         this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
           console.log('updated',res);
-          
+
          let token=  this.storage.getJWTToken();
           this.storage.setUser(res,token);
         })
@@ -286,13 +287,13 @@ export class OnboardingPage implements OnInit {
   //     this.utils.errorSnackBar('Please Check Fields');
   //   }
   // }
-    
+
   }
 
 
   onChange(event,value){
    console.log(event);
-   
+
      if(value=='requestgenerated'){
       this.secondFormGroup.patchValue({
         requestgeneratednotification:event.detail.checked
@@ -342,7 +343,7 @@ export class OnboardingPage implements OnInit {
 
   onEmailChange(event,value){
     console.log(event);
-    
+
       if(value=='requestgeneratedemail'){
        this.secondFormGroup.patchValue({
          requestgeneratedemail:event.detail.checked
@@ -397,7 +398,7 @@ export class OnboardingPage implements OnInit {
       let token=  this.storage.getJWTToken();
       this.storage.setUser(res,token);
       //this.utils.showSnackBar('Changes saved successfully');
-      
+
     })
   }
 
@@ -405,7 +406,7 @@ export class OnboardingPage implements OnInit {
     console.log(this.thirdFormGroup.status)
     //  if (this.thirdFormGroup.status === 'VALID') {
     // $ev.preventDefault();
-    
+
         let rolesel = parseInt(this.thirdFormGroup.get("userrole").value);
         var senddesignrequestpermission = false;
         if(rolesel == ROLES.ContractorAdmin || rolesel == ROLES.Admin || rolesel == ROLES.BD){
@@ -422,7 +423,7 @@ export class OnboardingPage implements OnInit {
           )
           .subscribe(
             (response:any) => {
-              
+
               this.utils.showSnackBar('Team created successfully');
               this.thirdFormGroup.reset();
             },
@@ -434,7 +435,7 @@ export class OnboardingPage implements OnInit {
           this.utils.errorSnackBar(error.message);
             }
           );
-    
+
      // }
     // else{
     //   if(this.thirdFormGroup.value.firstname =='' || this.thirdFormGroup.get('firstname').hasError('pattern')){
@@ -451,9 +452,9 @@ export class OnboardingPage implements OnInit {
     //     this.utils.errorSnackBar('Please check fields')
     //   }
     // }
-    
+
   }
-  
+
 
   goToWallet(){
     console.log("hello",this.user.amount);
@@ -467,11 +468,11 @@ export class OnboardingPage implements OnInit {
         onBoarding:"true"
       },
       skipLocationChange: false,
-      fragment: 'top' 
+      fragment: 'top'
   };
 
 
-this.router.navigate(['/add-money'], { 
+this.router.navigate(['/add-money'], {
 state: { productdetails: objToSend }
 });
     }
@@ -483,11 +484,11 @@ state: { productdetails: objToSend }
           onBoarding:"false"
         },
         skipLocationChange: false,
-        fragment: 'top' 
+        fragment: 'top'
     };
-  
-  
-  this.router.navigate(['/add-money'], { 
+
+
+  this.router.navigate(['/add-money'], {
   state: { productdetails: objToSend }
   });
     }
@@ -504,7 +505,7 @@ state: { productdetails: objToSend }
         this.prelimSettingValue = element.settingvalue;
       })
       console.log(this.prelimCharges)
-      console.log('hello', this.prelimSettingValue) 
+      console.log('hello', this.prelimSettingValue)
 
     })
 
@@ -516,12 +517,12 @@ state: { productdetails: objToSend }
       })
     })
   }
-  
+
   uploadFile(event) {
     this.logoSelected=true;
     this.fileName= event.target.files[0].name;
     console.log(this.fileName);
-    
+
     let reader = new FileReader(); // HTML5 FileReader API
     let file = event.target.files[0];
     if (event.target.files && event.target.files[0]) {
@@ -532,18 +533,18 @@ state: { productdetails: objToSend }
         this.logo = reader.result;
         this.blob= this.utils.b64toBlob(this.logo);
         console.log(this.blob);
-        
+
         this.firstFormGroup.patchValue({
           logo: this.fileName
         });
 
         console.log(this.firstFormGroup.value);
-        
+
         this.editFile = false;
         this.removeUpload = true;
       }
       // ChangeDetectorRef since file is loading outside the zone
-      this.cd.markForCheck();        
+      this.cd.markForCheck();
     }
   }
 
@@ -553,7 +554,7 @@ state: { productdetails: objToSend }
       console.log(res);
         this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
           console.log('updated',res);
-          
+
          let token=  this.storage.getJWTToken();
           this.storage.setUser(res,token);
         })
