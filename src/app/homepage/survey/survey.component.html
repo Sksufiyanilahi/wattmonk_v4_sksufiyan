@@ -65,7 +65,7 @@
                     <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
                         <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
                     <span class="customer-address z-100 m-0"
-                        (click)="openAddressOnMap(surveyData.address, $event)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
+                        (click)="openAddressOnMap(surveyData.address,$event)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
                     <p style="margin: 0px;" class="ion-no-padding" *ngIf="segments=='status=surveyassigned&status=surveyinprocess' || segments=='status=surveycompleted'">
                         <!-- <ion-col style="font-size: 0.8em;"> -->
                             <span><strong>Assigned to : {{surveyData.assignedto.firstname | titlecase}} {{surveyData.assignedto.lastname | titlecase}}</strong></span>

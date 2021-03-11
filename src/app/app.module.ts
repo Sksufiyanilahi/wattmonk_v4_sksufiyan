@@ -35,12 +35,11 @@ import {AuthGuardService} from './auth-guard.service';
 import {StorageService} from './storage.service';
 import {SuccessModalComponent} from './utilities/success-modal/success-modal.component';
 import {UtilitiesModule} from './utilities/utilities.module';
-import {PopoverComponentComponent} from './popover-component/popover-component.component';
-import {MyLoaderComponent} from './components/my-loader/my-loader.component';
+import { PopoverComponentComponent } from './popover-component/popover-component.component';
 
 @NgModule({
-  declarations: [AppComponent, SuccessModalComponent, MyLoaderComponent, PopoverComponentComponent],
-  entryComponents: [SuccessModalComponent, PopoverComponentComponent],
+  declarations: [AppComponent, SuccessModalComponent,PopoverComponentComponent],
+  entryComponents: [SuccessModalComponent,PopoverComponentComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
