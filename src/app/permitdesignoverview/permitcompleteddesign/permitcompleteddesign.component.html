@@ -16,24 +16,24 @@
                 </span>
         </ion-col> -->
         <ion-col *ngFor="let designData of item.listOfDesigns;let i = index ;trackBy: trackdesign" size="12">
-            <div class="ion-no-padding custom-card" style="height: 100%;">
+            <div class="ion-no-padding custom-card" style="height: 100%;" (click)="gotoDetails(designData,$event)">
                 <p class="customer-name" >{{designData.name}}
                       <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',designData.id]" routerDirection="forward">
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
-                    <span  [routerLink]="['/permit-design-details/',designData.id]"
+                    <span 
                     routerDirection="forward" class="chipdetail" style="background-color: rgb(109, 187, 26);border-radius: 50%;padding: 4px 5px;" *ngIf="designData.status == 'designcompleted'"><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
-                    <span [routerLink]="['/permit-design-details/',designData.id]"
+                    <span
                     routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue">Overdue</span>
-                    <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"   [routerLink]="['/permit-design-details/',designData.id]">Revision</span>
+                    <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  >Revision</span>
                     <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
                     *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
-                    <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+                    <span fill="clear" background-border="clear" class="imagebutton"  size="small" (click)="gotoActivity(designData,$event)" ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
                     <ng-container *ngIf="designData?.chatid!==null && designData?.addedtogroupchat">
-                        <span fill="clear" background-border="clear" [routerLink]="['/','chat',designData.chatid]" class="chatbutton"  size="small"  ><img  style= "height:20px" src="assets/images/chat.svg" /></span>
+                        <span fill="clear" background-border="clear" (click)="gotoChats(designData,$event)" class="chatbutton"  size="small"  ><img  style= "height:20px" src="assets/images/chat.svg" /></span>
                       </ng-container>
                 </p>
-                <p style="margin:0px"><span class="customer-email"  [routerLink]="['/permit-design-details/',designData.id]" *ngIf="userData.designertype!='external'"
+                <p style="margin:0px"><span class="customer-email"  *ngIf="userData.designertype!='external'"
                       routerDirection="forward">{{designData.email}}</span>
                       <span *ngIf="designData.isoverdue" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{item.lateby}}</strong></span>
 
@@ -41,9 +41,9 @@
                 <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone" *ngIf="userData.designertype!='external'">{{designData.phonenumber}}</span></a>
                 <span style="margin:0px" class="customer-address z-100" *ngIf="userData.designertype!='external'"
-                      (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
+                      (click)="openAddressOnMap(designData.address,$event)">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
 
-                <ion-row style="margin-bottom: 8px;"  [routerLink]="['/permit-design-details/',designData.id]" >
+                <ion-row style="margin-bottom: 8px;"  >
                     <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
                     <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData.source}}</span>
                     <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype}}</span>
