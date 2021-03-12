@@ -58,7 +58,6 @@ import { PopoverComponentComponent } from './popover-component/popover-component
      MatProgressSpinnerModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase)
-
   ],
   providers: [
     // FCM,

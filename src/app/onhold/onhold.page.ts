@@ -419,7 +419,8 @@ this.network.networkConnect();
   }
 
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -849,6 +850,21 @@ getassignedata(asssignedata){
 
 }
 
+
+gotoActivity(designData,event){
+  console.log(event)
+      event.stopPropagation();
+    this.router.navigate(['/activity' + '/' + designData.id + '/design'])
+  
+  }
+  
+  gotoDetails(designData,$event){
+    // $event.preventDefault();
+    // $event.stopPropagation();
+    this.router.navigate(['/permit-design-details/' + designData.id])
+  }
+
+
 shareWhatsapp(designData){
   this.socialsharing.share(designData.prelimdesign.url);
 }
@@ -1012,7 +1028,8 @@ createNewDesignChatGroup(design:DesginDataModel) {
   );
 }
 
-directAssignToWattmonk(id:number){
+directAssignToWattmonk(id:number,event){
+  event.stopPropagation();
   this.designId = id;
   var postData = {};
   var designacceptancestarttime = new Date();

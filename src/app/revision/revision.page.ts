@@ -192,7 +192,8 @@ this.network.networkConnect();
     this.fetchPendingDesigns(event, showLoader);
   }
 
-     accept(id,data:string){
+     accept(id,data:string,event){
+      event.stopPropagation();
         this.acceptid = id;
        let status={
         status:data
@@ -419,7 +420,8 @@ this.network.networkConnect();
   }
 
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -761,7 +763,8 @@ this.network.networkConnect();
   }
 
 
-async decline(id){
+async decline(id,event){
+  event.stopPropagation();
   const modal = await this.modalController.create({
     component: DeclinepagePage,
     cssClass: 'my-custom-modal-css',
@@ -848,6 +851,21 @@ getassignedata(asssignedata){
   console.log("dholak is",this.selectedDesigner);
 
 }
+
+gotoActivity(designData,event){
+  console.log(event)
+      event.stopPropagation();
+    this.router.navigate(['/activity' + '/' + designData.id + '/design'])
+  
+  }
+  
+  gotoDetails(designData,$event){
+    // $event.preventDefault();
+    // $event.stopPropagation();
+    this.router.navigate(['/permit-design-details/' + designData.id])
+  }
+
+
 
 shareWhatsapp(designData){
   this.socialsharing.share(designData.prelimdesign.url);

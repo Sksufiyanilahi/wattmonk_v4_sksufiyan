@@ -42,7 +42,7 @@
           <ion-label position="floating" class="label">Email*</ion-label>
            <ion-input class="form_input" type="email" autocapitalize="none" autocomplete="off"
           formControlName="email" [disabled]="fieldDisabled" ></ion-input>
-                  
+
         </ion-item>
         <div style="height: 5px;">
           <div *ngIf="firstFormGroup.get('email').hasError('pattern') && firstFormGroup.get('email').dirty">
@@ -98,7 +98,7 @@
                 <span class="error">{{fieldRequired}}</span>
             </div>
         </div>
-      </ion-col>  
+      </ion-col>
   </ion-row>
   <ion-row *ngIf="stampingModeValue == 'hardcopy' || stampingModeValue == 'both'">
     <ion-col>
@@ -184,7 +184,7 @@
           </ion-select>
       </ion-item>
   </ion-col>
-  
+
 </ion-row>
 
     <ion-row style="margin-top: 20px;">
@@ -217,7 +217,7 @@
       <ion-item class="ion-no-padding">
           <ion-label style="display: none;">Job Type*</ion-label>
           <ion-label position="floating">Job Type*</ion-label>
-          <ion-select   [disabled] = "nonEditableField" class="form_input select_div"
+          <ion-select [disabled]="nonEditableField" class="form_input select_div"
                       ok-text=""
                       cancel-text=""
                       formControlName="jobtype" interface="popover">
@@ -230,7 +230,7 @@
   </ion-row>
   <ion-row *ngIf="stampingTypeValue == 'structural' || stampingTypeValue =='both'">
     <ion-col size="12">
-  
+
         <ng-container>
             <ion-item class="ion-no-padding" (click)="attic.click()">
                 <ion-label position="floating" class="label">Attic Photos*</ion-label>
@@ -246,26 +246,26 @@
                     </ion-item>
                 </div>
                 </ng-container>
-                
+
             </ion-col>
             <ng-container *ngIf="design && design.atticphotos !==null">
               <div *ngFor="let arc of design.atticphotos;let i=index">
                  <ion-item>
                      <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
                      <!-- <ion-col size="1" (click)="removeattachment(arc,i)">x</ion-col> -->
-                     <ion-col size="1" (click)="removeattachment(arc,i,'attic')">x</ion-col> 
-                    
+                     <ion-col size="1" (click)="removeattachment(arc,i,'attic')">x</ion-col>
+
 
                  </ion-item>
-             
-                 
-             </div> 
+
+
+             </div>
           </ng-container>
-    
+
   </ion-row>
   <ion-row *ngIf="stampingTypeValue == 'structural' || stampingTypeValue =='both'">
     <ion-col size="12">
-  
+
         <ng-container>
             <ion-item class="ion-no-padding" (click)="roof.click()">
                 <ion-label position="floating" class="label">Roof Photos*</ion-label>
@@ -281,26 +281,26 @@
                     </ion-item>
                 </div>
                 </ng-container>
-                
+
             </ion-col>
             <ng-container *ngIf="design && design.roofphotos !==null">
               <div *ngFor="let arc of design.roofphotos;let i=index">
                  <ion-item>
                      <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
                      <!-- <ion-col size="1" (click)="removeattachment(arc,i)">x</ion-col> -->
-                     <ion-col size="1" (click)="removeattachment(arc,i,'roof')">x</ion-col> 
-                    
+                     <ion-col size="1" (click)="removeattachment(arc,i,'roof')">x</ion-col>
+
 
                  </ion-item>
-             
-                 
-             </div> 
+
+
+             </div>
           </ng-container>
-    
+
   </ion-row>
   <ion-row *ngIf="stampingTypeValue == 'structural' || stampingTypeValue =='both' || stampingTypeValue == 'electrical'">
     <ion-col size="12">
-  
+
         <ng-container>
             <ion-item class="ion-no-padding" (click)="permitplan.click()">
                 <ion-label position="floating" class="label">Permit Plan*</ion-label>
@@ -316,22 +316,22 @@
                     </ion-item>
                 </div>
                 </ng-container>
-                
+
             </ion-col>
             <ng-container *ngIf="design && design.permitplan !==null">
               <div *ngFor="let arc of design.permitplan;let i=index">
                  <ion-item>
                      <ion-col size="auto" > {{arc.name}}{{arc.ext}}</ion-col>
                      <!-- <ion-col size="1" (click)="removePermitPlan(arc,i)">x</ion-col> -->
-                     <ion-col size="1" (click)="removeattachment(arc,i,'permitplan')">x</ion-col> 
-                    
+                     <ion-col size="1" (click)="removeattachment(arc,i,'permitplan')">x</ion-col>
+
 
                  </ion-item>
-             
-                 
-             </div> 
+
+
+             </div>
           </ng-container>
-    
+
   </ion-row>
   <!-- <ion-row style="margin-top: 20px;">
     <ion-label style="font-weight: bold;">Type of Stamping</ion-label>
@@ -370,7 +370,7 @@
 </ion-row>
 </form>
 <!-- <form [formGroup]="secondFormGroup" novalidate style="overflow:scroll">
- 
+
 </form> -->
 </ion-content>
 <ion-row>

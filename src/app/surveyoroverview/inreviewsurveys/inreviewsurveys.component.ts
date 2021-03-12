@@ -117,7 +117,8 @@ export class InreviewsurveysComponent implements OnInit {
       })
   }
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -244,5 +245,22 @@ export class InreviewsurveysComponent implements OnInit {
 
 
   }
+  resumeSurvey(surveyData,event){
+    event.stopPropagation();
+    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
+  }
+
+  gotoActivity(surveyData,event){
+    console.log(event)
+        event.stopPropagation();
+      this.router.navigate(['/activity' + '/' + surveyData.id + '/survey'])
+    
+    }
+    
+    gotoDetails(surveyData,$event){
+      // $event.preventDefault();
+      // $event.stopPropagation();
+      this.router.navigate(['/survey-detail/' + surveyData.id])
+    }
 
 }

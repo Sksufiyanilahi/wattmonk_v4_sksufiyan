@@ -32,9 +32,6 @@ import { Utility } from 'src/app/model/utility.model';
   styleUrls: ['./salesproposal.component.scss'],
 })
 export class SalesproposalComponent implements OnInit {
-
-  //@ViewChild('fileInput',{static:false}) el: ElementRef;
-
   myControl = new FormControl();
     desginForm: FormGroup;
 
