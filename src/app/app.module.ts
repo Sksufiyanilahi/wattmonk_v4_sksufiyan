@@ -37,6 +37,7 @@ import {SuccessModalComponent} from './utilities/success-modal/success-modal.com
 import {UtilitiesModule} from './utilities/utilities.module';
 import { PopoverComponentComponent } from './popover-component/popover-component.component';
 
+
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent,PopoverComponentComponent],
   entryComponents: [SuccessModalComponent,PopoverComponentComponent],
@@ -54,7 +55,7 @@ import { PopoverComponentComponent } from './popover-component/popover-component
     MatProgressBarModule,
     MatDialogModule,
     MatButtonModule,
-    MatProgressSpinnerModule,
+     MatProgressSpinnerModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase)
 
