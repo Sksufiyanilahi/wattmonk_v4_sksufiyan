@@ -22,7 +22,6 @@ import { map, startWith } from "rxjs/operators";
 import { UtilityRates } from 'src/app/model/utilityrate.model';
 import { Incentive } from 'src/app/model/incentive.model';
 import { Utility } from 'src/app/model/utility.model';
-// import { throwMatDuplicatedDrawerError } from '@angular/material';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFirestore} from '@angular/fire/firestore';
 
@@ -68,10 +67,10 @@ export class SalesproposalComponent implements OnInit {
   address: string;
   showValue: any;
   uploadbox: any;
-  archFiles: string[]=[];
-  prelimFiles: string[]=[];
+  archFiles: any=[];
+  prelimFiles: any=[];
  imageName:any;
- 
+
  indexOfArcFiles=[]
  isArcFileDelete:boolean=false;
   //attachmentName = this.desginForm.get('attachments').value;
@@ -158,7 +157,7 @@ blob:Blob;
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
 
     this.firstFormGroup=this.formBuilder.group({
-    
+
     })
 
     this.desginForm = this.formBuilder.group({
@@ -212,7 +211,7 @@ blob:Blob;
       requirementtype : new FormControl('proposal')
       // uploadbox:new FormControl('')
     });
-      
+
     // this.newprelimsRef = db.object('newprelimdesigns');
     // this.newprelims = this.newprelimsRef.valueChanges();
     // this.newprelims.subscribe(
@@ -237,7 +236,7 @@ blob:Blob;
     //   (err) => console.log(err),
     //   () => console.log('done!')
     // )
-    
+
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.getAssignees();
 
@@ -245,7 +244,7 @@ blob:Blob;
 
   numberfield(event){
     console.log(event);
-    
+
   }
 
   ionViewDidEnter(){
@@ -266,7 +265,7 @@ blob:Blob;
     this.apiService.utilitiesNames().subscribe(res=>{
       console.log(res,"utilityname");
       this.utilitiesName = res;
-      
+
     })
   }
 
@@ -365,8 +364,8 @@ blob:Blob;
     if (!found) {
       console.log("hello");
       let data={
-  
-        
+
+
         name:this.desginForm.get('utility').value
       }
       this.apiService
@@ -381,7 +380,7 @@ blob:Blob;
           },
           error => {
             this.utils.errorSnackBar(
-  
+
               "Error"
             );
           }
@@ -390,7 +389,7 @@ blob:Blob;
       this.saveUtilityRate();
     }
   }
-  
+
   saveUtilityRate() {
     console.log(this.modulemodels);
     console.log(this.desginForm.get("utilityrate").value)
@@ -402,7 +401,7 @@ blob:Blob;
       let data={
         utility:this.selectedUtilityId,
         rate:this.desginForm.get('utilityrate').value
-  
+
       }
       this.apiService
         .postUtilitiesRate(
@@ -428,7 +427,7 @@ blob:Blob;
     this.logoSelected=true;
     this.uploadLogo= event.target.files[0].name;
     console.log(this.uploadLogo);
-    
+
     let reader = new FileReader(); // HTML5 FileReader API
     let file = event.target.files[0];
     if (event.target.files && event.target.files[0]) {
@@ -439,21 +438,21 @@ blob:Blob;
         this.logo = reader.result;
         this.blob= this.utils.b64toBlob(this.logo);
         console.log(this.blob);
-        
+
         this.firstFormGroup.patchValue({
           logo: this.uploadLogo
-        });    
+        });
       }
       // ChangeDetectorRef since file is loading outside the zone
-      this.cdr.markForCheck();        
+      this.cdr.markForCheck();
     }
   }
 
   // getmodulename(event){
-   
+
   //     this.modulename= event;
   //     console.log(this.modulename);
-      
+
   // }
 
 
@@ -484,23 +483,23 @@ blob:Blob;
           // this.solarMakeDisposable = this.desginForm.get('solarmake').valueChanges.subscribe(val => {
           //   this.getSolarMade();
           // });
-          
+
         // }else if(this.modulename=='solarmade'){
         // this.solarmade=data;
         // }else if(this.modulename=='invertermake'){
         //   this.invertermake = data;
         // }else if(this.modulename=='invertermade'){
-        //   this.invertermade= data; 
+        //   this.invertermade= data;
         // }
-        
-      
+
+
     // })
     this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_SALES_FORM || event === ScheduleFormEvent.SEND_SALES_FORM) {
         this.send=event;
         this.addForm();
-      
+
       }
       if(event===ScheduleFormEvent.PAY_EVENT){
         this.sendtowattmonk();
@@ -524,7 +523,7 @@ blob:Blob;
       // }
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        
+
          this.desginForm.get('address').setValue('124/345');
          this.desginForm.get('latitude').setValue('24.553333');
          this.desginForm.get('longitude').setValue('80.5555555555');
@@ -552,8 +551,8 @@ blob:Blob;
         createdby: this.storage.getUserID()
       });
       this.getSolarMake();
-     
-      
+
+
     }
 
     setTimeout(()=>{
@@ -578,7 +577,7 @@ this.uploadcontrolvalidation();
     this.logo = this.userdata.logo.url
     }
   }
-  
+
 formControlValueChanged() {
   const NUMBERPATTERN = '^[0-9]*$';
   const tiltControl = this.desginForm.get('tiltgroundmount');
@@ -650,7 +649,7 @@ loadModuleModelsData() {
   }
 
 getDesignDetails() {
-  
+
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(()=>{
@@ -683,7 +682,7 @@ getDesignDetails() {
             newconstruction: this.design.newconstruction + '',
             prelimdesign:null,
             //attachments:this.design.attachments,
-            
+
             attachments:this.design.attachments,
             solarmake:this.design.solarmake,
             solarmodel:this.design.solarmodel,
@@ -711,7 +710,7 @@ getDesignDetails() {
           this.getInverterMakeForForm();
         },500)
         });
-      
+
       }, (error) => {
         this.utils.hideLoading();
       });
@@ -719,7 +718,7 @@ getDesignDetails() {
   }
 
   getSolarMakeForForm() {
- 
+
     this.apiService.getSolarMake().subscribe(response => {
       this.listOfSolarMake = response;
 
@@ -741,7 +740,7 @@ getDesignDetails() {
           }, 500);
         // });
       }, solarResponseError => {
-      
+
         const error: ErrorModel = solarResponseError.error;
         if (error.message instanceof String) {
           this.utils.errorSnackBar(error.message);
@@ -783,7 +782,7 @@ getDesignDetails() {
 
 
       }, makeResponseError => {
-   
+
         const error: ErrorModel = makeResponseError.error;
         if (error.message instanceof String) {
           this.utils.errorSnackBar(error.message);
@@ -807,7 +806,7 @@ getDesignDetails() {
 );
 
   console.log(found);
-  
+
     if(!found){
       let solarmakedata={
         name:this.solarmake
@@ -819,7 +818,7 @@ getDesignDetails() {
         this.saveModuleModel();
       },err=>{
         console.log(err,'err in savemodulemake');
-        
+
       })
 
     }else{
@@ -839,7 +838,7 @@ getDesignDetails() {
         solarmake:this.desginForm.get('solarmake').value
       }
       console.log(solarmadedata);
-      
+
       this.apiService.postSolarMade(solarmadedata).subscribe((response:any)=>{
         this.desginForm.patchValue({
           solarmade:response.id
@@ -880,7 +879,7 @@ getDesignDetails() {
         invertermake:this.desginForm.get('invertermake').value
       }
       console.log(invertermadedata);
-      
+
       this.apiService.postInverterMade(invertermadedata).subscribe((response:any)=>{
           this.desginForm.patchValue({
             invertermade:response.id
@@ -922,7 +921,7 @@ this.architecturalData.splice(i, 1);
 }
 
 removeattachment(attachment,i){
-    
+
   this.indexOfArcFiles.push( attachment.id);
 
   this.isArcFileDelete=true;
@@ -930,24 +929,24 @@ removeattachment(attachment,i){
   console.log(this.indexOfArcFiles);
   console.log(this.attachmentData);
   console.log(i);
-  
+
   this.attachmentData.splice(i, 1);
 }
 
 deleteArcFile(index){
-     
-      
+
+
   // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
      for(var i=0; i< index.length;i++){
        var id = index[i];
        this.apiService.deletePrelimImage(id).subscribe(res=>{console.log("hello",res)
-      
+
    });
- 
+
  // this.utils.hideLoading().then(()=>{
  //   //   this.utils.showSnackBar('File deleted successfully');
  //     // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
-     
+
  //    // this.utils.setPermitDesignDetailsRefresh(true);
  //  // });
  //   },
@@ -959,10 +958,10 @@ deleteArcFile(index){
 
 // });
  //this.utils.setHomepageDesignRefresh(true);
- 
 
-  
- 
+
+
+
 }
 
 
@@ -974,7 +973,7 @@ deleteArcFile(index){
     // debugger;
     // this.saveModuleMake();
     this.saveUtilityName();
-    
+
 
   }
 
@@ -989,8 +988,8 @@ deleteArcFile(index){
     // }
     // console.log('hey',invalid)
     // return invalid;
-    
-         
+
+
     if (this.desginForm.status == 'VALID') {
       var newConstruction = this.desginForm.get("newconstruction").value;
       console.log(this.selectedUtilityId)
@@ -998,7 +997,7 @@ deleteArcFile(index){
      // this.desginForm.get('utility').setValue(this.selectedUtilityId);
      let postData;
         if (this.designId === 0) {
-          
+
           if(this.send===ScheduleFormEvent.SAVE_SALES_FORM){
             debugger;
             postData = {
@@ -1087,7 +1086,7 @@ deleteArcFile(index){
               //   //     this.navController.pop();
               //   //   });
               //   // });
-              
+
                });
             }, responseError => {
               this.utils.hideLoading();
@@ -1164,14 +1163,14 @@ deleteArcFile(index){
                                 id:response.id,
                                 designData:"prelim",
                                 fulldesigndata:response,
-                               
+
                               },
                               skipLocationChange: false,
-                              fragment: 'top' 
+                              fragment: 'top'
                           };
-                      
-                      
-                      this.router.navigate(['/payment-modal'], { 
+
+
+                      this.router.navigate(['/payment-modal'], {
                         state: { productdetails: objToSend }
                       });
                   }
@@ -1184,7 +1183,7 @@ deleteArcFile(index){
                   this.utils.errorSnackBar(error.message);
                 });
               }
-          
+
 
         } else {
           if(this.send===ScheduleFormEvent.SAVE_SALES_FORM){
@@ -1258,7 +1257,7 @@ deleteArcFile(index){
             if(this.isArcFileDelete){
               this.deleteArcFile(this.indexOfArcFiles);
             }
-               
+
               });
           },
            responseError => {
@@ -1339,11 +1338,11 @@ deleteArcFile(index){
                     fulldesigndata:response,
                   },
                   skipLocationChange: false,
-                  fragment: 'top' 
+                  fragment: 'top'
               };
-          
-          
-          this.router.navigate(['/payment-modal'], { 
+
+
+          this.router.navigate(['/payment-modal'], {
             state: { productdetails: objToSend }
           });
               }
@@ -1355,12 +1354,12 @@ deleteArcFile(index){
             // this.utils.hideLoading().then(() => {
             //   console.log('Res', response);
             //   this.value=response.id;
-              
+
             //   this.utils.showSnackBar('Design have been updated');
             //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
-              
-              
-      
+
+
+
              });
           }, responseError => {
             this.utils.hideLoading().then(() => {
@@ -1372,7 +1371,7 @@ deleteArcFile(index){
         }
       }
 
-    
+
 
     } else {
       if(this.desginForm.value.name=='' || this.desginForm.get('name').hasError('pattern')){
@@ -1496,7 +1495,7 @@ deleteArcFile(index){
 
   }
 ioniViewDidEnter(){
- 
+
 
 }
   getSolarMake() {
@@ -1504,7 +1503,7 @@ ioniViewDidEnter(){
 
     this.apiService.getSolarMake().subscribe(response => {
       this.listOfSolarMake = response;
-      
+
     }, responseError => {
       const error: ErrorModel = responseError.error;
       console.log(error);
@@ -1555,19 +1554,19 @@ ioniViewDidEnter(){
   eventcheck(e){
     this.showValue = e.target.value;
     console.log(this.showValue);
-    
+
   }
   showUpload(e){
     this.uploadbox = e.target.value;
 
-    
+
   }
 
 
   files(event){
    console.log(event.target.files);
     for(var i=0; i< event.target.files.length;i++){
-      this.archFiles.push(event.target.files[i]) 
+      this.archFiles.push(event.target.files[i])
     }
     console.log(this.archFiles);
   }
@@ -1575,22 +1574,22 @@ ioniViewDidEnter(){
   prelimfiles(event){
     console.log(event.target.files);
     for(var i=0; i< event.target.files.length;i++){
-      this.prelimFiles.push(event.target.files[i]) 
+      this.prelimFiles.push(event.target.files[i])
     }
     this.attachmentFileUpload= true;
     if(this.prelimFiles.length==1){
       this.fileName= event.target.files[0].name;
       console.log(this.fileName);
-      
+
     }else if(this.prelimFiles.length >1){
       this.fileName= this.prelimFiles.length;
     }else{
       this.fileName='';
     }
-  
-   
+
+
   }
-  
+
 
   uploaarchitecturedesign(response?: any, key?: string){
     console.log(this.archFiles);
@@ -1603,10 +1602,10 @@ ioniViewDidEnter(){
         imageData.append('ref', 'design');
         imageData.append('field', key);
       }
-    } 
+    }
     this.utils.showLoading("Architectural File Uploading").then(()=>{
     this.apiService.uploaddesign(imageData).subscribe(res=>{
-      console.log(res); 
+      console.log(res);
       this.utils.hideLoading();
       if(this.attachmentFileUpload){
       this.uploadpreliumdesign(response,'attachments');
@@ -1630,11 +1629,11 @@ ioniViewDidEnter(){
                       fulldesigndata:response
                     },
                     skipLocationChange: false,
-                    fragment: 'top' 
+                    fragment: 'top'
                 };
-            
-            
-            this.router.navigate(['/payment-modal'], { 
+
+
+            this.router.navigate(['/payment-modal'], {
               state: { productdetails: objToSend }
             });
         }
@@ -1660,10 +1659,10 @@ ioniViewDidEnter(){
         imageData.append('ref', 'design');
         imageData.append('field', key);
       }
-    } 
+    }
     this.utils.showLoading("Attachment File Uploading").then(()=>{
     this.apiService.uploaddesign(imageData).subscribe(res=>{
-      console.log(res); 
+      console.log(res);
       this.utils.hideLoading();
       if(this.send === ScheduleFormEvent.SAVE_DESIGN_FORM)
       {
@@ -1685,15 +1684,15 @@ ioniViewDidEnter(){
             fulldesigndata:response
           },
           skipLocationChange: false,
-          fragment: 'top' 
+          fragment: 'top'
       };
-  
-  
-  this.router.navigate(['/payment-modal'], { 
+
+
+  this.router.navigate(['/payment-modal'], {
     state: { productdetails: objToSend }
   });
       }
-      
+
     }, responseError => {
       this.utils.hideLoading();
       //this.utils.hideUploadingLoading();
@@ -1709,7 +1708,7 @@ ioniViewDidEnter(){
       console.log(res);
         this.apiService.updateUser(this.userId,this.uploadLogo).subscribe((res:any)=>{
           console.log('updated',res);
-          
+
          let token=  this.storage.getJWTToken();
           this.storage.setUser(res,token);
         })
@@ -1747,14 +1746,14 @@ ioniViewDidEnter(){
         paymenttype: this.utils.getPaymentMode().value,
         couponid:this.utils.getCouponId().value
       };
-  
+
       this.utils.showLoading('Assigning').then(()=>{
         //this.newprelimsRef.update({ count: this.newprelimscount + 1});
         this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
           this.utils.hideLoading().then(()=>{
-            ; 
+            ;
             console.log('reach ', value);
-           
+
             this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
             this.router.navigate(['/homepage/design'])
             this.utils.setHomepageDesignRefresh(true);
@@ -1775,11 +1774,11 @@ ioniViewDidEnter(){
         designData:"prelim"
       },
       skipLocationChange: false,
-      fragment: 'top' 
+      fragment: 'top'
   };
 
 
-this.router.navigate(['/payment-modal'], { 
+this.router.navigate(['/payment-modal'], {
 state: { productdetails: objToSend }
 });
     }else {
@@ -1865,10 +1864,10 @@ state: { productdetails: objToSend }
   );
   }
 
-  proxyValue: any; onCompanyChanged(event$) { 
+  proxyValue: any; onCompanyChanged(event$) {
     console.log(event$);
-    this.proxyValue = event$.detail.value.companyname; 
-    this.designCreatedBy = event$.detail.value.companyid; 
+    this.proxyValue = event$.detail.value.companyname;
+    this.designCreatedBy = event$.detail.value.companyid;
     this.designCreatedByUserParent = event$.detail.value.parentid;
     if(this.designCreatedBy !== null && this.designCreatedByUserParent !== null){
       var designacceptancestarttime = new Date();
@@ -1892,7 +1891,7 @@ state: { productdetails: objToSend }
   onRangeChangeHandler() {
     this.number = this.desginForm.get('annualutilityescalation').value;
     console.log(this.number);
-    
+
 
     if (this.desginForm.get('annualutilityescalation').value > 0 && this.desginForm.get('annualutilityescalation').value < 1) {
         this.color = 'dark';
