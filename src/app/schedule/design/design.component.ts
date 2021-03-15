@@ -1330,7 +1330,7 @@ state: { productdetails: objToSend }
           console.log(designacceptancestarttime)
       this.desginForm.patchValue({createdby:this.designCreatedBy,
                                   creatorparentid:this.designCreatedByUserParent,
-                                  status:"outsourced",
+                                  status:"requestaccepted",
                                   outsourcedto:"232",
                                   isoutsourced:"true",
                                   designacceptancestarttime:designacceptancestarttime})

@@ -872,7 +872,7 @@ saveInverterModel() {
         var isoutsourced;
         var newConstruction = this.desginForm.get("newconstruction").value;
         if (this.designCreatedBy) {
-          designstatus = "outsourced";
+          designstatus = "requestaccepted";
           designoutsourcedto = "232";
           isoutsourced = "true";
           var designacceptancestarttime = new Date();

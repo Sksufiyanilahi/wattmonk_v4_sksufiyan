@@ -242,7 +242,7 @@ servicecharges(){
 
 
         if(this.servicePrice.freedesign==true){
-          this.delivertime="24-48";
+          this.delivertime="6-12";
           this.discount=this.servicePrice.slabdiscount;
           this.netPay=0
           this.isradiodisable=true
@@ -272,7 +272,7 @@ confirm(){
     couponid:this.utils.getCouponId().value,
     designacceptancestarttime: designacceptancestarttime,
     paymenttype:"wallet",
-    amount:parseInt(this.netPay),
+    amount:Number(this.netPay),
     serviceamount:this.settingValue,
     paymentstatus:null
   };
@@ -288,7 +288,7 @@ confirm(){
       slabname:this.delivertime,
       slabdiscount:this.servicePrice.slabdiscount,
       serviceamount:this.servicePrice.paymentamount,
-      amount:parseInt(this.netPay),
+      amount:Number(this.netPay),
       paymenttype:"wallet",
       paymentstatus:null
     };

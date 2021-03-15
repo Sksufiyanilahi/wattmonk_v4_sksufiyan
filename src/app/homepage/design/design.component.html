@@ -93,7 +93,9 @@
                             <ion-col *ngIf="segments=='requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')" style="font-size: 0.8em;">
                                 <span><strong>Assigned to : {{designData.reviewassignedto.firstname | titlecase}} {{designData.reviewassignedto.lastname | titlecase}}</strong></span>
                             </ion-col>
-
+                            <ion-col *ngIf="(segments=='requesttype=prelim&status=designassigned' || segments=='requesttype=prelim&status=designcompleted') && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')" style="font-size: 0.8em;">
+                                <span><strong>Assigned to : {{designData.designassignedto.firstname | titlecase}} {{designData.designassignedto.lastname | titlecase}}</strong></span>
+                            </ion-col>
                         <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
                                 <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
                                     {{designData.designremainingtime}}</span></ion-col>
