@@ -1,0 +1,382 @@
+[
+    {
+        "name":"Electricals",
+        "isactive": true,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children":[
+            {
+                "name":"MSP",
+                "isactive": true,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence":false,
+                "isexistencechecked":false,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": true,
+                        "ispending": true,
+                        "shotinfo":"Capture Long Shot",
+                        "questioninfo":"Provide MSP Location",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "MSP is located inside or outside the building?",
+                        "actions" : ["inside","outside"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "msplocation",
+                        "imagekey":"mspimages",
+                        "imagename":"msplongshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide MSP Rating",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "MSP/BUS Rating?",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "msprating",
+                        "imagekey":"mspimages",
+                        "imagename":"mspzoomshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Open MSP Shutter & Capture Zoom Shot",
+                        "questioninfo":"Provide Main Breaker Size",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Main Breaker Size",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "mainbreakersize",
+                        "imagekey":"mspimages",
+                        "imagename":"mspopenshutterzoomshot"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Open MSP Inside Cover & Capture Zoom Shot",
+                        "questioninfo":"Provide Main breaker location in MSP",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Main breaker location in MSP?",
+                        "actions" : ["top","bottom","center"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "mspbreaker",
+                        "imagekey":"mspimages",
+                        "imagename":"mspwithoutcovershot"
+                    }
+                ]
+            },
+            {
+                "name":"Utility Meter",
+                "ispending": true,
+                "isactive": false,
+                "isvisible": true,
+                "checkexistence":false,
+                "isexistencechecked":false,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"Provide Utility Meter",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Utility meter is attached or detached with MSP?",
+                        "actions" : ["attach","detach"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "utilitymeter",
+                        "imagekey":"utilitymeterimages",
+                        "imagename":"umwideshoturl"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"utilitymeterimages",
+                        "imagename":"umzoomshoturl"
+                    }
+                ]
+            },
+            {
+                "name":"PV Inverter",
+                "ispending": true,
+                "isactive": false,
+                "isvisible": true,
+                "checkexistence":false,
+                "isexistencechecked":false,
+                "inputformcontrol": "",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"Provide Inverter Location",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "PV Inverter is located inside or outside?",
+                        "actions" : ["inside","outside"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 1,
+                        "inputformcontrol" : "pvinverterlocation",
+                        "imagekey":"pvinverterimages",
+                        "imagename":"pvinverterwideshoturl"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"Provide Inverter Details",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "PV Inverter Make & Model?",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 4,
+                        "inputformcontrol" : "",
+                        "imagekey":"pvinverterimages",
+                        "imagename":"pvinverterzoomshoturl"
+                    }
+                ]
+            },
+            {
+                "name":"PV Meter",
+                "ispending": true,
+                "isactive": false,
+                "isvisible": true,
+                "checkexistence":true,
+                "isexistencechecked":false,
+                "inputformcontrol": "pvmeter",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"pvmeterimages",
+                        "imagename":"pvmeterwideshoturl"
+                    }
+                ]
+            },
+            {
+                "name":"AC Disconnect",
+                "ispending": true,
+                "isactive": false,
+                "isvisible": true,
+                "checkexistence":true,
+                "isexistencechecked":false,
+                "inputformcontrol": "acdisconnect",
+                "allowmultipleshots": false,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide Angle Shot",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"acdisconnectimages",
+                        "imagename":"acdisconnectwideshoturl"
+                    },
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Zoom Shot",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"acdisconnectimages",
+                        "imagename":"acdisconnectzoomshoturl"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Solar",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children":[
+            {
+                "name":"Panels",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture Wide angle shot",
+                        "questioninfo":"Provide Number of modules installed",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Number of moduled installed?",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 2,
+                        "inputformcontrol" : "numberofmodules",
+                        "imagekey":"solarpanelsimages",
+                        "imagename":"modulewideshoturl"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Roof",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children":[
+            {
+                "name":"Roof Area",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture roof from all angles",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "",
+                        "actions" : [],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 0,
+                        "inputformcontrol" : "",
+                        "imagekey":"roofimages",
+                        "imagename":"roof"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Appliances",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children":[
+            {
+                "name":"Heavy Load Appliances",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "checkexistence": false,
+                "isexistencechecked": false,
+                "inputformcontrol": "",
+                "allowmultipleshots": true,
+                "capturedshots": [],
+                "shots":[
+                    {
+                        "isactive": false,
+                        "ispending": true,
+                        "shotinfo":"Capture all appliances of higher load",
+                        "questioninfo":"",
+                        "shotstatus": false,
+                        "promptquestion": false,
+                        "question" : "Name of the appliance?",
+                        "actions" : ["confirm"],
+                        "result" : "",
+                        "questionstatus": false,
+                        "questiontype": 5,
+                        "inputformcontrol" : "",
+                        "imagekey":"appliancesimages",
+                        "imagename":"appliances"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Marking",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 2,
+        "children":[]
+    },
+    {
+        "name": "Details",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 1,
+        "children":[]
+    }
+]
