@@ -130,7 +130,7 @@
         </ion-col>
         <ion-col size="12">
             <ion-item class="ion-no-padding">
-                <ion-label position="floating">Licence No.</ion-label>
+                <ion-label position="floating">License No.</ion-label>
                 <ion-input type="text" formControlName="registrationnumber" class="form_input" autocapitalize="words" maxLength="16"
                             required></ion-input>
             </ion-item>
@@ -221,7 +221,7 @@
    <ion-toggle formControlName="requestgeneratednotification" (ionChange)="onChange($event,'requestgenerated')"  ></ion-toggle>
  </ion-item>
  <ion-item>
-  <ion-label class="font">Design Acknowledgement  (Accept/On Hold)</ion-label>
+  <ion-label style="white-space: break-spaces;" class="font">Design Acknowledgement  (Accept/On Hold)</ion-label>
  <ion-toggle formControlName="requestacknowledgementemail" (ionChange)="onEmailChange($event,'requestacknoledgedemail')"></ion-toggle>
  <ion-toggle formControlName="requestacknowledgementnotification" (ionChange)="onChange($event,'requestacknoledged')"></ion-toggle>
 </ion-item>
@@ -235,8 +235,13 @@
 </ion-item> -->
 <ion-item>
   <ion-label class="font">Design In-Designing</ion-label>
- <ion-toggle formControlName="requestindesigningemail" (ionChange)="onEmailChange($event,'completedesignemail')"></ion-toggle>
- <ion-toggle formControlName="requestindesigningnotification" (ionChange)="onChange($event,'completedesign')"></ion-toggle>
+ <ion-toggle formControlName="requestindesigningemail" (ionChange)="onEmailChange($event,'requestindesigningemail')"></ion-toggle>
+ <ion-toggle formControlName="requestindesigningnotification" (ionChange)="onChange($event,'requestindesigningnotification')"></ion-toggle>
+</ion-item>
+<ion-item>
+  <ion-label class="font">Design Completed</ion-label>
+ <ion-toggle formControlName="designcompletedemail" (ionChange)="onEmailChange($event,'designcompletedemail')"></ion-toggle>
+ <ion-toggle formControlName="designcompletednotification" (ionChange)="onChange($event,'designcompletednotification')"></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label class="font">Design In-Review</ion-label>
@@ -368,7 +373,7 @@
         <ion-col size="auto">
           <ion-item lines="none">
             <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Surveyor</ion-label>
-            <ion-radio slot="start"  value="" ></ion-radio>
+            <ion-radio slot="start"  value="9" ></ion-radio>
           </ion-item>
         </ion-col>
         </ion-row>

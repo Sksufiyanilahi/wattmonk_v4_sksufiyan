@@ -309,19 +309,19 @@ export class OnboardingPage implements OnInit {
         requestacknowledgementnotification:event.detail.checked
       })
     }
-    // else if(value=='requestdesign'){
-    //   this.secondFormGroup.patchValue({
-    //     requestindesigningnotification:event.detail.checked
-    //   })
-    // }
+    else if(value=='designcompletednotification'){
+      this.secondFormGroup.patchValue({
+        designcompletednotification:event.detail.checked
+      })
+    }
     // else if(value=='onhold'){
     //   this.secondFormGroup.patchValue({
     //     designonholdnotification:event.detail.checked
     //   })
     // }
-    else if(value=='completedesign'){
+    else if(value=='requestindesigningnotification'){
       this.secondFormGroup.patchValue({
-        designcompletednotification:event.detail.checked
+        requestindesigningnotification:event.detail.checked
       })
     }
     else if(value=='qc'){
@@ -359,19 +359,19 @@ export class OnboardingPage implements OnInit {
          requestacknowledgementemail:event.detail.checked
        })
      }
-    //  else if(value=='requestdesign'){
-    //    this.secondFormGroup.patchValue({
-    //      requestindesigningemail:event.detail.checked
-    //    })
-    //  }
+     else if(value=='designcompletedemail'){
+       this.secondFormGroup.patchValue({
+        designcompletedemail:event.detail.checked
+       })
+     }
     //  else if(value=='onhold'){
     //    this.secondFormGroup.patchValue({
     //      designonholdemail:event.detail.checked
     //    })
     //  }
-     else if(value=='completedesignemail'){
+     else if(value=='requestindesigningemail'){
        this.secondFormGroup.patchValue({
-         designcompletedemail:event.detail.checked
+        requestindesigningemail:event.detail.checked
        })
      }
      else if(value=='qcemail'){
