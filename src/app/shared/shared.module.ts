@@ -9,6 +9,7 @@ import { ResendpagedialogPageModule } from '../resendpagedialog/resendpagedialog
 import { CouponOffersModalPageModule } from '../coupon-offers-modal/coupon-offers-modal.module';
 import { PestampdelivermodalPageModule } from '../pestampdelivermodal/pestampdelivermodal.module';
 import { LinkifyPipe } from '../linkify.pipe';
+import { MatStepperModule } from '@angular/material/stepper';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { LinkifyPipe } from '../linkify.pipe';
     EmailModelPageModule,
     CouponOffersModalPageModule,
     DeclinepagePageModule,
-    
+    MatStepperModule,
+
     StatisticsDetailsPageModule,
     ResendpagedialogPageModule,
     PestampdelivermodalPageModule,
@@ -30,7 +32,8 @@ import { LinkifyPipe } from '../linkify.pipe';
     StatisticsDetailsPageModule,
     ResendpagedialogPageModule,
     CouponOffersModalPageModule,
-    LinkifyPipe
+    LinkifyPipe,
+    MatStepperModule
   ]
 })
 export class SharedModule { }

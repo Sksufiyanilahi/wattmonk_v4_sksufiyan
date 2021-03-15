@@ -142,7 +142,6 @@ export class DesginDataModel {
   personname : string;
   companylogo : any;
   tiltgroundmount:string;
-  
 }
 
 export class PrelimDesign{

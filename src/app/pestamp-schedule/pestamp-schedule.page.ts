@@ -26,7 +26,6 @@ export class PestampSchedulePage implements OnInit {
   //secondFormGroup:FormGroup;
 
   private addressSubscription: Subscription;
-
   fieldRequired = FIELD_REQUIRED;
   nameError = INVALID_NAME_MESSAGE;
   emailError = INVALID_EMAIL_MESSAGE;

@@ -39,7 +39,7 @@
                 <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
                   {{designData.deliverydate | date: 'hh:mm a'}}
               </span> -->
-              <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;" 
+              <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
                     *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
               <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'declined'"  >On Hold</span>
 
@@ -63,7 +63,7 @@
       </p>
 
       <p style="margin:0px">
-          <span class="customer-email" 
+          <span class="customer-email"
                   routerDirection="forward">{{designData.email}}</span>
                   <span *ngIf="designData.isoverdue" class="latebystyle"><strong>Late by {{designData.lateby}}</strong></span>
                   <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
@@ -184,7 +184,6 @@
 
 
 </ion-content>
-[
 <ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false" [disableDrag]="true"
            [shouldBounce]="true" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
 <form [formGroup]="assignForm">
