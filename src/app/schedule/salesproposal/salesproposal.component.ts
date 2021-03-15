@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, resolveForwardRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, resolveForwardRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from 'src/app/model/assignee.model';
 import { SolarMake } from 'src/app/model/solar-make.model';
@@ -9,7 +9,7 @@ import { SolarMadeModel } from 'src/app/model/solar-made.model';
 import { InverterMakeModel } from 'src/app/model/inverter-make.model';
 import { NavController } from '@ionic/angular';
 import { InverterMadeModel } from 'src/app/model/inverter-made.model';
-import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE, INVALID_ANNUAL_UNIT, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_COMPANY_NAME, INVALID_MODULE_AND_INVERTER } from '../../model/constants';
+import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE, INVALID_ANNUAL_UNIT, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_COMPANY_NAME, INVALID_MODULE_AND_INVERTER, INVALID_ADDRESS } from '../../model/constants';
 import { Observable, Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute, Router, RoutesRecognized, NavigationEnd, NavigationExtras } from '@angular/router';
@@ -22,6 +22,8 @@ import { map, startWith } from "rxjs/operators";
 import { UtilityRates } from 'src/app/model/utilityrate.model';
 import { Incentive } from 'src/app/model/incentive.model';
 import { Utility } from 'src/app/model/utility.model';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import { AddressModel } from 'src/app/model/address.model';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFirestore} from '@angular/fire/firestore';
 
@@ -31,9 +33,6 @@ import { Utility } from 'src/app/model/utility.model';
   styleUrls: ['./salesproposal.component.scss'],
 })
 export class SalesproposalComponent implements OnInit {
-
-  //@ViewChild('fileInput',{static:false}) el: ElementRef;
-
   myControl = new FormControl();
     desginForm: FormGroup;
 
@@ -59,6 +58,7 @@ export class SalesproposalComponent implements OnInit {
   tiltforgroundError = INVALID_TILT_FOR_GROUND_MOUNT;
   companyError = INVALID_COMPANY_NAME;
   moduleAndInverterError = INVALID_MODULE_AND_INVERTER;
+  addressError = INVALID_ADDRESS;
 
   fieldRequired = FIELD_REQUIRED;
 
@@ -133,6 +133,21 @@ blob:Blob;
   uploadLogo: any;
   firstFormGroup: FormGroup;
 
+  formatted_address:string;
+
+  GoogleAutocomplete: google.maps.places.AutocompleteService;
+  autocompleteItems: any[];
+  map: any;
+
+  geoEncoderOptions: NativeGeocoderOptions = {
+    useLocale: true,
+    maxResults: 5
+  };
+
+  geocoder = new google.maps.Geocoder();
+  autoCompleteOff:boolean = false;
+  isSelectSearchResult:boolean = false;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -145,6 +160,8 @@ blob:Blob;
     private file: File,
     public router:Router,
     private cdr:ChangeDetectorRef,
+    private zone: NgZone,
+    private nativeGeocoder: NativeGeocoder,
     //private db: AngularFireDatabase
   ) {
     // this.utils.showHideIntercom(true);
@@ -521,32 +538,32 @@ blob:Blob;
           this.getInverterMade();
         });
       // }
-      this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-        // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      // this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+      //   // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-         this.desginForm.get('address').setValue('124/345');
-         this.desginForm.get('latitude').setValue('24.553333');
-         this.desginForm.get('longitude').setValue('80.5555555555');
-         this.desginForm.get('country').setValue('india');
-         this.desginForm.get('city').setValue('Lucknow');
-         this.desginForm.get('state').setValue('UP');
-         this.desginForm.get('postalcode').setValue(3232343);
-        //  this.desginForm.get('address').setValue(address.address);
-        //    this.desginForm.get('latitude').setValue(address.lat);
-        //    this.desginForm.get('longitude').setValue(address.long);
-        //    this.desginForm.get('country').setValue(address.country);
-        //  this.desginForm.get('city').setValue(address.city);
-        //    this.desginForm.get('state').setValue(address.state);
-        //    this.desginForm.get('postalcode').setValue(address.postalcode);
-      }, (error) => {
-        this.desginForm.get('address').setValue('');
-        this.desginForm.get('latitude').setValue('');
-        this.desginForm.get('longitude').setValue('');
-        this.desginForm.get('country').setValue('');
-        this.desginForm.get('city').setValue('');
-        this.desginForm.get('state').setValue('');
-        this.desginForm.get('postalcode').setValue('');
-      });
+      //    this.desginForm.get('address').setValue('124/345');
+      //    this.desginForm.get('latitude').setValue('24.553333');
+      //    this.desginForm.get('longitude').setValue('80.5555555555');
+      //    this.desginForm.get('country').setValue('india');
+      //    this.desginForm.get('city').setValue('Lucknow');
+      //    this.desginForm.get('state').setValue('UP');
+      //    this.desginForm.get('postalcode').setValue(3232343);
+      //   //  this.desginForm.get('address').setValue(address.address);
+      //   //    this.desginForm.get('latitude').setValue(address.lat);
+      //   //    this.desginForm.get('longitude').setValue(address.long);
+      //   //    this.desginForm.get('country').setValue(address.country);
+      //   //  this.desginForm.get('city').setValue(address.city);
+      //   //    this.desginForm.get('state').setValue(address.state);
+      //   //    this.desginForm.get('postalcode').setValue(address.postalcode);
+      // }, (error) => {
+      //   this.desginForm.get('address').setValue('');
+      //   this.desginForm.get('latitude').setValue('');
+      //   this.desginForm.get('longitude').setValue('');
+      //   this.desginForm.get('country').setValue('');
+      //   this.desginForm.get('city').setValue('');
+      //   this.desginForm.get('state').setValue('');
+      //   this.desginForm.get('postalcode').setValue('');
+      // });
       this.desginForm.patchValue({
         createdby: this.storage.getUserID()
       });
@@ -1906,4 +1923,165 @@ state: { productdetails: objToSend }
       this.color = 'danger';
     }
   }
+
+   //// For Address
+    /* FOR SEARCH SHIPPING ADDRESS */
+    updateSearchResults(event) {
+      //this.autoCompleteOff = true;
+      console.log(this.autoCompleteOff);
+      const input = event.detail.value;
+      console.log(input)
+      if (input === '') {
+        this.autocompleteItems = [];
+        return;
+      }
+      this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+        country: 'us'
+      }  },
+        (predictions, status) => {
+          this.autocompleteItems = [];
+          this.zone.run(() => {
+            predictions.forEach((prediction) => {
+              this.autocompleteItems.push(prediction);
+            });
+          });
+        });
+    }
+
+    forAutoComplete(e){
+      console.log("hello",e);
+      this.autoCompleteOff = true;
+
+    }
+
+  //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
+    selectSearchResult(item) {
+      console.log(item);
+      this.isSelectSearchResult = true;
+      this.geocoder.geocode({
+        placeId: item.place_id
+      }, (responses, status) => {
+        console.log('respo', responses);
+        this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
+      });
+      this.autocompleteItems = []
+    }
+
+    getGeoEncoder(latitude, longitude, formattedAddress) {
+
+      // // TODO remove later
+      // const address: AddressModel = {
+      //   address: 'Vasant Kunj, New Delhi, Delhi',
+      //   lat: 28.5200491,
+      //   long: 77.158687,
+      //   country: 'India',
+      //   state: 'Delhi',
+      //   city: 'New Delhi',
+      //   postalcode: '110070'
+      // };
+      // this.utilities.setAddress(address);
+      // this.goBack();
+      // return;
+
+      this.utils.showLoading('Loading').then(() => {
+        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+          .then((result: NativeGeocoderResult[]) => {
+            console.log(result)
+            let add = '';
+            if (formattedAddress === '') {
+              add = this.generateAddress(result[0]);
+            } else {
+              add = formattedAddress;
+            }
+            this.utils.hideLoading().then(() => {
+              console.log('resu', result);
+              const address: AddressModel = {
+                address: add,
+                lat: latitude,
+                long: longitude,
+                country: result[0].countryName,
+                state: result[0].administrativeArea,
+                city: result[0].locality,
+                postalcode: result[0].postalCode
+              };
+              this.utils.setAddress(address);
+              this.addressValue();
+              //this.goBack();
+            });
+
+          })
+          .catch((error: any) => {
+            this.utils.hideLoading().then(() => {
+              alert('Error getting location' + JSON.stringify(error));
+            });
+
+          });
+      });
+    }
+
+    generateAddress(addressObj) {
+      const obj = [];
+      let address = '';
+      for (const key in addressObj) {
+        obj.push(addressObj[key]);
+      }
+      obj.reverse();
+      for (const val in obj) {
+        if (obj[val].length) {
+          address += obj[val] + ', ';
+        }
+      }
+      return address.slice(0, -2);
+    }
+
+    onCancel() {
+      console.log("hello");
+      this.autocompleteItems = [];
+      console.log(this.autocompleteItems)
+    }
+
+    addressValue(){
+      // }
+      this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+          // this.firstFormGroup.get('address').setValue('124/345');
+          // this.firstFormGroup.get('latitude').setValue('24.553333');
+          // this.firstFormGroup.get('longitude').setValue('80.5555555555');
+          // this.firstFormGroup.get('country').setValue('india');
+          // this.firstFormGroup.get('city').setValue('Lucknow');
+          // this.firstFormGroup.get('state').setValue('UP');
+          // this.firstFormGroup.get('postalcode').setValue(3232343);
+         this.desginForm.get('address').setValue(address.address);
+           this.desginForm.get('latitude').setValue(address.lat);
+           this.desginForm.get('longitude').setValue(address.long);
+           this.desginForm.get('country').setValue(address.country);
+         this.desginForm.get('city').setValue(address.city);
+           this.desginForm.get('state').setValue(address.state);
+           this.desginForm.get('postalcode').setValue(address.postalcode);
+      }, (error) => {
+        this.desginForm.get('address').setValue('');
+        this.desginForm.get('latitude').setValue(null);
+        this.desginForm.get('longitude').setValue(null);
+        this.desginForm.get('country').setValue('');
+        this.desginForm.get('city').setValue('');
+        this.desginForm.get('state').setValue('');
+        this.desginForm.get('postalcode').setValue(null);
+      });
+      // this.firstFormGroup.patchValue({
+      //   createdby: this.storage.getUserID()
+      // });
+   // this.autocompleteItems = [];
+      this.autoCompleteOff = false;
+      console.log(this.autoCompleteOff);
+      //this.getSolarMake();
+
+      }
+
+      onBlur()
+      {
+        setTimeout(() => {
+          this.autocompleteItems = [];
+        }, 100);
+      }
 }

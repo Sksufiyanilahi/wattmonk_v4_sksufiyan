@@ -226,6 +226,8 @@ servicecharges(){
         this.servicePrice.forEach(element => {
           this.settingValue = element.settingvalue;
         });
+        
+        this.discountAmount();
       })
     }
     else{

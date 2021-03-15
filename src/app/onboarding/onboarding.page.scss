@@ -1,6 +1,6 @@
 .margin{
     margin-top: 0px;
-    
+
 }
 .font{
   font-size: 10px;
@@ -21,7 +21,7 @@ ion-radio{
 
 ::ng-deep.mat-step-header .mat-step-label.mat-step-label-active {
   color: rgba(0,0,0,.87) !important;
-  font-size: large !important; 
+  font-size: large !important;
 }
 
 // .card-content{
@@ -48,7 +48,7 @@ ion-radio{
   .mat-stepper-horizontal {
     margin-top: 8px;
   }
-  
+
   .mat-form-field {
     margin-top: 16px;
   }
@@ -69,4 +69,9 @@ ion-radio{
     margin-top: 0px;
     margin-right: 10px;
     margin-bottom: 0px;
+  }
+
+  .alignment{
+    margin-top: 0.3rem;
+    font: -webkit-small-control;
   }

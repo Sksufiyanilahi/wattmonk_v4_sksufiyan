@@ -84,6 +84,7 @@ export class DesginDataModel {
   created_at: Date;
   updated_at: Date;
   address: string;
+  company: any;
   rooftype: string;
   jobtype: string;
   newconstruction: any;
@@ -141,7 +142,6 @@ export class DesginDataModel {
   personname : string;
   companylogo : any;
   tiltgroundmount:string;
-  company:string;
 }
 
 export class PrelimDesign{

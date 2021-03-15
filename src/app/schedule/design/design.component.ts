@@ -155,6 +155,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     const NUMBERPATTERN = '^[0-9]*$';
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
+    const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
     this.desginForm = this.formBuilder.group({
       companyname: new FormControl(''),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
@@ -165,7 +166,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       invertermodel: new FormControl('', [Validators.required]),
       monthlybill: new FormControl('',[Validators.required,Validators.min(0),Validators.pattern(NUMBERPATTERN)]),
       //address: new FormControl('',[Validators.required]),
-      address: new FormControl('',[Validators.required]),
+      address: new FormControl('',[Validators.required,Validators.pattern(ADDRESSFORMAT)]),
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
       rooftype: new FormControl(''),
@@ -1425,6 +1426,7 @@ state: { productdetails: objToSend }
         console.log('respo', responses);
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
       });
+      this.autocompleteItems = []
     }
 
     getGeoEncoder(latitude, longitude, formattedAddress) {
@@ -1512,7 +1514,6 @@ state: { productdetails: objToSend }
           // this.firstFormGroup.get('city').setValue('Lucknow');
           // this.firstFormGroup.get('state').setValue('UP');
           // this.firstFormGroup.get('postalcode').setValue(3232343);
-          debugger;
          this.desginForm.get('address').setValue(address.address);
            this.desginForm.get('latitude').setValue(address.lat);
            this.desginForm.get('longitude').setValue(address.long);

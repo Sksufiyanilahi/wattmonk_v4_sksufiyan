@@ -467,7 +467,8 @@ this.network.networkConnect();
   //   });
   // }
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -668,16 +669,38 @@ pending(value){
   }
 }
 
+
+gotoActivity(designData,event){
+  console.log(event)
+      event.stopPropagation();
+    this.router.navigate(['/activity' + '/' + designData.id + '/design'])
+  
+  }
+  
+  gotoDetails(designData,$event){
+    // $event.preventDefault();
+    // $event.stopPropagation();
+    this.router.navigate(['/design-details/' + designData.id])
+  }
+
+  gotoChats(designData,event){
+    event.stopPropagation();
+    this.router.navigate(['/chat/' + designData.chatid])
+  }
+
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
 
 }
 
-shareWhatsapp(designData){
+shareWhatsapp(designData,event){
+  event.stopPropagation();
   this.socialsharing.share(designData.prelimdesign.url);
 }
 
- async shareViaEmails(id,designData){
+
+ async shareViaEmails(id,designData,event){
+   event.stopPropagation();
   const modal = await this.modalController.create({
     component: EmailModelPage,
     cssClass: 'email-modal-css',

@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
 import { AssigneeModel } from '../model/assignee.model';
-import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent, INVALID_MODULE_AND_INVERTER, INVALID_COMPANY_NAME } from '../model/constants';
+import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent, INVALID_MODULE_AND_INVERTER, INVALID_COMPANY_NAME, INVALID_ADDRESS } from '../model/constants';
 import { DesginDataModel } from '../model/design.model';
 import { Invertermake } from '../model/inverter-made.model';
 import { InverterMakeModel } from '../model/inverter-make.model';
@@ -83,6 +83,7 @@ export class PermitschedulePage implements OnInit {
   phoneError = INVALID_PHONE_NUMBER;
   moduleAndInverterError = INVALID_MODULE_AND_INVERTER;
   companyError = INVALID_COMPANY_NAME;
+  addressError = INVALID_ADDRESS;
 
   fieldRequired = FIELD_REQUIRED;
 
@@ -118,11 +119,6 @@ export class PermitschedulePage implements OnInit {
 
   solarMakeDisposable: Subscription;
 
-   // Geocoder configuration
-   geoEncoderOptions: NativeGeocoderOptions = {
-    useLocale: true,
-    maxResults: 5
-  };
   architecturalFileUpload: boolean= false;
   attachmentFileUpload: boolean= false;
   netSwitch: any;
@@ -131,6 +127,21 @@ export class PermitschedulePage implements OnInit {
   // newpermits: Observable<any>;
   // newpermitsRef: AngularFireObject<any>;
   // newpermitscount = 0;
+
+  formatted_address:string;
+
+  GoogleAutocomplete: google.maps.places.AutocompleteService;
+  autocompleteItems: any[];
+  map: any;
+
+  geoEncoderOptions: NativeGeocoderOptions = {
+    useLocale: true,
+    maxResults: 5
+  };
+
+  geocoder = new google.maps.Geocoder();
+  autoCompleteOff:boolean = false;
+  isSelectSearchResult:boolean = false;
 
 
 
@@ -149,7 +160,8 @@ export class PermitschedulePage implements OnInit {
 
     private cdr:ChangeDetectorRef,
     private network:NetworkdetectService,
-    private mixpanelService:MixpanelService
+    private mixpanelService:MixpanelService,
+    private zone: NgZone,
     //private db:AngularFireDatabase
     //private data: DesignFormData
     ) {
@@ -255,7 +267,7 @@ export class PermitschedulePage implements OnInit {
     this.fieldDisabled=false;
     this.userdata = this.storage.getUser();
     console.log(this.userdata)
-    this.requestLocationPermission();
+    //this.requestLocationPermission();
     if (this.designId!=0) {
       this.tabsDisabled=true;
       this.subscription = this.utils.getStaticAddress().subscribe((address) => {
@@ -303,6 +315,9 @@ export class PermitschedulePage implements OnInit {
     }
     else{
       this.addressValue();
+    this.desginForm.patchValue({
+      createdby: this.storage.getUserID()
+    });
     }
 
     setTimeout(()=>{
@@ -597,40 +612,38 @@ export class PermitschedulePage implements OnInit {
   }
 
 
-  addressValue(){
+  // addressValue(){
+  // // }
+  // this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+  //   console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+  //     // this.desginForm.get('address').setValue('124/345');
+  //     // this.desginForm.get('latitude').setValue('24.553333');
+  //     // this.desginForm.get('longitude').setValue('80.5555555555');
+  //     // this.desginForm.get('country').setValue('india');
+  //     // this.desginForm.get('city').setValue('Lucknow');
+  //     // this.desginForm.get('state').setValue('UP');
+  //     // this.desginForm.get('postalcode').setValue(3232343);
+  //    this.desginForm.get('address').setValue(address.address);
+  //      this.desginForm.get('latitude').setValue(address.lat);
+  //      this.desginForm.get('longitude').setValue(address.long);
+  //      this.desginForm.get('country').setValue(address.country);
+  //    this.desginForm.get('city').setValue(address.city);
+  //      this.desginForm.get('state').setValue(address.state);
+  //      this.desginForm.get('postalcode').setValue(address.postalcode);
+  // }, (error) => {
+  //   this.desginForm.get('address').setValue('');
+  //   this.desginForm.get('latitude').setValue('');
+  //   this.desginForm.get('longitude').setValue('');
+  //   this.desginForm.get('country').setValue('');
+  //   this.desginForm.get('city').setValue('');
+  //   this.desginForm.get('state').setValue('');
+  //   this.desginForm.get('postalcode').setValue('');
+  // });
+ 
+  // //this.getSolarMake();
+
   // }
-  this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-    console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
-      // this.desginForm.get('address').setValue('124/345');
-      // this.desginForm.get('latitude').setValue('24.553333');
-      // this.desginForm.get('longitude').setValue('80.5555555555');
-      // this.desginForm.get('country').setValue('india');
-      // this.desginForm.get('city').setValue('Lucknow');
-      // this.desginForm.get('state').setValue('UP');
-      // this.desginForm.get('postalcode').setValue(3232343);
-     this.desginForm.get('address').setValue(address.address);
-       this.desginForm.get('latitude').setValue(address.lat);
-       this.desginForm.get('longitude').setValue(address.long);
-       this.desginForm.get('country').setValue(address.country);
-     this.desginForm.get('city').setValue(address.city);
-       this.desginForm.get('state').setValue(address.state);
-       this.desginForm.get('postalcode').setValue(address.postalcode);
-  }, (error) => {
-    this.desginForm.get('address').setValue('');
-    this.desginForm.get('latitude').setValue('');
-    this.desginForm.get('longitude').setValue('');
-    this.desginForm.get('country').setValue('');
-    this.desginForm.get('city').setValue('');
-    this.desginForm.get('state').setValue('');
-    this.desginForm.get('postalcode').setValue('');
-  });
-  this.desginForm.patchValue({
-    createdby: this.storage.getUserID()
-  });
-  //this.getSolarMake();
-
-  }
   getDesignDetails() {
 
     this.utils.showLoading('Getting Design Details').then(() => {
@@ -1704,243 +1717,243 @@ else{
     //   this.tabs.select(event.detail.value);
     // }
 
-    getGeoLocation() {
-      // this.utilities.showLoading('Getting Location').then(()=>{
-            // setTimeout(()=>{
-            //   this.utilities.hideLoading();
-            // },1000)
-        this.geolocation.getCurrentPosition().then((resp) => {
-          this.utils.hideLoading();
-          // .then(()=>{
-            console.log('resp',resp);
-            this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
-            this.utils.hideLoading();
-          // });
-        },err=>{
-          this.utils.hideLoading();
-          this.utils.errorSnackBar('Unable to get location');
-        }).catch((error) => {
-          this.utils.hideLoading();
-          this.utils.errorSnackBar('Unable to get location');
+    // getGeoLocation() {
+    //   // this.utilities.showLoading('Getting Location').then(()=>{
+    //         // setTimeout(()=>{
+    //         //   this.utilities.hideLoading();
+    //         // },1000)
+    //     this.geolocation.getCurrentPosition().then((resp) => {
+    //       this.utils.hideLoading();
+    //       // .then(()=>{
+    //         console.log('resp',resp);
+    //         this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
+    //         this.utils.hideLoading();
+    //       // });
+    //     },err=>{
+    //       this.utils.hideLoading();
+    //       this.utils.errorSnackBar('Unable to get location');
+    //     }).catch((error) => {
+    //       this.utils.hideLoading();
+    //       this.utils.errorSnackBar('Unable to get location');
 
-          console.log('Error getting location', error);
-          this.showNoLocation();
-        });
-      // },err=>{
-      //   this.utilities.hideLoading();
-      // });
-    }
+    //       console.log('Error getting location', error);
+    //       this.showNoLocation();
+    //     });
+    //   // },err=>{
+    //   //   this.utilities.hideLoading();
+    //   // });
+    // }
 
-    async  showNoLocation() {
-      const toast = await this.toastController.create({
-        header: 'Error',
-        message: 'Unable to get location',
-        cssClass: 'my-custom-class',
-        buttons: [
-          {
-            text: 'OK',
-            handler: () => {
-              this.goBack();
-            }
-          }
-        ]
-      });
-      toast.present();
-    }
-
-
-
-    async showLocationDenied() {
-      const toast = await this.toastController.create({
-        header: 'Error',
-        message: 'Location services denied, please enable them manually',
-        cssClass: 'my-custom-class',
-        buttons: [
-          {
-            text: 'OK',
-            handler: () => {
-              this.goBack();
-            }
-          }
-        ]
-      });
-      toast.present();
-    }
+    // async  showNoLocation() {
+    //   const toast = await this.toastController.create({
+    //     header: 'Error',
+    //     message: 'Unable to get location',
+    //     cssClass: 'my-custom-class',
+    //     buttons: [
+    //       {
+    //         text: 'OK',
+    //         handler: () => {
+    //           this.goBack();
+    //         }
+    //       }
+    //     ]
+    //   });
+    //   toast.present();
+    // }
 
 
-    getGeoEncoder(latitude, longitude) {
-      // this.utilities.hideLoading().then((success) => {
-            this.utils.showLoading('Getting Location').then(()=>{
-        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
-        .then((result: NativeGeocoderResult[]) => {
-          console.log(result);
-          this.utils.hideLoading();
-              const address: AddressModel = {
-                address: this.generateAddress(result[0]),
-                lat: latitude,
-                long: longitude,
-                country:result[0].countryName,
-                state: result[0].administrativeArea,
-                city:result[0].locality,
-                postalcode:result[0].postalCode
-              };
-              this.utils.setAddress(address);
-            })
-            .catch((error: any) => {
-              this.showNoLocation();
-              this.utils.hideLoading();
-              alert('Error getting location' + JSON.stringify(error));
-            });
-          });
-        // }, (error) => {
 
-        // }
-      // );
-    }
+    // async showLocationDenied() {
+    //   const toast = await this.toastController.create({
+    //     header: 'Error',
+    //     message: 'Location services denied, please enable them manually',
+    //     cssClass: 'my-custom-class',
+    //     buttons: [
+    //       {
+    //         text: 'OK',
+    //         handler: () => {
+    //           this.goBack();
+    //         }
+    //       }
+    //     ]
+    //   });
+    //   toast.present();
+    // }
 
-    generateAddress(addressObj) {
-      const obj = [];
-      let address = '';
-      for (const key in addressObj) {
-        obj.push(addressObj[key]);
-      }
-      obj.reverse();
-      for (const val in obj) {
-        if (obj[val].length) {
-          address += obj[val] + ', ';
-        }
-      }
-      return address.slice(0, -2);
-    }
 
-    requestLocationPermission() {
-      this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
-        console.log(mode);
-        switch (mode) {
-          case this.diagnostic.permissionStatus.NOT_REQUESTED:
-            this.goBack();
-            break;
-          case this.diagnostic.permissionStatus.DENIED_ALWAYS:
-            this.showLocationDenied();
-            break;
-          case this.diagnostic.permissionStatus.DENIED_ONCE:
-            this.goBack();
-            break;
-          case this.diagnostic.permissionStatus.GRANTED:
-            this.fetchLocation();
-            break;
-          case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-            this.fetchLocation();
-            break;
-          case 'authorized_when_in_use':
-            this.fetchLocation();
-            break;
-        }
-      }, (rejection) => {
-        console.log(rejection);
-        // this.goBack();
-      });
+    // getGeoEncoder(latitude, longitude) {
+    //   // this.utilities.hideLoading().then((success) => {
+    //         this.utils.showLoading('Getting Location').then(()=>{
+    //     this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+    //     .then((result: NativeGeocoderResult[]) => {
+    //       console.log(result);
+    //       this.utils.hideLoading();
+    //           const address: AddressModel = {
+    //             address: this.generateAddress(result[0]),
+    //             lat: latitude,
+    //             long: longitude,
+    //             country:result[0].countryName,
+    //             state: result[0].administrativeArea,
+    //             city:result[0].locality,
+    //             postalcode:result[0].postalCode
+    //           };
+    //           this.utils.setAddress(address);
+    //         })
+    //         .catch((error: any) => {
+    //           this.showNoLocation();
+    //           this.utils.hideLoading();
+    //           alert('Error getting location' + JSON.stringify(error));
+    //         });
+    //       });
+    //     // }, (error) => {
 
-      // if (this.platform.is('ios')) {
-      //   if (this.storage.isLocationAllowedOnIOS()) {
-      //     this.fetchLocation();
-      //   } else {
-      //     if (!this.storage.isLocationCheckedOnIOS()) {
-      //       this.storage.setLocationCheckedOnIOS(true);
-      //       this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
-      //         switch (mode) {
-      //           case this.diagnostic.permissionStatus.NOT_REQUESTED:
-      //             this.storage.setLocationAllowedOnIOS(false);
-      //             break;
-      //           case this.diagnostic.permissionStatus.DENIED_ALWAYS:
-      //             this.storage.setLocationAllowedOnIOS(false);
-      //             break;
-      //           case this.diagnostic.permissionStatus.GRANTED:
-      //             this.storage.setLocationAllowedOnIOS(true);
-      //             this.fetchLocation();
-      //             break;
-      //           case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-      //             this.storage.setLocationAllowedOnIOS(true);
-      //             this.fetchLocation();
-      //             break;
-      //           case 'authorized_when_in_use':
-      //             this.storage.setLocationAllowedOnIOS(true);
-      //             this.fetchLocation();
-      //             break;
-      //         }
-      //       }, (rejection) => {
-      //         this.locationAllowed = false;
-      //         this.storage.setLocationAllowedOnIOS(false);
-      //       });
-      //     }
-      //   }
-      // } else {
-      //
-      // }
+    //     // }
+    //   // );
+    // }
 
-    }
+    // generateAddress(addressObj) {
+    //   const obj = [];
+    //   let address = '';
+    //   for (const key in addressObj) {
+    //     obj.push(addressObj[key]);
+    //   }
+    //   obj.reverse();
+    //   for (const val in obj) {
+    //     if (obj[val].length) {
+    //       address += obj[val] + ', ';
+    //     }
+    //   }
+    //   return address.slice(0, -2);
+    // }
 
-    fetchLocation() {
-      if (this.platform.is('ios')) {
-        this.getGeoLocation();
-      } else {
-        this.diagnostic.isGpsLocationEnabled().then((status) => {
-          if (status === true) {
-            this.getGeoLocation();
-            // this.utilities.showLoading('Getting Location').then(() => {
+    // requestLocationPermission() {
+    //   this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
+    //     console.log(mode);
+    //     switch (mode) {
+    //       case this.diagnostic.permissionStatus.NOT_REQUESTED:
+    //         this.goBack();
+    //         break;
+    //       case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+    //         this.showLocationDenied();
+    //         break;
+    //       case this.diagnostic.permissionStatus.DENIED_ONCE:
+    //         this.goBack();
+    //         break;
+    //       case this.diagnostic.permissionStatus.GRANTED:
+    //         this.fetchLocation();
+    //         break;
+    //       case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+    //         this.fetchLocation();
+    //         break;
+    //       case 'authorized_when_in_use':
+    //         this.fetchLocation();
+    //         break;
+    //     }
+    //   }, (rejection) => {
+    //     console.log(rejection);
+    //     // this.goBack();
+    //   });
 
-            // });
-          } else {
-            this.askToChangeSettings();
-          }
-        });
-      }
+    //   // if (this.platform.is('ios')) {
+    //   //   if (this.storage.isLocationAllowedOnIOS()) {
+    //   //     this.fetchLocation();
+    //   //   } else {
+    //   //     if (!this.storage.isLocationCheckedOnIOS()) {
+    //   //       this.storage.setLocationCheckedOnIOS(true);
+    //   //       this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
+    //   //         switch (mode) {
+    //   //           case this.diagnostic.permissionStatus.NOT_REQUESTED:
+    //   //             this.storage.setLocationAllowedOnIOS(false);
+    //   //             break;
+    //   //           case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+    //   //             this.storage.setLocationAllowedOnIOS(false);
+    //   //             break;
+    //   //           case this.diagnostic.permissionStatus.GRANTED:
+    //   //             this.storage.setLocationAllowedOnIOS(true);
+    //   //             this.fetchLocation();
+    //   //             break;
+    //   //           case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+    //   //             this.storage.setLocationAllowedOnIOS(true);
+    //   //             this.fetchLocation();
+    //   //             break;
+    //   //           case 'authorized_when_in_use':
+    //   //             this.storage.setLocationAllowedOnIOS(true);
+    //   //             this.fetchLocation();
+    //   //             break;
+    //   //         }
+    //   //       }, (rejection) => {
+    //   //         this.locationAllowed = false;
+    //   //         this.storage.setLocationAllowedOnIOS(false);
+    //   //       });
+    //   //     }
+    //   //   }
+    //   // } else {
+    //   //
+    //   // }
 
-    }
+    // }
 
-    async askToChangeSettings() {
-      const toast = await this.toastController.create({
-        header: 'Location Disabled',
-        message: 'Please enable location services',
-        cssClass: 'my-custom-class',
-        buttons: [
-          {
-            text: 'OK',
-            handler: () => {
-              this.changeLocationSettings();
-            }
-          }, {
-            text: 'Cancel',
-            handler: () => {
-              this.goBack();
-            }
-          }
-        ]
-      });
-      toast.present();
-    }
+    // fetchLocation() {
+    //   if (this.platform.is('ios')) {
+    //     this.getGeoLocation();
+    //   } else {
+    //     this.diagnostic.isGpsLocationEnabled().then((status) => {
+    //       if (status === true) {
+    //         this.getGeoLocation();
+    //         // this.utilities.showLoading('Getting Location').then(() => {
 
-    changeLocationSettings() {
-      this.diagnostic.switchToLocationSettings();
-      this.diagnostic.registerLocationStateChangeHandler((state) => {
-        if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) ||
-          (this.platform.is('ios')) && (state === this.diagnostic.permissionStatus.GRANTED ||
-            state === this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE
-          )) {
-          this.checkLocationAccess();
-        }
+    //         // });
+    //       } else {
+    //         this.askToChangeSettings();
+    //       }
+    //     });
+    //   }
 
-      });
-    }
+    // }
 
-    checkLocationAccess() {
-      this.diagnostic.isLocationAuthorized().then((success) => {
-        this.fetchLocation();
-      }, (error) => {
-        this.utils.showSnackBar('GPS Not Allowed');
-      });
+    // async askToChangeSettings() {
+    //   const toast = await this.toastController.create({
+    //     header: 'Location Disabled',
+    //     message: 'Please enable location services',
+    //     cssClass: 'my-custom-class',
+    //     buttons: [
+    //       {
+    //         text: 'OK',
+    //         handler: () => {
+    //           this.changeLocationSettings();
+    //         }
+    //       }, {
+    //         text: 'Cancel',
+    //         handler: () => {
+    //           this.goBack();
+    //         }
+    //       }
+    //     ]
+    //   });
+    //   toast.present();
+    // }
 
-    }
+    // changeLocationSettings() {
+    //   this.diagnostic.switchToLocationSettings();
+    //   this.diagnostic.registerLocationStateChangeHandler((state) => {
+    //     if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) ||
+    //       (this.platform.is('ios')) && (state === this.diagnostic.permissionStatus.GRANTED ||
+    //         state === this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE
+    //       )) {
+    //       this.checkLocationAccess();
+    //     }
+
+    //   });
+    // }
+
+    // checkLocationAccess() {
+    //   this.diagnostic.isLocationAuthorized().then((success) => {
+    //     this.fetchLocation();
+    //   }, (error) => {
+    //     this.utils.showSnackBar('GPS Not Allowed');
+    //   });
+
+    // }
 
     ionViewWillLeave(){
     }
@@ -1999,5 +2012,166 @@ else{
         company => company.companyname.toLowerCase().indexOf(companyname) != -1
       );
     }
+
+     //// For Address
+    /* FOR SEARCH SHIPPING ADDRESS */
+    updateSearchResults(event) {
+      //this.autoCompleteOff = true;
+      console.log(this.autoCompleteOff);
+      const input = event.detail.value;
+      console.log(input)
+      if (input === '') {
+        this.autocompleteItems = [];
+        return;
+      }
+      this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+        country: 'us'
+      }  },
+        (predictions, status) => {
+          this.autocompleteItems = [];
+          this.zone.run(() => {
+            predictions.forEach((prediction) => {
+              this.autocompleteItems.push(prediction);
+            });
+          });
+        });
+    }
+
+    forAutoComplete(e){
+      console.log("hello",e);
+      this.autoCompleteOff = true;
+
+    }
+
+  //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
+    selectSearchResult(item) {
+      console.log(item);
+      this.isSelectSearchResult = true;
+      this.geocoder.geocode({
+        placeId: item.place_id
+      }, (responses, status) => {
+        console.log('respo', responses);
+        this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
+      });
+      this.autocompleteItems = []
+    }
+
+    getGeoEncoder(latitude, longitude, formattedAddress) {
+
+      // // TODO remove later
+      // const address: AddressModel = {
+      //   address: 'Vasant Kunj, New Delhi, Delhi',
+      //   lat: 28.5200491,
+      //   long: 77.158687,
+      //   country: 'India',
+      //   state: 'Delhi',
+      //   city: 'New Delhi',
+      //   postalcode: '110070'
+      // };
+      // this.utilities.setAddress(address);
+      // this.goBack();
+      // return;
+
+      this.utils.showLoading('Loading').then(() => {
+        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+          .then((result: NativeGeocoderResult[]) => {
+            console.log(result)
+            let add = '';
+            if (formattedAddress === '') {
+              add = this.generateAddress(result[0]);
+            } else {
+              add = formattedAddress;
+            }
+            this.utils.hideLoading().then(() => {
+              console.log('resu', result);
+              const address: AddressModel = {
+                address: add,
+                lat: latitude,
+                long: longitude,
+                country: result[0].countryName,
+                state: result[0].administrativeArea,
+                city: result[0].locality,
+                postalcode: result[0].postalCode
+              };
+              this.utils.setAddress(address);
+              this.addressValue();
+              //this.goBack();
+            });
+
+          })
+          .catch((error: any) => {
+            this.utils.hideLoading().then(() => {
+              alert('Error getting location' + JSON.stringify(error));
+            });
+
+          });
+      });
+    }
+
+    generateAddress(addressObj) {
+      const obj = [];
+      let address = '';
+      for (const key in addressObj) {
+        obj.push(addressObj[key]);
+      }
+      obj.reverse();
+      for (const val in obj) {
+        if (obj[val].length) {
+          address += obj[val] + ', ';
+        }
+      }
+      return address.slice(0, -2);
+    }
+
+    onCancel() {
+      console.log("hello");
+      this.autocompleteItems = [];
+      console.log(this.autocompleteItems)
+    }
+
+    addressValue(){
+      // }
+      this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+          // this.firstFormGroup.get('address').setValue('124/345');
+          // this.firstFormGroup.get('latitude').setValue('24.553333');
+          // this.firstFormGroup.get('longitude').setValue('80.5555555555');
+          // this.firstFormGroup.get('country').setValue('india');
+          // this.firstFormGroup.get('city').setValue('Lucknow');
+          // this.firstFormGroup.get('state').setValue('UP');
+          // this.firstFormGroup.get('postalcode').setValue(3232343);
+         this.desginForm.get('address').setValue(address.address);
+           this.desginForm.get('latitude').setValue(address.lat);
+           this.desginForm.get('longitude').setValue(address.long);
+           this.desginForm.get('country').setValue(address.country);
+         this.desginForm.get('city').setValue(address.city);
+           this.desginForm.get('state').setValue(address.state);
+           this.desginForm.get('postalcode').setValue(address.postalcode);
+      }, (error) => {
+        this.desginForm.get('address').setValue('');
+        this.desginForm.get('latitude').setValue(null);
+        this.desginForm.get('longitude').setValue(null);
+        this.desginForm.get('country').setValue('');
+        this.desginForm.get('city').setValue('');
+        this.desginForm.get('state').setValue('');
+        this.desginForm.get('postalcode').setValue(null);
+      });
+      // this.firstFormGroup.patchValue({
+      //   createdby: this.storage.getUserID()
+      // });
+   // this.autocompleteItems = [];
+      this.autoCompleteOff = false;
+      console.log(this.autoCompleteOff);
+      //this.getSolarMake();
+
+      }
+
+      onBlur()
+      {
+        setTimeout(() => {
+          this.autocompleteItems = [];
+        }, 100);
+      }
 
 }
