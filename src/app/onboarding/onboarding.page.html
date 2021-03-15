@@ -151,10 +151,12 @@
 
                   <div *ngIf="logo !=null && logo !=''" class="avatar-upload" style="text-align: center;">
                       <img [src]=logo height="100px" width="100px" />
+                      <ion-icon name="close-circle-outline" class="logo" (click)="removeLogo($event)"></ion-icon>
                 </div>
 
             <!-- </ion-item> -->
         </ion-col>
+
     </ion-row>
     <!-- <ion-row *ngIf="isCompany">
       <ion-col>
@@ -261,7 +263,7 @@
 
     </form>
     <div>
-      <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext>Next</button>
+      <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;"  matStepperNext>Next</button>
       <!-- <ion-button (click)="secondStepper()" fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
       <!-- <button  class="action-button-color" mat-button matStepperNext style="float: right;">Next</button> -->
       <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
@@ -361,6 +363,12 @@
           <ion-item lines="none">
             <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Design Manager</ion-label>
             <ion-radio slot="start"  value="3" ></ion-radio>
+          </ion-item>
+        </ion-col>
+        <ion-col size="auto">
+          <ion-item lines="none">
+            <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Surveyor</ion-label>
+            <ion-radio slot="start"  value="" ></ion-radio>
           </ion-item>
         </ion-col>
         </ion-row>

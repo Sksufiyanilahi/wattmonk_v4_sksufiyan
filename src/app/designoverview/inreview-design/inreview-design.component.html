@@ -16,32 +16,32 @@
                 </span>
         </ion-col> -->
         <ion-col *ngFor="let designData of item.listOfDesigns;let i = index;trackBy: trackdesign " size="12">
-            <div class="ion-no-padding custom-card" style="height: 100%;" (click)="gotoDetails(designdata,$event)">
+            <div class="ion-no-padding custom-card" style="height: 100%;" (click)="gotoDetails(designData,$event)">
                 <p class="customer-name" >{{designData.name}}
                       <!-- <span class="chipdetail" style="background-color: #1289A7;"  routerDirection="forward">
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
-                    <span 
+                    <span
                     routerDirection="forward" class="chipdetail" style="background-color: #1289A7;" *ngIf="designData.status == 'reviewassigned'">In Review</span>
-                   
-                    <span 
+
+                    <span
                     routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue">Overdue</span>
                     <span  routerDirection="forward" class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'">Review Failed</span>
                     <span  routerDirection="forward" class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'"> Review Passed</span>
                     <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  >Revision</span>
                     <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
                     *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
-                    <span fill="clear" background-border="clear" class="imagebutton"  size="small" (click)="gotoActivity(designData,$event)" ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span> 
+                    <span fill="clear" background-border="clear" class="imagebutton"  size="small" (click)="gotoActivity(designData,$event)" ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
                     <ng-container *ngIf="designData?.chatid!==null && designData?.addedtogroupchat">
                         <span fill="clear" background-border="clear" (click)="gotoChats(designData,$event)" class="chatbutton"  size="small"  ><img  style= "height:20px" src="assets/images/chat.svg" /></span>
-                      </ng-container> 
+                      </ng-container>
                 </p>
-               <p style="margin: 0px;"> <span class="customer-email" 
+               <p style="margin: 0px;"> <span class="customer-email"
                       routerDirection="forward" *ngIf="user.designertype!='external'">{{designData.email}}</span>
                       <span *ngIf="designData.isoverdue" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{item.lateby}}</strong></span>
-                   
+
             </p>
-            
+
                        <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone" *ngIf="user.designertype!='external'">{{designData.phonenumber}}</span></a>
                 <span style="margin:0px" class="customer-address z-100"
@@ -50,7 +50,7 @@
                 <ion-row style="margin-bottom: 8px;"  >
                     <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
                     <span class="chipdetail" style="background-color: #95afc0;" >{{designData.source}}</span>
-                      
+
                 </ion-row>
                 <ion-row class="ion-no-margin ion-no-margin" *ngIf="designData.status == 'reviewfailed'">
                     <ion-col></ion-col>
@@ -83,5 +83,5 @@
      >
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
- 
+
 </ion-content>

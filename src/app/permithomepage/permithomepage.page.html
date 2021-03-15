@@ -15,16 +15,16 @@
           <!-- <ion-col *ngIf="showSearchBar === true" >
               <ion-searchbar debounce="0" placeholder="home" class="custom"></ion-searchbar>
           </ion-col> -->
+          <ion-col size="auto"  *ngIf="showFooter">
+            <div class="notification-padding" (click)="scheduledPage()">
+                <ion-icon name="add-circle" style="font-size: 24px;"></ion-icon>
+            </div>
+        </ion-col>
           <ion-col size="auto" >
               <div class="notification-padding" (click)="searchbar()">
                   <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
               </div>
           </ion-col>
-          <ion-col size="auto"  *ngIf="showFooter">
-            <div class="notification-padding" (click)="scheduledPage()">
-                <ion-icon name="add-circle"></ion-icon>
-            </div>
-        </ion-col>
           <ion-col size="auto" style="position: relative;">
               <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward" (click)="setzero()">
                   <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>

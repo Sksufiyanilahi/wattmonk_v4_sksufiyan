@@ -5,7 +5,7 @@ import { User } from '../model/user.model';
 import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_COMPANY_NAME, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_PHONE_NUMBER, INVALID_REGISTRATION_NUMBER } from '../model/constants';
 import { MenuController, NavController } from '@ionic/angular';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { ActivationStart, NavigationExtras, Router, RouterOutlet } from '@angular/router';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
@@ -19,7 +19,7 @@ import { ErrorModel } from '../model/error.model';
   styleUrls: ['./onboarding.page.scss'],
 })
 export class OnboardingPage implements OnInit {
-
+  @ViewChild(RouterOutlet) outlet: RouterOutlet;
   @ViewChild('stepper',{static:true}) stepper: MatStepper;
   @ViewChild('fileInput',{static:false}) el: ElementRef;
   notification:any={
@@ -73,53 +73,58 @@ export class OnboardingPage implements OnInit {
               private utils: UtilitiesService,
               private navCtrl:NavController,
               private cd:ChangeDetectorRef,) {
-                const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
-                const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
-                this.firstFormGroup = this.formBuilder.group({
-                  usertype : new FormControl(null),
-                  billingaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
-                  phone:new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
-                  //companyaddresssameasbilling:new FormControl(''),
-                  companyaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
-                  company:new FormControl(null, [Validators.required,Validators.minLength(3), Validators.pattern(COMPANYFORMAT)]),
-                  ispaymentmodeprepay:new FormControl(null),
-                  // logo:new FormControl(null, [Validators.required]),
-                  registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9-]*')]),
-                  isonboardingcompleted: new FormControl(true)
-                })
-                this.secondFormGroup = this.formBuilder.group({
-                  //For Emails
-                    designcompletedemail:new FormControl(false),
-                    designdeliveredemail:new FormControl(false),
-                    designmovedtoqcemail:new FormControl(false),
-                    designonholdemail:new FormControl(false),
-                    designreviewfailedemail:new FormControl(false),
-                    designreviewpassedemail:new FormControl(false),
-                    requestgeneratedemail:new FormControl(false),
-                    requestacknowledgementemail:new FormControl(false),
-                    requestindesigningemail:new FormControl(false),
-                  //For Notifications
-                    designcompletednotification:new FormControl(false),
-                    designdeliverednotification:new FormControl(false),
-                    designmovedtoqcnotification:new FormControl(false),
-                    designonholdnotification:new FormControl(false),
-                    designreviewfailednotification:new FormControl(false),
-                    designreviewpassednotification:new FormControl(false),
-                    requestgeneratednotification:new FormControl(false),
-                    requestacknowledgementnotification:new FormControl(false),
-                    requestindesigningnotification:new FormControl(false)
-                })
-                const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
-                const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
-                this.thirdFormGroup = this.formBuilder.group({
-                  firstname : new FormControl('',[Validators.required, Validators.pattern(NAMEPATTERN)]),
-                  lastname : new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
-                  workemail : new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
-                  userrole : new FormControl('')
-                })
+
                }
 
   ngOnInit() {
+    const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
+    const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
+    this.firstFormGroup = this.formBuilder.group({
+      usertype : new FormControl(null),
+      billingaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
+      phone:new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
+      //companyaddresssameasbilling:new FormControl(''),
+      companyaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
+      company:new FormControl(null, [Validators.required,Validators.minLength(3), Validators.pattern(COMPANYFORMAT)]),
+      ispaymentmodeprepay:new FormControl(null),
+      // logo:new FormControl(null, [Validators.required]),
+      registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9-]*')]),
+      isonboardingcompleted: new FormControl(true)
+    })
+    this.secondFormGroup = this.formBuilder.group({
+      //For Emails
+        designcompletedemail:new FormControl(false),
+        designdeliveredemail:new FormControl(false),
+        designmovedtoqcemail:new FormControl(false),
+        designonholdemail:new FormControl(false),
+        designreviewfailedemail:new FormControl(false),
+        designreviewpassedemail:new FormControl(false),
+        requestgeneratedemail:new FormControl(false),
+        requestacknowledgementemail:new FormControl(false),
+        requestindesigningemail:new FormControl(false),
+      //For Notifications
+        designcompletednotification:new FormControl(false),
+        designdeliverednotification:new FormControl(false),
+        designmovedtoqcnotification:new FormControl(false),
+        designonholdnotification:new FormControl(false),
+        designreviewfailednotification:new FormControl(false),
+        designreviewpassednotification:new FormControl(false),
+        requestgeneratednotification:new FormControl(false),
+        requestacknowledgementnotification:new FormControl(false),
+        requestindesigningnotification:new FormControl(false)
+    })
+    const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
+    const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
+    this.thirdFormGroup = this.formBuilder.group({
+      firstname : new FormControl('',[Validators.required, Validators.pattern(NAMEPATTERN)]),
+      lastname : new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
+      workemail : new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
+      userrole : new FormControl('')
+    })
+    this.router.events.subscribe(e => {
+      if (e instanceof ActivationStart && e.snapshot.outlet === "onboarding")
+        this.outlet.deactivate();
+    });
     console.log("onboarding")
     this.menu.enable(false);
     this.user = this.storage.getUser();
@@ -546,6 +551,14 @@ state: { productdetails: objToSend }
       // ChangeDetectorRef since file is loading outside the zone
       this.cd.markForCheck();
     }
+  }
+
+  removeLogo(event){
+    event.stopPropagation();
+    this.logo= null;
+    this.firstFormGroup.patchValue({
+      logo: null
+    });
   }
 
   updateLogo(){
