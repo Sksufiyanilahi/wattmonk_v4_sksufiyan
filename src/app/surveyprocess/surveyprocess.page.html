@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header style="margin-top: -20px;">
     <ion-progress-bar [value]="totalpercent" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar>
 </ion-header>
 
@@ -756,7 +756,7 @@
                     <p class="shotinfo" style="position: absolute; top: 1rem;">
                         {{this.mainmenuitems[shot.menuindex].children[shot.submenuindex].shots[shot.shotindex].capturedshotinfo}}
                     </p>
-                    <img class="slideimage" [src]="shot.shotimage"/>
+                    <img class="slideimage" [src]="shot.shotimage" style="object-fit: fill"/>
                 </ion-row>
             </ion-col>
         </ion-slide>

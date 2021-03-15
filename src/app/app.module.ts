@@ -37,6 +37,8 @@ import {SuccessModalComponent} from './utilities/success-modal/success-modal.com
 import {UtilitiesModule} from './utilities/utilities.module';
 import {PopoverComponentComponent} from './popover-component/popover-component.component';
 import {MyLoaderComponent} from './components/my-loader/my-loader.component';
+import {CameraPreviewWeb} from '@capacitor-community/camera-preview';
+import {SplashScreenPluginWeb} from '@capacitor/core';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent, MyLoaderComponent, PopoverComponentComponent],
@@ -70,6 +72,8 @@ import {MyLoaderComponent} from './components/my-loader/my-loader.component';
     NgxImageCompressService,
     BackgroundMode,
     Camera,
+    CameraPreviewWeb,
+    SplashScreenPluginWeb,
     InAppBrowser,
     Network,
     Stripe,
