@@ -695,5 +695,12 @@ export class ApiService {
     return this.http.post<any>(BaseUrl + "walletrecharge", inputData,{
       headers: this.uploadHeaders}
      ) }
+
+     registerUser(data){
+      return this.http.post(BaseUrl + "auth/local/register",data,{
+        headers:this.headers
+      }
+      )
+    }
 }
 
