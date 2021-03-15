@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators, FormBuilder} from '@angular/forms';
 import { Router } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ApiService } from '../api.service';
 import { INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE } from '../model/constants';
 import { ErrorModel } from '../model/error.model';
@@ -27,7 +28,8 @@ export class UserregistrationPage implements OnInit {
     private http:HttpClient,
     private utils:UtilitiesService,
     private apiservice:ApiService,
-    private router:Router
+    private router:Router,
+    private iab: InAppBrowser,
   ) { }
 
   ngOnInit() {
@@ -158,6 +160,13 @@ export class UserregistrationPage implements OnInit {
     this.router.navigate(['/login'])
   }
 
+  showTermsAggrement(){
+    const browser = this.iab.create(" https://www.wattmonk.com/service-agreement" ,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  }
+
+  showPrivacyPolicy(){
+    const browser = this.iab.create("https://www.wattmonk.com/privacy-policy  " ,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  }
 
 
 }
