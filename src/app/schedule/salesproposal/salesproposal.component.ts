@@ -178,7 +178,7 @@ blob:Blob;
       mountingtype: new FormControl('', [Validators.required]),
       // jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
-      newconstruction: new FormControl(false),
+      newconstruction: new FormControl('false'),
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim'),
@@ -991,6 +991,7 @@ deleteArcFile(index){
 
     if (this.desginForm.status == 'VALID') {
       var newConstruction = this.desginForm.get("newconstruction").value;
+      this.desginForm.get("architecturaldesign").setValue('');
       console.log(this.selectedUtilityId)
      // this.desginForm.get('utilityrate').setValue(this.selectedUtilityRateId);
      // this.desginForm.get('utility').setValue(this.selectedUtilityId);
