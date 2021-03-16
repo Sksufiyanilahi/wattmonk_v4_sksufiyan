@@ -38,7 +38,7 @@
                              
                               <div style="height: 5px;">
                                 <div *ngIf="userregistrationForm.get('firstname').hasError('pattern') && userregistrationForm.get('firstname').dirty">
-                                    <span class="error">{{nameError}}</span>
+                                    <span class="error">{{firstNameError}}</span>
                                 </div>
                                 <div *ngIf="userregistrationForm.get('firstname').value === '' && userregistrationForm.get('firstname').dirty">
                                     <span class="error">{{fieldRequired}}</span>
@@ -53,7 +53,7 @@
                        
                         <div style="height: 5px;">
                           <div *ngIf="userregistrationForm.get('lastname').hasError('pattern') && userregistrationForm.get('lastname').dirty">
-                              <span class="error">{{nameError}}</span>
+                              <span class="error">{{lastNameError}}</span>
                           </div>
                           <div *ngIf="userregistrationForm.get('lastname').value === '' && userregistrationForm.get('lastname').dirty">
                               <span class="error">{{fieldRequired}}</span>

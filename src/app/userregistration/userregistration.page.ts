@@ -25,8 +25,9 @@ export class UserregistrationPage implements OnInit {
   user:LoginModel;
   isTermsSelect:boolean=false;
 
-  nameError = INVALID_NAME_MESSAGE;
+  firstNameError = "Invalid First Name";
   emailError = INVALID_EMAIL_MESSAGE;
+  lastNameError = "Invalid Last Name";
   netSwitch:any;
   //countries:Country[]=(countriesjson as any).default
   countries:any;
