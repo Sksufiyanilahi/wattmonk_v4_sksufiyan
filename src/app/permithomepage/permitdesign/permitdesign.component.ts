@@ -1380,6 +1380,11 @@ gotoActivity(designData,event){
     this.route.navigate(['/design-details/' + designData.id])
   }
 
+  gotoChats(designData,event){
+    event.stopPropagation();
+    this.route.navigate(['/chat/' + designData.chatid])
+  }
+
 }
 
 export class DesginDataHelper {

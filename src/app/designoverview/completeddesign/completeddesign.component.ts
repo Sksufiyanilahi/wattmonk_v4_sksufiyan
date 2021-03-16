@@ -14,6 +14,7 @@ import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-completeddesign',
@@ -44,6 +45,7 @@ export class CompleteddesignComponent implements OnInit {
     private utils: UtilitiesService,
     private storage: Storage,
     private apiService: ApiService,
+    private router:Router,
      private storageservice:StorageService) {
 
       this.user=this.storageservice.getUser();
@@ -104,7 +106,8 @@ export class CompleteddesignComponent implements OnInit {
     });
   }
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -193,6 +196,25 @@ export class CompleteddesignComponent implements OnInit {
 
     return records;
   }
+
+
+  gotoActivity(designData,event){
+    console.log(event)
+        event.stopPropagation();
+      this.router.navigate(['/activity' + '/' + designData.id + '/design'])
+    
+    }
+    
+    gotoDetails(designData,$event){
+      // $event.preventDefault();
+      // $event.stopPropagation();
+      this.router.navigate(['/design-details/' + designData.id])
+    }
+
+    gotoChats(designData,event){
+      event.stopPropagation();
+      this.router.navigate(['/chat/' + designData.chatid])
+    }
 
   doInfinite($event){
     this.skip=this.skip+10;

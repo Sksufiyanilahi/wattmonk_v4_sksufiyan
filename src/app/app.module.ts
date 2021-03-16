@@ -41,8 +41,8 @@ import {CameraPreviewWeb} from '@capacitor-community/camera-preview';
 import {SplashScreenPluginWeb} from '@capacitor/core';
 
 @NgModule({
-  declarations: [AppComponent, SuccessModalComponent, MyLoaderComponent, PopoverComponentComponent],
-  entryComponents: [SuccessModalComponent, PopoverComponentComponent],
+  declarations: [AppComponent, SuccessModalComponent,PopoverComponentComponent],
+  entryComponents: [SuccessModalComponent,PopoverComponentComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -57,7 +57,7 @@ import {SplashScreenPluginWeb} from '@capacitor/core';
     MatProgressBarModule,
     MatDialogModule,
     MatButtonModule,
-    MatProgressSpinnerModule,
+     MatProgressSpinnerModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],

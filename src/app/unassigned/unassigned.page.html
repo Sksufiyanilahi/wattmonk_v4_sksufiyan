@@ -26,20 +26,20 @@
           <!-- <ion-virtual-scroll [items]="item.listOfDesigns" approxItemHeight="320px" > -->
           <!-- <ion-col *ngFor="let designData of item.listOfDesigns;let j = index;trackBy: trackdesign" size="12"> -->
              <ion-col *ngFor="let designData of item.listOfDesigns;let j = index;trackBy: trackdesign" size="12">
-              <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
+              <ion-card class="ion-no-padding custom-card ion-no-margin" (click)="gotoDetails(designData,$event)" style="height: 100%;">
                   <p class="customer-name"
                   routerDirection="forward">{{designData.name}}
-                  <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
+                  <!-- <span class="chipdetail" style="background-color: #1289A7;"  routerDirection="forward">
                     {{designData.deliverydate | date: 'hh:mm a'}}
                 </span> -->
-                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" [routerLink]="['/design-details/',designData.id]">Unassigned</span>
-                <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" [routerLink]="['/design-details/',designData.id]">Overdue</span>
-                <span fill="clear" background-border="clear" [routerLink]="['/','activity',designData.id,'design']" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
-                <span class="chipdetail" style="background-color: #1c12a7;float:right;margin-right: 1rem;" *ngIf="designData.company !== null || designData.company!== ''" [routerLink]="['/design-details/',designData.id]">{{designData.company}}</span>
+                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" >Unassigned</span>
+                <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" >Overdue</span>
+                <span fill="clear" background-border="clear" (click)="gotoActivity(designData,$event)" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
+                <span class="chipdetail" style="background-color: #1c12a7;float:right;margin-right: 1rem;" *ngIf="designData.company !== null || designData.company!== ''" >{{designData.company}}</span>
         </p>
 
         <p style="margin:0px">
-            <span class="customer-email" [routerLink]="['/design-details/',designData.id]"
+            <span class="customer-email"
                     routerDirection="forward">{{designData.email}}</span>
                     <span *ngIf="designData.isoverdue" class="latebystyle"><strong>Late by {{designData.lateby}}</strong></span>
 
@@ -50,7 +50,7 @@
                           <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
 
                   <span class="customer-address z-100"
-                          (click)="openAddressOnMap(designData.address)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}
+                          (click)="openAddressOnMap(designData.address,$event)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}
 
                                <ion-col>
 
@@ -58,7 +58,7 @@
 
                       </span>
 
-                  <ion-row style="margin-bottom: 0px;" [routerLink]="['/design-details/',designData.id]">
+                  <ion-row style="margin-bottom: 0px;" >
                      <ion-col style="padding-left:0px" >
                       <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
                       <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.requesttype}}</span>
@@ -76,14 +76,14 @@
 
                   <ion-row class="ion-no-margin ion-no-margin">
                       <ion-col>
-                          <span style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
+                          <span style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData,$event)"
                           >Assign</span>
                           <span style="float: right;">
                               <ng-container *ngIf="userData.role.type !=='clientsuperadmin' && userData.role.type !== 'clientadmin'">
-                                  <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted')">
+                                  <ion-col size="8"  *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(designData.id,'requestaccepted',$event)">
                                      Accept
                                   </ion-col>
-                                  <ion-col size="4" *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(designData.id)">
+                                  <ion-col size="4" *ngIf="designData.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(designData.id,$event)">
                                   On Hold
                                   </ion-col>
                               </ng-container>
@@ -95,7 +95,7 @@
 
 
                       <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
-                          <span *ngIf= "(designData.status =='designassigned') && userData.role.type !='clientsuperadmin' && userData.role.type !='clientadmin'" (click)="openDesigners(designData.id,designData)" style="float:right !important" class="ion-text-end action-button-color"
+                          <span *ngIf= "(designData.status =='designassigned') && userData.role.type !='clientsuperadmin' && userData.role.type !='clientadmin'" (click)="openDesigners(designData.id,designData,$event)" style="float:right !important" class="ion-text-end action-button-color"
                           >Reassign</span>
                       </ion-col>
 
@@ -133,7 +133,7 @@
                       </ion-col> -->
                   </ion-row>
                   <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
-                    <!-- <span class="ion-text-end timestamp" [routerLink]="['/design-details/',designData.id]" routerDirection="forward">
+                    <!-- <span class="ion-text-end timestamp"  routerDirection="forward">
                           {{designData.deliverydate | date: 'hh:mm a'}}
 
               </span> -->

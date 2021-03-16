@@ -15,6 +15,7 @@ import { StorageService } from 'src/app/storage.service';
 import { version } from 'src/app/contants.prod';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-newdesign',
@@ -49,7 +50,8 @@ export class NewdesignComponent implements OnInit {
     private storage: Storage,
     private apiService: ApiService,
     private iab:InAppBrowser,
-     private storageservice :StorageService) {
+     private storageservice :StorageService,
+     private router:Router) {
 
       this.user=this.storageservice.getUser();
 
@@ -147,7 +149,8 @@ this.apiService.version.subscribe(versionInfo=>{
     });
   }
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -291,6 +294,19 @@ this.apiService.version.subscribe(versionInfo=>{
 
     return records;
   }
+
+  gotoActivity(designData,event){
+    console.log(event)
+        event.stopPropagation();
+      this.router.navigate(['/activity' + '/' + designData.id + '/design'])
+    
+    }
+    
+    gotoDetails(designData,$event){
+      // $event.preventDefault();
+      // $event.stopPropagation();
+      this.router.navigate(['/design-details/' + designData.id])
+    }
 
   doInfinite($event){
     this.skip=this.skip+10;

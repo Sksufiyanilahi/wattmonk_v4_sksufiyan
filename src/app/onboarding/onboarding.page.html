@@ -11,17 +11,19 @@
 </ion-header>
 
 <ion-content>
-
+<div style="text-align: center;">
+  Welcome! Let's help you get started.
+</div>
 <!-- <mat-vertical-stepper labelPosition="bottom" #stepper linear> -->
   <mat-vertical-stepper labelPosition="bottom" [linear]="isLinear" #stepper>
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
 
-      <ng-template matStepLabel>Profile Information <button class="action-button-color" *ngIf="this.stepper.selectedIndex==0" style="float: right;" mat-button (click)="move($event,1)" matStepperNext>Skip</button></ng-template>
+      <ng-template matStepLabel>Profile Information <button class="action-button-color alignment" *ngIf="this.stepper.selectedIndex==0" style="float: right;" mat-button (click)="move($event,1)" matStepperNext>Skip</button></ng-template>
 
-      <ion-row>
-      <span style="font-size: small;">Please fill-in below mentioned details, to help you serve better</span>
-    </ion-row>
+      <div style="font-size: small;padding: 5px;">
+    Please fill-in below mentioned details, to help you serve better
+    </div>
         <mat-label>Type of User</mat-label>
         <ion-radio-group formControlName="usertype" >
           <ion-row >
@@ -128,7 +130,7 @@
         </ion-col>
         <ion-col size="12">
             <ion-item class="ion-no-padding">
-                <ion-label position="floating">Licence No.</ion-label>
+                <ion-label position="floating">License No.</ion-label>
                 <ion-input type="text" formControlName="registrationnumber" class="form_input" autocapitalize="words" maxLength="16"
                             required></ion-input>
             </ion-item>
@@ -149,10 +151,12 @@
 
                   <div *ngIf="logo !=null && logo !=''" class="avatar-upload" style="text-align: center;">
                       <img [src]=logo height="100px" width="100px" />
+                      <ion-icon name="close-circle-outline" class="logo" (click)="removeLogo($event)"></ion-icon>
                 </div>
 
             <!-- </ion-item> -->
         </ion-col>
+
     </ion-row>
     <!-- <ion-row *ngIf="isCompany">
       <ion-col>
@@ -192,9 +196,9 @@
   </mat-step>
   <mat-step [stepControl]="secondFormGroup">
     <form [formGroup]="secondFormGroup">
-      <ng-template matStepLabel>Notification <button class="action-button-color"  *ngIf="this.stepper.selectedIndex==1" style="float: right;" mat-button (click)="move($event,2)" matStepperNext>Skip</button></ng-template>
+      <ng-template matStepLabel>Notifications <button class="action-button-color alignment"  *ngIf="this.stepper.selectedIndex==1" style="float: right;" mat-button (click)="move($event,2)" matStepperNext>Skip</button></ng-template>
       <ion-row>
-        <span style="font-size: small;">
+        <span style="font-size: small;padding:5px">
       Personalize your platform updates, the way you want. Set when you would like to be notified.
     </span>
     </ion-row>
@@ -217,7 +221,7 @@
    <ion-toggle formControlName="requestgeneratednotification" (ionChange)="onChange($event,'requestgenerated')"  ></ion-toggle>
  </ion-item>
  <ion-item>
-  <ion-label class="font">Design Acknowledgement</ion-label>
+  <ion-label style="white-space: break-spaces;" class="font">Design Acknowledgement  (Accept/On Hold)</ion-label>
  <ion-toggle formControlName="requestacknowledgementemail" (ionChange)="onEmailChange($event,'requestacknoledgedemail')"></ion-toggle>
  <ion-toggle formControlName="requestacknowledgementnotification" (ionChange)="onChange($event,'requestacknoledged')"></ion-toggle>
 </ion-item>
@@ -230,24 +234,30 @@
  <ion-toggle formControlName="designonholdnotification" (ionChange)="onChange($event,'onhold')" ></ion-toggle>
 </ion-item> -->
 <ion-item>
-  <ion-label class="font">Request Indesigning</ion-label>
- <ion-toggle formControlName="requestindesigningemail" (ionChange)="onEmailChange($event,'completedesignemail')"></ion-toggle>
- <ion-toggle formControlName="requestindesigningnotification" (ionChange)="onChange($event,'completedesign')"></ion-toggle>
+  <ion-label class="font">Design In-Designing</ion-label>
+ <ion-toggle formControlName="requestindesigningemail" (ionChange)="onEmailChange($event,'requestindesigningemail')"></ion-toggle>
+ <ion-toggle formControlName="requestindesigningnotification" (ionChange)="onChange($event,'requestindesigningnotification')"></ion-toggle>
 </ion-item>
 <ion-item>
-  <ion-label class="font">Design Moved to QC</ion-label>
+  <ion-label class="font">Design Completed</ion-label>
+ <ion-toggle formControlName="designcompletedemail" (ionChange)="onEmailChange($event,'designcompletedemail')"></ion-toggle>
+ <ion-toggle formControlName="designcompletednotification" (ionChange)="onChange($event,'designcompletednotification')"></ion-toggle>
+</ion-item>
+<ion-item>
+  <ion-label class="font">Design In-Review</ion-label>
  <ion-toggle formControlName="designmovedtoqcemail" (ionChange)="onEmailChange($event,'qcemail')"></ion-toggle>
  <ion-toggle formControlName="designmovedtoqcnotification" (ionChange)="onChange($event,'qc')"></ion-toggle>
+</ion-item>
+
+<ion-item>
+  <ion-label class="font">Design Review Passed</ion-label>
+ <ion-toggle formControlName="designreviewpassedemail" (ionChange)="onEmailChange($event,'reviewpassedemail')" ></ion-toggle>
+ <ion-toggle formControlName="designreviewpassednotification" (ionChange)="onChange($event,'reviewpassed')" ></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label class="font">Design Review Failed</ion-label>
  <ion-toggle formControlName="designreviewfailedemail" (ionChange)="onEmailChange($event,'reviewfailedemail')" ></ion-toggle>
  <ion-toggle formControlName="designreviewfailednotification" (ionChange)="onChange($event,'reviewfailed')" ></ion-toggle>
-</ion-item>
-<ion-item>
-  <ion-label class="font">Design Review Passed</ion-label>
- <ion-toggle formControlName="designreviewpassedemail" (ionChange)="onEmailChange($event,'reviewpassedemail')" ></ion-toggle>
- <ion-toggle formControlName="designreviewpassednotification" (ionChange)="onChange($event,'reviewpassed')" ></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label class="font">Design Delivered</ion-label>
@@ -258,7 +268,7 @@
 
     </form>
     <div>
-      <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext>Next</button>
+      <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;"  matStepperNext>Next</button>
       <!-- <ion-button (click)="secondStepper()" fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
       <!-- <button  class="action-button-color" mat-button matStepperNext style="float: right;">Next</button> -->
       <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
@@ -267,7 +277,7 @@
   </mat-step>
   <mat-step *ngIf="isCompany" [stepControl]="thirdFormGroup">
     <form [formGroup]="thirdFormGroup">
-    <ng-template matStepLabel>Build your own team <button class="action-button-color" *ngIf="this.stepper.selectedIndex==2" style="float: right;" mat-button (click)="move($event,3)" matStepperNext>Skip</button></ng-template>
+    <ng-template matStepLabel>Build your own team <button class="action-button-color alignment" *ngIf="this.stepper.selectedIndex==2" style="float: right;" mat-button (click)="move($event,3)" matStepperNext>Skip</button></ng-template>
     <!-- <ion-row style=" background-color: rgb(211,211,211); text-align: center;">
       <ion-col >
       <ion-label position="fixed">Name</ion-label>
@@ -358,6 +368,12 @@
           <ion-item lines="none">
             <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Design Manager</ion-label>
             <ion-radio slot="start"  value="3" ></ion-radio>
+          </ion-item>
+        </ion-col>
+        <ion-col size="auto">
+          <ion-item lines="none">
+            <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Surveyor</ion-label>
+            <ion-radio slot="start"  value="9" ></ion-radio>
           </ion-item>
         </ion-col>
         </ion-row>

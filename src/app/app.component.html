@@ -33,7 +33,7 @@
               <ion-list id="inbox-list">
               <ion-menu-toggle auto-hide="false">
                     <ion-item *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !== 'peengineer'" [routerLink]="['/dashboard']" routerDirection="forward">
-                  <ion-img src="/assets/icon/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item>
+                  <ion-img src="/assets/icon/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Dashboard</p></ion-item>
                 <!-- <ion-item [routerLink]="['/onboarding']" routerDirection="forward">
                   <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item> -->
                     <ion-item  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'  && userData?.role.type!=='peengineer'" routerDirection="forward">

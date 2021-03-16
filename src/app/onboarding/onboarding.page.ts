@@ -5,7 +5,7 @@ import { User } from '../model/user.model';
 import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_COMPANY_NAME, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_PHONE_NUMBER, INVALID_REGISTRATION_NUMBER } from '../model/constants';
 import { MenuController, NavController } from '@ionic/angular';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { ActivationStart, NavigationExtras, Router, RouterOutlet } from '@angular/router';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
@@ -19,7 +19,7 @@ import { ErrorModel } from '../model/error.model';
   styleUrls: ['./onboarding.page.scss'],
 })
 export class OnboardingPage implements OnInit {
-
+  @ViewChild(RouterOutlet) outlet: RouterOutlet;
   @ViewChild('stepper',{static:true}) stepper: MatStepper;
   @ViewChild('fileInput',{static:false}) el: ElementRef;
   notification:any={
@@ -38,8 +38,8 @@ export class OnboardingPage implements OnInit {
   registrationError = INVALID_REGISTRATION_NUMBER;
   companyError = INVALID_COMPANY_NAME;
   phoneError = INVALID_PHONE_NUMBER;
-  
-  
+
+
   logo: any ;
   editFile: boolean = true;
   removeUpload: boolean = false;
@@ -73,53 +73,59 @@ export class OnboardingPage implements OnInit {
               private utils: UtilitiesService,
               private navCtrl:NavController,
               private cd:ChangeDetectorRef,) {
-                const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
-                const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
-                this.firstFormGroup = this.formBuilder.group({
-                  usertype : new FormControl(null),
-                  billingaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
-                  phone:new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
-                  //companyaddresssameasbilling:new FormControl(''),
-                  companyaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
-                  company:new FormControl(null, [Validators.required,Validators.minLength(3), Validators.pattern(COMPANYFORMAT)]),
-                  ispaymentmodeprepay:new FormControl(null),
-                  // logo:new FormControl(null, [Validators.required]),
-                  registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9-]*')]),
-                  isonboardingcompleted: new FormControl(true)
-                })
-                this.secondFormGroup = this.formBuilder.group({
-                  //For Emails
-                    designcompletedemail:new FormControl(false),
-                    designdeliveredemail:new FormControl(false),
-                    designmovedtoqcemail:new FormControl(false),
-                    designonholdemail:new FormControl(false),
-                    designreviewfailedemail:new FormControl(false),
-                    designreviewpassedemail:new FormControl(false),
-                    requestgeneratedemail:new FormControl(false),
-                    requestacknowledgementemail:new FormControl(false),
-                    requestindesigningemail:new FormControl(false),
-                  //For Notifications
-                    designcompletednotification:new FormControl(false),
-                    designdeliverednotification:new FormControl(false),
-                    designmovedtoqcnotification:new FormControl(false),
-                    designonholdnotification:new FormControl(false),
-                    designreviewfailednotification:new FormControl(false),
-                    designreviewpassednotification:new FormControl(false),
-                    requestgeneratednotification:new FormControl(false),
-                    requestacknowledgementnotification:new FormControl(false),
-                    requestindesigningnotification:new FormControl(false)
-                })
-                const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
-                const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
-                this.thirdFormGroup = this.formBuilder.group({
-                  firstname : new FormControl('',[Validators.required, Validators.pattern(NAMEPATTERN)]),
-                  lastname : new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
-                  workemail : new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
-                  userrole : new FormControl('')
-                })
+
                }
 
   ngOnInit() {
+    const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
+    const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
+    this.firstFormGroup = this.formBuilder.group({
+      usertype : new FormControl(null),
+      billingaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
+      phone:new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
+      //companyaddresssameasbilling:new FormControl(''),
+      companyaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
+      company:new FormControl(null, [Validators.required,Validators.minLength(3), Validators.pattern(COMPANYFORMAT)]),
+      ispaymentmodeprepay:new FormControl(null),
+      // logo:new FormControl(null, [Validators.required]),
+      registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9-]*')]),
+      isonboardingcompleted: new FormControl(true)
+    })
+    this.secondFormGroup = this.formBuilder.group({
+      //For Emails
+        designcompletedemail:new FormControl(false),
+        designdeliveredemail:new FormControl(false),
+        designmovedtoqcemail:new FormControl(false),
+        designonholdemail:new FormControl(false),
+        designreviewfailedemail:new FormControl(false),
+        designreviewpassedemail:new FormControl(false),
+        requestgeneratedemail:new FormControl(false),
+        requestacknowledgementemail:new FormControl(false),
+        requestindesigningemail:new FormControl(false),
+      //For Notifications
+        designcompletednotification:new FormControl(false),
+        designdeliverednotification:new FormControl(false),
+        designmovedtoqcnotification:new FormControl(false),
+        designonholdnotification:new FormControl(false),
+        designreviewfailednotification:new FormControl(false),
+        designreviewpassednotification:new FormControl(false),
+        requestgeneratednotification:new FormControl(false),
+        requestacknowledgementnotification:new FormControl(false),
+        requestindesigningnotification:new FormControl(false)
+    })
+    const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
+    const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
+    this.thirdFormGroup = this.formBuilder.group({
+      firstname : new FormControl('',[Validators.required, Validators.pattern(NAMEPATTERN)]),
+      lastname : new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
+      workemail : new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
+      userrole : new FormControl('')
+    })
+    this.router.events.subscribe(e => {
+      if (e instanceof ActivationStart && e.snapshot.outlet === "onboarding")
+        this.outlet.deactivate();
+    });
+    console.log("onboarding")
     this.menu.enable(false);
     this.user = this.storage.getUser();
     this.userId= this.storage.getUserID();
@@ -143,7 +149,7 @@ export class OnboardingPage implements OnInit {
   }
 
   ngOnDestroy(){
-    
+
   }
 
   ionViewWillLeave(){
@@ -170,7 +176,7 @@ export class OnboardingPage implements OnInit {
         ispaymentmodeprepay:res.ispaymentmodeprepay,
         registrationnumber:res.registrationnumber,
         logo:res.logo,
-        
+
       })
       this.secondFormGroup.patchValue({
         //For Emails
@@ -194,7 +200,7 @@ export class OnboardingPage implements OnInit {
         requestacknowledgementnotification:res.requestacknowledgementnotification,
         requestindesigningnotification:res.requestindesigningnotification
       })
-    
+
     })
   }
 
@@ -208,7 +214,7 @@ export class OnboardingPage implements OnInit {
     this.firstFormGroup.patchValue({
       phone:'',
       billingaddress:'',
-      
+
     })
     }
     else{
@@ -226,7 +232,7 @@ export class OnboardingPage implements OnInit {
       //this.firstFormGroup.get('company').reset();
       this.firstFormGroup.get('registrationnumber').clearValidators();
       //this.firstFormGroup.get('registrationnumber').reset();
-      
+
     }
     this.firstFormGroup.get('companyaddress').updateValueAndValidity();
     this.firstFormGroup.get('company').updateValueAndValidity();
@@ -258,7 +264,7 @@ export class OnboardingPage implements OnInit {
       // if(this.logoUploaded){
       //   this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
       //     console.log('updated',res);
-          
+
       //    let token=  this.storage.getJWTToken();
       //     this.storage.setUser(res,token);
       //   })
@@ -267,7 +273,7 @@ export class OnboardingPage implements OnInit {
         console.log(this.firstFormGroup.value);
         this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
           console.log('updated',res);
-          
+
          let token=  this.storage.getJWTToken();
           this.storage.setUser(res,token);
         })
@@ -286,13 +292,13 @@ export class OnboardingPage implements OnInit {
   //     this.utils.errorSnackBar('Please Check Fields');
   //   }
   // }
-    
+
   }
 
 
   onChange(event,value){
    console.log(event);
-   
+
      if(value=='requestgenerated'){
       this.secondFormGroup.patchValue({
         requestgeneratednotification:event.detail.checked
@@ -303,19 +309,19 @@ export class OnboardingPage implements OnInit {
         requestacknowledgementnotification:event.detail.checked
       })
     }
-    // else if(value=='requestdesign'){
-    //   this.secondFormGroup.patchValue({
-    //     requestindesigningnotification:event.detail.checked
-    //   })
-    // }
+    else if(value=='designcompletednotification'){
+      this.secondFormGroup.patchValue({
+        designcompletednotification:event.detail.checked
+      })
+    }
     // else if(value=='onhold'){
     //   this.secondFormGroup.patchValue({
     //     designonholdnotification:event.detail.checked
     //   })
     // }
-    else if(value=='completedesign'){
+    else if(value=='requestindesigningnotification'){
       this.secondFormGroup.patchValue({
-        designcompletednotification:event.detail.checked
+        requestindesigningnotification:event.detail.checked
       })
     }
     else if(value=='qc'){
@@ -342,7 +348,7 @@ export class OnboardingPage implements OnInit {
 
   onEmailChange(event,value){
     console.log(event);
-    
+
       if(value=='requestgeneratedemail'){
        this.secondFormGroup.patchValue({
          requestgeneratedemail:event.detail.checked
@@ -353,19 +359,19 @@ export class OnboardingPage implements OnInit {
          requestacknowledgementemail:event.detail.checked
        })
      }
-    //  else if(value=='requestdesign'){
-    //    this.secondFormGroup.patchValue({
-    //      requestindesigningemail:event.detail.checked
-    //    })
-    //  }
+     else if(value=='designcompletedemail'){
+       this.secondFormGroup.patchValue({
+        designcompletedemail:event.detail.checked
+       })
+     }
     //  else if(value=='onhold'){
     //    this.secondFormGroup.patchValue({
     //      designonholdemail:event.detail.checked
     //    })
     //  }
-     else if(value=='completedesignemail'){
+     else if(value=='requestindesigningemail'){
        this.secondFormGroup.patchValue({
-         designcompletedemail:event.detail.checked
+        requestindesigningemail:event.detail.checked
        })
      }
      else if(value=='qcemail'){
@@ -397,7 +403,7 @@ export class OnboardingPage implements OnInit {
       let token=  this.storage.getJWTToken();
       this.storage.setUser(res,token);
       //this.utils.showSnackBar('Changes saved successfully');
-      
+
     })
   }
 
@@ -405,7 +411,7 @@ export class OnboardingPage implements OnInit {
     console.log(this.thirdFormGroup.status)
     //  if (this.thirdFormGroup.status === 'VALID') {
     // $ev.preventDefault();
-    
+
         let rolesel = parseInt(this.thirdFormGroup.get("userrole").value);
         var senddesignrequestpermission = false;
         if(rolesel == ROLES.ContractorAdmin || rolesel == ROLES.Admin || rolesel == ROLES.BD){
@@ -422,7 +428,7 @@ export class OnboardingPage implements OnInit {
           )
           .subscribe(
             (response:any) => {
-              
+
               this.utils.showSnackBar('Team created successfully');
               this.thirdFormGroup.reset();
             },
@@ -434,7 +440,7 @@ export class OnboardingPage implements OnInit {
           this.utils.errorSnackBar(error.message);
             }
           );
-    
+
      // }
     // else{
     //   if(this.thirdFormGroup.value.firstname =='' || this.thirdFormGroup.get('firstname').hasError('pattern')){
@@ -451,9 +457,9 @@ export class OnboardingPage implements OnInit {
     //     this.utils.errorSnackBar('Please check fields')
     //   }
     // }
-    
+
   }
-  
+
 
   goToWallet(){
     console.log("hello",this.user.amount);
@@ -467,11 +473,11 @@ export class OnboardingPage implements OnInit {
         onBoarding:"true"
       },
       skipLocationChange: false,
-      fragment: 'top' 
+      fragment: 'top'
   };
 
 
-this.router.navigate(['/add-money'], { 
+this.router.navigate(['/add-money'], {
 state: { productdetails: objToSend }
 });
     }
@@ -483,11 +489,11 @@ state: { productdetails: objToSend }
           onBoarding:"false"
         },
         skipLocationChange: false,
-        fragment: 'top' 
+        fragment: 'top'
     };
-  
-  
-  this.router.navigate(['/add-money'], { 
+
+
+  this.router.navigate(['/add-money'], {
   state: { productdetails: objToSend }
   });
     }
@@ -504,7 +510,7 @@ state: { productdetails: objToSend }
         this.prelimSettingValue = element.settingvalue;
       })
       console.log(this.prelimCharges)
-      console.log('hello', this.prelimSettingValue) 
+      console.log('hello', this.prelimSettingValue)
 
     })
 
@@ -516,12 +522,12 @@ state: { productdetails: objToSend }
       })
     })
   }
-  
+
   uploadFile(event) {
     this.logoSelected=true;
     this.fileName= event.target.files[0].name;
     console.log(this.fileName);
-    
+
     let reader = new FileReader(); // HTML5 FileReader API
     let file = event.target.files[0];
     if (event.target.files && event.target.files[0]) {
@@ -532,19 +538,27 @@ state: { productdetails: objToSend }
         this.logo = reader.result;
         this.blob= this.utils.b64toBlob(this.logo);
         console.log(this.blob);
-        
+
         this.firstFormGroup.patchValue({
           logo: this.fileName
         });
 
         console.log(this.firstFormGroup.value);
-        
+
         this.editFile = false;
         this.removeUpload = true;
       }
       // ChangeDetectorRef since file is loading outside the zone
-      this.cd.markForCheck();        
+      this.cd.markForCheck();
     }
+  }
+
+  removeLogo(event){
+    event.stopPropagation();
+    this.logo= null;
+    this.firstFormGroup.patchValue({
+      logo: null
+    });
   }
 
   updateLogo(){
@@ -553,7 +567,7 @@ state: { productdetails: objToSend }
       console.log(res);
         this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
           console.log('updated',res);
-          
+
          let token=  this.storage.getJWTToken();
           this.storage.setUser(res,token);
         })

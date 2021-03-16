@@ -16,6 +16,7 @@ import { ModalController } from '@ionic/angular';
 import{SocialSharing} from '@ionic-native/social-sharing/ngx';
 import { StorageService } from 'src/app/storage.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-permitdeliver-design',
@@ -47,7 +48,8 @@ limit:number=10;
     private apiService: ApiService,
     private socialsharing: SocialSharing,
     public modalController: ModalController,
-    private storageservice:StorageService
+    private storageservice:StorageService,
+    private router:Router
     ) {
       this.userData = this.storageservice.getUser();
       console.log("inside new surveys");
@@ -115,7 +117,8 @@ limit:number=10;
     });
   }
 
-  openAddressOnMap(address: string) {
+  openAddressOnMap(address: string,event) {
+    event.stopPropagation();
     this.launchNavigator.navigate(address, this.options);
   }
 
@@ -205,6 +208,24 @@ limit:number=10;
     return records;
   }
 
+  gotoActivity(designData,event){
+    console.log(event)
+        event.stopPropagation();
+      this.router.navigate(['/activity' + '/' + designData.id + '/design'])
+    
+    }
+    
+    gotoDetails(designData,$event){
+      // $event.preventDefault();
+      // $event.stopPropagation();
+      this.router.navigate(['/permit-design-details/' + designData.id])
+    }
+
+    gotoChats(designData,event){
+      event.stopPropagation();
+      this.router.navigate(['/chat/' + designData.chatid])
+    }
+
   doInfinite($event){
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys("requesttype=permit&status=delivered",this.limit,this.skip).subscribe((response:any) => {
@@ -237,11 +258,13 @@ limit:number=10;
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;
   }
-  shareWhatsapp(designData){
+  shareWhatsapp(designData,event){
+    event.stopPropagation();
     this.socialsharing.share(designData.permitdesign.url);
   }
 
-   async shareViaEmails(id,designData){
+   async shareViaEmails(id,designData,event){
+     event.stopPropagation();
     const modal = await this.modalController.create({
       component: EmailModelPage,
       cssClass: 'email-modal-css',
