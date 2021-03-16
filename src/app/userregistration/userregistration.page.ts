@@ -38,19 +38,20 @@ export class UserregistrationPage implements OnInit {
     private router:Router,
     private iab: InAppBrowser,
     private storageService:StorageService,
-  ) { 
-    const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
-    this.userregistrationForm = this.formBuilder.group({
-      email: new FormControl("", [Validators.required, Validators.pattern(EMAILPATTERN)]),
-      firstname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
-      lastname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
-      country: new FormControl("", [Validators.required]),
-      password:new FormControl(this.utils.randomPass()),
-      username:new FormControl(null),
-      role:new FormControl(6)
-    }
-    );
+    private navController:NavController,
+    private mixpanelService:MixpanelService,
+    private network:NetworkdetectService
+  ) { const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+  this.userregistrationForm = this.formBuilder.group({
+    email: new FormControl("", [Validators.required, Validators.pattern(EMAILPATTERN)]),
+    firstname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
+    lastname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
+    country: new FormControl("", [Validators.required]),
+    password:new FormControl(this.utils.randomPass()),
+    username:new FormControl(null),
+    role:new FormControl(6)
   }
+  );}
 
   ngOnInit() {
     this.fetchCountry();
@@ -80,8 +81,8 @@ export class UserregistrationPage implements OnInit {
         console.log(res);
         this.user = res;
         // console.log(this.user.jwt)
-        // this.storage.setJWTToken(this.user.jwt);
-         this.storageService.setUser(this.user.user,this.user.jwt);
+         this.storageService.setJWTToken(this.user.jwt);
+        // this.storageService.setUser(this.user.user,this.user.jwt);
         if(res){
         this.updateUser();
         }
@@ -150,12 +151,16 @@ export class UserregistrationPage implements OnInit {
       resetPasswordToken: this.userregistrationForm.get('password').value,
       role: this.userregistrationForm.get('role').value
     };
-    this.apiService.updateUser(this.user.user.id,postData).subscribe((response)=>{
+    this.apiService.updateUser(this.user.user.id,postData).subscribe((response:any)=>{
       console.log(response,"jj");
+      //this.
+      this.storageService.setUser(response);
+      this.apiService.refreshHeader();
       this.utils.hideLoading();
-      //this.login();
-       this.router.navigate(['/login']);
-       this.utils.showSnackBar("User Registered Successfully");
+      this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.")
+      this.login();
+      // this.router.navigate(['/login']);
+      // this.utils.showSnackBar("User Registered Successfully");
     },
       responseError => {
         this.utils.hideLoading().then(() => {
@@ -181,6 +186,84 @@ export class UserregistrationPage implements OnInit {
 
   showPrivacyPolicy(){
     const browser = this.iab.create("https://www.wattmonk.com/privacy-policy  " ,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  }
+
+  ionViewDidEnter(){
+    this.network.networkSwitch.subscribe(data=>{
+      this.netSwitch = data;
+      console.log(this.netSwitch);
+
+    })
+
+this.network.networkDisconnect();
+this.network.networkConnect();
+  }
+
+  login() {
+    if(!this.netSwitch){
+      this.utils.errorSnackBar('No internet connection');
+    }else{
+      console.log(this.userregistrationForm);
+      if (this.userregistrationForm.status === 'VALID') {
+        this.utils.showLoading('Logging In').then(() => {
+          const postData ={
+            identifier : this.storageService.getUser().username,
+            password : this.userregistrationForm.get('password').value
+          }
+          this.apiService.login(postData).subscribe(response => {
+            this.utils.hideLoading().then(() => {
+              console.log('Res', response);
+              console.log(response);
+              this.mixpanelService.track("USER_LOGIN", {
+                $id: response.user.id,
+                $email: response.user.email,
+                $name: response.user.firstname + response.user.lastname
+              });
+
+                 // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
+                 this.storageService.setUserName(this.userregistrationForm.get('username').value);
+                 this.storageService.setPassword(this.userregistrationForm.get('password').value);
+                 this.storageService.setUser(response.user, response.jwt);
+                 this.apiService.refreshHeader();
+                //  if (response.user.isdefaultpassword) {
+                //   this.storageService.setJWTToken(response.jwt);
+                //   this.apiService.refreshHeader();
+                //    this.navController.navigateRoot(['changepassword'])
+                //  } else {
+                  if(response.user.role.type==='clientsuperadmin' && (response.user.isonboardingcompleted == null || response.user.isonboardingcompleted == false)){
+
+                    this.navController.navigateRoot('onboarding');
+                    if(response.user){
+                      this.utils.doCometUserLogin();
+                    }
+                  }
+                  else{
+                   this.navController.navigateRoot(['/dashboard'])
+                   if(response.user){
+                    this.utils.doCometUserLogin();
+                  }
+                 }
+                //}
+              
+            });
+            this.apiService.emitUserNameAndRole(response.user);
+
+          }, responseError => {
+            this.utils.hideLoading().then(() => {
+              this.apiService.resetHeaders();
+              const error: ErrorModel = responseError.error;
+              // this.utils.errorSnackBar(error);
+              this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
+            });
+
+          });
+        });
+
+      } else {
+        this.apiService.resetHeaders();
+        this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
+      }
+    }
   }
 
 
