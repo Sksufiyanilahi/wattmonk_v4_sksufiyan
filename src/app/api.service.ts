@@ -56,6 +56,8 @@ export class ApiService {
   public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
   version = new BehaviorSubject<string>('');
 
+  formHeaders : HttpHeaders;
+
 
   constructor(
     private http: HttpClient,
@@ -83,6 +85,7 @@ export class ApiService {
     this.resetHeaders();
     this._OnMessageReceivedSubject = new Subject<string>();
     this.showUserName= new Subject<any>();
+    //this.formHeaders = new HttpHeaders({"Content-Type":"application/json",'Authorization':'Bearer' + this.storageService.getUser().})
   }
   
  /**
@@ -302,7 +305,11 @@ export class ApiService {
   }
 
   updateUser(id, data){
-    return this.http.put(BaseUrl + 'users/'+ id, data, { headers: this.uploadHeaders } );
+    this.headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + this.storageService.getJWTToken()
+    });
+    return this.http.put(BaseUrl + 'users/'+ id, data, { headers: this.headers } );
   }
   getCountOfUnreadNotifications(){
     return this.http.get(BaseUrl+ "Notifications/count?user=" + this.userId + "&status=unread", { headers: this.headers});

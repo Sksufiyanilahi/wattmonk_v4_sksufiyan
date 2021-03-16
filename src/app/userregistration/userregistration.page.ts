@@ -3,10 +3,17 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators, FormBuilder} from '@angular/forms';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { NavController } from '@ionic/angular';
 import { ApiService } from '../api.service';
+import { ROLES } from '../contants';
 import { INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE } from '../model/constants';
 import { ErrorModel } from '../model/error.model';
+import { LoginModel } from '../model/login.model';
+import { User } from '../model/user.model';
+import { NetworkdetectService } from '../networkdetect.service';
+import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
+import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
   selector: 'app-userregistration',
@@ -15,25 +22,23 @@ import { UtilitiesService } from '../utilities.service';
 })
 export class UserregistrationPage implements OnInit {
   userregistrationForm: FormGroup;
-  user:any;
+  user:LoginModel;
   isTermsSelect:boolean=false;
 
   nameError = INVALID_NAME_MESSAGE;
   emailError = INVALID_EMAIL_MESSAGE;
-
+  netSwitch:any;
   //countries:Country[]=(countriesjson as any).default
   countries:any;
   constructor(
     private formBuilder: FormBuilder,
     private http:HttpClient,
     private utils:UtilitiesService,
-    private apiservice:ApiService,
+    private apiService:ApiService,
     private router:Router,
     private iab: InAppBrowser,
-  ) { }
-
-  ngOnInit() {
-    this.fetchCountry();
+    private storageService:StorageService,
+  ) { 
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.userregistrationForm = this.formBuilder.group({
       email: new FormControl("", [Validators.required, Validators.pattern(EMAILPATTERN)]),
@@ -45,6 +50,11 @@ export class UserregistrationPage implements OnInit {
       role:new FormControl(6)
     }
     );
+  }
+
+  ngOnInit() {
+    this.fetchCountry();
+    
   }
 
   fetchCountry(){
@@ -66,9 +76,12 @@ export class UserregistrationPage implements OnInit {
         password:this.userregistrationForm.get('password').value,
         username:this.userregistrationForm.get('email').value
       }
-      this.apiservice.registerUser(postData).subscribe((res:any)=>{
+      this.apiService.registerUser(postData).subscribe((res:any)=>{
         console.log(res);
         this.user = res;
+        // console.log(this.user.jwt)
+        // this.storage.setJWTToken(this.user.jwt);
+         this.storageService.setUser(this.user.user,this.user.jwt);
         if(res){
         this.updateUser();
         }
@@ -126,6 +139,7 @@ export class UserregistrationPage implements OnInit {
 
   updateUser()
   {
+    console.log(this.user.user.id);
     const postData = {
       firstname: this.userregistrationForm.get("firstname").value,
       lastname: this.userregistrationForm.get("lastname").value,
@@ -136,11 +150,12 @@ export class UserregistrationPage implements OnInit {
       resetPasswordToken: this.userregistrationForm.get('password').value,
       role: this.userregistrationForm.get('role').value
     };
-    this.apiservice.updateUser(this.user.user.id,postData).subscribe((response)=>{
+    this.apiService.updateUser(this.user.user.id,postData).subscribe((response)=>{
       console.log(response,"jj");
       this.utils.hideLoading();
-      this.router.navigate(['/login']);
-      this.utils.showSnackBar("User Registered Successfully");
+      //this.login();
+       this.router.navigate(['/login']);
+       this.utils.showSnackBar("User Registered Successfully");
     },
       responseError => {
         this.utils.hideLoading().then(() => {
