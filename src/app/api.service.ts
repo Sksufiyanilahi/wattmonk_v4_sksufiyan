@@ -695,5 +695,10 @@ export class ApiService {
     return this.http.post<any>(BaseUrl + "walletrecharge", inputData,{
       headers: this.uploadHeaders}
      ) }
+
+     getStatusCount(): Observable<any[]> {
+      return this.http.get<any[]>( BaseUrl + "designstatistics?id=" + this.userId, { headers: this.headers })
+       
+    }
 }
 
