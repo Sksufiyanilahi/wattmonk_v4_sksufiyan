@@ -233,6 +233,8 @@ export class PermitschedulePage implements OnInit {
   //   )
 
   this.designId = +this.route.snapshot.paramMap.get('id');
+  this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
+    this.autocompleteItems = [];
 
   // const url = this.router.url;
   //   const splittedUrl = url.split('/');
@@ -1005,13 +1007,13 @@ else{
                 if(this.attachmentFileUpload){
                   this.uploadAttachmentDesign(response,'attachments')
                 }
-              }
               else{
                 this.router.navigate(['/permithomepage'])
                     this.utils.showSnackBar('Design have been Created');
                     // this.utils.showSnackBar('Design have been saved');
                     this.utils.setHomepagePermitRefresh(true);
               }
+            }
                   // setTimeout(()=>{
                   //   this.utils.hideLoading().then(() => {
                   //     console.log('Res', response);
@@ -1105,7 +1107,6 @@ else{
                    if(this.attachmentFileUpload){
                      this.uploadAttachmentDesign(response,'attachments')
                    }
-                 }
                  else{
                   let objToSend: NavigationExtras = {
                             queryParams: {
@@ -1122,6 +1123,7 @@ else{
                       state: { productdetails: objToSend }
                     });
                  }
+                }
                 // this.utils.hideLoading().then(() => {
                 //   // this.createChatGroup(response);
                 //   console.log('Res', response);
@@ -1227,13 +1229,14 @@ else{
                  if(this.attachmentFileUpload){
                    this.uploadAttachmentDesign(response,'attachments')
                  }
-               }
+               
                else{
                 this.router.navigate(['/permithomepage'])
-                this.utils.showSnackBar('Design have been Created');
+                this.utils.showSnackBar('Design have been updated');
                 // this.utils.showSnackBar('Design have been saved');
                 this.utils.setHomepagePermitRefresh(true);
                }
+              }
               // if(this.isArcFileDelete){
               //   this.deleteArcFile(this.indexOfArcFiles);
               // }
@@ -1316,7 +1319,6 @@ else{
                  if(this.attachmentFileUpload){
                    this.uploadAttachmentDesign(response,'attachments')
                  }
-               }
                else{
                 let objToSend: NavigationExtras = {
                   queryParams: {
@@ -1333,6 +1335,7 @@ else{
             state: { productdetails: objToSend }
           });
                }
+              }
               // if(this.isArcFileDelete){
               //   console.log("hello");
               //   this.deleteArcFile(this.indexOfArcFiles);
@@ -2018,6 +2021,7 @@ else{
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
       console.log(this.autoCompleteOff);
+      if(this.designId==0){
       const input = event.detail.value;
       console.log(input)
       if (input === '') {
@@ -2035,6 +2039,7 @@ else{
             });
           });
         });
+      }
     }
 
     forAutoComplete(e){

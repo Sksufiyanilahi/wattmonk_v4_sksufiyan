@@ -216,7 +216,7 @@ blob:Blob;
       //isonpriority:new FormControl('false'),
       paymentstatus:new FormControl(null),
       paymenttype:new FormControl(null),
-      utility: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      utility: new FormControl("",[Validators.required]),
       //utility: new FormControl("",[Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
       //utilityrate : new FormControl("",[Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
       utilityrate : new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
@@ -256,6 +256,9 @@ blob:Blob;
 
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.getAssignees();
+
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
+    this.autocompleteItems = [];
 
   }
 
@@ -514,6 +517,7 @@ blob:Blob;
     this.address= this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_SALES_FORM || event === ScheduleFormEvent.SEND_SALES_FORM) {
+        console.log("himanshu")
         this.send=event;
         this.addForm();
 
@@ -1929,6 +1933,7 @@ state: { productdetails: objToSend }
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
       console.log(this.autoCompleteOff);
+      if(this.designId == 0){
       const input = event.detail.value;
       console.log(input)
       if (input === '') {
@@ -1946,6 +1951,7 @@ state: { productdetails: objToSend }
             });
           });
         });
+      }
     }
 
     forAutoComplete(e){

@@ -62,10 +62,10 @@ export class PestampDesignComponent implements OnInit {
   netSwitch: boolean;
   acceptid: any;
   storageDirectory: string;
-
+ 
   updatechat_id: boolean=false;
   isclientassigning: boolean=false;
-
+ requesttype:String
   today: any;
   todaysdate:string;
   options: LaunchNavigatorOptions = {
@@ -426,11 +426,32 @@ export class PestampDesignComponent implements OnInit {
         pestampstarttime.setHours(pestampstarttime.getHours() + additonalhours);
         pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
         console.log(this.designId);
-
-        var postData = {
+        var postData={};
+        if(this.designerData.type!='both'){
+         postData = {
           assignedto: this.selectedPeEngineer.id,
           status: "assigned",
           pestampstarttime: pestampstarttime
+        }}
+        else{
+          
+          if (this.requesttype == 'electrical') {
+            postData = {
+              electricalassignedto: this.selectedPeEngineer.id,
+              iselectricalassigned: true,
+              status: "assigned",
+              pestampstarttime: pestampstarttime
+            };
+          }
+          else if (this.requesttype == 'structural') {
+            postData = {
+              structuralassignedto: this.selectedPeEngineer.id,
+              isstructuralassigned: true,
+              status: "assigned",
+              pestampstarttime: pestampstarttime
+            };
+          }
+        
         };
         this.utils.showLoading('assigning').then(() => {
         this.apiService.assignPestamps(this.designId,postData).subscribe(res=>{
@@ -1086,6 +1107,138 @@ gotoActivity(designData,event){
 gotoChats(designData,event){
   event.stopPropagation();
   this.route.navigate(['/chat/' + designData.chatid])
+}
+
+structuralAssign(id,designData,event){
+  event.stopPropagation();
+ 
+  debugger;
+  this.mixpanelService.track("ASSIGN_PESTAMP_DESIGN_PAGE_OPEN", {
+  });
+  this.listOfAssignees=[];
+  console.log("this is",designData);
+   this.designerData = designData;
+   this.requesttype="structural"
+   //this.assignedTo=designData.assignedto;
+  if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin')&& this.designerData.status=='created'){
+    //this.route.navigate(["pestamp-payment-modal",{id:id,designData:this.designerData.requesttype}])
+    let objToSend: NavigationExtras = {
+      queryParams: {
+      designData:designData,
+      value:'assign'
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+this.route.navigate(['/pestamp-payment-modal'], {
+state: { productdetails: objToSend }
+});
+
+
+  }
+
+ else{ if (this.listOfAssignees.length === 0) {
+    this.utils.showLoading('Getting Pe Engineers').then(() => {
+      this.apiService.getPeEngineers("structural").subscribe((assignees:any) => {
+        this.utils.hideLoading().then(() => {
+          this.listOfAssignees = [];
+        //   // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+           assignees.forEach(item => this.listOfAssignees.push(item));
+           console.log(this.listOfAssignees);
+           this.showBottomDraw = true;
+           this.designId = id;
+           this.utils.setBottomBarHomepage(false);
+          this.drawerState = DrawerState.Docked;
+          this.assignForm.patchValue({
+            assignedto: ''
+          });
+        });
+        console.log(assignees);
+      }, (error) => {
+        this.utils.hideLoading().then(() => {
+          this.utils.errorSnackBar('Some error occurred. Please try again later');
+        });
+      });
+    });
+
+  } else {
+    this.designId = id;
+    this.utils.setBottomBarHomepage(false);
+    this.drawerState = DrawerState.Docked;
+    this.assignForm.patchValue({
+      assignedto: ''
+    });
+  }}
+
+}
+
+electricalAssign(id,designData,event){
+  event.stopPropagation();
+  
+ 
+  debugger;
+  this.mixpanelService.track("ASSIGN_PESTAMP_DESIGN_PAGE_OPEN", {
+  });
+ 
+  this.listOfAssignees=[];
+  console.log("this is",designData);
+   this.designerData = designData;
+   this.requesttype="electrical"
+   //this.assignedTo=designData.assignedto;
+  if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin')&& this.designerData.status=='created'){
+    //this.route.navigate(["pestamp-payment-modal",{id:id,designData:this.designerData.requesttype}])
+    let objToSend: NavigationExtras = {
+      queryParams: {
+      designData:designData,
+      value:'assign'
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+this.route.navigate(['/pestamp-payment-modal'], {
+state: { productdetails: objToSend }
+});
+
+
+  }
+
+ else{ if (this.listOfAssignees.length === 0) {
+    this.utils.showLoading('Getting Pe Engineers').then(() => {
+      this.apiService.getPeEngineers("electrical").subscribe((assignees:any) => {
+        this.utils.hideLoading().then(() => {
+          this.listOfAssignees = [];
+        //   // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+           assignees.forEach(item => this.listOfAssignees.push(item));
+           console.log(this.listOfAssignees);
+           this.showBottomDraw = true;
+           this.designId = id;
+           this.utils.setBottomBarHomepage(false);
+          this.drawerState = DrawerState.Docked;
+          this.assignForm.patchValue({
+            assignedto: ''
+          });
+        });
+        console.log(assignees);
+      }, (error) => {
+        this.utils.hideLoading().then(() => {
+          this.utils.errorSnackBar('Some error occurred. Please try again later');
+        });
+      });
+    });
+
+  } else {
+    this.designId = id;
+    this.utils.setBottomBarHomepage(false);
+    this.drawerState = DrawerState.Docked;
+    this.assignForm.patchValue({
+      assignedto: ''
+    });
+  }}
+
 }
 
 }

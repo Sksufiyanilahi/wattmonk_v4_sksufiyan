@@ -1391,6 +1391,8 @@ state: { productdetails: objToSend }
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
       console.log(this.autoCompleteOff);
+      if(this.designId)
+      {
       const input = event.detail.value;
       console.log(input)
       if (input === '') {
@@ -1408,6 +1410,7 @@ state: { productdetails: objToSend }
             });
           });
         });
+      }
     }
 
     forAutoComplete(e){

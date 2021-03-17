@@ -52,6 +52,8 @@
 
               </p>
               <p style="margin:0px">
+                <span class="chipdetail" style="background-color: rgb(204, 153, 0);" *ngIf="designData.requirementtype=='proposal'" >Proposal</span>
+                <span class="chipdetail" style="background-color: rgb(204, 153, 0);" *ngIf="designData.requirementtype=='assessment'" >Assessment</span>
                 <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'"  >On Hold</span>
 
                 <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  >Review Failed</span>

@@ -109,7 +109,11 @@
                 <ion-row class="ion-no-margin ion-no-margin">
 
                     <ion-col *ngIf="segments=='status=created&status=outsourced&status=accepted&status=declined' || segments=='status=created&status=outsourced&status=accepted&&status=declined'">
-                        <span *ngIf="designData.status == 'created' || (designData.status == 'accepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')) " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData,$event)"
+                        <span *ngIf=" (designData.status == 'accepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin') && designData.type=='both' ) " style="float:right !important;" class="ion-text-end action-button-color" (click)="electricalAssign(designData.id,designData,$event)"
+                        > &nbsp; Electrical Assign</span>
+                        <span *ngIf=" (designData.status == 'accepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin') && designData.type=='both' ) " style="float:right !important;" class="ion-text-end action-button-color" (click)="structuralAssign(designData.id,designData,$event)"
+                        > Structural Assign</span>
+                        <span *ngIf="designData.status == 'created' || (designData.status == 'accepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')  && designData.type!='both')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData,$event)"
                         >Assign</span>
                         <span style="float: right;">
                             <ng-container *ngIf="userData.role.type !=='clientsuperadmin' && userData.role.type !== 'clientadmin'">
