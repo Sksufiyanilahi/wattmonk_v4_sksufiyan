@@ -61,7 +61,7 @@
             <ion-col size="auto" class="ion-text-end">
                 <ion-grid class="ion-no-padding">
                     <ion-row>
-                        <ion-col><span class="data-header font">annual units</span></ion-col>
+                        <ion-col><span class="data-header font">Annual Units</span></ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col class="font"><span>{{design?.monthlybill}} kWh</span></ion-col>
@@ -84,13 +84,13 @@
             <ion-col>
                 <ion-grid class="ion-no-padding">
                     <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type font">make</span></ion-col>
+                        <ion-col><span class="model-type font">Make</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name font">{{design.solarmake?.name}}</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
-                        <ion-col><span class="model-type font">model</span></ion-col>
+                        <ion-col><span class="model-type font">Model</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name font">{{design.solarmodel?.name}}</span>
                         </ion-col>
@@ -106,13 +106,13 @@
             <ion-col>
                 <ion-grid class="ion-no-padding">
                     <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type font">make</span></ion-col>
+                        <ion-col><span class="model-type font">Make</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name font">{{design.invertermake?.name}}</span>
                         </ion-col>
                     </ion-row>
                     <ion-row>
-                        <ion-col><span class="model-type font">model</span></ion-col>
+                        <ion-col><span class="model-type font">Model</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name font">{{design.invertermodel?.name}}</span>
                         </ion-col>
@@ -125,7 +125,7 @@
             <ion-col>
                 <ion-grid class="ion-no-padding">
                     <ion-row class="ion-no-padding">
-                        <ion-col><span class="model-type font">new construction</span></ion-col>
+                        <ion-col><span class="model-type font">New Construction</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name font">{{design?.newconstruction}}</span>
                         </ion-col>
@@ -142,7 +142,7 @@
                     </ion-row>
                     <ion-row *ngIf="design.newconstruction=='Yes'" class="ion-no-padding font">
                         <ng-container *ngIf="design.architecturaldesign !=[]">
-                            <ion-col ><span class="model-type font">Architectural design</span></ion-col>
+                            <ion-col ><span class="model-type font">Architectural Design</span></ion-col>
                             <ion-col   size="auto">
                                 <div  *ngFor="let archdesign of design.architecturaldesign;let i=index" style="display: flex;justify-content: flex-end;">
                                 <span class="model-name font" (click)="showurl(i,'architecturaldesign')" style="color:#3c78d8 !important">{{archdesign?.name}}{{archdesign?.ext}}</span>
@@ -151,7 +151,7 @@
                         </ng-container>
                     </ion-row>
                     <ion-row>
-                        <ion-col><span class="model-type font">project type</span></ion-col>
+                        <ion-col><span class="model-type font">Project Type</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name font">{{design?.projecttype}}</span>
                         </ion-col>
@@ -169,13 +169,13 @@
                         </ion-col>
                     </ion-row>
                     <ion-row *ngIf="design.mountingtype == 'roof' || design.mountingtype =='both'">
-                        <ion-col><span class="model-type font">roof type</span></ion-col>
+                        <ion-col><span class="model-type font">Roof Type</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name font">{{design?.rooftype}}</span>
                         </ion-col>
                     </ion-row>
                     <ion-row *ngIf="design.mountingtype=='ground' || design.mountingtype == 'both'">
-                        <ion-col><span class="model-type font">tilt of ground mounting system</span></ion-col>
+                        <ion-col><span class="model-type font">Tilt of Ground Mounting System</span></ion-col>
                         <ion-col size="auto">
                             <span class="model-name font">{{design?.tiltofgroundmountingsystem}}</span>
                         </ion-col>
@@ -221,7 +221,7 @@
             </ion-col>
         </ion-row>
         <ion-row *ngIf="design.annualutilityescalation !== null">
-            <ion-col><span class="model-type font">Annual utility Escalation</span></ion-col>
+            <ion-col><span class="model-type font">Annual Utility Escalation</span></ion-col>
             <ion-col size="auto">
                 <span class="model-name font">{{design?.annualutilityescalation}}</span>
             </ion-col>
@@ -272,7 +272,7 @@
         </ion-row>
 
         <ion-row>
-            <ion-col><span class="model-type font">created at</span></ion-col>
+            <ion-col><span class="model-type font">Created At</span></ion-col>
             <ion-col size="auto">
                 <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
             </ion-col>
@@ -385,7 +385,7 @@
 
             <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
             *ngIf="design.status=='designassigned'||design.status=='completed'">
-            <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned to</span></ion-col>
+            <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">Assigned To</span></ion-col>
             <ion-col size="auto">
                 <div class="selected d-flex">
                     <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"
@@ -404,7 +404,7 @@
 
         <ion-row style="margin-top: 40px !important;" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
         *ngIf="design.status=='reviewassigned'||design.status=='delivered'">
-        <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned to</span></ion-col>
+        <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">Assigned To</span></ion-col>
         <ion-col size="auto">
             <div class="selected d-flex">
                 <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"

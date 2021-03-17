@@ -394,6 +394,7 @@ this.DesignModel=this.sample1;
 
 
   dismissBottomSheet() {
+    this.showBottomDraw= false;
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);

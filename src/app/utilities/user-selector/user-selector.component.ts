@@ -38,10 +38,9 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator ,O
    
   }
 ngOnInit(){
- 
- 
+
    this.userId=this.storage.getUserID();
-    
+   console.log(this.userId)
 
 }
 

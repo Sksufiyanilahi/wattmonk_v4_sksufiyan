@@ -1,0 +1,127 @@
+<ion-content class="ion-padding login-background">
+  <ion-grid class="ion-padding">
+      <ion-row class="ion-margin-top">
+          <ion-col size="12" class="ion-no-margin ion-no-padding">
+              <span class="title text-bold">
+                  Wattmonk
+              </span>
+          </ion-col>
+      </ion-row>
+
+  </ion-grid>
+
+  <ion-grid class="ion-padding form-background">
+      <ion-row class="ion-margin-top">
+          <ion-col size="12" class="ion-no-margin ion-no-padding">
+              <span class="subtitle">
+                  Welcome
+              </span>
+              
+          </ion-col>
+          <ion-col size="12" class="ion-no-margin ion-no-padding">
+              <span class="subtitle-sub-text subtitle-dim-color">
+                  sign up to continue
+              </span>
+          </ion-col>
+      </ion-row>
+      <ion-row class="ion-margin-top">
+          <ion-col size="12" class="ion-no-padding">
+              <form [formGroup]="userregistrationForm" novalidate>
+                  <ion-grid class="ion-no-padding">
+                      <ion-row class="ion-margin-top">
+                      <ion-row>
+                        <ion-col size="6" class="ion-margin-top">
+                         
+                              <ion-input type="text" class="form-control"  placeholder="First name*" formControlName="firstname">
+                              </ion-input>
+                              
+                             
+                              <div style="height: 5px;">
+                                <div *ngIf="userregistrationForm.get('firstname').hasError('pattern') && userregistrationForm.get('firstname').dirty">
+                                    <span class="error">{{firstNameError}}</span>
+                                </div>
+                                <div *ngIf="userregistrationForm.get('firstname').value === '' && userregistrationForm.get('firstname').dirty">
+                                    <span class="error">{{fieldRequired}}</span>
+                                </div>
+                            </div>
+                      </ion-col>
+
+                      <ion-col size="6" class="ion-margin-top" >
+                         
+                        <ion-input type="text" class="form-control"  placeholder="Last name*" formControlName="lastname">
+                        </ion-input>
+                       
+                        <div style="height: 5px;">
+                          <div *ngIf="userregistrationForm.get('lastname').hasError('pattern') && userregistrationForm.get('lastname').dirty">
+                              <span class="error">{{lastNameError}}</span>
+                          </div>
+                          <div *ngIf="userregistrationForm.get('lastname').value === '' && userregistrationForm.get('lastname').dirty">
+                              <span class="error">{{fieldRequired}}</span>
+                          </div>
+                      </div>
+                </ion-col>
+              </ion-row>
+
+                          <ion-col size="12" class="ion-margin-top">
+                              <ion-input type="email" placeholder="work email*" class="form-control" autocomplete="off"
+                                  formControlName="email">
+                              </ion-input>
+                              <div style="height: 5px;">
+                                <div *ngIf="userregistrationForm.get('email').hasError('pattern') && userregistrationForm.get('email').dirty">
+                                    <span class="error">{{emailError}}</span>
+                                </div>
+                                <div *ngIf="userregistrationForm.get('email').value === '' && userregistrationForm.get('email').dirty">
+                                    <span class="error">{{fieldRequired}}</span>
+                                </div>
+                            </div>
+                          </ion-col>
+
+                          <ion-col size="12" class="ion-margin-top">
+                         
+                            <!-- <ion-input type="text" class="form-control"  placeholder="Country*" formControlName="country">
+                            </ion-input>
+                           
+                        <div class="error_div">
+                             <div >
+                                <span class="error">Invalid password</span>
+                            </div>        
+                        </div>   -->
+                            <ion-select style="padding-left:9px" class="form_input select_div"
+                                        ok-text="" cancel-text=""
+                                        formControlName="country" interface="popover" placeholder="Country*" >
+                                <ion-select-option *ngFor="let country of countries" [value]="country.country">{{country.callingcode}}{{country.country}}</ion-select-option>
+                               
+                            </ion-select>
+                          
+                    </ion-col>
+                    <ion-col size="12" class="ion-margin-top">
+                      <ion-item class="ion-no-padding" lines="none">
+                      
+                        <ion-label class="margin"   style="font-size: small;margin-bottom: 0px;margin-top:16px;white-space:break-spaces">I agree to platform's <a
+                        (click)="showTermsAggrement()" style="color: blue">Terms Agreement</a> and <a (click)="showPrivacyPolicy()" style="color: blue;">Privacy policy</a></ion-label>
+                        <ion-checkbox class="margin" style="margin-bottom: 0;" slot="start" class="form_input" (ionChange)="change($event)"></ion-checkbox>
+                    </ion-item>
+                    </ion-col>
+                         
+
+                          <ion-col size="12" class="ion-margin-top">
+                            <ion-button style="float: right;" class="action-button-color" fill="clear" (click)="registerUser()">Sign Up</ion-button>
+                          </ion-col>
+                      </ion-row>
+                  </ion-grid>
+              </form>
+          </ion-col>
+      </ion-row>
+  <ion-row class="ion-margin-top">
+    <ion-col size="12" class="ion-no-margin ion-no-padding">
+        <span style="font-size: 1.0em; color: black; font-weight: bold;">
+            Already a member?
+        </span>
+        <span style="font-size: .9em; color:#7DA4DD; font-weight: bold;" (click)="gotoSignIn()" routerDirection="forward">
+         &nbsp; Sign in
+        </span>
+    </ion-col>
+</ion-row>
+</ion-grid>
+
+</ion-content>

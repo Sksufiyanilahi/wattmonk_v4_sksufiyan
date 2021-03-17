@@ -398,6 +398,7 @@ export class PestampDesignComponent implements OnInit {
   }
 
   dismissBottomSheet() {
+    this.showBottomDraw = false;
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
@@ -1074,9 +1075,9 @@ gotoActivity(designData,event){
   console.log(event)
       event.stopPropagation();
     this.route.navigate(['/activity' + '/' + designData.id + '/pestamp'])
-  
+
   }
-  
+
   gotoDetails(designData,$event){
     // $event.preventDefault();
     // $event.stopPropagation();
