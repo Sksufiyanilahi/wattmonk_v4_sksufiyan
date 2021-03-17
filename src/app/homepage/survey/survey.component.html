@@ -73,7 +73,7 @@
                     </p>
                     <ion-row style="margin-bottom: 8px;"  class="m-0">
 
-                        <span class="chipdetail" style="background-color: #95afc0;">{{surveyData.source}}</span>
+                        <span class="chipdetail" style="background-color: #95afc0;">{{surveyData.source | titlecase}}</span>
                         <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{surveyData?.jobtype=='pvbattery' ? 'PV + Battery' : surveyData?.jobtype | uppercase}}</span>
 
 

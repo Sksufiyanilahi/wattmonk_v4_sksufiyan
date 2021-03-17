@@ -56,14 +56,14 @@ export const version='1.1.3'
 export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
 
 export enum ROLES {
-    Peengineer = 11,
-    SuperAdmin = 4,
-    ContractorSuperAdmin = 6,
-    ContractorAdmin = 7,
-    Admin = 5,
-    BD = 3,
-    Designer = 8,
-    Surveyor = 9,
-    Analyst = 10,
+  Peengineer = 11,
+  SuperAdmin = 4,
+  ContractorSuperAdmin = 6,
+  ContractorAdmin = 7,
+  Admin = 5,
+  BD = 3,
+  Designer = 8,
+  Surveyor = 9,
+  Analyst = 10,
 }
 

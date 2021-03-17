@@ -61,8 +61,8 @@
           <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" >In Review</span>
           <span class="chipdetail" *ngIf="designData.status == 'outsourced' && (userData.role.type=='clientadmin' || userData.role.type=='clientsuperadmin')" style="background-color: #95afc0;" >Waiting for acceptance</span>
           <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  >Revision</span>
-          <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
-                *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
+          <!-- <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+                *ngIf="designData.isoutsourced == 'true'">Wattmonk</span> -->
 
 
         </p>
@@ -94,21 +94,21 @@
 
 
 
-                  <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
-                          <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
-                              {{designData.designremainingtime}}</span></ion-col>
-                              <ion-col *ngIf="designData.status == 'outsourced'">
-                                  <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
-                                      {{designData.designacceptanceremainingtime}}</span></ion-col>
-                                      <ion-col *ngIf="designData.status == 'reviewassigned' && designData.reviewassignedto.id==userData.id" style="color: #737373; font-size: 14px;">
-                                          <span style="float: right;">{{designData.reviewremainingtime}}</span>
-                                        </ion-col>
+          <!-- <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
+                  <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
+                      {{designData.designremainingtime}}</span></ion-col>
+                      <ion-col *ngIf="designData.status == 'outsourced'">
+                          <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
+                              {{designData.designacceptanceremainingtime}}</span></ion-col>
+                              <ion-col *ngIf="designData.status == 'reviewassigned' && designData.reviewassignedto.id==userData.id" style="color: #737373; font-size: 14px;">
+                                  <span style="float: right;">{{designData.reviewremainingtime}}</span>
+                                </ion-col> -->
                   </ion-row>
 
                   <ion-row class="ion-no-margin ion-no-margin">
                     <ion-col style="padding-left:0px" >
-                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
-                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype}}</span>
+                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source | titlecase}}</span>
+                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype | uppercase}}</span>
                   </ion-col>
                       <ion-col *ngIf="segments=='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined' || segments=='requesttype=permit&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined'">
                           <span *ngIf="designData.status == 'created' || (designData.status == 'requestaccepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')) " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData,$event)"

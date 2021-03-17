@@ -45,8 +45,8 @@
      <span style="font-size:small ;float:right;font-style: italic;"> {{search?.updated_at|date: 'dd MMM yyyy'}}</span><br>
      <!-- <span class="chipdetail" style="background-color: #95afc0;"  [routerLink]="['/design-details/',search?.id]">{{search?.company}}</span> -->
      <span class="chipdetail" style="background-color: #95afc0;"  [routerLink]="['/design-details/',search?.id]">{{search?.requesttype}}</span>
-     <span *ngIf="search?.requesttype=='permit'" class="chipdetail" style="background-color: #95afc0;"  [routerLink]="['/design-details/',search?.id]">{{search?.jobtype=='pvbattery' ? 'PV + Battery' : search?.jobtype}}</span>
-     <span class="chipdetail" style="background-color: #95afc0;"  [routerLink]="['/design-details/',search?.id]">{{search?.source}}</span>
+     <span *ngIf="search?.requesttype=='permit'" class="chipdetail" style="background-color: #95afc0;"  [routerLink]="['/design-details/',search?.id]">{{search?.jobtype=='pvbattery' ? 'PV + Battery' : search?.jobtype | uppercase}}</span>
+     <span class="chipdetail" style="background-color: #95afc0;"  [routerLink]="['/design-details/',search?.id]">{{search?.source | titlecase}}</span>
      <ion-row class="ion-no-margin ion-no-margin">
       <!-- <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
           <span *ngIf="search?.status == 'created' || search?.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id,search)"
@@ -109,7 +109,7 @@
        <span style="font-size:small ;float:right;font-style: italic;">{{search?.updated_at|date: 'dd MMM yyyy'}}</span><br>
        <!-- <span class="chipdetail" style="background-color: #95afc0;"[routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">{{search?.company}}</span> -->
        <span class="chipdetail" style="background-color: #95afc0;"[routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">{{search?.jobtype=='pvbattery' ? 'PV + Battery' : search?.jobtype}}</span>
-       <span class="chipdetail" style="background-color: #95afc0;"[routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">{{search?.source}}</span>
+       <span class="chipdetail" style="background-color: #95afc0;"[routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">{{search?.source | titlecase}}</span>
        <ion-row class="ion-no-margin ion-no-margin">
         <!-- <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
             <span *ngIf="search?.status == 'created' || search?.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(search?.id,search)"
