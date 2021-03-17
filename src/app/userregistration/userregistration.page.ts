@@ -6,7 +6,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { NavController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { ROLES } from '../contants';
-import { INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE } from '../model/constants';
+import {FIELD_REQUIRED, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE} from '../model/constants';
 import { ErrorModel } from '../model/error.model';
 import { LoginModel } from '../model/login.model';
 import { User } from '../model/user.model';
@@ -26,6 +26,7 @@ export class UserregistrationPage implements OnInit {
   isTermsSelect:boolean=false;
 
   firstNameError = "Invalid First Name";
+  fieldRequired = FIELD_REQUIRED;
   emailError = INVALID_EMAIL_MESSAGE;
   lastNameError = "Invalid Last Name";
   netSwitch:any;
@@ -56,7 +57,7 @@ export class UserregistrationPage implements OnInit {
 
   ngOnInit() {
     this.fetchCountry();
-    
+
   }
 
   fetchCountry(){
@@ -87,7 +88,7 @@ export class UserregistrationPage implements OnInit {
         if(res){
         this.updateUser();
         }
-        
+
         // const postData = {
         //   firstname: this.userregistrationForm.get("firstname").value,
         //   lastname: this.userregistrationForm.get("lastname").value,
@@ -245,7 +246,7 @@ this.network.networkConnect();
                   }
                  }
                 //}
-              
+
             });
             this.apiService.emitUserNameAndRole(response.user);
 
