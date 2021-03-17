@@ -1380,7 +1380,7 @@ gotoActivity(designData,event){
   gotoDetails(designData,$event){
     // $event.preventDefault();
     // $event.stopPropagation();
-    this.route.navigate(['/design-details/' + designData.id])
+    this.route.navigate(['/permit-design-details/' + designData.id])
   }
 
   gotoChats(designData,event){

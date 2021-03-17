@@ -32,7 +32,7 @@
                   <!-- <span class="chipdetail" style="background-color: #1289A7;"  routerDirection="forward">
                     {{designData.deliverydate | date: 'hh:mm a'}}
                 </span> -->
-                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" >Unassigned</span>
+                <!-- <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" >Unassigned</span> -->
                 <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" >Overdue</span>
                 <span fill="clear" background-border="clear" (click)="gotoActivity(designData,$event)" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                 <span class="chipdetail" style="background-color: #1c12a7;float:right;margin-right: 1rem;" *ngIf="designData.company !== null || designData.company!== ''" >{{designData.company}}</span>
