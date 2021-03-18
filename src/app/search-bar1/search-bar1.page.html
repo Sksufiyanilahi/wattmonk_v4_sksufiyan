@@ -19,7 +19,12 @@
 <ion-refresher slot="fixed" (ionRefresh)="refreshData($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-<ion-card *ngFor="let search of SortedModel" class="custom-card">
+
+  <ion-grid *ngIf="SortedModel.length!==0 ; else norecordfound" >
+   <ion-col *ngFor="let search of SortedModel" >
+    
+<ion-card  class="custom-card">
+    
    <p *ngIf="search?.type=='design'">
     <span style="float: left;font-size: medium;color: black;font-size: medium;font-weight: 100; "  [routerLink]="['/design-details/',search?.id]">{{search?.name}}</span>
     <span class="chipdetail" style="background-color:rgb(228, 77, 102);"  [routerLink]="['/design-details/',search?.id]" >design</span>
@@ -38,7 +43,7 @@
     <span *ngIf="search?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;"  [routerLink]="['/design-details/',search?.id]">
      pending
    </span>
-   <span fill="clear" background-border="clear" [routerLink]="['/','activity',search?.id,'design']" style="float: right;"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span>
+   <span fill="clear" background-border="clear" [routerLink]="['/','activity',search?.id,'design']" style="float: right;"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
    <br><br>
      <span style="float:left;font-size: smaller;">{{search?.email}}</span><br>
      <span style="float:left;text-align:left;font-size: smaller;"> {{search?.address}}</span><br>
@@ -103,7 +108,7 @@
       <span *ngIf="search?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;" [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">
        pending
      </span>
-     <span fill="clear" background-border="clear" [routerLink]="['/','activity',search?.id,'survey']" style="float: right;"  size="small"  ><ion-icon  src="/assets/images/activitylist.svg" ></ion-icon></span><br><br>
+     <span fill="clear" background-border="clear" [routerLink]="['/','activity',search?.id,'survey']" style="float: right;"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span><br><br>
        <span style="float:left;font-size: smaller;">{{search?.email}}</span><br>
        <span style="float:left;font-size: smaller;"> {{search?.address}}</span><br>
        <span style="font-size:small ;float:right;font-style: italic;">{{search?.updated_at|date: 'dd MMM yyyy'}}</span><br>
@@ -148,8 +153,32 @@
          -->
     </ion-row>
       </p>
-
+    
 </ion-card>
+   </ion-col>
+
+  
+</ion-grid>
+
+
+<ng-template #norecordfound>
+    <div *ngIf="SortedModel.length == 0 && searchElement!=''" class="h-100 d-flex flex-column align-center justify-center">
+            <!-- <div *ngIf="!netSwitch"> -->
+               No such record found
+            <!-- </div> -->
+
+        <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+    </div>
+    <div *ngIf="SortedModel.length == 0 && searchElement==''" class="h-100 d-flex flex-column align-center justify-center">
+        <!-- <div *ngIf="!netSwitch"> -->
+           Enter text to search
+        <!-- </div> -->
+
+    <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+</div></ng-template>
+
+
+
 
 </ion-content>
 <ng-container *ngIf="showBottomDraw">
