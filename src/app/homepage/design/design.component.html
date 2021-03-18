@@ -94,7 +94,7 @@
                                 <span><strong>Assigned to : {{designData.reviewassignedto.firstname | titlecase}} {{designData.reviewassignedto.lastname | titlecase}}</strong></span>
                             </ion-col>
 
-                        <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
+                        <!-- <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
                                 <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
                                     {{designData.designremainingtime}}</span></ion-col>
                                     <ion-col *ngIf="designData.status == 'outsourced'">
@@ -102,7 +102,7 @@
                                             {{designData.designacceptanceremainingtime}}</span></ion-col>
                                             <ion-col *ngIf="designData.status == 'reviewassigned' && designData.reviewassignedto.id==userData.id" style="color: #737373; font-size: 14px;">
                                                 <span style="float: right;">{{designData.reviewremainingtime}}</span>
-                                              </ion-col>
+                                              </ion-col> -->
                         </ion-row>
 
                         <ion-row class="ion-no-margin ion-no-margin">

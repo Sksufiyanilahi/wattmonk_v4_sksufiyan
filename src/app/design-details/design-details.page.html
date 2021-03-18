@@ -134,7 +134,7 @@
                         <ng-container *ngIf="design.attachments.length > 0">
                             <ion-col><span class="model-type font">Attachments</span></ion-col>
                             <ion-col size="auto" >
-                                <div *ngFor="let attachment of design.attachments;let i=index" style="display: flex;justify-content: flex-end;">
+                                <div *ngFor="let attachment of design.attachments;let i=index" style="display: flex;justify-content: flex-end;line-height: 1.5rem;">
                                     <span class="model-name font" style="color:#3c78d8 !important" (click)="showurl(i,'attachments')">{{attachment?.name}}{{attachment?.ext}}</span>
                                 </div>
                             </ion-col>
@@ -144,7 +144,7 @@
                         <ng-container *ngIf="design.architecturaldesign !=[]">
                             <ion-col ><span class="model-type font">Architectural Design</span></ion-col>
                             <ion-col   size="auto">
-                                <div  *ngFor="let archdesign of design.architecturaldesign;let i=index" style="display: flex;justify-content: flex-end;">
+                                <div  *ngFor="let archdesign of design.architecturaldesign;let i=index" style="display: flex;justify-content: flex-end;line-height: 1.5rem;">
                                 <span class="model-name font" (click)="showurl(i,'architecturaldesign')" style="color:#3c78d8 !important">{{archdesign?.name}}{{archdesign?.ext}}</span>
                             </div>
                             </ion-col>
