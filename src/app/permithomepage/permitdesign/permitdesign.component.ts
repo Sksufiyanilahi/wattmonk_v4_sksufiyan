@@ -919,8 +919,7 @@ this.route.navigate(['/payment-modal'], {
                   ;
                   console.log('reach ', value);
                  this.utils.showSnackBar('Design request has been delivered successfully');
-
-                  this.utils.setHomepagePermitRefresh(true);
+                 this.utils.setHomepagePermitRefresh(true);
                 })
               }, (error) => {
                 this.utils.hideLoading();

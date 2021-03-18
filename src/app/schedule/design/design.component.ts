@@ -65,7 +65,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   archFiles: any =[];
   prelimFiles: any =[];
  imageName:any;
-
+ oldcommentid :String
  indexOfArcFiles=[]
  isArcFileDelete:boolean=false;
   //attachmentName = this.desginForm.get('attachments').value;
@@ -136,6 +136,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
       monthlybill: new FormControl('',[Validators.required,Validators.min(0),Validators.pattern(NUMBERPATTERN)]),
+      inverterscount : new FormControl('1', [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
       address: new FormControl('',[Validators.required]),
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
@@ -166,7 +167,8 @@ export class DesignComponent implements OnInit, OnDestroy {
       //isonpriority:new FormControl('false'),
       paymentstatus:new FormControl(null),
       paymenttype:new FormControl(null),
-      requirementtype : new FormControl('assessment')
+      requirementtype : new FormControl('assessment'),
+      oldcommentid: new FormControl(''),
       // uploadbox:new FormControl('')
     });
 
@@ -404,10 +406,13 @@ getDesignDetails() {
             solarmodel:this.design.solarmodel,
             invertermake:this.design.invertermake,
             invertermodel:this.design.invertermodel,
-            status:this.design.status
+            inverterscount:this.design.inverterscount,
+            status:this.design.status,
+            oldcommentid:this.design.comments[0].id
           });
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
+          this.oldcommentid = this.design.comments[0].id;
         //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
           if (this.design.assignedto !== null && this.design.assignedto !== undefined) {
             this.desginForm.patchValue({
@@ -1248,6 +1253,9 @@ state: { productdetails: objToSend }
       else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field annual units.');
       }
+      else if(this.desginForm.value.inverterscount=='' || this.desginForm.get('inverterscount').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field inverters count.');
+      }
       else if(this.desginForm.value.modulemake=='' || this.desginForm.get('modulemake').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field module make.');
       }
@@ -1331,7 +1339,7 @@ state: { productdetails: objToSend }
           console.log(designacceptancestarttime)
       this.desginForm.patchValue({createdby:this.designCreatedBy,
                                   creatorparentid:this.designCreatedByUserParent,
-                                  status:"outsourced",
+                                  status:"requestaccepted",
                                   outsourcedto:"232",
                                   isoutsourced:"true",
                                   designacceptancestarttime:designacceptancestarttime})
