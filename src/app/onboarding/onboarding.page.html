@@ -389,7 +389,7 @@
   </div>
   </mat-step>
   <mat-step>
-    <ng-template matStepLabel>Request for Design</ng-template>
+    <ng-template matStepLabel>Request for Design <button class="action-button-color alignment"  *ngIf="this.stepper.selectedIndex==3" style="float: right;" mat-button (click)="moveToDashboard()" matStepperNext>Skip</button></ng-template>
     <div style="color: #111 !important;padding-left: 0px;">
       <ion-label style="color:#111 !important;">Service Charges</ion-label>
     </div>

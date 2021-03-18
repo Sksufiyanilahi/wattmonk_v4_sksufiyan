@@ -88,7 +88,7 @@ export class OnboardingPage implements OnInit {
       company:new FormControl(null, [Validators.required,Validators.minLength(3), Validators.pattern(COMPANYFORMAT)]),
       ispaymentmodeprepay:new FormControl(null),
       // logo:new FormControl(null, [Validators.required]),
-      registrationnumber:new FormControl(null, [Validators.required, Validators.pattern('[a-zA-Z0-9-]*')]),
+      registrationnumber:new FormControl(null, [Validators.required,Validators.minLength(3), Validators.maxLength(20), Validators.pattern("^[0-9]{3,20}$")]),
       isonboardingcompleted: new FormControl(true)
     })
     this.secondFormGroup = this.formBuilder.group({
@@ -577,6 +577,11 @@ state: { productdetails: objToSend }
   move($event,index: number) {
     $event.stopPropagation();
     this.stepper.selectedIndex = index;
+  }
+
+  moveToDashboard()
+  {
+    this.router.navigate(['/dashboard']);
   }
   goBack(){
     this.navCtrl.pop();
