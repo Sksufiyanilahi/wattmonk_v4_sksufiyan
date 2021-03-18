@@ -65,5 +65,6 @@ export enum ROLES {
   Designer = 8,
   Surveyor = 9,
   Analyst = 10,
+  Master = 15,
 }
 
