@@ -98,6 +98,7 @@ export class AddMoneyPage implements OnInit {
     // this.data = this.designData.productdetails.queryParams.data;
     this.fulldesigndata = this.designData.productdetails.queryParams.fulldesigndata;
     this.assignValue = this.designData.productdetails.queryParams.assignValue;
+    this.onBoarding= this.designData.productdetails.queryParams.onBoarding;
     console.log(this.fulldesigndata);
     console.log(this.design);
     this.amountForm = this.formBuilder.group(

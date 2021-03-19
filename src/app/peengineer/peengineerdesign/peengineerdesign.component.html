@@ -30,8 +30,8 @@
 
       </p>
       <p style="margin:0px">
-        <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
-        *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
+        <!-- <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+        *ngIf="designData.isoutsourced == 'true'">Wattmonk</span> -->
         <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'declined'"  >On Hold</span>
         <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'assigned'" >Assigned</span>
       <span class="chipdetail" style="background-color: rgb(109, 187, 26);"   *ngIf=" designData.acceptedbypeengineer==true && designData.status == 'assigned'" >Accepted</span>
@@ -64,7 +64,7 @@
 
                   <ion-row class="ion-no-margin ion-no-margin" style="margin-bottom: 0px;">
                    <ion-col style="padding-left:0px" >
-                    <span class="chipdetail"  style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
+                    <span class="chipdetail"  style="background-color: #95afc0;align-self: center;" >{{designData?.source | titlecase}}</span>
                     <span class="chipdetail"  style="background-color: #95afc0;align-self: center;" >{{designData?.propertytype}}</span>
                     <span class="chipdetail"  style="background-color: #95afc0;align-self: center;" >{{designData?.type}}</span>
                 </ion-col>

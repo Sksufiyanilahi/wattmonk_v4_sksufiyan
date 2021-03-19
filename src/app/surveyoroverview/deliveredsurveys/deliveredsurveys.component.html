@@ -38,7 +38,7 @@
                       (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
 
                 <ion-row style="margin-bottom: 8px;"  [routerLink]="['/survey-detail/',surveyData.id]">
-                    <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span>
+                    <!-- <span class="chipdetail" style="background-color: #95afc0;" >Wattmonk</span> -->
                     <span class="chipdetail" style="background-color: #95afc0;" >{{surveyData.formattedjobtype}}</span>
                 </ion-row>
             </div>

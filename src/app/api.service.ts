@@ -707,6 +707,9 @@ export class ApiService {
       headers: this.uploadHeaders}
      ) }
 
+     getStatusCount(): Observable<any[]> {
+      return this.http.get<any[]>( BaseUrl + "designstatistics?id=" + this.userId, { headers: this.headers })}
+       
      registerUser(data){
       return this.http.post(BaseUrl + "auth/local/register",data,{
         headers:this.headers

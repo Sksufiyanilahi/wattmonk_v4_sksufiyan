@@ -68,7 +68,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       city: new FormControl(''),
       postalcode: new FormControl(''),
       status: new FormControl('created'),
-      chatid:new FormControl(null)
+      chatid:new FormControl(null),
+      oldcommentid: new FormControl(''),
     });
 
   }
@@ -315,6 +316,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             state: this.survey.state,
             city: this.survey.city,
             postalcode:this.survey.postalcode,
+            oldcommentid:this.survey.comments[0].id
           });
           if (this.survey.assignedto !== null && this.survey.assignedto !== undefined) {
             this.surveyForm.patchValue({

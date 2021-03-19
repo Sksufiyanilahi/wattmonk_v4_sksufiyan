@@ -72,6 +72,7 @@ export class PermitschedulePage implements OnInit {
   filteredCompanies: Observable<Clients[]>;
   designCreatedBy;
   designCreatedByUserParent;
+  oldcommentid:any
 
   private subscription: Subscription;
   private addressSubscription: Subscription;
@@ -166,6 +167,7 @@ export class PermitschedulePage implements OnInit {
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       phone : new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
+      inverterscount : new FormControl('1', [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
     modulemake : new FormControl("", [
       Validators.required,
       Validators.pattern("^[a-zA-Z-_ ]{3,}$")
@@ -672,9 +674,11 @@ export class PermitschedulePage implements OnInit {
             modulemodel:this.design.solarmodel.name,
             invertermake:this.design.invertermake.name,
             invertermodel:this.design.invertermodel.name,
-            status:this.design.status
+            status:this.design.status,
+            inverterscount:this.design.inverterscount
           });
           console.log("gg",this.design.solarmake.name);
+          this.oldcommentid = this.design.comments[0].id;
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
         //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
@@ -873,7 +877,7 @@ saveInverterModel() {
         var isoutsourced;
         var newConstruction = this.desginForm.get("newconstruction").value;
         if (this.designCreatedBy) {
-          designstatus = "outsourced";
+          designstatus = "requestaccepted";
           designoutsourcedto = "232";
           isoutsourced = "true";
           var designacceptancestarttime = new Date();
@@ -974,7 +978,8 @@ else{
   outsourcedto:designoutsourcedto,
   designacceptancestarttime:designacceptancestarttime,
   isoutsourced:isoutsourced,
-  isdesignraised:true
+  isdesignraised:true,
+  inverterscount:this.desginForm.get('inverterscount').value
 
 }}
 
@@ -993,13 +998,13 @@ else{
                 if(this.attachmentFileUpload){
                   this.uploadAttachmentDesign(response,'attachments')
                 }
-              }
+              
               else{
                 this.router.navigate(['/permithomepage'])
                     this.utils.showSnackBar('Design have been Created');
                     // this.utils.showSnackBar('Design have been saved');
                     this.utils.setHomepagePermitRefresh(true);
-              }
+              }}
                   // setTimeout(()=>{
                   //   this.utils.hideLoading().then(() => {
                   //     console.log('Res', response);
@@ -1065,7 +1070,8 @@ else{
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
-                        isdesignraised:true
+                        isdesignraised:true,
+                        inverterscount:this.desginForm.get('inverterscount').value
 
 
 
@@ -1093,7 +1099,7 @@ else{
                    if(this.attachmentFileUpload){
                      this.uploadAttachmentDesign(response,'attachments')
                    }
-                 }
+                 
                  else{
                   let objToSend: NavigationExtras = {
                             queryParams: {
@@ -1109,7 +1115,7 @@ else{
                     this.router.navigate(['/payment-modal'], {
                       state: { productdetails: objToSend }
                     });
-                 }
+                 }}
                 // this.utils.hideLoading().then(() => {
                 //   // this.createChatGroup(response);
                 //   console.log('Res', response);
@@ -1195,7 +1201,10 @@ else{
                         outsourcedto:designoutsourcedto,
                         designacceptancestarttime:designacceptancestarttime,
                         isoutsourced:isoutsourced,
-                        isdesignraised:true
+                        isdesignraised:true,
+                        oldcommentid:this.oldcommentid,
+                        inverterscount:this.desginForm.get('inverterscount').value
+                        
 
   }
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
@@ -1215,13 +1224,13 @@ else{
                  if(this.attachmentFileUpload){
                    this.uploadAttachmentDesign(response,'attachments')
                  }
-               }
+               
                else{
                 this.router.navigate(['/permithomepage'])
                 this.utils.showSnackBar('Design have been Created');
                 // this.utils.showSnackBar('Design have been saved');
                 this.utils.setHomepagePermitRefresh(true);
-               }
+               }}
               // if(this.isArcFileDelete){
               //   this.deleteArcFile(this.indexOfArcFiles);
               // }
@@ -1282,7 +1291,10 @@ else{
     //attachments: this.desginForm.get('attachments').value,
                         deliverydate:tomorrow.toISOString(),
                         creatorparentid:this.storage.getParentId(),
-                        isdesignraised:true
+                        isdesignraised:true,
+                        oldcommentid:this.oldcommentid,
+                        inverterscount:this.desginForm.get('inverterscount').value
+                     
 
 
   }
@@ -1304,7 +1316,7 @@ else{
                  if(this.attachmentFileUpload){
                    this.uploadAttachmentDesign(response,'attachments')
                  }
-               }
+               
                else{
                 let objToSend: NavigationExtras = {
                   queryParams: {
@@ -1315,12 +1327,12 @@ else{
                   skipLocationChange: false,
                   fragment: 'top'
               };
-
+            
 
           this.router.navigate(['/payment-modal'], {
             state: { productdetails: objToSend }
           });
-               }
+               }}
               // if(this.isArcFileDelete){
               //   console.log("hello");
               //   this.deleteArcFile(this.indexOfArcFiles);
@@ -1382,6 +1394,9 @@ else{
         }
         else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern') || this.desginForm.value.monthlybill==undefined){
           this.utils.errorSnackBar('Please check the field annual units.');
+        }
+        else if(this.desginForm.value.inverterscount=='' || this.desginForm.get('inverterscount').hasError('pattern') || this.desginForm.value.inverterscount==undefined){
+          this.utils.errorSnackBar('Please check the field inverters count.');
         }
         else if(this.desginForm.value.modulemake=='' || this.desginForm.get('modulemake').hasError('pattern') || this.desginForm.value.modulemake==undefined){
           this.utils.errorSnackBar('Please check the field module make.');

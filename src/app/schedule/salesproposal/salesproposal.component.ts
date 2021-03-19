@@ -68,7 +68,7 @@ export class SalesproposalComponent implements OnInit {
   archFiles: any=[];
   prelimFiles: any=[];
  imageName:any;
-
+ oldcommentid:String
  indexOfArcFiles=[]
  isArcFileDelete:boolean=false;
   //attachmentName = this.desginForm.get('attachments').value;
@@ -168,6 +168,7 @@ blob:Blob;
       invertermake: new FormControl('', [Validators.required]),
       invertermodel: new FormControl('', [Validators.required]),
       monthlybill: new FormControl('',[Validators.required,Validators.min(0),Validators.pattern(NUMBERPATTERN)]),
+      inverterscount : new FormControl('1', [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
       address: new FormControl('',[Validators.required]),
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
@@ -694,10 +695,12 @@ getDesignDetails() {
             incentive : this.design.incentive.id,
             costofsystem : this.design.costofsystem,
             personname : this.design.personname,
-            requirementtype : this.design.requirementtype
+            requirementtype : this.design.requirementtype,
+            inverterscount:this.design.inverterscount
           });
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
+          this.oldcommentid = this.design.comments[0].id;
         //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
           if (this.design.assignedto !== null && this.design.assignedto !== undefined) {
             this.desginForm.patchValue({
@@ -1046,6 +1049,7 @@ deleteArcFile(index){
               costofsystem : this.desginForm.get('costofsystem').value,
               personname : this.desginForm.get('personname').value,
               requirementtype :this.desginForm.get('requirementtype').value,
+              inverterscount:this.desginForm.get('inverterscount').value
             }
             this.utils.showLoading('Saving').then(() => {
             // this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
@@ -1142,6 +1146,7 @@ deleteArcFile(index){
                 costofsystem : this.desginForm.get('costofsystem').value,
                 personname : this.desginForm.get('personname').value,
                 requirementtype :this.desginForm.get('requirementtype').value,
+                inverterscount:this.desginForm.get('inverterscount').value
               }
               this.apiService.addDesginForm(postData).subscribe((response) => {
                 console.log(response.id);
@@ -1233,6 +1238,8 @@ deleteArcFile(index){
               costofsystem : this.desginForm.get('costofsystem').value,
               personname : this.desginForm.get('personname').value,
               requirementtype :this.desginForm.get('requirementtype').value,
+              inverterscount:this.desginForm.get('inverterscount').value,
+              oldcommentid:this.oldcommentid,
             }
             this.utils.showLoading('Saving').then(() => {
           this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
@@ -1316,6 +1323,8 @@ deleteArcFile(index){
             costofsystem : this.desginForm.get('costofsystem').value,
             personname : this.desginForm.get('personname').value,
             requirementtype :this.desginForm.get('requirementtype').value,
+            inverterscount:this.desginForm.get('inverterscount').value,
+            oldcommentid:this.oldcommentid,
           }
           this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
             this.utils.hideLoading().then(()=>{
@@ -1383,6 +1392,9 @@ deleteArcFile(index){
       }
       else if(this.desginForm.value.monthlybill=='' || this.desginForm.get('monthlybill').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field annual units.');
+      }
+      else if(this.desginForm.value.inverterscount=='' || this.desginForm.get('inverterscount').hasError('pattern')){
+        this.utils.errorSnackBar('Please check the field inverterscount.');
       }
       else if(this.desginForm.value.solarmake=='' || this.desginForm.get('solarmake').hasError('pattern')){
         this.utils.errorSnackBar('Please check the field module make.');
