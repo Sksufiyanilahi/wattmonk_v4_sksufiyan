@@ -7,7 +7,7 @@ import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
 import { SolarMadeModel } from 'src/app/model/solar-made.model';
 import { InverterMakeModel } from 'src/app/model/inverter-make.model';
-import { NavController } from '@ionic/angular';
+import { IonSlides, NavController } from '@ionic/angular';
 import { InverterMadeModel } from 'src/app/model/inverter-made.model';
 import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED,INVALID_NAME_MESSAGE, INVALID_ANNUAL_UNIT, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_COMPANY_NAME } from '../../model/constants';
 import { Observable, Subscription } from 'rxjs';
@@ -29,7 +29,35 @@ import { map, startWith } from "rxjs/operators";
   styleUrls: ['./design.component.scss'],
 })
 export class DesignComponent implements OnInit, OnDestroy {
+  @ViewChild('slideWithNav', { static: false }) slideWithNav: IonSlides;
+  @ViewChild('slideWithNav2', { static: false }) slideWithNav2: IonSlides;
+  @ViewChild('slideWithNav3', { static: false }) slideWithNav3: IonSlides;
 
+  sliderOne: any;
+  sliderTwo: any;
+  sliderThree: any;
+
+
+  //Configuration for each Slider
+  slideOptsOne = {
+    initialSlide: 0,
+    slidesPerView: 1,
+    autoplay: true
+  };
+  slideOptsTwo = {
+    initialSlide: 1,
+    slidesPerView: 2,
+    loop: true,
+    centeredSlides: true,
+    spaceBetween: 20
+  };
+  slideOptsThree = {
+    initialSlide: 0,
+    slidesPerView: 3
+  };
+
+  isBeginningSlide: true;
+  isEndSlide: false;
 
   desginForm: FormGroup;
 
@@ -100,6 +128,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   userdata:any;
 
   attachmentFileUpload: boolean= false;
+  imageurls: any=[];
 
   // newprelims: Observable<any>;
   // newprelimsRef: AngularFireObject<any>;
@@ -207,6 +236,45 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   ionViewDidEnter(){
   }
+
+
+
+ //Move to Next slide
+ slideNext(object, slideView) {
+  slideView.slideNext(500).then(() => {
+    this.checkIfNavDisabled(object, slideView);
+  });
+}
+
+//Move to previous slide
+slidePrev(object, slideView) {
+  slideView.slidePrev(500).then(() => {
+    this.checkIfNavDisabled(object, slideView);
+  });;
+}
+
+//Method called when slide is changed by drag or navigation
+SlideDidChange(object, slideView) {
+  this.checkIfNavDisabled(object, slideView);
+}
+
+//Call methods to check if slide is first or last to enable disbale navigation
+checkIfNavDisabled(object, slideView) {
+  this.checkisBeginning(object, slideView);
+  this.checkisEnd(object, slideView);
+}
+
+checkisBeginning(object, slideView) {
+  slideView.isBeginning().then((istrue) => {
+    object.isBeginningSlide = istrue;
+  });
+}
+checkisEnd(object, slideView) {
+  slideView.isEnd().then((istrue) => {
+    object.isEndSlide = istrue;
+  });
+}
+
 
   // getmodulename(event){
 
@@ -1041,9 +1109,22 @@ ioniViewDidEnter(){
   }
 
   prelimfiles(event){
-    console.log(event.target.files);
-    for(var i=0; i< event.target.files.length;i++){
+    console.log(event);
+    for(let i=0; i< event.target.files.length;i++){
+      console.log(i);
+
       this.prelimFiles.push(event.target.files[i])
+      var reader = new FileReader();
+      reader.onload = (e: any) => {
+        if(event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')){
+          // console.log(event.target.files[i].name);
+          this.imageurls.push(e.target.result);
+        }else{
+          this.imageurls.push('/assets/icon/file.png');
+        }
+        console.log(this.imageurls)
+      }
+      reader.readAsDataURL(event.target.files[i]);
     }
     this.attachmentFileUpload= true;
     if(this.prelimFiles.length==1){
@@ -1189,6 +1270,8 @@ ioniViewDidEnter(){
     this.archFiles.splice(i, 1);
   }
   removePrelim(i) {
+    console.log(i,this.prelimFiles,this.prelimFiles.length)
+    this.imageurls.splice(i, 1);
     this.prelimFiles.splice(i, 1);
   }
   sendtowattmonk(){
