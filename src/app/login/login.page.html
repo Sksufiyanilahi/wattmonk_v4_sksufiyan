@@ -38,11 +38,11 @@
                                 <div class="error_div">
                                     <div *ngIf="loginForm.get('identifier').hasError('pattern') && loginForm.get('identifier').dirty" >
                                         <span class="error">{{emailError}}</span>
-                                    </div> 
+                                    </div>
                                     <div *ngIf="loginForm.get('identifier').value === '' && loginForm.get('identifier').dirty" >
                                         <span class="error">{{fieldRequired}}</span>
-                                    </div>      
-                                </div>  
+                                    </div>
+                                </div>
                             </ion-col>
 
                             <ion-col size="12" class="ion-margin-top">
@@ -57,8 +57,8 @@
                                 <div class="error_div">
                                     <div *ngIf="password.errors?.minlength">
                                         <span class="error">Invalid password</span>
-                                    </div>       
-                                </div>  
+                                    </div>
+                                </div>
                             </ion-col>
 
                             <ion-col size="12" class="forgot-password-text">
@@ -86,12 +86,16 @@
                 <span style="font-size: .8em; color:#000000a6; font-weight: bold;">
                     Start exploring our end-to-end platform for better experiences and enhanced productivity. Scale with the power of Wattmonk platform
                 </span>
-                <span style="font-size: .9em; color:#7DA4DD; font-weight: bold;" (click)="gotoSignup()" routerDirection="forward">
-                 &nbsp; Sign up
-                </span>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+
+                <ion-button color="primary" (click)="gotoSignup()">
+                 Sign up
+                </ion-button>
+
+            </ion-row>
+          </ion-grid>
 
 
 </ion-content>

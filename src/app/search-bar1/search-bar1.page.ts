@@ -64,11 +64,12 @@ userData:any;
     console.log(this.userData);
     this.mixpanelService.track("SEARCH_PAGE_OPEN", {
     });
+    this.SortedModel=[]
   }
 
   searchfor(event){
 
- if (this.searchElement !==''){
+ if (this.searchElement !=''){
  this.apiService.searchAllDesgin(this.searchElement).subscribe((dataModel:any) =>{
 console.log("inside this",dataModel);
 
@@ -394,6 +395,7 @@ this.DesignModel=this.sample1;
 
 
   dismissBottomSheet() {
+    this.showBottomDraw= false;
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);

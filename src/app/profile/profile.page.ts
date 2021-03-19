@@ -33,6 +33,8 @@ export class ProfilePage implements OnInit {
 profile:any;
   user: User;
   userdata: any;
+  statuscount:any;
+  activedesignjobs;any;
 
   constructor(
     private navController: NavController,
@@ -78,7 +80,19 @@ this.apiService.getProfileDetails().subscribe(res=>{
   console.log(res);
   this.profile=res;
 })
+this.apiService.getStatusCount().subscribe(
+  response => {
+    this.statuscount = response;
+    this.activedesignjobs = this.statuscount.waitingforassigned + this.statuscount.waitingforacceptance + this.statuscount.requestaccepted + this.statuscount.designassigned
+      + this.statuscount.reviewassigned + this.statuscount.reviewpassed + this.statuscount.reviewfailed;
+      console.log(this.activedesignjobs)
+  }
+,
+error => {
+  this.utilities.errorSnackBar("Error");
+})
 }
+
 
 isEmptyObject(obj) {
   return (obj && (Object.keys(obj).length === 0));
@@ -257,5 +271,32 @@ state: { productdetails: objToSend }
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
 
+  }
+
+  onEmailChange(data,value,event){
+    console.log(event.detail.checked);
+    console.log(event.target.value,value)
+    const id = data.id;
+    if(value=='notification')
+    {
+      const postData = {
+        getnotification:event.detail.checked
+      }
+      this.apiService.updateUser(id,postData).subscribe(res=>{
+        console.log(res);
+      })
+    }
+    else{
+      const postData = {
+        getemail:event.detail.checked
+      }
+      this.apiService.updateUser(id,postData).subscribe(res=>{
+        console.log(res);
+      })
+    }
+  }
+
+  profileEdit(){
+    
   }
 }

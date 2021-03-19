@@ -60,6 +60,7 @@ export class PestampSchedulePage implements OnInit {
   indexOfatticphotos = [];
   indexOfroofphotos = [];
   indexOfpermitPlanphotos = [];
+  oldcommentsid:String
 
   isRoofFileDelete: boolean = false;
   isAtticFileDelete: boolean = false;
@@ -189,7 +190,9 @@ export class PestampSchedulePage implements OnInit {
             postalcode: this.design.postalcode,
             //attachments:this.design.attachments,
           });
-        })
+        }  
+        )
+        this.oldcommentsid=this.design.comments[0].id;
       }, (error) => {
         this.utils.hideLoading();
       })
@@ -647,7 +650,7 @@ export class PestampSchedulePage implements OnInit {
       }
       else {
         if (e == 'save') {
-          var data = {
+          var data1 = {
             personname: this.firstFormGroup.get('name').value,
             email: this.firstFormGroup.get('email').value,
             contactnumber: contactnumber,
@@ -668,11 +671,13 @@ export class PestampSchedulePage implements OnInit {
             status: "created",
             outsourcedto: null,
             //paymenttype: null,
-            paymentstatus: null
+            paymentstatus: null,
+            oldcommentid: this.oldcommentsid
+            
           }
           this.utils.showLoading('Saving').then(() => {
             console.log(this.isAtticFileUpload);
-            this.apiService.updatePestamps(this.designId, data).subscribe(res => {
+            this.apiService.updatePestamps(this.designId, data1).subscribe(res => {
               this.utils.hideLoading();
               // if(stampingType=='structural' || stampingType == 'both')
               console.log(this.isAtticFileUpload);
@@ -724,7 +729,7 @@ export class PestampSchedulePage implements OnInit {
           })
         }
         else if (e == 'send') {
-          var postData = {
+          var postData1 = {
             personname: this.firstFormGroup.get('name').value,
             email: this.firstFormGroup.get('email').value,
             contactnumber: this.firstFormGroup.get('contactnumber').value,
@@ -745,9 +750,10 @@ export class PestampSchedulePage implements OnInit {
             status: "created",
             outsourcedto: null,
             //paymenttype: null,
-            paymentstatus: null
+            paymentstatus: null,
+            oldcommentid:this.oldcommentsid
           }
-          this.apiService.updatePestamps(this.designId, postData).subscribe(res => {
+          this.apiService.updatePestamps(this.designId, postData1).subscribe(res => {
             console.log(res);
             if (stampingType == 'structural' || stampingType == 'both') {
               this.uploadAtticFiles(res,this.atticPhotosList[0],0)

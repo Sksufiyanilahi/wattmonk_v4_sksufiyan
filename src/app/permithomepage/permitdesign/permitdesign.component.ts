@@ -46,7 +46,7 @@ export class PermitdesignComponent implements OnInit {
   update_version: string;
   //netSwitch: any;
   unreadCount;
-
+  hide=true;
 
   listOfDesignDataHelper: DesginDataHelper[] = [];
   listOfDesignsData: DesginDataModel[] = [];
@@ -246,7 +246,6 @@ this.deactivateNetworkSwitch.unsubscribe();
 
   getDesigns(event) {
     this.skip=0;
-
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -609,9 +608,13 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.launchNavigator.navigate(address, this.options);
   }
 
+
   dismissBottomSheet() {
+    this.hide= false;
+    this.showBottomDraw = false;
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
+    console.log('this', this.drawerState);
     this.utils.setBottomBarHomepage(true);
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
@@ -761,8 +764,8 @@ this.deactivateNetworkSwitch.unsubscribe();
 
 
   openDesigners(id: number,designData,event) {
+    this.hide= true;
     event.stopPropagation();
-    debugger;
     this.mixpanel.track("ASSIGN_PERMIT_DESIGN_PAGE_OPEN", {
     });
     this.listOfAssignees=[];
@@ -916,8 +919,7 @@ this.route.navigate(['/payment-modal'], {
                   ;
                   console.log('reach ', value);
                  this.utils.showSnackBar('Design request has been delivered successfully');
-
-                  this.utils.setHomepagePermitRefresh(true);
+                 this.utils.setHomepagePermitRefresh(true);
                 })
               }, (error) => {
                 this.utils.hideLoading();
@@ -1371,9 +1373,9 @@ gotoActivity(designData,event){
   console.log(event)
       event.stopPropagation();
     this.route.navigate(['/activity' + '/' + designData.id + '/design'])
-  
+
   }
-  
+
   gotoDetails(designData,$event){
     // $event.preventDefault();
     // $event.stopPropagation();

@@ -455,6 +455,7 @@ this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
   }
 
   dismissBottomSheet() {
+    this.showBottomDraw = false;
     console.log("hello cancel");
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
@@ -1049,9 +1050,9 @@ state: { productdetails: objToSend }
     console.log(event)
         event.stopPropagation();
       this.router.navigate(['/activity' + '/' + surveyData.id + '/survey'])
-    
+
     }
-    
+
     gotoDetails(surveyData,$event){
       // $event.preventDefault();
       // $event.stopPropagation();

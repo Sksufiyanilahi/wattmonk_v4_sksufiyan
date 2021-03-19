@@ -91,7 +91,7 @@
             </ion-col>
         </ion-row>
         <ion-row class="ion-align-items-center ion-justify-content-center">
-            <ion-col>
+            <ion-col size="6">
                 <ion-item class="ion-no-padding">
                     <ion-label position="floating">annual units (Kwh)*</ion-label>
                     <ion-input class="form_input"  type="tel" (ionInput)="numberfield($event)"
@@ -100,6 +100,24 @@
                 <div style="height: 5px;">
                     <div *ngIf="desginForm.get('monthlybill').dirty && desginForm.get('monthlybill').hasError('pattern')">
                         <span class="error">{{"Annual units should be a valid number"}}</span>
+                    </div>
+                    <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
+                        <span class="error">{{annualunitError}}</span>
+                    </div> -->
+                </div>
+            </ion-col>
+            <ion-col size="6">
+                <ion-item class="ion-no-padding">
+                    
+                    <ion-label position="floating">inverters count*</ion-label>
+                    <!-- <ion-label style="display: none;">Project Type</ion-label> -->
+                    <!-- <ion-label position="floating">project type</ion-label> -->
+                    <ion-input   class="form_input" type="tel" autocapitalize="none" autocomplete="off"
+                                      formControlName="inverterscount" maxLength="3" ></ion-input>
+                </ion-item>
+                <div style="height: 5px;">
+                    <div *ngIf="desginForm.get('inverterscount').dirty && desginForm.get('inverterscount').hasError('pattern')">
+                        <span class="error">{{"Invalid"}}</span>
                     </div>
                     <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
                         <span class="error">{{annualunitError}}</span>
@@ -300,14 +318,64 @@
                                 <input #d type="file"  class="form_input"  (change)="prelimfiles($event)" style="margin-top: 12px;" formArrayName="attachments" multiple>
                                 <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
                             </ion-item>
-                            <div *ngFor="let file of prelimFiles;let i = index">
-                                <ion-item>
-                                    <ion-col size="11">
-                                        {{file.name}}
-                                    </ion-col>
-                                    <ion-col size="1" (click)="removePrelim(i)">x</ion-col>
-                                </ion-item>
-                            </div>
+                            <!-- <div *ngFor="let url of imageurls;let i = index">
+
+                                      <img [src]="url" />
+
+                                    <ion-icon name="close-circle-outline" class="remove" (click)="removePrelim(i)"></ion-icon>
+
+                            </div> -->
+
+
+
+                            <!-- <ion-grid> -->
+                              <ion-row>
+                                <!-- <ion-col size="1">
+                                  <span class="slider-nav arrow-prev" (click)="slidePrev(imageurls,slideWithNav2)">
+                                    <div class="prev-icon-custom custon-nav" [class.disabled]="isBeginningSlide"></div>
+                                  </span>
+                                </ion-col> -->
+                                <ion-col size="12">
+
+                                  <ion-slides  pager="false" [options]="slideOptsTwo" #slideWithNav2
+                                    (ionSlideDidChange)="SlideDidChange(imageurls,slideWithNav2)">
+
+                                    <ion-slide *ngFor="let url of imageurls;let i = index">
+                                      <div>
+                                        <img [src]="url"  style="height:10rem;width:10rem;border:3px solid black" alt="file"/>
+
+                                        <ion-icon class="remove" name="close-circle-outline" (click)="removePrelim(i)"></ion-icon>
+                                      </div>
+
+                                    </ion-slide>
+                                  </ion-slides>
+
+                                </ion-col>
+                                <!-- <ion-col size="1">
+                                  <span class="slider-nav arrow-next" (click)="slideNext(imageurls,slideWithNav2)">
+                                    <div class="next-icon-custom custon-nav" [class.disabled]="isEndSlide"></div>
+                                  </span>
+                                </ion-col> -->
+                              </ion-row>
+                            <!-- </ion-grid> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             </ng-container>
                     <!-- <ion-item class="ion-no-padding"> -->
                         <!-- <ion-input class="form_input" type="file" placeholder="Upload Architectural design"
@@ -336,7 +404,7 @@
             </ion-row>
 
         <ion-row class="ion-margin-top">
-            <ion-label position="floating">Comments</ion-label></ion-row>
+            <ion-label>Comments</ion-label></ion-row>
            <ion-row class="ion-margin-top"> <ion-col size="12" class="ion-no-padding">
                 <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
                                 formControlName="comments"></ion-textarea>

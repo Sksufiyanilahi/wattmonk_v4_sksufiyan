@@ -46,7 +46,7 @@
                         {{designData.deliverydate | date: 'hh:mm a'}}
                     </span> -->
 
-                   <span fill="clear" background-border="clear" (click)="gotoActivity(designData,$event)" class="imagebutton"  size="small"  ><ion-icon src="/assets/images/activitylist.png" style="height: 20px;" ></ion-icon></span>
+                    <span fill="clear" background-border="clear"  class="imagebutton" (click)="gotoActivity(designData,$event)" size="small"  ><img src="/assets/images/activitylist.png" style="height:20px"/></span>
                    <ng-container *ngIf="designData?.chatid!==null && designData?.addedtogroupchat">
                     <span fill="clear" background-border="clear" (click)="gotoChats(designData,$event)" class="chatbutton"  size="small"  ><img  style= "height:20px" src="assets/images/chat.svg" /></span>
                   </ng-container>
@@ -64,12 +64,12 @@
                 <span class="chipdetail" style="background-color: rgb(109, 187, 26) ;" *ngIf="designData.status == 'reviewpassed'" >Review Passed</span>
                 <span class="chipdetail" style="background-color: rgb(246, 77, 10) ;" *ngIf="designData.status == 'reviewfailed'" >Review Failed</span>
                 <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate" >Revision</span>
-                <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
-                *ngIf="designData.isoutsourced == 'true'">Wattmonk</span>
+                <!-- <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+                *ngIf="designData.isoutsourced == 'true'">Wattmonk</span> -->
             </p>
 
             <p style="margin:0px">
-                <span class="customer-email" 
+                <span class="customer-email"
                         routerDirection="forward">{{designData.email}}</span>
                         <span *ngIf="item.lateby > 1" class="latebystyle"><strong>Late by {{item.lateby}} days</strong></span>
                         <span *ngIf="item.lateby == 1" class="latebystyle"><strong>Late by a day</strong></span>
@@ -82,7 +82,7 @@
                       <ion-row style="margin-bottom: 8px;">
                           <!-- <span class="chipdetail" style="background-color: #95afc0; cursor: pointer;" >Wattmonk</span> -->
                           <ion-col>
-                          <span class="chipdetail" style="background-color: #95afc0; cursor: pointer;" >{{designData?.source}}</span></ion-col>
+                          <span class="chipdetail" style="background-color: #95afc0; cursor: pointer;" >{{designData?.source | titlecase}}</span></ion-col>
                           <ion-col *ngIf="designData.status == 'reviewassigned'" style="color: #737373; font-size: 14px;">
                             <span style="float: right;">{{designData?.reviewremainingtime}}</span>
                           </ion-col>
@@ -173,39 +173,41 @@
       </ion-infinite-scroll>
 
 </ion-content>
+<ng-container *ngIf="showBottomDraw">
+  <ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false" [disableDrag]="true"
+                   [shouldBounce]="true" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
+    <form [formGroup]="assignForm">
+        <ion-grid class="drawer">
+            <ion-row>
+                <ion-col size="12">
+                    <app-user-selector (assigneeData)=getassignedata($event) placeholder="Assign" [assignees]="listOfAssignees"
+                                       formControlName="assignedto"></app-user-selector>
+                </ion-col>
+            </ion-row>
+            <ion-row style="margin-left: 8px;">
+                <ion-col size="12">
+                    <span class="input-placeholder">comments</span>
+                </ion-col>
+                <ion-col size="12" style="padding-top: 0px;">
+                    <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                  formControlName="comment"></ion-textarea>
+                </ion-col>
+            </ion-row>
+            <ion-row style="justify-content: flex-end;">
+                <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
+                    <ion-button class="buttom-drawer-button" fill="clear" (click)="assignToDesigner()">
+                        Confirm
+                    </ion-button>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
+                        Cancel
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
 
-<ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false" [disableDrag]="true"
-                 [shouldBounce]="true" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
-  <form [formGroup]="assignForm">
-      <ion-grid class="drawer">
-          <ion-row>
-              <ion-col size="12">
-                  <app-user-selector (assigneeData)=getassignedata($event) placeholder="Assign" [assignees]="listOfAssignees"
-                                     formControlName="assignedto"></app-user-selector>
-              </ion-col>
-          </ion-row>
-          <ion-row style="margin-left: 8px;">
-              <ion-col size="12">
-                  <span class="input-placeholder">comments</span>
-              </ion-col>
-              <ion-col size="12" style="padding-top: 0px;">
-                  <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
-                                formControlName="comment"></ion-textarea>
-              </ion-col>
-          </ion-row>
-          <ion-row style="justify-content: flex-end;">
-              <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
-                  <ion-button class="buttom-drawer-button" fill="clear" (click)="assignToDesigner()">
-                      Confirm
-                  </ion-button>
-              </ion-col>
-              <ion-col size="auto">
-                  <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
-                      Cancel
-                  </ion-button>
-              </ion-col>
-          </ion-row>
-      </ion-grid>
-  </form>
+  </ion-bottom-drawer>
+</ng-container>
 
-</ion-bottom-drawer>

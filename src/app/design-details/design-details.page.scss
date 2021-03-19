@@ -27,7 +27,7 @@ ion-header {
 
 .data-header {
   font-size: 0.9em;
-  color: #BFBFBF;
+  color: #666666;
 }
 
 .data-point {
@@ -41,17 +41,18 @@ ion-header {
 
 .models {
   font-size: 18px;
-  color: #B6B6B6;
+  color: #666666;
 }
 
 .model-type {
   font-size: 18px;
-  color: #B6B6B6;
+  color: #666666;
 }
 
 .model-name {
   font-size: 15px;
   text-transform: capitalize;
+  color: #111 !important;
 }
 .model-space {
   font-size: 15px;
