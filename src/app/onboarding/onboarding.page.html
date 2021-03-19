@@ -65,7 +65,7 @@
         <ion-col>
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Phone Number*</ion-label>
-                <ion-input type="text" class="form_input" formControlName="phone"
+                <ion-input type="tel" class="form_input" formControlName="phone"
                             required></ion-input>
             </ion-item>
             <div style="height: 5px;">
@@ -389,7 +389,7 @@
   </div>
   </mat-step>
   <mat-step>
-    <ng-template matStepLabel>Request for Design</ng-template>
+    <ng-template matStepLabel>Request for Design <button class="action-button-color alignment"  *ngIf="this.stepper.selectedIndex==3" style="float: right;" mat-button (click)="moveToDashboard()" matStepperNext>Skip</button></ng-template>
     <div style="color: #111 !important;padding-left: 0px;">
       <ion-label style="color:#111 !important;">Service Charges</ion-label>
     </div>

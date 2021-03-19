@@ -4,6 +4,8 @@ import {FormControl, FormGroup, Validators, FormBuilder} from '@angular/forms';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { NavController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { ApiService } from '../api.service';
 import { ROLES } from '../contants';
 import {FIELD_REQUIRED, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE} from '../model/constants';
@@ -14,6 +16,12 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
+
+export interface Country {
+  country: string;
+  calling_code: string;
+  
+}
 
 @Component({
   selector: 'app-userregistration',
@@ -31,7 +39,10 @@ export class UserregistrationPage implements OnInit {
   lastNameError = "Invalid Last Name";
   netSwitch:any;
   //countries:Country[]=(countriesjson as any).default
-  countries:any;
+  countries:Country[];
+  filteredCountries: Observable<Country[]>;
+  selectedcountry: any;
+  
   constructor(
     private formBuilder: FormBuilder,
     private http:HttpClient,
@@ -62,10 +73,41 @@ export class UserregistrationPage implements OnInit {
 
   fetchCountry(){
     console.log("user");
-    this.http.get("assets/country/country.json").subscribe((res)=>{
+    this.http.get("assets/country/country.json").subscribe((res:any)=>{
       console.log(res);
       this.countries = res;
+      this.country();
+      this.selectedcountry=this.countries.find(c=> c.country=='United States');
+  
+    this.userregistrationForm.get('country').setValue(this.selectedcountry.country);
+    this.setSelectedCountry(this.selectedcountry);
     })
+  }
+
+  displayFn(country: Country): string {
+    return country && country.country ? country.country : "";
+  }
+
+  private _filter(name: string): Country[] {
+    const filterValue = name.toLowerCase();
+
+    return this.countries.filter(
+      country => country.country.toLowerCase().indexOf(filterValue) != -1
+    );
+  }
+  
+  setSelectedCountry(item: Country) {
+    this.selectedcountry = item;
+ 
+  }
+
+  country()
+  {
+    this.filteredCountries = this.userregistrationForm.get('country').valueChanges.pipe(
+      startWith(""),
+      map(value => (typeof value === "string" ? value : value.name)),
+      map(name => (name ? this._filter(name) : this.countries.slice()))
+    ); 
   }
 
   registerUser()

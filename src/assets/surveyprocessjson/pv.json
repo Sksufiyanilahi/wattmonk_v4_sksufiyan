@@ -14,6 +14,7 @@
         "checkexistence": false,
         "isexistencechecked": false,
         "inputformcontrol": "",
+        "placeholder": "",
         "allowmultipleshots": false,
         "capturedshots": [],
         "shots": [
@@ -34,6 +35,7 @@
             "questionstatus": false,
             "questiontype": 1,
             "inputformcontrol": "msplocation",
+            "placeholder": "MSP Location",
             "imagekey": "mspimages",
             "imagename": "msplongshot"
           },
@@ -53,6 +55,7 @@
             "questionstatus": false,
             "questiontype": 2,
             "inputformcontrol": "msprating",
+            "placeholder": "MSP Rating",
             "imagekey": "mspimages",
             "imagename": "mspzoomshot"
           },
@@ -72,6 +75,7 @@
             "questionstatus": false,
             "questiontype": 2,
             "inputformcontrol": "mainbreakersize",
+            "placeholder": "Main Breaker Size",
             "imagekey": "mspimages",
             "imagename": "mspopenshutterzoomshot"
           },
@@ -93,6 +97,7 @@
             "questionstatus": false,
             "questiontype": 1,
             "inputformcontrol": "mspbreaker",
+            "placeholder": "MSP Breaker",
             "imagekey": "mspimages",
             "imagename": "mspwithoutcovershot"
           }
@@ -106,6 +111,7 @@
         "checkexistence": false,
         "isexistencechecked": false,
         "inputformcontrol": "",
+        "placeholder": "",
         "allowmultipleshots": false,
         "capturedshots": [],
         "shots": [
@@ -126,6 +132,7 @@
             "questionstatus": false,
             "questiontype": 1,
             "inputformcontrol": "utilitymeter",
+            "placeholder": "Utility Meter",
             "imagekey": "utilitymeterimages",
             "imagename": "umwideshoturl"
           },
@@ -143,6 +150,7 @@
             "questionstatus": false,
             "questiontype": 0,
             "inputformcontrol": "",
+            "placeholder": "",
             "imagekey": "utilitymeterimages",
             "imagename": "umzoomshoturl"
           }
@@ -156,6 +164,7 @@
         "checkexistence": true,
         "isexistencechecked": false,
         "inputformcontrol": "existingsolarsystem",
+        "placeholder": "Existing Solar System",
         "allowmultipleshots": false,
         "capturedshots": [],
         "shots": [
@@ -176,6 +185,7 @@
             "questionstatus": false,
             "questiontype": 1,
             "inputformcontrol": "pvinverterlocation",
+            "placeholder": "PV Inverter Location",
             "imagekey": "pvinverterimages",
             "imagename": "pvinverterwideshoturl"
           },
@@ -194,7 +204,9 @@
             "result": "",
             "questionstatus": false,
             "questiontype": 9,
-            "inputformcontrol": "invertermanufacturerandmodel",
+            "inputformcontrol": "invertermake",
+            "inputformcontrol2": "invertermodel",
+            "placeholder": "PV Inverter Manufacturer and Model",
             "imagekey": "pvinverterimages",
             "imagename": "pvinverterzoomshoturl"
           },
@@ -212,6 +224,7 @@
             "questionstatus": false,
             "questiontype": 0,
             "inputformcontrol": "",
+            "placeholder": "",
             "imagekey": "pvmeterimages",
             "imagename": "pvmeterwideshoturl"
           },
@@ -229,6 +242,7 @@
             "questionstatus": false,
             "questiontype": 0,
             "inputformcontrol": "",
+            "placeholder": "",
             "imagekey": "acdisconnectimages",
             "imagename": "acdisconnectwideshoturl"
           },
@@ -246,6 +260,7 @@
             "questionstatus": false,
             "questiontype": 0,
             "inputformcontrol": "",
+            "placeholder": "",
             "imagekey": "acdisconnectimages",
             "imagename": "acdisconnectzoomshoturl"
           }
@@ -268,6 +283,7 @@
         "checkexistence": false,
         "isexistencechecked": false,
         "inputformcontrol": "",
+        "placeholder": "",
         "allowmultipleshots": true,
         "capturedshots": [],
         "shots": [
@@ -287,6 +303,7 @@
             "questionstatus": false,
             "questiontype": 2,
             "inputformcontrol": "rooftilt",
+            "placeholder": "Roof Tilt",
             "imagekey": "roofimages",
             "imagename": "roof"
           }
@@ -300,6 +317,7 @@
         "checkexistence": false,
         "isexistencechecked": false,
         "inputformcontrol": "",
+        "placeholder": "",
         "allowmultipleshots": true,
         "capturedshots": [],
         "shots": [
@@ -317,6 +335,7 @@
             "questionstatus": false,
             "questiontype": 0,
             "inputformcontrol": "",
+            "placeholder": "",
             "imagekey": "roofdimensionimages",
             "imagename": "roofdimension"
           }
@@ -330,6 +349,7 @@
         "checkexistence": false,
         "isexistencechecked": false,
         "inputformcontrol": "",
+        "placeholder": "",
         "allowmultipleshots": true,
         "capturedshots": [],
         "shots": [
@@ -347,6 +367,7 @@
             "questionstatus": false,
             "questiontype": 0,
             "inputformcontrol": "",
+            "placeholder": "",
             "imagekey": "obstaclesimages",
             "imagename": "obstacle"
           }
@@ -360,6 +381,7 @@
         "checkexistence": false,
         "isexistencechecked": false,
         "inputformcontrol": "",
+        "placeholder": "",
         "allowmultipleshots": true,
         "capturedshots": [],
         "shots": [
@@ -377,6 +399,7 @@
             "questionstatus": false,
             "questiontype": 0,
             "inputformcontrol": "",
+            "placeholder": "",
             "imagekey": "obstaclesdimensionsimages",
             "imagename": "obstacledimension"
           }
@@ -399,6 +422,7 @@
         "checkexistence": false,
         "isexistencechecked": false,
         "inputformcontrol": "",
+        "placeholder": "",
         "allowmultipleshots": false,
         "capturedshots": [],
         "shots": [
@@ -419,6 +443,7 @@
             "questionstatus": false,
             "questiontype": 1,
             "inputformcontrol": "framing",
+            "placeholder": "Framing",
             "imagekey": "atticimages",
             "imagename": "atticwideshoturl"
           },
@@ -438,6 +463,7 @@
             "questionstatus": false,
             "questiontype": 8,
             "inputformcontrol": "framingsize",
+            "placeholder": "Framing Size",
             "imagekey": "atticimages",
             "imagename": "atticzoomshoturl"
           },
@@ -457,6 +483,7 @@
             "questionstatus": false,
             "questiontype": 2,
             "inputformcontrol": "distancebetweentworafts",
+            "placeholder": "Distance between Two Rafts",
             "imagekey": "atticimages",
             "imagename": "atticrequiredshoturl"
           }
@@ -478,6 +505,7 @@
         "checkexistence": false,
         "isexistencechecked": false,
         "inputformcontrol": "",
+        "placeholder": "",
         "allowmultipleshots": true,
         "capturedshots": [],
         "shots": [
@@ -497,6 +525,7 @@
             "questionstatus": false,
             "questiontype": 5,
             "inputformcontrol": "",
+            "placeholder": "",
             "imagekey": "appliancesimages",
             "imagename": "appliances"
           }
@@ -510,6 +539,107 @@
     "ispending": true,
     "isvisible": true,
     "viewmode": 1,
-    "children": []
+    "children": [],
+    "formelements": [
+      {
+        "inputformcontrol": "batterysystem",
+        "placeholder": "",
+        "label": "Is there any Battery System?*",
+        "visibility": true,
+        "controltype": 5,
+        "controlselement": {
+          "inputformcontrol": "detailsofbatterysystem",
+          "onvalueselection": true
+        },
+        "options": [
+          {
+            "label": "Yes",
+            "value": true
+          },
+          {
+            "label": "No",
+            "value": false
+          }
+        ],
+        "required": true
+      },
+      {
+        "inputformcontrol": "detailsofbatterysystem",
+        "placeholder": "",
+        "label": "Details Of Battery System",
+        "visibility": false,
+        "controltype": 7,
+        "options": [],
+        "required": false
+      },
+      {
+        "inputformcontrol": "interconnection",
+        "placeholder": "",
+        "label": "Interconnection*",
+        "visibility": true,
+        "controltype": 5,
+        "controlselement": {
+          "inputformcontrol": "interconnection_input",
+          "onvalueselection": "more"
+        },
+        "options": [
+          {
+            "label": "Backfed",
+            "value": "backfed"
+          },
+          {
+            "label": "Supply Side Tap",
+            "value": "supplysidetap"
+          },
+          {
+            "label": "Load Side Tap",
+            "value": "loadsidetap"
+          },
+          {
+            "label": "More",
+            "value": "more",
+            "controls": "interconnection_input"
+          }
+        ],
+        "required": true
+      },
+      {
+        "inputformcontrol": "interconnection_input",
+        "placeholder": "",
+        "label": "Interconnection Detail",
+        "visibility": false,
+        "controltype": 1,
+        "options": [],
+        "required": false
+      },
+      {
+        "inputformcontrol": "servicefeedsource",
+        "placeholder": "",
+        "label": "Service feed source*",
+        "visibility": true,
+        "controltype": 5,
+        "controlselement": {},
+        "options": [
+          {
+            "label": "Overhead",
+            "value": "overhead"
+          },
+          {
+            "label": "Underground",
+            "value": "underground"
+          }
+        ],
+        "required": true
+      },
+      {
+        "inputformcontrol": "additionalnotes",
+        "placeholder": "",
+        "label": "Additional notes",
+        "visibility": true,
+        "controltype": 7,
+        "options": [],
+        "required": false
+      }
+    ]
   }
 ]

@@ -182,7 +182,8 @@ export class PermitschedulePage implements OnInit {
     ]),
     invertermodel : new FormControl("", [
       Validators.required,
-      Validators.pattern("^[a-z0-9A-Z-_([)/. {\\]}]{5,}$")
+      // Validators.pattern("^[a-z0-9A-Z-_([)/. {\\]}]{5,}$")
+      Validators.pattern("^[a-z0-9A-Z+-_([)/. {\\]}]{3,}$")
     ]),
     monthlybill: new FormControl('',[Validators.required,Validators.min(0),Validators.pattern(NUMBERPATTERN)]),
     address: new FormControl('',[Validators.required]),
@@ -1636,13 +1637,14 @@ else{
 
     deleteArcFile(index){
 
-
      // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
         for(var i=0; i< index.length;i++){
           var id = index[i];
           this.utils.showLoading("Deleting Architectural File").then(()=>{
           this.apiService.deletePrelimImage(id).subscribe(res=>{
-         this.utils.hideLoading().then(()=>{console.log("hello",res)})
+         this.utils.hideLoading().then(()=>{console.log("hello",res)
+         this.indexOfArcFiles=[]
+        })
           })
       });
     (error)=>{
@@ -1656,13 +1658,14 @@ else{
 
   deleteAttachmentFile(index){
 
-
     // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
        for(var i=0; i< index.length;i++){
+        
          var id = index[i];
          this.utils.showLoading("Deleting Attachment File").then(()=>{
          this.apiService.deletePrelimImage(id).subscribe(res=>{
-        this.utils.hideLoading().then(()=>{console.log("hello",res)});
+        this.utils.hideLoading().then(()=>{console.log("hello",res)
+      this.indexOfAttachmentFiles=[]});
          })
      });
    (error)=>{
