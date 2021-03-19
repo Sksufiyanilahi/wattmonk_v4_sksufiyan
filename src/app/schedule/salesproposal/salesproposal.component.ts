@@ -1,14 +1,14 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {AssigneeModel} from 'src/app/model/assignee.model';
-import {SolarMake} from 'src/app/model/solar-make.model';
-import {ApiService} from 'src/app/api.service';
-import {UtilitiesService} from 'src/app/utilities.service';
-import {ErrorModel} from 'src/app/model/error.model';
-import {SolarMadeModel} from 'src/app/model/solar-made.model';
-import {InverterMakeModel} from 'src/app/model/inverter-make.model';
-import {NavController} from '@ionic/angular';
-import {InverterMadeModel} from 'src/app/model/inverter-made.model';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AssigneeModel } from 'src/app/model/assignee.model';
+import { SolarMake } from 'src/app/model/solar-make.model';
+import { ApiService } from 'src/app/api.service';
+import { UtilitiesService } from 'src/app/utilities.service';
+import { ErrorModel } from 'src/app/model/error.model';
+import { SolarMadeModel } from 'src/app/model/solar-made.model';
+import { InverterMakeModel } from 'src/app/model/inverter-make.model';
+import { NavController } from '@ionic/angular';
+import { InverterMadeModel } from 'src/app/model/inverter-made.model';
 import {
   FIELD_REQUIRED,
   INVALID_ANNUAL_UNIT,
@@ -19,19 +19,19 @@ import {
   INVALID_TILT_FOR_GROUND_MOUNT,
   ScheduleFormEvent
 } from '../../model/constants';
-import {Observable, Subscription} from 'rxjs';
-import {StorageService} from '../../storage.service';
-import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
-import {DesginDataModel} from '../../model/design.model';
-import {Camera, CameraOptions} from '@ionic-native/Camera/ngx';
-import {File} from '@ionic-native/file/ngx';
+import { Observable, Subscription } from 'rxjs';
+import { StorageService } from '../../storage.service';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { DesginDataModel } from '../../model/design.model';
+import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
+import { File } from '@ionic-native/file/ngx';
 // import { Intercom } from 'ng-intercom';
-import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
-import {Clients} from 'src/app/model/clients.model';
-import {map, startWith} from "rxjs/operators";
-import {UtilityRates} from 'src/app/model/utilityrate.model';
-import {Incentive} from 'src/app/model/incentive.model';
-import {Utility} from 'src/app/model/utility.model';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { Clients } from 'src/app/model/clients.model';
+import { map, startWith } from "rxjs/operators";
+import { UtilityRates } from 'src/app/model/utilityrate.model';
+import { Incentive } from 'src/app/model/incentive.model';
+import { Utility } from 'src/app/model/utility.model';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFirestore} from '@angular/fire/firestore';
 
@@ -74,13 +74,13 @@ export class SalesproposalComponent implements OnInit {
   address: string;
   showValue: any;
   uploadbox: any;
-  archFiles: any=[];
-  prelimFiles: any=[];
- imageName:any;
- oldcommentid:String
- indexOfArcFiles=[]
- indexOfAttachmentFile=[];
- isArcFileDelete:boolean=false;
+  archFiles: any = [];
+  prelimFiles: any = [];
+  imageName: any;
+  oldcommentid: String
+  indexOfArcFiles = []
+  indexOfAttachmentFile = [];
+  isArcFileDelete: boolean = false;
   //attachmentName = this.desginForm.get('attachments').value;
 
   options: CameraOptions = {
@@ -112,7 +112,7 @@ export class SalesproposalComponent implements OnInit {
   architecturalData: any;
   fieldDisabled = false;
   userdata: any;
-  isArchitecturalFileUpload:boolean=false;
+  isArchitecturalFileUpload: boolean = false;
 
   attachmentFileUpload: boolean = false;
   incentives: Incentive[] = [];
@@ -321,7 +321,7 @@ export class SalesproposalComponent implements OnInit {
 
   fetchUtilityData(_event: any, make) {
     //this.desginForm.patchValue({ uti: " " })
-    this.desginForm.patchValue({utilityrate: " "})
+    this.desginForm.patchValue({ utilityrate: " " })
     if (_event.isUserInput) {
       console.log(_event, "hello");
       this.desginForm.get('utilityrate').setValue("");
@@ -900,21 +900,21 @@ export class SalesproposalComponent implements OnInit {
   }
 
   remove(arc, i) {
-//   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-//     this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
-//   this.utils.hideLoading().then(()=>{
-//     this.utils.showSnackBar('File deleted successfully');
-//     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
-//     //this.utils.setHomepageDesignRefresh(true);
-//   });
-//   },
-// (error)=>{
-//   this.utils.hideLoading().then(()=> {
-//     this.utils.errorSnackBar('some Error Occured');
-//   });
+    //   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+    //     this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+    //   this.utils.hideLoading().then(()=>{
+    //     this.utils.showSnackBar('File deleted successfully');
+    //     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
+    //     //this.utils.setHomepageDesignRefresh(true);
+    //   });
+    //   },
+    // (error)=>{
+    //   this.utils.hideLoading().then(()=> {
+    //     this.utils.errorSnackBar('some Error Occured');
+    //   });
 
-// });
-// });
+    // });
+    // });
     console.log(arc);
     this.indexOfArcFiles.push(arc.id);
 
@@ -923,39 +923,40 @@ export class SalesproposalComponent implements OnInit {
     console.log(this.indexOfArcFiles);
     console.log(this.architecturalData);
 
-this.architecturalData.splice(i, 1);
-this.deleteArcFile(this.indexOfArcFiles);
+    this.architecturalData.splice(i, 1);
+    this.deleteArcFile(this.indexOfArcFiles);
 
   }
 
   removeattachment(attachment, i) {
 
-  this.indexOfAttachmentFile.push( attachment.id);
+    this.indexOfAttachmentFile.push(attachment.id);
 
-  this.isArcFileDelete=true;
-  console.log(this.isArcFileDelete);
-  console.log(this.indexOfAttachmentFile);
-  console.log(this.attachmentData);
-  console.log(i);
+    this.isArcFileDelete = true;
+    console.log(this.isArcFileDelete);
+    console.log(this.indexOfAttachmentFile);
+    console.log(this.attachmentData);
+    console.log(i);
 
-  this.attachmentData.splice(i, 1);
-  this.deleteAttachmentFile(this.indexOfAttachmentFile);
-}
+    this.attachmentData.splice(i, 1);
+    this.deleteAttachmentFile(this.indexOfAttachmentFile);
+  }
 
   deleteArcFile(index) {
 
 
-  // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-     for(var i=0; i< index.length;i++){
-       var id = index[i];
-       this.utils.showLoading("Deleting Architectural File").then(()=>{
-       this.apiService.deletePrelimImage(id).subscribe(res=>{console.log("hello",res)
-       this.indexOfArcFiles=[]
-   });
-  });
- // this.utils.hideLoading().then(()=>{
- //   //   this.utils.showSnackBar('File deleted successfully');
- //     // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
+    // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+    for (var i = 0; i < index.length; i++) {
+      var id = index[i];
+      this.utils.showLoading("Deleting Architectural File").then(() => {
+        this.apiService.deletePrelimImage(id).subscribe(res => {
+          console.log("hello", res)
+          this.indexOfArcFiles = []
+        });
+      });
+      // this.utils.hideLoading().then(()=>{
+      //   //   this.utils.showSnackBar('File deleted successfully');
+      //     // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
 
       //    // this.utils.setPermitDesignDetailsRefresh(true);
       //  // });
@@ -967,30 +968,33 @@ this.deleteArcFile(this.indexOfArcFiles);
       }
     }
 
-// });
- //this.utils.setHomepageDesignRefresh(true);
-}
+    // });
+    //this.utils.setHomepageDesignRefresh(true);
+  }
 
-deleteAttachmentFile(index){
+  deleteAttachmentFile(index) {
 
-  // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-     for(var i=0; i< index.length;i++){
-      
-       var id = index[i];
-       this.utils.showLoading("Deleting Attachment File").then(()=>{
-       this.apiService.deletePrelimImage(id).subscribe(res=>{
-      this.utils.hideLoading().then(()=>{console.log("hello",res)
-    this.indexOfAttachmentFile=[]});
-       })
-   });
- (error)=>{
-   this.utils.hideLoading().then(()=> {
-     this.utils.errorSnackBar('some Error Occured');
-   });
- }}
+    // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+    for (var i = 0; i < index.length; i++) {
 
-// })
-}
+      var id = index[i];
+      this.utils.showLoading("Deleting Attachment File").then(() => {
+        this.apiService.deletePrelimImage(id).subscribe(res => {
+          this.utils.hideLoading().then(() => {
+            console.log("hello", res)
+            this.indexOfAttachmentFile = []
+          });
+        })
+      });
+      (error) => {
+        this.utils.hideLoading().then(() => {
+          this.utils.errorSnackBar('some Error Occured');
+        });
+      }
+    }
+
+    // })
+  }
 
 
   addForm() {
@@ -1086,38 +1090,38 @@ deleteAttachmentFile(index){
                 if (this.logoSelected) {
                   this.updateLogo();
                 }
-              if(newConstruction=='true'){
-                // if(this.architecturalFileUpload){
-                   this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
-                // }
-               }
-               else{
-                 if(this.attachmentFileUpload){
-                   this.uploadpreliumdesign(response,'attachments',this.prelimFiles[0],0)
-                 }
-                 else{
-                   console.log('Redirect.....')
-                  this.router.navigate(['/homepage/design'])
-                  // this.utils.showSnackBar('Design have been saved');
-                  this.utils.setHomepageDesignRefresh(true);
-                 }
-               }
-              // this.utils.hideLoading().then(() => {
-              //   console.log('Res', response);
-              //   this.createChatGroup(response);
-              //   this.router.navigate(['/homepage/design'])
-              //   // this.utils.showSnackBar('Design have been saved');
-              //   this.utils.setHomepageDesignRefresh(true);
-              //   // this.navController.pop();
-              //   // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-              //   //   modal.present();
-              //   //   modal.onWillDismiss().then((dismissed) => {
-              //       // this.utils.setHomepageDesignRefresh(true);
-              //   //     this.navController.pop();
-              //   //   });
-              //   // });
+                if (newConstruction == 'true') {
+                  // if(this.architecturalFileUpload){
+                  this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+                  // }
+                }
+                else {
+                  if (this.attachmentFileUpload) {
+                    this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0)
+                  }
+                  else {
+                    console.log('Redirect.....')
+                    this.router.navigate(['/homepage/design'])
+                    // this.utils.showSnackBar('Design have been saved');
+                    this.utils.setHomepageDesignRefresh(true);
+                  }
+                }
+                // this.utils.hideLoading().then(() => {
+                //   console.log('Res', response);
+                //   this.createChatGroup(response);
+                //   this.router.navigate(['/homepage/design'])
+                //   // this.utils.showSnackBar('Design have been saved');
+                //   this.utils.setHomepageDesignRefresh(true);
+                //   // this.navController.pop();
+                //   // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
+                //   //   modal.present();
+                //   //   modal.onWillDismiss().then((dismissed) => {
+                //       // this.utils.setHomepageDesignRefresh(true);
+                //   //     this.navController.pop();
+                //   //   });
+                //   // });
 
-               });
+              });
             }, responseError => {
               this.utils.hideLoading();
               const error: ErrorModel = responseError.error;
@@ -1174,39 +1178,38 @@ deleteAttachmentFile(index){
             inverterscount: this.desginForm.get('inverterscount').value
           }
           this.apiService.addDesginForm(postData).subscribe((response) => {
-              console.log(response.id);
-              this.utils.hideLoading().then(() => {
-                if (this.logoSelected) {
-                  this.updateLogo();
-                  }
-                if(newConstruction == 'true')
-                {
-               this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
+            console.log(response.id);
+            this.utils.hideLoading().then(() => {
+              if (this.logoSelected) {
+                this.updateLogo();
+              }
+              if (newConstruction == 'true') {
+                this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+              }
+              else {
+                if (this.attachmentFileUpload) {
+                  this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0)
                 }
-                else{
-                  if(this.attachmentFileUpload){
-                    this.uploadpreliumdesign(response,'attachments',this.prelimFiles[0],0)
-                  }
-                  else{
-                    let objToSend: NavigationExtras = {
-                      queryParams: {
-                        id: response.id,
-                        designData: "prelim",
-                        fulldesigndata: response,
+                else {
+                  let objToSend: NavigationExtras = {
+                    queryParams: {
+                      id: response.id,
+                      designData: "prelim",
+                      fulldesigndata: response,
 
-                      },
-                      skipLocationChange: false,
-                      fragment: 'top'
-                    };
+                    },
+                    skipLocationChange: false,
+                    fragment: 'top'
+                  };
 
 
-                    this.router.navigate(['/payment-modal'], {
-                      state: {productdetails: objToSend}
-                    });
-                  }
+                  this.router.navigate(['/payment-modal'], {
+                    state: { productdetails: objToSend }
+                  });
                 }
-              })
-            }
+              }
+            })
+          }
             , responseError => {
               this.utils.hideLoading();
               const error: ErrorModel = responseError.error;
@@ -1215,80 +1218,79 @@ deleteAttachmentFile(index){
         }
 
 
-        } else {
-          if(this.send===ScheduleFormEvent.SAVE_SALES_FORM){
-            postData = {
-              company: this.desginForm.get('company').value,
-              name: this.desginForm.get('name').value,
-              email: this.desginForm.get('email').value,
-              solarmake: this.desginForm.get('solarmake').value,
-              solarmodel: this.desginForm.get('solarmodel').value,
-              invertermake: this.desginForm.get('invertermake').value,
-              invertermodel: this.desginForm.get('invertermodel').value,
-              monthlybill: this.desginForm.get('monthlybill').value,
-              address: this.desginForm.get('address').value,
-              createdby: this.desginForm.get('createdby').value,
-              assignedto: this.desginForm.get('assignedto').value,
-              rooftype: this.desginForm.get('rooftype').value,
-              //prelimdesign: new FormControl(null),
-              architecturaldesign: this.desginForm.get('architecturaldesign').value,
-              tiltgroundmount: this.desginForm.get('tiltgroundmount').value,
-              mountingtype: this.desginForm.get('mountingtype').value,
-              // jobtype: new FormControl('', [Validators.required]),
-              projecttype: this.desginForm.get('projecttype').value,
-              newconstruction: this.desginForm.get('newconstruction').value,
-              source: this.desginForm.get('source').value,
-              comments: this.desginForm.get('comments').value,
-              requesttype: this.desginForm.get('requesttype').value,
-              latitude: this.desginForm.get('latitude').value,
-              longitude: this.desginForm.get('longitude').value,
-              country:this.desginForm.get('country').value,
-              state: this.desginForm.get('state').value,
-              city: this.desginForm.get('city').value,
-              postalcode:this.desginForm.get('postalcode').value,
-              status: this.desginForm.get('status').value,
-              attachments: this.desginForm.get('attachments').value,
-              deliverydate:this.desginForm.get('deliverydate').value,
-              outsourcedto:this.desginForm.get('outsourcedto').value,
-              isoutsourced:this.desginForm.get('isoutsourced').value,
-              designacceptancestarttime:this.desginForm.get('designacceptancestarttime').value,
-              creatorparentid:this.desginForm.get('creatorparentid').value,
-              //isonpriority:new FormControl('false'),
-              paymentstatus:this.desginForm.get('paymentstatus').value,
-              paymenttype:this.desginForm.get('paymenttype').value,
-              utility:this.selectedUtilityId,
-              utilityrate : this.selectedUtilityRateId,
-              annualutilityescalation :this.desginForm.get('annualutilityescalation').value,
-              incentive : this.desginForm.get('incentive').value,
-              costofsystem : this.desginForm.get('costofsystem').value,
-              personname : this.desginForm.get('personname').value,
-              requirementtype :this.desginForm.get('requirementtype').value,
-              inverterscount:this.desginForm.get('inverterscount').value,
-              oldcommentid:this.oldcommentid,
-            }
-            this.utils.showLoading('Saving').then(() => {
-          this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
-            this.utils.hideLoading().then(()=>{
-              if(this.logoSelected){
-              this.updateLogo();
-              }
-            if(newConstruction=='true')
-            {
-            this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
-            }
-            else{
-              if(this.attachmentFileUpload){
-            this.uploadpreliumdesign(response,'attachments',this.prelimFiles[0],0)
-              }
-              else{
-                this.utils.showSnackBar('Design have been updated');
-                this.utils.setDesignDetailsRefresh(true);
-                this.navController.pop();
-              }
-            }
+      } else {
+        if (this.send === ScheduleFormEvent.SAVE_SALES_FORM) {
+          postData = {
+            company: this.desginForm.get('company').value,
+            name: this.desginForm.get('name').value,
+            email: this.desginForm.get('email').value,
+            solarmake: this.desginForm.get('solarmake').value,
+            solarmodel: this.desginForm.get('solarmodel').value,
+            invertermake: this.desginForm.get('invertermake').value,
+            invertermodel: this.desginForm.get('invertermodel').value,
+            monthlybill: this.desginForm.get('monthlybill').value,
+            address: this.desginForm.get('address').value,
+            createdby: this.desginForm.get('createdby').value,
+            assignedto: this.desginForm.get('assignedto').value,
+            rooftype: this.desginForm.get('rooftype').value,
+            //prelimdesign: new FormControl(null),
+            architecturaldesign: this.desginForm.get('architecturaldesign').value,
+            tiltgroundmount: this.desginForm.get('tiltgroundmount').value,
+            mountingtype: this.desginForm.get('mountingtype').value,
+            // jobtype: new FormControl('', [Validators.required]),
+            projecttype: this.desginForm.get('projecttype').value,
+            newconstruction: this.desginForm.get('newconstruction').value,
+            source: this.desginForm.get('source').value,
+            comments: this.desginForm.get('comments').value,
+            requesttype: this.desginForm.get('requesttype').value,
+            latitude: this.desginForm.get('latitude').value,
+            longitude: this.desginForm.get('longitude').value,
+            country: this.desginForm.get('country').value,
+            state: this.desginForm.get('state').value,
+            city: this.desginForm.get('city').value,
+            postalcode: this.desginForm.get('postalcode').value,
+            status: this.desginForm.get('status').value,
+            attachments: this.desginForm.get('attachments').value,
+            deliverydate: this.desginForm.get('deliverydate').value,
+            outsourcedto: this.desginForm.get('outsourcedto').value,
+            isoutsourced: this.desginForm.get('isoutsourced').value,
+            designacceptancestarttime: this.desginForm.get('designacceptancestarttime').value,
+            creatorparentid: this.desginForm.get('creatorparentid').value,
+            //isonpriority:new FormControl('false'),
+            paymentstatus: this.desginForm.get('paymentstatus').value,
+            paymenttype: this.desginForm.get('paymenttype').value,
+            utility: this.selectedUtilityId,
+            utilityrate: this.selectedUtilityRateId,
+            annualutilityescalation: this.desginForm.get('annualutilityescalation').value,
+            incentive: this.desginForm.get('incentive').value,
+            costofsystem: this.desginForm.get('costofsystem').value,
+            personname: this.desginForm.get('personname').value,
+            requirementtype: this.desginForm.get('requirementtype').value,
+            inverterscount: this.desginForm.get('inverterscount').value,
+            oldcommentid: this.oldcommentid,
+          }
+          this.utils.showLoading('Saving').then(() => {
+            this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
+              this.utils.hideLoading().then(() => {
+                if (this.logoSelected) {
+                  this.updateLogo();
+                }
+                if (newConstruction == 'true') {
+                  this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+                }
+                else {
+                  if (this.attachmentFileUpload) {
+                    this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0)
+                  }
+                  else {
+                    this.utils.showSnackBar('Design have been updated');
+                    this.utils.setDesignDetailsRefresh(true);
+                    this.navController.pop();
+                  }
+                }
 
-                });
-              },
+              });
+            },
               responseError => {
                 this.utils.hideLoading().then(() => {
                   const error: ErrorModel = responseError.error;
@@ -1353,10 +1355,10 @@ deleteAttachmentFile(index){
                 this.updateLogo();
               }
               if (newConstruction == 'true') {
-                this.uploaarchitecturedesign(response, 'architecturaldesign',this.archFiles[0],0);
+                this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
               } else {
                 if (this.attachmentFileUpload) {
-                  this.uploadpreliumdesign(response, 'attachments',this.prelimFiles[0],0);
+                  this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0);
                 } else {
                   let objToSend: NavigationExtras = {
                     queryParams: {
@@ -1370,7 +1372,7 @@ deleteAttachmentFile(index){
 
 
                   this.router.navigate(['/payment-modal'], {
-                    state: {productdetails: objToSend}
+                    state: { productdetails: objToSend }
                   });
                 }
               }
@@ -1382,12 +1384,12 @@ deleteAttachmentFile(index){
             //   this.utils.showSnackBar('Design have been updated');
             //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
 
-              //   this.utils.showSnackBar('Design have been updated');
-              //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
+            //   this.utils.showSnackBar('Design have been updated');
+            //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
 
 
-            });
-           responseError => {
+          });
+          responseError => {
             this.utils.hideLoading().then(() => {
               const error: ErrorModel = responseError.error;
               this.utils.errorSnackBar(error.message[0].messages[0].message);
@@ -1601,136 +1603,131 @@ deleteAttachmentFile(index){
   }
 
 
-  uploaarchitecturedesign(response?: any, key?: string, fileObj?:string,index?:number){
-    if(!this.isArchitecturalFileUpload)
-    {
-      this.uploadpreliumdesign(response,key,this.prelimFiles[0],0)
+  uploaarchitecturedesign(response?: any, key?: string, fileObj?: string, index?: number) {
+    if (!this.isArchitecturalFileUpload) {
+      this.uploadpreliumdesign(response, key, this.prelimFiles[0], 0)
     }
-    else{
-    console.log(this.archFiles);
-    const imageData = new FormData();
-    //for(var i=0; i< this.archFiles.length;i++){
-      imageData.append("files",fileObj);
+    else {
+      console.log(this.archFiles);
+      const imageData = new FormData();
+      //for(var i=0; i< this.archFiles.length;i++){
+      imageData.append("files", fileObj);
       //if(i ==0){
-        imageData.append('path', 'designs/' + response.id);
-        imageData.append('refId', response.id + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-    //  }
-   // }
-      this.utils.showLoading("Uploading architecture"+" "+(index+1)+" of"+" "+this.archFiles.length).then(()=>{
-    this.apiService.uploaddesign(imageData).subscribe(res=>{
-      console.log(res);
-      if(index<this.archFiles.length - 1)
-      {
-        console.log("if")
-        this.utils.hideLoading();
-        var newIndex = index + 1;
-        this.uploaarchitecturedesign(response,key,this.archFiles[newIndex],newIndex);
-      }else{
-      this.utils.hideLoading();
-      if(this.attachmentFileUpload){
-      this.uploadpreliumdesign(response,'attachments',this.prelimFiles[0],0);
-      }
-      else{
-        if(this.send === ScheduleFormEvent.SAVE_SALES_FORM ){
-        this.router.navigate(['/homepage/design'])
-        if(this.designId==0){
-                 this.utils.showSnackBar('Design have been saved');
-        }
-        else{
-          this.utils.showSnackBar('Design have been updated')
-        }
+      imageData.append('path', 'designs/' + response.id);
+      imageData.append('refId', response.id + '');
+      imageData.append('ref', 'design');
+      imageData.append('field', key);
+      //  }
+      // }
+      this.utils.showLoading("Uploading architecture" + " " + (index + 1) + " of" + " " + this.archFiles.length).then(() => {
+        this.apiService.uploaddesign(imageData).subscribe(res => {
+          console.log(res);
+          if (index < this.archFiles.length - 1) {
+            console.log("if")
+            this.utils.hideLoading();
+            var newIndex = index + 1;
+            this.uploaarchitecturedesign(response, key, this.archFiles[newIndex], newIndex);
+          } else {
+            this.utils.hideLoading();
+            if (this.attachmentFileUpload) {
+              this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0);
+            }
+            else {
+              if (this.send === ScheduleFormEvent.SAVE_SALES_FORM) {
+                this.router.navigate(['/homepage/design'])
+                if (this.designId == 0) {
+                  this.utils.showSnackBar('Design have been saved');
+                }
+                else {
+                  this.utils.showSnackBar('Design have been updated')
+                }
                 this.utils.setHomepageDesignRefresh(true);
-        }
-        else{
-          let objToSend: NavigationExtras = {
-                    queryParams: {
-                      id:response.id,
-                      designData:"prelim",
-                      fulldesigndata:response
-                    },
-                    skipLocationChange: false,
-                    fragment: 'top'
+              }
+              else {
+                let objToSend: NavigationExtras = {
+                  queryParams: {
+                    id: response.id,
+                    designData: "prelim",
+                    fulldesigndata: response
+                  },
+                  skipLocationChange: false,
+                  fragment: 'top'
                 };
 
 
+                this.router.navigate(['/payment-modal'], {
+                  state: { productdetails: objToSend }
+                });
+              }
+            }
+          }
+        })
+      }, responseError => {
+        this.utils.hideLoading();
+        const error: ErrorModel = responseError.error;
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
+      })
+    }
+
+  }
+
+  uploadpreliumdesign(response?: any, key?: string, fileObj?: string, index?: number) {
+    console.log(this.prelimFiles);
+    const imageData = new FormData();
+    // for(var i=0; i< this.prelimFiles.length;i++){
+    imageData.append("files", fileObj);
+    // if(i ==0){
+    imageData.append('path', 'designs/' + response.id);
+    imageData.append('refId', response.id + '');
+    imageData.append('ref', 'design');
+    imageData.append('field', key);
+    //}
+    //}
+    this.utils.showLoading("Uploading attachment" + " " + (index + 1) + " of" + " " + this.prelimFiles.length).then(() => {
+      this.apiService.uploaddesign(imageData).subscribe(res => {
+        console.log(res);
+        if (index < this.prelimFiles.length - 1) {
+          console.log("if")
+          this.utils.hideLoading();
+          var newIndex = index + 1;
+          this.uploadpreliumdesign(response, key, this.prelimFiles[newIndex], newIndex);
+        } else {
+          this.utils.hideLoading();
+          if (this.send === ScheduleFormEvent.SAVE_SALES_FORM) {
+            this.router.navigate(['/homepage/design'])
+            if (this.designId == 0) {
+              this.utils.showSnackBar('Design have been saved');
+            }
+            else {
+              this.utils.showSnackBar('Design have been updated');
+            }
+            this.utils.setHomepageDesignRefresh(true);
+          }
+          else {
+            let objToSend: NavigationExtras = {
+              queryParams: {
+                id: response.id,
+                designData: "prelim",
+                fulldesigndata: response
+              },
+              skipLocationChange: false,
+              fragment: 'top'
+            };
+
+
             this.router.navigate(['/payment-modal'], {
-              state: {productdetails: objToSend}
+              state: { productdetails: objToSend }
             });
           }
         }
-      }
-    })
-  }, responseError => {
-      this.utils.hideLoading();
-      const error: ErrorModel = responseError.error;
-      this.utils.errorSnackBar(error.message[0].messages[0].message);
-    })
-  }
-
-  }
-
-  uploadpreliumdesign(response?: any, key?: string,fileObj?:string,index?:number){
-    console.log(this.prelimFiles);
-    const imageData = new FormData();
-   // for(var i=0; i< this.prelimFiles.length;i++){
-      imageData.append("files",fileObj);
-     // if(i ==0){
-        imageData.append('path', 'designs/' + response.id);
-        imageData.append('refId', response.id + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-      //}
-    //}
-      this.utils.showLoading("Uploading attachment"+" "+(index+1)+" of"+" "+this.prelimFiles.length).then(()=>{
-    this.apiService.uploaddesign(imageData).subscribe(res=>{
-      console.log(res);
-      if(index<this.prelimFiles.length - 1)
-      {
-        console.log("if")
+      }, responseError => {
         this.utils.hideLoading();
-        var newIndex = index + 1;
-        this.uploadpreliumdesign(response,key,this.prelimFiles[newIndex],newIndex);
-      }else{
-      this.utils.hideLoading();
-      if(this.send === ScheduleFormEvent.SAVE_SALES_FORM)
-      {
-      this.router.navigate(['/homepage/design'])
-      if(this.designId==0)
-      {
-                 this.utils.showSnackBar('Design have been saved');
-      }
-      else{
-        this.utils.showSnackBar('Design have been updated');
-      }
-                this.utils.setHomepageDesignRefresh(true);
-      }
-      else{
-        let objToSend: NavigationExtras = {
-          queryParams: {
-            id:response.id,
-            designData:"prelim",
-            fulldesigndata:response
-          },
-          skipLocationChange: false,
-          fragment: 'top'
-      };
-
-
-  this.router.navigate(['/payment-modal'], {
-    state: { productdetails: objToSend }
-  });
-      }
-    }
-    }, responseError => {
-      this.utils.hideLoading();
-      //this.utils.hideUploadingLoading();
-      const error: ErrorModel = responseError.error;
-      this.utils.errorSnackBar(error.message[0].messages[0].message);
+        //this.utils.hideUploadingLoading();
+        const error: ErrorModel = responseError.error;
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
+      })
     })
-  })
-}
+  }
 
   updateLogo() {
 
@@ -1810,7 +1807,7 @@ deleteAttachmentFile(index){
 
 
       this.router.navigate(['/payment-modal'], {
-        state: {productdetails: objToSend}
+        state: { productdetails: objToSend }
       });
     } else {
       if (this.desginForm.value.name == '' || this.desginForm.get('name').hasError('pattern')) {
@@ -1867,14 +1864,14 @@ deleteAttachmentFile(index){
 
   gettingClients() {
     this.apiService.getClients().subscribe(res => {
-        this.getCompanies = res;
-        console.log(this.getCompanies);
-        this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
-          startWith(""),
-          map(value => (typeof value === "string" ? value : value.companyid)),
-          map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
-        );
-      },
+      this.getCompanies = res;
+      console.log(this.getCompanies);
+      this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
+        startWith(""),
+        map(value => (typeof value === "string" ? value : value.companyid)),
+        map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
+      );
+    },
       error => {
         this.utils.errorSnackBar("Error");
       }
