@@ -23,6 +23,8 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { NetworkdetectService } from '../networkdetect.service';
 import { Clients } from '../model/clients.model';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import { element } from 'protractor';
+import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 
@@ -132,7 +134,7 @@ export class PermitschedulePage implements OnInit {
   // newpermitsRef: AngularFireObject<any>;
   // newpermitscount = 0;
 
-
+  
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -986,12 +988,12 @@ else{
                 this.utils.hideLoading().then(()=>{
                 if(newConstruction=='true'){
                // if(this.architecturalFileUpload){
-                  this.uploaarchitecturedesign(response,'architecturaldesign');
+                  this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
                // }
               }
               else if(newConstruction=='false'){
                 if(this.attachmentFileUpload){
-                  this.uploadAttachmentDesign(response,'attachments')
+                  this.uploadAttachmentDesign(response,'attachments',this.permitFiles[0],0)
                 }
               }
               else{
@@ -1086,12 +1088,12 @@ else{
                 this.value = response.id;
                 if(newConstruction=='true'){
                   // if(this.architecturalFileUpload){
-                     this.uploaarchitecturedesign(response,'architecturaldesign');
+                     this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
                   // }
                  }
                  else if(newConstruction=='false'){
                    if(this.attachmentFileUpload){
-                     this.uploadAttachmentDesign(response,'attachments')
+                     this.uploadAttachmentDesign(response,'attachments',this.permitFiles[0],0)
                    }
                  }
                  else{
@@ -1208,12 +1210,12 @@ else{
               this.utils.hideLoading().then(()=>{
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
-                   this.uploaarchitecturedesign(response,'architecturaldesign');
+                   this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
                 // }
                }
                else if(newConstruction=='false'){
                  if(this.attachmentFileUpload){
-                   this.uploadAttachmentDesign(response,'attachments')
+                   this.uploadAttachmentDesign(response,'attachments',this.permitFiles[0],0)
                  }
                }
                else{
@@ -1297,12 +1299,12 @@ else{
               this.value=response.id;
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
-                   this.uploaarchitecturedesign(response,'architecturaldesign');
+                   this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
                 // }
                }
                else if(newConstruction=='false'){
                  if(this.attachmentFileUpload){
-                   this.uploadAttachmentDesign(response,'attachments')
+                   this.uploadAttachmentDesign(response,'attachments',this.permitFiles[0],0)
                  }
                }
                else{
@@ -1445,24 +1447,31 @@ else{
 
      }
 
-    uploaarchitecturedesign(response?: any, key?: string){
+    uploaarchitecturedesign(response?: any, key?: string, fileObj?:File,index?:number){
      // console.log(this.archFiles);
-      const imageData = new FormData();
-      for(var i=0; i< this.archFiles.length;i++){
-        imageData.append("files",this.archFiles[i]);
-        if(i ==0){
+     const imageData = new FormData();
+       // for(var i=0; i< this.archFiles.length;i++){
+        imageData.append("files",fileObj);
+       // if(i ==0){
           imageData.append('path', 'designs/' + response.id);
           imageData.append('refId', response.id + '');
           imageData.append('ref', 'design');
           imageData.append('field', key);
-        }
-      }
-      this.utils.showLoading("Architectural File Uploading...").then(()=>{
+       // }
+     // }
+        this.utils.showLoading("Uploading architecture"+" "+(index+1)+" of"+" "+this.archFiles.length).then(()=>{
       this.apiService.uploaddesign(imageData).subscribe(res=>{
         console.log(res);
+        if(index<this.archFiles.length - 1)
+        {
+          console.log("if")
+          this.utils.hideLoading();
+          var newIndex = index + 1;
+          this.uploaarchitecturedesign(response,key,this.archFiles[newIndex],newIndex);
+        }else{
         this.utils.hideLoading();
         if(this.attachmentFileUpload){
-          this.uploadAttachmentDesign(response,'attachments')
+          this.uploadAttachmentDesign(response,'attachments',this.permitFiles[0],0);
         }
         else{
           if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM)
@@ -1496,31 +1505,39 @@ else{
       });
           }
         }
-
+      }
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
         this.utils.errorSnackBar(error.message[0].messages[0].message);
       })
       })
+   // })
 
     }
 
-    uploadAttachmentDesign(response?: any, key?: string,filearray?:File[]){
+    uploadAttachmentDesign(response?: any, key?: string, fileObj?:File,index?:number){
       console.log(this.permitFiles);
       const imageData = new FormData();
-      for(var i=0; i< this.permitFiles.length;i++){
-        imageData.append("files",this.permitFiles[i]);
-        if(i ==0){
+     // for(var i=0; i< this.permitFiles.length;i++){
+        imageData.append("files",fileObj);
+      //  if(i ==0){
           imageData.append('path', 'designs/' + response.id);
           imageData.append('refId', response.id + '');
           imageData.append('ref', 'design');
           imageData.append('field', key);
-        }
-      }
-      this.utils.showLoading("Attachment File Uploading").then(()=>{
+     //   }
+     // }
+        this.utils.showLoading("Uploading attachment"+" "+(index+1)+" of"+" "+this.permitFiles.length).then(()=>{
       this.apiService.uploaddesign(imageData).subscribe(res=>{
         console.log(res);
+        if(index<this.permitFiles.length - 1)
+        {
+          console.log("if")
+          this.utils.hideLoading();
+          var newIndex = index + 1;
+          this.uploadAttachmentDesign(response,key,this.archFiles[newIndex],newIndex);
+        }else{
         this.utils.hideLoading();
         if(this.formValue === 'save' || this.send ===ScheduleFormEvent.SAVE_PERMIT_FORM)
         {
@@ -1552,6 +1569,7 @@ else{
       state: { productdetails: objToSend }
     });
         }
+      }
       }, responseError => {
         this.utils.hideLoading();
         //this.utils.hideUploadingLoading();

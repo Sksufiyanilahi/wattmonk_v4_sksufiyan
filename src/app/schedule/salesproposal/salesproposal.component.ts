@@ -70,6 +70,7 @@ export class SalesproposalComponent implements OnInit {
  imageName:any;
 
  indexOfArcFiles=[]
+ indexOfAttachmentFile=[];
  isArcFileDelete:boolean=false;
   //attachmentName = this.desginForm.get('attachments').value;
 
@@ -916,20 +917,22 @@ console.log(this.indexOfArcFiles);
 console.log(this.architecturalData);
 
 this.architecturalData.splice(i, 1);
+this.deleteArcFile(this.indexOfArcFiles);
 
 }
 
 removeattachment(attachment,i){
 
-  this.indexOfArcFiles.push( attachment.id);
+  this.indexOfAttachmentFile.push( attachment.id);
 
   this.isArcFileDelete=true;
   console.log(this.isArcFileDelete);
-  console.log(this.indexOfArcFiles);
+  console.log(this.indexOfAttachmentFile);
   console.log(this.attachmentData);
   console.log(i);
 
   this.attachmentData.splice(i, 1);
+  this.deleteAttachmentFile(this.indexOfAttachmentFile);
 }
 
 deleteArcFile(index){
@@ -938,10 +941,11 @@ deleteArcFile(index){
   // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
      for(var i=0; i< index.length;i++){
        var id = index[i];
+       this.utils.showLoading("Deleting Architectural File").then(()=>{
        this.apiService.deletePrelimImage(id).subscribe(res=>{console.log("hello",res)
-
+       this.indexOfArcFiles=[]
    });
-
+  });
  // this.utils.hideLoading().then(()=>{
  //   //   this.utils.showSnackBar('File deleted successfully');
  //     // this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
@@ -957,10 +961,27 @@ deleteArcFile(index){
 
 // });
  //this.utils.setHomepageDesignRefresh(true);
+}
 
+deleteAttachmentFile(index){
 
+  // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+     for(var i=0; i< index.length;i++){
+      
+       var id = index[i];
+       this.utils.showLoading("Deleting Attachment File").then(()=>{
+       this.apiService.deletePrelimImage(id).subscribe(res=>{
+      this.utils.hideLoading().then(()=>{console.log("hello",res)
+    this.indexOfAttachmentFile=[]});
+       })
+   });
+ (error)=>{
+   this.utils.hideLoading().then(()=> {
+     this.utils.errorSnackBar('some Error Occured');
+   });
+ }}
 
-
+// })
 }
 
 
@@ -988,7 +1009,7 @@ deleteArcFile(index){
     // console.log('hey',invalid)
     // return invalid;
 
-
+    console.log(this.send);
     if (this.desginForm.status == 'VALID') {
       var newConstruction = this.desginForm.get("newconstruction").value;
       this.desginForm.get("architecturaldesign").setValue('');
@@ -1058,12 +1079,12 @@ deleteArcFile(index){
                 }
               if(newConstruction=='true'){
                 // if(this.architecturalFileUpload){
-                   this.uploaarchitecturedesign(response,'architecturaldesign');
+                   this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
                 // }
                }
                else{
                  if(this.attachmentFileUpload){
-                   this.uploadpreliumdesign(response,'attachments')
+                   this.uploadpreliumdesign(response,'attachments',this.prelimFiles[0],0)
                  }
                  else{
                    console.log('Redirect.....')
@@ -1151,11 +1172,11 @@ deleteArcFile(index){
                   }
                 if(newConstruction == 'true')
                 {
-               this.uploaarchitecturedesign(response,'architecturaldesign');
+               this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
                 }
                 else{
                   if(this.attachmentFileUpload){
-                    this.uploadpreliumdesign(response,'attachments')
+                    this.uploadpreliumdesign(response,'attachments',this.prelimFiles[0],0)
                   }
                   else{
                     let objToSend: NavigationExtras = {
@@ -1242,20 +1263,17 @@ deleteArcFile(index){
               }
             if(newConstruction=='true')
             {
-            this.uploaarchitecturedesign(response,'architecturaldesign');
+            this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
             }
             else{
               if(this.attachmentFileUpload){
-            this.uploadpreliumdesign(response,'attachments')
+            this.uploadpreliumdesign(response,'attachments',this.prelimFiles[0],0)
               }
               else{
                 this.utils.showSnackBar('Design have been updated');
                 this.utils.setDesignDetailsRefresh(true);
                 this.navController.pop();
               }
-            }
-            if(this.isArcFileDelete){
-              this.deleteArcFile(this.indexOfArcFiles);
             }
 
               });
@@ -1324,11 +1342,11 @@ deleteArcFile(index){
               }
             if(newConstruction=='true')
             {
-            this.uploaarchitecturedesign(response,'architecturaldesign');
+            this.uploaarchitecturedesign(response,'architecturaldesign',this.archFiles[0],0);
             }
             else{
               if(this.attachmentFileUpload){
-            this.uploadpreliumdesign(response,'attachments');
+            this.uploadpreliumdesign(response,'attachments',this.prelimFiles[0],0);
               }
               else{
                 let objToSend: NavigationExtras = {
@@ -1346,10 +1364,6 @@ deleteArcFile(index){
             state: { productdetails: objToSend }
           });
               }
-            }
-            if(this.isArcFileDelete){
-              console.log("hello");
-              this.deleteArcFile(this.indexOfArcFiles);
             }
             // this.utils.hideLoading().then(() => {
             //   console.log('Res', response);
@@ -1591,27 +1605,34 @@ ioniViewDidEnter(){
   }
 
 
-  uploaarchitecturedesign(response?: any, key?: string){
+  uploaarchitecturedesign(response?: any, key?: string, fileObj?:string,index?:number){
     console.log(this.archFiles);
     const imageData = new FormData();
-    for(var i=0; i< this.archFiles.length;i++){
-      imageData.append("files",this.archFiles[i]);
-      if(i ==0){
+    //for(var i=0; i< this.archFiles.length;i++){
+      imageData.append("files",fileObj);
+      //if(i ==0){
         imageData.append('path', 'designs/' + response.id);
         imageData.append('refId', response.id + '');
         imageData.append('ref', 'design');
         imageData.append('field', key);
-      }
-    }
-    this.utils.showLoading("Architectural File Uploading").then(()=>{
+    //  }
+   // }
+      this.utils.showLoading("Uploading architecture"+" "+(index+1)+" of"+" "+this.archFiles.length).then(()=>{
     this.apiService.uploaddesign(imageData).subscribe(res=>{
       console.log(res);
+      if(index<this.archFiles.length - 1)
+      {
+        console.log("if")
+        this.utils.hideLoading();
+        var newIndex = index + 1;
+        this.uploaarchitecturedesign(response,key,this.archFiles[newIndex],newIndex);
+      }else{
       this.utils.hideLoading();
       if(this.attachmentFileUpload){
-      this.uploadpreliumdesign(response,'attachments');
+      this.uploadpreliumdesign(response,'attachments',this.prelimFiles[0],0);
       }
       else{
-        if(this.send === ScheduleFormEvent.SAVE_DESIGN_FORM ){
+        if(this.send === ScheduleFormEvent.SAVE_SALES_FORM ){
         this.router.navigate(['/homepage/design'])
         if(this.designId==0){
                  this.utils.showSnackBar('Design have been saved');
@@ -1638,6 +1659,7 @@ ioniViewDidEnter(){
             });
         }
       }
+    }
     }, responseError => {
       this.utils.hideLoading();
       const error: ErrorModel = responseError.error;
@@ -1648,23 +1670,30 @@ ioniViewDidEnter(){
 
   }
 
-  uploadpreliumdesign(response?: any, key?: string,filearray?:File[]){
+  uploadpreliumdesign(response?: any, key?: string,fileObj?:string,index?:number){
     console.log(this.prelimFiles);
     const imageData = new FormData();
-    for(var i=0; i< this.prelimFiles.length;i++){
-      imageData.append("files",this.prelimFiles[i]);
-      if(i ==0){
+   // for(var i=0; i< this.prelimFiles.length;i++){
+      imageData.append("files",fileObj);
+     // if(i ==0){
         imageData.append('path', 'designs/' + response.id);
         imageData.append('refId', response.id + '');
         imageData.append('ref', 'design');
         imageData.append('field', key);
-      }
-    }
-    this.utils.showLoading("Attachment File Uploading").then(()=>{
+      //}
+    //}
+      this.utils.showLoading("Uploading attachment"+" "+(index+1)+" of"+" "+this.prelimFiles.length).then(()=>{
     this.apiService.uploaddesign(imageData).subscribe(res=>{
       console.log(res);
+      if(index<this.prelimFiles.length - 1)
+      {
+        console.log("if")
+        this.utils.hideLoading();
+        var newIndex = index + 1;
+        this.uploadpreliumdesign(response,key,this.prelimFiles[newIndex],newIndex);
+      }else{
       this.utils.hideLoading();
-      if(this.send === ScheduleFormEvent.SAVE_DESIGN_FORM)
+      if(this.send === ScheduleFormEvent.SAVE_SALES_FORM)
       {
       this.router.navigate(['/homepage/design'])
       if(this.designId==0)
@@ -1692,7 +1721,7 @@ ioniViewDidEnter(){
     state: { productdetails: objToSend }
   });
       }
-
+    }
     }, responseError => {
       this.utils.hideLoading();
       //this.utils.hideUploadingLoading();
