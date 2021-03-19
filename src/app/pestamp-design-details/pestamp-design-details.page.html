@@ -92,7 +92,7 @@
     <ion-row class="ion-no-padding" *ngIf="design.jobtype != null">
         <ion-col><span class="model-type font">Job Type</span></ion-col>
         <ion-col size="auto">
-            <span class="model-name font">{{design?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype | uppercase}}</span>
+            <span class="model-name font">{{design?.jobtype=='pvbattery' ? 'PV + Battery' : design?.jobtype | uppercase}}</span>
         </ion-col>
     </ion-row>
 
