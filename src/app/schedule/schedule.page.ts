@@ -359,7 +359,7 @@ this.network.networkConnect();
   saveDesignForm() {
     console.log('posting value');
     console.log(this.router.url);
-    if(this.router.url=='/schedule/design'){
+    if(this.router.url=='/schedule/design' || this.router.url=='/schedule/design/' + this.designs.id ){
     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
     }
     else

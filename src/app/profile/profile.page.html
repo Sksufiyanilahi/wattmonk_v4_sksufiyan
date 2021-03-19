@@ -36,7 +36,7 @@
                 </div>
             </ion-col>
             <ion-col class="ion-no-padding" style="padding-top: 1%;padding-left: 5%;">
-                <div>   
+                <div>
                     <span class="profile-name">{{user?.firstname}} {{user?.lastname}}</span>
                     <!-- <ion-icon name="pencil-outline"></ion-icon> -->
                     <ion-button fill="clear" style="height: 10%;
@@ -61,116 +61,118 @@
                   <span>$ {{profile?.amount}}</span><br>
                    <ion-label>Wallet</ion-label>
                 </div>
-            <!-- </ion-col> 
+            <!-- </ion-col>
             <ion-col style="text-align: center;" *ngIf="user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay"> -->
               <!-- <ion-button *ngIf="user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay" (click)='AddWallet()' fill='clear'>Add money</ion-button>  -->
               <!-- <span>Active jobs </span>
               <span>{{activedesignjobs}} </span> -->
-              
+
             </ion-col>
         </ion-row>
         <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-        <ion-row>
-            <ion-col size="12" class="ion-no-padding" style="margin-top: 5%;">
-                <div>
-                <ion-icon name="mail" style="margin-left: 10%"></ion-icon>
-                    <span class="profile-email" style="font-size: larger;
-                    margin-left: 5%;">{{user?.email}}</span>
-                </div>
-            </ion-col>
+        <ion-card>
+          <ion-row>
+              <ion-col size="12" class="ion-no-padding" style="margin-top: 5%;">
+                  <div>
+                  <ion-icon name="mail" style="margin-left: 10%"></ion-icon>
+                      <span class="profile-email" style="font-size: larger;
+                      margin-left: 5%;">{{user?.email}}</span>
+                  </div>
+              </ion-col>
 
-            <ion-col size="12" class="ion-no-padding" style="margin-top: 5%;">
-                <div>
-                    <ion-icon name="business-sharp" style="margin-left: 10%;"></ion-icon>
-                    <span class="profile-email" style="font-size: larger;
-                    margin-left: 5%;">{{user?.company}}</span>
-                </div>
-            </ion-col>
+              <ion-col size="12" class="ion-no-padding" style="margin-top: 5%;">
+                  <div>
+                      <ion-icon name="business-sharp" style="margin-left: 10%;"></ion-icon>
+                      <span class="profile-email" style="font-size: larger;
+                      margin-left: 5%;">{{user?.company}}</span>
+                  </div>
+              </ion-col>
 
-            <ion-col size="12" class="ion-no-padding" style="margin-top: 5%;">
-                <div>
-                    <ion-icon name="call-outline" style="margin-left: 10%;"></ion-icon>
-                    <span class="profile-email" style="font-size: larger;
-                    margin-left: 5%;">{{user?.phone==null?"No Phone number found":user?.phone}}</span>
-                </div>
-            </ion-col>
+              <ion-col size="12" class="ion-no-padding" style="margin-top: 5%;">
+                  <div>
+                      <ion-icon name="call-outline" style="margin-left: 10%;"></ion-icon>
+                      <span class="profile-email" style="font-size: larger;
+                      margin-left: 5%;">{{user?.phone==null?"No Phone number found":user?.phone}}</span>
+                  </div>
+              </ion-col>
 
-            <ion-item>
-                <ion-label class="font" >Notifications</ion-label>
-               <ion-toggle (ionChange)="onEmailChange(user,'notification',$event)"  ></ion-toggle>
-               <!-- <ion-toggle formControlName="requestgeneratednotification" (ionChange)="onChange($event,'requestgenerated')"  ></ion-toggle> -->
-             </ion-item>
-             <ion-item>
-              <ion-label class="font">Emails</ion-label>
-             <ion-toggle (ionChange)="onEmailChange(user,'email',$event)"></ion-toggle>
-             <!-- <ion-toggle formControlName="requestacknowledgementnotification" (ionChange)="onChange($event,'requestacknoledged')"></ion-toggle> -->
-            </ion-item>
-            <!-- <ion-col size="12" class="ion-no-padding">
-                <div style="text-align: center">
-                    <span class="profile-name">{{user?.firstname}} {{user?.lastname}}</span>
-                </div>
-            </ion-col>
+              <ion-item lines="none">
+                  <ion-label class="font" >Notifications</ion-label>
+                 <ion-toggle [(ngModel)]="getnotification" (ionChange)="onEmailChange(user,'notification',$event)"  ></ion-toggle>
+                 <!-- <ion-toggle formControlName="requestgeneratednotification" (ionChange)="onChange($event,'requestgenerated')"  ></ion-toggle> -->
+               </ion-item>
+               <ion-item lines="none">
+                <ion-label class="font">Emails</ion-label>
+               <ion-toggle [(ngModel)]="getemail" (ionChange)="onEmailChange(user,'email',$event)"></ion-toggle>
+               <!-- <ion-toggle formControlName="requestacknowledgementnotification" (ionChange)="onChange($event,'requestacknoledged')"></ion-toggle> -->
+              </ion-item>
+              <!-- <ion-col size="12" class="ion-no-padding">
+                  <div style="text-align: center">
+                      <span class="profile-name">{{user?.firstname}} {{user?.lastname}}</span>
+                  </div>
+              </ion-col>
 
-            <ion-col size="12" class="ion-no-padding">
+              <ion-col size="12" class="ion-no-padding">
+                  <div style="text-align: center">
+                      <span class="profile-email">{{user?.email}}</span>
+                  </div>
+              </ion-col> -->
+              <!-- <ion-col size="12" class="ion-no-padding">
+                  <div style="text-align: center">
+                      <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin';else role">{{"Admin"}}</span>
+                      <ng-template #role>
+                        <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin'">{{user.role.name}}</span>
+                      </ng-template>
+                  </div>
+              </ion-col> -->
+              <!-- <ion-col size="12" class="ion-no-padding">
+                  <div style="text-align: center">
+                      <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin';else role">{{user.company}}</span>
+                       <ng-template #role>
+                        <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin'">{{user?.phone==null?"No Phone number found":user?.phone}}</span>
+                       </ng-template>
+                  </div>
+              </ion-col> -->
+              <!-- <ion-col size="12" class="ion-no-padding" *ngIf="(user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay)|| user.designertype=='external'">
                 <div style="text-align: center">
-                    <span class="profile-email">{{user?.email}}</span>
+                  <span>$ {{profile?.amount}}</span><br>
+                   <ion-label>Wallet</ion-label>
                 </div>
             </ion-col> -->
-            <!-- <ion-col size="12" class="ion-no-padding">
-                <div style="text-align: center">
-                    <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin';else role">{{"Admin"}}</span>
-                    <ng-template #role>
-                      <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin'">{{user.role.name}}</span>
-                    </ng-template>
-                </div>
-            </ion-col> -->
-            <!-- <ion-col size="12" class="ion-no-padding">
-                <div style="text-align: center">
-                    <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin';else role">{{user.company}}</span>
-                     <ng-template #role> 
-                      <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin'">{{user?.phone==null?"No Phone number found":user?.phone}}</span>
-                     </ng-template>
-                </div>
-            </ion-col> -->
-            <!-- <ion-col size="12" class="ion-no-padding" *ngIf="(user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay)|| user.designertype=='external'">
-              <div style="text-align: center">
-                <span>$ {{profile?.amount}}</span><br>
-                 <ion-label>Wallet</ion-label>
-              </div>
-          </ion-col> 
-          <ion-col style="text-align: center;" *ngIf="user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay">
-            <ion-button (click)='AddWallet()' fill='clear'>Add money</ion-button> 
-          </ion-col> -->
-            <!-- <ion-col size="12" class="ion-no-padding">
-                <div style="text-align: center">
-                    <span class="profile-amount">Total points: {{user.amount}}</span>
-                </div>
-                <div style="text-align: center;color:#4272B9" (click)="addPoints()">Add points</div>
-            </ion-col> -->
-
-            <!-- <ion-col size="12" class="ion-no-padding">
-                <div style="text-align: center">
-                    <span style="color: #BCBCBC;">Male</span>
-                </div>
-            </ion-col> -->
-            <!-- <ion-col size="12">
-                <div style="text-align: center">
-                    <ion-badge class="badge-container">
-                        <div class="dollar-badge">
-                            <span style="color: grey;">$50</span>
-                        </div>
-                    </ion-badge>
-                </div>
-            </ion-col> -->
-            <!-- <ion-col class="ion-align-items-center ion-text-center">
-                <ion-button fill="clear" class="action-button-color" (click)="logout()">Logout</ion-button>
+            <ion-col style="text-align: center;" *ngIf="user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay">
+              <ion-button (click)='AddWallet()' fill='clear'>Add money</ion-button>
             </ion-col>
-            <ion-col class="ion-align-items-center ion-text-center">
-                <ion-button fill="clear" class="action-button-color" (click)="syncSurvey()">Sync Surveys</ion-button>
-            </ion-col> -->
-        </ion-row>
+              <!-- <ion-col size="12" class="ion-no-padding">
+                  <div style="text-align: center">
+                      <span class="profile-amount">Total points: {{user.amount}}</span>
+                  </div>
+                  <div style="text-align: center;color:#4272B9" (click)="addPoints()">Add points</div>
+              </ion-col> -->
+
+              <!-- <ion-col size="12" class="ion-no-padding">
+                  <div style="text-align: center">
+                      <span style="color: #BCBCBC;">Male</span>
+                  </div>
+              </ion-col> -->
+              <!-- <ion-col size="12">
+                  <div style="text-align: center">
+                      <ion-badge class="badge-container">
+                          <div class="dollar-badge">
+                              <span style="color: grey;">$50</span>
+                          </div>
+                      </ion-badge>
+                  </div>
+              </ion-col> -->
+              <!-- <ion-col class="ion-align-items-center ion-text-center">
+                  <ion-button fill="clear" class="action-button-color" (click)="logout()">Logout</ion-button>
+              </ion-col>
+              <ion-col class="ion-align-items-center ion-text-center">
+                  <ion-button fill="clear" class="action-button-color" (click)="syncSurvey()">Sync Surveys</ion-button>
+              </ion-col> -->
+          </ion-row>
+        </ion-card>
         <!-- <ion-row> -->
-      
+
         <!-- </ion-row> -->
 
         <!-- <ion-row class="ion-justify-content-center">
