@@ -1,3 +1,4 @@
+/* tslint:disable:no-string-literal */
 import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
@@ -31,6 +32,7 @@ export interface MAINMENU {
   isvisible: boolean;
   viewmode: number;
   children: CHILDREN[];
+  formelements?: FORMELEMENTS[];
 }
 
 export interface CHILDREN {
@@ -41,6 +43,7 @@ export interface CHILDREN {
   checkexistence: boolean;
   isexistencechecked: boolean;
   inputformcontrol: string;
+  placeholder?: string;
   shotscount: number;
   allowmultipleshots: boolean;
   capturedshots: CAPTUREDSHOT[];
@@ -61,6 +64,8 @@ export interface SHOT {
   questionstatus: boolean;
   questiontype: QUESTIONTYPE;
   inputformcontrol: string;
+  inputformcontrol2?: string;
+  placeholder?: string;
   imagekey: string;
   imagename: string;
 }
@@ -72,6 +77,30 @@ export interface CAPTUREDSHOT {
   shotimage: string;
   imagekey: string;
   imagename: string;
+}
+
+export interface FORMELEMENTS {
+  inputformcontrol: string;
+  placeholder: string;
+  label: string;
+  visibility: boolean;
+  controltype: CONTROLTYPE;
+  options: any;
+  controlselement: {
+    inputformcontrol: string;
+    onvalueselection: any;
+  } | {};
+  required: boolean;
+}
+
+export enum CONTROLTYPE {
+  CONTROL_INPUT_TEXT = 1,
+  CONTROL_INPUT_NUMBER = 2,
+  CONTROL_INPUT_SELECT = 3,
+  CONTROL_INPUT_AUTOCOMPLETE = 4,
+  CONTROL_INPUT_RADIO = 5,
+  CONTROL_INPUT_CHECKBOX = 6,
+  CONTROL_INPUT_TEXTAREA = 7,
 }
 
 export interface Equipment {
@@ -132,6 +161,7 @@ export class SurveyprocessPage implements OnInit {
 
   @ViewChild('screen', {static: false}) screen: ElementRef;
   @ViewChild('slides', {static: false}) slider: IonSlides;
+  @ViewChild('autocomplete', {static: false}) autoCompleteComponent: AutoCompleteComponent;
   @ViewChild('utility', {static: false}) utility: AutoCompleteComponent;
   @ViewChild('roofmaterial', {static: false}) roofmaterial: AutoCompleteComponent;
   @ViewChild('mainscroll', {static: false}) mainscroll: any;
@@ -139,6 +169,7 @@ export class SurveyprocessPage implements OnInit {
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
+  ControlTypes = CONTROLTYPE;
 
   slideOpts = {
     speed: 400
@@ -273,6 +304,7 @@ export class SurveyprocessPage implements OnInit {
   isSaveFormCalled = false;
   editingMode = false;
   editingModePreviousIndex;
+  activeFormElementsArray;
 
   constructor(
     private route: ActivatedRoute,
@@ -311,17 +343,143 @@ export class SurveyprocessPage implements OnInit {
     //         navController.pop();
     //     }
     // });
+    this.checkSurveyStorage();
+    this.fetchJSONData();
+  }
 
-    if (this.surveytype == 'battery') {
-      this.batterySurveyProcess();
-    } else if (this.surveytype == 'pvbattery') {
-      this.pvBatterySurveyProcess();
-    } else if (this.surveytype == 'pv') {
-      this.pvSurveyProcess();
+  ngOnInit() {
+    this.routeroutlet.swipeGesture = false;
+    this.startCameraWithOpts();
+  }
+
+  ngOnDestroy() {
+    this.stopCamera();
+  }
+
+  /**
+   * Active Form Code Starts Here
+   */
+  checkSurveyStorage() {
+    this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
+      if (data) {
+        this.mainmenuitems = data.menuitems;
+        this.originalmainmenuitems = data.menuitems;
+        this.totalpercent = data.currentprogress;
+        this.selectedmainmenuindex = data.selectedmainmenuindex;
+        this.selectedsubmenuindex = data.selectedsubmenuindex;
+        this.selectedshotindex = data.selectedshotindex;
+        this.shotcompletecount = data.shotcompletecount;
+        this.previousmainmenuindex = data.previousmainmenuindex;
+        this.previoussubmenuindex = data.previoussubmenuindex;
+        this.previousshotindex = data.previousshotindex;
+
+        this.surveyid = data.surveyid;
+        this.surveytype = data.surveytype;
+        this.surveycity = data.city;
+        this.surveystate = data.state;
+        this.latitude = data.latitude;
+        this.longitude = data.longitude;
+        this.setSurveyProcessForm(data);
+      } else {
+        this.fetchJSONData();
+      }
+    });
+  }
+
+  fetchJSONData() {
+    const userId = this.user.parent.id !== '' ? this.user.parent.id : this.user.id;
+    this.apiService.fetchJSON(userId, this.surveytype).subscribe((data: any) => {
+      this.mainmenuitems = JSON.parse(JSON.stringify(data.sequence));
+      this.originalmainmenuitems = JSON.parse(JSON.stringify(data.sequence));
+      this.isdataloaded = true;
+      this.mainmenuitems.forEach(element => {
+        if (element.isactive) {
+          this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+        }
+      });
+      this.setTotalStepCount();
+      this.setSurveyProcessForm();
+    });
+  }
+
+  toggleElementVisibility(element, controlsElement) {
+    if (Object.keys(controlsElement).length > 0) {
+      const elementToControl = this.activeForm.get(controlsElement.inputformcontrol);
+      if (this.activeForm.get(element).value === controlsElement.onvalueselection) {
+        document.getElementById(`input_${controlsElement.inputformcontrol}`).classList.remove('hideElement');
+        elementToControl.enable();
+        elementToControl.setValidators([Validators.required]);
+      } else {
+        document.getElementById(`input_${controlsElement.inputformcontrol}`).classList.add('hideElement');
+        elementToControl.setValue('');
+        elementToControl.clearValidators();
+        elementToControl.disable();
+      }
     }
   }
 
-  pvSurveyProcess() {
+  setSurveyProcessForm(data?) {
+    const formData = {};
+    this.activeFormKeysMap = {};
+    this.mainmenuitems.map(mainMenuItem => {
+      mainMenuItem.children.map(child => {
+        if (child.inputformcontrol !== '') {
+          this.activeFormElementsArray.push(child.inputformcontrol);
+          this.activeFormKeysMap[child.inputformcontrol] = child.placeholder;
+          formData[child.inputformcontrol] = new FormControl('', [Validators.required]);
+        }
+        child.shots.map(shot => {
+          if (shot.inputformcontrol !== '') {
+            this.activeFormElementsArray.push(shot.inputformcontrol);
+            this.activeFormKeysMap[shot.inputformcontrol] = shot.placeholder;
+            if (child.inputformcontrol !== '') {
+              formData[shot.inputformcontrol] = new FormControl('', []);
+            } else {
+              formData[shot.inputformcontrol] = new FormControl('', [Validators.required]);
+            }
+            if (shot.questiontype === 9) {
+              formData[shot.inputformcontrol2] = new FormControl('', [Validators.required]);
+            }
+          }
+        });
+      });
+      if (mainMenuItem.formelements) {
+        mainMenuItem.formelements.map(formElement => {
+          this.activeFormElementsArray.push(formElement.inputformcontrol);
+          this.activeFormKeysMap[formElement.inputformcontrol] = formElement.placeholder;
+          if (formElement.required) {
+            formData[formElement.inputformcontrol] = new FormControl('', [Validators.required]);
+          } else {
+            formData[formElement.inputformcontrol] = new FormControl('', []);
+          }
+        });
+      }
+    });
+    formData['dimensionA'] = new FormControl('', []);
+    formData['dimensionB'] = new FormControl('', []);
+    formData['shotname'] = new FormControl('', []);
+    this.activeForm = new FormGroup(formData);
+    if (data) {
+      this.setSurveyProcessFormData(data);
+    }
+    this.getSiteLocationGoogleImageFromService();
+  }
+
+  setSurveyProcessFormData(data) {
+    Object.keys(data.formdata).forEach((key: string) => {
+      let control: AbstractControl = null;
+      control = this.activeForm.get(key);
+      control.setValue(data.formdata[key]);
+    });
+    this.isdataloaded = true;
+    this.setTotalStepCount();
+    this.handleViewModeSwitch();
+  }
+  /**
+   * Form Code Ends Here
+   */
+
+  /*pvSurveyProcess() {
     this.pvForm = new FormGroup({
       existingsolarsystem: new FormControl('', [Validators.required]),
       batterysystem: new FormControl('', [Validators.required]),
@@ -421,19 +579,9 @@ export class SurveyprocessPage implements OnInit {
       }
     });
     this.getSiteLocationGoogleImageFromService();
-  }
+  }*/
 
-  setTotalStepCount() {
-    let totalSteps = 0;
-    this.mainmenuitems.map(mainmenuitem => {
-      mainmenuitem.children.map(child => {
-        totalSteps += child.shots.length;
-      });
-    });
-    this.totalstepcount = totalSteps;
-  }
-
-  batterySurveyProcess() {
+  /*batterySurveyProcess() {
     this.totalstepcount = 16;
     this.batteryForm = new FormGroup({
       modulemake: new FormControl('', [Validators.required]),
@@ -522,9 +670,9 @@ export class SurveyprocessPage implements OnInit {
     });
 
     this.getSiteLocationGoogleImageFromService();
-  }
+  }*/
 
-  pvBatterySurveyProcess() {
+  /*pvBatterySurveyProcess() {
     this.totalstepcount = 13;
     this.pvbatteryForm = new FormGroup({
       msplocation: new FormControl('', [Validators.required]),
@@ -595,7 +743,7 @@ export class SurveyprocessPage implements OnInit {
     });
 
     this.getSiteLocationGoogleImageFromService();
-  }
+  }*/
 
   formatDateInBackendFormat() {
     const d = new Date();
@@ -606,14 +754,25 @@ export class SurveyprocessPage implements OnInit {
     return (`${ye}-${mo}-${da}`);
   }
 
-  ngOnInit() {
-
-    this.routeroutlet.swipeGesture = false;
-    // tslint:disable-next-line:max-line-length
-    // camera options (Size and location). In the following example, the preview uses the rear camera and display the preview in the back of the webview
-    this.startCameraWithOpts();
+  /**
+   * Step Counts Starts Here
+   */
+  setTotalStepCount() {
+    let totalSteps = 0;
+    this.mainmenuitems.map(mainmenuitem => {
+      mainmenuitem.children.map(child => {
+        totalSteps += child.shots.length;
+      });
+    });
+    this.totalstepcount = totalSteps;
   }
+  /**
+   * Step Counts Ends Here
+   */
 
+  /**
+   * Camera Code Starts Here
+   */
   startCameraWithOpts() {
     this.cameraPreviewOpts = {
       x: 0,
@@ -623,9 +782,7 @@ export class SurveyprocessPage implements OnInit {
       position: 'rear',
       toBack: true,
     };
-
     this.startCamera();
-
     setTimeout(() => {
       CameraPreview.getMaxZoom().then((value) => {
         this.maxzoom = value;
@@ -635,179 +792,6 @@ export class SurveyprocessPage implements OnInit {
       }, (error) => {
       });
     }, 2000);
-  }
-
-  ngOnDestroy() {
-    this.stopCamera();
-  }
-
-  getUtilities() {
-    this.utilitieservice.showLoading('Loading').then(() => {
-      this.apiService.getUtilities().subscribe(response => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.utilities = response;
-          this.changedetectorref.detectChanges();
-        });
-
-      }, responseError => {
-        this.utilitieservice.hideLoading().then(() => {
-          const error: ErrorModel = responseError.error;
-          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
-        });
-
-      });
-    });
-  }
-
-  getRoofMaterials() {
-    this.utilitieservice.showLoading('Loading').then(() => {
-      this.apiService.getRoofMaterials().subscribe(response => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.roofmaterials = response;
-          this.changedetectorref.detectChanges();
-        });
-
-      }, responseError => {
-        this.utilitieservice.hideLoading().then(() => {
-          const error: ErrorModel = responseError.error;
-          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
-        });
-      });
-    });
-  }
-
-  getInverterModels(selectedmakeid: string) {
-    this.utilitieservice.showLoading('Getting inverter models').then((success) => {
-      this.apiService.getInverterMade(selectedmakeid).subscribe(response => {
-        this.utilitieservice.hideLoading();
-        this.invertermodels = response;
-      }, responseError => {
-        this.utilitieservice.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
-      });
-    });
-  }
-
-  getInverterMakes() {
-    this.utilitieservice.showLoading('Loading').then(() => {
-      this.apiService.getInverterMake().subscribe(response => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.invertermakes = response;
-          this.changedetectorref.detectChanges();
-        });
-      }, responseError => {
-        this.utilitieservice.hideLoading().then(() => {
-          const error: ErrorModel = responseError.error;
-          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
-        });
-      });
-    });
-  }
-
-  getSolarModels(selectedsolarmakeid: number) {
-    this.utilitieservice.showLoading('Getting solar models').then((success) => {
-      this.apiService.getSolarMade(selectedsolarmakeid).subscribe(response => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.solarmodels = response;
-        });
-      }, responseError => {
-        this.utilitieservice.hideLoading().then(() => {
-          const error: ErrorModel = responseError.error;
-          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
-        });
-      });
-    });
-  }
-
-  getSolarMakes() {
-    this.utilitieservice.showLoading('Loading').then(() => {
-      this.apiService.getSolarMake().subscribe(response => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.solarmakes = response;
-          this.changedetectorref.detectChanges();
-          this.getUtilities();
-        });
-      }, responseError => {
-        this.utilitieservice.hideLoading().then(() => {
-          const error: ErrorModel = responseError.error;
-          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
-        });
-      });
-    });
-  }
-
-  dragEnded(event: CdkDragEnd, item: Equipment) {
-    item.enabled = false;
-    item.event = event;
-  }
-
-  reverttoOriginalPosition(item: Equipment) {
-    item.event.source.element.nativeElement.style.transform = 'none'; // visually reset element to its origin
-    const source: any = item.event.source;
-    source._passiveTransform = {x: 0, y: 0};
-    item.enabled = true;
-  }
-
-  toggleSidebar(isopen: boolean) {
-    this.isgallerymenucollapsed = true;
-    this.issidemenucollapsed = isopen;
-  }
-
-  toggleGallerybar(isopen: boolean) {
-    this.issidemenucollapsed = true;
-    this.isgallerymenucollapsed = isopen;
-  }
-
-  toggleMainMenuSelection(index) {
-    this.issidemenucollapsed = true;
-    this.isgallerymenucollapsed = true;
-
-    // Retaining previous state
-    this.previousmainmenuindex = this.selectedmainmenuindex;
-    this.previoussubmenuindex = this.selectedsubmenuindex;
-    this.previousshotindex = this.selectedshotindex;
-
-    // Set questionstatus true for question type 5
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
-    }
-
-    // Unset previous menu and select new one
-    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-    this.selectedmainmenuindex = index;
-    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-
-    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
-      let issubmenuset = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
-        if (element.ispending && !issubmenuset) {
-          element.isactive = true;
-          issubmenuset = true;
-          this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
-          let isshotmenuset = false;
-          element.shots.forEach(shot => {
-            if (shot.ispending && !isshotmenuset) {
-              shot.isactive = true;
-              isshotmenuset = true;
-              this.selectedshotindex = element.shots.indexOf(shot);
-            }
-          });
-        }
-      });
-    }
-
-    this.handleViewModeSwitch();
-  }
-
-  toggleSubMenuSelection(index) {
-    this.issidemenucollapsed = true;
-    this.isgallerymenucollapsed = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-    this.selectedsubmenuindex = index;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-    this.selectedshotindex = 0;
   }
 
   startCamera() {
@@ -959,6 +943,184 @@ export class SurveyprocessPage implements OnInit {
     } else {
     }
   }
+  /**
+   * Camera Code Ends Here
+   */
+
+  /**
+   * API Calls for Autocomplete Code Starts Here
+   */
+  getUtilities() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getUtilities().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilities = response;
+          this.changedetectorref.detectChanges();
+        });
+
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+
+      });
+    });
+  }
+
+  getRoofMaterials() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getRoofMaterials().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.roofmaterials = response;
+          this.changedetectorref.detectChanges();
+        });
+
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  getInverterModels(selectedmakeid: string) {
+    this.utilitieservice.showLoading('Getting inverter models').then((success) => {
+      this.apiService.getInverterMade(selectedmakeid).subscribe(response => {
+        this.utilitieservice.hideLoading();
+        this.invertermodels = response;
+      }, responseError => {
+        this.utilitieservice.hideLoading();
+        const error: ErrorModel = responseError.error;
+        this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+      });
+    });
+  }
+
+  getInverterMakes() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getInverterMake().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.invertermakes = response;
+          this.changedetectorref.detectChanges();
+        });
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  getSolarModels(selectedsolarmakeid: number) {
+    this.utilitieservice.showLoading('Getting solar models').then((success) => {
+      this.apiService.getSolarMade(selectedsolarmakeid).subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.solarmodels = response;
+        });
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  getSolarMakes() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getSolarMake().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.solarmakes = response;
+          this.changedetectorref.detectChanges();
+          this.getUtilities();
+        });
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+  /**
+   * API Calls for Autocomplete Code Ends Here
+   */
+
+  dragEnded(event: CdkDragEnd, item: Equipment) {
+    item.enabled = false;
+    item.event = event;
+  }
+
+  reverttoOriginalPosition(item: Equipment) {
+    item.event.source.element.nativeElement.style.transform = 'none'; // visually reset element to its origin
+    const source: any = item.event.source;
+    source._passiveTransform = {x: 0, y: 0};
+    item.enabled = true;
+  }
+
+  toggleSidebar(isopen: boolean) {
+    this.isgallerymenucollapsed = true;
+    this.issidemenucollapsed = isopen;
+  }
+
+  toggleGallerybar(isopen: boolean) {
+    this.issidemenucollapsed = true;
+    this.isgallerymenucollapsed = isopen;
+  }
+
+  toggleMainMenuSelection(index) {
+    this.issidemenucollapsed = true;
+    this.isgallerymenucollapsed = true;
+
+    // Retaining previous state
+    this.previousmainmenuindex = this.selectedmainmenuindex;
+    this.previoussubmenuindex = this.selectedsubmenuindex;
+    this.previousshotindex = this.selectedshotindex;
+
+    // Set questionstatus true for question type 5
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
+    }
+
+    // Unset previous menu and select new one
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+    this.selectedmainmenuindex = index;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+
+    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+      let issubmenuset = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
+        if (element.ispending && !issubmenuset) {
+          element.isactive = true;
+          issubmenuset = true;
+          this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
+          let isshotmenuset = false;
+          element.shots.forEach(shot => {
+            if (shot.ispending && !isshotmenuset) {
+              shot.isactive = true;
+              isshotmenuset = true;
+              this.selectedshotindex = element.shots.indexOf(shot);
+            }
+          });
+        }
+      });
+    }
+
+    this.handleViewModeSwitch();
+  }
+
+  toggleSubMenuSelection(index) {
+    this.issidemenucollapsed = true;
+    this.isgallerymenucollapsed = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+    this.selectedsubmenuindex = index;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+    this.selectedshotindex = 0;
+  }
 
   architecturalfiles(event) {
     for (let i = 0; i < event.target.files.length; i++) {
@@ -966,6 +1128,9 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
+  /**
+   * Answer Submissions for Shot Questions Code Starts Here
+   */
   handleAnswerSubmission(result) {
     this.iscapturingallowed = true;
     this.issidemenucollapsed = true;
@@ -983,50 +1148,6 @@ export class SurveyprocessPage implements OnInit {
     }
 
     this.handleMenuSwitch();
-  }
-
-  handleGroundShotsVisibility() {
-    const mountingtypecontrol = this.activeForm.get('mountingtype');
-    if (mountingtypecontrol.value == 'both' || mountingtypecontrol.value == 'ground') {
-      this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = true;
-      this.mainmenuitems[this.selectedmainmenuindex].children[1].ispending = true;
-      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].ispending = true;
-      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].shotstatus = false;
-    } else {
-      this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children[1].ispending = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].ispending = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].shotstatus = true;
-    }
-  }
-
-  handleAtticSectionVisibility() {
-    const mountingtypecontrol = this.activeForm.get('rooftype');
-    if (mountingtypecontrol.value == 'both' || mountingtypecontrol.value == 'pitch') {
-      this.mainmenuitems[2].isvisible = true;
-      this.mainmenuitems[2].ispending = true;
-      this.mainmenuitems[2].children[0].ispending = true;
-      this.mainmenuitems[2].children[0].shots.forEach(element => {
-        element.ispending = true;
-        element.questionstatus = false;
-        element.shotstatus = false;
-      });
-      this.activeForm.get('framing').setValidators([Validators.required]);
-      this.activeForm.get('framingsize').setValidators([Validators.required]);
-      this.activeForm.get('distancebetweentworafts').setValidators([Validators.required]);
-    } else {
-      this.mainmenuitems[2].isvisible = false;
-      this.mainmenuitems[2].ispending = false;
-      this.mainmenuitems[2].children[0].ispending = false;
-      this.mainmenuitems[2].children[0].shots.forEach(element => {
-        element.ispending = false;
-        element.questionstatus = true;
-        element.shotstatus = true;
-      });
-      this.activeForm.get('framing').clearValidators();
-      this.activeForm.get('framingsize').clearValidators();
-      this.activeForm.get('distancebetweentworafts').clearValidators();
-    }
   }
 
   handleInputSubmission(form: FormGroup) {
@@ -1150,9 +1271,65 @@ export class SurveyprocessPage implements OnInit {
       roofmaterialcontrol.markAsDirty();
     }
   }
+  /**
+   * Answer Submissions for Shot Questions Code Starts Here
+   */
 
+  /**
+   * Shots Visibility Code Starts Here
+   */
+  handleGroundShotsVisibility() {
+    const mountingtypecontrol = this.activeForm.get('mountingtype');
+    if (mountingtypecontrol.value == 'both' || mountingtypecontrol.value == 'ground') {
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].ispending = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].ispending = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].shotstatus = false;
+    } else {
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].isvisible = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[1].shots[0].shotstatus = true;
+    }
+  }
+
+  handleAtticSectionVisibility() {
+    const mountingtypecontrol = this.activeForm.get('rooftype');
+    if (mountingtypecontrol.value == 'both' || mountingtypecontrol.value == 'pitch') {
+      this.mainmenuitems[2].isvisible = true;
+      this.mainmenuitems[2].ispending = true;
+      this.mainmenuitems[2].children[0].ispending = true;
+      this.mainmenuitems[2].children[0].shots.forEach(element => {
+        element.ispending = true;
+        element.questionstatus = false;
+        element.shotstatus = false;
+      });
+      this.activeForm.get('framing').setValidators([Validators.required]);
+      this.activeForm.get('framingsize').setValidators([Validators.required]);
+      this.activeForm.get('distancebetweentworafts').setValidators([Validators.required]);
+    } else {
+      this.mainmenuitems[2].isvisible = false;
+      this.mainmenuitems[2].ispending = false;
+      this.mainmenuitems[2].children[0].ispending = false;
+      this.mainmenuitems[2].children[0].shots.forEach(element => {
+        element.ispending = false;
+        element.questionstatus = true;
+        element.shotstatus = true;
+      });
+      this.activeForm.get('framing').clearValidators();
+      this.activeForm.get('framingsize').clearValidators();
+      this.activeForm.get('distancebetweentworafts').clearValidators();
+    }
+  }
+  /**
+   * Shots Visibility Code Ends Here
+   */
+
+  /**
+   * Survey Exit Code Starts Here
+   */
   handleSurveyExit() {
-    CameraPreview.stopCamera();
+    CameraPreview.stop();
     this.stopCamera();
 
     const data = this.preparesurveystorage();
@@ -1168,7 +1345,13 @@ export class SurveyprocessPage implements OnInit {
       this.navController.navigateBack('/homepage/survey');
     }
   }
+  /**
+   * Survey Exit Code Ends Here
+   */
 
+  /**
+   * Survey Storage Code Starts Here
+   */
   preparesurveystorage(): SurveyStorageModel {
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.menuitems = this.mainmenuitems;
@@ -1191,7 +1374,13 @@ export class SurveyprocessPage implements OnInit {
 
     return surveyStorageModel;
   }
+  /**
+   * Survey Storage Code Ends Here
+   */
 
+  /**
+   * Camera Actions Code Starts Here
+   */
   handleExistence(doesexist: boolean) {
     this.issidemenucollapsed = true;
     this.isgallerymenucollapsed = true;
@@ -1375,7 +1564,13 @@ export class SurveyprocessPage implements OnInit {
     });
     return checkstatus;
   }
+  /**
+   * Camera Actions Code Ends Here
+   */
 
+  /**
+   * Pending Items Check Code Starts Here
+   */
   preparePendingItemsList() {
     this.pendingmenuitems = [];
     for (let mainindex = 0; mainindex < this.mainmenuitems.length; mainindex++) {
@@ -1431,6 +1626,63 @@ export class SurveyprocessPage implements OnInit {
     }
   }
 
+  async displayIncompleteFormAlert() {
+    let error = '';
+    Object.keys(this.activeForm.controls).forEach((key: string) => {
+      const control: AbstractControl = this.activeForm.get(key);
+      if (control.invalid) {
+        if (error !== '') {
+          error = error + '<br/>';
+        }
+        if (control.errors.required === true) {
+          error = error + 'Input for field ' + this.activeFormKeysMap[key] + ' is missing.';
+        }
+        if (control.errors.email === true) {
+          error = error + 'Invalid email';
+        }
+        if (control.errors.error !== null && control.errors.error !== undefined) {
+          error = error + control.errors.error;
+        }
+        if (control.errors.pattern !== null && control.errors.pattern !== undefined) {
+          error = error + 'Invalid pattern for field ' + this.activeFormKeysMap[key] + '. Use the specified pattern only';
+        }
+      }
+    });
+    this.utilitieservice.showAlert(error);
+  }
+
+  async displayAlertForRemainingShots() {
+    const alert = await this.alertController.create({
+      header: 'Incomplete',
+      subHeader: 'Please check list of pending items and try submitting the survey once all required information is filled.',
+      buttons: [
+        {
+          text: 'VIEW PENDING ITEMS',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            this.viewpendingitems = true;
+            this.ispendingitemsmode = true;
+            CameraPreview.stop();
+            this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
+            this.previousmainmenuindex = this.selectedmainmenuindex;
+            this.previoussubmenuindex = this.selectedsubmenuindex;
+            this.previousshotindex = this.selectedshotindex;
+            this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.NONE;
+          }
+        }
+      ],
+      backdropDismiss: false
+    });
+    await alert.present();
+  }
+  /**
+   * Pending Items Check Code Ends Here
+   */
+
+  /**
+   * Complete Survey Code Starts Here
+   */
   handleCompleteSurveyDataSubmission() {
     // Code to save current status
     const data = this.preparesurveystorage();
@@ -1483,62 +1735,24 @@ export class SurveyprocessPage implements OnInit {
       });
     });
   }
+  /**
+   * Complete Survey Code Ends Here
+   */
 
+  /**
+   * Review Form Code Starts Here
+   */
   handleReviewFormBack() {
     this.reviewForm = false;
   }
 
   reviewFormData() {
     this.reviewForm = true;
-    CameraPreview.stopCamera();
+    CameraPreview.stop();
   }
-
-  savePVFormData() {
-    this.utilitieservice.showLoading('Please wait...');
-    const data = {
-      existingsolarsystem: this.pvForm.get('existingsolarsystem').value,
-      batterysystem: this.pvForm.get('batterysystem').value,
-      detailsofbatterysystem: this.pvForm.get('detailsofbatterysystem').value,
-      interconnection: this.pvForm.get('interconnection').value,
-      interconnectiondetails: this.pvForm.get('interconnection_input').value,
-      servicefeedsource: this.pvForm.get('servicefeedsource').value,
-      additionalnotes: this.pvForm.get('additionalnotes').value,
-      status: 'surveycompleted',
-      mainbreakersize: this.pvForm.get('mainbreakersize').value,
-      msprating: this.pvForm.get('msprating').value,
-      msplocation: this.pvForm.get('msplocation').value,
-      mspbreaker: this.pvForm.get('mspbreaker').value,
-      architecturaldesign: this.pvForm.get('architecturaldesign').value,
-      utilitymeter: this.pvForm.get('utilitymeter').value,
-      framing: this.pvForm.get('framing').value,
-      framingsize: this.pvForm.get('framingsize').value,
-      distancebetweentworafts: this.pvForm.get('distancebetweentworafts').value,
-      pvinverterlocation: this.pvForm.get('pvinverterlocation').value == '' ? null : this.pvForm.get('pvinverterlocation').value,
-      invertermanufacturerandmodel: this.pvForm.get('invertermanufacturerandmodel').value == '' ? null : this.pvForm.get('invertermanufacturerandmodel').value,
-      rooftilt: this.pvForm.get('rooftilt').value,
-      shotname: this.pvForm.get('shotname').value,
-
-    };
-
-    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
-
-      this.utilitieservice.hideLoading().then(() => {
-        this.insomnia.keepAwake()
-          .then(
-            () => {
-              console.log('success');
-            },
-            () => console.log('error')
-          );
-        this.uploadImagesToServer();
-      });
-    }, (error) => {
-      this.utilitieservice.hideLoading().then(() => {
-        // this.utilitieservice.errorSnackBar(JSON.stringify(error));
-        this.utilitieservice.errorSnackBar('There was some error in processing the request');
-      });
-    });
-  }
+  /**
+   * Review Form Code Ends Here
+   */
 
   savePVBatteryFormData() {
     const data = {
@@ -1579,57 +1793,6 @@ export class SurveyprocessPage implements OnInit {
     });
   }
 
-  async displayIncompleteFormAlert() {
-    let error = '';
-    Object.keys(this.activeForm.controls).forEach((key: string) => {
-      const control: AbstractControl = this.activeForm.get(key);
-      if (control.invalid) {
-        if (error !== '') {
-          error = error + '<br/>';
-        }
-        if (control.errors.required === true) {
-          error = error + 'Input for field ' + this.activeFormKeysMap[key] + ' is missing.';
-        }
-        if (control.errors.email === true) {
-          error = error + 'Invalid email';
-        }
-        if (control.errors.error !== null && control.errors.error !== undefined) {
-          error = error + control.errors.error;
-        }
-        if (control.errors.pattern !== null && control.errors.pattern !== undefined) {
-          error = error + 'Invalid pattern for field ' + this.activeFormKeysMap[key] + '. Use the specified pattern only';
-        }
-      }
-    });
-    this.utilitieservice.showAlert(error);
-  }
-
-  async displayAlertForRemainingShots() {
-    const alert = await this.alertController.create({
-      header: 'Incomplete',
-      subHeader: 'Please check list of pending items and try submitting the survey once all required information is filled.',
-      buttons: [
-        {
-          text: 'VIEW PENDING ITEMS',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            this.viewpendingitems = true;
-            this.ispendingitemsmode = true;
-            CameraPreview.stopCamera();
-            this.previousviewmode = this.mainmenuitems[this.selectedmainmenuindex].viewmode;
-            this.previousmainmenuindex = this.selectedmainmenuindex;
-            this.previoussubmenuindex = this.selectedsubmenuindex;
-            this.previousshotindex = this.selectedshotindex;
-            this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.NONE;
-          }
-        }
-      ],
-      backdropDismiss: false
-    });
-    await alert.present();
-  }
-
   saveForm() {
     if (this.activeForm.status == 'INVALID') {
       this.displayIncompleteFormAlert();
@@ -1641,7 +1804,7 @@ export class SurveyprocessPage implements OnInit {
         return;
       }
       if (this.surveytype == 'pv') {
-        this.savePVFormData();
+        this.submitFormData();
       } else {
         let isutilitymanualinput = false;
         if (this.activeForm.get('utility').value == null || this.activeForm.get('utility').value == '') {
@@ -1684,6 +1847,34 @@ export class SurveyprocessPage implements OnInit {
         });
       }
     }
+  }
+
+  submitFormData() {
+    this.utilitieservice.showLoading('Please wait...');
+    const data = {};
+    this.activeFormElementsArray.map(element => {
+      data[element] = this.activeForm.get(element).value;
+      if (element === 'pvinverterlocation') {
+        data[element] = this.activeForm.get('pvinverterlocation').value === '' ? null : this.activeForm.get('pvinverterlocation').value;
+      }
+    });
+
+    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.insomnia.keepAwake()
+          .then(
+            () => {
+              console.log('success');
+            },
+            () => console.log('error')
+          );
+        this.uploadImagesToServer();
+      });
+    }, (error) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.utilitieservice.errorSnackBar('There was some error in processing the request');
+      });
+    });
   }
 
   uploadImagesToServer() {
@@ -1768,14 +1959,14 @@ export class SurveyprocessPage implements OnInit {
     if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
       this.startCameraAfterPermission();
     } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
-      CameraPreview.stopCamera();
+      CameraPreview.stop();
       if (this.surveytype == 'battery') {
         this.getSolarMakes();
       } else if (this.surveytype == 'pvbattery') {
         this.getUtilities();
       }
     } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.MAP) {
-      CameraPreview.stopCamera();
+      CameraPreview.stop();
       if (JSON.parse(this.activeForm.get('acdisconnect').value)) {
         this.equipments.splice(0, 0, this.acdisconnectequipment);
       }
@@ -1963,10 +2154,6 @@ export class SurveyprocessPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
     this.startCameraWithOpts();
-  }
-
-  changeBatterySystem() {
-    this.hasBatterySystem = eval(this.pvForm.value.batterysystem);
   }
 
   handleEditQuestionInput(index) {

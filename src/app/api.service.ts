@@ -87,9 +87,9 @@ export class ApiService {
     this.showUserName= new Subject<any>();
     //this.formHeaders = new HttpHeaders({"Content-Type":"application/json",'Authorization':'Bearer' + this.storageService.getUser().})
   }
-  
+
  /**
- * emits a message. 
+ * emits a message.
  */
   public emitMessageReceived(msg: string): void {
     this._OnMessageReceivedSubject.next(msg);
@@ -115,11 +115,15 @@ export class ApiService {
     return this.http.post(BaseUrl + 'auth/forgot-password', data, { headers: this.headers });
   }
 
+  fetchJSON(uid, surveyType) {
+    return this.http.get( `${BaseUrl}surveyprocessjsons?user=${uid}&jobtype=${surveyType}`, { headers: this.headers });
+  }
+
   getSolarMake() {
     return this.http.get<SolarMake[]>(BaseUrl + 'modulemakes', { headers: this.headers });
   }
   postSolarMake(data){
-    return this.http.post<SolarMake[]>(BaseUrl + 'modulemakes',data, { headers: this.headers });
+    return this.http.post<SolarMake[]>(BaseUrl + 'modulemakes', data, { headers: this.headers });
   }
 
   getRoofMaterial() {
@@ -219,7 +223,7 @@ export class ApiService {
     });
     this.uploadHeaders = new HttpHeaders({
       Authorization: 'Bearer ' + this.storageService.getJWTToken()
-    
+
     });
     this.parentId = this.storageService.getParentId();
     this.userId = this.storageService.getUserID();
@@ -350,8 +354,8 @@ export class ApiService {
   }
   paymentDetail(C_id){
     return this.http.get(BaseUrl+ "designs/count?createdby=" + C_id + "&isoutsourced=true&outsourcedto=232", { headers: this.headers});}
- 
-   
+
+
     prelimCharges(){
       return this.http.get(BaseUrl+ "commonsettings?settingname=prelimdesigncharges", { headers: this.headers});}
 
@@ -360,29 +364,29 @@ export class ApiService {
 
       permitinitcharges(){
         return this.http.get(BaseUrl+ "commonsettings?settingname=permitdesigncharges", { headers: this.headers});}
-   
+
     permitCharges(data){
       return this.http.post(BaseUrl+ "getdesignservicecharge",data, { headers: this.headers});}
-     
+
       freeCharges(){
         return this.http.get(BaseUrl+ "commonsettings?settingname=freedesigns ", { headers: this.headers});}
-   
+
     survey_activityDetails(surveyid){
      return this.http.get(BaseUrl+ "surveys/" + surveyid, { headers: this.headers});
-  
+
   }
   publishSolarMake(value){
     this.solarMakeValue.next(value);
   }
 
   editDesign(id:number, inputData:any): Observable<DesignModel>{
-   
+
     return this.http
     .put<DesignModel>(BaseUrl + "designs/"+ id, JSON.stringify(inputData), {
       headers: this.headers,
-      
+
     })
-  
+
   }
 
   pushtoken(id,data){
@@ -392,10 +396,10 @@ export class ApiService {
   getTeamData(): Observable<User[]> {
     return this.http.get<User[]>(BaseUrl + "users?_sort=created_at:desc&parent="+this.parentId+"&id_ne="+this.parentId, {
       headers: this.headers,
-   
+
     })
-   
-  
+
+
     }
 
     update_message(){
@@ -404,7 +408,7 @@ export class ApiService {
         Authorization: 'Bearer ' + this.storageService.getJWTToken()
       });
       console.log(this.headers);
-      return this.http.get(BaseUrl + 'platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app',{ headers: this.headers})  
+      return this.http.get(BaseUrl + 'platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app',{ headers: this.headers})
     }
 
     getUpgradeMessage(){
@@ -415,10 +419,10 @@ export class ApiService {
     }
 
     getStatistic(inputData:any):Observable<DesignStatistic[]>{
- 
+
       return this.http.post<DesignStatistic[]>(BaseUrl + 'designanalytics', inputData, { headers: this.headers });
     }
-  
+
     getClientSuperadmin(): Observable<User[]> {
      // return this.http.get<User[]>(BaseUrl + "fetchsuperadmins", {
      //   headers: this.headers,
@@ -426,7 +430,7 @@ export class ApiService {
      // });
      return this.http.get<User[]>(BaseUrl + 'fetchsuperadmins',{headers:this.headers});
     }
-  
+
     getDesignersDetails(starttime:string, endtime:string, requesttype:string):Observable<DesignersStatistics[]>{
       return this.http.get<DesignersStatistics[]>(BaseUrl + 'getdesignanalytics?starttime='+starttime+'&endtime='+endtime+'&companyid=232&requesttype='+requesttype, {headers:this.headers});
     }
@@ -454,7 +458,7 @@ export class ApiService {
     getUserData(id){
       return this.http.get(BaseUrl + "users/" + id,{headers: this.headers})
     }
-    
+
     getCoupons(data){
       return this.http.get(BaseUrl + "getCoupons?userid="+ this.userId+"&requesttype="+data,{headers: this.headers});
     }
@@ -530,14 +534,14 @@ export class ApiService {
     }
 
     uploadFile(data): Observable<UploadedFile[]> {
-     
+
       // const data = new FormData();
       // data.append('files', blob, file);
       // data.append('path', path);
       // data.append('refId', ""+recordid);
       // data.append('ref', ref);
       // data.append('field', field);
-      
+
       // console.log("file upload data---"+data);
 
       return this.http.post<UploadedFile[]>(BaseUrl + "upload", data, {
@@ -547,7 +551,7 @@ export class ApiService {
 
     /* SEARCH PE STAMP DESIGNS */
     getFilteredDesigns(search:string): Observable<Pestamp[]> {
-    
+
       return this.http.get<Pestamp[]>(BaseUrl + "userpestamps?id="+this.storageService.getUser().id+"&"+search, {
         headers: this.headers,
         //observe: "response"
@@ -583,7 +587,7 @@ export class ApiService {
 
       deletePestamp(id:string): Observable<Pestamp> {
         console.log(id);
-        
+
         return this.http.delete<Pestamp>(BaseUrl + "upload/files/"+id, {
           headers: this.headers
         })
@@ -651,8 +655,8 @@ export class ApiService {
           headers: this.headers
         })
       }
-   
-     
+
+
 
       listencall(listnerID) {
       // let listnerID = localStorage.getItem('gid');
@@ -681,20 +685,20 @@ export class ApiService {
             },
             onIncomingCallCancelled(call) {
               console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-              
+
               console.log('Incoming call calcelled:', call);
               console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
               that.callData = call;
-        
+
                 // that.location.back();
                 that.navCtrl.pop();
-      
-              
+
+
             }
           })
         );
       }
-  
+
       getCallData(): Observable<any> {
         return this.callData;
   }
