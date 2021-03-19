@@ -76,16 +76,9 @@
                             </div>
                           </ion-col>
 
-                          <ion-col size="12" class="ion-margin-top">
+                          <!-- <ion-col size="12" class="ion-margin-top">
                          
-                            <!-- <ion-input type="text" class="form-control"  placeholder="Country*" formControlName="country">
-                            </ion-input>
-                           
-                        <div class="error_div">
-                             <div >
-                                <span class="error">Invalid password</span>
-                            </div>        
-                        </div>   -->
+                            
                             <ion-select style="padding-left:9px" class="form_input select_div"
                                         ok-text="" cancel-text=""
                                         formControlName="country" interface="popover" placeholder="Country*" >
@@ -93,7 +86,26 @@
                                
                             </ion-select>
                           
+                    </ion-col> -->
+                    <ion-col size="12" class="ion-margin-top">
+                        <ion-item class="ion-no-padding" lines="none">
+                            <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
+                                <!-- <mat-label></mat-label> -->
+                                <input type="text" placeholder="Country*" class="form_input font-size" matInput [matAutocomplete]="auto" autocomplete="off" formControlName="country">
+        
+                                <mat-autocomplete #auto="matAutocomplete">
+                                  <mat-option *ngFor="let country of filteredCountries | async" [value]="country.country"
+                                  (onSelectionChange)="setSelectedCountry(country)" class="font">{{country.country}}</mat-option>
+                                </mat-autocomplete>
+                              </mat-form-field>
+                        </ion-item>
+                        <div style="height: 5px;">
+                            <div *ngIf="userregistrationForm.get('country').value === '' && userregistrationForm.get('country').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                        </div>
                     </ion-col>
+
                     <ion-col size="12" class="ion-margin-top">
                       <ion-item class="ion-no-padding" lines="none">
                       
@@ -105,7 +117,7 @@
                          
 
                           <ion-col size="12" class="ion-margin-top">
-                            <ion-button style="float: right;" class="action-button-color" fill="clear" (click)="registerUser()">Sign Up</ion-button>
+                            <ion-button style="float: left;padding-left: 0px;" class="action-button-color" fill="clear" (click)="registerUser()">Sign Up</ion-button>
                           </ion-col>
                       </ion-row>
                   </ion-grid>
