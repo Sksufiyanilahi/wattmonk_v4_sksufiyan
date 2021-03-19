@@ -358,7 +358,7 @@ export class PestampPaymentModalPage implements OnInit {
         isoutsourced: "true",
         status: "outsourced",
         pestampacceptancestarttime: pestampacceptancestarttime,
-        paymenttype:this.utils.getPaymentMode().value
+        paymenttype:"wallet"
       };
       this.utils.showLoading("Assigning").then(()=>
       {

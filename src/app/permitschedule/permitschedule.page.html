@@ -115,7 +115,7 @@
               </ion-col>
           </ion-row>
             <ion-row class="ion-align-items-center ion-justify-content-center">
-                <ion-col>
+                <ion-col size="6">
                     <ion-item class="ion-no-padding">
                         <ion-label position="floating">annual units (Kwh)*</ion-label>
                         <ion-input class="form_input"  type="tel" (ionInput)="numberfield($event)"
@@ -130,6 +130,24 @@
                         </div> -->
                     </div>
                 </ion-col>
+                <ion-col size="6">
+                <ion-item class="ion-no-padding">
+                    
+                    <ion-label position="floating">inverters count*</ion-label>
+                    <!-- <ion-label style="display: none;">Project Type</ion-label> -->
+                    <!-- <ion-label position="floating">project type</ion-label> -->
+                    <ion-input   class="form_input" type="tel" autocapitalize="none" autocomplete="off"
+                                      formControlName="inverterscount" maxLength="3" ></ion-input>
+                </ion-item>
+                <div style="height: 5px;">
+                    <div *ngIf="desginForm.get('inverterscount').dirty && desginForm.get('inverterscount').hasError('pattern')">
+                        <span class="error">{{"Invalid"}}</span>
+                    </div>
+                    <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
+                        <span class="error">{{annualunitError}}</span>
+                    </div> -->
+                </div>
+            </ion-col>
             </ion-row>
 
 
