@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavController, Platform } from '@ionic/angular';
 import { AssigneeModel } from '../../model/assignee.model';
@@ -10,6 +10,8 @@ import { StorageService } from '../../storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyDataModel } from '../../model/survey.model';
 import { ErrorModel } from 'src/app/model/error.model';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import { AddressModel } from 'src/app/model/address.model';
 
 @Component({
   selector: 'app-survey',
@@ -33,6 +35,19 @@ export class SurveyComponent implements OnInit, OnDestroy {
   address: string;
   userData: any;
 
+  GoogleAutocomplete: google.maps.places.AutocompleteService;
+  autocompleteItems: any[];
+  map: any;
+
+  geoEncoderOptions: NativeGeocoderOptions = {
+    useLocale: true,
+    maxResults: 5
+  };
+
+  geocoder = new google.maps.Geocoder();
+  autoCompleteOff:boolean = false;
+  isSelectSearchResult:boolean = false;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,7 +57,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private storage: StorageService,
     private route: ActivatedRoute,
-    private router:Router
+    private router:Router,
+    private zone: NgZone,
+    private nativeGeocoder: NativeGeocoder,
   ) {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
@@ -71,6 +88,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       chatid:new FormControl(null)
     });
 
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
+    this.autocompleteItems = [];
   }
 
 
@@ -91,32 +110,32 @@ export class SurveyComponent implements OnInit, OnDestroy {
     if (this.surveyId !== 0) {
       this.getSurveyDetails();
     }
-    else {
-      this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
-         // this.surveyForm.get('address').setValue("sdck");
-         // this.surveyForm.get('latitude').setValue('1111111');
-         // this.surveyForm.get('longitude').setValue('222222222');
-         // this.surveyForm.get('country').setValue('India');
-         // this.surveyForm.get('city').setValue('delhi');
-        // this.surveyForm.get('state').setValue('up');
-        //  this.surveyForm.get('postalcode').setValue(777777777);
-       this.surveyForm.get('address').setValue(address.address);
-       this.surveyForm.get('latitude').setValue(address.lat);
-        this.surveyForm.get('longitude').setValue(address.long);
-        this.surveyForm.get('country').setValue(address.country);
-        this.surveyForm.get('city').setValue(address.city);
-        this.surveyForm.get('state').setValue(address.state);
-        this.surveyForm.get('postalcode').setValue(address.postalcode);
-      }, (error) => {
-        this.surveyForm.get('address').setValue('');
-        this.surveyForm.get('latitude').setValue('');
-        this.surveyForm.get('longitude').setValue('');
-        this.surveyForm.get('country').setValue('');
-        this.surveyForm.get('city').setValue('');
-        this.surveyForm.get('state').setValue('');
-        this.surveyForm.get('postalcode').setValue('');
-      });
-    }
+    // else {
+    //   this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
+    //      // this.surveyForm.get('address').setValue("sdck");
+    //      // this.surveyForm.get('latitude').setValue('1111111');
+    //      // this.surveyForm.get('longitude').setValue('222222222');
+    //      // this.surveyForm.get('country').setValue('India');
+    //      // this.surveyForm.get('city').setValue('delhi');
+    //     // this.surveyForm.get('state').setValue('up');
+    //     //  this.surveyForm.get('postalcode').setValue(777777777);
+    //    this.surveyForm.get('address').setValue(address.address);
+    //    this.surveyForm.get('latitude').setValue(address.lat);
+    //     this.surveyForm.get('longitude').setValue(address.long);
+    //     this.surveyForm.get('country').setValue(address.country);
+    //     this.surveyForm.get('city').setValue(address.city);
+    //     this.surveyForm.get('state').setValue(address.state);
+    //     this.surveyForm.get('postalcode').setValue(address.postalcode);
+    //   }, (error) => {
+    //     this.surveyForm.get('address').setValue('');
+    //     this.surveyForm.get('latitude').setValue('');
+    //     this.surveyForm.get('longitude').setValue('');
+    //     this.surveyForm.get('country').setValue('');
+    //     this.surveyForm.get('city').setValue('');
+    //     this.surveyForm.get('state').setValue('');
+    //     this.surveyForm.get('postalcode').setValue('');
+    //   });
+    // }
 
     this.getAssignees();
   }
@@ -344,4 +363,166 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
 
   }
+
+    /* FOR SEARCH SHIPPING ADDRESS */
+    updateSearchResults(event) {
+      //this.autoCompleteOff = true;
+      console.log(this.autoCompleteOff);
+      if(this.surveyId == 0){
+      const input = event.detail.value;
+      console.log(input)
+      if (input === '') {
+        this.autocompleteItems = [];
+        return;
+      }
+      this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+        country: 'us'
+      }  },
+        (predictions, status) => {
+          this.autocompleteItems = [];
+          this.zone.run(() => {
+            predictions.forEach((prediction) => {
+              this.autocompleteItems.push(prediction);
+            });
+          });
+        });
+      }
+    }
+
+    forAutoComplete(e){
+      console.log("hello",e);
+      this.autoCompleteOff = true;
+
+    }
+
+  //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
+    selectSearchResult(item) {
+      console.log(item);
+      this.isSelectSearchResult = true;
+      this.geocoder.geocode({
+        placeId: item.place_id
+      }, (responses, status) => {
+        console.log('respo', responses);
+        this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
+      });
+      this.autocompleteItems = []
+    }
+
+    getGeoEncoder(latitude, longitude, formattedAddress) {
+
+      // // TODO remove later
+      // const address: AddressModel = {
+      //   address: 'Vasant Kunj, New Delhi, Delhi',
+      //   lat: 28.5200491,
+      //   long: 77.158687,
+      //   country: 'India',
+      //   state: 'Delhi',
+      //   city: 'New Delhi',
+      //   postalcode: '110070'
+      // };
+      // this.utilities.setAddress(address);
+      // this.goBack();
+      // return;
+
+      this.utilities.showLoading('Loading').then(() => {
+        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+          .then((result: NativeGeocoderResult[]) => {
+            console.log(result)
+            let add = '';
+            if (formattedAddress === '') {
+              add = this.generateAddress(result[0]);
+            } else {
+              add = formattedAddress;
+            }
+            this.utilities.hideLoading().then(() => {
+              console.log('resu', result);
+              const address: AddressModel = {
+                address: add,
+                lat: latitude,
+                long: longitude,
+                country: result[0].countryName,
+                state: result[0].administrativeArea,
+                city: result[0].locality,
+                postalcode: result[0].postalCode
+              };
+              this.utilities.setAddress(address);
+              this.addressValue();
+              //this.goBack();
+            });
+
+          })
+          .catch((error: any) => {
+            this.utilities.hideLoading().then(() => {
+              alert('Error getting location' + JSON.stringify(error));
+            });
+
+          });
+      });
+    }
+
+    generateAddress(addressObj) {
+      const obj = [];
+      let address = '';
+      for (const key in addressObj) {
+        obj.push(addressObj[key]);
+      }
+      obj.reverse();
+      for (const val in obj) {
+        if (obj[val].length) {
+          address += obj[val] + ', ';
+        }
+      }
+      return address.slice(0, -2);
+    }
+
+    onCancel() {
+      console.log("hello");
+      this.autocompleteItems = [];
+      console.log(this.autocompleteItems)
+    }
+
+    addressValue(){
+      // }
+      this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
+        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+          // this.firstFormGroup.get('address').setValue('124/345');
+          // this.firstFormGroup.get('latitude').setValue('24.553333');
+          // this.firstFormGroup.get('longitude').setValue('80.5555555555');
+          // this.firstFormGroup.get('country').setValue('india');
+          // this.firstFormGroup.get('city').setValue('Lucknow');
+          // this.firstFormGroup.get('state').setValue('UP');
+          // this.firstFormGroup.get('postalcode').setValue(3232343);
+         this.surveyForm.get('address').setValue(address.address);
+           this.surveyForm.get('latitude').setValue(address.lat);
+           this.surveyForm.get('longitude').setValue(address.long);
+           this.surveyForm.get('country').setValue(address.country);
+         this.surveyForm.get('city').setValue(address.city);
+           this.surveyForm.get('state').setValue(address.state);
+           this.surveyForm.get('postalcode').setValue(address.postalcode);
+      }, (error) => {
+        this.surveyForm.get('address').setValue('');
+        this.surveyForm.get('latitude').setValue(null);
+        this.surveyForm.get('longitude').setValue(null);
+        this.surveyForm.get('country').setValue('');
+        this.surveyForm.get('city').setValue('');
+        this.surveyForm.get('state').setValue('');
+        this.surveyForm.get('postalcode').setValue(null);
+      });
+      // this.firstFormGroup.patchValue({
+      //   createdby: this.storage.getUserID()
+      // });
+   // this.autocompleteItems = [];
+      this.autoCompleteOff = false;
+      console.log(this.autoCompleteOff);
+      //this.getSolarMake();
+
+      }
+
+      onBlur()
+      {
+        setTimeout(() => {
+          this.autocompleteItems = [];
+        }, 100);
+      }
 }

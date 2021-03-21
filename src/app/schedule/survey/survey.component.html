@@ -69,6 +69,38 @@
 
             <ion-row>
                 <ion-col>
+                  <ion-item class="ion-no-padding">
+                    <ion-label position="floating" class="label">Address*</ion-label>
+                    <ion-input type="text" class="form_input" autocapitalize="words"
+                                formControlName="address" autocomplete="off"  (ionChange)="updateSearchResults($event)"
+                                (ionClear)="onCancel()" debounce="300"
+                                (ionFocus)="forAutoComplete($event)" (ionBlur)="onBlur()" [disabled]="fieldDisabled"></ion-input>
+                </ion-item>
+                <!-- <ion-item class="ion-no-padding">
+                  <ion-label position="floating" class="label">Shipping Address*</ion-label>
+                  <ion-input type="text" class="form_input" autocapitalize="words"
+                              formControlName="shippingaddress" autocomplete="off"></ion-input>
+              </ion-item> -->
+                <!-- <ion-list *ngIf="autocompleteItems.length > 0 && autoCompleteOff"> -->
+                    <ion-list style="padding:0px">
+                  <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+                      <ion-label>
+                          {{ item.description }}
+                      </ion-label>
+                  </ion-item>
+              </ion-list>
+              <!-- <div style="height: 5px;">
+                <div *ngIf="surveyForm.get('address').hasError('pattern') && surveyForm.get('address').dirty">
+                    <span class="error">{{addressError}}</span>
+                </div>
+                <div *ngIf="surveyForm.get('address').value === '' && surveyForm.get('address').dirty">
+                    <span class="error">{{fieldRequired}}</span>
+                </div>
+            </div> -->
+            
+
+            <ion-row>
+                <ion-col>
                     <ion-item class="ion-no-padding">
                         <ion-label style="display: none;">Job Type</ion-label>
                         <ion-select class="form_input select_div" placeholder="job type"
