@@ -145,9 +145,12 @@ export class AppComponent {
       this.backgroundMode.enable();
       SplashScreen.hide();
       StatusBar.setStyle({
-        style: StatusBarStyle.Dark
+        style: StatusBarStyle.Light
       });
-      StatusBar.hide();
+      StatusBar.setOverlaysWebView({
+        overlay: true
+      });
+      // StatusBar.hide();
     });
   }
 
@@ -185,7 +188,11 @@ export class AppComponent {
       } else if (this.user.role.type === 'peengineer') {
         this.navController.navigateRoot('peengineer');
       } else {
-        this.navController.navigateRoot('permithomepage');
+        if(this.user.role.type === 'clientsuperadmin' || this.user.role.type === 'wattmonkadmins'){
+          this.navController.navigateRoot('dashboard');
+        }else{
+          this.navController.navigateRoot('permithomepage');
+        }
       }
     }
     const path = window.location.pathname.split('/')[1];

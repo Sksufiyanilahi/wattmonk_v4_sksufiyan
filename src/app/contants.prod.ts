@@ -18,10 +18,10 @@
 //     APP_ID: '190385dcec51285',
 //     REGION: 'US',
 //     API_KEY: '5cafae1939d4fc620698c50ae3f25e727fc90213',
-//     REST_API_KEY: "4f441010f9ace69fc5e2471c20e9f1c21ca56402"
-// }
-// export const version='1.1.3'
-// export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
+//     REST_API_KEY: '4f441010f9ace69fc5e2471c20e9f1c21ca56402'
+// };
+// export const version = '1.1.3';
+// export const Mixpanel_CONSTANTS = 'e4b30b18d61b5abe078c2719911858cb';
 
 // Test Server
 // export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';

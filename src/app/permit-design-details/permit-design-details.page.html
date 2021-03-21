@@ -61,7 +61,7 @@
           <ion-col size="auto" class="ion-text-end">
               <ion-grid class="ion-no-padding">
                   <ion-row>
-                      <ion-col><span class="data-header font">annual units</span></ion-col>
+                      <ion-col><span class="data-header font">Annual Units</span></ion-col>
                   </ion-row>
                   <ion-row>
                       <ion-col class="font"><span>{{design?.monthlybill}} kWh</span></ion-col>
@@ -90,13 +90,13 @@
           <ion-col>
               <ion-grid class="ion-no-padding">
                   <ion-row class="ion-no-padding">
-                      <ion-col><span class="model-type font">make</span></ion-col>
+                      <ion-col><span class="model-type font">Make</span></ion-col>
                       <ion-col size="auto">
                           <span class="model-name font">{{design.solarmake?.name}}</span>
                       </ion-col>
                   </ion-row>
                   <ion-row>
-                      <ion-col><span class="model-type font">model</span></ion-col>
+                      <ion-col><span class="model-type font">Model</span></ion-col>
                       <ion-col size="auto">
                           <span class="model-name font">{{design.solarmodel?.name}}</span>
                       </ion-col>
@@ -112,17 +112,23 @@
           <ion-col>
               <ion-grid class="ion-no-padding">
                   <ion-row class="ion-no-padding">
-                      <ion-col><span class="model-type font">make</span></ion-col>
+                      <ion-col><span class="model-type font">Make</span></ion-col>
                       <ion-col size="auto">
                           <span class="model-name font">{{design.invertermake?.name}}</span>
                       </ion-col>
                   </ion-row>
                   <ion-row>
-                      <ion-col><span class="model-type font">model</span></ion-col>
+                      <ion-col><span class="model-type font">Model</span></ion-col>
                       <ion-col size="auto">
                           <span class="model-name font">{{design.invertermodel?.name}}</span>
                       </ion-col>
                   </ion-row>
+                  <ion-row class="ion-no-padding">
+                    <ion-col><span class="model-type font">Inverters count</span></ion-col>
+                    <ion-col size="auto">
+                        <span class="model-name font">{{design.inverterscount}}</span>
+                    </ion-col>
+                </ion-row>
               </ion-grid>
           </ion-col>
       </ion-row>
@@ -131,7 +137,7 @@
           <ion-col>
               <ion-grid class="ion-no-padding">
                   <ion-row class="ion-no-padding">
-                      <ion-col><span class="model-type font">new construction</span></ion-col>
+                      <ion-col><span class="model-type font">New Construction</span></ion-col>
                       <ion-col size="auto">
                           <span class="model-name font">{{design?.newconstruction}}</span>
                       </ion-col>
@@ -140,7 +146,7 @@
                       <ng-container *ngIf="design.attachments.length > 0">
                           <ion-col><span class="model-type font">Attachments</span></ion-col>
                           <ion-col size="auto" >
-                              <div *ngFor="let attachment of design.attachments;let i=index" style="display: flex;justify-content: flex-end;">
+                              <div *ngFor="let attachment of design.attachments;let i=index" style="display: flex;justify-content: flex-end;line-height:1.5rem">
                                   <span class="model-name font" style="color:#3c78d8 !important" (click)="showurl(i,'attachments')">{{attachment?.name}}{{attachment?.ext}}</span>
                               </div>
                           </ion-col>
@@ -148,24 +154,24 @@
                   </ion-row>
                   <ion-row *ngIf="design.newconstruction=='Yes'" class="ion-no-padding font">
                       <ng-container *ngIf="design.architecturaldesign !=[]">
-                          <ion-col ><span class="model-type font">Architectural design</span></ion-col>
+                          <ion-col ><span class="model-type font">Architectural Design</span></ion-col>
                           <ion-col   size="auto">
-                              <div  *ngFor="let archdesign of design.architecturaldesign;let i=index" style="display: flex;justify-content: flex-end;">
+                              <div  *ngFor="let archdesign of design.architecturaldesign;let i=index" style="display: flex;justify-content: flex-end;line-height: 1.5rem">
                               <span class="model-name font" (click)="showurl(i,'architecturaldesign')" style="color:#3c78d8 !important">{{archdesign?.name}}{{archdesign?.ext}}</span>
                           </div>
                           </ion-col>
                       </ng-container>
                   </ion-row>
                   <ion-row>
-                      <ion-col><span class="model-type font">project type</span></ion-col>
+                      <ion-col><span class="model-type font">Project Type</span></ion-col>
                       <ion-col size="auto">
                           <span class="model-name font">{{design?.projecttype}}</span>
                       </ion-col>
                   </ion-row>
                   <ion-row>
-                      <ion-col><span class="model-type font">job type</span></ion-col>
+                      <ion-col><span class="model-type font">Job Type</span></ion-col>
                       <ion-col size="auto">
-                          <span class="model-name font">{{design?.jobtype=='pvbattery' ? 'PV + Battery' : design?.jobtype}}</span>
+                          <span class="model-name font">{{design?.jobtype =='pvbattery' ? 'PV + Battery' : design?.jobtype | uppercase}}</span>
                       </ion-col>
                   </ion-row>
                   <ion-row>
@@ -175,13 +181,13 @@
                       </ion-col>
                   </ion-row>
                   <ion-row *ngIf="design.mountingtype == 'roof' || design.mountingtype =='both'">
-                      <ion-col><span class="model-type font">roof type</span></ion-col>
+                      <ion-col><span class="model-type font">Roof Type</span></ion-col>
                       <ion-col size="auto">
                           <span class="model-name font">{{design?.rooftype}}</span>
                       </ion-col>
                   </ion-row>
                   <ion-row *ngIf="design.mountingtype=='ground' || design.mountingtype == 'both'">
-                      <ion-col><span class="model-type font">tilt of ground mounting system</span></ion-col>
+                      <ion-col><span class="model-type font">Tilt of Ground Mounting System</span></ion-col>
                       <ion-col size="auto">
                           <span class="model-name font">{{design?.tiltofgroundmountingsystem}}</span>
                       </ion-col>
@@ -205,7 +211,7 @@
 
       <ion-row *ngIf="design.comments || design.comments !==null  " class="ion-no-padding ion-margin-top">
           <ion-col size="6">
-              <span class="models font">comments</span>
+              <span class="models font">Comments</span>
           </ion-col>
           <!-- <div> -->
 
@@ -248,7 +254,7 @@
       </ion-row>
 
       <ion-row>
-          <ion-col><span class="model-type font">created at</span></ion-col>
+          <ion-col><span class="model-type font">Created At</span></ion-col>
           <ion-col size="auto">
               <span class="model-name font">{{design.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
           </ion-col>
@@ -311,7 +317,7 @@
                            </div>
               </form>
                 <ng-template #showimageName >
-              <ion-col><span class="model-type font">permit Design</span></ion-col>
+              <ion-col><span class="model-type font">Permit Design</span></ion-col>
               <ion-button size="3" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="(user.role.type=='qcinspector' && design.status=='reviewassigned')||(design.status=='reviewassigned' && design.reviewassignedto.id==user.id)" (click)="isSelfUpdate = !isSelfUpdate">Self Update</ion-button>
               <ion-button size="2" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="user.role.type=='designer' && design.status=='reviewfailed'" (click)="ispermitUpdate = !ispermitUpdate">Update</ion-button>
               <ion-col size="auto"  style="float: right;">
@@ -353,7 +359,7 @@
            <ion-col > <span class="model-type font">Revision Attachments</span></ion-col>
            <ion-col size="6"  style="float: right;" *ngFor="let attachmentfile of design.revisionattachments">
 
-              <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ? (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}{{attachmentfile.ext}}</span>
+              <span class="model-space font" style="text-align:right;color:#3c78d8 !important;line-height: 1.5rem;" (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ? (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}{{attachmentfile.ext}}</span>
             </ion-col>
 
           </ion-row>
@@ -361,7 +367,7 @@
 
       <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
       *ngIf="design.status=='designassigned'||design.status=='completed'">
-      <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">assigned to</span></ion-col>
+      <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">Assigned To</span></ion-col>
       <ion-col size="auto">
           <div class="selected d-flex">
               <img *ngIf="design.designassignedto.contractorlogo && design.designassignedto.contractorlogo.logo"
@@ -411,7 +417,7 @@
 
           <form novalidate [formGroup]="commentsForm" style="width:100%">
               <ion-col size="12">
-                  <span class="input-placeholder">comments</span>
+                  <span class="input-placeholder">Comments</span>
               </ion-col>
               <ion-col size="12" style="padding-top: 0px;">
                   <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"

@@ -1,17 +1,23 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NavController, Platform } from '@ionic/angular';
-import { AssigneeModel } from '../../model/assignee.model';
-import { UtilitiesService } from '../../utilities.service';
-import { ScheduleFormEvent, UserRoles, INVALID_EMAIL_MESSAGE, FIELD_REQUIRED, INVALID_NAME_MESSAGE, INVALID_PHONE_NUMBER } from '../../model/constants';
-import { ApiService } from '../../api.service';
-import { Subscription } from 'rxjs';
-import { StorageService } from '../../storage.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SurveyDataModel } from '../../model/survey.model';
-import { ErrorModel } from 'src/app/model/error.model';
-import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {NavController, Platform} from '@ionic/angular';
+import {AssigneeModel} from '../../model/assignee.model';
+import {UtilitiesService} from '../../utilities.service';
+import {
+  FIELD_REQUIRED,
+  INVALID_EMAIL_MESSAGE,
+  INVALID_NAME_MESSAGE,
+  INVALID_PHONE_NUMBER,
+  ScheduleFormEvent
+} from '../../model/constants';
+import {ApiService} from '../../api.service';
+import {Subscription} from 'rxjs';
+import {StorageService} from '../../storage.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SurveyDataModel} from '../../model/survey.model';
+import {ErrorModel} from 'src/app/model/error.model';
 import { AddressModel } from 'src/app/model/address.model';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 
 @Component({
   selector: 'app-survey',
@@ -64,15 +70,15 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
-    const EMAILPATTERN =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const mydate:any =new Date().getTime();
+    const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const mydate: any = new Date().getTime();
     this.surveyForm = this.formBuilder.group({
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.pattern(EMAILPATTERN)]),
-      phonenumber: new FormControl('', [Validators.required,  Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
+      phonenumber: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
       jobtype: new FormControl('', [Validators.required]),
       surveydatetime: new FormControl(mydate),
-      datetime:new FormControl(''),
+      datetime: new FormControl(''),
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
       source: new FormControl('android', [Validators.required]),
@@ -85,7 +91,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       city: new FormControl(''),
       postalcode: new FormControl(''),
       status: new FormControl('created'),
-      chatid:new FormControl(null)
+      chatid: new FormControl(null),
+      oldcommentid: new FormControl(''),
     });
 
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
@@ -94,7 +101,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.userData =  this.storage.getUser();
+    this.userData = this.storage.getUser();
     // this.address= this.storage.getData();
     this.subscription = this.utilities.getScheduleFormEvent().subscribe((event) => {
       switch (event) {
@@ -158,18 +165,18 @@ export class SurveyComponent implements OnInit, OnDestroy {
         if (this.surveyId !== 0) {
           this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
-            this.utilities.hideLoading().then(() => {
-              this.utilities.setDesignDetailsRefresh(true);
-              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
+              this.utilities.hideLoading().then(() => {
+                this.utilities.setDesignDetailsRefresh(true);
+                this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
+              });
+            },
+            responseError => {
+              this.utilities.hideLoading().then(() => {
+                const error: ErrorModel = responseError.error;
+                this.utilities.errorSnackBar(error.message);
+              });
+              //
             });
-          },
-          responseError => {
-            this.utilities.hideLoading().then(() => {
-              const error :ErrorModel= responseError.error;
-              this.utilities.errorSnackBar(error.message);
-            });
-         //
-          });
         } else {
 
           // if starting survey directly, assign the survey to yourself
@@ -178,18 +185,18 @@ export class SurveyComponent implements OnInit, OnDestroy {
           console.log(this.surveyForm.value);
           this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
-            this.utilities.hideLoading().then(() => {
-              this.utilities.setDesignDetailsRefresh(true);
-              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
-            });
-          },
-          responseError => {
-            this.utilities.hideLoading().then(() => {
-              const error :ErrorModel= responseError.error;
-              this.utilities.errorSnackBar(error.message);
-            });
-         //
-          }
+              this.utilities.hideLoading().then(() => {
+                this.utilities.setDesignDetailsRefresh(true);
+                this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
+              });
+            },
+            responseError => {
+              this.utilities.hideLoading().then(() => {
+                const error: ErrorModel = responseError.error;
+                this.utilities.errorSnackBar(error.message);
+              });
+              //
+            }
           );
         }
       });
@@ -200,24 +207,21 @@ export class SurveyComponent implements OnInit, OnDestroy {
     const invalid = [];
     const controls = this.surveyForm.controls;
     for (const name in controls) {
-        if (controls[name].invalid) {
-            invalid.push(name);
-        }
-
+      if (controls[name].invalid) {
+        invalid.push(name);
       }
-      console.log(invalid);
+
+    }
+    console.log(invalid);
     if (this.surveyForm.status === 'INVALID') {
       console.log(this.surveyForm.value);
-      if(this.surveyForm.value.name==''){
+      if (this.surveyForm.value.name == '') {
         this.utilities.errorSnackBar('Please enter name.');
-      }
-      else if(this.surveyForm.value.phonenumber==''){
+      } else if (this.surveyForm.value.phonenumber == '') {
         this.utilities.errorSnackBar('Please enter phone number.');
-      }
-      else if(this.surveyForm.value.jobtype==''){
+      } else if (this.surveyForm.value.jobtype == '') {
         this.utilities.errorSnackBar('Please enter job type.');
-      }
-      else {
+      } else {
         this.utilities.errorSnackBar('Address not found. Make sure your location is on in device.');
       }
     } else {
@@ -226,20 +230,20 @@ export class SurveyComponent implements OnInit, OnDestroy {
         if (this.surveyId !== 0) {
           this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
-            this.utilities.hideLoading().then(() => {
-              this.utilities.showSnackBar('Survey has been updated');
-              this.utilities.setSurveyDetailsRefresh(true);
-              // this.navController.navigateRoot('homepage/survey');
-              this.navController.pop();
+              this.utilities.hideLoading().then(() => {
+                this.utilities.showSnackBar('Survey has been updated');
+                this.utilities.setSurveyDetailsRefresh(true);
+                // this.navController.navigateRoot('homepage/survey');
+                this.navController.pop();
+              });
+            },
+            responseError => {
+              this.utilities.hideLoading().then(() => {
+                const error: ErrorModel = responseError.error;
+                this.utilities.errorSnackBar(error.message);
+              });
+              //
             });
-          },
-          responseError => {
-            this.utilities.hideLoading().then(() => {
-              const error :ErrorModel= responseError.error;
-              this.utilities.errorSnackBar(error.message);
-            });
-         //
-          });
 
         } else {
           if (this.surveyForm.get('assignedto').value !== ''
@@ -252,26 +256,26 @@ export class SurveyComponent implements OnInit, OnDestroy {
           console.log(this.surveyForm.value);
           this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
-            this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
-              this.utilities.hideLoading();
-              // this.navController.pop();
+              this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+                this.utilities.hideLoading();
+                // this.navController.pop();
                 modal.present();
                 modal.onWillDismiss().then((dismissed) => {
                   this.utilities.sethomepageSurveyRefresh(true);
                   this.navController.navigateRoot('homepage/survey');
 
                 });
-              // });
-            });
+                // });
+              });
 
-          },
-          responseError => {
-            this.utilities.hideLoading().then(() => {
-              const error :ErrorModel= responseError.error;
-              this.utilities.errorSnackBar(error.message);
-            });
-         //
-          }
+            },
+            responseError => {
+              this.utilities.hideLoading().then(() => {
+                const error: ErrorModel = responseError.error;
+                this.utilities.errorSnackBar(error.message);
+              });
+              //
+            }
           );
         }
       });
@@ -323,8 +327,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
             jobtype: this.survey.jobtype,
             phonenumber: this.survey.phonenumber,
             surveydatetime: date.getTime(),
-            datetime:date,
-            comments:this.survey.comments=='' ?'': this.survey.comments[0].message,
+            datetime: date,
+            comments: this.survey.comments == '' ? '' : this.survey.comments[0].message,
             address: this.survey.address,
             source: this.survey.source,
             createdby: this.survey.createdby.id,
@@ -333,7 +337,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
             country: this.survey.country,
             state: this.survey.state,
             city: this.survey.city,
-            postalcode:this.survey.postalcode,
+            postalcode: this.survey.postalcode,
+            oldcommentid: this.survey.comments[0].id
           });
           if (this.survey.assignedto !== null && this.survey.assignedto !== undefined) {
             this.surveyForm.patchValue({
@@ -350,13 +355,13 @@ export class SurveyComponent implements OnInit, OnDestroy {
     });
   }
 
-  assignedTo(surveyData){
+  assignedTo(surveyData) {
 
     let postData = {
       assignedto: this.userData.id,
       status: "surveyassigned"
     };
-    this.apiService.updateSurveyForm(postData,surveyData.id).subscribe(res=>{
+    this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
       console.log(res);
       this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
     })

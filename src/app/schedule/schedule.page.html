@@ -2,8 +2,8 @@
     <!-- <ion-grid style="overflow:hidden;" scroll="false"> -->
         <ion-row class="ion-align-items-center ion-padding-start">
             <ion-col>
-                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/design'">Add Site Assessment</h5>
-                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/salesproposal'">Add Sales Proposal</h5>
+                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/design'">Request Site Assessment</h5>
+                <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/salesproposal'">Request Sales Proposal</h5>
                 <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;" *ngIf="!tabsDisabled && router.url=='/schedule/survey'">Schedule Survey</h5>
                 <h4 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit </h4>
             </ion-col>
@@ -73,7 +73,7 @@
                     <b>{{address == "" ? "No Address Found" : address}}</b>
                     
                 </ion-col>
-              
+
                 <ion-col class="ion-text-end" *ngIf="!tabsDisabled" size="3">
                     <p></p>
                     <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">

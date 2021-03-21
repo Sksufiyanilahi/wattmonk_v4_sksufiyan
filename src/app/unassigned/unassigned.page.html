@@ -32,14 +32,14 @@
                   <!-- <span class="chipdetail" style="background-color: #1289A7;"  routerDirection="forward">
                     {{designData.deliverydate | date: 'hh:mm a'}}
                 </span> -->
-                <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" >Unassigned</span>
+                <!-- <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" >Unassigned</span> -->
                 <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" >Overdue</span>
                 <span fill="clear" background-border="clear" (click)="gotoActivity(designData,$event)" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                 <span class="chipdetail" style="background-color: #1c12a7;float:right;margin-right: 1rem;" *ngIf="designData.company !== null || designData.company!== ''" >{{designData.company}}</span>
         </p>
 
         <p style="margin:0px">
-            <span class="customer-email" 
+            <span class="customer-email"
                     routerDirection="forward">{{designData.email}}</span>
                     <span *ngIf="designData.isoverdue" class="latebystyle"><strong>Late by {{designData.lateby}}</strong></span>
 
@@ -60,7 +60,7 @@
 
                   <ion-row style="margin-bottom: 0px;" >
                      <ion-col style="padding-left:0px" >
-                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source}}</span>
+                      <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source | titlecase}}</span>
                       <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.requesttype}}</span>
                   </ion-col>
                   <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
@@ -95,7 +95,7 @@
 
 
                       <ion-col *ngIf="segments=='requesttype=prelim&status=designassigned'">
-                          <span *ngIf= "(designData.status =='designassigned') && userData.role.type !='clientsuperadmin' && userData.role.type !='clientadmin'" (click)="openDesigners(designData.id,designData)" style="float:right !important" class="ion-text-end action-button-color"
+                          <span *ngIf= "(designData.status =='designassigned') && userData.role.type !='clientsuperadmin' && userData.role.type !='clientadmin'" (click)="openDesigners(designData.id,designData,$event)" style="float:right !important" class="ion-text-end action-button-color"
                           >Reassign</span>
                       </ion-col>
 

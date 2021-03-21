@@ -674,6 +674,7 @@ this.network.networkConnect();
   }
 
   dismissBottomSheet() {
+    this.showBottomDraw = false;
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
@@ -950,8 +951,7 @@ this.router.navigate(['/payment-modal'], {
                   ;
                   console.log('reach ', value);
                  this.utils.showSnackBar('Design request has been delivered successfully');
-
-                  this.utils.setHomepageDesignRefresh(true);
+                 this.utils.setHomepageDesignRefresh(true);
                 })
               }, (error) => {
                 this.utils.hideLoading();
@@ -1397,9 +1397,9 @@ gotoActivity(designData,event){
   console.log(event)
       event.stopPropagation();
     this.router.navigate(['/activity' + '/' + designData.id + '/design'])
-  
+
   }
-  
+
   gotoDetails(designData,$event){
     // $event.preventDefault();
     // $event.stopPropagation();

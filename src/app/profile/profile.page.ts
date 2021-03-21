@@ -11,7 +11,7 @@ import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.modul
 import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
 import { AddMoneyPage } from '../add-money/add-money.page';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
- 
+
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Subscription } from 'rxjs';
 import { MixpanelService } from '../utilities/mixpanel.service';
@@ -23,7 +23,8 @@ import { MixpanelService } from '../utilities/mixpanel.service';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-
+  getemail:boolean=false;
+  getnotification:boolean=false;
   imageUploadIndex = 1;
   totalImagesToUpload = 0;
   totalSurveys = 0;
@@ -33,6 +34,8 @@ export class ProfilePage implements OnInit {
 profile:any;
   user: User;
   userdata: any;
+  statuscount:any;
+  activedesignjobs;any;
 
   constructor(
     private navController: NavController,
@@ -46,11 +49,11 @@ profile:any;
     private route: ActivatedRoute,
     private mixpanelService:MixpanelService
   ) {
-   
+
   }
 
   ngOnInit() {
-   
+
     this.user = this.storage.getUser(); // get data from resolver
     console.log(this.user);
     this.mixpanelService.track("PROFILE_PAGE_OPEN", {
@@ -77,8 +80,22 @@ getProfileData(){
 this.apiService.getProfileDetails().subscribe(res=>{
   console.log(res);
   this.profile=res;
+  this.getemail=this.profile.getemail;
+  this.getnotification=this.profile.getnotification;
+})
+this.apiService.getStatusCount().subscribe(
+  response => {
+    this.statuscount = response;
+    this.activedesignjobs = this.statuscount.waitingforassigned + this.statuscount.waitingforacceptance + this.statuscount.requestaccepted + this.statuscount.designassigned
+      + this.statuscount.reviewassigned + this.statuscount.reviewpassed + this.statuscount.reviewfailed;
+      console.log(this.activedesignjobs)
+  }
+,
+error => {
+  this.utilities.errorSnackBar("Error");
 })
 }
+
 
 isEmptyObject(obj) {
   return (obj && (Object.keys(obj).length === 0));
@@ -93,11 +110,11 @@ AddWallet()
       mode:'wallet'
     },
     skipLocationChange: false,
-    fragment: 'top' 
+    fragment: 'top'
 };
 
 
-this.router.navigate(['/add-money'], { 
+this.router.navigate(['/add-money'], {
 state: { productdetails: objToSend }
 });
 
@@ -256,6 +273,33 @@ state: { productdetails: objToSend }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+
+  }
+
+  onEmailChange(data,value,event){
+    console.log(event.detail.checked);
+    console.log(event.target.value,value)
+    const id = data.id;
+    if(value=='notification')
+    {
+      const postData = {
+        getnotification:event.detail.checked
+      }
+      this.apiService.updateUser(id,postData).subscribe(res=>{
+        console.log(res);
+      })
+    }
+    else{
+      const postData = {
+        getemail:event.detail.checked
+      }
+      this.apiService.updateUser(id,postData).subscribe(res=>{
+        console.log(res);
+      })
+    }
+  }
+
+  profileEdit(){
 
   }
 }

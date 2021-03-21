@@ -35,7 +35,10 @@ import {AuthGuardService} from './auth-guard.service';
 import {StorageService} from './storage.service';
 import {SuccessModalComponent} from './utilities/success-modal/success-modal.component';
 import {UtilitiesModule} from './utilities/utilities.module';
-import { PopoverComponentComponent } from './popover-component/popover-component.component';
+import {PopoverComponentComponent} from './popover-component/popover-component.component';
+import {MyLoaderComponent} from './components/my-loader/my-loader.component';
+import {CameraPreviewWeb} from '@capacitor-community/camera-preview';
+import {SplashScreenPluginWeb} from '@capacitor/core';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent,PopoverComponentComponent],
@@ -54,7 +57,7 @@ import { PopoverComponentComponent } from './popover-component/popover-component
     MatProgressBarModule,
     MatDialogModule,
     MatButtonModule,
-    MatProgressSpinnerModule,
+     MatProgressSpinnerModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
@@ -69,6 +72,8 @@ import { PopoverComponentComponent } from './popover-component/popover-component
     NgxImageCompressService,
     BackgroundMode,
     Camera,
+    CameraPreviewWeb,
+    SplashScreenPluginWeb,
     InAppBrowser,
     Network,
     Stripe,

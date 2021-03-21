@@ -498,6 +498,7 @@ this.network.networkConnect();
     }
 
   dismissBottomSheet() {
+    this.showBottomDraw = false;
     console.log('this', this.drawerState);
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
@@ -674,9 +675,9 @@ gotoActivity(designData,event){
   console.log(event)
       event.stopPropagation();
     this.router.navigate(['/activity' + '/' + designData.id + '/design'])
-  
+
   }
-  
+
   gotoDetails(designData,$event){
     // $event.preventDefault();
     // $event.stopPropagation();

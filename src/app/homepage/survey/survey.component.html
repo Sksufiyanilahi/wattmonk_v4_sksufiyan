@@ -73,7 +73,7 @@
                     </p>
                     <ion-row style="margin-bottom: 8px;"  class="m-0">
 
-                        <span class="chipdetail" style="background-color: #95afc0;">{{surveyData.source}}</span>
+                        <span class="chipdetail" style="background-color: #95afc0;">{{surveyData.source | titlecase}}</span>
                         <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{surveyData?.jobtype=='pvbattery' ? 'PV + Battery' : surveyData?.jobtype | uppercase}}</span>
 
 
@@ -191,30 +191,33 @@
 
 
 </ion-content>
+<ng-container *ngIf="showBottomDraw">
 
-<ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false" [disableDrag]="true"
-    [shouldBounce]="false" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
-    <form [formGroup]="assignForm">
-        <ion-grid class="drawer">
-            <ion-row>
-                <ion-col size="12">
-                    <app-user-selector (assigneeData)=getassignedata($event) placeholder="Assign"
-                        [assignees]="listOfAssignees" formControlName="assignedto"></app-user-selector>
-                </ion-col>
-            </ion-row>
-            <ion-row style="justify-content: flex-end;">
-                <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
-                    <ion-button class="buttom-drawer-button" fill="clear" (click)="assignToSurveyor()">
-                        Confirm
-                    </ion-button>
-                </ion-col>
-                <ion-col size="auto">
-                    <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
-                        Cancel
-                    </ion-button>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </form>
+  <ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false" [disableDrag]="true"
+      [shouldBounce]="false" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
+      <form [formGroup]="assignForm">
+          <ion-grid class="drawer">
+              <ion-row>
+                  <ion-col size="12">
+                      <app-user-selector (assigneeData)=getassignedata($event) placeholder="Assign"
+                          [assignees]="listOfAssignees" formControlName="assignedto"></app-user-selector>
+                  </ion-col>
+              </ion-row>
+              <ion-row style="justify-content: flex-end;">
+                  <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
+                      <ion-button class="buttom-drawer-button" fill="clear" (click)="assignToSurveyor()">
+                          Confirm
+                      </ion-button>
+                  </ion-col>
+                  <ion-col size="auto">
+                      <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
+                          Cancel
+                      </ion-button>
+                  </ion-col>
+              </ion-row>
+          </ion-grid>
+      </form>
 
-</ion-bottom-drawer>
+  </ion-bottom-drawer>
+</ng-container>
+

@@ -3,9 +3,9 @@
     <ion-buttons slot="start">
       <!-- <ion-menu-button></ion-menu-button> -->
     </ion-buttons>
-    <ion-title>Dashboard</ion-title>
+    <ion-title>DashBoard</ion-title>
     <ion-buttons slot="end">
-      <ion-icon name="close-outline" [routerLink]="['/permithomepage']" routerDirection="back" style="font-size: 25px;padding: 5px;"></ion-icon>
+      <ion-icon name="close-outline" [routerLink]="['/dashboard']" routerDirection="back" style="font-size: 25px;padding: 5px;"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -65,7 +65,7 @@
         <ion-col>
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Phone Number*</ion-label>
-                <ion-input type="text" class="form_input" formControlName="phone"
+                <ion-input type="tel" class="form_input" formControlName="phone"
                             required></ion-input>
             </ion-item>
             <div style="height: 5px;">
@@ -130,7 +130,7 @@
         </ion-col>
         <ion-col size="12">
             <ion-item class="ion-no-padding">
-                <ion-label position="floating">Licence No.</ion-label>
+                <ion-label position="floating">License No.</ion-label>
                 <ion-input type="text" formControlName="registrationnumber" class="form_input" autocapitalize="words" maxLength="16"
                             required></ion-input>
             </ion-item>
@@ -151,10 +151,12 @@
 
                   <div *ngIf="logo !=null && logo !=''" class="avatar-upload" style="text-align: center;">
                       <img [src]=logo height="100px" width="100px" />
+                      <ion-icon name="close-circle-outline" class="logo" (click)="removeLogo($event)"></ion-icon>
                 </div>
 
             <!-- </ion-item> -->
         </ion-col>
+
     </ion-row>
     <!-- <ion-row *ngIf="isCompany">
       <ion-col>
@@ -219,7 +221,7 @@
    <ion-toggle formControlName="requestgeneratednotification" (ionChange)="onChange($event,'requestgenerated')"  ></ion-toggle>
  </ion-item>
  <ion-item>
-  <ion-label class="font">Design Acknowledgement  (Accept/On Hold)</ion-label>
+  <ion-label style="white-space: break-spaces;" class="font">Design Acknowledgement  (Accept/On Hold)</ion-label>
  <ion-toggle formControlName="requestacknowledgementemail" (ionChange)="onEmailChange($event,'requestacknoledgedemail')"></ion-toggle>
  <ion-toggle formControlName="requestacknowledgementnotification" (ionChange)="onChange($event,'requestacknoledged')"></ion-toggle>
 </ion-item>
@@ -233,8 +235,13 @@
 </ion-item> -->
 <ion-item>
   <ion-label class="font">Design In-Designing</ion-label>
- <ion-toggle formControlName="requestindesigningemail" (ionChange)="onEmailChange($event,'completedesignemail')"></ion-toggle>
- <ion-toggle formControlName="requestindesigningnotification" (ionChange)="onChange($event,'completedesign')"></ion-toggle>
+ <ion-toggle formControlName="requestindesigningemail" (ionChange)="onEmailChange($event,'requestindesigningemail')"></ion-toggle>
+ <ion-toggle formControlName="requestindesigningnotification" (ionChange)="onChange($event,'requestindesigningnotification')"></ion-toggle>
+</ion-item>
+<ion-item>
+  <ion-label class="font">Design Completed</ion-label>
+ <ion-toggle formControlName="designcompletedemail" (ionChange)="onEmailChange($event,'designcompletedemail')"></ion-toggle>
+ <ion-toggle formControlName="designcompletednotification" (ionChange)="onChange($event,'designcompletednotification')"></ion-toggle>
 </ion-item>
 <ion-item>
   <ion-label class="font">Design In-Review</ion-label>
@@ -261,7 +268,7 @@
 
     </form>
     <div>
-      <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;" (click)="$event.stopPropagation()" matStepperNext>Next</button>
+      <button (click)="secondStepper()" class="action-button-color" mat-button style="float: right;"  matStepperNext>Next</button>
       <!-- <ion-button (click)="secondStepper()" fill="clear" style="float: right;font-size: 12px; height: 30px;color: #3c78d8;">Update</ion-button> -->
       <!-- <button  class="action-button-color" mat-button matStepperNext style="float: right;">Next</button> -->
       <!-- <button class="action-button-color" mat-button matStepperPrevious style="float: right;">Back</button> -->
@@ -363,6 +370,12 @@
             <ion-radio slot="start"  value="3" ></ion-radio>
           </ion-item>
         </ion-col>
+        <ion-col size="auto">
+          <ion-item lines="none">
+            <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Surveyor</ion-label>
+            <ion-radio slot="start"  value="9" ></ion-radio>
+          </ion-item>
+        </ion-col>
         </ion-row>
         </ion-radio-group>
 
@@ -376,7 +389,7 @@
   </div>
   </mat-step>
   <mat-step>
-    <ng-template matStepLabel>Request for Design</ng-template>
+    <ng-template matStepLabel>Request for Design <button class="action-button-color alignment"  *ngIf="this.stepper.selectedIndex==3" style="float: right;" mat-button (click)="moveToDashboard()" matStepperNext>Skip</button></ng-template>
     <div style="color: #111 !important;padding-left: 0px;">
       <ion-label style="color:#111 !important;">Service Charges</ion-label>
     </div>
@@ -410,7 +423,7 @@
       <ion-col size="6">
         <ion-card [routerLink]="['/schedule/design']" style="border-radius: 20%;">
           <ion-card-header style="text-align: center;">
-            <img src="/assets/images/design.svg" alt="" class="cardimg">
+            <img src="/assets/icon/Prelim.svg" alt="" class="cardimg">
           </ion-card-header >
           <ion-card-content class="ion-text-center bottomrow">
             Prelim
@@ -421,7 +434,7 @@
   <ion-col size="6">
     <ion-card [routerLink]="['/permitschedule']" style="border-radius: 20%;">
       <ion-card-header style="text-align: center;">
-        <img src="/assets/images/permit.svg" alt="" class="cardimg">
+        <img src="/assets/icon/Permit.svg" alt="" class="cardimg">
       </ion-card-header>
       <ion-card-content class="ion-text-center bottomrow">
         Permit

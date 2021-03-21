@@ -360,8 +360,7 @@ this.network.networkConnect();
   saveDesignForm() {
     console.log('posting value');
     console.log(this.router.url);
-   // if(this.designs == 'null'){
-    if(this.router.url=='/schedule/design' || this.router.url == '/schedule/design/'+this.designs.id){
+    if(this.router.url=='/schedule/design' || this.router.url=='/schedule/design/' + this.designs.id ){
     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
     }
     else if(this.router.url=='/schedule/salesproposal' || this.router.url == '/schedule/salesproposal/'+this.designs.id)
