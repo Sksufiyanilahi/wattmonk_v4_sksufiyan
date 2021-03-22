@@ -1,14 +1,14 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AssigneeModel } from 'src/app/model/assignee.model';
-import { SolarMake } from 'src/app/model/solar-make.model';
-import { ApiService } from 'src/app/api.service';
-import { UtilitiesService } from 'src/app/utilities.service';
-import { ErrorModel } from 'src/app/model/error.model';
-import { SolarMadeModel } from 'src/app/model/solar-made.model';
-import { InverterMakeModel } from 'src/app/model/inverter-make.model';
-import { IonSlides, NavController } from '@ionic/angular';
-import { InverterMadeModel } from 'src/app/model/inverter-made.model';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AssigneeModel} from 'src/app/model/assignee.model';
+import {SolarMake} from 'src/app/model/solar-make.model';
+import {ApiService} from 'src/app/api.service';
+import {UtilitiesService} from 'src/app/utilities.service';
+import {ErrorModel} from 'src/app/model/error.model';
+import {SolarMadeModel} from 'src/app/model/solar-made.model';
+import {InverterMakeModel} from 'src/app/model/inverter-make.model';
+import {IonSlides, NavController} from '@ionic/angular';
+import {InverterMadeModel} from 'src/app/model/inverter-made.model';
 import {
   FIELD_REQUIRED,
   INVALID_ANNUAL_UNIT,
@@ -18,16 +18,16 @@ import {
   INVALID_TILT_FOR_GROUND_MOUNT,
   ScheduleFormEvent
 } from '../../model/constants';
-import { Observable, Subscription } from 'rxjs';
-import { StorageService } from '../../storage.service';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { DesginDataModel } from '../../model/design.model';
-import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
-import { File } from '@ionic-native/file/ngx';
+import {Observable, Subscription} from 'rxjs';
+import {StorageService} from '../../storage.service';
+import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
+import {DesginDataModel} from '../../model/design.model';
+import {Camera, CameraOptions} from '@ionic-native/Camera/ngx';
+import {File} from '@ionic-native/file/ngx';
 
-import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { Clients } from 'src/app/model/clients.model';
-import { map, startWith } from "rxjs/operators";
+import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
+import {Clients} from 'src/app/model/clients.model';
+import {map, startWith} from "rxjs/operators";
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFirestore} from '@angular/fire/firestore';
 
@@ -60,8 +60,11 @@ export class DesignComponent implements OnInit, OnDestroy {
     spaceBetween: 20
   };
   slideOptsThree = {
-    initialSlide: 0,
-    slidesPerView: 3
+    initialSlide: 1,
+    slidesPerView: 2,
+    loop: true,
+    centeredSlides: true,
+    spaceBetween: 20
   };
 
   isBeginningSlide: true;
@@ -137,9 +140,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   fieldDisabled = false;
   userdata: any;
 
-  attachmentFileUpload: boolean = false;
-  isArchitecturalFileUpload: boolean = false;
-  imageurls: any = [];
+isArchitecturalFileUpload: boolean = false;
+  attachmentFileUpload: boolean= false;
+  imageurls: any=[];
+  arcFileUrl: any=[];
 
   // newprelims: Observable<any>;
   // newprelimsRef: AngularFireObject<any>;
@@ -359,20 +363,20 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
         // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-        // this.desginForm.get('address').setValue('124/345');
-        // this.desginForm.get('latitude').setValue('24.553333');
-        // this.desginForm.get('longitude').setValue('80.5555555555');
-        // this.desginForm.get('country').setValue('india');
-        // this.desginForm.get('city').setValue('Lucknow');
-        // this.desginForm.get('state').setValue('UP');
-        // this.desginForm.get('postalcode').setValue(3232343);
-        this.desginForm.get('address').setValue(address.address);
-        this.desginForm.get('latitude').setValue(address.lat);
-        this.desginForm.get('longitude').setValue(address.long);
-        this.desginForm.get('country').setValue(address.country);
-        this.desginForm.get('city').setValue(address.city);
-        this.desginForm.get('state').setValue(address.state);
-        this.desginForm.get('postalcode').setValue(address.postalcode);
+        this.desginForm.get('address').setValue('124/345');
+        this.desginForm.get('latitude').setValue('24.553333');
+        this.desginForm.get('longitude').setValue('80.5555555555');
+        this.desginForm.get('country').setValue('india');
+        this.desginForm.get('city').setValue('Lucknow');
+        this.desginForm.get('state').setValue('UP');
+        this.desginForm.get('postalcode').setValue(3232343);
+        // this.desginForm.get('address').setValue(address.address);
+        // this.desginForm.get('latitude').setValue(address.lat);
+        // this.desginForm.get('longitude').setValue(address.long);
+        // this.desginForm.get('country').setValue(address.country);
+        // this.desginForm.get('city').setValue(address.city);
+        // this.desginForm.get('state').setValue(address.state);
+        // this.desginForm.get('postalcode').setValue(address.postalcode);
       }, (error) => {
         this.desginForm.get('address').setValue('');
         this.desginForm.get('latitude').setValue('');
@@ -486,11 +490,11 @@ export class DesignComponent implements OnInit, OnDestroy {
             invertermodel: this.design.invertermodel,
             inverterscount: this.design.inverterscount,
             status: this.design.status,
-            oldcommentid: this.design.comments[0].id
+            oldcommentid: ''
           });
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
-          this.oldcommentid = this.design.comments[0].id;
+          // this.oldcommentid = this.design.comments[0].id;
           //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
           if (this.design.assignedto !== null && this.design.assignedto !== undefined) {
             this.desginForm.patchValue({
@@ -1119,18 +1123,30 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
 
-  files(event) {
-    console.log(event.target.files);
-    for (var i = 0; i < event.target.files.length; i++) {
-      this.archFiles.push(event.target.files[i])
+  files(ev) {
+    console.log(ev.target.files,this.arcFileUrl);
+    for (let i = 0; i < ev.target.files.length; i++) {
+      this.archFiles.push(ev.target.files[i])
+      var reader = new FileReader();
+      reader.onload = (e: any) => {
+        console.log(ev.target.files[i],this.arcFileUrl);
+        if(ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')){
+          this.arcFileUrl.push(e.target.result);
+        }else{
+          this.arcFileUrl.push('/assets/icon/file.png');
+        }
+      }
+      reader.readAsDataURL(ev.target.files[i]);
     }
     this.isArchitecturalFileUpload = true;
     console.log(this.archFiles);
   }
 
-  prelimfiles(event) {
-    console.log(event.target.files);
-    for (var i = 0; i < event.target.files.length; i++) {
+  prelimfiles(event){
+    console.log(event);
+    for(let i=0; i< event.target.files.length;i++){
+      console.log(i);
+
       this.prelimFiles.push(event.target.files[i])
       var reader = new FileReader();
       reader.onload = (e: any) => {
@@ -1303,6 +1319,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   removeArc(i) {
     this.archFiles.splice(i, 1);
+    this.arcFileUrl.splice(i, 1);
   }
 
   removePrelim(i) {

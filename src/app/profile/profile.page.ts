@@ -11,10 +11,11 @@ import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.modul
 import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
 import { AddMoneyPage } from '../add-money/add-money.page';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
- 
+
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Subscription } from 'rxjs';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import { ProfileEditComponent } from './profile-edit/profile-edit.component';
 
 
 @Component({
@@ -23,7 +24,8 @@ import { MixpanelService } from '../utilities/mixpanel.service';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-
+  getemail:boolean=false;
+  getnotification:boolean=false;
   imageUploadIndex = 1;
   totalImagesToUpload = 0;
   totalSurveys = 0;
@@ -48,11 +50,11 @@ profile:any;
     private route: ActivatedRoute,
     private mixpanelService:MixpanelService
   ) {
-   
+
   }
 
   ngOnInit() {
-   
+
     this.user = this.storage.getUser(); // get data from resolver
     console.log(this.user);
     this.mixpanelService.track("PROFILE_PAGE_OPEN", {
@@ -79,6 +81,8 @@ getProfileData(){
 this.apiService.getProfileDetails().subscribe(res=>{
   console.log(res);
   this.profile=res;
+  this.getemail=this.profile.getemail;
+  this.getnotification=this.profile.getnotification;
 })
 this.apiService.getStatusCount().subscribe(
   response => {
@@ -107,11 +111,11 @@ AddWallet()
       mode:'wallet'
     },
     skipLocationChange: false,
-    fragment: 'top' 
+    fragment: 'top'
 };
 
 
-this.router.navigate(['/add-money'], { 
+this.router.navigate(['/add-money'], {
 state: { productdetails: objToSend }
 });
 
@@ -296,7 +300,19 @@ state: { productdetails: objToSend }
     }
   }
 
-  profileEdit(){
-    
-  }
+  async profileEdit(){
+      const modal = await this.modalController.create({
+        component: ProfileEditComponent,
+        cssClass: 'profie-edit',
+        componentProps: {
+          'firstName': this.user.firstname,
+          'lastName': this.user.lastname,
+          'email': this.user.email,
+          'country':this.user.country,
+          'phone':this.user.phone
+        }
+      });
+      return await modal.present();
+    }
+
 }

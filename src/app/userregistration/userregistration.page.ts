@@ -202,9 +202,11 @@ export class UserregistrationPage implements OnInit {
       this.apiService.refreshHeader();
       this.utils.hideLoading();
       this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.")
-      this.login();
-      // this.router.navigate(['/login']);
-      // this.utils.showSnackBar("User Registered Successfully");
+     // this.login();
+     setTimeout(() => {
+      this.router.navigate(['/login']);
+      this.utils.showSnackBar("User Registered Successfully");
+     },3000)
     },
       responseError => {
         this.utils.hideLoading().then(() => {
@@ -243,72 +245,72 @@ this.network.networkDisconnect();
 this.network.networkConnect();
   }
 
-  login() {
-    if(!this.netSwitch){
-      this.utils.errorSnackBar('No internet connection');
-    }else{
-      console.log(this.userregistrationForm);
-      if (this.userregistrationForm.status === 'VALID') {
-        this.utils.showLoading('Logging In').then(() => {
-          const postData ={
-            identifier : this.storageService.getUser().username,
-            password : this.userregistrationForm.get('password').value
-          }
-          this.apiService.login(postData).subscribe(response => {
-            this.utils.hideLoading().then(() => {
-              console.log('Res', response);
-              console.log(response);
-              this.mixpanelService.track("USER_LOGIN", {
-                $id: response.user.id,
-                $email: response.user.email,
-                $name: response.user.firstname + response.user.lastname
-              });
+  // login() {
+  //   if(!this.netSwitch){
+  //     this.utils.errorSnackBar('No internet connection');
+  //   }else{
+  //     console.log(this.userregistrationForm);
+  //     if (this.userregistrationForm.status === 'VALID') {
+  //       this.utils.showLoading('Logging In').then(() => {
+  //         const postData ={
+  //           identifier : this.storageService.getUser().username,
+  //           password : this.userregistrationForm.get('password').value
+  //         }
+  //         this.apiService.login(postData).subscribe(response => {
+  //           this.utils.hideLoading().then(() => {
+  //             console.log('Res', response);
+  //             console.log(response);
+  //             this.mixpanelService.track("USER_LOGIN", {
+  //               $id: response.user.id,
+  //               $email: response.user.email,
+  //               $name: response.user.firstname + response.user.lastname
+  //             });
 
-                 // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
-                 this.storageService.setUserName(this.userregistrationForm.get('username').value);
-                 this.storageService.setPassword(this.userregistrationForm.get('password').value);
-                 this.storageService.setUser(response.user, response.jwt);
-                 this.apiService.refreshHeader();
-                //  if (response.user.isdefaultpassword) {
-                //   this.storageService.setJWTToken(response.jwt);
-                //   this.apiService.refreshHeader();
-                //    this.navController.navigateRoot(['changepassword'])
-                //  } else {
-                  if(response.user.role.type==='clientsuperadmin' && (response.user.isonboardingcompleted == null || response.user.isonboardingcompleted == false)){
+  //                // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
+  //                this.storageService.setUserName(this.userregistrationForm.get('username').value);
+  //                this.storageService.setPassword(this.userregistrationForm.get('password').value);
+  //                this.storageService.setUser(response.user, response.jwt);
+  //                this.apiService.refreshHeader();
+  //               //  if (response.user.isdefaultpassword) {
+  //               //   this.storageService.setJWTToken(response.jwt);
+  //               //   this.apiService.refreshHeader();
+  //               //    this.navController.navigateRoot(['changepassword'])
+  //               //  } else {
+  //                 if(response.user.role.type==='clientsuperadmin' && (response.user.isonboardingcompleted == null || response.user.isonboardingcompleted == false)){
 
-                    this.navController.navigateRoot('onboarding');
-                    if(response.user){
-                      this.utils.doCometUserLogin();
-                    }
-                  }
-                  else{
-                   this.navController.navigateRoot(['/dashboard'])
-                   if(response.user){
-                    this.utils.doCometUserLogin();
-                  }
-                 }
-                //}
+  //                   this.navController.navigateRoot('onboarding');
+  //                   if(response.user){
+  //                     this.utils.doCometUserLogin();
+  //                   }
+  //                 }
+  //                 else{
+  //                  this.navController.navigateRoot(['/dashboard'])
+  //                  if(response.user){
+  //                   this.utils.doCometUserLogin();
+  //                 }
+  //                }
+  //               //}
 
-            });
-            this.apiService.emitUserNameAndRole(response.user);
+  //           });
+  //           this.apiService.emitUserNameAndRole(response.user);
 
-          }, responseError => {
-            this.utils.hideLoading().then(() => {
-              this.apiService.resetHeaders();
-              const error: ErrorModel = responseError.error;
-              // this.utils.errorSnackBar(error);
-              this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
-            });
+  //         }, responseError => {
+  //           this.utils.hideLoading().then(() => {
+  //             this.apiService.resetHeaders();
+  //             const error: ErrorModel = responseError.error;
+  //             // this.utils.errorSnackBar(error);
+  //             this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
+  //           });
 
-          });
-        });
+  //         });
+  //       });
 
-      } else {
-        this.apiService.resetHeaders();
-        this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
-      }
-    }
-  }
+  //     } else {
+  //       this.apiService.resetHeaders();
+  //       this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
+  //     }
+  //   }
+  // }
 
 
 }
