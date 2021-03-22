@@ -80,6 +80,7 @@ export class SalesproposalComponent implements OnInit {
   oldcommentid: String
   indexOfArcFiles = []
   isArcFileDelete: boolean = false;
+  arcFileUrl: any=[];
   //attachmentName = this.desginForm.get('attachments').value;
 
   options: CameraOptions = {
@@ -139,7 +140,7 @@ export class SalesproposalComponent implements OnInit {
   userId: string;
   uploadLogo: any;
   firstFormGroup: FormGroup;
-
+  imageurls: any=[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -260,6 +261,43 @@ export class SalesproposalComponent implements OnInit {
     // this.getutilitiesName();
     this.fetchIncentive();
   }
+
+
+  slideNext(object, slideView) {
+    slideView.slideNext(500).then(() => {
+      this.checkIfNavDisabled(object, slideView);
+    });
+  }
+  
+  //Move to previous slide
+  slidePrev(object, slideView) {
+    slideView.slidePrev(500).then(() => {
+      this.checkIfNavDisabled(object, slideView);
+    });;
+  }
+  
+  //Method called when slide is changed by drag or navigation
+  SlideDidChange(object, slideView) {
+    this.checkIfNavDisabled(object, slideView);
+  }
+  
+  //Call methods to check if slide is first or last to enable disbale navigation
+  checkIfNavDisabled(object, slideView) {
+    this.checkisBeginning(object, slideView);
+    this.checkisEnd(object, slideView);
+  }
+  
+  checkisBeginning(object, slideView) {
+    slideView.isBeginning().then((istrue) => {
+      object.isBeginningSlide = istrue;
+    });
+  }
+  checkisEnd(object, slideView) {
+    slideView.isEnd().then((istrue) => {
+      object.isEndSlide = istrue;
+    });
+  }
+  
 
   getincentives() {
     this.apiService.salesIncentives().subscribe(res => {
@@ -1544,18 +1582,41 @@ export class SalesproposalComponent implements OnInit {
   }
 
 
-  files(event) {
-    console.log(event.target.files);
-    for (var i = 0; i < event.target.files.length; i++) {
-      this.archFiles.push(event.target.files[i])
+  files(ev) {
+    console.log(ev.target.files,this.arcFileUrl);
+    for (let i = 0; i < ev.target.files.length; i++) {
+      this.archFiles.push(ev.target.files[i])
+      var reader = new FileReader();
+      reader.onload = (e: any) => {
+        console.log(ev.target.files[i],this.arcFileUrl);
+        if(ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')){
+          this.arcFileUrl.push(e.target.result);
+        }else{
+          this.arcFileUrl.push('/assets/icon/file.png');
+        }
+      }
+      reader.readAsDataURL(ev.target.files[i]);
     }
     console.log(this.archFiles);
   }
 
   prelimfiles(event) {
-    console.log(event.target.files);
-    for (var i = 0; i < event.target.files.length; i++) {
+    console.log(event);
+    for(let i=0; i< event.target.files.length;i++){
+      console.log(i);
+
       this.prelimFiles.push(event.target.files[i])
+      var reader = new FileReader();
+      reader.onload = (e: any) => {
+        if(event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')){
+          // console.log(event.target.files[i].name);
+          this.imageurls.push(e.target.result);
+        }else{
+          this.imageurls.push('/assets/icon/file.png');
+        }
+        console.log(this.imageurls)
+      }
+      reader.readAsDataURL(event.target.files[i]);
     }
     this.attachmentFileUpload = true;
     if (this.prelimFiles.length == 1) {
@@ -1703,12 +1764,17 @@ export class SalesproposalComponent implements OnInit {
 
   // }
 
+ 
+  
+
   removeArc(i) {
     this.archFiles.splice(i, 1);
+    this.arcFileUrl.splice(i, 1);
   }
 
   removePrelim(i) {
     this.prelimFiles.splice(i, 1);
+    this.imageurls.splice(i, 1);
   }
 
   sendtowattmonk() {
