@@ -110,7 +110,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   imageName: any;
   oldcommentid: String
   indexOfArcFiles = []
+  indexOfAttachmentFile = [];
   isArcFileDelete: boolean = false;
+
   //attachmentName = this.desginForm.get('attachments').value;
 
   options: CameraOptions = {
@@ -142,6 +144,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   fieldDisabled = false;
   userdata: any;
 
+isArchitecturalFileUpload: boolean = false;
   attachmentFileUpload: boolean= false;
   imageurls: any=[];
   arcFileUrl: any=[];
@@ -280,41 +283,41 @@ export class DesignComponent implements OnInit, OnDestroy {
 
 
 
- //Move to Next slide
- slideNext(object, slideView) {
-  slideView.slideNext(500).then(() => {
+  //Move to Next slide
+  slideNext(object, slideView) {
+    slideView.slideNext(500).then(() => {
+      this.checkIfNavDisabled(object, slideView);
+    });
+  }
+
+  //Move to previous slide
+  slidePrev(object, slideView) {
+    slideView.slidePrev(500).then(() => {
+      this.checkIfNavDisabled(object, slideView);
+    });;
+  }
+
+  //Method called when slide is changed by drag or navigation
+  SlideDidChange(object, slideView) {
     this.checkIfNavDisabled(object, slideView);
-  });
-}
+  }
 
-//Move to previous slide
-slidePrev(object, slideView) {
-  slideView.slidePrev(500).then(() => {
-    this.checkIfNavDisabled(object, slideView);
-  });;
-}
+  //Call methods to check if slide is first or last to enable disbale navigation
+  checkIfNavDisabled(object, slideView) {
+    this.checkisBeginning(object, slideView);
+    this.checkisEnd(object, slideView);
+  }
 
-//Method called when slide is changed by drag or navigation
-SlideDidChange(object, slideView) {
-  this.checkIfNavDisabled(object, slideView);
-}
-
-//Call methods to check if slide is first or last to enable disbale navigation
-checkIfNavDisabled(object, slideView) {
-  this.checkisBeginning(object, slideView);
-  this.checkisEnd(object, slideView);
-}
-
-checkisBeginning(object, slideView) {
-  slideView.isBeginning().then((istrue) => {
-    object.isBeginningSlide = istrue;
-  });
-}
-checkisEnd(object, slideView) {
-  slideView.isEnd().then((istrue) => {
-    object.isEndSlide = istrue;
-  });
-}
+  checkisBeginning(object, slideView) {
+    slideView.isBeginning().then((istrue) => {
+      object.isBeginningSlide = istrue;
+    });
+  }
+  checkisEnd(object, slideView) {
+    slideView.isEnd().then((istrue) => {
+      object.isEndSlide = istrue;
+    });
+  }
 
 
   // getmodulename(event){
@@ -713,21 +716,21 @@ checkisEnd(object, slideView) {
   }
 
   remove(arc, i) {
-//   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-//     this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
-//   this.utils.hideLoading().then(()=>{
-//     this.utils.showSnackBar('File deleted successfully');
-//     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
-//     //this.utils.setHomepageDesignRefresh(true);
-//   });
-//   },
-// (error)=>{
-//   this.utils.hideLoading().then(()=> {
-//     this.utils.errorSnackBar('some Error Occured');
-//   });
+    //   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+    //     this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+    //   this.utils.hideLoading().then(()=>{
+    //     this.utils.showSnackBar('File deleted successfully');
+    //     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
+    //     //this.utils.setHomepageDesignRefresh(true);
+    //   });
+    //   },
+    // (error)=>{
+    //   this.utils.hideLoading().then(()=> {
+    //     this.utils.errorSnackBar('some Error Occured');
+    //   });
 
-// });
-// });
+    // });
+    // });
     console.log(arc);
     this.indexOfArcFiles.push(arc.id);
 
@@ -737,20 +740,21 @@ checkisEnd(object, slideView) {
     console.log(this.architecturalData);
 
     this.architecturalData.splice(i, 1);
-
+    this.deleteArcFile(this.indexOfArcFiles);
   }
 
   removeattachment(attachment, i) {
 
-    this.indexOfArcFiles.push(attachment.id);
+    this.indexOfAttachmentFile.push(attachment.id);
 
     this.isArcFileDelete = true;
     console.log(this.isArcFileDelete);
-    console.log(this.indexOfArcFiles);
+    console.log(this.indexOfAttachmentFile);
     console.log(this.attachmentData);
     console.log(i);
 
     this.attachmentData.splice(i, 1);
+    this.deleteAttachmentFile(this.indexOfAttachmentFile)
   }
 
   deleteArcFile(index) {
@@ -759,9 +763,11 @@ checkisEnd(object, slideView) {
     // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
     for (var i = 0; i < index.length; i++) {
       var id = index[i];
-      this.apiService.deletePrelimImage(id).subscribe(res => {
-        console.log("hello", res)
-
+      this.utils.showLoading("Deleting Architectural File").then(() => {
+        this.apiService.deletePrelimImage(id).subscribe(res => {
+          console.log("hello", res)
+          this.indexOfArcFiles = []
+        })
       });
 
       // this.utils.hideLoading().then(()=>{
@@ -778,10 +784,34 @@ checkisEnd(object, slideView) {
       }
     }
 
-// });
+    // });
     //this.utils.setHomepageDesignRefresh(true);
 
 
+  }
+
+  deleteAttachmentFile(index) {
+
+    // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+    for (var i = 0; i < index.length; i++) {
+
+      var id = index[i];
+      this.utils.showLoading("Deleting Attachment File").then(() => {
+        this.apiService.deletePrelimImage(id).subscribe(res => {
+          this.utils.hideLoading().then(() => {
+            console.log("hello", res)
+            this.indexOfAttachmentFile = []
+          });
+        })
+      });
+      (error) => {
+        this.utils.hideLoading().then(() => {
+          this.utils.errorSnackBar('some Error Occured');
+        });
+      }
+    }
+
+    // })
   }
 
   addForm() {
@@ -816,12 +846,14 @@ checkisEnd(object, slideView) {
               this.utils.hideLoading().then(() => {
                 if (newConstruction == 'true') {
                   // if(this.architecturalFileUpload){
-                  this.uploaarchitecturedesign(response, 'architecturaldesign');
+                  this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                   // }
-                } else {
+                }
+                else {
                   if (this.attachmentFileUpload) {
-                    this.uploadpreliumdesign(response, 'attachments')
-                  } else {
+                    this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0)
+                  }
+                  else {
                     this.router.navigate(['/homepage/design'])
                     // this.utils.showSnackBar('Design have been saved');
                     this.utils.setHomepageDesignRefresh(true);
@@ -851,33 +883,33 @@ checkisEnd(object, slideView) {
           });
         } else if (this.send === ScheduleFormEvent.SEND_DESIGN_FORM) {
           this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
-              console.log(response.id);
-              this.utils.hideLoading().then(() => {
-                if (newConstruction == 'true') {
-                  this.uploaarchitecturedesign(response, 'architecturaldesign');
+            console.log(response.id);
+            this.utils.hideLoading().then(() => {
+              if (newConstruction == 'true') {
+                this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+              } else {
+                if (this.attachmentFileUpload) {
+                  this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0)
                 } else {
-                  if (this.attachmentFileUpload) {
-                    this.uploadpreliumdesign(response, 'attachments')
-                  } else {
-                    let objToSend: NavigationExtras = {
-                      queryParams: {
-                        id: response.id,
-                        designData: "prelim",
-                        fulldesigndata: response,
-                        designType: "siteassesment"
-                      },
-                      skipLocationChange: false,
-                      fragment: 'top'
-                    };
+                  let objToSend: NavigationExtras = {
+                    queryParams: {
+                      id: response.id,
+                      designData: "prelim",
+                      fulldesigndata: response,
+                      designType: "siteassesment"
+                    },
+                    skipLocationChange: false,
+                    fragment: 'top'
+                  };
 
 
-                    this.router.navigate(['/payment-modal'], {
-                      state: {productdetails: objToSend}
-                    });
-                  }
+                  this.router.navigate(['/payment-modal'], {
+                    state: { productdetails: objToSend }
+                  });
                 }
-              })
-            }
+              }
+            })
+          }
             , responseError => {
               this.utils.hideLoading();
               const error: ErrorModel = responseError.error;
@@ -890,24 +922,23 @@ checkisEnd(object, slideView) {
         if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
           this.utils.showLoading('Saving').then(() => {
             this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
-                this.utils.hideLoading().then(() => {
-                  if (newConstruction == 'true') {
-                    this.uploaarchitecturedesign(response, 'architecturaldesign');
-                  } else {
-                    if (this.attachmentFileUpload) {
-                      this.uploadpreliumdesign(response, 'attachments')
-                    } else {
-                      this.utils.showSnackBar('Design have been updated');
-                      this.utils.setDesignDetailsRefresh(true);
-                      this.navController.pop();
-                    }
+              this.utils.hideLoading().then(() => {
+                if (newConstruction == 'true') {
+                  this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+                }
+                else {
+                  if (this.attachmentFileUpload) {
+                    this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0)
                   }
-                  if (this.isArcFileDelete) {
-                    this.deleteArcFile(this.indexOfArcFiles);
+                  else {
+                    this.utils.showSnackBar('Design have been updated');
+                    this.utils.setDesignDetailsRefresh(true);
+                    this.navController.pop();
                   }
+                }
 
-                });
-              },
+              });
+            },
               responseError => {
                 this.utils.hideLoading().then(() => {
                   const error: ErrorModel = responseError.error;
@@ -920,11 +951,13 @@ checkisEnd(object, slideView) {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(() => {
               if (newConstruction == 'true') {
-                this.uploaarchitecturedesign(response, 'architecturaldesign');
-              } else {
+                this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+              }
+              else {
                 if (this.attachmentFileUpload) {
-                  this.uploadpreliumdesign(response, 'attachments');
-                } else {
+                  this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0);
+                }
+                else {
                   let objToSend: NavigationExtras = {
                     queryParams: {
                       id: response.id,
@@ -937,35 +970,35 @@ checkisEnd(object, slideView) {
 
 
                   this.router.navigate(['/payment-modal'], {
-                    state: {productdetails: objToSend}
+                    state: { productdetails: objToSend }
                   });
                 }
               }
-              if (this.isArcFileDelete) {
-                console.log("hello");
-                this.deleteArcFile(this.indexOfArcFiles);
-              }
-              // this.utils.hideLoading().then(() => {
-              //   console.log('Res', response);
-              //   this.value=response.id;
+            })
+            // this.utils.hideLoading().then(() => {
+            //   console.log('Res', response);
+            //   this.value=response.id;
 
-              //   this.utils.showSnackBar('Design have been updated');
-              //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
+            //   this.utils.showSnackBar('Design have been updated');
+            //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
+
+            //   this.utils.showSnackBar('Design have been updated');
+            //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
 
 
-            });
-          }, responseError => {
+          });
+          responseError => {
             this.utils.hideLoading().then(() => {
               const error: ErrorModel = responseError.error;
               this.utils.errorSnackBar(error.message[0].messages[0].message);
             });
 
-          });
+          }
         }
       }
+    }
 
-
-    } else {
+    else {
       if (this.desginForm.value.name == '' || this.desginForm.get('name').hasError('pattern')) {
 
         this.utils.errorSnackBar('Please check the field name.');
@@ -1138,6 +1171,7 @@ checkisEnd(object, slideView) {
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
+    this.isArchitecturalFileUpload = true;
     console.log(this.archFiles);
   }
 
@@ -1149,10 +1183,10 @@ checkisEnd(object, slideView) {
       this.prelimFiles.push(event.target.files[i])
       var reader = new FileReader();
       reader.onload = (e: any) => {
-        if(event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')){
+        if (event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')) {
           // console.log(event.target.files[i].name);
           this.imageurls.push(e.target.result);
-        }else{
+        } else {
           this.imageurls.push('/assets/icon/file.png');
         }
         console.log(this.imageurls)
@@ -1174,34 +1208,109 @@ checkisEnd(object, slideView) {
   }
 
 
-  uploaarchitecturedesign(response?: any, key?: string) {
-    console.log(this.archFiles);
-    const imageData = new FormData();
-    for (var i = 0; i < this.archFiles.length; i++) {
-      imageData.append("files", this.archFiles[i]);
-      if (i == 0) {
-        imageData.append('path', 'designs/' + response.id);
-        imageData.append('refId', response.id + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-      }
+  uploaarchitecturedesign(response?: any, key?: string, fileObj?: string, index?: number) {
+    //  console.log(this.archFiles);
+
+    if (!this.isArchitecturalFileUpload) {
+      this.uploadpreliumdesign(response, key, this.prelimFiles[0], 0);
     }
-    this.utils.showLoading("Architectural File Uploading").then(() => {
+    else {
+      console.log(fileObj)
+      const imageData = new FormData();
+      //for(var i=0; i< this.archFiles.length;i++){
+      imageData.append("files", fileObj);
+      // if(i ==0){
+      imageData.append('path', 'designs/' + response.id);
+      imageData.append('refId', response.id + '');
+      imageData.append('ref', 'design');
+      imageData.append('field', key);
+      // }
+      // }
+      this.utils.showLoading("Uploading architecture" + " " + (index + 1) + " of" + " " + this.archFiles.length).then(() => {
+        this.apiService.uploaddesign(imageData).subscribe(res => {
+          console.log(res);
+          if (index < this.archFiles.length - 1) {
+            console.log("if")
+            this.utils.hideLoading();
+            var newIndex = index + 1;
+            this.uploaarchitecturedesign(response, key, this.archFiles[newIndex], newIndex);
+          } else {
+            this.utils.hideLoading();
+            if (this.attachmentFileUpload) {
+              this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0);
+            }
+            else {
+              if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
+                this.router.navigate(['/homepage/design'])
+                if (this.designId == 0) {
+                  this.utils.showSnackBar('Design have been saved');
+                }
+                else {
+                  this.utils.showSnackBar('Design have been updated')
+                }
+                this.utils.setHomepageDesignRefresh(true);
+              }
+              else {
+                let objToSend: NavigationExtras = {
+                  queryParams: {
+                    id: response.id,
+                    designData: "prelim",
+                    fulldesigndata: response
+                  },
+                  skipLocationChange: false,
+                  fragment: 'top'
+                };
+
+
+                this.router.navigate(['/payment-modal'], {
+                  state: { productdetails: objToSend }
+                });
+              }
+            }
+          }
+        })
+      }, responseError => {
+        this.utils.hideLoading();
+        const error: ErrorModel = responseError.error;
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
+      })
+
+    }
+  }
+
+  uploadpreliumdesign(response?: any, key?: string, fileObj?: string, index?: number) {
+    console.log(this.prelimFiles);
+    const imageData = new FormData();
+    // for(var i=0; i< this.prelimFiles.length;i++){
+    imageData.append("files", fileObj);
+    // if(i ==0){
+    imageData.append('path', 'designs/' + response.id);
+    imageData.append('refId', response.id + '');
+    imageData.append('ref', 'design');
+    imageData.append('field', key);
+    //}
+    // }
+    this.utils.showLoading("Uploading attachment" + " " + (index + 1) + " of" + " " + this.prelimFiles.length).then(() => {
       this.apiService.uploaddesign(imageData).subscribe(res => {
         console.log(res);
-        this.utils.hideLoading();
-        if (this.attachmentFileUpload) {
-          this.uploadpreliumdesign(response, 'attachments');
+        if (index < this.prelimFiles.length - 1) {
+          console.log("if")
+          this.utils.hideLoading();
+          var newIndex = index + 1;
+          this.uploadpreliumdesign(response, key, this.prelimFiles[newIndex], newIndex);
         } else {
+          this.utils.hideLoading();
           if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
             this.router.navigate(['/homepage/design'])
             if (this.designId == 0) {
               this.utils.showSnackBar('Design have been saved');
-            } else {
-              this.utils.showSnackBar('Design have been updated')
+            }
+            else {
+              this.utils.showSnackBar('Design have been updated');
             }
             this.utils.setHomepageDesignRefresh(true);
-          } else {
+          }
+          else {
             let objToSend: NavigationExtras = {
               queryParams: {
                 id: response.id,
@@ -1214,61 +1323,10 @@ checkisEnd(object, slideView) {
 
 
             this.router.navigate(['/payment-modal'], {
-              state: {productdetails: objToSend}
+              state: { productdetails: objToSend }
             });
           }
         }
-      }, responseError => {
-        this.utils.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utils.errorSnackBar(error.message[0].messages[0].message);
-      })
-    })
-
-
-  }
-
-  uploadpreliumdesign(response?: any, key?: string, filearray?: File[]) {
-    console.log(this.prelimFiles);
-    const imageData = new FormData();
-    for (var i = 0; i < this.prelimFiles.length; i++) {
-      imageData.append("files", this.prelimFiles[i]);
-      if (i == 0) {
-        imageData.append('path', 'designs/' + response.id);
-        imageData.append('refId', response.id + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-      }
-    }
-    this.utils.showLoading("Attachment File Uploading").then(() => {
-      this.apiService.uploaddesign(imageData).subscribe(res => {
-        console.log(res);
-        this.utils.hideLoading();
-        if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
-          this.router.navigate(['/homepage/design'])
-          if (this.designId == 0) {
-            this.utils.showSnackBar('Design have been saved');
-          } else {
-            this.utils.showSnackBar('Design have been updated');
-          }
-          this.utils.setHomepageDesignRefresh(true);
-        } else {
-          let objToSend: NavigationExtras = {
-            queryParams: {
-              id: response.id,
-              designData: "prelim",
-              fulldesigndata: response
-            },
-            skipLocationChange: false,
-            fragment: 'top'
-          };
-
-
-          this.router.navigate(['/payment-modal'], {
-            state: {productdetails: objToSend}
-          });
-        }
-
       }, responseError => {
         this.utils.hideLoading();
         //this.utils.hideUploadingLoading();
@@ -1298,7 +1356,7 @@ checkisEnd(object, slideView) {
   }
 
   removePrelim(i) {
-    console.log(i,this.prelimFiles,this.prelimFiles.length)
+    console.log(i, this.prelimFiles, this.prelimFiles.length)
     this.imageurls.splice(i, 1);
     this.prelimFiles.splice(i, 1);
   }
@@ -1346,7 +1404,7 @@ checkisEnd(object, slideView) {
 
 
       this.router.navigate(['/payment-modal'], {
-        state: {productdetails: objToSend}
+        state: { productdetails: objToSend }
       });
     } else {
       if (this.desginForm.value.name == '' || this.desginForm.get('name').hasError('pattern')) {
@@ -1407,14 +1465,14 @@ checkisEnd(object, slideView) {
 
   gettingClients() {
     this.apiService.getClients().subscribe(res => {
-        this.getCompanies = res;
-        console.log(this.getCompanies);
-        this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
-          startWith(""),
-          map(value => (typeof value === "string" ? value : value.companyid)),
-          map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
-        );
-      },
+      this.getCompanies = res;
+      console.log(this.getCompanies);
+      this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
+        startWith(""),
+        map(value => (typeof value === "string" ? value : value.companyid)),
+        map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
+      );
+    },
       error => {
         // this.utils.errorSnackBar("Error");
       }

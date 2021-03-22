@@ -1,10 +1,10 @@
-import {ChangeDetectorRef, Component, NgZone, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
-import {NavController, Platform, ToastController} from '@ionic/angular';
-import {Observable, Subscription} from 'rxjs';
-import {ApiService} from '../api.service';
-import {AssigneeModel} from '../model/assignee.model';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { NavController, Platform, ToastController } from '@ionic/angular';
+import { Observable, Subscription } from 'rxjs';
+import { ApiService } from '../api.service';
+import { AssigneeModel } from '../model/assignee.model';
 import {
   FIELD_REQUIRED,
   INVALID_ANNUAL_UNIT,
@@ -17,23 +17,24 @@ import {
   ScheduleFormEvent,
   INVALID_ADDRESS
 } from '../model/constants';
-import {DesginDataModel} from '../model/design.model';
-import {Invertermake} from '../model/inverter-made.model';
-import {InverterMakeModel} from '../model/inverter-make.model';
-import {Modulemake} from '../model/solar-made.model';
-import {SolarMake} from '../model/solar-make.model';
-import {StorageService} from '../storage.service';
-import {UtilitiesService} from '../utilities.service';
-import {map, startWith} from "rxjs/operators";
-import {ErrorModel} from '../model/error.model';
-import {NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult} from '@ionic-native/native-geocoder/ngx';
-import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {AddressModel} from '../model/address.model';
-import {Diagnostic} from '@ionic-native/diagnostic/ngx';
-import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
-import {NetworkdetectService} from '../networkdetect.service';
-import {Clients} from '../model/clients.model';
-import {MixpanelService} from '../utilities/mixpanel.service';
+import { DesginDataModel } from '../model/design.model';
+import { Invertermake } from '../model/inverter-made.model';
+import { InverterMakeModel } from '../model/inverter-make.model';
+import { Modulemake } from '../model/solar-made.model';
+import { SolarMake } from '../model/solar-make.model';
+import { StorageService } from '../storage.service';
+import { UtilitiesService } from '../utilities.service';
+import { map, startWith } from "rxjs/operators";
+import { ErrorModel } from '../model/error.model';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { AddressModel } from '../model/address.model';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { NetworkdetectService } from '../networkdetect.service';
+import { Clients } from '../model/clients.model';
+import { MixpanelService } from '../utilities/mixpanel.service';
+import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 
@@ -56,11 +57,11 @@ export class PermitschedulePage implements OnInit {
 
   listOfAssignees: AssigneeModel[] = [];
 
-//  listOfSolarMake: SolarMake[] = [];
-//  listOfSolarMade: SolarMadeModel[] = [];
+  //  listOfSolarMake: SolarMake[] = [];
+  //  listOfSolarMade: SolarMadeModel[] = [];
 
-//   listOfInverterMade: InverterMadeModel[] = [];
-//  listOfInverterMake: InverterMakeModel[] = [];
+  //   listOfInverterMade: InverterMadeModel[] = [];
+  //  listOfInverterMake: InverterMakeModel[] = [];
 
   modulemakes: SolarMake[] = [];
   filteredModuleMakes: Observable<SolarMake[]>;
@@ -164,7 +165,7 @@ export class PermitschedulePage implements OnInit {
     private navController: NavController,
     private storage: StorageService,
     private route: ActivatedRoute,
-    private router:Router,
+    private router: Router,
     private nativeGeocoder: NativeGeocoder,
     private diagnostic: Diagnostic,
     private geolocation: Geolocation,
@@ -495,7 +496,7 @@ export class PermitschedulePage implements OnInit {
   }
 
   fetchModuleModelsData(_event: any, make) {
-    this.desginForm.patchValue({modulemodel: " "})
+    this.desginForm.patchValue({ modulemodel: " " })
     if (_event.isUserInput) {
       this.desginForm.get('modulemodel').setValue("");
       if (this.isEditMode) {
@@ -560,7 +561,7 @@ export class PermitschedulePage implements OnInit {
   }
 
   fetchInverterModelsData(_event: any, make) {
-    this.desginForm.patchValue({invertermodel: " "})
+    this.desginForm.patchValue({ invertermodel: " " })
     if (_event.isUserInput) {
       this.desginForm.get('invertermodel').setValue("");
       if (this.isEditMode) {
@@ -982,7 +983,7 @@ export class PermitschedulePage implements OnInit {
               city: this.desginForm.get('city').value,
               postalcode: this.desginForm.get('postalcode').value,
               status: designstatus,
-//attachments: this.desginForm.get('attachments').value,
+              //attachments: this.desginForm.get('attachments').value,
               deliverydate: tomorrow.toISOString(),
               //creatorparentid:this.storage.getParentId()
               creatorparentid: this.desginForm.get('creatorparentid').value,
@@ -1002,11 +1003,11 @@ export class PermitschedulePage implements OnInit {
               this.utils.hideLoading().then(() => {
                 if (newConstruction == 'true') {
                   // if(this.architecturalFileUpload){
-                  this.uploaarchitecturedesign(response, 'architecturaldesign');
+                  this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                   // }
                 } else if (newConstruction == 'false') {
                   if (this.attachmentFileUpload) {
-                    this.uploadAttachmentDesign(response, 'attachments')
+                    this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
                   } else {
                     this.router.navigate(['/permithomepage'])
                     this.utils.showSnackBar('Design have been Created');
@@ -1096,11 +1097,11 @@ export class PermitschedulePage implements OnInit {
               this.value = response.id;
               if (newConstruction == 'true') {
                 // if(this.architecturalFileUpload){
-                this.uploaarchitecturedesign(response, 'architecturaldesign');
+                this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                 // }
               } else if (newConstruction == 'false') {
                 if (this.attachmentFileUpload) {
-                  this.uploadAttachmentDesign(response, 'attachments')
+                  this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
                 } else {
                   let objToSend: NavigationExtras = {
                     queryParams: {
@@ -1114,7 +1115,7 @@ export class PermitschedulePage implements OnInit {
 
 
                   this.router.navigate(['/payment-modal'], {
-                    state: {productdetails: objToSend}
+                    state: { productdetails: objToSend }
                   });
                 }
               }
@@ -1164,6 +1165,7 @@ export class PermitschedulePage implements OnInit {
 
       } else {
         if (this.formValue === 'save') {
+          console.log("hello edit")
           this.utils.showLoading('Saving').then(() => {
             var data = {
               name: this.desginForm.get('name').value,
@@ -1207,42 +1209,45 @@ export class PermitschedulePage implements OnInit {
 
             }
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
-                // if(this.architecturalFileUpload){
-                //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
-                // }
-                // if(this.attachmentFileUpload){
-                //   this.uploadAttachmentDesign(response.id,'attachments')
-                // }
-                this.utils.hideLoading().then(() => {
-                  if (newConstruction == 'true') {
-                    // if(this.architecturalFileUpload){
-                    this.uploaarchitecturedesign(response, 'architecturaldesign');
-                    // }
-                  } else if (newConstruction == 'false') {
-                    if (this.attachmentFileUpload) {
-                      this.uploadAttachmentDesign(response, 'attachments')
-                    } else {
-                      this.router.navigate(['/permithomepage'])
-                      this.utils.showSnackBar('Design have been Created');
-                      // this.utils.showSnackBar('Design have been saved');
-                      this.utils.setHomepagePermitRefresh(true);
-                    }
-                  }
-                  // if(this.isArcFileDelete){
-                  //   this.deleteArcFile(this.indexOfArcFiles);
+              // if(this.architecturalFileUpload){
+              //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+              // }
+              // if(this.attachmentFileUpload){
+              //   this.uploadAttachmentDesign(response.id,'attachments')
+              // }
+              this.utils.hideLoading().then(() => {
+                if (newConstruction == 'true') {
+                  // if(this.architecturalFileUpload){
+                  console.log("hello")
+                  this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                   // }
+                } else if (newConstruction == 'false') {
+                  if (this.attachmentFileUpload) {
+                    console.log("edit")
+                    console.log(this.permitFiles[0])
+                    this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
+                  } else {
+                    this.router.navigate(['/permithomepage'])
+                    this.utils.showSnackBar('Design have been Created');
+                    // this.utils.showSnackBar('Design have been saved');
+                    this.utils.setHomepagePermitRefresh(true);
+                  }
+                }
+                // if(this.isArcFileDelete){
+                //   this.deleteArcFile(this.indexOfArcFiles);
+                // }
 
-                  // this.utils.hideLoading().then(() => {
-                  //   console.log('Res', response);
-                  //   this.utils.showSnackBar('Design have been updated');
-                  //   if(!this.isArcFileDelete){
-                  //     this.utils.setPermitDesignDetailsRefresh(true);
-                  //   }
-                  //   //this.navController.pop();
-                  //   // this.router.navigate(['/permit-design-details/',this.designId])
+                // this.utils.hideLoading().then(() => {
+                //   console.log('Res', response);
+                //   this.utils.showSnackBar('Design have been updated');
+                //   if(!this.isArcFileDelete){
+                //     this.utils.setPermitDesignDetailsRefresh(true);
+                //   }
+                //   //this.navController.pop();
+                //   // this.router.navigate(['/permit-design-details/',this.designId])
 
-                });
-              },
+              });
+            },
               responseError => {
                 this.utils.hideLoading().then(() => {
                   const error: ErrorModel = responseError.error;
@@ -1294,80 +1299,116 @@ export class PermitschedulePage implements OnInit {
 
           }
           this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
-              // if(this.architecturalFileUpload){
-              //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
-              // }
-              // if(this.attachmentFileUpload){
-              //   this.uploadAttachmentDesign(response.id,'attachments')
-              // }
-              this.utils.hideLoading().then(() => {
-                this.value = response.id;
-                if (newConstruction == 'true') {
-                  // if(this.architecturalFileUpload){
-                  this.uploaarchitecturedesign(response, 'architecturaldesign');
-                  // }
-                } else if (newConstruction == 'false') {
-                  if (this.attachmentFileUpload) {
-                    this.uploadAttachmentDesign(response, 'attachments')
-                  } else {
-                    let objToSend: NavigationExtras = {
-                      queryParams: {
-                        id: response.id,
-                        designData: "permit",
-                        fulldesigndata: response
-                      },
-                      skipLocationChange: false,
-                      fragment: 'top'
-                    };
-
-
-                    this.router.navigate(['/payment-modal'], {
-                      state: {productdetails: objToSend}
-                    });
-                  }
-                }
-                // if(this.isArcFileDelete){
-                //   console.log("hello");
-                //   this.deleteArcFile(this.indexOfArcFiles);
+            // if(this.architecturalFileUpload){
+            //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+            // }
+            // if(this.attachmentFileUpload){
+            //   this.uploadAttachmentDesign(response.id,'attachments')
+            // }
+            this.utils.hideLoading().then(() => {
+              this.value = response.id;
+              if (newConstruction == 'true') {
+                // if(this.architecturalFileUpload){
+                this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                 // }
-                //       this.utils.hideLoading().then(() => {
-                //         console.log('Res', response);
+              } else if (newConstruction == 'false') {
+                if (this.attachmentFileUpload) {
+                  this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
+                } else {
+                  let objToSend: NavigationExtras = {
+                    queryParams: {
+                      id: response.id,
+                      designData: "permit",
+                      fulldesigndata: response
+                    },
+                    skipLocationChange: false,
+                    fragment: 'top'
+                  };
 
-                //         this.utils.showSnackBar('Design have been updated');
-                //        // this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
-                //        let objToSend: NavigationExtras = {
-                //         queryParams: {
-                //           id:response.id,
-                //           designData:"permit",
-                //           fulldesigndata:response
-                //         },
-                //         skipLocationChange: false,
-                //         fragment: 'top'
-                //     };
+
+                }
+                this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
+                  // if(this.architecturalFileUpload){
+                  //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                  // }
+                  // if(this.attachmentFileUpload){
+                  //   this.uploadAttachmentDesign(response.id,'attachments')
+                  // }
+                  this.utils.hideLoading().then(() => {
+                    this.value = response.id;
+                    if (newConstruction == 'true') {
+                      // if(this.architecturalFileUpload){
+                      this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+                      // }
+                    }
+                    else if (newConstruction == 'false') {
+                      if (this.attachmentFileUpload) {
+                        this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
+                      }
+
+                      else {
+                        let objToSend: NavigationExtras = {
+                          queryParams: {
+                            id: response.id,
+                            designData: "permit",
+                            fulldesigndata: response
+                          },
+                          skipLocationChange: false,
+                          fragment: 'top'
+                        };
 
 
-                // this.router.navigate(['/payment-modal'], {
-                //   state: { productdetails: objToSend }
-                // });
+                        this.router.navigate(['/payment-modal'], {
+                          state: { productdetails: objToSend }
+                        });
+                      }
+                    }
+                    // if(this.isArcFileDelete){
+                    //   console.log("hello");
+                    //   this.deleteArcFile(this.indexOfArcFiles);
+                    // }
+                    //       this.utils.hideLoading().then(() => {
+                    //         console.log('Res', response);
 
-              });
-            },
-            responseError => {
-              this.utils.hideLoading().then(() => {
-                const error: ErrorModel = responseError.error;
-                this.utils.errorSnackBar(error.message[0].messages[0].message);
-              });
-              //
-            });
+                    //         this.utils.showSnackBar('Design have been updated');
+                    //        // this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
+                    //        let objToSend: NavigationExtras = {
+                    //         queryParams: {
+                    //           id:response.id,
+                    //           designData:"permit",
+                    //           fulldesigndata:response
+                    //         },
+                    //         skipLocationChange: false,
+                    //         fragment: 'top'
+                    //     };
 
+
+                    // this.router.navigate(['/payment-modal'], {
+                    //   state: { productdetails: objToSend }
+                    // });
+
+                  });
+                },
+                  responseError => {
+                    this.utils.hideLoading().then(() => {
+                      const error: ErrorModel = responseError.error;
+                      this.utils.errorSnackBar(error.message[0].messages[0].message);
+                    });
+                    //
+                  });
+
+              }
+            })
+
+
+          });
         }
       }
-
-
     } else {
       this.error();
     }
   }
+
 
   error() {
     // if(this.desginForm.value.name == '' || this.desginForm.get('companyname').hasError('pattern'))
@@ -1458,25 +1499,100 @@ export class PermitschedulePage implements OnInit {
 
   }
 
-  uploaarchitecturedesign(response?: any, key?: string) {
+  uploaarchitecturedesign(response?: any, key?: string, fileObj?: File, index?: number) {
     // console.log(this.archFiles);
-    const imageData = new FormData();
-    for (var i = 0; i < this.archFiles.length; i++) {
-      imageData.append("files", this.archFiles[i]);
-      if (i == 0) {
-        imageData.append('path', 'designs/' + response.id);
-        imageData.append('refId', response.id + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-      }
+    if (!this.architecturalFileUpload) {
+      this.uploadAttachmentDesign(response, key, this.permitFiles[0], 0)
     }
-    this.utils.showLoading("Architectural File Uploading...").then(() => {
+    else {
+      console.log(fileObj)
+      const imageData = new FormData();
+      // for(var i=0; i< this.archFiles.length;i++){
+      imageData.append("files", fileObj);
+      // if(i ==0){
+      imageData.append('path', 'designs/' + response.id);
+      imageData.append('refId', response.id + '');
+      imageData.append('ref', 'design');
+      imageData.append('field', key);
+      // }
+      // }
+      this.utils.showLoading("Uploading architecture" + " " + (index + 1) + " of" + " " + this.archFiles.length).then(() => {
+        this.apiService.uploaddesign(imageData).subscribe(res => {
+          console.log(res);
+          if (index < this.archFiles.length - 1) {
+            console.log("if")
+            this.utils.hideLoading();
+            var newIndex = index + 1;
+            this.uploaarchitecturedesign(response, key, this.archFiles[newIndex], newIndex);
+          } else {
+            this.utils.hideLoading();
+            if (this.attachmentFileUpload) {
+              this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0);
+            }
+            else {
+              if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
+                if (this.designId == 0) {
+                  this.router.navigate(['/permithomepage'])
+                  this.utils.showSnackBar('Design have been Created');
+                  // this.utils.showSnackBar('Design have been saved');
+                  this.utils.setHomepagePermitRefresh(true);
+                }
+                else {
+                  this.router.navigate(['/permithomepage'])
+                  this.utils.showSnackBar('Design have been updated');
+                  this.utils.setHomepagePermitRefresh(true);
+                }
+              } else {
+                let objToSend: NavigationExtras = {
+                  queryParams: {
+                    id: response.id,
+                    designData: "permit",
+                    fulldesigndata: response
+                  },
+                  skipLocationChange: false,
+                  fragment: 'top'
+                };
+
+
+                this.router.navigate(['/payment-modal'], {
+                  state: { productdetails: objToSend }
+                });
+              }
+            }
+          }
+        }, responseError => {
+          this.utils.hideLoading();
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+        })
+      })
+      // })
+    }
+  }
+
+  uploadAttachmentDesign(response?: any, key?: string, fileObj?: File, index?: number) {
+    console.log(this.permitFiles);
+    console.log(fileObj)
+    const imageData = new FormData();
+    // for(var i=0; i< this.permitFiles.length;i++){
+    imageData.append("files", fileObj);
+    //  if(i ==0){
+    imageData.append('path', 'designs/' + response.id);
+    imageData.append('refId', response.id + '');
+    imageData.append('ref', 'design');
+    imageData.append('field', key);
+    //   }
+    // }
+    this.utils.showLoading("Uploading attachment" + " " + (index + 1) + " of" + " " + this.permitFiles.length).then(() => {
       this.apiService.uploaddesign(imageData).subscribe(res => {
         console.log(res);
-        this.utils.hideLoading();
-        if (this.attachmentFileUpload) {
-          this.uploadAttachmentDesign(response, 'attachments')
+        if (index < this.permitFiles.length - 1) {
+          console.log("if")
+          this.utils.hideLoading();
+          var newIndex = index + 1;
+          this.uploadAttachmentDesign(response, key, this.permitFiles[newIndex], newIndex);
         } else {
+          this.utils.hideLoading();
           if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
             if (this.designId == 0) {
               this.router.navigate(['/permithomepage'])
@@ -1501,62 +1617,9 @@ export class PermitschedulePage implements OnInit {
 
 
             this.router.navigate(['/payment-modal'], {
-              state: {productdetails: objToSend}
+              state: { productdetails: objToSend }
             });
           }
-        }
-
-      }, responseError => {
-        this.utils.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utils.errorSnackBar(error.message[0].messages[0].message);
-      })
-    })
-
-  }
-
-  uploadAttachmentDesign(response?: any, key?: string, filearray?: File[]) {
-    console.log(this.permitFiles);
-    const imageData = new FormData();
-    for (var i = 0; i < this.permitFiles.length; i++) {
-      imageData.append("files", this.permitFiles[i]);
-      if (i == 0) {
-        imageData.append('path', 'designs/' + response.id);
-        imageData.append('refId', response.id + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-      }
-    }
-    this.utils.showLoading("Attachment File Uploading").then(() => {
-      this.apiService.uploaddesign(imageData).subscribe(res => {
-        console.log(res);
-        this.utils.hideLoading();
-        if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
-          if (this.designId == 0) {
-            this.router.navigate(['/permithomepage'])
-            this.utils.showSnackBar('Design have been Created');
-            // this.utils.showSnackBar('Design have been saved');
-            this.utils.setHomepagePermitRefresh(true);
-          } else {
-            this.router.navigate(['/permithomepage'])
-            this.utils.showSnackBar('Design have been updated');
-            this.utils.setHomepagePermitRefresh(true);
-          }
-        } else {
-          let objToSend: NavigationExtras = {
-            queryParams: {
-              id: response.id,
-              designData: "permit",
-              fulldesigndata: response
-            },
-            skipLocationChange: false,
-            fragment: 'top'
-          };
-
-
-          this.router.navigate(['/payment-modal'], {
-            state: {productdetails: objToSend}
-          });
         }
       }, responseError => {
         this.utils.hideLoading();
@@ -1971,14 +2034,14 @@ export class PermitschedulePage implements OnInit {
 
   gettingClients() {
     this.apiService.getClients().subscribe(res => {
-        this.getCompanies = res;
-        console.log(this.getCompanies);
-        this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
-          startWith(""),
-          map(value => (typeof value === "string" ? value : value.companyid)),
-          map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
-        );
-      },
+      this.getCompanies = res;
+      console.log(this.getCompanies);
+      this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
+        startWith(""),
+        map(value => (typeof value === "string" ? value : value.companyid)),
+        map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
+      );
+    },
       error => {
         this.utils.errorSnackBar("Error");
       }
