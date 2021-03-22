@@ -130,6 +130,8 @@ export class PermitschedulePage implements OnInit {
   surveydatapresent: boolean = false
 
   solarMakeDisposable: Subscription;
+  imageurls: any=[];
+  arcFileUrl: any=[];
 
   // Geocoder configuration
   geoEncoderOptions: NativeGeocoderOptions = {
@@ -1407,21 +1409,42 @@ export class PermitschedulePage implements OnInit {
   }
 
 
-  files(event) {
-    console.log(event.target.files);
-    for (var i = 0; i < event.target.files.length; i++) {
-      this.archFiles.push(event.target.files[i])
+  files(ev) {
+    console.log(ev.target.files,this.arcFileUrl);
+    for (let i = 0; i < ev.target.files.length; i++) {
+      this.archFiles.push(ev.target.files[i])
+      var reader = new FileReader();
+      reader.onload = (e: any) => {
+        console.log(ev.target.files[i],this.arcFileUrl);
+        if(ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')){
+          this.arcFileUrl.push(e.target.result);
+        }else{
+          this.arcFileUrl.push('/assets/icon/file.png');
+        }
+      }
+      reader.readAsDataURL(ev.target.files[i]);
     }
-    this.architecturalFileUpload = true;
     console.log(this.archFiles);
   }
 
   permitfiles(event) {
-    console.log(event.target.files);
-    for (var i = 0; i < event.target.files.length; i++) {
-      this.permitFiles.push(event.target.files[i])
-    }
+    console.log(event);
+    for(let i=0; i< event.target.files.length;i++){
+      console.log(i);
 
+      this.permitFiles.push(event.target.files[i])
+      var reader = new FileReader();
+      reader.onload = (e: any) => {
+        if(event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')){
+          // console.log(event.target.files[i].name);
+          this.imageurls.push(e.target.result);
+        }else{
+          this.imageurls.push('/assets/icon/file.png');
+        }
+        console.log(this.imageurls)
+      }
+      reader.readAsDataURL(event.target.files[i]);
+    }
     this.attachmentFileUpload = true;
     if (this.permitFiles.length == 1) {
       this.fileName = event.target.files[0].name;
@@ -1432,7 +1455,6 @@ export class PermitschedulePage implements OnInit {
     } else {
       this.fileName = '';
     }
-
 
   }
 
@@ -1552,10 +1574,12 @@ export class PermitschedulePage implements OnInit {
 
   removeArc(i) {
     this.archFiles.splice(i, 1);
+    this.arcFileUrl.splice(i, 1);
   }
 
   removePermit(i) {
     this.permitFiles.splice(i, 1);
+    this.imageurls.splice(i, 1);
   }
 
   remove(arc, i) {
