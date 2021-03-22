@@ -198,8 +198,8 @@ export class UserregistrationPage implements OnInit {
     this.apiService.updateUser(this.user.user.id,postData).subscribe((response:any)=>{
       console.log(response,"jj");
       //this.
-      this.storageService.setUser(response);
-      this.apiService.refreshHeader();
+     // this.storageService.setUser(response);
+     // this.apiService.refreshHeader();
       this.utils.hideLoading();
       this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.")
      // this.login();
