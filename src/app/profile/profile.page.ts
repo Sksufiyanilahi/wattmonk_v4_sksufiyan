@@ -15,6 +15,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Subscription } from 'rxjs';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import { ProfileEditComponent } from './profile-edit/profile-edit.component';
 
 
 @Component({
@@ -299,7 +300,19 @@ state: { productdetails: objToSend }
     }
   }
 
-  profileEdit(){
+  async profileEdit(){
+      const modal = await this.modalController.create({
+        component: ProfileEditComponent,
+        cssClass: 'profie-edit',
+        componentProps: {
+          'firstName': this.user.firstname,
+          'lastName': this.user.lastname,
+          'email': this.user.email,
+          'country':this.user.country,
+          'phone':this.user.phone
+        }
+      });
+      return await modal.present();
+    }
 
-  }
 }
