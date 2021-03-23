@@ -1,0 +1,121 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Edit Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <form [formGroup]="profileEdit" novalidate>
+    <ion-row>
+      <ion-col size="6">
+        <ion-item lines="none">
+          <ion-label position="floating">First Name</ion-label>
+          <ion-input type="text" formControlName="firstName" class="form-control"></ion-input>
+        </ion-item>
+        <div style="height: 5px;">
+          <div *ngIf="profileEdit.get('firstName').hasError('pattern') && profileEdit.get('firstName').dirty">
+              <span class="error">{{firstNameError}}</span>
+          </div>
+          <div *ngIf="profileEdit.get('firstName').value === '' && profileEdit.get('firstName').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item lines="none">
+          <ion-label position="floating">Last Name</ion-label>
+          <ion-input type="text" formControlName="lastName" class="form-control"></ion-input>
+        </ion-item>
+        <div style="height: 5px;">
+          <div *ngIf="profileEdit.get('lastName').hasError('pattern') && profileEdit.get('lastName').dirty">
+              <span class="error">{{lastNameError}}</span>
+          </div>
+          <div *ngIf="profileEdit.get('lastName').value === '' && profileEdit.get('lastName').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none">
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="email" formControlName="email" class="form-control" disabled></ion-input>
+        </ion-item>
+        <div style="height: 5px;">
+          <div *ngIf="profileEdit.get('email').hasError('pattern') && profileEdit.get('email').dirty">
+              <span class="error">{{emailError}}</span>
+          </div>
+          <div *ngIf="profileEdit.get('email').value === '' && profileEdit.get('email').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none">
+          <ion-label position="floating">Address</ion-label>
+          <ion-input type="text" formControlName="address" class="form-control"></ion-input>
+        </ion-item>
+        <div style="height: 5px;">
+          <!-- <div *ngIf="profileEdit.get('email').hasError('pattern') && profileEdit.get('email').dirty">
+              <span class="error">{{emailError}}</span>
+          </div> -->
+          <div *ngIf="profileEdit.get('address').value === '' && profileEdit.get('address').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-item  lines="none">
+          <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
+              <!-- <mat-label></mat-label> -->
+              <input type="text" placeholder="Country*" class="form_input font-size" matInput [matAutocomplete]="auto" autocomplete="off" formControlName="country">
+
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let country of filteredCountries | async" [value]="country.country"
+                (onSelectionChange)="setSelectedCountry(country)" class="font">{{country.country}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+      </ion-item>
+      <!-- <div style="height: 5px;"> -->
+        <div *ngIf="profileEdit.get('country').value === '' && profileEdit.get('country').dirty">
+        <span class="error">{{fieldRequired}}</span>
+    <!-- </div> -->
+    </div>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item lines="none">
+          <ion-label position="floating">Phone</ion-label>
+          <ion-input type="text" formControlName="phone" class="form-control"></ion-input>
+        </ion-item>
+        <div style="height: 5px;">
+          <div *ngIf="profileEdit.get('phone').hasError('pattern') && profileEdit.get('phone').dirty">
+              <span class="error">{{phoneError}}</span>
+          </div>
+          <div *ngIf="profileEdit.get('phone').value === '' && profileEdit.get('phone').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </ion-col>
+    </ion-row>
+    <ion-row style="margin-top: 30px;">
+      <ion-col size="4">
+      </ion-col>
+      <ion-col size="4" >
+        <ion-button color="primary" fill="clear" (click)="dismiss()" style="float:right">
+          Cancel
+        </ion-button>
+      </ion-col>
+      <ion-col size="4" >
+        <ion-button color="primary" fill="clear" (click)="updateProfile()" style="float:right">
+          Submit
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-grid>
+</ion-content>

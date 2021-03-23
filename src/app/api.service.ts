@@ -709,12 +709,17 @@ export class ApiService {
 
      getStatusCount(): Observable<any[]> {
       return this.http.get<any[]>( BaseUrl + "designstatistics?id=" + this.userId, { headers: this.headers })}
-       
+
      registerUser(data){
       return this.http.post(BaseUrl + "auth/local/register",data,{
         headers:this.headers
       }
       )
     }
+
+    editProfile(data,id): Observable<User> {
+      return this.http.put<User>(BaseUrl + 'users/' + id, data, { headers: this.headers });
+    }
+
 }
 

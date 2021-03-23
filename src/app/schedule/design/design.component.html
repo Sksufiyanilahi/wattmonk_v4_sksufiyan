@@ -221,8 +221,8 @@
                 <span class="error">{{fieldRequired}}</span>
             </div>
         </div>
-        
-        
+
+
           <!-- <ion-item *ngIf="autocompleteItems.length === 0" lines="none">
               <ion-label class="ion-text-center">
                   Search for address
@@ -525,7 +525,7 @@
               <!-- <ion-item> -->
               <div>
                 <img
-                  [src]="arc.url"
+                [src]="arc.ext === '.pdf' ? 'assets/icon/file.png' : arc.url "
                   style="height: 10rem; width: 10rem; border: 3px solid black"
                   alt="file"
                 />

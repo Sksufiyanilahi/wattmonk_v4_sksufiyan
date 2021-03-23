@@ -1,7 +1,7 @@
 <ion-app class="safe-area">
   <!-- <ion-router-outlet></ion-router-outlet>-->
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
+    <ion-menu contentId="main-content" type="overlay" (ionWillOpen)="updateMenuState()">
       <ion-content>
         <ion-menu-toggle>
           <ion-header style="text-align: -webkit-center;" mode="md">

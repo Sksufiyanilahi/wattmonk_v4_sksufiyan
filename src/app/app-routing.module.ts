@@ -294,6 +294,10 @@ const routes: Routes = [
     path: 'userregistration',
     loadChildren: () => import('./userregistration/userregistration.module').then( m => m.UserregistrationPageModule)
   },
+  {
+    path: 'profile-edit-modal',
+    loadChildren: () => import('./profile-edit-modal/profile-edit-modal.module').then( m => m.ProfileEditModalPageModule)
+  },
 
 
 ];

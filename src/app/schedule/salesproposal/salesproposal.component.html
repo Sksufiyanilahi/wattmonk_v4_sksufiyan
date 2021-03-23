@@ -66,7 +66,7 @@
               </ion-col>
               <ion-col size="6">
                 <ion-item class="ion-no-padding">
-                    
+
                     <ion-label position="floating">inverters count*</ion-label>
                     <!-- <ion-label style="display: none;">Project Type</ion-label> -->
                     <!-- <ion-label position="floating">project type</ion-label> -->
@@ -115,8 +115,8 @@
                 <span class="error">{{fieldRequired}}</span>
             </div>
         </div>
-        
-        
+
+
           <!-- <ion-item *ngIf="autocompleteItems.length === 0" lines="none">
               <ion-label class="ion-text-center">
                   Search for address
@@ -437,7 +437,7 @@
                                 <ion-col size="1" (click)="removeArc(i)">x</ion-col>
                             </ion-item>
                         </div> -->
-        
+
                     <ion-row>
                       <!-- <ion-col size="1">
                             <span class="slider-nav arrow-prev" (click)="slidePrev(imageurls,slideWithNav2)">
@@ -464,7 +464,7 @@
                                 "
                                 alt="file"
                               />
-        
+
                               <ion-icon
                                 class="remove"
                                 name="close-circle-outline"
@@ -505,7 +505,7 @@
                       <!-- <ion-item> -->
                       <div>
                         <img
-                          [src]="arc.url"
+                        [src]="arc.ext === '.pdf' ? 'assets/icon/file.png' : arc.url "
                           style="height: 10rem; width: 10rem; border: 3px solid black"
                           alt="file"
                         />
@@ -515,7 +515,7 @@
                           (click)="remove(arc, i)"
                         ></ion-icon>
                       </div>
-        
+
                       <!-- </ion-item> -->
                     </ion-slide>
                   </ion-slides>
@@ -608,7 +608,7 @@
           <ion-slide *ngFor="let attach of design?.attachments; let i = index">
             <div>
               <img
-                [src]="attach.url"
+              [src]="attach.ext === '.pdf' ? 'assets/icon/file.png' : attach.url "
                 style="height: 10rem; width: 10rem; border: 3px solid black"
                 alt="file"
               />
