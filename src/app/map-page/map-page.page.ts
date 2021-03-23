@@ -262,4 +262,11 @@ export class MapPagePage implements OnInit {
 
   ionViewWillLeave(){
   }
+
+  // select(item)
+  // {
+  //   console.log("hello")
+  //   this.isSelectFromList = true;
+  //   this.listSelectedAddress = item;
+  // }
 }

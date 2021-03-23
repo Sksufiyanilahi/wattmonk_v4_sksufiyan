@@ -332,4 +332,10 @@ export class AppComponent {
     //     })
     //   });
   }
+
+  updateMenuState(){
+    console.log(">>");
+    this.userData= this.storageService.getUser();
+    // this.apiservice.emitUserNameAndRole(this.userData);
+  }
 }

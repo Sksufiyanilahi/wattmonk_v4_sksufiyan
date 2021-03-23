@@ -93,6 +93,7 @@ this.network.networkConnect();
       });
     }
      this.designs = this.utilities.getdesignDetails();
+     console.log(this.designs)
   //console.log(this.designs.status);
   }
 
@@ -359,14 +360,24 @@ this.network.networkConnect();
   saveDesignForm() {
     console.log('posting value');
     console.log(this.router.url);
-    if(this.router.url=='/schedule/design'){
+    if(this.router.url=='/schedule/design' || this.router.url=='/schedule/design/' + this.designs.id ){
     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
     }
-    else
+    else if(this.router.url=='/schedule/salesproposal' || this.router.url == '/schedule/salesproposal/'+this.designs.id)
     {
       this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SALES_FORM);
     }
   }
+  // else{
+  //   if(this.router.url=='/schedule/design/'+this.designs.id)
+  //   {
+  //     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
+  //   }
+  //   else{
+  //     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SALES_FORM);
+  //   }
+  // }
+  //}
 
   saveSurveyForm() {
     console.log('posting value');
@@ -379,11 +390,12 @@ this.network.networkConnect();
   }
 
   sendDesignForm(){
-    if(this.router.url=='/schedule/design'){
+    if(this.router.url=='/schedule/design' || this.router.url == '/schedule/design/'+this.designs.id){
      this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
   }
-  else{
-    this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_SALES_FORM);
-  }
+  else if(this.router.url=='/schedule/salesproposal' || this.router.url == '/schedule/salesproposal/'+this.designs.id)
+    {
+      this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_SALES_FORM);
+    }
 }
 }

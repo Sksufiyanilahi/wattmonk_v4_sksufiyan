@@ -11,10 +11,11 @@ import { PaymentgatewayPageModule } from '../paymentgateway/paymentgateway.modul
 import { PaymentgatewayPage } from '../paymentgateway/paymentgateway.page';
 import { AddMoneyPage } from '../add-money/add-money.page';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
- 
+
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Subscription } from 'rxjs';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import { ProfileEditModalPage } from '../profile-edit-modal/profile-edit-modal.page';
 
 
 @Component({
@@ -23,7 +24,8 @@ import { MixpanelService } from '../utilities/mixpanel.service';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-
+  getemail:boolean=false;
+  getnotification:boolean=false;
   imageUploadIndex = 1;
   totalImagesToUpload = 0;
   totalSurveys = 0;
@@ -48,11 +50,12 @@ profile:any;
     private route: ActivatedRoute,
     private mixpanelService:MixpanelService
   ) {
-   
+
   }
 
   ngOnInit() {
-   
+
+
     this.user = this.storage.getUser(); // get data from resolver
     console.log(this.user);
     this.mixpanelService.track("PROFILE_PAGE_OPEN", {
@@ -63,11 +66,15 @@ profile:any;
     this.enableDisable= false;
     // this.user = this.storage.getUser();
     // console.log(this.user);
-    this.getProfileData();
+    // this.getProfileData();
 
   }
-  ionViewDidEnter(){
+  ionViewWillEnter(){
+    this.user = this.storage.getUser();
+    console.log(">>>");
+
    this.getProfileData();
+
   }
   goBack() {
     this.mixpanelService.track("PROFILE_PAGE_CLOSE", {
@@ -77,8 +84,11 @@ profile:any;
 
 getProfileData(){
 this.apiService.getProfileDetails().subscribe(res=>{
+
   console.log(res);
   this.profile=res;
+  this.getemail=this.profile.getemail;
+  this.getnotification=this.profile.getnotification;
 })
 this.apiService.getStatusCount().subscribe(
   response => {
@@ -107,11 +117,11 @@ AddWallet()
       mode:'wallet'
     },
     skipLocationChange: false,
-    fragment: 'top' 
+    fragment: 'top'
 };
 
 
-this.router.navigate(['/add-money'], { 
+this.router.navigate(['/add-money'], {
 state: { productdetails: objToSend }
 });
 
@@ -296,7 +306,26 @@ state: { productdetails: objToSend }
     }
   }
 
-  profileEdit(){
-    
-  }
+  async profileEdit(){
+      // const modal = await this.modalController.create({
+      //   component: ProfileEditModalPage,
+      //   cssClass: 'profie-edit',
+      //   componentProps: {
+      //     'user':this.user
+      //   }
+      // });
+      let modal = await this.modalController.create({
+            component: ProfileEditModalPage,
+        cssClass: 'profie-edit',
+        componentProps: {
+          'user':this.user
+        }
+      });
+      modal.onDidDismiss().then(()=>{
+        this.user=this.storage.getUser();
+        this.getProfileData();
+      })
+      return await modal.present();
+    }
+
 }

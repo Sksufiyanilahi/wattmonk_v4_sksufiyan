@@ -58,9 +58,9 @@
                                 </ion-col>
 
                     </span>
-                    <ion-col *ngIf="designData.status=='assigned' || designData.status=='completed' || designData.status=='delivered'" style="font-size: 0.8em;padding-right: 0px;padding-bottom: 18px;">
+                    <!-- <ion-col *ngIf="designData.status=='assigned' || designData.status=='completed' || designData.status=='delivered'" style="font-size: 0.8em;padding-right: 0px;padding-bottom: 18px;">
                       <span style=" float:right"><strong>Assigned to : {{designData.assignedto.firstname | titlecase}} {{designData.assignedto.lastname | titlecase}}</strong></span>
-                      </ion-col>
+                      </ion-col> -->
 
                   <ion-row class="ion-no-margin ion-no-margin" style="margin-bottom: 0px;">
                    <ion-col style="padding-left:0px" >
@@ -74,7 +74,7 @@
                     <ion-col *ngIf="segments=='status=assigned&status=declined'">
                                    <span style="float: right;">
                             <ng-container *ngIf="designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false)" >
-                                <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,'accepted',$event)">
+                                <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,designData,$event)">
                                    Accept
                                 </ion-col>
                                 <ion-col size="4" style="color:#dc6e67;" class="ion-text-end" (click)="decline(designData.id,'pestamp',$event)">

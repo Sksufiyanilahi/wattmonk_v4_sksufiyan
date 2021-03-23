@@ -74,7 +74,7 @@
                         <span *ngIf="item.lateby > 1" class="latebystyle"><strong>Late by {{item.lateby}} days</strong></span>
                         <span *ngIf="item.lateby == 1" class="latebystyle"><strong>Late by a day</strong></span>
             </p>
-                      <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
+                      <a href="tel:{{designData.phonenumber}}" (click)="$event.stopPropogation()" style="text-decoration: none;" class="z-100">
                           <span class="customer-phone">{{designData.phonenumber}}</span></a>
                       <span class="customer-address z-100"
                               (click)="openAddressOnMap(designData.address,$event)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>
@@ -90,13 +90,13 @@
 
 
 
-                      <ion-row class="ion-no-margin ion-no-margin">
+                      <!-- <ion-row class="ion-no-margin ion-no-margin">
                       <ion-col *ngIf="segments=='requesttype=permit&status=delivered'">
                         <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="shareWhatsapp(designData,$event)">
                             <ion-icon name="share-social-outline"></ion-icon></span>&nbsp;
                         <span style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="shareViaEmails(designData.id,designData,$event)">
                             <ion-icon name="mail" ></ion-icon></span>
-                    </ion-col></ion-row>
+                    </ion-col></ion-row> -->
                   <!-- <ion-row class="ion-no-margin ion-no-margin">
                           <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
                               <span *ngIf="designData.status == 'created' || designData.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData)"
