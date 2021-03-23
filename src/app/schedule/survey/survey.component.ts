@@ -150,9 +150,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    if (this.surveyId === 0) {
-      this.addressSubscription.unsubscribe();
-    }
+    // if (this.surveyId === 0) {
+    //   this.addressSubscription.unsubscribe();
+    // }
     // this.utilities.getScheduleFormEvent().unsubscribe();
   }
 

@@ -46,6 +46,12 @@ import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dia
 //   design: DesginDataModel;
 // }
 
+export function getFileReader(): FileReader {
+  const fileReader = new FileReader();
+  const zoneOriginalInstance = (fileReader as any)["__zone_symbol__originalInstance"];
+  return zoneOriginalInstance || fileReader;
+}
+
 @Component({
   selector: 'app-permitschedule',
   templateUrl: './permitschedule.page.html',
@@ -249,6 +255,8 @@ export class PermitschedulePage implements OnInit {
     //   )
 
     this.designId = +this.route.snapshot.paramMap.get('id');
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
+    this.autocompleteItems = [];
 
     // const url = this.router.url;
     //   const splittedUrl = url.split('/');
@@ -1002,10 +1010,12 @@ export class PermitschedulePage implements OnInit {
             this.apiService.addDesginForm(data).subscribe(response => {
               this.utils.hideLoading().then(() => {
                 if (newConstruction == 'true') {
+                  console.log("hello");
                   // if(this.architecturalFileUpload){
                   this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                   // }
                 } else if (newConstruction == 'false') {
+                  console.log("HII")
                   if (this.attachmentFileUpload) {
                     this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
                   } else {
@@ -1454,7 +1464,7 @@ export class PermitschedulePage implements OnInit {
     console.log(ev.target.files,this.arcFileUrl);
     for (let i = 0; i < ev.target.files.length; i++) {
       this.archFiles.push(ev.target.files[i])
-      var reader = new FileReader();
+      let reader = getFileReader();
       reader.onload = (e: any) => {
         console.log(ev.target.files[i],this.arcFileUrl);
         if(ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')){
@@ -1465,6 +1475,7 @@ export class PermitschedulePage implements OnInit {
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
+    this.architecturalFileUpload = true;
     console.log(this.archFiles);
   }
 
@@ -1474,7 +1485,8 @@ export class PermitschedulePage implements OnInit {
       console.log(i);
 
       this.permitFiles.push(event.target.files[i])
-      var reader = new FileReader();
+     // var reader = new FileReader();
+     let reader = getFileReader();
       reader.onload = (e: any) => {
         if(event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')){
           // console.log(event.target.files[i].name);

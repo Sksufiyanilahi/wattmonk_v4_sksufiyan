@@ -13,6 +13,12 @@ import { MatStepper } from '@angular/material/stepper';
 import { ErrorModel } from '../model/error.model';
 //import { Slides } from 'ionic-angular';
 
+export function getFileReader(): FileReader {
+  const fileReader = new FileReader();
+  const zoneOriginalInstance = (fileReader as any)["__zone_symbol__originalInstance"];
+  return zoneOriginalInstance || fileReader;
+}
+
 @Component({
   selector: 'app-onboarding',
   templateUrl: './onboarding.page.html',
@@ -528,7 +534,7 @@ state: { productdetails: objToSend }
     this.fileName= event.target.files[0].name;
     console.log(this.fileName);
 
-    let reader = new FileReader(); // HTML5 FileReader API
+    let reader = getFileReader(); // HTML5 FileReader API
     let file = event.target.files[0];
     if (event.target.files && event.target.files[0]) {
       reader.readAsDataURL(file);

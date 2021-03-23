@@ -78,7 +78,7 @@ ngOnInit() {
 this.network.networkConnect();
 
    this.userdata = this.storage.getUser();
-    this.requestLocationPermission();
+    //this.requestLocationPermission();
     if (this.tabsDisabled) {
       this.subscription = this.utilities.getStaticAddress().subscribe((address) => {
         this.address = address;
