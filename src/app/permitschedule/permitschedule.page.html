@@ -11,9 +11,9 @@
 <!-- <ion-row class="ion-padding-start ion-padding-end mrT"  style="background: #ffffff;">
     <ion-col size="9"  style="background: #ffffff; font-size:small;">
         <p></p>
-        
+
         {{address == "" ? "No Address Found" : address}}
-       
+
     </ion-col>
 
     <ion-col class="ion-text-end" *ngIf="!tabsDisabled" size="3">
@@ -132,7 +132,7 @@
                 </ion-col>
                 <ion-col size="6">
                 <ion-item class="ion-no-padding">
-                    
+
                     <ion-label position="floating">inverters count*</ion-label>
                     <!-- <ion-label style="display: none;">Project Type</ion-label> -->
                     <!-- <ion-label position="floating">project type</ion-label> -->
@@ -181,8 +181,8 @@
                 <span class="error">{{fieldRequired}}</span>
             </div>
         </div>
-        
-        
+
+
           <!-- <ion-item *ngIf="autocompleteItems.length === 0" lines="none">
               <ion-label class="ion-text-center">
                   Search for address
@@ -190,8 +190,8 @@
           </ion-item> -->
             </ion-col>
           </ion-row>
-          
-           
+
+
             <ion-row class="ion-align-items-center ion-justify-content-center">
               <ion-col size="6">
                 <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
@@ -388,7 +388,7 @@
                             <ion-col size="1" (click)="removeArc(i)">x</ion-col>
                         </ion-item>
                     </div> -->
-    
+
                 <ion-row>
                   <!-- <ion-col size="1">
                         <span class="slider-nav arrow-prev" (click)="slidePrev(imageurls,slideWithNav2)">
@@ -415,7 +415,7 @@
                             "
                             alt="file"
                           />
-    
+
                           <ion-icon
                             class="remove"
                             name="close-circle-outline"
@@ -456,7 +456,7 @@
                   <!-- <ion-item> -->
                   <div>
                     <img
-                      [src]="arc.url"
+                    [src]="arc.ext === '.pdf' ? 'assets/icon/file.png' : arc.url "
                       style="height: 10rem; width: 10rem; border: 3px solid black"
                       alt="file"
                     />
@@ -466,20 +466,20 @@
                       (click)="remove(arc, i)"
                     ></ion-icon>
                   </div>
-    
+
                   <!-- </ion-item> -->
                 </ion-slide>
               </ion-slides>
             </ng-container>
             <!-- </ion-item> -->
           </ion-row>
-    
+
           <ion-row>
             <ion-col size="12">
               <ng-container>
                 <ion-item class="ion-no-padding" (click)="d.click()">
                   <ion-label position="floating">Attachments</ion-label>
-    
+
                   <input
                     #d
                     type="file"
@@ -520,7 +520,7 @@
                             "
                             alt="file"
                           />
-    
+
                           <ion-icon
                             class="remove"
                             name="close-circle-outline"
@@ -555,11 +555,11 @@
                   [options]="slideOptsThree"
                 >
                 <ng-container *ngIf="design && design.attachments !== null">
-    
+
                   <ion-slide *ngFor="let attach of design?.attachments; let i = index">
                     <div>
                       <img
-                        [src]="attach.url"
+                      [src]="attach.ext === '.pdf' ? 'assets/icon/file.png' : attach.url "
                         style="height: 10rem; width: 10rem; border: 3px solid black"
                         alt="file"
                       />
