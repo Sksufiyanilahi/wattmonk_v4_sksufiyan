@@ -70,11 +70,11 @@ profile:any;
 
   }
   ionViewWillEnter(){
-    this.user = this.storage.getUser(); 
+    this.user = this.storage.getUser();
     console.log(">>>");
-    
+
    this.getProfileData();
-  
+
   }
   goBack() {
     this.mixpanelService.track("PROFILE_PAGE_CLOSE", {
@@ -84,7 +84,7 @@ profile:any;
 
 getProfileData(){
 this.apiService.getProfileDetails().subscribe(res=>{
-  this.apiService.emitUserNameAndRole(this.user);
+
   console.log(res);
   this.profile=res;
   this.getemail=this.profile.getemail;
@@ -324,8 +324,6 @@ state: { productdetails: objToSend }
       modal.onDidDismiss().then(()=>{
         this.user=this.storage.getUser();
         this.getProfileData();
-      
-
       })
       return await modal.present();
     }
