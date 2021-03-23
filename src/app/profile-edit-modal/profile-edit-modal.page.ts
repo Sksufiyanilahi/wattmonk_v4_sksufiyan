@@ -114,6 +114,7 @@ if(this.profileEdit.status=='VALID'){
     email:this.profileEdit.get('email').value,
     address:this.profileEdit.get('address').value,
     country:this.profileEdit.get('country').value,
+    phone:this.profileEdit.get('phone').value,
   }
   this.apiservice.editProfile(postdata,this.user.id).subscribe((res) => {
 console.log(res);
