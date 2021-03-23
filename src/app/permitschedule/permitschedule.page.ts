@@ -1,10 +1,10 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
-import {NavController, Platform, ToastController} from '@ionic/angular';
-import {Observable, Subscription} from 'rxjs';
-import {ApiService} from '../api.service';
-import {AssigneeModel} from '../model/assignee.model';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { NavController, Platform, ToastController } from '@ionic/angular';
+import { Observable, Subscription } from 'rxjs';
+import { ApiService } from '../api.service';
+import { AssigneeModel } from '../model/assignee.model';
 import {
   FIELD_REQUIRED,
   INVALID_ANNUAL_UNIT,
@@ -14,25 +14,27 @@ import {
   INVALID_NAME_MESSAGE,
   INVALID_PHONE_NUMBER,
   INVALID_TILT_FOR_GROUND_MOUNT,
-  ScheduleFormEvent
+  ScheduleFormEvent,
+  INVALID_ADDRESS
 } from '../model/constants';
-import {DesginDataModel} from '../model/design.model';
-import {Invertermake} from '../model/inverter-made.model';
-import {InverterMakeModel} from '../model/inverter-make.model';
-import {Modulemake} from '../model/solar-made.model';
-import {SolarMake} from '../model/solar-make.model';
-import {StorageService} from '../storage.service';
-import {UtilitiesService} from '../utilities.service';
-import {map, startWith} from "rxjs/operators";
-import {ErrorModel} from '../model/error.model';
-import {NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult} from '@ionic-native/native-geocoder/ngx';
-import {Geolocation} from '@ionic-native/geolocation/ngx';
-import {AddressModel} from '../model/address.model';
-import {Diagnostic} from '@ionic-native/diagnostic/ngx';
-import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
-import {NetworkdetectService} from '../networkdetect.service';
-import {Clients} from '../model/clients.model';
-import {MixpanelService} from '../utilities/mixpanel.service';
+import { DesginDataModel } from '../model/design.model';
+import { Invertermake } from '../model/inverter-made.model';
+import { InverterMakeModel } from '../model/inverter-make.model';
+import { Modulemake } from '../model/solar-made.model';
+import { SolarMake } from '../model/solar-make.model';
+import { StorageService } from '../storage.service';
+import { UtilitiesService } from '../utilities.service';
+import { map, startWith } from "rxjs/operators";
+import { ErrorModel } from '../model/error.model';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { AddressModel } from '../model/address.model';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { NetworkdetectService } from '../networkdetect.service';
+import { Clients } from '../model/clients.model';
+import { MixpanelService } from '../utilities/mixpanel.service';
+import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 
@@ -55,11 +57,11 @@ export class PermitschedulePage implements OnInit {
 
   listOfAssignees: AssigneeModel[] = [];
 
-//  listOfSolarMake: SolarMake[] = [];
-//  listOfSolarMade: SolarMadeModel[] = [];
+  //  listOfSolarMake: SolarMake[] = [];
+  //  listOfSolarMade: SolarMadeModel[] = [];
 
-//   listOfInverterMade: InverterMadeModel[] = [];
-//  listOfInverterMake: InverterMakeModel[] = [];
+  //   listOfInverterMade: InverterMadeModel[] = [];
+  //  listOfInverterMake: InverterMakeModel[] = [];
 
   modulemakes: SolarMake[] = [];
   filteredModuleMakes: Observable<SolarMake[]>;
@@ -94,6 +96,7 @@ export class PermitschedulePage implements OnInit {
   phoneError = INVALID_PHONE_NUMBER;
   moduleAndInverterError = INVALID_MODULE_AND_INVERTER;
   companyError = INVALID_COMPANY_NAME;
+  addressError = INVALID_ADDRESS;
 
   fieldRequired = FIELD_REQUIRED;
 
@@ -145,29 +148,42 @@ export class PermitschedulePage implements OnInit {
   // newpermitsRef: AngularFireObject<any>;
   // newpermitscount = 0;
 
+  formatted_address:string;
+
+  GoogleAutocomplete: google.maps.places.AutocompleteService;
+  autocompleteItems: any[];
+  map: any;
+
+  geocoder = new google.maps.Geocoder();
+  autoCompleteOff:boolean = false;
+  isSelectSearchResult:boolean = false;
+
 
   constructor(private formBuilder: FormBuilder,
-              private apiService: ApiService,
-              private utils: UtilitiesService,
-              private navController: NavController,
-              private storage: StorageService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private nativeGeocoder: NativeGeocoder,
-              private diagnostic: Diagnostic,
-              private geolocation: Geolocation,
-              private platform: Platform,
-              private toastController: ToastController,
-              private cdr: ChangeDetectorRef,
-              private network: NetworkdetectService,
-              private mixpanelService: MixpanelService
-              //private db:AngularFireDatabase
-              //private data: DesignFormData
-  ) {
+    private apiService: ApiService,
+    private utils: UtilitiesService,
+    private navController: NavController,
+    private storage: StorageService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private nativeGeocoder: NativeGeocoder,
+    private diagnostic: Diagnostic,
+    private geolocation: Geolocation,
+    private platform: Platform,
+    private toastController: ToastController,
+
+    private cdr:ChangeDetectorRef,
+    private network:NetworkdetectService,
+    private mixpanelService:MixpanelService,
+    private zone: NgZone,
+    //private db:AngularFireDatabase
+    //private data: DesignFormData
+    ) {
 
 
-    const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
-    const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
+
+       const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD \s,-]+$/;
+       const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     const NUMBERPATTERN = '^[0-9]+$';
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
@@ -267,9 +283,9 @@ export class PermitschedulePage implements OnInit {
     this.fieldDisabled = false;
     this.userdata = this.storage.getUser();
     console.log(this.userdata)
-    this.requestLocationPermission();
-    if (this.designId != 0) {
-      this.tabsDisabled = true;
+    //this.requestLocationPermission();
+    if (this.designId!=0) {
+      this.tabsDisabled=true;
       this.subscription = this.utils.getStaticAddress().subscribe((address) => {
         this.address = address;
         this.storage.setData(this.address);
@@ -311,6 +327,9 @@ export class PermitschedulePage implements OnInit {
       this.getsurveydata();
     } else {
       this.addressValue();
+    this.desginForm.patchValue({
+      createdby: this.storage.getUserID()
+    });
     }
 
     setTimeout(() => {
@@ -477,7 +496,7 @@ export class PermitschedulePage implements OnInit {
   }
 
   fetchModuleModelsData(_event: any, make) {
-    this.desginForm.patchValue({modulemodel: " "})
+    this.desginForm.patchValue({ modulemodel: " " })
     if (_event.isUserInput) {
       this.desginForm.get('modulemodel').setValue("");
       if (this.isEditMode) {
@@ -542,7 +561,7 @@ export class PermitschedulePage implements OnInit {
   }
 
   fetchInverterModelsData(_event: any, make) {
-    this.desginForm.patchValue({invertermodel: " "})
+    this.desginForm.patchValue({ invertermodel: " " })
     if (_event.isUserInput) {
       this.desginForm.get('invertermodel').setValue("");
       if (this.isEditMode) {
@@ -602,41 +621,38 @@ export class PermitschedulePage implements OnInit {
   }
 
 
-  addressValue() {
-    // }
-    this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-      console.log(address, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+  // addressValue(){
+  // // }
+  // this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+  //   console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-      // this.desginForm.get('address').setValue('124/345');
-      // this.desginForm.get('latitude').setValue('24.553333');
-      // this.desginForm.get('longitude').setValue('80.5555555555');
-      // this.desginForm.get('country').setValue('india');
-      // this.desginForm.get('city').setValue('Lucknow');
-      // this.desginForm.get('state').setValue('UP');
-      // this.desginForm.get('postalcode').setValue(3232343);
-      this.desginForm.get('address').setValue(address.address);
-      this.desginForm.get('latitude').setValue(address.lat);
-      this.desginForm.get('longitude').setValue(address.long);
-      this.desginForm.get('country').setValue(address.country);
-      this.desginForm.get('city').setValue(address.city);
-      this.desginForm.get('state').setValue(address.state);
-      this.desginForm.get('postalcode').setValue(address.postalcode);
-    }, (error) => {
-      this.desginForm.get('address').setValue('');
-      this.desginForm.get('latitude').setValue('');
-      this.desginForm.get('longitude').setValue('');
-      this.desginForm.get('country').setValue('');
-      this.desginForm.get('city').setValue('');
-      this.desginForm.get('state').setValue('');
-      this.desginForm.get('postalcode').setValue('');
-    });
-    this.desginForm.patchValue({
-      createdby: this.storage.getUserID()
-    });
-    //this.getSolarMake();
+  //     // this.desginForm.get('address').setValue('124/345');
+  //     // this.desginForm.get('latitude').setValue('24.553333');
+  //     // this.desginForm.get('longitude').setValue('80.5555555555');
+  //     // this.desginForm.get('country').setValue('india');
+  //     // this.desginForm.get('city').setValue('Lucknow');
+  //     // this.desginForm.get('state').setValue('UP');
+  //     // this.desginForm.get('postalcode').setValue(3232343);
+  //    this.desginForm.get('address').setValue(address.address);
+  //      this.desginForm.get('latitude').setValue(address.lat);
+  //      this.desginForm.get('longitude').setValue(address.long);
+  //      this.desginForm.get('country').setValue(address.country);
+  //    this.desginForm.get('city').setValue(address.city);
+  //      this.desginForm.get('state').setValue(address.state);
+  //      this.desginForm.get('postalcode').setValue(address.postalcode);
+  // }, (error) => {
+  //   this.desginForm.get('address').setValue('');
+  //   this.desginForm.get('latitude').setValue('');
+  //   this.desginForm.get('longitude').setValue('');
+  //   this.desginForm.get('country').setValue('');
+  //   this.desginForm.get('city').setValue('');
+  //   this.desginForm.get('state').setValue('');
+  //   this.desginForm.get('postalcode').setValue('');
+  // });
+ 
+  // //this.getSolarMake();
 
-  }
-
+  // }
   getDesignDetails() {
 
     this.utils.showLoading('Getting Design Details').then(() => {
@@ -967,7 +983,7 @@ export class PermitschedulePage implements OnInit {
               city: this.desginForm.get('city').value,
               postalcode: this.desginForm.get('postalcode').value,
               status: designstatus,
-//attachments: this.desginForm.get('attachments').value,
+              //attachments: this.desginForm.get('attachments').value,
               deliverydate: tomorrow.toISOString(),
               //creatorparentid:this.storage.getParentId()
               creatorparentid: this.desginForm.get('creatorparentid').value,
@@ -987,11 +1003,11 @@ export class PermitschedulePage implements OnInit {
               this.utils.hideLoading().then(() => {
                 if (newConstruction == 'true') {
                   // if(this.architecturalFileUpload){
-                  this.uploaarchitecturedesign(response, 'architecturaldesign');
+                  this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                   // }
                 } else if (newConstruction == 'false') {
                   if (this.attachmentFileUpload) {
-                    this.uploadAttachmentDesign(response, 'attachments')
+                    this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
                   } else {
                     this.router.navigate(['/permithomepage'])
                     this.utils.showSnackBar('Design have been Created');
@@ -1081,11 +1097,11 @@ export class PermitschedulePage implements OnInit {
               this.value = response.id;
               if (newConstruction == 'true') {
                 // if(this.architecturalFileUpload){
-                this.uploaarchitecturedesign(response, 'architecturaldesign');
+                this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                 // }
               } else if (newConstruction == 'false') {
                 if (this.attachmentFileUpload) {
-                  this.uploadAttachmentDesign(response, 'attachments')
+                  this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
                 } else {
                   let objToSend: NavigationExtras = {
                     queryParams: {
@@ -1099,7 +1115,7 @@ export class PermitschedulePage implements OnInit {
 
 
                   this.router.navigate(['/payment-modal'], {
-                    state: {productdetails: objToSend}
+                    state: { productdetails: objToSend }
                   });
                 }
               }
@@ -1149,6 +1165,7 @@ export class PermitschedulePage implements OnInit {
 
       } else {
         if (this.formValue === 'save') {
+          console.log("hello edit")
           this.utils.showLoading('Saving').then(() => {
             var data = {
               name: this.desginForm.get('name').value,
@@ -1192,42 +1209,45 @@ export class PermitschedulePage implements OnInit {
 
             }
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
-                // if(this.architecturalFileUpload){
-                //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
-                // }
-                // if(this.attachmentFileUpload){
-                //   this.uploadAttachmentDesign(response.id,'attachments')
-                // }
-                this.utils.hideLoading().then(() => {
-                  if (newConstruction == 'true') {
-                    // if(this.architecturalFileUpload){
-                    this.uploaarchitecturedesign(response, 'architecturaldesign');
-                    // }
-                  } else if (newConstruction == 'false') {
-                    if (this.attachmentFileUpload) {
-                      this.uploadAttachmentDesign(response, 'attachments')
-                    } else {
-                      this.router.navigate(['/permithomepage'])
-                      this.utils.showSnackBar('Design have been Created');
-                      // this.utils.showSnackBar('Design have been saved');
-                      this.utils.setHomepagePermitRefresh(true);
-                    }
-                  }
-                  // if(this.isArcFileDelete){
-                  //   this.deleteArcFile(this.indexOfArcFiles);
+              // if(this.architecturalFileUpload){
+              //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+              // }
+              // if(this.attachmentFileUpload){
+              //   this.uploadAttachmentDesign(response.id,'attachments')
+              // }
+              this.utils.hideLoading().then(() => {
+                if (newConstruction == 'true') {
+                  // if(this.architecturalFileUpload){
+                  console.log("hello")
+                  this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                   // }
+                } else if (newConstruction == 'false') {
+                  if (this.attachmentFileUpload) {
+                    console.log("edit")
+                    console.log(this.permitFiles[0])
+                    this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
+                  } else {
+                    this.router.navigate(['/permithomepage'])
+                    this.utils.showSnackBar('Design have been Created');
+                    // this.utils.showSnackBar('Design have been saved');
+                    this.utils.setHomepagePermitRefresh(true);
+                  }
+                }
+                // if(this.isArcFileDelete){
+                //   this.deleteArcFile(this.indexOfArcFiles);
+                // }
 
-                  // this.utils.hideLoading().then(() => {
-                  //   console.log('Res', response);
-                  //   this.utils.showSnackBar('Design have been updated');
-                  //   if(!this.isArcFileDelete){
-                  //     this.utils.setPermitDesignDetailsRefresh(true);
-                  //   }
-                  //   //this.navController.pop();
-                  //   // this.router.navigate(['/permit-design-details/',this.designId])
+                // this.utils.hideLoading().then(() => {
+                //   console.log('Res', response);
+                //   this.utils.showSnackBar('Design have been updated');
+                //   if(!this.isArcFileDelete){
+                //     this.utils.setPermitDesignDetailsRefresh(true);
+                //   }
+                //   //this.navController.pop();
+                //   // this.router.navigate(['/permit-design-details/',this.designId])
 
-                });
-              },
+              });
+            },
               responseError => {
                 this.utils.hideLoading().then(() => {
                   const error: ErrorModel = responseError.error;
@@ -1279,80 +1299,116 @@ export class PermitschedulePage implements OnInit {
 
           }
           this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
-              // if(this.architecturalFileUpload){
-              //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
-              // }
-              // if(this.attachmentFileUpload){
-              //   this.uploadAttachmentDesign(response.id,'attachments')
-              // }
-              this.utils.hideLoading().then(() => {
-                this.value = response.id;
-                if (newConstruction == 'true') {
-                  // if(this.architecturalFileUpload){
-                  this.uploaarchitecturedesign(response, 'architecturaldesign');
-                  // }
-                } else if (newConstruction == 'false') {
-                  if (this.attachmentFileUpload) {
-                    this.uploadAttachmentDesign(response, 'attachments')
-                  } else {
-                    let objToSend: NavigationExtras = {
-                      queryParams: {
-                        id: response.id,
-                        designData: "permit",
-                        fulldesigndata: response
-                      },
-                      skipLocationChange: false,
-                      fragment: 'top'
-                    };
-
-
-                    this.router.navigate(['/payment-modal'], {
-                      state: {productdetails: objToSend}
-                    });
-                  }
-                }
-                // if(this.isArcFileDelete){
-                //   console.log("hello");
-                //   this.deleteArcFile(this.indexOfArcFiles);
+            // if(this.architecturalFileUpload){
+            //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+            // }
+            // if(this.attachmentFileUpload){
+            //   this.uploadAttachmentDesign(response.id,'attachments')
+            // }
+            this.utils.hideLoading().then(() => {
+              this.value = response.id;
+              if (newConstruction == 'true') {
+                // if(this.architecturalFileUpload){
+                this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                 // }
-                //       this.utils.hideLoading().then(() => {
-                //         console.log('Res', response);
+              } else if (newConstruction == 'false') {
+                if (this.attachmentFileUpload) {
+                  this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
+                } else {
+                  let objToSend: NavigationExtras = {
+                    queryParams: {
+                      id: response.id,
+                      designData: "permit",
+                      fulldesigndata: response
+                    },
+                    skipLocationChange: false,
+                    fragment: 'top'
+                  };
 
-                //         this.utils.showSnackBar('Design have been updated');
-                //        // this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
-                //        let objToSend: NavigationExtras = {
-                //         queryParams: {
-                //           id:response.id,
-                //           designData:"permit",
-                //           fulldesigndata:response
-                //         },
-                //         skipLocationChange: false,
-                //         fragment: 'top'
-                //     };
+
+                }
+                this.apiService.updateDesignForm(postData, this.designId).subscribe(response => {
+                  // if(this.architecturalFileUpload){
+                  //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
+                  // }
+                  // if(this.attachmentFileUpload){
+                  //   this.uploadAttachmentDesign(response.id,'attachments')
+                  // }
+                  this.utils.hideLoading().then(() => {
+                    this.value = response.id;
+                    if (newConstruction == 'true') {
+                      // if(this.architecturalFileUpload){
+                      this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+                      // }
+                    }
+                    else if (newConstruction == 'false') {
+                      if (this.attachmentFileUpload) {
+                        this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
+                      }
+
+                      else {
+                        let objToSend: NavigationExtras = {
+                          queryParams: {
+                            id: response.id,
+                            designData: "permit",
+                            fulldesigndata: response
+                          },
+                          skipLocationChange: false,
+                          fragment: 'top'
+                        };
 
 
-                // this.router.navigate(['/payment-modal'], {
-                //   state: { productdetails: objToSend }
-                // });
+                        this.router.navigate(['/payment-modal'], {
+                          state: { productdetails: objToSend }
+                        });
+                      }
+                    }
+                    // if(this.isArcFileDelete){
+                    //   console.log("hello");
+                    //   this.deleteArcFile(this.indexOfArcFiles);
+                    // }
+                    //       this.utils.hideLoading().then(() => {
+                    //         console.log('Res', response);
 
-              });
-            },
-            responseError => {
-              this.utils.hideLoading().then(() => {
-                const error: ErrorModel = responseError.error;
-                this.utils.errorSnackBar(error.message[0].messages[0].message);
-              });
-              //
-            });
+                    //         this.utils.showSnackBar('Design have been updated');
+                    //        // this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
+                    //        let objToSend: NavigationExtras = {
+                    //         queryParams: {
+                    //           id:response.id,
+                    //           designData:"permit",
+                    //           fulldesigndata:response
+                    //         },
+                    //         skipLocationChange: false,
+                    //         fragment: 'top'
+                    //     };
 
+
+                    // this.router.navigate(['/payment-modal'], {
+                    //   state: { productdetails: objToSend }
+                    // });
+
+                  });
+                },
+                  responseError => {
+                    this.utils.hideLoading().then(() => {
+                      const error: ErrorModel = responseError.error;
+                      this.utils.errorSnackBar(error.message[0].messages[0].message);
+                    });
+                    //
+                  });
+
+              }
+            })
+
+
+          });
         }
       }
-
-
     } else {
       this.error();
     }
   }
+
 
   error() {
     // if(this.desginForm.value.name == '' || this.desginForm.get('companyname').hasError('pattern'))
@@ -1443,25 +1499,100 @@ export class PermitschedulePage implements OnInit {
 
   }
 
-  uploaarchitecturedesign(response?: any, key?: string) {
+  uploaarchitecturedesign(response?: any, key?: string, fileObj?: File, index?: number) {
     // console.log(this.archFiles);
-    const imageData = new FormData();
-    for (var i = 0; i < this.archFiles.length; i++) {
-      imageData.append("files", this.archFiles[i]);
-      if (i == 0) {
-        imageData.append('path', 'designs/' + response.id);
-        imageData.append('refId', response.id + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-      }
+    if (!this.architecturalFileUpload) {
+      this.uploadAttachmentDesign(response, key, this.permitFiles[0], 0)
     }
-    this.utils.showLoading("Architectural File Uploading...").then(() => {
+    else {
+      console.log(fileObj)
+      const imageData = new FormData();
+      // for(var i=0; i< this.archFiles.length;i++){
+      imageData.append("files", fileObj);
+      // if(i ==0){
+      imageData.append('path', 'designs/' + response.id);
+      imageData.append('refId', response.id + '');
+      imageData.append('ref', 'design');
+      imageData.append('field', key);
+      // }
+      // }
+      this.utils.showLoading("Uploading architecture" + " " + (index + 1) + " of" + " " + this.archFiles.length).then(() => {
+        this.apiService.uploaddesign(imageData).subscribe(res => {
+          console.log(res);
+          if (index < this.archFiles.length - 1) {
+            console.log("if")
+            this.utils.hideLoading();
+            var newIndex = index + 1;
+            this.uploaarchitecturedesign(response, key, this.archFiles[newIndex], newIndex);
+          } else {
+            this.utils.hideLoading();
+            if (this.attachmentFileUpload) {
+              this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0);
+            }
+            else {
+              if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
+                if (this.designId == 0) {
+                  this.router.navigate(['/permithomepage'])
+                  this.utils.showSnackBar('Design have been Created');
+                  // this.utils.showSnackBar('Design have been saved');
+                  this.utils.setHomepagePermitRefresh(true);
+                }
+                else {
+                  this.router.navigate(['/permithomepage'])
+                  this.utils.showSnackBar('Design have been updated');
+                  this.utils.setHomepagePermitRefresh(true);
+                }
+              } else {
+                let objToSend: NavigationExtras = {
+                  queryParams: {
+                    id: response.id,
+                    designData: "permit",
+                    fulldesigndata: response
+                  },
+                  skipLocationChange: false,
+                  fragment: 'top'
+                };
+
+
+                this.router.navigate(['/payment-modal'], {
+                  state: { productdetails: objToSend }
+                });
+              }
+            }
+          }
+        }, responseError => {
+          this.utils.hideLoading();
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+        })
+      })
+      // })
+    }
+  }
+
+  uploadAttachmentDesign(response?: any, key?: string, fileObj?: File, index?: number) {
+    console.log(this.permitFiles);
+    console.log(fileObj)
+    const imageData = new FormData();
+    // for(var i=0; i< this.permitFiles.length;i++){
+    imageData.append("files", fileObj);
+    //  if(i ==0){
+    imageData.append('path', 'designs/' + response.id);
+    imageData.append('refId', response.id + '');
+    imageData.append('ref', 'design');
+    imageData.append('field', key);
+    //   }
+    // }
+    this.utils.showLoading("Uploading attachment" + " " + (index + 1) + " of" + " " + this.permitFiles.length).then(() => {
       this.apiService.uploaddesign(imageData).subscribe(res => {
         console.log(res);
-        this.utils.hideLoading();
-        if (this.attachmentFileUpload) {
-          this.uploadAttachmentDesign(response, 'attachments')
+        if (index < this.permitFiles.length - 1) {
+          console.log("if")
+          this.utils.hideLoading();
+          var newIndex = index + 1;
+          this.uploadAttachmentDesign(response, key, this.permitFiles[newIndex], newIndex);
         } else {
+          this.utils.hideLoading();
           if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
             if (this.designId == 0) {
               this.router.navigate(['/permithomepage'])
@@ -1486,62 +1617,9 @@ export class PermitschedulePage implements OnInit {
 
 
             this.router.navigate(['/payment-modal'], {
-              state: {productdetails: objToSend}
+              state: { productdetails: objToSend }
             });
           }
-        }
-
-      }, responseError => {
-        this.utils.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utils.errorSnackBar(error.message[0].messages[0].message);
-      })
-    })
-
-  }
-
-  uploadAttachmentDesign(response?: any, key?: string, filearray?: File[]) {
-    console.log(this.permitFiles);
-    const imageData = new FormData();
-    for (var i = 0; i < this.permitFiles.length; i++) {
-      imageData.append("files", this.permitFiles[i]);
-      if (i == 0) {
-        imageData.append('path', 'designs/' + response.id);
-        imageData.append('refId', response.id + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-      }
-    }
-    this.utils.showLoading("Attachment File Uploading").then(() => {
-      this.apiService.uploaddesign(imageData).subscribe(res => {
-        console.log(res);
-        this.utils.hideLoading();
-        if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
-          if (this.designId == 0) {
-            this.router.navigate(['/permithomepage'])
-            this.utils.showSnackBar('Design have been Created');
-            // this.utils.showSnackBar('Design have been saved');
-            this.utils.setHomepagePermitRefresh(true);
-          } else {
-            this.router.navigate(['/permithomepage'])
-            this.utils.showSnackBar('Design have been updated');
-            this.utils.setHomepagePermitRefresh(true);
-          }
-        } else {
-          let objToSend: NavigationExtras = {
-            queryParams: {
-              id: response.id,
-              designData: "permit",
-              fulldesigndata: response
-            },
-            skipLocationChange: false,
-            fragment: 'top'
-          };
-
-
-          this.router.navigate(['/payment-modal'], {
-            state: {productdetails: objToSend}
-          });
         }
       }, responseError => {
         this.utils.hideLoading();
@@ -1691,256 +1769,244 @@ export class PermitschedulePage implements OnInit {
     })
   }
 
-  // Location
+    // getGeoLocation() {
+    //   // this.utilities.showLoading('Getting Location').then(()=>{
+    //         // setTimeout(()=>{
+    //         //   this.utilities.hideLoading();
+    //         // },1000)
+    //     this.geolocation.getCurrentPosition().then((resp) => {
+    //       this.utils.hideLoading();
+    //       // .then(()=>{
+    //         console.log('resp',resp);
+    //         this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
+    //         this.utils.hideLoading();
+    //       // });
+    //     },err=>{
+    //       this.utils.hideLoading();
+    //       this.utils.errorSnackBar('Unable to get location');
+    //     }).catch((error) => {
+    //       this.utils.hideLoading();
+    //       this.utils.errorSnackBar('Unable to get location');
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-    this.utils.setStaticAddress('');
-    this.deactivateNetworkSwitch.unsubscribe();
-  }
-
-  // segmentChanged(event) {
-  //   console.log(event);
-  //   this.currentTab = event.detail.value;
-  //   this.tabs.select(event.detail.value);
-  // }
-
-  getGeoLocation() {
-    // this.utilities.showLoading('Getting Location').then(()=>{
-    // setTimeout(()=>{
-    //   this.utilities.hideLoading();
-    // },1000)
-    this.geolocation.getCurrentPosition().then((resp) => {
-      this.utils.hideLoading();
-      // .then(()=>{
-      console.log('resp', resp);
-      this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
-      this.utils.hideLoading();
-      // });
-    }, err => {
-      this.utils.hideLoading();
-      this.utils.errorSnackBar('Unable to get location');
-    }).catch((error) => {
-      this.utils.hideLoading();
-      this.utils.errorSnackBar('Unable to get location');
-
-      console.log('Error getting location', error);
-      this.showNoLocation();
-    });
-    // },err=>{
-    //   this.utilities.hideLoading();
-    // });
-  }
-
-  async showNoLocation() {
-    const toast = await this.toastController.create({
-      header: 'Error',
-      message: 'Unable to get location',
-      cssClass: 'my-custom-class',
-      buttons: [
-        {
-          text: 'OK',
-          handler: () => {
-            this.goBack();
-          }
-        }
-      ]
-    });
-    toast.present();
-  }
-
-
-  async showLocationDenied() {
-    const toast = await this.toastController.create({
-      header: 'Error',
-      message: 'Location services denied, please enable them manually',
-      cssClass: 'my-custom-class',
-      buttons: [
-        {
-          text: 'OK',
-          handler: () => {
-            this.goBack();
-          }
-        }
-      ]
-    });
-    toast.present();
-  }
-
-
-  getGeoEncoder(latitude, longitude) {
-    // this.utilities.hideLoading().then((success) => {
-    this.utils.showLoading('Getting Location').then(() => {
-      this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
-        .then((result: NativeGeocoderResult[]) => {
-          console.log(result);
-          this.utils.hideLoading();
-          const address: AddressModel = {
-            address: this.generateAddress(result[0]),
-            lat: latitude,
-            long: longitude,
-            country: result[0].countryName,
-            state: result[0].administrativeArea,
-            city: result[0].locality,
-            postalcode: result[0].postalCode
-          };
-          this.utils.setAddress(address);
-        })
-        .catch((error: any) => {
-          this.showNoLocation();
-          this.utils.hideLoading();
-          alert('Error getting location' + JSON.stringify(error));
-        });
-    });
-    // }, (error) => {
-
+    //       console.log('Error getting location', error);
+    //       this.showNoLocation();
+    //     });
+    //   // },err=>{
+    //   //   this.utilities.hideLoading();
+    //   // });
     // }
-    // );
-  }
 
-  generateAddress(addressObj) {
-    const obj = [];
-    let address = '';
-    for (const key in addressObj) {
-      obj.push(addressObj[key]);
-    }
-    obj.reverse();
-    for (const val in obj) {
-      if (obj[val].length) {
-        address += obj[val] + ', ';
-      }
-    }
-    return address.slice(0, -2);
-  }
-
-  requestLocationPermission() {
-    this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
-      console.log(mode);
-      switch (mode) {
-        case this.diagnostic.permissionStatus.NOT_REQUESTED:
-          this.goBack();
-          break;
-        case this.diagnostic.permissionStatus.DENIED_ALWAYS:
-          this.showLocationDenied();
-          break;
-        case this.diagnostic.permissionStatus.DENIED_ONCE:
-          this.goBack();
-          break;
-        case this.diagnostic.permissionStatus.GRANTED:
-          this.fetchLocation();
-          break;
-        case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-          this.fetchLocation();
-          break;
-        case 'authorized_when_in_use':
-          this.fetchLocation();
-          break;
-      }
-    }, (rejection) => {
-      console.log(rejection);
-      // this.goBack();
-    });
-
-    // if (this.platform.is('ios')) {
-    //   if (this.storage.isLocationAllowedOnIOS()) {
-    //     this.fetchLocation();
-    //   } else {
-    //     if (!this.storage.isLocationCheckedOnIOS()) {
-    //       this.storage.setLocationCheckedOnIOS(true);
-    //       this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
-    //         switch (mode) {
-    //           case this.diagnostic.permissionStatus.NOT_REQUESTED:
-    //             this.storage.setLocationAllowedOnIOS(false);
-    //             break;
-    //           case this.diagnostic.permissionStatus.DENIED_ALWAYS:
-    //             this.storage.setLocationAllowedOnIOS(false);
-    //             break;
-    //           case this.diagnostic.permissionStatus.GRANTED:
-    //             this.storage.setLocationAllowedOnIOS(true);
-    //             this.fetchLocation();
-    //             break;
-    //           case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-    //             this.storage.setLocationAllowedOnIOS(true);
-    //             this.fetchLocation();
-    //             break;
-    //           case 'authorized_when_in_use':
-    //             this.storage.setLocationAllowedOnIOS(true);
-    //             this.fetchLocation();
-    //             break;
+    // async  showNoLocation() {
+    //   const toast = await this.toastController.create({
+    //     header: 'Error',
+    //     message: 'Unable to get location',
+    //     cssClass: 'my-custom-class',
+    //     buttons: [
+    //       {
+    //         text: 'OK',
+    //         handler: () => {
+    //           this.goBack();
     //         }
-    //       }, (rejection) => {
-    //         this.locationAllowed = false;
-    //         this.storage.setLocationAllowedOnIOS(false);
+    //       }
+    //     ]
+    //   });
+    //   toast.present();
+    // }
+
+
+
+    // async showLocationDenied() {
+    //   const toast = await this.toastController.create({
+    //     header: 'Error',
+    //     message: 'Location services denied, please enable them manually',
+    //     cssClass: 'my-custom-class',
+    //     buttons: [
+    //       {
+    //         text: 'OK',
+    //         handler: () => {
+    //           this.goBack();
+    //         }
+    //       }
+    //     ]
+    //   });
+    //   toast.present();
+    // }
+
+
+    // getGeoEncoder(latitude, longitude) {
+    //   // this.utilities.hideLoading().then((success) => {
+    //         this.utils.showLoading('Getting Location').then(()=>{
+    //     this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+    //     .then((result: NativeGeocoderResult[]) => {
+    //       console.log(result);
+    //       this.utils.hideLoading();
+    //           const address: AddressModel = {
+    //             address: this.generateAddress(result[0]),
+    //             lat: latitude,
+    //             long: longitude,
+    //             country:result[0].countryName,
+    //             state: result[0].administrativeArea,
+    //             city:result[0].locality,
+    //             postalcode:result[0].postalCode
+    //           };
+    //           this.utils.setAddress(address);
+    //         })
+    //         .catch((error: any) => {
+    //           this.showNoLocation();
+    //           this.utils.hideLoading();
+    //           alert('Error getting location' + JSON.stringify(error));
+    //         });
     //       });
+    //     // }, (error) => {
+
+    //     // }
+    //   // );
+    // }
+
+    // generateAddress(addressObj) {
+    //   const obj = [];
+    //   let address = '';
+    //   for (const key in addressObj) {
+    //     obj.push(addressObj[key]);
+    //   }
+    //   obj.reverse();
+    //   for (const val in obj) {
+    //     if (obj[val].length) {
+    //       address += obj[val] + ', ';
     //     }
     //   }
-    // } else {
-    //
+    //   return address.slice(0, -2);
     // }
 
-  }
+    // requestLocationPermission() {
+    //   this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
+    //     console.log(mode);
+    //     switch (mode) {
+    //       case this.diagnostic.permissionStatus.NOT_REQUESTED:
+    //         this.goBack();
+    //         break;
+    //       case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+    //         this.showLocationDenied();
+    //         break;
+    //       case this.diagnostic.permissionStatus.DENIED_ONCE:
+    //         this.goBack();
+    //         break;
+    //       case this.diagnostic.permissionStatus.GRANTED:
+    //         this.fetchLocation();
+    //         break;
+    //       case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+    //         this.fetchLocation();
+    //         break;
+    //       case 'authorized_when_in_use':
+    //         this.fetchLocation();
+    //         break;
+    //     }
+    //   }, (rejection) => {
+    //     console.log(rejection);
+    //     // this.goBack();
+    //   });
 
-  fetchLocation() {
-    if (this.platform.is('ios')) {
-      this.getGeoLocation();
-    } else {
-      this.diagnostic.isGpsLocationEnabled().then((status) => {
-        if (status === true) {
-          this.getGeoLocation();
-          // this.utilities.showLoading('Getting Location').then(() => {
+    //   // if (this.platform.is('ios')) {
+    //   //   if (this.storage.isLocationAllowedOnIOS()) {
+    //   //     this.fetchLocation();
+    //   //   } else {
+    //   //     if (!this.storage.isLocationCheckedOnIOS()) {
+    //   //       this.storage.setLocationCheckedOnIOS(true);
+    //   //       this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
+    //   //         switch (mode) {
+    //   //           case this.diagnostic.permissionStatus.NOT_REQUESTED:
+    //   //             this.storage.setLocationAllowedOnIOS(false);
+    //   //             break;
+    //   //           case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+    //   //             this.storage.setLocationAllowedOnIOS(false);
+    //   //             break;
+    //   //           case this.diagnostic.permissionStatus.GRANTED:
+    //   //             this.storage.setLocationAllowedOnIOS(true);
+    //   //             this.fetchLocation();
+    //   //             break;
+    //   //           case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+    //   //             this.storage.setLocationAllowedOnIOS(true);
+    //   //             this.fetchLocation();
+    //   //             break;
+    //   //           case 'authorized_when_in_use':
+    //   //             this.storage.setLocationAllowedOnIOS(true);
+    //   //             this.fetchLocation();
+    //   //             break;
+    //   //         }
+    //   //       }, (rejection) => {
+    //   //         this.locationAllowed = false;
+    //   //         this.storage.setLocationAllowedOnIOS(false);
+    //   //       });
+    //   //     }
+    //   //   }
+    //   // } else {
+    //   //
+    //   // }
 
-          // });
-        } else {
-          this.askToChangeSettings();
-        }
-      });
-    }
+    // }
 
-  }
+    // fetchLocation() {
+    //   if (this.platform.is('ios')) {
+    //     this.getGeoLocation();
+    //   } else {
+    //     this.diagnostic.isGpsLocationEnabled().then((status) => {
+    //       if (status === true) {
+    //         this.getGeoLocation();
+    //         // this.utilities.showLoading('Getting Location').then(() => {
 
-  async askToChangeSettings() {
-    const toast = await this.toastController.create({
-      header: 'Location Disabled',
-      message: 'Please enable location services',
-      cssClass: 'my-custom-class',
-      buttons: [
-        {
-          text: 'OK',
-          handler: () => {
-            this.changeLocationSettings();
-          }
-        }, {
-          text: 'Cancel',
-          handler: () => {
-            this.goBack();
-          }
-        }
-      ]
-    });
-    toast.present();
-  }
+    //         // });
+    //       } else {
+    //         this.askToChangeSettings();
+    //       }
+    //     });
+    //   }
 
-  changeLocationSettings() {
-    this.diagnostic.switchToLocationSettings();
-    this.diagnostic.registerLocationStateChangeHandler((state) => {
-      if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) ||
-        (this.platform.is('ios')) && (state === this.diagnostic.permissionStatus.GRANTED ||
-          state === this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE
-        )) {
-        this.checkLocationAccess();
-      }
+    // }
 
-    });
-  }
+    // async askToChangeSettings() {
+    //   const toast = await this.toastController.create({
+    //     header: 'Location Disabled',
+    //     message: 'Please enable location services',
+    //     cssClass: 'my-custom-class',
+    //     buttons: [
+    //       {
+    //         text: 'OK',
+    //         handler: () => {
+    //           this.changeLocationSettings();
+    //         }
+    //       }, {
+    //         text: 'Cancel',
+    //         handler: () => {
+    //           this.goBack();
+    //         }
+    //       }
+    //     ]
+    //   });
+    //   toast.present();
+    // }
 
-  checkLocationAccess() {
-    this.diagnostic.isLocationAuthorized().then((success) => {
-      this.fetchLocation();
-    }, (error) => {
-      this.utils.showSnackBar('GPS Not Allowed');
-    });
+    // changeLocationSettings() {
+    //   this.diagnostic.switchToLocationSettings();
+    //   this.diagnostic.registerLocationStateChangeHandler((state) => {
+    //     if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) ||
+    //       (this.platform.is('ios')) && (state === this.diagnostic.permissionStatus.GRANTED ||
+    //         state === this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE
+    //       )) {
+    //       this.checkLocationAccess();
+    //     }
 
-  }
+    //   });
+    // }
+
+    // checkLocationAccess() {
+    //   this.diagnostic.isLocationAuthorized().then((success) => {
+    //     this.fetchLocation();
+    //   }, (error) => {
+    //     this.utils.showSnackBar('GPS Not Allowed');
+    //   });
+
+    // }
+
 
   ionViewWillLeave() {
   }
@@ -1968,14 +2034,14 @@ export class PermitschedulePage implements OnInit {
 
   gettingClients() {
     this.apiService.getClients().subscribe(res => {
-        this.getCompanies = res;
-        console.log(this.getCompanies);
-        this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
-          startWith(""),
-          map(value => (typeof value === "string" ? value : value.companyid)),
-          map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
-        );
-      },
+      this.getCompanies = res;
+      console.log(this.getCompanies);
+      this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
+        startWith(""),
+        map(value => (typeof value === "string" ? value : value.companyid)),
+        map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
+      );
+    },
       error => {
         this.utils.errorSnackBar("Error");
       }
@@ -2002,5 +2068,168 @@ export class PermitschedulePage implements OnInit {
       company => company.companyname.toLowerCase().indexOf(companyname) != -1
     );
   }
+
+     //// For Address
+    /* FOR SEARCH SHIPPING ADDRESS */
+    updateSearchResults(event) {
+      //this.autoCompleteOff = true;
+      console.log(this.autoCompleteOff);
+      if(this.designId==0){
+      const input = event.detail.value;
+      console.log(input)
+      if (input === '') {
+        this.autocompleteItems = [];
+        return;
+      }
+      this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+        country: 'us'
+      }  },
+        (predictions, status) => {
+          this.autocompleteItems = [];
+          this.zone.run(() => {
+            predictions.forEach((prediction) => {
+              this.autocompleteItems.push(prediction);
+            });
+          });
+        });
+      }
+    }
+
+    forAutoComplete(e){
+      console.log("hello",e);
+      this.autoCompleteOff = true;
+
+    }
+
+  //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
+    selectSearchResult(item) {
+      console.log(item);
+      this.isSelectSearchResult = true;
+      this.geocoder.geocode({
+        placeId: item.place_id
+      }, (responses, status) => {
+        console.log('respo', responses);
+        this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
+      });
+      this.autocompleteItems = []
+    }
+
+    getGeoEncoder(latitude, longitude, formattedAddress) {
+
+      // // TODO remove later
+      // const address: AddressModel = {
+      //   address: 'Vasant Kunj, New Delhi, Delhi',
+      //   lat: 28.5200491,
+      //   long: 77.158687,
+      //   country: 'India',
+      //   state: 'Delhi',
+      //   city: 'New Delhi',
+      //   postalcode: '110070'
+      // };
+      // this.utilities.setAddress(address);
+      // this.goBack();
+      // return;
+
+      this.utils.showLoading('Loading').then(() => {
+        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+          .then((result: NativeGeocoderResult[]) => {
+            console.log(result)
+            let add = '';
+            if (formattedAddress === '') {
+              add = this.generateAddress(result[0]);
+            } else {
+              add = formattedAddress;
+            }
+            this.utils.hideLoading().then(() => {
+              console.log('resu', result);
+              const address: AddressModel = {
+                address: add,
+                lat: latitude,
+                long: longitude,
+                country: result[0].countryName,
+                state: result[0].administrativeArea,
+                city: result[0].locality,
+                postalcode: result[0].postalCode
+              };
+              this.utils.setAddress(address);
+              this.addressValue();
+              //this.goBack();
+            });
+
+          })
+          .catch((error: any) => {
+            this.utils.hideLoading().then(() => {
+              alert('Error getting location' + JSON.stringify(error));
+            });
+
+          });
+      });
+    }
+
+    generateAddress(addressObj) {
+      const obj = [];
+      let address = '';
+      for (const key in addressObj) {
+        obj.push(addressObj[key]);
+      }
+      obj.reverse();
+      for (const val in obj) {
+        if (obj[val].length) {
+          address += obj[val] + ', ';
+        }
+      }
+      return address.slice(0, -2);
+    }
+
+    onCancel() {
+      console.log("hello");
+      this.autocompleteItems = [];
+      console.log(this.autocompleteItems)
+    }
+
+    addressValue(){
+      // }
+      this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+          // this.firstFormGroup.get('address').setValue('124/345');
+          // this.firstFormGroup.get('latitude').setValue('24.553333');
+          // this.firstFormGroup.get('longitude').setValue('80.5555555555');
+          // this.firstFormGroup.get('country').setValue('india');
+          // this.firstFormGroup.get('city').setValue('Lucknow');
+          // this.firstFormGroup.get('state').setValue('UP');
+          // this.firstFormGroup.get('postalcode').setValue(3232343);
+         this.desginForm.get('address').setValue(address.address);
+           this.desginForm.get('latitude').setValue(address.lat);
+           this.desginForm.get('longitude').setValue(address.long);
+           this.desginForm.get('country').setValue(address.country);
+         this.desginForm.get('city').setValue(address.city);
+           this.desginForm.get('state').setValue(address.state);
+           this.desginForm.get('postalcode').setValue(address.postalcode);
+      }, (error) => {
+        this.desginForm.get('address').setValue('');
+        this.desginForm.get('latitude').setValue(null);
+        this.desginForm.get('longitude').setValue(null);
+        this.desginForm.get('country').setValue('');
+        this.desginForm.get('city').setValue('');
+        this.desginForm.get('state').setValue('');
+        this.desginForm.get('postalcode').setValue(null);
+      });
+      // this.firstFormGroup.patchValue({
+      //   createdby: this.storage.getUserID()
+      // });
+   // this.autocompleteItems = [];
+      this.autoCompleteOff = false;
+      console.log(this.autoCompleteOff);
+      //this.getSolarMake();
+
+      }
+
+      onBlur()
+      {
+        setTimeout(() => {
+          this.autocompleteItems = [];
+        }, 100);
+      }
 
 }

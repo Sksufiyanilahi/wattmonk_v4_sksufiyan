@@ -1,10 +1,7 @@
-<ion-content
-  class="ion-padding-start ion-padding-end ion-padding-bottom"
-  style="height: 650px"
->
-  <form [formGroup]="desginForm" novalidate style="overflow: scroll">
-    <ion-grid style="position: relative; margin-top: 30px">
-      <!-- <ion-row *ngIf="address !== ''">
+<ion-content class="ion-padding-start ion-padding-end ion-padding-bottom" style="height:650px">
+<form [formGroup]="desginForm" novalidate style="overflow:scroll">
+    <ion-grid style="position: relative;">
+        <!-- <ion-row *ngIf="address !== ''">
             <ion-col>
                 {{address}}
             </ion-col>
@@ -193,7 +190,48 @@
         </ion-col>
       </ion-row>
 
-      <!-- <ion-row class="ion-margin-top">
+        <!-- Address -->
+        <ion-row>
+            <ion-col>
+              <ion-item class="ion-no-padding">
+                <ion-label position="floating" class="label">Address*</ion-label>
+                <ion-input type="text" class="form_input" autocapitalize="words"
+                            formControlName="address" autocomplete="off"  (ionChange)="updateSearchResults($event)"
+                            (ionClear)="onCancel()" debounce="300"
+                            (ionFocus)="forAutoComplete($event)" (ionBlur)="onBlur()" [disabled]="fieldDisabled"></ion-input>
+            </ion-item>
+            <!-- <ion-item class="ion-no-padding">
+              <ion-label position="floating" class="label">Shipping Address*</ion-label>
+              <ion-input type="text" class="form_input" autocapitalize="words"
+                          formControlName="shippingaddress" autocomplete="off"></ion-input>
+          </ion-item> -->
+            <!-- <ion-list *ngIf="autocompleteItems.length > 0 && autoCompleteOff"> -->
+                <ion-list style="padding:0px">
+              <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+                  <ion-label>
+                      {{ item.description }}
+                  </ion-label>
+              </ion-item>
+          </ion-list>
+          <div style="height: 5px;">
+            <div *ngIf="desginForm.get('address').hasError('pattern') && desginForm.get('address').dirty">
+                <span class="error">{{addressError}}</span>
+            </div>
+            <div *ngIf="desginForm.get('address').value === '' && desginForm.get('address').dirty">
+                <span class="error">{{fieldRequired}}</span>
+            </div>
+        </div>
+
+
+          <!-- <ion-item *ngIf="autocompleteItems.length === 0" lines="none">
+              <ion-label class="ion-text-center">
+                  Search for address
+              </ion-label>
+          </ion-item> -->
+            </ion-col>
+          </ion-row>
+
+        <!-- <ion-row class="ion-margin-top">
             <ion-col>
                 <ion-range [min]="minRange" [max]="maxRange" formControlName="monthlybill" mode="ios" pin="true"
                             class="ion-no-padding">
@@ -487,7 +525,7 @@
               <!-- <ion-item> -->
               <div>
                 <img
-                  [src]="arc.url"
+                [src]="arc.ext === '.pdf' ? 'assets/icon/file.png' : arc.url "
                   style="height: 10rem; width: 10rem; border: 3px solid black"
                   alt="file"
                 />
@@ -590,7 +628,7 @@
               <ion-slide *ngFor="let attach of design?.attachments; let i = index">
                 <div>
                   <img
-                    [src]="attach.url"
+                    [src]="attach.ext === '.pdf' ? 'assets/icon/file.png' : attach.url "
                     style="height: 10rem; width: 10rem; border: 3px solid black"
                     alt="file"
                   />

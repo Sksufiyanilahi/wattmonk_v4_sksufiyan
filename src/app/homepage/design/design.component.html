@@ -52,6 +52,8 @@
 
               </p>
               <p style="margin:0px">
+                <span class="chipdetail" style="background-color: rgb(204, 153, 0);" *ngIf="designData.requirementtype=='proposal'" >Proposal</span>
+                <span class="chipdetail" style="background-color: rgb(204, 153, 0);" *ngIf="designData.requirementtype=='assessment'" >Assessment</span>
                 <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'requestdeclined'"  >On Hold</span>
 
                 <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  >Review Failed</span>
@@ -104,7 +106,7 @@
                                             {{designData.designacceptanceremainingtime}}</span></ion-col>
                                             <ion-col *ngIf="designData.status == 'reviewassigned' && designData.reviewassignedto.id==userData.id" style="color: #737373; font-size: 14px;">
                                                 <span style="float: right;">{{designData.reviewremainingtime}}</span>
-                                              </ion-col> -->
+                                              </ion-col>
                         </ion-row>
 
                         <ion-row class="ion-no-margin ion-no-margin">

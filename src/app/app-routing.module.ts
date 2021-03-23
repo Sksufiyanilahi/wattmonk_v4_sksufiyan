@@ -289,7 +289,8 @@ const routes: Routes = [
   {
     path: 'sales-proposal',
     loadChildren: () => import('./sales-proposal/sales-proposal.module').then( m => m.SalesProposalPageModule)
-  },  {
+  },
+  {
     path: 'userregistration',
     loadChildren: () => import('./userregistration/userregistration.module').then( m => m.UserregistrationPageModule)
   },

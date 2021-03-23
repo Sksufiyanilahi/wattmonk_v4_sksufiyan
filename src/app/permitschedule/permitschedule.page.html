@@ -8,12 +8,12 @@
   </ion-button>
 </ion-col>
 </ion-row>
-<ion-row class="ion-padding-start ion-padding-end mrT"  style="background: #ffffff;">
+<!-- <ion-row class="ion-padding-start ion-padding-end mrT"  style="background: #ffffff;">
     <ion-col size="9"  style="background: #ffffff; font-size:small;">
         <p></p>
-        <!-- <span class="address-text"> -->
+
         {{address == "" ? "No Address Found" : address}}
-        <!-- </span> -->
+
     </ion-col>
 
     <ion-col class="ion-text-end" *ngIf="!tabsDisabled" size="3">
@@ -28,7 +28,7 @@
             Change
         </span>
     </ion-col>
-</ion-row>
+</ion-row> -->
 
 
 <ion-content class="ion-padding-start ion-padding-end ion-padding-bottom" >
@@ -132,7 +132,7 @@
                 </ion-col>
                 <ion-col size="6">
                 <ion-item class="ion-no-padding">
-                    
+
                     <ion-label position="floating">inverters count*</ion-label>
                     <!-- <ion-label style="display: none;">Project Type</ion-label> -->
                     <!-- <ion-label position="floating">project type</ion-label> -->
@@ -149,6 +149,47 @@
                 </div>
             </ion-col>
             </ion-row>
+
+            <!-- Address -->
+        <ion-row>
+            <ion-col>
+              <ion-item class="ion-no-padding">
+                <ion-label position="floating" class="label">Address*</ion-label>
+                <ion-input type="text" class="form_input" autocapitalize="words"
+                            formControlName="address" autocomplete="off"  (ionChange)="updateSearchResults($event)"
+                            (ionClear)="onCancel()" debounce="300"
+                            (ionFocus)="forAutoComplete($event)" (ionBlur)="onBlur()" [disabled]="fieldDisabled"></ion-input>
+            </ion-item>
+            <!-- <ion-item class="ion-no-padding">
+              <ion-label position="floating" class="label">Shipping Address*</ion-label>
+              <ion-input type="text" class="form_input" autocapitalize="words"
+                          formControlName="shippingaddress" autocomplete="off"></ion-input>
+          </ion-item> -->
+            <!-- <ion-list *ngIf="autocompleteItems.length > 0 && autoCompleteOff"> -->
+                <ion-list style="padding:0px">
+              <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+                  <ion-label>
+                      {{ item.description }}
+                  </ion-label>
+              </ion-item>
+          </ion-list>
+          <div style="height: 5px;">
+            <div *ngIf="desginForm.get('address').hasError('pattern') && desginForm.get('address').dirty">
+                <span class="error">{{addressError}}</span>
+            </div>
+            <div *ngIf="desginForm.get('address').value === '' && desginForm.get('address').dirty">
+                <span class="error">{{fieldRequired}}</span>
+            </div>
+        </div>
+
+
+          <!-- <ion-item *ngIf="autocompleteItems.length === 0" lines="none">
+              <ion-label class="ion-text-center">
+                  Search for address
+              </ion-label>
+          </ion-item> -->
+            </ion-col>
+          </ion-row>
 
 
             <ion-row class="ion-align-items-center ion-justify-content-center">
@@ -347,7 +388,7 @@
                             <ion-col size="1" (click)="removeArc(i)">x</ion-col>
                         </ion-item>
                     </div> -->
-    
+
                 <ion-row>
                   <!-- <ion-col size="1">
                         <span class="slider-nav arrow-prev" (click)="slidePrev(imageurls,slideWithNav2)">
@@ -374,7 +415,7 @@
                             "
                             alt="file"
                           />
-    
+
                           <ion-icon
                             class="remove"
                             name="close-circle-outline"
@@ -415,7 +456,7 @@
                   <!-- <ion-item> -->
                   <div>
                     <img
-                      [src]="arc.url"
+                    [src]="arc.ext === '.pdf' ? 'assets/icon/file.png' : arc.url "
                       style="height: 10rem; width: 10rem; border: 3px solid black"
                       alt="file"
                     />
@@ -425,20 +466,20 @@
                       (click)="remove(arc, i)"
                     ></ion-icon>
                   </div>
-    
+
                   <!-- </ion-item> -->
                 </ion-slide>
               </ion-slides>
             </ng-container>
             <!-- </ion-item> -->
           </ion-row>
-    
+
           <ion-row>
             <ion-col size="12">
               <ng-container>
                 <ion-item class="ion-no-padding" (click)="d.click()">
                   <ion-label position="floating">Attachments</ion-label>
-    
+
                   <input
                     #d
                     type="file"
@@ -479,7 +520,7 @@
                             "
                             alt="file"
                           />
-    
+
                           <ion-icon
                             class="remove"
                             name="close-circle-outline"
@@ -514,11 +555,11 @@
                   [options]="slideOptsThree"
                 >
                 <ng-container *ngIf="design && design.attachments !== null">
-    
+
                   <ion-slide *ngFor="let attach of design?.attachments; let i = index">
                     <div>
                       <img
-                        [src]="attach.url"
+                      [src]="attach.ext === '.pdf' ? 'assets/icon/file.png' : attach.url "
                         style="height: 10rem; width: 10rem; border: 3px solid black"
                         alt="file"
                       />
