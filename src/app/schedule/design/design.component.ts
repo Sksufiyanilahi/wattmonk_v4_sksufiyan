@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AssigneeModel} from 'src/app/model/assignee.model';
 import {SolarMake} from 'src/app/model/solar-make.model';
@@ -16,7 +16,8 @@ import {
   INVALID_EMAIL_MESSAGE,
   INVALID_NAME_MESSAGE,
   INVALID_TILT_FOR_GROUND_MOUNT,
-  ScheduleFormEvent
+  ScheduleFormEvent,
+  INVALID_ADDRESS
 } from '../../model/constants';
 import {Observable, Subscription} from 'rxjs';
 import {StorageService} from '../../storage.service';
@@ -28,6 +29,8 @@ import {File} from '@ionic-native/file/ngx';
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
 import {Clients} from 'src/app/model/clients.model';
 import {map, startWith} from "rxjs/operators";
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import { AddressModel } from 'src/app/model/address.model';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFirestore} from '@angular/fire/firestore';
 
@@ -93,6 +96,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   annualunitError = INVALID_ANNUAL_UNIT;
   tiltforgroundError = INVALID_TILT_FOR_GROUND_MOUNT;
   companyError = INVALID_COMPANY_NAME;
+  addressError = INVALID_ADDRESS;
 
   fieldRequired = FIELD_REQUIRED;
 
@@ -106,7 +110,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   imageName: any;
   oldcommentid: String
   indexOfArcFiles = []
+  indexOfAttachmentFile = [];
   isArcFileDelete: boolean = false;
+
   //attachmentName = this.desginForm.get('attachments').value;
 
   options: CameraOptions = {
@@ -138,6 +144,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   fieldDisabled = false;
   userdata: any;
 
+isArchitecturalFileUpload: boolean = false;
   attachmentFileUpload: boolean= false;
   imageurls: any=[];
   arcFileUrl: any=[];
@@ -147,6 +154,23 @@ export class DesignComponent implements OnInit, OnDestroy {
   // //newprelimsRef:any;
   // newprelimscount = 0;
 
+  //for address
+  //user: User
+  isEditMode:boolean=false;
+  formatted_address:string;
+
+  GoogleAutocomplete: google.maps.places.AutocompleteService;
+  autocompleteItems: any[];
+  map: any;
+
+  geoEncoderOptions: NativeGeocoderOptions = {
+    useLocale: true,
+    maxResults: 5
+  };
+
+  geocoder = new google.maps.Geocoder();
+  autoCompleteOff:boolean = false;
+  isSelectSearchResult:boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -157,8 +181,10 @@ export class DesignComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private camera: Camera,
     private file: File,
-    public router: Router,
-    private cdr: ChangeDetectorRef,
+    public router:Router,
+    private cdr:ChangeDetectorRef,
+    private zone: NgZone,
+    private nativeGeocoder: NativeGeocoder,
     //private db: AngularFireDatabase
   ) {
     var tomorrow = new Date();
@@ -168,6 +194,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     const NAMEPATTERN = /^[a-zA-Z. ]{3,}$/;
     const NUMBERPATTERN = '^[0-9]*$';
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
+    const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
     this.desginForm = this.formBuilder.group({
       companyname: new FormControl(''),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
@@ -192,12 +219,12 @@ export class DesignComponent implements OnInit, OnDestroy {
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim'),
-      latitude: new FormControl(''),
-      longitude: new FormControl(''),
+      latitude: new FormControl(null),
+      longitude: new FormControl(null),
       country: new FormControl(''),
       state: new FormControl(''),
       city: new FormControl(''),
-      postalcode: new FormControl(''),
+      postalcode: new FormControl(null),
       status: new FormControl('created'),
       attachments: new FormControl([]),
       deliverydate: new FormControl(d_date, []),
@@ -241,6 +268,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.getAssignees();
 
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
+    this.autocompleteItems = [];
+
   }
 
   numberfield(event) {
@@ -253,41 +283,41 @@ export class DesignComponent implements OnInit, OnDestroy {
 
 
 
- //Move to Next slide
- slideNext(object, slideView) {
-  slideView.slideNext(500).then(() => {
+  //Move to Next slide
+  slideNext(object, slideView) {
+    slideView.slideNext(500).then(() => {
+      this.checkIfNavDisabled(object, slideView);
+    });
+  }
+
+  //Move to previous slide
+  slidePrev(object, slideView) {
+    slideView.slidePrev(500).then(() => {
+      this.checkIfNavDisabled(object, slideView);
+    });;
+  }
+
+  //Method called when slide is changed by drag or navigation
+  SlideDidChange(object, slideView) {
     this.checkIfNavDisabled(object, slideView);
-  });
-}
+  }
 
-//Move to previous slide
-slidePrev(object, slideView) {
-  slideView.slidePrev(500).then(() => {
-    this.checkIfNavDisabled(object, slideView);
-  });;
-}
+  //Call methods to check if slide is first or last to enable disbale navigation
+  checkIfNavDisabled(object, slideView) {
+    this.checkisBeginning(object, slideView);
+    this.checkisEnd(object, slideView);
+  }
 
-//Method called when slide is changed by drag or navigation
-SlideDidChange(object, slideView) {
-  this.checkIfNavDisabled(object, slideView);
-}
-
-//Call methods to check if slide is first or last to enable disbale navigation
-checkIfNavDisabled(object, slideView) {
-  this.checkisBeginning(object, slideView);
-  this.checkisEnd(object, slideView);
-}
-
-checkisBeginning(object, slideView) {
-  slideView.isBeginning().then((istrue) => {
-    object.isBeginningSlide = istrue;
-  });
-}
-checkisEnd(object, slideView) {
-  slideView.isEnd().then((istrue) => {
-    object.isEndSlide = istrue;
-  });
-}
+  checkisBeginning(object, slideView) {
+    slideView.isBeginning().then((istrue) => {
+      object.isBeginningSlide = istrue;
+    });
+  }
+  checkisEnd(object, slideView) {
+    slideView.isEnd().then((istrue) => {
+      object.isEndSlide = istrue;
+    });
+  }
 
 
   // getmodulename(event){
@@ -357,32 +387,32 @@ checkisEnd(object, slideView) {
         this.getInverterMade();
       });
       // }
-      this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-        // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      // this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+      //   // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-        this.desginForm.get('address').setValue('124/345');
-        this.desginForm.get('latitude').setValue('24.553333');
-        this.desginForm.get('longitude').setValue('80.5555555555');
-        this.desginForm.get('country').setValue('india');
-        this.desginForm.get('city').setValue('Lucknow');
-        this.desginForm.get('state').setValue('UP');
-        this.desginForm.get('postalcode').setValue(3232343);
-        // this.desginForm.get('address').setValue(address.address);
-        // this.desginForm.get('latitude').setValue(address.lat);
-        // this.desginForm.get('longitude').setValue(address.long);
-        // this.desginForm.get('country').setValue(address.country);
-        // this.desginForm.get('city').setValue(address.city);
-        // this.desginForm.get('state').setValue(address.state);
-        // this.desginForm.get('postalcode').setValue(address.postalcode);
-      }, (error) => {
-        this.desginForm.get('address').setValue('');
-        this.desginForm.get('latitude').setValue('');
-        this.desginForm.get('longitude').setValue('');
-        this.desginForm.get('country').setValue('');
-        this.desginForm.get('city').setValue('');
-        this.desginForm.get('state').setValue('');
-        this.desginForm.get('postalcode').setValue('');
-      });
+      //    // this.desginForm.get('address').setValue('124/345');
+      //    // this.desginForm.get('latitude').setValue('24.553333');
+      //    // this.desginForm.get('longitude').setValue('80.5555555555');
+      //    // this.desginForm.get('country').setValue('india');
+      //    // this.desginForm.get('city').setValue('Lucknow');
+      //    // this.desginForm.get('state').setValue('UP');
+      //    // this.desginForm.get('postalcode').setValue(3232343);
+      //    this.desginForm.get('address').setValue(address.address);
+      //      this.desginForm.get('latitude').setValue(address.lat);
+      //      this.desginForm.get('longitude').setValue(address.long);
+      //      this.desginForm.get('country').setValue(address.country);
+      //    this.desginForm.get('city').setValue(address.city);
+      //      this.desginForm.get('state').setValue(address.state);
+      //      this.desginForm.get('postalcode').setValue(address.postalcode);
+      // }, (error) => {
+      //   this.desginForm.get('address').setValue('');
+      //   this.desginForm.get('latitude').setValue('');
+      //   this.desginForm.get('longitude').setValue('');
+      //   this.desginForm.get('country').setValue('');
+      //   this.desginForm.get('city').setValue('');
+      //   this.desginForm.get('state').setValue('');
+      //   this.desginForm.get('postalcode').setValue('');
+      // });
       this.desginForm.patchValue({
         createdby: this.storage.getUserID()
       });
@@ -686,21 +716,21 @@ checkisEnd(object, slideView) {
   }
 
   remove(arc, i) {
-//   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-//     this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
-//   this.utils.hideLoading().then(()=>{
-//     this.utils.showSnackBar('File deleted successfully');
-//     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
-//     //this.utils.setHomepageDesignRefresh(true);
-//   });
-//   },
-// (error)=>{
-//   this.utils.hideLoading().then(()=> {
-//     this.utils.errorSnackBar('some Error Occured');
-//   });
+    //   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+    //     this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+    //   this.utils.hideLoading().then(()=>{
+    //     this.utils.showSnackBar('File deleted successfully');
+    //     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
+    //     //this.utils.setHomepageDesignRefresh(true);
+    //   });
+    //   },
+    // (error)=>{
+    //   this.utils.hideLoading().then(()=> {
+    //     this.utils.errorSnackBar('some Error Occured');
+    //   });
 
-// });
-// });
+    // });
+    // });
     console.log(arc);
     this.indexOfArcFiles.push(arc.id);
 
@@ -710,20 +740,21 @@ checkisEnd(object, slideView) {
     console.log(this.architecturalData);
 
     this.architecturalData.splice(i, 1);
-
+    this.deleteArcFile(this.indexOfArcFiles);
   }
 
   removeattachment(attachment, i) {
 
-    this.indexOfArcFiles.push(attachment.id);
+    this.indexOfAttachmentFile.push(attachment.id);
 
     this.isArcFileDelete = true;
     console.log(this.isArcFileDelete);
-    console.log(this.indexOfArcFiles);
+    console.log(this.indexOfAttachmentFile);
     console.log(this.attachmentData);
     console.log(i);
 
     this.attachmentData.splice(i, 1);
+    this.deleteAttachmentFile(this.indexOfAttachmentFile)
   }
 
   deleteArcFile(index) {
@@ -732,9 +763,11 @@ checkisEnd(object, slideView) {
     // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
     for (var i = 0; i < index.length; i++) {
       var id = index[i];
-      this.apiService.deletePrelimImage(id).subscribe(res => {
-        console.log("hello", res)
-
+      this.utils.showLoading("Deleting Architectural File").then(() => {
+        this.apiService.deletePrelimImage(id).subscribe(res => {
+          console.log("hello", res)
+          this.indexOfArcFiles = []
+        })
       });
 
       // this.utils.hideLoading().then(()=>{
@@ -751,10 +784,34 @@ checkisEnd(object, slideView) {
       }
     }
 
-// });
+    // });
     //this.utils.setHomepageDesignRefresh(true);
 
 
+  }
+
+  deleteAttachmentFile(index) {
+
+    // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
+    for (var i = 0; i < index.length; i++) {
+
+      var id = index[i];
+      this.utils.showLoading("Deleting Attachment File").then(() => {
+        this.apiService.deletePrelimImage(id).subscribe(res => {
+          this.utils.hideLoading().then(() => {
+            console.log("hello", res)
+            this.indexOfAttachmentFile = []
+          });
+        })
+      });
+      (error) => {
+        this.utils.hideLoading().then(() => {
+          this.utils.errorSnackBar('some Error Occured');
+        });
+      }
+    }
+
+    // })
   }
 
   addForm() {
@@ -764,6 +821,12 @@ checkisEnd(object, slideView) {
     console.log('Reach', this.desginForm);
     // debugger;
     // this.saveModuleMake();
+    // if(!this.isSelectSearchResult)
+    // {
+    //   this.desginForm.get('latitude').setValue(null);
+    //   this.desginForm.get('longitude').setValue(null);
+    //   this.desginForm.get('postalcode').setValue(null);
+    // }
     this.submitform();
 
   }
@@ -783,12 +846,14 @@ checkisEnd(object, slideView) {
               this.utils.hideLoading().then(() => {
                 if (newConstruction == 'true') {
                   // if(this.architecturalFileUpload){
-                  this.uploaarchitecturedesign(response, 'architecturaldesign');
+                  this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                   // }
-                } else {
+                }
+                else {
                   if (this.attachmentFileUpload) {
-                    this.uploadpreliumdesign(response, 'attachments')
-                  } else {
+                    this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0)
+                  }
+                  else {
                     this.router.navigate(['/homepage/design'])
                     // this.utils.showSnackBar('Design have been saved');
                     this.utils.setHomepageDesignRefresh(true);
@@ -818,33 +883,33 @@ checkisEnd(object, slideView) {
           });
         } else if (this.send === ScheduleFormEvent.SEND_DESIGN_FORM) {
           this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
-              console.log(response.id);
-              this.utils.hideLoading().then(() => {
-                if (newConstruction == 'true') {
-                  this.uploaarchitecturedesign(response, 'architecturaldesign');
+            console.log(response.id);
+            this.utils.hideLoading().then(() => {
+              if (newConstruction == 'true') {
+                this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+              } else {
+                if (this.attachmentFileUpload) {
+                  this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0)
                 } else {
-                  if (this.attachmentFileUpload) {
-                    this.uploadpreliumdesign(response, 'attachments')
-                  } else {
-                    let objToSend: NavigationExtras = {
-                      queryParams: {
-                        id: response.id,
-                        designData: "prelim",
-                        fulldesigndata: response,
-                        designType: "siteassesment"
-                      },
-                      skipLocationChange: false,
-                      fragment: 'top'
-                    };
+                  let objToSend: NavigationExtras = {
+                    queryParams: {
+                      id: response.id,
+                      designData: "prelim",
+                      fulldesigndata: response,
+                      designType: "siteassesment"
+                    },
+                    skipLocationChange: false,
+                    fragment: 'top'
+                  };
 
 
-                    this.router.navigate(['/payment-modal'], {
-                      state: {productdetails: objToSend}
-                    });
-                  }
+                  this.router.navigate(['/payment-modal'], {
+                    state: { productdetails: objToSend }
+                  });
                 }
-              })
-            }
+              }
+            })
+          }
             , responseError => {
               this.utils.hideLoading();
               const error: ErrorModel = responseError.error;
@@ -857,24 +922,23 @@ checkisEnd(object, slideView) {
         if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
           this.utils.showLoading('Saving').then(() => {
             this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
-                this.utils.hideLoading().then(() => {
-                  if (newConstruction == 'true') {
-                    this.uploaarchitecturedesign(response, 'architecturaldesign');
-                  } else {
-                    if (this.attachmentFileUpload) {
-                      this.uploadpreliumdesign(response, 'attachments')
-                    } else {
-                      this.utils.showSnackBar('Design have been updated');
-                      this.utils.setDesignDetailsRefresh(true);
-                      this.navController.pop();
-                    }
+              this.utils.hideLoading().then(() => {
+                if (newConstruction == 'true') {
+                  this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+                }
+                else {
+                  if (this.attachmentFileUpload) {
+                    this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0)
                   }
-                  if (this.isArcFileDelete) {
-                    this.deleteArcFile(this.indexOfArcFiles);
+                  else {
+                    this.utils.showSnackBar('Design have been updated');
+                    this.utils.setDesignDetailsRefresh(true);
+                    this.navController.pop();
                   }
+                }
 
-                });
-              },
+              });
+            },
               responseError => {
                 this.utils.hideLoading().then(() => {
                   const error: ErrorModel = responseError.error;
@@ -887,11 +951,13 @@ checkisEnd(object, slideView) {
           this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
             this.utils.hideLoading().then(() => {
               if (newConstruction == 'true') {
-                this.uploaarchitecturedesign(response, 'architecturaldesign');
-              } else {
+                this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
+              }
+              else {
                 if (this.attachmentFileUpload) {
-                  this.uploadpreliumdesign(response, 'attachments');
-                } else {
+                  this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0);
+                }
+                else {
                   let objToSend: NavigationExtras = {
                     queryParams: {
                       id: response.id,
@@ -904,35 +970,35 @@ checkisEnd(object, slideView) {
 
 
                   this.router.navigate(['/payment-modal'], {
-                    state: {productdetails: objToSend}
+                    state: { productdetails: objToSend }
                   });
                 }
               }
-              if (this.isArcFileDelete) {
-                console.log("hello");
-                this.deleteArcFile(this.indexOfArcFiles);
-              }
-              // this.utils.hideLoading().then(() => {
-              //   console.log('Res', response);
-              //   this.value=response.id;
+            })
+            // this.utils.hideLoading().then(() => {
+            //   console.log('Res', response);
+            //   this.value=response.id;
 
-              //   this.utils.showSnackBar('Design have been updated');
-              //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
+            //   this.utils.showSnackBar('Design have been updated');
+            //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
+
+            //   this.utils.showSnackBar('Design have been updated');
+            //   //this.router.navigate(["payment-modal",{id:response.id,designData:"prelim"}]);
 
 
-            });
-          }, responseError => {
+          });
+          responseError => {
             this.utils.hideLoading().then(() => {
               const error: ErrorModel = responseError.error;
               this.utils.errorSnackBar(error.message[0].messages[0].message);
             });
 
-          });
+          }
         }
       }
+    }
 
-
-    } else {
+    else {
       if (this.desginForm.value.name == '' || this.desginForm.get('name').hasError('pattern')) {
 
         this.utils.errorSnackBar('Please check the field name.');
@@ -1105,6 +1171,7 @@ checkisEnd(object, slideView) {
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
+    this.isArchitecturalFileUpload = true;
     console.log(this.archFiles);
   }
 
@@ -1116,10 +1183,10 @@ checkisEnd(object, slideView) {
       this.prelimFiles.push(event.target.files[i])
       var reader = new FileReader();
       reader.onload = (e: any) => {
-        if(event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')){
+        if (event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')) {
           // console.log(event.target.files[i].name);
           this.imageurls.push(e.target.result);
-        }else{
+        } else {
           this.imageurls.push('/assets/icon/file.png');
         }
         console.log(this.imageurls)
@@ -1141,34 +1208,109 @@ checkisEnd(object, slideView) {
   }
 
 
-  uploaarchitecturedesign(response?: any, key?: string) {
-    console.log(this.archFiles);
-    const imageData = new FormData();
-    for (var i = 0; i < this.archFiles.length; i++) {
-      imageData.append("files", this.archFiles[i]);
-      if (i == 0) {
-        imageData.append('path', 'designs/' + response.id);
-        imageData.append('refId', response.id + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-      }
+  uploaarchitecturedesign(response?: any, key?: string, fileObj?: string, index?: number) {
+    //  console.log(this.archFiles);
+
+    if (!this.isArchitecturalFileUpload) {
+      this.uploadpreliumdesign(response, key, this.prelimFiles[0], 0);
     }
-    this.utils.showLoading("Architectural File Uploading").then(() => {
+    else {
+      console.log(fileObj)
+      const imageData = new FormData();
+      //for(var i=0; i< this.archFiles.length;i++){
+      imageData.append("files", fileObj);
+      // if(i ==0){
+      imageData.append('path', 'designs/' + response.id);
+      imageData.append('refId', response.id + '');
+      imageData.append('ref', 'design');
+      imageData.append('field', key);
+      // }
+      // }
+      this.utils.showLoading("Uploading architecture" + " " + (index + 1) + " of" + " " + this.archFiles.length).then(() => {
+        this.apiService.uploaddesign(imageData).subscribe(res => {
+          console.log(res);
+          if (index < this.archFiles.length - 1) {
+            console.log("if")
+            this.utils.hideLoading();
+            var newIndex = index + 1;
+            this.uploaarchitecturedesign(response, key, this.archFiles[newIndex], newIndex);
+          } else {
+            this.utils.hideLoading();
+            if (this.attachmentFileUpload) {
+              this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0);
+            }
+            else {
+              if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
+                this.router.navigate(['/homepage/design'])
+                if (this.designId == 0) {
+                  this.utils.showSnackBar('Design have been saved');
+                }
+                else {
+                  this.utils.showSnackBar('Design have been updated')
+                }
+                this.utils.setHomepageDesignRefresh(true);
+              }
+              else {
+                let objToSend: NavigationExtras = {
+                  queryParams: {
+                    id: response.id,
+                    designData: "prelim",
+                    fulldesigndata: response
+                  },
+                  skipLocationChange: false,
+                  fragment: 'top'
+                };
+
+
+                this.router.navigate(['/payment-modal'], {
+                  state: { productdetails: objToSend }
+                });
+              }
+            }
+          }
+        })
+      }, responseError => {
+        this.utils.hideLoading();
+        const error: ErrorModel = responseError.error;
+        this.utils.errorSnackBar(error.message[0].messages[0].message);
+      })
+
+    }
+  }
+
+  uploadpreliumdesign(response?: any, key?: string, fileObj?: string, index?: number) {
+    console.log(this.prelimFiles);
+    const imageData = new FormData();
+    // for(var i=0; i< this.prelimFiles.length;i++){
+    imageData.append("files", fileObj);
+    // if(i ==0){
+    imageData.append('path', 'designs/' + response.id);
+    imageData.append('refId', response.id + '');
+    imageData.append('ref', 'design');
+    imageData.append('field', key);
+    //}
+    // }
+    this.utils.showLoading("Uploading attachment" + " " + (index + 1) + " of" + " " + this.prelimFiles.length).then(() => {
       this.apiService.uploaddesign(imageData).subscribe(res => {
         console.log(res);
-        this.utils.hideLoading();
-        if (this.attachmentFileUpload) {
-          this.uploadpreliumdesign(response, 'attachments');
+        if (index < this.prelimFiles.length - 1) {
+          console.log("if")
+          this.utils.hideLoading();
+          var newIndex = index + 1;
+          this.uploadpreliumdesign(response, key, this.prelimFiles[newIndex], newIndex);
         } else {
+          this.utils.hideLoading();
           if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
             this.router.navigate(['/homepage/design'])
             if (this.designId == 0) {
               this.utils.showSnackBar('Design have been saved');
-            } else {
-              this.utils.showSnackBar('Design have been updated')
+            }
+            else {
+              this.utils.showSnackBar('Design have been updated');
             }
             this.utils.setHomepageDesignRefresh(true);
-          } else {
+          }
+          else {
             let objToSend: NavigationExtras = {
               queryParams: {
                 id: response.id,
@@ -1181,61 +1323,10 @@ checkisEnd(object, slideView) {
 
 
             this.router.navigate(['/payment-modal'], {
-              state: {productdetails: objToSend}
+              state: { productdetails: objToSend }
             });
           }
         }
-      }, responseError => {
-        this.utils.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utils.errorSnackBar(error.message[0].messages[0].message);
-      })
-    })
-
-
-  }
-
-  uploadpreliumdesign(response?: any, key?: string, filearray?: File[]) {
-    console.log(this.prelimFiles);
-    const imageData = new FormData();
-    for (var i = 0; i < this.prelimFiles.length; i++) {
-      imageData.append("files", this.prelimFiles[i]);
-      if (i == 0) {
-        imageData.append('path', 'designs/' + response.id);
-        imageData.append('refId', response.id + '');
-        imageData.append('ref', 'design');
-        imageData.append('field', key);
-      }
-    }
-    this.utils.showLoading("Attachment File Uploading").then(() => {
-      this.apiService.uploaddesign(imageData).subscribe(res => {
-        console.log(res);
-        this.utils.hideLoading();
-        if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
-          this.router.navigate(['/homepage/design'])
-          if (this.designId == 0) {
-            this.utils.showSnackBar('Design have been saved');
-          } else {
-            this.utils.showSnackBar('Design have been updated');
-          }
-          this.utils.setHomepageDesignRefresh(true);
-        } else {
-          let objToSend: NavigationExtras = {
-            queryParams: {
-              id: response.id,
-              designData: "prelim",
-              fulldesigndata: response
-            },
-            skipLocationChange: false,
-            fragment: 'top'
-          };
-
-
-          this.router.navigate(['/payment-modal'], {
-            state: {productdetails: objToSend}
-          });
-        }
-
       }, responseError => {
         this.utils.hideLoading();
         //this.utils.hideUploadingLoading();
@@ -1265,7 +1356,7 @@ checkisEnd(object, slideView) {
   }
 
   removePrelim(i) {
-    console.log(i,this.prelimFiles,this.prelimFiles.length)
+    console.log(i, this.prelimFiles, this.prelimFiles.length)
     this.imageurls.splice(i, 1);
     this.prelimFiles.splice(i, 1);
   }
@@ -1313,7 +1404,7 @@ checkisEnd(object, slideView) {
 
 
       this.router.navigate(['/payment-modal'], {
-        state: {productdetails: objToSend}
+        state: { productdetails: objToSend }
       });
     } else {
       if (this.desginForm.value.name == '' || this.desginForm.get('name').hasError('pattern')) {
@@ -1323,6 +1414,8 @@ checkisEnd(object, slideView) {
         this.utils.errorSnackBar('Please check the field email.');
       } else if (this.desginForm.value.monthlybill == '' || this.desginForm.get('monthlybill').hasError('pattern')) {
         this.utils.errorSnackBar('Please check the field annual units.');
+      }else if(this.desginForm.value.address=='' || this.desginForm.value.address==null){
+        this.utils.errorSnackBar('Please check the field address')
       } else if (this.desginForm.value.inverterscount == '' || this.desginForm.get('inverterscount').hasError('pattern')) {
         this.utils.errorSnackBar('Please check the field inverters count.');
       } else if (this.desginForm.value.modulemake == '' || this.desginForm.get('modulemake').hasError('pattern')) {
@@ -1372,14 +1465,14 @@ checkisEnd(object, slideView) {
 
   gettingClients() {
     this.apiService.getClients().subscribe(res => {
-        this.getCompanies = res;
-        console.log(this.getCompanies);
-        this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
-          startWith(""),
-          map(value => (typeof value === "string" ? value : value.companyid)),
-          map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
-        );
-      },
+      this.getCompanies = res;
+      console.log(this.getCompanies);
+      this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
+        startWith(""),
+        map(value => (typeof value === "string" ? value : value.companyid)),
+        map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
+      );
+    },
       error => {
         // this.utils.errorSnackBar("Error");
       }
@@ -1413,5 +1506,169 @@ checkisEnd(object, slideView) {
       company => company.companyname.toLowerCase().indexOf(companyname) != -1
     );
   }
+
+   //// For Address
+    /* FOR SEARCH SHIPPING ADDRESS */
+    updateSearchResults(event) {
+      //this.autoCompleteOff = true;
+      console.log(this.autoCompleteOff);
+      if(this.designId)
+      {
+      const input = event.detail.value;
+      console.log(input)
+      if (input === '') {
+        this.autocompleteItems = [];
+        return;
+      }
+      this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+        country: 'us'
+      }  },
+        (predictions, status) => {
+          this.autocompleteItems = [];
+          this.zone.run(() => {
+            predictions.forEach((prediction) => {
+              this.autocompleteItems.push(prediction);
+            });
+          });
+        });
+      }
+    }
+
+    forAutoComplete(e){
+      console.log("hello",e);
+      this.autoCompleteOff = true;
+
+    }
+
+  //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
+    selectSearchResult(item) {
+      console.log(item);
+      this.isSelectSearchResult = true;
+      this.geocoder.geocode({
+        placeId: item.place_id
+      }, (responses, status) => {
+        console.log('respo', responses);
+        this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
+      });
+      this.autocompleteItems = []
+    }
+
+    getGeoEncoder(latitude, longitude, formattedAddress) {
+
+      // // TODO remove later
+      // const address: AddressModel = {
+      //   address: 'Vasant Kunj, New Delhi, Delhi',
+      //   lat: 28.5200491,
+      //   long: 77.158687,
+      //   country: 'India',
+      //   state: 'Delhi',
+      //   city: 'New Delhi',
+      //   postalcode: '110070'
+      // };
+      // this.utilities.setAddress(address);
+      // this.goBack();
+      // return;
+
+      this.utils.showLoading('Loading').then(() => {
+        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+          .then((result: NativeGeocoderResult[]) => {
+            console.log(result)
+            let add = '';
+            if (formattedAddress === '') {
+              add = this.generateAddress(result[0]);
+            } else {
+              add = formattedAddress;
+            }
+            this.utils.hideLoading().then(() => {
+              console.log('resu', result);
+              const address: AddressModel = {
+                address: add,
+                lat: latitude,
+                long: longitude,
+                country: result[0].countryName,
+                state: result[0].administrativeArea,
+                city: result[0].locality,
+                postalcode: result[0].postalCode
+              };
+              this.utils.setAddress(address);
+              this.addressValue();
+              //this.goBack();
+            });
+
+          })
+          .catch((error: any) => {
+            this.utils.hideLoading().then(() => {
+              alert('Error getting location' + JSON.stringify(error));
+            });
+
+          });
+      });
+    }
+
+    generateAddress(addressObj) {
+      const obj = [];
+      let address = '';
+      for (const key in addressObj) {
+        obj.push(addressObj[key]);
+      }
+      obj.reverse();
+      for (const val in obj) {
+        if (obj[val].length) {
+          address += obj[val] + ', ';
+        }
+      }
+      return address.slice(0, -2);
+    }
+
+    onCancel() {
+      console.log("hello");
+      this.autocompleteItems = [];
+      console.log(this.autocompleteItems)
+    }
+
+    addressValue(){
+      // }
+      this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+          // this.firstFormGroup.get('address').setValue('124/345');
+          // this.firstFormGroup.get('latitude').setValue('24.553333');
+          // this.firstFormGroup.get('longitude').setValue('80.5555555555');
+          // this.firstFormGroup.get('country').setValue('india');
+          // this.firstFormGroup.get('city').setValue('Lucknow');
+          // this.firstFormGroup.get('state').setValue('UP');
+          // this.firstFormGroup.get('postalcode').setValue(3232343);
+         this.desginForm.get('address').setValue(address.address);
+           this.desginForm.get('latitude').setValue(address.lat);
+           this.desginForm.get('longitude').setValue(address.long);
+           this.desginForm.get('country').setValue(address.country);
+         this.desginForm.get('city').setValue(address.city);
+           this.desginForm.get('state').setValue(address.state);
+           this.desginForm.get('postalcode').setValue(address.postalcode);
+      }, (error) => {
+        this.desginForm.get('address').setValue('');
+        this.desginForm.get('latitude').setValue(null);
+        this.desginForm.get('longitude').setValue(null);
+        this.desginForm.get('country').setValue('');
+        this.desginForm.get('city').setValue('');
+        this.desginForm.get('state').setValue('');
+        this.desginForm.get('postalcode').setValue(null);
+      });
+      // this.firstFormGroup.patchValue({
+      //   createdby: this.storage.getUserID()
+      // });
+   // this.autocompleteItems = [];
+      this.autoCompleteOff = false;
+      console.log(this.autoCompleteOff);
+      //this.getSolarMake();
+
+      }
+
+      onBlur()
+      {
+        setTimeout(() => {
+          this.autocompleteItems = [];
+        }, 100);
+      }
 }
 

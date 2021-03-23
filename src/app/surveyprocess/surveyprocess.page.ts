@@ -389,6 +389,7 @@ export class SurveyprocessPage implements OnInit {
   fetchJSONData() {
     const userId = this.user.parent.id !== '' ? this.user.parent.id : this.user.id;
     this.apiService.fetchJSON(userId, this.surveytype).subscribe((data: any) => {
+      data = data[0];
       this.mainmenuitems = JSON.parse(JSON.stringify(data.sequence));
       this.originalmainmenuitems = JSON.parse(JSON.stringify(data.sequence));
       this.isdataloaded = true;

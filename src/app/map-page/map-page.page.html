@@ -8,9 +8,12 @@
                 </ion-button>
             </ion-col>
             <ion-col>
-                <ion-searchbar (ionChange)="updateSearchResults($event)" country="us"
+                <!-- <ion-searchbar (ionChange)="updateSearchResults($event)" country="us"
                                (ionClear)="onCancel()" debounce="300"
-                               placeholder="Search for a place"></ion-searchbar>
+                               placeholder="Search for a place"></ion-searchbar> -->
+                               <ion-input (ionChange)="updateSearchResults($event)" country="us"
+                               (ionClear)="onCancel()" debounce="300"
+                               placeholder="Search for a place"></ion-input>
 
             </ion-col>
             <ion-col size="auto">

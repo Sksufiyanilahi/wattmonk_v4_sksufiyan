@@ -408,15 +408,34 @@ export class PEengineerdesignComponent implements OnInit {
     }
   }
 
-  accept(id,data:string,event){
+  accept(id,data:any,event){
     event.stopPropagation();
     // this.acceptid= id;
     this.mixpanelService.track("ACCEPT_PESTAMP_PAGE_OPEN", {
     });
-    const postData = {
-      acceptedbypeengineer: true,
-      declinedbypeengineer:false
-    };
+
+    var postData
+    if (data.type == 'both') {
+      if (this.userData.peengineertype == 'electrical') {
+        postData = {
+          acceptedbyelectricalpeengineer: true,
+          declinedbyelectricalpeengineer: false
+        }
+      }
+      else {
+        postData = {
+          acceptedbystructuralpeengineer: true,
+          declinedbystructuralpeengineer: false
+        }
+      }
+    }
+    else {
+      postData = {
+        acceptedbypeengineer: true,
+        declinedbypeengineer: false
+      };
+    }
+    
     this.utils.showLoading("accepting").then(()=>{
        this.apiService.assignPestamps(id,postData).subscribe((res:any)=>{
          this.utils.hideLoading().then(()=>{
