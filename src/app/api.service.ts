@@ -716,5 +716,10 @@ export class ApiService {
       }
       )
     }
+
+    editProfile(data,id): Observable<User> {
+      return this.http.put<User>(BaseUrl + 'users/' + id, data, { headers: this.headers });
+    }
+  
 }
 

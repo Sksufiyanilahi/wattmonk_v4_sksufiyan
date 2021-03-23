@@ -39,6 +39,7 @@ import {PopoverComponentComponent} from './popover-component/popover-component.c
 import {MyLoaderComponent} from './components/my-loader/my-loader.component';
 import {CameraPreviewWeb} from '@capacitor-community/camera-preview';
 import {SplashScreenPluginWeb} from '@capacitor/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent,PopoverComponentComponent],
@@ -59,7 +60,9 @@ import {SplashScreenPluginWeb} from '@capacitor/core';
     MatButtonModule,
      MatProgressSpinnerModule,
     AngularFireDatabaseModule,
-    AngularFireModule.initializeApp(environment.firebase)
+    AngularFireModule.initializeApp(environment.firebase),
+    MatAutocompleteModule
+
   ],
   providers: [
     // FCM,
