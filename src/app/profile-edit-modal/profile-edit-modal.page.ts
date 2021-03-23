@@ -11,7 +11,7 @@ import { UtilitiesService } from '../utilities.service';
 export interface Country {
   country: string;
   calling_code: string;
-  
+
 }
 
 @Component({
@@ -31,7 +31,7 @@ export class ProfileEditModalPage implements OnInit {
   emailError = INVALID_EMAIL_MESSAGE;
   lastNameError = "Invalid Last Name";
   phoneError = INVALID_PHONE_NUMBER;
-  
+
   constructor(
     private formBuilder: FormBuilder,
     private modalCtrl:ModalController,
@@ -51,7 +51,7 @@ export class ProfileEditModalPage implements OnInit {
       address:  new FormControl(''),
     })
 
-   
+
    }
 
   ngOnInit() {
@@ -74,7 +74,7 @@ export class ProfileEditModalPage implements OnInit {
       this.countries = res;
       this.country();
       this.selectedcountry=this.countries.find(c=> c.country=='United States');
-  
+
     this.profileEdit.get('country').setValue(this.selectedcountry.country);
     this.setSelectedCountry(this.selectedcountry);
     })
@@ -91,10 +91,10 @@ export class ProfileEditModalPage implements OnInit {
       country => country.country.toLowerCase().indexOf(filterValue) != -1
     );
   }
-  
+
   setSelectedCountry(item: Country) {
     this.selectedcountry = item;
- 
+
   }
 
   country()
@@ -103,7 +103,7 @@ export class ProfileEditModalPage implements OnInit {
       startWith(""),
       map(value => (typeof value === "string" ? value : value.name)),
       map(name => (name ? this._filter(name) : this.countries.slice()))
-    ); 
+    );
   }
 
   updateProfile(){
