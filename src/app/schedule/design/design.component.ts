@@ -1028,7 +1028,11 @@ isArchitecturalFileUpload: boolean = false;
         this.utils.errorSnackBar('Please check the field tilt for ground mount.');
       } else if (this.desginForm.value.rooftype == '') {
         this.utils.errorSnackBar('Please fill the rooftype.');
-      } else if (this.desginForm.value.architecturaldesign == '') {
+      }
+      else if (this.desginForm.value.inverterscount == '' || this.desginForm.get('inverterscount').hasError('pattern')) {
+        this.utils.errorSnackBar('Please check the field inverters count.');}
+        
+       else if (this.desginForm.value.architecturaldesign == '') {
         this.utils.errorSnackBar('Please attach architectural design.');
       } else {
         this.utils.errorSnackBar('Address not found. Make sure location is on on device.');
