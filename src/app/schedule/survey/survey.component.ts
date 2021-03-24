@@ -352,7 +352,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             state: this.survey.state,
             city: this.survey.city,
             postalcode: this.survey.postalcode,
-            oldcommentid: this.survey.comments[0].id
+            oldcommentid: this.survey.comments == '' ? '' : this.survey.comments[0].id
           });
           if (this.survey.assignedto !== null && this.survey.assignedto !== undefined) {
             this.surveyForm.patchValue({

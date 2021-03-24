@@ -40,6 +40,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   netSwitch: boolean;
   deactivateNetworkSwitch: Subscription;
   designs: any;
+  designId:number;
 
   constructor(
     private navController: NavController,
@@ -94,6 +95,13 @@ this.network.networkConnect();
     }
      this.designs = this.utilities.getdesignDetails();
      console.log(this.designs)
+     if(this.designs)
+     {
+       this.designId = this.designs.id;
+     }
+     else{
+       this.designId = 0;
+     }
   //console.log(this.designs.status);
   }
 
@@ -360,13 +368,25 @@ this.network.networkConnect();
   saveDesignForm() {
     console.log('posting value');
     console.log(this.router.url);
-    if(this.router.url=='/schedule/design' || this.router.url=='/schedule/design/' + this.designs.id ){
-    this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
-    }
-    else if(this.router.url=='/schedule/salesproposal' || this.router.url == '/schedule/salesproposal/'+this.designs.id)
-    {
-      this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SALES_FORM);
-    }
+    if(this.designId !== 0){
+      if(this.router.url=='/schedule/design/' + this.designs.id ){
+        this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
+        }
+        else if(this.router.url == '/schedule/salesproposal/'+this.designs.id)
+        {
+          this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SALES_FORM);
+        }
+    
+  }
+  else{
+    if(this.router.url=='/schedule/design'){
+      this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
+      }
+      else if(this.router.url=='/schedule/salesproposal')
+      {
+        this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SALES_FORM);
+      }
+  }
   }
   // else{
   //   if(this.router.url=='/schedule/design/'+this.designs.id)
@@ -390,12 +410,24 @@ this.network.networkConnect();
   }
 
   sendDesignForm(){
-    if(this.router.url=='/schedule/design' || this.router.url == '/schedule/design/'+this.designs.id){
+    if(this.designId == 0)
+    {
+    if(this.router.url=='/schedule/design'){
      this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
   }
-  else if(this.router.url=='/schedule/salesproposal' || this.router.url == '/schedule/salesproposal/'+this.designs.id)
+  else if(this.router.url=='/schedule/salesproposal')
     {
       this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_SALES_FORM);
     }
+  }
+  else{
+    if(this.router.url == '/schedule/design/'+this.designs.id){
+      this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
+   }
+   else if(this.router.url == '/schedule/salesproposal/'+this.designs.id)
+     {
+       this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_SALES_FORM);
+     }
+  }
 }
 }

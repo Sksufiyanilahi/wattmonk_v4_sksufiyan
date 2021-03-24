@@ -111,12 +111,12 @@ export class PestampSchedulePage implements OnInit {
       roofphotos: new FormControl(''),
       permitplanphotos: new FormControl(''),
       comment: new FormControl(''),
-      latitude: new FormControl(''),
-      longitude: new FormControl(''),
+      latitude: new FormControl(null),
+      longitude: new FormControl(null),
       country: new FormControl(''),
       state: new FormControl(''),
       city: new FormControl(''),
-      postalcode: new FormControl(''),
+      postalcode: new FormControl(null),
       mountingtype: new FormControl('', [Validators.required]),
       propertytype: new FormControl('', [Validators.required]),
       jobtype: new FormControl('')
@@ -192,8 +192,9 @@ export class PestampSchedulePage implements OnInit {
           });
         }
         )
+        this.oldcommentsid = this.design.comments == '' ? '' : this.design.comments[0].id;
         this.nonEditableField=true;
-        this.oldcommentsid = this.design.comments[0].id;
+
       }, (error) => {
         this.utils.hideLoading();
       })
