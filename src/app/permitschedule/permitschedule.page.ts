@@ -705,7 +705,7 @@ export class PermitschedulePage implements OnInit {
             inverterscount: this.design.inverterscount
           });
           console.log("gg", this.design.solarmake.name);
-          this.oldcommentid = this.design.comments[0].id;
+          this.oldcommentid = this.design.comments == '' ? '' : this.design.comments[0].id;
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
           //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;

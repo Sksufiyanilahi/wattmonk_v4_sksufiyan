@@ -220,12 +220,12 @@ export class SalesproposalComponent implements OnInit {
       source: new FormControl('android', [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim'),
-      latitude: new FormControl(''),
-      longitude: new FormControl(''),
+      latitude: new FormControl(null),
+      longitude: new FormControl(null),
       country: new FormControl(''),
       state: new FormControl(''),
       city: new FormControl(''),
-      postalcode: new FormControl(''),
+      postalcode: new FormControl(null),
       status: new FormControl('created'),
       attachments: new FormControl([]),
       deliverydate: new FormControl(d_date, []),
@@ -571,6 +571,7 @@ export class SalesproposalComponent implements OnInit {
     // })
     this.address = this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
+      console.log(event);
       if (event === ScheduleFormEvent.SAVE_SALES_FORM || event === ScheduleFormEvent.SEND_SALES_FORM) {
         this.send = event;
         this.addForm();
@@ -773,7 +774,7 @@ export class SalesproposalComponent implements OnInit {
           });
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
-          this.oldcommentid = this.design.comments[0].id;
+          this.oldcommentid = this.design.comments == '' ? '' : this.design.comments[0].id;
           //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
           if (this.design.assignedto !== null && this.design.assignedto !== undefined) {
             this.desginForm.patchValue({

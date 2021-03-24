@@ -71,9 +71,10 @@
 
 
 
-                    <ion-col *ngIf="segments=='status=assigned&status=declined'">
+                    <!-- <ion-col *ngIf="segments=='status=assigned&status=declined'"> -->
+                      <ion-col>
                                    <span style="float: right;">
-                            <ng-container *ngIf="designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false)" >
+                            <ng-container *ngIf="(designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false) && designData.type!=='both') || (userData.peengineertype=='structural' && designData.isstructuralassigned && designData.type == 'both' && !designData.acceptedbystructuralpeengineer) || (userData.peengineertype=='electrical' && designData.iselectricalassigned && designData.type == 'both' && !designData.acceptedbyelectricalpeengineer)" >
                                 <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,designData,$event)">
                                    Accept
                                 </ion-col>
@@ -82,6 +83,26 @@
                                 </ion-col>
                             </ng-container>
                         </span>
+                        <!-- <span style="float: right;">
+                          <ng-container *ngIf="userData.peengineertype=='structural' && designData.isstructuralassigned && designData.type == 'both' && !designData.acceptedbystructuralpeengineer" >
+                              <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,designData,$event)">
+                                 Accept
+                              </ion-col>
+                              <ion-col size="4" style="color:#dc6e67;" class="ion-text-end" (click)="decline(designData.id,'pestamp',$event)">
+                              On Hold
+                              </ion-col>
+                          </ng-container>
+                      </span>
+                      <span style="float: right;">
+                        <ng-container *ngIf="userData.peengineertype=='electrical' && designData.iselectricalassigned && designData.type == 'both' && !designData.acceptedbyelectricalpeengineer" >
+                            <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,designData,$event)">
+                               Accept
+                            </ion-col>
+                            <ion-col size="4" style="color:#dc6e67;" class="ion-text-end" (click)="decline(designData.id,'pestamp',$event)">
+                            On Hold
+                            </ion-col>
+                        </ng-container>
+                    </span> -->
                     </ion-col>
 
                     <ion-col *ngIf="segments=='status=completed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'">
