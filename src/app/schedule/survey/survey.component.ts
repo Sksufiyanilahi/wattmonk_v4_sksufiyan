@@ -85,8 +85,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       source: new FormControl('android', [Validators.required]),
       assignedto: new FormControl(null),
       createdby: new FormControl(this.storage.getUserID(), [Validators.required]),
-      latitude: new FormControl(''),
-      longitude: new FormControl(''),
+      latitude: new FormControl('',[Validators.required]),
+      longitude: new FormControl('',[Validators.required]),
       country: new FormControl(''),
       state: new FormControl(''),
       city: new FormControl(''),
@@ -231,9 +231,12 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.utilities.errorSnackBar('Please enter phone number.');
       } else if (this.surveyForm.value.jobtype == '') {
         this.utilities.errorSnackBar('Please enter job type.');
-      } else {
+      } else if(this.surveyForm.value.latitude == '' && this.surveyForm.value.longitude == ''){
+        this.utilities.errorSnackBar('Please select address from dropdown.');
+      }else {
         this.utilities.errorSnackBar('Address not found. Make sure your location is on in device.');
       }
+      return;
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
         this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
@@ -276,7 +279,11 @@ export class SurveyComponent implements OnInit, OnDestroy {
                 modal.present();
                 modal.onWillDismiss().then((dismissed) => {
                   this.utilities.sethomepageSurveyRefresh(true);
-                  this.navController.navigateRoot('homepage/survey');
+                  if(this.userData.role.type === 'surveyors'){
+                    this.navController.navigateRoot('surveyoroverview/newsurveys');
+                  }else{
+                    this.navController.navigateRoot('homepage/survey');
+                  }
 
                 });
                 // });
