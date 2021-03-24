@@ -1031,7 +1031,7 @@ isArchitecturalFileUpload: boolean = false;
       }
       else if (this.desginForm.value.inverterscount == '' || this.desginForm.get('inverterscount').hasError('pattern')) {
         this.utils.errorSnackBar('Please check the field inverters count.');}
-        
+
        else if (this.desginForm.value.architecturaldesign == '') {
         this.utils.errorSnackBar('Please attach architectural design.');
       } else {
@@ -1562,7 +1562,7 @@ isArchitecturalFileUpload: boolean = false;
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
         this.autocompleteItems = [];
       });
-      
+
     }
 
     getGeoEncoder(latitude, longitude, formattedAddress) {

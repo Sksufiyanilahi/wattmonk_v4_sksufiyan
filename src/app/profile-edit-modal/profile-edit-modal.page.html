@@ -40,7 +40,7 @@
       <ion-col>
         <ion-item lines="none">
           <ion-label position="floating">Email</ion-label>
-          <ion-input type="email" formControlName="email" class="form-control" disabled></ion-input>
+          <ion-input type="email" formControlName="email" class="form-control" [disabled]="true"></ion-input>
         </ion-item>
         <div style="height: 5px;">
           <div *ngIf="profileEdit.get('email').hasError('pattern') && profileEdit.get('email').dirty">
