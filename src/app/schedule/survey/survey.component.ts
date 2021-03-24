@@ -163,7 +163,11 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.showInvalidFormAlert();
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
-        this.surveyForm.get('status').setValue('surveyinprocess');
+        if(this.userData.role.type=== 'surveyors'){
+          this.surveyForm.get('status').setValue('surveyassigned');
+        }else{
+          this.surveyForm.get('status').setValue('surveyinprocess');
+        }
         if (this.surveyId !== 0) {
           this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
@@ -183,7 +187,11 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
           // if starting survey directly, assign the survey to yourself
           this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
-          this.surveyForm.get('status').setValue('surveyinprocess');
+          if(this.userData.role.type === 'surveyors'){
+            this.surveyForm.get('status').setValue('surveyassigned');
+          }else{
+            this.surveyForm.get('status').setValue('surveyinprocess');
+          }
           console.log(this.surveyForm.value);
           this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
@@ -229,6 +237,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
         this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
+        if(this.userData.role.type === 'surveyors'){
+        this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
+          this.surveyForm.get('status').setValue('surveyassigned');
+        }
         if (this.surveyId !== 0) {
           this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
