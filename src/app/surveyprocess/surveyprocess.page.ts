@@ -421,8 +421,10 @@ export class SurveyprocessPage implements OnInit {
   }
 
   checkSurveyStorage() {
+    console.log('inside survey storage module');
     this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
       if (data) {
+        console.log('data found');
         this.mainmenuitems = data.menuitems;
         this.originalmainmenuitems = data.menuitems;
         this.totalpercent = data.currentprogress;
@@ -765,6 +767,7 @@ export class SurveyprocessPage implements OnInit {
    * Step Counts Starts Here
    */
   setTotalStepCount() {
+    console.log('setting total step count');
     let totalSteps = 0;
     this.mainmenuitems.map(mainmenuitem => {
       mainmenuitem.children.map(child => {

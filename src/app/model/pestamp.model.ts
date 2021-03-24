@@ -72,6 +72,8 @@ export class Pestamp{
     isrecordcomplete : boolean = false;
     pestampacceptanceremainingtime: string;
     unreadmessagecount = 0;
+    acceptedbystructuralpeengineer:any;
+    acceptedbyelectricalpeengineer:any;
 }
 
 export class Activity {

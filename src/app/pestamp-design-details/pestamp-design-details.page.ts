@@ -196,13 +196,67 @@ export class PestampDesignDetailsPage implements OnInit {
         }else{
           let cdate = Date.now();
     this.designenddatetime = cdate;
-    const postData = {
-      status: "completed",
-      pestampstarttime: this.designstartdatetime,
-      pestampendtime: this.designenddatetime,
-      comments: this.commentform.get('comments').value,
-      workinghours : this.pestampForm.get('workinghours').value
-    };
+    let workinghours = this.pestampForm.get('workinghours').value;
+    var postData;
+    // const postData = {
+    //   status: "completed",
+    //   pestampstarttime: this.designstartdatetime,
+    //   pestampendtime: this.designenddatetime,
+    //   comments: this.commentform.get('comments').value,
+    //   workinghours : this.pestampForm.get('workinghours').value
+    // };
+    if (this.design.type == 'both' && this.design.propertytype=='commercial') {
+      if (this.user.peengineertype == 'electrical') {
+        postData = {
+          status: "completed",
+          pestampstarttime: this.designstartdatetime,
+          pestampendtime: this.designenddatetime,
+          comments: this.commentform.get('comments').value,
+          electricalworkinghours: workinghours,
+          iselectricalstampeduploaded: true
+        }
+      }
+      else {
+        postData = {
+          status: "completed",
+          pestampstarttime: this.designstartdatetime,
+          pestampendtime: this.designenddatetime,
+          comments: this.commentform.get('comments').value,
+          structuralworkinghours: workinghours,
+          isstructuralstampeduploaded: true
+        }
+      }
+    }
+    else {
+      if(this.design.type=='both'){
+        if (this.user.peengineertype == 'electrical') {
+          postData = {
+            status: "completed",
+            pestampstarttime: this.designstartdatetime,
+            pestampendtime: this.designenddatetime,
+            comments: this.commentform.get('comments').value,
+            iselectricalstampeduploaded: true
+          }
+        }
+        else {
+          postData = {
+            status: "completed",
+            pestampstarttime: this.designstartdatetime,
+            pestampendtime: this.designenddatetime,
+            comments: this.commentform.get('comments').value,
+            isstructuralstampeduploaded: true
+          }
+        }
+      }
+      else{
+        postData = {
+          status: "completed",
+          pestampstarttime: this.designstartdatetime,
+          pestampendtime: this.designenddatetime,
+          comments: this.commentform.get('comments').value,
+        }
+      }
+    }
           this.utilities.showLoading('Submitting').then(()=>{
          // this.apiService.updatePestamps(this.designId,this.pestampForm.value).subscribe(res=>{
           this.apiService.updatePestamps(this.designId,postData).subscribe(res=>{
@@ -247,7 +301,19 @@ export class PestampDesignDetailsPage implements OnInit {
           /* FOR UPLOAD Stamped FILES */
        uploadStampedFiles(recordid: number,file: string){
         // console.log(this.archFiles);
-        console.log(file);
+        var path;
+        if (this.design.type == 'both') {
+          if (this.user.peengineertype == 'electrical') {
+            path = "electricalstampedfiles"
+          }
+          else {
+            path = "structuralstampedfiles"
+          }
+        }
+        else {
+          path = "stampedfiles"
+        }
+        console.log(file,path);
          const data = new FormData();
          for(var i=0; i< this.stampfile.length;i++){
            data.append("files",this.stampfile[i]);
@@ -256,7 +322,7 @@ export class PestampDesignDetailsPage implements OnInit {
             data.append('path', "pestamp/" + recordid);
             data.append('refId', ""+recordid);
             data.append('ref', "pestamp");
-            data.append('field', "stampedfiles");
+            data.append('field', path);
 
             console.log("file upload data---"+data);
            }
