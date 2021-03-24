@@ -301,7 +301,19 @@ export class PestampDesignDetailsPage implements OnInit {
           /* FOR UPLOAD Stamped FILES */
        uploadStampedFiles(recordid: number,file: string){
         // console.log(this.archFiles);
-        console.log(file);
+        var path;
+        if (this.design.type == 'both') {
+          if (this.user.peengineertype == 'electrical') {
+            path = "electricalstampedfiles"
+          }
+          else {
+            path = "structuralstampedfiles"
+          }
+        }
+        else {
+          path = "stampedfiles"
+        }
+        console.log(file,path);
          const data = new FormData();
          for(var i=0; i< this.stampfile.length;i++){
            data.append("files",this.stampfile[i]);
@@ -310,7 +322,7 @@ export class PestampDesignDetailsPage implements OnInit {
             data.append('path', "pestamp/" + recordid);
             data.append('refId', ""+recordid);
             data.append('ref', "pestamp");
-            data.append('field', "stampedfiles");
+            data.append('field', path);
 
             console.log("file upload data---"+data);
            }
