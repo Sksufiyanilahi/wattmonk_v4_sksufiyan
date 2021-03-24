@@ -61,7 +61,7 @@
                 ]
               },
               {
-                "questiontype": 2,
+                "questiontype": 10,
                 "imagekey": "mspimages",
                 "imagename": "mspopenshutterzoomshot",
                 "capturedshotinfo": "MSP Shutter Zoom Shot",

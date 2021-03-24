@@ -26,6 +26,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   @Input() placeholder = '';
   @Input() mode = 'id'; //id or object
   @Input() name='';
+  @Input() selectedValue = '';
   @Output() modulename= new EventEmitter();
 
 
@@ -39,6 +40,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   manualinput = '';
 
   constructor(public apiService:ApiService,private utility:UtilitiesService) {
+    this.selectedDataName = this.selectedValue;
   }
 
   registerOnChange(fn: any): void {
