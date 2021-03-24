@@ -44,6 +44,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   GoogleAutocomplete: google.maps.places.AutocompleteService;
   autocompleteItems: any[];
   map: any;
+  fieldDisabled = false;
 
   geoEncoderOptions: NativeGeocoderOptions = {
     useLocale: true,
@@ -101,6 +102,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+   this.fieldDisabled = false;
     this.userData = this.storage.getUser();
     // this.address= this.storage.getData();
     this.subscription = this.utilities.getScheduleFormEvent().subscribe((event) => {
@@ -319,7 +321,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.apiService.getSurveyDetail(this.surveyId).subscribe((result) => {
         this.utilities.hideLoading().then(() => {
           this.survey = result;
-
+          this.fieldDisabled = true;
           const date = new Date(this.survey.datetime);
           this.surveyForm.patchValue({
             name: this.survey.name,

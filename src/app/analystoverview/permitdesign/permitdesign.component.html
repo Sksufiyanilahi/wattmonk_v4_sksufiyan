@@ -74,7 +74,7 @@
                         <span *ngIf="item.lateby > 1" class="latebystyle"><strong>Late by {{item.lateby}} days</strong></span>
                         <span *ngIf="item.lateby == 1" class="latebystyle"><strong>Late by a day</strong></span>
             </p>
-                      <a href="tel:{{designData.phonenumber}}" (click)="$event.stopPropogation()" style="text-decoration: none;" class="z-100">
+                      <a href="tel:{{designData.phonenumber}}" (click)="$event.stopPropagation()" style="text-decoration: none;" class="z-100">
                           <span class="customer-phone">{{designData.phonenumber}}</span></a>
                       <span class="customer-address z-100"
                               (click)="openAddressOnMap(designData.address,$event)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}</span>

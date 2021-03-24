@@ -72,6 +72,7 @@ export class PestampSchedulePage implements OnInit {
   isAtticFileUpload: boolean = false;
   isRoofFileUpload: boolean = false;
   isPermitPlanFileUpload: boolean = false;
+  nonEditableField: any;
   //user: User
   // isEditMode:boolean=false;
   // formatted_address:string;
@@ -191,6 +192,7 @@ export class PestampSchedulePage implements OnInit {
           });
         }
         )
+        this.nonEditableField=true;
         this.oldcommentsid = this.design.comments[0].id;
       }, (error) => {
         this.utils.hideLoading();

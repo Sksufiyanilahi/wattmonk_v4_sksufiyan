@@ -37,7 +37,7 @@
                       routerDirection="forward">{{designData.email}}</span>
                       <span *ngIf="designData.isoverdue" class="latebystyle" style="float: right;font-size: 10px;"><strong>Late by {{designData.lateby}}</strong></span>
                      </p>
-                <a href="tel:{{designData.phonenumber}}" (click)="$event.stopPropogation()" style="text-decoration: none;" class="z-100">
+                <a href="tel:{{designData.phonenumber}}" (click)="$event.stopPropagation()" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone"  *ngIf="userData.designertype!='external'">{{designData.phonenumber}}</span></a>
                 <span style="margin:0px" class="customer-address z-100"  *ngIf="userData.designertype!='external'"
                       (click)="openAddressOnMap(designData.address,$event)">{{(designData.address | slice:0:50) + (designData.address.length > 50 ? '...' : '')}}</span>
