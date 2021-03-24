@@ -117,6 +117,7 @@ export class ApiService {
 
   fetchJSON(uid, surveyType) {
     return this.http.get( `${BaseUrl}surveyprocessjsons?user=${uid}&jobtype=${surveyType}`, { headers: this.headers });
+    // return this.http.get( 'assets/surveyprocessjson/pv.json');
   }
 
   getSolarMake() {

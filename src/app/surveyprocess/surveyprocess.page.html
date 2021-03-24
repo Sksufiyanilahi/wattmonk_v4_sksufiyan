@@ -208,6 +208,36 @@
       </ion-col>
     </ion-row>
 
+    <!-- Row for mpu required checkbox with number questions -->
+    <ion-row class="questionaireview-row ion-padding-horizontal"
+             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.MPU_REQUIRED_CHECKBOX_WITH_NUMBER">
+      <ion-col size="12">
+        <p>
+          {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+        </p>
+        <form [formGroup]="activeForm" novalidate>
+          <ion-input type="number" class="form-control" autocomplete="off"
+                     formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
+          </ion-input>
+          <div class="error_div">
+            <div
+              *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+              <span class="error">Field input is required.</span>
+            </div>
+          </div>
+          <ion-item style="font-size: 14px">
+          <ion-label>MPU Required?</ion-label>
+          <ion-checkbox class="form-control" formControlName="mpurequired"></ion-checkbox>
+          </ion-item>
+        </form>
+        <ion-row class="ion-float-right">
+          <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
+            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0] | titlecase}}
+          </ion-button>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
     <!-- Row for input text questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_TEXT">
@@ -236,7 +266,7 @@
 
     <!-- Row for input two dimensions question -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
-             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_TWO_DIMENSIONS">
+             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_FRAMING_SIZE">
       <ion-col size="12">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
@@ -852,11 +882,6 @@
   <form [formGroup]="activeForm" class="white-bg">
     <ion-grid class="ion-padding" *ngFor="let mainmenuitem of mainmenuitems">
       <ng-container *ngIf="mainmenuitem.children.length > 0">
-        <!--<ion-row>
-            <ion-col size="12">
-                <h2>{{mainmenuitem.name}}</h2>
-            </ion-col>
-        </ion-row>-->
         <ion-row *ngFor="let child of mainmenuitem.children">
           <ng-container>
             <ion-col size="12">
@@ -915,27 +940,34 @@
                       </div>
                     </div>
                   </ion-col>
-                  <ion-col size="12" *ngIf="shot.questiontype == QuestionTypes.INPUT_TWO_DIMENSIONS">
+                  <ion-col size="12" *ngIf="shot.questiontype == QuestionTypes.INPUT_ROOF_MATERIAL_AUTOCOMPLETE">
+                    <app-auto-complete [dataList]="roofmaterials" class="form-control" mode="object"
+                                       [formControlName]="shot.inputformcontrol" [selectedValue]="activeForm.get(shot.inputformcontrol).value"
+                                       #make>
+                    </app-auto-complete>
+                    You selected {{(activeForm.get(shot.inputformcontrol).value).name}}
+                    <div class="error_div">
+                      <div
+                        *ngIf="activeForm.get(shot.inputformcontrol).value === '' && activeForm.get(shot.inputformcontrol).dirty">
+                        <span class="error">Field input is required.</span>
+                      </div>
+                    </div>
+                  </ion-col>
+                  <ion-col size="12" *ngIf="shot.questiontype == QuestionTypes.INPUT_FRAMING_SIZE">
                     <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                      <ion-input type="number" class="form-control" autocomplete="off"
-                                 formControlName="dimensionA"
-                                 [value]="activeForm.get(shot.inputformcontrol).value.split('x')[0]">
-                      </ion-input>
+                      <ion-input type="number" class="form-control" autocomplete="off" formControlName="dimensionA"></ion-input>
                       <span>x</span>
-                      <ion-input type="number" class="form-control" autocomplete="off"
-                                 formControlName="dimensionB"
-                                 [value]="activeForm.get(shot.inputformcontrol).value.split('x')[1]">
-                      </ion-input>
+                      <ion-input type="number" class="form-control" autocomplete="off" formControlName="dimensionB"></ion-input>
                     </div>
                     <div class="error_div">
                       <div class="error_div">
-                        <div *ngIf="activeForm.get('dimensionA').value === '' && activeForm.get('dimensionA').dirty">
+                        <div *ngIf="activeForm.get(shot.inputformcontrol).value.split('x')[0] === '' && activeForm.get(shot.inputformcontrol).dirty">
                           <span class="error">First dimension is required.</span>
                         </div>
                       </div>
                     </div>
                     <div class="error_div">
-                      <div *ngIf="activeForm.get('dimensionB').value === '' && activeForm.get('dimensionB').dirty">
+                      <div *ngIf="activeForm.get(shot.inputformcontrol).value.split('x')[1] === '' && activeForm.get(shot.inputformcontrol).dirty">
                         <span class="error">Second dimension is required.</span>
                       </div>
                     </div>

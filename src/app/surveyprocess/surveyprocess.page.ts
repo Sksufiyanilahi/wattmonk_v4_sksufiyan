@@ -121,8 +121,9 @@ export enum QUESTIONTYPE {
   INPUT_SHOT_NAME = 5,
   INPUT_ROOF_MATERIAL_AUTOCOMPLETE = 6,
   INPUT_TEXT = 7,
-  INPUT_TWO_DIMENSIONS = 8,
+  INPUT_FRAMING_SIZE = 8,
   INPUT_INVERTER_DETAILS = 9,
+  MPU_REQUIRED_CHECKBOX_WITH_NUMBER = 10
 }
 
 export enum VIEWMODE {
@@ -384,7 +385,12 @@ export class SurveyprocessPage implements OnInit {
                   formData[shot.inputformcontrol] = new FormControl('', [Validators.required]);
                 }
                 if (shot.questiontype === 9) {
-                  formData[shot.inputformcontrol2] = new FormControl('', [Validators.required]);
+                  this.activeFormElementsArray.push(shot.inputformcontrol2);
+                  formData[shot.inputformcontrol2] = new FormControl('', []);
+                }
+                if (shot.questiontype === 10) {
+                  this.activeFormElementsArray.push('mpurequired');
+                  formData['mpurequired'] = new FormControl(false, [Validators.required]);
                 }
               }
             });
@@ -404,8 +410,11 @@ export class SurveyprocessPage implements OnInit {
         }
       });
       formData['dimensionA'] = new FormControl('', []);
+      this.activeFormElementsArray.push('dimensionA');
       formData['dimensionB'] = new FormControl('', []);
+      this.activeFormElementsArray.push('dimensionB');
       formData['shotname'] = new FormControl('', []);
+      this.activeFormElementsArray.push('shotname');
       this.activeForm = new FormGroup(formData);
       this.checkSurveyStorage();
     });
@@ -441,9 +450,7 @@ export class SurveyprocessPage implements OnInit {
         this.isdataloaded = true;
         this.setTotalStepCount();
         this.handleViewModeSwitch();
-        console.log('data found loading completed');
       } else {
-        console.log('setting up data');
         this.mainmenuitems = JSON.parse(JSON.stringify(this.surveyProcessData));
         this.originalmainmenuitems = JSON.parse(JSON.stringify(this.surveyProcessData));
         this.isdataloaded = true;
@@ -453,7 +460,6 @@ export class SurveyprocessPage implements OnInit {
             this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
           }
         });
-        console.log('completed setting up data');
         this.setTotalStepCount();
       }
     });
@@ -892,8 +898,6 @@ export class SurveyprocessPage implements OnInit {
         quality: 0
       };
       const result = await CameraPreview.capture(cameraPreviewPictureOptions);
-      console.log(result);
-      console.log(result.value);
       this.capturedImage = 'data:image/png;base64,' + result.value;
       const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       if (!currentIndex.allowmultipleshots) {
@@ -976,6 +980,7 @@ export class SurveyprocessPage implements OnInit {
     this.utilitieservice.showLoading('Loading').then(() => {
       this.apiService.getRoofMaterials().subscribe(response => {
         this.utilitieservice.hideLoading().then(() => {
+          console.log(response);
           this.roofmaterials = response;
           this.changedetectorref.detectChanges();
         });
@@ -1157,11 +1162,9 @@ export class SurveyprocessPage implements OnInit {
   handleInputSubmission(form: FormGroup) {
     const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
     const control = form.get(currentIndex.shots[this.selectedshotindex].inputformcontrol);
-    if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_TWO_DIMENSIONS) {
+    if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_FRAMING_SIZE) {
       if (form.get('dimensionA').value != '' && form.get('dimensionB').value != '') {
         this.handleAnswerSubmission(`${form.get('dimensionA').value}x${form.get('dimensionB').value}`);
-        form.get('dimensionA').setValue('');
-        form.get('dimensionB').setValue('');
       } else {
         if (form.get('dimensionA').value == '' || form.get('dimensionA').value == undefined) {
           form.get('dimensionA').markAsTouched();
@@ -1740,6 +1743,7 @@ export class SurveyprocessPage implements OnInit {
       status: 'surveycompleted'
     };
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
+      console.log(data);
       this.utilitieservice.hideLoading().then(() => {
         this.insomnia.keepAwake()
           .then(
@@ -1752,6 +1756,7 @@ export class SurveyprocessPage implements OnInit {
 
       });
     }, (error) => {
+      console.log(error);
       this.utilitieservice.hideLoading().then(() => {
         this.utilitieservice.errorSnackBar(JSON.stringify(error));
       });
@@ -1879,8 +1884,17 @@ export class SurveyprocessPage implements OnInit {
       if (element === 'pvinverterlocation') {
         data[element] = this.activeForm.get('pvinverterlocation').value === '' ? null : this.activeForm.get('pvinverterlocation').value;
       }
+      if (element === 'batterysystem') {
+        data[element] = this.activeForm.get('batterysystem').value.toString();
+      }
+      if (element === 'framing') {
+        data[element] = this.activeForm.get('framing').value === '' ? null : this.activeForm.get('framing').value;
+      }
+      if (element === 'distancebetweentworafts') {
+        data[element] = this.activeForm.get('distancebetweentworafts').value === '' ? 0 : this.activeForm.get('distancebetweentworafts').value;
+      }
     });
-
+    console.log(data);
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
       this.utilitieservice.hideLoading().then(() => {
         this.insomnia.keepAwake()
@@ -1893,6 +1907,7 @@ export class SurveyprocessPage implements OnInit {
         this.uploadImagesToServer();
       });
     }, (error) => {
+      console.log(error);
       this.utilitieservice.hideLoading().then(() => {
         this.utilitieservice.errorSnackBar('There was some error in processing the request');
       });
@@ -1982,6 +1997,7 @@ export class SurveyprocessPage implements OnInit {
       this.startCameraAfterPermission();
     } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
       CameraPreview.stop();
+      this.stopCamera();
       if (this.surveytype == 'battery') {
         this.getSolarMakes();
       } else if (this.surveytype == 'pvbattery') {
