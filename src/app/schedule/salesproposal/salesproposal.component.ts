@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, NgZone, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, NgZone, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AssigneeModel} from 'src/app/model/assignee.model';
 import {SolarMake} from 'src/app/model/solar-make.model';
@@ -7,7 +7,7 @@ import {UtilitiesService} from 'src/app/utilities.service';
 import {ErrorModel} from 'src/app/model/error.model';
 import {SolarMadeModel} from 'src/app/model/solar-made.model';
 import {InverterMakeModel} from 'src/app/model/inverter-make.model';
-import {NavController} from '@ionic/angular';
+import {NavController, IonSlides} from '@ionic/angular';
 import {InverterMadeModel} from 'src/app/model/inverter-made.model';
 import {
   FIELD_REQUIRED,
@@ -44,6 +44,40 @@ import { AddressModel } from 'src/app/model/address.model';
   styleUrls: ['./salesproposal.component.scss'],
 })
 export class SalesproposalComponent implements OnInit {
+
+  @ViewChild('slideWithNav', { static: false }) slideWithNav: IonSlides;
+  @ViewChild('slideWithNav2', { static: false }) slideWithNav2: IonSlides;
+  @ViewChild('slideWithNav3', { static: false }) slideWithNav3: IonSlides;
+
+  sliderOne: any;
+  sliderTwo: any;
+  sliderThree: any;
+
+
+  //Configuration for each Slider
+  slideOptsOne = {
+    initialSlide: 0,
+    slidesPerView: 1,
+    autoplay: true
+  };
+  slideOptsTwo = {
+    initialSlide: 1,
+    slidesPerView: 2,
+    loop: true,
+    centeredSlides: true,
+    spaceBetween: 20
+  };
+  slideOptsThree = {
+    initialSlide: 1,
+    slidesPerView: 2,
+    loop: true,
+    centeredSlides: true,
+    spaceBetween: 20
+  };
+
+  isBeginningSlide: true;
+  isEndSlide: false;
+
   myControl = new FormControl();
   desginForm: FormGroup;
 
