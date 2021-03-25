@@ -467,8 +467,9 @@ export class HomepagePage implements OnInit, OnDestroy {
 			this.utilities.setDesignDetails(null);
 			// this.route.navigate([ '/schedule/design' ]);
 		} else if (this.route.url == '/homepage/survey') {
-			this.route.navigate([ '/schedule/survey' ]);
 			this.utilities.setDesignDetails(null);
+			this.route.navigate([ '/schedule/survey' ]);
+			
 		}
 	}
 

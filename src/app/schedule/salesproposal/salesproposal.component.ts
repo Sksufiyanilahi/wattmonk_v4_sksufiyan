@@ -2056,10 +2056,8 @@ export class SalesproposalComponent implements OnInit {
    //// For Address
     /* FOR SEARCH SHIPPING ADDRESS */
     updateSearchResults(event) {
-      //this.autoCompleteOff = true;
-      this.utils.showLoading('Loading').then(() => {
+      //this.autoCompleteOff = true;    
       console.log(this.autoCompleteOff);
-      if(this.designId == 0){
       const input = event.detail.value;
       console.log(input)
       if (input === '') {
@@ -2077,8 +2075,6 @@ export class SalesproposalComponent implements OnInit {
             });
           });
         });
-      }
-    })
     }
 
     forAutoComplete(e){
@@ -2090,6 +2086,7 @@ export class SalesproposalComponent implements OnInit {
 
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
     selectSearchResult(item) {
+      this.utils.showLoading('Loading').then(() => {
       console.log(item);
       this.isSelectSearchResult = true;
       this.geocoder.geocode({
@@ -2099,6 +2096,7 @@ export class SalesproposalComponent implements OnInit {
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
       });
       this.autocompleteItems = []
+    })
     }
 
     getGeoEncoder(latitude, longitude, formattedAddress) {

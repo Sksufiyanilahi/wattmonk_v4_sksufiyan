@@ -1,23 +1,21 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { UtilitiesService } from 'src/app/utilities.service';
-import { ApiService } from 'src/app/api.service';
-import { SurveyDataModel } from 'src/app/model/survey.model';
-import { ErrorModel } from 'src/app/model/error.model';
-import { DatePipe } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { NavController } from '@ionic/angular';
-import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
-import { DrawerState } from 'ion-bottom-drawer';
-import { AssigneeModel } from '../../model/assignee.model';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserRoles } from '../../model/constants';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { StorageService } from 'src/app/storage.service';
-import { ROLES } from 'src/app/contants';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {UtilitiesService} from 'src/app/utilities.service';
+import {ApiService} from 'src/app/api.service';
+import {SurveyDataModel} from 'src/app/model/survey.model';
+import {ErrorModel} from 'src/app/model/error.model';
+import {DatePipe} from '@angular/common';
+import {Subscription} from 'rxjs';
+import {ActionSheetController, NavController, Platform} from '@ionic/angular';
+import {LaunchNavigator, LaunchNavigatorOptions} from '@ionic-native/launch-navigator/ngx';
+import {DrawerState} from 'ion-bottom-drawer';
+import {AssigneeModel} from '../../model/assignee.model';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {StorageService} from 'src/app/storage.service';
 import {Storage} from '@ionic/storage';
-import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
+import {SurveyStorageModel} from 'src/app/model/survey-storage.model';
 import * as moment from 'moment';
-import { NetworkdetectService } from 'src/app/networkdetect.service';
+import {NetworkdetectService} from 'src/app/networkdetect.service';
 
 @Component({
   selector: 'app-survey',
@@ -42,13 +40,14 @@ export class SurveyComponent implements OnInit {
   listOfAssignees: AssigneeModel[] = [];
   routeSubscription: Subscription;
   filterDataArray: SurveyDataModel[];
-  segments:any;
+  segments: any;
   overdue: number;
   userData: any;
   netSwitch: any;
   deactivateNetworkSwitch: Subscription;
 
-  constructor(private utils: UtilitiesService,
+  constructor(
+    private utils: UtilitiesService,
     private apiService: ApiService,
     private datePipe: DatePipe,
     private navController: NavController,
@@ -58,70 +57,71 @@ export class SurveyComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private storage: Storage,
-    private storageService:StorageService,
-    private network:NetworkdetectService)
-    {
-      this.segments='status=reviewassigned&status=reviewpassed&status=reviewfailed';
-      const latestDate = new Date();
-      this.today = datePipe.transform(latestDate, 'M/dd/yy');
-      console.log('date', this.today);
-      this.assignForm = this.formBuilder.group({
-        assignedto: new FormControl('', [Validators.required]),
-        status: new FormControl('surveyassigned', [Validators.required])
-      });
+    private storageService: StorageService,
+    private network: NetworkdetectService,
+    private actionSheetController: ActionSheetController,
+    private platform: Platform
+  ) {
+    this.segments = 'status=reviewassigned&status=reviewpassed&status=reviewfailed';
+    const latestDate = new Date();
+    this.today = datePipe.transform(latestDate, 'M/dd/yy');
+    console.log('date', this.today);
+    this.assignForm = this.formBuilder.group({
+      assignedto: new FormControl('', [Validators.required]),
+      status: new FormControl('surveyassigned', [Validators.required])
+    });
+  }
+
+  segmentChanged(event) {
+
+    if (this.userData.role.type == 'qcinspector') {
+      if (event.target.value == 'InReview') {
+        this.segments = "status=reviewassigned&status=reviewpassed&status=reviewfailed";
+        // return this.segments;
+      } else if (event.target.value == 'delivered') {
+        this.segments = "status=delivered";
+      }
+      this.getSurveys(null);
+      // return this.segments;
+
     }
+    // this.getsegmentdata(event.target.value);
+    console.log((event.target.value));
+    // this.segments= event.target.value;
+    // this.getSurveys(event);
 
-    segmentChanged(event){
+    // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
+    //   this.getSurveys(null);
+    // });
 
-      if(this.userData.role.type=='qcinspector'){
-        if(event.target.value=='InReview'){
-           this.segments ="status=reviewassigned&status=reviewpassed&status=reviewfailed";
-           // return this.segments;
-         }
-         else if(event.target.value=='delivered'){
-           this.segments ="status=delivered";
-         }
-         this.getSurveys(null);
-         // return this.segments;
+    // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+    //   if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
+    //     this.formatSurveyData(this.listOfSurveyData);
+    //   }
+    // });
+  }
 
-       }
-       // this.getsegmentdata(event.target.value);
-       console.log((event.target.value));
-      // this.segments= event.target.value;
-      // this.getSurveys(event);
+  ionViewDidEnter() {
+    this.network.networkDisconnect();
+    this.network.networkConnect();
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
+      this.netSwitch = data;
+      console.log(this.netSwitch);
 
-      // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-      //   this.getSurveys(null);
-      // });
+    })
+    this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
 
-      // this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-      //   if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-      //     this.formatSurveyData(this.listOfSurveyData);
-      //   }
-      // });
-    }
+      this.getSurveys(null);
+    });
 
-    ionViewDidEnter() {
-      this.network.networkDisconnect();
-  this.network.networkConnect();
-  this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
-        this.netSwitch = data;
-        console.log(this.netSwitch);
-
-      })
-      this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
-
-        this.getSurveys(null);
-      });
-
-      this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
-        if(this.listOfSurveyData != null && this.listOfSurveyData.length > 0){
-          this.formatSurveyData(this.listOfSurveyData);
-        }
-      });
-      // debugger;
-      // this.routeSubscription.unsubscribe();
-    }
+    this.dataRefreshSubscription = this.utils.getDataRefresh().subscribe((result) => {
+      if (this.listOfSurveyData != null && this.listOfSurveyData.length > 0) {
+        this.formatSurveyData(this.listOfSurveyData);
+      }
+    });
+    // debugger;
+    // this.routeSubscription.unsubscribe();
+  }
 
   ngOnInit() {
     this.userData = this.storageService.getUser();
@@ -133,7 +133,7 @@ export class SurveyComponent implements OnInit {
     if (event != null && event !== undefined) {
       showLoader = false;
     }
-    this.fetchPendingSurveys(event,showLoader);
+    this.fetchPendingSurveys(event, showLoader);
   }
 
   fetchPendingSurveys(event?, showLoader?: boolean) {
@@ -194,54 +194,54 @@ export class SurveyComponent implements OnInit {
   //   this.cdr.detectChanges();
   // }
 
-  formatSurveyData(records : SurveyDataModel[]){
+  formatSurveyData(records: SurveyDataModel[]) {
     this.listOfSurveyData = this.fillinDynamicData(records);
     console.log(this.listOfSurveyData);
 
     const tempData: SurveyDataHelper[] = [];
-          this.listOfSurveyData.forEach((surveyItem,i) => {
-            this.sDatePassed(surveyItem.datetime,i);
-            surveyItem.lateby = this.overdue;
-            if (tempData.length === 0) {
-              const listOfSurvey = new SurveyDataHelper();
-              listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
-              listOfSurvey.listOfSurveys.push(surveyItem);
-              tempData.push(listOfSurvey);
-            } else {
-              let added = false;
-              tempData.forEach((surveyList) => {
-                if (!added) {
-                  if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/dd/yy')) {
-                    surveyList.listOfSurveys.push(surveyItem);
-                    added = true;
-                  }
-                }
-              });
-              if (!added) {
-                const listOfSurvey = new SurveyDataHelper();
-                listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
-                listOfSurvey.listOfSurveys.push(surveyItem);
-                tempData.push(listOfSurvey);
-                added = true;
-              }
+    this.listOfSurveyData.forEach((surveyItem, i) => {
+      this.sDatePassed(surveyItem.datetime, i);
+      surveyItem.lateby = this.overdue;
+      if (tempData.length === 0) {
+        const listOfSurvey = new SurveyDataHelper();
+        listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
+        listOfSurvey.listOfSurveys.push(surveyItem);
+        tempData.push(listOfSurvey);
+      } else {
+        let added = false;
+        tempData.forEach((surveyList) => {
+          if (!added) {
+            if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/dd/yy')) {
+              surveyList.listOfSurveys.push(surveyItem);
+              added = true;
             }
-          });
-          this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
-            var dateA = new Date(a.date).getTime(),
-              dateB = new Date(b.date).getTime();
-            return dateB - dateA;
-          });
-          this.cdr.detectChanges();
+          }
+        });
+        if (!added) {
+          const listOfSurvey = new SurveyDataHelper();
+          listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
+          listOfSurvey.listOfSurveys.push(surveyItem);
+          tempData.push(listOfSurvey);
+          added = true;
+        }
+      }
+    });
+    this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+      var dateA = new Date(a.date).getTime(),
+        dateB = new Date(b.date).getTime();
+      return dateB - dateA;
+    });
+    this.cdr.detectChanges();
   }
 
-  fillinDynamicData(records : SurveyDataModel[]) : SurveyDataModel[]{
+  fillinDynamicData(records: SurveyDataModel[]): SurveyDataModel[] {
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
-      this.storage.get(''+element.id).then((data: SurveyStorageModel) => {
+      this.storage.get('' + element.id).then((data: SurveyStorageModel) => {
         console.log(data);
         if (data) {
           element.totalpercent = data.currentprogress;
-        }else{
+        } else {
           element.totalpercent = 0;
         }
       });
@@ -360,7 +360,52 @@ export class SurveyComponent implements OnInit {
   // }
 
   openAddressOnMap(address: string) {
-    this.launchNavigator.navigate(address, this.options);
+    if (this.platform.is('ios')) {
+      this.presentActionSheet(address);
+    } else {
+      this.launchNavigator.navigate(address, this.options);
+    }
+  }
+
+  async presentActionSheet(address) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Launch Directions',
+      buttons: [
+        {
+          text: 'Apple Maps',
+          icon: 'logo-apple',
+          role: 'apple-maps',
+          handler: () => {
+            this.options = {
+              start: '',
+              app: this.launchNavigator.APP.APPLE_MAPS
+            };
+            this.launchNavigator.navigate(address, this.options);
+          }
+        },
+        {
+          text: 'Google Maps',
+          icon: 'logo-google',
+          role: 'google-maps',
+          handler: () => {
+            this.options = {
+              start: '',
+              app: this.launchNavigator.APP.GOOGLE_MAPS
+            };
+            this.launchNavigator.navigate(address, this.options);
+          }
+        },
+        {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    await actionSheet.present();
   }
 
   dismissBottomSheet() {
@@ -417,13 +462,13 @@ export class SurveyComponent implements OnInit {
   //   }
   // }
 
-  sDatePassed(datestring: any,i){
+  sDatePassed(datestring: any, i) {
     var checkdate = moment(datestring, "YYYYMMDD");
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;
     debugger;
-    console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
+    console.log(this.overdue, ">>>>>>>>>>>>>>>>>.");
 
   }
 
@@ -432,7 +477,7 @@ export class SurveyComponent implements OnInit {
 export class SurveyDataHelper {
   listOfSurveys: SurveyDataModel[];
   date: any;
-  lateby:any;
+  lateby: any;
 
   constructor() {
     this.listOfSurveys = [];
