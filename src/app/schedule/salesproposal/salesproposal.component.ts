@@ -2057,6 +2057,7 @@ export class SalesproposalComponent implements OnInit {
     /* FOR SEARCH SHIPPING ADDRESS */
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
+      this.utils.showLoading('Loading').then(() => {
       console.log(this.autoCompleteOff);
       if(this.designId == 0){
       const input = event.detail.value;
@@ -2077,11 +2078,13 @@ export class SalesproposalComponent implements OnInit {
           });
         });
       }
+    })
     }
 
     forAutoComplete(e){
       console.log("hello",e);
       this.autoCompleteOff = true;
+      this.isSelectSearchResult = false;
 
     }
 
@@ -2114,7 +2117,7 @@ export class SalesproposalComponent implements OnInit {
       // this.goBack();
       // return;
 
-      this.utils.showLoading('Loading').then(() => {
+      //this.utils.showLoading('Loading').then(() => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
             console.log(result)
@@ -2147,7 +2150,7 @@ export class SalesproposalComponent implements OnInit {
             });
 
           });
-      });
+     // });
     }
 
     generateAddress(addressObj) {

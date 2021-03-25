@@ -139,4 +139,10 @@ export class SurveyoroverviewPage implements OnInit {
 		this.unreadCount = 0;
 	}
 
+  scheduledPage() {
+		
+			this.route.navigate(['/schedule/survey']);
+			this.utilities.setDesignDetails(null);
+	}
+
 }
