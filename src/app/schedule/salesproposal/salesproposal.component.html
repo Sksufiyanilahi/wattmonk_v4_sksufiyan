@@ -493,12 +493,12 @@
                 <!-- <ion-item> -->
                 <!-- <ion-label position="floating">architectural design*</ion-label> -->
                 <ng-container *ngIf="design && design.architecturaldesign !== null">
-                  <ion-slides
+                  <!-- <ion-slides
                     pager="false"
                     [options]="slideOptsTwo"
                     #slideWithNav2
                     (ionSlideDidChange)="SlideDidChange(design.architecturaldesign, slideWithNav2)"
-                  >
+                  > -->
                     <ion-slide
                       *ngFor="let arc of design.architecturaldesign; let i = index"
                     >
@@ -518,7 +518,7 @@
 
                       <!-- </ion-item> -->
                     </ion-slide>
-                  </ion-slides>
+                  <!-- </ion-slides> -->
                 </ng-container>
                 <!-- </ion-item> -->
               </ion-row>
