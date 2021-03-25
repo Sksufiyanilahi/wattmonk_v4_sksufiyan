@@ -187,11 +187,12 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
           // if starting survey directly, assign the survey to yourself
           this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
-          if(this.userData.role.type === 'surveyors'){
-            this.surveyForm.get('status').setValue('surveyassigned');
-          }else{
+          // if(this.userData.role.type === 'surveyors'){
+            this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
             this.surveyForm.get('status').setValue('surveyinprocess');
-          }
+          // }else{
+            this.surveyForm.get('status').setValue('surveyinprocess');
+          // }
           console.log(this.surveyForm.value);
           this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
