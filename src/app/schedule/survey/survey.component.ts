@@ -163,11 +163,11 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.showInvalidFormAlert();
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
-        if(this.userData.role.type=== 'surveyors'){
-          this.surveyForm.get('status').setValue('surveyassigned');
-        }else{
-          this.surveyForm.get('status').setValue('surveyinprocess');
-        }
+        // if(this.userData.role.type=== 'surveyors'){
+        //   this.surveyForm.get('status').setValue('surveyassigned');
+        // }else{
+        //   this.surveyForm.get('status').setValue('surveyinprocess');
+        // }
         if (this.surveyId !== 0) {
           this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
