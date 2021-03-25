@@ -367,9 +367,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     /* FOR SEARCH SHIPPING ADDRESS */
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
-      this.utilities.showLoading('Loading').then(() => {
       console.log(this.autoCompleteOff);
-      if(this.surveyId == 0){
       const input = event.detail.value;
       console.log(input)
       if (input === '') {
@@ -387,8 +385,6 @@ export class SurveyComponent implements OnInit, OnDestroy {
             });
           });
         });
-      }
-    });
     }
 
     forAutoComplete(e){
@@ -400,6 +396,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
     selectSearchResult(item) {
+      this.utilities.showLoading('Loading').then(() => {
       console.log(item);
       this.isSelectSearchResult = true;
       this.geocoder.geocode({
@@ -409,6 +406,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
       });
       this.autocompleteItems = []
+    })
     }
 
     getGeoEncoder(latitude, longitude, formattedAddress) {

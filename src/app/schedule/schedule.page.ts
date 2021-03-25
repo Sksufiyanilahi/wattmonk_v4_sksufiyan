@@ -95,7 +95,7 @@ this.network.networkConnect();
     }
      this.designs = this.utilities.getdesignDetails();
      console.log(this.designs)
-     if(this.designs !== null)
+     if(this.designs !== null && this.designs !== undefined)
      {
       this.designId = this.designs.id;
      }

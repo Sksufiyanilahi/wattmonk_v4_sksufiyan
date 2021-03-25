@@ -1522,8 +1522,8 @@ isArchitecturalFileUpload: boolean = false;
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
       console.log(this.autoCompleteOff);
-      if(this.designId == 0 || !this.isSelectSearchResult)
-      {
+     // if(this.designId == 0 || !this.isSelectSearchResult)
+    //  {
       const input = event.detail.value;
       console.log(input)
       if (input === '') {
@@ -1541,7 +1541,7 @@ isArchitecturalFileUpload: boolean = false;
             });
           });
         });
-      }
+   //   }
     }
 
     forAutoComplete(e){

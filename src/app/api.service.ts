@@ -244,7 +244,7 @@ export class ApiService {
   }
 
   getSurveyors(): Observable<AssigneeModel[]> {
-    return this.http.get<AssigneeModel[]>(BaseUrl + 'surveyors?parent_eq=' + this.parentId, { headers: this.headers });
+    return this.http.get<AssigneeModel[]>(BaseUrl + 'surveyors?user=' + this.parentId, { headers: this.headers });
   }
 
   getAnalysts(): Observable<AssigneeModel[]> {
