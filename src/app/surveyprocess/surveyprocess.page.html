@@ -9,11 +9,12 @@
     <ion-row>
       <ion-row style="width: 100%;" *ngIf="isdataloaded">
         <ion-col size="12" class="actionareacol">
-          <ion-row class="ion-justify-content-center ion-align-items-center">
-            <p class="shotinfo">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
-            </p>
-          </ion-row>
+          <p class="shotinfo">
+            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
+          </p>
+          <!-- <ion-row class="ion-justify-content-center ion-align-items-center">
+            
+          </ion-row> -->
         </ion-col>
       </ion-row>
       <ion-row class="actionarea" *ngIf="isdataloaded">
