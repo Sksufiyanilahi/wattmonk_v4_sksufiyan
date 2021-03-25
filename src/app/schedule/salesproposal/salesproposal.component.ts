@@ -615,7 +615,7 @@ export class SalesproposalComponent implements OnInit {
         this.sendtowattmonk();
       }
     });
-    this.gettingClients();
+    //this.gettingClients();
 
     if (this.designId !== 0) {
       setTimeout(() => {
@@ -1993,21 +1993,21 @@ export class SalesproposalComponent implements OnInit {
     })
   }
 
-  gettingClients() {
-    this.apiService.getClients().subscribe(res => {
-      this.getCompanies = res;
-      console.log(this.getCompanies);
-      this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
-        startWith(""),
-        map(value => (typeof value === "string" ? value : value.companyid)),
-        map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
-      );
-    },
-      error => {
-        this.utils.errorSnackBar("Error");
-      }
-    );
-  }
+  // gettingClients() {
+  //   this.apiService.getClients().subscribe(res => {
+  //     this.getCompanies = res;
+  //     console.log(this.getCompanies);
+  //     this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
+  //       startWith(""),
+  //       map(value => (typeof value === "string" ? value : value.companyid)),
+  //       map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
+  //     );
+  //   },
+  //     error => {
+  //       this.utils.errorSnackBar("Error");
+  //     }
+  //   );
+  // }
 
   proxyValue: any;
 

@@ -40,7 +40,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   netSwitch: boolean;
   deactivateNetworkSwitch: Subscription;
   designs: any;
-  designId:number;
+  designId:number=0;
 
   constructor(
     private navController: NavController,
@@ -95,12 +95,9 @@ this.network.networkConnect();
     }
      this.designs = this.utilities.getdesignDetails();
      console.log(this.designs)
-     if(this.designs)
+     if(this.designs !== null)
      {
-       this.designId = this.designs.id;
-     }
-     else{
-       this.designId = 0;
+      this.designId = this.designs.id;
      }
   //console.log(this.designs.status);
   }
@@ -368,11 +365,13 @@ this.network.networkConnect();
   saveDesignForm() {
     console.log('posting value');
     console.log(this.router.url);
+    console.log(this.designId);
     if(this.designId !== 0){
-      if(this.router.url=='/schedule/design/' + this.designs.id ){
+      console.log("hello")
+      if(this.router.url=='/schedule/design/' + this.designId ){
         this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
         }
-        else if(this.router.url == '/schedule/salesproposal/'+this.designs.id)
+        else if(this.router.url == '/schedule/salesproposal/'+this.designId)
         {
           this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SALES_FORM);
         }
@@ -380,6 +379,7 @@ this.network.networkConnect();
   }
   else{
     if(this.router.url=='/schedule/design'){
+      console.log("hii")
       this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
       }
       else if(this.router.url=='/schedule/salesproposal')
@@ -421,10 +421,10 @@ this.network.networkConnect();
     }
   }
   else{
-    if(this.router.url == '/schedule/design/'+this.designs.id){
+    if(this.router.url == '/schedule/design/'+this.designId){
       this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_DESIGN_FORM);
    }
-   else if(this.router.url == '/schedule/salesproposal/'+this.designs.id)
+   else if(this.router.url == '/schedule/salesproposal/'+this.designId)
      {
        this.utilities.setScheduleFormEvent(ScheduleFormEvent.SEND_SALES_FORM);
      }
