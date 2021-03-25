@@ -10,6 +10,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { SurveyStorageModel } from 'src/app/model/survey-storage.model';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
+import {ActionSheetController, Platform} from "@ionic/angular";
 
 @Component({
   selector: 'app-deliveredsurveys',
@@ -30,12 +31,16 @@ export class DeliveredsurveysComponent implements OnInit {
   };
   overdue: number;
 
-  constructor(private launchNavigator: LaunchNavigator,
+  constructor(
+    private launchNavigator: LaunchNavigator,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef,
     private utils: UtilitiesService,
     private storage: Storage,
-    private apiService: ApiService) {
+    private apiService: ApiService,
+    private actionSheetController: ActionSheetController,
+    private platform: Platform
+  ) {
       console.log("inside new surveys");
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -88,7 +93,49 @@ export class DeliveredsurveysComponent implements OnInit {
   }
 
   openAddressOnMap(address: string) {
-    this.launchNavigator.navigate(address, this.options);
+    if (this.platform.is('ios')) {
+      this.presentActionSheet(address);
+    } else {
+      this.launchNavigator.navigate(address, this.options);
+    }
+  }
+
+  async presentActionSheet(address) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Launch Directions',
+      buttons: [
+        {
+          text: 'Apple Maps',
+          role: 'apple-maps',
+          handler: () => {
+            this.options = {
+              start: '',
+              app: this.launchNavigator.APP.APPLE_MAPS
+            };
+            this.launchNavigator.navigate(address, this.options);
+          }
+        },
+        {
+          text: 'Google Maps',
+          role: 'google-maps',
+          handler: () => {
+            this.options = {
+              start: '',
+              app: this.launchNavigator.APP.GOOGLE_MAPS
+            };
+            this.launchNavigator.navigate(address, this.options);
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    await actionSheet.present();
   }
 
   formatSurveyData(records : SurveyDataModel[]){
