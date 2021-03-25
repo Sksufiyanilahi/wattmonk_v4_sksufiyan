@@ -13,12 +13,12 @@
                 </span>
         </ion-col>
         <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
-            <div class="ion-no-padding custom-card" style="height: 100%;">
+            <div class="ion-no-padding custom-card" style="height: 100%;" (click)="gotoDetails(surveyData,$event)">
                 <p class="customer-name" >{{surveyData.name}}
                       <span class="chipdetail" style="background-color: #1289A7;"  routerDirection="forward">
                        {{utils.formatTimeInDisplayFormat(surveyData.datetime)}}
                     </span>
-                    <span fill="clear" background-border="clear"    [routerLink]="['/','activity',surveyData.id,'survey']"  class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
+                    <span fill="clear" background-border="clear"   (click)="gotoActivity(surveyData,$event)"  class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                     <span *ngIf="surveyData.status=='surveycompleted'" class="chipdetail" style="background-color: rgb(109, 187, 26);"  routerDirection="forward">
                         completed
                     </span>
@@ -31,9 +31,10 @@
                       <span *ngIf="surveyData.lateby > 1" class="latebystyle" style="font-size: 10px;"><strong>Late by {{surveyData.lateby}} days</strong></span>
                       <span *ngIf="surveyData.lateby == 1" class="latebystyle" style="font-size: 10px;"><strong>Late by a day</strong></span>
             </p>
-            <span class="recordupdatedon">Updated {{surveyData.recordupdatedon}}</span>
-                <a href="tel:{{surveyData.phonenumber}}" style="text-decoration: none;" class="z-100">
+            <p style="margin:0px">
+                <a href="tel:{{surveyData.phonenumber}}" (click)="$event.stopPropagation()" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
+                    <span class="recordupdatedon">Updated {{surveyData.recordupdatedon}}</span></p>
                 <span class="customer-address z-100"
                       (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address.length > 60 ? '...' : '')}}</span>
 

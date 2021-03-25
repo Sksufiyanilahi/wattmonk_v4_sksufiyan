@@ -31,9 +31,10 @@
                       <!-- <span *ngIf="surveyData.lateby > 1" class="latebystyle" style="font-size: 10px;"><strong>Late by {{surveyData.lateby}} days</strong></span>
                       <span *ngIf="surveyData.lateby == 1" class="latebystyle" style="font-size: 10px;"><strong>Late by a day</strong></span> -->
             </p>
-            <span class="recordupdatedon">Updated {{surveyData.recordupdatedon}}</span>
-                <a href="tel:{{surveyData?.phonenumber}}" style="text-decoration: none;" class="z-100">
-                    <span class="customer-phone">{{surveyData?.phonenumber}}</span></a>
+            <p style="margin:0px">
+                <a href="tel:{{surveyData.phonenumber}}" (click)="$event.stopPropagation()" style="text-decoration: none;" class="z-100">
+                    <span class="customer-phone">{{surveyData.phonenumber}}</span></a>
+                    <span class="recordupdatedon">Updated {{surveyData.recordupdatedon}}</span></p>
                 <span class="customer-address z-100"
                       (click)="openAddressOnMap(surveyData.address,$event)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
 
