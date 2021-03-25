@@ -26,7 +26,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 export class SurveyDetailPage implements OnInit, OnDestroy {
 
   slideOpts = {
-    initialSlide: 1,
+    initialSlide: 0,
     speed: 400
   };
 
