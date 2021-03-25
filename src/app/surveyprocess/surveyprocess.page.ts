@@ -121,8 +121,9 @@ export enum QUESTIONTYPE {
   INPUT_SHOT_NAME = 5,
   INPUT_ROOF_MATERIAL_AUTOCOMPLETE = 6,
   INPUT_TEXT = 7,
-  INPUT_TWO_DIMENSIONS = 8,
+  INPUT_FRAMING_SIZE = 8,
   INPUT_INVERTER_DETAILS = 9,
+  MPU_REQUIRED_CHECKBOX_WITH_NUMBER = 10
 }
 
 export enum VIEWMODE {
@@ -305,6 +306,7 @@ export class SurveyprocessPage implements OnInit {
   editingMode = false;
   editingModePreviousIndex;
   activeFormElementsArray;
+  surveyProcessData;
 
   constructor(
     private route: ActivatedRoute,
@@ -343,8 +345,9 @@ export class SurveyprocessPage implements OnInit {
     //         navController.pop();
     //     }
     // });
-    this.checkSurveyStorage();
-    this.fetchJSONData();
+    // this.checkSurveyStorage();
+    // this.fetchJSONData();
+    this.createSurveyProcessForm();
   }
 
   ngOnInit() {
@@ -356,12 +359,72 @@ export class SurveyprocessPage implements OnInit {
     this.stopCamera();
   }
 
-  /**
-   * Active Form Code Starts Here
-   */
+  createSurveyProcessForm() {
+    this.activeFormElementsArray = [];
+    const userId = this.user.parent.id !== '' ? this.user.parent.id : this.user.id;
+    this.apiService.fetchJSON(userId, this.surveytype).subscribe((response: any) => {
+      response = response[0];
+      this.surveyProcessData = response.sequence;
+      const formData = {};
+      this.activeFormKeysMap = {};
+      response.sequence.map(item => {
+        if (item.children) {
+          item.children.map(child => {
+            if (child.inputformcontrol !== '') {
+              this.activeFormElementsArray.push(child.inputformcontrol);
+              this.activeFormKeysMap[child.inputformcontrol] = child.placeholder;
+              formData[child.inputformcontrol] = new FormControl('', [Validators.required]);
+            }
+            child.shots.map(shot => {
+              if (shot.inputformcontrol !== '') {
+                this.activeFormElementsArray.push(shot.inputformcontrol);
+                this.activeFormKeysMap[shot.inputformcontrol] = shot.placeholder;
+                if (child.inputformcontrol !== '') {
+                  formData[shot.inputformcontrol] = new FormControl('', []);
+                } else {
+                  formData[shot.inputformcontrol] = new FormControl('', [Validators.required]);
+                }
+                if (shot.questiontype === 9) {
+                  this.activeFormElementsArray.push(shot.inputformcontrol2);
+                  formData[shot.inputformcontrol2] = new FormControl('', []);
+                }
+                if (shot.questiontype === 10) {
+                  this.activeFormElementsArray.push('mpurequired');
+                  formData['mpurequired'] = new FormControl(false, [Validators.required]);
+                }
+              }
+            });
+          });
+        }
+        if (item.formelements) {
+          item.formelements.map(formElement => {
+            console.log(formElement.inputformcontrol);
+            this.activeFormElementsArray.push(formElement.inputformcontrol);
+            this.activeFormKeysMap[formElement.inputformcontrol] = formElement.placeholder;
+            if (formElement.required) {
+              formData[formElement.inputformcontrol] = new FormControl('', [Validators.required]);
+            } else {
+              formData[formElement.inputformcontrol] = new FormControl('', []);
+            }
+          });
+        }
+      });
+      formData['dimensionA'] = new FormControl('', []);
+      this.activeFormElementsArray.push('dimensionA');
+      formData['dimensionB'] = new FormControl('', []);
+      this.activeFormElementsArray.push('dimensionB');
+      formData['shotname'] = new FormControl('', []);
+      this.activeFormElementsArray.push('shotname');
+      this.activeForm = new FormGroup(formData);
+      this.checkSurveyStorage();
+    });
+  }
+
   checkSurveyStorage() {
+    console.log('inside survey storage module');
     this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
       if (data) {
+        console.log('data found');
         this.mainmenuitems = data.menuitems;
         this.originalmainmenuitems = data.menuitems;
         this.totalpercent = data.currentprogress;
@@ -379,30 +442,33 @@ export class SurveyprocessPage implements OnInit {
         this.surveystate = data.state;
         this.latitude = data.latitude;
         this.longitude = data.longitude;
-        this.setSurveyProcessForm(data);
+        Object.keys(data.formdata).forEach((key: string) => {
+          let control: AbstractControl = null;
+          control = this.activeForm.get(key);
+          control.setValue(data.formdata[key]);
+        });
+        this.isdataloaded = true;
+        this.setTotalStepCount();
+        this.handleViewModeSwitch();
       } else {
-        this.fetchJSONData();
+        this.mainmenuitems = JSON.parse(JSON.stringify(this.surveyProcessData));
+        this.originalmainmenuitems = JSON.parse(JSON.stringify(this.surveyProcessData));
+        this.isdataloaded = true;
+
+        this.mainmenuitems.forEach(element => {
+          if (element.isactive) {
+            this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+          }
+        });
+        this.setTotalStepCount();
       }
     });
+    this.getSiteLocationGoogleImageFromService();
   }
 
-  fetchJSONData() {
-    const userId = this.user.parent.id !== '' ? this.user.parent.id : this.user.id;
-    this.apiService.fetchJSON(userId, this.surveytype).subscribe((data: any) => {
-      data = data[0];
-      this.mainmenuitems = JSON.parse(JSON.stringify(data.sequence));
-      this.originalmainmenuitems = JSON.parse(JSON.stringify(data.sequence));
-      this.isdataloaded = true;
-      this.mainmenuitems.forEach(element => {
-        if (element.isactive) {
-          this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
-        }
-      });
-      this.setTotalStepCount();
-      this.setSurveyProcessForm();
-    });
-  }
-
+  /**
+   * Active Form Code Starts Here
+   */
   toggleElementVisibility(element, controlsElement) {
     if (Object.keys(controlsElement).length > 0) {
       const elementToControl = this.activeForm.get(controlsElement.inputformcontrol);
@@ -417,64 +483,6 @@ export class SurveyprocessPage implements OnInit {
         elementToControl.disable();
       }
     }
-  }
-
-  setSurveyProcessForm(data?) {
-    const formData = {};
-    this.activeFormKeysMap = {};
-    this.mainmenuitems.map(mainMenuItem => {
-      mainMenuItem.children.map(child => {
-        if (child.inputformcontrol !== '') {
-          this.activeFormElementsArray.push(child.inputformcontrol);
-          this.activeFormKeysMap[child.inputformcontrol] = child.placeholder;
-          formData[child.inputformcontrol] = new FormControl('', [Validators.required]);
-        }
-        child.shots.map(shot => {
-          if (shot.inputformcontrol !== '') {
-            this.activeFormElementsArray.push(shot.inputformcontrol);
-            this.activeFormKeysMap[shot.inputformcontrol] = shot.placeholder;
-            if (child.inputformcontrol !== '') {
-              formData[shot.inputformcontrol] = new FormControl('', []);
-            } else {
-              formData[shot.inputformcontrol] = new FormControl('', [Validators.required]);
-            }
-            if (shot.questiontype === 9) {
-              formData[shot.inputformcontrol2] = new FormControl('', [Validators.required]);
-            }
-          }
-        });
-      });
-      if (mainMenuItem.formelements) {
-        mainMenuItem.formelements.map(formElement => {
-          this.activeFormElementsArray.push(formElement.inputformcontrol);
-          this.activeFormKeysMap[formElement.inputformcontrol] = formElement.placeholder;
-          if (formElement.required) {
-            formData[formElement.inputformcontrol] = new FormControl('', [Validators.required]);
-          } else {
-            formData[formElement.inputformcontrol] = new FormControl('', []);
-          }
-        });
-      }
-    });
-    formData['dimensionA'] = new FormControl('', []);
-    formData['dimensionB'] = new FormControl('', []);
-    formData['shotname'] = new FormControl('', []);
-    this.activeForm = new FormGroup(formData);
-    if (data) {
-      this.setSurveyProcessFormData(data);
-    }
-    this.getSiteLocationGoogleImageFromService();
-  }
-
-  setSurveyProcessFormData(data) {
-    Object.keys(data.formdata).forEach((key: string) => {
-      let control: AbstractControl = null;
-      control = this.activeForm.get(key);
-      control.setValue(data.formdata[key]);
-    });
-    this.isdataloaded = true;
-    this.setTotalStepCount();
-    this.handleViewModeSwitch();
   }
   /**
    * Form Code Ends Here
@@ -759,6 +767,7 @@ export class SurveyprocessPage implements OnInit {
    * Step Counts Starts Here
    */
   setTotalStepCount() {
+    console.log('setting total step count');
     let totalSteps = 0;
     this.mainmenuitems.map(mainmenuitem => {
       mainmenuitem.children.map(child => {
@@ -889,8 +898,6 @@ export class SurveyprocessPage implements OnInit {
         quality: 0
       };
       const result = await CameraPreview.capture(cameraPreviewPictureOptions);
-      console.log(result);
-      console.log(result.value);
       this.capturedImage = 'data:image/png;base64,' + result.value;
       const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       if (!currentIndex.allowmultipleshots) {
@@ -973,6 +980,7 @@ export class SurveyprocessPage implements OnInit {
     this.utilitieservice.showLoading('Loading').then(() => {
       this.apiService.getRoofMaterials().subscribe(response => {
         this.utilitieservice.hideLoading().then(() => {
+          console.log(response);
           this.roofmaterials = response;
           this.changedetectorref.detectChanges();
         });
@@ -1154,11 +1162,9 @@ export class SurveyprocessPage implements OnInit {
   handleInputSubmission(form: FormGroup) {
     const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
     const control = form.get(currentIndex.shots[this.selectedshotindex].inputformcontrol);
-    if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_TWO_DIMENSIONS) {
+    if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_FRAMING_SIZE) {
       if (form.get('dimensionA').value != '' && form.get('dimensionB').value != '') {
         this.handleAnswerSubmission(`${form.get('dimensionA').value}x${form.get('dimensionB').value}`);
-        form.get('dimensionA').setValue('');
-        form.get('dimensionB').setValue('');
       } else {
         if (form.get('dimensionA').value == '' || form.get('dimensionA').value == undefined) {
           form.get('dimensionA').markAsTouched();
@@ -1428,8 +1434,14 @@ export class SurveyprocessPage implements OnInit {
             if (element.isvisible && !nextvisibleitemfound) {
               nextvisibleitemfound = true;
               this.selectedsubmenuindex = index + 1;
-              this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-              this.selectedshotindex = 0;
+              if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
+                CameraPreview.stop();
+                this.stopCamera();
+              }
+              if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+                this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                this.selectedshotindex = 0;
+              }
               this.scrollToSubmenuElement(this.selectedsubmenuindex);
             }
           }
@@ -1448,7 +1460,13 @@ export class SurveyprocessPage implements OnInit {
                   this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
                   this.selectedshotindex = 0;
                   this.selectedsubmenuindex = 0;
-                  this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                  if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
+                    CameraPreview.stop();
+                    this.stopCamera();
+                  }
+                  if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+                    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                  }
                   this.scrollToMainmenuElement(this.selectedmainmenuindex);
                   this.handleViewModeSwitch();
                 }
@@ -1469,7 +1487,13 @@ export class SurveyprocessPage implements OnInit {
                 this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
                 this.selectedshotindex = 0;
                 this.selectedsubmenuindex = 0;
-                this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
+                  CameraPreview.stop();
+                  this.stopCamera();
+                }
+                if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+                  this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                }
                 this.scrollToMainmenuElement(this.selectedmainmenuindex);
                 this.handleViewModeSwitch();
               }
@@ -1719,6 +1743,7 @@ export class SurveyprocessPage implements OnInit {
       status: 'surveycompleted'
     };
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
+      console.log(data);
       this.utilitieservice.hideLoading().then(() => {
         this.insomnia.keepAwake()
           .then(
@@ -1731,6 +1756,7 @@ export class SurveyprocessPage implements OnInit {
 
       });
     }, (error) => {
+      console.log(error);
       this.utilitieservice.hideLoading().then(() => {
         this.utilitieservice.errorSnackBar(JSON.stringify(error));
       });
@@ -1858,8 +1884,17 @@ export class SurveyprocessPage implements OnInit {
       if (element === 'pvinverterlocation') {
         data[element] = this.activeForm.get('pvinverterlocation').value === '' ? null : this.activeForm.get('pvinverterlocation').value;
       }
+      if (element === 'batterysystem') {
+        data[element] = this.activeForm.get('batterysystem').value.toString();
+      }
+      if (element === 'framing') {
+        data[element] = this.activeForm.get('framing').value === '' ? null : this.activeForm.get('framing').value;
+      }
+      if (element === 'distancebetweentworafts') {
+        data[element] = this.activeForm.get('distancebetweentworafts').value === '' ? 0 : this.activeForm.get('distancebetweentworafts').value;
+      }
     });
-
+    console.log(data);
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
       this.utilitieservice.hideLoading().then(() => {
         this.insomnia.keepAwake()
@@ -1872,6 +1907,7 @@ export class SurveyprocessPage implements OnInit {
         this.uploadImagesToServer();
       });
     }, (error) => {
+      console.log(error);
       this.utilitieservice.hideLoading().then(() => {
         this.utilitieservice.errorSnackBar('There was some error in processing the request');
       });
@@ -1961,6 +1997,7 @@ export class SurveyprocessPage implements OnInit {
       this.startCameraAfterPermission();
     } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
       CameraPreview.stop();
+      this.stopCamera();
       if (this.surveytype == 'battery') {
         this.getSolarMakes();
       } else if (this.surveytype == 'pvbattery') {

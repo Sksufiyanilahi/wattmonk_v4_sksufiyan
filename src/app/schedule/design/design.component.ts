@@ -34,6 +34,12 @@ import { AddressModel } from 'src/app/model/address.model';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFirestore} from '@angular/fire/firestore';
 
+export function getFileReader(): FileReader {
+  const fileReader = new FileReader();
+  const zoneOriginalInstance = (fileReader as any)["__zone_symbol__originalInstance"];
+  return zoneOriginalInstance || fileReader;
+}
+
 @Component({
   selector: 'app-design',
   templateUrl: './design.component.html',
@@ -471,9 +477,9 @@ isArchitecturalFileUpload: boolean = false;
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-    if (this.designId === 0) {
-      this.addressSubscription.unsubscribe();
-    }
+    // if (this.designId === 0) {
+    //   this.addressSubscription.unsubscribe();
+    // }
   }
 
   getDesignDetails() {
@@ -521,7 +527,7 @@ isArchitecturalFileUpload: boolean = false;
           });
           //console.log("attachments",this.desginForm.get('attachments').value)
           this.utils.setStaticAddress(this.design.address);
-          // this.oldcommentid = this.design.comments[0].id;
+          this.oldcommentid =this.design.comments == '' ? '' : this.design.comments[0].id;
           //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
           if (this.design.assignedto !== null && this.design.assignedto !== undefined) {
             this.desginForm.patchValue({
@@ -1025,7 +1031,7 @@ isArchitecturalFileUpload: boolean = false;
       }
       else if (this.desginForm.value.inverterscount == '' || this.desginForm.get('inverterscount').hasError('pattern')) {
         this.utils.errorSnackBar('Please check the field inverters count.');}
-        
+
        else if (this.desginForm.value.architecturaldesign == '') {
         this.utils.errorSnackBar('Please attach architectural design.');
       } else {
@@ -1164,7 +1170,7 @@ isArchitecturalFileUpload: boolean = false;
     console.log(ev.target.files,this.arcFileUrl);
     for (let i = 0; i < ev.target.files.length; i++) {
       this.archFiles.push(ev.target.files[i])
-      var reader = new FileReader();
+      var reader = getFileReader();
       reader.onload = (e: any) => {
         console.log(ev.target.files[i],this.arcFileUrl);
         if(ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')){
@@ -1185,7 +1191,7 @@ isArchitecturalFileUpload: boolean = false;
       console.log(i);
 
       this.prelimFiles.push(event.target.files[i])
-      var reader = new FileReader();
+      var reader = getFileReader();
       reader.onload = (e: any) => {
         if (event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')) {
           // console.log(event.target.files[i].name);
@@ -1516,7 +1522,7 @@ isArchitecturalFileUpload: boolean = false;
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
       console.log(this.autoCompleteOff);
-      if(this.designId)
+      if(this.designId == 0 || !this.isSelectSearchResult)
       {
       const input = event.detail.value;
       console.log(input)
@@ -1548,13 +1554,15 @@ isArchitecturalFileUpload: boolean = false;
     selectSearchResult(item) {
       console.log(item);
       this.isSelectSearchResult = true;
+      console.log(this.isSelectSearchResult);
       this.geocoder.geocode({
         placeId: item.place_id
       }, (responses, status) => {
         console.log('respo', responses);
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
+        this.autocompleteItems = [];
       });
-      this.autocompleteItems = []
+
     }
 
     getGeoEncoder(latitude, longitude, formattedAddress) {

@@ -1,645 +1,653 @@
 [
   {
-    "name": "Electricals",
-    "isactive": true,
-    "ispending": true,
-    "isvisible": true,
-    "viewmode": 0,
-    "children": [
+    "id": 2,
+    "sequence": [
       {
-        "name": "MSP",
-        "ispending": true,
+        "name": "Electricals",
         "isactive": true,
+        "ispending": true,
         "isvisible": true,
-        "checkexistence": false,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "placeholder": "",
-        "allowmultipleshots": false,
-        "capturedshots": [],
-        "shots": [
+        "viewmode": 0,
+        "children": [
           {
+            "allowmultipleshots": false,
+            "isvisible": true,
+            "name": "MSP",
+            "ispending": true,
+            "isexistencechecked": false,
+            "inputformcontrol": "",
             "isactive": true,
-            "ispending": true,
-            "shotinfo": "Capture MSP Long Shot",
-            "capturedshotinfo": "MSP Long Shot",
-            "questioninfo": "Provide MSP Location",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "MSP is located inside or outside the building?",
-            "actions": [
-              "inside",
-              "outside"
-            ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 1,
-            "inputformcontrol": "msplocation",
-            "placeholder": "MSP Location",
-            "imagekey": "mspimages",
-            "imagename": "msplongshot"
-          },
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture MSP Zoom Shot",
-            "capturedshotinfo": "MSP Zoom Shot",
-            "questioninfo": "Provide MSP Rating",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "MSP/BUS Rating?",
-            "actions": [
-              "confirm"
-            ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 2,
-            "inputformcontrol": "msprating",
-            "placeholder": "MSP Rating",
-            "imagekey": "mspimages",
-            "imagename": "mspzoomshot"
-          },
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Open MSP Shutter & Capture Zoom Shot",
-            "capturedshotinfo": "MSP Shutter Zoom Shot",
-            "questioninfo": "Provide Main Breaker Size",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "Main Breaker Size",
-            "actions": [
-              "confirm"
-            ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 2,
-            "inputformcontrol": "mainbreakersize",
-            "placeholder": "Main Breaker Size",
-            "imagekey": "mspimages",
-            "imagename": "mspopenshutterzoomshot"
-          },
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Open MSP Inside Cover & Capture Zoom Shot",
-            "capturedshotinfo": "MSP Inside Cover Zoom Shot",
-            "questioninfo": "Provide Main breaker location in MSP",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "Main breaker location in MSP?",
-            "actions": [
-              "top",
-              "bottom",
-              "center"
-            ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 1,
-            "inputformcontrol": "mspbreaker",
-            "placeholder": "MSP Breaker",
-            "imagekey": "mspimages",
-            "imagename": "mspwithoutcovershot"
-          }
-        ]
-      },
-      {
-        "name": "Utility Meter",
-        "ispending": true,
-        "isactive": false,
-        "isvisible": true,
-        "checkexistence": false,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "placeholder": "",
-        "allowmultipleshots": false,
-        "capturedshots": [],
-        "shots": [
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture Utility Meter Wide Angle Shot",
-            "capturedshotinfo": "Utility Meter Wide Angle Shot",
-            "questioninfo": "Provide Utility Meter",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "Utility meter is attached or detached with MSP?",
-            "actions": [
-              "attach",
-              "detach"
-            ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 1,
-            "inputformcontrol": "utilitymeter",
-            "placeholder": "Utility Meter",
-            "imagekey": "utilitymeterimages",
-            "imagename": "umwideshoturl"
-          },
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture Utility Meter Zoom Shot",
-            "capturedshotinfo": "Utility Meter Zoom Shot",
-            "questioninfo": "",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "",
-            "actions": [],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 0,
-            "inputformcontrol": "",
             "placeholder": "",
-            "imagekey": "utilitymeterimages",
-            "imagename": "umzoomshoturl"
-          }
-        ]
-      },
-      {
-        "name": "Existing PV/Solar System",
-        "ispending": true,
-        "isactive": false,
-        "isvisible": true,
-        "checkexistence": true,
-        "isexistencechecked": false,
-        "inputformcontrol": "existingsolarsystem",
-        "placeholder": "Existing Solar System",
-        "allowmultipleshots": false,
-        "capturedshots": [],
-        "shots": [
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture PV Inverter Wide Angle Shot",
-            "capturedshotinfo": "PV Inverter Wide Angle Shot",
-            "questioninfo": "Provide Inverter Location",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "Inverter is located inside or outside the building?",
-            "actions": [
-              "inside",
-              "outside"
+            "shots": [
+              {
+                "questiontype": 1,
+                "imagekey": "mspimages",
+                "imagename": "msplongshot",
+                "capturedshotinfo": "MSP Long Shot",
+                "question": "MSP is located inside or outside the building?",
+                "shotinfo": "Capture MSP Long Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "msplocation",
+                "isactive": true,
+                "placeholder": "MSP Location",
+                "questioninfo": "Provide MSP Location",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "inside",
+                  "outside"
+                ]
+              },
+              {
+                "questiontype": 2,
+                "imagekey": "mspimages",
+                "imagename": "mspzoomshot",
+                "capturedshotinfo": "MSP Zoom Shot",
+                "question": "MSP/BUS Rating?",
+                "shotinfo": "Capture MSP Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "msprating",
+                "isactive": false,
+                "placeholder": "MSP Rating",
+                "questioninfo": "Provide MSP Rating",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "confirm"
+                ]
+              },
+              {
+                "questiontype": 10,
+                "imagekey": "mspimages",
+                "imagename": "mspopenshutterzoomshot",
+                "capturedshotinfo": "MSP Shutter Zoom Shot",
+                "question": "Main Breaker Size",
+                "shotinfo": "Open MSP Shutter & Capture Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "mainbreakersize",
+                "isactive": false,
+                "placeholder": "Main Breaker Size",
+                "questioninfo": "Provide Main Breaker Size",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "confirm"
+                ]
+              },
+              {
+                "questiontype": 1,
+                "imagekey": "mspimages",
+                "imagename": "mspwithoutcovershot",
+                "capturedshotinfo": "MSP Inside Cover Zoom Shot",
+                "question": "Main breaker location in MSP?",
+                "shotinfo": "Open MSP Inside Cover & Capture Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "mspbreaker",
+                "isactive": false,
+                "placeholder": "MSP Breaker",
+                "questioninfo": "Provide Main breaker location in MSP",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "top",
+                  "bottom",
+                  "center"
+                ]
+              }
             ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 1,
-            "inputformcontrol": "pvinverterlocation",
-            "placeholder": "PV Inverter Location",
-            "imagekey": "pvinverterimages",
-            "imagename": "pvinverterwideshoturl"
+            "checkexistence": false,
+            "capturedshots": []
           },
           {
-            "isactive": false,
+            "allowmultipleshots": false,
+            "isvisible": true,
+            "name": "Utility Meter",
             "ispending": true,
-            "shotinfo": "Capture PV Inverter Zoom Shot",
-            "capturedshotinfo": "PV Inverter Zoom Shot",
-            "questioninfo": "Provide Inverter Manufacturer & Model",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "Inverter Manufacturer, Model",
-            "actions": [
-              "confirm"
+            "isexistencechecked": false,
+            "inputformcontrol": "",
+            "isactive": false,
+            "placeholder": "",
+            "shots": [
+              {
+                "questiontype": 1,
+                "imagekey": "utilitymeterimages",
+                "imagename": "umwideshoturl",
+                "capturedshotinfo": "Utility Meter Wide Angle Shot",
+                "question": "Utility meter is attached or detached with MSP?",
+                "shotinfo": "Capture Utility Meter Wide Angle Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "utilitymeter",
+                "isactive": false,
+                "placeholder": "Utility Meter",
+                "questioninfo": "Provide Utility Meter",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "attach",
+                  "detach"
+                ]
+              },
+              {
+                "questiontype": 2,
+                "imagekey": "utilitymeterimages",
+                "imagename": "umzoomshoturl",
+                "capturedshotinfo": "Utility Meter Zoom Shot",
+                "question": "Provide Utility Meter Number",
+                "shotinfo": "Capture Utility Meter Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "utilitymeternumber",
+                "isactive": false,
+                "placeholder": "Utility Meter Number",
+                "questioninfo": "Provide Utility Meter Number",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "confirm"
+                ]
+              }
             ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 9,
-            "inputformcontrol": "invertermake",
-            "inputformcontrol2": "invertermodel",
-            "placeholder": "PV Inverter Manufacturer and Model",
-            "imagekey": "pvinverterimages",
-            "imagename": "pvinverterzoomshoturl"
+            "checkexistence": false,
+            "capturedshots": []
           },
           {
-            "isactive": false,
+            "allowmultipleshots": false,
+            "isvisible": true,
+            "name": "Existing PV/Solar System",
             "ispending": true,
-            "shotinfo": "Capture PV Meter Wide Angle Shot",
-            "capturedshotinfo": "PV Meter Wide Angle Shot",
-            "questioninfo": "PV Meter",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "",
-            "actions": [],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 0,
-            "inputformcontrol": "",
-            "placeholder": "",
-            "imagekey": "pvmeterimages",
-            "imagename": "pvmeterwideshoturl"
-          },
-          {
+            "isexistencechecked": false,
+            "inputformcontrol": "existingsolarsystem",
             "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture AC Disconnect Wide Angle Shot",
-            "capturedshotinfo": "AC Disconnect Wide Angle Shot",
-            "questioninfo": "",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "",
-            "actions": [],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 0,
-            "inputformcontrol": "",
-            "placeholder": "",
-            "imagekey": "acdisconnectimages",
-            "imagename": "acdisconnectwideshoturl"
-          },
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture AC Disconnect Zoom Shot",
-            "capturedshotinfo": "AC Disconnect Zoom Shot",
-            "questioninfo": "",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "",
-            "actions": [],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 0,
-            "inputformcontrol": "",
-            "placeholder": "",
-            "imagekey": "acdisconnectimages",
-            "imagename": "acdisconnectzoomshoturl"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "name": "Roof",
-    "isactive": false,
-    "ispending": true,
-    "isvisible": true,
-    "viewmode": 0,
-    "children": [
-      {
-        "name": "Roof Photos",
-        "isactive": false,
-        "ispending": true,
-        "isvisible": true,
-        "checkexistence": false,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "placeholder": "",
-        "allowmultipleshots": true,
-        "capturedshots": [],
-        "shots": [
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture roof from all angles",
-            "capturedshotinfo": "Roof Photos",
-            "questioninfo": "Provide Roof Tilt / Slope (degrees)",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "What's the roof tilt / slope (in degrees)?",
-            "actions": [
-              "Confirm"
+            "placeholder": "Existing Solar System",
+            "shots": [
+              {
+                "questiontype": 1,
+                "imagekey": "pvinverterimages",
+                "imagename": "pvinverterwideshoturl",
+                "capturedshotinfo": "PV Inverter Wide Angle Shot",
+                "question": "Inverter is located inside or outside the building?",
+                "shotinfo": "Capture PV Inverter Wide Angle Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "pvinverterlocation",
+                "isactive": false,
+                "placeholder": "PV Inverter Location",
+                "questioninfo": "Provide Inverter Location",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "inside",
+                  "outside"
+                ]
+              },
+              {
+                "questiontype": 9,
+                "inputformcontrol2": "invertermodel",
+                "imagekey": "pvinverterimages",
+                "imagename": "pvinverterzoomshoturl",
+                "capturedshotinfo": "PV Inverter Zoom Shot",
+                "question": "Inverter Manufacturer, Model",
+                "shotinfo": "Capture PV Inverter Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "invertermake",
+                "isactive": false,
+                "placeholder": "PV Inverter Manufacturer and Model",
+                "questioninfo": "Provide Inverter Manufacturer & Model",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "confirm"
+                ]
+              },
+              {
+                "questiontype": 0,
+                "imagekey": "pvmeterimages",
+                "imagename": "pvmeterwideshoturl",
+                "capturedshotinfo": "PV Meter Wide Angle Shot",
+                "question": "",
+                "shotinfo": "Capture PV Meter Wide Angle Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "",
+                "isactive": false,
+                "placeholder": "",
+                "questioninfo": "PV Meter",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              },
+              {
+                "questiontype": 0,
+                "imagekey": "acdisconnectimages",
+                "imagename": "acdisconnectwideshoturl",
+                "capturedshotinfo": "AC Disconnect Wide Angle Shot",
+                "question": "",
+                "shotinfo": "Capture AC Disconnect Wide Angle Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "",
+                "isactive": false,
+                "placeholder": "",
+                "questioninfo": "",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              },
+              {
+                "questiontype": 0,
+                "imagekey": "acdisconnectimages",
+                "imagename": "acdisconnectzoomshoturl",
+                "capturedshotinfo": "AC Disconnect Zoom Shot",
+                "question": "",
+                "shotinfo": "Capture AC Disconnect Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "",
+                "isactive": false,
+                "placeholder": "",
+                "questioninfo": "",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              }
             ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 2,
-            "inputformcontrol": "rooftilt",
-            "placeholder": "Roof Tilt",
-            "imagekey": "roofimages",
-            "imagename": "roof"
-          }
-        ]
-      },
-      {
-        "name": "Roof Dimensions",
-        "isactive": false,
-        "ispending": true,
-        "isvisible": true,
-        "checkexistence": false,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "placeholder": "",
-        "allowmultipleshots": true,
-        "capturedshots": [],
-        "shots": [
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
-            "capturedshotinfo": "Roof Dimensions",
-            "questioninfo": "",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "",
-            "actions": [],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 0,
-            "inputformcontrol": "",
-            "placeholder": "",
-            "imagekey": "roofdimensionimages",
-            "imagename": "roofdimension"
-          }
-        ]
-      },
-      {
-        "name": "Obstacles Photos",
-        "isactive": false,
-        "ispending": true,
-        "isvisible": true,
-        "checkexistence": false,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "placeholder": "",
-        "allowmultipleshots": true,
-        "capturedshots": [],
-        "shots": [
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture obstacles photos",
-            "capturedshotinfo": "Obstacles Photos",
-            "questioninfo": "",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "",
-            "actions": [],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 0,
-            "inputformcontrol": "",
-            "placeholder": "",
-            "imagekey": "obstaclesimages",
-            "imagename": "obstacle"
-          }
-        ]
-      },
-      {
-        "name": "Obstacles Dimensions",
-        "isactive": false,
-        "ispending": true,
-        "isvisible": true,
-        "checkexistence": false,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "placeholder": "",
-        "allowmultipleshots": true,
-        "capturedshots": [],
-        "shots": [
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
-            "capturedshotinfo": "Obstacles Dimensions",
-            "questioninfo": "",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "",
-            "actions": [],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 0,
-            "inputformcontrol": "",
-            "placeholder": "",
-            "imagekey": "obstaclesdimensionsimages",
-            "imagename": "obstacledimension"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "name": "Attic",
-    "isactive": false,
-    "ispending": true,
-    "isvisible": true,
-    "viewmode": 0,
-    "children": [
-      {
-        "name": "Attic Photos",
-        "isactive": false,
-        "ispending": true,
-        "isvisible": true,
-        "checkexistence": false,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "placeholder": "",
-        "allowmultipleshots": false,
-        "capturedshots": [],
-        "shots": [
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture Attic Wide Angle Shot",
-            "capturedshotinfo": "Attic Wide Angle SHot",
-            "questioninfo": "Provide Type of Frame Details",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "What is the type of frame?",
-            "actions": [
-              "truss",
-              "rafter"
-            ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 1,
-            "inputformcontrol": "framing",
-            "placeholder": "Framing",
-            "imagekey": "atticimages",
-            "imagename": "atticwideshoturl"
-          },
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture Attic Zoom Shot",
-            "capturedshotinfo": "Attic Zoom Shot",
-            "questioninfo": "Provide Size Details",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "What's the size of the raft (thickness x width)?",
-            "actions": [
-              "Confirm"
-            ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 8,
-            "inputformcontrol": "framingsize",
-            "placeholder": "Framing Size",
-            "imagekey": "atticimages",
-            "imagename": "atticzoomshoturl"
-          },
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture Attic Required Shot",
-            "capturedshotinfo": "Attic Required Shot",
-            "questioninfo": "Provide Spacing Details",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "What's the distance between two rafts?",
-            "actions": [
-              "Confirm"
-            ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 2,
-            "inputformcontrol": "distancebetweentworafts",
-            "placeholder": "Distance between Two Rafts",
-            "imagekey": "atticimages",
-            "imagename": "atticrequiredshoturl"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "name": "Appliances",
-    "isactive": false,
-    "ispending": true,
-    "isvisible": true,
-    "viewmode": 0,
-    "children": [
-      {
-        "name": "Heavy Load Appliances",
-        "isactive": false,
-        "ispending": true,
-        "checkexistence": false,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "placeholder": "",
-        "allowmultipleshots": true,
-        "capturedshots": [],
-        "shots": [
-          {
-            "isactive": false,
-            "ispending": true,
-            "shotinfo": "Capture all appliances of heavy load",
-            "capturedshotinfo": "Appliances Photos",
-            "questioninfo": "",
-            "shotstatus": false,
-            "promptquestion": false,
-            "question": "Name of the appliance?",
-            "actions": [
-              "confirm"
-            ],
-            "result": "",
-            "questionstatus": false,
-            "questiontype": 5,
-            "inputformcontrol": "",
-            "placeholder": "",
-            "imagekey": "appliancesimages",
-            "imagename": "appliances"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "name": "Details",
-    "isactive": false,
-    "ispending": true,
-    "isvisible": true,
-    "viewmode": 1,
-    "children": [],
-    "formelements": [
-      {
-        "inputformcontrol": "batterysystem",
-        "placeholder": "",
-        "label": "Is there any Battery System?*",
-        "visibility": true,
-        "controltype": 5,
-        "controlselement": {
-          "inputformcontrol": "detailsofbatterysystem",
-          "onvalueselection": true
-        },
-        "options": [
-          {
-            "label": "Yes",
-            "value": true
-          },
-          {
-            "label": "No",
-            "value": false
+            "checkexistence": true,
+            "capturedshots": []
           }
         ],
-        "required": true
+        "formelements": []
       },
       {
-        "inputformcontrol": "detailsofbatterysystem",
-        "placeholder": "",
-        "label": "Details Of Battery System",
-        "visibility": false,
-        "controltype": 7,
-        "options": [],
-        "required": false
-      },
-      {
-        "inputformcontrol": "interconnection",
-        "placeholder": "",
-        "label": "Interconnection*",
-        "visibility": true,
-        "controltype": 5,
-        "controlselement": {
-          "inputformcontrol": "interconnection_input",
-          "onvalueselection": "more"
-        },
-        "options": [
+        "name": "Roof",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children": [
           {
-            "label": "Backfed",
-            "value": "backfed"
+            "allowmultipleshots": true,
+            "isvisible": true,
+            "name": "Roof Photos",
+            "ispending": true,
+            "isexistencechecked": false,
+            "inputformcontrol": "",
+            "isactive": false,
+            "placeholder": "",
+            "shots": [
+              {
+                "questiontype": 6,
+                "imagekey": "roofimages",
+                "imagename": "roof",
+                "capturedshotinfo": "Roof Photos",
+                "question": "What is the roof material?",
+                "shotinfo": "Capture roof from all angles",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "roofmaterial",
+                "isactive": false,
+                "placeholder": "Roof Material",
+                "questioninfo": "Provide Roof Material",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "Confirm"
+                ]
+              }
+            ],
+            "checkexistence": false,
+            "capturedshots": []
           },
           {
-            "label": "Supply Side Tap",
-            "value": "supplysidetap"
-          },
-          {
-            "label": "Load Side Tap",
-            "value": "loadsidetap"
-          },
-          {
-            "label": "More",
-            "value": "more",
-            "controls": "interconnection_input"
+            "allowmultipleshots": true,
+            "isvisible": true,
+            "name": "Obstacles Photos",
+            "ispending": true,
+            "isexistencechecked": false,
+            "inputformcontrol": "",
+            "isactive": false,
+            "placeholder": "",
+            "shots": [
+              {
+                "questiontype": 0,
+                "imagekey": "obstaclesimages",
+                "imagename": "obstacle",
+                "capturedshotinfo": "Obstacles Photos",
+                "question": "",
+                "shotinfo": "Capture obstacles photos",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "",
+                "isactive": false,
+                "placeholder": "",
+                "questioninfo": "",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              }
+            ],
+            "checkexistence": false,
+            "capturedshots": []
           }
         ],
-        "required": true
+        "formelements": []
       },
       {
-        "inputformcontrol": "interconnection_input",
-        "placeholder": "",
-        "label": "Interconnection Detail",
-        "visibility": false,
-        "controltype": 1,
-        "options": [],
-        "required": false
-      },
-      {
-        "inputformcontrol": "servicefeedsource",
-        "placeholder": "",
-        "label": "Service feed source*",
-        "visibility": true,
-        "controltype": 5,
-        "controlselement": {},
-        "options": [
+        "name": "Attic",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children": [
           {
-            "label": "Overhead",
-            "value": "overhead"
-          },
-          {
-            "label": "Underground",
-            "value": "underground"
+            "allowmultipleshots": false,
+            "isvisible": true,
+            "name": "Attic Photos",
+            "ispending": true,
+            "isexistencechecked": false,
+            "inputformcontrol": "atticphotosrequired",
+            "isactive": false,
+            "placeholder": "Attic Photos Required",
+            "shots": [
+              {
+                "questiontype": 1,
+                "imagekey": "atticimages",
+                "imagename": "atticwideshoturl",
+                "capturedshotinfo": "Attic Wide Angle SHot",
+                "question": "What is the type of frame?",
+                "shotinfo": "Capture Attic Wide Angle Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "framing",
+                "isactive": false,
+                "placeholder": "Framing",
+                "questioninfo": "Provide Type of Frame Details",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "truss",
+                  "rafter"
+                ]
+              },
+              {
+                "questiontype": 8,
+                "imagekey": "atticimages",
+                "imagename": "atticzoomshoturl",
+                "capturedshotinfo": "Attic Zoom Shot",
+                "question": "What's the size of the raft (thickness x width)?",
+                "shotinfo": "Capture Attic Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "framingsize",
+                "isactive": false,
+                "placeholder": "Framing Size",
+                "questioninfo": "Provide Size Details",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "Confirm"
+                ]
+              },
+              {
+                "questiontype": 2,
+                "imagekey": "atticimages",
+                "imagename": "atticrequiredshoturl",
+                "capturedshotinfo": "Attic Required Shot",
+                "question": "What's the distance between two rafts?",
+                "shotinfo": "Capture Attic Required Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "distancebetweentworafts",
+                "isactive": false,
+                "placeholder": "Distance between Two Rafts",
+                "questioninfo": "Provide Spacing Details",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "Confirm"
+                ]
+              }
+            ],
+            "checkexistence": true,
+            "capturedshots": []
           }
         ],
-        "required": true
+        "formelements": []
       },
       {
-        "inputformcontrol": "additionalnotes",
-        "placeholder": "",
-        "label": "Additional notes",
-        "visibility": true,
-        "controltype": 7,
-        "options": [],
-        "required": false
+        "name": "Utility Bill",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children": [
+          {
+            "allowmultipleshots": false,
+            "isvisible": true,
+            "name": "Utility Bill Photos",
+            "ispending": true,
+            "isexistencechecked": false,
+            "inputformcontrol": "",
+            "isactive": false,
+            "placeholder": "",
+            "shots": [
+              {
+                "questiontype": 0,
+                "imagekey": "utilitybillimages",
+                "imagename": "utilitybillfront",
+                "capturedshotinfo": "Utility Bill Front SHot",
+                "question": "",
+                "shotinfo": "Capture Utility Bill Front Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "",
+                "isactive": false,
+                "placeholder": "",
+                "questioninfo": "",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              },
+              {
+                "questiontype": 0,
+                "imagekey": "utilitybillimages",
+                "imagename": "utilitybillback",
+                "capturedshotinfo": "Utility Bill Back Shot",
+                "question": "",
+                "shotinfo": "Capture Utility Bill Back Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "",
+                "isactive": false,
+                "placeholder": "",
+                "questioninfo": "",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              }
+            ],
+            "checkexistence": false,
+            "capturedshots": []
+          }
+        ],
+        "formelements": []
+      },
+      {
+        "name": "Details",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 1,
+        "children": [],
+        "formelements": [
+          {
+            "inputformcontrol": "batterysystem",
+            "placeholder": "",
+            "label": "Is there any Battery System?*",
+            "visibility": true,
+            "controltype": 5,
+            "controlselement": {
+              "inputformcontrol": "detailsofbatterysystem",
+              "onvalueselection": true
+            },
+            "options": [
+              {
+                "label": "Yes",
+                "value": true
+              },
+              {
+                "label": "No",
+                "value": false
+              }
+            ],
+            "required": true
+          },
+          {
+            "inputformcontrol": "detailsofbatterysystem",
+            "placeholder": "",
+            "label": "Details Of Battery System",
+            "visibility": false,
+            "controltype": 7,
+            "options": [],
+            "required": false
+          },
+          {
+            "inputformcontrol": "esid_number",
+            "placeholder": "ESID Number",
+            "label": "ESID Number",
+            "visibility": true,
+            "controltype": 1,
+            "options": [],
+            "required": false
+          },
+          {
+            "inputformcontrol": "servicefeedsource",
+            "placeholder": "",
+            "label": "Service feed source*",
+            "visibility": true,
+            "controltype": 5,
+            "controlselement": {},
+            "options": [
+              {
+                "label": "Overhead",
+                "value": "overhead"
+              },
+              {
+                "label": "Underground",
+                "value": "underground"
+              }
+            ],
+            "required": true
+          },
+          {
+            "inputformcontrol": "additionalnotes",
+            "placeholder": "",
+            "label": "Additional notes",
+            "visibility": true,
+            "controltype": 7,
+            "options": [],
+            "required": false
+          }
+        ]
       }
-    ]
+    ],
+    "user": {
+      "id": 974,
+      "username": "newuser@mailinator.com",
+      "email": "newuser@mailinator.com",
+      "provider": "local",
+      "confirmed": true,
+      "blocked": null,
+      "role": 6,
+      "created_at": "2021-03-22T04:01:14.000Z",
+      "updated_at": "2021-03-22T04:09:40.000Z",
+      "firstname": "new",
+      "lastname": "user",
+      "phone": null,
+      "country": "United States",
+      "company": null,
+      "callingcode": null,
+      "address": null,
+      "registrationnumber": null,
+      "isdefaultpassword": false,
+      "source": "android",
+      "parent": 974,
+      "contractorsubscription": null,
+      "addedby": null,
+      "contractorlogo": null,
+      "pushtoken": null,
+      "score": null,
+      "pushtokens": null,
+      "amount": 0,
+      "design": null,
+      "survey": null,
+      "permissiontomakedesign": true,
+      "minpermitdesignaccess": true,
+      "getnotification": true,
+      "getemail": true,
+      "isplatformupdated": true,
+      "ispaymentmodeprepay": true,
+      "prelimdiscount": null,
+      "permitdiscount": null,
+      "usertype": "individual",
+      "billingaddress": null,
+      "requestgeneratednotification": true,
+      "requestacknowledgementnotification": true,
+      "requestindesigningnotification": false,
+      "designonholdnotification": false,
+      "designcompletednotification": false,
+      "designmovedtoqcnotification": false,
+      "designreviewfailednotification": false,
+      "designreviewpassednotification": false,
+      "designdeliverednotification": true,
+      "prelimdesigndiscount": null,
+      "permitdesigndiscount": null,
+      "discounttype": "amount",
+      "producttour": null,
+      "inboxtour": null,
+      "isonboardingcompleted": false,
+      "requestgeneratedemail": true,
+      "requestacknowledgementemail": true,
+      "requestindesigningemail": false,
+      "designcompletedemail": false,
+      "designmovedtoqcemail": false,
+      "designreviewfailedemail": false,
+      "designreviewpassedemail": false,
+      "designdeliveredemail": true,
+      "designertype": "internal",
+      "status": "active",
+      "peengineertype": null,
+      "companyaddress": null,
+      "companyaddresssameasbilling": null,
+      "slabname": null,
+      "logo": null,
+      "userimage": []
+    },
+    "jobtype": "pv",
+    "created_at": "2021-03-19T05:37:34.000Z",
+    "updated_at": "2021-03-22T04:22:12.000Z"
   }
 ]

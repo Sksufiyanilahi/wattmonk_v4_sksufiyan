@@ -204,6 +204,10 @@ app-ar ion-content {
   margin-bottom: 0px;
 }
 
+ion-input, ion-textarea {
+  padding-left: 0.325rem;
+}
+
 .stepper-title {
   font-size: 14px;
   font-weight: 600;

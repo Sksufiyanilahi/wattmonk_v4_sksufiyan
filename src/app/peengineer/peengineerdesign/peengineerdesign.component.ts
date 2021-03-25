@@ -38,7 +38,7 @@ export class PEengineerdesignComponent implements OnInit {
   assignForm:FormGroup
   drawerState = DrawerState.Bottom;
   userData: any;
-  segments:any="status=assigned&status=declined";
+  segments:any="status=assigned&declinedbyelectricalpeengineer=true&declinedbystructuralpeengineer=true&acceptedbyelectricalpeengineer=true&acceptedbystructuralpeengineer=true&isstructuralassigned=true&iselectricalassigned=true";
 
   listOfDesigns: Pestamp[];
   listOfDesignsHelper: any[];
@@ -126,7 +126,8 @@ export class PEengineerdesignComponent implements OnInit {
                 // this.skip=0;
 
                 if(event.target.value=='InStamping'){
-                      this.segments ="status=assigned&status=declined";
+                      // this.segments ="status=assigned&status=declined";
+                      this.segments = "status=assigned&declinedbyelectricalpeengineer=true&declinedbystructuralpeengineer=true&acceptedbyelectricalpeengineer=true&acceptedbystructuralpeengineer=true&isstructuralassigned=true&iselectricalassigned=true"
                       // return this.segments;
                     }
                     else if(event.target.value=='completed'){
