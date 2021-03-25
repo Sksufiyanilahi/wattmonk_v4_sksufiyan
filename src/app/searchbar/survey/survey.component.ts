@@ -5,7 +5,7 @@ import { SurveyDataModel } from 'src/app/model/survey.model';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { NavController } from '@ionic/angular';
+import {ActionSheetController, NavController, Platform} from '@ionic/angular';
 import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-navigator/ngx';
 import { DrawerState } from 'ion-bottom-drawer';
 import { AssigneeModel } from '../../model/assignee.model';
@@ -48,7 +48,9 @@ export class SurveyComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute,
-    private storage: StorageService
+    private storage: StorageService,
+    private actionSheetController: ActionSheetController,
+    private platform: Platform
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -264,7 +266,49 @@ export class SurveyComponent implements OnInit {
   }
 
   openAddressOnMap(address: string) {
-    this.launchNavigator.navigate(address, this.options);
+    if (this.platform.is('ios')) {
+      this.presentActionSheet(address);
+    } else {
+      this.launchNavigator.navigate(address, this.options);
+    }
+  }
+
+  async presentActionSheet(address) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Launch Directions',
+      buttons: [
+        {
+          text: 'Apple Maps',
+          role: 'apple-maps',
+          handler: () => {
+            this.options = {
+              start: '',
+              app: this.launchNavigator.APP.APPLE_MAPS
+            };
+            this.launchNavigator.navigate(address, this.options);
+          }
+        },
+        {
+          text: 'Google Maps',
+          role: 'google-maps',
+          handler: () => {
+            this.options = {
+              start: '',
+              app: this.launchNavigator.APP.GOOGLE_MAPS
+            };
+            this.launchNavigator.navigate(address, this.options);
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    await actionSheet.present();
   }
 
   dismissBottomSheet() {

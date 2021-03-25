@@ -1,22 +1,28 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UtilitiesService } from '../utilities.service';
-import { ApiService } from '../api.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, NavController, ToastController, ModalController } from '@ionic/angular';
-import { SurveyDataModel } from '../model/survey.model';
-import { UserRoles } from '../model/constants';
-import { AssigneeModel } from '../model/assignee.model';
-import { StorageService } from '../storage.service';
-import { DrawerState } from 'ion-bottom-drawer';
-import { DatePicker } from '@ionic-native/date-picker/ngx';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ErrorModel } from '../model/error.model';
-import { Subscription } from 'rxjs';
-import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
-import { ROLES } from '../contants';
-import { ModalPageComponent } from './modal-page/modal-page.component';
-import { User } from '../model/user.model';
-import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {UtilitiesService} from '../utilities.service';
+import {ApiService} from '../api.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {
+  ActionSheetController,
+  AlertController,
+  ModalController,
+  NavController,
+  Platform,
+  ToastController
+} from '@ionic/angular';
+import {SurveyDataModel} from '../model/survey.model';
+import {AssigneeModel} from '../model/assignee.model';
+import {StorageService} from '../storage.service';
+import {DrawerState} from 'ion-bottom-drawer';
+import {DatePicker} from '@ionic-native/date-picker/ngx';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ErrorModel} from '../model/error.model';
+import {Subscription} from 'rxjs';
+import {LaunchNavigator, LaunchNavigatorOptions} from '@ionic-native/launch-navigator/ngx';
+import {ROLES} from '../contants';
+import {ModalPageComponent} from './modal-page/modal-page.component';
+import {User} from '../model/user.model';
+import {PhotoViewer} from '@ionic-native/photo-viewer/ngx';
 
 @Component({
   selector: 'app-survey-detail',
@@ -35,17 +41,17 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   listOfAssignees: AssigneeModel[] = [];
   drawerState = DrawerState.Bottom;
   date: Date;
-  user:User;
-  reviewcomments:any
+  user: User;
+  reviewcomments: any
   rescheduleForm: FormGroup;
   assigned = false;
   assigneeForm: FormGroup;
   dataSubscription: Subscription;
   refreshDataOnPreviousPage = 0;
-  segments:any='SiteDetils';
-  electricals:any='MSB';
+  segments: any = 'SiteDetils';
+  electricals: any = 'MSB';
 
-  reviewenddatetime:number;
+  reviewenddatetime: number;
 
   options: LaunchNavigatorOptions = {
     start: '',
@@ -65,9 +71,11 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private launchNavigator: LaunchNavigator,
     private toastController: ToastController,
-    private modalController:ModalController,
+    private modalController: ModalController,
     private photoViewer: PhotoViewer,
-    private router:Router
+    private router: Router,
+    private actionSheetController: ActionSheetController,
+    private platform: Platform
   ) {
     this.surveyId = +this.route.snapshot.paramMap.get('id');
     this.rescheduleForm = this.formBuilder.group({
@@ -84,7 +92,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.user=this.storage.getUser();
+    this.user = this.storage.getUser();
     console.log(this.user);
     this.dataSubscription = this.utilities.getSurveyDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
@@ -105,8 +113,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
       this.apiService.getSurveyDetail(this.surveyId).subscribe((result) => {
         this.utilities.hideLoading().then(() => {
           this.setData(result);
-          console.log(">>>",result);
-          
+          console.log(">>>", result);
+
         });
       }, (error) => {
         this.utilities.hideLoading();
@@ -179,25 +187,25 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     toast.present();
   }
 
-  assignedTo(surveyData){
+  assignedTo(surveyData) {
 
     let postData = {
       assignedto: this.user.id,
       status: "surveyinprocess"
     };
-    this.apiService.updateSurveyForm(postData,surveyData.id).subscribe(res=>{
+    this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
       console.log(res);
     })
     this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
 
- 
+
   }
 
 
   deleteSurveyFromServer() {
     this.utilities.showLoading('Deleting Survey').then((success) => {
       this.apiService.deleteSurvey(this.surveyId).subscribe((result) => {
-        this.utilities.hideLoading().then(()=>{
+        this.utilities.hideLoading().then(() => {
           this.utilities.showSnackBar('Survey deleted successfully');
           this.navController.pop();
           this.utilities.sethomepageSurveyRefresh(true);
@@ -313,138 +321,176 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   openAddressOnMap(address: string) {
-    this.launchNavigator.navigate(address, this.options);
+    if (this.platform.is('ios')) {
+      this.presentActionSheet(address);
+    } else {
+      this.launchNavigator.navigate(address, this.options);
+    }
   }
 
-  async openModal(image){
+  async presentActionSheet(address) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Launch Directions',
+      buttons: [
+        {
+          text: 'Apple Maps',
+          role: 'apple-maps',
+          handler: () => {
+            this.options = {
+              start: '',
+              app: this.launchNavigator.APP.APPLE_MAPS
+            };
+            this.launchNavigator.navigate(address, this.options);
+          }
+        },
+        {
+          text: 'Google Maps',
+          role: 'google-maps',
+          handler: () => {
+            this.options = {
+              start: '',
+              app: this.launchNavigator.APP.GOOGLE_MAPS
+            };
+            this.launchNavigator.navigate(address, this.options);
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
+
+  async openModal(image) {
     console.log(image)
 
     const modal = await this.modalController.create({
       component: ModalPageComponent,
-      showBackdrop:true,
+      showBackdrop: true,
       backdropDismiss: true,
       componentProps: {
-        image_url : image,
+        image_url: image,
       },
     });
     return await modal.present();
   }
 
-  reportDesignReviewFailure(){
+  reportDesignReviewFailure() {
     console.log("fail");
     //console.log("Value is" + this.reviewIssuesForm.value);
-        let cdate = Date.now();
-        this.reviewenddatetime = cdate;
-       const postData = {
-        status: "reviewfailed",
-       reviewissues : this.reviewcomments,
-        reviewendtime : this.reviewenddatetime,
-        
-      };
-
-    
-      //console.log("this is" + this.survey.reviewstarttime);
-
-     // console.log("this is"+ this.reviewstartdatetime);
-      this.apiService.updateSurveyForm(
-        postData, 
-        this.survey.id
-         
-        )
-        .subscribe(
-          response => {
-            this.utilities.showSnackBar("Survey status has been updated successfully.");
-            this.utilities.sethomepageSurveyRefresh(true);
-            if(this.user.role.type=='qcinspector'){
-              this.navController.navigateRoot(['analystoverview/survey']);}
-              else{
-                this.navController.navigateRoot(['homepage/survey']);
-              }
-            //this.data.triggerEditEvent = false;
-            //this.dialogRef.close(this.data);
-          },
-          error => {
-            this.utilities.errorSnackBar(
-              
-              "Error"
-            );
-          }
-        );
-    }
-  
-
-  reportDesignReviewSuccess(){
-   // this.countdownservice.stopTimer();
     let cdate = Date.now();
     this.reviewenddatetime = cdate;
-  const postData = {
-    status: "reviewpassed",
-    //reviewissues : this.reviewIssuesForm.get('reviewIssues').value,
-    //reviewstarttime : this.reviewstartdatetime,
-    reviewissues : this.reviewcomments,
-    reviewendtime : this.reviewenddatetime
-  };
-  this.apiService
-  .updateSurveyForm(
-    postData,
-    this.survey.id
-    
-  )
-  .subscribe(
-    response => {
-      this.utilities.showSnackBar("Survey status has been updated successfully.");
-      this.utilities.sethomepageSurveyRefresh(true);
-      if(this.user.role.type=='qcinspector'){
-        this.navController.navigateRoot(['analystoverview/survey']);}
-        else{
-          this.navController.navigateRoot(['homepage/survey']);
+    const postData = {
+      status: "reviewfailed",
+      reviewissues: this.reviewcomments,
+      reviewendtime: this.reviewenddatetime,
+
+    };
+
+
+    //console.log("this is" + this.survey.reviewstarttime);
+
+    // console.log("this is"+ this.reviewstartdatetime);
+    this.apiService.updateSurveyForm(
+      postData,
+      this.survey.id
+    )
+      .subscribe(
+        response => {
+          this.utilities.showSnackBar("Survey status has been updated successfully.");
+          this.utilities.sethomepageSurveyRefresh(true);
+          if (this.user.role.type == 'qcinspector') {
+            this.navController.navigateRoot(['analystoverview/survey']);
+          } else {
+            this.navController.navigateRoot(['homepage/survey']);
+          }
+          //this.data.triggerEditEvent = false;
+          //this.dialogRef.close(this.data);
+        },
+        error => {
+          this.utilities.errorSnackBar(
+            "Error"
+          );
         }
-     // this.triggerEditEvent = false;
-      //this.dialogRef.close(this.data);
-    },
-    error => {
-      this.utilities.errorSnackBar(
-        "Error"
       );
-    }
-  );
+  }
+
+
+  reportDesignReviewSuccess() {
+    // this.countdownservice.stopTimer();
+    let cdate = Date.now();
+    this.reviewenddatetime = cdate;
+    const postData = {
+      status: "reviewpassed",
+      //reviewissues : this.reviewIssuesForm.get('reviewIssues').value,
+      //reviewstarttime : this.reviewstartdatetime,
+      reviewissues: this.reviewcomments,
+      reviewendtime: this.reviewenddatetime
+    };
+    this.apiService
+      .updateSurveyForm(
+        postData,
+        this.survey.id
+      )
+      .subscribe(
+        response => {
+          this.utilities.showSnackBar("Survey status has been updated successfully.");
+          this.utilities.sethomepageSurveyRefresh(true);
+          if (this.user.role.type == 'qcinspector') {
+            this.navController.navigateRoot(['analystoverview/survey']);
+          } else {
+            this.navController.navigateRoot(['homepage/survey']);
+          }
+          // this.triggerEditEvent = false;
+          //this.dialogRef.close(this.data);
+        },
+        error => {
+          this.utilities.errorSnackBar(
+            "Error"
+          );
+        }
+      );
 ​
- 
-      
-    
+
 
   }
 
 
-  
-  async openreviewPassed(value){
+  async openreviewPassed(value) {
     var checkValue = value;
     console.log(checkValue)
-    if(checkValue == 'pass'){
-  const alert = await this.alertController.create({
-      cssClass: 'alertClass',
-      header: 'Confirm!',
-      message:'Would you like to  Add Comments!!',
-      inputs:
-       [ {name:'comment',
-       id:'comment',
-          type:'textarea',
-        placeholder:'Enter Comment'}
-        ] ,
-      buttons: [
-        {
-          text: 'Passed',
-        cssClass: 'secondary',
-          handler: (alertData) => {
-            console.log('Confirm Cancel: blah');
-            this.reviewcomments=alertData.comment;
-            this.reportDesignReviewSuccess();
-           // if(checkValue == 'pass'){
-           // this.reportDesignReviewSuccess();
-           // }
-           // else if(checkValue == 'fail')
-           // {
-           //   if(this.reviewcomments !== "")
+    if (checkValue == 'pass') {
+      const alert = await this.alertController.create({
+        cssClass: 'alertClass',
+        header: 'Confirm!',
+        message: 'Would you like to  Add Comments!!',
+        inputs:
+          [{
+            name: 'comment',
+            id: 'comment',
+            type: 'textarea',
+            placeholder: 'Enter Comment'
+          }
+          ],
+        buttons: [
+          {
+            text: 'Passed',
+            cssClass: 'secondary',
+            handler: (alertData) => {
+              console.log('Confirm Cancel: blah');
+              this.reviewcomments = alertData.comment;
+              this.reportDesignReviewSuccess();
+              // if(checkValue == 'pass'){
+              // this.reportDesignReviewSuccess();
+              // }
+              // else if(checkValue == 'fail')
+              // {
+              //   if(this.reviewcomments !== "")
               // {
               // this.reportDesignReviewFailure();
               // }
@@ -453,62 +499,62 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
               // }
             }
           }
-      ]
-    });
-    await alert.present();
-  }
-  else if(checkValue == 'fail'){
-    const alert = await this.alertController.create({
-      cssClass: 'alertClass',
-      header: 'Confirm!',
-      message:'Would you like to  Add Comments!!',
-      inputs:
-       [ {name:'comment',
-       id:'comment',
-          type:'textarea',
-        placeholder:'Enter Comment'}
-        ] ,
-      buttons: [
-        {
-          text: 'Failed',
-        cssClass: 'secondary',
-          handler: (alertData) => {
-            console.log('Confirm Cancel: blah');
-            this.reviewcomments=alertData.comment;
-            if(this.reviewcomments !== ""){
-            this.reportDesignReviewFailure();
-            }
-            else{
-              this.utilities.errorSnackBar("Please Enter Issues");
-            }
-            // if(checkValue == 'pass'){
-            // this.reportDesignReviewSuccess();
-            // }
-            // else if(checkValue == 'fail')
-            // {
-            //   if(this.reviewcomments !== "")
-            //   {
-            //   this.reportDesignReviewFailure();
-            //   }
-            //   else{
-            //     this.utilities.errorSnackBar("Please Enter Issues");
-            //   }
-            // }
+        ]
+      });
+      await alert.present();
+    } else if (checkValue == 'fail') {
+      const alert = await this.alertController.create({
+        cssClass: 'alertClass',
+        header: 'Confirm!',
+        message: 'Would you like to  Add Comments!!',
+        inputs:
+          [{
+            name: 'comment',
+            id: 'comment',
+            type: 'textarea',
+            placeholder: 'Enter Comment'
           }
-        }
-      ]
-    });
-    await alert.present();
-  }
+          ],
+        buttons: [
+          {
+            text: 'Failed',
+            cssClass: 'secondary',
+            handler: (alertData) => {
+              console.log('Confirm Cancel: blah');
+              this.reviewcomments = alertData.comment;
+              if (this.reviewcomments !== "") {
+                this.reportDesignReviewFailure();
+              } else {
+                this.utilities.errorSnackBar("Please Enter Issues");
+              }
+              // if(checkValue == 'pass'){
+              // this.reportDesignReviewSuccess();
+              // }
+              // else if(checkValue == 'fail')
+              // {
+              //   if(this.reviewcomments !== "")
+              //   {
+              //   this.reportDesignReviewFailure();
+              //   }
+              //   else{
+              //     this.utilities.errorSnackBar("Please Enter Issues");
+              //   }
+              // }
+            }
+          }
+        ]
+      });
+      await alert.present();
+    }
   }
 
-    
-showimage(url){
-  this.photoViewer.show(url);
+
+  showimage(url) {
+    this.photoViewer.show(url);
+  }
+
+
 }
-
-
-  }
 
 
 
