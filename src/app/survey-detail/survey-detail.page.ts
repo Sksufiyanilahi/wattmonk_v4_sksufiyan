@@ -26,7 +26,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 export class SurveyDetailPage implements OnInit, OnDestroy {
 
   slideOpts = {
-    initialSlide: 1,
+    initialSlide: 0,
     speed: 400
   };
 
@@ -106,7 +106,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
         this.utilities.hideLoading().then(() => {
           this.setData(result);
           console.log(">>>",result);
-          
+
         });
       }, (error) => {
         this.utilities.hideLoading();
@@ -190,7 +190,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     })
     this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
 
- 
+
   }
 
 
@@ -339,17 +339,17 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
         status: "reviewfailed",
        reviewissues : this.reviewcomments,
         reviewendtime : this.reviewenddatetime,
-        
+
       };
 
-    
+
       //console.log("this is" + this.survey.reviewstarttime);
 
      // console.log("this is"+ this.reviewstartdatetime);
       this.apiService.updateSurveyForm(
-        postData, 
+        postData,
         this.survey.id
-         
+
         )
         .subscribe(
           response => {
@@ -365,13 +365,13 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
           },
           error => {
             this.utilities.errorSnackBar(
-              
+
               "Error"
             );
           }
         );
     }
-  
+
 
   reportDesignReviewSuccess(){
    // this.countdownservice.stopTimer();
@@ -388,7 +388,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   .updateSurveyForm(
     postData,
     this.survey.id
-    
+
   )
   .subscribe(
     response => {
@@ -409,14 +409,14 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     }
   );
 ​
- 
-      
-    
+
+
+
 
   }
 
 
-  
+
   async openreviewPassed(value){
     var checkValue = value;
     console.log(checkValue)
@@ -502,7 +502,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
   }
 
-    
+
 showimage(url){
   this.photoViewer.show(url);
 }

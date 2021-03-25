@@ -95,7 +95,7 @@ this.network.networkConnect();
     }
      this.designs = this.utilities.getdesignDetails();
      console.log(this.designs)
-     if(this.designs !== null)
+     if(this.designs !== null && this.designs !== undefined)
      {
       this.designId = this.designs.id;
      }
@@ -110,7 +110,7 @@ this.network.networkConnect();
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.utilities.setStaticAddress('');
-    this.deactivateNetworkSwitch.unsubscribe();
+    // this.deactivateNetworkSwitch.unsubscribe();
   }
 
   segmentChanged(event) {
@@ -375,7 +375,7 @@ this.network.networkConnect();
         {
           this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SALES_FORM);
         }
-    
+
   }
   else{
     if(this.router.url=='/schedule/design'){

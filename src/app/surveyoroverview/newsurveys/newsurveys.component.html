@@ -18,9 +18,9 @@
                       <span class="chipdetail" style="background-color: #1289A7;"  routerDirection="forward">
                         {{utils.formatTimeInDisplayFormat(surveyData.datetime)}}
                     </span>
-                      <span *ngIf="surveyData.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;"  routerDirection="forward">
+                      <!-- <span *ngIf="surveyData.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;"  routerDirection="forward">
                         Pending
-                    </span>
+                    </span> -->
                     <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span> -->
                     <span fill="clear" background-border="clear"    (click)="gotoActivity(surveyData,$event)"  class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                 </p>
