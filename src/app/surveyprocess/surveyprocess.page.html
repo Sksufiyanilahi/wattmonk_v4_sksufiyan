@@ -12,6 +12,9 @@
           <p class="shotinfo">
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
           </p>
+          <p *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].multipleshotslimit !== -1">
+            Remaining Shots: {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].multipleshotslimit - this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length}}
+          </p>
         </ion-col>
       </ion-row>
       <ion-row class="actionarea" *ngIf="isdataloaded">
