@@ -2157,7 +2157,6 @@ export class PermitschedulePage implements OnInit {
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
       console.log(this.autoCompleteOff);
-      if(this.designId==0){
       const input = event.detail.value;
       console.log(input)
       if (input === '') {
@@ -2175,17 +2174,18 @@ export class PermitschedulePage implements OnInit {
             });
           });
         });
-      }
     }
 
     forAutoComplete(e){
       console.log("hello",e);
       this.autoCompleteOff = true;
+      this.isSelectSearchResult = false;
 
     }
 
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
     selectSearchResult(item) {
+      this.utils.showLoading('Loading').then(() => {
       console.log(item);
       this.isSelectSearchResult = true;
       this.geocoder.geocode({
@@ -2195,6 +2195,7 @@ export class PermitschedulePage implements OnInit {
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
       });
       this.autocompleteItems = []
+    })
     }
 
     getGeoEncoder(latitude, longitude, formattedAddress) {
@@ -2213,7 +2214,7 @@ export class PermitschedulePage implements OnInit {
       // this.goBack();
       // return;
 
-      this.utils.showLoading('Loading').then(() => {
+     // this.utils.showLoading('Loading').then(() => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
             console.log(result)
@@ -2246,7 +2247,7 @@ export class PermitschedulePage implements OnInit {
             });
 
           });
-      });
+     // });
     }
 
     generateAddress(addressObj) {

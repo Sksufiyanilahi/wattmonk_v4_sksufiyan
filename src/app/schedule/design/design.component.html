@@ -206,7 +206,7 @@
                           formControlName="shippingaddress" autocomplete="off"></ion-input>
           </ion-item> -->
             <!-- <ion-list *ngIf="autocompleteItems.length > 0 && autoCompleteOff"> -->
-                <ion-list style="padding:0px">
+                <ion-list style="padding:0px" *ngIf="!isSelectSearchResult && designId == 0">
               <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
                   <ion-label>
                       {{ item.description }}

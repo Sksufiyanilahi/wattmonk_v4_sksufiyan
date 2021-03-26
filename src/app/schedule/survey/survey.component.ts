@@ -119,33 +119,6 @@ export class SurveyComponent implements OnInit, OnDestroy {
     if (this.surveyId !== 0) {
       this.getSurveyDetails();
     }
-    // else {
-    //   this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
-    //      // this.surveyForm.get('address').setValue("sdck");
-    //      // this.surveyForm.get('latitude').setValue('1111111');
-    //      // this.surveyForm.get('longitude').setValue('222222222');
-    //      // this.surveyForm.get('country').setValue('India');
-    //      // this.surveyForm.get('city').setValue('delhi');
-    //     // this.surveyForm.get('state').setValue('up');
-    //     //  this.surveyForm.get('postalcode').setValue(777777777);
-    //    this.surveyForm.get('address').setValue(address.address);
-    //    this.surveyForm.get('latitude').setValue(address.lat);
-    //     this.surveyForm.get('longitude').setValue(address.long);
-    //     this.surveyForm.get('country').setValue(address.country);
-    //     this.surveyForm.get('city').setValue(address.city);
-    //     this.surveyForm.get('state').setValue(address.state);
-    //     this.surveyForm.get('postalcode').setValue(address.postalcode);
-    //   }, (error) => {
-    //     this.surveyForm.get('address').setValue('');
-    //     this.surveyForm.get('latitude').setValue('');
-    //     this.surveyForm.get('longitude').setValue('');
-    //     this.surveyForm.get('country').setValue('');
-    //     this.surveyForm.get('city').setValue('');
-    //     this.surveyForm.get('state').setValue('');
-    //     this.surveyForm.get('postalcode').setValue('');
-    //   });
-    // }
-
     this.getAssignees();
   }
 
@@ -395,7 +368,6 @@ export class SurveyComponent implements OnInit, OnDestroy {
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
       console.log(this.autoCompleteOff);
-      if(this.surveyId == 0){
       const input = event.detail.value;
       console.log(input)
       if (input === '') {
@@ -413,17 +385,18 @@ export class SurveyComponent implements OnInit, OnDestroy {
             });
           });
         });
-      }
     }
 
     forAutoComplete(e){
       console.log("hello",e);
       this.autoCompleteOff = true;
+      this.isSelectSearchResult = false;
 
     }
 
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
     selectSearchResult(item) {
+      this.utilities.showLoading('Loading').then(() => {
       console.log(item);
       this.isSelectSearchResult = true;
       this.geocoder.geocode({
@@ -433,25 +406,12 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
       });
       this.autocompleteItems = []
+    })
     }
 
     getGeoEncoder(latitude, longitude, formattedAddress) {
 
-      // // TODO remove later
-      // const address: AddressModel = {
-      //   address: 'Vasant Kunj, New Delhi, Delhi',
-      //   lat: 28.5200491,
-      //   long: 77.158687,
-      //   country: 'India',
-      //   state: 'Delhi',
-      //   city: 'New Delhi',
-      //   postalcode: '110070'
-      // };
-      // this.utilities.setAddress(address);
-      // this.goBack();
-      // return;
-
-      this.utilities.showLoading('Loading').then(() => {
+     // this.utilities.showLoading('Loading').then(() => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
             console.log(result)
@@ -484,7 +444,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             });
 
           });
-      });
+    //  });
     }
 
     generateAddress(addressObj) {
@@ -536,13 +496,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.surveyForm.get('state').setValue('');
         this.surveyForm.get('postalcode').setValue(null);
       });
-      // this.firstFormGroup.patchValue({
-      //   createdby: this.storage.getUserID()
-      // });
-   // this.autocompleteItems = [];
+      
       this.autoCompleteOff = false;
       console.log(this.autoCompleteOff);
-      //this.getSolarMake();
+     
 
       }
 

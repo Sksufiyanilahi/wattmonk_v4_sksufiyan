@@ -1522,8 +1522,8 @@ isArchitecturalFileUpload: boolean = false;
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
       console.log(this.autoCompleteOff);
-      if(this.designId == 0 || !this.isSelectSearchResult)
-      {
+     // if(this.designId == 0 || !this.isSelectSearchResult)
+    //  {
       const input = event.detail.value;
       console.log(input)
       if (input === '') {
@@ -1541,18 +1541,20 @@ isArchitecturalFileUpload: boolean = false;
             });
           });
         });
-      }
+   //   }
     }
 
     forAutoComplete(e){
       console.log("hello",e);
       this.autoCompleteOff = true;
+      this.isSelectSearchResult = false;
 
     }
 
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
     selectSearchResult(item) {
       console.log(item);
+      this.utils.showLoading('Loading').then(() => {
       this.isSelectSearchResult = true;
       console.log(this.isSelectSearchResult);
       this.geocoder.geocode({
@@ -1562,6 +1564,7 @@ isArchitecturalFileUpload: boolean = false;
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
         this.autocompleteItems = [];
       });
+    })
 
     }
 
@@ -1581,7 +1584,7 @@ isArchitecturalFileUpload: boolean = false;
       // this.goBack();
       // return;
 
-      this.utils.showLoading('Loading').then(() => {
+     // this.utils.showLoading('Loading').then(() => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
             console.log(result)
@@ -1614,7 +1617,7 @@ isArchitecturalFileUpload: boolean = false;
             });
 
           });
-      });
+     // });
     }
 
     generateAddress(addressObj) {

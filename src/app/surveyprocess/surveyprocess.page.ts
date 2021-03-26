@@ -2230,6 +2230,12 @@ export class SurveyprocessPage implements OnInit {
     this.iscapturingallowed = false;
   }
 
+  handleShotNavigation(index, event){
+    event.stopPropogation();
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].isactive = true;
+    this.startCameraWithOpts();
+  }
+
   handleBackbutton() {
     this.platform.backButton.subscribeWithPriority(10, () => {
       console.log('Handler called to force close!');

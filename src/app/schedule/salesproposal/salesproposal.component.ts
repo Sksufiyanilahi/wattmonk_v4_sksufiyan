@@ -615,7 +615,7 @@ export class SalesproposalComponent implements OnInit {
         this.sendtowattmonk();
       }
     });
-    this.gettingClients();
+    //this.gettingClients();
 
     if (this.designId !== 0) {
       setTimeout(() => {
@@ -1993,21 +1993,21 @@ export class SalesproposalComponent implements OnInit {
     })
   }
 
-  gettingClients() {
-    this.apiService.getClients().subscribe(res => {
-      this.getCompanies = res;
-      console.log(this.getCompanies);
-      this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
-        startWith(""),
-        map(value => (typeof value === "string" ? value : value.companyid)),
-        map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
-      );
-    },
-      error => {
-        this.utils.errorSnackBar("Error");
-      }
-    );
-  }
+  // gettingClients() {
+  //   this.apiService.getClients().subscribe(res => {
+  //     this.getCompanies = res;
+  //     console.log(this.getCompanies);
+  //     this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
+  //       startWith(""),
+  //       map(value => (typeof value === "string" ? value : value.companyid)),
+  //       map(companyname => (companyname ? this._filterCompanies(companyname) : this.getCompanies.slice()))
+  //     );
+  //   },
+  //     error => {
+  //       this.utils.errorSnackBar("Error");
+  //     }
+  //   );
+  // }
 
   proxyValue: any;
 
@@ -2056,9 +2056,8 @@ export class SalesproposalComponent implements OnInit {
    //// For Address
     /* FOR SEARCH SHIPPING ADDRESS */
     updateSearchResults(event) {
-      //this.autoCompleteOff = true;
+      //this.autoCompleteOff = true;    
       console.log(this.autoCompleteOff);
-      if(this.designId == 0){
       const input = event.detail.value;
       console.log(input)
       if (input === '') {
@@ -2076,17 +2075,18 @@ export class SalesproposalComponent implements OnInit {
             });
           });
         });
-      }
     }
 
     forAutoComplete(e){
       console.log("hello",e);
       this.autoCompleteOff = true;
+      this.isSelectSearchResult = false;
 
     }
 
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
     selectSearchResult(item) {
+      this.utils.showLoading('Loading').then(() => {
       console.log(item);
       this.isSelectSearchResult = true;
       this.geocoder.geocode({
@@ -2096,6 +2096,7 @@ export class SalesproposalComponent implements OnInit {
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
       });
       this.autocompleteItems = []
+    })
     }
 
     getGeoEncoder(latitude, longitude, formattedAddress) {
@@ -2114,7 +2115,7 @@ export class SalesproposalComponent implements OnInit {
       // this.goBack();
       // return;
 
-      this.utils.showLoading('Loading').then(() => {
+      //this.utils.showLoading('Loading').then(() => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
             console.log(result)
@@ -2147,7 +2148,7 @@ export class SalesproposalComponent implements OnInit {
             });
 
           });
-      });
+     // });
     }
 
     generateAddress(addressObj) {

@@ -464,9 +464,12 @@ export class HomepagePage implements OnInit, OnDestroy {
 			this.mixpanelService.track("ADD_PRELIMDESIGN_PAGE_OPEN", {
 			});
 			this.utilities.presentPopover('design');
+			this.utilities.setDesignDetails(null);
 			// this.route.navigate([ '/schedule/design' ]);
 		} else if (this.route.url == '/homepage/survey') {
+			this.utilities.setDesignDetails(null);
 			this.route.navigate([ '/schedule/survey' ]);
+			
 		}
 	}
 
