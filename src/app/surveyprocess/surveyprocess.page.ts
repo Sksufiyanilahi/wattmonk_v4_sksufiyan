@@ -1918,10 +1918,11 @@ export class SurveyprocessPage implements OnInit {
         data[element] = this.activeForm.get('framing').value === '' ? null : this.activeForm.get('framing').value;
       }
       if (element === 'distancebetweentworafts') {
+        // tslint:disable-next-line:max-line-length
         data[element] = this.activeForm.get('distancebetweentworafts').value === '' ? 0 : this.activeForm.get('distancebetweentworafts').value;
       }
     });
-    console.log(data);
+    data['status'] = 'surveycompleted';
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
       this.utilitieservice.hideLoading().then(() => {
         this.insomnia.keepAwake()
