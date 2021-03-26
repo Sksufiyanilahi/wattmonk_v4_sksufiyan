@@ -12,6 +12,9 @@
           <p class="shotinfo">
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
           </p>
+          <p *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].multipleshotslimit !== -1">
+            Remaining Shots: {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].multipleshotslimit - this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length}}
+          </p>
         </ion-col>
       </ion-row>
       <ion-row class="actionarea" *ngIf="isdataloaded">
@@ -99,13 +102,13 @@
     <div *ngIf="!issidemenucollapsed && isdataloaded" class="sidestepper">
       <div
         *ngFor="let childshot of mainmenuitems[selectedmainmenuindex].children[selectedsubmenuindex].shots; let i = index">
-        <ion-row>
+        <ion-row (click)="handleShotNavigation(i, $event)">
           <div class="stepper-index">{{i + 1}}</div>
           <p class="stepper-title">Step</p>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-row class="stepper-list-row">
+            <ion-row class="stepper-list-row" (click)="handleShotNavigation(i, $event)">
               <p [ngClass]="childshot.shotstatus ? 'stepper-text-active' : 'stepper-text-default'">
                 {{childshot.shotinfo}}</p>
             </ion-row>

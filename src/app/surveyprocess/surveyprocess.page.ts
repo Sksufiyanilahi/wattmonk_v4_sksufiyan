@@ -46,6 +46,7 @@ export interface CHILDREN {
   placeholder?: string;
   shotscount: number;
   allowmultipleshots: boolean;
+  multipleshotslimit?: number;
   capturedshots: CAPTUREDSHOT[];
   shots: SHOT[];
 }
@@ -484,6 +485,7 @@ export class SurveyprocessPage implements OnInit {
       }
     }
   }
+
   /**
    * Form Code Ends Here
    */
@@ -776,6 +778,7 @@ export class SurveyprocessPage implements OnInit {
     });
     this.totalstepcount = totalSteps;
   }
+
   /**
    * Step Counts Ends Here
    */
@@ -911,15 +914,22 @@ export class SurveyprocessPage implements OnInit {
         };
         currentIndex.capturedshots.push(captureshot);
       } else {
-        const captureshot: CAPTUREDSHOT = {
-          menuindex: this.selectedmainmenuindex,
-          submenuindex: this.selectedsubmenuindex,
-          shotindex: this.selectedshotindex,
-          shotimage: this.capturedImage,
-          imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
-          imagename: currentIndex.shots[this.selectedshotindex].imagename + (currentIndex.capturedshots.length + 1)
-        };
-        currentIndex.capturedshots.push(captureshot);
+        if (currentIndex.multipleshotslimit !== -1 && currentIndex.capturedshots.length === currentIndex.multipleshotslimit) {
+          this.handleMenuSwitch();
+        } else {
+          const captureshot: CAPTUREDSHOT = {
+            menuindex: this.selectedmainmenuindex,
+            submenuindex: this.selectedsubmenuindex,
+            shotindex: this.selectedshotindex,
+            shotimage: this.capturedImage,
+            imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
+            imagename: currentIndex.shots[this.selectedshotindex].imagename + (currentIndex.capturedshots.length + 1)
+          };
+          currentIndex.capturedshots.push(captureshot);
+          if (currentIndex.capturedshots.length === currentIndex.multipleshotslimit) {
+            this.handleMenuSwitch();
+          }
+        }
       }
       currentIndex.shots[this.selectedshotindex].shotstatus = true;
       if (currentIndex.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
@@ -951,6 +961,7 @@ export class SurveyprocessPage implements OnInit {
     } else {
     }
   }
+
   /**
    * Camera Code Ends Here
    */
@@ -1054,6 +1065,7 @@ export class SurveyprocessPage implements OnInit {
       });
     });
   }
+
   /**
    * API Calls for Autocomplete Code Ends Here
    */
@@ -1278,6 +1290,7 @@ export class SurveyprocessPage implements OnInit {
       roofmaterialcontrol.markAsDirty();
     }
   }
+
   /**
    * Answer Submissions for Shot Questions Code Starts Here
    */
@@ -1328,6 +1341,7 @@ export class SurveyprocessPage implements OnInit {
       this.activeForm.get('distancebetweentworafts').clearValidators();
     }
   }
+
   /**
    * Shots Visibility Code Ends Here
    */
@@ -1352,6 +1366,7 @@ export class SurveyprocessPage implements OnInit {
       this.navController.navigateBack('/homepage/survey');
     }
   }
+
   /**
    * Survey Exit Code Ends Here
    */
@@ -1381,6 +1396,7 @@ export class SurveyprocessPage implements OnInit {
 
     return surveyStorageModel;
   }
+
   /**
    * Survey Storage Code Ends Here
    */
@@ -1415,7 +1431,14 @@ export class SurveyprocessPage implements OnInit {
     this.previoussubmenuindex = this.selectedsubmenuindex;
     this.previousshotindex = this.selectedshotindex;
 
-    if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots) {
+    if (
+      !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots ||
+      (
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots &&
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].multipleshotslimit !== -1 &&
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length === this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].multipleshotslimit
+      )
+    ) {
       this.markShotCompletion(this.selectedshotindex);
       if (!this.editingMode) {
         this.updateProgressStatus();
@@ -1589,6 +1612,7 @@ export class SurveyprocessPage implements OnInit {
     });
     return checkstatus;
   }
+
   /**
    * Camera Actions Code Ends Here
    */
@@ -1701,6 +1725,7 @@ export class SurveyprocessPage implements OnInit {
     });
     await alert.present();
   }
+
   /**
    * Pending Items Check Code Ends Here
    */
@@ -1762,6 +1787,7 @@ export class SurveyprocessPage implements OnInit {
       });
     });
   }
+
   /**
    * Complete Survey Code Ends Here
    */
@@ -1777,6 +1803,7 @@ export class SurveyprocessPage implements OnInit {
     this.reviewForm = true;
     CameraPreview.stop();
   }
+
   /**
    * Review Form Code Ends Here
    */
@@ -2201,6 +2228,12 @@ export class SurveyprocessPage implements OnInit {
     const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index];
     shotDetail.promptquestion = true;
     this.iscapturingallowed = false;
+  }
+
+  handleShotNavigation(index, event){
+    event.stopPropogation();
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].isactive = true;
+    this.startCameraWithOpts();
   }
 
   handleBackbutton() {
