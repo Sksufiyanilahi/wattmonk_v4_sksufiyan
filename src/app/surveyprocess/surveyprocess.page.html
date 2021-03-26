@@ -99,13 +99,13 @@
     <div *ngIf="!issidemenucollapsed && isdataloaded" class="sidestepper">
       <div
         *ngFor="let childshot of mainmenuitems[selectedmainmenuindex].children[selectedsubmenuindex].shots; let i = index">
-        <ion-row>
+        <ion-row (click)="handleShotNavigation(i, $event)">
           <div class="stepper-index">{{i + 1}}</div>
           <p class="stepper-title">Step</p>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-row class="stepper-list-row">
+            <ion-row class="stepper-list-row" (click)="handleShotNavigation(i, $event)">
               <p [ngClass]="childshot.shotstatus ? 'stepper-text-active' : 'stepper-text-default'">
                 {{childshot.shotinfo}}</p>
             </ion-row>
