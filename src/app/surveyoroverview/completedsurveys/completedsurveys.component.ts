@@ -10,7 +10,7 @@ import {ErrorModel} from 'src/app/model/error.model';
 import {SurveyStorageModel} from 'src/app/model/survey-storage.model';
 import {Storage} from '@ionic/storage';
 import * as moment from 'moment';
-import {Router} from '@angular/router';
+import {NavigationExtras, Router} from '@angular/router';
 import {ActionSheetController, Platform} from "@ionic/angular";
 
 @Component({
@@ -231,6 +231,25 @@ export class CompletedsurveysComponent implements OnInit {
     // $event.preventDefault();
     // $event.stopPropagation();
     this.router.navigate(['/survey-detail/' + surveyData.id])
+  }
+
+  gotoChats(surveyData,event){
+    console.log(surveyData)
+    event.stopPropagation();
+    this.router.navigate(['/chat/' + surveyData.chatid])
+    let objToSend: NavigationExtras = {
+      queryParams: {
+       name:surveyData.name +'_'+surveyData.address,
+       guid:surveyData.chatid
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+  this.router.navigate(['chat/'+ surveyData.chatid], {
+  state: { productdetails: objToSend }
+  });
   }
 
 
