@@ -42,6 +42,7 @@ import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 export class SurveyComponent {
 
   @ViewChild(IonContent, {static: false}) content: IonContent;
+  indexoftodayrow = -1;
 
 
   listOfSurveyData: SurveyDataModel[] = [];
@@ -131,8 +132,6 @@ export class SurveyComponent {
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
       console.log(this.netSwitch);
-
-       this.scrollTo();
     })
     // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
 
@@ -239,13 +238,10 @@ export class SurveyComponent {
 
 
   scrollTo() {
-
     setTimeout(() => {
-      console.log(this.el.nativeElement)
-      let sectionOffset = document.getElementById('todaydate');
-      console.log("sectionOffset == ", sectionOffset);
-      this.content.scrollToPoint(0,sectionOffset.offsetTop,1000);
-      // sectionOffset.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+      let todaytitleElement = document.getElementById(''+this.indexoftodayrow);
+      console.log("sectionOffset == ", todaytitleElement.offsetTop);
+      this.content.scrollToPoint(0, todaytitleElement.offsetTop, 1000);
     }, 2000)
 
   }
@@ -317,12 +313,22 @@ export class SurveyComponent {
       }
     });
     this.listOfSurveyDataHelper = tempData;
+
+    //Code to get index of today date element
+    this.listOfSurveyDataHelper.forEach((element, index) => {
+      if(element.date == this.today){
+        this.indexoftodayrow = index;
+        console.log(this.indexoftodayrow);
+      }
+    });
+
     // this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
     //   var dateA = new Date(a.date).getTime(),
     //     dateB = new Date(b.date).getTime();
     //   return dateB - dateA;
     // });
     this.cdr.detectChanges();
+    this.scrollTo();
   }
 
   fillinDynamicData(records: SurveyDataModel[]): SurveyDataModel[] {
