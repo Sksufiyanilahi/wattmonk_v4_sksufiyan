@@ -1085,6 +1085,10 @@ export class SurveyComponent {
     this.router.navigate(['/survey-detail/' + surveyData.id])
   }
 
+  gotoChats(surveyData,event){
+    event.stopPropagation();
+    this.router.navigate(['/chat/' + surveyData.chatid])
+  }
 
 }
 
