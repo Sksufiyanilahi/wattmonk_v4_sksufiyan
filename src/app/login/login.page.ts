@@ -1,39 +1,25 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  Validators,
-  FormBuilder
-} from '@angular/forms';
-import {
-  ApiService
-} from '../api.service';
-import {
-  UtilitiesService
-} from '../utilities.service';
-import {
-  NavController
-} from '@ionic/angular';
-import {
-  StorageService
-} from '../storage.service';
-import {
-  ErrorModel
-} from '../model/error.model';
-import { INVALID_EMAIL_MESSAGE, FIELD_REQUIRED } from '../model/constants';
-import { Router } from '@angular/router';
-import { ROLES } from '../contants';
-import { NetworkdetectService } from '../networkdetect.service';
-import { MixpanelService } from '../utilities/mixpanel.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ApiService} from '../api.service';
+import {UtilitiesService} from '../utilities.service';
+import {NavController} from '@ionic/angular';
+import {StorageService} from '../storage.service';
+import {ErrorModel} from '../model/error.model';
+import {FIELD_REQUIRED, INVALID_EMAIL_MESSAGE} from '../model/constants';
+import {Router} from '@angular/router';
+import {ROLES} from '../contants';
+import {NetworkdetectService} from '../networkdetect.service';
+import {MixpanelService} from '../utilities/mixpanel.service';
+
+import {Plugins, PushNotification, PushNotificationActionPerformed, PushNotificationToken} from '@capacitor/core';
+
+const {PushNotifications} = Plugins;
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
-}
+    selector: 'app-login',
+    templateUrl: './login.page.html',
+    styleUrls: ['./login.page.scss'],
+  }
 )
 export class LoginPage implements OnInit {
 
@@ -44,48 +30,49 @@ export class LoginPage implements OnInit {
   fieldRequired = FIELD_REQUIRED;
   isLoggedInOnce = false;
   netSwitch: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private utils: UtilitiesService,
     private apiService: ApiService,
     private storageService: StorageService,
     private router: Router,
-    private network:NetworkdetectService,
-
+    private network: NetworkdetectService,
     private navController: NavController,
-    private mixpanelService:MixpanelService) {
+    private mixpanelService: MixpanelService) {
     this.isLoggedInOnce = this.storageService.isLoggedInOnce();
   }
 
   ngOnInit() {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.loginForm = this.formBuilder.group({
-      identifier: new FormControl(this.storageService.getUserName(), [Validators.required, Validators.pattern(EMAILPATTERN)]),
-      password: new FormControl(this.storageService.getPassword(), [Validators.required, Validators.minLength(6)])
-    }
+        identifier: new FormControl(this.storageService.getUserName(), [Validators.required, Validators.pattern(EMAILPATTERN)]),
+        password: new FormControl(this.storageService.getPassword(), [Validators.required, Validators.minLength(6)])
+      }
     );
 
   }
 
-  ionViewDidEnter(){
-    this.network.networkSwitch.subscribe(data=>{
+  ionViewDidEnter() {
+    this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
       console.log(this.netSwitch);
 
     })
 
-this.network.networkDisconnect();
-this.network.networkConnect();
+    this.network.networkDisconnect();
+    this.network.networkConnect();
   }
 
   login() {
-    if(!this.netSwitch){
+    if (!this.netSwitch) {
       this.utils.errorSnackBar('No internet connection');
-    }else{
+    } else {
       console.log(this.loginForm);
       if (this.loginForm.status === 'VALID') {
         this.utils.showLoading('Logging In').then(() => {
           this.apiService.login(this.loginForm.value).subscribe(response => {
+            this.registerAPNS(response.user);
             this.utils.hideLoading().then(() => {
               console.log('Res', response);
               console.log(response);
@@ -109,11 +96,11 @@ this.network.networkConnect();
                   this.apiService.refreshHeader();
                   // this.navController.navigateRoot(['homepage']);
                   this.navController.navigateRoot(['surveyoroverview']);
-                  if(response.user){
+                  if (response.user) {
                     this.utils.doCometUserLogin();
                   }
                 }
-              } else if(response.user.role.id == ROLES.Designer){
+              } else if (response.user.role.id == ROLES.Designer) {
                 // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
                 this.storageService.setUserName(this.loginForm.get('identifier').value);
                 this.storageService.setPassword(this.loginForm.get('password').value);
@@ -127,73 +114,66 @@ this.network.networkConnect();
                   this.storageService.setUser(response.user, response.jwt);
                   this.apiService.refreshHeader();
                   this.navController.navigateRoot(['permitdesignoverview']);
-                  if(response.user){
+                  if (response.user) {
                     this.utils.doCometUserLogin();
                   }
                 }
-              }
+              } else if (response.user.role.id == ROLES.Analyst) {
+                this.storageService.setUserName(this.loginForm.get('identifier').value);
+                this.storageService.setPassword(this.loginForm.get('password').value);
 
-              else if(response.user.role.id == ROLES.Analyst)
-              {
-                 this.storageService.setUserName(this.loginForm.get('identifier').value);
-                  this.storageService.setPassword(this.loginForm.get('password').value);
-
-                  if(response.user.isdefaultpassword){
-                      this.storageService.setJWTToken(response.jwt);
-                      this.apiService.refreshHeader();
-                      this.navController.navigateRoot(['changepassword'])
-                  } else{
-                    this.storageService.setUser(response.user, response.jwt);
-                    this.apiService.refreshHeader();
-                    this.navController.navigateRoot(['analystoverview']);
-                    if(response.user){
-                      this.utils.doCometUserLogin();
-                    }
-                  }
-              }
-              else if(response.user.role.id == ROLES.Peengineer)
-              {
-                 this.storageService.setUserName(this.loginForm.get('identifier').value);
-                  this.storageService.setPassword(this.loginForm.get('password').value);
-
-                  if(response.user.isdefaultpassword){
-                      this.storageService.setJWTToken(response.jwt);
-                      this.apiService.refreshHeader();
-                      this.navController.navigateRoot(['changepassword'])
-                  } else{
-                    this.storageService.setUser(response.user, response.jwt);
-                    this.apiService.refreshHeader();
-                    this.navController.navigateRoot(['peengineer']);
-                    if(response.user){
-                      this.utils.doCometUserLogin();
-                    }
-                  }
-              }
-              else{
-
-                 // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
-                 this.storageService.setUserName(this.loginForm.get('identifier').value);
-                 this.storageService.setPassword(this.loginForm.get('password').value);
-                 this.storageService.setUser(response.user, response.jwt);
-                 this.apiService.refreshHeader();
-                 if (response.user.isdefaultpassword) {
+                if (response.user.isdefaultpassword) {
                   this.storageService.setJWTToken(response.jwt);
                   this.apiService.refreshHeader();
-                   this.navController.navigateRoot(['changepassword'])
-                 } else {
-                  if(response.user.role.type==='clientsuperadmin' && (response.user.isonboardingcompleted == null || response.user.isonboardingcompleted == false)){
+                  this.navController.navigateRoot(['changepassword'])
+                } else {
+                  this.storageService.setUser(response.user, response.jwt);
+                  this.apiService.refreshHeader();
+                  this.navController.navigateRoot(['analystoverview']);
+                  if (response.user) {
+                    this.utils.doCometUserLogin();
+                  }
+                }
+              } else if (response.user.role.id == ROLES.Peengineer) {
+                this.storageService.setUserName(this.loginForm.get('identifier').value);
+                this.storageService.setPassword(this.loginForm.get('password').value);
+
+                if (response.user.isdefaultpassword) {
+                  this.storageService.setJWTToken(response.jwt);
+                  this.apiService.refreshHeader();
+                  this.navController.navigateRoot(['changepassword'])
+                } else {
+                  this.storageService.setUser(response.user, response.jwt);
+                  this.apiService.refreshHeader();
+                  this.navController.navigateRoot(['peengineer']);
+                  if (response.user) {
+                    this.utils.doCometUserLogin();
+                  }
+                }
+              } else {
+
+                // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
+                this.storageService.setUserName(this.loginForm.get('identifier').value);
+                this.storageService.setPassword(this.loginForm.get('password').value);
+                this.storageService.setUser(response.user, response.jwt);
+                this.apiService.refreshHeader();
+                if (response.user.isdefaultpassword) {
+                  this.storageService.setJWTToken(response.jwt);
+                  this.apiService.refreshHeader();
+                  this.navController.navigateRoot(['changepassword'])
+                } else {
+                  if (response.user.role.type === 'clientsuperadmin' && (response.user.isonboardingcompleted == null || response.user.isonboardingcompleted == false)) {
 
                     this.navController.navigateRoot('onboarding');
-                    if(response.user){
+                    if (response.user) {
+                      this.utils.doCometUserLogin();
+                    }
+                  } else {
+                    this.navController.navigateRoot(['/dashboard'])
+                    if (response.user) {
                       this.utils.doCometUserLogin();
                     }
                   }
-                  else{
-                   this.navController.navigateRoot(['/dashboard'])
-                   if(response.user){
-                    this.utils.doCometUserLogin();
-                  }
-                 }
                 }
               }
             });
@@ -235,8 +215,43 @@ this.network.networkConnect();
     this.router.navigate(['/changepassword'])
   }
 
-  gotoSignup(){
+  gotoSignup() {
     this.router.navigate(['/userregistration'])
+  }
+
+  registerAPNS(user) {
+    PushNotifications.requestPermission().then(result => {
+      if (result.granted) {
+        PushNotifications.register();
+      }
+    });
+
+    PushNotifications.addListener('registration',
+      (token: PushNotificationToken) => {
+        localStorage.setItem('pushtoken', token.value);
+        console.log('Push registration success, token: ' + token.value);
+      }
+    );
+
+    PushNotifications.addListener('registrationError',
+      (error: any) => {
+        console.log('Error on registration: ' + JSON.stringify(error));
+      }
+    );
+
+    PushNotifications.addListener('pushNotificationReceived',
+      (notification: PushNotification) => {
+        console.log('Push received: ' + JSON.stringify(notification));
+      }
+    );
+
+    PushNotifications.addListener('pushNotificationActionPerformed',
+      (notification: PushNotificationActionPerformed) => {
+        console.log('Push action performed: ' + JSON.stringify(notification));
+      }
+    );
+
+    this.apiService.pushtoken(user.id, {newpushtoken: localStorage.getItem('pushtoken')});
   }
 
 

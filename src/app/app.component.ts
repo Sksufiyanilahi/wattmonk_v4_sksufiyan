@@ -14,9 +14,9 @@ import {Router} from '@angular/router';
 import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
 import {MixpanelService} from './utilities/mixpanel.service';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
-import {Plugins, StatusBarStyle} from '@capacitor/core';
+import {Plugins, StatusBarStyle, PushNotification, PushNotificationToken, PushNotificationActionPerformed} from '@capacitor/core';
 
-const { StatusBar, SplashScreen } = Plugins;
+const {StatusBar, SplashScreen, PushNotifications} = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -143,6 +143,9 @@ export class AppComponent {
       this.utilities.setupCometChat();
       this.mix.initializeMixPanel();
       this.backgroundMode.enable();
+      if (this.user !== null || this.user !== '') {
+        this.registerAPNS();
+      }
       SplashScreen.hide();
       StatusBar.setStyle({
         style: StatusBarStyle.Light
@@ -152,6 +155,41 @@ export class AppComponent {
       });
       // StatusBar.hide();
     });
+  }
+
+  registerAPNS() {
+    PushNotifications.requestPermission().then(result => {
+      if (result.granted) {
+        PushNotifications.register();
+      }
+    });
+
+    PushNotifications.addListener('registration',
+      (token: PushNotificationToken) => {
+        localStorage.setItem('pushtoken', token.value);
+        console.log('Push registration success, token: ' + token.value);
+      }
+    );
+
+    PushNotifications.addListener('registrationError',
+      (error: any) => {
+        console.log('Error on registration: ' + JSON.stringify(error));
+      }
+    );
+
+    PushNotifications.addListener('pushNotificationReceived',
+      (notification: PushNotification) => {
+        console.log('Push received: ' + JSON.stringify(notification));
+      }
+    );
+
+    PushNotifications.addListener('pushNotificationActionPerformed',
+      (notification: PushNotificationActionPerformed) => {
+        console.log('Push action performed: ' + JSON.stringify(notification));
+      }
+    );
+
+    this.apiservice.pushtoken(this.user.id, {newpushtoken: localStorage.getItem('pushtoken')});
   }
 
   isEmptyObject(obj) {
@@ -188,9 +226,9 @@ export class AppComponent {
       } else if (this.user.role.type === 'peengineer') {
         this.navController.navigateRoot('peengineer');
       } else {
-        if(this.user.role.type === 'clientsuperadmin' || this.user.role.type === 'wattmonkadmins'){
+        if (this.user.role.type === 'clientsuperadmin' || this.user.role.type === 'wattmonkadmins') {
           this.navController.navigateRoot('dashboard');
-        }else{
+        } else {
           this.navController.navigateRoot('permithomepage');
         }
       }
@@ -333,9 +371,9 @@ export class AppComponent {
     //   });
   }
 
-  updateMenuState(){
+  updateMenuState() {
     console.log(">>");
-    this.userData= this.storageService.getUser();
+    this.userData = this.storageService.getUser();
     // this.apiservice.emitUserNameAndRole(this.userData);
   }
 }
