@@ -41,7 +41,7 @@ import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 })
 export class SurveyComponent {
 
-  @ViewChild('content', {static: true}) content: IonContent;
+  @ViewChild(IonContent, {static: false}) content: IonContent;
 
 
   listOfSurveyData: SurveyDataModel[] = [];
@@ -132,7 +132,7 @@ export class SurveyComponent {
       this.netSwitch = data;
       console.log(this.netSwitch);
 
-      //  this.scrollTo();
+       this.scrollTo();
     })
     // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
 
@@ -238,16 +238,17 @@ export class SurveyComponent {
   }
 
 
-  // scrollTo() {
+  scrollTo() {
 
-  //   setTimeout(() => {
-  //     console.log(this.el.nativeElement)
-  //     let sectionOffset = document.getElementById('todaydate');
-  //     console.log("sectionOffset == ", sectionOffset);
-  //     sectionOffset.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
-  //   }, 2000)
+    setTimeout(() => {
+      console.log(this.el.nativeElement)
+      let sectionOffset = document.getElementById('todaydate');
+      console.log("sectionOffset == ", sectionOffset);
+      this.content.scrollToPoint(0,sectionOffset.offsetTop,1000);
+      // sectionOffset.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+    }, 2000)
 
-  // }
+  }
 
 
   // filterData(serchTerm: any) {
