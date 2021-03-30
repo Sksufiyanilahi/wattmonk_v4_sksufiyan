@@ -24,6 +24,9 @@
                       <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span> -->
                       <span fill="clear" background-border="clear"  (click)="gotoActivity(surveyData,$event)"   class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                   </p>
+                   <!-- <ng-container *ngIf="surveyData?.chatid!==null && surveyData?.addedtogroupchat"> -->
+                    <span fill="clear" background-border="clear" (click)="gotoChats(surveyData,$event)" class="chatbutton"  size="small"  ><img  style= "height:20px" src="assets/images/chat.svg" /></span>
+                    <!-- </ng-container> -->
               <p style="margin:0px">
 
                   <span class="customer-email"

@@ -25,6 +25,9 @@ export class ChatPage implements OnInit {
 	loggedInUserData: any;
 	designData:any;
 	callAcceptedByReceiver:boolean;
+	data:any;
+	name:any;
+	guid:any;
  
 	@ViewChild('content', { static: false })
 	content: any;
@@ -56,6 +59,9 @@ export class ChatPage implements OnInit {
 		// console.log('params: ', params);
 
 		// if (this.router.getCurrentNavigation().extras.state) {
+			this.name = this.router.getCurrentNavigation().extras.state.productdetails.queryParams.name;
+			this.guid = this.router.getCurrentNavigation().extras.state.productdetails.queryParams.guid;
+	  console.log(this.name,this.guid);
 		this.currentGroupData = this.route.snapshot.paramMap.get('id');
 		console.log(this.currentGroupData);
 		localStorage.setItem('gid',this.currentGroupData);

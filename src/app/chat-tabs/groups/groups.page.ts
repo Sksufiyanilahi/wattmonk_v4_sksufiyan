@@ -3,6 +3,7 @@ import { NavController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import Conversation = CometChat.Conversation;
 import { UtilitiesService } from 'src/app/utilities.service';
+import { NavigationExtras, Router } from '@angular/router';
  
 
 
@@ -19,7 +20,8 @@ export class GroupsPage implements OnInit {
 
   constructor(
     private navController: NavController,
-    private utilities: UtilitiesService
+    private utilities: UtilitiesService,
+    private router : Router
   ) {
   }
 
@@ -79,7 +81,21 @@ export class GroupsPage implements OnInit {
   }
 
   openConversation(conversation) {
-    this.navController.navigateForward(['chat/' + conversation.getConversationWith().getGuid(),{'key':'group'}]);
+    let objToSend: NavigationExtras = {
+      queryParams: {
+       name:conversation.getConversationWith().getName(),
+       guid:conversation.getConversationWith().getGuid()
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+  this.router.navigate(['chat/'+ conversation.getConversationWith().getGuid()], {
+  state: { productdetails: objToSend }
+  });
+  console.log(conversation.getConversationWith().getName());
+    //this.navController.navigateForward(['chat/' + conversation.getConversationWith().getGuid(),{'key':'group'}]);
   }
 
   ionViewWillLeave(){
