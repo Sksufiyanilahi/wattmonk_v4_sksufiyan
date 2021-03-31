@@ -95,6 +95,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       chatid: new FormControl(null),
       oldcommentid: new FormControl(''),
     });
+    this.surveyForm.get('jobtype').setValue('pv');
 
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
