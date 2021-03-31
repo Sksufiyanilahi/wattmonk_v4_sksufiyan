@@ -29,7 +29,7 @@ export class CouponOffersModalPage implements OnInit {
     private storageService:StorageService,
     private nav:NavParams,
     private mixpanelService:MixpanelService
-  ) { 
+  ) {
     this.couponForm = this.formBuilder.group({
       couponInput : new FormControl('')
     })
@@ -39,7 +39,7 @@ export class CouponOffersModalPage implements OnInit {
     this.requesttype= this.nav.get('request');
     this.apiservice.getCoupons(this.requesttype).subscribe((res)=>{
       this.Coupons=res;
-      console.log(this.Coupons);
+
     },
     (error)=>{
 
@@ -48,38 +48,38 @@ export class CouponOffersModalPage implements OnInit {
     this.mixpanelService.track("COUPON_OFFER_PAGE_OPEN", {
     });
   }
- 
+
   selectCoupon(coupondata:any) {
-    console.log(this.couponForm.get('couponInput').value)
-    console.log("this is",coupondata)
+
+
     // this.assigneeData.emit(assignee);
     this.Coupons.forEach((item) => {
       item.selected = false;
-     
+
     });
-    
+
     if (coupondata.id === this.selecteduserId) {
       this.selecteduserId = null;
       this.selectedCoupon=null;
       this.couponForm.patchValue({
         couponInput:""
       })
-      console.log(this.selectedCoupon);
-      
+
+
     } else {
       coupondata.selected = true;
-      console.log(coupondata);
+
       this.selectedCoupon=coupondata
       this.couponForm.patchValue({
         couponInput:coupondata.code
       })
       this.selecteduserId = coupondata.id;
       this.error=null;
-      console.log(this.selectedCoupon);
-      
+
+
     }
   }
-  
+
   changeInput(){
     this.error=null;
   }
@@ -94,7 +94,7 @@ export class CouponOffersModalPage implements OnInit {
           requesttype:this.requesttype
       }
       this.apiservice.sendCoupon(postData).subscribe((res)=>{
-        console.log(res);
+
         this.selectedCoupon=res;
         if(this.selectedCoupon.error){
         this.error=this.selectedCoupon.message;
@@ -107,15 +107,15 @@ export class CouponOffersModalPage implements OnInit {
         })
       }},
      (error)=>{this.utils.errorSnackBar("Invalid Coupon Code")})
-        
+
         this.utils.hideLoading();
         }
         )
- 
+
     }
     else if(this.selectedCoupon!=null){
    this.utils.showLoading("Applying").then(()=>{
- 
+
     this.modalctrl.dismiss({
     'dismissed':true,
     data:this.selectedCoupon

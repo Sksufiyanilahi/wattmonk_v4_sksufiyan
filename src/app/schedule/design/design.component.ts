@@ -250,25 +250,25 @@ isArchitecturalFileUpload: boolean = false;
     // this.newprelims = this.newprelimsRef.valueChanges();
     // this.newprelims.subscribe(
     //   (res) => {
-    //     console.log(res);
+
     //     this.newprelimscount = res.count;
     //     cdr.detectChanges();
     //   },
-    //   (err) => console.log(err),
-    //   () => console.log('done!')
+
+
     // )
     //this.newprelims = this.newprelimsRef.valueChanges();
     // this.db.doc('newprelimdesigns').valueChanges().subscribe((res:any)=>{
     //   this.newprelimscount = res;
-    //   console.log(this.newprelimscount)
+
     // })
     // this.newprelims.subscribe(
     //   (res) => {
-    //     console.log(res);
+
     //     this.newprelimscount = res.count;
     //   },
-    //   (err) => console.log(err),
-    //   () => console.log('done!')
+
+
     // )
 
     this.designId = +this.route.snapshot.paramMap.get('id');
@@ -280,7 +280,7 @@ isArchitecturalFileUpload: boolean = false;
   }
 
   numberfield(event) {
-    console.log(event);
+
 
   }
 
@@ -329,7 +329,7 @@ isArchitecturalFileUpload: boolean = false;
   // getmodulename(event){
 
   //     this.modulename= event;
-  //     console.log(this.modulename);
+
 
   // }
 
@@ -394,7 +394,7 @@ isArchitecturalFileUpload: boolean = false;
       });
       // }
       // this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-      //   // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
 
       //    // this.desginForm.get('address').setValue('124/345');
       //    // this.desginForm.get('latitude').setValue('24.553333');
@@ -437,7 +437,7 @@ isArchitecturalFileUpload: boolean = false;
     const roofcontrol = this.desginForm.get('rooftype');
     this.desginForm.get('mountingtype').valueChanges.subscribe(
       (mode: string) => {
-        console.log(mode);
+
         if (mode === 'ground') {
           tiltControl.setValidators([Validators.required, Validators.pattern(NUMBERPATTERN)]);
           roofcontrol.clearValidators();
@@ -463,7 +463,7 @@ isArchitecturalFileUpload: boolean = false;
     const uploadboxcontrol = this.desginForm.get('architecturaldesign');
     this.desginForm.get('newconstruction').valueChanges.subscribe(
       (uploadmode: any) => {
-        console.log(uploadmode);
+
         if (uploadmode == 'true') {
           uploadboxcontrol.setValidators([Validators.required]);
         } else if (uploadmode == 'false') {
@@ -488,11 +488,11 @@ isArchitecturalFileUpload: boolean = false;
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(() => {
           this.design = result;
-          console.log(this.design);
+
           this.fieldDisabled = true;
           this.attachmentData = this.design.attachments;
           this.architecturalData = this.design.architecturaldesign;
-          console.log("hello", this.design.attachments);
+
           this.desginForm.patchValue({
             name: this.design.name,
             email: this.design.email,
@@ -525,7 +525,7 @@ isArchitecturalFileUpload: boolean = false;
             status: this.design.status,
             oldcommentid: ''
           });
-          //console.log("attachments",this.desginForm.get('attachments').value)
+
           this.utils.setStaticAddress(this.design.address);
           this.oldcommentid =this.design.comments == '' ? '' : this.design.comments[0].id;
           //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
@@ -554,8 +554,8 @@ isArchitecturalFileUpload: boolean = false;
       this.apiService.getSolarMade(this.design.solarmake.id).subscribe(solarresponse => {
         // this.utils.hideLoading().then(()=>{
         this.listOfSolarMade = solarresponse;
-        console.log(solarresponse);
-        console.log('patching solar');
+
+
         setTimeout(() => {
           this.desginForm.patchValue({
             solarmake: this.design.solarmake.id,
@@ -590,11 +590,11 @@ isArchitecturalFileUpload: boolean = false;
 
   getInverterMakeForForm() {
     this.apiService.getInverterMake().subscribe(response => {
-      console.log(response);
+
       this.listOfInverterMake = response;
       this.apiService.getInverterMade(this.design.invertermake.id).subscribe(makeResponse => {
         // this.utils.hideLoading();
-        console.log('patching inverter');
+
         this.listOfInverterMade = makeResponse;
 
         setTimeout(() => {
@@ -634,7 +634,7 @@ isArchitecturalFileUpload: boolean = false;
       el.name === this.solarmake
     );
 
-    console.log(found);
+
 
     if (!found) {
       let solarmakedata = {
@@ -646,7 +646,7 @@ isArchitecturalFileUpload: boolean = false;
         })
         this.saveModuleModel();
       }, err => {
-        console.log(err, 'err in savemodulemake');
+
 
       })
 
@@ -666,7 +666,7 @@ isArchitecturalFileUpload: boolean = false;
         solarmade: this.solarmade,
         solarmake: this.desginForm.get('solarmake').value
       }
-      console.log(solarmadedata);
+
 
       this.apiService.postSolarMade(solarmadedata).subscribe((response: any) => {
         this.desginForm.patchValue({
@@ -707,7 +707,7 @@ isArchitecturalFileUpload: boolean = false;
         invertermade: this.invertermade,
         invertermake: this.desginForm.get('invertermake').value
       }
-      console.log(invertermadedata);
+
 
       this.apiService.postInverterMade(invertermadedata).subscribe((response: any) => {
         this.desginForm.patchValue({
@@ -723,7 +723,7 @@ isArchitecturalFileUpload: boolean = false;
 
   remove(arc, i) {
     //   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-    //     this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+
     //   this.utils.hideLoading().then(()=>{
     //     this.utils.showSnackBar('File deleted successfully');
     //     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
@@ -737,13 +737,13 @@ isArchitecturalFileUpload: boolean = false;
 
     // });
     // });
-    console.log(arc);
+
     this.indexOfArcFiles.push(arc.id);
 
     this.isArcFileDelete = true;
-    console.log(this.isArcFileDelete);
-    console.log(this.indexOfArcFiles);
-    console.log(this.architecturalData);
+
+
+
 
     this.architecturalData.splice(i, 1);
     this.deleteArcFile(this.indexOfArcFiles);
@@ -754,10 +754,10 @@ isArchitecturalFileUpload: boolean = false;
     this.indexOfAttachmentFile.push(attachment.id);
 
     this.isArcFileDelete = true;
-    console.log(this.isArcFileDelete);
-    console.log(this.indexOfAttachmentFile);
-    console.log(this.attachmentData);
-    console.log(i);
+
+
+
+
 
     this.attachmentData.splice(i, 1);
     this.deleteAttachmentFile(this.indexOfAttachmentFile)
@@ -771,7 +771,7 @@ isArchitecturalFileUpload: boolean = false;
       var id = index[i];
       this.utils.showLoading("Deleting Architectural File").then(() => {
         this.apiService.deletePrelimImage(id).subscribe(res => {
-          console.log("hello", res)
+
           this.indexOfArcFiles = []
         })
       });
@@ -805,7 +805,7 @@ isArchitecturalFileUpload: boolean = false;
       this.utils.showLoading("Deleting Attachment File").then(() => {
         this.apiService.deletePrelimImage(id).subscribe(res => {
           this.utils.hideLoading().then(() => {
-            console.log("hello", res)
+
             this.indexOfAttachmentFile = []
           });
         })
@@ -823,9 +823,9 @@ isArchitecturalFileUpload: boolean = false;
   addForm() {
     this.onFormSubmit = false;
     // this.saveModuleMake();
-    debugger;
-    console.log('Reach', this.desginForm);
-    // debugger;
+     ;
+
+    //  ;
     // this.saveModuleMake();
     // if(!this.isSelectSearchResult)
     // {
@@ -844,7 +844,7 @@ isArchitecturalFileUpload: boolean = false;
       if (this.designId === 0) {
 
         if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
-          debugger;
+           ;
           this.utils.showLoading('Saving').then(() => {
             this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
               // this.uploaarchitecturedesign(response.id,'architecturaldesign');
@@ -866,7 +866,7 @@ isArchitecturalFileUpload: boolean = false;
                   }
                 }
                 // this.utils.hideLoading().then(() => {
-                //   console.log('Res', response);
+
                 //   this.createChatGroup(response);
                 //   this.router.navigate(['/homepage/design'])
                 //   // this.utils.showSnackBar('Design have been saved');
@@ -889,7 +889,7 @@ isArchitecturalFileUpload: boolean = false;
           });
         } else if (this.send === ScheduleFormEvent.SEND_DESIGN_FORM) {
           this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
-            console.log(response.id);
+
             this.utils.hideLoading().then(() => {
               if (newConstruction == 'true') {
                 this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
@@ -982,7 +982,7 @@ isArchitecturalFileUpload: boolean = false;
               }
             })
             // this.utils.hideLoading().then(() => {
-            //   console.log('Res', response);
+
             //   this.value=response.id;
 
             //   this.utils.showSnackBar('Design have been updated');
@@ -1059,7 +1059,7 @@ isArchitecturalFileUpload: boolean = false;
         }
       }
     });
-    console.log(this.desginForm.value);
+
     this.utils.showAlert(error);
   }
 
@@ -1069,7 +1069,7 @@ isArchitecturalFileUpload: boolean = false;
       this.listOfAssignees = [];
       // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
-      console.log(this.listOfAssignees);
+
     });
   }
 
@@ -1077,7 +1077,7 @@ isArchitecturalFileUpload: boolean = false;
     this.utils.showLoading('Getting module models').then((success) => {
       this.apiService.getSolarMade(this.desginForm.get('solarmake').value).subscribe(response => {
         this.utils.hideLoading().then(() => {
-          console.log(response);
+
           this.listOfSolarMade = response;
           this.desginForm.patchValue({
             solarmodel: ''
@@ -1108,17 +1108,17 @@ isArchitecturalFileUpload: boolean = false;
 
     }, responseError => {
       const error: ErrorModel = responseError.error;
-      console.log(error);
+
       this.utils.errorSnackBar(error.message[0].messages[0].message);
     });
   }
 
   getInverterMade() {
-    console.log(this.desginForm.get('invertermake').value);
+
     this.utils.showLoading('Getting inverter models').then((success) => {
       this.apiService.getInverterMade(this.desginForm.get('invertermake').value).subscribe(response => {
         this.utils.hideLoading().then(() => {
-          console.log(response);
+
           this.listOfInverterMade = response;
           this.desginForm.patchValue({
             invertermodel: ''
@@ -1137,7 +1137,7 @@ isArchitecturalFileUpload: boolean = false;
 
   getInverterMake() {
     this.apiService.getInverterMake().subscribe(response => {
-      console.log(response);
+
       this.listOfInverterMake = response;
     }, responseError => {
       const error: ErrorModel = responseError.error;
@@ -1146,7 +1146,7 @@ isArchitecturalFileUpload: boolean = false;
   }
 
   // onProjectChange(event){
-  // console.log("eve",this.desginForm);
+
   // }
 
   getclass = () => {
@@ -1155,7 +1155,7 @@ isArchitecturalFileUpload: boolean = false;
 
   eventcheck(e) {
     this.showValue = e.target.value;
-    console.log(this.showValue);
+
 
   }
 
@@ -1167,12 +1167,12 @@ isArchitecturalFileUpload: boolean = false;
 
 
   files(ev) {
-    console.log(ev.target.files,this.arcFileUrl);
+
     for (let i = 0; i < ev.target.files.length; i++) {
       this.archFiles.push(ev.target.files[i])
       var reader = getFileReader();
       reader.onload = (e: any) => {
-        console.log(ev.target.files[i],this.arcFileUrl);
+
         if(ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')){
           this.arcFileUrl.push(e.target.result);
         }else{
@@ -1182,31 +1182,31 @@ isArchitecturalFileUpload: boolean = false;
       reader.readAsDataURL(ev.target.files[i]);
     }
     this.isArchitecturalFileUpload = true;
-    console.log(this.archFiles);
+
   }
 
   prelimfiles(event){
-    console.log(event);
+
     for(let i=0; i< event.target.files.length;i++){
-      console.log(i);
+
 
       this.prelimFiles.push(event.target.files[i])
       var reader = getFileReader();
       reader.onload = (e: any) => {
         if (event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')) {
-          // console.log(event.target.files[i].name);
+
           this.imageurls.push(e.target.result);
         } else {
           this.imageurls.push('/assets/icon/file.png');
         }
-        console.log(this.imageurls)
+
       }
       reader.readAsDataURL(event.target.files[i]);
     }
     this.attachmentFileUpload = true;
     if (this.prelimFiles.length == 1) {
       this.fileName = event.target.files[0].name;
-      console.log(this.fileName);
+
 
     } else if (this.prelimFiles.length > 1) {
       this.fileName = this.prelimFiles.length;
@@ -1219,13 +1219,13 @@ isArchitecturalFileUpload: boolean = false;
 
 
   uploaarchitecturedesign(response?: any, key?: string, fileObj?: string, index?: number) {
-    //  console.log(this.archFiles);
+
 
     if (!this.isArchitecturalFileUpload) {
       this.uploadpreliumdesign(response, key, this.prelimFiles[0], 0);
     }
     else {
-      console.log(fileObj)
+
       const imageData = new FormData();
       //for(var i=0; i< this.archFiles.length;i++){
       imageData.append("files", fileObj);
@@ -1238,9 +1238,9 @@ isArchitecturalFileUpload: boolean = false;
       // }
       this.utils.showLoading("Uploading architecture" + " " + (index + 1) + " of" + " " + this.archFiles.length).then(() => {
         this.apiService.uploaddesign(imageData).subscribe(res => {
-          console.log(res);
+
           if (index < this.archFiles.length - 1) {
-            console.log("if")
+
             this.utils.hideLoading();
             var newIndex = index + 1;
             this.uploaarchitecturedesign(response, key, this.archFiles[newIndex], newIndex);
@@ -1289,7 +1289,7 @@ isArchitecturalFileUpload: boolean = false;
   }
 
   uploadpreliumdesign(response?: any, key?: string, fileObj?: string, index?: number) {
-    console.log(this.prelimFiles);
+
     const imageData = new FormData();
     // for(var i=0; i< this.prelimFiles.length;i++){
     imageData.append("files", fileObj);
@@ -1302,9 +1302,9 @@ isArchitecturalFileUpload: boolean = false;
     // }
     this.utils.showLoading("Uploading attachment" + " " + (index + 1) + " of" + " " + this.prelimFiles.length).then(() => {
       this.apiService.uploaddesign(imageData).subscribe(res => {
-        console.log(res);
+
         if (index < this.prelimFiles.length - 1) {
-          console.log("if")
+
           this.utils.hideLoading();
           var newIndex = index + 1;
           this.uploadpreliumdesign(response, key, this.prelimFiles[newIndex], newIndex);
@@ -1366,7 +1366,7 @@ isArchitecturalFileUpload: boolean = false;
   }
 
   removePrelim(i) {
-    console.log(i, this.prelimFiles, this.prelimFiles.length)
+
     this.imageurls.splice(i, 1);
     this.prelimFiles.splice(i, 1);
   }
@@ -1388,7 +1388,7 @@ isArchitecturalFileUpload: boolean = false;
       this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
         this.utils.hideLoading().then(() => {
           ;
-          console.log('reach ', value);
+
 
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
           this.router.navigate(['/homepage/design'])
@@ -1476,7 +1476,7 @@ isArchitecturalFileUpload: boolean = false;
   gettingClients() {
     this.apiService.getClients().subscribe(res => {
       this.getCompanies = res;
-      console.log(this.getCompanies);
+
       this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
         startWith(""),
         map(value => (typeof value === "string" ? value : value.companyid)),
@@ -1492,14 +1492,14 @@ isArchitecturalFileUpload: boolean = false;
   proxyValue: any;
 
   onCompanyChanged(event$) {
-    console.log(event$);
+
     this.proxyValue = event$.detail.value.companyname;
     this.designCreatedBy = event$.detail.value.companyid;
     this.designCreatedByUserParent = event$.detail.value.parentid;
     if (this.designCreatedBy !== null && this.designCreatedByUserParent !== null) {
       var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
-      console.log(designacceptancestarttime)
+
       this.desginForm.patchValue({
         createdby: this.designCreatedBy,
         creatorparentid: this.designCreatedByUserParent,
@@ -1521,11 +1521,11 @@ isArchitecturalFileUpload: boolean = false;
     /* FOR SEARCH SHIPPING ADDRESS */
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
-      console.log(this.autoCompleteOff);
+
      // if(this.designId == 0 || !this.isSelectSearchResult)
     //  {
       const input = event.detail.value;
-      console.log(input)
+
       if (input === '') {
         this.autocompleteItems = [];
         return;
@@ -1545,7 +1545,7 @@ isArchitecturalFileUpload: boolean = false;
     }
 
     forAutoComplete(e){
-      console.log("hello",e);
+
       this.autoCompleteOff = true;
       this.isSelectSearchResult = false;
 
@@ -1553,14 +1553,14 @@ isArchitecturalFileUpload: boolean = false;
 
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
     selectSearchResult(item) {
-      console.log(item);
+
       this.utils.showLoading('Loading').then(() => {
       this.isSelectSearchResult = true;
-      console.log(this.isSelectSearchResult);
+
       this.geocoder.geocode({
         placeId: item.place_id
       }, (responses, status) => {
-        console.log('respo', responses);
+
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
         this.autocompleteItems = [];
       });
@@ -1587,7 +1587,7 @@ isArchitecturalFileUpload: boolean = false;
      // this.utils.showLoading('Loading').then(() => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
-            console.log(result)
+
             let add = '';
             if (formattedAddress === '') {
               add = this.generateAddress(result[0]);
@@ -1595,7 +1595,7 @@ isArchitecturalFileUpload: boolean = false;
               add = formattedAddress;
             }
             this.utils.hideLoading().then(() => {
-              console.log('resu', result);
+
               const address: AddressModel = {
                 address: add,
                 lat: latitude,
@@ -1636,15 +1636,15 @@ isArchitecturalFileUpload: boolean = false;
     }
 
     onCancel() {
-      console.log("hello");
+
       this.autocompleteItems = [];
-      console.log(this.autocompleteItems)
+
     }
 
     addressValue(){
       // }
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
 
           // this.firstFormGroup.get('address').setValue('124/345');
           // this.firstFormGroup.get('latitude').setValue('24.553333');
@@ -1674,7 +1674,7 @@ isArchitecturalFileUpload: boolean = false;
       // });
    // this.autocompleteItems = [];
       this.autoCompleteOff = false;
-      console.log(this.autoCompleteOff);
+
       //this.getSolarMake();
 
       }

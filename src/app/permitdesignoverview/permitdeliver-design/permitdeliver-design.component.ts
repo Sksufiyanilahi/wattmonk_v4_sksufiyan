@@ -52,10 +52,10 @@ limit:number=10;
     private router:Router
     ) {
       this.userData = this.storageservice.getUser();
-      console.log("inside new surveys");
+
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
   }
 
   ngOnInit() {
@@ -95,7 +95,7 @@ limit:number=10;
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys("requesttype=permit&status=delivered",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           if(response.length){
             this.formatDesignData(response);
           }else{
@@ -176,11 +176,11 @@ limit:number=10;
         .build();
       groupMembersRequest.fetchNext().then(
         groupMembers => {
-          console.log(groupMembers);
+
           element.addedtogroupchat=true;
         },
         error => {
-          console.log("Group Member list fetching failed with exception:", error);
+
         }
       );
     })
@@ -196,7 +196,7 @@ limit:number=10;
       element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       this.storage.get(''+element.id).then((data: any) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
         }else{
@@ -209,12 +209,12 @@ limit:number=10;
   }
 
   gotoActivity(designData,event){
-    console.log(event)
+
         event.stopPropagation();
       this.router.navigate(['/activity' + '/' + designData.id + '/design'])
-    
+
     }
-    
+
     gotoDetails(designData,$event){
       // $event.preventDefault();
       // $event.stopPropagation();
@@ -229,7 +229,7 @@ limit:number=10;
   doInfinite($event){
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys("requesttype=permit&status=delivered",this.limit,this.skip).subscribe((response:any) => {
-         console.log(response);
+
           if(response.length){
 
             this.formatDesignData(response);
@@ -275,7 +275,7 @@ limit:number=10;
 
     });
     modal.onDidDismiss().then((data) => {
-      console.log(data)
+
       if(data.data.cancel=='cancel'){
       }else{
         this.getDesigns(null)

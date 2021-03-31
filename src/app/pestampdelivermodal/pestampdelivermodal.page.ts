@@ -33,7 +33,7 @@ export class PestampdelivermodalPage implements OnInit {
               private apiService : ApiService,
               private navController:NavController,
               private modalCtrl:ModalController,
-              private launchNavigator: LaunchNavigator) { 
+              private launchNavigator: LaunchNavigator) {
     this.deliverForm = formBuilder.group({
       delivercharges : new FormControl("",[ Validators.min(1),
         Validators.max(5000)]),
@@ -44,18 +44,18 @@ export class PestampdelivermodalPage implements OnInit {
   ngOnInit() {
     this.id= this.nav.get('id');
     this.data=this.nav.get('designData');
-    console.log(this.id,this.data)
+
   }
 
   deliver()
   {
-    console.log("Hello",this.data)
-    console.log(this.deliverForm.get('delivercharges').value)
+
+
     var deliverycharges;
     if(this.data.modeofstamping == 'hardcopy' || this.data.modeofstamping =='both' ){
-      console.log("harddcopy");
+
       if(this.deliverForm.get('delivercharges').value ==='undefined' || this.deliverForm.get('delivercharges').value ==='' || this.deliverForm.get('delivercharges').value === null || this.deliverForm.get('delivercharges').invalid){
-        console.log("error");
+
         //alertData.deliverycharges.setValidators([Validators.required]);
         //this.chargesError = "Please Enter Delivery Charges";
         this.utils.errorSnackBar("Please Enter Valid Delivery Charges");
@@ -82,15 +82,15 @@ export class PestampdelivermodalPage implements OnInit {
                   comments:""
                    };
                }
-               console.log(postData);
+
                this.apiService.updatePestamps(this.id,postData).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
                   ;
-                  console.log('reach ', value);
+
                  this.utils.showSnackBar('Pe Stamp request has been delivered successfully');
                  this.modalCtrl.dismiss({
                   'dismissed': true
-                });  
+                });
                  // this.utils.setPeStampRefresh(true);
                 })
               }, (error) => {
@@ -109,7 +109,7 @@ goBack() {
     'dismissed': true,
     cancel:'cancel'
   });
-  
+
  }
 
  openAddressOnMap(address: string) {

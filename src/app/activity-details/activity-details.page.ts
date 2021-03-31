@@ -6,7 +6,7 @@ import { NavController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { StorageService } from '../storage.service';
- 
+
 import { UtilitiesService } from '../utilities.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
 
@@ -32,14 +32,13 @@ designId:any;
     ) {
     this.route.paramMap.subscribe( params =>{ this.designId=params.get('id');
   this.name=params.get('name')});
-  console.log(this.name);
    }
 
   ngOnInit() {
     this.mixpanelService.track("ACTIVITY_BAR_TOGGLE_PAGE_OPEN", {
     });
     this.userData = this.storageService.getUser();
-    console.log(this.userData);
+
 
    this.activitiesList();
 
@@ -47,7 +46,7 @@ designId:any;
 
   activitiesList(){
     this.utilities.showLoading('Please wait...').then(()=>{
-      console.log(this.name)
+
     if(this.name=="design"){
         this.apiservice.design_activityDetails(this.designId).subscribe(response =>{
           this.utilities.hideLoading().then(()=>{
@@ -65,13 +64,13 @@ designId:any;
           this.apiservice.pestamp_activityDetails(this.designId).subscribe(response =>{
             this.utilities.hideLoading().then(()=>{
               this.activity_details=response;
-              console.log(this.activity_details)
+
             })
           });
           }
       })
   }
-  
+
   goBack() {
     this.mixpanelService.track("ACTIVITY_BAR_TOGGLE_PAGE_CLOSE", {
     });
@@ -92,7 +91,7 @@ designId:any;
   ionViewWillLeave(){
   }
 
- 
-  
+
+
 
 }

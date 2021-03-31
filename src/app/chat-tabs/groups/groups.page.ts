@@ -4,7 +4,7 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import Conversation = CometChat.Conversation;
 import { UtilitiesService } from 'src/app/utilities.service';
 import { NavigationExtras, Router } from '@angular/router';
- 
+
 
 
 @Component({
@@ -54,15 +54,15 @@ export class GroupsPage implements OnInit {
             //       })
             //     }
             //     this.conversations = conversationList;
-            // console.log('UserList Array :', this.conversations);
+
             //   })
             // }
-            console.log('Conversations list received:', conversationList);
+
             conversationList.forEach((item) => {
-              console.log('item', item);
+
               this.conversations.push(item);
             });
-            console.log(this.conversations);
+
             if (event !== null) {
               event.target.complete();
             }
@@ -73,7 +73,7 @@ export class GroupsPage implements OnInit {
             if (event !== null) {
               event.target.complete();
             }
-            console.log('Conversations list fetching failed with error:', error);
+
           });
         }
       );
@@ -94,7 +94,7 @@ export class GroupsPage implements OnInit {
   this.router.navigate(['chat/'+ conversation.getConversationWith().getGuid()], {
   state: { productdetails: objToSend }
   });
-  console.log(conversation.getConversationWith().getName());
+
     //this.navController.navigateForward(['chat/' + conversation.getConversationWith().getGuid(),{'key':'group'}]);
   }
 

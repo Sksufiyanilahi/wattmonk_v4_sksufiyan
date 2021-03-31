@@ -49,7 +49,7 @@ user:any
 
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
   }
 
   ngOnInit() {
@@ -83,13 +83,13 @@ user:any
 
   fetchPendingDesigns(event, showLoader: boolean) {
     this.noDesignsFound="";
-    console.log("inside fetch Designs");
+
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys("requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           if(response.length){
             this.formatDesignData(response);
           }else{
@@ -170,11 +170,11 @@ user:any
         .build();
       groupMembersRequest.fetchNext().then(
         groupMembers => {
-          console.log(groupMembers);
+
           element.addedtogroupchat=true;
         },
         error => {
-          console.log("Group Member list fetching failed with exception:", error);
+
         }
       );
     })
@@ -190,7 +190,7 @@ user:any
       element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       this.storage.get(''+element.id).then((data: any) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
         }else{
@@ -203,12 +203,12 @@ user:any
   }
 
   gotoActivity(designData,event){
-    console.log(event)
+
         event.stopPropagation();
       this.router.navigate(['/activity' + '/' + designData.id + '/design'])
-    
+
     }
-    
+
     gotoDetails(designData,$event){
       // $event.preventDefault();
       // $event.stopPropagation();
@@ -223,7 +223,7 @@ user:any
   doInfinite($event){
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys("requesttype=prelim&status=reviewassigned&status=reviewfailed&status=reviewpassed",this.limit,this.skip).subscribe((response:any) => {
-         console.log(response);
+
           if(response.length){
 
             this.formatDesignData(response);

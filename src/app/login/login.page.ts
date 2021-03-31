@@ -56,7 +56,7 @@ export class LoginPage implements OnInit {
   ionViewDidEnter() {
     this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
 
     })
 
@@ -68,14 +68,14 @@ export class LoginPage implements OnInit {
     if (!this.netSwitch) {
       this.utils.errorSnackBar('No internet connection');
     } else {
-      console.log(this.loginForm);
+
       if (this.loginForm.status === 'VALID') {
         this.utils.showLoading('Logging In').then(() => {
           this.apiService.login(this.loginForm.value).subscribe(response => {
             this.registerAPNS(response.user);
             this.utils.hideLoading().then(() => {
-              console.log('Res', response);
-              console.log(response);
+
+
               this.mixpanelService.track("USER_LOGIN", {
                 $id: response.user.id,
                 $email: response.user.email,
@@ -210,7 +210,7 @@ export class LoginPage implements OnInit {
   }
 
   changepassword() {
-    console.log('rrrrrrrrrrrrrrr');
+
 
     this.router.navigate(['/changepassword'])
   }
@@ -229,25 +229,25 @@ export class LoginPage implements OnInit {
     PushNotifications.addListener('registration',
       (token: PushNotificationToken) => {
         localStorage.setItem('pushtoken', token.value);
-        console.log('Push registration success, token: ' + token.value);
+
       }
     );
 
     PushNotifications.addListener('registrationError',
       (error: any) => {
-        console.log('Error on registration: ' + JSON.stringify(error));
+
       }
     );
 
     PushNotifications.addListener('pushNotificationReceived',
       (notification: PushNotification) => {
-        console.log('Push received: ' + JSON.stringify(notification));
+
       }
     );
 
     PushNotifications.addListener('pushNotificationActionPerformed',
       (notification: PushNotificationActionPerformed) => {
-        console.log('Push action performed: ' + JSON.stringify(notification));
+
       }
     );
 

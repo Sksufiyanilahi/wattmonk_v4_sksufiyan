@@ -166,7 +166,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           // }else{
             this.surveyForm.get('status').setValue('surveyinprocess');
           // }
-          console.log(this.surveyForm.value);
+
           this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
               this.utilities.hideLoading().then(() => {
@@ -196,9 +196,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
       }
 
     }
-    console.log(invalid);
+
     if (this.surveyForm.status === 'INVALID') {
-      console.log(this.surveyForm.value);
+
       if (this.surveyForm.value.name == '') {
         this.utilities.errorSnackBar('Please enter name.');
       } else if (this.surveyForm.value.phonenumber == '') {
@@ -244,7 +244,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           ) {
             this.surveyForm.get('status').setValue('surveyassigned');
           }
-          console.log(this.surveyForm.value);
+
           this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
               this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
@@ -297,7 +297,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
         }
       }
     });
-    console.log(this.surveyForm.value);
+
     this.utilities.showAlert(error);
   }
 
@@ -305,7 +305,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     this.apiService.getSurveyors().subscribe(assignees => {
       this.listOfAssignees = [];
       assignees.forEach(item => this.listOfAssignees.push(item));
-      console.log(this.listOfAssignees);
+
     });
   }
 
@@ -357,7 +357,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       status: "surveyassigned"
     };
     this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
-      console.log(res);
+
       this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
     })
 
@@ -367,9 +367,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
     /* FOR SEARCH SHIPPING ADDRESS */
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
-      console.log(this.autoCompleteOff);
+
       const input = event.detail.value;
-      console.log(input)
+
       if (input === '') {
         this.autocompleteItems = [];
         return;
@@ -388,7 +388,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     }
 
     forAutoComplete(e){
-      console.log("hello",e);
+
       this.autoCompleteOff = true;
       this.isSelectSearchResult = false;
 
@@ -397,12 +397,12 @@ export class SurveyComponent implements OnInit, OnDestroy {
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
     selectSearchResult(item) {
       this.utilities.showLoading('Loading').then(() => {
-      console.log(item);
+
       this.isSelectSearchResult = true;
       this.geocoder.geocode({
         placeId: item.place_id
       }, (responses, status) => {
-        console.log('respo', responses);
+
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
       });
       this.autocompleteItems = []
@@ -414,7 +414,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
      // this.utilities.showLoading('Loading').then(() => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
-            console.log(result)
+
             let add = '';
             if (formattedAddress === '') {
               add = this.generateAddress(result[0]);
@@ -422,7 +422,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
               add = formattedAddress;
             }
             this.utilities.hideLoading().then(() => {
-              console.log('resu', result);
+
               const address: AddressModel = {
                 address: add,
                 lat: latitude,
@@ -463,15 +463,15 @@ export class SurveyComponent implements OnInit, OnDestroy {
     }
 
     onCancel() {
-      console.log("hello");
+
       this.autocompleteItems = [];
-      console.log(this.autocompleteItems)
+
     }
 
     addressValue(){
       // }
       this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
-        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
 
           // this.firstFormGroup.get('address').setValue('124/345');
           // this.firstFormGroup.get('latitude').setValue('24.553333');
@@ -496,10 +496,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.surveyForm.get('state').setValue('');
         this.surveyForm.get('postalcode').setValue(null);
       });
-      
+
       this.autoCompleteOff = false;
-      console.log(this.autoCompleteOff);
-     
+
+
 
       }
 

@@ -117,7 +117,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
     this.todaysdate = datePipe.transform(latestDate, 'yyyy-MM-dd');
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl('', [Validators.required]),
@@ -128,12 +128,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     // this.newprelims = this.newprelimsRef.valueChanges();
     // this.newprelims.subscribe(
     //   (res) => {
-    //     console.log(res);
+
     //     this.newprelimscount = res.count;
     //     cdr.detectChanges();
     //   },
-    //   (err) => console.log(err),
-    //   () => console.log('done!')
+
+
     // )
 
   }
@@ -176,7 +176,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.makeDirectory();
     this.deactivateNetworkSwitch =this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
 
     })
 
@@ -235,7 +235,7 @@ this.network.networkConnect();
       this.getDesigns(null);
     }
     // this.getsegmentdata(event.target.value);
-    console.log((event.target.value));
+
     // this.segments = event.target.value;
     // this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
     // });
@@ -252,7 +252,7 @@ this.network.networkConnect();
 
     this.apiService.emitUserNameAndRole(this.userData);
     // this.userData = this.storageService.getUser();
-    console.log(this.userData);
+
     this.mixpanelService.track("PRELIM_DESIGN_PAGE_OPEN", {
       // $id: this.userData.id,
       // $email: this.userData.email,
@@ -265,7 +265,7 @@ this.network.networkConnect();
     //     if (this.router.url.indexOf('page') > -1) {
     //       this.router.navigated = false;
     //       let data = this.route.queryParams.subscribe((_res: any) => {
-    //         console.log('Serach Term', _res);
+
     //         if (Object.keys(_res).length !== 0) {
     //           //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
 
@@ -318,7 +318,7 @@ this.network.networkConnect();
            if(!res.isinrevisionstate){
              this.createNewDesignChatGroup(res);
             }
-            debugger;
+             ;
            this.utils.hideLoading().then(()=>{
             this.utils.setHomepageDesignRefresh(true);})})
           })
@@ -327,7 +327,7 @@ this.network.networkConnect();
 
 
        addUserToGroupChat() {
-         debugger;
+          ;
         var GUID = this.designerData.chatid;
         var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
         if (this.isclientassigning) {
@@ -350,13 +350,13 @@ this.network.networkConnect();
    fetchPendingDesigns(event, showLoader: boolean) {
 
      this.noDesignFound= "";
-    console.log("inside fetch Designs");
+
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           if(response.length){
 
             this.formatDesignData(response);
@@ -390,11 +390,11 @@ this.network.networkConnect();
      this.listOfDesigns.push(element);
    })
 
-    console.log(this.listOfDesigns);
+
 
     const tempData: DesginDataHelper[] = [];
           this.listOfDesigns.forEach((designItem:any,i) => {
-            console.log(i);
+
 
             if (tempData.length === 0) {
               this.sDatePassed(designItem.updated_at,i);
@@ -403,7 +403,7 @@ this.network.networkConnect();
                 listOfDesign.lateby = this.overdue;
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
-              console.log(tempData);
+
 
 
 ;
@@ -413,7 +413,7 @@ this.network.networkConnect();
               tempData.forEach((DesignList) => {
                 // DesignList['listOfDesigns'].forEach(element=>{
 
-                //   console.log(element.deliverydate,":::::::::::::");
+
 
                 //   this.sDatePassed(element.deliverydate);
                 // })
@@ -454,11 +454,11 @@ this.network.networkConnect();
               .build();
             groupMembersRequest.fetchNext().then(
               groupMembers => {
-                console.log(groupMembers);
+
                 element.addedtogroupchat=true;
               },
               error => {
-                console.log("Group Member list fetching failed with exception:", error);
+
               }
             );
           })
@@ -473,7 +473,7 @@ this.network.networkConnect();
   }
 
   // filterData(records : DesginDataModel[]) {
-  //   console.log(this.listOfDesignsData);
+
   //   this.listOfDesigns = this.fillinDynamicData(records);
   //   // let filterDataArray: any = this.listOfDesignsData.filter(x => x.id == serchTerm);
   //   const tempData: DesginDataHelper[] = [];
@@ -500,7 +500,7 @@ this.network.networkConnect();
   //         tempData.push(listOfDesign);
   //         added = true;
   //         this.listOfDesignDataHelper.push(listOfDesign);
-  //         console.log(this.listOfDesignDataHelper);
+
   //       }
   //     }
   //   });
@@ -573,7 +573,7 @@ this.network.networkConnect();
       }
     }
       // this.storage.get(''+element.id).then((data: any) => {
-      //   console.log(data,">>>");
+
       //   if (data) {
       //     element.totalpercent = data.currentprogress;
       //   }else{
@@ -602,12 +602,12 @@ this.network.networkConnect();
   //         if (event !== null) {
   //           event.target.complete();
   //         }
-  //         console.log(response, '>>');
+
   //         this.listOfDesignsData = response;
   //          response.forEach(element => {
   //             this.roleType = element.type;
   //         });;
-  //         console.log(this.roleType);
+
 
   //         const tempData: DesginDataHelper[] = [];
   //         this.listOfDesignsData.forEach((desginItem) => {
@@ -633,7 +633,7 @@ this.network.networkConnect();
   //               tempData.push(listOfDesign);
   //               added = true;
   //               this.listOfDesignDataHelper.push(listOfDesign);
-  //               console.log(this.listOfDesignDataHelper,"<<<<>>>>");
+
   //             }
   //           }
   //         });
@@ -675,17 +675,17 @@ this.network.networkConnect();
 
   dismissBottomSheet() {
     this.showBottomDraw = false;
-    console.log('this', this.drawerState);
+
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
 
-   // console.log("this works",this.listOfAssignees)
+
   }
 
   assignToDesigner() {
-      console.log(this.designerData.createdby.id);
+
 
     if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
       this.utils.errorSnackBar('Please select a analyst');
@@ -707,7 +707,7 @@ this.network.networkConnect();
       var milisecond = designstarttime.getTime();
     var additonalhours = 0;
     if(this.designerData.requesttype == "prelim"){
-      console.log(parseInt(this.selectedDesigner.jobcount) );
+
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
 
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
@@ -715,10 +715,10 @@ this.network.networkConnect();
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
     }
-    console.log(this.selectedDesigner);
+
     var postData = {};
     if (this.designerData.createdby.id == this.userData.id) {
-      debugger;
+       ;
       if (this.selectedDesigner.parent.id == this.userData.parent.id) {
         if(this.selectedDesigner.role.type=="qcinspector"){
           postData = {
@@ -766,7 +766,7 @@ this.network.networkConnect();
       this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
         this.utils.hideLoading().then(()=>{
           ;
-          console.log('reach ', value);
+
 
           if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
          {
@@ -800,12 +800,12 @@ this.network.networkConnect();
     this.mixpanelService.track("ASSIGN_PRELIM_DESIGN_PAGE_OPEN", {
     });
     this.listOfAssignees=[];
-    console.log("this is",designData);
+
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin') && this.designerData.status=='created'){
       //this.router.navigate(["payment-modal",{id:id,designData:this.designerData.requesttype}])
-      console.log(id,this.designerData.requesttype);
+
       let objToSend: NavigationExtras = {
         queryParams: {
           id:id,
@@ -816,7 +816,7 @@ this.network.networkConnect();
         fragment: 'top'
     };
 
-console.log(objToSend);
+
 this.router.navigate(['/payment-modal'], {
   state: { productdetails: objToSend }
 });
@@ -829,7 +829,7 @@ this.router.navigate(['/payment-modal'], {
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.designId = id;
             this.utils.setBottomBarHomepage(false);
@@ -858,7 +858,7 @@ this.router.navigate(['/payment-modal'], {
   openAnalysts(id: number,designData,event) {
     event.stopPropagation();
     this.listOfAssignees=[];
-    console.log("this is",designData);
+
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;
 
@@ -869,7 +869,7 @@ this.router.navigate(['/payment-modal'], {
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.designId = id;
             this.utils.setBottomBarHomepage(false);
@@ -929,7 +929,7 @@ this.router.navigate(['/payment-modal'], {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+
           }
         }, {
           text: 'deliver',
@@ -945,11 +945,11 @@ this.router.navigate(['/payment-modal'], {
                   status: "delivered",
                    };
                }
-               console.log(postData);
+
                this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
                   ;
-                  console.log('reach ', value);
+
                  this.utils.showSnackBar('Design request has been delivered successfully');
                  this.utils.setHomepageDesignRefresh(true);
                 })
@@ -970,10 +970,10 @@ this.router.navigate(['/payment-modal'], {
 
 
   doInfinite($event){
-   console.log($event)
+
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
-         console.log(response);
+
           if(response.length){
 
             this.formatDesignData(response);
@@ -1017,7 +1017,7 @@ this.router.navigate(['/payment-modal'], {
     backdropDismiss:false
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -1045,7 +1045,7 @@ async decline(id,event){
     backdropDismiss:false
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -1074,7 +1074,7 @@ async Resend(id, type,event){
     backdropDismiss:false
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -1111,7 +1111,7 @@ selfAssign(id,designData,event){
     this.apiService.updateDesignForm(postData,id).subscribe((value) => {
       this.utils.hideLoading().then(()=>{
         ;
-        console.log('reach ', value);
+
       this.utils.showSnackBar('Design request has been assigned to you successfully');
       this.utils.setHomepageDesignRefresh(true);
 
@@ -1135,7 +1135,7 @@ pending(value){
 
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
-  console.log(this.selectedDesigner);
+
 
 }
 
@@ -1156,7 +1156,7 @@ shareWhatsapp(designData,event){
 
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -1174,38 +1174,38 @@ shareWhatsapp(designData,event){
 this.platform.ready().then(()=>{
   this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
-      result => console.log('Has permission?',result.hasPermission),
+
       err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
     );
     this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
-      console.log(data);
+
 
       if(data==true){
 
       }else{
-        console.log('not found!');
+
         throw { code: 1, message: 'NOT_FOUND_ERR' };
       }
 
     }).catch(async err=>{
-      console.log('Error occurred while checking local files:');
-      console.log(err);
+
+
       if (err.code == 1) {
         const fileTransfer: FileTransferObject = this.transfer.create();
         this.utils.showLoading('Downloading').then(()=>{
           fileTransfer.download(url, this.storageDirectory + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
             this.utils.hideLoading().then(()=>{
-              console.log('download complete: ' + entry.toURL());
+
               this.utils.showSnackBar("Prelim Design Downloaded Successfully");
 
               // this.clickSub = this.localnotification.on('click').subscribe(data => {
-              //   console.log(data)
+
               //   path;
               // })
               this.localnotification.schedule({text:'Prelim Design Downloaded Successfully', foreground:true, vibrate:true })
             }, (error) => {
               // handle error
-              console.log(error);
+
 
             });
             })
@@ -1248,14 +1248,14 @@ this.platform.ready().then(()=>{
  let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
 result.then((resp) => {
  path = resp.toURL();
- console.log(path);
+
 
  fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
-   console.log('download complete: ' + entry.toURL());
+
    this.utils.showSnackBar("Prelim Design Downloaded Successfully");
 
    // this.clickSub = this.localnotification.on('click').subscribe(data => {
-   //   console.log(data)
+
    //   path;
    // })
    this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
@@ -1307,7 +1307,7 @@ createNewDesignChatGroup(design:DesginDataModel) {
 }
 
 // addUserToGroupChat() {
-//   debugger;
+//    ;
 // var GUID = this.designerData.chatid;
 // var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
 // if (this.isclientassigning) {
@@ -1334,21 +1334,21 @@ setupCometChat() {
   const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
   CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
     () => {
-      console.log('Initialization completed successfully');
+
       // if(this.utilities.currentUserValue != null){
         // You can now call login function.
         CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
           (user) => {
-            console.log('Login Successful:', { user });
+
           },
           error => {
-            console.log('Login failed with exception:', { error });
+
           }
         );
     // }
     },
     error => {
-      console.log('Initialization failed with error:', error);
+
     }
   );
 }
@@ -1371,7 +1371,7 @@ directAssignToWattmonk(id:number,event){
           this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
             this.utils.hideLoading().then(()=>{
               ;
-              console.log('reach ', value);
+
 
             //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
             //  {
@@ -1394,7 +1394,7 @@ directAssignToWattmonk(id:number,event){
 
 
 gotoActivity(designData,event){
-  console.log(event)
+
       event.stopPropagation();
     this.router.navigate(['/activity' + '/' + designData.id + '/design'])
 

@@ -81,7 +81,7 @@ export class PermitdesignComponent implements OnInit {
       this.segments ='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed';
       const latestDate = new Date();
       this.today = datePipe.transform(latestDate, 'M/dd/yy');
-      console.log('date', this.today);
+
       this.todaysdate = datePipe.transform(latestDate, 'yyyy-MM-dd');
       this.assignForm = this.formBuilder.group({
         assignedto: new FormControl('', [Validators.required]),
@@ -106,7 +106,7 @@ export class PermitdesignComponent implements OnInit {
     // }
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
 
     })
 
@@ -130,8 +130,8 @@ this.network.networkConnect();
 
     }
     // this.getsegmentdata(event.target.value);
-    console.log((event.target.value));
-   // console.log((event.target.value));
+
+
    // this.pending(event.target.value);
 
    // this.segments = event.target.value;
@@ -153,7 +153,7 @@ this.network.networkConnect();
     this.apiService.version.subscribe(versionInfo=>{
       this.update_version = versionInfo;
     })
-    console.log(this.userData);
+
 
     // this.router.navigate(['homepage/design/pending']);
     // this.routeSubscription = this.router.events.subscribe((event) => {
@@ -162,14 +162,14 @@ this.network.networkConnect();
     //     if (this.router.url.indexOf('page') > -1) {
     //       this.router.navigated = false;
     //       let data = this.route.queryParams.subscribe((_res: any) => {
-    //         console.log('Serach Term', _res);
+
     //         if (Object.keys(_res).length !== 0) {
     //           //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
 
     //           this.filterData(_res.serchTerm);
     //         } else {
     //           // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-    //             // debugger;
+    //             //  ;
     //             this.getDesign(null, true);
     //           // });
     //         }
@@ -191,7 +191,7 @@ this.network.networkConnect();
 
 
   getDesigns(event) {
-    //debugger;
+    // ;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -201,13 +201,13 @@ this.network.networkConnect();
 
   fetchPendingDesigns(event, showLoader: boolean) {
     this.noDesignsFound="";
-    console.log("inside fetch Designs");
+
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           if(response.length){
             this.formatDesignData(response);
           }else{
@@ -232,11 +232,11 @@ this.network.networkConnect();
   // formatDesignData(records : DesginDataModel[]){
   //   this.overdue=[];
   //   this.listOfDesigns = this.fillinDynamicData(records);
-  //   console.log(this.listOfDesigns);
+
 
   //   const tempData: DesginDataHelper[] = [];
   //         this.listOfDesigns.forEach((designItem:any,i) => {
-  //           console.log(i);
+
 
   //           if (tempData.length === 0) {
   //             this.sDatePassed(designItem.deliverydate,i);
@@ -245,7 +245,7 @@ this.network.networkConnect();
   //               listOfDesign.lateby = this.overdue;
   //             listOfDesign.listOfDesigns.push(designItem);
   //             tempData.push(listOfDesign);
-  //             console.log(tempData);
+
 
 
   //           } else {
@@ -254,7 +254,7 @@ this.network.networkConnect();
   //             tempData.forEach((DesignList) => {
   //               // DesignList['listOfDesigns'].forEach(element=>{
 
-  //               //   console.log(element.deliverydate,":::::::::::::");
+
 
   //               //   this.sDatePassed(element.deliverydate);
   //               // })
@@ -267,7 +267,7 @@ this.network.networkConnect();
   //               }
   //             });
   //             if (!added) {
-  //               //debugger;
+  //               // ;
   //               this.sDatePassed(designItem.deliverydate,i);
   //               const listOfDesign = new DesginDataHelper();
   //               listOfDesign.date = this.datePipe.transform(designItem.deliverydate, 'M/dd/yy');
@@ -290,18 +290,18 @@ this.network.networkConnect();
     this.overdue=[];
     this.listOfDesigns = this.fillinDynamicData(records);
 
-    console.log(this.listOfDesigns);
+
 
     const tempData: DesginDataHelper[] = [];
           this.listOfDesigns.forEach((designItem:any,i) => {
-            console.log(i);
+
             designItem.lateby = this.utils.getTheLatebyString(designItem.deliverydate)
             if (tempData.length === 0) {
               const listOfDesign = new DesginDataHelper();
               listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
-              console.log(tempData);
+
 
 
 ;
@@ -311,7 +311,7 @@ this.network.networkConnect();
               tempData.forEach((DesignList) => {
                 // DesignList['listOfDesigns'].forEach(element=>{
 
-                //   console.log(element.deliverydate,":::::::::::::");
+
 
                 //   this.sDatePassed(element.deliverydate);
                 // })
@@ -352,7 +352,7 @@ this.network.networkConnect();
   }
 
   // filterData(records : DesginDataModel[]) {
-  //   console.log(this.listOfDesignsData);
+
   //   this.listOfDesigns = this.fillinDynamicData(records);
   //   // let filterDataArray: any = this.listOfDesignsData.filter(x => x.id == serchTerm);
   //   const tempData: DesginDataHelper[] = [];
@@ -379,7 +379,7 @@ this.network.networkConnect();
   //         tempData.push(listOfDesign);
   //         added = true;
   //         this.listOfDesignDataHelper.push(listOfDesign);
-  //         console.log(this.listOfDesignDataHelper);
+
   //       }
   //     }
   //   });
@@ -400,7 +400,7 @@ this.network.networkConnect();
       element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       this.storage.get(''+element.id).then((data: any) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
         }else{
@@ -418,19 +418,19 @@ this.network.networkConnect();
   //   this.listOfDesignDataHelper = [];
 
   //   this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting designs').then((success) => {
-  //     // debugger;
+  //     //  ;
   //     this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
   //       this.utils.hideLoadingWithPullRefreshSupport(showLoader).then((loaderHidden) => {
-  //         // debugger;
+  //         //  ;
   //         if (event !== null) {
   //           event.target.complete();
   //         }
-  //         console.log(response, '>>');
+
   //         this.listOfDesignsData = response;
   //          response.forEach(element => {
   //             this.roleType = element.type;
   //         });;
-  //         console.log(this.roleType);
+
 
   //         const tempData: DesginDataHelper[] = [];
   //         this.listOfDesignsData.forEach((desginItem) => {
@@ -456,7 +456,7 @@ this.network.networkConnect();
   //               tempData.push(listOfDesign);
   //               added = true;
   //               this.listOfDesignDataHelper.push(listOfDesign);
-  //               console.log(this.listOfDesignDataHelper,"<<<<>>>>");
+
   //             }
   //           }
   //         });
@@ -498,13 +498,13 @@ this.network.networkConnect();
 
   dismissBottomSheet() {
     this.showBottomDraw = false;
-    console.log('this', this.drawerState);
+
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
   }
 
   assignToDesigner() {
-      console.log(this.designerData.createdby.id);
+
 
     if (this.assignForm.status === 'INVALID') {
       this.utils.errorSnackBar('Please select a designer');
@@ -546,8 +546,8 @@ this.network.networkConnect();
     this.utils.showLoading('Assigning').then(()=>{
       this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
         this.utils.hideLoading().then(()=>{
-          debugger;
-          console.log('reach ', value);
+           ;
+
           this.utils.showSnackBar('Design request has been assigned to' + ' ' + value.name + ' ' + 'successfully');
           this.dismissBottomSheet();
           this.showBottomDraw = false;
@@ -564,7 +564,7 @@ this.network.networkConnect();
   }
 
   openDesigners(id: number,designData) {
-    console.log(designData);
+
     this.designerData = designData;
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Designers').then(() => {
@@ -573,7 +573,7 @@ this.network.networkConnect();
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.designId = id;
             this.utils.setBottomBarHomepage(false);
@@ -637,14 +637,14 @@ async decline(id){
     },
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
     }
 });
   // modal.dismiss(() => {
-  //   debugger;
+  //    ;
   //   this.getDesigns(null);
   // });
   return await modal.present();
@@ -660,7 +660,7 @@ sDatePassed(datestring: string,i){
 
 
 pending(value){
-  //debugger;
+  // ;
   if(this.userData.role.type=='SuperAdmin'){
       value= "requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined"
   }else{
@@ -675,7 +675,7 @@ getassignedata(asssignedata){
 
 
 gotoActivity(designData,event){
-  console.log(event)
+
       event.stopPropagation();
     this.router.navigate(['/activity' + '/' + designData.id + '/design'])
 
@@ -700,7 +700,7 @@ shareWhatsapp(designData,event){
 doInfinite($event){
   this.skip=this.skip+10;
   this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
-       console.log(response);
+
         if(response.length){
 
           this.formatDesignData(response);
@@ -735,7 +735,7 @@ doInfinite($event){
 
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)

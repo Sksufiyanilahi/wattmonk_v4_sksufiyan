@@ -134,14 +134,14 @@ export class PestampSchedulePage implements OnInit {
   ionViewDidEnter() {
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
     })
   }
 
   ngOnInit() {
     this.fieldDisabled = false;
     this.userdata = this.storage.getUser();
-    console.log(this.userdata);
+
 
     if (this.designId !== 0) {
       setTimeout(() => {
@@ -153,17 +153,17 @@ export class PestampSchedulePage implements OnInit {
 
   /* Getting Design Details */
   getDesignDetails() {
-    console.log(this.isAtticFileUpload);
+
     this.utils.showLoading('Getting Design Details').then(() => {
       this.apiService.getPestampDetails(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(() => {
           this.design = result;
-          console.log(this.design);
+
           this.fieldDisabled = true;
           this.atticData = this.design.atticphotos;
           this.roofData = this.design.roofphotos;
           this.permitPlanData = this.design.permitplan;
-          console.log(this.permitPlanData)
+
           this.firstFormGroup.patchValue({
             name: this.design.personname,
             email: this.design.email,
@@ -212,13 +212,13 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR UPLOAD ATTIC PHOTOS OR FILES */
   uploadAtticFiles(response: any, fileObj: File, index: number) {
-    console.log(this.isAtticFileUpload, "attic");
+
 
     if (!this.isAtticFileUpload) {
       this.uploadRoofFiles(response, this.roofPhotosList[0], 0);
     }
     else {
-      console.log("hello", response)
+
       const data = new FormData();
       // for (var i = 0; i < this.atticPhotosList.length; i++) {
       data.append("files", fileObj);
@@ -229,13 +229,13 @@ export class PestampSchedulePage implements OnInit {
       data.append('ref', "pestamp");
       data.append('field', "atticphotos");
 
-      console.log("file upload data---" + data);
+
       //  }
       // }
       this.utils.showLoading("Uploading attic file" + " " + (index + 1) + " of" + " " + this.atticPhotosList.length).then(() => {
         this.apiService.uploadFile(data).subscribe(res => {
           if (index < this.atticPhotosList.length - 1) {
-            console.log("if")
+
             this.utils.hideLoading();
             var newIndex = index + 1;
             this.uploadAtticFiles(response, this.atticPhotosList[newIndex], newIndex);
@@ -261,19 +261,19 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR SELECT ROOF FILES OR PHOTOS FROM DEVICE */
   roofFiles(event) {
-    console.log(event);
-    console.log(event.target.files);
+
+
     this.isRoofFileUpload = true;
     for (var i = 0; i < event.target.files.length; i++) {
       this.roofPhotosList.push(event.target.files[i])
     }
     //this.architecturalFileUpload= true;
-    console.log(this.roofPhotosList);
+
   }
 
   /* FOR UPLOAD ROOF PHOTOS OR FILES */
   uploadRoofFiles(response: any, fileObj: File, index: number) {
-    console.log(this.isRoofFileUpload, "roof");
+
     if (!this.isRoofFileUpload) {
       this.uploadPermitPlanFiles(response, this.permitPlanList[0], 0);
 
@@ -289,14 +289,14 @@ export class PestampSchedulePage implements OnInit {
       data.append('ref', "pestamp");
       data.append('field', "roofphotos");
 
-      console.log("file upload data---" + data);
+
       // }
       // }
       // this.utils.showLoading("Roof File Uploading").then(() => {
       this.utils.showLoading("Uploading roof file" + " " + (index + 1) + " of" + " " + this.roofPhotosList.length).then(() => {
         this.apiService.uploadFile(data).subscribe(res => {
           if (index < this.roofPhotosList.length - 1) {
-            console.log("if")
+
             this.utils.hideLoading();
             var newIndex = index + 1;
             this.uploadRoofFiles(response, this.roofPhotosList[newIndex], newIndex);
@@ -316,21 +316,21 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR SELECT PHOTOS OR FILES FOR PERMIT PLAN FROM DEVICE */
   permitPlanFiles(event) {
-    console.log(event);
-    console.log(event.target.files);
+
+
     this.isPermitPlanFileUpload = true;
     for (var i = 0; i < event.target.files.length; i++) {
       this.permitPlanList.push(event.target.files[i])
     }
     //this.architecturalFileUpload= true;
-    console.log(this.permitPlanList);
+
   }
 
   /* FOR UPLOAD PERMIT PLAN PHOTOS OR FILES */
   uploadPermitPlanFiles(response: any, fileObj: File, index: number) {
-    console.log(this.isPermitPlanFileUpload, 'permit');
+
     if (!this.isPermitPlanFileUpload) {
-      console.log("checking...")
+
       this.router.navigate(['/pestamp-homepage'])
       this.utils.showSnackBar('Pe Stamp have been updated');
       this.utils.setPeStampRefresh(true);
@@ -346,14 +346,14 @@ export class PestampSchedulePage implements OnInit {
       data.append('ref', "pestamp");
       data.append('field', "permitplan");
 
-      console.log("file upload data---" + data);
+
       //  }
       //}
       // this.utils.showLoading("Permit Plan Uploading").then(() => {
       this.utils.showLoading("Uploading permit plan file" + " " + (index + 1) + " of" + " " + this.permitPlanList.length).then(() => {
         this.apiService.uploadFile(data).subscribe(res => {
           if (index < this.permitPlanList.length - 1) {
-            console.log("if")
+
             this.utils.hideLoading();
             var newIndex = index + 1;
             this.uploadPermitPlanFiles(response, this.permitPlanList[newIndex], newIndex);
@@ -396,7 +396,7 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR REMOVE SELECTED PHOTOS OR FILES */
   removeArc(i, value) {
-    console.log(value);
+
     if (value == 'attic') {
       this.atticPhotosList.splice(i, 1);
     }
@@ -410,7 +410,7 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR TYPE OF STAMPING RADIO BUTTONS */
   stampingTypeOption(e) {
-    console.log(e.target.value);
+
     this.stampingTypeValue = e.target.value;
     const attic = this.firstFormGroup.get('atticphotos');
     const roof = this.firstFormGroup.get('roofphotos');
@@ -461,10 +461,10 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR MODE OF STAMPING RADIO BUTTONS*/
   stampingModeOption(e) {
-    console.log(e)
-    console.log(e.target.value);
+
+
     this.stampingModeValue = e.target.value;
-    console.log(this.stampingModeValue)
+
     // if(this.stampingModeValue == 'ecopy')
     // {
     //   this.isECopy = true;
@@ -477,9 +477,9 @@ export class PestampSchedulePage implements OnInit {
     const shipping = this.firstFormGroup.get('shippingaddress');
     const contact = this.firstFormGroup.get('contactnumber');
     const hardcopy = this.firstFormGroup.get('numberofhardcopy');
-    console.log(shipping);
-    console.log(contact);
-    console.log(hardcopy);
+
+
+
     if (this.stampingModeValue == 'hardcopy' || this.stampingModeValue == 'both') {
       shipping.setValidators([
         Validators.required,
@@ -502,7 +502,7 @@ export class PestampSchedulePage implements OnInit {
         Validators.pattern(NUMBERPATTERN)]);
     }
     // else if(this.stampingModeValue == 'ecopy'){
-    //   console.log("hello")
+
     //   contact.setValidators([
     //     Validators.required,
     //     Validators.minLength(8),
@@ -533,7 +533,7 @@ export class PestampSchedulePage implements OnInit {
 
   /* FOR SUBMIT FORM */
   submitForm(e) {
-    console.log(e)
+
     this.buttonValueCheck = e;
     if (this.firstFormGroup.status == 'VALID') {
       var tomorrow = new Date();
@@ -615,7 +615,7 @@ export class PestampSchedulePage implements OnInit {
             paymentstatus: null
           }
           this.apiService.addSiteAssessment(postData).subscribe((res: any) => {
-            console.log(res);
+
             if (stampingType == 'structural' || stampingType == 'both') {
               this.uploadAtticFiles(res, this.atticPhotosList[0], 0)
             }
@@ -675,11 +675,11 @@ export class PestampSchedulePage implements OnInit {
 
           }
           this.utils.showLoading('Saving').then(() => {
-            console.log(this.isAtticFileUpload);
+
             this.apiService.updatePestamps(this.designId, data1).subscribe(res => {
               this.utils.hideLoading();
               // if(stampingType=='structural' || stampingType == 'both')
-              console.log(this.isAtticFileUpload);
+
               //  if(this.isAtticFileUploadEdit)
               //         {
               this.uploadAtticFiles(res, this.atticPhotosList[0], 0)
@@ -700,7 +700,7 @@ export class PestampSchedulePage implements OnInit {
                  }*/
               // setTimeout(()=>{
               //   this.utils.hideLoading().then(() => {
-              //     console.log('Res', res);
+
               //     //this.createChatGroup(response);
               //     this.router.navigate(['/pestamp-homepage'])
               //     this.utils.showSnackBar('Pe Stamp have been updated');
@@ -753,7 +753,7 @@ export class PestampSchedulePage implements OnInit {
             oldcommentid: this.oldcommentsid
           }
           this.apiService.updatePestamps(this.designId, postData1).subscribe(res => {
-            console.log(res);
+
             if (stampingType == 'structural' || stampingType == 'both') {
               this.uploadAtticFiles(res, this.atticPhotosList[0], 0)
             }
@@ -798,7 +798,7 @@ export class PestampSchedulePage implements OnInit {
       }
       else if ((this.firstFormGroup.value.numberofhardcopy == null || this.firstFormGroup.value.numberofhardcopy == '') && (this.stampingModeValue == 'hardcopy' || this.stampingModeValue == 'both')) {
         this.utils.errorSnackBar("Please check the field no of hardcopies")
-        console.log(this.stampingModeValue)
+
       }
       else if ((this.firstFormGroup.value.shippingaddress == null || this.firstFormGroup.value.shippingaddress == '' || this.firstFormGroup.get('shippingaddress').hasError('pattern')) && (this.stampingModeValue == 'hardcopy' || this.stampingModeValue == 'both')) {
         this.utils.errorSnackBar("Please check the field address");
@@ -836,7 +836,7 @@ export class PestampSchedulePage implements OnInit {
   //   /* FOR SEARCH SHIPPING ADDRESS */
   //   updateSearchResults(event) {
   //     //this.autoCompleteOff = true;
-  //     console.log(this.autoCompleteOff);
+
   //     const input = event.detail.value;
   //     if (input === '') {
   //       this.autocompleteItems = [];
@@ -856,18 +856,18 @@ export class PestampSchedulePage implements OnInit {
   //   }
 
   //   forAutoComplete(e){
-  //     console.log("hello",e);
+
   //     this.autoCompleteOff = true;
 
   //   }
 
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
   //   selectSearchResult(item) {
-  //     console.log(item);
+
   //     this.geocoder.geocode({
   //       placeId: item.place_id
   //     }, (responses, status) => {
-  //       console.log('respo', responses);
+
   //       this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
   //     });
   //   }
@@ -891,7 +891,7 @@ export class PestampSchedulePage implements OnInit {
   //     this.utils.showLoading('Loading').then(() => {
   //       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
   //         .then((result: NativeGeocoderResult[]) => {
-  //           console.log(result)
+
   //           let add = '';
   //           if (formattedAddress === '') {
   //             add = this.generateAddress(result[0]);
@@ -899,7 +899,7 @@ export class PestampSchedulePage implements OnInit {
   //             add = formattedAddress;
   //           }
   //           this.utils.hideLoading().then(() => {
-  //             console.log('resu', result);
+
   //             const address: AddressModel = {
   //               address: add,
   //               lat: latitude,
@@ -940,15 +940,15 @@ export class PestampSchedulePage implements OnInit {
   //   }
 
   //   onCancel() {
-  //     console.log("hello");
+
   //     this.autocompleteItems = [];
-  //     console.log(this.autocompleteItems)
+
   //   }
 
   //   addressValue(){
   //     // }
   //     this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-  //       console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
 
   //         // this.firstFormGroup.get('address').setValue('124/345');
   //         // this.firstFormGroup.get('latitude').setValue('24.553333');
@@ -978,7 +978,7 @@ export class PestampSchedulePage implements OnInit {
   //     // });
   //  // this.autocompleteItems = [];
   //     this.autoCompleteOff = false;
-  //     console.log(this.autoCompleteOff);
+
   //     //this.getSolarMake();
 
   //     }
@@ -995,18 +995,18 @@ export class PestampSchedulePage implements OnInit {
   //     }
 
   removeattachment(arc, i, value) {
-    console.log(arc, i, value)
+
     if (value == 'attic') {
       this.indexOfatticphotos.push(arc.id)
-      console.log(this.indexOfatticphotos)
+
       this.atticData.splice(i, 1);
       // this.isAtticFileDelete=true;
-      // console.log(this.isAtticFileDelete)
+
       this.deleteAtticFile(this.indexOfatticphotos);
     }
     else if (value == 'roof') {
       this.indexOfroofphotos.push(arc.id)
-      console.log(this.indexOfroofphotos)
+
       this.roofData.splice(i, 1);
       // this.isRoofFileDelete=true;
       this.deleteRoofFile(this.indexOfroofphotos);
@@ -1014,7 +1014,7 @@ export class PestampSchedulePage implements OnInit {
     }
     else {
       this.indexOfpermitPlanphotos.push(arc.id)
-      console.log(this.indexOfpermitPlanphotos)
+
       this.permitPlanData.splice(i, 1);
       // this.isPermitPlanFileDelete=true;
       this.deletePermitPlan(this.indexOfpermitPlanphotos);
@@ -1027,7 +1027,7 @@ export class PestampSchedulePage implements OnInit {
       this.utils.showLoading("Deleting Attic File").then(() => {
         this.apiService.deletePestamp(id).subscribe(res => {
           this.utils.hideLoading().then(() => {
-            console.log("hello", res)
+
             this.indexOfatticphotos = [];
           });
         })
@@ -1042,14 +1042,14 @@ export class PestampSchedulePage implements OnInit {
   }
 
   deleteRoofFile(index) {
-    console.log(index)
+
     for (var i = 0; i < index.length; i++) {
       var id = index[i];
-      console.log(id);
+
       this.utils.showLoading("Deleting Roof File").then(() => {
         this.apiService.deletePestamp(id).subscribe(res => {
           this.utils.hideLoading().then(() => {
-            console.log("hello", res)
+
             this.indexOfroofphotos = [];
           });
         })
@@ -1064,14 +1064,14 @@ export class PestampSchedulePage implements OnInit {
   }
 
   deletePermitPlan(index) {
-    console.log(index);
+
     for (var i = 0; i < index.length; i++) {
       var id = index[i];
-      console.log(id);
+
       this.utils.showLoading("Deleting Permit Plan").then(() => {
         this.apiService.deletePestamp(id).subscribe(res => {
           this.utils.hideLoading().then(() => {
-            console.log("hello", res)
+
             this.indexOfpermitPlanphotos = [];
           });
         })

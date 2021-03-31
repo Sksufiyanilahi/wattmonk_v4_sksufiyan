@@ -52,9 +52,9 @@ export class PermitnewdesignComponent implements OnInit {
       this.userData = this.storageservice.getUser();
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
   //  this.unsubscribeMessage=  this.apiService._OnMessageReceivedSubject.subscribe((r) => {
-  //     console.log('message received! ', r);
+
   //     this.getDesigns();
   //   });
   }
@@ -108,7 +108,7 @@ export class PermitnewdesignComponent implements OnInit {
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys("requesttype=permit&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           if(response.length){
             this.formatDesignData(response);
           }else{
@@ -142,7 +142,7 @@ export class PermitnewdesignComponent implements OnInit {
     list.forEach(element =>{
       this.listOfDesignData.push(element);
     })
-    console.log(this.listOfDesignData);
+
 
     const tempData: DesginDataHelper[] = [];
           this.listOfDesignData.forEach((designItem:any) => {
@@ -192,11 +192,11 @@ export class PermitnewdesignComponent implements OnInit {
         .build();
       groupMembersRequest.fetchNext().then(
         groupMembers => {
-          console.log(groupMembers);
+
           element.addedtogroupchat=true;
         },
         error => {
-          console.log("Group Member list fetching failed with exception:", error);
+
         }
       );
     })
@@ -260,7 +260,7 @@ export class PermitnewdesignComponent implements OnInit {
       }
     }
       this.storage.get(''+element.id).then((data: any) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
         }else{
@@ -276,12 +276,12 @@ export class PermitnewdesignComponent implements OnInit {
   }
 
   gotoActivity(designData,event){
-    console.log(event)
+
         event.stopPropagation();
       this.router.navigate(['/activity' + '/' + designData.id + '/design'])
-    
+
     }
-    
+
     gotoDetails(designData,$event){
       // $event.preventDefault();
       // $event.stopPropagation();
@@ -295,7 +295,7 @@ export class PermitnewdesignComponent implements OnInit {
   doInfinite($event){
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys("requesttype=permit&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
-         console.log(response);
+
           if(response.length){
 
             this.formatDesignData(response);
@@ -318,7 +318,7 @@ export class PermitnewdesignComponent implements OnInit {
     }
 
 
-    
+
 
   sDatePassed(datestring: string){
     var checkdate = moment(datestring, "YYYYMMDD");
@@ -328,7 +328,7 @@ export class PermitnewdesignComponent implements OnInit {
   }
 
 
-  
+
   startAllTimers(){
     this.listOfDesignData.forEach(element => {
 

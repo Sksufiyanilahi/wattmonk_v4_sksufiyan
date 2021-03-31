@@ -27,8 +27,6 @@ export class ProfileNotificationComponent implements OnInit {
         this.apiservice.profileNotification().subscribe(res=>{
             this.notification = res;
             this.showLoader=true;
-            console.log(this.notification);
-            console.log(this.notification.length);
             if(res !==[]){
               this.disableContent=true;
             }

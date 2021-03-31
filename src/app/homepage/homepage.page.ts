@@ -81,7 +81,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 
 	getNotificationCount() {
 		this.apiService.getCountOfUnreadNotifications().subscribe((count) => {
-			console.log('count', count);
+
 			this.unreadCount = count;
 		});
 	}
@@ -156,21 +156,21 @@ export class HomepagePage implements OnInit, OnDestroy {
 			.build();
 		CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
 			() => {
-				console.log('Initialization completed successfully');
+
 				// if(this.utilities.currentUserValue != null){
 				// You can now call login function.
 				CometChat.login(userId, COMETCHAT_CONSTANTS.API_KEY).then(
 					(user) => {
-						console.log('Login Successful:', { user });
+
 					},
 					(error) => {
-						console.log('Login failed with exception:', { error });
+
 					}
 				);
 				// }
 			},
 			(error) => {
-				console.log('Initialization failed with error:', error);
+
 			}
 		);
 	}
@@ -191,31 +191,31 @@ export class HomepagePage implements OnInit, OnDestroy {
 	}
 
 	searchDesginAndSurvey(event) {
-		console.log(event, this.searchbarElement);
+
 
 		if (this.searchbarElement !== '') {
 			this.apiService.searchAllDesgin(this.searchbarElement).subscribe(
 				(searchModel: any) => {
-					// console.log(searchModel);
+
 					this.searchDesginItem = [];
 					this.searchSurveyItem = [];
 					if (event.target.value !== '') {
 						searchModel.filter((element: any) => {
 							if (element.type == 'design') {
 								this.searchDesginItem = searchModel;
-								// console.log(this.searchDesginItem);
+
 							} else {
 								this.searchSurveyItem = searchModel;
 							}
 						});
-						console.log(this.searchDesginItem);
+
 					} else {
 						this.searchDesginItem = [];
 						this.searchSurveyItem = [];
 					}
 				},
 				(error) => {
-					console.log(error);
+
 				}
 			);
 		} else {
@@ -224,7 +224,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 	}
 
 	getdesigndata(serchTermData: any = { type: '' }) {
-		console.log(serchTermData.name);
+
 		this.name = serchTermData.name;
 		this.searchbarElement = this.name;
 		if (serchTermData.type == 'design') {
@@ -246,7 +246,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 		this.platform.ready().then(() => {
 			this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then(
 				(mode) => {
-					console.log(mode);
+
 					switch (mode) {
 						case this.diagnostic.permissionStatus.NOT_REQUESTED:
 							// this.goBack();
@@ -269,7 +269,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 					}
 				},
 				(rejection) => {
-					console.log(rejection);
+
 				}
 			);
 		});
@@ -327,12 +327,12 @@ export class HomepagePage implements OnInit, OnDestroy {
 		this.geolocation
 			.getCurrentPosition()
 			.then((resp) => {
-				console.log('resp', resp);
+
 				this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
 			})
 			.catch((error) => {
 				this.utilities.errorSnackBar('Unable to get location');
-				console.log('Error getting location', error);
+
 				this.showNoLocation();
 			});
 	}
@@ -342,7 +342,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 		this.nativeGeocoder
 			.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
 			.then((result: NativeGeocoderResult[]) => {
-				console.log('resu', result);
+
 				const address: AddressModel = {
 					address: this.generateAddress(result[0]),
 					lat: latitude,
@@ -378,7 +378,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 	changeLocationSettings() {
 		this.diagnostic.switchToLocationSettings();
 		this.diagnostic.registerLocationStateChangeHandler((state) => {
-			console.log(state);
+
 			if (this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) {
 				this.checkLocationAccess();
 			}
@@ -386,7 +386,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 	}
 
 	checkLocationAccess() {
-		console.log('Getting location');
+
 		this.diagnostic.isLocationAuthorized().then(
 			(success) => {
 				this.fetchLocation();
@@ -438,7 +438,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 		// }
 		this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe((data) => {
 			this.netSwitch = data;
-			console.log(this.netSwitch);
+
 		});
 
 		this.network.networkDisconnect();
@@ -469,7 +469,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 		} else if (this.route.url == '/homepage/survey') {
 			this.utilities.setDesignDetails(null);
 			this.route.navigate([ '/schedule/survey' ]);
-			
+
 		}
 	}
 

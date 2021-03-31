@@ -103,7 +103,7 @@ export class SurveyComponent {
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl(0, [Validators.required]),
       status: new FormControl('surveyassigned', [Validators.required])
@@ -131,7 +131,7 @@ export class SurveyComponent {
     this.network.networkConnect();
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
     })
     // this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
 
@@ -143,13 +143,13 @@ export class SurveyComponent {
     //     this.formatSurveyData(this.listOfSurveyData);
     //   }
     // });
-    // debugger;
+    //  ;
     // this.routeSubscription.unsubscribe();
   }
 
   ngOnInit() {
     this.userData = this.storageService.getUser();
-    console.log(this.userData);
+
     this.setupCometChat();
 
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
@@ -166,14 +166,14 @@ export class SurveyComponent {
   //   //     if (this.router.url.indexOf('page') > -1) {
   //   //       this.router.navigated = false;
   //   //       let data = this.route.queryParams.subscribe((_res: any) => {
-  //   //         console.log('Serach Term', _res);
+
   //   //         if (Object.keys(_res).length !== 0) {
   //   //           //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
 
   //   //           this.filterData(_res.serchTerm);
   //   //         } else {
   //   //           // this.refreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-  //   //             // debugger;
+  //   //             //  ;
   //   //             this.getSurveys(null);
   //   //           // });
   //   //         }
@@ -181,14 +181,14 @@ export class SurveyComponent {
   //   //     }
   //   //   }
   //   // });
-  //   // console.log('inside init');
+
   //   // this.routeSubscription = this.router.events.subscribe((event) => {
   //   //   if (event instanceof NavigationEnd) {
   //   //     // Trick the Router into believing it's last link wasn't previously loaded
   //   //     if (this.router.url.indexOf('page') > -1) {
   //   //       this.router.navigated = false;
   //   //       const data = this.route.queryParams.subscribe((_res: any) => {
-  //   //         console.log('Search Term', _res);
+
   //   //         if (Object.keys(_res).length !== 0) {
   //   //           //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
   //   //           this.filterData(_res.serchTerm);
@@ -213,11 +213,11 @@ export class SurveyComponent {
   fetchPendingSurveys(event, showLoader: boolean) {
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
-    console.log("data", this.segments);
+
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
       this.apiService.getSurveyorSurveys(this.segments).subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           this.formatSurveyData(response);
           if (event !== null) {
             event.target.complete();
@@ -240,7 +240,7 @@ export class SurveyComponent {
   scrollTo() {
     setTimeout(() => {
       let todaytitleElement = document.getElementById(''+this.indexoftodayrow);
-      console.log("sectionOffset == ", todaytitleElement.offsetTop);
+
       this.content.scrollToPoint(0, todaytitleElement.offsetTop, 1000);
     }, 2000)
 
@@ -248,7 +248,7 @@ export class SurveyComponent {
 
 
   // filterData(serchTerm: any) {
-  //   console.log(this.listOfSurveyData);
+
   //   this.filterDataArray = this.listOfSurveyData.filter(x => x.id == serchTerm);
   //   const tempData: SurveyDataHelper[] = [];
   //   this.filterDataArray.forEach((surveyItem) => {
@@ -282,7 +282,7 @@ export class SurveyComponent {
 
   formatSurveyData(records: SurveyDataModel[]) {
     this.listOfSurveyData = this.fillinDynamicData(records);
-    console.log(this.listOfSurveyData);
+
 
     const tempData: SurveyDataHelper[] = [];
     this.listOfSurveyData.forEach((surveyItem, i) => {
@@ -318,7 +318,7 @@ export class SurveyComponent {
     this.listOfSurveyDataHelper.forEach((element, index) => {
       if(element.date == this.today){
         this.indexoftodayrow = index;
-        console.log(this.indexoftodayrow);
+
       }
     });
 
@@ -336,13 +336,13 @@ export class SurveyComponent {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       this.storage.get('' + element.id).then((data: SurveyStorageModel) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
-          console.log(element);
+
         } else {
           element.totalpercent = 0;
-          console.log(element);
+
         }
       });
     });
@@ -364,7 +364,7 @@ export class SurveyComponent {
   //         if (event !== null) {
   //           event.target.complete();
   //         }
-  //         console.log(response);
+
   //         this.listOfSurveyData = response;
   //         const tempData: SurveyDataHelper[] = [];
   //         this.listOfSurveyData.forEach((surveyItem) => {
@@ -416,7 +416,7 @@ export class SurveyComponent {
   //         if (event !== null) {
   //           event.target.complete();
   //         }
-  //         console.log(response);
+
   //         this.listOfSurveyData = response;
   //         const tempData: SurveyDataHelper[] = [];
   //         this.listOfSurveyData.forEach((surveyItem) => {
@@ -498,7 +498,7 @@ export class SurveyComponent {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+
           }
         }
       ]
@@ -508,7 +508,7 @@ export class SurveyComponent {
 
   dismissBottomSheet() {
     this.showBottomDraw = false;
-    console.log("hello cancel");
+
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
     this.listOfAssignees = [];
@@ -516,9 +516,9 @@ export class SurveyComponent {
   }
 
   assignToSurveyor() {
-    debugger;
-    console.log("hello");
-    console.log(this.surveyData.createdby.id);
+     ;
+
+
 
     if (this.assignForm.status === 'INVALID' && (this.surveyData.status === 'reviewassigned' || this.surveyData.status === 'reviewfailed' || this.surveyData.status === 'reviewpassed')) {
       this.utils.errorSnackBar('Please select a analyst');
@@ -534,7 +534,7 @@ export class SurveyComponent {
       var milisecond = surveystarttime.getTime();
       var additonalhours = 0;
       if (this.surveyData.requesttype == "prelim") {
-        console.log(parseInt(this.selectedDesigner.jobcount));
+
         additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
 
         surveystarttime.setHours(surveystarttime.getHours() + additonalhours);
@@ -542,10 +542,10 @@ export class SurveyComponent {
         additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
         surveystarttime.setHours(surveystarttime.getHours() + additonalhours);
       }
-      console.log(this.selectedDesigner);
+
       var postData = {};
       if (this.surveyData.createdby.id == this.userData.id) {
-        debugger;
+         ;
         if (this.selectedDesigner.parent.id == this.userData.parent.id) {
           if (this.selectedDesigner.role.type == "qcinspector") {
             postData = {
@@ -592,7 +592,7 @@ export class SurveyComponent {
           this.utils.hideLoading().then(() => {
             ;
             this.createNewDesignChatGroup(value);
-            console.log('reach ', value);
+
 
             this.utils.showSnackBar('Survey request has been assigned to' + ' ' + this.selectedDesigner.firstname + " " + this.selectedDesigner.lastname + ' ' + 'successfully');
 
@@ -615,7 +615,7 @@ export class SurveyComponent {
     this.utils.showLoading('Generating PDF').then(() => {
       this.apiService.generatePdf(id).subscribe(res => {
         this.utils.hideLoading();
-        console.log(res);
+
         this.utils.sethomepageSurveyRefresh(true);
 
       }, err => {
@@ -628,11 +628,11 @@ export class SurveyComponent {
 
   openAnalysts(id: number, surveyData) {
     this.listOfAssignees = [];
-    console.log(this.listOfAssignees);
+
     this.surveyData = surveyData;
-    console.log(surveyData);
+
     this.reviewAssignedTo = surveyData.reviewassignedto;
-    console.log(this.reviewAssignedTo);
+
     if (this.listOfAssignees.length === 0) {
       this.utils.showLoading('Getting Analysts').then(() => {
         this.apiService.getAnalysts().subscribe(assignees => {
@@ -640,7 +640,7 @@ export class SurveyComponent {
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.surveyId = id;
             this.utils.setBottomBarHomepage(false);
@@ -671,8 +671,8 @@ export class SurveyComponent {
   openSurveyors(id: number, surveyData, event) {
     event.stopPropagation();
     this.listOfAssignees = [];
-    console.log(surveyData);
-    console.log(this.listOfAssignees);
+
+
     this.surveyData = surveyData;
     this.reviewAssignedTo = surveyData.assignedto;
     if (this.listOfAssignees.length === 0) {
@@ -682,7 +682,7 @@ export class SurveyComponent {
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.surveyId = id;
             this.utils.setBottomBarHomepage(false);
@@ -723,7 +723,7 @@ export class SurveyComponent {
       this.apiService.updateSurveyForm(postData, id).subscribe((value) => {
         this.utils.hideLoading().then(() => {
           ;
-          console.log('reach ', value);
+
           this.utils.showSnackBar('Design request has been assigned to you successfully');
           this.utils.sethomepageSurveyRefresh(true);
 
@@ -753,7 +753,7 @@ export class SurveyComponent {
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;
-    console.log(this.overdue, ">>>>>>>>>>>>>>>>>.");
+
 
   }
 
@@ -775,7 +775,7 @@ export class SurveyComponent {
       fragment: 'top'
     };
 
-    console.log(objToSend);
+
     this.router.navigate(['/permitschedule/'], {
       state: {productdetails: objToSend}
     });
@@ -801,7 +801,7 @@ export class SurveyComponent {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+
           }
         }, {
           text: 'deliver',
@@ -817,11 +817,11 @@ export class SurveyComponent {
                 status: "delivered",
               };
             }
-            console.log(postData);
+
             this.apiService.updateSurveyForm(postData, this.surveyId).subscribe((value) => {
               this.utils.hideLoading().then(() => {
                 ;
-                console.log('reach ', value);
+
                 this.utils.showSnackBar('Survey request has been delivered successfully');
 
                 this.utils.setHomepageDesignRefresh(true);
@@ -865,9 +865,9 @@ export class SurveyComponent {
             // }
 
             // this.apiService.updateSurveyForm(postdata,this.surveyId).subscribe(res=>{
-            // console.log(res);
+
             // this.chatid=res.chatid;
-            // console.log(this.chatid);
+
             this.updatechat_id = true;
             this.addUserToGroupChat(GUID);
 
@@ -915,21 +915,21 @@ export class SurveyComponent {
     const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
     CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
       () => {
-        console.log('Initialization completed successfully');
+
         // if(this.utilities.currentUserValue != null){
         // You can now call login function.
         CometChat.login(userId, COMETCHAT_CONSTANTS.API_KEY).then(
           (user) => {
-            console.log('Login Successful:', {user});
+
           },
           error => {
-            console.log('Login failed with exception:', {error});
+
           }
         );
         // }
       },
       error => {
-        console.log('Initialization failed with error:', error);
+
       }
     );
   }
@@ -960,7 +960,7 @@ export class SurveyComponent {
 
     });
     modal.onDidDismiss().then((data) => {
-      console.log(data)
+
       if (data.data.cancel == 'cancel') {
       } else {
         this.getSurveys(null)
@@ -976,7 +976,7 @@ export class SurveyComponent {
       status: "surveyinprocess"
     };
     this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
-      console.log(res);
+
     })
     this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
 
@@ -1000,32 +1000,32 @@ export class SurveyComponent {
     this.platform.ready().then(() => {
       this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory => {
         this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
-          result => console.log('Has permission?', result.hasPermission),
+
           err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
         );
         this.file.checkFile(resolvedDirectory.nativeURL, pdf.url).then(data => {
-          console.log(data);
+
 
           if (data == true) {
 
           } else {
-            console.log('not found!');
+
             throw {code: 1, message: 'NOT_FOUND_ERR'};
           }
 
         }).catch(async err => {
-          console.log('Error occurred while checking local files:');
-          console.log(err);
+
+
           if (err.code == 1) {
             const fileTransfer: FileTransferObject = this.transfer.create();
             // this.utils.showLoading('Downloading').then(()=>{
             fileTransfer.download(url, this.storageDirectory + pdf.url).then((entry) => {
               // this.utils.hideLoading().then(()=>{
-              console.log('download complete: ' + entry.toURL());
+
               this.utils.showSnackBar("Survey File Downloaded Successfully");
 
               // this.clickSub = this.localnotification.on('click').subscribe(data => {
-              //   console.log(data)
+
               //   path;
               // })
               this.localnotification.schedule({
@@ -1035,7 +1035,7 @@ export class SurveyComponent {
               })
               // }, (error) => {
               //   // handle error
-              //   console.log(error);
+
 
               // });
             })
@@ -1055,14 +1055,14 @@ export class SurveyComponent {
     let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
     result.then((resp) => {
       path = resp.toURL();
-      console.log(path);
+
 
       fileTransfer.download(url, path + designData.surveypdf.hash + designData.surveypdf.ext).then((entry) => {
-        console.log('download complete: ' + entry.toURL());
+
         this.utils.showSnackBar("Survey File Downloaded Successfully");
 
         // this.clickSub = this.localnotification.on('click').subscribe(data => {
-        //   console.log(data)
+
         //   path;
         // })
         this.localnotification.schedule({text: 'Downloaded Successfully', foreground: true, vibrate: true})
@@ -1080,7 +1080,7 @@ export class SurveyComponent {
   }
 
   gotoActivity(surveyData, event) {
-    console.log(event)
+
     event.stopPropagation();
     this.router.navigate(['/activity' + '/' + surveyData.id + '/survey'])
 

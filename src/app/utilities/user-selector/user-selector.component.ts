@@ -35,12 +35,12 @@ export class UserSelectorComponent implements ControlValueAccessor, Validator ,O
   // assignee: AssigneeModel;
 
   constructor( private storage:StorageService) {
-   
+
   }
 ngOnInit(){
 
    this.userId=this.storage.getUserID();
-   console.log(this.userId)
+
 
 }
 
@@ -65,7 +65,7 @@ ngOnChanges(){
 
   validate(control: AbstractControl): ValidationErrors | null {
    if (this.required) {
-      console.log(this.selectedUserId);
+
       if (this.selectedUserId !== null) {
         return null;
       }
@@ -73,34 +73,34 @@ ngOnChanges(){
         error: 'Assignee is required'
       };
     }
-    console.log(this.reviewAssigned);
+
     return null;
-    
+
   }
 
   selectAssignee(assignee: AssigneeModel) {
-    console.log(this.userId);
+
     if( this.reviewAssigned!=null && this.reviewAssigned.id!=this.userId ){
     const element = <HTMLElement> document.getElementById('pre');
     element.className='afterselected';
 
-    
+
   }
 
-    console.log("this is",assignee)
+
     this.assigneeData.emit(assignee);
     this.assignees.forEach((item) => {
       item.selected = false;
-     
+
     });
-    
+
     if (assignee.id === this.selectedUserId) {
       this.selectedUserId = null;
       this.onChange(null);
     } else {
       assignee.selected = true;
-      console.log(assignee);
-      
+
+
       this.selectedUserId = assignee.id;
       this.onChange(assignee.id);
     }
@@ -111,13 +111,13 @@ ngOnChanges(){
   }
 
   filterUsers(){
-    console.log('-------------------');
-    console.log(this.searchTerm);
+
+
     this.filteredAssignees = this.assignees.filter(assignee =>{
       return assignee.firstname.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1
       || assignee.lastname.toLowerCase().indexOf(this.searchTerm.toLowerCase())  > -1
 
     })
-    console.log(this.filteredAssignees)
+
   }
 }

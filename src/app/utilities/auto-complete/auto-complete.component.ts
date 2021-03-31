@@ -94,12 +94,12 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
 
 
   onValueChanged(event) {
-    console.log('value changed');
-    console.log(this.dataList);
+
+
     this.manualinput = event.detail.value;
     this.utility.manualInput.next(this.manualinput);
     // this.selectedDataName = event.detail.value;
-    console.log(this.selectedDataName);
+
     this.sortedList = this.dataList.filter((item) => {
       if(item.name !==null){
         return (item.name.toLowerCase().indexOf(event.detail.value.toLowerCase()) > -1);
@@ -120,12 +120,12 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   }
 
   selectOption(data: any) {
-    console.log('data changed');
+
     this.sortedList = [];
     this.selectedOption = data;
     this.selectedDataId = data.id;
     this.selectedDataName = data.name;
-    console.log(data,"KK");
+
 
 
     if (this.mode === 'id') {
@@ -139,7 +139,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
     this.sortedList=[];
     // this.selectedDataName= event.detail.value;
     this.sortedList = this.dataList.filter((item) => {
-      // console.log(item);
+
         if(item.name !== null){
           return (item.name.toLowerCase().indexOf(this.selectedDataName) > -1);
         }

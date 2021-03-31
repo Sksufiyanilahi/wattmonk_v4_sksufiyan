@@ -25,7 +25,7 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { AddressModel } from '../model/address.model';
- 
+
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMETCHAT_CONSTANTS,version } from '../contants';
 import { MixpanelService } from '../utilities/mixpanel.service';
@@ -112,7 +112,7 @@ export class PermithomepagePage implements OnInit {
 
               getNotificationCount(){
                 this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
-                  console.log("count",count);
+
                  this.unreadCount= count;
                 });
 
@@ -134,7 +134,7 @@ export class PermithomepagePage implements OnInit {
       });
   }
   setupCometChatUser() {
-    debugger;
+     ;
     let userId = this.storageservice.getUserID();
     this.userData = this.storageservice.getUser();
     const user = new CometChat.User(userId);
@@ -142,28 +142,28 @@ export class PermithomepagePage implements OnInit {
     const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
     CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
       () => {
-        console.log('Initialization completed successfully');
+
         // if(this.utilities.currentUserValue != null){
           // You can now call login function.
           CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
             (user) => {
-              console.log('Login Successful:', { user });
+
             },
             error => {
-              console.log('Login failed with exception:', { error });
+
             }
           );
       // }
       },
       error => {
-        console.log('Initialization failed with error:', error);
+
       }
     );
 
   }
 
   ionViewDidEnter() {
-    debugger;
+     ;
     if(this.version !== this.update_version && this.update_version !==''){
 
       setTimeout(()=>{
@@ -180,7 +180,7 @@ export class PermithomepagePage implements OnInit {
     }
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
       let user= this.storageservice.getUser();
       this.apiService.emitUserNameAndRole(user);
 
@@ -223,7 +223,7 @@ this.network.networkConnect();
     requestLocationPermission() {
       this.platform.ready().then(() => {
         this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
-          console.log(mode);
+
           switch (mode) {
             case this.diagnostic.permissionStatus.NOT_REQUESTED:
               // this.goBack();
@@ -245,7 +245,7 @@ this.network.networkConnect();
               break;
           }
         }, (rejection) => {
-          console.log(rejection);
+
         });
       });
     }
@@ -303,11 +303,11 @@ this.network.networkConnect();
     getGeoLocation() {
 
       this.geolocation.getCurrentPosition().then((resp) => {
-        console.log('resp', resp);
+
         this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
       }).catch((error) => {
         this.utils.errorSnackBar('Unable to get location');
-        console.log('Error getting location', error);
+
         this.showNoLocation();
       });
 
@@ -317,7 +317,7 @@ this.network.networkConnect();
       // this.utilities.hideLoading().then((success) => {
       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
         .then((result: NativeGeocoderResult[]) => {
-          console.log('resu', result);
+
           const address: AddressModel = {
             address: this.generateAddress(result[0]),
             lat: latitude,
@@ -354,7 +354,7 @@ this.network.networkConnect();
 
       this.diagnostic.switchToLocationSettings();
       this.diagnostic.registerLocationStateChangeHandler((state) => {
-        console.log(state);
+
         if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF)) {
           this.checkLocationAccess();
         }
@@ -363,7 +363,7 @@ this.network.networkConnect();
     }
 
     checkLocationAccess() {
-      console.log('Getting location');
+
       this.diagnostic.isLocationAuthorized().then((success) => {
         this.fetchLocation();
       }, (error) => {

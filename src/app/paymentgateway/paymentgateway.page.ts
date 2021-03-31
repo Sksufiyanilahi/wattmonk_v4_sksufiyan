@@ -5,7 +5,7 @@ import { NavController } from '@ionic/angular';
 
 // import {
 //   IPayPalConfig,
-//   ICreateOrderRequest 
+//   ICreateOrderRequest
 // } from 'ngx-paypal';
 
 @Component({
@@ -16,11 +16,11 @@ import { NavController } from '@ionic/angular';
 export class PaymentgatewayPage implements OnInit {
   value: number=24;
   user: any;
- 
+
 
   constructor(private storage:StorageService,
-    private navController:NavController) { 
-   
+    private navController:NavController) {
+
   }
 
   ngOnInit() {
@@ -33,7 +33,7 @@ export class PaymentgatewayPage implements OnInit {
   }
 
   select(e){
-    console.log(e);
+    // console.log(e);
     this.value=parseInt(e.target.value);
   }
 

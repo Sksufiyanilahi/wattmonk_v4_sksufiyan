@@ -13,7 +13,7 @@ export class ProgressBarComponent implements OnInit {
 
   ngOnInit() {
     this.buffer= this.value + 0.25;
-    console.log(this.buffer);
+
   }
 
 }

@@ -54,7 +54,7 @@ export class SurveyComponent implements OnInit {
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl('', [Validators.required]),
       status: new FormControl('surveyassigned', [Validators.required])
@@ -75,16 +75,16 @@ export class SurveyComponent implements OnInit {
 
     this.filterData(this.filterDataArray);
     this.routeSubscription = this.router.events.subscribe((event) => {
-      console.log("//",event);
-      console.log(this.router.url.indexOf('page'));
+
+
       if (event instanceof NavigationEnd) {
-        console.log(event.url);
+
 
         // Trick the Router into believing it's last link wasn't previously loaded
         if (this.router.url.indexOf('page') >= -1) {
           this.router.navigated = false;
           let data = this.route.queryParams.subscribe((_res: any) => {
-            console.log('Serach Term', _res);
+
             if (Object.keys(_res).length !== 0) {
               //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
 
@@ -99,14 +99,14 @@ export class SurveyComponent implements OnInit {
         }
       }
     });
-    // console.log('inside init');
+
     // this.routeSubscription = this.router.events.subscribe((event) => {
     //   if (event instanceof NavigationEnd) {
     //     // Trick the Router into believing it's last link wasn't previously loaded
     //     if (this.router.url.indexOf('page') > -1) {
     //       this.router.navigated = false;
     //       const data = this.route.queryParams.subscribe((_res: any) => {
-    //         console.log('Search Term', _res);
+
     //         if (Object.keys(_res).length !== 0) {
     //           //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
     //           this.filterData(_res.serchTerm);
@@ -125,7 +125,7 @@ export class SurveyComponent implements OnInit {
 
 
   filterData(serchTerm: any) {
-    console.log(this.listOfSurveyData);
+
     this.filterDataArray = this.listOfSurveyData.filter(x => x.id == serchTerm);
     const tempData: SurveyDataHelper[] = [];
     this.filterDataArray.forEach((surveyItem) => {
@@ -170,7 +170,7 @@ export class SurveyComponent implements OnInit {
           if (event !== null) {
             event.target.complete();
           }
-          console.log(response);
+
           this.listOfSurveyData = response;
           const tempData: SurveyDataHelper[] = [];
           this.listOfSurveyData.forEach((surveyItem) => {
@@ -222,7 +222,7 @@ export class SurveyComponent implements OnInit {
           if (event !== null) {
             event.target.complete();
           }
-          console.log(response);
+
           this.listOfSurveyData = response;
           const tempData: SurveyDataHelper[] = [];
           this.listOfSurveyData.forEach((surveyItem) => {
@@ -303,7 +303,7 @@ export class SurveyComponent implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+
           }
         }
       ]
@@ -339,7 +339,7 @@ export class SurveyComponent implements OnInit {
           this.surveyId = id;
           this.utils.setBottomBarHomepage(false);
           this.drawerState = DrawerState.Docked;
-          console.log(this.listOfAssignees);
+
           this.assignForm.patchValue({
             assignedto: 0
           });

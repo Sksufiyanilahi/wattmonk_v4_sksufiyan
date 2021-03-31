@@ -7,7 +7,7 @@ import { NavController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { ErrorModel } from '../model/error.model';
 import { FIELD_REQUIRED, INVALID_EMAIL_MESSAGE } from '../model/constants';
- 
+
 
 
 @Component({
@@ -62,20 +62,20 @@ getnewType() {
 
 
  resetPassword() {
-  
+
    let data={
     newpassword:this.changepassword.controls.newpassword.value,
     confirmpassword:this.changepassword.controls.confirmpassword.value,
     oldpassword:this.password
    }
-   console.log(data,">>>>>>>>>>>>>>>>.");
-   
+
+
 
    if (this.changepassword.status === 'VALID') {
-      console.log(this.changepassword.value);
+
      this.utils.showLoading('Resetting password').then(() => {
        this.apiService.changepassword(data).subscribe((response:any) => {
-         console.log(response);
+
          let postdata={
           isdefaultpassword:false
          }
@@ -83,12 +83,12 @@ getnewType() {
            this.utils.showSnackBar('Your password has been changed successfully!');
           //  this.utils.showSuccessModal('User password changed successfully!').then((modal) => {
             //  this.apiService.updateresetpassword(response.user.id,postdata).subscribe(res=>{
-             
-            //   console.log(res,"ressss");
-              
+
+
+
             //  },err=>{
-            //       console.log(err,"errr");
-                  
+
+
             //  })
             //  modal.present();
             //  modal.onWillDismiss().then((dismissed) => {
@@ -101,7 +101,7 @@ getnewType() {
           //   const error: ErrorModel = responseError.error;
           //   this.utils.errorSnackBar(error.message[0].messages[0].message);
           //  });
-          
+
          });
        }, (responseError) => {
          const error: ErrorModel = responseError.error;

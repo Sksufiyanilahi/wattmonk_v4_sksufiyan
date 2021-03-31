@@ -108,15 +108,14 @@ export class PermitDesignDetailsPage implements OnInit {
 
   }
 
- 
 
-  
+
+
 
   ionViewDidEnter(){
-    
+
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
 
     })
 
@@ -127,10 +126,8 @@ export class PermitDesignDetailsPage implements OnInit {
 
   ngOnInit() {
     this.enableDisable= false;
-    console.log(this.imageName);
     this.user=this.storage.getUser();
-    console.log(this.user);
-    this.mixpanelService.track('PERMIT_DESIGN_DETAIL_PAGE_OPEN', {
+     this.mixpanelService.track('PERMIT_DESIGN_DETAIL_PAGE_OPEN', {
     });
     // console.log("pop after ngoninit");
     // this.utilities.getHomepagePermitRefresh().subscribe(()=>{})
@@ -145,7 +142,6 @@ export class PermitDesignDetailsPage implements OnInit {
     const browser = this.iab.create(this.design.permitdesign.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
   showRevisionImage(attachmentFile:any){
-    console.log(attachmentFile)
     const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
   showreasonImage(attachmentFile:any){
@@ -192,11 +188,11 @@ export class PermitDesignDetailsPage implements OnInit {
             this.setData(success);
           this.uploadpreliumdesign(this.designId,'permitdesign');
           // this.utilities.hideLoading().then(() => {
-            console.log("suc",success);
-            
+
+
             // this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
             // this.utilities.setHomepageDesignRefresh(true);
-            
+
             // this.navController.navigateRoot(['homepage']);
           });
         },(error) => {
@@ -228,7 +224,7 @@ export class PermitDesignDetailsPage implements OnInit {
          this.timerConfig.timerTexts.secondsText = " "; //default - ss
          if (this.design.status == "designassigned"){
           let cdate = new Date(this.design.designstarttime);
-          console.log(cdate);
+
 
           cdate.setHours(cdate.getHours() + 6);
           this.countdownservice.startTimer(cdate);
@@ -258,7 +254,7 @@ export class PermitDesignDetailsPage implements OnInit {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
         //console.log('re', result.comments[0].message);
-       
+
        // this.commentboxdata = result.comments[0].message;
       //  const urlArray=  Array.from(getUrls(this.commentbox));
 
@@ -269,7 +265,7 @@ export class PermitDesignDetailsPage implements OnInit {
       //   setTimeout(()=>{
       //     const urlData=this._element.nativeElement.querySelectorAll('a');
       //      urlData.forEach(url=>{
-      //        url.addEventListener('click', (event) => 
+      //        url.addEventListener('click', (event) =>
       //           {
       //              event.preventDefault();
       //              this._link = event.target.href;
@@ -277,11 +273,11 @@ export class PermitDesignDetailsPage implements OnInit {
       //              console.log('Link is: ' + this._link);
       //              this.openUrl(this._link);
       //           }, false);
-      //      })         
+      //      })
       //      this.commentboxdata=this.sanitizer.bypassSecurityTrustHtml(this.commentbox);
       //        console.log(this.commentboxdata);
       //   },2000)
-        
+
         this.setData(result);
         this.timer();
       }, (error) => {
@@ -291,7 +287,7 @@ export class PermitDesignDetailsPage implements OnInit {
   }
 
   openUrl(url){
-    console.log(url);
+
     const browser = this.iab.create(url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
 
@@ -307,12 +303,13 @@ export class PermitDesignDetailsPage implements OnInit {
 
   setData(result: DesginDataModel) {
     this.design = result;
-    console.log(this.design,">>>>>>>>>>>>>>>>");
+
     if(this.design.isinrevisionstate && this.design.status=='designassigned'){
       this.imageName=[];
     }else{
     this.imageName= result.permitdesign==null ? '' : result.permitdesign.name + result.permitdesign.ext;
-    console.log(this.imageName);}
+
+  }
 
     if (this.design.newconstruction == true) {
       this.design.newconstruction = 'Yes';
@@ -348,7 +345,7 @@ export class PermitDesignDetailsPage implements OnInit {
   deleteDesignFromServer() {
     this.utilities.showLoading('Deleting Design').then((success) => {
       this.apiService.deleteDesign(this.designId).subscribe((result) => {
-        console.log('result', result);
+
         this.utilities.hideLoading().then(() => {
           this.utilities.showSnackBar(this.design.name+" "+'has been deleted successfully');
           this.navController.pop();
@@ -368,7 +365,7 @@ export class PermitDesignDetailsPage implements OnInit {
     this.apiService.getDesigners().subscribe(assignees => {
       this.listOfAssignees = [];
       assignees.forEach(item => this.listOfAssignees.push(item));
-      console.log(this.listOfAssignees);
+
     });
   }
 
@@ -379,7 +376,7 @@ export class PermitDesignDetailsPage implements OnInit {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.assigneeForm.value, this.designId).subscribe((success) => {
           this.utilities.hideLoading().then(() => {
-            console.log("suc",success);
+
             this.setData(success);
             this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
             this.utilities.setHomepagePermitRefresh(true);
@@ -402,25 +399,19 @@ export class PermitDesignDetailsPage implements OnInit {
   showuploadbox(){
     // console.log(this.design.permitdesign.id);
     this.apiService.deletePrelimImage(this.design.permitdesign.id).subscribe(_res=>{})
-    console.log(this.imageName);
+
     this.imageName=[];
 
   }
 
   permitfiles(event){
-
-
-    console.log(this.imageName);
-    console.log(event.target.files);
     // for(var i=0; i< event.target.files.length;i++){
       // this.permitFiles.push(event.target.files)
       this.permitFiles= event.target.files;
       this.imageName= event.target.files[0].name;
       this.exceedfileSize = event.target.files[0].size;
-      console.log(this.exceedfileSize);
       this.imagebox= true;
     // }
-    console.log(this.permitFiles);
 
       this.targetLength= event.target.files.length;
 
@@ -470,8 +461,6 @@ remove(){
     this.permitFiles=[];
     this.imageName= [];
     this.imagebox= false;
-    console.log(this.permitFiles);
-    console.log(this.imageName);
     this.commentsForm.get('permitdesign').setValue('');
 
 
@@ -484,7 +473,6 @@ permitupdate(event){
     // this.permitFiles.push(event.target.files)
     this.permitFiles= event.target.files;
     this.permitFileSize = event.target.files[0].size;
-    console.log(this.permitFileSize);
     //this.imageName= event.target.files[0].name;
     //this.imagebox= true;
   // }
@@ -543,8 +531,7 @@ return blob;
       //   console.log(blob);
 
       // console.log(typeof(this.permitFiles[0]));
-      
-      console.log(key);
+
       const imageData = new FormData();
       for(var i=0; i< this.permitFiles.length;i++){
         imageData.append("files",this.permitFiles[i]);
@@ -559,7 +546,6 @@ return blob;
           this.apiService.uploaddesign(imageData).subscribe(res=>{
             //this.utilities.hideUploadingLoading();
             this.utilities.hideLoading().then(()=>{
-              console.log(res);
               this.imagebox= false;
               // this.getDesignDetails();
               // this.updatecomments();
@@ -570,8 +556,7 @@ return blob;
               // })
               //this.utilities.getPermitDesignDetailsRefresh();
             if(this.ispermitUpdate){
-              console.log("hello")
-              this.router.navigate(['permitdesignoverview/permitInreview']);
+               this.router.navigate(['permitdesignoverview/permitInreview']);
               this.utilities.setHomepagePermitRefresh(true);
 
             }
@@ -580,7 +565,6 @@ return blob;
             }
             else
             {
-              console.log('hii')
               this.router.navigate(['permitdesignoverview/permitcompleted'])
                this.utilities.setHomepagePermitRefresh(true);
 
@@ -598,7 +582,7 @@ return blob;
       },err=>{
         //this.utilities.hideUploadingLoading();
             this.utilities.hideLoading().then(()=>{
-              console.log(err);
+
 
             })
           })
@@ -623,9 +607,6 @@ return blob;
         reviewendtime : this.reviewenddatetime,
 
       };
-
-
-      console.log("this is" + this.design.reviewstarttime);
 
      // console.log("this is"+ this.reviewstartdatetime);
       this.apiService.editDesign(

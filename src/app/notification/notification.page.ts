@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
- 
+
 import { ApiService } from '../api.service';
 import { UtilitiesService } from '../utilities.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
@@ -18,7 +18,7 @@ export class NotificationPage implements OnInit {
 
   constructor(  private apiservice:ApiService,
     private utilities:UtilitiesService,
-    private mixpanelService:MixpanelService    
+    private mixpanelService:MixpanelService
     ) { }
 
   ngOnInit() {
@@ -32,8 +32,8 @@ export class NotificationPage implements OnInit {
     this.apiservice.profileNotification().subscribe(res=>{
         this.notification = res;
         this.showLoader=true;
-        console.log(this.notification);
-        console.log(this.notification.length);
+
+
         if(res !==[]){
           this.disableContent=true;
         }

@@ -39,7 +39,7 @@ export class TeammodulePage implements OnInit {
     this.subscription = this.utils.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
-    console.log("hello team")
+    // console.log("hello team")
     this.getTeamData();
   }
 
@@ -47,7 +47,7 @@ export class TeammodulePage implements OnInit {
   {
     this.utils.showLoading("Getting Data").then(()=>{
     this.apiService.getTeamData().subscribe((res)=>{
-      console.log(res);
+      // console.log(res);
       this.utils.hideLoading().then(()=>{
       if(res.length>0)
       {
@@ -56,7 +56,7 @@ export class TeammodulePage implements OnInit {
         //   console.log(this.teamData)
         // })
       this.teamData = res;
-      console.log(this.teamData);
+      // console.log(this.teamData);
 
       }
     })
@@ -65,7 +65,7 @@ export class TeammodulePage implements OnInit {
   }
 
   ionViewDidEnter() {
-    // debugger;
+    //  ;
     // if(this.version !== this.update_version && this.update_version !==''){
 
     //   setTimeout(()=>{
@@ -82,7 +82,7 @@ export class TeammodulePage implements OnInit {
     // }
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
+      // console.log(this.netSwitch);
       let user= this.storageservice.getUser();
       this.apiService.emitUserNameAndRole(user);
 

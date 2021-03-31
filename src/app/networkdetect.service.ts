@@ -9,14 +9,13 @@ export class NetworkdetectService {
 
   networkSwitch = new BehaviorSubject<boolean>(true);
 
-  constructor(private network: Network) { 
+  constructor(private network: Network) {
 
 
   }
 
   networkDisconnect(){
     this.network.onDisconnect().subscribe(() => {
-      console.log('network was disconnected :-(');
       this.networkSwitch.next(false);
       // netSwitch= this.networkSwitch;
     });
@@ -24,7 +23,6 @@ export class NetworkdetectService {
 
   networkConnect(){
     let connectSubscription = this.network.onConnect().subscribe(() => {
-      console.log('network connected!');
       this.networkSwitch.next(true);
       // netSwitch = this.networkSwitch;
       // We just got a connection but we need to wait briefly
@@ -32,7 +30,6 @@ export class NetworkdetectService {
       // prior to doing any api requests as well.
       setTimeout(() => {
         if (this.network.type === 'wifi') {
-          console.log('we got a wifi connection, woohoo!');
         }
       }, 3000);
     });

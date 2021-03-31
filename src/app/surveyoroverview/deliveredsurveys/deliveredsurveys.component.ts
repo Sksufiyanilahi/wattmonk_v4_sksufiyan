@@ -41,10 +41,10 @@ export class DeliveredsurveysComponent implements OnInit {
     private actionSheetController: ActionSheetController,
     private platform: Platform
   ) {
-      console.log("inside new surveys");
+
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
   }
 
   ngOnInit() {
@@ -68,13 +68,13 @@ export class DeliveredsurveysComponent implements OnInit {
   }
 
   fetchPendingSurveys(event, showLoader: boolean) {
-    console.log("inside fetch surveys");
+
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
       this.apiService.getSurveyorSurveys("status=delivered").subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           this.formatSurveyData(response);
           if (event !== null) {
             event.target.complete();
@@ -130,7 +130,7 @@ export class DeliveredsurveysComponent implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+
           }
         }
       ]
@@ -181,7 +181,7 @@ export class DeliveredsurveysComponent implements OnInit {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       this.storage.get(''+element.id).then((data: SurveyStorageModel) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
         }else{
@@ -198,7 +198,7 @@ export class DeliveredsurveysComponent implements OnInit {
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;
-    console.log(this.overdue,">>>>>>>>>>>>>>>>>.");
+
 
   }
   ngOnDestroy(): void {

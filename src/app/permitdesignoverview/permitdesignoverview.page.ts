@@ -48,7 +48,7 @@ export class PermitdesignoverviewPage implements OnInit {
     private router:ActivatedRoute
     ) {
       let data = localStorage.getItem('type');
-      console.log(data,"dataa");
+
     }
 
   ngOnInit() {
@@ -77,21 +77,21 @@ export class PermitdesignoverviewPage implements OnInit {
     const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
     CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
       () => {
-        console.log('Initialization completed successfully');
+
         // if(this.utilities.currentUserValue != null){
           // You can now call login function.
           CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
             (user) => {
-              console.log('Login Successful:', { user });
+
             },
             error => {
-              console.log('Login failed with exception:', { error });
+
             }
           );
       // }
       },
       error => {
-        console.log('Initialization failed with error:', error);
+
       }
     );
 
@@ -99,13 +99,13 @@ export class PermitdesignoverviewPage implements OnInit {
 
   updateUserPushToken(){
   let token=   localStorage.getItem('pushtoken');
-  console.log(token);
+
   let userid= this.storage.getUserID();
   let tokendata={
     pushtokens:token
   }
     this.apiService.pushtoken(userid, {"newpushtoken":token}).subscribe((data) => {
-    console.log(data, "fcm data");
+
 
     }, (error) => {
     });
@@ -139,7 +139,7 @@ searchbar(){
 
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -167,7 +167,7 @@ searchbar(){
   }
   this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
     this.netSwitch = data;
-    console.log(this.netSwitch);
+
 
   })
 
@@ -184,7 +184,7 @@ this.network.networkConnect();
 
 getNotificationCount(){
   this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
-    console.log("count",count);
+
    this.unreadCount= count;
   });
 

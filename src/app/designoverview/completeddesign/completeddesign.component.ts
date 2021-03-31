@@ -54,7 +54,7 @@ export class CompleteddesignComponent implements OnInit {
 
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
   }
 
   ngOnInit() {
@@ -80,13 +80,13 @@ export class CompleteddesignComponent implements OnInit {
 
   fetchPendingDesigns(event, showLoader: boolean) {
     this.noDesignFound = "";
-    console.log("inside fetch surveys");
+
     this.listOfDesignData = [];
     this.listOfDesignDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys("requesttype=prelim&status=designcompleted", this.limit, this.skip).subscribe((response: any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           if (response.length) {
             this.formatDesignData(response);
           } else {
@@ -147,7 +147,7 @@ export class CompleteddesignComponent implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+
           }
         }
       ]
@@ -209,11 +209,11 @@ export class CompleteddesignComponent implements OnInit {
         .build();
       groupMembersRequest.fetchNext().then(
         groupMembers => {
-          console.log(groupMembers);
+
           element.addedtogroupchat = true;
         },
         error => {
-          console.log("Group Member list fetching failed with exception:", error);
+
         }
       );
     })
@@ -229,7 +229,7 @@ export class CompleteddesignComponent implements OnInit {
       element.lateby = this.utils.getTheLatebyString(element.deliverydate);
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       this.storage.get('' + element.id).then((data: any) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
         } else {
@@ -243,7 +243,7 @@ export class CompleteddesignComponent implements OnInit {
 
 
   gotoActivity(designData, event) {
-    console.log(event)
+
     event.stopPropagation();
     this.router.navigate(['/activity' + '/' + designData.id + '/design'])
 
@@ -263,7 +263,7 @@ export class CompleteddesignComponent implements OnInit {
   doInfinite($event) {
     this.skip = this.skip + 10;
     this.apiService.getDesignSurveys("requesttype=prelim&status=designcompleted", this.limit, this.skip).subscribe((response: any) => {
-        console.log(response);
+
         if (response.length) {
 
           this.formatDesignData(response);

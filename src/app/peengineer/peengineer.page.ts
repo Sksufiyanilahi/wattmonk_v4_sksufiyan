@@ -38,7 +38,6 @@ export class PEengineerPage implements OnInit {
 
   getNotificationCount(){
     this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
-      console.log("count",count);
      this.unreadCount= count;
     });
 
@@ -73,7 +72,6 @@ export class PEengineerPage implements OnInit {
     }
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
       let user= this.storageService.getUser();
       this.apiService.emitUserNameAndRole(user);
 

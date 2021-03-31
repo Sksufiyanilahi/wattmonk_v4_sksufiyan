@@ -85,7 +85,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.user=this.storage.getUser();
-    console.log(this.user);
+
     this.dataSubscription = this.utilities.getSurveyDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getSurveyDetails();
@@ -105,7 +105,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
       this.apiService.getSurveyDetail(this.surveyId).subscribe((result) => {
         this.utilities.hideLoading().then(() => {
           this.setData(result);
-          console.log(">>>",result);
+
 
         });
       }, (error) => {
@@ -115,7 +115,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   setData(result: SurveyDataModel) {
-    console.log(result);
+
     this.survey = result;
     if (this.survey.acdisconnect) {
       if (this.survey.acdisconnect === 'true') {
@@ -186,7 +186,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
       status: "surveyinprocess"
     };
     this.apiService.updateSurveyForm(postData,surveyData.id).subscribe(res=>{
-      console.log(res);
+
     })
     this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
 
@@ -214,7 +214,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     this.apiService.getSurveyors().subscribe(assignees => {
       this.listOfAssignees = [];
       assignees.forEach(item => this.listOfAssignees.push(item));
-      console.log(this.listOfAssignees);
+
     });
   }
 
@@ -225,7 +225,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
 
   changeDate() {
     const currentDate = new Date(this.date);
-    console.log(currentDate);
+
     this.datePicker.show({
       date: new Date(this.date),
       minDate: new Date(),
@@ -238,13 +238,13 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
           datetime: this.date.getTime()
         });
       },
-      err => console.log('Error occurred while getting date: ', err)
+
     );
   }
 
   changeTime() {
     const currentDate = new Date(this.date);
-    console.log(currentDate);
+
     this.datePicker.show({
       date: new Date(this.date),
       mode: 'time',
@@ -259,7 +259,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
           datetime: this.date.getTime()
         });
       },
-      err => console.log('Error occurred while getting date: ', err)
+
     );
   }
 
@@ -317,7 +317,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   async openModal(image){
-    console.log(image)
+
 
     const modal = await this.modalController.create({
       component: ModalPageComponent,
@@ -331,8 +331,8 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
   }
 
   reportDesignReviewFailure(){
-    console.log("fail");
-    //console.log("Value is" + this.reviewIssuesForm.value);
+
+
         let cdate = Date.now();
         this.reviewenddatetime = cdate;
        const postData = {
@@ -343,9 +343,9 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
       };
 
 
-      //console.log("this is" + this.survey.reviewstarttime);
 
-     // console.log("this is"+ this.reviewstartdatetime);
+
+
       this.apiService.updateSurveyForm(
         postData,
         this.survey.id
@@ -419,7 +419,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
 
   async openreviewPassed(value){
     var checkValue = value;
-    console.log(checkValue)
+
     if(checkValue == 'pass'){
   const alert = await this.alertController.create({
       cssClass: 'alertClass',
@@ -436,7 +436,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
           text: 'Passed',
         cssClass: 'secondary',
           handler: (alertData) => {
-            console.log('Confirm Cancel: blah');
+
             this.reviewcomments=alertData.comment;
             this.reportDesignReviewSuccess();
            // if(checkValue == 'pass'){
@@ -473,7 +473,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
           text: 'Failed',
         cssClass: 'secondary',
           handler: (alertData) => {
-            console.log('Confirm Cancel: blah');
+
             this.reviewcomments=alertData.comment;
             if(this.reviewcomments !== ""){
             this.reportDesignReviewFailure();

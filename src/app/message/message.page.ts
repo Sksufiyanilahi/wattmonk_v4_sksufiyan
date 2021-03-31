@@ -50,15 +50,15 @@ export class MessagePage implements OnInit {
             //       })
             //     }
             //     this.conversations = conversationList;
-            // console.log('UserList Array :', this.conversations);
+
             //   })
             // }
-            console.log('Conversations list received:', conversationList);
+
             conversationList.forEach((item) => {
-              console.log('item', item);
+
               this.conversations.push(item);
             });
-            console.log(this.conversations);
+
             if (event !== null) {
               event.target.complete();
             }
@@ -69,7 +69,7 @@ export class MessagePage implements OnInit {
             if (event !== null) {
               event.target.complete();
             }
-            console.log('Conversations list fetching failed with error:', error);
+
           });
         }
       );

@@ -57,17 +57,17 @@ export class NewdesignComponent implements OnInit {
 
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
   //  this.unsubscribeMessage=  this.apiService._OnMessageReceivedSubject.subscribe((r) => {
-  //     console.log('message received! ', r);
+
   //     this.getDesigns();
   //   });
   }
 
   ngOnInit() {
     localStorage.setItem('type','prelim');
- console.log("ngoninit");
-console.log(this.currentDate.toISOString());
+
+
 this.apiService.version.subscribe(versionInfo=>{
   this.update_version = versionInfo;
 })
@@ -127,7 +127,7 @@ this.apiService.version.subscribe(versionInfo=>{
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys("requesttype=prelim&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           if(response.length){
             this.formatDesignData(response);
           }else{
@@ -161,7 +161,7 @@ this.apiService.version.subscribe(versionInfo=>{
     list.forEach(element =>{
       this.listOfDesignData.push(element);
     })
-    console.log(this.listOfDesignData);
+
 
     const tempData: DesginDataHelper[] = [];
           this.listOfDesignData.forEach((designItem:any) => {
@@ -201,7 +201,7 @@ this.apiService.version.subscribe(versionInfo=>{
           });
           this.chatIcon(list);
           this.cdr.detectChanges();
-          console.log(this.listOfDesignDataHelper)
+
   }
 
   ///chat icon
@@ -212,11 +212,11 @@ this.apiService.version.subscribe(versionInfo=>{
         .build();
       groupMembersRequest.fetchNext().then(
         groupMembers => {
-          console.log(groupMembers);
+
           element.addedtogroupchat=true;
         },
         error => {
-          console.log("Group Member list fetching failed with exception:", error);
+
         }
       );
     })
@@ -280,7 +280,7 @@ this.apiService.version.subscribe(versionInfo=>{
       }
     }
       this.storage.get(''+element.id).then((data: any) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
         }else{
@@ -296,12 +296,12 @@ this.apiService.version.subscribe(versionInfo=>{
   }
 
   gotoActivity(designData,event){
-    console.log(event)
+
         event.stopPropagation();
       this.router.navigate(['/activity' + '/' + designData.id + '/design'])
-    
+
     }
-    
+
     gotoDetails(designData,$event){
       // $event.preventDefault();
       // $event.stopPropagation();
@@ -311,7 +311,7 @@ this.apiService.version.subscribe(versionInfo=>{
   doInfinite($event){
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys("requesttype=prelim&status=designassigned&status=designinprocess",this.limit,this.skip).subscribe((response:any) => {
-         console.log(response);
+
           if(response.length){
 
             this.formatDesignData(response);

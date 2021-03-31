@@ -399,7 +399,7 @@ export class SurveyprocessPage implements OnInit {
         }
         if (item.formelements) {
           item.formelements.map(formElement => {
-            console.log(formElement.inputformcontrol);
+
             this.activeFormElementsArray.push(formElement.inputformcontrol);
             this.activeFormKeysMap[formElement.inputformcontrol] = formElement.placeholder;
             if (formElement.required) {
@@ -422,10 +422,10 @@ export class SurveyprocessPage implements OnInit {
   }
 
   checkSurveyStorage() {
-    console.log('inside survey storage module');
+
     this.storage.get(this.surveyid + '').then((data: SurveyStorageModel) => {
       if (data) {
-        console.log('data found');
+
         this.mainmenuitems = data.menuitems;
         this.originalmainmenuitems = data.menuitems;
         this.totalpercent = data.currentprogress;
@@ -769,7 +769,7 @@ export class SurveyprocessPage implements OnInit {
    * Step Counts Starts Here
    */
   setTotalStepCount() {
-    console.log('setting total step count');
+
     let totalSteps = 0;
     this.mainmenuitems.map(mainmenuitem => {
       mainmenuitem.children.map(child => {
@@ -991,7 +991,7 @@ export class SurveyprocessPage implements OnInit {
     this.utilitieservice.showLoading('Loading').then(() => {
       this.apiService.getRoofMaterials().subscribe(response => {
         this.utilitieservice.hideLoading().then(() => {
-          console.log(response);
+
           this.roofmaterials = response;
           this.changedetectorref.detectChanges();
         });
@@ -1768,20 +1768,20 @@ export class SurveyprocessPage implements OnInit {
       status: 'surveycompleted'
     };
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
-      console.log(data);
+
       this.utilitieservice.hideLoading().then(() => {
         this.insomnia.keepAwake()
           .then(
             () => {
-              console.log('success');
+
             },
-            () => console.log('error')
+
           );
         this.uploadImagesToServer();
 
       });
     }, (error) => {
-      console.log(error);
+
       this.utilitieservice.hideLoading().then(() => {
         this.utilitieservice.errorSnackBar(JSON.stringify(error));
       });
@@ -1833,9 +1833,9 @@ export class SurveyprocessPage implements OnInit {
         this.insomnia.keepAwake()
           .then(
             () => {
-              console.log('success');
+
             },
-            () => console.log('error')
+
           );
         this.uploadImagesToServer();
 
@@ -1928,14 +1928,14 @@ export class SurveyprocessPage implements OnInit {
         this.insomnia.keepAwake()
           .then(
             () => {
-              console.log('success');
+
             },
-            () => console.log('error')
+
           );
         this.uploadImagesToServer();
       });
     }, (error) => {
-      console.log(error);
+
       this.utilitieservice.hideLoading().then(() => {
         this.utilitieservice.errorSnackBar('There was some error in processing the request');
       });
@@ -2011,8 +2011,8 @@ export class SurveyprocessPage implements OnInit {
             }
             this.insomnia.allowSleepAgain()
               .then(
-                () => console.log('success'),
-                () => console.log('error')
+
+
               );
           });
         });
@@ -2104,7 +2104,7 @@ export class SurveyprocessPage implements OnInit {
       this.longitude).subscribe(data => {
       this.createImageFromBlob(data);
     }, error => {
-      console.log(error);
+
     });
   }
 
@@ -2239,13 +2239,13 @@ export class SurveyprocessPage implements OnInit {
 
   handleBackbutton() {
     this.platform.backButton.subscribeWithPriority(10, () => {
-      console.log('Handler called to force close!');
+
       this.alertController.getTop().then(r => {
         if (r) {
           // navigator.app.exitApp();
         }
       }).catch(e => {
-        console.log(e);
+
       });
     });
   }

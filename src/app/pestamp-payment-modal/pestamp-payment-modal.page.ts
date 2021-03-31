@@ -87,19 +87,15 @@ export class PestampPaymentModalPage implements OnInit {
       //   (err) => console.log(err),
       //   () => console.log('done!')
       // )
-        console.log(this.router.getCurrentNavigation().extras.state);
       this.designData = this.router.getCurrentNavigation().extras.state;
       this.data = this.designData.productdetails.queryParams.designData;
       this.assignValue = this.designData.productdetails.queryParams.value;
       this.deliveryCharges = this.data.deliverycharges;
-      console.log(this.assignValue);
-      console.log(this.data);
 
       this.newpestampRef = db.object('newpestamp');
     this.newpestamp = this.newpestampRef.valueChanges();
     this.newpestamp.subscribe(
       (res) => {
-        console.log(res);
         this.newpestampscount = res.count;
         this.cdr.detectChanges();
       },
@@ -121,7 +117,6 @@ export class PestampPaymentModalPage implements OnInit {
 
 
       this.userData = this.storageService.getUser();
-      console.log(this.userData)
       this.mixpanelService.track('PESTAMP_PAYMENT_PAGE_OPEN', {
       });
        this.fetchData();
@@ -208,28 +203,28 @@ export class PestampPaymentModalPage implements OnInit {
       }
       this.apiService.getPeStampCharges(structuralsearchdata).subscribe(
         response => {
-          console.log(response);
+
           bothtypepestampcharges = parseInt(response[0].settingvalue);
         }
       );
     }
     setTimeout(() => {
       this.apiService.getPeStampCharges(searchdata).subscribe((res)=>{
-        console.log(res);
+
         this.servicePrice = res;
         // this.servicePrice.forEach(element => {
         //   this.settingValue = element.settingvalue;
         // });
         if(res[0].settingname =='commercialanymountingpecharges')
         {
-          console.log("hello");
+
           this.settingValue = 0;
           this.netPay = this.settingValue;
         }
         else{
           this.settingValue = res[0].settingvalue + bothtypepestampcharges;
           this.netPay = this.settingValue;
-          console.log("hello1",this.netPay);
+
         }
       }
       )
@@ -238,9 +233,9 @@ export class PestampPaymentModalPage implements OnInit {
 
     getCommercialCharges(){
       this.apiService.getPeStampCharges("commercialanymountingpecharges").subscribe((res)=>{
-        console.log(res);
+
         this.servicePrice = res;
-        console.log("deliver")
+
         this.settingValue = res[0].settingvalue;
         this.serviceCharges = this.settingValue * this.data.workinghours;
         //this.netPay = this.settingValue * this.data.workinghours;
@@ -266,7 +261,7 @@ export class PestampPaymentModalPage implements OnInit {
 
 
     this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
-      console.log(this.user)
+
       });
 
 
