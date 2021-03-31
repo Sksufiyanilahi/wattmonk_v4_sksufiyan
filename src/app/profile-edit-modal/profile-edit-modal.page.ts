@@ -68,9 +68,9 @@ export class ProfileEditModalPage implements OnInit {
   }
 
   fetchCountry(){
-    console.log("user");
+
     this.http.get("assets/country/country.json").subscribe((res:any)=>{
-      console.log(res);
+
       this.countries = res;
       this.country();
       this.selectedcountry=this.countries.find(c=> c.country=='United States');
@@ -117,7 +117,7 @@ if(this.profileEdit.status=='VALID'){
     phone:this.profileEdit.get('phone').value,
   }
   this.apiservice.editProfile(postdata,this.user.id).subscribe((res) => {
-console.log(res);
+
 let token=  this.storageService.getJWTToken();
  this.storageService.setUser(res,token);
  this.apiservice.refreshHeader();

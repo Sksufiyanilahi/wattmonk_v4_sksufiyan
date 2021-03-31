@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
- 
+
 
 
 @Component({
@@ -14,16 +14,15 @@ export class StatisticsPage implements OnInit {
 
   constructor(public route: Router){}
 
-  
+
   ngOnInit() {
     this.isSelected=true;
     this.route.navigate(['statistics/designs']);}
-  
+
 
   segmentChanged(event){
-   
+
     //if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
-    console.log( event);  
     if(event.target.value=='designs'){
         this.route.navigate(['statistics/designs']);
         // return this.segments;

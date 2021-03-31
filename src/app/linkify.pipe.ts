@@ -29,7 +29,7 @@ export class LinkifyPipe implements PipeTransform {
               newString = newString + ' ' + s;
           }
       });
-      console.log(newString);
+      // console.log(newString);
       // if (text && text.length > 0) {
       //   // for (let t of text.split("")) {
       //     if (text.search(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i) > -1){

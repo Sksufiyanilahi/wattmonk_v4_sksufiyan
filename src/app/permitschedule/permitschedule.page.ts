@@ -280,12 +280,12 @@ export class PermitschedulePage implements OnInit {
     //   this.newpermits = this.newpermitsRef.valueChanges();
     //   this.newpermits.subscribe(
     //     (res) => {
-    //       console.log(res);
+
     //       this.newpermitscount = res.count;
     //       cdr.detectChanges();
     //     },
-    //     (err) => console.log(err),
-    //     () => console.log('done!')
+
+
     //   )
 
     this.designId = +this.route.snapshot.paramMap.get('id');
@@ -294,7 +294,7 @@ export class PermitschedulePage implements OnInit {
 
     // const url = this.router.url;
     //   const splittedUrl = url.split('/');
-    //   console.log(splittedUrl);
+
     //   this.tabsDisabled = splittedUrl.length === 4;
     //   this.currentTab = splittedUrl[2];
     // }
@@ -303,7 +303,7 @@ export class PermitschedulePage implements OnInit {
   ionViewDidEnter() {
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
     })
   }
 
@@ -348,12 +348,12 @@ export class PermitschedulePage implements OnInit {
   ngOnInit() {
     this.surveydatapresent = false
     this.data = this.router.getCurrentNavigation().extras.state;
-    console.log(this.data)
+
     if (this.data != undefined) {
       this.surveydata = this.data.productdetails.queryParams.surveyData;
       this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
       this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
-      console.log(this.surveydata)
+
       this.surveydatapresent = true
 
 
@@ -361,7 +361,7 @@ export class PermitschedulePage implements OnInit {
 
     this.fieldDisabled = false;
     this.userdata = this.storage.getUser();
-    console.log(this.userdata)
+
     //this.requestLocationPermission();
     if (this.designId!=0) {
       this.tabsDisabled=true;
@@ -377,7 +377,7 @@ export class PermitschedulePage implements OnInit {
     } else {
       // await this.getGeoLocation();
       this.subscription = this.utils.getAddressObservable().subscribe((address) => {
-        console.log(address);
+
         this.address = address.address;
         this.storage.setData(this.address);
       });
@@ -434,7 +434,7 @@ export class PermitschedulePage implements OnInit {
     const roofcontrol = this.desginForm.get('rooftype');
     this.desginForm.get('mountingtype').valueChanges.subscribe(
       (mode: string) => {
-        console.log(mode);
+
         if (mode === 'ground') {
           tiltControl.setValidators([Validators.required, Validators.pattern(NUMBERPATTERN)]);
           roofcontrol.clearValidators();
@@ -497,7 +497,7 @@ export class PermitschedulePage implements OnInit {
     const uploadboxcontrol = this.desginForm.get('architecturaldesign');
     this.desginForm.get('newconstruction').valueChanges.subscribe(
       (uploadmode: any) => {
-        console.log(uploadmode);
+
         if (uploadmode == 'true') {
           uploadboxcontrol.setValidators([Validators.required]);
         } else if (uploadmode == 'false') {
@@ -560,7 +560,7 @@ export class PermitschedulePage implements OnInit {
   fetchModuleMakesData() {
     this.apiService.getSolarMake().subscribe(
       response => {
-        console.log("Hiii");
+
         this.modulemakes = response;
         this.filteredModuleMakes = this.desginForm.get('modulemake').valueChanges.pipe(
           startWith(""),
@@ -585,7 +585,7 @@ export class PermitschedulePage implements OnInit {
       this.selectedModuleMakeID = make.id;
       this.apiService.getSolarMade(make.id).subscribe(
         response => {
-          console.log("Hiii");
+
           this.modulemodels = response;
           this.filteredModuleModels = this.desginForm.get('modulemodel').valueChanges.pipe(
             startWith(""),
@@ -604,7 +604,7 @@ export class PermitschedulePage implements OnInit {
     this.modulemodels = [];
     this.apiService.getSolarMade(this.selectedModuleMakeID).subscribe(
       response => {
-        console.log("Hiii");
+
         this.modulemodels = response;
         this.filteredModuleModels = this.desginForm.get('modulemodel').valueChanges.pipe(
           startWith(""),
@@ -625,7 +625,7 @@ export class PermitschedulePage implements OnInit {
   fetchInverterMakesData() {
     this.apiService.getInverterMake().subscribe(
       response => {
-        console.log("Hiii");
+
         this.invertermakes = response;
         this.filteredInverterMakes = this.desginForm.get('invertermake').valueChanges.pipe(
           startWith(""),
@@ -650,7 +650,7 @@ export class PermitschedulePage implements OnInit {
       this.selectedInverterMakeID = make.id;
       this.apiService.getInverterMade(make.id).subscribe(
         response => {
-          console.log("Hiii");
+
           this.invertermodels = response;
           this.filteredInverterModels = this.desginForm.get('invertermodel').valueChanges.pipe(
             startWith(""),
@@ -669,7 +669,7 @@ export class PermitschedulePage implements OnInit {
     this.invertermodels = [];
     this.apiService.getInverterMade(this.selectedInverterMakeID).subscribe(
       response => {
-        console.log("Hiii");
+
         this.invertermodels = response;
         this.filteredInverterModels = this.desginForm.get('invertermodel').valueChanges.pipe(
           startWith(""),
@@ -695,7 +695,7 @@ export class PermitschedulePage implements OnInit {
 
   eventcheck(e) {
     this.showValue = e.target.value;
-    console.log(this.showValue);
+
 
   }
 
@@ -703,7 +703,7 @@ export class PermitschedulePage implements OnInit {
   // addressValue(){
   // // }
   // this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-  //   console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
 
   //     // this.desginForm.get('address').setValue('124/345');
   //     // this.desginForm.get('latitude').setValue('24.553333');
@@ -728,7 +728,7 @@ export class PermitschedulePage implements OnInit {
   //   this.desginForm.get('state').setValue('');
   //   this.desginForm.get('postalcode').setValue('');
   // });
- 
+
   // //this.getSolarMake();
 
   // }
@@ -738,11 +738,11 @@ export class PermitschedulePage implements OnInit {
       this.apiService.getDesginDetail(this.designId).subscribe(async (result) => {
         await this.utils.hideLoading().then(() => {
           this.design = result;
-          console.log(this.design);
+
           this.fieldDisabled = true;
           this.attachmentData = this.design.attachments;
           this.architecturalData = this.design.architecturaldesign;
-          console.log("hello", this.design.attachments);
+
           this.desginForm.patchValue({
             name: this.design.name,
             email: this.design.email,
@@ -775,9 +775,9 @@ export class PermitschedulePage implements OnInit {
             status: this.design.status,
             inverterscount: this.design.inverterscount
           });
-          console.log("gg", this.design.solarmake.name);
+
           this.oldcommentid = this.design.comments == '' ? '' : this.design.comments[0].id;
-          //console.log("attachments",this.desginForm.get('attachments').value)
+
           this.utils.setStaticAddress(this.design.address);
           //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
           if (this.design.assignedto !== null && this.design.assignedto !== undefined) {
@@ -790,7 +790,7 @@ export class PermitschedulePage implements OnInit {
           //   this.fetchModuleMakesData();
           //   this.fetchInverterMakesData();
           //   if(this.isEditMode){
-          //     console.log("hello")
+
           //     this.loadModuleModelsData();
           //     this.loadInverterModelsData();
 
@@ -812,16 +812,16 @@ export class PermitschedulePage implements OnInit {
 
   showUpload(e) {
     this.uploadbox = e.target.value;
-    console.log(this.uploadbox)
+
 
 
   }
 
   saveModuleMake() {
-    console.log("g", this.desginForm.get("modulemake").value);
+
     const found = this.modulemakes.some(el => el.name === this.desginForm.get("modulemake").value);
     if (!found) {
-      console.log("hello");
+
       let solarmadedata = {
 
 
@@ -849,9 +849,9 @@ export class PermitschedulePage implements OnInit {
 
   saveModuleModel() {
     const ismakefound = this.modulemakes.some(el => el.name === this.desginForm.get("modulemake").value);
-    console.log(ismakefound);
+
     const found = this.modulemodels.some(el => el.name === this.desginForm.get("modulemodel").value);
-    console.log(found);
+
     if (!ismakefound || !found) {
       let solarmadedata = {
         modulemake: this.selectedModuleMakeID,
@@ -881,7 +881,7 @@ export class PermitschedulePage implements OnInit {
   saveInverterMake() {
     const found = this.invertermakes.some(el => el.name === this.desginForm.get("invertermake").value);
     if (!found) {
-      console.log("Hello");
+
       let invertermakedata = {
         name: this.desginForm.get("invertermake").value
       }
@@ -944,10 +944,10 @@ export class PermitschedulePage implements OnInit {
     this.onFormSubmit = false;
     // this.saveModuleMake();
     this.formValue = e;
-    console.log(this.formValue);
-    console.log('Reach', this.desginForm.value);
 
-    // debugger;
+
+
+    //  ;
     // this.saveModuleMake();
 
     if (this.desginForm.status === 'VALID') {
@@ -975,7 +975,7 @@ export class PermitschedulePage implements OnInit {
         isoutsourced = "true";
         var designacceptancestarttime = new Date();
         designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
-        console.log(designacceptancestarttime)
+
       } else {
         designstatus = "created";
         designoutsourcedto = null;
@@ -983,7 +983,7 @@ export class PermitschedulePage implements OnInit {
       }
       var tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 2);
-      console.log(this.formValue);
+
       if (this.designId === 0) {
         if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
           this.mixpanelService.track("SAVE_PERMITDESIGN_PAGE", {});
@@ -1081,12 +1081,12 @@ export class PermitschedulePage implements OnInit {
             this.apiService.addDesginForm(data).subscribe(response => {
               this.utils.hideLoading().then(() => {
                 if (newConstruction == 'true') {
-                  console.log("hello");
+
                   // if(this.architecturalFileUpload){
                   this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                   // }
                 } else if (newConstruction == 'false') {
-                  console.log("HII")
+
                   if (this.attachmentFileUpload) {
                     this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
                   } else {
@@ -1098,7 +1098,7 @@ export class PermitschedulePage implements OnInit {
                 }
                 // setTimeout(()=>{
                 //   this.utils.hideLoading().then(() => {
-                //     console.log('Res', response);
+
                 //     // this.createChatGroup(response);
                 //     this.router.navigate(['/permithomepage'])
                 //     this.utils.showSnackBar('Design have been Created');
@@ -1202,7 +1202,7 @@ export class PermitschedulePage implements OnInit {
               }
               // this.utils.hideLoading().then(() => {
               //   // this.createChatGroup(response);
-              //   console.log('Res', response);
+
               //   this.value = response.id;
               //this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
               //       let objToSend: NavigationExtras = {
@@ -1246,7 +1246,7 @@ export class PermitschedulePage implements OnInit {
 
       } else {
         if (this.formValue === 'save') {
-          console.log("hello edit")
+
           this.utils.showLoading('Saving').then(() => {
             var data = {
               name: this.desginForm.get('name').value,
@@ -1299,13 +1299,13 @@ export class PermitschedulePage implements OnInit {
               this.utils.hideLoading().then(() => {
                 if (newConstruction == 'true') {
                   // if(this.architecturalFileUpload){
-                  console.log("hello")
+
                   this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
                   // }
                 } else if (newConstruction == 'false') {
                   if (this.attachmentFileUpload) {
-                    console.log("edit")
-                    console.log(this.permitFiles[0])
+
+
                     this.uploadAttachmentDesign(response, 'attachments', this.permitFiles[0], 0)
                   } else {
                     this.router.navigate(['/permithomepage'])
@@ -1319,7 +1319,7 @@ export class PermitschedulePage implements OnInit {
                 // }
 
                 // this.utils.hideLoading().then(() => {
-                //   console.log('Res', response);
+
                 //   this.utils.showSnackBar('Design have been updated');
                 //   if(!this.isArcFileDelete){
                 //     this.utils.setPermitDesignDetailsRefresh(true);
@@ -1445,11 +1445,11 @@ export class PermitschedulePage implements OnInit {
                       }
                     }
                     // if(this.isArcFileDelete){
-                    //   console.log("hello");
+
                     //   this.deleteArcFile(this.indexOfArcFiles);
                     // }
                     //       this.utils.hideLoading().then(() => {
-                    //         console.log('Res', response);
+
 
                     //         this.utils.showSnackBar('Design have been updated');
                     //        // this.router.navigate(['payment-modal',{id:response.id,designData:"permit"}]);
@@ -1532,12 +1532,12 @@ export class PermitschedulePage implements OnInit {
 
 
   files(ev) {
-    console.log(ev.target.files,this.arcFileUrl);
+
     for (let i = 0; i < ev.target.files.length; i++) {
       this.archFiles.push(ev.target.files[i])
       let reader = getFileReader();
       reader.onload = (e: any) => {
-        console.log(ev.target.files[i],this.arcFileUrl);
+
         if(ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')){
           this.arcFileUrl.push(e.target.result);
         }else{
@@ -1547,32 +1547,32 @@ export class PermitschedulePage implements OnInit {
       reader.readAsDataURL(ev.target.files[i]);
     }
     this.architecturalFileUpload = true;
-    console.log(this.archFiles);
+
   }
 
   permitfiles(event) {
-    console.log(event);
+
     for(let i=0; i< event.target.files.length;i++){
-      console.log(i);
+
 
       this.permitFiles.push(event.target.files[i])
      // var reader = new FileReader();
      let reader = getFileReader();
       reader.onload = (e: any) => {
         if(event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')){
-          // console.log(event.target.files[i].name);
+
           this.imageurls.push(e.target.result);
         }else{
           this.imageurls.push('/assets/icon/file.png');
         }
-        console.log(this.imageurls)
+
       }
       reader.readAsDataURL(event.target.files[i]);
     }
     this.attachmentFileUpload = true;
     if (this.permitFiles.length == 1) {
       this.fileName = event.target.files[0].name;
-      console.log(this.fileName);
+
 
     } else if (this.permitFiles.length > 1) {
       this.fileName = this.permitFiles.length;
@@ -1583,12 +1583,12 @@ export class PermitschedulePage implements OnInit {
   }
 
   uploaarchitecturedesign(response?: any, key?: string, fileObj?: File, index?: number) {
-    // console.log(this.archFiles);
+
     if (!this.architecturalFileUpload) {
       this.uploadAttachmentDesign(response, key, this.permitFiles[0], 0)
     }
     else {
-      console.log(fileObj)
+
       const imageData = new FormData();
       // for(var i=0; i< this.archFiles.length;i++){
       imageData.append("files", fileObj);
@@ -1601,9 +1601,9 @@ export class PermitschedulePage implements OnInit {
       // }
       this.utils.showLoading("Uploading architecture" + " " + (index + 1) + " of" + " " + this.archFiles.length).then(() => {
         this.apiService.uploaddesign(imageData).subscribe(res => {
-          console.log(res);
+
           if (index < this.archFiles.length - 1) {
-            console.log("if")
+
             this.utils.hideLoading();
             var newIndex = index + 1;
             this.uploaarchitecturedesign(response, key, this.archFiles[newIndex], newIndex);
@@ -1654,8 +1654,8 @@ export class PermitschedulePage implements OnInit {
   }
 
   uploadAttachmentDesign(response?: any, key?: string, fileObj?: File, index?: number) {
-    console.log(this.permitFiles);
-    console.log(fileObj)
+
+
     const imageData = new FormData();
     // for(var i=0; i< this.permitFiles.length;i++){
     imageData.append("files", fileObj);
@@ -1668,9 +1668,9 @@ export class PermitschedulePage implements OnInit {
     // }
     this.utils.showLoading("Uploading attachment" + " " + (index + 1) + " of" + " " + this.permitFiles.length).then(() => {
       this.apiService.uploaddesign(imageData).subscribe(res => {
-        console.log(res);
+
         if (index < this.permitFiles.length - 1) {
-          console.log("if")
+
           this.utils.hideLoading();
           var newIndex = index + 1;
           this.uploadAttachmentDesign(response, key, this.permitFiles[newIndex], newIndex);
@@ -1714,7 +1714,7 @@ export class PermitschedulePage implements OnInit {
   }
 
   numberfield(event) {
-    console.log(event);
+
 
   }
 
@@ -1730,7 +1730,7 @@ export class PermitschedulePage implements OnInit {
 
   remove(arc, i) {
     // this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-    //   this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+
     // this.utils.hideLoading().then(()=>{
     //   this.utils.showSnackBar('File deleted successfully');
     //   this.navController.navigateRoot(["/permitschedule",{id:this.designId}]);
@@ -1745,14 +1745,14 @@ export class PermitschedulePage implements OnInit {
 
     // });
     // });
-    console.log(arc);
+
     this.indexOfArcFiles.push(arc.id);
 
     this.isArcFileDelete = true;
-    console.log(this.isArcFileDelete);
-    console.log(this.indexOfArcFiles);
-    console.log(this.architecturalData);
-    console.log(i);
+
+
+
+
 
     this.architecturalData.splice(i, 1);
     this.deleteArcFile(this.indexOfArcFiles);
@@ -1764,10 +1764,10 @@ export class PermitschedulePage implements OnInit {
     this.indexOfAttachmentFiles.push(attachment.id);
 
     this.isArcFileDelete = true;
-    console.log(this.isArcFileDelete);
-    console.log(this.indexOfAttachmentFiles);
-    console.log(this.attachmentData);
-    console.log(i);
+
+
+
+
 
     this.attachmentData.splice(i, 1);
     this.deleteAttachmentFile(this.indexOfAttachmentFiles);
@@ -1782,7 +1782,7 @@ export class PermitschedulePage implements OnInit {
       this.utils.showLoading("Deleting Architectural File").then(() => {
         this.apiService.deletePrelimImage(id).subscribe(res => {
           this.utils.hideLoading().then(() => {
-            console.log("hello", res)
+
             this.indexOfArcFiles = []
           })
         })
@@ -1806,7 +1806,7 @@ export class PermitschedulePage implements OnInit {
       this.utils.showLoading("Deleting Attachment File").then(() => {
         this.apiService.deletePrelimImage(id).subscribe(res => {
           this.utils.hideLoading().then(() => {
-            console.log("hello", res)
+
             this.indexOfAttachmentFiles = []
           });
         })
@@ -1824,7 +1824,7 @@ export class PermitschedulePage implements OnInit {
   sendtowattmonk() {
     var designacceptancestarttime = new Date();
     designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
-    console.log(this.utils.getPaymentMode().value);
+
     const postData = {
       outsourcedto: 232,
       isoutsourced: "true",
@@ -1839,7 +1839,7 @@ export class PermitschedulePage implements OnInit {
       this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
         this.utils.hideLoading().then(() => {
           ;
-          console.log('reach ', value);
+
 
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
           this.router.navigate(['/permithomepage'])
@@ -1860,7 +1860,7 @@ export class PermitschedulePage implements OnInit {
     //     this.geolocation.getCurrentPosition().then((resp) => {
     //       this.utils.hideLoading();
     //       // .then(()=>{
-    //         console.log('resp',resp);
+
     //         this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
     //         this.utils.hideLoading();
     //       // });
@@ -1871,7 +1871,7 @@ export class PermitschedulePage implements OnInit {
     //       this.utils.hideLoading();
     //       this.utils.errorSnackBar('Unable to get location');
 
-    //       console.log('Error getting location', error);
+
     //       this.showNoLocation();
     //     });
     //   // },err=>{
@@ -1921,7 +1921,7 @@ export class PermitschedulePage implements OnInit {
     //         this.utils.showLoading('Getting Location').then(()=>{
     //     this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
     //     .then((result: NativeGeocoderResult[]) => {
-    //       console.log(result);
+
     //       this.utils.hideLoading();
     //           const address: AddressModel = {
     //             address: this.generateAddress(result[0]),
@@ -1963,7 +1963,7 @@ export class PermitschedulePage implements OnInit {
 
     // requestLocationPermission() {
     //   this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
-    //     console.log(mode);
+
     //     switch (mode) {
     //       case this.diagnostic.permissionStatus.NOT_REQUESTED:
     //         this.goBack();
@@ -1985,7 +1985,7 @@ export class PermitschedulePage implements OnInit {
     //         break;
     //     }
     //   }, (rejection) => {
-    //     console.log(rejection);
+
     //     // this.goBack();
     //   });
 
@@ -2118,7 +2118,7 @@ export class PermitschedulePage implements OnInit {
   gettingClients() {
     this.apiService.getClients().subscribe(res => {
       this.getCompanies = res;
-      console.log(this.getCompanies);
+
       this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
         startWith(""),
         map(value => (typeof value === "string" ? value : value.companyid)),
@@ -2134,7 +2134,7 @@ export class PermitschedulePage implements OnInit {
   proxyValue: any;
 
   onCompanyChanged(event$) {
-    console.log(event$);
+
     this.proxyValue = event$.detail.value.companyname;
     this.designCreatedBy = event$.detail.value.companyid;
     this.designCreatedByUserParent = event$.detail.value.parentid;
@@ -2156,9 +2156,9 @@ export class PermitschedulePage implements OnInit {
     /* FOR SEARCH SHIPPING ADDRESS */
     updateSearchResults(event) {
       //this.autoCompleteOff = true;
-      console.log(this.autoCompleteOff);
+
       const input = event.detail.value;
-      console.log(input)
+
       if (input === '') {
         this.autocompleteItems = [];
         return;
@@ -2177,7 +2177,7 @@ export class PermitschedulePage implements OnInit {
     }
 
     forAutoComplete(e){
-      console.log("hello",e);
+
       this.autoCompleteOff = true;
       this.isSelectSearchResult = false;
 
@@ -2186,12 +2186,12 @@ export class PermitschedulePage implements OnInit {
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
     selectSearchResult(item) {
       this.utils.showLoading('Loading').then(() => {
-      console.log(item);
+
       this.isSelectSearchResult = true;
       this.geocoder.geocode({
         placeId: item.place_id
       }, (responses, status) => {
-        console.log('respo', responses);
+
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
       });
       this.autocompleteItems = []
@@ -2217,7 +2217,7 @@ export class PermitschedulePage implements OnInit {
      // this.utils.showLoading('Loading').then(() => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
-            console.log(result)
+
             let add = '';
             if (formattedAddress === '') {
               add = this.generateAddress(result[0]);
@@ -2225,7 +2225,7 @@ export class PermitschedulePage implements OnInit {
               add = formattedAddress;
             }
             this.utils.hideLoading().then(() => {
-              console.log('resu', result);
+
               const address: AddressModel = {
                 address: add,
                 lat: latitude,
@@ -2266,15 +2266,15 @@ export class PermitschedulePage implements OnInit {
     }
 
     onCancel() {
-      console.log("hello");
+
       this.autocompleteItems = [];
-      console.log(this.autocompleteItems)
+
     }
 
     addressValue(){
       // }
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
 
           // this.firstFormGroup.get('address').setValue('124/345');
           // this.firstFormGroup.get('latitude').setValue('24.553333');
@@ -2304,7 +2304,7 @@ export class PermitschedulePage implements OnInit {
       // });
    // this.autocompleteItems = [];
       this.autoCompleteOff = false;
-      console.log(this.autoCompleteOff);
+
       //this.getSolarMake();
 
       }

@@ -44,7 +44,7 @@ export class DashboardPage implements OnInit {
   getCount(){
          this.apiService.getcounts(this.userId).subscribe(res=>{
            this.count= res;
-           console.log(this.count);
+
          })
   }
 

@@ -39,7 +39,7 @@ export class GalleryPage implements OnInit {
   }
 
   // setDataToDataModel(data: MenuModel[]) {
-  //   console.log(this.survey);
+
   //   data.forEach((mainMenu) => {
   //     if (mainMenu.imageModel !== null && mainMenu.imageModel !== undefined) {
   //       mainMenu.imageModel.forEach((imageModel) => {
@@ -136,11 +136,11 @@ export class GalleryPage implements OnInit {
 
   private setImage() {
     this.image = this.listOfImages[this.currentPosition];
-    console.log(this.image);
+
   }
 
   onTabSelected(event) {
-    console.log(event.detail.value);
+
     this.selectedTab = event.detail.value;
     this.setImageSource();
   }

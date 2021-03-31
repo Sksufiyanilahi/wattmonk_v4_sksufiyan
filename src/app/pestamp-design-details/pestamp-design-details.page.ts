@@ -60,12 +60,12 @@ export class PestampDesignDetailsPage implements OnInit {
 
 
     this.designId = +this.route.snapshot.paramMap.get('id');
-    console.log(this.designId);
+
   }
 
   ngOnInit() {
     this.user=this.storage.getUser();
-    console.log(this.user);
+
     this.mixpanelService.track('PESTAMP_DESIGN_DETAIL_PAGE_OPEN', {
     });
     this.getDesignDetails();
@@ -80,7 +80,7 @@ export class PestampDesignDetailsPage implements OnInit {
     this.utilities.showLoading('Getting Design Details').then((success) => {
       this.apiService.getPestampDetails(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
-        console.log('re', result);
+
         //this.setData(result);
         //this.timer();
         this.design = result;
@@ -123,7 +123,7 @@ export class PestampDesignDetailsPage implements OnInit {
       deleteDesignFromServer() {
         this.utilities.showLoading('Deleting Design').then((success) => {
           this.apiService.deletePestamp(this.designId).subscribe((result) => {
-            console.log('result', result);
+
             this.utilities.hideLoading().then(() => {
               this.utilities.showSnackBar(this.design.personname+" "+'has been deleted successfully');
               this.navController.pop();
@@ -164,16 +164,16 @@ export class PestampDesignDetailsPage implements OnInit {
 
       submit(){
         //this.validations();
-        debugger;
+         ;
         if(this.pestampForm.status=='INVALID'){
           // if(this.design.propertytype=='commercial'){
-          //   console.log("Hello Commercial",this.design.propertytype)
+
           //   if(this.pestampForm.get('stampedfiles').value=='')
           //   {
-          //     console.log("Hello Stampedfiles")
+
           //     this.utilities.errorSnackBar('Please attach stamped file');
           //   }else if(this.pestampForm.get('workinghours').value==null){
-          //     console.log("Hello Working HOurs");
+
           // this.utilities.errorSnackBar('Please add working hours');
           //   }
           // }
@@ -262,12 +262,12 @@ export class PestampDesignDetailsPage implements OnInit {
           this.apiService.updatePestamps(this.designId,postData).subscribe(res=>{
             this.utilities.hideLoading().then(() => {
               this.uploadStampedFiles(res.id,this.stampfile[0])
-              console.log(res);
+
               // this.navController.pop();
               // this.utilities.setPeStampRefresh(true);
             })
           },err=>{
-            console.log(err);
+
 
           })
         })
@@ -280,27 +280,27 @@ export class PestampDesignDetailsPage implements OnInit {
 
       remove(stamp,i){
 
-        console.log(stamp);
+
         this.indexOfstampFiles.push( stamp.id);
 
-        console.log(i);
+
 
         this.stampfile.splice(i, 1);
 
         }
 
         files(event){
-          console.log(event.target.files);
+
           //  for(var i=0; i< event.target.files.length;i++){
           //    this.stampfile.push(event.target.files[i])
           //  }
           this.stampfile = event.target.files;
-           console.log(this.stampfile);
+
          }
 
           /* FOR UPLOAD Stamped FILES */
        uploadStampedFiles(recordid: number,file: string){
-        // console.log(this.archFiles);
+
         var path;
         if (this.design.type == 'both') {
           if (this.user.peengineertype == 'electrical') {
@@ -313,7 +313,7 @@ export class PestampDesignDetailsPage implements OnInit {
         else {
           path = "stampedfiles"
         }
-        console.log(file,path);
+
          const data = new FormData();
          for(var i=0; i< this.stampfile.length;i++){
            data.append("files",this.stampfile[i]);
@@ -324,13 +324,13 @@ export class PestampDesignDetailsPage implements OnInit {
             data.append('ref', "pestamp");
             data.append('field', path);
 
-            console.log("file upload data---"+data);
+
            }
          }
          this.utilities.showLoading("Stamped File Uploading").then(()=>{
          this.apiService.uploadFile(data).subscribe(res=>{
            this.utilities.hideLoading();
-           console.log(res);
+
            this.navController.pop();
               this.utilities.setPeStampRefresh(true);
 
@@ -361,23 +361,23 @@ export class PestampDesignDetailsPage implements OnInit {
       }
 
       showStampedFile(attachmentFile:any){
-        console.log(attachmentFile);
+
         const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
       }
 
       showRevisionImage(revisionattachment:any){
-        console.log(revisionattachment)
+
         const browser = this.iab.create(revisionattachment.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
       }
       // files(event){
-      //   console.log(event);
-      //   console.log(event.target.files);
+
+
       //   this.isAtticFileUpload = true;
       //    for(var i=0; i< event.target.files.length;i++){
       //      this.atticPhotosList.push(event.target.files[i])
       //    }
       //    //this.architecturalFileUpload= true;
-      //    console.log(this.atticPhotosList);
+
       //  }
 
 

@@ -57,7 +57,7 @@ profile:any;
 
 
     this.user = this.storage.getUser(); // get data from resolver
-    console.log(this.user);
+
     this.mixpanelService.track("PROFILE_PAGE_OPEN", {
       $id: this.user.id,
       $email: this.user.email,
@@ -65,13 +65,13 @@ profile:any;
     });
     this.enableDisable= false;
     // this.user = this.storage.getUser();
-    // console.log(this.user);
+
     // this.getProfileData();
 
   }
   ionViewWillEnter(){
     this.user = this.storage.getUser();
-    console.log(">>>");
+
 
    this.getProfileData();
 
@@ -85,7 +85,7 @@ profile:any;
 getProfileData(){
 this.apiService.getProfileDetails().subscribe(res=>{
 
-  console.log(res);
+
   this.profile=res;
   this.getemail=this.profile.getemail;
   this.getnotification=this.profile.getnotification;
@@ -95,7 +95,7 @@ this.apiService.getStatusCount().subscribe(
     this.statuscount = response;
     this.activedesignjobs = this.statuscount.waitingforassigned + this.statuscount.waitingforacceptance + this.statuscount.requestaccepted + this.statuscount.designassigned
       + this.statuscount.reviewassigned + this.statuscount.reviewpassed + this.statuscount.reviewfailed;
-      console.log(this.activedesignjobs)
+
   }
 ,
 error => {
@@ -158,7 +158,7 @@ state: { productdetails: objToSend }
                 this.navController.navigateRoot('login');
               });
             },err=>{
-              console.log(err);
+
               this.utilities.hideLoading();
             })
           }
@@ -284,8 +284,8 @@ state: { productdetails: objToSend }
   }
 
   onEmailChange(data,value,event){
-    console.log(event.detail.checked);
-    console.log(event.target.value,value)
+
+
     const id = data.id;
     if(value=='notification')
     {
@@ -293,7 +293,7 @@ state: { productdetails: objToSend }
         getnotification:event.detail.checked
       }
       this.apiService.updateUser(id,postData).subscribe(res=>{
-        console.log(res);
+
       })
     }
     else{
@@ -301,7 +301,7 @@ state: { productdetails: objToSend }
         getemail:event.detail.checked
       }
       this.apiService.updateUser(id,postData).subscribe(res=>{
-        console.log(res);
+
       })
     }
   }

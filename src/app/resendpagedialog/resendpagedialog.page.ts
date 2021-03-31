@@ -39,9 +39,9 @@ export class ResendpagedialogPage implements OnInit {
   ngOnInit() {
     this.userData = this.storageService.getUser();
     this.id= this.nav.get('id');
-    console.log(this.id);
+
     this.requestType = this.nav.get('requesttype');
-    console.log(this.requestType)
+
 
   }
 
@@ -63,13 +63,13 @@ export class ResendpagedialogPage implements OnInit {
     this.chooser.getFile()
   .then((file) =>
     {
-      console.log(file, 'canceled')
+
         this.filename= file.name;
         this.file.resolveLocalFilesystemUrl(file.uri).then((fileentry:FileEntry)=>{
           fileentry.file(fileObj=>{
-            console.log(fileObj);
+
             this.blob=fileObj;
-           console.log(fileObj.size);
+
 
            if(fileObj.size > 1024 * 1024 * 1){
             this.exceedfileSize = fileObj.size;
@@ -79,7 +79,7 @@ export class ResendpagedialogPage implements OnInit {
               this.getBase64(fileObj).then(res=>{
                 let base64file= file.dataURI + res;
                 this.blob= this.utilities.b64toBlob(base64file);
-                console.log(this.blob);
+
             });
 
            }
@@ -99,7 +99,7 @@ export class ResendpagedialogPage implements OnInit {
     //   // If it's base64 (DATA_URL):
     //   let base64Image = 'data:image/jpeg;base64,' + imageData;
     //   this.blob = this.utilities.b64tBlob(base64Image);
-    //   console.log(this.blob);
+
 
     //   this.filename = Date.now().toString() + '.png';
     //   if(this.blob){
@@ -140,7 +140,7 @@ export class ResendpagedialogPage implements OnInit {
 
     }else if(this.filename !=='' && this.exceedfileSize > 1048576){
 
-      console.log('could not submit');
+
 
     }else{
       if(this.requestType=='pestamp')
@@ -204,7 +204,7 @@ export class ResendpagedialogPage implements OnInit {
         }
       }
 
-      console.log(data);
+
 
       this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
           this.modalCtrl.dismiss({
@@ -217,16 +217,16 @@ export class ResendpagedialogPage implements OnInit {
   }
 
   uploadPestamResendFile(event){
-    console.log(event);
-    console.log(event.target.files);
+
+
     this.exceedfileSize = event.target.files[0].size;
-    console.log(this.exceedfileSize);
+
     //this.isPermitPlanFileUpload = true;
      for(var i=0; i< event.target.files.length;i++){
        this.pestampResendList.push(event.target.files[i])
      }
      this.pestampResendFileUpload= true;
-     console.log(this.pestampResendList);
+
    }
 
    removeArc(i) {
@@ -235,7 +235,7 @@ export class ResendpagedialogPage implements OnInit {
  }
 
  pestampResendFile(){
-  console.log("Hello pestamp");
+
   const data = new FormData();
  for(var i=0; i< this.pestampResendList.length;i++){
    data.append("files",this.pestampResendList[i]);
@@ -246,7 +246,7 @@ export class ResendpagedialogPage implements OnInit {
     data.append('ref', "pestamp");
     data.append('field', "revisionattachments");
 
-    console.log("file upload data---"+data);
+
    }
  }
   this.utilities.showLoading('Uploading').then(()=>{
@@ -280,7 +280,7 @@ export class ResendpagedialogPage implements OnInit {
         }
         this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{
         //this.createNewDesignChatGroup(res);
-        console.log(res);
+
         this.utilities.showSnackBar("Pestamp request has been send for revision successfully.");
         this.modalCtrl.dismiss({
           'dismissed' : true
@@ -312,7 +312,7 @@ export class ResendpagedialogPage implements OnInit {
 
             }
 
-              console.log(data);
+
 
               this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
                 this.utilities.showSnackBar("Design request has been send for revision successfully.");

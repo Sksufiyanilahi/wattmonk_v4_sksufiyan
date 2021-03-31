@@ -27,16 +27,16 @@ export class AnalystsComponent implements OnInit {
   analystId:any;
 
   private subscription: Subscription;
-  
+
 
   //public analystValue:analysts[]=[];
   public analystsList:AnalystStatistics[]=[];
-  
+
   constructor(private service:ApiService,
     private modalController:ModalController,
     private formBuilder:FormBuilder,
     private utilities:UtilitiesService,
-    private router:Router) { 
+    private router:Router) {
       this.desginForm = this.formBuilder.group({
         startdate : new FormControl(''),
         enddate : new FormControl(''),
@@ -46,15 +46,15 @@ export class AnalystsComponent implements OnInit {
       })
     }
 
-   
+
   ngOnInit() {
     this.getAnalystsPerformer();
     this.isSelected=true;
     this.subscription = this.utilities.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SEND_ANALYSTS_VALUE) {
-        console.log(event);
+
         this.fetchFilteredStatisticsAnalysts();
-      
+
       }
     });
   }
@@ -64,13 +64,13 @@ export class AnalystsComponent implements OnInit {
   //   const date = new Date();
   //       const starttime=date.getFullYear()+'-01-01T06:30:00.000Z'.toString();
   //       const endtime = date.getFullYear()+'-12-31T06:30:00.000Z'.toString();
-  
+
   //   this.service.getanalystanalytics(starttime, endtime).subscribe(
   //     response => {
   //       this.analystsList = response;
-        
-  
-  
+
+
+
   //     })
   // }
 
@@ -88,7 +88,7 @@ export class AnalystsComponent implements OnInit {
   fetchFilteredStatisticsAnalysts(){
     var startDate = new Date(this.desginForm.get('startdate').value);
         startDate.setDate(startDate.getDate()+1);
-        console.log("date",startDate)
+
        var endDate = new Date(this.desginForm.get('enddate').value);
         endDate.setDate(endDate.getDate()+1);
     this.starttime = startDate.toISOString();
@@ -121,7 +121,7 @@ export class AnalystsComponent implements OnInit {
       backdropDismiss:false
     });
     modal.onDidDismiss().then((data) => {
-      console.log(data)
+
       if(data.data.cancel=='cancel'){
       }//else{
        // this.getDesigns(null)
@@ -133,29 +133,29 @@ export class AnalystsComponent implements OnInit {
     // });
     return await modal.present();
   }
-  
+
   eventFieldChange(event)
 {
   this.isSelected=true;
   this.fieldChangeValue = event.target.value;
   this.eventSortChange();
-  console.log("hg",this.isSelected);
-  
-  
+
+
+
 }
 
 eventSortChange()
 {
   this.sortChangeValue = this.desginForm.get('sort').value;
-  console.log(this.sortChangeValue)
+
   if(this.sortChangeValue=='lowtohigh'){
   if(this.fieldChangeValue=='Avg Comp Time'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => a.avgdesigncompletiontime - b.avgdesigncompletiontime);
-   // console.log("Average");
+
   }
   else if(this.fieldChangeValue=='Avg Review Failure'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => a.avgreviewfailurecount-b.avgreviewfailurecount);
-    console.log("Average Review");
+
   }
   else if(this.fieldChangeValue=='Delayed'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => a.latedesignscompleted-b.latedesignscompleted);
@@ -173,11 +173,11 @@ eventSortChange()
 }else if(this.sortChangeValue=='hightolow'){
   if(this.fieldChangeValue=='Avg Comp Time'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => b.avgdesigncompletiontime - a.avgdesigncompletiontime);
-    console.log("Average");
+
   }
   else if(this.fieldChangeValue=='Avg Review Failure'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => b.avgreviewfailurecount-a.avgreviewfailurecount);
-    console.log("Average Review");
+
   }
   else if(this.fieldChangeValue=='Delayed'){
     this.analystsList = this.analystsList.sort((a:any,b:any)  => b.latedesignscompleted-a.latedesignscompleted);
@@ -192,7 +192,7 @@ eventSortChange()
     this.analystsList = this.analystsList.sort((a:any,b:any)  => b.totaldesignscreated-a.totaldesignscreated);
   }
 }
-  
+
 }
 
 sendValue(){
@@ -212,12 +212,12 @@ else{
 
 eventTypeChange(event){
   this.requestTypeValue = event.target.value;
-  console.log(this.requestTypeValue);
+
   this.getAnalystsPerformer();
   }
 
 statsDetails(e){
-  console.log("Hello");
+
   this.analystId = e;
   this.router.navigate(['/statsoverviewdetails',{starttime:this.starttime, endtime:this.endtime, requesttype:this.desginForm.get('requesttype').value, id:this.analystId, name:'analyst'}]);
   }

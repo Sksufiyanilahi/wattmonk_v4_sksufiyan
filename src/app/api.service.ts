@@ -165,7 +165,6 @@ export class ApiService {
   }
 
   getInverterMade(id): Observable<InverterMadeModel[]> {
-    console.log(id);
     return this.http.get<InverterMadeModel[]>(BaseUrl + 'invertermodels?invertermake.id_eq=' + id, { headers: this.headers });
   }
 
@@ -266,9 +265,6 @@ export class ApiService {
     data.append('refId', surveyId + '');
     data.append('ref', 'survey');
     data.append('field', key);
-
-    console.log("file upload data---"+data);
-
     return this.http.post(BaseUrl + 'upload', data, { headers: this.uploadHeaders });
   }
   uploadDeclineImage(designId: number, key: string, blob: Blob, fileName: string) {
@@ -278,9 +274,6 @@ export class ApiService {
     data.append('refId', designId + '');
     data.append('ref', 'design');
     data.append('field', key);
-
-    console.log("file upload data---"+data);
-
     return this.http.post(BaseUrl + 'upload', data, { headers: this.uploadHeaders });
   }
   uploadlogo(blob: Blob, fileName: string) {
@@ -408,13 +401,11 @@ export class ApiService {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + this.storageService.getJWTToken()
       });
-      console.log(this.headers);
       return this.http.get(BaseUrl + 'platformupdates?status=true&_limit=1&_sort=id:desc&platformtype=app',{ headers: this.headers})
     }
 
     getUpgradeMessage(){
       this.update_message().subscribe(res=>{
-        console.log(res);
         this.version.next(res[0].appversion);
       })
     }
@@ -505,7 +496,6 @@ export class ApiService {
         company: this.storageService.getUser().company,//user.company,
         addedby: this.storageService.getUser().id//.currentUserValue.user.id
       };
-      console.log(postData)
       return this.http
         .post<User>(BaseUrl + "users", JSON.stringify(postData), {
           headers: this.headers,
@@ -543,7 +533,6 @@ export class ApiService {
       // data.append('ref', ref);
       // data.append('field', field);
 
-      // console.log("file upload data---"+data);
 
       return this.http.post<UploadedFile[]>(BaseUrl + "upload", data, {
           headers: this.uploadHeaders,
@@ -567,7 +556,6 @@ export class ApiService {
 
     /* Get Pe Engineers */
     getPeEngineers(peenginertype:string) {
-      console.log(peenginertype);
       return this.http.get(BaseUrl + "peengineers?pestamptype="+peenginertype+"&parent_eq="+this.storageService.getUser().parent.id, {
         headers: this.headers,
       })
@@ -587,7 +575,6 @@ export class ApiService {
         }
 
       deletePestamp(id:string): Observable<Pestamp> {
-        console.log(id);
 
         return this.http.delete<Pestamp>(BaseUrl + "upload/files/"+id, {
           headers: this.headers
@@ -666,7 +653,6 @@ export class ApiService {
           listnerID,
           new CometChat.CallListener({
             onIncomingCallReceived(call) {
-              console.log('Incoming call:', call);
               that.callData = call;
               // if(call.status=='initiated'){
                 that.router.navigate(['/', 'callingscreen']);
@@ -674,21 +660,16 @@ export class ApiService {
               // Handle incoming call
             },
             onOutgoingCallAccepted(call) {
-              console.log('Outgoing call accepted:', call);
               that.callData = call;
               // Outgoing Call Accepted
             },
             onOutgoingCallRejected(call) {
-              console.log('Outgoing call rejected:', call);
               that.callData = call;
               // Outgoing Call Rejected
               that.navCtrl.pop();
             },
             onIncomingCallCancelled(call) {
-              console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
-              console.log('Incoming call calcelled:', call);
-              console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
               that.callData = call;
 
                 // that.location.back();

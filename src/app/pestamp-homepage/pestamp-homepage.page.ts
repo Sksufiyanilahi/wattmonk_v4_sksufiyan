@@ -36,13 +36,12 @@ export class PestampHomepagePage implements OnInit {
               private iab:InAppBrowser,
               private storageService:StorageService,
               private mixpanelService:MixpanelService
-  ) { 
+  ) {
     this.userData = this.storageService.getUser();
   }
 
   getNotificationCount(){
     this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
-      console.log("count",count);
      this.unreadCount= count;
     });
 
@@ -77,7 +76,6 @@ export class PestampHomepagePage implements OnInit {
     }
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
       let user= this.storageService.getUser();
       this.apiService.emitUserNameAndRole(user);
 
@@ -109,7 +107,7 @@ this.network.networkConnect();
     //     console.log(res);
     //     if(res.length>0){
     //       this.utils.errorSnackBar("Please clear your pending dues from the delivered section");
-    //     } 
+    //     }
     //     else{
     //       this.route.navigate(['/pestamp-schedule']);
     //     }
@@ -117,7 +115,7 @@ this.network.networkConnect();
     //     error => {
     //       this.utils.errorSnackBar("Error");
     //     })
-    
+
     // }
     // else{
       this.mixpanelService.track("ADD_PESTAMP_PAGE_OPEN", {

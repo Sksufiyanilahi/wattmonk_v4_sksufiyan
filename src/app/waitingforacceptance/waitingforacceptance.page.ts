@@ -109,7 +109,7 @@ export class WaitingforacceptancePage implements OnInit {
     this.segments= 'status=outsourced';
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
     this.todaysdate = datePipe.transform(latestDate, 'yyyy-MM-dd');
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl('', [Validators.required]),
@@ -120,12 +120,12 @@ export class WaitingforacceptancePage implements OnInit {
     // this.newprelims = this.newprelimsRef.valueChanges();
     // this.newprelims.subscribe(
     //   (res) => {
-    //     console.log(res);
+
     //     this.newprelimscount = res.count;
     //     cdr.detectChanges();
     //   },
-    //   (err) => console.log(err),
-    //   () => console.log('done!')
+
+
     // )
 
   }
@@ -155,7 +155,7 @@ export class WaitingforacceptancePage implements OnInit {
   ionViewDidEnter() {
     this.deactivateNetworkSwitch =this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
 
     })
 
@@ -167,7 +167,7 @@ this.network.networkConnect();
   ngOnInit() {
     this.apiService.emitUserNameAndRole(this.userData);
     // this.userData = this.storageService.getUser();
-    console.log(this.userData);
+
     this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
       this.skip=0;
       this.getDesigns(null);
@@ -235,13 +235,13 @@ this.network.networkConnect();
    fetchPendingDesigns(event, showLoader: boolean) {
 
      this.noDesignFound= "";
-    console.log("inside fetch Designs");
+
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           if(response.length){
 
             this.formatDesignData(response);
@@ -273,11 +273,11 @@ this.network.networkConnect();
      this.listOfDesigns.push(element);
    })
 
-    console.log(this.listOfDesigns);
+
 
     const tempData: DesginDataHelper[] = [];
           this.listOfDesigns.forEach((designItem:any,i) => {
-            console.log(i);
+
 
             if (tempData.length === 0) {
               this.sDatePassed(designItem.updated_at,i);
@@ -286,7 +286,7 @@ this.network.networkConnect();
                 listOfDesign.lateby = this.overdue;
               listOfDesign.listOfDesigns.push(designItem);
               tempData.push(listOfDesign);
-              console.log(tempData);
+
 
 
 ;
@@ -296,7 +296,7 @@ this.network.networkConnect();
               tempData.forEach((DesignList) => {
                 // DesignList['listOfDesigns'].forEach(element=>{
 
-                //   console.log(element.deliverydate,":::::::::::::");
+
 
                 //   this.sDatePassed(element.deliverydate);
                 // })
@@ -403,7 +403,7 @@ this.network.networkConnect();
       }
     }
       // this.storage.get(''+element.id).then((data: any) => {
-      //   console.log(data,">>>");
+
       //   if (data) {
       //     element.totalpercent = data.currentprogress;
       //   }else{
@@ -427,17 +427,17 @@ this.network.networkConnect();
 
   dismissBottomSheet() {
     this.showBottomDraw = false;
-    console.log('this', this.drawerState);
+
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
 
-   // console.log("this works",this.listOfAssignees)
+
   }
 
   assignToDesigner() {
-      console.log(this.designerData.createdby.id);
+
 
     if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
       this.utils.errorSnackBar('Please select a analyst');
@@ -459,7 +459,7 @@ this.network.networkConnect();
       var milisecond = designstarttime.getTime();
     var additonalhours = 0;
     if(this.designerData.requesttype == "prelim"){
-      console.log(parseInt(this.selectedDesigner.jobcount) );
+
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
 
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
@@ -467,7 +467,7 @@ this.network.networkConnect();
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
     }
-    console.log(this.selectedDesigner);
+
     var postData = {};
     if (this.designerData.createdby.id == this.userData.id) {
 
@@ -518,7 +518,7 @@ this.network.networkConnect();
       this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
         this.utils.hideLoading().then(()=>{
           ;
-          console.log('reach ', value);
+
 
           if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
          {
@@ -549,7 +549,7 @@ this.network.networkConnect();
 
   openDesigners(id: number,designData) {
     this.listOfAssignees=[];
-    console.log("this is",designData);
+
     this.designerData = designData;
     this.reviewAssignedTo=designData.designassignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin') && this.designerData.status=='created'){
@@ -564,7 +564,7 @@ this.network.networkConnect();
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.designId = id;
             this.utils.setBottomBarHomepage(false);
@@ -592,7 +592,7 @@ this.network.networkConnect();
 
   openAnalysts(id: number,designData) {
     this.listOfAssignees=[];
-    console.log("this is",designData);
+
     this.designerData = designData;
     this.reviewAssignedTo=designData.reviewassignedto;
 
@@ -603,7 +603,7 @@ this.network.networkConnect();
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.designId = id;
             this.utils.setBottomBarHomepage(false);
@@ -660,7 +660,7 @@ this.network.networkConnect();
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+
           }
         }, {
           text: 'deliver',
@@ -676,11 +676,11 @@ this.network.networkConnect();
                   status: "delivered",
                    };
                }
-               console.log(postData);
+
                this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
                   ;
-                  console.log('reach ', value);
+
                  this.utils.showSnackBar('Design request has been delivered successfully');
 
                   this.utils.setHomepageDesignRefresh(true);
@@ -702,10 +702,10 @@ this.network.networkConnect();
 
 
   doInfinite($event){
-   console.log($event)
+
     this.skip=this.skip+10;
     this.apiService.getDesignSurveys(this.segments,this.limit,this.skip).subscribe((response:any) => {
-         console.log(response);
+
           if(response.length){
 
             this.formatDesignData(response);
@@ -749,7 +749,7 @@ this.network.networkConnect();
     backdropDismiss:false
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -775,7 +775,7 @@ async decline(id,event){
     backdropDismiss:false
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -801,7 +801,7 @@ async Resend(id, type){
     backdropDismiss:false
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -835,7 +835,7 @@ selfAssign(id,designData){
     this.apiService.updateDesignForm(postData,id).subscribe((value) => {
       this.utils.hideLoading().then(()=>{
         ;
-        console.log('reach ', value);
+
       this.utils.showSnackBar('Design request has been assigned to you successfully');
       this.utils.setHomepageDesignRefresh(true);
 
@@ -849,7 +849,7 @@ selfAssign(id,designData){
 
 getassignedata(asssignedata){
   this.selectedDesigner = asssignedata;
-  console.log("dholak is",this.selectedDesigner);
+
 
 }
 
@@ -868,7 +868,7 @@ shareWhatsapp(designData){
 
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -879,7 +879,7 @@ shareWhatsapp(designData){
 
 
  gotoActivity(designData,event){
-  console.log(event)
+
       event.stopPropagation();
     this.router.navigate(['/activity' + '/' + designData.id + '/design'])
 
@@ -898,38 +898,38 @@ shareWhatsapp(designData){
 this.platform.ready().then(()=>{
   this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
-      result => console.log('Has permission?',result.hasPermission),
+
       err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
     );
     this.file.checkFile(resolvedDirectory.nativeURL,designData.prelimdesign.hash).then(data=>{
-      console.log(data);
+
 
       if(data==true){
 
       }else{
-        console.log('not found!');
+
         throw { code: 1, message: 'NOT_FOUND_ERR' };
       }
 
     }).catch(async err=>{
-      console.log('Error occurred while checking local files:');
-      console.log(err);
+
+
       if (err.code == 1) {
         const fileTransfer: FileTransferObject = this.transfer.create();
         this.utils.showLoading('Downloading').then(()=>{
           fileTransfer.download(url, this.storageDirectory + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
             this.utils.hideLoading().then(()=>{
-              console.log('download complete: ' + entry.toURL());
+
               this.utils.showSnackBar("Prelim Design Downloaded Successfully");
 
               // this.clickSub = this.localnotification.on('click').subscribe(data => {
-              //   console.log(data)
+
               //   path;
               // })
               this.localnotification.schedule({text:'Prelim Design Downloaded Successfully', foreground:true, vibrate:true })
             }, (error) => {
               // handle error
-              console.log(error);
+
 
             });
             })
@@ -972,14 +972,14 @@ this.platform.ready().then(()=>{
  let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
 result.then((resp) => {
  path = resp.toURL();
- console.log(path);
+
 
  fileTransfer.download(url, path + designData.prelimdesign.hash + designData.prelimdesign.ext).then((entry) => {
-   console.log('download complete: ' + entry.toURL());
+
    this.utils.showSnackBar("Prelim Design Downloaded Successfully");
 
    // this.clickSub = this.localnotification.on('click').subscribe(data => {
-   //   console.log(data)
+
    //   path;
    // })
    this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
@@ -1045,7 +1045,7 @@ directAssignToWattmonk(id:number){
           this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
             this.utils.hideLoading().then(()=>{
               ;
-              console.log('reach ', value);
+
 
             //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
             //  {

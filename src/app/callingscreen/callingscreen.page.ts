@@ -30,7 +30,7 @@ export class CallingscreenPage implements OnInit, OnChanges {
 		this.showHideCallButtton = false;
 		let data = localStorage.getItem('showHideButton');
 		// let data  =this.router.getCurrentNavigation().extras.state.data.queryParams.value;
-		console.log(data);
+
 		// if(data){
 			// this.showHideCallButtton= data;
 		// }
@@ -38,7 +38,7 @@ export class CallingscreenPage implements OnInit, OnChanges {
 
 	ngOnChanges() {
 		this.apiService.listencall(localStorage.getItem('gid'));
-		console.log("HELLO",localStorage.getItem('gid'));
+
 	}
 	ngOnInit() {
 
@@ -50,27 +50,27 @@ export class CallingscreenPage implements OnInit, OnChanges {
 		let that = this;
 		// this.calldeactivate =  that.utils.callData;
 		that.calldata = that.apiService.getCallData();
-		console.log("hhll",that.calldata);
+
 		this.name = (that.calldata.receiver.name).slice(0,2);
-		console.log(that.calldata.receiver.name, '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+
 
 	}
 
 	acceptcall() {
 		var sessionID = this.calldata.sessionId;
-		console.log("aa",sessionID);
+
 
 		CometChat.acceptCall(sessionID).then(
 			(call) => {
-				console.log('Call accepted successfully:', call);
+
 				// start the call using the startCall() method
-				console.log(call,"asd")
+
 				//this.startcall();
 				this.startcall(call);
 				this.showHideCallButtton = true;
 			},
 			(error) => {
-				console.log('Call acceptance failed with error', error);
+
 				// handle exception
 			}
 		);
@@ -78,23 +78,23 @@ export class CallingscreenPage implements OnInit, OnChanges {
 
 	rejectcall() {
 		/*ApiService.rejectCall(this.calldata.sessionId, CometChat.CALL_STATUS.REJECTED).then((res) => {
-			console.log(res);
+
 		});*/
 		var sessionID = this.calldata.sessionId;
 
-		console.log(sessionID);
+
 
 		var status = CometChat.CALL_STATUS.REJECTED;
 
 		CometChat.rejectCall(sessionID, status).then(
 			(call) => {
-				console.log('Call rejected successfully', call);
+
 				this.showHideCallButtton = false;
 				this.navCtrl.pop();
 				this.pauseAudio();
 			},
 			(error) => {
-				console.log('Call rejection failed with error:', error);
+
 			}
 		);
 	}
@@ -109,16 +109,16 @@ export class CallingscreenPage implements OnInit, OnChanges {
 		var callType = call.type;
 		let callListener = new CometChat.OngoingCallListener({
 			onUserJoined: (user) => {
-				console.log('User joined call:', user);
+
 				this.pauseAudio();
 			},
 			onUserLeft: (user) => {
-				console.log('User left call:', user);
+
 				this.navCtrl.pop();
 				// this.pauseAudio();
 			},
 			onCallEnded: (call) => {
-				console.log('Call ended listener', call);
+
 				this.navCtrl.pop();
 				this.pauseAudio();
 			}
@@ -129,26 +129,26 @@ export class CallingscreenPage implements OnInit, OnChanges {
 			.setIsAudioOnlyCall(callType == 'audio' ? true : false)
 			.setCallEventListener(callListener)
 			.build();
-			console.log(callSettings,">>>>");
+
 		CometChat.startCall(callSettings);
 	}
 
 	cancelOutgoingCall() {
 		var sessionID = this.calldata.sessionId;
 
-		console.log(sessionID);
-		debugger;
+
+		 ;
 		var status = CometChat.CALL_STATUS.ENDED;
 
 		CometChat.rejectCall(sessionID, status).then(
 			(call) => {
-				console.log('Call rejected successfully', call);
+
 				this.showHideCallButtton = false;
 				this.navCtrl.pop();
 				this.pauseAudio();
 			},
 			(error) => {
-				console.log('Call rejection failed with error:', error);
+
 			}
 		);
 	}

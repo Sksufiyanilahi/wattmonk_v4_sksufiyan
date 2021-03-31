@@ -42,8 +42,8 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
 
   writeValue(date: any): void {
     this.date = date;
-    console.log(this.date);
-    
+    // console.log(this.date);
+
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
@@ -63,7 +63,7 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
 
   changeDate() {
     const currentDate = new Date(this.date);
-    console.log(currentDate);
+    // console.log(currentDate);
     this.datePicker.show({
       date: new Date(this.date),
       minDate: new Date().getTime(),
@@ -80,7 +80,7 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
 
   changeTime() {
     const currentDate = new Date();
-    console.log(currentDate);
+    // console.log(currentDate);
     this.datePicker.show({
       date: new Date(this.date),
       minDate: new Date().getTime(),
@@ -94,7 +94,7 @@ export class DateTimeComponent implements ControlValueAccessor, Validator {
         oldDate.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds())
         this.date = oldDate.getTime();
          var selected_date=oldDate.getDay();
-       console.log(this.date, currentDate.getTime(),"time");
+
         this.onChange(oldDate);
         if(this.date < currentDate.getTime() ){
           this.utilities.showAlert("Invalid time")

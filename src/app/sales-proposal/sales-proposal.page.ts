@@ -30,8 +30,7 @@ color: string;
 
   onRangeChangeHandler() {
     this.number = this.salesProposal.get('annualUtilityEscalation').value;
-    console.log(this.number);
-    
+
 
     if (this.salesProposal.get('annualUtilityEscalation').value > 0 && this.salesProposal.get('annualUtilityEscalation').value < 1) {
         this.color = 'dark';

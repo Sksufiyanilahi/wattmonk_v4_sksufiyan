@@ -61,7 +61,7 @@ userData:any;
      }
 
   ngOnInit() {this.userData = this.storageService.getUser();
-    console.log(this.userData);
+
     this.mixpanelService.track("SEARCH_PAGE_OPEN", {
     });
     this.SortedModel=[]
@@ -71,7 +71,7 @@ userData:any;
 
  if (this.searchElement !=''){
  this.apiService.searchAllDesgin(this.searchElement).subscribe((dataModel:any) =>{
-console.log("inside this",dataModel);
+
 
 if(this.Type=="survey"){
   this.sample=this.fillinDynamicData(dataModel.survey);
@@ -93,7 +93,7 @@ this.DesignModel=this.sample1;
 
 //this.MixModel=this.SurveyModel.concat(this.DesignModel);
    this.MixModel = dataModel.survey.concat(dataModel.design);
-   console.log("welcome",this.MixModel);
+
 //this.SortedModel=this.MixModel.sort((a,b) => a.id.localecompare(b.id));
       this.SortedModel=this.MixModel.sort((a:any ,b:any) => b.id - a.id);
         }
@@ -103,7 +103,7 @@ this.DesignModel=this.sample1;
   }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
-    console.log( "that",records);
+
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
 
@@ -121,7 +121,7 @@ this.DesignModel=this.sample1;
 
 
   getDesigns(event) {
-    debugger;
+     ;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -130,13 +130,13 @@ this.DesignModel=this.sample1;
   }
 
   fetchPendingDesigns(event, showLoader: boolean) {
-    console.log("inside fetch Designs");
+
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       // this.apiService.getDesignSurveys(this.segments).subscribe((response:any) => {
       //   this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-      //     console.log(response);
+
 
       //     if (event !== null) {
       //       event.target.complete();
@@ -155,10 +155,10 @@ this.DesignModel=this.sample1;
   }
 
   openDesigners(id: number,designData) {
-    console.log(designData);
+
     this.designerData = designData;
     this.SearchData=designData;
-    console.log(designData);
+
     if (this.listOfAssignees.length === 0) {
 
       this.utils.showLoading('Getting Designers').then(() => {
@@ -167,7 +167,7 @@ this.DesignModel=this.sample1;
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.designId = id;
             this.utils.setBottomBarHomepage(false);
@@ -205,7 +205,7 @@ this.DesignModel=this.sample1;
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.surveyId = id;
             this.utils.setBottomBarHomepage(false);
@@ -235,7 +235,7 @@ this.DesignModel=this.sample1;
 
 
   openAnalysts(id: number,designData) {
-    console.log("this is",designData);
+
     this.designerData = designData;
     this.SearchData=designData;
     if (this.listOfAssignees.length === 0) {
@@ -245,7 +245,7 @@ this.DesignModel=this.sample1;
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.designId = id;
             this.utils.setBottomBarHomepage(false);
@@ -292,7 +292,7 @@ this.DesignModel=this.sample1;
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+
           }
         }, {
           text: 'deliver',
@@ -302,12 +302,12 @@ this.DesignModel=this.sample1;
               status: "delivered",
               comments: alertData.comment ,
                };
-               console.log(postData);
+
                if(data.type=="design"){
                this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
                   ;
-                  console.log('reach ', value);
+
                  this.utils.showSnackBar('Design request has been delivered successfully');
 
                   this.utils.setHomepageDesignRefresh(true);
@@ -320,7 +320,7 @@ this.DesignModel=this.sample1;
               this.apiService.updateSurveyForm(postData, this.designId).subscribe((value) => {
                 this.utils.hideLoading().then(()=>{
                   ;
-                  console.log('reach ', value);
+
                  this.utils.showSnackBar('Survey request has been delivered successfully');
 
                   this.utils.setHomepageDesignRefresh(true);
@@ -380,7 +380,7 @@ this.DesignModel=this.sample1;
       backdropDismiss:false
     });
     modal.onDidDismiss().then((data) => {
-      console.log(data)
+
       if(data.data.cancel=='cancel'){
       }else{
         this.getDesigns(null)
@@ -396,7 +396,7 @@ this.DesignModel=this.sample1;
 
   dismissBottomSheet() {
     this.showBottomDraw= false;
-    console.log('this', this.drawerState);
+
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
     this.listOfAssignees=[];
@@ -411,7 +411,7 @@ assignToSurveyor(){
     var milisecond = designstarttime.getTime();
     var additonalhours = 0;
     if(this.surveyData.requesttype == "prelim"){
-      console.log(parseInt(this.selectedDesigner.jobcount) );
+
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 2;
 
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
@@ -419,7 +419,7 @@ assignToSurveyor(){
       additonalhours = parseInt(this.selectedDesigner.jobcount) * 6;
       designstarttime.setHours( designstarttime.getHours() + additonalhours );
     }
-    console.log(this.selectedDesigner);
+
     var postData = {};
     if (this.surveyData.createdby.id == this.userData.id) {
       if (this.selectedDesigner.company == this.userData.company) {
@@ -465,7 +465,7 @@ assignToSurveyor(){
       this.apiService.updateSurveyForm(postData, this.surveyId).subscribe((value) => {
         this.utils.hideLoading().then(()=>{
           ;
-          console.log('reach ', value);
+
           this.utils.showSnackBar('Survey request has been assigned to' + ' ' + this.selectedDesigner.firstname + ' ' +this.selectedDesigner.lastname +' ' +'successfully');
           this.dismissBottomSheet();
           this.showBottomDraw = false;
@@ -483,7 +483,7 @@ assignToSurveyor(){
 
 //assigning to designer
   assignToDesigner() {
-    console.log(this.designerData.createdby.id);
+
 
     if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
       this.utils.errorSnackBar('Please select a analyst');
@@ -548,7 +548,7 @@ assignToSurveyor(){
     this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
       this.utils.hideLoading().then(()=>{
         ;
-        console.log('reach ', value);
+
         this.utils.showSnackBar('Design request has been assigned to' + ' ' + this.selectedDesigner.firstname + ' ' +this.selectedDesigner.lastname +' ' +'successfully');
         this.dismissBottomSheet();
         this.showBottomDraw = false;
@@ -577,7 +577,7 @@ else if(this.selectedDesigner.role.type=="surveyor"){
   this.assignToSurveyor();
 }
  else if(this.selectedDesigner.role.type=="qcinspector"){
- console.log(this.SearchData)
+
   if(this.SearchData.type=="design"){
   this.assignToDesigner();}
   if(this.SearchData.type=="survey"){
@@ -600,7 +600,7 @@ shareWhatsapp(designData){
 
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)

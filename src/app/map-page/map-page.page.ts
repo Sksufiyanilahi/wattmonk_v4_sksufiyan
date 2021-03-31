@@ -80,11 +80,11 @@ export class MapPagePage implements OnInit {
   }
 
   selectSearchResult(item) {
-    console.log(item);
+
     this.geocoder.geocode({
       placeId: item.place_id
     }, (responses, status) => {
-      console.log('respo', responses);
+
       this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
     });
   }
@@ -115,7 +115,7 @@ export class MapPagePage implements OnInit {
             add = formattedAddress;
           }
           this.utilities.hideLoading().then(() => {
-            console.log('resu', result);
+
             const address: AddressModel = {
               address: add,
               lat: latitude,
@@ -157,13 +157,13 @@ export class MapPagePage implements OnInit {
   getGeoLocation() {
     this.utilities.showLoading('Getting Location');
     this.geolocation.getCurrentPosition().then((resp) => {
-      console.log('resp', resp);
+
       this.utilities.hideLoading().then(() => {
         this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude, '');
       });
     }).catch((error) => {
       this.utilities.errorSnackBar('Unable to get location').then(() => {
-        console.log('Error getting location', error);
+
         this.showNoLocation();
       });
     });
@@ -265,7 +265,7 @@ export class MapPagePage implements OnInit {
 
   // select(item)
   // {
-  //   console.log("hello")
+
   //   this.isSelectFromList = true;
   //   this.listSelectedAddress = item;
   // }
