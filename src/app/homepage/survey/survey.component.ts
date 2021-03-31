@@ -240,7 +240,7 @@ export class SurveyComponent {
   scrollTo() {
     setTimeout(() => {
       let todaytitleElement = document.getElementById(''+this.indexoftodayrow);
-      this.content.scrollToPoint(0, todaytitleElement.offsetTop, 1000);
+      this.content.scrollToPoint(0, todaytitleElement.offsetTop, 500);
     }, 2000)
 
   }
