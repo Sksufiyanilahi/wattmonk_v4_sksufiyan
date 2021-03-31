@@ -240,7 +240,6 @@ export class SurveyComponent {
   scrollTo() {
     setTimeout(() => {
       let todaytitleElement = document.getElementById(''+this.indexoftodayrow);
-
       this.content.scrollToPoint(0, todaytitleElement.offsetTop, 1000);
     }, 2000)
 
@@ -314,19 +313,19 @@ export class SurveyComponent {
     });
     this.listOfSurveyDataHelper = tempData;
 
+    this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+      var dateA = new Date(a.date).getTime(),
+        dateB = new Date(b.date).getTime();
+      return dateA - dateB;
+    });
+
     //Code to get index of today date element
     this.listOfSurveyDataHelper.forEach((element, index) => {
       if(element.date == this.today){
         this.indexoftodayrow = index;
-
       }
     });
 
-    // this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
-    //   var dateA = new Date(a.date).getTime(),
-    //     dateB = new Date(b.date).getTime();
-    //   return dateB - dateA;
-    // });
     this.cdr.detectChanges();
     this.scrollTo();
   }
