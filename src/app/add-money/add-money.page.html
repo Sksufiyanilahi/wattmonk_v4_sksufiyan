@@ -1,47 +1,26 @@
-<ion-header  class="ion-no-border white-bg">
-  <ion-toolbar>
-    <ion-title></ion-title>
-    <ion-grid class="ion-padding-top ion-padding-start ion-padding-end ">
-      <ion-row  >
-    <ion-col size="1">
-    <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()" >
-        <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
-    </ion-button>
-</ion-col>
-<ion-col class="ion-text-center" size="9" style="padding-left: 27px; text-align: center;">
-  <ion-grid class="ion-align-items-center ion-justify-content-center">
-      <ion-row class="ion-align-items-center ion-justify-content-center ion-margin">
-          <span *ngIf="mode=='wallet'" class="survey-name ion-text-center" style="font-size:x-large; text-align: center;">Add Money</span>
-          <span *ngIf="mode=='card'" class="survey-name ion-text-center" style="font-size:x-large; text-align: center;">Pay Via Card</span>
-      </ion-row>
-
+<ion-header class="ion-no-border white-bg">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="2">
+        <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+          <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+        </ion-button>
+      </ion-col>
+      <ion-col size="8">
+          <p *ngIf="mode=='wallet'" style="font-size: 22px; margin-top: 4px;">Add Money</p>
+          <p *ngIf="mode=='card'" style="font-size: 22px; margin-top: 4px;">Pay Via Card</p>
+      </ion-col>
+    </ion-row>
   </ion-grid>
-</ion-col>
-
-</ion-row>
-</ion-grid> <ion-grid class="position-relative ion-no-padding">
-  <ion-row class="ion-no-padding  header-half-height">
-  </ion-row>
-  <ion-row class="ion-no-padding header-half-height">
-
-  </ion-row>
-
-<ion-row  class="ion-no-padding position-absolute header-icon-position full-width">
-<ion-col class="flex-center" >
-
-
-</ion-col></ion-row></ion-grid>
-
-  </ion-toolbar>
 </ion-header>
 
-<ion-content >
- <ng-container>
-   <ion-img  src="assets/images/securedpayment.jpg" style="height: 40%;"></ion-img>
- </ng-container>
+<ion-content>
+  <ng-container>
+    <ion-img src="assets/images/securedpayment.jpg" style="height: 40%;"></ion-img>
+  </ng-container>
 
 
-<!--<form (ngSubmit)="addMoney(f)" #f="ngForm">
+  <!--<form (ngSubmit)="addMoney(f)" #f="ngForm">
 
 
   <ion-input  type="number" name="cardNo" ngModel #cardNo="ngModel" placeholder="Enter Card Number" placeholder-color= 'grey'
@@ -58,44 +37,44 @@
 
 <ion-footer ><ion-button type="submit" style="width: 100%; height: 50px; bottom: 20px;">Proceed</ion-button></ion-footer>
 </form>-->
-<form [formGroup]="amountForm" >
-  <ion-row class="ion-align-items-center ion-justify-content-center">
-  <ion-col style="padding: 15px;">
-      <ion-item class="ion-no-padding " *ngIf="mode=='wallet'">
+  <form [formGroup]="amountForm">
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col style="padding: 15px;">
+        <ion-item class="ion-no-padding " *ngIf="mode=='wallet'">
           <ion-label position="floating"> Enter Amount*</ion-label>
           <ion-input class="form_input" type="number" style="width: 330px;" autocapitalize="none" autocomplete="off"
-                formControlName="amount" (ionChange)="amountCheck($event)"></ion-input>
+            formControlName="amount" (ionChange)="amountCheck($event)"></ion-input>
 
-      </ion-item>
-      <ion-item class="ion-no-padding" *ngIf="mode=='card'">
-        <ion-label position="floating"> Enter Amount*</ion-label>
-        <ion-input class="form_input" type="number" style="width: 330px;" autocapitalize="none" formControlName ="amount" autocomplete="off"
-         [disabled]=true  ></ion-input>
-    </ion-item>
-    <div style="height: 5px;">
-      <div *ngIf="amountChecking">
-          <span class="error">{{invalidAmount}}</span>
-      </div>
-      <div *ngIf="amountCheckingForOnboarding">
-        <span class="error">{{invalidAmountForOnboarding}}</span>
-    </div>
-  </div>
+        </ion-item>
+        <ion-item class="ion-no-padding" *ngIf="mode=='card'">
+          <ion-label position="floating"> Enter Amount*</ion-label>
+          <ion-input class="form_input" type="number" style="width: 330px;" autocapitalize="none"
+            formControlName="amount" autocomplete="off" [disabled]=true></ion-input>
+        </ion-item>
+        <div style="height: 5px;">
+          <div *ngIf="amountChecking">
+            <span class="error">{{invalidAmount}}</span>
+          </div>
+          <div *ngIf="amountCheckingForOnboarding">
+            <span class="error">{{invalidAmountForOnboarding}}</span>
+          </div>
+        </div>
 
-  </ion-col>
-</ion-row>
-</form>
-<ion-row>
-<ion-col size="10" offset=1>
-<ngx-paypal class="paypal-button" [config]="payPalConfig"></ngx-paypal>
-</ion-col>
-</ion-row>
-<!-- <form  id="payment-form">
+      </ion-col>
+    </ion-row>
+  </form>
+  <ion-row>
+    <ion-col size="10" offset=1>
+      <ngx-paypal class="paypal-button" [config]="payPalConfig"></ngx-paypal>
+    </ion-col>
+  </ion-row>
+  <!-- <form  id="payment-form">
   <div class="form-row" style="padding: 15px;">
     <div id="card-element"> -->
-       <!-- a Stripe Element will be inserted here. -->
-      <!-- </div> -->
-    <!-- Used to display Element errors -->
-    <!-- <div id="card-errors" class="stripeerror" role="alert"></div>
+  <!-- a Stripe Element will be inserted here. -->
+  <!-- </div> -->
+  <!-- Used to display Element errors -->
+  <!-- <div id="card-errors" class="stripeerror" role="alert"></div>
   </div>
   <div class="ion-margin" style="margin-top:30px ;">
 

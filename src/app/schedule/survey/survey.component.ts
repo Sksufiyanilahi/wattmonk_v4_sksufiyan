@@ -1,8 +1,8 @@
-import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {NavController, Platform} from '@ionic/angular';
-import {AssigneeModel} from '../../model/assignee.model';
-import {UtilitiesService} from '../../utilities.service';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NavController, Platform } from '@ionic/angular';
+import { AssigneeModel } from '../../model/assignee.model';
+import { UtilitiesService } from '../../utilities.service';
 import {
   FIELD_REQUIRED,
   INVALID_EMAIL_MESSAGE,
@@ -10,12 +10,12 @@ import {
   INVALID_PHONE_NUMBER,
   ScheduleFormEvent
 } from '../../model/constants';
-import {ApiService} from '../../api.service';
-import {Subscription} from 'rxjs';
-import {StorageService} from '../../storage.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {SurveyDataModel} from '../../model/survey.model';
-import {ErrorModel} from 'src/app/model/error.model';
+import { ApiService } from '../../api.service';
+import { Subscription } from 'rxjs';
+import { StorageService } from '../../storage.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SurveyDataModel } from '../../model/survey.model';
+import { ErrorModel } from 'src/app/model/error.model';
 import { AddressModel } from 'src/app/model/address.model';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 
@@ -52,8 +52,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
   };
 
   geocoder = new google.maps.Geocoder();
-  autoCompleteOff:boolean = false;
-  isSelectSearchResult:boolean = false;
+  autoCompleteOff: boolean = false;
+  isSelectSearchResult: boolean = false;
 
 
   constructor(
@@ -64,7 +64,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private storage: StorageService,
     private route: ActivatedRoute,
-    private router:Router,
+    private router: Router,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
   ) {
@@ -85,8 +85,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       source: new FormControl('android', [Validators.required]),
       assignedto: new FormControl(null),
       createdby: new FormControl(this.storage.getUserID(), [Validators.required]),
-      latitude: new FormControl('',[Validators.required]),
-      longitude: new FormControl('',[Validators.required]),
+      latitude: new FormControl('', [Validators.required]),
+      longitude: new FormControl('', [Validators.required]),
       country: new FormControl(''),
       state: new FormControl(''),
       city: new FormControl(''),
@@ -95,6 +95,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       chatid: new FormControl(null),
       oldcommentid: new FormControl(''),
     });
+    this.surveyForm.get('jobtype').setValue('pv');
 
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
@@ -102,7 +103,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-   this.fieldDisabled = false;
+    this.fieldDisabled = false;
     this.userData = this.storage.getUser();
     // this.address= this.storage.getData();
     this.subscription = this.utilities.getScheduleFormEvent().subscribe((event) => {
@@ -144,11 +145,11 @@ export class SurveyComponent implements OnInit, OnDestroy {
         if (this.surveyId !== 0) {
           this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
-              this.utilities.hideLoading().then(() => {
-                this.utilities.setDesignDetailsRefresh(true);
-                this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
-              });
-            },
+            this.utilities.hideLoading().then(() => {
+              this.utilities.setDesignDetailsRefresh(true);
+              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
+            });
+          },
             responseError => {
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
@@ -161,19 +162,19 @@ export class SurveyComponent implements OnInit, OnDestroy {
           // if starting survey directly, assign the survey to yourself
           this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
           // if(this.userData.role.type === 'surveyors'){
-            this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
-            this.surveyForm.get('status').setValue('surveyinprocess');
+          this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
+          this.surveyForm.get('status').setValue('surveyinprocess');
           // }else{
-            this.surveyForm.get('status').setValue('surveyinprocess');
+          this.surveyForm.get('status').setValue('surveyinprocess');
           // }
 
           this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
-              this.utilities.hideLoading().then(() => {
-                this.utilities.setDesignDetailsRefresh(true);
-                this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
-              });
-            },
+            this.utilities.hideLoading().then(() => {
+              this.utilities.setDesignDetailsRefresh(true);
+              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
+            });
+          },
             responseError => {
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
@@ -205,29 +206,29 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.utilities.errorSnackBar('Please enter phone number.');
       } else if (this.surveyForm.value.jobtype == '') {
         this.utilities.errorSnackBar('Please enter job type.');
-      } else if(this.surveyForm.value.latitude == '' && this.surveyForm.value.longitude == ''){
+      } else if (this.surveyForm.value.latitude == '' && this.surveyForm.value.longitude == '') {
         this.utilities.errorSnackBar('Please select address from dropdown.');
-      }else {
+      } else {
         this.utilities.errorSnackBar('Address not found. Make sure your location is on in device.');
       }
       return;
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
         this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
-        if(this.userData.role.type === 'surveyors'){
-        this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
+        if (this.userData.role.type === 'surveyors') {
+          this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
           this.surveyForm.get('status').setValue('surveyassigned');
         }
         if (this.surveyId !== 0) {
           this.surveyForm.get('chatid').setValue(this.survey.chatid);
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
-              this.utilities.hideLoading().then(() => {
-                this.utilities.showSnackBar('Survey has been updated');
-                this.utilities.setSurveyDetailsRefresh(true);
-                // this.navController.navigateRoot('homepage/survey');
-                this.navController.pop();
-              });
-            },
+            this.utilities.hideLoading().then(() => {
+              this.utilities.showSnackBar('Survey has been updated');
+              this.utilities.setSurveyDetailsRefresh(true);
+              // this.navController.navigateRoot('homepage/survey');
+              this.navController.pop();
+            });
+          },
             responseError => {
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
@@ -247,23 +248,23 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
           this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
-              this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
-                this.utilities.hideLoading();
-                // this.navController.pop();
-                modal.present();
-                modal.onWillDismiss().then((dismissed) => {
-                  this.utilities.sethomepageSurveyRefresh(true);
-                  if(this.userData.role.type === 'surveyors'){
-                    this.navController.navigateRoot('surveyoroverview/newsurveys');
-                  }else{
-                    this.navController.navigateRoot('homepage/survey');
-                  }
+            this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+              this.utilities.hideLoading();
+              // this.navController.pop();
+              modal.present();
+              modal.onWillDismiss().then((dismissed) => {
+                this.utilities.sethomepageSurveyRefresh(true);
+                if (this.userData.role.type === 'surveyors') {
+                  this.navController.navigateRoot('surveyoroverview/newsurveys');
+                } else {
+                  this.navController.navigateRoot('homepage/survey');
+                }
 
-                });
-                // });
               });
+              // });
+            });
 
-            },
+          },
             responseError => {
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
@@ -364,40 +365,41 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
   }
 
-    /* FOR SEARCH SHIPPING ADDRESS */
-    updateSearchResults(event) {
-      //this.autoCompleteOff = true;
+  /* FOR SEARCH SHIPPING ADDRESS */
+  updateSearchResults(event) {
+    //this.autoCompleteOff = true;
 
-      const input = event.detail.value;
+    const input = event.detail.value;
 
-      if (input === '') {
-        this.autocompleteItems = [];
-        return;
-      }
-      this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+    if (input === '') {
+      this.autocompleteItems = [];
+      return;
+    }
+    this.GoogleAutocomplete.getPlacePredictions({
+      input, componentRestrictions: {
         country: 'us'
-      }  },
-        (predictions, status) => {
-          this.autocompleteItems = [];
-          this.zone.run(() => {
-            predictions.forEach((prediction) => {
-              this.autocompleteItems.push(prediction);
-            });
+      }
+    },
+      (predictions, status) => {
+        this.autocompleteItems = [];
+        this.zone.run(() => {
+          predictions.forEach((prediction) => {
+            this.autocompleteItems.push(prediction);
           });
         });
-    }
+      });
+  }
 
-    forAutoComplete(e){
+  forAutoComplete(e) {
 
-      this.autoCompleteOff = true;
-      this.isSelectSearchResult = false;
+    this.autoCompleteOff = true;
+    this.isSelectSearchResult = false;
 
-    }
+  }
 
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
-    selectSearchResult(item) {
-      this.utilities.showLoading('Loading').then(() => {
-
+  selectSearchResult(item) {
+    this.utilities.showLoading('Loading').then(() => {
       this.isSelectSearchResult = true;
       this.geocoder.geocode({
         placeId: item.place_id
@@ -407,106 +409,105 @@ export class SurveyComponent implements OnInit, OnDestroy {
       });
       this.autocompleteItems = []
     })
-    }
+  }
 
-    getGeoEncoder(latitude, longitude, formattedAddress) {
+  getGeoEncoder(latitude, longitude, formattedAddress) {
 
-     // this.utilities.showLoading('Loading').then(() => {
-        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
-          .then((result: NativeGeocoderResult[]) => {
+    // this.utilities.showLoading('Loading').then(() => {
+    this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+      .then((result: NativeGeocoderResult[]) => {
 
-            let add = '';
-            if (formattedAddress === '') {
-              add = this.generateAddress(result[0]);
-            } else {
-              add = formattedAddress;
-            }
-            this.utilities.hideLoading().then(() => {
-
-              const address: AddressModel = {
-                address: add,
-                lat: latitude,
-                long: longitude,
-                country: result[0].countryName,
-                state: result[0].administrativeArea,
-                city: result[0].locality,
-                postalcode: result[0].postalCode
-              };
-              this.utilities.setAddress(address);
-              this.addressValue();
-              //this.goBack();
-            });
-
-          })
-          .catch((error: any) => {
-            this.utilities.hideLoading().then(() => {
-              alert('Error getting location' + JSON.stringify(error));
-            });
-
-          });
-    //  });
-    }
-
-    generateAddress(addressObj) {
-      const obj = [];
-      let address = '';
-      for (const key in addressObj) {
-        obj.push(addressObj[key]);
-      }
-      obj.reverse();
-      for (const val in obj) {
-        if (obj[val].length) {
-          address += obj[val] + ', ';
+        let add = '';
+        if (formattedAddress === '') {
+          add = this.generateAddress(result[0]);
+        } else {
+          add = formattedAddress;
         }
-      }
-      return address.slice(0, -2);
-    }
+        this.utilities.hideLoading().then(() => {
 
-    onCancel() {
+          const address: AddressModel = {
+            address: add,
+            lat: latitude,
+            long: longitude,
+            country: result[0].countryName,
+            state: result[0].administrativeArea,
+            city: result[0].locality,
+            postalcode: result[0].postalCode
+          };
+          this.utilities.setAddress(address);
+          this.addressValue();
+          //this.goBack();
+        });
 
-      this.autocompleteItems = [];
+      })
+      .catch((error: any) => {
+        this.utilities.hideLoading().then(() => {
+          alert('Error getting location' + JSON.stringify(error));
+        });
 
-    }
-
-    addressValue(){
-      // }
-      this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
-
-
-          // this.firstFormGroup.get('address').setValue('124/345');
-          // this.firstFormGroup.get('latitude').setValue('24.553333');
-          // this.firstFormGroup.get('longitude').setValue('80.5555555555');
-          // this.firstFormGroup.get('country').setValue('india');
-          // this.firstFormGroup.get('city').setValue('Lucknow');
-          // this.firstFormGroup.get('state').setValue('UP');
-          // this.firstFormGroup.get('postalcode').setValue(3232343);
-         this.surveyForm.get('address').setValue(address.address);
-           this.surveyForm.get('latitude').setValue(address.lat);
-           this.surveyForm.get('longitude').setValue(address.long);
-           this.surveyForm.get('country').setValue(address.country);
-         this.surveyForm.get('city').setValue(address.city);
-           this.surveyForm.get('state').setValue(address.state);
-           this.surveyForm.get('postalcode').setValue(address.postalcode);
-      }, (error) => {
-        this.surveyForm.get('address').setValue('');
-        this.surveyForm.get('latitude').setValue(null);
-        this.surveyForm.get('longitude').setValue(null);
-        this.surveyForm.get('country').setValue('');
-        this.surveyForm.get('city').setValue('');
-        this.surveyForm.get('state').setValue('');
-        this.surveyForm.get('postalcode').setValue(null);
       });
+    //  });
+  }
 
-      this.autoCompleteOff = false;
-
-
-
+  generateAddress(addressObj) {
+    const obj = [];
+    let address = '';
+    for (const key in addressObj) {
+      obj.push(addressObj[key]);
+    }
+    obj.reverse();
+    for (const val in obj) {
+      if (obj[val].length) {
+        address += obj[val] + ', ';
       }
+    }
+    return address.slice(0, -2);
+  }
 
-      onBlur()
-      {
-        setTimeout(() => {
-          this.autocompleteItems = [];
-        }, 100);
-      }
+  onCancel() {
+
+    this.autocompleteItems = [];
+
+  }
+
+  addressValue() {
+    // }
+    this.addressSubscription = this.utilities.getAddressObservable().subscribe((address) => {
+
+
+      // this.firstFormGroup.get('address').setValue('124/345');
+      // this.firstFormGroup.get('latitude').setValue('24.553333');
+      // this.firstFormGroup.get('longitude').setValue('80.5555555555');
+      // this.firstFormGroup.get('country').setValue('india');
+      // this.firstFormGroup.get('city').setValue('Lucknow');
+      // this.firstFormGroup.get('state').setValue('UP');
+      // this.firstFormGroup.get('postalcode').setValue(3232343);
+      this.surveyForm.get('address').setValue(address.address);
+      this.surveyForm.get('latitude').setValue(address.lat);
+      this.surveyForm.get('longitude').setValue(address.long);
+      this.surveyForm.get('country').setValue(address.country);
+      this.surveyForm.get('city').setValue(address.city);
+      this.surveyForm.get('state').setValue(address.state);
+      this.surveyForm.get('postalcode').setValue(address.postalcode);
+    }, (error) => {
+      this.surveyForm.get('address').setValue('');
+      this.surveyForm.get('latitude').setValue(null);
+      this.surveyForm.get('longitude').setValue(null);
+      this.surveyForm.get('country').setValue('');
+      this.surveyForm.get('city').setValue('');
+      this.surveyForm.get('state').setValue('');
+      this.surveyForm.get('postalcode').setValue(null);
+    });
+
+    this.autoCompleteOff = false;
+
+
+
+  }
+
+  onBlur() {
+    setTimeout(() => {
+      this.autocompleteItems = [];
+    }, 100);
+  }
 }
