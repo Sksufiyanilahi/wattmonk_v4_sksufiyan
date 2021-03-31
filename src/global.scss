@@ -142,10 +142,6 @@
   background: white !important;
 }
 
-.header-bg {
-  background: #F9F9F9 !important;
-}
-
 .header-icon-position {
   position: relative;
   top: 0;
@@ -159,14 +155,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.border-header {
-  background: url("/assets/images/border_header.svg") no-repeat center center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
 }
 
 .header-half-height {
