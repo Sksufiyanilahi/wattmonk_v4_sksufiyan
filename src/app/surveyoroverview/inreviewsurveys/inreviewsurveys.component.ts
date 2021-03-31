@@ -22,6 +22,7 @@ import {ActionSheetController, IonContent, Platform} from '@ionic/angular';
 export class InreviewsurveysComponent implements OnInit {
 
   @ViewChild(IonContent, {static: false}) content: IonContent;
+  indexoftodayrow = -1;
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
@@ -62,14 +63,7 @@ export class InreviewsurveysComponent implements OnInit {
     });
   }
 
-  scrollTo(offsetTop, date) {
-    setTimeout(() => {
-      let sectionOffset = this.el.nativeElement.getElementsByTagName('ion-grid')[date].offsetTop;
-
-      this.content.scrollToPoint(0, sectionOffset, 1000);
-    }, 500);
-  }
-
+  
 
   ionViewDidEnter() {
 
@@ -168,6 +162,14 @@ export class InreviewsurveysComponent implements OnInit {
     await actionSheet.present();
   }
 
+  scrollTo() {
+    setTimeout(() => {
+      let todaytitleElement = document.getElementById(''+this.indexoftodayrow);
+      this.content.scrollToPoint(0, todaytitleElement.offsetTop, 1000);
+    }, 2000)
+
+  }
+
   formatSurveyData(records: SurveyDataModel[]) {
     this.listOfSurveyData = this.fillinDynamicData(records);
 
@@ -209,8 +211,16 @@ export class InreviewsurveysComponent implements OnInit {
     this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
       var dateA = new Date(a.date).getTime(),
         dateB = new Date(b.date).getTime();
-      return dateB - dateA;
+      return dateA - dateB;
     });
+
+    this.listOfSurveyDataHelper.forEach((element, index) => {
+      if(element.date == this.today){
+        this.indexoftodayrow = index;
+      }
+    });
+
+    this.scrollTo();
     this.cdr.detectChanges();
   }
 

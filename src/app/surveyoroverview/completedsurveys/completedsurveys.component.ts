@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {SurveyDataModel} from 'src/app/model/survey.model';
 import {SurveyDataHelper} from 'src/app/homepage/survey/survey.component';
 import {Subscription} from 'rxjs';
@@ -11,7 +11,7 @@ import {SurveyStorageModel} from 'src/app/model/survey-storage.model';
 import {Storage} from '@ionic/storage';
 import * as moment from 'moment';
 import {NavigationExtras, Router} from '@angular/router';
-import {ActionSheetController, Platform} from "@ionic/angular";
+import {ActionSheetController, Platform, IonContent} from "@ionic/angular";
 
 @Component({
   selector: 'app-completedsurveys',
@@ -19,7 +19,8 @@ import {ActionSheetController, Platform} from "@ionic/angular";
   styleUrls: ['./completedsurveys.component.scss'],
 })
 export class CompletedsurveysComponent implements OnInit {
-
+  @ViewChild(IonContent, {static: false}) content: IonContent;
+  indexoftodayrow = -1;
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
@@ -142,6 +143,15 @@ export class CompletedsurveysComponent implements OnInit {
     await actionSheet.present();
   }
 
+  scrollTo() {
+    setTimeout(() => {
+      let todaytitleElement = document.getElementById(''+this.indexoftodayrow);
+      this.content.scrollToPoint(0, todaytitleElement.offsetTop, 1000);
+    }, 2000)
+
+  }
+
+
   formatSurveyData(records: SurveyDataModel[]) {
     this.listOfSurveyData = this.fillinDynamicData(records);
     const tempData: SurveyDataHelper[] = [];
@@ -172,12 +182,19 @@ export class CompletedsurveysComponent implements OnInit {
         }
       }
     });
-    this.listOfSurveyDataHelper = tempData;
-    // .sort(function (a, b) {
-    //   var dateA = new Date(a.date).getTime(),
-    //     dateB = new Date(b.date).getTime();
-    //   return dateA - dateB;
-    // });
+    this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+      var dateA = new Date(a.date).getTime(),
+        dateB = new Date(b.date).getTime();
+      return dateA - dateB;
+    });
+
+    this.listOfSurveyDataHelper.forEach((element, index) => {
+      if(element.date == this.today){
+        this.indexoftodayrow = index;
+      }
+    });
+
+    this.scrollTo();
     this.cdr.detectChanges();
   }
 

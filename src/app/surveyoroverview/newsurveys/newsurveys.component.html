@@ -3,9 +3,9 @@
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull down to refresh" refreshingSpinner="lines"></ion-refresher-content>
   </ion-refresher>
   <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
-    <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index">
+    <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index" id={{i}}>
         <ion-col size="12" class="ion-margin-top">
-                <span class="ion-padding" *ngIf="today == item.date">
+                <span class="ion-padding" *ngIf="today == item.date" id="todayitems">
                     Today
                   </span>
             <span class="ion-padding" *ngIf="today != item.date">
