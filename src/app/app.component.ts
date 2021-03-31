@@ -158,6 +158,7 @@ export class AppComponent {
   }
 
   registerAPNS() {
+    console.log("Inside register");
     PushNotifications.requestPermission().then(result => {
       if (result.granted) {
         PushNotifications.register();
@@ -168,6 +169,7 @@ export class AppComponent {
       (token: PushNotificationToken) => {
         localStorage.setItem('pushtoken', token.value);
         console.log('Push registration success, token: ' + token.value);
+        this.apiservice.pushtoken(this.user.id, {newpushtoken: localStorage.getItem('pushtoken')});
       }
     );
 
@@ -188,8 +190,6 @@ export class AppComponent {
         console.log('Push action performed: ' + JSON.stringify(notification));
       }
     );
-
-    this.apiservice.pushtoken(this.user.id, {newpushtoken: localStorage.getItem('pushtoken')});
   }
 
   isEmptyObject(obj) {
