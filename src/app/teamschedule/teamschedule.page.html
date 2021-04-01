@@ -1,12 +1,14 @@
-
 <ion-row>
   <ion-col>
-    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;">Add Team Member </h5>
+    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;" *ngIf="!isEditMode">Add Team Member </h5>
+    
+    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;" *ngIf="isEditMode">Edit Team Member </h5>
+   <!-- <h4 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit </h4>-->
   </ion-col>
 <ion-col size="auto" style="align-self: center;">
   <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
-      <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
-  </ion-button>
+    <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+</ion-button>
 </ion-col>
 </ion-row>
 
@@ -21,14 +23,14 @@
                     <ion-input type="text" class="form_input" formControlName="firstname" autocapitalize="words"
                                 required></ion-input>
                               </ion-item>
-                              <!-- <div style="height: 5px;">
-                                <div *ngIf="thirdFormGroup.get('firstname').hasError('pattern') && thirdFormGroup.get('firstname').dirty">
+                               <div style="height: 5px;">
+                                <div *ngIf="teamForm.get('firstname').hasError('pattern') && teamForm.get('firstname').dirty">
                                     <span class="error">{{firstnameError}}</span>
                                 </div>
-                                <div *ngIf="thirdFormGroup.get('firstname').value === '' && thirdFormGroup.get('firstname').dirty">
+                                <div *ngIf="teamForm.get('firstname').value === '' && teamForm.get('firstname').dirty">
                                     <span class="error">{{fieldRequired}}</span>
                                 </div>
-                            </div> -->
+                            </div> 
         </ion-col>
         <ion-col size="12">
           <ion-item class="ion-no-padding">
@@ -36,14 +38,14 @@
                     <ion-input type="text" class="form_input" formControlName="lastname" autocapitalize="words"
                                 ></ion-input>
                               </ion-item>
-                              <!-- <div style="height: 5px;">
-                                <div *ngIf="thirdFormGroup.get('lastname').hasError('pattern') && thirdFormGroup.get('lastname').dirty">
+                             <div style="height: 5px;">
+                                <div *ngIf="teamForm.get('lastname').hasError('pattern') && teamForm.get('lastname').dirty">
                                     <span class="error">{{lastnameError}}</span>
                                 </div>
-                                <div *ngIf="thirdFormGroup.get('lastname').value === '' && thirdFormGroup.get('lastname').dirty">
+                                <div *ngIf="teamForm.get('lastname').value === '' && teamForm.get('lastname').dirty">
                                     <span class="error">{{fieldRequired}}</span>
                                 </div>
-                            </div> -->
+                            </div> 
         </ion-col>
       </ion-row>
       <ion-row >
@@ -53,56 +55,74 @@
                 <ion-input type="text" class="form_input" formControlName="workemail"
                             ></ion-input>
             </ion-item>
-            <!-- <div style="height: 5px;">
-              <div *ngIf="thirdFormGroup.get('workemail').hasError('pattern') && thirdFormGroup.get('workemail').dirty">
+          <div style="height: 5px;">
+              <div *ngIf="teamForm.get('workemail').hasError('pattern') && teamForm.get('workemail').dirty">
                   <span class="error">{{emailError}}</span>
               </div>
-              <div *ngIf="thirdFormGroup.get('workemail').value === '' && thirdFormGroup.get('workemail').dirty">
-                  <span class="error">{{fieldRequired}}</span>
+              <div *ngIf="teamForm.get('workemail').value === '' && teamForm.get('workemail').dirty">
+                  <span class="error">{{"Enter a valid email"}}</span>
+                  
               </div>
-          </div> -->
+          </div> 
         </ion-col>
     </ion-row>
     <br>
     <ion-label>User Role</ion-label>
           <ion-radio-group formControlName="userrole" >
-            <ion-row >
-              <ion-col size="6">
+            <ion-row>
+              <ion-col size="6" *ngFor="let role of roles">
             <ion-item lines="none">
-              <ion-label class="margin" style="font-size: small;">Admin</ion-label>
-              <ion-radio slot="start" value="7" ></ion-radio>
+              <ion-label class="margin" style="font-size: small;">{{role.displayname}}</ion-label>
+              <ion-radio slot="start" [value]="role.role.id" (ionFocus)="roleChange(role.role.id)"></ion-radio>
+            </ion-item>
+          </ion-col>
+        
+          <!-- <ion-col size="6" *ngIf="designData.role.type=='wattmonkadmin' || designData.role.type=='superadmin'" >
+            <ion-item lines="none">
+              <ion-label class="margin"   style="font-size: small;padding-left: 0%;" >Designer</ion-label>
+              <ion-radio slot="start" value="8"  ></ion-radio>
             </ion-item>
           </ion-col>
           <ion-col size="6">
             <ion-item lines="none">
-              <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Design Manager</ion-label>
-              <ion-radio slot="start"  value="3" ></ion-radio>
-            </ion-item>
-          </ion-col>
-          <ion-col size="6">
-            <ion-item lines="none">
-              <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Designer</ion-label>
-              <ion-radio slot="start"  value="8" ></ion-radio>
-            </ion-item>
-          </ion-col>
-          <ion-col size="6">
-            <ion-item lines="none">
+
               <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Surveyor</ion-label>
               <ion-radio slot="start"  value="9" ></ion-radio>
             </ion-item>
           </ion-col>
           <ion-col size="6">
             <ion-item lines="none">
-              <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Analyst</ion-label>
-              <ion-radio slot="start"  value="10" ></ion-radio>
+              <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Design Manager</ion-label>
+              <ion-radio slot="start" value ="3" ></ion-radio>
             </ion-item>
           </ion-col>
-          <ion-col size="6">
+          <ion-col size="6" *ngIf="designData.role.type=='wattmonkadmin' || designData.role.type=='superadmin'">
+            <ion-item lines="none">
+              <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Analyst</ion-label>
+              <ion-radio slot="start" value="10"  ></ion-radio>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6" *ngIf="designData.role.type=='wattmonkadmin' || designData.role.type=='superadmin'">
             <ion-item lines="none">
               <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Pe Engineer</ion-label>
-              <ion-radio slot="start"  value="11" ></ion-radio>
+              <ion-radio slot="start" value="11"   ></ion-radio>
             </ion-item>
-          </ion-col>
+          </ion-col> -->
+            <ion-col size="12" *ngIf="roleValue=='11'">
+            <ion-item class="ion-no-padding">
+                <!-- <ion-label style="display: none;">Type of Pe engineer*</ion-label> -->
+                <ion-label position="floating">Type of Pe engineer*</ion-label>
+                <!-- <ion-label position="floating">mounting type</ion-label> -->
+                <ion-select class="form_input select_div"
+                            ok-text="" cancel-text=""
+                            formControlName="peengineertype" [disabled]="fieldDisabled" interface="popover">
+                    <ion-select-option value="structural">Structural</ion-select-option>
+                    <ion-select-option value="electrical">Electrical</ion-select-option>
+                    <ion-select-option value="both">Both</ion-select-option>
+                </ion-select>
+            </ion-item>
+        </ion-col>
+      
           </ion-row>
           </ion-radio-group>
     </ion-grid>
@@ -111,6 +131,7 @@
 <ion-row>
   <ion-col></ion-col>
   <ion-col size="auto">
-      <ion-button class="action-button-color" fill="clear">Confirm</ion-button>
+    
+    <ion-button class="action-button-color" fill="clear" (click)="submitForm()">Confirm</ion-button>
       </ion-col>
       </ion-row>  

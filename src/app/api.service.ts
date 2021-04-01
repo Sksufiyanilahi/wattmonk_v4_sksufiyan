@@ -473,7 +473,8 @@ export class ApiService {
       lastname: String,
       permissiontomakedesign:boolean,
       role: number,
-      minpermitaccess: boolean
+      minpermitaccess: boolean,
+      peengineertype:String
       // address: String,
       // country: String,
       // callingcode: number
@@ -498,6 +499,7 @@ export class ApiService {
         username: workemail,
         confirmed : true,
         isdefaultpassword: true,
+        peengineertype:peengineertype,
         role: role,
         minpermitdesignaccess: minpermitaccess,
         provider: "local",
@@ -721,6 +723,41 @@ export class ApiService {
     editProfile(data,id): Observable<User> {
       return this.http.put<User>(BaseUrl + 'users/' + id, data, { headers: this.headers });
     }
+
+    deleteTeam(id){
+      return this.http.delete(BaseUrl + "users/"+id,{
+        headers:this.headers
+      })
+      }
+ 
+    updateTeam(data,id){
+    
+     return this.http.put(BaseUrl + "users/"+id , data , {
+         headers: this.headers,
+        // observe: "response"
+       })
+   }
+
+   getTeamDetails(id){
+    return this.http.get(BaseUrl+"users?_sort=created_at:desc&parent="+this.parentId+"&id_ne="+id ,{
+      headers:this.headers
+  })
+  }
+
+  getDynamicRoles()
+  {
+    let roleid = this.storageService.getUser().role.id;
+    console.log(roleid);
+    return this.http.get(BaseUrl +
+      "clientroles?client="+this.userId+"&canbeaddedby_in="+roleid+"&_sort=id:asc",)
+  }
+
+  getDefaultRoles(){
+    let roleid = this.storageService.getUser().role.id;
+    console.log(roleid);
+    return this.http.get(BaseUrl +
+      "clientroles?client_null=true&canbeaddedby_in="+roleid,)
+  }
 
 }
 

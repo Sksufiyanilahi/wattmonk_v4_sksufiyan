@@ -42,6 +42,7 @@ export class UtilitiesService {
 	surveyDetailsRefresh = new BehaviorSubject<boolean>(false);
 	designDetailsRefresh = new BehaviorSubject<boolean>(false);
 	peStampRefresh = new BehaviorSubject<boolean>(false);
+	teamModuleRefresh = new BehaviorSubject<boolean>(false);
 	permitdesignDetailsRefresh = new BehaviorSubject<boolean>(false);
 	//permitdesignDetailsRefresh = new BehaviorSubject<boolean>(false);
 	showBottomBarHomepage = new BehaviorSubject<boolean>(true);
@@ -150,6 +151,14 @@ export class UtilitiesService {
 
 	setPeStampRefresh(refresh: boolean) {
 		this.peStampRefresh.next(refresh);
+	}
+
+	getteamModuleRefresh(): BehaviorSubject<boolean> {
+		return this.teamModuleRefresh;
+	}
+
+	setteamModuleRefresh(refresh: boolean) {
+		this.teamModuleRefresh.next(refresh);
 	}
 
 	getDataRefresh(): BehaviorSubject<boolean> {

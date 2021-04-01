@@ -287,6 +287,10 @@ const routes: Routes = [
     loadChildren: () => import('./teamschedule/teamschedule.module').then( m => m.TeamschedulePageModule)
   },
   {
+    path: 'teamschedule/:id',
+    loadChildren: () => import('./teamschedule/teamschedule.module').then( m => m.TeamschedulePageModule)
+  },
+  {
     path: 'sales-proposal',
     loadChildren: () => import('./sales-proposal/sales-proposal.module').then( m => m.SalesProposalPageModule)
   },
@@ -298,6 +302,11 @@ const routes: Routes = [
     path: 'profile-edit-modal',
     loadChildren: () => import('./profile-edit-modal/profile-edit-modal.module').then( m => m.ProfileEditModalPageModule)
   },
+  {
+    path: 'teamdetails/:id',
+    loadChildren: () => import('./teamdetails/teamdetails.module').then( m => m.TeamdetailsPageModule)
+  },
+
 
 
 ];
