@@ -11,7 +11,7 @@ import {SurveyStorageModel} from 'src/app/model/survey-storage.model';
 import {Storage} from '@ionic/storage';
 import * as moment from 'moment';
 import {StorageService} from 'src/app/storage.service';
-import {Router} from '@angular/router';
+import {NavigationExtras, Router} from '@angular/router';
 import {ActionSheetController, IonContent, Platform} from '@ionic/angular';
 
 @Component({
@@ -22,6 +22,7 @@ import {ActionSheetController, IonContent, Platform} from '@ionic/angular';
 export class InreviewsurveysComponent implements OnInit {
 
   @ViewChild(IonContent, {static: false}) content: IonContent;
+  indexoftodayrow = -1;
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
@@ -55,21 +56,14 @@ export class InreviewsurveysComponent implements OnInit {
     this.userData = this.storageService.getUser();
     const latestDate = new Date();
     this.today = this.datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
     this.apiService._OnMessageReceivedSubject.subscribe((r) => {
-      console.log('message received! ', r);
+
       this.getSurveys();
     });
   }
 
-  scrollTo(offsetTop, date) {
-    setTimeout(() => {
-      let sectionOffset = this.el.nativeElement.getElementsByTagName('ion-grid')[date].offsetTop;
-      console.log("sectionOffset == ", sectionOffset);
-      this.content.scrollToPoint(0, sectionOffset, 1000);
-    }, 500);
-  }
-
+  
 
   ionViewDidEnter() {
 
@@ -100,7 +94,7 @@ export class InreviewsurveysComponent implements OnInit {
       this.apiService.getSurveyorSurveys("status=surveyinprocess").subscribe(response => {
         // this.utils.hideLoading().then(()=>{
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           this.formatSurveyData(response);
           if (event !== null) {
             event.target.complete();
@@ -160,12 +154,20 @@ export class InreviewsurveysComponent implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+
           }
         }
       ]
     });
     await actionSheet.present();
+  }
+
+  scrollTo() {
+    setTimeout(() => {
+      let todaytitleElement = document.getElementById(''+this.indexoftodayrow);
+      this.content.scrollToPoint(0, todaytitleElement.offsetTop, 1000);
+    }, 2000)
+
   }
 
   formatSurveyData(records: SurveyDataModel[]) {
@@ -180,7 +182,7 @@ export class InreviewsurveysComponent implements OnInit {
         listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
         listOfSurvey.listOfSurveys.push(surveyItem);
         tempData.push(listOfSurvey);
-        console.log(tempData);
+
 
       } else {
         let added = false;
@@ -189,7 +191,7 @@ export class InreviewsurveysComponent implements OnInit {
             if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/dd/yy')) {
               surveyList.listOfSurveys.push(surveyItem);
               added = true;
-              console.log(surveyList.listOfSurveys);
+
 
             }
           }
@@ -201,7 +203,7 @@ export class InreviewsurveysComponent implements OnInit {
           listOfSurvey.listOfSurveys.push(surveyItem);
           tempData.push(listOfSurvey);
           added = true;
-          console.log(tempData);
+
 
         }
       }
@@ -209,8 +211,16 @@ export class InreviewsurveysComponent implements OnInit {
     this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
       var dateA = new Date(a.date).getTime(),
         dateB = new Date(b.date).getTime();
-      return dateB - dateA;
+      return dateA - dateB;
     });
+
+    this.listOfSurveyDataHelper.forEach((element, index) => {
+      if(element.date == this.today){
+        this.indexoftodayrow = index;
+      }
+    });
+
+    this.scrollTo();
     this.cdr.detectChanges();
   }
 
@@ -219,13 +229,13 @@ export class InreviewsurveysComponent implements OnInit {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       this.storage.get('' + element.id).then((data: SurveyStorageModel) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
-          console.log(element);
+
         } else {
           element.totalpercent = 0;
-          console.log(element);
+
         }
 
       });
@@ -239,7 +249,7 @@ export class InreviewsurveysComponent implements OnInit {
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;
-    console.log(this.overdue, ">>>>>>>>>>>>>>>>>.");
+
 
   }
 
@@ -259,21 +269,21 @@ export class InreviewsurveysComponent implements OnInit {
     // const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
     // CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
     //   () => {
-    //     console.log('Initialization completed successfully');
+
     //     // if(this.utilities.currentUserValue != null){
     //       // You can now call login function.
     //       CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
     //         (user) => {
-    //           console.log('Login Successful:', { user });
+
     //         },
     //         error => {
-    //           console.log('Login failed with exception:', { error });
+
     //         }
     //       );
     //   // }
     //   },
     //   error => {
-    //     console.log('Initialization failed with error:', error);
+
     //   }
     // );
   }
@@ -285,7 +295,7 @@ export class InreviewsurveysComponent implements OnInit {
       status: "surveyinprocess"
     };
     this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
-      console.log(res);
+
     })
     this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
 
@@ -298,7 +308,7 @@ export class InreviewsurveysComponent implements OnInit {
   }
 
   gotoActivity(surveyData, event) {
-    console.log(event)
+
     event.stopPropagation();
     this.router.navigate(['/activity' + '/' + surveyData.id + '/survey'])
 
@@ -308,6 +318,25 @@ export class InreviewsurveysComponent implements OnInit {
     // $event.preventDefault();
     // $event.stopPropagation();
     this.router.navigate(['/survey-detail/' + surveyData.id])
+  }
+
+  gotoChats(surveyData,event){
+
+    event.stopPropagation();
+    this.router.navigate(['/chat/' + surveyData.chatid])
+    let objToSend: NavigationExtras = {
+      queryParams: {
+       name:surveyData.name +'_'+surveyData.address,
+       guid:surveyData.chatid
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+  this.router.navigate(['chat/'+ surveyData.chatid], {
+  state: { productdetails: objToSend }
+  });
   }
 
 }

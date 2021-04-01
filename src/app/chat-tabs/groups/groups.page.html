@@ -1,5 +1,5 @@
 <ion-header class="ion-no-border">
-    <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
+    <ion-grid class="ion-padding-top ion-padding-start ion-padding-end ">
         <ion-row>
             <ion-col size="auto">
                 <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
@@ -20,7 +20,7 @@
         </ion-row>
     </ion-grid>
     <ion-grid class="position-relative ion-no-padding">
-        <ion-row class="ion-no-padding border-header header-half-height">
+        <ion-row class="ion-no-padding  header-half-height">
         </ion-row>
         <ion-row class="ion-no-padding header-half-height">
 
@@ -44,9 +44,10 @@
 
     <ion-list *ngIf="conversations.length !== 0">
         <ion-item *ngFor="let conversation of conversations" (click)="openConversation(conversation)">
-            <ion-avatar slot="start">
+            <ion-avatar slot="start" style="background:greenyellow;padding: 1px;">
                 <!-- <img *ngIf="conversation.getConversationWith().getAvatar()" [src]="conversation.getConversationWith().getAvatar()"> -->
-                <img  src="/assets/images/user_placeholder.jpg">
+                <!-- <img  src="/assets/images/user_placeholder.jpg"> -->
+                <span>#{{(conversation.getConversationWith().getName()).charAt(0).toUpperCase()}}</span>
             </ion-avatar>
             <ion-label>
                 <h2>{{conversation.getConversationWith().getName()}}</h2>

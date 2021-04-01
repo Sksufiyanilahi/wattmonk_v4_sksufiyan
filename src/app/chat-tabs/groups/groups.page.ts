@@ -3,7 +3,8 @@ import { NavController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import Conversation = CometChat.Conversation;
 import { UtilitiesService } from 'src/app/utilities.service';
- 
+import { NavigationExtras, Router } from '@angular/router';
+
 
 
 @Component({
@@ -19,7 +20,8 @@ export class GroupsPage implements OnInit {
 
   constructor(
     private navController: NavController,
-    private utilities: UtilitiesService
+    private utilities: UtilitiesService,
+    private router : Router
   ) {
   }
 
@@ -52,15 +54,15 @@ export class GroupsPage implements OnInit {
             //       })
             //     }
             //     this.conversations = conversationList;
-            // console.log('UserList Array :', this.conversations);
+
             //   })
             // }
-            console.log('Conversations list received:', conversationList);
+
             conversationList.forEach((item) => {
-              console.log('item', item);
+
               this.conversations.push(item);
             });
-            console.log(this.conversations);
+
             if (event !== null) {
               event.target.complete();
             }
@@ -71,7 +73,7 @@ export class GroupsPage implements OnInit {
             if (event !== null) {
               event.target.complete();
             }
-            console.log('Conversations list fetching failed with error:', error);
+
           });
         }
       );
@@ -79,7 +81,21 @@ export class GroupsPage implements OnInit {
   }
 
   openConversation(conversation) {
-    this.navController.navigateForward(['chat/' + conversation.getConversationWith().getGuid(),{'key':'group'}]);
+    let objToSend: NavigationExtras = {
+      queryParams: {
+       name:conversation.getConversationWith().getName(),
+       guid:conversation.getConversationWith().getGuid()
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+  this.router.navigate(['chat/'+ conversation.getConversationWith().getGuid()], {
+  state: { productdetails: objToSend }
+  });
+
+    //this.navController.navigateForward(['chat/' + conversation.getConversationWith().getGuid(),{'key':'group'}]);
   }
 
   ionViewWillLeave(){

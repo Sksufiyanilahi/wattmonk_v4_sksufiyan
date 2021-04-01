@@ -53,7 +53,7 @@ export class DesignersComponent implements OnInit {
     this.isSelected = false;
     this.subscription = this.utilities.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SEND_DESIGNERS_VALUE) {
-        console.log(event);
+
         this.fetchFilteredStatisticsDesigners();
 
       }
@@ -99,7 +99,7 @@ export class DesignersComponent implements OnInit {
   fetchFilteredStatisticsDesigners() {
     var startDate = new Date(this.desginForm.get('startdate').value);
     startDate.setDate(startDate.getDate() + 1);
-    console.log("date", startDate)
+
     var endDate = new Date(this.desginForm.get('enddate').value);
     endDate.setDate(endDate.getDate() + 1);
     this.starttime = startDate.toISOString();
@@ -135,7 +135,7 @@ export class DesignersComponent implements OnInit {
       backdropDismiss: false
     });
     modal.onDidDismiss().then((data) => {
-      console.log(data)
+
       if (data.data.cancel == 'cancel') {
       }//else{
        // this.getDesigns(null)
@@ -158,22 +158,22 @@ export class DesignersComponent implements OnInit {
 
   eventTypeChange(event) {
     this.requestTypeValue = event.target.value;
-    console.log(this.requestTypeValue);
+
     this.fetchStatisticsDesigners();
   }
 
 
   eventSortChange() {
     this.sortChangeValue = this.desginForm.get('sort').value;
-    console.log(this.sortChangeValue)
+
     if (this.sortChangeValue == 'lowtohigh') {
       if (this.fieldChangeValue == 'Avg Comp Time') {
 
         this.designersList = this.designersList.sort((a: any, b: any) => a.avgdesigncompletiontime - b.avgdesigncompletiontime);
-        console.log("Average");
+
       } else if (this.fieldChangeValue == 'Avg Review Failure') {
         this.designersList = this.designersList.sort((a: any, b: any) => a.avgreviewfailurecount - b.avgreviewfailurecount);
-        console.log("Average Review");
+
       } else if (this.fieldChangeValue == 'Delayed') {
         this.designersList = this.designersList.sort((a: any, b: any) => a.latedesignscompleted - b.latedesignscompleted);
       } else if (this.fieldChangeValue == 'Monthly Rating') {
@@ -187,10 +187,10 @@ export class DesignersComponent implements OnInit {
     } else if (this.sortChangeValue == 'hightolow') {
       if (this.fieldChangeValue == 'Avg Comp Time') {
         this.designersList = this.designersList.sort((a: any, b: any) => b.avgdesigncompletiontime - a.avgdesigncompletiontime);
-        console.log("Average");
+
       } else if (this.fieldChangeValue == 'Avg Review Failure') {
         this.designersList = this.designersList.sort((a: any, b: any) => b.avgreviewfailurecount - a.avgreviewfailurecount);
-        console.log("Average Review");
+
       } else if (this.fieldChangeValue == 'Delayed') {
         this.designersList = this.designersList.sort((a: any, b: any) => b.latedesignscompleted - a.latedesignscompleted);
       } else if (this.fieldChangeValue == 'Monthly Rating') {
@@ -217,9 +217,9 @@ export class DesignersComponent implements OnInit {
   }
 
   statsDetails(e) {
-    console.log("Hello");
+
     this.designerId = e;
-    console.log("Hello", this.designerId);
+
     this.router.navigate(['/statsoverviewdetails', {
       starttime: this.starttime,
       endtime: this.endtime,

@@ -20,7 +20,7 @@ import { MixpanelService } from '../utilities/mixpanel.service';
 export interface Country {
   country: string;
   calling_code: string;
-  
+
 }
 
 @Component({
@@ -42,7 +42,7 @@ export class UserregistrationPage implements OnInit {
   countries:Country[];
   filteredCountries: Observable<Country[]>;
   selectedcountry: any;
-  
+
   constructor(
     private formBuilder: FormBuilder,
     private http:HttpClient,
@@ -72,13 +72,13 @@ export class UserregistrationPage implements OnInit {
   }
 
   fetchCountry(){
-    console.log("user");
+
     this.http.get("assets/country/country.json").subscribe((res:any)=>{
-      console.log(res);
+
       this.countries = res;
       this.country();
       this.selectedcountry=this.countries.find(c=> c.country=='United States');
-  
+
     this.userregistrationForm.get('country').setValue(this.selectedcountry.country);
     this.setSelectedCountry(this.selectedcountry);
     })
@@ -95,10 +95,10 @@ export class UserregistrationPage implements OnInit {
       country => country.country.toLowerCase().indexOf(filterValue) != -1
     );
   }
-  
+
   setSelectedCountry(item: Country) {
     this.selectedcountry = item;
- 
+
   }
 
   country()
@@ -107,7 +107,7 @@ export class UserregistrationPage implements OnInit {
       startWith(""),
       map(value => (typeof value === "string" ? value : value.name)),
       map(name => (name ? this._filter(name) : this.countries.slice()))
-    ); 
+    );
   }
 
   registerUser()
@@ -122,9 +122,9 @@ export class UserregistrationPage implements OnInit {
         username:this.userregistrationForm.get('email').value
       }
       this.apiService.registerUser(postData).subscribe((res:any)=>{
-        console.log(res);
+
         this.user = res;
-        // console.log(this.user.jwt)
+        //
          this.storageService.setJWTToken(this.user.jwt);
         // this.storageService.setUser(this.user.user,this.user.jwt);
         if(res){
@@ -143,7 +143,7 @@ export class UserregistrationPage implements OnInit {
         // };
         // if(res){
         //   this.apiservice.updateUser(this.user.user.id,postData).subscribe((response)=>{
-        //     console.log(response,"jj");
+        //
         //     this.router.navigate(['/login']);
         //     this.utils.showSnackBar("User Registered Successfully");
         //   })
@@ -184,7 +184,7 @@ export class UserregistrationPage implements OnInit {
 
   updateUser()
   {
-    console.log(this.user.user.id);
+
     const postData = {
       firstname: this.userregistrationForm.get("firstname").value,
       lastname: this.userregistrationForm.get("lastname").value,
@@ -196,7 +196,7 @@ export class UserregistrationPage implements OnInit {
       role: this.userregistrationForm.get('role').value
     };
     this.apiService.updateUser(this.user.user.id,postData).subscribe((response:any)=>{
-      console.log(response,"jj");
+
       //this.
      // this.storageService.setUser(response);
      // this.apiService.refreshHeader();
@@ -218,7 +218,7 @@ export class UserregistrationPage implements OnInit {
 
   change(event)
   {
-    console.log(event.detail.checked);
+
     this.isTermsSelect = event.detail.checked;
   }
 
@@ -237,7 +237,7 @@ export class UserregistrationPage implements OnInit {
   ionViewDidEnter(){
     this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
 
     })
 
@@ -249,7 +249,7 @@ this.network.networkConnect();
   //   if(!this.netSwitch){
   //     this.utils.errorSnackBar('No internet connection');
   //   }else{
-  //     console.log(this.userregistrationForm);
+  //
   //     if (this.userregistrationForm.status === 'VALID') {
   //       this.utils.showLoading('Logging In').then(() => {
   //         const postData ={
@@ -258,8 +258,8 @@ this.network.networkConnect();
   //         }
   //         this.apiService.login(postData).subscribe(response => {
   //           this.utils.hideLoading().then(() => {
-  //             console.log('Res', response);
-  //             console.log(response);
+  //
+  //
   //             this.mixpanelService.track("USER_LOGIN", {
   //               $id: response.user.id,
   //               $email: response.user.email,

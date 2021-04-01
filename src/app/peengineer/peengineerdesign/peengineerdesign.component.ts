@@ -99,7 +99,7 @@ export class PEengineerdesignComponent implements OnInit {
     // }
                 const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
     this.todaysdate = datePipe.transform(latestDate, 'yyyy-MM-dd');
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl('', [Validators.required]),
@@ -111,7 +111,7 @@ export class PEengineerdesignComponent implements OnInit {
                 this.apiService.emitUserNameAndRole(this.userData);
                 this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
                   this.netSwitch = data;
-                  console.log(this.netSwitch);
+
                   //this.newpermitsRef.update({ count: 0 });
 
                 })
@@ -145,7 +145,7 @@ export class PEengineerdesignComponent implements OnInit {
                     // return this.segments;
 
                   // this.getsegmentdata(event.target.value);
-                  console.log((event.target.value));
+
                   // this.segments = event.target.value;
                   // this.DesignRefreshSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
                   // });
@@ -184,14 +184,14 @@ export class PEengineerdesignComponent implements OnInit {
 
   fetchPendingDesigns(event, showLoader: boolean) {
     this.noDesignFound="";
-    console.log("inside fetch Designs");
+
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     //this.newpermitsRef.update({ count: 0 });
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
       this.apiService.getFilteredDesigns(this.segments).subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           if(response.length){
 
             this.formatDesignData(response);
@@ -217,20 +217,20 @@ export class PEengineerdesignComponent implements OnInit {
   formatDesignData(records : Pestamp[]){
     this.overdue=[];
     let list:Pestamp[];
-    console.log(records);
+
    list=this.fillinDynamicData(records);
    list.forEach(element =>{
      this.listOfDesigns.push(element);
    })
 
-    console.log(this.listOfDesigns);
+
 
     const tempData: DesginDataHelper[] = [];
 
 
 
       this.listOfDesigns.forEach((designItem:any,i) => {
-        console.log(i);
+
 
         if (tempData.length === 0) {
           this.sDatePassed(designItem.updated_at,i);
@@ -239,7 +239,7 @@ export class PEengineerdesignComponent implements OnInit {
             listOfDesign.lateby = this.overdue;
           listOfDesign.listOfDesigns.push(designItem);
           tempData.push(listOfDesign);
-          console.log(tempData);
+
 
 
 ;
@@ -249,7 +249,7 @@ export class PEengineerdesignComponent implements OnInit {
           tempData.forEach((DesignList) => {
             // DesignList['listOfDesigns'].forEach(element=>{
 
-            //   console.log(element.deliverydate,":::::::::::::");
+
 
             //   this.sDatePassed(element.deliverydate);
             // })
@@ -279,7 +279,7 @@ export class PEengineerdesignComponent implements OnInit {
             return dateB - dateA;
           });
           this.chatIcon(list)
-          console.log(this.listOfDesignsHelper);
+
           this.cdr.detectChanges();
   }
 
@@ -291,11 +291,11 @@ export class PEengineerdesignComponent implements OnInit {
         .build();
       groupMembersRequest.fetchNext().then(
         groupMembers => {
-          console.log(groupMembers);
+
           element.addedtogroupchat=true;
         },
         error => {
-          console.log("Group Member list fetching failed with exception:", error);
+
         }
       );
     })
@@ -327,8 +327,8 @@ export class PEengineerdesignComponent implements OnInit {
     if(element.status == "outsourced"){
       var acceptancedate = new Date(element.pestampacceptancestarttime);
       element.pestampacceptanceremainingtime = this.utils.getRemainingTime(acceptancedate.toString());
-      console.log(element.pestampacceptancestarttime)
-      console.log(element.pestampacceptanceremainingtime)
+
+
       if(element.pestampacceptanceremainingtime == "0h : 0m"){
         element.isoverdue = true;
       }
@@ -357,18 +357,18 @@ export class PEengineerdesignComponent implements OnInit {
   }
 
   dismissBottomSheet() {
-    console.log('this', this.drawerState);
+
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
     this.assignForm.get('comment').setValue("");
     this.listOfAssignees=[];
 
-   console.log("this works",this.listOfAssignees)
+
   }
 
   assignToPeEngineer() {
-       console.log(this.designerData.createdby.id);
-    console.log(this.selectedPeEngineer);
+
+
     //if(this.assignForm.status === 'INVALID' && (  this.designerData.status === 'designcompleted' ||this.designerData.status === 'reviewassigned' || this.designerData.status === 'reviewfailed' || this.designerData.status === 'reviewpassed')){
     if(this.assignForm.status === 'INVALID') {
     this.utils.errorSnackBar('Please select a pe engineer');
@@ -380,7 +380,7 @@ export class PEengineerdesignComponent implements OnInit {
         additonalhours = this.selectedPeEngineer.jobcount * 2;
         pestampstarttime.setHours(pestampstarttime.getHours() + additonalhours);
         pestampacceptancestarttime.setMinutes(pestampacceptancestarttime.getMinutes() + 15);
-        console.log(this.designId);
+
 
         var postData = {
           assignedto: this.selectedPeEngineer.id,
@@ -389,7 +389,7 @@ export class PEengineerdesignComponent implements OnInit {
         };
         this.utils.showLoading('assigning').then(() => {
         this.apiService.assignPestamps(this.designId,postData).subscribe(res=>{
-          console.log(res);
+
           this.utils.hideLoading().then(()=>{
             this.utils.showSnackBar('successfully assigned to'+this.selectedPeEngineer.firstname+' '+this.selectedPeEngineer.lastname);
             this.route.navigate(["pestamp-homepage/pestamp-design"]);
@@ -436,7 +436,7 @@ export class PEengineerdesignComponent implements OnInit {
         declinedbypeengineer: false
       };
     }
-    
+
     this.utils.showLoading("accepting").then(()=>{
        this.apiService.assignPestamps(id,postData).subscribe((res:any)=>{
          this.utils.hideLoading().then(()=>{
@@ -449,10 +449,10 @@ export class PEengineerdesignComponent implements OnInit {
      }
 
   openDesigners(id: number,designData) {
-    debugger;
+     ;
 
     this.listOfAssignees=[];
-    console.log("this is",designData);
+
      this.designerData = designData;
      //this.reviewAssignedTo=designData.designassignedto;
     if((this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin')&& this.designerData.status=='created'){
@@ -480,7 +480,7 @@ this.route.navigate(['/pestamp-payment-modal'], {
             this.listOfAssignees = [];
           //   // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
              assignees.forEach(item => this.listOfAssignees.push(item));
-             console.log(this.listOfAssignees);
+
              this.showBottomDraw = true;
              this.designId = id;
              this.utils.setBottomBarHomepage(false);
@@ -489,7 +489,7 @@ this.route.navigate(['/pestamp-payment-modal'], {
               assignedto: ''
             });
           });
-          console.log(assignees);
+
         }, (error) => {
           this.utils.hideLoading().then(() => {
             this.utils.errorSnackBar('Some error occurred. Please try again later');
@@ -538,7 +538,7 @@ this.route.navigate(['/pestamp-payment-modal'], {
     backdropDismiss:false
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -558,7 +558,7 @@ async decline(id,e,event){
   this.mixpanelService.track("DECLINE_PESTAMP_PAGE_OPEN", {
   });
   let status = e;
-  console.log(status);
+
   const modal = await this.modalController.create({
     component: DeclinepagePage,
     cssClass: 'my-custom-modal-css',
@@ -570,7 +570,7 @@ async decline(id,e,event){
     backdropDismiss:false
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -585,7 +585,7 @@ async decline(id,e,event){
 
 
 async Resend(id, type){
-  console.log(type);
+
   const modal = await this.modalController.create({
     component: ResendpagedialogPage,
     cssClass: 'my-custom-modal-css',
@@ -597,7 +597,7 @@ async Resend(id, type){
     backdropDismiss:false
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -649,7 +649,7 @@ shareWhatsapp(designData){
 
   });
   modal.onDidDismiss().then((data) => {
-    console.log(data)
+
     if(data.data.cancel=='cancel'){
     }else{
       this.getDesigns(null)
@@ -676,38 +676,38 @@ designDownload(designData,event){
   this.platform.ready().then(()=>{
     this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory=>{
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
-        result => console.log('Has permission?',result.hasPermission),
+
         err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
       );
       this.file.checkFile(resolvedDirectory.nativeURL,designData.stampedfiles.hash).then(data=>{
-        console.log(data);
+
 
         if(data==true){
 
         }else{
-          console.log('not found!');
+
           throw { code: 1, message: 'NOT_FOUND_ERR' };
         }
 
       }).catch(async err=>{
-        console.log('Error occurred while checking local files:');
-        console.log(err);
+
+
         if (err.code == 1) {
           const fileTransfer: FileTransferObject = this.transfer.create();
           this.utils.showLoading('Downloading').then(()=>{
             fileTransfer.download(url, this.storageDirectory + designData.stampedfiles.hash + designData.stampedfiles.ext).then((entry) => {
               this.utils.hideLoading().then(()=>{
-                console.log('download complete: ' + entry.toURL());
+
                 this.utils.showSnackBar("Stamped File Downloaded Successfully");
 
                 // this.clickSub = this.localnotification.on('click').subscribe(data => {
-                //   console.log(data)
+
                 //   path;
                 // })
                 this.localnotification.schedule({text:'Stamped File Downloaded Successfully', foreground:true, vibrate:true })
               }, (error) => {
                 // handle error
-                console.log(error);
+
 
               });
               })
@@ -726,14 +726,14 @@ designDownload(designData,event){
    let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
   result.then((resp) => {
    path = resp.toURL();
-   console.log(path);
+
 
    fileTransfer.download(url, path + designData.stampedfiles.hash + designData.stampedfiles.ext).then((entry) => {
-     console.log('download complete: ' + entry.toURL());
+
      this.utils.showSnackBar("Stamped File Downloaded Successfully");
 
      // this.clickSub = this.localnotification.on('click').subscribe(data => {
-     //   console.log(data)
+
      //   path;
      // })
      this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
@@ -758,7 +758,7 @@ designDownload(designData,event){
       backdropDismiss:false
     });
     modal.onDidDismiss().then((data) => {
-      console.log(data)
+
       if(data.data.cancel=='cancel'){
       }else{
         this.getDesigns(null)
@@ -834,7 +834,7 @@ createChatGroup(design:DesginDataModel){
 // }
 
 //       addUserToGroupChat() {
-//         debugger;
+//          ;
 //       var GUID = this.designerData.chatid;
 //       var userscope = CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT;
 //       if (this.isclientassigning) {
@@ -861,21 +861,21 @@ createChatGroup(design:DesginDataModel){
         const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
         CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
           () => {
-            console.log('Initialization completed successfully');
+
             // if(this.utilities.currentUserValue != null){
               // You can now call login function.
               CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
                 (user) => {
-                  console.log('Login Successful:', { user });
+
                 },
                 error => {
-                  console.log('Login failed with exception:', { error });
+
                 }
               );
           // }
           },
           error => {
-            console.log('Initialization failed with error:', error);
+
           }
         );
       }
@@ -896,7 +896,7 @@ directAssignToWattmonk(id:number){
   //         this.apiService.updateDesignForm(postData, this.designId).subscribe((value) => {
   //           this.utils.hideLoading().then(()=>{
   //             ;
-  //             console.log('reach ', value);
+
 
   //           //   if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
   //           //  {
@@ -921,18 +921,18 @@ trackdesign(index,design){
 }
 
 gotoActivity(designData,event){
-  console.log(event)
+
       event.stopPropagation();
     this.route.navigate(['/activity' + '/' + designData.id + '/pestamp'])
-  
+
   }
-  
+
   gotoDetails(designData,$event){
     // $event.preventDefault();
     // $event.stopPropagation();
     this.route.navigate(['/pestamp-design-details/' + designData.id])
   }
-  
+
   gotoChats(designData,event){
     event.stopPropagation();
     this.route.navigate(['/chat/' + designData.chatid])

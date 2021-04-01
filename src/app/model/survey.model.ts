@@ -1,7 +1,7 @@
-import { Image, User } from './user.model';
-import { Invertermake, Invertermodel, Solarmake, Solarmodel } from './design.model';
+import {Image, User} from './user.model';
+import {Solarmake, Solarmodel} from './design.model';
 // import { ImageModel } from '../camera/menu.model';
-import { InverterMadeModel } from './inverter-made.model';
+import {InverterMadeModel} from './inverter-made.model';
 
 export class SurveyModel {
   id: number;
@@ -11,7 +11,7 @@ export class SurveyDataModel {
   id: number;
   name: string;
   email: string;
-  chatid:string;
+  chatid: string;
   phonenumber: string;
   datetime: Date;
   comments: any;
@@ -54,28 +54,32 @@ export class SurveyDataModel {
   status: string;
   latitude: string;
   longitude: string;
-  totalpercent : number;
-  isoverdue : boolean;
-  formattedjobtype : string;
-  solarpanelsimages:Image[];
-  electricalslocation:any
-  lateby:any;
-  city:string;
-  state:string;
-  country:string;
-  postalcode:number;
-  reviewissues:String;
-  reviewassignedto:any;
-  invertermanufacturerandmodel:any;
-  existingsolarsystem:any;
-  framing:any;
-  framingsize:any;
-  distancebetweentworafts:any;
-  batterysystem:any;
-  isdesignraised:boolean=false;
-  recordupdatedon:any;
+  totalpercent: number;
+  isoverdue: boolean;
+  formattedjobtype: string;
+  solarpanelsimages: Image[];
+  electricalslocation: any
+  lateby: any;
+  city: string;
+  state: string;
+  country: string;
+  postalcode: number;
+  reviewissues: String;
+  reviewassignedto: any;
+  invertermanufacturerandmodel: any;
+  existingsolarsystem: any;
+  framing: any;
+  framingsize: any;
+  distancebetweentworafts: any;
+  batterysystem: any;
+  isdesignraised: boolean = false;
+  recordupdatedon: any;
   surveypdf?: any;
   rooftilt?: any;
+  utilitybillback?: any;
+  utilitybillfront?: any;
+  mpurequired?: any;
+  roofmaterial?: any;
 }
 
 

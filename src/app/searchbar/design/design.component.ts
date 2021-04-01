@@ -56,7 +56,7 @@ export class DesignComponent implements OnInit {
   ) {
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl('', [Validators.required]),
       comment: new FormControl('')
@@ -76,16 +76,16 @@ export class DesignComponent implements OnInit {
     // })
     // this.getDesign(event);
     this.routeSubscription = this.router.events.subscribe((event) => {
-      console.log("//",event);
-      console.log(this.router.url.indexOf('page'));
+
+
       if (event instanceof NavigationEnd) {
-        console.log(event.url);
+
 
         // Trick the Router into believing it's last link wasn't previously loaded
         if (this.router.url.indexOf('page') >= -1) {
           this.router.navigated = false;
           let data = this.route.queryParams.subscribe((_res: any) => {
-            console.log('Serach Term', _res);
+
             if (Object.keys(_res).length !== 0) {
               //  this.ApplysearchDesginAndSurvey(_res.serchTerm)
 
@@ -110,7 +110,7 @@ export class DesignComponent implements OnInit {
   }
 
   filterData(serchTerm: any) {
-    console.log(this.listOfDesignsData);
+
     let filterDataArray: any = this.listOfDesignsData.filter(x => x.id == serchTerm);
     const tempData: DesginDataHelper[] = [];
     filterDataArray.forEach((desginItem) => {
@@ -136,7 +136,7 @@ export class DesignComponent implements OnInit {
           tempData.push(listOfDesign);
           added = true;
           this.listOfDesignDataHelper.push(listOfDesign);
-          console.log(this.listOfDesignDataHelper);
+
         }
       }
     });
@@ -150,19 +150,19 @@ this.isRequest= true;
     this.listOfDesignDataHelper = [];
 
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting designs').then((success) => {
-      // debugger;
+      //  ;
       this.apiService.getDesgin().subscribe((response:any) => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then((loaderHidden) => {
-          // debugger;
+          //  ;
           if (event !== null) {
             event.target.complete();
           }
-          console.log(response, '>>');
+
           this.listOfDesignsData = response;
            response.forEach(element => {
               this.roleType = element.type;
           });;
-          console.log(this.roleType);
+
 
           const tempData: DesginDataHelper[] = [];
           this.listOfDesignsData.forEach((desginItem) => {
@@ -188,7 +188,7 @@ this.isRequest= true;
                 tempData.push(listOfDesign);
                 added = true;
                 this.listOfDesignDataHelper.push(listOfDesign);
-                console.log(this.listOfDesignDataHelper,"<<<<>>>>");
+
               }
             }
           });
@@ -228,7 +228,7 @@ this.isRequest= true;
   }
 
   dismissBottomSheet() {
-    console.log('this', this.drawerState);
+
     this.drawerState = DrawerState.Bottom;
     this.utils.setBottomBarHomepage(true);
   }
@@ -238,7 +238,7 @@ this.isRequest= true;
       this.utils.errorSnackBar('Please select a designer');
     } else {
       this.apiService.updateDesignForm(this.assignForm.value, this.designId).subscribe((value) => {
-        console.log('reach ', value);
+
         this.utils.showSnackBar('Design request has been assigned to' + ' ' + value.name + ' ' + 'successfully');
         this.dismissBottomSheet();
         this.showBottomDraw = false;
@@ -259,7 +259,7 @@ this.isRequest= true;
             this.listOfAssignees = [];
             // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
             assignees.forEach(item => this.listOfAssignees.push(item));
-            console.log(this.listOfAssignees);
+
             this.showBottomDraw = true;
             this.designId = id;
             this.utils.setBottomBarHomepage(false);

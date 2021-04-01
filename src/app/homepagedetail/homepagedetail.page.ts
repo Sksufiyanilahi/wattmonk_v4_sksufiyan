@@ -25,10 +25,10 @@ export class HomepagedetailPage implements OnInit {
 
   ngOnInit() {
     this.myId = this.route.snapshot.paramMap.get('id');
-    console.log(this.myId);
+
     this.desginData = new DesginDataModel();
     this.getDesginDetail();
-    console.log("re",this.desginData.phonenumber)
+
   }
 
   getDesginDetail(){
@@ -36,12 +36,12 @@ export class HomepagedetailPage implements OnInit {
       this.apiservice.getDesginDetail(this.myId).subscribe(response => {
         this.utils.hideLoading();
         this.desginData = response[0];
-        console.log("reach",this.desginData);
+
       }, responseError => {
         this.utils.hideLoading();
         const error: ErrorModel = responseError.error;
         this.utils.errorSnackBar(error.message[0].messages[0].message);
-      });   
+      });
   });
   }
 

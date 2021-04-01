@@ -283,6 +283,7 @@
         "children": [
           {
             "allowmultipleshots": true,
+            "multipleshotslimit": 7,
             "isvisible": true,
             "name": "Roof Photos",
             "ispending": true,
@@ -317,6 +318,7 @@
           },
           {
             "allowmultipleshots": true,
+            "multipleshotslimit": -1,
             "isvisible": true,
             "name": "Obstacles Photos",
             "ispending": true,

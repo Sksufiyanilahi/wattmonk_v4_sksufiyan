@@ -65,7 +65,7 @@ export class SurveyComponent implements OnInit {
     this.segments = 'status=reviewassigned&status=reviewpassed&status=reviewfailed';
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl('', [Validators.required]),
       status: new FormControl('surveyassigned', [Validators.required])
@@ -86,7 +86,7 @@ export class SurveyComponent implements OnInit {
 
     }
     // this.getsegmentdata(event.target.value);
-    console.log((event.target.value));
+
     // this.segments= event.target.value;
     // this.getSurveys(event);
 
@@ -106,7 +106,7 @@ export class SurveyComponent implements OnInit {
     this.network.networkConnect();
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
 
     })
     this.surveyRefreshSubscription = this.utils.getHomepageSurveyRefresh().subscribe((result) => {
@@ -119,13 +119,13 @@ export class SurveyComponent implements OnInit {
         this.formatSurveyData(this.listOfSurveyData);
       }
     });
-    // debugger;
+    //  ;
     // this.routeSubscription.unsubscribe();
   }
 
   ngOnInit() {
     this.userData = this.storageService.getUser();
-    console.log(this.userData);
+
   }
 
   getSurveys(event?) {
@@ -137,13 +137,13 @@ export class SurveyComponent implements OnInit {
   }
 
   fetchPendingSurveys(event?, showLoader?: boolean) {
-    console.log(this.segments)
+
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
       this.apiService.getSurveyorSurveys(this.segments).subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           this.formatSurveyData(response);
           if (event !== null) {
             event.target.complete();
@@ -162,7 +162,7 @@ export class SurveyComponent implements OnInit {
   }
 
   // filterData(serchTerm: any) {
-  //   console.log(this.listOfSurveyData);
+
   //   this.filterDataArray = this.listOfSurveyData.filter(x => x.id == serchTerm);
   //   const tempData: SurveyDataHelper[] = [];
   //   this.filterDataArray.forEach((surveyItem) => {
@@ -196,7 +196,7 @@ export class SurveyComponent implements OnInit {
 
   formatSurveyData(records: SurveyDataModel[]) {
     this.listOfSurveyData = this.fillinDynamicData(records);
-    console.log(this.listOfSurveyData);
+
 
     const tempData: SurveyDataHelper[] = [];
     this.listOfSurveyData.forEach((surveyItem, i) => {
@@ -238,7 +238,7 @@ export class SurveyComponent implements OnInit {
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       this.storage.get('' + element.id).then((data: SurveyStorageModel) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
         } else {
@@ -264,7 +264,7 @@ export class SurveyComponent implements OnInit {
   //         if (event !== null) {
   //           event.target.complete();
   //         }
-  //         console.log(response);
+
   //         this.listOfSurveyData = response;
   //         const tempData: SurveyDataHelper[] = [];
   //         this.listOfSurveyData.forEach((surveyItem) => {
@@ -316,7 +316,7 @@ export class SurveyComponent implements OnInit {
   //         if (event !== null) {
   //           event.target.complete();
   //         }
-  //         console.log(response);
+
   //         this.listOfSurveyData = response;
   //         const tempData: SurveyDataHelper[] = [];
   //         this.listOfSurveyData.forEach((surveyItem) => {
@@ -400,7 +400,7 @@ export class SurveyComponent implements OnInit {
           icon: 'close',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+
           }
         }
       ]
@@ -436,7 +436,7 @@ export class SurveyComponent implements OnInit {
           this.surveyId = id;
           this.utils.setBottomBarHomepage(false);
           this.drawerState = DrawerState.Docked;
-          console.log(this.listOfAssignees);
+
           this.assignForm.patchValue({
             assignedto: 0
           });
@@ -467,8 +467,8 @@ export class SurveyComponent implements OnInit {
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;
-    debugger;
-    console.log(this.overdue, ">>>>>>>>>>>>>>>>>.");
+     ;
+
 
   }
 

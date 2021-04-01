@@ -60,7 +60,7 @@ export class SchedulePage implements OnInit, OnDestroy {
 
     const url = this.router.url;
     const splittedUrl = url.split('/');
-    console.log(splittedUrl);
+
     this.tabsDisabled = splittedUrl.length === 4;
     this.currentTab = splittedUrl[2];
 
@@ -69,7 +69,7 @@ export class SchedulePage implements OnInit, OnDestroy {
   ionViewDidEnter(){
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
     })
   }
 
@@ -88,18 +88,18 @@ this.network.networkConnect();
     } else {
       // await this.getGeoLocation();
       this.subscription = this.utilities.getAddressObservable().subscribe((address) => {
-        console.log(address);
+
         this.address = address.address;
       this.storage.setData(this.address);
       });
     }
      this.designs = this.utilities.getdesignDetails();
-     console.log(this.designs)
+
      if(this.designs !== null && this.designs !== undefined)
      {
       this.designId = this.designs.id;
      }
-  //console.log(this.designs.status);
+
   }
 
   goBack() {
@@ -110,11 +110,11 @@ this.network.networkConnect();
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.utilities.setStaticAddress('');
-    this.deactivateNetworkSwitch.unsubscribe();
+    // this.deactivateNetworkSwitch.unsubscribe();
   }
 
   segmentChanged(event) {
-    console.log(event);
+
     this.currentTab = event.detail.value;
     this.tabs.select(event.detail.value);
   }
@@ -127,7 +127,7 @@ this.network.networkConnect();
       this.geolocation.getCurrentPosition().then((resp) => {
         this.utilities.hideLoading();
         // .then(()=>{
-          console.log('resp',resp);
+
           this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
           this.utilities.hideLoading();
         // });
@@ -138,7 +138,7 @@ this.network.networkConnect();
         this.utilities.hideLoading();
         this.utilities.errorSnackBar('Unable to get location');
 
-        console.log('Error getting location', error);
+
         this.showNoLocation();
       });
     // },err=>{
@@ -188,7 +188,7 @@ this.network.networkConnect();
           this.utilities.showLoading('Getting Location').then(()=>{
       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
       .then((result: NativeGeocoderResult[]) => {
-        console.log(result);
+
         this.utilities.hideLoading();
             const address: AddressModel = {
               address: this.generateAddress(result[0]),
@@ -230,7 +230,7 @@ this.network.networkConnect();
 
   requestLocationPermission() {
     this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
-      console.log(mode);
+
       switch (mode) {
         case this.diagnostic.permissionStatus.NOT_REQUESTED:
           this.goBack();
@@ -252,7 +252,7 @@ this.network.networkConnect();
           break;
       }
     }, (rejection) => {
-      console.log(rejection);
+
       // this.goBack();
     });
 
@@ -363,11 +363,11 @@ this.network.networkConnect();
 
 
   saveDesignForm() {
-    console.log('posting value');
-    console.log(this.router.url);
-    console.log(this.designId);
+
+
+
     if(this.designId !== 0){
-      console.log("hello")
+
       if(this.router.url=='/schedule/design/' + this.designId ){
         this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
         }
@@ -375,11 +375,11 @@ this.network.networkConnect();
         {
           this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SALES_FORM);
         }
-    
+
   }
   else{
     if(this.router.url=='/schedule/design'){
-      console.log("hii")
+
       this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_DESIGN_FORM);
       }
       else if(this.router.url=='/schedule/salesproposal')
@@ -400,12 +400,12 @@ this.network.networkConnect();
   //}
 
   saveSurveyForm() {
-    console.log('posting value');
+
     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SURVEY_FORM);
   }
 
   startSurvey() {
-    console.log('posting value');
+
     this.utilities.setScheduleFormEvent(ScheduleFormEvent.START_SURVEY);
   }
 

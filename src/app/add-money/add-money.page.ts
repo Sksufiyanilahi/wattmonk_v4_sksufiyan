@@ -87,7 +87,6 @@ export class AddMoneyPage implements OnInit {
   ) {
     this.paypalintegration()
     this.designData = this.router.getCurrentNavigation().extras.state;
-    console.log(this.designData)
     this.mode = this.designData.productdetails.queryParams.mode;
     this.designId = this.designData.productdetails.queryParams.id;
     this.serviceAmount = this.designData.productdetails.queryParams.serviceAmount;
@@ -99,8 +98,6 @@ export class AddMoneyPage implements OnInit {
     this.fulldesigndata = this.designData.productdetails.queryParams.fulldesigndata;
     this.assignValue = this.designData.productdetails.queryParams.assignValue;
     this.onBoarding= this.designData.productdetails.queryParams.onBoarding;
-    console.log(this.fulldesigndata);
-    console.log(this.design);
     this.amountForm = this.formBuilder.group(
       {
         amount: new FormControl('', [Validators.required, Validators.min(1), Validators.max(10000)]),
@@ -112,24 +109,18 @@ export class AddMoneyPage implements OnInit {
     this.newpermits = this.newpermitsRef.valueChanges();
     this.newpermits.subscribe(
       (res) => {
-        console.log(res);
         this.newpermitscount = res.count;
         cdr.detectChanges();
       },
-      (err) => console.log(err),
-      () => console.log('done!')
     )
     //counts
     this.newprelimsRef = db.object('newprelimdesigns');
     this.newprelims = this.newprelimsRef.valueChanges();
     this.newprelims.subscribe(
       (res) => {
-        console.log(res);
         this.newprelimscount = res.count;
         cdr.detectChanges();
       },
-      (err) => console.log(err),
-      () => console.log('done!')
     )
 
     //PESTAMP badge count
@@ -137,18 +128,13 @@ export class AddMoneyPage implements OnInit {
     this.newpestamp = this.newpestampRef.valueChanges();
     this.newpestamp.subscribe(
       (res) => {
-        console.log(res);
         this.newpestampscount = res.count;
-        console.log(res.count);
         cdr.detectChanges();
       },
-      (err) => console.log(err),
-      () => console.log('done!')
     )
 
     //PESTAMP Payment
     this.designData = this.router.getCurrentNavigation().extras.state;
-    console.log(this.designData)
     this.mode = this.designData.productdetails.queryParams.mode;
     this.designId = this.designData.productdetails.queryParams.id;
     this.serviceAmount = this.designData.productdetails.queryParams.serviceAmount;
@@ -170,9 +156,6 @@ export class AddMoneyPage implements OnInit {
 
     this.userData = this.storageService.getUser();
     // this.setupStripe();
-    console.log(this.mode)
-    console.log(this.designId);
-    console.log(this.design);
     this.mixpanelService.track("ADD_MONEY_PAGE_OPEN", {});
 
     if (this.mode == 'card') {
@@ -200,7 +183,6 @@ export class AddMoneyPage implements OnInit {
 //       }
 //     };
 //     this.card = elements.create('card', { style: style });
-//     console.log(this.card);
 //     this.card.mount('#card-element');
 
 //     this.card.addEventListener('change', event => {
@@ -216,7 +198,6 @@ export class AddMoneyPage implements OnInit {
   // var form = document.getElementById('payment-form');
   // form.addEventListener('submit', event => {
   //   event.preventDefault();
-  //   console.log(event)
   // if(this.onBoarding == 'true' || this.onBoarding =='false'){
   //   if(this.amountForm.get('amount').value >=100 && this.amountForm.get('amount').value <= 5000)
   //   {
@@ -225,9 +206,7 @@ export class AddMoneyPage implements OnInit {
   //         var errorElement = document.getElementById('card-errors');
   //         errorElement.textContent = result.error.message;
   //       } else {
-  //         console.log(result);
   //         this.token=result;
-  //         console.log(this.token.token.id);
   //         this.addMoney();
 
   //       }
@@ -244,9 +223,7 @@ export class AddMoneyPage implements OnInit {
   //       var errorElement = document.getElementById('card-errors');
   //       errorElement.textContent = result.error.message;
   //     } else {
-  //       console.log(result);
   //       this.token=result;
-  //       console.log(this.token.token.id);
   //       this.addMoney();
 
   //     }
@@ -268,7 +245,6 @@ export class AddMoneyPage implements OnInit {
     const stripe = await this.stripePromise;
     this.apiService.getStripeSessionID(inputdata).subscribe(
       response => {
-        console.log(response);
         return stripe.redirectToCheckout({sessionId: response.id});
       },
       error => {
@@ -296,7 +272,6 @@ export class AddMoneyPage implements OnInit {
 //       }
 //     };
 //     this.card = elements.create('card', { style: style });
-//     console.log(this.card);
 //     this.card.mount('#card-element');
 //   }
 
@@ -311,7 +286,6 @@ export class AddMoneyPage implements OnInit {
     if (this.mode == 'wallet') {
       var data = {};
       var rechargeData = {};
-      //console.log(form.value.cardNo);
       /* this.stripe.setPublishableKey('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
         let card:any= {
           number : form.value.cardNo,
@@ -322,10 +296,8 @@ export class AddMoneyPage implements OnInit {
           amount : form.value.amount,
 
         }
-        console.log(card);*/
       this.utils.showLoading("Adding").then(() => {
         //this.stripe.createCardToken(card).then(token => {
-        // console.log(token);
         // this.token=token.id
 //      if(this.onBoarding=='true' && this.amountForm.get('amount').value >= 500){
 //       data={
@@ -335,7 +307,6 @@ export class AddMoneyPage implements OnInit {
 //         token:this.token.token.id,
 //         user:this.userData.id
 //       }
-//       console.log(data);
 //      }
 //      else{
 //   data={
@@ -346,12 +317,10 @@ export class AddMoneyPage implements OnInit {
 //     user:this.userData.id
 //   }
 // }
-//   console.log(data);
         // this.apiService.createPayment(data).subscribe(res=>{
         //   this.createPayment=res;
         //   this.utils.hideLoading().then(()=>{
         var dates = new Date();
-        console.log(dates)
         if (this.onBoarding == 'true' && this.amountForm.get('amount').value > 1000) {
           rechargeData = {
             amount: this.amountForm.get('amount').value + 100,
@@ -376,13 +345,11 @@ export class AddMoneyPage implements OnInit {
             this.responseData = res;
             let token = this.storageService.getJWTToken();
             this.storageService.setUser(res.user, token);
-            console.log(res);
             this.utils.showSnackBar("$" + this.responseData.amount + " added in your wallet successfully");
             this.goBack();
             this.utils.setHomepageDesignRefresh(true);
           }), error => {
             this.utils.hideLoading().then(() => {
-              console.log("payment was unsuccessful");
               this.utils.errorSnackBar(error);
             })
           };
@@ -394,7 +361,6 @@ export class AddMoneyPage implements OnInit {
 
     if (this.mode == 'card') {
       var data = {};
-      //console.log(form.value.cardNo);
       // this.stripe.setPublishableKey('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
       /* let card:any= {
          number : form.value.cardNo,
@@ -405,10 +371,8 @@ export class AddMoneyPage implements OnInit {
          amount : form.value.amount,
 
        }*/
-      console.log("card");
       this.utils.showLoading("Adding").then(() => {
         // this.stripe.createCardToken(card).then(token => {
-        //   console.log(token);
         // this.token=token.id
         var date = new Date();
         if (this.design == 'pestamp') {
@@ -442,7 +406,6 @@ export class AddMoneyPage implements OnInit {
                     };
                     this.apiService.updatePestamps(this.designId, postData).subscribe(value => {
                       this.newpestampRef.update({count: this.newpestampscount + 1});
-                      console.log(this.newpestampscount);
                       this.utils.showSnackBar("Pe Stamp request has been send to wattmonk successfully");
                       this.router.navigate(['pestamp-homepage/pestamp-design']);
                       this.utils.setPeStampRefresh(true);
@@ -470,7 +433,6 @@ export class AddMoneyPage implements OnInit {
 
 
             }
-            console.log(inputData)
             if (this.fulldesigndata.propertytype == 'commercial' && (this.fulldesigndata.modeofstamping == 'hardcopy' || this.fulldesigndata.modeofstamping == 'both')) {
               this.makeCommercialpayment(inputData);
             } else if (this.fulldesigndata.propertytype == 'commercial' && this.fulldesigndata.modeofstamping == 'ecopy') {
@@ -516,10 +478,8 @@ export class AddMoneyPage implements OnInit {
 
             }
           }
-          console.log(data);
           this.apiService.createPayment(data).subscribe((res) => {
               this.createPayment = res;
-              debugger;
               if (res) {
                 this.utils.hideLoading().then(() => {
                   this.createChatGroup(this.fulldesigndata);
@@ -571,7 +531,6 @@ export class AddMoneyPage implements OnInit {
                   this.apiService.updateDesignForm(postData, this.designId).subscribe(value => {
                     if (this.design == 'prelim') {
                       this.newprelimsRef.update({count: this.newprelimscount + 1});
-                      console.log("hello", this.newprelimscount)
                     } else {
                       this.newpermitsRef.update({count: this.newpermitscount + 1});
                     }
@@ -619,13 +578,11 @@ export class AddMoneyPage implements OnInit {
   }
 
   amountCheck(event) {
-    console.log(event.target.value);
 //   if(this.onBoarding == 'true' || this.onBoarding == 'false')
 //   {
 //     if(event.target.value < 100 || event.target.value > 5000)
 // {
 //   this.amountCheckingForOnboarding = true;
-//   console.log(this.amountCheckingForOnboarding);
 // }else{
 //   this.amountCheckingForOnboarding = false;
 // }
@@ -633,7 +590,6 @@ export class AddMoneyPage implements OnInit {
 //   else{
     if (event.target.value < 1 || event.target.value > 10000) {
       this.amountChecking = true;
-      console.log(this.amountChecking);
     } else {
       this.amountChecking = false;
     }
@@ -641,9 +597,7 @@ export class AddMoneyPage implements OnInit {
   }
 
   makepayment(inputData) {
-    console.log(inputData);
     this.apiService.createPestamppayment(inputData).subscribe(response => {
-        console.log(response);
         this.createpayment = response;
         this.utils.hideLoading().then(() => {
 //if(this.createpayment.status=='succeeded'){
@@ -670,7 +624,6 @@ export class AddMoneyPage implements OnInit {
 
   makeCommercialpayment(inputData) {
     this.apiService.createCommercialPestamppayment(inputData).subscribe(response => {
-        console.log(response);
         this.createpayment = response;
         this.utils.hideLoading().then(() => {
 //if(this.createpayment.status=='succeeded'){
@@ -698,7 +651,6 @@ export class AddMoneyPage implements OnInit {
 
 
   createChatGroup(design) {
-    debugger;
     if (this.design == 'pestamp') {
       var GUID = 'pestamp' + "_" + new Date().getTime();
       //var address = design.address.substring(0, 60);
@@ -778,16 +730,13 @@ export class AddMoneyPage implements OnInit {
 
 
       onApprove: (data, actions) => {
-        console.log('onApprove - transaction was approved, but not authorized', data, actions);
         actions.order.get().then(details => {
-          console.log('onApprove - you can get full order details inside onApprove: ', details);
 
 
           var rechargeData = {}
           this.utils.showLoading("Adding").then(() => {
             var sessionId: number
             var dates = new Date();
-            console.log(dates)
             if (this.onBoarding == 'true' && this.amountForm.get('amount').value > 1000) {
               rechargeData = {
                 amount: this.amountForm.get('amount').value + 100,
@@ -813,13 +762,11 @@ export class AddMoneyPage implements OnInit {
                 this.responseData = res;
                 let token = this.storageService.getJWTToken();
                 this.storageService.setUser(res.user, token);
-                console.log(res);
                 this.utils.showSnackBar("$" + this.responseData.amount + " added in your wallet successfully");
                 this.goBack();
                 this.utils.setHomepageDesignRefresh(true);
               }), error => {
                 this.utils.hideLoading().then(() => {
-                  console.log("payment was unsuccessful");
                   this.utils.errorSnackBar(error);
                 })
               };
@@ -829,20 +776,16 @@ export class AddMoneyPage implements OnInit {
         })
       },
       onClientAuthorization: (data) => {
-        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
         // this.showSuccess = true;
       },
       onCancel: (data, actions) => {
-        console.log('OnCancel', data, actions);
         // this.showCancel = true;
 
       },
       onError: err => {
-        console.log('OnError', err);
         // this.showError = true;
       },
       onClick: (data, actions) => {
-        console.log('onClick', data, actions);
         // this.resetStatus();
       },
     };

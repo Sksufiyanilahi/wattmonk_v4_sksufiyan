@@ -49,7 +49,7 @@ export class SurveyoroverviewPage implements OnInit {
     this.updateUserPushToken();
     this.getNotificationCount();
     this.route.navigate(['surveyoroverview/newsurveys']);
-    
+
   }
 
   searchbar(){
@@ -58,11 +58,11 @@ export class SurveyoroverviewPage implements OnInit {
 
   getNotificationCount(){
     this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
-      console.log("count",count);
+
      this.unreadCount= count;
     });
-  
-   
+
+
   }
 
   ngOnDestroy() {
@@ -76,40 +76,40 @@ export class SurveyoroverviewPage implements OnInit {
     const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
     CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
       () => {
-        console.log('Initialization completed successfully');
+
         // if(this.utilities.currentUserValue != null){
           // You can now call login function.
           CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
             (user) => {
-              console.log('Login Successful:', { user });
+
             },
             error => {
-              console.log('Login failed with exception:', { error });
+
             }
           );
       // }
       },
       error => {
-        console.log('Initialization failed with error:', error);
+
       }
     );
   }
 
   updateUserPushToken(){
     this.apiService.pushtoken(this.storage.getUserID(), {"newpushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
-    console.log(data, "fcm data");
-    
+
+
     }, (error) => {
     });
   }
   ionViewDidEnter() {
     if(this.version !== this.update_version && this.update_version !==''){
-        
+
       setTimeout(()=>{
-    
+
         this.utilities.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
           text:'Ok',
-        
+
           handler:()=>{
             this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
            this.ionViewDidEnter();
@@ -119,10 +119,10 @@ export class SurveyoroverviewPage implements OnInit {
     }
     this.deactivateNetworkSwitch=   this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
-      console.log(this.netSwitch);
-      
+
+
     })
-  
+
   this.network.networkDisconnect();
   this.network.networkConnect();
     // this.subscription = this.platform.backButton.subscribe(() => {
@@ -133,14 +133,14 @@ export class SurveyoroverviewPage implements OnInit {
     //   }
     // });
   }
-  
-  
+
+
 	setzero() {
 		this.unreadCount = 0;
 	}
 
   scheduledPage() {
-		
+
 			this.route.navigate(['/schedule/survey']);
 			this.utilities.setDesignDetails(null);
 	}

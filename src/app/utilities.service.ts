@@ -86,7 +86,7 @@ export class UtilitiesService {
 	}
 
 	guid(data) {
-		console.log(data); // I have data! Let's return it so subscribers can use it!
+
 		// we can do stuff with data if we want
 
 		this.groupid = data;
@@ -322,7 +322,7 @@ export class UtilitiesService {
 	async uploadingSnackBar(message) {
 		//this.hideLoading();
 		//const toast = await this.toastController.create({
-			console.log("hii")
+
 		this.toast = await this.toastController.create({
 			message,
 			//duration: 2000,
@@ -333,7 +333,7 @@ export class UtilitiesService {
 
 	 async hideUploadingLoading() {
 		 //that = this;
-		 console.log("hello");
+
 	await this.toast.dismiss();
 	}
 
@@ -451,8 +451,8 @@ export class UtilitiesService {
 	}
 
 	async presentPopover(ev: any) {
-		console.log(ev);
-		
+
+
 		this.popover = await this.popoverController.create({
 		  component: PopoverComponentComponent,
 		  cssClass: 'my-custom',
@@ -531,7 +531,7 @@ export class UtilitiesService {
 
 	// getNotificationCount(){
 	//   this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
-	//     console.log("count",count);
+
 	//     // this.unreadCount.next(count);
 	//   });
 
@@ -546,7 +546,7 @@ export class UtilitiesService {
 			listnerID,
 			new CometChat.CallListener({
 				onIncomingCallReceived(call) {
-					console.log('Incoming call:', call);
+
 					that.callData = call;
 					// if(call.status=='initiated'){
 					that.router.navigate([ '/', 'callingscreen' ]);
@@ -554,18 +554,18 @@ export class UtilitiesService {
 					// Handle incoming call
 				},
 				onOutgoingCallAccepted(call) {
-					console.log('Outgoing call accepted:', call);
+
 					that.callData = call;
 					// Outgoing Call Accepted
 				},
 				onOutgoingCallRejected(call) {
-					console.log('Outgoing call rejected:', call);
+
 					that.callData = call;
 					// Outgoing Call Rejected
 					that.navCtrl.pop();
 				},
 				onIncomingCallCancelled(call) {
-					console.log('Incoming call calcelled:', call);
+
 					that.callData = call;
 
 					// that.location.back();
@@ -597,14 +597,14 @@ export class UtilitiesService {
                 if (this.storageService.getUserID() !== '') {
                     this.doCometUserLogin();
                 }
-                console.log('Initialization completed successfully');
+
                 // if(this.utilities.currentUserValue != null){
                 // You can now call login function.
 
                 // }
             },
             (error) => {
-                console.log('Initialization failed with error:', error);
+
             }
         ));
     }
@@ -616,21 +616,21 @@ export class UtilitiesService {
     const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(COMETCHAT_CONSTANTS.REGION).build();
     CometChat.init(COMETCHAT_CONSTANTS.APP_ID, appSetting).then(
       () => {
-        console.log('Initialization completed successfully');
+
         // if(this.utilities.currentUserValue != null){
           // You can now call login function.
           CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
             (user) => {
-              console.log('Login Successful:', { user });
+
             },
             error => {
-              console.log('Login failed with exception:', { error });
+
             }
           );
       // }
       },
       error => {
-        console.log('Initialization failed with error:', error);
+
       }
     );
 

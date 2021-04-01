@@ -79,14 +79,10 @@ netPay:any
       this.fulldesigndata = this.designData.productdetails.queryParams.fulldesigndata;
       this.designType = this.designData.productdetails.queryParams.designType;
 
-      console.log(this.fulldesigndata);
-
-
     this.newpermitsRef = db.object('newpermitdesigns');
     this.newpermits = this.newpermitsRef.valueChanges();
     this.newpermits.subscribe(
       (res) => {
-        console.log(res);
         this.newpermitscount = res.count;
         this.cdr.detectChanges();
       },
@@ -98,7 +94,6 @@ netPay:any
     this.newprelims = this.newprelimsRef.valueChanges();
     this.newprelims.subscribe(
       (res) => {
-        console.log(res);
         this.newprelimscount = res.count;
         this.cdr.detectChanges();
       },
@@ -116,7 +111,6 @@ netPay:any
 
 
     this.userData = this.storageService.getUser();
-    console.log(this.userData)
     this.fetchData();
     this.servicecharges();});
    /* this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
@@ -155,11 +149,9 @@ fetchData(){
 this.isradiodisable=false
 
   this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
-    console.log(this.user)
     this.delivertime=this.user.slabname
     this.apiService.paymentDetail(this.user.parent.id).subscribe(res=>{
       this.count=res;
-      console.log(this.count);
       this.servicecharges();
     })});
 
@@ -169,13 +161,8 @@ this.isradiodisable=false
       this.freeDesigns.forEach(element => {
         this.freeCharges = element.settingvalue;
       })
-      console.log(this.freeCharges);
 
     })
-
-
-    console.log(this.id);
-   console.log(this.design);
 
 
 }
@@ -189,7 +176,7 @@ discountAmount(){
     if(this.design=='prelim'){
     this.discount=this.code_discount;
     this.netPay=(this.settingValue-this.code_discount).toFixed(2);
-    console.log(this.netPay)}
+  }
     if(this.design=='permit'){
       this.discount=this.code_discount;
       this.netPay=(this.netPay-this.discount).toFixed(2);
@@ -199,7 +186,7 @@ discountAmount(){
     if(this.design=='prelim'){
     this.discount=null;
     this.netPay=this.settingValue;
-    console.log(this.netPay)}
+    }
 
     if(this.design=='permit'){
       this.netPay=this.servicePrice.paymentamount;
@@ -209,14 +196,12 @@ discountAmount(){
 }
 
 servicecharges(){
-  console.log(this.fulldesigndata,this.design);
   if(this.design=='prelim' && this.fulldesigndata.requirementtype=="assessment"){
     this.apiService.prelimCharges().subscribe(res=>{
       this.servicePrice=res;
       this.servicePrice.forEach(element => {
         this.settingValue = element.settingvalue;
       });
-      console.log("ddd",this.settingValue)
       this.discountAmount();
     })}
     else if(this.design=='prelim' && this.fulldesigndata.requirementtype == "proposal")
@@ -226,7 +211,7 @@ servicecharges(){
         this.servicePrice.forEach(element => {
           this.settingValue = element.settingvalue;
         });
-        
+
         this.discountAmount();
       })
     }
@@ -238,7 +223,6 @@ servicecharges(){
       this.apiService.permitCharges(postData).subscribe(res=>{
         this.servicePrice=res;
        this.settingValue=this.servicePrice.servicecharge
-        console.log("ddd",this.settingValue)
 
 
         if(this.servicePrice.freedesign==true){
@@ -301,7 +285,6 @@ confirm(){
       {
         this.createChatGroup(value);
         this.newprelimsRef.update({ count: this.newprelimscount + 1});
-        console.log("hello",this.newprelimscount)
       }else{
         this.createChatGroup(value);
         this.newpermitsRef.update({ count: this.newpermitscount + 1});
@@ -504,16 +487,13 @@ confirm(){
 
   codeDiscountCalculation(data,price:number){
   if(data.discounttype=='percentage'){
-    console.log(price)
     this.code_discount=(data.amount/100)*this.netPay;
   // this.code_discount= this.code_discount.toFixed(2);
   this.discountAmount();
-    console.log(this.code_discount)
     this.Congratulations();
 }
 else if(data.discounttype=='amount'){
   this.code_discount=data.amount;
-  console.log(this.code_discount)
    this.discountAmount();
    this.Congratulations();
 }
@@ -529,12 +509,10 @@ else if(data.discounttype=='amount'){
       backdropDismiss:false
     });
     modal.onDidDismiss().then((data) => {
-      console.log(data);
       if(data.data.cancel=='cancel'){
       }
       else if(data.data.data!=null){
       this.coupondata=data.data.data;
-      console.log(this.coupondata);
       this.utils.setCouponId(this.coupondata.id);
 
       this.codeDiscountCalculation(this.coupondata,this.settingValue);
@@ -583,7 +561,6 @@ else if(data.discounttype=='amount'){
 
   checkboxClicking(event){
 
-console.log(this.delivertime);
 this.servicecharges();
 this.removeCoupon();
 
@@ -623,9 +600,7 @@ this.removeCoupon();
 
 
       onApprove: (data, actions) => {
-          console.log('onApprove - transaction was approved, but not authorized', data, actions);
           actions.order.get().then(details => {
-         console.log('onApprove - you can get full order details inside onApprove: ', details);
          var postData={};
          var designacceptancestarttime = new Date();
          if(this.design=='prelim'){
@@ -665,7 +640,6 @@ this.removeCoupon();
              {
                this.createChatGroup(value);
                this.newprelimsRef.update({ count: this.newprelimscount + 1});
-               console.log("hello",this.newprelimscount)
              }else{
                this.createChatGroup(value);
                this.newpermitsRef.update({ count: this.newpermitscount + 1});
@@ -688,20 +662,16 @@ this.removeCoupon();
 
       },
       onClientAuthorization: (data) => {
-          console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
           // this.showSuccess = true;
       },
       onCancel: (data, actions) => {
-          console.log('OnCancel', data, actions);
           // this.showCancel = true;
 
       },
       onError: err => {
-          console.log('OnError', err);
           // this.showError = true;
       },
       onClick: (data, actions) => {
-          console.log('onClick', data, actions);
           // this.resetStatus();
       },
   };

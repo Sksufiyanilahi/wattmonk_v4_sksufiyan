@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {SurveyDataModel} from 'src/app/model/survey.model';
 import {SurveyDataHelper} from 'src/app/homepage/survey/survey.component';
 import {Subscription} from 'rxjs';
@@ -10,8 +10,8 @@ import {ErrorModel} from 'src/app/model/error.model';
 import {SurveyStorageModel} from 'src/app/model/survey-storage.model';
 import {Storage} from '@ionic/storage';
 import * as moment from 'moment';
-import {Router} from '@angular/router';
-import {ActionSheetController, Platform} from "@ionic/angular";
+import {NavigationExtras, Router} from '@angular/router';
+import {ActionSheetController, Platform, IonContent} from "@ionic/angular";
 
 @Component({
   selector: 'app-completedsurveys',
@@ -19,7 +19,8 @@ import {ActionSheetController, Platform} from "@ionic/angular";
   styleUrls: ['./completedsurveys.component.scss'],
 })
 export class CompletedsurveysComponent implements OnInit {
-
+  @ViewChild(IonContent, {static: false}) content: IonContent;
+  indexoftodayrow = -1;
   listOfSurveyData: SurveyDataModel[] = [];
   listOfSurveyDataHelper: SurveyDataHelper[] = [];
   private surveyRefreshSubscription: Subscription;
@@ -44,10 +45,10 @@ export class CompletedsurveysComponent implements OnInit {
     private actionSheetController: ActionSheetController,
     private platform: Platform
   ) {
-    console.log("inside new surveys");
+
     const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
-    console.log('date', this.today);
+
   }
 
   ngOnInit() {
@@ -72,13 +73,13 @@ export class CompletedsurveysComponent implements OnInit {
   }
 
   fetchPendingSurveys(event, showLoader: boolean) {
-    console.log("inside fetch surveys");
+
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
       this.apiService.getSurveyorSurveys("status=surveycompleted").subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-          console.log(response);
+
           this.formatSurveyData(response);
           if (event !== null) {
             event.target.complete();
@@ -134,13 +135,22 @@ export class CompletedsurveysComponent implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+
           }
         }
       ]
     });
     await actionSheet.present();
   }
+
+  scrollTo() {
+    setTimeout(() => {
+      let todaytitleElement = document.getElementById(''+this.indexoftodayrow);
+      this.content.scrollToPoint(0, todaytitleElement.offsetTop, 1000);
+    }, 2000)
+
+  }
+
 
   formatSurveyData(records: SurveyDataModel[]) {
     this.listOfSurveyData = this.fillinDynamicData(records);
@@ -172,12 +182,19 @@ export class CompletedsurveysComponent implements OnInit {
         }
       }
     });
-    this.listOfSurveyDataHelper = tempData;
-    // .sort(function (a, b) {
-    //   var dateA = new Date(a.date).getTime(),
-    //     dateB = new Date(b.date).getTime();
-    //   return dateA - dateB;
-    // });
+    this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+      var dateA = new Date(a.date).getTime(),
+        dateB = new Date(b.date).getTime();
+      return dateA - dateB;
+    });
+
+    this.listOfSurveyDataHelper.forEach((element, index) => {
+      if(element.date == this.today){
+        this.indexoftodayrow = index;
+      }
+    });
+
+    this.scrollTo();
     this.cdr.detectChanges();
   }
 
@@ -186,7 +203,7 @@ export class CompletedsurveysComponent implements OnInit {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       this.storage.get('' + element.id).then((data: SurveyStorageModel) => {
-        console.log(data);
+
         if (data) {
           element.totalpercent = data.currentprogress;
         } else {
@@ -203,7 +220,7 @@ export class CompletedsurveysComponent implements OnInit {
     var todaydate = moment(new Date(), "YYYYMMDD");
     var lateby = todaydate.diff(checkdate, "days");
     this.overdue = lateby;
-    console.log(this.overdue, ">>>>>>>>>>>>>>>>>.");
+
 
   }
 
@@ -221,7 +238,7 @@ export class CompletedsurveysComponent implements OnInit {
   }
 
   gotoActivity(surveyData, event) {
-    console.log(event)
+
     event.stopPropagation();
     this.router.navigate(['/activity' + '/' + surveyData.id + '/survey'])
 
@@ -231,6 +248,25 @@ export class CompletedsurveysComponent implements OnInit {
     // $event.preventDefault();
     // $event.stopPropagation();
     this.router.navigate(['/survey-detail/' + surveyData.id])
+  }
+
+  gotoChats(surveyData,event){
+
+    event.stopPropagation();
+    this.router.navigate(['/chat/' + surveyData.chatid])
+    let objToSend: NavigationExtras = {
+      queryParams: {
+       name:surveyData.name +'_'+surveyData.address,
+       guid:surveyData.chatid
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+  this.router.navigate(['chat/'+ surveyData.chatid], {
+  state: { productdetails: objToSend }
+  });
   }
 
 

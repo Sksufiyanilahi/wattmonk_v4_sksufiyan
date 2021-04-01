@@ -120,13 +120,13 @@ export class SearchbarPage implements OnInit {
 
   searchDesginAndSurvey(event) {
 
-    console.log(event, this.searchbarElement);
+
 
 
     if (this.searchbarElement !== '') {
       this.apiService.searchAllDesgin(this.searchbarElement,).subscribe((searchModel: any) => {
-        console.log(searchModel);
-        // console.log(searchModel.design);
+
+
         // this.searchDesginItem = [];
         // this.searchSurveyItem = [];
         if (event.target.value !== '') {
@@ -138,15 +138,15 @@ export class SearchbarPage implements OnInit {
             }else{
               this.searchSurveyItem = searchModel.survey;
             }
-                console.log(this.searchDesginItem);
+
           // });
-          console.log(this.searchSurveyItem);
+
         } else {
           this.searchDesginItem = [];
           this.searchSurveyItem = [];
         }
       }, (error) => {
-        console.log(error);
+
       });
     } else {
       this.route.navigate(['searchbar/design']);
@@ -155,7 +155,7 @@ export class SearchbarPage implements OnInit {
   }
 
   getdesigndata(serchTermData: any = { 'type': '' }) {
-    console.log(serchTermData);
+
     this.name = serchTermData.name==undefined ? '' :serchTermData.name ;
     this.searchbarElement = this.name;
     if (this.route.url == '/searchbar/design') {
@@ -186,7 +186,7 @@ export class SearchbarPage implements OnInit {
   requestLocationPermission() {
     this.platform.ready().then(() => {
       this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then((mode) => {
-        console.log(mode);
+
         switch (mode) {
           case this.diagnostic.permissionStatus.NOT_REQUESTED:
             // this.goBack();
@@ -208,7 +208,7 @@ export class SearchbarPage implements OnInit {
             break;
         }
       }, (rejection) => {
-        console.log(rejection);
+
       });
     });
   }
@@ -266,11 +266,11 @@ export class SearchbarPage implements OnInit {
   getGeoLocation() {
 
     this.geolocation.getCurrentPosition().then((resp) => {
-      console.log('resp', resp);
+
       this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
     }).catch((error) => {
       this.utilities.errorSnackBar('Unable to get location');
-      console.log('Error getting location', error);
+
       this.showNoLocation();
     });
 
@@ -280,7 +280,7 @@ export class SearchbarPage implements OnInit {
     // this.utilities.hideLoading().then((success) => {
     this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
       .then((result: NativeGeocoderResult[]) => {
-        console.log('resu', result);
+
         const address: AddressModel = {
           address: this.generateAddress(result[0]),
           lat: latitude,
@@ -317,7 +317,7 @@ export class SearchbarPage implements OnInit {
 
     this.diagnostic.switchToLocationSettings();
     this.diagnostic.registerLocationStateChangeHandler((state) => {
-      console.log(state);
+
       if ((this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF)) {
         this.checkLocationAccess();
       }
@@ -326,7 +326,7 @@ export class SearchbarPage implements OnInit {
   }
 
   checkLocationAccess() {
-    console.log('Getting location');
+
     this.diagnostic.isLocationAuthorized().then((success) => {
       this.fetchLocation();
     }, (error) => {

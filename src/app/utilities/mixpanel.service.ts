@@ -26,7 +26,7 @@ export class MixpanelService {
       "$name": name,
       "USER_ID": userid,    // use human-readable names
     });
-    console.log(email,name,userid)
+    // console.log(email,name,userid)
   }
 
   /**
@@ -37,7 +37,6 @@ export class MixpanelService {
    * @memberof MixpanelService
    */
   track(id: string, action: any = {}): void {
-    console.log(id,action);
     this.mixpanel.track(id, action).then((res)=>{console.log(res)})
   }
 }

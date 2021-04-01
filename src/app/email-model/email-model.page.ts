@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BaseUrl } from 'src/app/contants' 
+import { BaseUrl } from 'src/app/contants'
 
 import {
   HttpClient,
@@ -33,7 +33,7 @@ export class EmailModelPage implements OnInit {
   data:any;
   emails:any='';
   checkedEmailIds: boolean=false;
-  
+
   constructor(
     private util:UtilitiesService,
     private http: HttpClient,
@@ -66,8 +66,8 @@ export class EmailModelPage implements OnInit {
   ngOnInit() {
     this.id= this.nav.get('id');
     this.data=this.nav.get('designData');
-    console.log("hello",this.data);
-   
+
+
   }
 
   getTeamData(){
@@ -89,17 +89,17 @@ export class EmailModelPage implements OnInit {
  selectAll(event) {
     const Checked = event.target.checked;
     this.TeamData.forEach(item => item.Checked = Checked);
-    console.log(this.TeamData.Checked);
-    
+
+
   }
 
   checkedMails(event){
     const Checked = event.target.checked;
     this.checkedEmailIds = event.target.checked;
-  
-    
+
+
   }
-  
+
  SendMail(){
   var emails =(document.getElementById("inputemails") as HTMLInputElement).value
   this.emailArray = emails.split(',')
@@ -109,11 +109,11 @@ export class EmailModelPage implements OnInit {
 
   this.bodyData= this.TeamData.filter(item=> item.Checked);
     this.bodyData.forEach(element => {
-     
+
       this.selectedEmails.push(element.email)
     });
-  
-    console.log(this.selectedEmails)
+
+
     // if(this.selectedEmails.length > 1){
   let body= {emails:this.selectedEmails,
   id:this.id}
@@ -127,17 +127,17 @@ export class EmailModelPage implements OnInit {
         });
        // this.dialogRef.close( );
      }
-     this.selectedEmails=[]; 
+     this.selectedEmails=[];
    },
    error => {
-   
+
     this.util.errorSnackBar(
       "Something went wrong. Please try again."
     );
     this.selectedEmails=[];
       }
       )
-    } 
+    }
     else{
       this.api.sendPermitEmails(body).subscribe((response)=>{
         this.resp=response
@@ -148,10 +148,10 @@ export class EmailModelPage implements OnInit {
            });
           // this.dialogRef.close( );
         }
-        this.selectedEmails=[]; 
+        this.selectedEmails=[];
       },
       error => {
-      
+
        this.util.errorSnackBar(
          "Something went wrong. Please try again."
        );
@@ -163,8 +163,8 @@ export class EmailModelPage implements OnInit {
   //   else{
   //     this.util.errorSnackBar("Please Select the Email");
   //   }
-   
-      
+
+
   }
 
 
@@ -176,7 +176,7 @@ export class EmailModelPage implements OnInit {
 }
 
 checkedData(event){
-console.log(event.target.checked);
+
 
 }
 

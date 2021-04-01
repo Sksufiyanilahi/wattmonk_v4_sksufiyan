@@ -139,17 +139,17 @@ export class OnboardingPage implements OnInit {
     this.menu.enable(false);
     this.user = this.storage.getUser();
     this.userId= this.storage.getUserID();
-    console.log(this.prelimCharges);
-    console.log(this.permitCharges);
+
+
       this.onboardingData();
       this.paymentCharges();
       this.apiService.emitUserNameAndRole(this.user);
-      console.log(this.firstFormGroup.value)
+
 
 
 
 // this.buffer= this.value + 0.25;
-//     console.log(this.buffer);
+
     this.fetchTeamData();
 
   }
@@ -169,7 +169,7 @@ export class OnboardingPage implements OnInit {
   onboardingData(){
 
     this.apiService.getUserData(this.userId).subscribe((res:any)=>{
-      console.log(res);
+
       //this.checkboxValue = res.companyaddresssameasbilling;
       if(res.usertype=='company'){
         this.isCompany=true;
@@ -215,9 +215,9 @@ export class OnboardingPage implements OnInit {
   }
 
   companyOptions(e){
-    console.log(e);
+
     this.radioValues = e.target.value;
-    console.log(this.radioValues);
+
     if(this.radioValues === 'company'){
     this.isCompany = true;
     this.checkboxValue = false;
@@ -260,7 +260,7 @@ export class OnboardingPage implements OnInit {
   fetchTeamData(){
     this.apiService.getTeamData().subscribe(response =>{
       this.teamMember = response;
-      console.log(this.teamMember);
+
     })
   }
 
@@ -290,16 +290,16 @@ export class OnboardingPage implements OnInit {
       else{
       // if(this.logoUploaded){
       //   this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
-      //     console.log('updated',res);
+
 
       //    let token=  this.storage.getJWTToken();
       //     this.storage.setUser(res,token);
       //   })
       // }
       // else{
-        console.log(this.firstFormGroup.value);
+
         this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
-          console.log('updated',res);
+
 
          let token=  this.storage.getJWTToken();
           this.storage.setUser(res,token);
@@ -324,7 +324,7 @@ export class OnboardingPage implements OnInit {
 
 
   onChange(event,value){
-   console.log(event);
+
 
      if(value=='requestgenerated'){
       this.secondFormGroup.patchValue({
@@ -374,7 +374,7 @@ export class OnboardingPage implements OnInit {
   }
 
   onEmailChange(event,value){
-    console.log(event);
+
 
       if(value=='requestgeneratedemail'){
        this.secondFormGroup.patchValue({
@@ -424,9 +424,9 @@ export class OnboardingPage implements OnInit {
    }
 
   secondStepper(){
-    console.log(this.secondFormGroup.value);
+
     this.apiService.updateUser(this.userId,this.secondFormGroup.value).subscribe((res:any)=>{
-      console.log('updated',res);
+
       let token=  this.storage.getJWTToken();
       this.storage.setUser(res,token);
       //this.utils.showSnackBar('Changes saved successfully');
@@ -435,7 +435,7 @@ export class OnboardingPage implements OnInit {
   }
 
   thirdStepper(){
-    console.log(this.thirdFormGroup.status)
+
     //  if (this.thirdFormGroup.status === 'VALID') {
     // $ev.preventDefault();
     let peengineertype;
@@ -490,8 +490,8 @@ export class OnboardingPage implements OnInit {
 
 
   goToWallet(){
-    console.log("hello",this.user.amount);
-    console.log("hello",this.user.isonboardingcompleted);
+
+
     if(this.user.amount == 0 && this.user.isonboardingcompleted == false)
     {
     //this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"true"}]);
@@ -528,17 +528,17 @@ state: { productdetails: objToSend }
   }
 
   paymentCharges(){
-    console.log("hello")
+
     this.apiService.prelimCharges().subscribe(res => {
       // this.prelimCharge = res;
-      // console.log(this.prelimCharge.settingvalue)
+
       // this.storage.setPrelimCharges(res);
       this.prelimCharges = res;
       this.prelimCharges.forEach(element=>{
         this.prelimSettingValue = element.settingvalue;
       })
-      console.log(this.prelimCharges)
-      console.log('hello', this.prelimSettingValue)
+
+
 
     })
 
@@ -554,7 +554,7 @@ state: { productdetails: objToSend }
   uploadFile(event) {
     this.logoSelected=true;
     this.fileName= event.target.files[0].name;
-    console.log(this.fileName);
+
 
     let reader = getFileReader(); // HTML5 FileReader API
     let file = event.target.files[0];
@@ -565,13 +565,13 @@ state: { productdetails: objToSend }
       reader.onload = () => {
         this.logo = reader.result;
         this.blob= this.utils.b64toBlob(this.logo);
-        console.log(this.blob);
+
 
         this.firstFormGroup.patchValue({
           logo: this.fileName
         });
 
-        console.log(this.firstFormGroup.value);
+
 
         this.editFile = false;
         this.removeUpload = true;
@@ -592,9 +592,9 @@ state: { productdetails: objToSend }
   updateLogo(){
 
     this.apiService.uploadlogo(this.blob,this.fileName).subscribe(res=>{
-      console.log(res);
+
         this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
-          console.log('updated',res);
+
 
          let token=  this.storage.getJWTToken();
           this.storage.setUser(res,token);
@@ -618,11 +618,11 @@ state: { productdetails: objToSend }
   change(e)
   {
     this.checkboxValue = e.detail.checked;
-    console.log(this.checkboxValue)
+
     if(this.checkboxValue == true)
     {
       this.firstFormGroup.get("billingaddress").setValue(this.firstFormGroup.get("companyaddress").value);
-      console.log(this.firstFormGroup.get("billingaddress").value);
+
     }
     else{
       this.firstFormGroup.get("billingaddress").setValue('');

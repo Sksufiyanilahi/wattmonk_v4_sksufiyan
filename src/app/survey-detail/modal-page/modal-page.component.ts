@@ -16,8 +16,8 @@ export class ModalPageComponent implements OnInit {
   ngOnInit() {
 
     let image = this.navParam.get('image_url');
-    console.log(image);
-    
+    // console.log(image);
+
   }
 
 }

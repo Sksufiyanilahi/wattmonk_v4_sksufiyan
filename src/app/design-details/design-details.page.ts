@@ -14,7 +14,7 @@ import {NgxImageCompressService} from 'ngx-image-compress';
 import { CountdownTimerService, countDownTimerConfigModel, countDownTimerTexts } from 'ngx-timer';
 import { User } from '../model/user.model';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
- 
+
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { ErrorModel } from '../model/error.model';
 
@@ -56,7 +56,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   timerConfig: any;
   user: User;
   commentsForm: FormGroup;
-  reviewIssuesForm: FormGroup; 
+  reviewIssuesForm: FormGroup;
   //reviewIssues= new FormControl('', Validators.required);
   browser: any;
   exceedfileSize:any;
@@ -78,7 +78,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     private iab: InAppBrowser,
     private router:Router,
     private mixpanelService:MixpanelService
-  
+
   ) {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.assigneeForm = this.formBuilder.group({
@@ -96,18 +96,16 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
      reviewIssues: new FormControl('',[Validators.required])
     })
 
-    
+
   }
-  
+
 
   ngOnInit() {
     this.enableDisable= false;
-    console.log(this.imageName);
     this.user=this.storage.getUser();
-    console.log(this.user);
     this.mixpanelService.track('PRELIM_DESIGN_DETAIL_PAGE_OPEN', {
     });
-    
+
     this.dataSubscription = this.utilities.getDesignDetailsRefresh().subscribe((result) => {
       this.refreshDataOnPreviousPage++;
       this.getDesignDetails();
@@ -118,7 +116,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     const browser = this.iab.create(this.design.prelimdesign.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
   showRevisionImage(attachmentFile:any){
-    console.log(attachmentFile)
     const browser = this.iab.create(attachmentFile.url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
   showreasonImage(attachmentFile:any){
@@ -130,7 +127,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     }else{
       this.browser = this.iab.create(this.design.architecturaldesign[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
     }
- 
+
   }
 
   updatecomments(){
@@ -155,18 +152,17 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
              designendtime:date,
              reviewstarttime:date,
              comments:this.commentsForm.get('comments').value
-             
+
      }}
 
       this.utilities.showLoading('Submitting').then(()=>{
-        
+
         this.apiService.updateDesignForm(data,this.designId).subscribe((success)=>{
           this.utilities.hideLoading().then(()=>{
           this.setData(success);
           this.uploadpreliumdesign(this.designId,'prelimdesign');
           // this.utilities.hideLoading().then(() => {
-            console.log("suc",success);
-            
+
             // this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
             // this.utilities.setHomepageDesignRefresh(true);
           //   this.utilities.getDesignDetailsRefresh();
@@ -174,7 +170,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
           //     this.utilities.setHomepageDesignRefresh(true);
           //     // this.router.navigate(['designoverview/inreviewdesigns']);
           //     this.navController.pop();
-              
+
           //   }
 
           //   else
@@ -205,15 +201,14 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
          //custom class
          this.timerConfig.timerClass = 'remainingtimerclass';
      ​
-         //timer text values  
+         //timer text values
          this.timerConfig.timerTexts = new countDownTimerTexts();
          this.timerConfig.timerTexts.hourText = " :"; //default - hh
          this.timerConfig.timerTexts.minuteText = " :"; //default - mm
          this.timerConfig.timerTexts.secondsText = " "; //default - ss
          if (this.design.status == "designassigned"){
           let cdate = new Date(this.design.designstarttime);
-          console.log(cdate);
-          
+
           cdate.setHours(cdate.getHours() + 2);
           this.countdownservice.startTimer(cdate);
         }else if (this.design.status == "reviewassigned"){
@@ -240,7 +235,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
     this.utilities.showLoading('Getting Design Details').then((success) => {
       this.apiService.getDesginDetail(this.designId).subscribe((result) => {
         this.utilities.hideLoading();
-        console.log('re', result);
         this.setData(result);
         this.utilities.setDesignDetails(result);
         this.timer();
@@ -261,7 +255,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   scheduleRoute(design){
-    console.log("hello",design)
     if(design.requirementtype=="assessment"){
       this.router.navigate(['/schedule/design/' + design.id]);
     }
@@ -272,13 +265,13 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
   setData(result: DesginDataModel) {
     this.design = result;
-    console.log(this.design,">>>>>>>>>>>>>>>>");
     if(this.design.isinrevisionstate && this.design.status=='designassigned'){
       this.imageName=[];
     }else{
     this.imageName= result.prelimdesign==null ? '' : result.prelimdesign.name + result.prelimdesign.ext;
-    console.log(this.imageName);}
-    
+
+  }
+
     if (this.design.newconstruction == true) {
       this.design.newconstruction = 'Yes';
     } else {
@@ -313,7 +306,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   deleteDesignFromServer() {
     this.utilities.showLoading('Deleting Design').then((success) => {
       this.apiService.deleteDesign(this.designId).subscribe((result) => {
-        console.log('result', result);
         this.utilities.hideLoading().then(() => {
           this.utilities.showSnackBar(this.design.name+" "+'has been deleted successfully');
           this.navController.pop();
@@ -329,11 +321,10 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   getAssignees() {
-    
+
     this.apiService.getDesigners().subscribe(assignees => {
       this.listOfAssignees = [];
       assignees.forEach(item => this.listOfAssignees.push(item));
-      console.log(this.listOfAssignees);
     });
   }
 
@@ -344,7 +335,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       this.utilities.showLoading('Updating').then(() => {
         this.apiService.updateDesignForm(this.assigneeForm.value, this.designId).subscribe((success) => {
           this.utilities.hideLoading().then(() => {
-            console.log("suc",success);
             this.setData(success);
             this.utilities.showSnackBar('Design request has been assigned to' + " " + success.name + " " +'successfully');
             this.utilities.setHomepageDesignRefresh(true);
@@ -365,29 +355,23 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
   }
 
   showuploadbox(){
-    // console.log(this.design.prelimdesign.id);
     this.apiService.deletePrelimImage(this.design.prelimdesign.id).subscribe(_res=>{})
-    console.log(this.imageName);
     this.imageName=[];
-    
+
   }
 
   prelimfiles(event){
-    
-    console.log(this.imageName);
-    console.log(event.target.files);
+
+
     // for(var i=0; i< event.target.files.length;i++){
-      // this.prelimFiles.push(event.target.files) 
+      // this.prelimFiles.push(event.target.files)
       this.prelimFiles= event.target.files;
       this.imageName= event.target.files[0].name;
       this.imagebox= true;
       this.exceedfileSize = event.target.files[0].size;
       //this.prelimFileType = event.target.files[0].type;
-      console.log(this.exceedfileSize);
-      //console.log(this.prelimFileType)
     // }
-    console.log(this.prelimFiles);
-    
+
       this.targetLength= event.target.files.length;
 
 
@@ -397,8 +381,7 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
       var orientation = -1;
       let localUrl = event.target.result;
         // this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
-       // console.log(res,">><><><");
-        // this.image= res;  
+        // this.image= res;
     this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
     result => {
       this.image = result;
@@ -432,12 +415,11 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 }
 
 remove(){
-  
+
     this.prelimFiles=[];
     this.imageName= [];
     this.imagebox= false;
-    console.log(this.prelimFiles);
-    console.log(this.imageName);
+
     this.commentsForm.get('prelimdesign').setValue('');
 
 
@@ -447,15 +429,14 @@ prelimupdate(event){
   //console.log(this.imageName);
   //console.log(event.target.files);
   // for(var i=0; i< event.target.files.length;i++){
-    // this.prelimFiles.push(event.target.files) 
+    // this.prelimFiles.push(event.target.files)
     this.prelimFiles= event.target.files;
     this.prelimFileSize = event.target.files[0].size;
-    console.log(this.prelimFileSize);
     //this.imageName= event.target.files[0].name;
     //this.imagebox= true;
   // }
   //console.log(this.prelimFiles);
-  
+
     this.targetLength= event.target.files.length;
 
 
@@ -466,7 +447,7 @@ var orientation = -1;
 let localUrl = event.target.result;
 // this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
 // console.log(res,">><><><");
-// this.image= res;  
+// this.image= res;
 this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
   result => {
     this.image = result;
@@ -507,7 +488,7 @@ return blob;
       // console.log(blob);
       //  let blob= this.utilities.b64toBlob(this.image);
       //   console.log(blob);
-        
+
       // console.log(typeof(this.prelimFiles[0]));
       const imageData = new FormData();
       for(var i=0; i< this.prelimFiles.length;i++){
@@ -518,26 +499,25 @@ return blob;
           imageData.append('ref', 'design');
           imageData.append('field', key);
         // }
-      } 
+      }
         this.utilities.showLoading("Prelim File Uploading").then(()=>{
           this.apiService.uploaddesign(imageData).subscribe(res=>{
            // this.utilities.hideUploadingLoading();
             this.utilities.hideLoading().then(()=>{
-              console.log(res); 
               this.imagebox= false;
               // this.getDesignDetails();
               // this.updatecomments();
               // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res)=>{
               //   this.utilities.getDesignDetailsRefresh();
               //   console.log(res,">>");
-                
+
               // })
               //this.utilities.getDesignDetailsRefresh();
             if(this.isprelimUpdate){
               // this.router.navigate(['designoverview/inreviewdesigns']);
               this.navController.pop();
               this.utilities.setHomepageDesignRefresh(true);
-              
+
             }
             else if(this.isSelfUpdate){
               this.reportDesignReviewSuccess();
@@ -551,17 +531,16 @@ return blob;
               //else{
                // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res) =>{
              // this.utilities.getDesignDetailsRefresh();
-              
-              
-     
-            
-              
+
+
+
+
+
            // });
         //  }
       },err=>{
             this.utilities.hideLoading().then(()=>{
-              console.log(err);
-              
+
             })
           })
         }, responseError => {
@@ -579,7 +558,7 @@ return blob;
 
   reportDesignReviewFailure(){
     //console.log("Value is" + this.reviewIssuesForm.value);
-    if(this.reviewIssuesForm.valid){  
+    if(this.reviewIssuesForm.valid){
     this.countdownservice.stopTimer();
         let cdate = Date.now();
         this.reviewenddatetime = cdate;
@@ -588,11 +567,10 @@ return blob;
        reviewissues : this.reviewIssuesForm.get('reviewIssues').value,
         reviewstarttime : this.reviewstartdatetime,
         reviewendtime : this.reviewenddatetime,
-        
+
       };
 
-    
-      console.log("this is" + this.design.reviewstarttime);
+
 
      // console.log("this is"+ this.reviewstartdatetime);
       this.apiService.editDesign(
@@ -613,7 +591,7 @@ return blob;
           },
           error => {
             this.utilities.errorSnackBar(
-              
+
               "Error"
             );
           }
@@ -627,7 +605,7 @@ return blob;
 
 
   designReviewSuccess(){
-    
+
     if(this.isSelfUpdate && this.prelimFiles.length > 0)
     {
       if(this.prelimFileSize<=25000000){
@@ -636,8 +614,8 @@ return blob;
       }else{
         this.utilities.errorSnackBar("File is greater than 25MB")
       }
-      
-      
+
+
     }else if(this.isSelfUpdate && this.prelimFiles.length == 0)
     {
       this.utilities.errorSnackBar("Please attach file");
@@ -680,9 +658,9 @@ return blob;
         }
       );
   ​
-     
-          
-        
+
+
+
   }
 
   ionViewWillLeave(){
@@ -690,6 +668,6 @@ return blob;
 
 
 
-  
+
 
 }

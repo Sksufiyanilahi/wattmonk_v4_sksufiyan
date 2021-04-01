@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
- 
+
 
 @Component({
   selector: 'app-statistics-details',
@@ -13,14 +13,14 @@ export class StatisticsDetailsPage implements OnInit {
   name:any;
   constructor(private nav:NavParams,
               private modalCtrl:ModalController
-              
+
               ) { }
 
   ngOnInit() {
     this.designers= this.nav.get('designersValue');
     this.name = this.nav.get('name');
     //this.name = this.nav.get('name');
-    console.log(this.name);
+    // console.log(this.name);
   }
 
   goBack(){

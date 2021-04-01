@@ -14,9 +14,9 @@ import {Router} from '@angular/router';
 import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
 import {MixpanelService} from './utilities/mixpanel.service';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
-import {Plugins, StatusBarStyle} from '@capacitor/core';
+import {Plugins, StatusBarStyle, PushNotification, PushNotificationToken, PushNotificationActionPerformed} from '@capacitor/core';
 
-const { StatusBar, SplashScreen } = Plugins;
+const {StatusBar, SplashScreen, PushNotifications} = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -98,13 +98,13 @@ export class AppComponent {
     this.newprelims = this.newprelimsRef.valueChanges();
     this.newprelims.subscribe(
       (res) => {
-        console.log(res);
+
         this.newprelimscounts = res.count;
-        console.log(this.newprelimscounts);
+
         changeDetectorRef.detectChanges();
       },
-      (err) => console.log(err),
-      () => console.log('done!')
+
+
     );
     this.newpermitsRef = db.object('newpermitdesigns');
     this.newpermits = this.newpermitsRef.valueChanges();
@@ -113,8 +113,8 @@ export class AppComponent {
         this.newpermitscounts = res.count;
         changeDetectorRef.detectChanges();
       },
-      (err) => console.log(err),
-      () => console.log('done!')
+
+
     );
 
     //For Pestamp Badges
@@ -123,15 +123,15 @@ export class AppComponent {
     this.newpestamp.subscribe(
       (res) => {
         this.newpestampscount = res.count;
-        console.log(res.count);
+
         changeDetectorRef.detectChanges();
       },
-      (err) => console.log(err),
-      () => console.log('done!')
+
+
     );
     // this.db.doc('/newprelimdesigns/1').valueChanges().subscribe((res:any)=>{
     //   this.newprelimscounts = res;
-    //   console.log(this.newprelimscounts)
+
     // })
   }
 
@@ -143,6 +143,9 @@ export class AppComponent {
       this.utilities.setupCometChat();
       this.mix.initializeMixPanel();
       this.backgroundMode.enable();
+      if (this.user !== null || this.user !== '') {
+        this.registerAPNS();
+      }
       SplashScreen.hide();
       StatusBar.setStyle({
         style: StatusBarStyle.Light
@@ -154,6 +157,41 @@ export class AppComponent {
     });
   }
 
+  registerAPNS() {
+    console.log("Inside register");
+    PushNotifications.requestPermission().then(result => {
+      if (result.granted) {
+        PushNotifications.register();
+      }
+    });
+
+    PushNotifications.addListener('registration',
+      (token: PushNotificationToken) => {
+        localStorage.setItem('pushtoken', token.value);
+        console.log('Push registration success, token: ' + token.value);
+        this.apiservice.pushtoken(this.user.id, {newpushtoken: localStorage.getItem('pushtoken')});
+      }
+    );
+
+    PushNotifications.addListener('registrationError',
+      (error: any) => {
+
+      }
+    );
+
+    PushNotifications.addListener('pushNotificationReceived',
+      (notification: PushNotification) => {
+
+      }
+    );
+
+    PushNotifications.addListener('pushNotificationActionPerformed',
+      (notification: PushNotificationActionPerformed) => {
+
+      }
+    );
+  }
+
   isEmptyObject(obj) {
     return obj && Object.keys(obj).length === 0;
   }
@@ -161,7 +199,7 @@ export class AppComponent {
   ngOnInit() {
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe((data) => {
       this.netSwitch = data;
-      console.log(this.netSwitch);
+
     });
 
     this.network.networkDisconnect();
@@ -170,15 +208,15 @@ export class AppComponent {
     if (this.storageService.isUserPresent()) {
       this.apiservice.refreshHeader();
       this.user = JSON.parse(localStorage.getItem('user'));
-      // console.log("???",this.user.role);
-      console.log(this.user.role.type);
+
+
 
       if (this.user.role.type == 'surveyors') {
         this.navController.navigateRoot('surveyoroverview');
       } else if (this.user.role.type == 'designer') {
         this.navController.navigateRoot('permitdesignoverview');
       } else if (this.user.role.type === 'qcinspector') {
-        console.log(this.user.role.type);
+
         this.navController.navigateRoot('analystoverview');
       } else if (
         this.user.role.type === 'clientsuperadmin' &&
@@ -188,22 +226,21 @@ export class AppComponent {
       } else if (this.user.role.type === 'peengineer') {
         this.navController.navigateRoot('peengineer');
       } else {
-        if(this.user.role.type === 'clientsuperadmin' || this.user.role.type === 'wattmonkadmins'){
+        if (this.user.role.type === 'clientsuperadmin' || this.user.role.type === 'wattmonkadmins') {
           this.navController.navigateRoot('dashboard');
-        }else{
+        } else {
           this.navController.navigateRoot('permithomepage');
         }
       }
     }
     const path = window.location.pathname.split('/')[1];
-    console.log(path);
+
     if (path !== undefined) {
       this.selectedIndex = this.appPages.findIndex((page) => page.title.toLowerCase() === path.toLowerCase());
     }
 
     this.deactivateGetUserData = this.apiservice.getUserName().subscribe((res: any) => {
       this.userData = res;
-      debugger;
       if (res.role.name == 'ContractorSuperAdmin') {
         this.userData.role.name = 'SuperAdmin';
       } else if (res.role.name == 'WattmonkAdmin') {
@@ -244,7 +281,6 @@ export class AppComponent {
     ) {
       this.router.navigate(['/homepage/survey']);
     } else if (type == 'pestamp') {
-      debugger;
       if (this.userData.role.type == 'peengineer') {
         this.router.navigate(['/peengineer']);
         //this.router.navigate(['/comingsoon']);
@@ -269,7 +305,7 @@ export class AppComponent {
     this.firebase
       .getToken()
       .then((token) => {
-        console.log(`The token is ${token}`);
+
         this.firebaseToken = token;
         localStorage.setItem('pushtoken', token);
       })
@@ -287,7 +323,7 @@ export class AppComponent {
 
   getNotification() {
     this.firebase.onMessageReceived().subscribe((data) => {
-      console.log(`User opened a notification ${data}`, data);
+
       this.apiservice.emitMessageReceived('pushNotification');
     });
   }
@@ -303,14 +339,14 @@ export class AppComponent {
         if (this.storageService.getUserID() !== '') {
           this.utilities.doCometUserLogin();
         }
-        console.log('Initialization completed successfully');
+
         // if(this.utilities.currentUserValue != null){
         // You can now call login function.
 
         // }
       },
       (error) => {
-        console.log('Initialization failed with error:', error);
+
       }
     ));
   }
@@ -322,20 +358,20 @@ export class AppComponent {
 
   handleBackbutton() {
     // this.platform.backButton.subscribeWithPriority(10, () => {
-    //     console.log('Handler called to force close!');
+
     //     this.alertController.getTop().then(r => {
     //       if (r) {
     //         navigator['app'].exitApp();
     //       }
     //     }).catch(e => {
-    //       console.log(e);
+
     //     })
     //   });
   }
 
-  updateMenuState(){
-    console.log(">>");
-    this.userData= this.storageService.getUser();
+  updateMenuState() {
+
+    this.userData = this.storageService.getUser();
     // this.apiservice.emitUserNameAndRole(this.userData);
   }
 }

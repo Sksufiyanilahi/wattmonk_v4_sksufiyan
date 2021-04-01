@@ -7,7 +7,7 @@
 }
 
 .subtitle {
-  font-size: 2em;
+  font-size: 1.6rem;
   color: #434343;
 }
 
@@ -61,4 +61,18 @@ ion-content.login-background {
   color: rgb(223, 62, 62);
   font-size: 11px;
   margin-left: 5px;
+}
+
+.actionlink{
+  color: #3a7be0;
+  text-decoration: none;
+}
+
+.actionlink:hover{
+  text-decoration: none;
+}
+
+.registrationtext{
+  color: #3c4257;
+  font-size: 15px;
 }

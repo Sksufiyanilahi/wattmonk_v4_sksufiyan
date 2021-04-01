@@ -1,5 +1,5 @@
 import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
-import { BaseUrl } from 'src/app/contants' 
+import { BaseUrl } from 'src/app/contants'
 
 import {
   HttpClient,
@@ -72,14 +72,14 @@ export class EmailSelectorComponent implements ControlValueAccessor, Validator {
   }
 
   ngOnInit() {
-    
+
     this.api.getTeamData().subscribe(
       response => {
-      
+
         this.teamMember=response
         this.example=response
         this.example.push(this.design);
-        this.TeamData=this.example  
+        this.TeamData=this.example
       })
   }
   //onCloseClick(){
@@ -89,7 +89,7 @@ export class EmailSelectorComponent implements ControlValueAccessor, Validator {
     const checked = event.target.checked;
     this.TeamData.forEach(item => item.checked = checked);
   }
-  
+
  SendMail(){
   var emails =(document.getElementById("inputemails") as HTMLInputElement).value
   this.emailArray = emails.split(',')
@@ -99,11 +99,11 @@ export class EmailSelectorComponent implements ControlValueAccessor, Validator {
 
   this.bodyData= this.TeamData.filter(item=> item.checked);
     this.bodyData.forEach(element => {
-     
+
       this.selectedEmails.push(element.email)
     });
     this.selectedEmails.push()
-    console.log(this.selectedEmails)
+
   let body= {emails:this.selectedEmails,
   id:this.design}
    return this.http.post(BaseUrl+"designs/send-prelim-design",
@@ -116,16 +116,16 @@ export class EmailSelectorComponent implements ControlValueAccessor, Validator {
         this.util.showSnackBar("Email Sent  Successfully");
        // this.dialogRef.close( );
      }
-    
+
    },
    error => {
-   
+
     this.util.errorSnackBar(
       "Something went wrong. Please try again."
     );
-    
+
   })
-  
+
  }
 
 }

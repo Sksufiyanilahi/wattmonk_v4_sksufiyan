@@ -287,25 +287,25 @@ export class SalesproposalComponent implements OnInit {
     // this.newprelims = this.newprelimsRef.valueChanges();
     // this.newprelims.subscribe(
     //   (res) => {
-    //     console.log(res);
+
     //     this.newprelimscount = res.count;
     //     cdr.detectChanges();
     //   },
-    //   (err) => console.log(err),
-    //   () => console.log('done!')
+
+
     // )
     //this.newprelims = this.newprelimsRef.valueChanges();
     // this.db.doc('newprelimdesigns').valueChanges().subscribe((res:any)=>{
     //   this.newprelimscount = res;
-    //   console.log(this.newprelimscount)
+
     // })
     // this.newprelims.subscribe(
     //   (res) => {
-    //     console.log(res);
+
     //     this.newprelimscount = res.count;
     //   },
-    //   (err) => console.log(err),
-    //   () => console.log('done!')
+
+
     // )
 
     this.designId = +this.route.snapshot.paramMap.get('id');
@@ -317,7 +317,7 @@ export class SalesproposalComponent implements OnInit {
   }
 
   numberfield(event) {
-    console.log(event);
+
 
   }
 
@@ -334,25 +334,25 @@ export class SalesproposalComponent implements OnInit {
       this.checkIfNavDisabled(object, slideView);
     });
   }
-  
+
   //Move to previous slide
   slidePrev(object, slideView) {
     slideView.slidePrev(500).then(() => {
       this.checkIfNavDisabled(object, slideView);
     });;
   }
-  
+
   //Method called when slide is changed by drag or navigation
   SlideDidChange(object, slideView) {
     this.checkIfNavDisabled(object, slideView);
   }
-  
+
   //Call methods to check if slide is first or last to enable disbale navigation
   checkIfNavDisabled(object, slideView) {
     this.checkisBeginning(object, slideView);
     this.checkisEnd(object, slideView);
   }
-  
+
   checkisBeginning(object, slideView) {
     slideView.isBeginning().then((istrue) => {
       object.isBeginningSlide = istrue;
@@ -363,18 +363,18 @@ export class SalesproposalComponent implements OnInit {
       object.isEndSlide = istrue;
     });
   }
-  
+
 
   getincentives() {
     this.apiService.salesIncentives().subscribe(res => {
-      console.log(res, "salesinc");
+
       // this.incentives  = res;
     })
   }
 
   getutilitiesName() {
     this.apiService.utilitiesNames().subscribe(res => {
-      console.log(res, "utilityname");
+
       this.utilitiesName = res;
 
     })
@@ -383,7 +383,7 @@ export class SalesproposalComponent implements OnInit {
   fetchModuleMakesData() {
     this.apiService.utilitiesNames().subscribe(
       (response: any) => {
-        console.log("Hiii");
+
         this.modulemakes = response;
         this.filteredModuleMakes = this.desginForm.get('utility').valueChanges.pipe(
           startWith(""),
@@ -400,7 +400,7 @@ export class SalesproposalComponent implements OnInit {
   fetchIncentive() {
     this.apiService.salesIncentives().subscribe(
       (response: any) => {
-        console.log("Hiii");
+
         this.incentives = response;
         // this.filterIncentive = this.desginForm.get('utility').valueChanges.pipe(
         //   startWith(""),
@@ -425,7 +425,7 @@ export class SalesproposalComponent implements OnInit {
     //this.desginForm.patchValue({ uti: " " })
     this.desginForm.patchValue({ utilityrate: " " })
     if (_event.isUserInput) {
-      console.log(_event, "hello");
+
       this.desginForm.get('utilityrate').setValue("");
       if (this.isEditMode) {
         this.selectedUtilityRateId = null;
@@ -434,9 +434,9 @@ export class SalesproposalComponent implements OnInit {
       this.selectedUtilityId = make.id;
       this.apiService.utilitiesRate(make.id).subscribe(
         (response: any) => {
-          console.log("Hiii", response);
+
           this.modulemodels = response;
-          console.log(this.modulemodels)
+
           this.filteredModuleModels = this.desginForm.get('utilityrate').valueChanges.pipe(
             startWith(""),
             map(value => (typeof value === "string" ? value : value.rate)),
@@ -451,7 +451,7 @@ export class SalesproposalComponent implements OnInit {
   }
 
   setSelectedUtilityRate(module) {
-    console.log(module);
+
     this.selectedUtilityRateId = module.id;
   }
 
@@ -468,11 +468,11 @@ export class SalesproposalComponent implements OnInit {
   }
 
   saveUtilityName() {
-    console.log(this.modulemakes)
-    console.log("g", this.desginForm.get("utility").value);
+
+
     const found = this.modulemakes.some(el => el.name === this.desginForm.get("utility").value);
     if (!found) {
-      console.log("hello");
+
       let data = {
 
 
@@ -484,7 +484,7 @@ export class SalesproposalComponent implements OnInit {
         )
         .subscribe(
           (response: any) => {
-            console.log(response);
+
             this.selectedUtilityId = response.id;
             this.saveUtilityRate();
           },
@@ -500,12 +500,12 @@ export class SalesproposalComponent implements OnInit {
   }
 
   saveUtilityRate() {
-    console.log(this.modulemodels);
-    console.log(this.desginForm.get("utilityrate").value)
+
+
     const ismakefound = this.modulemakes.some(el => el.name === this.desginForm.get("utility").value);
-    console.log(ismakefound);
+
     const found = this.modulemodels.some(el => el.rate === this.desginForm.get("utilityrate").value);
-    console.log(found);
+
     if (!ismakefound || !found) {
       let data = {
         utility: this.selectedUtilityId,
@@ -535,7 +535,7 @@ export class SalesproposalComponent implements OnInit {
   uploadFile(event) {
     this.logoSelected = true;
     this.uploadLogo = event.target.files[0].name;
-    console.log(this.uploadLogo);
+
 
     let reader = new FileReader(); // HTML5 FileReader API
     let file = event.target.files[0];
@@ -546,7 +546,7 @@ export class SalesproposalComponent implements OnInit {
       reader.onload = () => {
         this.logo = reader.result;
         this.blob = this.utils.b64toBlob(this.logo);
-        console.log(this.blob);
+
 
         this.firstFormGroup.patchValue({
           logo: this.uploadLogo
@@ -560,7 +560,7 @@ export class SalesproposalComponent implements OnInit {
   // getmodulename(event){
 
   //     this.modulename= event;
-  //     console.log(this.modulename);
+
 
   // }
 
@@ -605,7 +605,7 @@ export class SalesproposalComponent implements OnInit {
     // })
     this.address = this.storage.getData();
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
-      console.log(event);
+
       if (event === ScheduleFormEvent.SAVE_SALES_FORM || event === ScheduleFormEvent.SEND_SALES_FORM) {
         this.send = event;
         this.addForm();
@@ -632,7 +632,7 @@ export class SalesproposalComponent implements OnInit {
       });
       // }
       // this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-      //   // console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
 
       //    this.desginForm.get('address').setValue('124/345');
       //    this.desginForm.get('latitude').setValue('24.553333');
@@ -678,7 +678,7 @@ export class SalesproposalComponent implements OnInit {
   }
 
   byDefaultData() {
-    console.log(this.userdata)
+
     this.desginForm.patchValue({
       company: this.userdata.company
     })
@@ -693,7 +693,7 @@ export class SalesproposalComponent implements OnInit {
     const roofcontrol = this.desginForm.get('rooftype');
     this.desginForm.get('mountingtype').valueChanges.subscribe(
       (mode: string) => {
-        console.log(mode);
+
         if (mode === 'ground') {
           tiltControl.setValidators([Validators.required, Validators.pattern(NUMBERPATTERN)]);
           roofcontrol.clearValidators();
@@ -719,7 +719,7 @@ export class SalesproposalComponent implements OnInit {
     const uploadboxcontrol = this.desginForm.get('architecturaldesign');
     this.desginForm.get('newconstruction').valueChanges.subscribe(
       (uploadmode: any) => {
-        console.log(uploadmode);
+
         if (uploadmode == 'true') {
           uploadboxcontrol.setValidators([Validators.required]);
         } else if (uploadmode == 'false') {
@@ -734,7 +734,7 @@ export class SalesproposalComponent implements OnInit {
     this.modulemodels = [];
     this.apiService.utilitiesRate(this.selectedUtilityId).subscribe(
       (response: any) => {
-        console.log("Hiii");
+
         this.modulemodels = response;
         this.filteredModuleModels = this.desginForm.get('utilityrate').valueChanges.pipe(
           startWith(""),
@@ -763,11 +763,11 @@ export class SalesproposalComponent implements OnInit {
         await this.utils.hideLoading().then(() => {
           // this.utils.showHideIntercom(true);
           this.design = result;
-          console.log(this.design);
+
           this.fieldDisabled = true;
           this.attachmentData = this.design.attachments;
           this.architecturalData = this.design.architecturaldesign;
-          console.log("hello", this.design.attachments);
+
           this.desginForm.patchValue({
             name: this.design.name,
             email: this.design.email,
@@ -806,7 +806,7 @@ export class SalesproposalComponent implements OnInit {
             requirementtype: this.design.requirementtype,
             inverterscount: this.design.inverterscount
           });
-          //console.log("attachments",this.desginForm.get('attachments').value)
+
           this.utils.setStaticAddress(this.design.address);
           this.oldcommentid = this.design.comments == '' ? '' : this.design.comments[0].id;
           //  this.attachmentData=this.design.attachments.length==1 ? this.design.attachments[0].name + this.design.attachments[0].ext : this.design.attachments.length;
@@ -835,8 +835,8 @@ export class SalesproposalComponent implements OnInit {
       this.apiService.getSolarMade(this.design.solarmake.id).subscribe(solarresponse => {
         // this.utils.hideLoading().then(()=>{
         this.listOfSolarMade = solarresponse;
-        console.log(solarresponse);
-        console.log('patching solar');
+
+
         setTimeout(() => {
           this.desginForm.patchValue({
             solarmake: this.design.solarmake.id,
@@ -871,11 +871,11 @@ export class SalesproposalComponent implements OnInit {
 
   getInverterMakeForForm() {
     this.apiService.getInverterMake().subscribe(response => {
-      console.log(response);
+
       this.listOfInverterMake = response;
       this.apiService.getInverterMade(this.design.invertermake.id).subscribe(makeResponse => {
         // this.utils.hideLoading();
-        console.log('patching inverter');
+
         this.listOfInverterMade = makeResponse;
 
         setTimeout(() => {
@@ -915,7 +915,7 @@ export class SalesproposalComponent implements OnInit {
       el.name === this.solarmake
     );
 
-    console.log(found);
+
 
     if (!found) {
       let solarmakedata = {
@@ -927,7 +927,7 @@ export class SalesproposalComponent implements OnInit {
         })
         this.saveModuleModel();
       }, err => {
-        console.log(err, 'err in savemodulemake');
+
 
       })
 
@@ -947,7 +947,7 @@ export class SalesproposalComponent implements OnInit {
         solarmade: this.solarmade,
         solarmake: this.desginForm.get('solarmake').value
       }
-      console.log(solarmadedata);
+
 
       this.apiService.postSolarMade(solarmadedata).subscribe((response: any) => {
         this.desginForm.patchValue({
@@ -988,7 +988,7 @@ export class SalesproposalComponent implements OnInit {
         invertermade: this.invertermade,
         invertermake: this.desginForm.get('invertermake').value
       }
-      console.log(invertermadedata);
+
 
       this.apiService.postInverterMade(invertermadedata).subscribe((response: any) => {
         this.desginForm.patchValue({
@@ -1004,7 +1004,7 @@ export class SalesproposalComponent implements OnInit {
 
   remove(arc, i) {
     //   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
-    //     this.apiService.deletePrelimImage(index).subscribe(res=>{console.log("hello",res)
+
     //   this.utils.hideLoading().then(()=>{
     //     this.utils.showSnackBar('File deleted successfully');
     //     this.navController.navigateRoot(["/schedule/design/",{id:this.designId}]);
@@ -1018,13 +1018,13 @@ export class SalesproposalComponent implements OnInit {
 
     // });
     // });
-    console.log(arc);
+
     this.indexOfArcFiles.push(arc.id);
 
     this.isArcFileDelete = true;
-    console.log(this.isArcFileDelete);
-    console.log(this.indexOfArcFiles);
-    console.log(this.architecturalData);
+
+
+
 
     this.architecturalData.splice(i, 1);
     this.deleteArcFile(this.indexOfArcFiles);
@@ -1036,10 +1036,10 @@ export class SalesproposalComponent implements OnInit {
     this.indexOfAttachmentFile.push(attachment.id);
 
     this.isArcFileDelete = true;
-    console.log(this.isArcFileDelete);
-    console.log(this.indexOfAttachmentFile);
-    console.log(this.attachmentData);
-    console.log(i);
+
+
+
+
 
     this.attachmentData.splice(i, 1);
     this.deleteAttachmentFile(this.indexOfAttachmentFile);
@@ -1053,7 +1053,7 @@ export class SalesproposalComponent implements OnInit {
       var id = index[i];
       this.utils.showLoading("Deleting Architectural File").then(() => {
         this.apiService.deletePrelimImage(id).subscribe(res => {
-          console.log("hello", res)
+
           this.indexOfArcFiles = []
         });
       });
@@ -1084,7 +1084,7 @@ export class SalesproposalComponent implements OnInit {
       this.utils.showLoading("Deleting Attachment File").then(() => {
         this.apiService.deletePrelimImage(id).subscribe(res => {
           this.utils.hideLoading().then(() => {
-            console.log("hello", res)
+
             this.indexOfAttachmentFile = []
           });
         })
@@ -1103,9 +1103,9 @@ export class SalesproposalComponent implements OnInit {
   addForm() {
     this.onFormSubmit = false;
     // this.saveModuleMake();
-    debugger;
-    console.log('Reach', this.desginForm.value);
-    // debugger;
+     ;
+
+    //  ;
     // this.saveModuleMake();
     this.saveUtilityName();
 
@@ -1113,7 +1113,7 @@ export class SalesproposalComponent implements OnInit {
   }
 
   submitform() {
-    console.log(this.desginForm);
+
     // const invalid = [];
     // const controls = this.desginForm.controls;
     // for (const name in controls) {
@@ -1121,21 +1121,21 @@ export class SalesproposalComponent implements OnInit {
     //         invalid.push(name);
     //     }
     // }
-    // console.log('hey',invalid)
+
     // return invalid;
 
-    console.log(this.send);
+
     if (this.desginForm.status == 'VALID') {
       var newConstruction = this.desginForm.get("newconstruction").value;
       this.desginForm.get("architecturaldesign").setValue('');
-      console.log(this.selectedUtilityId)
+
       // this.desginForm.get('utilityrate').setValue(this.selectedUtilityRateId);
       // this.desginForm.get('utility').setValue(this.selectedUtilityId);
       let postData;
       if (this.designId === 0) {
 
         if (this.send === ScheduleFormEvent.SAVE_SALES_FORM) {
-          debugger;
+           ;
           postData = {
             company: this.desginForm.get('company').value,
             name: this.desginForm.get('name').value,
@@ -1203,14 +1203,14 @@ export class SalesproposalComponent implements OnInit {
                     this.uploadpreliumdesign(response, 'attachments', this.prelimFiles[0], 0)
                   }
                   else {
-                    console.log('Redirect.....')
+
                     this.router.navigate(['/homepage/design'])
                     // this.utils.showSnackBar('Design have been saved');
                     this.utils.setHomepageDesignRefresh(true);
                   }
                 }
                 // this.utils.hideLoading().then(() => {
-                //   console.log('Res', response);
+
                 //   this.createChatGroup(response);
                 //   this.router.navigate(['/homepage/design'])
                 //   // this.utils.showSnackBar('Design have been saved');
@@ -1281,7 +1281,7 @@ export class SalesproposalComponent implements OnInit {
             inverterscount: this.desginForm.get('inverterscount').value
           }
           this.apiService.addDesginForm(postData).subscribe((response) => {
-            console.log(response.id);
+
             this.utils.hideLoading().then(() => {
               if (this.logoSelected) {
                 this.updateLogo();
@@ -1481,7 +1481,7 @@ export class SalesproposalComponent implements OnInit {
               }
             });
             // this.utils.hideLoading().then(() => {
-            //   console.log('Res', response);
+
             //   this.value=response.id;
 
             //   this.utils.showSnackBar('Design have been updated');
@@ -1570,7 +1570,7 @@ export class SalesproposalComponent implements OnInit {
         }
       }
     });
-    console.log(this.desginForm.value);
+
     this.utils.showAlert(error);
   }
 
@@ -1580,7 +1580,7 @@ export class SalesproposalComponent implements OnInit {
       this.listOfAssignees = [];
       // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
       assignees.forEach(item => this.listOfAssignees.push(item));
-      console.log(this.listOfAssignees);
+
     });
   }
 
@@ -1588,7 +1588,7 @@ export class SalesproposalComponent implements OnInit {
     this.utils.showLoading('Getting module models').then((success) => {
       this.apiService.getSolarMade(this.desginForm.get('solarmake').value).subscribe(response => {
         this.utils.hideLoading().then(() => {
-          console.log(response);
+
           this.listOfSolarMade = response;
           this.desginForm.patchValue({
             solarmodel: ''
@@ -1619,17 +1619,17 @@ export class SalesproposalComponent implements OnInit {
 
     }, responseError => {
       const error: ErrorModel = responseError.error;
-      console.log(error);
+
       this.utils.errorSnackBar(error.message[0].messages[0].message);
     });
   }
 
   getInverterMade() {
-    console.log(this.desginForm.get('invertermake').value);
+
     this.utils.showLoading('Getting inverter models').then((success) => {
       this.apiService.getInverterMade(this.desginForm.get('invertermake').value).subscribe(response => {
         this.utils.hideLoading().then(() => {
-          console.log(response);
+
           this.listOfInverterMade = response;
           this.desginForm.patchValue({
             invertermodel: ''
@@ -1648,7 +1648,7 @@ export class SalesproposalComponent implements OnInit {
 
   getInverterMake() {
     this.apiService.getInverterMake().subscribe(response => {
-      console.log(response);
+
       this.listOfInverterMake = response;
     }, responseError => {
       const error: ErrorModel = responseError.error;
@@ -1657,7 +1657,7 @@ export class SalesproposalComponent implements OnInit {
   }
 
   // onProjectChange(event){
-  // console.log("eve",this.desginForm);
+
   // }
 
   getclass = () => {
@@ -1666,7 +1666,7 @@ export class SalesproposalComponent implements OnInit {
 
   eventcheck(e) {
     this.showValue = e.target.value;
-    console.log(this.showValue);
+
 
   }
 
@@ -1678,12 +1678,12 @@ export class SalesproposalComponent implements OnInit {
 
 
   files(ev) {
-    console.log(ev.target.files,this.arcFileUrl);
+
     for (let i = 0; i < ev.target.files.length; i++) {
       this.archFiles.push(ev.target.files[i])
       var reader = getFileReader();
       reader.onload = (e: any) => {
-        console.log(ev.target.files[i],this.arcFileUrl);
+
         if(ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')){
           this.arcFileUrl.push(e.target.result);
         }else{
@@ -1693,31 +1693,31 @@ export class SalesproposalComponent implements OnInit {
       reader.readAsDataURL(ev.target.files[i]);
     }
     this.isArchitecturalFileUpload = true;
-    console.log(this.archFiles);
+
   }
 
   prelimfiles(event) {
-    console.log(event);
+
     for(let i=0; i< event.target.files.length;i++){
-      console.log(i);
+
 
       this.prelimFiles.push(event.target.files[i])
       var reader = getFileReader();
       reader.onload = (e: any) => {
         if(event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')){
-          // console.log(event.target.files[i].name);
+
           this.imageurls.push(e.target.result);
         }else{
           this.imageurls.push('/assets/icon/file.png');
         }
-        console.log(this.imageurls)
+
       }
       reader.readAsDataURL(event.target.files[i]);
     }
     this.attachmentFileUpload = true;
     if (this.prelimFiles.length == 1) {
       this.fileName = event.target.files[0].name;
-      console.log(this.fileName);
+
 
     } else if (this.prelimFiles.length > 1) {
       this.fileName = this.prelimFiles.length;
@@ -1734,7 +1734,7 @@ export class SalesproposalComponent implements OnInit {
       this.uploadpreliumdesign(response, key, this.prelimFiles[0], 0)
     }
     else {
-      console.log(this.archFiles);
+
       const imageData = new FormData();
       //for(var i=0; i< this.archFiles.length;i++){
       imageData.append("files", fileObj);
@@ -1747,9 +1747,9 @@ export class SalesproposalComponent implements OnInit {
       // }
       this.utils.showLoading("Uploading architecture" + " " + (index + 1) + " of" + " " + this.archFiles.length).then(() => {
         this.apiService.uploaddesign(imageData).subscribe(res => {
-          console.log(res);
+
           if (index < this.archFiles.length - 1) {
-            console.log("if")
+
             this.utils.hideLoading();
             var newIndex = index + 1;
             this.uploaarchitecturedesign(response, key, this.archFiles[newIndex], newIndex);
@@ -1798,7 +1798,7 @@ export class SalesproposalComponent implements OnInit {
   }
 
   uploadpreliumdesign(response?: any, key?: string, fileObj?: string, index?: number) {
-    console.log(this.prelimFiles);
+
     const imageData = new FormData();
     // for(var i=0; i< this.prelimFiles.length;i++){
     imageData.append("files", fileObj);
@@ -1811,9 +1811,9 @@ export class SalesproposalComponent implements OnInit {
     //}
     this.utils.showLoading("Uploading attachment" + " " + (index + 1) + " of" + " " + this.prelimFiles.length).then(() => {
       this.apiService.uploaddesign(imageData).subscribe(res => {
-        console.log(res);
+
         if (index < this.prelimFiles.length - 1) {
-          console.log("if")
+
           this.utils.hideLoading();
           var newIndex = index + 1;
           this.uploadpreliumdesign(response, key, this.prelimFiles[newIndex], newIndex);
@@ -1858,9 +1858,9 @@ export class SalesproposalComponent implements OnInit {
   updateLogo() {
 
     this.apiService.uploadlogo(this.blob, this.uploadLogo).subscribe(res => {
-      console.log(res);
+
       this.apiService.updateUser(this.userId, this.uploadLogo).subscribe((res: any) => {
-        console.log('updated', res);
+
 
         let token = this.storage.getJWTToken();
         this.storage.setUser(res, token);
@@ -1882,8 +1882,8 @@ export class SalesproposalComponent implements OnInit {
 
   // }
 
- 
-  
+
+
 
   removeArc(i) {
     this.archFiles.splice(i, 1);
@@ -1912,7 +1912,7 @@ export class SalesproposalComponent implements OnInit {
       this.apiService.updateDesignForm(postData, /*this.desginForm.get('id').value*/this.value).subscribe((value) => {
         this.utils.hideLoading().then(() => {
           ;
-          console.log('reach ', value);
+
 
           this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
           this.router.navigate(['/homepage/design'])
@@ -1996,7 +1996,7 @@ export class SalesproposalComponent implements OnInit {
   // gettingClients() {
   //   this.apiService.getClients().subscribe(res => {
   //     this.getCompanies = res;
-  //     console.log(this.getCompanies);
+
   //     this.filteredCompanies = this.desginForm.get('companyname').valueChanges.pipe(
   //       startWith(""),
   //       map(value => (typeof value === "string" ? value : value.companyid)),
@@ -2012,14 +2012,14 @@ export class SalesproposalComponent implements OnInit {
   proxyValue: any;
 
   onCompanyChanged(event$) {
-    console.log(event$);
+
     this.proxyValue = event$.detail.value.companyname;
     this.designCreatedBy = event$.detail.value.companyid;
     this.designCreatedByUserParent = event$.detail.value.parentid;
     if (this.designCreatedBy !== null && this.designCreatedByUserParent !== null) {
       var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
-      console.log(designacceptancestarttime)
+
       this.desginForm.patchValue({
         createdby: this.designCreatedBy,
         creatorparentid: this.designCreatedByUserParent,
@@ -2039,7 +2039,7 @@ export class SalesproposalComponent implements OnInit {
 
   onRangeChangeHandler() {
     this.number = this.desginForm.get('annualutilityescalation').value;
-    console.log(this.number);
+
 
 
     if (this.desginForm.get('annualutilityescalation').value > 0 && this.desginForm.get('annualutilityescalation').value < 1) {
@@ -2056,10 +2056,10 @@ export class SalesproposalComponent implements OnInit {
    //// For Address
     /* FOR SEARCH SHIPPING ADDRESS */
     updateSearchResults(event) {
-      //this.autoCompleteOff = true;    
-      console.log(this.autoCompleteOff);
+      //this.autoCompleteOff = true;
+
       const input = event.detail.value;
-      console.log(input)
+
       if (input === '') {
         this.autocompleteItems = [];
         return;
@@ -2078,7 +2078,7 @@ export class SalesproposalComponent implements OnInit {
     }
 
     forAutoComplete(e){
-      console.log("hello",e);
+
       this.autoCompleteOff = true;
       this.isSelectSearchResult = false;
 
@@ -2087,12 +2087,12 @@ export class SalesproposalComponent implements OnInit {
   //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
     selectSearchResult(item) {
       this.utils.showLoading('Loading').then(() => {
-      console.log(item);
+
       this.isSelectSearchResult = true;
       this.geocoder.geocode({
         placeId: item.place_id
       }, (responses, status) => {
-        console.log('respo', responses);
+
         this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
       });
       this.autocompleteItems = []
@@ -2118,7 +2118,7 @@ export class SalesproposalComponent implements OnInit {
       //this.utils.showLoading('Loading').then(() => {
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
-            console.log(result)
+
             let add = '';
             if (formattedAddress === '') {
               add = this.generateAddress(result[0]);
@@ -2126,7 +2126,7 @@ export class SalesproposalComponent implements OnInit {
               add = formattedAddress;
             }
             this.utils.hideLoading().then(() => {
-              console.log('resu', result);
+
               const address: AddressModel = {
                 address: add,
                 lat: latitude,
@@ -2167,15 +2167,15 @@ export class SalesproposalComponent implements OnInit {
     }
 
     onCancel() {
-      console.log("hello");
+
       this.autocompleteItems = [];
-      console.log(this.autocompleteItems)
+
     }
 
     addressValue(){
       // }
       this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
-        console.log(address,">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
 
           // this.firstFormGroup.get('address').setValue('124/345');
           // this.firstFormGroup.get('latitude').setValue('24.553333');
@@ -2205,7 +2205,7 @@ export class SalesproposalComponent implements OnInit {
       // });
    // this.autocompleteItems = [];
       this.autoCompleteOff = false;
-      console.log(this.autoCompleteOff);
+
       //this.getSolarMake();
 
       }

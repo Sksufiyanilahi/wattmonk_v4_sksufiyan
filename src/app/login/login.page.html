@@ -12,17 +12,17 @@
 
     <ion-grid class="ion-padding form-background">
         <ion-row class="ion-margin-top">
-            <ion-col size="12" class="ion-no-margin ion-no-padding">
+            <!-- <ion-col size="12" class="ion-no-margin ion-no-padding">
                 <span class="subtitle">
                     Welcome
                 </span>
                 <span class="subtitle" *ngIf="isLoggedInOnce">
                     back
                 </span>
-            </ion-col>
+            </ion-col> -->
             <ion-col size="12" class="ion-no-margin ion-no-padding">
-                <span class="subtitle-sub-text subtitle-dim-color">
-                    sign in to continue
+                <span class="subtitle">
+                    Sign in to your account
                 </span>
             </ion-col>
         </ion-row>
@@ -67,9 +67,9 @@
                             </ion-col>
 
                             <ion-col size="12" class="ion-margin-top">
-                                <h1 class="ion-no-margin ion-no-padding action-button-color" (click)="login()">
-                                    Login
-                                </h1>
+                                <ion-button color="primary" (click)="login()">
+                                    Sign in
+                                   </ion-button>
                             </ion-col>
                         </ion-row>
                     </ion-grid>
@@ -77,23 +77,9 @@
             </ion-col>
         </ion-row>
         <ion-row class="ion-margin-top">
-            <ion-col size="12" class="ion-no-margin ion-no-padding">
-                <span style="font-size: 1.0em; color: black; font-weight: bold;">
-                    Haven't register yet!!
-                </span>
+            <ion-col class="ion-no-margin ion-no-padding">
+                <p class="registrationtext">Don't have an account yet? <a class="actionlink" [routerLink]="['/userregistration']">Sign up</a></p>
             </ion-col>
-            <ion-col size="12" class="ion-no-margin ion-no-padding">
-                <span style="font-size: .8em; color:#000000a6; font-weight: bold;">
-                    Start exploring our end-to-end platform for better experiences and enhanced productivity. Scale with the power of Wattmonk platform
-                </span>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-
-                <ion-button color="primary" (click)="gotoSignup()">
-                 Sign up
-                </ion-button>
-
             </ion-row>
           </ion-grid>
 

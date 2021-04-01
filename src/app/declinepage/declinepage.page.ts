@@ -44,9 +44,6 @@ export class DeclinepagePage implements OnInit {
     this.id= this.nav.get('id');
     this.value = this.nav.get('value');
     this.declinedbypeengineer = this.nav.get('declinedbypeengineer');
-    console.log(this.declinedbypeengineer);
-    console.log(this.id);
-    console.log(this.value);
     this.pestampDeclineFileUpload = false;
 
     this.userData = this.storageService.getUser();
@@ -72,20 +69,20 @@ export class DeclinepagePage implements OnInit {
     this.chooser.getFile()
   .then((file) =>
     {
-      console.log(file);
+
       // if(this.value == 'pestamp'){
       //   for(var i=0; i< e.target.files.length;i++){
       //     this.pestampDeclineList.push(e.target.files[i])
       //   }
       // }
       // else{
-      console.log(file, 'canceled')
+
         this.filename= file.name;
         this.file.resolveLocalFilesystemUrl(file.uri).then((fileentry:FileEntry)=>{
           fileentry.file(fileObj=>{
-            console.log(fileObj);
+
             this.blob=fileObj;
-           console.log(fileObj.size);
+
 
            this.exceedfileSize = fileObj.size;
            if(fileObj.size > 1024 * 1024 * 25){
@@ -96,7 +93,7 @@ export class DeclinepagePage implements OnInit {
               this.getBase64(fileObj).then(res=>{
                 let base64file= file.dataURI + res;
                 this.blob= this.utilities.b64toBlob(base64file);
-                console.log(this.blob);
+
             });
 
            }
@@ -116,7 +113,7 @@ export class DeclinepagePage implements OnInit {
     //   // If it's base64 (DATA_URL):
     //   let base64Image = 'data:image/jpeg;base64,' + imageData;
     //   this.blob = this.utilities.b64tBlob(base64Image);
-    //   console.log(this.blob);
+
 
     //   this.filename = Date.now().toString() + '.png';
     //   if(this.blob){
@@ -157,7 +154,7 @@ export class DeclinepagePage implements OnInit {
 
     }else if(this.filename !=='' && this.exceedfileSize > 1048576){
 
-      console.log('could not submit');
+
 
     }else{
       var designstarttime = new Date();
@@ -183,7 +180,7 @@ export class DeclinepagePage implements OnInit {
             }
             this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{
             //this.createNewDesignChatGroup(res);
-            console.log(res);
+
             this.modalCtrl.dismiss({
               'dismissed' : true
             })
@@ -197,7 +194,7 @@ export class DeclinepagePage implements OnInit {
               designacceptanceendtime:milisecond,
                    }
 
-            console.log(data);
+
 
             this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
               this.createNewDesignChatGroup(res);
@@ -211,16 +208,16 @@ export class DeclinepagePage implements OnInit {
   }
 
   uploadPestampDeclineFile(event){
-    console.log(event);
-    console.log(event.target.files);
+
+
     this.exceedfileSize = event.target.files[0].size;
-    console.log(this.exceedfileSize);
+
     //this.isPermitPlanFileUpload = true;
      for(var i=0; i< event.target.files.length;i++){
        this.pestampDeclineList.push(event.target.files[i])
      }
      this.pestampDeclineFileUpload= true;
-     console.log(this.pestampDeclineList);
+
    }
 
    removeArc(i) {
@@ -229,7 +226,7 @@ export class DeclinepagePage implements OnInit {
  }
 
    pestampDeclineFile(){
-      console.log("Hello pestamp");
+
       const data = new FormData();
      for(var i=0; i< this.pestampDeclineList.length;i++){
        data.append("files",this.pestampDeclineList[i]);
@@ -240,7 +237,7 @@ export class DeclinepagePage implements OnInit {
         data.append('ref', "pestamp");
         data.append('field', "requestdeclineattachment");
 
-        console.log("file upload data---"+data);
+
        }
      }
       this.utilities.showLoading('Uploading').then(()=>{
@@ -265,7 +262,7 @@ export class DeclinepagePage implements OnInit {
             }
             this.apiservice.assignPestamps(this.id,postData).subscribe((res:any)=>{
             //this.createNewDesignChatGroup(res);
-            console.log(res);
+
             this.modalCtrl.dismiss({
               'dismissed' : true
             })
@@ -292,7 +289,7 @@ export class DeclinepagePage implements OnInit {
 
               }
 
-              console.log(data);
+
 
               this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
                   this.modalCtrl.dismiss({
@@ -323,7 +320,7 @@ export class DeclinepagePage implements OnInit {
   }
 
   createNewDesignChatGroup(design:DesginDataModel) {
-    debugger;
+     ;
     var GUID = 'prelim' + "_" + new Date().getTime();
     var address = design.address.substring(0, 60);
     var groupName = design.name + "_" + address;
@@ -335,7 +332,7 @@ export class DeclinepagePage implements OnInit {
 
     CometChat.createGroup(group).then(
       group => {
-        debugger;
+         ;
         let membersList = [
           new CometChat.GroupMember("" + design.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN),
           new CometChat.GroupMember("" + this.userData.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
@@ -348,7 +345,7 @@ export class DeclinepagePage implements OnInit {
               }
 
               this.apiservice.updateDesignForm(postdata,this.id).subscribe(res=>{
-                console.log(res);
+
 
               })
               // this.updateItemInList(LISTTYPE.NEW, design);
@@ -357,14 +354,14 @@ export class DeclinepagePage implements OnInit {
             }
           },
           error => {
-            console.log(error);
+
 
           }
         );
       },
       error => {
 
-        console.log(error);
+
 
 
       }
