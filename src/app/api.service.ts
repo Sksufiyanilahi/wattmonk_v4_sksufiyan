@@ -52,6 +52,7 @@ export class ApiService {
   public _OnMessageReceivedSubject: Subject<string>;
   public design : Observable<DesignModel>;
   public showUserName:Subject<any>;
+  audio: HTMLAudioElement;
 
   public solarMakeValue: BehaviorSubject<any> = new BehaviorSubject<any>('');
   version = new BehaviorSubject<string>('');
@@ -661,6 +662,7 @@ export class ApiService {
             },
             onOutgoingCallAccepted(call) {
               that.callData = call;
+              this.startcall();
               // Outgoing Call Accepted
             },
             onOutgoingCallRejected(call) {
@@ -680,6 +682,47 @@ export class ApiService {
           })
         );
       }
+
+      startcall() {
+        /**
+            * You can get the call Object from the success of acceptCall() or from the onOutgoingCallAccepted() callback of the CallListener.
+            */
+        var sessionId = this.callData.sessionId;
+        var callType = this.callData.type;
+        let callListener = new CometChat.OngoingCallListener({
+          onUserJoined: (user) => {
+            console.log('User joined call:', user);
+            this.pauseAudio();
+          },
+          onUserLeft: (user) => {
+            console.log('User left call:', user);
+            this.navCtrl.pop();
+            // this.pauseAudio();
+          },
+          onCallEnded: (call) => {
+            console.log('Call ended listener', call);
+            this.navCtrl.pop();
+            this.pauseAudio();
+          }
+        });
+        var callSettings = new CometChat.CallSettingsBuilder()
+          .setSessionID(sessionId)
+          .enableDefaultLayout(true)
+          .setIsAudioOnlyCall(callType == 'audio' ? true : false)
+          .setCallEventListener(callListener)
+          .build();
+          console.log(callSettings,">>>>");
+        CometChat.startCall(callSettings);
+      }
+      pauseAudio() {
+        this.audio.pause();
+      }
+      static rejectCall(sessionId, rejectStatus) {
+          let promise = new Promise((resolve, reject) => {
+            CometChat.rejectCall(sessionId, rejectStatus).then((call) => resolve(call), (error) => reject(error));
+          });
+          return promise;
+        }
 
       getCallData(): Observable<any> {
         return this.callData;

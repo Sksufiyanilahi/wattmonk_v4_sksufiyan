@@ -5,6 +5,9 @@ buildscript {
     repositories {
         google()
         jcenter()
+             maven {
+            url "https://dl.bintray.com/cometchat/pro"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.1'

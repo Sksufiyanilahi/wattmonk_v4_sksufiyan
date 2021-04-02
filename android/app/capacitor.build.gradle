@@ -10,6 +10,7 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-camera-preview')
+    implementation project(':cometchat-pro-ionic-calls')
     implementation "com.android.support:support-v4:27.+"
     implementation "androidx.exifinterface:exifinterface:1.2.0"
     implementation "com.google.android.gms:play-services-tagmanager:17.0.0"

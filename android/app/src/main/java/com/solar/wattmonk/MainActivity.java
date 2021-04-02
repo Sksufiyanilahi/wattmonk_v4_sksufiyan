@@ -2,6 +2,7 @@ package com.solar.wattmonk;
 
 import android.os.Bundle;
 
+import com.cometchat.calling.Calling;
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Plugin;
 import com.ahm.capacitor.camera.preview.CameraPreview;
@@ -18,6 +19,7 @@ public class MainActivity extends BridgeActivity {
       // Additional plugins you've installed go here
       // Ex: add(TotallyAwesomePlugin.class);
       add(CameraPreview.class);
+       add(Calling.class);
     }});
   }
 }
