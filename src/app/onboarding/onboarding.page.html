@@ -358,13 +358,13 @@
   <mat-label>User Role</mat-label>
         <ion-radio-group formControlName="userrole" >
           <ion-row >
-            <ion-col size="auto">
+            <ion-col size="6" *ngFor="let role of roles">
           <ion-item lines="none">
-            <ion-label class="margin" style="font-size: small;">Admin</ion-label>
-            <ion-radio slot="start" value="7" ></ion-radio>
+            <ion-label class="margin" style="font-size: small;">{{role.displayname}}</ion-label>
+            <ion-radio slot="start" [value]="role.role.id" (ionFocus)="roleChange(role.role.id)"></ion-radio>
           </ion-item>
         </ion-col>
-        <ion-col size="auto">
+        <!-- <ion-col size="auto">
           <ion-item lines="none">
             <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Design Manager</ion-label>
             <ion-radio slot="start"  value="3" ></ion-radio>
@@ -375,9 +375,23 @@
             <ion-label class="margin"   style="font-size: small;padding-left: 0%;">Surveyor</ion-label>
             <ion-radio slot="start"  value="9" ></ion-radio>
           </ion-item>
-        </ion-col>
-        </ion-row>
+        </ion-col>-->
+        </ion-row> 
         </ion-radio-group>
+        <ion-col size="12" *ngIf="roleValue=='11'">
+          <ion-item class="ion-no-padding">
+              <!-- <ion-label style="display: none;">Type of Pe engineer*</ion-label> -->
+              <ion-label position="floating">Type of Pe engineer*</ion-label>
+              <!-- <ion-label position="floating">mounting type</ion-label> -->
+              <ion-select class="form_input select_div"
+                          ok-text="" cancel-text=""
+                          formControlName="peengineertype" [disabled]="fieldDisabled" interface="popover">
+                  <ion-select-option value="structural">Structural</ion-select-option>
+                  <ion-select-option value="electrical">Electrical</ion-select-option>
+                  <ion-select-option value="both">Both</ion-select-option>
+              </ion-select>
+          </ion-item>
+      </ion-col>
 
   </form>
   <div>
