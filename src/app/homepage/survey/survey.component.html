@@ -143,11 +143,11 @@
                                 class="ion-text-end action-button-color" (click)="designDownload(surveyData,$event)">
                                 <ion-icon name="cloud-download-outline"></ion-icon>
                             </span>
-                            <span
+                            <!-- <span
                                 *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin') && (surveyData.surveypdf== null)"
                                 style="float:right !important;" class="ion-text-end action-button-color"
                                 (click)="generatePdf(surveyData.id,$event)">
-                                Generate PDF &nbsp; &nbsp;</span>
+                                Generate PDF &nbsp; &nbsp;</span> -->
                             <span
                                 *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin') && (surveyData.isdesignraised==false || surveyData.isdesignraised==null)"
                                 style="float:right !important;" class="ion-text-end action-button-color"
