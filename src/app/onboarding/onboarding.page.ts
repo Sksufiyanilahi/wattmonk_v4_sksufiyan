@@ -33,6 +33,7 @@ export class OnboardingPage implements OnInit {
   }
 
   user:any;
+  roles:any;
 
   // buffer:any;
   // value=0.25;
@@ -69,6 +70,7 @@ export class OnboardingPage implements OnInit {
   logoUploaded: boolean=false;
   logoSelected: boolean=false;
   checkboxValue:boolean;
+  roleValue: number;
 
   constructor(
               private router:Router,
@@ -125,13 +127,15 @@ export class OnboardingPage implements OnInit {
       firstname : new FormControl('',[Validators.required, Validators.pattern(NAMEPATTERN)]),
       lastname : new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       workemail : new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
-      userrole : new FormControl('')
+      userrole : new FormControl(''),
+      peengineertype:new FormControl('')
     })
     this.router.events.subscribe(e => {
       if (e instanceof ActivationStart && e.snapshot.outlet === "onboarding")
         this.outlet.deactivate();
     });
-
+    this.getRoles()
+    console.log("onboarding")
     this.menu.enable(false);
     this.user = this.storage.getUser();
     this.userId= this.storage.getUserID();
@@ -259,6 +263,23 @@ export class OnboardingPage implements OnInit {
 
     })
   }
+
+  getRoles()
+    {
+      this.apiService.getDynamicRoles().subscribe((res)=>{
+        console.log(res);
+        this.roles = res;
+        console.log(this.roles);
+        if(res == 0)
+        {
+          this.apiService.getDefaultRoles().subscribe((response)=>{
+            console.log(response);
+            this.roles = response;
+            console.log(this.roles)
+          })
+        }
+      })
+    }
 
   firstStepper(){
     // if(this.firstFormGroup.status === 'VALID')
@@ -417,7 +438,7 @@ export class OnboardingPage implements OnInit {
 
     //  if (this.thirdFormGroup.status === 'VALID') {
     // $ev.preventDefault();
-
+    let peengineertype;
         let rolesel = parseInt(this.thirdFormGroup.get("userrole").value);
         var senddesignrequestpermission = false;
         if(rolesel == ROLES.ContractorAdmin || rolesel == ROLES.Admin || rolesel == ROLES.BD){
@@ -430,7 +451,8 @@ export class OnboardingPage implements OnInit {
             this.thirdFormGroup.get("lastname").value,
             senddesignrequestpermission,
             parseInt(this.thirdFormGroup.get("userrole").value),
-            this.user.parent.minpermitdesignaccess
+            this.user.parent.minpermitdesignaccess,
+            this.thirdFormGroup.get("peengineertype").value
           )
           .subscribe(
             (response:any) => {
@@ -606,5 +628,10 @@ state: { productdetails: objToSend }
       this.firstFormGroup.get("billingaddress").setValue('');
     }
  }
+ roleChange(id)
+{
+  console.log(id)
+  this.roleValue = id;
+}
 
 }

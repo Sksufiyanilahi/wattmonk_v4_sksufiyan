@@ -1,141 +1,146 @@
+<ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+  <ion-col >
+    <h1 class="ion-no-padding ion-no-margin home">
+        Team</h1>
+</ion-col>
+</ion-toolbar>
 
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button mode="md"></ion-menu-button>
-    </ion-buttons>
-    <ion-col >
-      <h1 class="ion-no-padding ion-no-margin home">
-          Team</h1>
-  </ion-col>
-  </ion-toolbar>
-
-
+<!-- <ion-segment scrollable (ionChange)="segmentChanged($event)" value="groups" mode="md">
+  <ion-segment-button value="Groups">
+    <ion-label class="segment-btn">Team</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="teamForm">
+    <ion-label class="segment-btn">Group</ion-label>
+  </ion-segment-button>
+  </ion-segment>-->
 <ion-content style="padding-bottom: 250px;position: sticky;">
-  <ion-refresher slot="fixed">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-<ion-grid >
-    <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
-      <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
-          <ion-row >
-              <!-- <ion-row *virtualItem="let item;let i = index"> -->
-        <!-- <ion-col size="12" class="ion-margin-top">
-                <span class="ion-padding" *ngIf="today === item.date">
-                    Today
-                    </span>
-            <span class="ion-padding" *ngIf="today !== item.date">
-                        {{item.date | date: 'dd MMM yyyy'}}
-                </span>
-        </ion-col> -->
-        <ion-col *ngFor="let designData of teamData;let i = index;" size="12">
-            <ion-card class="ion-no-padding custom-card ion-no-margin" style="height: 100%;">
-                <p class="customer-name"
-                routerDirection="forward">{{designData.firstname}} {{designData.lastname}}
-                <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
-                  {{designData.deliverydate | date: 'hh:mm a'}}
-              </span> -->
+<ion-refresher slot="fixed">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
+<ion-grid>
 
-      </p>
+  <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
+    <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
+        <ion-row >
+            <!-- <ion-row *virtualItem="let item;let i = index"> -->
+      <!-- <ion-col size="12" class="ion-margin-top">
+              <span class="ion-padding" *ngIf="today === item.date">
+                  Today
+                  </span>
+          <span class="ion-padding" *ngIf="today !== item.date">
+                      {{item.date | date: 'dd MMM yyyy'}}
+              </span>
+      </ion-col> -->
+      <ion-col *ngFor="let designData of teamData;let i = index" size="12">
+        <ion-card class="ion-no-padding custom-card ion-no-margin"  (click)="teamdetail(designData,$event)" style="height: 100%;">
+              <p class="customer-name"
+              routerDirection="forward" >{{designData.firstname}} {{designData.lastname}}
+               <!--<span class="chipdetail" style="background-color: #1289A7;"  routerDirection="forward">
+                {{designData?.id | date: 'hh:mm a'}}
+            </span> -->
+            
+            
+    </p>
 
-      <p style="margin:0px">
-          <span class="customer-email" [routerLink]="['/pestamp-design-details/',designData.id]"
-                  routerDirection="forward">{{designData.role.name}}</span>
-                  <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
-                <!-- </ion-col> -->
-
-      </p>
-      <p style="margin:0px">
-        <span class="customer-email" [routerLink]="['/pestamp-design-details/',designData.id]"
-                routerDirection="forward">{{designData.email}}</span>
+    <p style="margin:0px">
+        <span class="customer-email" 
+                routerDirection="forward" style="color: #4272B9">{{designData.role?.name}}</span>
                 <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
               <!-- </ion-col> -->
 
     </p>
     <p style="margin:0px">
-      <span class="customer-phone" [routerLink]="['/pestamp-design-details/',designData.id]"
-              routerDirection="forward">{{designData.phone}}</span>
+      <span class="customer-email" 
+              routerDirection="forward">{{designData.email}}</span>
               <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
             <!-- </ion-col> -->
 
   </p>
-      <!-- <p style="margin:0px"  >
-                <a href="tel:{{designData.contactnumber}}" style="text-decoration: none;" class="z-100">
-                    <span class="customer-phone" *ngIf="designData.contactnumber != null && designData.contactnumber != ''">{{designData.contactnumber}}</span></a>
-                    <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
-                  </p>
-                <span class="customer-address z-100" *ngIf="designData.deliveryaddress != null && designData.deliveryaddress != ''"
-                        (click)="openAddressOnMap(designData.address)">{{(designData.deliveryaddress | slice:0:60) + (designData.deliveryaddress.length > 60 ? '...' : '')}}
+  <p style="margin:0px">
+    <span class="customer-phone" 
+            routerDirection="forward">{{designData.phone}}</span>
+            <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
+          <!-- </ion-col> -->
 
-                             <ion-col>
-
-                                </ion-col>
-
-                    </span> -->
-                    <!-- <ion-row style="margin-bottom: 0px;" [routerLink]="['/pestamp-design-details/',designData.id]">
-                        <ion-col *ngIf="designData.status == 'assigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
-                            <span *ngIf="designData.status == 'assigned'" style="float:right;text-align: right;">
-                                {{designData.designremainingtime}}</span></ion-col>
-                                <ion-col *ngIf="designData.status == 'outsourced'">
-                                    <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
-                                        {{designData.pestampacceptanceremainingtime}}</span></ion-col>
-                    </ion-row> -->
-
-
-
-                <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
-                  <!-- <span class="ion-text-end timestamp" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
-                        {{designData.deliverydate | date: 'hh:mm a'}}
-
-            </span> -->
-        </ion-card>
-        </ion-col>
-    </ion-row>
-    <!-- </ion-virtual-scroll> -->
+</p>
+    <!-- <p style="margin:0px"  >
+              <a href="tel:{{designData.contactnumber}}" style="text-decoration: none;" class="z-100">
+                  <span class="customer-phone" *ngIf="designData.contactnumber != null && designData.contactnumber != ''">{{designData.contactnumber}}</span></a>
+                  <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
+                </p>
+              <span class="customer-address z-100" *ngIf="designData.deliveryaddress != null && designData.deliveryaddress != ''" 
+                      (click)="openAddressOnMap(designData.address)">{{(designData.deliveryaddress | slice:0:60) + (designData.deliveryaddress.length > 60 ? '...' : '')}}
+                           <ion-col>
+                              
+                              </ion-col>
+                  </span> -->
+                  <!-- <ion-row style="margin-bottom: 0px;" [routerLink]="['/pestamp-design-details/',designData.id]">
+                      <ion-col *ngIf="designData.status == 'assigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
+                          <span *ngIf="designData.status == 'assigned'" style="float:right;text-align: right;">
+                              {{designData.designremainingtime}}</span></ion-col>
+                              <ion-col *ngIf="designData.status == 'outsourced'">
+                                  <span *ngIf="designData.status == 'outsourced'" style="float:right;text-align: right;">
+                                      {{designData.pestampacceptanceremainingtime}}</span></ion-col>
+                  </ion-row> -->
+                              
+            <ion-grid>
+                <ng-template #nodesignFound>
+                    <div *ngIf="listOfteamData.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
+                            <!-- <div *ngIf="!netSwitch"> -->
+                                
+                              {{noDesignFound}}
+                            <!-- </div> -->
+                  
+                        <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+                    </div>
+                </ng-template>
+                </ion-grid>
+              <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
+                <!-- <span class="ion-text-end timestamp" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
+                      {{designData.deliverydate | date: 'hh:mm a'}}
+          </span> -->
+      </ion-card>
+      </ion-col>
+  </ion-row>
+  <!-- </ion-virtual-scroll> -->
 </ion-grid>
-<!-- <ng-template #nodesignFound>
-    <div *ngIf="teamData.length === 0 " class="h-100 d-flex flex-column align-center justify-center"> -->
-            <!-- <div *ngIf="!netSwitch"> -->
 
-              <!-- {{noDesignFound}} -->
-            <!-- </div> -->
-
-        <!-- <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
-    </div>
-</ng-template> -->
-
-
-
+    
+  
 </ion-content>
 
 <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
-  <div class="position-relative">
-      <ion-fab horizontal="start" class="fab-position position-absolute">
-          <ion-fab-button (click)="teamScheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md" class="ht_wt">
-              <ion-icon name="add"></ion-icon>
-          </ion-fab-button>
-      </ion-fab>
-      <!-- <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
-          <ion-row>
-              <ion-col size="4">
-                  <div class="tab">
-                      <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>
-                      <span class="tabText">Home</span>
-                  </div>
-              </ion-col>
-              <ion-col size="4" [routerLink]="['/groups']">
-                  <div class="tab">
-                      <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
-                      <span class="tabText">Messages</span>
-                  </div>
-              </ion-col>
-              <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
-                  <div class="tab">
-                      <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
-                      <span class="tabText">Profile</span>
-                  </div>
-              </ion-col>
-          </ion-row>
-      </ion-grid> -->
-  </div>
+<div class="position-relative">
+    <ion-fab horizontal="start" class="fab-position position-absolute">
+        <ion-fab-button (click)="teamScheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md" class="ht_wt">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+    <!-- <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
+        <ion-row>
+            <ion-col size="4">
+                <div class="tab">
+                    <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>
+                    <span class="tabText">Home</span>
+                </div>
+            </ion-col>
+            <ion-col size="4" [routerLink]="['/groups']">
+                <div class="tab">
+                    <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
+                    <span class="tabText">Messages</span>
+                </div>
+            </ion-col>
+            <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
+                <div class="tab">
+                    <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
+                    <span class="tabText">Profile</span>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid> -->
+</div>
 
 </ion-footer>

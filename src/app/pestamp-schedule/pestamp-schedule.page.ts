@@ -66,8 +66,8 @@ export class PestampSchedulePage implements OnInit {
   isAtticFileDelete: boolean = false;
   isPermitPlanFileDelete: boolean = false;
 
-  // GoogleAutocomplete: google.maps.places.AutocompleteService;
-  // autocompleteItems: any[];
+  GoogleAutocomplete: google.maps.places.AutocompleteService;
+  autocompleteItems: any[];
 
   isAtticFileUpload: boolean = false;
   isRoofFileUpload: boolean = false;
@@ -78,13 +78,14 @@ export class PestampSchedulePage implements OnInit {
   // formatted_address:string;
 
   // map: any;
+  isSelectSearchResult:boolean = false;
+  autoCompleteOff:boolean = false;
+  geoEncoderOptions: NativeGeocoderOptions = {
+    useLocale: true,
+    maxResults: 5
+  };
 
-  // geoEncoderOptions: NativeGeocoderOptions = {
-  //   useLocale: true,
-  //   maxResults: 5
-  // };
-
-  // geocoder = new google.maps.Geocoder();
+    geocoder = new google.maps.Geocoder();
 
   constructor(private formBuilder: FormBuilder,
     private storage: StorageService,
@@ -127,8 +128,8 @@ export class PestampSchedulePage implements OnInit {
     this.designId = +this.route.snapshot.paramMap.get('id');
 
 
-    // this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
-    // this.autocompleteItems = [];
+    this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
+    this.autocompleteItems = [];
   }
 
   ionViewDidEnter() {
@@ -834,165 +835,167 @@ export class PestampSchedulePage implements OnInit {
 
   //// For Address
   //   /* FOR SEARCH SHIPPING ADDRESS */
-  //   updateSearchResults(event) {
-  //     //this.autoCompleteOff = true;
+    updateSearchResults(event) {
+      //this.autoCompleteOff = true;
 
-  //     const input = event.detail.value;
-  //     if (input === '') {
-  //       this.autocompleteItems = [];
-  //       return;
-  //     }
-  //     this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
-  //       country: 'us'
-  //     }  },
-  //       (predictions, status) => {
-  //         this.autocompleteItems = [];
-  //         this.zone.run(() => {
-  //           predictions.forEach((prediction) => {
-  //             this.autocompleteItems.push(prediction);
-  //           });
-  //         });
-  //       });
-  //   }
+      const input = event.detail.value;
+      if (input === '') {
+        this.autocompleteItems = [];
+        return;
+      }
+      this.GoogleAutocomplete.getPlacePredictions({ input, componentRestrictions: {
+        country: 'us'
+      }  },
+        (predictions, status) => {
+          this.autocompleteItems = [];
+          this.zone.run(() => {
+            predictions.forEach((prediction) => {
+              this.autocompleteItems.push(prediction);
+            });
+          });
+        });
+    }
 
-  //   forAutoComplete(e){
+    forAutoComplete(e){
 
-  //     this.autoCompleteOff = true;
+      this.autoCompleteOff = true;
+      this.isSelectSearchResult = false;
+    }
 
-  //   }
+    /* FOR SELECT SEARCH SHIPPING ADDRESS*/
+    selectSearchResult(item) {
+      this.utils.showLoading('Loading').then(() => {
+      this.isSelectSearchResult = true;
+      this.geocoder.geocode({
+        placeId: item.place_id
+      }, (responses, status) => {
 
-  //   /* FOR SELECT SEARCH SHIPPING ADDRESS*/
-  //   selectSearchResult(item) {
+        this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
+      });
+    });
+    }
 
-  //     this.geocoder.geocode({
-  //       placeId: item.place_id
-  //     }, (responses, status) => {
+    getGeoEncoder(latitude, longitude, formattedAddress) {
 
-  //       this.getGeoEncoder(responses[0].geometry.location.lat(), responses[0].geometry.location.lng(), responses[0].formatted_address);
-  //     });
-  //   }
+      // // TODO remove later
+      // const address: AddressModel = {
+      //   address: 'Vasant Kunj, New Delhi, Delhi',
+      //   lat: 28.5200491,
+      //   long: 77.158687,
+      //   country: 'India',
+      //   state: 'Delhi',
+      //   city: 'New Delhi',
+      //   postalcode: '110070'
+      // };
+      // this.utilities.setAddress(address);
+      // this.goBack();
+      // return;
 
-  //   getGeoEncoder(latitude, longitude, formattedAddress) {
+      
+        this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+          .then((result: NativeGeocoderResult[]) => {
 
-  //     // // TODO remove later
-  //     // const address: AddressModel = {
-  //     //   address: 'Vasant Kunj, New Delhi, Delhi',
-  //     //   lat: 28.5200491,
-  //     //   long: 77.158687,
-  //     //   country: 'India',
-  //     //   state: 'Delhi',
-  //     //   city: 'New Delhi',
-  //     //   postalcode: '110070'
-  //     // };
-  //     // this.utilities.setAddress(address);
-  //     // this.goBack();
-  //     // return;
+            let add = '';
+            if (formattedAddress === '') {
+              add = this.generateAddress(result[0]);
+            } else {
+              add = formattedAddress;
+            }
+            this.utils.hideLoading().then(() => {
 
-  //     this.utils.showLoading('Loading').then(() => {
-  //       this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
-  //         .then((result: NativeGeocoderResult[]) => {
+              const address: AddressModel = {
+                address: add,
+                lat: latitude,
+                long: longitude,
+                country: result[0].countryName,
+                state: result[0].administrativeArea,
+                city: result[0].locality,
+                postalcode: result[0].postalCode
+              };
+              this.utils.setAddress(address);
+              this.addressValue();
+              //this.goBack();
+            });
 
-  //           let add = '';
-  //           if (formattedAddress === '') {
-  //             add = this.generateAddress(result[0]);
-  //           } else {
-  //             add = formattedAddress;
-  //           }
-  //           this.utils.hideLoading().then(() => {
+          })
+          .catch((error: any) => {
+            this.utils.hideLoading().then(() => {
+              alert('Error getting location' + JSON.stringify(error));
+            });
 
-  //             const address: AddressModel = {
-  //               address: add,
-  //               lat: latitude,
-  //               long: longitude,
-  //               country: result[0].countryName,
-  //               state: result[0].administrativeArea,
-  //               city: result[0].locality,
-  //               postalcode: result[0].postalCode
-  //             };
-  //             this.utils.setAddress(address);
-  //             this.addressValue();
-  //             //this.goBack();
-  //           });
+          });
+     // });
+    }
 
-  //         })
-  //         .catch((error: any) => {
-  //           this.utils.hideLoading().then(() => {
-  //             alert('Error getting location' + JSON.stringify(error));
-  //           });
+    generateAddress(addressObj) {
+      const obj = [];
+      let address = '';
+      for (const key in addressObj) {
+        obj.push(addressObj[key]);
+      }
+      obj.reverse();
+      for (const val in obj) {
+        if (obj[val].length) {
+          address += obj[val] + ', ';
+        }
+      }
+      return address.slice(0, -2);
+    }
 
-  //         });
-  //     });
-  //   }
+    onCancel() {
 
-  //   generateAddress(addressObj) {
-  //     const obj = [];
-  //     let address = '';
-  //     for (const key in addressObj) {
-  //       obj.push(addressObj[key]);
-  //     }
-  //     obj.reverse();
-  //     for (const val in obj) {
-  //       if (obj[val].length) {
-  //         address += obj[val] + ', ';
-  //       }
-  //     }
-  //     return address.slice(0, -2);
-  //   }
+      this.autocompleteItems = [];
 
-  //   onCancel() {
+    }
 
-  //     this.autocompleteItems = [];
-
-  //   }
-
-  //   addressValue(){
-  //     // }
-  //     this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
+    addressValue(){
+      // }
+      this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
 
 
-  //         // this.firstFormGroup.get('address').setValue('124/345');
-  //         // this.firstFormGroup.get('latitude').setValue('24.553333');
-  //         // this.firstFormGroup.get('longitude').setValue('80.5555555555');
-  //         // this.firstFormGroup.get('country').setValue('india');
-  //         // this.firstFormGroup.get('city').setValue('Lucknow');
-  //         // this.firstFormGroup.get('state').setValue('UP');
-  //         // this.firstFormGroup.get('postalcode').setValue(3232343);
-  //        this.firstFormGroup.get('shippingaddress').setValue(address.address);
-  //          this.firstFormGroup.get('latitude').setValue(address.lat);
-  //          this.firstFormGroup.get('longitude').setValue(address.long);
-  //          this.firstFormGroup.get('country').setValue(address.country);
-  //        this.firstFormGroup.get('city').setValue(address.city);
-  //          this.firstFormGroup.get('state').setValue(address.state);
-  //          this.firstFormGroup.get('postalcode').setValue(address.postalcode);
-  //     }, (error) => {
-  //       this.firstFormGroup.get('address').setValue('');
-  //       this.firstFormGroup.get('latitude').setValue('');
-  //       this.firstFormGroup.get('longitude').setValue('');
-  //       this.firstFormGroup.get('country').setValue('');
-  //       this.firstFormGroup.get('city').setValue('');
-  //       this.firstFormGroup.get('state').setValue('');
-  //       this.firstFormGroup.get('postalcode').setValue('');
-  //     });
-  //     // this.firstFormGroup.patchValue({
-  //     //   createdby: this.storage.getUserID()
-  //     // });
-  //  // this.autocompleteItems = [];
-  //     this.autoCompleteOff = false;
+          // this.firstFormGroup.get('address').setValue('124/345');
+          // this.firstFormGroup.get('latitude').setValue('24.553333');
+          // this.firstFormGroup.get('longitude').setValue('80.5555555555');
+          // this.firstFormGroup.get('country').setValue('india');
+          // this.firstFormGroup.get('city').setValue('Lucknow');
+          // this.firstFormGroup.get('state').setValue('UP');
+          // this.firstFormGroup.get('postalcode').setValue(3232343);
+         this.firstFormGroup.get('shippingaddress').setValue(address.address);
+           this.firstFormGroup.get('latitude').setValue(address.lat);
+           this.firstFormGroup.get('longitude').setValue(address.long);
+           this.firstFormGroup.get('country').setValue(address.country);
+         this.firstFormGroup.get('city').setValue(address.city);
+           this.firstFormGroup.get('state').setValue(address.state);
+           this.firstFormGroup.get('postalcode').setValue(address.postalcode);
+      }, (error) => {
+        this.firstFormGroup.get('address').setValue('');
+        this.firstFormGroup.get('latitude').setValue('');
+        this.firstFormGroup.get('longitude').setValue('');
+        this.firstFormGroup.get('country').setValue('');
+        this.firstFormGroup.get('city').setValue('');
+        this.firstFormGroup.get('state').setValue('');
+        this.firstFormGroup.get('postalcode').setValue('');
+      });
+      // this.firstFormGroup.patchValue({
+      //   createdby: this.storage.getUserID()
+      // });
+   // this.autocompleteItems = [];
+      this.autoCompleteOff = false;
 
-  //     //this.getSolarMake();
+      //this.getSolarMake();
 
-  //     }
+      }
 
-  //     onBlur()
-  //     {
-  //       setTimeout(() => {
-  //         this.autocompleteItems = [];
-  //       }, 100);
-  //     }
+      onBlur()
+      {
+        setTimeout(() => {
+          this.autocompleteItems = [];
+        }, 100);
+      }
 
-  //     uploadAtticphotos(recordid: number, fileobj: File, index){
+      uploadAtticphotos(recordid: number, fileobj: File, index){
 
-  //     }
+      }
 
   removeattachment(arc, i, value) {
 
