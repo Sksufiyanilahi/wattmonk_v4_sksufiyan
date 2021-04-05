@@ -79,7 +79,7 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
     });
 
     if (this.storage.getUser().role.id == ROLES.Surveyor) {
-      this.iseditable = false;
+      this.iseditable = true;
     }
   }
 

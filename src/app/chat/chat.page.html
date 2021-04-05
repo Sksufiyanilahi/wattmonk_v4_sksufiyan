@@ -5,12 +5,12 @@
                 <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
             </ion-button>
         </ion-buttons>
-        <!-- <ion-buttons slot="end" (click)="dialcall()">
+        <ion-buttons slot="end" (click)="dialcall()">
             <ion-icon name="call" style="color:#3c78d8;font-size: 20px;"></ion-icon>&nbsp;&nbsp;
           </ion-buttons>
         <ion-buttons slot="end" (click)="videocall()">
           <ion-icon name="videocam" style="color:#3c78d8;font-size: 20px;"></ion-icon>&nbsp;&nbsp;
-          </ion-buttons> -->
+          </ion-buttons>
         <ion-title *ngIf="currentGroupData">
             <div class="Inline"><span style="padding:5px;background-color: greenyellow;border-radius: 50%;">#{{name.charAt(0).toUpperCase()}}</span></div>
             <div class="Inline"><span style="padding:5px;font-size: 9px;">{{name}}</span></div>

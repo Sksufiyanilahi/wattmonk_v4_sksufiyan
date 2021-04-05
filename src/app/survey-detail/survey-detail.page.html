@@ -32,7 +32,7 @@
             </ion-col> -->
       <ion-col
         size="2"
-        *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined')"
+        *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined'|| (user.role.type == 'surveyors' && survey.status == 'surveyassigned'))"
         style="text-align: right !important"
       >
         <ion-button
@@ -47,7 +47,7 @@
       </ion-col>
       <ion-col
         size="2"
-        *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined')"
+        *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined'|| (user.role.type == 'surveyors' && survey.status == 'surveyassigned'))"
         style="text-align: right !important"
         size="2"
       >

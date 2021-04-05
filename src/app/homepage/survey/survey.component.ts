@@ -994,7 +994,8 @@ export class SurveyComponent {
     });
   }
 
-  designDownload(designData) {
+  designDownload(designData,event) {
+    event.stopPropagation();
     let pdf = designData.surveypdf == null ? '' : designData.surveypdf;
     this.platform.ready().then(() => {
       this.file.resolveDirectoryUrl(this.storageDirectory).then(resolvedDirectory => {
