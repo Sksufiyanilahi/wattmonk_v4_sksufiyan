@@ -91,11 +91,11 @@
                     </ion-row>
                     <ion-row class="ion-no-margin">
                         <ion-col><span
-                                *ngIf="surveyData.status == 'created' || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'"
+                                *ngIf="(surveyData.status == 'created' && userData.usertype !== 'individual') || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'"
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="openSurveyors(surveyData.id,surveyData,$event)">Assign</span>
                             <!-- <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type =='surveyor'"> -->
-                            <span *ngIf="surveyData.status == 'created' && userData.role.type !== 'clientsuperadmin'"
+                            <span *ngIf="(surveyData.status == 'created' && userData.role.type !== 'clientsuperadmin') || (userData.usertype == 'individual')"
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="assignedTo(surveyData,$event)">
                                 Start Survey &nbsp;

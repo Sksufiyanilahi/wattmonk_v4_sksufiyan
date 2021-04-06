@@ -90,7 +90,7 @@
             
 
             <ion-row>
-                <ion-col>
+                <ion-col size="6">
                     <ion-item class="ion-no-padding">
                         <ion-label position="floating" class="label">Job Type*</ion-label>
                         <ion-select class="form_input select_div" placeholder="job type"
@@ -102,6 +102,26 @@
                             <ion-select-option value="pv">PV</ion-select-option>
                         </ion-select>
                     </ion-item>
+                </ion-col>
+               <ion-col  size="6">
+                <ion-item class="ion-no-padding">
+                    <ion-label style="display: none">project type*</ion-label>
+                    <ion-label position="floating">Project type*</ion-label>
+                    <!-- <ion-label style="display: none;">Project Type</ion-label> -->
+                    <!-- <ion-label position="floating">project type</ion-label> -->
+                    <ion-select
+                      class="form_input"
+                      ok-text=""
+                      cancel-text=""
+                      formControlName="projecttype"
+                      interface="popover"
+                    >
+                    <ion-select-option value="residential">Residential</ion-select-option>
+                    <ion-select-option value="commercial">Commercial</ion-select-option>
+                    <ion-select-option value="detachedbuildingorshop">Detached building or shop</ion-select-option>
+                    <ion-select-option value="carport">Carport</ion-select-option>
+                    </ion-select>
+                  </ion-item>
                 </ion-col>
             </ion-row>
 

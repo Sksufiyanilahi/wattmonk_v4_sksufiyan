@@ -783,5 +783,8 @@ export class ApiService {
       "clientroles?client_null=true&canbeaddedby_in="+roleid,)
   }
 
+  getadmins() : Observable<any>{
+    return this.http.get<any[]>(BaseUrl + "getadmins",{headers: this.headers});
+  }
 }
 

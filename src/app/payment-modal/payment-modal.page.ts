@@ -51,6 +51,7 @@ netPay:any
   fulldesigndata: any;
   delivertime:String;
   designType:any;
+  wattmonkadmins: any;
 
 
 
@@ -164,6 +165,11 @@ this.isradiodisable=false
 
     })
 
+    this.apiService.getadmins().subscribe(res=>{
+      this.wattmonkadmins=res;
+     console.log(res);
+
+    })
 
 }
 
@@ -548,12 +554,29 @@ else if(data.discounttype=='amount'){
     var password = "";
 
     var group = new CometChat.Group(GUID, groupName, groupType, password);
+    let adminsid=[]
+  this.wattmonkadmins.forEach(element => {
+    adminsid.push(element.id)
+  });
 
     CometChat.createGroup(group).then(group=>{
       let membersList = [
         new CometChat.GroupMember("" + this.fulldesigndata.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
       ];
+      adminsid.forEach(element => {
+        membersList.push( new CometChat.GroupMember("" + element, CometChat.GROUP_MEMBER_SCOPE.ADMIN))
+      });
       CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
+        
+          let postdata={
+            chatid:GUID
+          }
+
+          this.apiService.updateDesignForm(postdata,design.id).subscribe(res=>{
+          
+          })
+          // this.updateItemInList(LISTTYPE.NEW, design);
+       
         this.cdr.detectChanges();
       })
     })
@@ -676,6 +699,7 @@ this.removeCoupon();
       },
   };
 }
+
 
 
 
