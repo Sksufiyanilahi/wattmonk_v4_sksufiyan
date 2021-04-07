@@ -1,0 +1,67 @@
+<!-- <ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+  <ion-col >
+    <h1 class="ion-no-padding ion-no-margin home">
+        Team</h1>
+</ion-col>
+</ion-toolbar> -->
+
+<!-- <ion-segment scrollable (ionChange)="segmentChanged($event)" value="groups" mode="md">
+  <ion-segment-button value="Groups">
+    <ion-label class="segment-btn">Team</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="teamForm">
+    <ion-label class="segment-btn">Group</ion-label>
+  </ion-segment-button>
+  </ion-segment>-->
+<ion-content style="padding-bottom: 250px;position: sticky;">
+  <ion-refresher slot="fixed">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid>
+
+    <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
+    <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
+    <ion-row>
+      <!-- <ion-row *virtualItem="let item;let i = index"> -->
+      <!-- <ion-col size="12" class="ion-margin-top">
+                <span class="ion-padding" *ngIf="today === item.date">
+                    Today
+                    </span>
+            <span class="ion-padding" *ngIf="today !== item.date">
+                        {{item.date | date: 'dd MMM yyyy'}}
+                </span>
+        </ion-col> -->
+      <ion-col *ngFor="let designData of groupData;let i = index" size="12">
+        <ion-card class="ion-no-padding custom-card ion-no-margin" (click)="groupdetail(designData,$event)"
+          style="height: 100%;">
+          <p class="customer-name" routerDirection="forward">{{designData.name}}
+          </p>
+          <p class="customer-description" routerDirection="forward">{{designData.description}}
+          </p>
+
+
+          <ion-grid>
+            <ng-template #nodesignFound>
+              <div *ngIf="listOfteamData.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
+                <!-- <div *ngIf="!netSwitch"> -->
+
+                {{noDesignFound}}
+                <!-- </div> -->
+
+                <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+              </div>
+            </ng-template>
+          </ion-grid>
+          <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
+          <!-- <span class="ion-text-end timestamp" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
+                        {{designData.deliverydate | date: 'hh:mm a'}}
+            </span> -->
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <!-- </ion-virtual-scroll> -->
+  </ion-grid>
+</ion-content>

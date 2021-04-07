@@ -1,0 +1,109 @@
+<ion-row>
+  <ion-col>
+    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;" *ngIf="!isEditMode">Add Group Member </h5>
+    
+    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;" *ngIf="isEditMode">Edit Group Member </h5>
+   <!-- <h4 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit </h4>-->
+  </ion-col>
+<ion-col size="auto" style="align-self: center;">
+  <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+    <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+</ion-button>
+</ion-col>
+</ion-row>
+
+
+<ion-content>
+  <form [formGroup]="groupForm" novalidate style="overflow:scroll">
+    <ion-grid style="position: relative;">
+      <ion-row>
+        <ion-col size="12">
+          <ion-item class="ion-no-padding">
+          <ion-label position="floating">Group Name*</ion-label>
+                    <ion-input type="text" class="form_input" formControlName="groupname" autocapitalize="words"
+                                required></ion-input>
+                              </ion-item>
+                               <!-- <div style="height: 5px;">
+                                <div *ngIf="groupForm.get('groupname').hasError('pattern') && groupForm.get('groupname').dirty">
+                                    <span class="error">{{firstnameError}}</span>
+                                </div>
+                                <div *ngIf="groupForm.get('groupname').value === '' && groupForm.get('groupname').dirty">
+                                    <span class="error">{{fieldRequired}}</span>
+                                </div>
+                            </div>  -->
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="ion-no-padding">
+          <ion-label position="floating">Description</ion-label>
+                    <ion-input type="text" class="form_input" formControlName="description" autocapitalize="words"
+                                ></ion-input>
+                              </ion-item>
+                             <!-- <div style="height: 5px;">
+                                <div *ngIf="groupForm.get('description').hasError('pattern') && groupForm.get('description').dirty">
+                                    <span class="error">{{lastnameError}}</span>
+                                </div>
+                                <div *ngIf="groupForm.get('description').value === '' && groupForm.get('description').dirty">
+                                    <span class="error">{{fieldRequired}}</span>
+                                </div>
+                            </div>  -->
+        </ion-col>
+      </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col>
+        <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
+          <mat-label>Members</mat-label>
+          <!-- <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto" autocomplete="off" formControlName="members" required> -->
+          <ion-list>
+            <ion-chip outline color="primary" *ngFor="let user of selectedmembers">
+              <ion-label>{{user}}</ion-label>
+              <ion-icon name="close-circle"></ion-icon>
+            </ion-chip>
+            <input class="form_input font-size" #membersInput matInput [matAutocomplete]="membersauto" formControlName="members" required> 
+          </ion-list>
+          <mat-autocomplete #membersauto="matAutocomplete" (optionSelected)="setSelectMember($event)">
+            <mat-option *ngFor="let members of membersList" [value]="members"
+               class="font">{{members.name}}</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <!-- <div style="height: 5px;">
+            <div *ngIf="desginForm.get('modulemake').hasError('pattern') && desginForm.get('modulemake').dirty">
+                <span class="error">{{moduleAndInverterError}}</span>
+            </div>
+        </div> -->
+      </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-center ion-justify-content-center">
+        <ion-col>
+          <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
+            <mat-label>Clients</mat-label>
+            <!-- <input type="text" class="form_input font-size" matInput [matAutocomplete]="clientauto" autocomplete="off" formControlName="clients" required> -->
+           <ion-list>
+            <ion-chip outline color="primary" *ngFor="let user of selectedclients">
+              <ion-label>{{user}}</ion-label>
+              <ion-icon name="close-circle"></ion-icon>
+            </ion-chip>
+            <input class="form_input font-size" #clientInput matInput [matAutocomplete]="clientauto" formControlName="clients" required> 
+          </ion-list>
+            <mat-autocomplete #clientauto="matAutocomplete" (optionSelected)="setSelectClient($event)">
+              <mat-option *ngFor="let user of companyList" [value]="user"
+                 class="font">{{user.company}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <!-- <div style="height: 5px;">
+              <div *ngIf="desginForm.get('modulemake').hasError('pattern') && desginForm.get('modulemake').dirty">
+                  <span class="error">{{moduleAndInverterError}}</span>
+              </div>
+          </div> -->
+        </ion-col>
+        </ion-row>
+    
+    </ion-grid>
+    </form>
+</ion-content>
+<ion-row>
+  <ion-col></ion-col>
+  <ion-col size="auto">
+    
+    <ion-button class="action-button-color" fill="clear" (click)="submitForm()">Confirm</ion-button>
+      </ion-col>
+      </ion-row>  

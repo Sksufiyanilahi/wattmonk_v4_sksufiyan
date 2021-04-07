@@ -1,0 +1,85 @@
+<!--<div style="margin-top: 30px;">
+    <ion-row style=" background-color: rgb(211,211,211); text-align: center;" >
+      <ion-col>
+      <ion-label position="fixed" style="float: left;">Filename</ion-label>
+    </ion-col>
+      <ion-col>
+        <ion-label position="fixed" style="float: right;">Status</ion-label>
+      </ion-col>
+      <ion-col>
+        <ion-label position="fixed" style="float: right;">Delivery Date</ion-label>
+      </ion-col>
+  </ion-row>
+</div>-->
+<ion-header class="ion-no-border white-bg" *ngIf="designData">
+  <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
+      <ion-row>
+        <ion-col size="1">
+
+          <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()" [disabled]=enableDisable>
+              <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+          </ion-button>
+      </ion-col>
+    
+
+          <ion-col class="ion-text-center" size="8" style="padding-left: 20px;">
+              <ion-grid class="ion-align-items-center ion-justify-content-center">
+                  <ion-row class="ion-align-items-center ion-justify-content-center">
+                      <span class="survey-name ion-text-center">{{designData?.name}}</span>
+                  </ion-row>
+              </ion-grid>
+          </ion-col>
+      
+           
+          
+            
+            <ion-button fill="clear" size="small"  class="ion-no-padding"
+               (click)="edit()" routerDirection="forward" [disabled]=enableDisable>
+                
+            <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
+            </ion-button>
+      
+          
+            <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()" [disabled]=enableDisable>
+                <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
+            </ion-button>
+        </ion-row>
+      </ion-grid>
+    
+  <!--<ion-grid class="position-relative ion-no-padding">
+      <ion-row class="ion-no-padding border-header header-half-height">
+      </ion-row>
+      <ion-row class="ion-no-padding header-half-height">
+      </ion-row>
+     <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
+          <ion-col class="flex-center">
+              <ion-img src="/assets/icon/Team.svg" class="header-icon"></ion-img>
+          </ion-col>
+      </ion-row>
+  </ion-grid>-->
+</ion-header>
+  <!--<ion-list><ion-card style=" background-color: rgb(211,211,211);">-->
+    
+   <!--<ion-col *ngFor="let designData of design;let i = index;trackBy: trackdesign" size="12">-->
+    <ion-content class="ion-padding page-text-color" scrollY="true">
+      <ion-grid *ngIf="designData" class="page-text-color">
+        <ion-row class="ion-no-padding">
+          <ion-col ><span class="model-type font">Description</span></ion-col>
+          <ion-col size="auto">
+              <span class="model-name font">{{designData?.description}}</span>
+          </ion-col>
+        </ion-row>
+          <ion-row class="ion-no-padding">
+            <ion-col ><span class="model-type font">Members</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name font">{{designData?.members}}</span>
+            </ion-col>
+          </ion-row>
+                <ion-row class="ion-no-padding">
+                  <ion-col ><span class="model-type font">Clients</span></ion-col>
+                  <ion-col size="auto">
+                      <span class="model-name font">{{designData?.clients}}</span>
+                  </ion-col>
+                </ion-row>
+                </ion-grid>
+                </ion-content>

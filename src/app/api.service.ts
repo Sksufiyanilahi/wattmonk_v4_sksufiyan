@@ -389,7 +389,7 @@ export class ApiService {
   }
 
   getTeamData(): Observable<User[]> {
-    return this.http.get<User[]>(BaseUrl + "users?_sort=created_at:desc&parent="+this.parentId+"&id_ne="+this.parentId, {
+    return this.http.get<User[]>(BaseUrl + "users?_sort=created_at:desc&user="+this.userId+"&id_ne="+this.parentId, {
       headers: this.headers,
 
     })
@@ -772,8 +772,9 @@ export class ApiService {
   {
     let roleid = this.storageService.getUser().role.id;
     console.log(roleid);
+    console.log(this.userId)
     return this.http.get(BaseUrl +
-      "clientroles?client="+this.userId+"&canbeaddedby_in="+roleid+"&_sort=id:asc",)
+      "clientroles?client="+this.parentId+"&canbeaddedby_in="+roleid+"&_sort=id:asc",)
   }
 
   getDefaultRoles(){
@@ -781,6 +782,34 @@ export class ApiService {
     console.log(roleid);
     return this.http.get(BaseUrl +
       "clientroles?client_null=true&canbeaddedby_in="+roleid,)
+  }
+
+  addGroup(data)
+  {
+    console.log(data);
+    return this.http.post(BaseUrl + "usergroups",data, {
+      headers : this.headers
+    })
+  }
+
+  getGroupData()
+  {
+    return this.http.get(BaseUrl + "usergroups",{
+      headers:this.headers
+    })
+  }
+
+  updateGroupData(id,data){
+    return this.http.put(BaseUrl + "usergroups/" + id,data,
+    {
+      headers:this.headers
+    })
+  }
+
+  deleteGroup(id){
+    return this.http.delete(BaseUrl + "usergroups/" + id,{
+    headers:this.headers
+    })
   }
 
 }

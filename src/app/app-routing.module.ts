@@ -306,6 +306,23 @@ const routes: Routes = [
     path: 'teamdetails/:id',
     loadChildren: () => import('./teamdetails/teamdetails.module').then( m => m.TeamdetailsPageModule)
   },
+  {
+    path: 'teamhomepage',
+    loadChildren: () => import('./teamhomepage/teamhomepage.module').then( m => m.TeamhomepagePageModule)
+  },
+  {
+    path: 'groupschedule',
+    loadChildren: () => import('./groupschedule/groupschedule.module').then( m => m.GroupschedulePageModule)
+  },
+  {
+    path: 'groupschedule/:id',
+    loadChildren: () => import('./groupschedule/groupschedule.module').then( m => m.GroupschedulePageModule)
+  },
+  {
+    path: 'groupdetails',
+    loadChildren: () => import('./groupdetails/groupdetails.module').then( m => m.GroupdetailsPageModule)
+  },
+
 
 
 
