@@ -1384,7 +1384,19 @@ gotoActivity(designData,event){
 
   gotoChats(designData,event){
     event.stopPropagation();
-    this.route.navigate(['/chat/' + designData.chatid])
+     let objToSend: NavigationExtras = {
+      queryParams: {
+       name:designData.name +'_'+designData.address,
+       guid:designData.chatid
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+  this.route.navigate(['chat/'+ designData.chatid], {
+  state: { productdetails: objToSend }
+  });
   }
 
 }

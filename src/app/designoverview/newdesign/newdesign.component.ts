@@ -15,7 +15,7 @@ import { StorageService } from 'src/app/storage.service';
 import { version } from 'src/app/contants.prod';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { Router } from '@angular/router';
+import { Router,NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-newdesign',
@@ -306,6 +306,23 @@ this.apiService.version.subscribe(versionInfo=>{
       // $event.preventDefault();
       // $event.stopPropagation();
       this.router.navigate(['/design-details/' + designData.id])
+    }
+
+    gotoChats(designData,event){
+      event.stopPropagation();
+       let objToSend: NavigationExtras = {
+        queryParams: {
+         name:designData.name +'_'+designData.address,
+         guid:designData.chatid
+        },
+        skipLocationChange: false,
+        fragment: 'top'
+    };
+  
+  
+    this.router.navigate(['chat/'+ designData.chatid], {
+    state: { productdetails: objToSend }
+    });
     }
 
   doInfinite($event){

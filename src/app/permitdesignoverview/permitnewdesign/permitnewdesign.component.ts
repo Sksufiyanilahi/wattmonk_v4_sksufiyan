@@ -11,7 +11,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import * as moment from 'moment';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router,NavigationExtras } from '@angular/router';
 
 import { StorageService } from 'src/app/storage.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
@@ -289,7 +289,19 @@ export class PermitnewdesignComponent implements OnInit {
     }
     gotoChats(designData,event){
       event.stopPropagation();
-      this.router.navigate(['/chat/' + designData.chatid])
+       let objToSend: NavigationExtras = {
+        queryParams: {
+         name:designData.name +'_'+designData.address,
+         guid:designData.chatid
+        },
+        skipLocationChange: false,
+        fragment: 'top'
+    };
+  
+  
+    this.router.navigate(['chat/'+ designData.chatid], {
+    state: { productdetails: objToSend }
+    });
     }
 
   doInfinite($event){

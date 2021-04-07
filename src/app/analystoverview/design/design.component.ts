@@ -9,11 +9,12 @@ import { LaunchNavigator, LaunchNavigatorOptions } from '@ionic-native/launch-na
 import { DrawerState } from 'ion-bottom-drawer';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AssigneeModel } from '../../model/assignee.model';
-import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, RoutesRecognized ,NavigationExtras} from '@angular/router';
 import {Storage} from '@ionic/storage';
 import { ModalController } from '@ionic/angular';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
 import * as moment from 'moment';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { StorageService } from 'src/app/storage.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
@@ -265,6 +266,7 @@ this.network.networkConnect();
   formatDesignData(records : DesginDataModel[]){
     this.overdue=[];
     this.listOfDesigns = this.fillinDynamicData(records);
+    
 
 
 
@@ -315,8 +317,27 @@ this.network.networkConnect();
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
           });
+          this.chatIcon(this.listOfDesigns);
           this.cdr.detectChanges();
   }
+
+    ///chat icon
+    chatIcon(list:DesginDataModel[]){
+      list.forEach(element => {
+        var groupMembersRequest = new CometChat.GroupMembersRequestBuilder(element.chatid)
+          .setLimit(10)
+          .build();
+        groupMembersRequest.fetchNext().then(
+          groupMembers => {
+
+            element.addedtogroupchat=true;
+          },
+          error => {
+
+          }
+        );
+      })
+    }
 
   ngOnDestroy(): void {
    // this.refreshSubscription.unsubscribe();
@@ -686,7 +707,19 @@ gotoActivity(designData,event){
 
   gotoChats(designData,event){
     event.stopPropagation();
-    this.router.navigate(['/chat/' + designData.chatid])
+     let objToSend: NavigationExtras = {
+      queryParams: {
+       name:designData.name +'_'+designData.address,
+       guid:designData.chatid
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+  this.router.navigate(['chat/'+ designData.chatid], {
+  state: { productdetails: objToSend }
+  });
   }
 
 getassignedata(asssignedata){
