@@ -15,7 +15,7 @@
   Welcome! Let's help you get started.
 </div>
 <!-- <mat-vertical-stepper labelPosition="bottom" #stepper linear> -->
-  <mat-vertical-stepper labelPosition="bottom" [linear]="isLinear" #stepper>
+  <mat-vertical-stepper labelPosition="bottom" [linear]="isLinear" #stepper [@.disabled] = "true">
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
 
