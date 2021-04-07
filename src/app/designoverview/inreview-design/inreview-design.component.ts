@@ -12,7 +12,7 @@ import { DesginDataHelper } from 'src/app/homepage/design/design.component';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { Router } from '@angular/router';
+import { Router ,NavigationExtras} from '@angular/router';
 
 @Component({
   selector: 'app-inreview-design',
@@ -217,7 +217,19 @@ user:any
 
     gotoChats(designData,event){
       event.stopPropagation();
-      this.router.navigate(['/chat/' + designData.chatid])
+      let objToSend: NavigationExtras = {
+       queryParams: {
+        name:designData.name +'_'+designData.address,
+        guid:designData.chatid
+       },
+       skipLocationChange: false,
+       fragment: 'top'
+   };
+ 
+ 
+   this.router.navigate(['chat/'+ designData.chatid], {
+   state: { productdetails: objToSend }
+   });
     }
 
   doInfinite($event){

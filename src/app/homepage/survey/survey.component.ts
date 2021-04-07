@@ -1094,7 +1094,19 @@ export class SurveyComponent {
 
   gotoChats(surveyData,event){
     event.stopPropagation();
-    this.router.navigate(['/chat/' + surveyData.chatid])
+     let objToSend: NavigationExtras = {
+      queryParams: {
+       name:surveyData.name +'_'+surveyData.address,
+       guid:surveyData.chatid
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+  this.router.navigate(['chat/'+ surveyData.chatid], {
+  state: { productdetails: objToSend }
+  });
   }
 
 }
