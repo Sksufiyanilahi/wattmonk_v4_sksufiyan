@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-teamhomepage',
@@ -8,12 +9,16 @@ import { Router } from '@angular/router';
 })
 export class TeamhomepagePage implements OnInit {
 
-  constructor(private router:Router) { 
+  user:any
+  constructor(private router:Router,
+    private storage : StorageService) { 
     const url = this.router.url;
     console.log(url);
   }
 
   ngOnInit() {
+this.user = this.storage.getUser();
+console.log(this.user)
   }
 
   scheduledPage()

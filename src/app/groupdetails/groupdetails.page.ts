@@ -23,6 +23,7 @@ export class GroupdetailsPage implements OnInit {
 
   ngOnInit() {
     this.designData= this.nav.get('designData');
+    console.log(this.designData)
   }
 
   goBack() {

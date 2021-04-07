@@ -48,9 +48,9 @@
       <ion-tab-button tab="team">
         <ion-label>Team</ion-label>
       </ion-tab-button>
-      <ion-tab-button tab="group">
+      <!-- <ion-tab-button tab="group" *ngIf="this.user.role.type=='wattmonkadmins' || this.user.role.type=='superadmin'">
               <ion-label>Group</ion-label>
-          </ion-tab-button>
+          </ion-tab-button> -->
     </ion-tab-bar>
   </ion-tabs>
 

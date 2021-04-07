@@ -25,7 +25,7 @@
           <ion-col class="ion-text-center" size="8" style="padding-left: 20px;">
               <ion-grid class="ion-align-items-center ion-justify-content-center">
                   <ion-row class="ion-align-items-center ion-justify-content-center">
-                      <span class="survey-name ion-text-center">{{designData?.name}}</span>
+                      <span class="survey-name ion-text-center" style="margin-left: 20%;">{{designData?.name}}</span>
                   </ion-row>
               </ion-grid>
           </ion-col>
@@ -41,22 +41,23 @@
       
           
             <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()" [disabled]=enableDisable>
-                <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
+                <ion-img src="/assets/images/trash.svg" class="action-icon" ></ion-img>
             </ion-button>
         </ion-row>
       </ion-grid>
     
-  <!--<ion-grid class="position-relative ion-no-padding">
-      <ion-row class="ion-no-padding border-header header-half-height">
-      </ion-row>
-      <ion-row class="ion-no-padding header-half-height">
-      </ion-row>
-     <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
-          <ion-col class="flex-center">
-              <ion-img src="/assets/icon/Team.svg" class="header-icon"></ion-img>
-          </ion-col>
-      </ion-row>
-  </ion-grid>-->
+      <ion-grid class="position-relative ion-no-padding">
+        <ion-row class="ion-no-padding  header-half-height">
+        </ion-row>
+        <ion-row class="ion-no-padding header-half-height">
+
+        </ion-row>
+        <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
+            <ion-col class="flex-center">
+                <ion-img src="/assets/images/Team.svg" class="header-icon" style="margin-right: 20%;"></ion-img>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-header>
   <!--<ion-list><ion-card style=" background-color: rgb(211,211,211);">-->
     
@@ -71,15 +72,19 @@
         </ion-row>
           <ion-row class="ion-no-padding">
             <ion-col ><span class="model-type font">Members</span></ion-col>
-            <ion-col size="auto">
-                <span class="model-name font">{{designData?.members}}</span>
+            <ion-col size="auto" >
+              <p *ngFor="let design of designData.members" style="margin-top: 0px;margin-bottom: 0px;">
+                <span class="model-name font" >{{design.firstname}}{{design.lastname}}</span>
+              </p>
             </ion-col>
           </ion-row>
                 <ion-row class="ion-no-padding">
                   <ion-col ><span class="model-type font">Clients</span></ion-col>
                   <ion-col size="auto">
-                      <span class="model-name font">{{designData?.clients}}</span>
-                  </ion-col>
+                    <p *ngFor="let design of designData.clients" style="margin-top: 0px;margin-bottom: 0px;">
+                      <span class="model-name font" >{{design.firstname}}{{design.lastname}}</span>
+                    </p>
+                    </ion-col>
                 </ion-row>
                 </ion-grid>
                 </ion-content>
