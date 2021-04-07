@@ -197,7 +197,7 @@ export class DeclinepagePage implements OnInit {
 
 
             this.apiservice.updateDesignForm(data,this.id).subscribe((res:any)=>{
-              this.createNewDesignChatGroup(res);
+              // this.createNewDesignChatGroup(res);
                 this.modalCtrl.dismiss({
                   'dismissed': true
                 });

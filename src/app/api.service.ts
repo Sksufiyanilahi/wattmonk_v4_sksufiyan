@@ -812,5 +812,8 @@ export class ApiService {
     })
   }
 
+  getadmins() : Observable<any>{
+    return this.http.get<any[]>(BaseUrl + "getadmins",{headers: this.headers});
+  }
 }
 

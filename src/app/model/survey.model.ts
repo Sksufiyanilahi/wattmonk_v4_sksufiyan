@@ -80,6 +80,7 @@ export class SurveyDataModel {
   utilitybillfront?: any;
   mpurequired?: any;
   roofmaterial?: any;
+  projecttype:string
 }
 
 

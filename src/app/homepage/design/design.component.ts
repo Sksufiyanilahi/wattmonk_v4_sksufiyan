@@ -316,7 +316,7 @@ this.network.networkConnect();
       this.utils.showLoading("accepting").then(()=>{
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
            if(!res.isinrevisionstate){
-             this.createNewDesignChatGroup(res);
+            //  this.createNewDesignChatGroup(res);
             }
              ;
            this.utils.hideLoading().then(()=>{

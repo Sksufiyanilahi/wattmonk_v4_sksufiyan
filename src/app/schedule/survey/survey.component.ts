@@ -78,6 +78,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       email: new FormControl('', [Validators.pattern(EMAILPATTERN)]),
       phonenumber: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
       jobtype: new FormControl('', [Validators.required]),
+      projecttype: new FormControl('', [Validators.required]),
       surveydatetime: new FormControl(mydate),
       datetime: new FormControl(''),
       comments: new FormControl(''),
@@ -206,6 +207,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.utilities.errorSnackBar('Please enter phone number.');
       } else if (this.surveyForm.value.jobtype == '') {
         this.utilities.errorSnackBar('Please enter job type.');
+      }
+      else if (this.surveyForm.value.projecttype == '') {
+        this.utilities.errorSnackBar('Please fill the project type.');
       } else if (this.surveyForm.value.latitude == '' && this.surveyForm.value.longitude == '') {
         this.utilities.errorSnackBar('Please select address from dropdown.');
       } else {
@@ -330,6 +334,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             createdby: this.survey.createdby.id,
             latitude: this.survey.latitude,
             longitude: this.survey.longitude,
+            projecttype: this.survey.projecttype,
             country: this.survey.country,
             state: this.survey.state,
             city: this.survey.city,

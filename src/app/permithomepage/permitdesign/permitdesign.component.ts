@@ -263,7 +263,7 @@ this.deactivateNetworkSwitch.unsubscribe();
       }
       this.utils.showLoading("accepting").then(()=>{
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
-          this.createNewDesignChatGroup(res);
+          // this.createNewDesignChatGroup(res);
            this.utils.hideLoading().then(()=>{
                 if(this.updatechat_id){
 
