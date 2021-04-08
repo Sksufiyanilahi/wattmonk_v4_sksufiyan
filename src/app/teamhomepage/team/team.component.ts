@@ -58,7 +58,7 @@ export class TeamComponent implements OnInit {
   }
 
   getTeamData() {
-    this.utils.showLoading("Getting Data").then(() => {
+    this.utils.showLoading("Getting Team Data").then(() => {
       this.apiService.getTeamData().subscribe((res) => {
          console.log(res);
         this.utils.hideLoading().then(() => {

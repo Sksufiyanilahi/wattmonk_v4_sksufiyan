@@ -68,12 +68,12 @@
     </ion-row>
     <br>
     <ion-label>User Role</ion-label>
-          <ion-radio-group formControlName="userrole" >
+          <ion-radio-group formControlName="userrole" value="userrole">
             <ion-row>
               <ion-col size="6" *ngFor="let role of roles">
             <ion-item lines="none">
               <ion-label class="margin" style="font-size: small;">{{role.displayname}}</ion-label>
-              <ion-radio slot="start" [value]="role.role.id" (ionFocus)="roleChange(role.role.id)"></ion-radio>
+              <ion-radio slot="start" name="{{role.role.name}}" [value]="role.role.id" (ionFocus)="roleChange(role.role.id)"></ion-radio>
             </ion-item>
           </ion-col>
         

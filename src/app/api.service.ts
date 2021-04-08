@@ -774,14 +774,14 @@ export class ApiService {
     console.log(roleid);
     console.log(this.userId)
     return this.http.get(BaseUrl +
-      "clientroles?client="+this.parentId+"&canbeaddedby_in="+roleid+"&_sort=id:asc",)
+      "/clientroles?client="+this.parentId+"&canbeaddedby_in="+roleid+"&_sort=id:asc",)
   }
 
   getDefaultRoles(){
     let roleid = this.storageService.getUser().role.id;
     console.log(roleid);
     return this.http.get(BaseUrl +
-      "clientroles?client_null=true&canbeaddedby_in="+roleid,)
+      "/clientroles?client_null=true&canbeaddedby_in="+roleid,)
   }
 
   addGroup(data)
