@@ -52,16 +52,29 @@ export class TeamComponent implements OnInit {
     });
     console.log("hello team")
     this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
-      this.getTeamData();
+      this.getTeams(null);
     })
 
   }
 
-  getTeamData() {
-    this.utils.showLoading("Getting Team Data").then(() => {
+  getTeams(event) {
+
+    let showLoader = true;
+    if (event != null && event !== undefined) {
+      showLoader = false;
+    }
+    this.getTeamData(event,showLoader);
+  }
+
+  getTeamData(event,showLoader:boolean) {
+    //this.utils.showLoading("Getting Team Data").then(() => {
+      console.log(showLoader)
+      this.teamData=[];
+      this.listOfteamData = [];
+      this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
       this.apiService.getTeamData().subscribe((res) => {
          console.log(res);
-        this.utils.hideLoading().then(() => {
+         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           if (res.length > 0) {
             // res.forEach(element=>{
             //   this.teamData.push(element);
@@ -75,9 +88,16 @@ export class TeamComponent implements OnInit {
           else {
             this.noDesignFound = "No Result Found"
           }
+          if (event !== null) {
+            event.target.complete();
+          }
         })
       }, (error) => {
-        this.utils.hideLoading();
+        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+        if (event !== null) {
+          event.target.complete();
+        }
+      })
       })
     })
   }
@@ -222,6 +242,16 @@ export class TeamComponent implements OnInit {
     // });
     this.route.navigate(['/teamschedule']);
 
+  }
+
+  refreshDesigns(event) {
+    // this.skip=0;
+    let showLoader = true;
+    if (event !== null && event !== undefined) {
+      showLoader = false;
+    }
+    console.log(showLoader)
+    this.getTeamData(event,showLoader);
   }
   //   segmentChanged(event){
 

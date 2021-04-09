@@ -190,9 +190,9 @@ export class GroupschedulePage implements OnInit {
               (response: any) => {
                 this.utils.hideLoading().then(() => {
                   //this.createChatGroup(response);
+                  this.utils.setteamModuleRefresh(true);
                   this.utils.showSnackBar('Group created successfully');
                   this.router.navigate(['/teamhomepage/group'])
-                  this.utils.setteamModuleRefresh(true);
 
                 });
               },

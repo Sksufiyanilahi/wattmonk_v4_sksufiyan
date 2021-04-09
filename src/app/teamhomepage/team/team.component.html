@@ -1,8 +1,8 @@
 
 <ion-content style="padding-bottom: 250px;position: sticky;">
-  <!-- <ion-refresher slot="fixed">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
     <ion-refresher-content></ion-refresher-content>
-  </ion-refresher> -->
+  </ion-refresher>
   <ion-grid>
 
     <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
