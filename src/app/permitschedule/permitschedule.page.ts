@@ -274,6 +274,7 @@ export class PermitschedulePage implements OnInit {
       attachments: new FormControl([]),
       issurveycompleted: new FormControl('false'),
       creatorparentid: new FormControl(this.storage.getParentId()),
+      mpurequired: new FormControl(false),
     })
     // //For Counts
     // this.newpermitsRef = db.object('newpermitdesigns');
@@ -1028,7 +1029,8 @@ export class PermitschedulePage implements OnInit {
               isoutsourced: isoutsourced,
               issurveycompleted: this.desginForm.get('issurveycompleted').value,
               survey: this.surveydata.id,
-              isdesignraised: true
+              isdesignraised: true,
+              mpurequired:this.desginForm.get('mpurequired').value
 
             }
           } else {
@@ -1070,11 +1072,13 @@ export class PermitschedulePage implements OnInit {
               designacceptancestarttime: designacceptancestarttime,
               isoutsourced: isoutsourced,
               isdesignraised: true,
-              inverterscount: this.desginForm.get('inverterscount').value
+              inverterscount: this.desginForm.get('inverterscount').value,
+              mpurequired:this.desginForm.get('mpurequired').value
 
             }
           }
-
+           
+          console.log(data)
 
           // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
           this.utils.showLoading('Saving').then(() => {
@@ -1160,7 +1164,8 @@ export class PermitschedulePage implements OnInit {
             deliverydate: tomorrow.toISOString(),
             creatorparentid: this.storage.getParentId(),
             isdesignraised: true,
-            inverterscount: this.desginForm.get('inverterscount').value
+            inverterscount: this.desginForm.get('inverterscount').value,
+            mpurequired:this.desginForm.get('mpurequired').value
 
 
           }
@@ -1289,6 +1294,7 @@ export class PermitschedulePage implements OnInit {
 
 
             }
+            console.log(data)
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
               // if(this.architecturalFileUpload){
               //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
@@ -2270,6 +2276,18 @@ export class PermitschedulePage implements OnInit {
       this.autocompleteItems = [];
 
     }
+
+    mpucheckbox(event){
+      let checked = event.detail.checked
+      console.log(event.detail.checked)
+      console.log(checked)
+      if(checked){
+        this.desginForm.get('mpurequired').setValue(true)
+      }
+      else{
+        this.desginForm.get('mpurequired').setValue(false)
+      }
+      }
 
     addressValue(){
       // }

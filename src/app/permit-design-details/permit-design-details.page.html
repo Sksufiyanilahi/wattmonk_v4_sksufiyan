@@ -364,6 +364,17 @@
 
           </ion-row>
 
+          <ion-row  class="ion-no-padding ion-margin-top">
+            <ion-col size="6"  >
+                <span class="models font">MPU required</span></ion-col>
+                <ion-col size="6"  class="ion-no-padding">
+                    <div>
+                        <p class="comment font" style="text-align: right;margin:0px">{{design.mpurequired}}</p>
+  
+                    </div>
+  
+                   </ion-col>
+            </ion-row>
 
       <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
       *ngIf="design.status=='designassigned'||design.status=='completed'">
