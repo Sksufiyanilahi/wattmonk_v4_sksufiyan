@@ -1,0 +1,67 @@
+
+<ion-header class="ion-no-border white-bg" *ngIf="designData">
+  <!-- <ion-grid class="ion-padding-top ion-padding-start ion-padding-end header-bg">
+      <ion-row> -->
+        <ion-toolbar>
+          <ion-title>{{designData?.name}}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" size="small"  class="ion-no-padding"
+               (click)="edit()" routerDirection="forward" [disabled]=enableDisable>
+
+            <img src="assets/images/edit.svg" class="action-icon" />
+            </ion-button>
+
+
+            <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()" [disabled]=enableDisable>
+                <img src="assets/images/trash.svg" class="action-icon" />
+            </ion-button>
+            <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+              <ion-icon name="close-outline" style="font-size: 26px;color: black;" ></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <!-- </ion-row>
+      </ion-grid> -->
+
+                        <ion-grid class="position-relative ion-no-padding">
+                          <ion-row class="ion-no-padding  header-half-height">
+                          </ion-row>
+                          <ion-row class="ion-no-padding header-half-height">
+
+                          </ion-row>
+                          <ion-row class="ion-no-padding position-absolute header-icon-position full-width">
+                              <ion-col class="flex-center">
+                                  <img src="assets/images/Team.svg" class="header-icon" style="margin-right: 20%;" />
+                              </ion-col>
+                          </ion-row>
+                      </ion-grid>
+</ion-header>
+  <!--<ion-list><ion-card style=" background-color: rgb(211,211,211);">-->
+
+   <!--<ion-col *ngFor="let designData of design;let i = index;trackBy: trackdesign" size="12">-->
+    <ion-content class="ion-padding page-text-color" scrollY="true">
+      <ion-grid *ngIf="designData" class="page-text-color">
+        <ion-row class="ion-no-padding">
+          <ion-col ><span class="model-type font">Description</span></ion-col>
+          <ion-col size="auto">
+              <span class="model-name font">{{designData?.description}}</span>
+          </ion-col>
+        </ion-row>
+          <ion-row class="ion-no-padding">
+            <ion-col ><span class="model-type font">Members</span></ion-col>
+            <ion-col size="auto" >
+              <p *ngFor="let design of designData.members" style="margin-top: 0px;margin-bottom: 0px;">
+                <span class="model-name font" >{{design.firstname}}{{design.lastname}}</span>
+              </p>
+            </ion-col>
+          </ion-row>
+                <ion-row class="ion-no-padding">
+                  <ion-col ><span class="model-type font">Clients</span></ion-col>
+                  <ion-col size="auto">
+                    <p *ngFor="let design of designData.clients" style="margin-top: 0px;margin-bottom: 0px;">
+                      <span class="model-name font" >{{design.firstname}}{{design.lastname}}</span>
+                    </p>
+                    </ion-col>
+                </ion-row>
+                </ion-grid>
+                </ion-content>

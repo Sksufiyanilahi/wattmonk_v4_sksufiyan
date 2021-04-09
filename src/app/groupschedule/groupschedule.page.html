@@ -1,0 +1,126 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <!-- <ion-menu-button></ion-menu-button> -->
+    </ion-buttons>
+    <ion-title>
+      <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;" *ngIf="!isEditMode">Add Group
+        Member </h5>
+
+      <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;" *ngIf="isEditMode">Edit Group
+        Member </h5>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close-outline"(click)="goBack()" routerDirection="back" style="font-size: 25px;padding: 5px;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- <ion-grid>
+
+  <ion-row>
+    <ion-col>
+      <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;" *ngIf="!isEditMode">Add Group
+        Member </h5>
+
+      <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;" *ngIf="isEditMode">Edit Group
+        Member </h5>
+
+    </ion-col>
+    <ion-col size="auto" style="align-self: center;">
+      <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+        <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid> -->
+
+
+<ion-content>
+  <ion-grid class="ion-padding">
+  <form [formGroup]="groupForm" novalidate>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item class="ion-no-padding">
+            <ion-label position="floating">Group Name*</ion-label>
+            <ion-input type="text" class="form_input" formControlName="groupname" autocapitalize="words" required>
+            </ion-input>
+          </ion-item>
+          <div style="height: 5px;">
+            <div *ngIf="groupForm.get('groupname').hasError('pattern') && groupForm.get('groupname').dirty">
+              <span class="error">{{groupnameError}}</span>
+            </div>
+            <div *ngIf="groupForm.get('groupname').value === '' && groupForm.get('groupname').dirty">
+              <span class="error">{{fieldRequired}}</span>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item class="ion-no-padding">
+            <ion-label position="floating">Description*</ion-label>
+            <ion-input type="text" class="form_input" formControlName="description" autocapitalize="words"></ion-input>
+          </ion-item>
+          <div style="height: 5px;">
+            <div *ngIf="groupForm.get('description').hasError('pattern') && groupForm.get('description').dirty">
+              <span class="error">{{descriptionError}}</span>
+            </div>
+            <div *ngIf="groupForm.get('description').value === '' && groupForm.get('description').dirty">
+              <span class="error">{{fieldRequired}}</span>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-center ion-justify-content-center">
+        <ion-col size="12">
+          <mat-form-field style="width: 100%" appearance="fill" class="fullwidth">
+            <ion-label>Members</ion-label>
+            <mat-chip-list #memberChipList aria-label="Clients selection">
+              <mat-chip style="margin:2px;font-size: 10px;" outline color="primary" *ngFor="let user of selectedmembers;let i = index"
+                [selectable]="selectable" [removable]="removable" (removed)="removemember(user,i)">
+                {{user}}
+                <mat-icon matChipRemove *ngIf="removable" style="font-size: 13px;">x</mat-icon>
+              </mat-chip>
+              <input class="form_input font-size" #membersInput [matAutocomplete]="membersauto"
+                [matChipInputFor]="memberChipList" formControlName="members" required>
+            </mat-chip-list>
+            <mat-autocomplete #membersauto="matAutocomplete" (optionSelected)="setSelectMember($event)">
+              <mat-option *ngFor="let members of membersList" [value]="members" class="font">{{members.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <ion-col size="12">
+            <mat-form-field style="width: 100%" appearance="fill" class="fullwidth">
+              <ion-label position="floating">Clients</ion-label>
+              <mat-chip-list #clientChipList aria-label="Clients selection">
+                <mat-chip style="margin: 2px;" outline color="primary" *ngFor="let user of selectedclients;let i = index"
+                  [selectable]="selectable" [removable]="removable" (removed)="removeclient(user,i)">
+                  {{user}}
+                  <mat-icon matChipRemove *ngIf="removable" style="font-size: 12px;margin-bottom: 6%;">x</mat-icon>
+                </mat-chip>
+                <input class="form_input font-size" #clientInput [matAutocomplete]="clientauto"
+                  [matChipInputFor]="clientChipList" formControlName="clients" required>
+              </mat-chip-list>
+              <mat-autocomplete #clientauto="matAutocomplete" (optionSelected)="setSelectClient($event)">
+                <mat-option *ngFor="let user of companyList" [value]="user" class="font">{{user.company}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+    </form>
+  </ion-grid>
+</ion-content>
+<ion-footer class="ion-no-border">
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col size="auto">
+        <ion-button class="action-button-color" fill="clear" (click)="submitForm()">Confirm</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
