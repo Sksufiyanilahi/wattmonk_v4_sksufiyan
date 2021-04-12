@@ -221,7 +221,7 @@ export class PestampDesignComponent implements OnInit {
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     //this.newpermitsRef.update({ count: 0 });
-    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Designs').then((success) => {
+    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Requests').then((success) => {
       this.apiService.getFilteredDesigns(this.segments).subscribe((response:any) => {
 
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {

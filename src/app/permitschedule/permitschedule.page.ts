@@ -2174,6 +2174,20 @@ export class PermitschedulePage implements OnInit {
             });
           });
         });
+        if(!this.isSelectSearchResult)
+        {
+          const address: AddressModel = {
+            address: this.desginForm.get("address").value,
+            lat: null,
+            long: null,
+            country: '',
+            state: '',
+            city: '',
+            postalcode: null
+          };
+          this.utils.setAddress(address);
+          this.addressValue();
+        }
     }
 
     forAutoComplete(e){

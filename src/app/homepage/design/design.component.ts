@@ -684,6 +684,23 @@ this.network.networkConnect();
 
   }
 
+  raiseSurvey(designData,event)
+  {
+    event.stopPropagation();
+    let objToSend: NavigationExtras = {
+      queryParams: {
+        designData:designData
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+
+this.router.navigate(['/schedule/survey'], {
+state: { productdetails: objToSend }
+});
+  }
+
   assignToDesigner() {
 
 
