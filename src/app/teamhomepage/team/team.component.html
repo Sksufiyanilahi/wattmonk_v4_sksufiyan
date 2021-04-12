@@ -1,0 +1,75 @@
+
+<ion-content style="padding-bottom: 250px;position: sticky;">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid>
+
+    <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
+    <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
+    <ion-row style="margin-bottom: 40px;">
+      <!-- <ion-row *virtualItem="let item;let i = index"> -->
+      <!-- <ion-col size="12" class="ion-margin-top">
+              <span class="ion-padding" *ngIf="today === item.date">
+                  Today
+                  </span>
+          <span class="ion-padding" *ngIf="today !== item.date">
+                      {{item.date | date: 'dd MMM yyyy'}}
+              </span>
+      </ion-col> -->
+      <ion-col *ngFor="let designData of teamData;let i = index" size="12">
+        <ion-card class="ion-no-padding custom-card ion-no-margin" (click)="teamdetail(designData,$event)"
+          style="height: 100%;">
+          <p class="customer-name" routerDirection="forward">{{designData.firstname}} {{designData.lastname}}
+            <!--<span class="chipdetail" style="background-color: #1289A7;"  routerDirection="forward">
+                {{designData?.id | date: 'hh:mm a'}}
+            </span> -->
+
+
+          </p>
+
+          <p style="margin:0px">
+            <span class="customer-email" routerDirection="forward"
+              style="color: #4272B9">{{designData.role?.name}}</span>
+            <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
+            <!-- </ion-col> -->
+
+          </p>
+          <p style="margin:0px">
+            <span class="customer-email" routerDirection="forward">{{designData.email}}</span>
+            <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
+            <!-- </ion-col> -->
+
+          </p>
+          <p style="margin:0px">
+            <span class="customer-phone" routerDirection="forward">{{designData.phone}}</span>
+            <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
+            <!-- </ion-col> -->
+
+          </p>
+
+          <ion-grid>
+            <ng-template #nodesignFound>
+              <div *ngIf="listOfteamData.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
+                <!-- <div *ngIf="!netSwitch"> -->
+
+                {{noDesignFound}}
+                <!-- </div> -->
+
+                <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+              </div>
+            </ng-template>
+          </ion-grid>
+          <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
+          <!-- <span class="ion-text-end timestamp" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
+                      {{designData.deliverydate | date: 'hh:mm a'}}
+          </span> -->
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <!-- </ion-virtual-scroll> -->
+  </ion-grid>
+
+
+
+</ion-content>

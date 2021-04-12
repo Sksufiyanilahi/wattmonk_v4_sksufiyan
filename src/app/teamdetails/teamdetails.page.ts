@@ -88,7 +88,7 @@ state: { productdetails: objToSend }
   goBack() {
     this.mixpanelService.track("TEAM_DESIGN_DETAIL_PAGE_CLOSE", {});
    this.modalCtrl.dismiss({'dismissed':true})
-    this.route.navigate(['/teammodule'])
+    this.route.navigate(['/teamhomepage/team'])
     //this.utils.setteamModuleRefresh(true);
    //this.modalCtrl.dismiss({'dismissed':true})
   // this.utils.setteamModuleRefresh(true);
@@ -138,7 +138,7 @@ state: { productdetails: objToSend }
         this.modalCtrl.dismiss({'dismissed':true})
         
         
-        this.route.navigate(['/teammodule'])
+        this.route.navigate(['/teamhomepage/team'])
         this.utils.setteamModuleRefresh(true);
          // this.utils.setteamModuleRefresh(true);
         });

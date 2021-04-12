@@ -95,7 +95,7 @@
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="openSurveyors(surveyData.id,surveyData,$event)">Assign</span>
                             <!-- <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type =='surveyor'"> -->
-                            <span *ngIf="(surveyData.status == 'created' && userData.role.type !== 'clientsuperadmin') || (userData.usertype == 'individual')"
+                            <span 
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="assignedTo(surveyData,$event)">
                                 Start Survey &nbsp;
@@ -149,7 +149,7 @@
                                 (click)="generatePdf(surveyData.id,$event)">
                                 Generate PDF &nbsp; &nbsp;</span> -->
                             <span
-                                *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin') && (surveyData.isdesignraised==false || surveyData.isdesignraised==null)"
+                                *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin' || userData.role.type=='master' ||(userData.role.type=='bd' && userData.parent.id != 232)) "
                                 style="float:right !important;" class="ion-text-end action-button-color"
                                 (click)="raisepermit(surveyData,$event)">
                                 Raise Permit &nbsp; &nbsp;</span>

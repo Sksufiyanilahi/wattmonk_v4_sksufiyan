@@ -139,16 +139,17 @@ export class TeamschedulePage implements OnInit {
     
        // await this.utils.hideLoading().then(() => {
           this.user = this.data;
-     
-            console.log(this.user);
-            
+          console.log(this.user);
+          
+          //this.roles = Object.(this.user)
+            console.log(this.roles);
             this.fieldDisabled = true;
            
             this.teamForm.patchValue({
               firstname: this.user.firstname,
               lastname: this.user.lastname,
               workemail: this.user.email,
-              userrole:(this.user.role.id).toString(),
+              userrole:this.user.role.id,
               peengineertype:this.user.peengineertype,
               source: "android",
               // createdby: this.user.designId,

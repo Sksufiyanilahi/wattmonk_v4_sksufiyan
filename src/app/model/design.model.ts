@@ -142,7 +142,8 @@ export class DesginDataModel {
   personname : string;
   companylogo : any;
   tiltgroundmount:string;
-  inverterscount:string
+  inverterscount:string;
+  mpurequired:boolean
 }
 
 export class PrelimDesign{
