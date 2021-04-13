@@ -1399,6 +1399,22 @@ gotoActivity(designData,event){
   });
   }
 
+  raisePestampRequest(design, event)
+  {
+    event.stopPropagation();
+    let objToSend: NavigationExtras = {
+      queryParams: {
+        designData:design
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+  };
+
+    this.route.navigate(['/pestamp-schedule'], {
+    state: { productdetails: objToSend }
+    });
+  }
+
 }
 
 export class DesginDataHelper {

@@ -768,18 +768,15 @@ export class ApiService {
   })
   }
 
-  getDynamicRoles()
+  getDynamicRoles(parentId,roleId)
   {
-    let roleid = this.storageService.getUser().role.id;
-    console.log(roleid);
-    console.log(this.userId)
+    console.log(parentId);
+    console.log(roleId)
     return this.http.get(BaseUrl +
-      "/clientroles?client="+this.parentId+"&canbeaddedby_in="+roleid+"&_sort=id:asc",)
+      "/clientroles?client="+parentId+"&canbeaddedby_in="+roleId+"&_sort=id:asc",)
   }
 
-  getDefaultRoles(){
-    let roleid = this.storageService.getUser().role.id;
-    console.log(roleid);
+  getDefaultRoles(roleid){
     return this.http.get(BaseUrl +
       "/clientroles?client_null=true&canbeaddedby_in="+roleid,)
   }

@@ -60,6 +60,8 @@ export class AppComponent {
   newpestamp: Observable<any>;
   newpestampRef: AngularFireObject<any>;
   newpestampscount = 0;
+  getclientsrole:any;
+  userrole:string;
 
   constructor(
     private platform: Platform,
@@ -240,14 +242,85 @@ export class AppComponent {
     }
 
     this.deactivateGetUserData = this.apiservice.getUserName().subscribe((res: any) => {
+      console.log(res)
       this.userData = res;
       if (res.role.name == 'ContractorSuperAdmin') {
         this.userData.role.name = 'SuperAdmin';
       } else if (res.role.name == 'WattmonkAdmin') {
         this.userData.role.name = 'Admin';
       }
+      this.getClientRole();
     });
+    
   }
+
+  getClientRole(){
+    let parentId = this.userData.parent.id;
+    let roleId = this.userData.role.id;
+    console.log(parentId,roleId)
+  this.apiservice.getDynamicRoles(parentId,roleId).subscribe(
+    (response:any) => {
+      console.log(this.userData)
+      console.log(response)
+      this.getclientsrole = response.length;
+      if (response.length > 0 && response[0].client.id !== 232) {
+        let specificclientid;
+        if (response[0].id && response[0].client.id !== 232) {
+          specificclientid = response[0].client.id;
+        } else {
+          specificclientid = '';
+        }
+        if (
+          this.userData.role.id == 3 &&
+          this.userData.parent.id == specificclientid
+        ) {
+          this.userrole = "Sales Manager";
+        } else if (
+          this.userData.role.id == 9 &&
+          this.userData.parent.id == specificclientid
+        ) {
+          this.userrole = "Sales Representative";
+        } else if (
+          this.userData.role.id == 15 &&
+          this.userData.parent.id == specificclientid
+        ) {
+          this.userrole = "Master Electrician";
+        } else if (
+          this.userData.role.id == 6 &&
+          this.userData.parent.id == specificclientid
+        ) {
+          this.userrole = "Super Admin";
+        } else if (
+          this.userData.role.id == 7 &&
+          this.userData.parent.id == specificclientid
+        ) {
+          this.userrole = "Admin";
+        } else {
+          this.userrole = this.userData.role.name;
+        }
+      } else {
+        if (this.userData.role.id == 10) {
+          this.userrole = "Analyst";
+        } else if (this.userData.role.id == 9) {
+          this.userrole = "Surveyor";
+        } else if (this.userData.role.id == 4 || this.userData.role.id == 6) {
+          this.userrole = "Super Admin";
+        } else if (this.userData.role.id == 5 || this.userData.role.id == 7) {
+          this.userrole = "Admin";
+        } else if (this.userData.role.id == 3) {
+          this.userrole = "Design Manager";
+        } else {
+          this.userrole = this.userData.role.name;
+        }
+      }
+      console.log(this.userrole);
+    },
+    error => {
+      //this.notifyService.showError(error, "Error");
+    }
+  );
+  }
+
 
   SwitchMenuAccordingtoRoles(type) {
     if (this.userData.role.type !== 'designer' && this.userData.role.type !== 'qcinspector' && type == 'prelim') {

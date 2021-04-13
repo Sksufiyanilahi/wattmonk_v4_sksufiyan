@@ -54,7 +54,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
   geocoder = new google.maps.Geocoder();
   autoCompleteOff: boolean = false;
   isSelectSearchResult: boolean = false;
-
+  surveydatapresent:boolean = false;
+  data:any;
+  surveydata:any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -95,6 +97,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       status: new FormControl('created'),
       chatid: new FormControl(null),
       oldcommentid: new FormControl(''),
+      prelimdesignsurvey : new FormControl(null),
+      isdesigndelivered : new FormControl(null)
     });
     this.surveyForm.get('jobtype').setValue('pv');
 
@@ -104,6 +108,19 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.surveydatapresent = false
+    this.data = this.router.getCurrentNavigation().extras.state;
+    console.log(this.data);
+    if (this.data != undefined) {
+      this.surveydata = this.data.productdetails.queryParams.designData;
+      console.log(this.surveydata)
+     // this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
+     // this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
+
+      this.surveydatapresent = true
+
+
+    }
     this.fieldDisabled = false;
     this.userData = this.storage.getUser();
     // this.address= this.storage.getData();
@@ -120,6 +137,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
     if (this.surveyId !== 0) {
       this.getSurveyDetails();
+    } else if (this.surveydatapresent) {
+      this.getsurveydata();
     }
     this.getAssignees();
   }
@@ -186,6 +205,40 @@ export class SurveyComponent implements OnInit, OnDestroy {
           );
         }
       });
+    }
+  }
+
+  getsurveydata() {
+
+    this.surveyForm.patchValue({
+      prelimdesignsurvey : this.surveydata.id,
+      name: this.surveydata.name,
+      email: this.surveydata.email,
+     
+      address: this.surveydata.address,
+      phonenumber: this.surveydata.phonenumber,
+      createdby: this.surveydata.createdby.id,
+     // architecturaldesign: this.surveydata.architecturaldesign,
+      jobtype: this.surveydata.formattedjobtype,
+      projecttype: this.surveydata.projecttype,
+      latitude: this.surveydata.latitude,
+      longitude: this.surveydata.longitude,
+      country: this.surveydata.country,
+      state: this.surveydata.state,
+      city: this.surveydata.city,
+      postalcode: this.surveydata.postalCode,
+      isdesigndelivered:true
+     // issurveycompleted: true,
+      //attachments:this.design.attachments,
+
+     // attachments: this.surveydata.attachments,
+
+    });
+    this.utilities.setStaticAddress(this.surveydata.address);
+    if (this.surveyForm.get('email').value == '') {
+      this.fieldDisabled = false;
+    } else {
+      this.fieldDisabled = true;
     }
   }
 

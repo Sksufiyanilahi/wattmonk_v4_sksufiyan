@@ -17,10 +17,12 @@
                 <div>
                   {{userData?.firstname.charAt(0).toUpperCase() + userData?.firstname.slice(1) + ' ' + userData?.lastname.charAt(0).toUpperCase() + userData?.lastname.slice(1)}}
                 </div>
-                <p
+                <!-- <p
                   style="text-align: center;font-size:9px;margin:0px">{{userData?.role.name == 'Surveyors' ? 'Surveyor' : userData?.role.name}} </p>
-                <p style="text-align: center;font-size:9px;margin:0px" *ngIf="userData?.role.type=='peengineer'">({{userData?.peengineertype}}
-                  ) </p>
+                <p style="text-align: center;font-size:9px;margin:0px" *ngIf="userData?.role.type=='peengineer'">({{userData?.peengineertype}})
+                   </p> -->
+                   <p style="text-align: center;font-size:9px;margin:0px">{{userrole}}
+                  </p>
               </ion-title>
             </ion-toolbar>
           </ion-header>
@@ -53,7 +55,7 @@
                       <ion-img src="/assets/icon/Inbox.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Inbox</ion-item>
                       <!-- <ion-item  (click)="SwitchMenuAccordingtoRoles('statistics')" *ngIf="userData?.role.type!='clientsuperadmin'" routerDirection="forward">
                        <ion-img src="/assets/icon/Stats.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Statistics</ion-item> -->
-                       <ion-item mode="md" (click)="SwitchMenuAccordingtoRoles('pestamp')" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector'" routerDirection="forward">
+                       <ion-item mode="md" (click)="SwitchMenuAccordingtoRoles('pestamp')" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
                         <ion-img src="/assets/icon/PEStamping.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>PE Stamps
                         <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpestampscount > 0">{{ newpestampscount }}</span></p>
                       </ion-item>
