@@ -29,7 +29,7 @@
         </ion-button>
       </ion-col>
       <ion-col size="2"
-        *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined'|| (user.role.type == 'surveyors' && survey.status == 'surveyassigned'))"
+        *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined'|| survey.status == 'surveycompleted' || (user.role.type == 'surveyors' && survey.status == 'surveyassigned'))"
         style="text-align: right !important" size="2">
         <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteSurvey()">
           <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
@@ -230,8 +230,8 @@
               <ion-row>
                 <ion-col size="12" *ngIf="i==0"><span>MSP is located
                     :</span>&nbsp;<span>{{survey.msplocation | titlecase}} for this site</span></ion-col>
-                <ion-col size="12" *ngIf="i==0"><span>MPU Required
-                    :</span>&nbsp;<span>{{survey?.mpurequired== true ? 'Yes' : 'No'}}</span></ion-col>
+                <!-- <ion-col size="12" *ngIf="i==0"><span>MPU Required
+                    :</span>&nbsp;<span>{{survey?.mpurequired== true ? 'Yes' : 'No'}}</span></ion-col> -->
                 <ion-col size="12" *ngIf="i==1"><span>MSP/BUS Rating is :</span>&nbsp;<span>{{survey.msprating}}
                   </span></ion-col>
                 <ion-col size="12" *ngIf="i==2"><span>Main breaker size is
@@ -448,7 +448,7 @@
         <ion-col size="6">{{survey.interconnection}}</ion-col>
       </ion-row>
       <ion-row>
-        <ion-col size="6">Service Feed Source</ion-col>
+        <ion-col size="6"> Power service line source to Main panel (Overhead if you can see the wires coming from the power poles to connect to home)</ion-col>
         <ion-col size="6">{{survey?.servicefeedsource}}</ion-col>
       </ion-row>
     </ion-grid>

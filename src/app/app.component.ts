@@ -62,6 +62,7 @@ export class AppComponent {
   newpestampscount = 0;
   getclientsrole:any;
   userrole:string;
+  specificclientid: any;
 
   constructor(
     private platform: Platform,
@@ -251,7 +252,7 @@ export class AppComponent {
       }
       this.getClientRole();
     });
-    
+
   }
 
   getClientRole(){
@@ -264,41 +265,47 @@ export class AppComponent {
       console.log(response)
       this.getclientsrole = response.length;
       if (response.length > 0 && response[0].client.id !== 232) {
-        let specificclientid;
+        this.specificclientid;
         if (response[0].id && response[0].client.id !== 232) {
-          specificclientid = response[0].client.id;
+          this.specificclientid = response[0].client.id;
+          this.utilities.isspecificClient = true;
+          this.changeDetectorRef.detectChanges();
         } else {
-          specificclientid = '';
+          this.specificclientid = '';
+          this.utilities.isspecificClient = false;
+          this.changeDetectorRef.detectChanges();
         }
         if (
           this.userData.role.id == 3 &&
-          this.userData.parent.id == specificclientid
+          this.userData.parent.id == this.specificclientid
         ) {
           this.userrole = "Sales Manager";
         } else if (
           this.userData.role.id == 9 &&
-          this.userData.parent.id == specificclientid
+          this.userData.parent.id == this.specificclientid
         ) {
           this.userrole = "Sales Representative";
         } else if (
           this.userData.role.id == 15 &&
-          this.userData.parent.id == specificclientid
+          this.userData.parent.id == this.specificclientid
         ) {
           this.userrole = "Master Electrician";
         } else if (
           this.userData.role.id == 6 &&
-          this.userData.parent.id == specificclientid
+          this.userData.parent.id == this.specificclientid
         ) {
           this.userrole = "Super Admin";
         } else if (
           this.userData.role.id == 7 &&
-          this.userData.parent.id == specificclientid
+          this.userData.parent.id == this.specificclientid
         ) {
           this.userrole = "Admin";
         } else {
           this.userrole = this.userData.role.name;
         }
       } else {
+        this.utilities.isspecificClient = false;
+        this.changeDetectorRef.detectChanges();
         if (this.userData.role.id == 10) {
           this.userrole = "Analyst";
         } else if (this.userData.role.id == 9) {
