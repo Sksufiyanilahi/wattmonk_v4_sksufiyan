@@ -321,7 +321,15 @@ const routes: Routes = [
   {
     path: 'groupdetails',
     loadChildren: () => import('./groupdetails/groupdetails.module').then( m => m.GroupdetailsPageModule)
+  },  {
+    path: 'clientschedule',
+    loadChildren: () => import('./clientschedule/clientschedule.module').then( m => m.ClientschedulePageModule)
   },
+  {
+    path: 'clienthomepage',
+    loadChildren: () => import('./clienthomepage/clienthomepage.module').then( m => m.ClienthomepagePageModule)
+  },
+
 
 
 

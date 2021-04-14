@@ -63,6 +63,9 @@
                       <ion-item  (click)="SwitchMenuAccordingtoRoles('team')" *ngIf="userData?.usertype=='company'" routerDirection="forward">
                         <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
                       </ion-item>
+                      <ion-item  (click)="SwitchMenuAccordingtoRoles('client')" *ngIf="userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin'" routerDirection="forward">
+                        <ion-img src="/assets/icon/clients.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Client
+                      </ion-item>
               </ion-menu-toggle>
           </ion-list>
       </ion-content>
