@@ -13,6 +13,8 @@ import { ErrorModel } from '../model/error.model';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import { NavigationExtras, Router } from '@angular/router';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
 @Component({
   selector: 'app-search-bar1',
@@ -43,6 +45,7 @@ showBottomDraw: boolean = false;
 designId=0;
 userData:any;
   selectedDesigner: any;
+  
 
   constructor( private apiService:ApiService,private navController: NavController,private formBuilder:FormBuilder,
     private storage: Storage,
@@ -51,6 +54,7 @@ userData:any;
     private utils: UtilitiesService,
     private alertController:AlertController,
     public modalController: ModalController,
+    private router: Router,
     private mixpanelService:MixpanelService) {
       this.assignForm = this.formBuilder.group({
         assignedto: new FormControl('', [Validators.required]),
@@ -77,12 +81,14 @@ if(this.Type=="survey"){
   this.sample=this.fillinDynamicData(dataModel.survey);
   this.SurveyModel=this.sample;
   this.SortedModel=this.SurveyModel;
+  this.chatIcon(this.SortedModel);
 }
 if(this.Type=="design"){
   this.sample=this.fillinDynamicData(dataModel.design);
   this.DesignModel=this.sample;
 
   this.SortedModel=this.DesignModel;
+  this.chatIcon(this.SortedModel);
 }
 if(this.Type=="both"){
   this.sample=this.fillinDynamicData(dataModel.survey);
@@ -96,10 +102,28 @@ this.DesignModel=this.sample1;
 
 //this.SortedModel=this.MixModel.sort((a,b) => a.id.localecompare(b.id));
       this.SortedModel=this.MixModel.sort((a:any ,b:any) => b.id - a.id);
+      this.chatIcon(this.SortedModel);
         }
   })
 
  }
+  }
+
+  ///chat icon
+  chatIcon(list:DesginDataModel[]){
+    list.forEach(element => {
+      var groupMembersRequest = new CometChat.GroupMembersRequestBuilder(element.chatid)
+     .build();
+      groupMembersRequest.fetchNext().then(
+        groupMembers => {
+
+          element.addedtogroupchat=true;
+        },
+        error => {
+
+        }
+      );
+    })
   }
 
   fillinDynamicData(records : DesginDataModel[]) : DesginDataModel[]{
@@ -564,6 +588,8 @@ assignToSurveyor(){
 
 }
 
+
+
 //method for bottom drawer confirm
 assign(){
   if(this.assignForm.status=='INVALID'){
@@ -616,6 +642,24 @@ shareWhatsapp(designData){
   }
   this.fetchPendingDesigns(event, showLoader);
 }
+
+gotoChats(surveyData,event){
+  event.stopPropagation();
+  console.log(surveyData)
+   let objToSend: NavigationExtras = {
+    queryParams: {
+     name:surveyData.name +'_'+surveyData.address,
+     guid:surveyData.chatid
+    },
+    skipLocationChange: false,
+    fragment: 'top'
+};
+this.router.navigate(['chat/'+ surveyData.chatid], {
+  state: { productdetails: objToSend }
+  });
+  }
+
+
 }
 
 export class DesginDataHelper {

@@ -12,6 +12,15 @@
     text-align: center;
     color: #fff;
   }
+
+  .customer-name {
+    font-size: 1em;
+    color: #434343;
+    font-weight: bold;
+    //display:table;
+    margin: 0px;
+  }
+
   .custom-card {
     
     background: white !important;
@@ -23,4 +32,14 @@
     background-color: wheat;
   }
  
+  .chatbutton{
+    float:right;
+    margin-top: 0px;
+    margin-right:5px;
+  }
+  .imagebutton{
+    float:right;
+    margin-top: 0px;
+  }
+  
   
