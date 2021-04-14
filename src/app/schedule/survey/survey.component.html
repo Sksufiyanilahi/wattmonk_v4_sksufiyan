@@ -24,7 +24,7 @@
                         <ion-label position="floating">Email</ion-label>
                         <ion-input autocapitalize="none" formControlName="email" email="true"
                                    type="email" autocomplete="off"
-                                   class="form_input"></ion-input>
+                                   class="form_input" [disabled]="fieldDisabled"></ion-input>
                     </ion-item>
                     <div style="height: 5px;">
                         <div *ngIf="surveyForm.get('email').hasError('pattern') && surveyForm.get('email').dirty">
