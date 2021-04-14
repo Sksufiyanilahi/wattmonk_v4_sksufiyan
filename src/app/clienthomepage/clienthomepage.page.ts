@@ -18,8 +18,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
   styleUrls: ['./clienthomepage.page.scss'],
 })
 export class ClienthomepagePage implements OnInit {
-  @ViewChild('contextMenuTrigger') paymentmodeMenu: MatMenuTrigger;
-  @ViewChild('contextMenuTrigger') postpaidpaymentmenu: MatMenuTrigger;
   displayedColumns: string[] = [
     "name",
     "company",
@@ -204,6 +202,20 @@ export class ClienthomepagePage implements OnInit {
       showLoader = false;
     }
     this.fetchAllContractorsList(event, showLoader);
+  }
+
+  switchPaymentModeCustomer(event,data,j)
+  {
+    event.stopPropagation();
+    console.log(event)
+    console.log(event.target.value,data.id)
+    let chipValue = event.target.value;
+    var postData={
+      ispaymentmodeprepay : chipValue
+    }
+    this.apiService.updateContractorsData(data.id,postData).subscribe((res)=>{
+      console.log(res);
+      })
   }
 
 

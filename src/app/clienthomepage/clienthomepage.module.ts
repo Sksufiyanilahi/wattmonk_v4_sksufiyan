@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { ClienthomepagePageRoutingModule } from './clienthomepage-routing.module';
 
 import { ClienthomepagePage } from './clienthomepage.page';
-import { MatMenu, MatMenuItem } from '@angular/material/menu';
 
 @NgModule({
   imports: [
@@ -15,8 +14,6 @@ import { MatMenu, MatMenuItem } from '@angular/material/menu';
     FormsModule,
     IonicModule,
     ClienthomepagePageRoutingModule,
-    MatMenu,
-    MatMenuItem
   ],
   declarations: [ClienthomepagePage]
 })

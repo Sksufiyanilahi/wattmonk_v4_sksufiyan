@@ -74,16 +74,14 @@
         <ion-col size="4">
           <!-- <span class="chip" *ngIf="designData.ispaymentmodeprepay">Prepaid</span>
           <span class="chip" *ngIf="!designData.ispaymentmodeprepay">Postpaid</span> -->
-          <div class="col-4">
-            <div class="chip" (click)="$event.stopPropagation()" [matMenuTriggerFor]="paymentmodeMenu" *ngIf="designData.ispaymentmodeprepay">Prepaid</div>
-            <div class="chip" (click)="$event.stopPropagation()" [matMenuTriggerFor]="postpaidpaymentmenu" *ngIf="!designData.ispaymentmodeprepay">Postpaid</div>
-            <mat-menu #paymentmodeMenu="matMenu">
-              <button (click)="switchPaymentModeCustomer(user, i, false,$event)" mat-menu-item>Postpaid</button>
-            </mat-menu>
-            <mat-menu #postpaidpaymentmenu="matMenu">
-              <button (click)="switchPaymentModeCustomer(user, i, true,$event)" mat-menu-item>Prepaid</button>
-            </mat-menu>
-          </div>
+          <ion-select class="chip" (click)="$event.stopPropagation()" ok-text="" cancel-text="" *ngIf="designData.ispaymentmodeprepay" (ionChange)="switchPaymentModeCustomer($event,designData,j)" interface="popover" value="true">
+            <ion-select-option value="true">Prepaid</ion-select-option>
+            <ion-select-option value="false">Postpaid</ion-select-option>
+            </ion-select>
+            <ion-select class="chip" (click)="$event.stopPropagation()" ok-text="" cancel-text="" *ngIf="!designData.ispaymentmodeprepay" (ionChange)="switchPaymentModeCustomer($event,designData,j)" interface="popover" value="false">
+            <ion-select-option value="true">Prepaid</ion-select-option>
+            <ion-select-option value="false">Postpaid</ion-select-option>
+            </ion-select>
           <!-- <ion-select class="chip" interface="popover">
           <ion-select-option value="prepaid">Prepaid</ion-select-option>
           <ion-select-option value="postpaid">Postpaid</ion-select-option>

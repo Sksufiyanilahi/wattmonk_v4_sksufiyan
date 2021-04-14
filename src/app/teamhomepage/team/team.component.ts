@@ -12,6 +12,9 @@ import { ModalController } from '@ionic/angular';
 import { MixpanelService } from 'src/app/utilities/mixpanel.service';
 import { TeamdetailsPage } from 'src/app/teamdetails/teamdetails.page';
 import { ApiService } from 'src/app/api.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DrawerState } from 'ion-bottom-drawer';
+import { AssigneeModel } from 'src/app/model/assignee.model';
 
 @Component({
   selector: 'app-team',
@@ -21,32 +24,48 @@ import { ApiService } from 'src/app/api.service';
 export class TeamComponent implements OnInit {
 
   private version = version;
+  drawerState = DrawerState.Bottom;
 
   private TeamRefreshSubscription: Subscription;
+  assignForm:FormGroup
   showSearchBar = false;
   update_version: string;
   teamData: User[];
   listOfteamData: any[];
   designData: any;
   overdue: any;
-  id: any;
+  id: number;
   netSwitch: any;
   noDesignFound: string;
   length: any;
   private subscription: Subscription;
   deactivateNetworkSwitch: Subscription;
   showFooter = true;
+  userData:any;
+  SalesManager:User[]=[];
+  showBottomDraw: boolean = false;
+  selectedDesigner:any;
+  teamBd:User[]=[];
+  isTeamBdAssign:boolean = false;
+  isTeamAdminAssign:boolean = false;
+  teamAdmin:User[]=[]
+  isTeamBd:boolean = false
+  isTeamAdmin:boolean = false;
+
   constructor(private apiService: ApiService,
-    private utils: UtilitiesService,
+    public utils: UtilitiesService,
     private storageservice: StorageService,
     private network: NetworkdetectService,
     private iab: InAppBrowser,
     private platform: Platform,
     private route: Router,
     public modalController: ModalController,
-    private mixpanelService: MixpanelService) { }
+    private mixpanelService: MixpanelService,
+    private formBuilder: FormBuilder) { 
+    }
 
   ngOnInit() {
+    this.userData = this.storageservice.getUser();
     this.subscription = this.utils.getBottomBarHomepage().subscribe((value) => {
       this.showFooter = value;
     });
@@ -76,10 +95,18 @@ export class TeamComponent implements OnInit {
          console.log(res);
          this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           if (res.length > 0) {
-            // res.forEach(element=>{
-            //   this.teamData.push(element);
-            //   console.log(this.teamData)
-            // })
+            res.forEach(element=>{
+              if(element.role.id==3)
+              {
+                this.teamBd.push(element);
+              }
+            })
+            res.forEach(element=>{
+              if(element.role.id==7)
+              {
+                this.teamAdmin.push(element);
+              }
+            })
             this.teamData = res;
             console.log(this.teamData);
             this.listOfteamData = res;
@@ -263,5 +290,79 @@ export class TeamComponent implements OnInit {
   // }
   // segmentChanged(event){
   // }
+
+  openAssignSalesManager(id,data,event)
+  {
+    this.SalesManager=[];
+    event.stopPropagation();
+    this.id = id;
+    this.isTeamBdAssign = true;
+    this.SalesManager = this.teamBd;
+      this.showBottomDraw=true;
+     // this.designId = id;
+            this.utils.setBottomBarHomepage(false);
+            this.drawerState = DrawerState.Docked;
+  }
+
+  getassignedata(asssignedata){
+    this.selectedDesigner = asssignedata;
+  console.log(this.selectedDesigner)
+  }
+
+  assign()
+  {
+    console.log(this.id);
+    this.utils.showLoading("Assigning").then(()=>{
+    let postData={
+      addedby:this.selectedDesigner.id
+    }
+    this.apiService.updateContractorsData(this.id,postData).subscribe((res)=>{
+      console.log(res);
+      this.utils.hideLoading().then(()=>{
+        // if(this.isTeamBdAssign)
+        // {
+        //   this.isTeamBd = true;  
+        // }
+        // else if(this.isTeamAdminAssign){
+        //   this.isTeamAdmin = true;
+        // }
+        
+        this.dismissBottomSheet();
+        this.showBottomDraw = false;
+      })
+    })
+  })
+  }
+
+  close() {
+    if (this.showBottomDraw === true) {
+      this.showBottomDraw = false;
+      this.drawerState = DrawerState.Bottom;
+      this.utils.setBottomBarHomepage(true);
+    } else {
+      this.showBottomDraw = true;
+    }
+  }
+
+  dismissBottomSheet() {
+    this.showBottomDraw = false;
+
+    this.drawerState = DrawerState.Bottom;
+    this.utils.setBottomBarHomepage(true);
+    this.SalesManager=[];
+  }
+
+  openAssignAdmin(data,event)
+  {
+    this.SalesManager=[]
+    event.stopPropagation();
+    this.id = data.id;
+    this.isTeamAdminAssign = true;
+    this.SalesManager = this.teamAdmin;
+    this.showBottomDraw=true;
+     // this.designId = id;
+            this.utils.setBottomBarHomepage(false);
+            this.drawerState = DrawerState.Docked;
+  }
 
 }

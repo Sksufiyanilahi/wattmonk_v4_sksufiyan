@@ -7,4 +7,5 @@ export class AssigneeModel {
   id: number;
   selected = false;
   jobcount:number;
+  displayname:string;
 }
