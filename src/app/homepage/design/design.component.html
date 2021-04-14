@@ -100,7 +100,7 @@
                     <!-- <a href="tel:{{designData.phonenumber}}" style="text-decoration: none;" class="z-100">
                             <span class="customer-phone">{{designData.phonenumber}}</span></a> -->
 
-                    <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
+                    <span class="recordupdatedon">{{designData.deliverydate|date: 'dd MMM yyyy'}}</span>
 
                     <span class="customer-address z-100"
                         (click)="openAddressOnMap(designData.address,$event)">{{(designData.address | slice:0:60) +

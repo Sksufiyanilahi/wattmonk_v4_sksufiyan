@@ -48,7 +48,7 @@
       <p style="margin:0px"  >
                 <a href="tel:{{designData.contactnumber}}" style="text-decoration: none;" class="z-100">
                     <span class="customer-phone" *ngIf="designData.contactnumber != null && designData.contactnumber != ''">{{designData.contactnumber}}</span></a>
-                    <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
+                    <span class="recordupdatedon">{{designData.deliverydate|date: 'dd MMM yyyy'}}</span>
                   </p>
                 <span class="customer-address z-100" *ngIf="designData.deliveryaddress != null && designData.deliveryaddress != ''"
                         (click)="openAddressOnMap(designData.address,$event)">{{(designData.deliveryaddress | slice:0:60) + (designData.deliveryaddress.length > 60 ? '...' : '')}}
