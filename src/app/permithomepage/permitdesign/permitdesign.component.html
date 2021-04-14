@@ -76,7 +76,7 @@
         <p style="margin:0px">
                   <a href="tel:{{designData.phonenumber}}" (click)="$event.stopPropagation()" style="text-decoration: none;" class="z-100">
                       <span class="customer-phone">{{designData.phonenumber}}</span></a>
-                      <span class="recordupdatedon">Updated {{designData.recordupdatedon}}</span>
+                      <span class="recordupdatedon">{{designData.deliverydate|date: 'dd MMM yyyy'}}</span>
                     </p>
                   <span class="customer-address z-100"
                           (click)="openAddressOnMap(designData.address,$event)">{{(designData.address | slice:0:60) + (designData.address.length > 60 ? '...' : '')}}
@@ -112,6 +112,8 @@
                       <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.source | titlecase}}</span>
                       <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype | uppercase}}</span>
                   </ion-col>
+                  </ion-row>
+                  <ion-row class="ion-no-margin ion-no-margin">
                       <ion-col *ngIf="segments=='requesttype=permit&status=created&status=outsourced&status=requestaccepted&status=requestdeclined' || segments=='requesttype=permit&status=created&status=outsourced&status=requestaccepted&&status=requestdeclined'">
                           <span *ngIf="designData.status == 'created' || (designData.status == 'requestaccepted' && (userData.role.type !== 'clientsuperadmin' && userData.role.type !== 'clientadmin')) " style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(designData.id,designData,$event)"
                           >Assign</span>
@@ -161,6 +163,8 @@
                               <ion-icon name="mail" ></ion-icon></span>
                               <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, designData.requesttype,$event)">
                                   Resend</span>
+                              <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="raisePestampRequest(designData,$event)">
+                                    Pestamp Request</span>
                       </ion-col>
                       <!-- <ion-col class="ion-no-margin ion-no-padding">
                           <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + designData.id + '/' + designData.jobtype + '/' + designData.latitude + '/' + designData.longitude]"

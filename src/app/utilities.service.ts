@@ -22,7 +22,7 @@ import { PopoverComponentComponent } from './popover-component/popover-component
 export class UtilitiesService {
 	guid$: Observable<any>;
 	private myMethodSubject = new Subject<any>();
-
+  isspecificClient:boolean;
 	loading: HTMLIonLoadingElement;
 	isLoading = false;
 	address = new BehaviorSubject<AddressModel>({

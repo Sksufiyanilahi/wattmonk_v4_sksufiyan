@@ -95,7 +95,7 @@
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="openSurveyors(surveyData.id,surveyData,$event)">Assign</span>
                             <!-- <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type =='surveyor'"> -->
-                            <span 
+                            <span  *ngIf="surveyData.status == 'created'"
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="assignedTo(surveyData,$event)">
                                 Start Survey &nbsp;

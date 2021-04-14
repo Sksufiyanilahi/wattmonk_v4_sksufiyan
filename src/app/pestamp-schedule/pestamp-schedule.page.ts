@@ -86,6 +86,9 @@ export class PestampSchedulePage implements OnInit {
   };
 
     geocoder = new google.maps.Geocoder();
+    permitdatapresent:boolean = false;
+    data:any;
+    permitdata:any;
 
   constructor(private formBuilder: FormBuilder,
     private storage: StorageService,
@@ -140,6 +143,19 @@ export class PestampSchedulePage implements OnInit {
   }
 
   ngOnInit() {
+    this.permitdatapresent = false
+    this.data = this.router.getCurrentNavigation().extras.state;
+    console.log(this.data);
+    if (this.data != undefined) {
+      this.permitdata = this.data.productdetails.queryParams.designData;
+      console.log(this.permitdata)
+     // this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
+     // this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
+
+      this.permitdatapresent = true
+
+
+    }
     this.fieldDisabled = false;
     this.userdata = this.storage.getUser();
 
@@ -149,6 +165,45 @@ export class PestampSchedulePage implements OnInit {
         this.getDesignDetails();
       }, 1000)
 
+    }
+    else if(this.permitdatapresent)
+    {
+this.getPermitData();
+    }
+  }
+
+  getPermitData()
+  {
+    this.firstFormGroup.patchValue({
+      name: this.permitdata.name,
+      email: this.permitdata.email,
+     // address: this.permitdata.address,
+     // phone: this.permitdata.phonenumber,
+      createdby: this.permitdata.createdby.id,
+     // rooftype: this.permitdata.rooftype,
+      mountingtype: this.permitdata.mountingtype,
+      //architecturaldesign: this.permitdata.architecturaldesign,
+      //jobtype: this.permitdata.jobtype,
+      //tiltofgroundmountingsystem: this.permitdata.tiltofgroundmountingsystem,
+
+      projecttype: this.permitdata.projecttype,
+      //latitude: this.permitdata.latitude,
+      //longitude: this.permitdata.longitude,
+      //country: this.permitdata.country,
+      //state: this.permitdata.state,
+      //city: this.permitdata.city,
+      //postalcode: this.permitdata.postalCode,
+      //issurveycompleted: true,
+      //attachments:this.design.attachments,
+
+      //attachments: this.permitdata.attachments,
+
+    });
+    this.utils.setStaticAddress(this.permitdata.address);
+    if (this.firstFormGroup.get('email').value == '') {
+      this.fieldDisabled = false;
+    } else {
+      this.fieldDisabled = true;
     }
   }
 
@@ -854,6 +909,20 @@ export class PestampSchedulePage implements OnInit {
             });
           });
         });
+        if(!this.isSelectSearchResult)
+        {
+          const address: AddressModel = {
+            address: this.firstFormGroup.get("address").value,
+            lat: null,
+            long: null,
+            country: '',
+            state: '',
+            city: '',
+            postalcode: null
+          };
+          this.utils.setAddress(address);
+          this.addressValue();
+        }
     }
 
     forAutoComplete(e){
