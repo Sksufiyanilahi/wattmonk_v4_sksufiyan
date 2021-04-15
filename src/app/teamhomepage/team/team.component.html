@@ -48,13 +48,13 @@
 
           </p>
           <p style="margin:0px">
-            <!-- <span *ngIf="(utils.isspecificClient && (userData?.role.id==6 || userData.role.id==7) && designData?.role.id==9 && (designData.addedby?.role!=3 ))"
+            <span *ngIf="(utils.isspecificClient && (userData?.role.id==6 || userData.role.id==7) && designData?.role.id==9 && (designData.addedby?.role!=3 ))"
             style="float:right !important;" class="ion-text-end action-button-color"
             (click)="openAssignSalesManager(designData.id,designData,$event)">Assign</span>
 
             <span *ngIf="(utils.isspecificClient && (userData?.role.id==6 ) && designData?.role.id==3 && (designData.addedby?.role!=7 ))"
             style="float:right !important;" class="ion-text-end action-button-color"
-            (click)="openAssignAdmin(designData,$event)">Assign</span> -->
+            (click)="openAssignAdmin(designData,$event)">Assign</span>
           </p>
 
           <ion-grid>
@@ -84,7 +84,7 @@
 </ion-content>
 <ng-container *ngIf="showBottomDraw">
 
-  <ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false"
+  <ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="400" [draggable]="false"
       [disableDrag]="true" [shouldBounce]="true" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
       <!-- <form [formGroup]="assignForm"> -->
           <ion-grid class="drawer">

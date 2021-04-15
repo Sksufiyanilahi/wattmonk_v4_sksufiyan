@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { version } from 'src/app/contants';
 import { User } from 'src/app/model/user.model';
@@ -61,7 +61,8 @@ export class TeamComponent implements OnInit {
     private route: Router,
     public modalController: ModalController,
     private mixpanelService: MixpanelService,
-    private formBuilder: FormBuilder) { 
+    private formBuilder: FormBuilder,
+    private cdr:ChangeDetectorRef) { 
     }
 
   ngOnInit() {
@@ -329,6 +330,8 @@ export class TeamComponent implements OnInit {
         
         this.dismissBottomSheet();
         this.showBottomDraw = false;
+        //this.utils.showSnackBar("");
+        this.utils.setteamModuleRefresh(true);
       })
     })
   })
