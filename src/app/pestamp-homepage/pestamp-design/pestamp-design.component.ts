@@ -742,7 +742,7 @@ designDownload(designData,event){
       );
       this.file.checkFile(resolvedDirectory.nativeURL,designData.stampedfiles.hash).then(data=>{
 
-
+        
         if(data==true){
 
         }else{

@@ -18,6 +18,7 @@ import { SurveyDataModel } from '../../model/survey.model';
 import { ErrorModel } from 'src/app/model/error.model';
 import { AddressModel } from 'src/app/model/address.model';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-survey',
@@ -57,6 +58,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   surveydatapresent:boolean = false;
   data:any;
   surveydata:any;
+  browser: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -69,6 +71,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private router: Router,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
+    private iab: InAppBrowser,
   ) {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
@@ -568,4 +571,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.autocompleteItems = [];
     }, 100);
   }
+
+  // showurl(i){
+  //     this.browser = this.iab.create(this.surveydata.prelimdesign[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+
+  // }
 }

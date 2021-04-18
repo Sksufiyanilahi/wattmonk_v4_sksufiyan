@@ -143,6 +143,16 @@
                                   formControlName="comments"></ion-textarea>
                 </ion-col>
             </ion-row>
+            <!-- <ion-row class="ion-no-padding font">
+                <ng-container *ngIf="surveydatapresent">
+                    <ion-col><span class="model-type font">Prelim Design</span></ion-col>
+                    <ion-col size="auto" >
+                        <div *ngFor="let prelimdesign of surveydata.prelimdesign;let i=index" style="display: flex;justify-content: flex-end;line-height: 1.5rem;">
+                            <span class="model-name font" style="color:#3c78d8 !important" (click)="showurl(i)">{{prelimdesign?.name}}{{prelimdesign?.ext}}</span>
+                        </div>
+                    </ion-col>
+                </ng-container>
+            </ion-row> -->
 
             <!-- <ion-row class="ion-margin-top">
                 <ion-col>

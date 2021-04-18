@@ -26,18 +26,18 @@ export function getFileReader(): FileReader {
 })
 export class OnboardingPage implements OnInit {
   @ViewChild(RouterOutlet) outlet: RouterOutlet;
-  @ViewChild('stepper',{static:true}) stepper: MatStepper;
-  @ViewChild('fileInput',{static:false}) el: ElementRef;
-  notification:any={
+  @ViewChild('stepper', { static: true }) stepper: MatStepper;
+  @ViewChild('fileInput', { static: false }) el: ElementRef;
+  notification: any = {
 
   }
 
-  user:any;
-  roles:any;
+  user: any;
+  roles: any;
 
   // buffer:any;
   // value=0.25;
-  firstnameError=INVALID_FIRST_NAME;
+  firstnameError = INVALID_FIRST_NAME;
   lastnameError = INVALID_LAST_NAME;
   fieldRequired = FIELD_REQUIRED;
   emailError = INVALID_EMAIL_MESSAGE;
@@ -47,90 +47,92 @@ export class OnboardingPage implements OnInit {
   phoneError = INVALID_PHONE_NUMBER;
 
 
-  logo: any ;
+  logo: any;
   editFile: boolean = true;
   removeUpload: boolean = false;
 
-  firstFormGroup:FormGroup;
-  secondFormGroup:FormGroup;
-  thirdFormGroup:FormGroup;
-  @ViewChild("slidess", {static:true}) slides:any;
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
+  @ViewChild("slidess", { static: true }) slides: any;
 
-  isCompany:boolean = false;
-  radioValues:any;
-  teamMember=[];
+  isCompany: boolean = false;
+  radioValues: any;
+  teamMember = [];
   userId: string;
-  isLinear:boolean;
-  prelimCharges:any;
-  permitCharges:any;
-  prelimSettingValue:any;
-  permitSettingValue:any;
+  isLinear: boolean;
+  prelimCharges: any;
+  salesProposalCharges:any;
+  permitCharges: any;
+  prelimSettingValue: any;
+  salesProposalSettingValue: any;
+  permitSettingValue: any;
   blob: Blob;
   fileName: any;
-  logoUploaded: boolean=false;
-  logoSelected: boolean=false;
-  checkboxValue:boolean;
+  logoUploaded: boolean = false;
+  logoSelected: boolean = false;
+  checkboxValue: boolean;
   roleValue: number;
 
   constructor(
-              private router:Router,
-              private formBuilder: FormBuilder,
-              private storage:StorageService,
-              private apiService: ApiService,
-              private menu:MenuController,
-              private utils: UtilitiesService,
-              private navCtrl:NavController,
-              private cd:ChangeDetectorRef,) {
-                this.user = this.storage.getUser();
-                console.log(this.user);
-                this.userId= this.storage.getUserID();
-               }
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private storage: StorageService,
+    private apiService: ApiService,
+    private menu: MenuController,
+    private utils: UtilitiesService,
+    private navCtrl: NavController,
+    private cd: ChangeDetectorRef,) {
+    this.user = this.storage.getUser();
+    console.log(this.user);
+    this.userId = this.storage.getUserID();
+  }
 
   ngOnInit() {
     const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.firstFormGroup = this.formBuilder.group({
-      usertype : new FormControl(null),
-      billingaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
-      phone:new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
+      usertype: new FormControl(null),
+      billingaddress: new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
+      phone: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
       //companyaddresssameasbilling:new FormControl(''),
-      companyaddress:new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
-      company:new FormControl(null, [Validators.required,Validators.minLength(3), Validators.pattern(COMPANYFORMAT)]),
-      ispaymentmodeprepay:new FormControl(null),
+      companyaddress: new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
+      company: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.pattern(COMPANYFORMAT)]),
+      ispaymentmodeprepay: new FormControl(null),
       // logo:new FormControl(null, [Validators.required]),
-      registrationnumber:new FormControl(null, [Validators.required,Validators.minLength(3), Validators.maxLength(20), Validators.pattern("^[0-9]{3,20}$")]),
+      registrationnumber: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20), Validators.pattern("^[0-9]{3,20}$")]),
       isonboardingcompleted: new FormControl(true)
     })
     this.secondFormGroup = this.formBuilder.group({
       //For Emails
-        designcompletedemail:new FormControl(false),
-        designdeliveredemail:new FormControl(false),
-        designmovedtoqcemail:new FormControl(false),
-        designonholdemail:new FormControl(false),
-        designreviewfailedemail:new FormControl(false),
-        designreviewpassedemail:new FormControl(false),
-        requestgeneratedemail:new FormControl(false),
-        requestacknowledgementemail:new FormControl(false),
-        requestindesigningemail:new FormControl(false),
+      designcompletedemail: new FormControl(false),
+      designdeliveredemail: new FormControl(false),
+      designmovedtoqcemail: new FormControl(false),
+      designonholdemail: new FormControl(false),
+      designreviewfailedemail: new FormControl(false),
+      designreviewpassedemail: new FormControl(false),
+      requestgeneratedemail: new FormControl(false),
+      requestacknowledgementemail: new FormControl(false),
+      requestindesigningemail: new FormControl(false),
       //For Notifications
-        designcompletednotification:new FormControl(false),
-        designdeliverednotification:new FormControl(false),
-        designmovedtoqcnotification:new FormControl(false),
-        designonholdnotification:new FormControl(false),
-        designreviewfailednotification:new FormControl(false),
-        designreviewpassednotification:new FormControl(false),
-        requestgeneratednotification:new FormControl(false),
-        requestacknowledgementnotification:new FormControl(false),
-        requestindesigningnotification:new FormControl(false)
+      designcompletednotification: new FormControl(false),
+      designdeliverednotification: new FormControl(false),
+      designmovedtoqcnotification: new FormControl(false),
+      designonholdnotification: new FormControl(false),
+      designreviewfailednotification: new FormControl(false),
+      designreviewpassednotification: new FormControl(false),
+      requestgeneratednotification: new FormControl(false),
+      requestacknowledgementnotification: new FormControl(false),
+      requestindesigningnotification: new FormControl(false)
     })
     const EMAILPATTERN = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
     const NAMEPATTERN = /^[a-zA-Z]{3,}$/;
     this.thirdFormGroup = this.formBuilder.group({
-      firstname : new FormControl('',[Validators.required, Validators.pattern(NAMEPATTERN)]),
-      lastname : new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
-      workemail : new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
-      userrole : new FormControl(''),
-      peengineertype:new FormControl('')
+      firstname: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
+      lastname: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
+      workemail: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
+      userrole: new FormControl(''),
+      peengineertype: new FormControl('')
     })
     this.router.events.subscribe(e => {
       if (e instanceof ActivationStart && e.snapshot.outlet === "onboarding")
@@ -144,101 +146,101 @@ export class OnboardingPage implements OnInit {
     // this.userId= this.storage.getUserID();
 
 
-      this.onboardingData();
-      this.paymentCharges();
-      this.apiService.emitUserNameAndRole(this.user);
+    this.onboardingData();
+    this.paymentCharges();
+    this.apiService.emitUserNameAndRole(this.user);
 
 
 
 
-// this.buffer= this.value + 0.25;
+    // this.buffer= this.value + 0.25;
 
     this.fetchTeamData();
 
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     this.user = this.storage.getUser();
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
 
   }
 
-  ionViewWillLeave(){
+  ionViewWillLeave() {
     this.menu.enable(true);
   }
 
-  onboardingData(){
+  onboardingData() {
 
-    this.apiService.getUserData(this.userId).subscribe((res:any)=>{
+    this.apiService.getUserData(this.userId).subscribe((res: any) => {
 
       //this.checkboxValue = res.companyaddresssameasbilling;
-      if(res.usertype=='company'){
-        this.isCompany=true;
-      }else{
-        this.isCompany=false;
-        }
+      if (res.usertype == 'company') {
+        this.isCompany = true;
+      } else {
+        this.isCompany = false;
+      }
       this.firstFormGroup.patchValue({
-        usertype:res.usertype,
-        billingaddress:res.billingaddress,
-        phone:res.phone,
-        companyaddresssameasbilling:res.companyaddresssameasbilling,
-        companyaddress:res.companyaddress,
-        company:res.company,
-        ispaymentmodeprepay:res.ispaymentmodeprepay,
-        registrationnumber:res.registrationnumber,
-        logo:res.logo,
+        usertype: res.usertype,
+        billingaddress: res.billingaddress,
+        phone: res.phone,
+        companyaddresssameasbilling: res.companyaddresssameasbilling,
+        companyaddress: res.companyaddress,
+        company: res.company,
+        ispaymentmodeprepay: res.ispaymentmodeprepay,
+        registrationnumber: res.registrationnumber,
+        logo: res.logo,
 
       })
       this.secondFormGroup.patchValue({
         //For Emails
-       // designcompletedemail:res.designcompletedemail,
-        designdeliveredemail:res.designdeliveredemail,
-        designmovedtoqcemail:res.designmovedtoqcemail,
+        // designcompletedemail:res.designcompletedemail,
+        designdeliveredemail: res.designdeliveredemail,
+        designmovedtoqcemail: res.designmovedtoqcemail,
         //designonholdemail:res.designonholdemail,
-        designreviewfailedemail:res.designreviewfailedemail,
-        designreviewpassedemail:res.designreviewpassedemail,
-        requestgeneratedemail:res.requestgeneratedemail,
-        requestacknowledgementemail:res.requestacknowledgementemail,
-        requestindesigningemail:res.requestindesigningemail,
+        designreviewfailedemail: res.designreviewfailedemail,
+        designreviewpassedemail: res.designreviewpassedemail,
+        requestgeneratedemail: res.requestgeneratedemail,
+        requestacknowledgementemail: res.requestacknowledgementemail,
+        requestindesigningemail: res.requestindesigningemail,
         // For Notifications
         //designcompletednotification:res.designcompletednotification,
-        designdeliverednotification:res.designdeliverednotification,
-        designmovedtoqcnotification:res.designmovedtoqcnotification,
+        designdeliverednotification: res.designdeliverednotification,
+        designmovedtoqcnotification: res.designmovedtoqcnotification,
         //designonholdnotification:res.designonholdnotification,
-        designreviewfailednotification:res.designreviewfailednotification,
-        designreviewpassednotification:res.designreviewpassednotification,
-        requestgeneratednotification:res.requestgeneratednotification,
-        requestacknowledgementnotification:res.requestacknowledgementnotification,
-        requestindesigningnotification:res.requestindesigningnotification
+        designreviewfailednotification: res.designreviewfailednotification,
+        designreviewpassednotification: res.designreviewpassednotification,
+        requestgeneratednotification: res.requestgeneratednotification,
+        requestacknowledgementnotification: res.requestacknowledgementnotification,
+        requestindesigningnotification: res.requestindesigningnotification
       })
 
     })
   }
 
-  companyOptions(e){
+  companyOptions(e) {
 
     this.radioValues = e.target.value;
 
-    if(this.radioValues === 'company'){
-    this.isCompany = true;
-    this.checkboxValue = false;
-    this.firstFormGroup.patchValue({
-      phone:'',
-      billingaddress:'',
+    if (this.radioValues === 'company') {
+      this.isCompany = true;
+      this.checkboxValue = false;
+      this.firstFormGroup.patchValue({
+        phone: '',
+        billingaddress: '',
 
-    })
+      })
     }
-    else{
+    else {
       this.isCompany = false;
       this.checkboxValue = false;
       this.firstFormGroup.patchValue({
-        company:'',
-        companyaddress:'',
-        registrationnumber:'',
-        phone:'',
-        billingaddress:''
+        company: '',
+        companyaddress: '',
+        registrationnumber: '',
+        phone: '',
+        billingaddress: ''
       })
       this.firstFormGroup.get('companyaddress').clearValidators();
       this.firstFormGroup.get('company').clearValidators();
@@ -260,40 +262,38 @@ export class OnboardingPage implements OnInit {
   //   this.router.navigate(['/permitschedule']);
   // }
 
-  fetchTeamData(){
-    this.apiService.getTeamData().subscribe(response =>{
+  fetchTeamData() {
+    this.apiService.getTeamData().subscribe(response => {
       this.teamMember = response;
 
     })
   }
 
-  getRoles()
-    {
-      console.log(this.user);
-      let parentId = this.user.parent.id;
-      let roleId = this.user.role.id;
-      this.apiService.getDynamicRoles(parentId,roleId).subscribe((res)=>{
-        console.log(res);
-        this.roles = res;
-        console.log(this.roles);
-        if(res == 0)
-        {
-          this.apiService.getDefaultRoles(roleId).subscribe((response)=>{
-            console.log(response);
-            this.roles = response;
-            console.log(this.roles)
-          })
-        }
-      })
-    }
+  getRoles() {
+    console.log(this.user);
+    let parentId = this.user.parent.id;
+    let roleId = this.user.role.id;
+    this.apiService.getDynamicRoles(parentId, roleId).subscribe((res) => {
+      console.log(res);
+      this.roles = res;
+      console.log(this.roles);
+      if (res == 0) {
+        this.apiService.getDefaultRoles(roleId).subscribe((response) => {
+          console.log(response);
+          this.roles = response;
+          console.log(this.roles)
+        })
+      }
+    })
+  }
 
-  firstStepper(){
+  firstStepper() {
     // if(this.firstFormGroup.status === 'VALID')
     // {
-      if(this.logoSelected){
-        this.updateLogo();
-      }
-      else{
+    if (this.logoSelected) {
+      this.updateLogo();
+    }
+    else {
       // if(this.logoUploaded){
       //   this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
 
@@ -304,47 +304,47 @@ export class OnboardingPage implements OnInit {
       // }
       // else{
 
-        this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
+      this.apiService.updateUser(this.userId, this.firstFormGroup.value).subscribe((res: any) => {
 
 
-         let token=  this.storage.getJWTToken();
-          this.storage.setUser(res,token);
-        })
+        let token = this.storage.getJWTToken();
+        this.storage.setUser(res, token);
+      })
       // }
     }
-  // }
-  // else{
-  //   if(this.firstFormGroup.value.billingaddress === ''){
-  //     this.utils.errorSnackBar('Please Enter Billing Address');
-  //   }
-  //   else if(this.firstFormGroup.value.company === '')
-  //   {
-  //     this.utils.errorSnackBar('Please Enter Company Name');
-  //   }
-  //   else {
-  //     this.utils.errorSnackBar('Please Check Fields');
-  //   }
-  // }
+    // }
+    // else{
+    //   if(this.firstFormGroup.value.billingaddress === ''){
+    //     this.utils.errorSnackBar('Please Enter Billing Address');
+    //   }
+    //   else if(this.firstFormGroup.value.company === '')
+    //   {
+    //     this.utils.errorSnackBar('Please Enter Company Name');
+    //   }
+    //   else {
+    //     this.utils.errorSnackBar('Please Check Fields');
+    //   }
+    // }
 
   }
 
 
-  onChange(event,value){
+  onChange(event, value) {
 
 
-     if(value=='requestgenerated'){
+    if (value == 'requestgenerated') {
       this.secondFormGroup.patchValue({
-        requestgeneratednotification:event.detail.checked
+        requestgeneratednotification: event.detail.checked
       })
     }
-    else if(value=='requestacknoledged'){
+    else if (value == 'requestacknoledged') {
       this.secondFormGroup.patchValue({
-        requestacknowledgementnotification:event.detail.checked
+        requestacknowledgementnotification: event.detail.checked
       })
     }
-    else if(value=='designcompletednotification'){
+    else if (value == 'designcompletednotification') {
       this.secondFormGroup.patchValue({
-        designcompletednotification:event.detail.checked
+        designcompletednotification: event.detail.checked
       })
     }
     // else if(value=='onhold'){
@@ -352,130 +352,130 @@ export class OnboardingPage implements OnInit {
     //     designonholdnotification:event.detail.checked
     //   })
     // }
-    else if(value=='requestindesigningnotification'){
+    else if (value == 'requestindesigningnotification') {
       this.secondFormGroup.patchValue({
-        requestindesigningnotification:event.detail.checked
+        requestindesigningnotification: event.detail.checked
       })
     }
-    else if(value=='qc'){
+    else if (value == 'qc') {
       this.secondFormGroup.patchValue({
-        designmovedtoqcnotification:event.detail.checked
+        designmovedtoqcnotification: event.detail.checked
       })
     }
-    else if(value=='reviewfailed'){
+    else if (value == 'reviewfailed') {
       this.secondFormGroup.patchValue({
-        designreviewfailednotification:event.detail.checked
+        designreviewfailednotification: event.detail.checked
       })
     }
-    else if(value=='reviewpassed'){
+    else if (value == 'reviewpassed') {
       this.secondFormGroup.patchValue({
-        designreviewpassednotification:event.detail.checked
+        designreviewpassednotification: event.detail.checked
       })
     }
-    else if(value=='delivered'){
+    else if (value == 'delivered') {
       this.secondFormGroup.patchValue({
-        designdeliverednotification:event.detail.checked
+        designdeliverednotification: event.detail.checked
       })
     }
   }
 
-  onEmailChange(event,value){
+  onEmailChange(event, value) {
 
 
-      if(value=='requestgeneratedemail'){
-       this.secondFormGroup.patchValue({
-         requestgeneratedemail:event.detail.checked
-       })
-     }
-     else if(value=='requestacknoledgedemail'){
-       this.secondFormGroup.patchValue({
-         requestacknowledgementemail:event.detail.checked
-       })
-     }
-     else if(value=='designcompletedemail'){
-       this.secondFormGroup.patchValue({
-        designcompletedemail:event.detail.checked
-       })
-     }
+    if (value == 'requestgeneratedemail') {
+      this.secondFormGroup.patchValue({
+        requestgeneratedemail: event.detail.checked
+      })
+    }
+    else if (value == 'requestacknoledgedemail') {
+      this.secondFormGroup.patchValue({
+        requestacknowledgementemail: event.detail.checked
+      })
+    }
+    else if (value == 'designcompletedemail') {
+      this.secondFormGroup.patchValue({
+        designcompletedemail: event.detail.checked
+      })
+    }
     //  else if(value=='onhold'){
     //    this.secondFormGroup.patchValue({
     //      designonholdemail:event.detail.checked
     //    })
     //  }
-     else if(value=='requestindesigningemail'){
-       this.secondFormGroup.patchValue({
-        requestindesigningemail:event.detail.checked
-       })
-     }
-     else if(value=='qcemail'){
-       this.secondFormGroup.patchValue({
-         designmovedtoqcemail:event.detail.checked
-       })
-     }
-     else if(value=='reviewfailedemail'){
-       this.secondFormGroup.patchValue({
-         designreviewfailedemail:event.detail.checked
-       })
-     }
-     else if(value=='reviewpassedemail'){
-       this.secondFormGroup.patchValue({
-         designreviewpassedemail:event.detail.checked
-       })
-     }
-     else if(value=='deliveredemail'){
-       this.secondFormGroup.patchValue({
-         designdeliveredemail:event.detail.checked
-       })
-     }
-   }
+    else if (value == 'requestindesigningemail') {
+      this.secondFormGroup.patchValue({
+        requestindesigningemail: event.detail.checked
+      })
+    }
+    else if (value == 'qcemail') {
+      this.secondFormGroup.patchValue({
+        designmovedtoqcemail: event.detail.checked
+      })
+    }
+    else if (value == 'reviewfailedemail') {
+      this.secondFormGroup.patchValue({
+        designreviewfailedemail: event.detail.checked
+      })
+    }
+    else if (value == 'reviewpassedemail') {
+      this.secondFormGroup.patchValue({
+        designreviewpassedemail: event.detail.checked
+      })
+    }
+    else if (value == 'deliveredemail') {
+      this.secondFormGroup.patchValue({
+        designdeliveredemail: event.detail.checked
+      })
+    }
+  }
 
-  secondStepper(){
+  secondStepper() {
 
-    this.apiService.updateUser(this.userId,this.secondFormGroup.value).subscribe((res:any)=>{
+    this.apiService.updateUser(this.userId, this.secondFormGroup.value).subscribe((res: any) => {
 
-      let token=  this.storage.getJWTToken();
-      this.storage.setUser(res,token);
+      let token = this.storage.getJWTToken();
+      this.storage.setUser(res, token);
       //this.utils.showSnackBar('Changes saved successfully');
 
     })
   }
 
-  thirdStepper(){
+  thirdStepper() {
 
     //  if (this.thirdFormGroup.status === 'VALID') {
     // $ev.preventDefault();
     let peengineertype;
-        let rolesel = parseInt(this.thirdFormGroup.get("userrole").value);
-        var senddesignrequestpermission = false;
-        if(rolesel == ROLES.ContractorAdmin || rolesel == ROLES.Admin || rolesel == ROLES.BD){
-          senddesignrequestpermission = true;
-        }
-        this.apiService
-          .addUser(
-            this.thirdFormGroup.get("workemail").value,
-            this.thirdFormGroup.get("firstname").value,
-            this.thirdFormGroup.get("lastname").value,
-            senddesignrequestpermission,
-            parseInt(this.thirdFormGroup.get("userrole").value),
-            this.user.parent.minpermitdesignaccess,
-            this.thirdFormGroup.get("peengineertype").value
-          )
-          .subscribe(
-            (response:any) => {
+    let rolesel = parseInt(this.thirdFormGroup.get("userrole").value);
+    var senddesignrequestpermission = false;
+    if (rolesel == ROLES.ContractorAdmin || rolesel == ROLES.Admin || rolesel == ROLES.BD) {
+      senddesignrequestpermission = true;
+    }
+    this.apiService
+      .addUser(
+        this.thirdFormGroup.get("workemail").value,
+        this.thirdFormGroup.get("firstname").value,
+        this.thirdFormGroup.get("lastname").value,
+        senddesignrequestpermission,
+        parseInt(this.thirdFormGroup.get("userrole").value),
+        this.user.parent.minpermitdesignaccess,
+        this.thirdFormGroup.get("peengineertype").value
+      )
+      .subscribe(
+        (response: any) => {
 
-              this.utils.showSnackBar('Team created successfully');
-              this.thirdFormGroup.reset();
-            },
-            // error => {
-            //   this.utils.errorSnackBar(error);
-            // }
-            responseError => {
-              const error: ErrorModel = responseError.error;
+          this.utils.showSnackBar('Team created successfully');
+          this.thirdFormGroup.reset();
+        },
+        // error => {
+        //   this.utils.errorSnackBar(error);
+        // }
+        responseError => {
+          const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message);
-            }
-          );
+        }
+      );
 
-     // }
+    // }
     // else{
     //   if(this.thirdFormGroup.value.firstname =='' || this.thirdFormGroup.get('firstname').hasError('pattern')){
 
@@ -495,57 +495,63 @@ export class OnboardingPage implements OnInit {
   }
 
 
-  goToWallet(){
+  goToWallet() {
 
 
-    if(this.user.amount == 0 && this.user.isonboardingcompleted == false)
-    {
-    //this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"true"}]);
-    let objToSend: NavigationExtras = {
-      queryParams: {
-        mode:"wallet",
-        onBoarding:"true"
-      },
-      skipLocationChange: false,
-      fragment: 'top'
-  };
-
-
-this.router.navigate(['/add-money'], {
-state: { productdetails: objToSend }
-});
-    }
-    else{
-      //this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"false"}])
+    if (this.user.amount == 0 && this.user.isonboardingcompleted == false) {
+      //this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"true"}]);
       let objToSend: NavigationExtras = {
         queryParams: {
-          mode:"wallet",
-          onBoarding:"false"
+          mode: "wallet",
+          onBoarding: "true"
         },
         skipLocationChange: false,
         fragment: 'top'
-    };
+      };
 
 
-  this.router.navigate(['/add-money'], {
-  state: { productdetails: objToSend }
-  });
+      this.router.navigate(['/add-money'], {
+        state: { productdetails: objToSend }
+      });
+    }
+    else {
+      //this.router.navigate(['/add-money',{mode:"wallet", onBoarding:"false"}])
+      let objToSend: NavigationExtras = {
+        queryParams: {
+          mode: "wallet",
+          onBoarding: "false"
+        },
+        skipLocationChange: false,
+        fragment: 'top'
+      };
+
+
+      this.router.navigate(['/add-money'], {
+        state: { productdetails: objToSend }
+      });
     }
   }
 
-  paymentCharges(){
+  paymentCharges() {
 
     this.apiService.prelimCharges().subscribe(res => {
       // this.prelimCharge = res;
 
       // this.storage.setPrelimCharges(res);
       this.prelimCharges = res;
-      this.prelimCharges.forEach(element=>{
+      this.prelimCharges.forEach(element => {
         this.prelimSettingValue = element.settingvalue;
       })
 
 
 
+    })
+
+    this.apiService.prelimSalesCharges().subscribe(res=>{
+      this.salesProposalCharges = res;
+      this.salesProposalCharges.forEach(element=>{
+        this.salesProposalSettingValue = element.settingvalue;
+      })
     })
 
     this.apiService.permitinitcharges().subscribe(res => {
@@ -558,8 +564,8 @@ state: { productdetails: objToSend }
   }
 
   uploadFile(event) {
-    this.logoSelected=true;
-    this.fileName= event.target.files[0].name;
+    this.logoSelected = true;
+    this.fileName = event.target.files[0].name;
 
 
     let reader = getFileReader(); // HTML5 FileReader API
@@ -570,7 +576,7 @@ state: { productdetails: objToSend }
       // When file uploads set it to file formcontrol
       reader.onload = () => {
         this.logo = reader.result;
-        this.blob= this.utils.b64toBlob(this.logo);
+        this.blob = this.utils.b64toBlob(this.logo);
 
 
         this.firstFormGroup.patchValue({
@@ -587,57 +593,61 @@ state: { productdetails: objToSend }
     }
   }
 
-  removeLogo(event){
+  removeLogo(event) {
     event.stopPropagation();
-    this.logo= null;
+    this.logo = null;
     this.firstFormGroup.patchValue({
       logo: null
     });
   }
 
-  updateLogo(){
+  updateLogo() {
 
-    this.apiService.uploadlogo(this.blob,this.fileName).subscribe(res=>{
+    this.apiService.uploadlogo(this.blob, this.fileName).subscribe(res => {
 
-        this.apiService.updateUser(this.userId,this.firstFormGroup.value).subscribe((res:any)=>{
+      this.apiService.updateUser(this.userId, this.firstFormGroup.value).subscribe((res: any) => {
 
 
-         let token=  this.storage.getJWTToken();
-          this.storage.setUser(res,token);
-        })
+        let token = this.storage.getJWTToken();
+        this.storage.setUser(res, token);
+      })
     })
   }
 
-  move($event,index: number) {
+  move($event, index: number) {
     $event.stopPropagation();
     this.stepper.selectedIndex = index;
   }
 
-  moveToDashboard()
-  {
+  moveToDashboard() {
     this.router.navigate(['/dashboard']);
   }
-  goBack(){
+  goBack() {
     this.navCtrl.pop();
   }
 
-  change(e)
-  {
+  change(e) {
     this.checkboxValue = e.detail.checked;
 
-    if(this.checkboxValue == true)
-    {
+    if (this.checkboxValue == true) {
       this.firstFormGroup.get("billingaddress").setValue(this.firstFormGroup.get("companyaddress").value);
 
     }
-    else{
+    else {
       this.firstFormGroup.get("billingaddress").setValue('');
     }
- }
- roleChange(id)
-{
-  console.log(id)
-  this.roleValue = id;
-}
+  }
+  roleChange(id) {
+    console.log(id)
+    this.roleValue = id;
+  }
+
+  scheduledPage() {
+    // this.mixpanelService.track("ADD_PRELIMDESIGN_PAGE_OPEN", {
+    // });
+    this.utils.presentPopover('design');
+    this.utils.setDesignDetails(null);
+    // this.route.navigate([ '/schedule/design' ]);
+  }
 
 }

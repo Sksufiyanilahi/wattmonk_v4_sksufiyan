@@ -186,25 +186,15 @@ this.getPermitData();
       //jobtype: this.permitdata.jobtype,
       //tiltofgroundmountingsystem: this.permitdata.tiltofgroundmountingsystem,
 
-      projecttype: this.permitdata.projecttype,
-      //latitude: this.permitdata.latitude,
-      //longitude: this.permitdata.longitude,
-      //country: this.permitdata.country,
-      //state: this.permitdata.state,
-      //city: this.permitdata.city,
-      //postalcode: this.permitdata.postalCode,
-      //issurveycompleted: true,
-      //attachments:this.design.attachments,
-
-      //attachments: this.permitdata.attachments,
+      propertytype: this.permitdata.projecttype,
 
     });
-    this.utils.setStaticAddress(this.permitdata.address);
-    if (this.firstFormGroup.get('email').value == '') {
-      this.fieldDisabled = false;
-    } else {
-      this.fieldDisabled = true;
-    }
+    //this.utils.setStaticAddress(this.permitdata.address);
+    // if (this.firstFormGroup.get('email').value == '') {
+    //   this.fieldDisabled = false;
+    // } else {
+    //   this.fieldDisabled = true;
+    // }
   }
 
   /* Getting Design Details */

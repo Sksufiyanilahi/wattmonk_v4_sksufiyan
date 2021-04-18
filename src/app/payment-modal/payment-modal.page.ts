@@ -349,11 +349,11 @@ confirm(){
 
       if(this.design ==='prelim'){
       this.router.navigate(['/homepage/design'])
-      // this.utils.setHomepageDesignRefresh(true);
+       this.utils.setHomepageDesignRefresh(true);
       }
       else{
         this.router.navigate(['permithomepage/permitdesign'])
-        // this.utils.setHomepagePermitRefresh(true);
+         this.utils.setHomepagePermitRefresh(true);
       }
 
   }
