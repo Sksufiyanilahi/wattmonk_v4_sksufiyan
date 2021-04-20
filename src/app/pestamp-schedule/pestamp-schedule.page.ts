@@ -616,7 +616,7 @@ this.getPermitData();
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -662,7 +662,7 @@ this.getPermitData();
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -720,7 +720,7 @@ this.getPermitData();
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -799,7 +799,7 @@ this.getPermitData();
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -960,7 +960,7 @@ this.getPermitData();
       // this.goBack();
       // return;
 
-      
+
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
 

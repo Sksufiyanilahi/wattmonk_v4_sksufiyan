@@ -261,7 +261,7 @@ export class PermitschedulePage implements OnInit {
       jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
       newconstruction: new FormControl('false'),
-      source: new FormControl('android', [Validators.required]),
+      source: new FormControl(utils.checkPlatform(), [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('permit'),
       latitude: new FormControl(''),
