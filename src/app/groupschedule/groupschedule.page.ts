@@ -41,16 +41,17 @@ export class GroupschedulePage implements OnInit {
   tabsDisabled = false;
   isEdit: boolean = true;
   members: any = [];
-  membersList: string[] = this.members
+  membersList: any[] = this.members
   selectedmembers: string[] = []
   selectedmembersId: number[] = []
   selectedclients: string[] = []
   selectedclientsId: number[] = []
   clientcompany: any = [];
-  companyList: string[] = this.clientcompany;
+  companyList: any[] = this.clientcompany;
   removable = true;
   clients: any[] = [];
   membersValue: any[] = [];
+  selectable:boolean=true;
 
   constructor(private formBuilder: FormBuilder,
     private modalCtrl: ModalController,
@@ -79,7 +80,7 @@ export class GroupschedulePage implements OnInit {
       //      address:new FormControl(null),
       // //contactnumber : new FormControl(null),
       //  //lic: new FormControl(null),
-      // // countrycode : new FormControl(null), 
+      // // countrycode : new FormControl(null),
       // // //company : new FormControl(null),
       //  password: new FormControl(null),
       //        resetPasswordToken: new FormControl(null),
@@ -157,7 +158,7 @@ export class GroupschedulePage implements OnInit {
       this.selectedclientsId.push(element.id);
     })
 
-    
+
     //     })
     //   },(error) => {
     //     this.utils.hideLoading();
@@ -265,7 +266,7 @@ export class GroupschedulePage implements OnInit {
     );
   }
 
-  setSelectMember(event, value) {
+  setSelectMember(event) {
     console.log(event)
     console.log(event.option)
     this.selectedmembers.push(event.option.viewValue);

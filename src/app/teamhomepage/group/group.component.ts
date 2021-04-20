@@ -15,6 +15,7 @@ export class GroupComponent implements OnInit {
 
   private TeamRefreshSubscription: Subscription;
   groupData:GroupModel[];
+  noDesignFound: string;
   constructor(private utils:UtilitiesService,
               private apiService:ApiService,
               private modalController:ModalController) { }
@@ -40,7 +41,11 @@ export class GroupComponent implements OnInit {
       this.apiService.getGroupData().subscribe((res:any)=>{
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
         console.log(res);
-        this.groupData = res;
+        if(res.length > 0){
+          this.groupData = res;
+        }else{
+          this.noDesignFound = "No Design Found";
+        }
         console.log(this.groupData);
         if (event !== null) {
           event.target.complete();

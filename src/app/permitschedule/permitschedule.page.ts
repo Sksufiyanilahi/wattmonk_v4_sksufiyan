@@ -201,7 +201,7 @@ export class PermitschedulePage implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
-    private utils: UtilitiesService,
+    public utils: UtilitiesService,
     private navController: NavController,
     private storage: StorageService,
     private route: ActivatedRoute,
@@ -1077,7 +1077,7 @@ export class PermitschedulePage implements OnInit {
 
             }
           }
-           
+
           console.log(data)
 
           // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {

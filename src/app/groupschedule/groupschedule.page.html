@@ -105,7 +105,7 @@
                   [matChipInputFor]="clientChipList" formControlName="clients" required>
               </mat-chip-list>
               <mat-autocomplete #clientauto="matAutocomplete" (optionSelected)="setSelectClient($event)">
-                <mat-option *ngFor="let user of companyList" [value]="user" class="font">{{user.company}}</mat-option>
+                <mat-option *ngFor="let user of companyList" [value]="user" class="font">{{user?.company}}</mat-option>
               </mat-autocomplete>
             </mat-form-field>
           </ion-col>

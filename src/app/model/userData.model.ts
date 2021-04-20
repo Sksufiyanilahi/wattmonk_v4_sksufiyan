@@ -1,6 +1,7 @@
 export class UserData{
     firstname:string;
     lastname:string;
+    usertype:string;
     role:{
         id:number;
         name:string;
@@ -13,4 +14,7 @@ export class UserData{
         id:number;
     }
     peengineertype:string;
+    company:any;
+
+
 }

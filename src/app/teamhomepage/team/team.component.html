@@ -3,7 +3,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-grid>
+  <ion-grid *ngIf="listOfteamData.length !== 0 ;else nodesignFound">
 
     <!-- <ion-row *ngFor="let item of listOfDesignsHelper;let i = index"> -->
     <!-- <ion-virtual-scroll [items]="listOfDesignsHelper"> -->
@@ -48,18 +48,6 @@
 
           </p>
 
-          <ion-grid>
-            <ng-template #nodesignFound>
-              <div *ngIf="listOfteamData.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
-                <!-- <div *ngIf="!netSwitch"> -->
-
-                {{noDesignFound}}
-                <!-- </div> -->
-
-                <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
-              </div>
-            </ng-template>
-          </ion-grid>
           <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
           <!-- <span class="ion-text-end timestamp" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
                       {{designData.deliverydate | date: 'hh:mm a'}}
@@ -69,6 +57,17 @@
     </ion-row>
     <!-- </ion-virtual-scroll> -->
   </ion-grid>
+
+  <ng-template #nodesignFound>
+    <div *ngIf="listOfteamData.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
+      <!-- <div *ngIf="!netSwitch"> -->
+
+      {{noDesignFound}}
+      <!-- </div> -->
+
+      <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+    </div>
+  </ng-template>
 
 
 
