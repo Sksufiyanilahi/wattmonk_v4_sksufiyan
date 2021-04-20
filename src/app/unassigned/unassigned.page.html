@@ -34,9 +34,9 @@
                 </span> -->
                         <!-- <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'created'" >Unassigned</span> -->
                         <span class="chipdetail" style="background-color: rgb(204, 153, 0);"
-                            *ngIf="designData.requirementtype=='proposal'">Proposal</span>
+                            *ngIf="designData.requirementtype=='proposal' && designData.requesttype=='prelim'">Proposal</span>
                         <span class="chipdetail" style="background-color: rgb(204, 153, 0);"
-                            *ngIf="designData.requirementtype=='assessment'">Assessment</span>
+                            *ngIf="designData.requirementtype=='assessment' && designData.requesttype=='prelim'">Assessment</span>
                         <span class="chipdetail" style="background-color: rgb(246, 104, 10);"
                             *ngIf="designData.isoverdue">Overdue</span>
                         <span fill="clear" background-border="clear" (click)="gotoActivity(designData,$event)"

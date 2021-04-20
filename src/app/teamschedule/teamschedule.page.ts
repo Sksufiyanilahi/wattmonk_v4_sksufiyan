@@ -116,9 +116,9 @@ export class TeamschedulePage implements OnInit {
       let parentId = this.designData.parent.id;
       let roleId = this.designData.role.id;
       this.apiservices.getDynamicRoles(parentId,roleId).subscribe((res)=>{
-        console.log(res);
-        this.roles = res;
-        console.log(this.roles);
+        // console.log(res);
+        // this.roles = res;
+        // console.log(this.roles);
         if(res == 0)
         {
           this.apiservices.getDefaultRoles(roleId).subscribe((response)=>{
@@ -199,8 +199,9 @@ export class TeamschedulePage implements OnInit {
             (response:any) => {
               this.utils.hideLoading().then(() =>{ 
                 this.utils.showSnackBar('Team created successfully');
-                this.router.navigate(['/teamhomepage/team'])
                 this.utils.setteamModuleRefresh(true);
+                this.router.navigate(['/teamhomepage/team'])
+               
     
               });
             },

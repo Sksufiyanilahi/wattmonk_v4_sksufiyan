@@ -34,9 +34,9 @@
                     {{designData.deliverydate | date: 'hh:mm a'}}
                 </span> -->
                         <span class="chipdetail" style="background-color: rgb(204, 153, 0);"
-                            *ngIf="designData.requirementtype=='proposal'">Proposal</span>
+                            *ngIf="designData.requirementtype=='proposal' && designData.requesttype=='prelim'">Proposal</span>
                         <span class="chipdetail" style="background-color: rgb(204, 153, 0);"
-                            *ngIf="designData.requirementtype=='assessment'">Assessment</span>
+                            *ngIf="designData.requirementtype=='assessment' && designData.requesttype=='prelim'">Assessment</span>
                         <span class="chipdetail"
                             *ngIf="(userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')"
                             style="background-color: #95afc0;">Waiting for acceptance</span>

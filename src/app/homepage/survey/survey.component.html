@@ -149,7 +149,7 @@
                                 (click)="generatePdf(surveyData.id,$event)">
                                 Generate PDF &nbsp; &nbsp;</span> -->
                             <span
-                                *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin' || userData.role.type=='master' ||(userData.role.type=='bd' && userData.parent.id != 232)) "
+                                *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin' || userData.role.type=='master' ||(userData.role.type!=='bd' && userData.parent.id != 232)) "
                                 style="float:right !important;" class="ion-text-end action-button-color"
                                 (click)="raisepermit(surveyData,$event)">
                                 Raise Permit &nbsp; &nbsp;</span>

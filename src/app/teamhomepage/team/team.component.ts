@@ -67,9 +67,7 @@ export class TeamComponent implements OnInit {
 
   ngOnInit() {
     this.userData = this.storageservice.getUser();
-    this.subscription = this.utils.getBottomBarHomepage().subscribe((value) => {
-      this.showFooter = value;
-    });
+    console.log(this.userData)
     console.log("hello team")
     this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
       this.getTeams(null);

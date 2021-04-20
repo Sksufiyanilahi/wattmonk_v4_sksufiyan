@@ -237,6 +237,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
      // attachments: this.surveydata.attachments,
 
     });
+    this.surveyForm.get("jobtype").setValue("pv");
     this.utilities.setStaticAddress(this.surveydata.address);
     if (this.surveyForm.get('email').value == '') {
       this.fieldDisabled = false;

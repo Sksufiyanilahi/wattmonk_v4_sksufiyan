@@ -168,7 +168,7 @@ export class PestampSchedulePage implements OnInit {
     }
     else if(this.permitdatapresent)
     {
-this.getPermitData();
+      this.getPermitData();
     }
   }
 
@@ -189,12 +189,6 @@ this.getPermitData();
       propertytype: this.permitdata.projecttype,
 
     });
-    //this.utils.setStaticAddress(this.permitdata.address);
-    // if (this.firstFormGroup.get('email').value == '') {
-    //   this.fieldDisabled = false;
-    // } else {
-    //   this.fieldDisabled = true;
-    // }
   }
 
   /* Getting Design Details */

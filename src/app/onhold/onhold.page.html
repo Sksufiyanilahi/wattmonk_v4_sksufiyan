@@ -39,11 +39,11 @@
           (click)="gotoDetails(designData,$event)">
           <p class="customer-name" routerDirection="forward">{{designData.name}}
             <span class="chipdetail" style="background-color: rgb(204, 153, 0);"
-              *ngIf="designData.requirementtype=='proposal'">Proposal</span>
+              *ngIf="designData.requirementtype=='proposal' && designData.requesttype=='prelim'">Proposal</span>
             <span class="chipdetail" style="background-color: rgb(204, 153, 0);"
-              *ngIf="designData.requirementtype=='assessment'">Assessment</span>
-            <span class="chipdetail" style="background-color: rgb(246, 77, 10);"
-              *ngIf="designData.status == 'requestdeclined'">On Hold</span>
+              *ngIf="designData.requirementtype=='assessment' && designData.requesttype=='prelim'">Assessment</span>
+            <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);"
+              *ngIf="designData.status == 'requestdeclined'">On Hold</span> -->
             <span fill="clear" background-border="clear" (click)="gotoActivity(designData,$event)" class="imagebutton"
               size="small"><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
 
