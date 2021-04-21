@@ -251,7 +251,7 @@ export class SalesproposalComponent implements OnInit {
       // jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
       newconstruction: new FormControl('false'),
-      source: new FormControl('android', [Validators.required]),
+      source: new FormControl(this.utils.checkPlatform(), [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('prelim'),
       latitude: new FormControl(null),
@@ -326,6 +326,7 @@ export class SalesproposalComponent implements OnInit {
     // this.getincentives();
     // this.getutilitiesName();
     this.fetchIncentive();
+    this.autocompleteItems=[];
   }
 
 

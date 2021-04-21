@@ -201,7 +201,7 @@ export class PermitschedulePage implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
-    private utils: UtilitiesService,
+    public utils: UtilitiesService,
     private navController: NavController,
     private storage: StorageService,
     private route: ActivatedRoute,
@@ -261,7 +261,7 @@ export class PermitschedulePage implements OnInit {
       jobtype: new FormControl('', [Validators.required]),
       projecttype: new FormControl('', [Validators.required]),
       newconstruction: new FormControl('false'),
-      source: new FormControl('android', [Validators.required]),
+      source: new FormControl(utils.checkPlatform(), [Validators.required]),
       comments: new FormControl(''),
       requesttype: new FormControl('permit'),
       latitude: new FormControl(''),
@@ -306,6 +306,7 @@ export class PermitschedulePage implements OnInit {
       this.netSwitch = data;
 
     })
+    this.autocompleteItems=[];
   }
 
 
@@ -407,7 +408,6 @@ export class PermitschedulePage implements OnInit {
     } else if (this.surveydatapresent) {
       this.getsurveydata();
     } else {
-      this.addressValue();
     this.desginForm.patchValue({
       createdby: this.storage.getUserID()
     });
@@ -1078,7 +1078,7 @@ export class PermitschedulePage implements OnInit {
 
             }
           }
-           
+
           console.log(data)
 
           // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {

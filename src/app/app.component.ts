@@ -72,7 +72,7 @@ export class AppComponent {
     private apiservice: ApiService,
     private utilitiesService: UtilitiesService,
     private firebase: FirebaseX,
-    private utilities: UtilitiesService,
+    public utilities: UtilitiesService,
     private network: NetworkdetectService,
     private router: Router,
     private db: AngularFireDatabase,

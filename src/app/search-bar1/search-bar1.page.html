@@ -34,16 +34,16 @@
 
                 <div  *ngIf="search?.type=='design'">
                     <p class="customer-name">
-    <span 
+    <span
     >{{search?.name}}</span>
-    <span fill="clear" background-border="clear" (click)="gotoActivity(designData,$event)" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
+    <span fill="clear" background-border="clear" (click)="gotoActivity(search,$event)" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
         <ng-container *ngIf="search?.chatid!==null">
 <span fill="clear" background-border="clear" (click)="gotoChats(search,$event)"
     class="chatbutton" size="small"><img style="height:20px" src="assets/images/chat.svg" /></span>
 </ng-container>
 </p>
                     <p style="margin:0px">
-                   
+
                     <span class="chipdetail" style="background-color:rgb(228, 77, 102);"
                         [routerLink]="['/design-details/',search?.id]">design</span>
                     <span class="chipdetail" style="background-color:rgb(228, 77, 102);"
@@ -137,16 +137,16 @@
                 </div>
                 <div *ngIf="search?.type=='survey'">
                     <p class="customer-name">
-                        <span 
+                        <span
                         >{{search?.name}}</span>
-                        <span fill="clear" background-border="clear" (click)="gotoActivity(designData,$event)" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
+                        <span fill="clear" background-border="clear" (click)="gotoSurveyActivity(search,$event)" class="imagebutton"  size="small"  ><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
                             <ng-container *ngIf="search?.chatid!==null">
                     <span fill="clear" background-border="clear" (click)="gotoChats(search,$event)"
                         class="chatbutton" size="small"><img style="height:20px" src="assets/images/chat.svg" /></span>
                     </ng-container>
                     </p>
                     <p style="margin:0px">
-                   
+
                     <span class="chipdetail" style="background-color:rgb(228, 77, 102);"
                         [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">survey</span>
                     <span class="chipdetail" style="background-color: rgb(246, 77, 10);"

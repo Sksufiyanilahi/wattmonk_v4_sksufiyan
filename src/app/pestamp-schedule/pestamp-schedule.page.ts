@@ -140,6 +140,7 @@ export class PestampSchedulePage implements OnInit {
       this.netSwitch = data;
 
     })
+    this.autocompleteItems=[];
   }
 
   ngOnInit() {
@@ -600,7 +601,7 @@ export class PestampSchedulePage implements OnInit {
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -646,7 +647,7 @@ export class PestampSchedulePage implements OnInit {
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -704,7 +705,7 @@ export class PestampSchedulePage implements OnInit {
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -783,7 +784,7 @@ export class PestampSchedulePage implements OnInit {
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -944,7 +945,7 @@ export class PestampSchedulePage implements OnInit {
       // this.goBack();
       // return;
 
-      
+
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
 

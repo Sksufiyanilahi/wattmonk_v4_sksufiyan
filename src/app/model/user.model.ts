@@ -27,6 +27,7 @@ export class User {
   };
   ispaymentmodeprepay:boolean;
   peengineertype:string;
+  usertype:string;
 
 }
 

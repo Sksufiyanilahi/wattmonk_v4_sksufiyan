@@ -88,7 +88,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       datetime: new FormControl(''),
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
-      source: new FormControl('android', [Validators.required]),
+      source: new FormControl(this.utilities.checkPlatform(), [Validators.required]),
       assignedto: new FormControl(null),
       createdby: new FormControl(this.storage.getUserID(), [Validators.required]),
       latitude: new FormControl('', [Validators.required]),
@@ -217,7 +217,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       prelimdesignsurvey : this.surveydata.id,
       name: this.surveydata.name,
       email: this.surveydata.email,
-     
+
       address: this.surveydata.address,
       phonenumber: this.surveydata.phonenumber,
       createdby: this.surveydata.createdby.id,
@@ -425,6 +425,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
     })
 
 
+  }
+
+  ionViewDidEnter() {
+    this.autocompleteItems=[];
   }
 
   /* FOR SEARCH SHIPPING ADDRESS */

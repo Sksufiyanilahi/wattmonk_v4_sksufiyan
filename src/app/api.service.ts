@@ -487,7 +487,7 @@ export class ApiService {
         permissiontomakedesign:permissiontomakedesign,
         password: randomPassword,
         resetPasswordToken: randomPassword,
-        source: "android",
+        source: this.utilities.checkPlatform(),
         username: workemail,
         confirmed : true,
         isdefaultpassword: true,
@@ -753,9 +753,9 @@ export class ApiService {
         headers:this.headers
       })
       }
- 
+
     updateTeam(data,id){
-    
+
      return this.http.put(BaseUrl + "users/"+id , data , {
          headers: this.headers,
         // observe: "response"

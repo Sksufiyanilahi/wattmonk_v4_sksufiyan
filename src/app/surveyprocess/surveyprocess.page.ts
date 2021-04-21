@@ -2,7 +2,7 @@
 import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
-import {AlertController, IonRouterOutlet, IonSlides, NavController, Platform} from '@ionic/angular';
+import {AlertController, IonRouterOutlet, IonSlides, MenuController, NavController, Platform} from '@ionic/angular';
 import {Diagnostic} from '@ionic-native/diagnostic/ngx';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UtilitiesService} from '../utilities.service';
@@ -323,6 +323,7 @@ export class SurveyprocessPage implements OnInit {
     private platform: Platform,
     private routeroutlet: IonRouterOutlet,
     private storageService: StorageService,
+    private menuCtrl:MenuController,
     private insomnia: Insomnia) {
     this.user = this.storageuserdata.getUser();
     this.surveyid = +this.route.snapshot.paramMap.get('id');
@@ -356,8 +357,13 @@ export class SurveyprocessPage implements OnInit {
     this.startCameraWithOpts();
   }
 
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
+  }
+
   ngOnDestroy() {
     this.stopCamera();
+    this.menuCtrl.enable(true);
   }
 
   createSurveyProcessForm() {

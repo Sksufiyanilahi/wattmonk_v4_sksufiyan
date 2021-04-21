@@ -189,7 +189,7 @@ export class UserregistrationPage implements OnInit {
       firstname: this.userregistrationForm.get("firstname").value,
       lastname: this.userregistrationForm.get("lastname").value,
       country: this.userregistrationForm.get("country").value,
-      source: "android",
+      source: this.utils.checkPlatform(),
       isdefaultpassword: true,
       parent: this.user.user.id,
       resetPasswordToken: this.userregistrationForm.get('password').value,
