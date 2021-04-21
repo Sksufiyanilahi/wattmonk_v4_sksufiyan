@@ -767,8 +767,8 @@ export class SurveyComponent {
     let objToSend: NavigationExtras = {
       queryParams: {
         surveyData: data,
-        tabsDisabled: true,
-        nonEditableField: true
+        // tabsDisabled: true,
+        // nonEditableField: true
       },
       skipLocationChange: false,
       fragment: 'top'

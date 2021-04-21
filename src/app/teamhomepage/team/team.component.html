@@ -1,5 +1,5 @@
 
-<ion-content style="padding-bottom: 250px;position: sticky;">
+<ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;overflow:none;" >
   <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -30,7 +30,7 @@
 
           <p style="margin:0px">
             <span class="customer-email" routerDirection="forward"
-              style="color: #4272B9">{{designData.role?.name}}</span>
+              style="color: #4272B9">{{designData.role?.displayname}}</span>
             <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
             <!-- </ion-col> -->
 
@@ -46,6 +46,15 @@
             <!-- <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'"  style="font-size: 0.8em;"> -->
             <!-- </ion-col> -->
 
+          </p>
+          <p style="margin:0px">
+            <span *ngIf="(utils.isspecificClient && (userData?.role.id==6 || userData.role.id==7) && designData?.role.id==9 && (designData.addedby?.role!=3 ))"
+            style="float:right !important;" class="ion-text-end action-button-color"
+            (click)="openAssignSalesManager(designData.id,designData,$event)">Assign</span>
+
+            <span *ngIf="(utils.isspecificClient && (userData?.role.id==6 ) && designData?.role.id==3 && (designData.addedby?.role!=7 ))"
+            style="float:right !important;" class="ion-text-end action-button-color"
+            (click)="openAssignAdmin(designData,$event)">Assign</span>
           </p>
 
           <!-- <ion-progress-bar [value]="1" mode="ios" color="success" class="progress-bar-height"></ion-progress-bar> -->
@@ -72,3 +81,44 @@
 
 
 </ion-content>
+<ng-container *ngIf="showBottomDraw">
+
+  <ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="400" [draggable]="false"
+      [disableDrag]="true" [shouldBounce]="true" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
+      <!-- <form [formGroup]="assignForm"> -->
+          <ion-grid class="drawer">
+              <ion-row>
+                  <ion-col size="12">
+                      <app-user-selector (assigneeData)=getassignedata($event) placeholder="Assign"
+                          [assignees]="SalesManager"
+                          ></app-user-selector>
+
+                  </ion-col>
+              </ion-row>
+              <!--<ion-row style="margin-left: 8px;">
+                <ion-col size="12">
+                    <span class="input-placeholder">comments</span>
+                </ion-col>
+                <ion-col size="12" style="padding-top: 0px;">
+                    <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                  formControlName="comment"></ion-textarea>
+                </ion-col>
+            </ion-row>-->
+              <ion-row style="justify-content: flex-end;">
+                  <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
+                      <ion-button class="buttom-drawer-button" fill="clear" (click)="assign()">
+                          Confirm
+                      </ion-button>
+                  </ion-col>
+                  <ion-col size="auto">
+                      <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
+                          Cancel
+                      </ion-button>
+                  </ion-col>
+              </ion-row>
+          </ion-grid>
+      <!-- </form> -->
+
+  </ion-bottom-drawer>
+</ng-container>
+

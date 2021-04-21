@@ -223,7 +223,7 @@
                                 class="ion-text-end action-button-color"
                                 (click)="Resend(designData.id, designData.requesttype,$event)">
                                 Resend</span>
-                            <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'"
+                            <span *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin' || userData.role.type=='master' ||(userData.role.type!=='bd' && userData.parent.id != 232)) "
                                 style="float:right !important;margin-right: 8px;"
                                 class="ion-text-end action-button-color"
                                 (click)="raiseSurvey(designData,$event)">

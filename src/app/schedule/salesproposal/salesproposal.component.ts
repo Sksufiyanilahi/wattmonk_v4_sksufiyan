@@ -326,6 +326,7 @@ export class SalesproposalComponent implements OnInit {
     // this.getincentives();
     // this.getutilitiesName();
     this.fetchIncentive();
+    this.autocompleteItems=[];
   }
 
 

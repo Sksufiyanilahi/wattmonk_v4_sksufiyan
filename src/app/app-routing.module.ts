@@ -279,10 +279,6 @@ const routes: Routes = [
         loadChildren: () => import('./callingscreen/callingscreen.module').then(m => m.CallingscreenPageModule)
     },
   {
-    path: 'teammodule',
-    loadChildren: () => import('./teammodule/teammodule.module').then( m => m.TeammodulePageModule)
-  },
-  {
     path: 'teamschedule',
     loadChildren: () => import('./teamschedule/teamschedule.module').then( m => m.TeamschedulePageModule)
   },
@@ -322,6 +318,15 @@ const routes: Routes = [
     path: 'groupdetails',
     loadChildren: () => import('./groupdetails/groupdetails.module').then( m => m.GroupdetailsPageModule)
   },
+  {
+    path: 'clientschedule',
+    loadChildren: () => import('./clientschedule/clientschedule.module').then( m => m.ClientschedulePageModule)
+  },
+  {
+    path: 'clienthomepage',
+    loadChildren: () => import('./clienthomepage/clienthomepage.module').then( m => m.ClienthomepagePageModule)
+  },
+
 
 
 

@@ -348,12 +348,13 @@ confirm(){
   cancel(){
 
       if(this.design ==='prelim'){
+        this.utils.setHomepageDesignRefresh(true);
       this.router.navigate(['/homepage/design'])
-      // this.utils.setHomepageDesignRefresh(true);
+       
       }
       else{
+        this.utils.setHomepagePermitRefresh(true);
         this.router.navigate(['permithomepage/permitdesign'])
-        // this.utils.setHomepagePermitRefresh(true);
       }
 
   }

@@ -302,9 +302,14 @@
     <ion-col size="6">
         <ion-item class="ion-no-padding">
             <ion-label position="floating">Cost of System* (Watt)</ion-label>
-            <ion-input type="text" class="form_input"
+            <ion-input type="number" class="form_input"
             formControlName="costofsystem"></ion-input>
         </ion-item>
+        <div style="height: 5px;">
+          <div *ngIf="desginForm.get('costofsystem').value === '' && desginForm.get('costofsystem').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
     </ion-col>
 <!-- </ion-row>
 
