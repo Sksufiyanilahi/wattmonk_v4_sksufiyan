@@ -285,6 +285,7 @@ isArchitecturalFileUpload: boolean = false;
   }
 
   ionViewDidEnter() {
+    this.autocompleteItems=[];
   }
 
 

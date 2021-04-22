@@ -862,7 +862,14 @@ gotoActivity(designData,event){
   gotoDetails(designData,$event){
     // $event.preventDefault();
     // $event.stopPropagation();
+    if(designData.requesttype=='permit')
+    {
     this.router.navigate(['/permit-design-details/' + designData.id])
+    }
+    else if(designData.requesttype=='prelim')
+    {
+      this.router.navigate(['design-details/' + designData.id]);
+    }
   }
 
 

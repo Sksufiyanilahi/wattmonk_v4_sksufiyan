@@ -306,6 +306,7 @@ export class PermitschedulePage implements OnInit {
       this.netSwitch = data;
 
     })
+    this.autocompleteItems=[];
   }
 
 
@@ -352,8 +353,8 @@ export class PermitschedulePage implements OnInit {
 
     if (this.data != undefined) {
       this.surveydata = this.data.productdetails.queryParams.surveyData;
-      this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
-      this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
+      // this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
+      // this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
 
       this.surveydatapresent = true
 
@@ -375,14 +376,15 @@ export class PermitschedulePage implements OnInit {
         this.address = address;
         this.storage.setData(this.address);
       });
-    } else {
-      // await this.getGeoLocation();
-      this.subscription = this.utils.getAddressObservable().subscribe((address) => {
+    } 
+    // else {
+    //   // await this.getGeoLocation();
+    //   this.subscription = this.utils.getAddressObservable().subscribe((address) => {
 
-        this.address = address.address;
-        this.storage.setData(this.address);
-      });
-    }
+    //     this.address = address.address;
+    //     this.storage.setData(this.address);
+    //   });
+    // }
 
     this.subscription = this.utils.getScheduleFormEvent().subscribe((event) => {
       if (event === ScheduleFormEvent.SAVE_PERMIT_FORM) {
@@ -406,7 +408,6 @@ export class PermitschedulePage implements OnInit {
     } else if (this.surveydatapresent) {
       this.getsurveydata();
     } else {
-      this.addressValue();
     this.desginForm.patchValue({
       createdby: this.storage.getUserID()
     });
@@ -459,7 +460,7 @@ export class PermitschedulePage implements OnInit {
 
 
   getsurveydata() {
-
+    console.log(this.surveydata);
     this.desginForm.patchValue({
       name: this.surveydata.name,
       email: this.surveydata.email,
@@ -486,12 +487,12 @@ export class PermitschedulePage implements OnInit {
       attachments: this.surveydata.attachments,
 
     });
-    this.utils.setStaticAddress(this.surveydata.address);
-    if (this.desginForm.get('email').value == '') {
-      this.fieldDisabled = false;
-    } else {
-      this.fieldDisabled = true;
-    }
+    // this.utils.setStaticAddress(this.surveydata.address);
+    // if (this.desginForm.get('email').value == '') {
+    //   this.fieldDisabled = false;
+    // } else {
+    //   this.fieldDisabled = true;
+    // }
   }
 
   uploadcontrolvalidation() {

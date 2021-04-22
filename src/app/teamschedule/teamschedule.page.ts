@@ -116,9 +116,9 @@ export class TeamschedulePage implements OnInit {
       let parentId = this.designData.parent.id;
       let roleId = this.designData.role.id;
       this.apiservices.getDynamicRoles(parentId,roleId).subscribe((res)=>{
-        console.log(res);
-        this.roles = res;
-        console.log(this.roles);
+        // console.log(res);
+        // this.roles = res;
+        // console.log(this.roles);
         if(res == 0)
         {
           this.apiservices.getDefaultRoles(roleId).subscribe((response)=>{
@@ -171,6 +171,7 @@ export class TeamschedulePage implements OnInit {
     console.log(this.teamForm.status)
    if (this.teamForm.status === 'VALID') {
     // $ev.preventDefault();
+    this.utils.showLoading("Saving").then(()=>{
      if(this.designId==0){
       var tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
@@ -196,49 +197,22 @@ export class TeamschedulePage implements OnInit {
           )
           .subscribe(
             (response:any) => {
-              this.utils.setteamModuleRefresh(true);
-              this.utils.showSnackBar('Team created successfully');
-              this.teamForm.reset();
-
-            },
-            error => {
-              this.utils.errorSnackBar(error);
-
-            responseError => {
-              const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message);
-          this.utils.showSnackBar('Please check valid fields');
-            }
-
-          });
-            setTimeout(()=>{
-              this.utils.hideLoading().then(() =>{
-                //this.createChatGroup(response);
+              this.utils.hideLoading().then(() =>{ 
                 this.utils.showSnackBar('Team created successfully');
-                this.router.navigate(['/teammodule'])
                 this.utils.setteamModuleRefresh(true);
-
-                // this.utils.showSnackBar('Design have been saved');
-
-                // this.navController.pop();
-                // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-                //   modal.present()
-                //   modal.onWillDismiss().then((dismissed) => {
-                    // this.utils.setHomepageDesignRefresh(true);
-                //     this.navController.pop();
-                //   });
-                // });
-
+                this.router.navigate(['/teamhomepage/team'])
+               
+    
               });
-            },2000)
-
+            },
+      
         responseError => {
          this.utils.hideLoading().then(() => {
            const error: ErrorModel = responseError.error;
            this.utils.errorSnackBar(error.message[0].messages[0].message);
          });
-
-        }
+  
+        })
       }
     else{
       let rolesel = parseInt(this.teamForm.get("userrole").value);
@@ -260,25 +234,12 @@ export class TeamschedulePage implements OnInit {
 
         )
         .subscribe(
-          (response:any) => {
-
-            this.utils.showSnackBar('Team updated successfully');
-            this.teamForm.reset();
-            this.utils.setteamModuleRefresh(true);
-          },
-          error => {
-            this.utils.errorSnackBar(error);
-
-          responseError => {
-            const error: ErrorModel = responseError.error;
-        this.utils.errorSnackBar(error.message);
-          }
-
-        });
-          setTimeout(()=>{
-            this.utils.hideLoading().then(() =>{
+          (response:any) => {  
+        
+          
+            this.utils.hideLoading().then(() =>{ 
               //this.createChatGroup(response);
-              this.router.navigate(['/teammodule'])
+              this.router.navigate(['/teamhomepage/team'])
               this.utils.showSnackBar('Team updated succesfully');
               // this.utils.showSnackBar('Design have been saved');
               this.utils.setteamModuleRefresh(true);
@@ -292,16 +253,20 @@ export class TeamschedulePage implements OnInit {
               // });
 
             });
-          },2000)
-
+        
+          },
       responseError => {
        this.utils.hideLoading().then(() => {
          const error: ErrorModel = responseError.error;
          this.utils.errorSnackBar(error.message[0].messages[0].message);
        });
 
-      }
+      })
     }
+  },
+  responseError=>{
+    this.utils.hideLoading();
+  })
   }
   else{
     if(this.teamForm.value.firstname == '' || this.teamForm.get('firstname').hasError('pattern'))

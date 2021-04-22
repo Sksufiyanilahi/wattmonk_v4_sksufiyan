@@ -76,7 +76,7 @@
                     <span class="recordupdatedon">{{designData.deliverydate|date: 'dd MMM yyyy'}}</span>
                   </p>
                 <span class="customer-address z-100" *ngIf="designData.deliveryaddress != null && designData.deliveryaddress != ''"
-                        (click)="openAddressOnMap(designData.address,$event)">{{(designData.deliveryaddress | slice:0:60) + (designData.deliveryaddress.length > 60 ? '...' : '')}}
+                        (click)="openAddressOnMap(designData.deliveryaddress,$event)">{{(designData.deliveryaddress | slice:0:60) + (designData.deliveryaddress.length > 60 ? '...' : '')}}
 
                              <ion-col>
 

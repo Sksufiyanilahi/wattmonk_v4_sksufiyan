@@ -379,6 +379,9 @@ export class AppComponent {
     } else if (this.userData.role.type !== 'designer' && this.userData.role.type !== 'qcinspector' && this.userData.role.type !== 'peengineer' && type == 'team') {
       this.router.navigate(['/teamhomepage/team'])
     }
+    else if (this.userData.role.type !== 'designer' && this.userData.role.type !== 'qcinspector' && this.userData.role.type !== 'peengineer' && type == 'client') {
+      this.router.navigate(['/clienthomepage'])
+    }
   }
 
   getFcmToken() {
