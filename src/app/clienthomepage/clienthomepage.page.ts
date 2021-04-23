@@ -82,7 +82,7 @@ export class ClienthomepagePage implements OnInit {
         console.log("response", response);
         //if (response.length > 0) {
         // this.clients = this.fillinDynamicData(response);
-       
+
         //}
         if(response.length){
           this.clientData = response;
@@ -217,6 +217,10 @@ export class ClienthomepagePage implements OnInit {
       console.log(res);
       })
   }
+
+  searchbar() {
+		this.route.navigate([ '/search-bar1' ]);
+	}
 
 
 }
