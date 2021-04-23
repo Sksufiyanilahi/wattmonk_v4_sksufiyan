@@ -146,6 +146,29 @@
         </ng-container>
     </ion-row>
 
+    <!-- <ion-row class="ion-no-padding font" *ngIf="((user.role.type!='clientsuperadmin' && user.role.type!='clientadmin') || ((user.role.type==='clientsuperadmin' || user.role.type === 'clientadmin') && design.status==='delivered'))"> -->
+        <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.iselectricalstampeduploaded">
+            <ion-col><span class="model-type font">Electrical Stamped Files</span></ion-col>
+            <ion-col size="auto">
+                <div  *ngFor="let electricalstamped of design.electricalstampedfiles" style="display: flex;justify-content: flex-end;line-height: 1.5rem;">
+                    <span class="model-name font" style="color:#3c78d8 !important" (click)="showStampedFile(electricalstamped)">{{electricalstamped.name}}{{electricalstamped.ext}}</span>
+                 </div>
+            </ion-col>
+        </ng-container>
+    </ion-row>
+
+    <ion-row class="ion-no-padding font">
+        <ng-container *ngIf="design.isstructuralstampeduploaded">
+            <ion-col><span class="model-type font">Structural Stamped Files</span></ion-col>
+            <ion-col size="auto">
+                <div  *ngFor="let structuralstamped of design.structuralstampedfiles" style="display: flex;justify-content: flex-end;line-height: 1.5rem;">
+                    <span class="model-name font" style="color:#3c78d8 !important" (click)="showStampedFile(structuralstamped)">{{structuralstamped.name}}{{structuralstamped.ext}}</span>
+                </div>
+            </ion-col>
+        </ng-container>
+    </ion-row>
+
     <ion-row class="ion-no-padding" *ngIf="((design.status == 'completed' || design.status == 'delivered') && design.propertytype == 'commercial') && (user.role.type !='clientadmin' && user.role.type !='clientsuperadmin')">
         <ion-col><span class="model-type font">Working Hours</span></ion-col>
         <ion-col size="auto">
@@ -279,7 +302,7 @@
 
 
     <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
-      *ngIf="design.status=='assigned'||design.status=='completed'">
+      *ngIf="(design.status=='assigned'||design.status=='completed') && design.assignedto!=null">
       <ion-col class="ion-justify-content-center ion-align-items-center"><span class="model-type font">Assigned to</span></ion-col>
       <ion-col size="auto">
           <div class="selected d-flex">

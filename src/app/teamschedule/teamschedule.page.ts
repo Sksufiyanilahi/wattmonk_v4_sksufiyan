@@ -117,7 +117,7 @@ export class TeamschedulePage implements OnInit {
       let roleId = this.designData.role.id;
       this.apiservices.getDynamicRoles(parentId,roleId).subscribe((res)=>{
         // console.log(res);
-        // this.roles = res;
+         this.roles = res;
         // console.log(this.roles);
         if(res == 0)
         {
