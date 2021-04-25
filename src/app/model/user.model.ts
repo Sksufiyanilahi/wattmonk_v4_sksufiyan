@@ -27,6 +27,11 @@ export class User {
   };
   ispaymentmodeprepay:boolean;
   peengineertype:string;
+  usertype:string;
+  selected = false;
+  jobcount:number;
+  displayname:string;
+  addedby:any;
 
 }
 
@@ -47,4 +52,5 @@ export class Role {
   name: string;
   description: string;
   type: string;
+  displayname:string;
 }

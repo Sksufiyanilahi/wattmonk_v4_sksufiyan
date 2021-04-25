@@ -74,6 +74,12 @@
       <!-- <ion-row>
           <ion-col> -->
               <!-- <ion-grid class="ion-no-padding"> -->
+                <ion-row class="ion-no-padding">
+                    <ion-col><span class="model-type font">Company</span></ion-col>
+                    <ion-col size="auto">
+                        <span class="model-name font fontwt_size">{{design?.company}}</span>
+                    </ion-col>
+                </ion-row>
                   <ion-row class="ion-no-padding" *ngIf="user.designertype!='external'">
                       <ion-col><span class="model-type font">Phone Number</span></ion-col>
                       <ion-col size="auto">

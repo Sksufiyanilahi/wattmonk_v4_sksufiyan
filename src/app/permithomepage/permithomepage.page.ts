@@ -86,7 +86,7 @@ export class PermithomepagePage implements OnInit {
   deactivateNetworkSwitch: Subscription;
 
   constructor(private apiService:ApiService,
-              private utils:UtilitiesService,
+              public utils:UtilitiesService,
               private iab:InAppBrowser,
               private network:NetworkdetectService,
               private platform: Platform,

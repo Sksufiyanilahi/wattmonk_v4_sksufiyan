@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ModalController, NavParams } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { INVALID_EMAIL_MESSAGE, FIELD_REQUIRED, INVALID_PHONE_NUMBER } from '../model/constants';
+import { INVALID_EMAIL_MESSAGE, FIELD_REQUIRED, INVALID_PHONE_NUMBER, INVALID_COMPANY_NAME } from '../model/constants';
 import { startWith ,map} from 'rxjs/operators';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
@@ -31,6 +31,7 @@ export class ProfileEditModalPage implements OnInit {
   emailError = INVALID_EMAIL_MESSAGE;
   lastNameError = "Invalid Last Name";
   phoneError = INVALID_PHONE_NUMBER;
+  companyError = INVALID_COMPANY_NAME;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,13 +43,15 @@ export class ProfileEditModalPage implements OnInit {
     private utils:UtilitiesService
   ) {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}'
     this.profileEdit = this.formBuilder.group({
       firstName: new FormControl('',[Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
       lastName:  new FormControl('',[Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
       email:  new FormControl('',[Validators.required, Validators.pattern(EMAILPATTERN)]),
       country:  new FormControl('',[Validators.required]),
       phone:  new FormControl('',[ Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
-      address:  new FormControl(''),
+      address:  new FormControl('',[Validators.required]),
+      company: new FormControl('',[Validators.pattern(COMPANYFORMAT)])
     })
 
 
@@ -63,6 +66,7 @@ export class ProfileEditModalPage implements OnInit {
       country: this.user.country,
       phone: this.user.phone,
       address: this.user.address,
+      company:this.user.company
     })
     this.fetchCountry();
   }
@@ -115,6 +119,7 @@ if(this.profileEdit.status=='VALID'){
     address:this.profileEdit.get('address').value,
     country:this.profileEdit.get('country').value,
     phone:this.profileEdit.get('phone').value,
+    company:this.profileEdit.get('company').value
   }
   this.apiservice.editProfile(postdata,this.user.id).subscribe((res) => {
 

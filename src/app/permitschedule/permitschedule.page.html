@@ -1,6 +1,6 @@
 <ion-row>
   <ion-col>
-    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;">Add Permit Design </h5>
+    <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;">{{utils.isspecificClient  ? "Add Designs" : "Add Permit Design"}} </h5>
   </ion-col>
   <ion-col size="auto" style="align-self: center;">
     <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
@@ -519,7 +519,7 @@
         <!-- </ng-container> -->
       </ion-row>
 
-      
+
       <ion-row class="ion-margin-top">
         <ion-col>
             <ion-item class="ion-no-padding no-border" lines="none">
@@ -528,7 +528,7 @@
             </ion-item>
         </ion-col>
     </ion-row>
-    
+
       <ion-row class="ion-margin-top">
         <ion-label>Comments</ion-label>
       </ion-row>

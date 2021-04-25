@@ -87,13 +87,13 @@
             </div> -->
             </ion-col>
             </ion-row>
-            
+
 
             <ion-row>
                 <ion-col size="6">
                     <ion-item class="ion-no-padding">
                         <ion-label position="floating" class="label">Job Type*</ion-label>
-                        <ion-select class="form_input select_div" placeholder="job type"
+                        <ion-select class="form_input select_div"
                                     ok-text=""
                                     cancel-text=""
                                     formControlName="jobtype" interface="popover">
@@ -143,6 +143,16 @@
                                   formControlName="comments"></ion-textarea>
                 </ion-col>
             </ion-row>
+            <!-- <ion-row class="ion-margin-top">
+                <ng-container *ngIf="surveydatapresent">
+                    <ion-col><span class="model-type font">Prelim Design</span></ion-col>
+                    <ion-col size="auto" >
+                        <div style="display: flex;justify-content: flex-end;line-height: 1.5rem;">
+                            <span class="model-name font" style="color:#3c78d8 !important" (click)="showurl(i)">{{surveydata.prelimdesign?.name}}{{surveydata.prelimdesign?.ext}}</span>
+                        </div>
+                    </ion-col>
+                </ng-container>
+            </ion-row> -->
 
             <!-- <ion-row class="ion-margin-top">
                 <ion-col>

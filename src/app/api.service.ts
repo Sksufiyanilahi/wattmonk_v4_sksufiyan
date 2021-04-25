@@ -487,7 +487,7 @@ export class ApiService {
         permissiontomakedesign:permissiontomakedesign,
         password: randomPassword,
         resetPasswordToken: randomPassword,
-        source: "android",
+        source: this.utilities.checkPlatform(),
         username: workemail,
         confirmed : true,
         isdefaultpassword: true,
@@ -753,9 +753,9 @@ export class ApiService {
         headers:this.headers
       })
       }
- 
+
     updateTeam(data,id){
-    
+
      return this.http.put(BaseUrl + "users/"+id , data , {
          headers: this.headers,
         // observe: "response"
@@ -812,5 +812,32 @@ export class ApiService {
   getadmins() : Observable<any>{
     return this.http.get<any[]>(BaseUrl + "getadmins",{headers: this.headers});
   }
+
+  addContractor(postData):Observable<User>{
+    console.log(postData)
+    return this.http.post<User>(BaseUrl + "users/", JSON.stringify(postData), {
+        headers: this.headers,
+      })
+    }
+
+    getContractorsList() {
+      // return this.http.get(BaseUrl + "users?role_eq="+ROLES.ContractorSuperAdmin+"&_sort=created_at:desc", {
+        return this.http.get(BaseUrl + "fetchsuperadmins", {
+        headers: this.headers
+      })
+    }
+    getContractorsData(id) {
+  
+      return this.http.get(BaseUrl + "users/"+ id, {
+        headers: this.headers
+      })
+    }
+
+    updateContractorsData(id,data) {
+  
+      return this.http.put(BaseUrl + "users/"+ id, data, {
+        headers: this.headers
+      })
+    }
 }
 

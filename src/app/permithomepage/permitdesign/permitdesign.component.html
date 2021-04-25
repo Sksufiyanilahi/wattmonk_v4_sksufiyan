@@ -96,7 +96,7 @@
                 </ion-col>
 
 
-          <!-- <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
+          <ion-col *ngIf="designData.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
                   <span *ngIf="designData.status == 'designassigned'" style="float:right;text-align: right;">
                       {{designData.designremainingtime}}</span></ion-col>
                       <ion-col *ngIf="designData.status == 'outsourced'">
@@ -104,7 +104,7 @@
                               {{designData.designacceptanceremainingtime}}</span></ion-col>
                               <ion-col *ngIf="designData.status == 'reviewassigned' && designData.reviewassignedto.id==userData.id" style="color: #737373; font-size: 14px;">
                                   <span style="float: right;">{{designData.reviewremainingtime}}</span>
-                                </ion-col> -->
+                                </ion-col>
                   </ion-row>
 
                   <ion-row class="ion-no-margin ion-no-margin">
@@ -147,7 +147,7 @@
                           <span *ngIf="userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData,$event)"
                           >Assign Review</span>
                       </ion-col>
-                      <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'" size="7">
+                      <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'" size="12">
                           <span *ngIf="designData.status =='reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData,$event)"
                           >  &nbsp; Deliver</span>
                           <span *ngIf="userData.role.type!='clientsuperadmin' &&(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData,$event)"
@@ -163,7 +163,7 @@
                               <ion-icon name="mail" ></ion-icon></span>
                               <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, designData.requesttype,$event)">
                                   Resend</span>
-                              <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="raisePestampRequest(designData,$event)">
+                              <span *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin' || userData.role.type=='master' ||(userData.role.type!=='bd' && userData.parent.id != 232)) " style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="raisePestampRequest(designData,$event)">
                                     Pestamp Request</span>
                       </ion-col>
                       <!-- <ion-col class="ion-no-margin ion-no-padding">

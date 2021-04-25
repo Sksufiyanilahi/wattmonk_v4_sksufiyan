@@ -83,6 +83,7 @@
                       <ion-row style="margin-bottom: 8px;">
                           <!-- <span class="chipdetail" style="background-color: #95afc0; cursor: pointer;" >Wattmonk</span> -->
                           <ion-col>
+                            <span class="chipdetail" style="background-color: #95afc0;align-self: center;" >{{designData?.jobtype=='pvbattery' ? 'PV + Battery' : designData?.jobtype | uppercase}}</span>
                           <span class="chipdetail" style="background-color: #95afc0; cursor: pointer;" >{{designData?.source | titlecase}}</span></ion-col>
                           <ion-col *ngIf="designData.status == 'reviewassigned'" style="color: #737373; font-size: 14px;">
                             <span style="float: right;">{{designData?.reviewremainingtime}}</span>

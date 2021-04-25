@@ -9,6 +9,9 @@ import { TeamhomepagePageRoutingModule } from './teamhomepage-routing.module';
 import { TeamhomepagePage } from './teamhomepage.page';
 import { TeamComponent } from './team/team.component';
 import { GroupComponent } from './group/group.component';
+import { IonBottomDrawerModule } from 'ion-bottom-drawer';
+import { SharedModule } from '../shared/shared.module';
+import { UtilitiesModule } from '../utilities/utilities.module';
 
 @NgModule({
   imports: [
@@ -16,7 +19,10 @@ import { GroupComponent } from './group/group.component';
     FormsModule,
     IonicModule,
     TeamhomepagePageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    IonBottomDrawerModule,
+    SharedModule,
+    UtilitiesModule
   ],
   declarations: [TeamhomepagePage,TeamComponent,GroupComponent]
 })

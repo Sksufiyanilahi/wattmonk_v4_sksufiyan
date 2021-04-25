@@ -703,7 +703,7 @@ gotoActivity(designData,event){
   gotoDetails(designData,$event){
     // $event.preventDefault();
     // $event.stopPropagation();
-    this.router.navigate(['/design-details/' + designData.id])
+    this.router.navigate(['/permit-design-details/' + designData.id])
   }
 
   gotoChats(designData,event){

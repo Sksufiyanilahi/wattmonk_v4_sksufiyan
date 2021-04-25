@@ -18,6 +18,7 @@ import { SurveyDataModel } from '../../model/survey.model';
 import { ErrorModel } from 'src/app/model/error.model';
 import { AddressModel } from 'src/app/model/address.model';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-survey',
@@ -57,6 +58,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   surveydatapresent:boolean = false;
   data:any;
   surveydata:any;
+  browser: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -69,6 +71,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private router: Router,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
+    private iab: InAppBrowser,
   ) {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
@@ -85,7 +88,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       datetime: new FormControl(''),
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
-      source: new FormControl('android', [Validators.required]),
+      source: new FormControl(this.utilities.checkPlatform(), [Validators.required]),
       assignedto: new FormControl(null),
       createdby: new FormControl(this.storage.getUserID(), [Validators.required]),
       latitude: new FormControl('', [Validators.required]),
@@ -214,7 +217,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       prelimdesignsurvey : this.surveydata.id,
       name: this.surveydata.name,
       email: this.surveydata.email,
-     
+
       address: this.surveydata.address,
       phonenumber: this.surveydata.phonenumber,
       createdby: this.surveydata.createdby.id,
@@ -234,6 +237,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
      // attachments: this.surveydata.attachments,
 
     });
+    this.surveyForm.get("jobtype").setValue("pv");
     this.utilities.setStaticAddress(this.surveydata.address);
     if (this.surveyForm.get('email').value == '') {
       this.fieldDisabled = false;
@@ -423,6 +427,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
   }
 
+  ionViewDidEnter() {
+    this.autocompleteItems=[];
+  }
+
   /* FOR SEARCH SHIPPING ADDRESS */
   updateSearchResults(event) {
     //this.autoCompleteOff = true;
@@ -568,4 +576,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.autocompleteItems = [];
     }, 100);
   }
+
+  // showurl(i){
+  //     this.browser = this.iab.create(this.surveydata.prelimdesign[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+
+  // }
 }

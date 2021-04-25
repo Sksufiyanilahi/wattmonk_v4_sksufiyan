@@ -1,0 +1,129 @@
+
+<ion-row style="background-color: #FBF9F4;" class="ion-align-items-center">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button mode="md"></ion-menu-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-center">
+      <ion-col>
+        <h1 class="ion-no-padding ion-no-margin home">Clients</h1>
+    </ion-col>
+    <ion-col size="auto">
+      <div class="notification-padding" (click)="searchbar()">
+          <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
+      </div>
+  </ion-col>
+  <ion-col size="auto" style="position: relative;">
+      <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward" (click)="setzero()">
+          <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
+         <span class="badge" *ngIf="unreadCount > 0">
+                      {{unreadCount > 99 ? '99+' : unreadCount }}
+                  </span>
+      </div>
+  </ion-col>
+    </ion-row>
+</ion-toolbar>
+  </ion-row>
+
+<ion-content style="padding-bottom: 250px;position: sticky;">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshClients($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+  <ion-grid style="background-color: #FBF9F4;" *ngIf="clientData.length !== 0 ;else nodesignFound">
+      <ion-row>
+             <ion-col *ngFor="let designData of clientData;let j = index;trackBy: trackdesign" size="12">
+              <ion-card class="ion-no-padding custom-card ion-no-margin"  style="height: 100%;">
+                <ion-row>
+                  <ion-col size="4">
+                <ion-card *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
+                class="profile_img">{{designData?.firstname.slice(0, 1).toUpperCase() + designData?.lastname.slice(0, 1).toUpperCase()}}</ion-card>
+                <div *ngIf="!isEmptyObject(designData?.logo) && designData?.logo !==null">
+                  <!-- <img [src]="designData?.logo?.url"
+                       style="height:50px;width:auto;display: flex;justify-content: center;align-items: center;"/> -->
+                       <img [src]="designData?.logo?.url"
+                       class="profile_img"/>
+                </div>
+              </ion-col>
+              <ion-col size="8">
+                <p class="customer-name"
+                  routerDirection="forward"><span >{{designData.firstname}}&nbsp;</span>
+                  <span >{{designData.lastname}}</span>
+
+
+        </p>
+
+        <p style="margin:0px">
+            <span class="customer-email"
+                    routerDirection="forward">{{designData.email}}</span>
+
+        </p>
+      </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+          <p class="team">{{designData.totalteams}}</p>
+          <p style="margin-top:0px">Our Team</p>
+        </ion-col>
+        <ion-col size="6">
+          <p class="team">{{designData.totalactivedesigns}}</p>
+          <p style="margin-top:0px">Design Requests</p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row style="margin-bottom: 3%;">
+        <ion-col size="4">
+          <!-- <span class="chip" *ngIf="designData.ispaymentmodeprepay">Prepaid</span>
+          <span class="chip" *ngIf="!designData.ispaymentmodeprepay">Postpaid</span> -->
+          <ion-select class="chip" (click)="$event.stopPropagation()" ok-text="" cancel-text="" *ngIf="designData.ispaymentmodeprepay" (ionChange)="switchPaymentModeCustomer($event,designData,j)" interface="popover" value="true">
+            <ion-select-option value="true">Prepaid</ion-select-option>
+            <ion-select-option value="false">Postpaid</ion-select-option>
+            </ion-select>
+            <ion-select class="chip" (click)="$event.stopPropagation()" ok-text="" cancel-text="" *ngIf="!designData.ispaymentmodeprepay" (ionChange)="switchPaymentModeCustomer($event,designData,j)" interface="popover" value="false">
+            <ion-select-option value="true">Prepaid</ion-select-option>
+            <ion-select-option value="false">Postpaid</ion-select-option>
+            </ion-select>
+          <!-- <ion-select class="chip" interface="popover">
+          <ion-select-option value="prepaid">Prepaid</ion-select-option>
+          <ion-select-option value="postpaid">Postpaid</ion-select-option>
+        </ion-select> -->
+        </ion-col>
+        <ion-col style="text-align: right;" size="8">
+          <!-- <ion-icon  name="chatbubble"></ion-icon> -->
+          <ion-icon name="pencil-outline" (click)="edit(designData.id,$event)"></ion-icon>
+          <ion-icon name="close" (click)="blockUser(designData,$event)"></ion-icon>
+        </ion-col>
+      </ion-row>
+
+
+
+          </ion-card>
+          </ion-col>
+      <!-- </ion-virtual-scroll> -->
+      </ion-row>
+
+  <!-- </ion-virtual-scroll> -->
+  <!-- <ion-row>
+      <ion-col size="12" style="height: 100px;">
+
+      </ion-col>
+  </ion-row> -->
+
+  </ion-grid>
+<ng-template #nodesignFound>
+  <div *ngIf="clientData.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
+
+             {{noDesignFound}}
+
+
+      <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+  </div></ng-template>
+
+
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)" >
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        >
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll> -->
+
+</ion-content>

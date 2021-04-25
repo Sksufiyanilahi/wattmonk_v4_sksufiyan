@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { AlertController, LoadingController, ModalController, NavController, PopoverController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, NavController, Platform, PopoverController, ToastController } from '@ionic/angular';
 import { SuccessModalComponent } from './utilities/success-modal/success-modal.component';
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
@@ -22,7 +22,7 @@ import { PopoverComponentComponent } from './popover-component/popover-component
 export class UtilitiesService {
 	guid$: Observable<any>;
 	private myMethodSubject = new Subject<any>();
-
+  isspecificClient:boolean;
 	loading: HTMLIonLoadingElement;
 	isLoading = false;
 	address = new BehaviorSubject<AddressModel>({
@@ -66,6 +66,7 @@ export class UtilitiesService {
 
 	toast:any;
 	popover: HTMLIonPopoverElement;
+  platformname: any;
 
 	constructor(
 		public loadingController: LoadingController,
@@ -76,7 +77,8 @@ export class UtilitiesService {
 		private router: Router,
 		private navCtrl: NavController,
 		private location: Location,
-		private popoverController : PopoverController
+		private popoverController : PopoverController,
+    private platform: Platform
 	) {
 		this.guid$ = this.myMethodSubject.asObservable();
 		// this.listencall();
@@ -685,6 +687,20 @@ export class UtilitiesService {
 
 			return [year, month, day].join('-') + ' ' + [(hours < 10? '0':'') + hours,(mins < 10? '0':'')+ mins, (seconds < 10? '0':'') + seconds].join(':');
 	}
+
+  checkPlatform(){
+
+    if (this.platform.is('ios')) {
+      this.platformname = 'iphone';
+    } else if (this.platform.is('android')) {
+      this.platformname = 'android';
+    } else {
+      this.platformname = 'other';
+    }
+
+    return this.platformname;
+  }
+
 }
 
 // getcount(){

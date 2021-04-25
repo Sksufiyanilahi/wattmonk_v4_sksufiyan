@@ -140,6 +140,7 @@ export class PestampSchedulePage implements OnInit {
       this.netSwitch = data;
 
     })
+    this.autocompleteItems=[];
   }
 
   ngOnInit() {
@@ -168,7 +169,7 @@ export class PestampSchedulePage implements OnInit {
     }
     else if(this.permitdatapresent)
     {
-this.getPermitData();
+      this.getPermitData();
     }
   }
 
@@ -186,25 +187,9 @@ this.getPermitData();
       //jobtype: this.permitdata.jobtype,
       //tiltofgroundmountingsystem: this.permitdata.tiltofgroundmountingsystem,
 
-      projecttype: this.permitdata.projecttype,
-      //latitude: this.permitdata.latitude,
-      //longitude: this.permitdata.longitude,
-      //country: this.permitdata.country,
-      //state: this.permitdata.state,
-      //city: this.permitdata.city,
-      //postalcode: this.permitdata.postalCode,
-      //issurveycompleted: true,
-      //attachments:this.design.attachments,
-
-      //attachments: this.permitdata.attachments,
+      propertytype: this.permitdata.projecttype,
 
     });
-    this.utils.setStaticAddress(this.permitdata.address);
-    if (this.firstFormGroup.get('email').value == '') {
-      this.fieldDisabled = false;
-    } else {
-      this.fieldDisabled = true;
-    }
   }
 
   /* Getting Design Details */
@@ -616,7 +601,7 @@ this.getPermitData();
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -662,7 +647,7 @@ this.getPermitData();
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -720,7 +705,7 @@ this.getPermitData();
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -799,7 +784,7 @@ this.getPermitData();
             longitude: this.firstFormGroup.get('longitude').value,
             actualdelivereddate: tomorrow.toISOString(),
             jobtype: this.firstFormGroup.get('jobtype').value,
-            source: "android",
+            source: this.utils.checkPlatform(),
             createdby: this.userdata.id,
             creatorparentid: this.userdata.parent.id,
             status: "created",
@@ -960,7 +945,7 @@ this.getPermitData();
       // this.goBack();
       // return;
 
-      
+
         this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
           .then((result: NativeGeocoderResult[]) => {
 

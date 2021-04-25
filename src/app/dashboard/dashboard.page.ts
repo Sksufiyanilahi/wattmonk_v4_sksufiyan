@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
+import { UtilitiesService } from '../utilities.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
 
 @Component({
@@ -23,7 +24,7 @@ export class DashboardPage implements OnInit {
   };
   userData: any;
 
-  constructor(private apiService:ApiService,private route: ActivatedRoute,private storage:StorageService,private mixpanelService:MixpanelService) { }
+  constructor(private apiService:ApiService,private route: ActivatedRoute,private storage:StorageService,private mixpanelService:MixpanelService,public utilities:UtilitiesService) { }
 
   ngOnInit() {
     this.userId= this.storage.getUserID();

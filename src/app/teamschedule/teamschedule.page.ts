@@ -31,10 +31,10 @@ export class TeamschedulePage implements OnInit {
     userData:any;
   userrole: any;
        designData:any;
-       isEditMode:boolean=false;  
-       fieldDisabled = false; 
-       userdata: any;  
-       designId = 0; 
+       isEditMode:boolean=false;
+       fieldDisabled = false;
+       userdata: any;
+       designId = 0;
        currentTab = 'designData';
        tabsDisabled = false;
        isEdit : boolean = true ;
@@ -51,11 +51,11 @@ export class TeamschedulePage implements OnInit {
     private navController:NavController,
     private router:Router,
     private mixpanelService: MixpanelService,
-   
+
 ) {    const MAILFORMAT = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
   //const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.teamForm = this.formBuilder.group({
-     
+
       usertype : new FormControl(null),
       firstname:new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
       lastname:new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
@@ -65,7 +65,7 @@ export class TeamschedulePage implements OnInit {
 //      address:new FormControl(null),
 // //contactnumber : new FormControl(null),
 //  //lic: new FormControl(null),
-// // countrycode : new FormControl(null), 
+// // countrycode : new FormControl(null),
 // // //company : new FormControl(null),
 //  password: new FormControl(null),
 //        resetPasswordToken: new FormControl(null),
@@ -82,7 +82,7 @@ export class TeamschedulePage implements OnInit {
     this.designId = +this.route.snapshot.paramMap.get('id');
     console.log(this.designId)
     if(this.designId !==0){
-    
+
    this.designData = this.router.getCurrentNavigation().extras.state;
    this.data = this.designData.productdetails.queryParams.designData;
     }
@@ -108,17 +108,17 @@ export class TeamschedulePage implements OnInit {
       this.mixpanelService.track("TEAM_PAGE_CLOSE", {
       });
       this.navController.pop();
-  
+
     }
-    
+
     getRoles()
     {
       let parentId = this.designData.parent.id;
       let roleId = this.designData.role.id;
       this.apiservices.getDynamicRoles(parentId,roleId).subscribe((res)=>{
-        console.log(res);
-        this.roles = res;
-        console.log(this.roles);
+        // console.log(res);
+        // this.roles = res;
+        // console.log(this.roles);
         if(res == 0)
         {
           this.apiservices.getDefaultRoles(roleId).subscribe((response)=>{
@@ -138,22 +138,22 @@ export class TeamschedulePage implements OnInit {
     //  this.data = this.designData.productdetails.queryParams.designData;
       //this.utils.showLoading('Getting Design Details').then(() => {
        //this.apiservices.getTeamDetails(this.designId).subscribe(async (result) => {
-    
+
        // await this.utils.hideLoading().then(() => {
           this.user = this.data;
           console.log(this.user);
-          
+
           //this.roles = Object.(this.user)
             console.log(this.roles);
             this.fieldDisabled = true;
-           
+
             this.teamForm.patchValue({
               firstname: this.user.firstname,
               lastname: this.user.lastname,
               workemail: this.user.email,
               userrole:this.user.role.id,
               peengineertype:this.user.peengineertype,
-              source: "android",
+              source: this.utils.checkPlatform(),
               // createdby: this.user.designId,
               // creatorparentid: this.user.parent.designId,
               // status: "created",
@@ -165,16 +165,17 @@ export class TeamschedulePage implements OnInit {
       //   })
       // })
     }
-  
+
   submitForm(){
 
     console.log(this.teamForm.status)
    if (this.teamForm.status === 'VALID') {
     // $ev.preventDefault();
+    this.utils.showLoading("Saving").then(()=>{
      if(this.designId==0){
       var tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-     
+
 
        let rolesel = parseInt(this.teamForm.get("userrole").value);
         var senddesignrequestpermission = false;
@@ -187,7 +188,7 @@ export class TeamschedulePage implements OnInit {
             this.teamForm.get("workemail").value,
             this.teamForm.get("firstname").value,
             this.teamForm.get("lastname").value,
-           
+
             senddesignrequestpermission,
            parseInt(this.teamForm.get("userrole").value),
             this.designData.parent.minpermitdesignaccess,
@@ -196,41 +197,14 @@ export class TeamschedulePage implements OnInit {
           )
           .subscribe(
             (response:any) => {
-              this.utils.setteamModuleRefresh(true);
-              this.utils.showSnackBar('Team created successfully');
-              this.teamForm.reset();
-             
-            },
-            error => {
-              this.utils.errorSnackBar(error);
-            
-            responseError => {
-              const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message);
-          this.utils.showSnackBar('Please check valid fields');
-            }
-          
-          });
-            setTimeout(()=>{
               this.utils.hideLoading().then(() =>{ 
-                //this.createChatGroup(response);
                 this.utils.showSnackBar('Team created successfully');
-                this.router.navigate(['/teammodule'])
                 this.utils.setteamModuleRefresh(true);
-                
-                // this.utils.showSnackBar('Design have been saved');
-              
-                // this.navController.pop();
-                // this.utils.showSuccessModal('Desgin have been saved').then((modal) => {
-                //   modal.present()
-                //   modal.onWillDismiss().then((dismissed) => {
-                    // this.utils.setHomepageDesignRefresh(true);
-                //     this.navController.pop();
-                //   });
-                // });
+                this.router.navigate(['/teamhomepage/team'])
+               
     
               });
-            },2000)
+            },
       
         responseError => {
          this.utils.hideLoading().then(() => {
@@ -238,7 +212,7 @@ export class TeamschedulePage implements OnInit {
            this.utils.errorSnackBar(error.message[0].messages[0].message);
          });
   
-        }
+        })
       }
     else{
       let rolesel = parseInt(this.teamForm.get("userrole").value);
@@ -253,32 +227,19 @@ export class TeamschedulePage implements OnInit {
         role: parseInt(this.teamForm.get("userrole").value),
         peengineertype:this.teamForm.get("peengineertype").value
       }
-    
+
       this.apiservices
         .updateTeam(
         postdata,this.designId
 
         )
         .subscribe(
-          (response:any) => {
-            
-            this.utils.showSnackBar('Team updated successfully');
-            this.teamForm.reset();
-            this.utils.setteamModuleRefresh(true);
-          },
-          error => {
-            this.utils.errorSnackBar(error);
-          
-          responseError => {
-            const error: ErrorModel = responseError.error;
-        this.utils.errorSnackBar(error.message);
-          }
+          (response:any) => {  
         
-        });
-          setTimeout(()=>{
+          
             this.utils.hideLoading().then(() =>{ 
               //this.createChatGroup(response);
-              this.router.navigate(['/teammodule'])
+              this.router.navigate(['/teamhomepage/team'])
               this.utils.showSnackBar('Team updated succesfully');
               // this.utils.showSnackBar('Design have been saved');
               this.utils.setteamModuleRefresh(true);
@@ -290,18 +251,22 @@ export class TeamschedulePage implements OnInit {
               //     this.navController.pop();
               //   });
               // });
-  
+
             });
-          },2000)
-    
+        
+          },
       responseError => {
        this.utils.hideLoading().then(() => {
          const error: ErrorModel = responseError.error;
          this.utils.errorSnackBar(error.message[0].messages[0].message);
        });
 
-      }
+      })
     }
+  },
+  responseError=>{
+    this.utils.hideLoading();
+  })
   }
   else{
     if(this.teamForm.value.firstname == '' || this.teamForm.get('firstname').hasError('pattern'))

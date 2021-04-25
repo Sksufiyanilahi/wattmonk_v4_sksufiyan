@@ -45,7 +45,7 @@ showBottomDraw: boolean = false;
 designId=0;
 userData:any;
   selectedDesigner: any;
-  
+
 
   constructor( private apiService:ApiService,private navController: NavController,private formBuilder:FormBuilder,
     private storage: Storage,
@@ -658,6 +658,20 @@ this.router.navigate(['chat/'+ surveyData.chatid], {
   state: { productdetails: objToSend }
   });
   }
+
+  gotoActivity(search,event){
+    console.log(search)
+    event.stopPropagation();
+  this.router.navigate(['/activity' + '/' + search.id + '/design'])
+
+}
+
+gotoSurveyActivity(search,event){
+  console.log(search)
+  event.stopPropagation();
+this.router.navigate(['/activity' + '/' + search.id + '/survey'])
+
+}
 
 
 }
