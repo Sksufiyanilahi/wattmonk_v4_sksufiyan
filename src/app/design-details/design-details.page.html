@@ -186,6 +186,9 @@
                             <span class="model-name font">{{design?.tiltofgroundmountingsystem}}</span>
                         </ion-col>
                     </ion-row>
+
+                   
+
         <ion-row *ngIf="design.status=='requestdeclined'" class="ion-no-padding ion-margin-top">
             <ion-col size="6"  >
                 <span class="model-type font">Reason</span></ion-col>
@@ -202,6 +205,8 @@
                 </ion-grid>
             </ion-col>
         </ion-row>
+
+
         <ion-row *ngIf="design.costofsystem !== null">
             <ion-col><span class="model-type font">Cost of System</span></ion-col>
             <ion-col size="auto">
@@ -368,26 +373,88 @@
 
                        </span>
                         </ion-row>-->
-            <ion-row *ngIf="design.isinrevisionstate" class="ion-no-padding ion-margin-top">
+
+                        <!-- <ion-row class="bkg" *ngIf="design.status=='requestdeclined'">
+                            <ion-col class="hgt-margin"> -->
+                              <!-- <ion-item> -->
+                              <!-- <label>On hold</label> -->
+                              <!-- </ion-item> -->
+                            <!-- </ion-col>
+                          </ion-row> -->
+                
+                
+                          <!-- <div  *ngIf="design.status=='requestdeclined'">
+                
+                                 
+                            <div *ngFor=" let onhold of design.onholddesign" class="ion-no-padding ion-margin-top">
+                                <div style="border: ridge;">
+                                    <ion-row>
+                            <ion-col size="6"  >
+                                <span class="models font">Reason</span></ion-col>
+                                <ion-col size="6"  class="ion-no-padding">
+                                   <div>
+                                        <p class="comment font" style="text-align: right;margin:0px">{{onhold.comment}}</p>
+                
+                                    </div>
+                
+                                   </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                   <ion-col > <span class="model-type font">Reason Attachments</span></ion-col>
+                                   <ion-col size="6"  style="float: right;" *ngFor="let attachmentfile of onhold.file">
+                      
+                                      <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ? (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}{{attachmentfile.ext}}</span>
+                                    </ion-col>
+                                </ion-row>
+                             
+                                    </div>
+                                </div>
+                            
+                        </div>  -->
+
+                        <ion-row class="bkg" *ngIf="design.isinrevisionstate">
+                            <ion-col class="hgt-margin">
+                              <!-- <ion-item> -->
+                              <label>Revision</label>
+                              <!-- </ion-item> -->
+                            </ion-col>
+                          </ion-row>
+                         <div  *ngIf="design.isinrevisionstate">
+
+                         
+            <div *ngFor=" let revision of design.revisiondesign" class="ion-no-padding ion-margin-top">
+                <div style="border: ridge;">
+                    <ion-row>
             <ion-col size="6"  >
                 <span class="models font">Revision Comments</span></ion-col>
                 <ion-col size="6"  class="ion-no-padding">
-                    <div>
-                        <p class="comment font" style="text-align: right;margin:0px">{{design.revisioncomments}}</p>
+                   <div>
+                        <p class="comment font" style="text-align: right;margin:0px">{{revision.comment}}</p>
 
                     </div>
 
                    </ion-col>
-            </ion-row>
-              <ion-row *ngIf="design.isinrevisionstate && design.revisionattachments.length > 0">
-             <ion-col > <span class="model-type font">Revision Attachments</span></ion-col>
-             <ion-col size="6"  style="float: right;" *ngFor="let attachmentfile of design.revisionattachments">
+                </ion-row>
+                <ion-row>
+                   <ion-col > <span class="model-type font">Revision Attachments</span></ion-col>
+                   <ion-col size="6"  style="float: right;" *ngFor="let attachmentfile of revision.file">
+      
+                      <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ? (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}{{attachmentfile.ext}}</span>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col > <span class="model-type font">Design file</span></ion-col>
+                    <ion-col size="6"  style="float: right;" *ngFor="let designfile of revision?.designfile">
+       
+                       <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showRevisionImage(designfile)">{{designfile.name.length > 40 ? (designfile.name | slice: 0:40) + '...' : designfile.name}}{{designfile.ext}}</span>
+                     </ion-col>
+                    </ion-row>
+                    </div>
+                </div>
+            
+        </div> 
 
-                <span class="model-space font" style="text-align:right;color:#3c78d8 !important" (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ? (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}{{attachmentfile.ext}}</span>
-              </ion-col>
-
-            </ion-row>
-
+      
 
             <ion-row size="12" class="ion-no-padding ion-margin-top ion-justify-content-center ion-align-items-center"
             *ngIf="design.status=='designassigned'||design.status=='completed'">
