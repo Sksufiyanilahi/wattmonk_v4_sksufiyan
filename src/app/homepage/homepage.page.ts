@@ -92,7 +92,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 		});
 		this.getNotificationCount();
 		this.setupCometChat();
-		this.requestLocationPermission();
+		//this.requestLocationPermission();
 		this.updateUserPushToken();
 		this.subscription = this.utilities.getBottomBarHomepage().subscribe((value) => {
 			this.showFooter = value;
@@ -242,177 +242,177 @@ export class HomepagePage implements OnInit, OnDestroy {
 		this.route.navigate([ '/search-bar1' ]);
 	}
 
-	requestLocationPermission() {
-		this.platform.ready().then(() => {
-			this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then(
-				(mode) => {
+	// requestLocationPermission() {
+	// 	this.platform.ready().then(() => {
+	// 		this.diagnostic.requestLocationAuthorization(this.diagnostic.locationAuthorizationMode.WHEN_IN_USE).then(
+	// 			(mode) => {
 
-					switch (mode) {
-						case this.diagnostic.permissionStatus.NOT_REQUESTED:
-							// this.goBack();
-							break;
-						case this.diagnostic.permissionStatus.DENIED_ALWAYS:
-							this.showLocationDenied();
-							break;
-						case this.diagnostic.permissionStatus.DENIED_ONCE:
-							// this.goBack();
-							break;
-						case this.diagnostic.permissionStatus.GRANTED:
-							this.fetchLocation();
-							break;
-						case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-							this.fetchLocation();
-							break;
-						case 'authorized_when_in_use':
-							this.fetchLocation();
-							break;
-					}
-				},
-				(rejection) => {
+	// 				switch (mode) {
+	// 					case this.diagnostic.permissionStatus.NOT_REQUESTED:
+	// 						// this.goBack();
+	// 						break;
+	// 					case this.diagnostic.permissionStatus.DENIED_ALWAYS:
+	// 						this.showLocationDenied();
+	// 						break;
+	// 					case this.diagnostic.permissionStatus.DENIED_ONCE:
+	// 						// this.goBack();
+	// 						break;
+	// 					case this.diagnostic.permissionStatus.GRANTED:
+	// 						this.fetchLocation();
+	// 						break;
+	// 					case this.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+	// 						this.fetchLocation();
+	// 						break;
+	// 					case 'authorized_when_in_use':
+	// 						this.fetchLocation();
+	// 						break;
+	// 				}
+	// 			},
+	// 			(rejection) => {
 
-				}
-			);
-		});
-	}
+	// 			}
+	// 		);
+	// 	});
+	// }
 
-	async showLocationDenied() {
-		const toast = await this.toastController.create({
-			header: 'Error',
-			message: 'Location services denied, please enable them manually',
-			cssClass: 'my-custom-class',
-			buttons: [
-				{
-					text: 'OK',
-					handler: () => {}
-				}
-			]
-		});
-		toast.present();
-	}
+	// async showLocationDenied() {
+	// 	const toast = await this.toastController.create({
+	// 		header: 'Error',
+	// 		message: 'Location services denied, please enable them manually',
+	// 		cssClass: 'my-custom-class',
+	// 		buttons: [
+	// 			{
+	// 				text: 'OK',
+	// 				handler: () => {}
+	// 			}
+	// 		]
+	// 	});
+	// 	toast.present();
+	// }
 
-	fetchLocation() {
-		this.diagnostic.isGpsLocationEnabled().then((status) => {
-			if (status === true) {
-				// this.utilities.showLoading('Getting Location').then(() => {
-				this.getGeoLocation();
-				// });
-			} else {
-				this.askToChangeSettings();
-			}
-		});
-	}
+	// fetchLocation() {
+	// 	this.diagnostic.isGpsLocationEnabled().then((status) => {
+	// 		if (status === true) {
+	// 			// this.utilities.showLoading('Getting Location').then(() => {
+	// 			this.getGeoLocation();
+	// 			// });
+	// 		} else {
+	// 			this.askToChangeSettings();
+	// 		}
+	// 	});
+	// }
 
-	async askToChangeSettings() {
-		const toast = await this.toastController.create({
-			header: 'Location Disabled',
-			message: 'Please enable location services',
-			cssClass: 'my-custom-class',
-			buttons: [
-				{
-					text: 'OK',
-					handler: () => {
-						this.changeLocationSettings();
-					}
-				},
-				{
-					text: 'Cancel',
-					handler: () => {}
-				}
-			]
-		});
-		toast.present();
-	}
+	// async askToChangeSettings() {
+	// 	const toast = await this.toastController.create({
+	// 		header: 'Location Disabled',
+	// 		message: 'Please enable location services',
+	// 		cssClass: 'my-custom-class',
+	// 		buttons: [
+	// 			{
+	// 				text: 'OK',
+	// 				handler: () => {
+	// 					this.changeLocationSettings();
+	// 				}
+	// 			},
+	// 			{
+	// 				text: 'Cancel',
+	// 				handler: () => {}
+	// 			}
+	// 		]
+	// 	});
+	// 	toast.present();
+	// }
 
-	getGeoLocation() {
-		this.geolocation
-			.getCurrentPosition()
-			.then((resp) => {
+	// getGeoLocation() {
+	// 	this.geolocation
+	// 		.getCurrentPosition()
+	// 		.then((resp) => {
 
-				this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
-			})
-			.catch((error) => {
-				this.utilities.errorSnackBar('Unable to get location');
+	// 			this.getGeoEncoder(resp.coords.latitude, resp.coords.longitude);
+	// 		})
+	// 		.catch((error) => {
+	// 			this.utilities.errorSnackBar('Unable to get location');
 
-				this.showNoLocation();
-			});
-	}
+	// 			this.showNoLocation();
+	// 		});
+	// }
 
-	getGeoEncoder(latitude, longitude) {
-		// this.utilities.hideLoading().then((success) => {
-		this.nativeGeocoder
-			.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
-			.then((result: NativeGeocoderResult[]) => {
+	// getGeoEncoder(latitude, longitude) {
+	// 	// this.utilities.hideLoading().then((success) => {
+	// 	this.nativeGeocoder
+	// 		.reverseGeocode(latitude, longitude, this.geoEncoderOptions)
+	// 		.then((result: NativeGeocoderResult[]) => {
 
-				const address: AddressModel = {
-					address: this.generateAddress(result[0]),
-					lat: latitude,
-					long: longitude,
-					country: result[0].countryName,
-					state: result[0].administrativeArea,
-					city: result[0].locality,
-					postalcode: result[0].postalCode
-				};
-				this.utilities.setAddress(address);
-			})
-			.catch((error: any) => {
-				this.showNoLocation();
-				alert('Error getting location' + JSON.stringify(error));
-			});
-	}
+	// 			const address: AddressModel = {
+	// 				address: this.generateAddress(result[0]),
+	// 				lat: latitude,
+	// 				long: longitude,
+	// 				country: result[0].countryName,
+	// 				state: result[0].administrativeArea,
+	// 				city: result[0].locality,
+	// 				postalcode: result[0].postalCode
+	// 			};
+	// 			this.utilities.setAddress(address);
+	// 		})
+	// 		.catch((error: any) => {
+	// 			this.showNoLocation();
+	// 			alert('Error getting location' + JSON.stringify(error));
+	// 		});
+	// }
 
-	generateAddress(addressObj) {
-		const obj = [];
-		let address = '';
-		for (const key in addressObj) {
-			obj.push(addressObj[key]);
-		}
-		obj.reverse();
-		for (const val in obj) {
-			if (obj[val].length) {
-				address += obj[val] + ', ';
-			}
-		}
-		return address.slice(0, -2);
-	}
+	// generateAddress(addressObj) {
+	// 	const obj = [];
+	// 	let address = '';
+	// 	for (const key in addressObj) {
+	// 		obj.push(addressObj[key]);
+	// 	}
+	// 	obj.reverse();
+	// 	for (const val in obj) {
+	// 		if (obj[val].length) {
+	// 			address += obj[val] + ', ';
+	// 		}
+	// 	}
+	// 	return address.slice(0, -2);
+	// }
 
-	changeLocationSettings() {
-		this.diagnostic.switchToLocationSettings();
-		this.diagnostic.registerLocationStateChangeHandler((state) => {
+	// changeLocationSettings() {
+	// 	this.diagnostic.switchToLocationSettings();
+	// 	this.diagnostic.registerLocationStateChangeHandler((state) => {
 
-			if (this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) {
-				this.checkLocationAccess();
-			}
-		});
-	}
+	// 		if (this.platform.is('android') && state !== this.diagnostic.locationMode.LOCATION_OFF) {
+	// 			this.checkLocationAccess();
+	// 		}
+	// 	});
+	// }
 
-	checkLocationAccess() {
+	// checkLocationAccess() {
 
-		this.diagnostic.isLocationAuthorized().then(
-			(success) => {
-				this.fetchLocation();
-			},
-			(error) => {
-				this.utilities.errorSnackBar('GPS Not Allowed');
-			}
-		);
-	}
+	// 	this.diagnostic.isLocationAuthorized().then(
+	// 		(success) => {
+	// 			this.fetchLocation();
+	// 		},
+	// 		(error) => {
+	// 			this.utilities.errorSnackBar('GPS Not Allowed');
+	// 		}
+	// 	);
+	// }
 
-	async showNoLocation() {
-		const alert = await this.alertController.create({
-			header: 'Error',
-			subHeader: 'Unable to get location',
-			buttons: [
-				{
-					text: 'OK',
-					handler: () => {
-						// this.goBack();
-					}
-				}
-			],
-			backdropDismiss: false
-		});
-		await alert.present();
-	}
+	// async showNoLocation() {
+	// 	const alert = await this.alertController.create({
+	// 		header: 'Error',
+	// 		subHeader: 'Unable to get location',
+	// 		buttons: [
+	// 			{
+	// 				text: 'OK',
+	// 				handler: () => {
+	// 					// this.goBack();
+	// 				}
+	// 			}
+	// 		],
+	// 		backdropDismiss: false
+	// 	});
+	// 	await alert.present();
+	// }
 
 	ionViewDidEnter() {
 		// if (this.version !== this.update_version && this.update_version !== '') {

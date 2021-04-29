@@ -14,7 +14,7 @@ import { SharedModule } from '../shared/shared.module';
 import { PEengineerdesignComponent } from './peengineerdesign/peengineerdesign.component';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { Chooser } from '@ionic-native/chooser/ngx';
-import { File } from '@ionic-native/file/ngx';
+import { File} from '@ionic-native/file/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 

@@ -22,16 +22,16 @@
 // export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
 
 // Test Server
-  export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';
-  export const BaseUrl = 'https://testorbit.wattmonk.com/api';
-export const intercomId = 'c6w73e4e';
-  export const COMETCHAT_CONSTANTS = {
-      APP_ID: '22738c62a78b107',
-       REGION: 'US',
-       API_KEY: '3afc04a7495edb03f4c7c802096a954faf7e3a27'
-   }
-export const version='1.1.3'
-export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
+//   export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';
+//   export const BaseUrl = 'https://testorbit.wattmonk.com/api';
+// export const intercomId = 'c6w73e4e';
+//   export const COMETCHAT_CONSTANTS = {
+//       APP_ID: '22738c62a78b107',
+//        REGION: 'US',
+//        API_KEY: '3afc04a7495edb03f4c7c802096a954faf7e3a27'
+//    }
+// export const version='1.1.3'
+// export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
 
 // Test Server
 //   export const PlatformUpdateUrl = 'https://testorbit.wattmonk.com/api';
@@ -44,16 +44,16 @@ export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
 //    }
 
 //Development Server
-// export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api/';
-// export const BaseUrl = 'https://devspace.wattmonk.com/api/';
-// export const intercomId = 'c6w73e4e';
-// export const COMETCHAT_CONSTANTS = {
-//    APP_ID: '2145560cac03137',
-//    REGION: 'US',
-//    API_KEY: '83ac811da8283c9e235ab912bf7a6213c207dd4d'
-// }
-// export const version='1.1.3'
-// export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
+export const PlatformUpdateUrl = 'https://devspace.wattmonk.com/api/';
+export const BaseUrl = 'https://devspace.wattmonk.com/api/';
+export const intercomId = 'c6w73e4e';
+export const COMETCHAT_CONSTANTS = {
+   APP_ID: '2145560cac03137',
+   REGION: 'US',
+   API_KEY: '83ac811da8283c9e235ab912bf7a6213c207dd4d'
+}
+export const version='1.1.3'
+export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
 
 export enum ROLES {
   Peengineer = 11,

@@ -66,7 +66,7 @@
                       <!-- <ion-item mode="md" routerLink="/comingsoon" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
                         <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
                       </ion-item> -->
-                      <ion-item  (click)="SwitchMenuAccordingtoRoles('team')" *ngIf="userData?.usertype=='company'" routerDirection="forward">
+                      <ion-item  (click)="SwitchMenuAccordingtoRoles('team')" *ngIf="userData?.usertype=='company' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
                         <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
                       </ion-item>
                       <ion-item  (click)="SwitchMenuAccordingtoRoles('client')" *ngIf="userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin'" routerDirection="forward">

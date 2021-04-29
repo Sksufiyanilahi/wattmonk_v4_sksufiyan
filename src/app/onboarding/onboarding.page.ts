@@ -92,7 +92,7 @@ export class OnboardingPage implements OnInit {
     const ADDRESSFORMAT = /^[#.0-9a-zA-Z\u00C0-\u1FFF\u2800-\uFFFD &_*#/'\s,-]+$/;
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.firstFormGroup = this.formBuilder.group({
-      usertype: new FormControl(null),
+      usertype: new FormControl('company'),
       billingaddress: new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
       phone: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
       //companyaddresssameasbilling:new FormControl(''),
@@ -458,7 +458,8 @@ export class OnboardingPage implements OnInit {
         senddesignrequestpermission,
         parseInt(this.thirdFormGroup.get("userrole").value),
         this.user.parent.minpermitdesignaccess,
-        this.thirdFormGroup.get("peengineertype").value
+        this.thirdFormGroup.get("peengineertype").value,
+        this.thirdFormGroup.get("usertype").value
       )
       .subscribe(
         (response: any) => {

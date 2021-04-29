@@ -27,6 +27,9 @@ import { PestampdelivermodalPage } from 'src/app/pestampdelivermodal/pestampdeli
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMETCHAT_CONSTANTS } from 'src/app/contants';
 import { MixpanelService } from 'src/app/utilities/mixpanel.service';
+import * as JSZip from 'jszip';
+import axios from 'axios';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-peengineerdesign',
@@ -62,7 +65,7 @@ export class PEengineerdesignComponent implements OnInit {
   netSwitch: boolean;
   acceptid: any;
   storageDirectory: string;
-
+  Allfiles:any[]=[];
   today: any;
   todaysdate:string;
   options: LaunchNavigatorOptions = {
@@ -937,6 +940,157 @@ gotoActivity(designData,event){
     event.stopPropagation();
     this.route.navigate(['/chat/' + designData.chatid])
   }
+
+  downloadfile(pestamp: Pestamp, event: Event) {
+    console.log(pestamp)
+    event.stopPropagation();
+    //const fileTransfer: FileTransferObject = this.transfer.create();
+    if(pestamp.atticphotos.length > 0){
+      pestamp.atticphotos.forEach(element => {
+        this.Allfiles.push(element);
+      });
+    }
+    if(pestamp.roofphotos.length > 0){
+      pestamp.roofphotos.forEach(element => {
+        this.Allfiles.push(element)
+      });
+    }
+    if(pestamp.permitplan.length > 0){
+      pestamp.permitplan.forEach(element => {
+        this.Allfiles.push(element)
+      })
+    }
+    console.log("All files", this.Allfiles)
+    var zip = new JSZip();
+    var count = 0;
+    let dir_name = 'Wattmonk';
+                let path;
+                if(this.platform.is('ios')){
+                path = this.file.documentsDirectory;
+                }else if(this.platform.is('android')){
+                  console.log(this.file.externalDataDirectory)
+                path = this.file.externalDataDirectory+'/Downloads'
+                }
+                const fileTransfer: FileTransferObject = this.transfer.create();
+              
+    this.Allfiles.forEach(res => {
+      axios
+        .get(res.url, {
+          responseType: "blob"
+        }).then(response=>{
+        // .then(response => {
+          console.log(response);
+          console.log(response.data);
+         // var ff = new Blob(res.url,{ type: "blob"})
+          zip.file(res.name+res.ext, response.data, {
+            binary: true
+          });
+          ++count;
+          if (count == this.Allfiles.length) {
+            zip
+              .generateAsync({
+                type: "blob"
+              })
+              .then(function(content) {
+                // const url =
+                const url = res.url;
+                console.log(url);
+              //   let result = this.file.createDir(this.file.externalRootDirectory, dir_name, true);
+              // result.then((resp) => {
+              //  path = resp.toURL();
+              
+              
+               //fileTransfer.download(url, path + pestamp.personname+"_"+pestamp.email+ ".zip").then((entry) => {
+              fileTransfer.download(url,path+pestamp.personname+"_"+pestamp.email);
+                 //this.utils.showSnackBar("Prelim Design Downloaded Successfully");
+              
+                 // this.clickSub = this.localnotification.on('click').subscribe(data => {
+              
+                 //   path;
+                 // })
+                 //saveAs(content, pestamp.personname+"_"+pestamp.email+ ".zip");
+                
+                // fileTransfer.download(url,content, pestamp.personname+"_"+pestamp.email+ ".zip")
+                // saveAs(content, pestamp.personname+"_"+pestamp.email+ ".zip");
+                
+             // });
+           // })
+          }).then((success)=>{
+            console.log(success);
+            this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
+          })
+        }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    });
+  }
+
+ async getDownloadPath(file) {
+    console.log(file);
+    if (this.platform.is('ios')) {
+        return this.file.documentsDirectory;
+    }
+  
+  // To be able to save files on Android, we first need to ask the user for permission.
+  // We do not let the download proceed until they grant access
+    await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+        result => {
+            if (!result.hasPermission) {
+                return this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE);
+            }
+            this.downloadFile(file);
+        }
+    );
+  
+    return this.file.externalRootDirectory + "/Download/";
+  }
+
+  downloadFile(designData){
+    console.log(designData)
+    let path;
+  if(this.platform.is('ios')){
+  path = this.file.documentsDirectory;
+  }else if(this.platform.is('android')){
+  path = this.file.externalDataDirectory
+  }
+    // const url = designData.stampedfiles.url;
+    // const fileTransfer: FileTransferObject = this.transfer.create();
+
+    //  // this.file.checkDir(this.file.externalDataDirectory, 'Wattmonk')
+    //  // .then(_ => {
+    //    // this.file.createDir(this.file.externalDataDirectory,dir_name,true).then(response => {
+    //      fileTransfer.download(url, path + (designData.stampedfiles.hash + designData.stampedfiles.ext)).then(async (entry) => {
+    //       const alertSuccess = await this.alertController.create({
+    //         header: `Download Succeeded!`,
+    //         subHeader: `File was successfully downloaded to: ${entry.toURL()}`,
+    //         buttons: ['Ok']
+    //       });
+
+    //      await alertSuccess.present();
+
+
+    //       this.fileOpener.open( path + path + (designData.stampedfiles.hash + designData.stampedfiles.ext), '')
+    //       .then(() => console.log('File is opened'))
+    //       .catch(e => console.log('Error opening file', e));
+
+    //       this.fileOpener.showOpenWithDialog(path + (designData.stampedfiles.hash + designData.stampedfiles.ext), '')
+    //         .then(() => console.log('File is opened'))
+    //         .catch(e => console.log('Error opening file', e));
+    //        this.utils.showSnackBar("Stamped File Downloaded Successfully");
+
+    //        // this.clickSub = this.localnotification.on('click').subscribe(data => {
+
+    //        //   path;
+    //        // })
+    //        this.localnotification.schedule({text:'Downloaded Successfully', foreground:true, vibrate:true })
+    //      }, (error) => {
+    //        console.log(error,"file error....")
+    //        // handle error
+    //      });
+  }
+
 }
 
 export class DesginDataHelper {

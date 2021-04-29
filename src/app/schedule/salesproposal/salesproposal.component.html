@@ -512,7 +512,7 @@
                       <!-- <ion-item> -->
                       <div>
                         <img
-                        [src]="arc.ext === '.pdf' ? 'assets/icon/file.png' : arc.url "
+                        [src]="arc.ext !== ('.png' || '.jpg' || '.jpeg' || '.gif') ? 'assets/icon/file.png' : arc.url "
                           style="height: 10rem; width: 10rem; border: 3px solid black"
                           alt="file"
                         />
@@ -615,7 +615,7 @@
           <ion-slide *ngFor="let attach of design?.attachments; let i = index">
             <div>
               <img
-              [src]="attach.ext === '.pdf' ? 'assets/icon/file.png' : attach.url "
+              [src]="attach.ext !== ('.png' || '.jpg' || '.jpeg' || '.gif') ? 'assets/icon/file.png' : attach.url "
                 style="height: 10rem; width: 10rem; border: 3px solid black"
                 alt="file"
               />
