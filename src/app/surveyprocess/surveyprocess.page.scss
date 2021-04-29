@@ -114,6 +114,14 @@ app-ar ion-content {
   max-width: 70px;
 }
 
+.actionarea .photogallerybutton{
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  left: 50px;
+  box-shadow: none;
+}
+
 .mainbuttonscontainer {
   width: 100vw;
   overflow: hidden;

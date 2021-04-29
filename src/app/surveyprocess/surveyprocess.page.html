@@ -55,6 +55,8 @@
             </div>
           </ion-row>
           <ion-row class="ion-justify-content-center">
+            <ion-button fill="clear" class="photogallerybutton" (click)="openGallery()"><img src="../../assets/images/photogallery.svg"/>
+            </ion-button>
             <ion-button fill="clear" (click)="takePicture()" class="capturebutton"></ion-button>
             <ion-button
               *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0"
