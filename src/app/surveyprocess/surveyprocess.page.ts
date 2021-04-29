@@ -330,8 +330,8 @@ export class SurveyprocessPage implements OnInit {
     this.surveytype = this.route.snapshot.paramMap.get('type');
     this.surveycity = this.route.snapshot.paramMap.get('city');
     this.surveystate = this.route.snapshot.paramMap.get('state');
-    this.latitude = +this.route.snapshot.paramMap.get('lat');
-    this.longitude = +this.route.snapshot.paramMap.get('long');
+    // this.latitude = +this.route.snapshot.paramMap.get('lat');
+    // this.longitude = +this.route.snapshot.paramMap.get('long');
 
     if (this.platform.is('ios')) {
       this.platformname = 'iphone';
@@ -447,8 +447,8 @@ export class SurveyprocessPage implements OnInit {
         this.surveytype = data.surveytype;
         this.surveycity = data.city;
         this.surveystate = data.state;
-        this.latitude = data.latitude;
-        this.longitude = data.longitude;
+        // this.latitude = data.latitude;
+        // this.longitude = data.longitude;
         Object.keys(data.formdata).forEach((key: string) => {
           let control: AbstractControl = null;
           control = this.activeForm.get(key);
@@ -470,7 +470,7 @@ export class SurveyprocessPage implements OnInit {
         this.setTotalStepCount();
       }
     });
-    this.getSiteLocationGoogleImageFromService();
+    // this.getSiteLocationGoogleImageFromService();
   }
 
   /**
@@ -1397,8 +1397,8 @@ export class SurveyprocessPage implements OnInit {
     surveyStorageModel.surveytype = this.surveytype;
     surveyStorageModel.city = this.surveycity;
     surveyStorageModel.state = this.surveystate;
-    surveyStorageModel.latitude = this.latitude;
-    surveyStorageModel.longitude = this.longitude;
+    // surveyStorageModel.latitude = this.latitude;
+    // surveyStorageModel.longitude = this.longitude;
 
     return surveyStorageModel;
   }
@@ -2105,14 +2105,14 @@ export class SurveyprocessPage implements OnInit {
     this.handleCanvasImageSaveOfMap();
   }
 
-  getSiteLocationGoogleImageFromService() {
-    this.apiService.getGoogleImage(this.latitude,
-      this.longitude).subscribe(data => {
-      this.createImageFromBlob(data);
-    }, error => {
+  // getSiteLocationGoogleImageFromService() {
+  //   this.apiService.getGoogleImage(this.latitude,
+  //     this.longitude).subscribe(data => {
+  //     this.createImageFromBlob(data);
+  //   }, error => {
 
-    });
-  }
+  //   });
+  // }
 
   createImageFromBlob(image: Blob) {
     const reader = new FileReader();
