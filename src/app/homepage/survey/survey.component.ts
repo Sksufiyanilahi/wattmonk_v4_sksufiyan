@@ -102,7 +102,8 @@ export class SurveyComponent {
     private actionSheetController: ActionSheetController,
   ) {
     const latestDate = new Date();
-    this.today = datePipe.transform(latestDate, 'M/dd/yy');
+    this.today = moment(latestDate).utc().format('M/D/YY');
+    // this.today = datePipe.transform(latestDate, 'M/dd/yy','0');
 
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl(0, [Validators.required]),
@@ -289,14 +290,15 @@ export class SurveyComponent {
       surveyItem.lateby = this.overdue;
       if (tempData.length === 0) {
         const listOfSurvey = new SurveyDataHelper();
-        listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
+        listOfSurvey.date = moment(surveyItem.datetime).utc().format('M/D/YY');
+        // listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy','0');
         listOfSurvey.listOfSurveys.push(surveyItem);
         tempData.push(listOfSurvey);
       } else {
         let added = false;
         tempData.forEach((surveyList) => {
           if (!added) {
-            if (surveyList.date === this.datePipe.transform(surveyItem.datetime, 'M/dd/yy')) {
+            if (surveyList.date === moment(surveyItem.datetime).utc().format('M/D/YY')) {
               surveyList.listOfSurveys.push(surveyItem);
               added = true;
             }
@@ -304,7 +306,7 @@ export class SurveyComponent {
         });
         if (!added) {
           const listOfSurvey = new SurveyDataHelper();
-          listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy');
+          listOfSurvey.date = moment(surveyItem.datetime).utc().format('M/D/YY');
           listOfSurvey.listOfSurveys.push(surveyItem);
           tempData.push(listOfSurvey);
           added = true;
