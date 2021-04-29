@@ -91,12 +91,12 @@ export class SurveyComponent implements OnInit, OnDestroy {
       source: new FormControl(this.utilities.checkPlatform(), [Validators.required]),
       assignedto: new FormControl(null),
       createdby: new FormControl(this.storage.getUserID(), [Validators.required]),
-      latitude: new FormControl('', [Validators.required]),
-      longitude: new FormControl('', [Validators.required]),
+      latitude: new FormControl(null),
+      longitude: new FormControl(null),
       country: new FormControl(''),
       state: new FormControl(''),
       city: new FormControl(''),
-      postalcode: new FormControl(''),
+      postalcode: new FormControl(null),
       status: new FormControl('created'),
       chatid: new FormControl(null),
       oldcommentid: new FormControl(''),
@@ -267,8 +267,6 @@ export class SurveyComponent implements OnInit, OnDestroy {
       }
       else if (this.surveyForm.value.projecttype == '') {
         this.utilities.errorSnackBar('Please fill the project type.');
-      } else if (this.surveyForm.value.latitude == '' && this.surveyForm.value.longitude == '') {
-        this.utilities.errorSnackBar('Please select address from dropdown.');
       } else {
         this.utilities.errorSnackBar('Address not found. Make sure your location is on in device.');
       }
