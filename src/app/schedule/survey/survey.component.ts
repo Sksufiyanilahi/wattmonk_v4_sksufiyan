@@ -377,7 +377,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.utilities.hideLoading().then(() => {
           this.survey = result;
           this.fieldDisabled = true;
-          const date = new Date(this.survey.datetime);
+          var date = new Date(this.survey.datetime);
+          var userTimezoneOffset = date.getTimezoneOffset();
+         date= new Date(userTimezoneOffset - date.getTime() );
+          console.log(date)
           this.surveyForm.patchValue({
             name: this.survey.name,
             email: this.survey.email,
