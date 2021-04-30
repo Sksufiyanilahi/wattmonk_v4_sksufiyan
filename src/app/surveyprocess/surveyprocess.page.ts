@@ -1,29 +1,31 @@
 /* tslint:disable:no-string-literal */
-import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {AlertController, IonRouterOutlet, IonSlides, MenuController, NavController, Platform} from '@ionic/angular';
-import {Diagnostic} from '@ionic-native/diagnostic/ngx';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {UtilitiesService} from '../utilities.service';
-import {ApiService} from '../api.service';
-import {InverterMakeModel} from '../model/inverter-make.model';
-import {ErrorModel} from '../model/error.model';
-import {InverterMadeModel} from '../model/inverter-made.model';
-import {SolarMake} from '../model/solar-make.model';
-import {SolarMadeModel} from '../model/solar-made.model';
-import {CdkDragEnd} from '@angular/cdk/drag-drop';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { AlertController, IonRouterOutlet, IonSlides, MenuController, NavController, Platform } from '@ionic/angular';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UtilitiesService } from '../utilities.service';
+import { ApiService } from '../api.service';
+import { InverterMakeModel } from '../model/inverter-make.model';
+import { ErrorModel } from '../model/error.model';
+import { InverterMadeModel } from '../model/inverter-made.model';
+import { SolarMake } from '../model/solar-make.model';
+import { SolarMadeModel } from '../model/solar-made.model';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import html2canvas from 'html2canvas';
-import {SurveyStorageModel} from '../model/survey-storage.model';
-import {Storage} from '@ionic/storage';
-import {AutoCompleteComponent} from '../utilities/auto-complete/auto-complete.component';
-import {StorageService} from '../storage.service';
-import {Insomnia} from '@ionic-native/insomnia/ngx';
+import { SurveyStorageModel } from '../model/survey-storage.model';
+import { Storage } from '@ionic/storage';
+import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
+import { StorageService } from '../storage.service';
+import { Insomnia } from '@ionic-native/insomnia/ngx';
 import * as domtoimage from 'dom-to-image';
-import {RoofMaterial} from '../model/roofmaterial.model';
-import {Plugins} from '@capacitor/core';
-import {CameraPreviewFlashMode, CameraPreviewOptions} from '@capacitor-community/camera-preview';
+import { RoofMaterial } from '../model/roofmaterial.model';
+import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
+import { CameraPreviewFlashMode, CameraPreviewOptions } from '@capacitor-community/camera-preview';
 import '@capacitor-community/camera-preview';
+
+const { Camera } = Plugins;
 
 export interface MAINMENU {
   name: string;
@@ -152,7 +154,7 @@ export interface PENDING_SHOT {
   name: string;
 }
 
-const {CameraPreview} = Plugins;
+const { CameraPreview } = Plugins;
 
 @Component({
   selector: 'app-surveyprocess',
@@ -161,13 +163,13 @@ const {CameraPreview} = Plugins;
 })
 export class SurveyprocessPage implements OnInit {
 
-  @ViewChild('screen', {static: false}) screen: ElementRef;
-  @ViewChild('slides', {static: false}) slider: IonSlides;
-  @ViewChild('autocomplete', {static: false}) autoCompleteComponent: AutoCompleteComponent;
-  @ViewChild('utility', {static: false}) utility: AutoCompleteComponent;
-  @ViewChild('roofmaterial', {static: false}) roofmaterial: AutoCompleteComponent;
-  @ViewChild('mainscroll', {static: false}) mainscroll: any;
-  @ViewChild('submenuscroll', {static: false}) submenuscroll: any;
+  @ViewChild('screen', { static: false }) screen: ElementRef;
+  @ViewChild('slides', { static: false }) slider: IonSlides;
+  @ViewChild('autocomplete', { static: false }) autoCompleteComponent: AutoCompleteComponent;
+  @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
+  @ViewChild('roofmaterial', { static: false }) roofmaterial: AutoCompleteComponent;
+  @ViewChild('mainscroll', { static: false }) mainscroll: any;
+  @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
@@ -323,15 +325,15 @@ export class SurveyprocessPage implements OnInit {
     private platform: Platform,
     private routeroutlet: IonRouterOutlet,
     private storageService: StorageService,
-    private menuCtrl:MenuController,
+    private menuCtrl: MenuController,
     private insomnia: Insomnia) {
     this.user = this.storageuserdata.getUser();
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
     this.surveycity = this.route.snapshot.paramMap.get('city');
     this.surveystate = this.route.snapshot.paramMap.get('state');
-    this.latitude = +this.route.snapshot.paramMap.get('lat');
-    this.longitude = +this.route.snapshot.paramMap.get('long');
+    // this.latitude = +this.route.snapshot.paramMap.get('lat');
+    // this.longitude = +this.route.snapshot.paramMap.get('long');
 
     if (this.platform.is('ios')) {
       this.platformname = 'iphone';
@@ -447,8 +449,8 @@ export class SurveyprocessPage implements OnInit {
         this.surveytype = data.surveytype;
         this.surveycity = data.city;
         this.surveystate = data.state;
-        this.latitude = data.latitude;
-        this.longitude = data.longitude;
+        // this.latitude = data.latitude;
+        // this.longitude = data.longitude;
         Object.keys(data.formdata).forEach((key: string) => {
           let control: AbstractControl = null;
           control = this.activeForm.get(key);
@@ -470,7 +472,7 @@ export class SurveyprocessPage implements OnInit {
         this.setTotalStepCount();
       }
     });
-    this.getSiteLocationGoogleImageFromService();
+    // this.getSiteLocationGoogleImageFromService();
   }
 
   /**
@@ -764,9 +766,9 @@ export class SurveyprocessPage implements OnInit {
 
   formatDateInBackendFormat() {
     const d = new Date();
-    const ye = new Intl.DateTimeFormat('en', {year: 'numeric'}).format(d);
-    const mo = new Intl.DateTimeFormat('en', {month: '2-digit'}).format(d);
-    const da = new Intl.DateTimeFormat('en', {day: '2-digit'}).format(d);
+    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+    const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
 
     return (`${ye}-${mo}-${da}`);
   }
@@ -1084,7 +1086,7 @@ export class SurveyprocessPage implements OnInit {
   reverttoOriginalPosition(item: Equipment) {
     item.event.source.element.nativeElement.style.transform = 'none'; // visually reset element to its origin
     const source: any = item.event.source;
-    source._passiveTransform = {x: 0, y: 0};
+    source._passiveTransform = { x: 0, y: 0 };
     item.enabled = true;
   }
 
@@ -1397,8 +1399,8 @@ export class SurveyprocessPage implements OnInit {
     surveyStorageModel.surveytype = this.surveytype;
     surveyStorageModel.city = this.surveycity;
     surveyStorageModel.state = this.surveystate;
-    surveyStorageModel.latitude = this.latitude;
-    surveyStorageModel.longitude = this.longitude;
+    // surveyStorageModel.latitude = this.latitude;
+    // surveyStorageModel.longitude = this.longitude;
 
     return surveyStorageModel;
   }
@@ -2105,14 +2107,14 @@ export class SurveyprocessPage implements OnInit {
     this.handleCanvasImageSaveOfMap();
   }
 
-  getSiteLocationGoogleImageFromService() {
-    this.apiService.getGoogleImage(this.latitude,
-      this.longitude).subscribe(data => {
-      this.createImageFromBlob(data);
-    }, error => {
+  // getSiteLocationGoogleImageFromService() {
+  //   this.apiService.getGoogleImage(this.latitude,
+  //     this.longitude).subscribe(data => {
+  //     this.createImageFromBlob(data);
+  //   }, error => {
 
-    });
-  }
+  //   });
+  // }
 
   createImageFromBlob(image: Blob) {
     const reader = new FileReader();
@@ -2237,7 +2239,7 @@ export class SurveyprocessPage implements OnInit {
     this.iscapturingallowed = false;
   }
 
-  handleShotNavigation(index, event){
+  handleShotNavigation(index, event) {
     event.stopPropogation();
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].isactive = true;
     this.startCameraWithOpts();
@@ -2258,5 +2260,79 @@ export class SurveyprocessPage implements OnInit {
 
   ionViewDidEnter() {
     this.handleBackbutton();
+  }
+
+  async openGallery() {
+    this.issidemenucollapsed = true;
+    this.isgallerymenucollapsed = true;
+
+    if (this.iscapturingallowed) {
+      const image = await Camera.getPhoto({
+        quality: 100,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Photos
+      });
+
+      this.capturedImage = "data:image/jpeg;base64,"+image.base64String;
+
+      const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+      if (!currentIndex.allowmultipleshots) {
+        const captureshot: CAPTUREDSHOT = {
+          menuindex: this.selectedmainmenuindex,
+          submenuindex: this.selectedsubmenuindex,
+          shotindex: this.selectedshotindex,
+          shotimage: this.capturedImage,
+          imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
+          imagename: currentIndex.shots[this.selectedshotindex].imagename
+        };
+        currentIndex.capturedshots.push(captureshot);
+      } else {
+        if (currentIndex.multipleshotslimit !== -1 && currentIndex.capturedshots.length === currentIndex.multipleshotslimit) {
+          this.handleMenuSwitch();
+        } else {
+          const captureshot: CAPTUREDSHOT = {
+            menuindex: this.selectedmainmenuindex,
+            submenuindex: this.selectedsubmenuindex,
+            shotindex: this.selectedshotindex,
+            shotimage: this.capturedImage,
+            imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
+            imagename: currentIndex.shots[this.selectedshotindex].imagename + (currentIndex.capturedshots.length + 1)
+          };
+          currentIndex.capturedshots.push(captureshot);
+          if (currentIndex.capturedshots.length === currentIndex.multipleshotslimit) {
+            this.handleMenuSwitch();
+          }
+        }
+      }
+      currentIndex.shots[this.selectedshotindex].shotstatus = true;
+      if (currentIndex.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
+        if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
+          currentIndex.shots[this.selectedshotindex].promptquestion = true;
+          this.iscapturingallowed = false;
+          if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
+            this.getUtilities();
+          } else if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
+            this.getInverterMakes();
+          } else if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
+            this.getRoofMaterials();
+          }
+        } else {
+          this.markShotCompletion(this.selectedshotindex);
+        }
+      } else {
+        if (!currentIndex.allowmultipleshots) {
+          currentIndex.shots[this.selectedshotindex].questionstatus = true;
+          this.handleMenuSwitch();
+        } else {
+          if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
+            currentIndex.shots[this.selectedshotindex].questionstatus = true;
+            this.markShotCompletion(this.selectedshotindex);
+            this.updateProgressStatus();
+          }
+        }
+      }
+    } else {
+    }
   }
 }

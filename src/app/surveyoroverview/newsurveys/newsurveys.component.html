@@ -61,6 +61,9 @@
                         <ion-button *ngIf="surveyData.status=='surveyassigned'" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="assignedTo(surveyData,$event)">
                         Start Survey
                     </ion-button>
+                    <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="resumeSurvey(surveyData,$event)">
+                      Resume Survey
+                    </ion-button>
                         <!-- <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]">
                         Resume Survey
                     </ion-button> -->
