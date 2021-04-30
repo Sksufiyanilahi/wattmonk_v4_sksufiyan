@@ -654,15 +654,16 @@ export class UtilitiesService {
 
 	  formatDateInDisplayFormat(datestring: any) {
 		if (datestring != null) {
-		  const d = new Date(datestring);
-		  const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
-		  const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
-		  const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
-		  const today = new Date();
-		  if (d.setHours(0, 0, 0, 0) == today.setHours(0, 0, 0, 0)) {
+      // var d= moment(datestring).utc().format();
+		  const d =moment(datestring).utc().format('M/D/YY');
+		  const ye =moment(datestring).utc().format('YYYY');
+		  const mo = moment(datestring).utc().format('M');
+		  const da = moment(datestring).utc().format('D');
+		  const today = moment().utc().format('M/D/YY');
+		  if (d == today) {
 			return "Today";
 		  } else {
-			return (`${da} ${mo} ${ye}`);
+			return (`${da}/${mo}/${ye}`);
 		  }
 		} else {
 		  return "-";

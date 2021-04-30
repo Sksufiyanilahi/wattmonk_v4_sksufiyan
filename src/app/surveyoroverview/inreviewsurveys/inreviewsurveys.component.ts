@@ -297,14 +297,14 @@ export class InreviewsurveysComponent implements OnInit {
     this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
 
     })
-    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
+    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
 
 
   }
 
   resumeSurvey(surveyData, event) {
     event.stopPropagation();
-    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
+    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
   }
 
   gotoActivity(surveyData, event) {

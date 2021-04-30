@@ -258,7 +258,7 @@ const routes: Routes = [
         canActivate: [AuthGuardService]
     },
     {
-        path: 'camera/:id/:type/:city/:state/:lat/:long',
+        path: 'camera/:id/:type/:city/:state',
         loadChildren: () => import('./surveyprocess/surveyprocess.module').then(m => m.SurveyprocessPageModule),
         canActivate: [AuthGuardService]
     },
