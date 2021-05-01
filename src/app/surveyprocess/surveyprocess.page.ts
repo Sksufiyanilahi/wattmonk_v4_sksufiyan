@@ -381,7 +381,7 @@ export class SurveyprocessPage implements OnInit {
           item.children.map(child => {
             if (child.inputformcontrol !== '') {
               this.activeFormElementsArray.push(child.inputformcontrol);
-              this.activeFormKeysMap[child.inputformcontrol] = child.placeholder;
+              this.activeFormKeysMap[child.inputformcontrol] = child.placeholder =='' ? child.label:child.placeholder;
               formData[child.inputformcontrol] = new FormControl('', [Validators.required]);
             }
             child.shots.map(shot => {

@@ -200,7 +200,7 @@
                                 class="ion-text-end action-button-color"
                                 (click)="openreviewPassed(designData.id,designData,$event)"> &nbsp; Deliver</span>
                                 
-                                <span *ngIf="userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin'"
+                                <span *ngIf="(userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin') && (designData.reviewassignedto.id != this.userData.id) && (designData.status == 'reviewassigned' || designData.status == 'reviewfailed' )"
                                 style="float:right !important;" class="ion-text-end action-button-color"
                                 (click)="selfAssign(designData.id,designData,$event)"> &nbsp; Self Assign</span>
                             <span
