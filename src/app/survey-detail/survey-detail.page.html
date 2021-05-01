@@ -75,9 +75,9 @@
     <ion-segment-button value="attic" class="wd140 colorwht" *ngIf="survey.atticimages.length !==0">
       <ion-label> Attic </ion-label>
     </ion-segment-button>
-    <!-- <ion-segment-button value="appliances" class="wd140 colorwht">
+    <ion-segment-button value="appliances" class="wd140 colorwht">
       <ion-label> Appliances </ion-label>
-    </ion-segment-button> -->
+    </ion-segment-button>
     <ion-segment-button *ngIf="survey.utilitybillback !== null || survey.utilitybillfront !==null" value="utilitybill"
       class="wd140 colorwht">
       <ion-label> Utility Bill </ion-label>
@@ -268,9 +268,11 @@
                 <ion-col size="12"><span>PV inverter is located
                     :</span>&nbsp;<span>{{survey.pvinverterlocation | titlecase}} the site
                   </span></ion-col>
-                <ion-col size="12"><span>Inverter manufacturer: {{survey.invertermake | titlecase}} </span>&nbsp;<span>
-                    Inverter Model is : {{survey.invertermodel |
-                    titlecase}}</span></ion-col>
+                <ion-col size="12"><span>Inverter manufacturer: {{survey.invertermake | titlecase}} </span></ion-col>
+                    <ion-col size="12"><span>
+                      Inverter Model is : {{survey.invertermodel |
+                      titlecase}}</span></ion-col>
+                    
 
                 <div class="swiper-zoom-container">
                   <img [src]="elecpvmeter.url" (click)="showimage(elecpvmeter.url)" width="100%" />
@@ -309,8 +311,9 @@
                   :</span>&nbsp;<span>{{survey.roofmaterial.name}}
                 </span></ion-col>
             </ng-container>
+             <ion-col size ="12" *ngIf="i=='0' && survey.rooftilt !='' && survey.rooftilt != null"><span >Roof Tilt :</span>&nbsp;<span>{{survey.rooftilt}} </span></ion-col>  
             <div class="swiper-zoom-container">
-              <!-- <h2 class="position-fix">{{roof.name}}</h2> -->
+              <h2 class="position-fix">{{roof.name}}</h2> 
               <img [src]="roof.url" (click)="showimage(roof.url)" />
             </div>
           </ion-row>
@@ -436,12 +439,12 @@
         <ion-col size="6">{{survey.batterysystem== true ? 'Yes' : 'No'}}</ion-col>
       </ion-row>
       <ion-row *ngIf="survey.batterysystem=='true'">
-        <ion-col size="6">Comments</ion-col>
+        <ion-col size="6">Battery details</ion-col>
         <ion-col size="6">{{survey.comments[0]?.message}}</ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="6">Existing Solar System</ion-col>
-        <ion-col size="6">{{survey.existingsolarsystem == true ? 'Yes' : 'No'}}</ion-col>
+        <ion-col size="6">{{survey.existingsolarsystem == 'true' ? 'Yes' : 'No'}}</ion-col>
       </ion-row>
       <ion-row *ngIf="survey.interconnection!== null">
         <ion-col size="6">Interconnection</ion-col>
@@ -450,6 +453,10 @@
       <ion-row>
         <ion-col size="6"> Power service line source to Main panel (Overhead if you can see the wires coming from the power poles to connect to home)</ion-col>
         <ion-col size="6">{{survey?.servicefeedsource}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.additionalnotes !='' && survey.additionalnotes !=null">
+        <ion-col size="6" > Additional notes</ion-col>
+        <ion-col size="6">{{survey?.additionalnotes}}</ion-col>
       </ion-row>
     </ion-grid>
   </div>
