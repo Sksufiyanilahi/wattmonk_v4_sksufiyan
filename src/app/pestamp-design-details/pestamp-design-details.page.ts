@@ -205,15 +205,80 @@ export class PestampDesignDetailsPage implements OnInit {
     //   comments: this.commentform.get('comments').value,
     //   workinghours : this.pestampForm.get('workinghours').value
     // };
-    if (this.design.type == 'both' && this.design.propertytype=='commercial') {
-      if (this.user.peengineertype == 'electrical') {
-        postData = {
-          status: "completed",
-          pestampstarttime: this.designstartdatetime,
-          pestampendtime: this.designenddatetime,
-          comments: this.commentform.get('comments').value,
-          electricalworkinghours: workinghours,
-          iselectricalstampeduploaded: true
+    // if (this.design.type == 'both' && this.design.propertytype=='commercial') {
+    //   if (this.user.peengineertype == 'electrical') {
+    //     postData = {
+    //       status: "completed",
+    //       pestampstarttime: this.designstartdatetime,
+    //       pestampendtime: this.designenddatetime,
+    //       comments: this.commentform.get('comments').value,
+    //       electricalworkinghours: workinghours,
+    //       iselectricalstampeduploaded: true
+    //     }
+    //   }
+    //   else {
+    //     postData = {
+    //       status: "completed",
+    //       pestampstarttime: this.designstartdatetime,
+    //       pestampendtime: this.designenddatetime,
+    //       comments: this.commentform.get('comments').value,
+    //       structuralworkinghours: workinghours,
+    //       isstructuralstampeduploaded: true
+    //     }
+    //   }
+    // }
+    // else {
+    //   if(this.design.type=='both'){
+    //     if (this.user.peengineertype == 'electrical') {
+    //       postData = {
+    //         status: "completed",
+    //         pestampstarttime: this.designstartdatetime,
+    //         pestampendtime: this.designenddatetime,
+    //         comments: this.commentform.get('comments').value,
+    //         iselectricalstampeduploaded: true
+    //       }
+    //     }
+    //     else {
+    //       postData = {
+    //         status: "completed",
+    //         pestampstarttime: this.designstartdatetime,
+    //         pestampendtime: this.designenddatetime,
+    //         comments: this.commentform.get('comments').value,
+    //         isstructuralstampeduploaded: true
+    //       }
+    //     }
+    //   }
+    //   else{
+    //     postData = {
+    //       status: "completed",
+    //       pestampstarttime: this.designstartdatetime,
+    //       pestampendtime: this.designenddatetime,
+    //       comments: this.commentform.get('comments').value,
+    //     }
+    //   }
+    // }
+
+    if (this.design.propertytype == 'commercial') {
+      if (this.design.type == 'both') {
+        if (this.user.peengineertype == 'electrical') {
+          postData = {
+            status: "completed",
+            pestampstarttime: this.designstartdatetime,
+            pestampendtime: this.designenddatetime,
+            comments: this.commentform.get('comments').value,
+            electricalworkinghours: Number(workinghours) + Number(this.design.electricalworkinghours),
+            iselectricalstampeduploaded: true
+          }
+        }
+        else {
+          postData = {
+            status: "completed",
+            pestampstarttime: this.designstartdatetime,
+            pestampendtime: this.designenddatetime,
+            comments: this.commentform.get('comments').value,
+            structuralworkinghours: Number(workinghours) + Number(this.design.structuralworkinghours),
+            isstructuralstampeduploaded: true
+          }
         }
       }
       else {
@@ -222,13 +287,12 @@ export class PestampDesignDetailsPage implements OnInit {
           pestampstarttime: this.designstartdatetime,
           pestampendtime: this.designenddatetime,
           comments: this.commentform.get('comments').value,
-          structuralworkinghours: workinghours,
-          isstructuralstampeduploaded: true
+          workinghours:Number(workinghours) + Number(this.design.workinghours)
         }
       }
     }
     else {
-      if(this.design.type=='both'){
+      if (this.design.type == 'both') {
         if (this.user.peengineertype == 'electrical') {
           postData = {
             status: "completed",
@@ -243,12 +307,12 @@ export class PestampDesignDetailsPage implements OnInit {
             status: "completed",
             pestampstarttime: this.designstartdatetime,
             pestampendtime: this.designenddatetime,
-            comments: this.commentform.get('comments').value,
+            comments:this.commentform.get('comments').value,
             isstructuralstampeduploaded: true
           }
         }
       }
-      else{
+      else {
         postData = {
           status: "completed",
           pestampstarttime: this.designstartdatetime,
@@ -291,10 +355,10 @@ export class PestampDesignDetailsPage implements OnInit {
 
         files(event){
 
-          //  for(var i=0; i< event.target.files.length;i++){
-          //    this.stampfile.push(event.target.files[i])
-          //  }
-          this.stampfile = event.target.files;
+           for(var i=0; i< event.target.files.length;i++){
+             this.stampfile.push(event.target.files[i])
+           }
+         // this.stampfile = event.target.files;
 
          }
 

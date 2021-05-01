@@ -1539,9 +1539,10 @@ export class PermitschedulePage implements OnInit {
 
 
   files(ev) {
-
+    this.architecturalFileUpload = true;
     for (let i = 0; i < ev.target.files.length; i++) {
-      this.archFiles.push(ev.target.files[i])
+      //this.archFiles.push(ev.target.files[i])
+      this.getFiletype(ev.target.files[i]);
       let reader = getFileReader();
       reader.onload = (e: any) => {
 
@@ -1553,16 +1554,15 @@ export class PermitschedulePage implements OnInit {
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
-    this.architecturalFileUpload = true;
 
   }
 
   permitfiles(event) {
-
+    this.attachmentFileUpload = true;
     for(let i=0; i< event.target.files.length;i++){
 
-
-      this.permitFiles.push(event.target.files[i])
+      this.getFiletype(event.target.files[i]);
+     // this.permitFiles.push(event.target.files[i])
      // var reader = new FileReader();
      let reader = getFileReader();
       reader.onload = (e: any) => {
@@ -1576,7 +1576,6 @@ export class PermitschedulePage implements OnInit {
       }
       reader.readAsDataURL(event.target.files[i]);
     }
-    this.attachmentFileUpload = true;
     if (this.permitFiles.length == 1) {
       this.fileName = event.target.files[0].name;
 
@@ -1587,6 +1586,26 @@ export class PermitschedulePage implements OnInit {
       this.fileName = '';
     }
 
+  }
+
+  getFiletype( file){
+    console.log(file)
+    var extension = file.name.substring(file.name.lastIndexOf('.'));
+    var mimetype = this.utils.getMimetype(extension);
+    window.console.log(extension, mimetype);
+    var data = new Blob([file], {
+      type: mimetype
+    });
+    console.log(data);
+    let replaceFile = new File([data], file.name, { type: mimetype })
+   if(this.attachmentFileUpload)
+   {
+    this.permitFiles.push(replaceFile);
+   }
+   else if(this.architecturalFileUpload)
+   {
+    this.archFiles.push(replaceFile)
+   }
   }
 
   uploaarchitecturedesign(response?: any, key?: string, fileObj?: File, index?: number) {

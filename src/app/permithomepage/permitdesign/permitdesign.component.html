@@ -150,6 +150,8 @@
                       <ion-col *ngIf="segments=='requesttype=permit&status=reviewassigned&status=reviewfailed&status=reviewpassed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'" size="12">
                           <span *ngIf="designData.status =='reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData,$event)"
                           >  &nbsp; Deliver</span>
+                          <span size="12" *ngIf="userData.role.type !='clientsuperadmin' && userData.role.type != 'clientadmin'" style="float:right !important;" class="ion-text-end action-button-color" (click)="selfAssign(designData.id,designData,$event)"
+                          > &nbsp; Self Assign</span>
                           <span *ngIf="userData.role.type!='clientsuperadmin' &&(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData,$event)"
                           >Reassign Review</span>
                       </ion-col>

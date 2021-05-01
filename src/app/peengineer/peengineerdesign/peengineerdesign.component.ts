@@ -62,7 +62,7 @@ export class PEengineerdesignComponent implements OnInit {
   netSwitch: boolean;
   acceptid: any;
   storageDirectory: string;
-
+  Allfiles:any[]=[];
   today: any;
   todaysdate:string;
   options: LaunchNavigatorOptions = {
@@ -937,6 +937,7 @@ gotoActivity(designData,event){
     event.stopPropagation();
     this.route.navigate(['/chat/' + designData.chatid])
   }
+
 }
 
 export class DesginDataHelper {

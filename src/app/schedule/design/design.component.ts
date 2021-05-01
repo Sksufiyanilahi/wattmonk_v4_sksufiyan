@@ -24,7 +24,7 @@ import {StorageService} from '../../storage.service';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {DesginDataModel} from '../../model/design.model';
 import {Camera, CameraOptions} from '@ionic-native/Camera/ngx';
-import {File} from '@ionic-native/file/ngx';
+// import {File} from '@ionic-native/file/ngx';
 
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
 import {Clients} from 'src/app/model/clients.model';
@@ -39,6 +39,7 @@ export function getFileReader(): FileReader {
   const zoneOriginalInstance = (fileReader as any)["__zone_symbol__originalInstance"];
   return zoneOriginalInstance || fileReader;
 }
+
 
 @Component({
   selector: 'app-design',
@@ -186,7 +187,7 @@ isArchitecturalFileUpload: boolean = false;
     private storage: StorageService,
     private route: ActivatedRoute,
     private camera: Camera,
-    private file: File,
+    // private file: File,
     public router:Router,
     private cdr:ChangeDetectorRef,
     private zone: NgZone,
@@ -1168,9 +1169,10 @@ isArchitecturalFileUpload: boolean = false;
 
 
   files(ev) {
-
+    this.isArchitecturalFileUpload = true;
     for (let i = 0; i < ev.target.files.length; i++) {
-      this.archFiles.push(ev.target.files[i])
+      // this.archFiles.push(ev.target.files[i])
+      this.getFiletype(ev.target.files[i]);
       var reader = getFileReader();
       reader.onload = (e: any) => {
 
@@ -1182,16 +1184,16 @@ isArchitecturalFileUpload: boolean = false;
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
-    this.isArchitecturalFileUpload = true;
+    
 
   }
 
   prelimfiles(event){
-
+    this.attachmentFileUpload = true;
     for(let i=0; i< event.target.files.length;i++){
 
-
-      this.prelimFiles.push(event.target.files[i])
+      this.getFiletype(event.target.files[i]);
+      // this.prelimFiles.push(event.target.files[i])
       var reader = getFileReader();
       reader.onload = (e: any) => {
         if (event.target.files[i].name.includes('.png') || event.target.files[i].name.includes('.jpeg') || event.target.files[i].name.includes('.jpg') || event.target.files[i].name.includes('.gif')) {
@@ -1204,7 +1206,7 @@ isArchitecturalFileUpload: boolean = false;
       }
       reader.readAsDataURL(event.target.files[i]);
     }
-    this.attachmentFileUpload = true;
+    
     if (this.prelimFiles.length == 1) {
       this.fileName = event.target.files[0].name;
 
@@ -1216,6 +1218,29 @@ isArchitecturalFileUpload: boolean = false;
     }
 
 
+  }
+
+   getFiletype( file){
+    console.log(file)
+    var extension = file.name.substring(file.name.lastIndexOf('.'));
+    var mimetype = this.utils.getMimetype(extension);
+    window.console.log(extension, mimetype);
+    console.log([file])
+    var data= new Blob([file], {
+      type: mimetype,
+
+    });
+  console.log(data);
+  var replaceFile = new File([data], file.name, { type: mimetype })
+   if(this.attachmentFileUpload)
+   {
+    this.prelimFiles.push(replaceFile);
+    console.log(this.prelimFiles)
+   }
+   else if(this.isArchitecturalFileUpload)
+   {
+    this.archFiles.push(replaceFile)
+   }
   }
 
 
@@ -1290,7 +1315,7 @@ isArchitecturalFileUpload: boolean = false;
   }
 
   uploadpreliumdesign(response?: any, key?: string, fileObj?: string, index?: number) {
-
+    console.log(fileObj)
     const imageData = new FormData();
     // for(var i=0; i< this.prelimFiles.length;i++){
     imageData.append("files", fileObj);

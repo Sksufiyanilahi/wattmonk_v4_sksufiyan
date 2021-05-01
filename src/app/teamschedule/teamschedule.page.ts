@@ -56,7 +56,7 @@ export class TeamschedulePage implements OnInit {
   //const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.teamForm = this.formBuilder.group({
 
-      usertype : new FormControl(null),
+      usertype : new FormControl('company'),
       firstname:new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
       lastname:new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
       workemail:new FormControl('',[Validators.required, Validators.pattern(MAILFORMAT)]),
@@ -117,7 +117,7 @@ export class TeamschedulePage implements OnInit {
       let roleId = this.designData.role.id;
       this.apiservices.getDynamicRoles(parentId,roleId).subscribe((res)=>{
         // console.log(res);
-        // this.roles = res;
+         this.roles = res;
         // console.log(this.roles);
         if(res == 0)
         {
@@ -192,8 +192,8 @@ export class TeamschedulePage implements OnInit {
             senddesignrequestpermission,
            parseInt(this.teamForm.get("userrole").value),
             this.designData.parent.minpermitdesignaccess,
-            this.teamForm.get("peengineertype").value
-
+            this.teamForm.get("peengineertype").value,
+            this.teamForm.get("usertype").value
           )
           .subscribe(
             (response:any) => {

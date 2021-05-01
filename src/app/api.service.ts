@@ -466,7 +466,8 @@ export class ApiService {
       permissiontomakedesign:boolean,
       role: number,
       minpermitaccess: boolean,
-      peengineertype:String
+      peengineertype:String,
+      usertype:string
       // address: String,
       // country: String,
       // callingcode: number
@@ -497,7 +498,8 @@ export class ApiService {
         provider: "local",
         parent: parentid,
         company: this.storageService.getUser().company,//user.company,
-        addedby: this.storageService.getUser().id//.currentUserValue.user.id
+        addedby: this.storageService.getUser().id,//.currentUserValue.user.id
+        usertype:usertype
       };
       return this.http
         .post<User>(BaseUrl + "users", JSON.stringify(postData), {

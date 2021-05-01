@@ -74,6 +74,12 @@ export class Pestamp{
     unreadmessagecount = 0;
     acceptedbystructuralpeengineer:any;
     acceptedbyelectricalpeengineer:any;
+    electricalworkinghours:number;
+    structuralworkinghours:number;
+    iselectricalstampeduploaded:boolean;
+    electricalstampedfiles:any;
+    isstructuralstampeduploaded:boolean;
+    structuralstampedfiles:any;
 }
 
 export class Activity {
