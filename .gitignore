@@ -39,6 +39,8 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+/ios
+/android
 # built application files
 
 
