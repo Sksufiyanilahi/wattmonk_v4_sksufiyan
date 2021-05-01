@@ -272,7 +272,7 @@
                     <ion-col size="12"><span>
                       Inverter Model is : {{survey.invertermodel |
                       titlecase}}</span></ion-col>
-                    
+
 
                 <div class="swiper-zoom-container">
                   <img [src]="elecpvmeter.url" (click)="showimage(elecpvmeter.url)" width="100%" />
@@ -311,9 +311,11 @@
                   :</span>&nbsp;<span>{{survey.roofmaterial.name}}
                 </span></ion-col>
             </ng-container>
-             <ion-col size ="12" *ngIf="i=='0' && survey.rooftilt !='' && survey.rooftilt != null"><span >Roof Tilt :</span>&nbsp;<span>{{survey.rooftilt}} </span></ion-col>  
+            <ng-container *ngIf="i==0">
+              <ion-col size ="12" *ngIf= "survey.rooftilt !='' && survey.rooftilt != null"><span >Roof Tilt :</span>&nbsp;<span>{{survey.rooftilt}} </span></ion-col>
+            </ng-container>
             <div class="swiper-zoom-container">
-              <h2 class="position-fix">{{roof.name}}</h2> 
+              <h2 class="position-fix">{{roof.name}}</h2>
               <img [src]="roof.url" (click)="showimage(roof.url)" />
             </div>
           </ion-row>
