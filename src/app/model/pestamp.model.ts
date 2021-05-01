@@ -76,6 +76,10 @@ export class Pestamp{
     acceptedbyelectricalpeengineer:any;
     electricalworkinghours:number;
     structuralworkinghours:number;
+    iselectricalstampeduploaded:boolean;
+    electricalstampedfiles:boolean;
+    isstructuralstampeduploaded:boolean;
+    structuralstampedfiles:boolean;
 }
 
 export class Activity {
