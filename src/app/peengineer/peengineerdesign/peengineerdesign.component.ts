@@ -27,9 +27,6 @@ import { PestampdelivermodalPage } from 'src/app/pestampdelivermodal/pestampdeli
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMETCHAT_CONSTANTS } from 'src/app/contants';
 import { MixpanelService } from 'src/app/utilities/mixpanel.service';
-import * as JSZip from 'jszip';
-import axios from 'axios';
-import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-peengineerdesign',
