@@ -26,7 +26,7 @@
                                 <ion-col size="12">
                                     <ion-label>Email*</ion-label>
                                     <ion-item class="box " lines="none"  >
-                                        <ion-input type="email" placeholder="Ex. johndoe@gmail.com" 
+                                        <ion-input type="email" placeholder="Ex. johndoe@gmail.com"
                                             formControlName="identifier">
                                         </ion-input>
                                     </ion-item>
@@ -65,13 +65,12 @@
                                         </div>
                                     </div>
                                 </ion-col>
-
-                                <ion-col size="12" style="left: 13px; top: -72px;" class="forgot-password-text">
-                                    <p style="text-align: end; margin-top: 0px;
-                                    padding-top: 0px; font-size: 0.9em;" class="ion-padding actionlink"
-                                        [routerLink]="['/forgot-password']" routerDirection="forward">Forgot password?
-                                    </p>
-                                </ion-col>
+                                <ion-col size="12" style="left: 13px;" class="forgot-password-text">
+                                  <p style="text-align: end; margin-top: 0px;
+                                  padding-top: 0px; font-size: 0.9em;" class="ion-padding actionlink"
+                                      [routerLink]="['/forgot-password']" routerDirection="forward">Forgot password?
+                                </p>
+                              </ion-col>
                                 <ion-col>
                                     <input type="checkbox"><span class="checkBox"> Keep me signed in</span>
                                 </ion-col>
@@ -97,10 +96,11 @@
 
 
 </ion-content>
-<ion-footer style="background-color: #FBF9F4;">
-    <center class="Footer1">© 2020 Wattmonk private Limited All Rigths Reserved</center>
-    <div>
-      <center class="Footer2">Privacy Policy | Service Agreement</center>
-    </div>
-  
+<ion-footer style="background-color: #FBF9F4;padding: 5px;" class="ion-text-center ion-no-border">
+  <div class="Footer1">
+   <span>©{{getFullYear}} Wattmonk private Limited All Rigths Reserved</span>
+  </div>
+  <div class="Footer2">
+    <span>Privacy Policy | Service Agreement</span>
+  </div>
   </ion-footer>
