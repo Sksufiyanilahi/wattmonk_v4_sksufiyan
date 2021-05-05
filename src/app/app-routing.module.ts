@@ -325,7 +325,11 @@ const routes: Routes = [
   {
     path: 'clienthomepage',
     loadChildren: () => import('./clienthomepage/clienthomepage.module').then( m => m.ClienthomepagePageModule)
+  },  {
+    path: 'settings',
+    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
   },
+
 
 
 

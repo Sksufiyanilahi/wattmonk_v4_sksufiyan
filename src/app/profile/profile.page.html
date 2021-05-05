@@ -8,14 +8,18 @@
                   </ion-button>
                 <!-- </ion-button> -->
             </ion-col>
-            <ion-col size="8"><p style="margin-top: 9px; font-size: 22px;">Profile</p></ion-col>
+            <ion-col size="6"><p style="margin-top: 9px; font-size: 22px;">Profile</p></ion-col>
+            
+            <ion-col size="2">
+                <ion-button fill="clear" (click)="Settings()" [disabled]='enableDisable'>
+                    <!-- <ion-icon class="text-center" class="_color" name="log-out-outline" style="font-size: 26px;width:48px;text-align: center;"></ion-icon> -->
+                    <ion-icon  class="_color" name="settings-outline"></ion-icon>
+                  </ion-button>
+            </ion-col>
             <ion-col size="2">
                 <ion-button fill="clear" (click)="logout()" [disabled]='enableDisable'>
                     <ion-icon class="text-center" class="_color" name="log-out-outline" style="font-size: 26px;width:48px;text-align: center;"></ion-icon>
                   </ion-button>
-                    <!-- <ion-icon class="action-button-color" style="font-size: 26px;"
-                              name="settings-outline"></ion-icon> -->
-                <!-- </ion-button> -->
             </ion-col>
         </ion-row>
     </ion-grid>
