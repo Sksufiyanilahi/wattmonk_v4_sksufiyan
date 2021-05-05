@@ -27,7 +27,7 @@
     "@capacitor/android": "^2.4.6",
     "@capacitor/core": "^2.4.6",
     "@capacitor/ios": "^2.4.6",
-    "@cometchat-pro/cordova-ionic-chat": "^2.3.0",
+    "@cometchat-pro/cordova-ionic-chat": "^2.1.2",
     "@cometchat-pro/ionic-calls": "0.0.9",
     "@ionic-native/android-permissions": "^5.31.1",
     "@ionic-native/background-mode": "^5.31.1",
