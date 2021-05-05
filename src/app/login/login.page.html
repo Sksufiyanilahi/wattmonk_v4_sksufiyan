@@ -1,6 +1,7 @@
 <ion-content>
     <ion-grid class="ion-padding">
-            <ion-row class="ion-margin-top">
+      <app-header></app-header>
+            <!-- <ion-row class="ion-margin-top">
                 <ion-col size="12" class="ion-no-margin ion-no-padding">
                     <span>
                         <img src="assets/images/wattmonk_logo.png">
@@ -9,7 +10,7 @@
                         Wattmonk
                     </span>
                 </ion-col>
-            </ion-row>
+            </ion-row> -->
         <ion-grid class="ion-padding form-background">
             <ion-row class="ion-margin-top">
                 <ion-col size="12" class="ion-no-margin ion-no-padding">
@@ -66,7 +67,7 @@
                                     </div>
                                 </ion-col>
                                 <ion-col size="12" style="left: 13px;" class="forgot-password-text">
-                                  <p style="text-align: end; margin-top: 0px;
+                                  <p style="text-align: end; margin: 0px;
                                   padding-top: 0px; font-size: 0.9em;" class="ion-padding actionlink"
                                       [routerLink]="['/forgot-password']" routerDirection="forward">Forgot password?
                                 </p>
@@ -96,11 +97,5 @@
 
 
 </ion-content>
-<ion-footer style="background-color: #FBF9F4;padding: 5px;" class="ion-text-center ion-no-border">
-  <div class="Footer1">
-   <span>©{{getFullYear}} Wattmonk private Limited All Rigths Reserved</span>
-  </div>
-  <div class="Footer2">
-    <span>Privacy Policy | Service Agreement</span>
-  </div>
-  </ion-footer>
+<app-footer></app-footer>
+
