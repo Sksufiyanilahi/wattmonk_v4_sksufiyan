@@ -30,6 +30,7 @@ export class LoginPage implements OnInit {
   fieldRequired = FIELD_REQUIRED;
   isLoggedInOnce = false;
   netSwitch: any;
+  getFullYear :any=new Date();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,6 +42,7 @@ export class LoginPage implements OnInit {
     private navController: NavController,
     private mixpanelService: MixpanelService) {
     this.isLoggedInOnce = this.storageService.isLoggedInOnce();
+    this.getFullYear = this.getFullYear.getFullYear();
   }
 
   ngOnInit() {
