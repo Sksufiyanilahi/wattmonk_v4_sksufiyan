@@ -82,6 +82,7 @@ export class SurveyDataModel {
   roofmaterial?: any;
   projecttype:string;
   additionalnotes:string;
+  interconnectiondetails: string;
 }
 
 
