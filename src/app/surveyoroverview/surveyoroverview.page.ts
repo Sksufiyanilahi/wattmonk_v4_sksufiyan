@@ -14,6 +14,7 @@ import { User } from '../model/user.model';
 import { UserData } from '../model/userData.model';
 import { COMETCHAT_CONSTANTS } from '../constants';
 import { Appversion } from '../appversion';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-surveyoroverview',
@@ -23,10 +24,10 @@ import { Appversion } from '../appversion';
 export class SurveyoroverviewPage implements OnInit {
   private version = Appversion.version;
   private subscription: Subscription;
-  update_version:string;
-  netSwitch:any;
-  showSearchBar=false;
-  userData:UserData;
+  update_version: string;
+  netSwitch: any;
+  showSearchBar = false;
+  userData: UserData;
   deactivateNetworkSwitch: Subscription;
   unreadCount: Object;
 
@@ -35,13 +36,15 @@ export class SurveyoroverviewPage implements OnInit {
     private storage: StorageService,
     private apiService: ApiService,
     private utilities: UtilitiesService,
-    private platform : Platform,
+    private platform: Platform,
     private iab: InAppBrowser,
-    private network: NetworkdetectService) { }
+    private network: NetworkdetectService,
+    private datastorage: Storage) { }
 
   ngOnInit() {
+    this.fetchsurveyprocessjsons();
     this.userData = this.storage.getUser();
-    this.apiService.version.subscribe(versionInfo=>{
+    this.apiService.version.subscribe(versionInfo => {
       this.update_version = versionInfo;
     })
     this.apiService.emitUserNameAndRole(this.userData);
@@ -49,17 +52,28 @@ export class SurveyoroverviewPage implements OnInit {
     this.updateUserPushToken();
     this.getNotificationCount();
     this.route.navigate(['surveyoroverview/newsurveys']);
-
   }
 
-  searchbar(){
+  searchbar() {
     this.route.navigate(['/search-bar1']);
   }
 
-  getNotificationCount(){
-    this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+  fetchsurveyprocessjsons() {
+    this.datastorage.get('pvsurveyjson').then((data) => {
+      console.log(data);
+      if (!data) {
+        this.apiService.fetchJSON(this.storage.getParentId(), 'pv').subscribe((response: any) => {
+          console.log(response);
+          this.datastorage.set('pvsurveyjson', response);
+        });
+      }
+    });
+  }
 
-     this.unreadCount= count;
+  getNotificationCount() {
+    this.apiService.getCountOfUnreadNotifications().subscribe((count) => {
+
+      this.unreadCount = count;
     });
 
 
@@ -78,16 +92,16 @@ export class SurveyoroverviewPage implements OnInit {
       () => {
 
         // if(this.utilities.currentUserValue != null){
-          // You can now call login function.
-          CometChat.login(userId,  COMETCHAT_CONSTANTS.API_KEY).then(
-            (user) => {
+        // You can now call login function.
+        CometChat.login(userId, COMETCHAT_CONSTANTS.API_KEY).then(
+          (user) => {
 
-            },
-            error => {
+          },
+          error => {
 
-            }
-          );
-      // }
+          }
+        );
+        // }
       },
       error => {
 
@@ -95,36 +109,36 @@ export class SurveyoroverviewPage implements OnInit {
     );
   }
 
-  updateUserPushToken(){
-    this.apiService.pushtoken(this.storage.getUserID(), {"newpushtoken":localStorage.getItem("pushtoken")}).subscribe((data) => {
+  updateUserPushToken() {
+    this.apiService.pushtoken(this.storage.getUserID(), { "newpushtoken": localStorage.getItem("pushtoken") }).subscribe((data) => {
 
 
     }, (error) => {
     });
   }
   ionViewDidEnter() {
-    if(this.version !== this.update_version && this.update_version !==''){
+    if (this.version !== this.update_version && this.update_version !== '') {
 
-      setTimeout(()=>{
+      setTimeout(() => {
 
-        this.utilities.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
-          text:'Ok',
+        this.utilities.showAlertBox('Update App', 'New version of app is available on Play Store. Please update now to get latest features and bug fixes.', [{
+          text: 'Ok',
 
-          handler:()=>{
-            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
-           this.ionViewDidEnter();
+          handler: () => {
+            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk', "_system");
+            this.ionViewDidEnter();
           }
         }]);
-      },2000)
+      }, 2000)
     }
-    this.deactivateNetworkSwitch=   this.network.networkSwitch.subscribe(data=>{
+    this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
 
 
     })
 
-  this.network.networkDisconnect();
-  this.network.networkConnect();
+    this.network.networkDisconnect();
+    this.network.networkConnect();
     // this.subscription = this.platform.backButton.subscribe(() => {
     //   if (this.showSearchBar === true) {
     //     this.showSearchBar = false;
@@ -135,14 +149,14 @@ export class SurveyoroverviewPage implements OnInit {
   }
 
 
-	setzero() {
-		this.unreadCount = 0;
-	}
+  setzero() {
+    this.unreadCount = 0;
+  }
 
   scheduledPage() {
 
-			this.route.navigate(['/schedule/survey']);
-			this.utilities.setDesignDetails(null);
-	}
+    this.route.navigate(['/schedule/survey']);
+    this.utilities.setDesignDetails(null);
+  }
 
 }
