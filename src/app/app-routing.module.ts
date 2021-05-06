@@ -75,7 +75,7 @@ const routes: Routes = [
     {
         path: 'changepassword',
         loadChildren: () => import('./change-password/change-password.module').then(m => m.ChangePasswordPageModule),
-        // canActivate: [AuthGuardService]
+        canActivate: [AuthGuardService]
     },
     {
         path: 'surveyoroverview',

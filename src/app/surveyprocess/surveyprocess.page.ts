@@ -2274,7 +2274,7 @@ export class SurveyprocessPage implements OnInit {
         source: CameraSource.Photos
       });
 
-      this.capturedImage = "data:image/jpeg;base64,"+image.base64String;
+      this.capturedImage = "data:image/jpeg;base64," + image.base64String;
 
       const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       if (!currentIndex.allowmultipleshots) {

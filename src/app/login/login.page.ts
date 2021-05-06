@@ -41,6 +41,7 @@ export class LoginPage implements OnInit {
     private navController: NavController,
     private mixpanelService: MixpanelService) {
     this.isLoggedInOnce = this.storageService.isLoggedInOnce();
+
   }
 
   ngOnInit() {

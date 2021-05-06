@@ -1,87 +1,101 @@
-<ion-content class="ion-padding login-background">
+<ion-content>
     <ion-grid class="ion-padding">
-        <ion-row class="ion-margin-top">
-            <ion-col size="12" class="ion-no-margin ion-no-padding">
-                <span class="title text-bold">
-                    Wattmonk
-                </span>
-            </ion-col>
-        </ion-row>
+      <app-header></app-header>
+            <!-- <ion-row class="ion-margin-top">
+                <ion-col size="12" class="ion-no-margin ion-no-padding">
+                    <span>
+                        <img src="assets/images/wattmonk_logo.png">
+                    </span>
+                    <span class="title text-bold">
+                        Wattmonk
+                    </span>
+                </ion-col>
+            </ion-row> -->
+        <ion-grid class="ion-padding form-background">
+            <ion-row class="ion-margin-top">
+                <ion-col size="12" class="ion-no-margin ion-no-padding">
+                    <span class="subtitle">
+                        Sign in to your account
+                    </span>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-margin-top">
+                <ion-col size="12" class="ion-no-padding">
+                    <form [formGroup]="loginForm" novalidate>
+                        <ion-grid class="ion-no-padding">
+                            <ion-row class="ion-margin-top">
+                                <ion-col size="12">
+                                    <ion-label>Email*</ion-label>
+                                    <ion-item class="box " lines="none"  >
+                                        <ion-input type="email" placeholder="Ex. johndoe@gmail.com"
+                                            formControlName="identifier">
+                                        </ion-input>
+                                    </ion-item>
+
+                                    <div class="error_div">
+                                        <div
+                                            *ngIf="loginForm.get('identifier').hasError('pattern') && loginForm.get('identifier').dirty">
+                                            <span class="error">{{emailError}}</span>
+                                        </div>
+                                        <div
+                                            *ngIf="loginForm.get('identifier').value === '' && loginForm.get('identifier').dirty">
+                                            <span class="error">{{fieldRequired}}</span>
+                                        </div>
+                                    </div>
+                                </ion-col>
+
+                                <ion-col size="12"  class="ion-margin-top">
+                                    <ion-label>Password*</ion-label>
+                                    <ion-item class="box">
+
+                                        <ion-input type="password" class="password_input" [type]="getType()"
+                                            placeholder="" formControlName="password">
+                                        </ion-input>
+                                        <div class="eye_box">
+                                            <ion-icon name="eye" *ngIf="!this.isActiveToggleTextPassword"
+                                                (click)="toggleTextPassword()" slot="end"></ion-icon>
+                                            <ion-icon name="eye-off" *ngIf="this.isActiveToggleTextPassword"
+                                                (click)="toggleTextPassword()" slot="end"></ion-icon>
+                                        </div>
+
+                                    </ion-item>
+
+                                    <div class="error_div">
+                                        <div *ngIf="password.errors?.minlength">
+                                            <span class="error">Invalid password</span>
+                                        </div>
+                                    </div>
+                                </ion-col>
+                                <ion-col size="12" style="left: 13px;" class="forgot-password-text">
+                                  <p style="text-align: end; margin: 0px;
+                                  padding-top: 0px; font-size: 0.9em;" class="ion-padding actionlink"
+                                      [routerLink]="['/forgot-password']" routerDirection="forward">Forgot password?
+                                </p>
+                              </ion-col>
+                                <ion-col>
+                                    <input type="checkbox"><span class="checkBox"> Keep me signed in</span>
+                                </ion-col>
+                                <ion-col size="12" style="margin-top: 5px" class="ion-margin-top">
+                                    <ion-button class="SignInBtn" (click)="login()">
+                                        Sign In
+                                    </ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </form>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-margin-top ion-no-padding">
+                <ion-col class="ion-no-margin ion-no-padding">
+                    <p class="registrationtext">Don't have an account yet? <a class="actionlink"
+                            [routerLink]="['/userregistration']">Sign up</a></p>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
 
     </ion-grid>
 
-    <ion-grid class="ion-padding form-background">
-        <ion-row class="ion-margin-top">
-            <!-- <ion-col size="12" class="ion-no-margin ion-no-padding">
-                <span class="subtitle">
-                    Welcome
-                </span>
-                <span class="subtitle" *ngIf="isLoggedInOnce">
-                    back
-                </span>
-            </ion-col> -->
-            <ion-col size="12" class="ion-no-margin ion-no-padding">
-                <span class="subtitle">
-                    Sign in to your account
-                </span>
-            </ion-col>
-        </ion-row>
-        <ion-row class="ion-margin-top">
-            <ion-col size="12" class="ion-no-padding">
-                <form [formGroup]="loginForm" novalidate>
-                    <ion-grid class="ion-no-padding">
-                        <ion-row class="ion-margin-top">
-                            <ion-col size="12">
-                                <ion-input type="email" placeholder="Your email address" class="form-control" autocomplete="off"
-                                    formControlName="identifier">
-                                </ion-input>
-                                <div class="error_div">
-                                    <div *ngIf="loginForm.get('identifier').hasError('pattern') && loginForm.get('identifier').dirty" >
-                                        <span class="error">{{emailError}}</span>
-                                    </div>
-                                    <div *ngIf="loginForm.get('identifier').value === '' && loginForm.get('identifier').dirty" >
-                                        <span class="error">{{fieldRequired}}</span>
-                                    </div>
-                                </div>
-                            </ion-col>
-
-                            <ion-col size="12" class="ion-margin-top">
-                                <div class="password_box">
-                                    <ion-input type="password" class="password_input" [type]="getType()" placeholder="Your password" formControlName="password">
-                                    </ion-input>
-                                    <div class="eye_box">
-                                        <ion-icon name="eye" *ngIf="!this.isActiveToggleTextPassword" (click)="toggleTextPassword()" slot="end"></ion-icon>
-                                        <ion-icon name="eye-off" *ngIf="this.isActiveToggleTextPassword" (click)="toggleTextPassword()" slot="end"></ion-icon>
-                                    </div>
-                                </div>
-                                <div class="error_div">
-                                    <div *ngIf="password.errors?.minlength">
-                                        <span class="error">Invalid password</span>
-                                    </div>
-                                </div>
-                            </ion-col>
-
-                            <ion-col size="12" class="forgot-password-text">
-                                <p style="text-align: end" class="ion-padding" [routerLink]="['/forgot-password']"
-                                    routerDirection="forward">Forgot your password?</p>
-                            </ion-col>
-
-                            <ion-col size="12" class="ion-margin-top">
-                                <ion-button color="primary" (click)="login()">
-                                    Sign in
-                                   </ion-button>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
-                </form>
-            </ion-col>
-        </ion-row>
-        <ion-row class="ion-margin-top">
-            <ion-col class="ion-no-margin ion-no-padding">
-                <p class="registrationtext">Don't have an account yet? <a class="actionlink" [routerLink]="['/userregistration']">Sign up</a></p>
-            </ion-col>
-            </ion-row>
-          </ion-grid>
-
 
 </ion-content>
+<app-footer></app-footer>
+

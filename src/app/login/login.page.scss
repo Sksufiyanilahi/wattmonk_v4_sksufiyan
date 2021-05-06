@@ -1,5 +1,17 @@
 .title {
-  font-size: 3em;
+  font-size: 1.1em;
+  top: 12%;
+  position: absolute;
+}
+
+ion-content{
+  --ion-background-color:#FBF9F4;
+  padding-bottom: 250px;
+  position: sticky;overflow:none;
+}
+
+img{
+  max-width: 50px;
 }
 
 .text-bold {
@@ -7,20 +19,56 @@
 }
 
 .subtitle {
-  font-size: 1.5rem;
-  color: #434343;
+  font-size: 25px;
+  color: black;
+  font-weight: bold;
+
+}
+
+ion-label{
+  color: #A5A095;
+  font-size: 0.9em;
+}
+
+ion-icon{
+  color: #A5A095;
+}
+
+.checkBox{
+  color: #A5A095 !important;
+
+}
+
+.box {
+  width:auto;
+  margin: 0 auto;
+  border-color: #403E39;
+  border-width: thin;
+  border-style: solid;
+  border-radius: 0.4em;
+}
+
+ion-input{
+    width: 38vh;
+    border: none;
+    -webkit-appearance: none;
+    -ms-progress-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 12px;
+    border-radius: 3px;
 }
 
 ion-content.login-background {
   --background: white;
-  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("/assets/images/login_background.png");
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9));
   background-position: bottom;
   background-repeat: no-repeat;
   background-size: contain;
 }
 
 .form-background {
-  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("/assets/images/wattmonk_logo.png");
+  background-color: #FBF9F4;
   background-position: top;
   background-repeat: no-repeat;
   background-size: contain;
@@ -43,7 +91,6 @@ ion-content.login-background {
 
 .password_box {
   display: flex;
-  border-bottom: 1px solid #ced4da !important;
 
 }
 
@@ -64,7 +111,7 @@ ion-content.login-background {
 }
 
 .actionlink{
-  color: #3a7be0;
+  color: #EDC773;
   text-decoration: none;
 }
 
@@ -73,6 +120,28 @@ ion-content.login-background {
 }
 
 .registrationtext{
-  color: #3c4257;
+  color: #A5A095;
   font-size: 15px;
+}
+
+
+.SignInBtn{
+  --background:#EDC773;
+    color: #434343;
+    width: auto;
+    height: 49px;
+    border-radius: 7px;
+    display: block;
+    font-size: 19px;
+}
+
+.Footer1{
+  padding: 6px;
+  font-size: 0.7em;
+  color: #A5A095;
+}
+
+.Footer2{
+  font-size: 0.7em;
+  color: #A5A095;
 }

@@ -10,10 +10,12 @@ import { CouponOffersModalPageModule } from '../coupon-offers-modal/coupon-offer
 import { PestampdelivermodalPageModule } from '../pestampdelivermodal/pestampdelivermodal.module';
 import { LinkifyPipe } from '../linkify.pipe';
 import { MatStepperModule } from '@angular/material/stepper';
+import { FooterComponent } from '../footer/footer.component';
+import { HeaderComponent } from '../header/header.component';
 
 
 @NgModule({
-  declarations: [LinkifyPipe],
+  declarations: [LinkifyPipe,FooterComponent,HeaderComponent],
   imports: [
     CommonModule,
     EmailModelPageModule,
@@ -33,7 +35,9 @@ import { MatStepperModule } from '@angular/material/stepper';
     ResendpagedialogPageModule,
     CouponOffersModalPageModule,
     LinkifyPipe,
-    MatStepperModule
+    MatStepperModule,
+    FooterComponent,
+    HeaderComponent
   ]
 })
 export class SharedModule { }
