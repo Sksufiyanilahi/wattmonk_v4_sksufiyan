@@ -1,7 +1,21 @@
 <ion-content *ngIf="isdataloaded">
   <ion-grid class="ion-no-padding">
     <ion-row class="imagearea">
-      <img src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].sampleimage}}" height="100%" width="100%"/>
+      <!-- <img src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].sampleimage}}" height="100%" width="100%"/> -->
+      <ion-col>
+        <ion-row class="sampleimagerow ion-justify-content-center">
+          <ion-col size="10">
+            <img src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].sampleimage}}"/>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <!-- <div class="capturedimagesbar">
+        <ion-grid class="ion-no-padding">
+          <ion-row>
+
+          </ion-row>
+        </ion-grid>
+      </div> -->
     </ion-row>
     <ion-row class="captureactionarea">
       <ion-col style="text-align: center;">
