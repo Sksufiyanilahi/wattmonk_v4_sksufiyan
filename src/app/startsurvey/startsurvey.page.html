@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content *ngIf="isdataloaded">
   <ion-grid class="ion-no-padding">
     <ion-row class="imagearea">
 
@@ -6,8 +6,14 @@
     <ion-row class="captureactionarea">
 
     </ion-row>
-    <ion-row class="submenuitemsrow">
-
+    <ion-row class="childbuttons ion-justify-content-center submenubuttonscontainer">
+      <div #submenuscroll class="scroll" scrollX="true">
+        <ng-container
+                *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
+                <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear"
+                [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}</ion-button>
+              </ng-container>
+      </div>
     </ion-row>
     <ion-row class="mainbuttons mainbuttonscontainer">
       <div #mainscroll class="scroll" scrollX="true">

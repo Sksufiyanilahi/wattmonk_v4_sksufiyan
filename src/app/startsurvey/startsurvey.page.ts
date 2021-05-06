@@ -114,6 +114,7 @@ export enum VIEWMODE {
 export class StartsurveyPage implements OnInit {
 
   @ViewChild('mainscroll', { static: false }) mainscroll: any;
+  @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
 
   user: User;
   surveyid: number;
@@ -211,13 +212,14 @@ export class StartsurveyPage implements OnInit {
       if (data) {
       } else {
         this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
-        this.isdataloaded = true;
 
         this.mainmenuitems.forEach(element => {
           if (element.isactive) {
             this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
           }
         });
+
+        this.isdataloaded = true;
       }
     });
   }
@@ -232,6 +234,14 @@ export class StartsurveyPage implements OnInit {
     // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
 
     this.mainscroll.nativeElement.scrollLeft = rect.left;
+  }
+
+  scrollToSubmenuElement(index) {
+    const el = document.getElementById('submenu' + index);
+    const rect = el.getBoundingClientRect();
+    // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
+
+    this.submenuscroll.nativeElement.scrollLeft = rect.left;
   }
 
 }

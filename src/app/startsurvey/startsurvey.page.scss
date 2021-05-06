@@ -2,14 +2,42 @@ ion-content {
     --ion-background-color: #000000;
   }
 .imagearea{
-    height: 70vh;
+    height: 73vh;
 }
 .captureactionarea{
     height: 10vh;
 }
-.submenuitemsrow{
-    height: 10vh;
+.submenubuttonscontainer{
+    width: 100vw;
+    height: 7vh;
+    overflow: hidden;
+    white-space: nowrap;
+  
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  
+    .scroll {
+      overflow: auto;
+      background-color: #212123;
+      border-radius: 10px;
+      margin-bottom: 21px;
+    }
 }
+.childbuttons .normal {
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 100;
+    padding: 0 4px;
+}
+  
+.childbuttons .active {
+    color: #EEBB5C;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0 4px;
+}
+
 .mainbuttonscontainer {
     width: 100vw;
     height: 10vh;
