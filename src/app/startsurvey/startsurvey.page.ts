@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-startsurvey',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StartsurveyPage implements OnInit {
 
-  constructor() { }
+  constructor(private datastorage: Storage) { }
 
   ngOnInit() {
+    this.loadSurveyJSON('pvsurveyjson');
+  }
+
+  loadSurveyJSON(type){
+    this.datastorage.get(type).then((data) => {
+      console.log(data);
+    });
   }
 
 }
