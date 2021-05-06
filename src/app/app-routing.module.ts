@@ -1,9 +1,9 @@
-import {NgModule} from '@angular/core';
-import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
-import {AuthGuardService} from './auth-guard.service';
+import { NgModule } from '@angular/core';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuardService } from './auth-guard.service';
 
 const routes: Routes = [
-    {path: '', redirectTo: 'login', pathMatch: 'full'},
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
     {
         path: 'forgot-password',
         loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule)
@@ -278,54 +278,59 @@ const routes: Routes = [
         path: 'callingscreen',
         loadChildren: () => import('./callingscreen/callingscreen.module').then(m => m.CallingscreenPageModule)
     },
-  {
-    path: 'teamschedule',
-    loadChildren: () => import('./teamschedule/teamschedule.module').then( m => m.TeamschedulePageModule)
-  },
-  {
-    path: 'teamschedule/:id',
-    loadChildren: () => import('./teamschedule/teamschedule.module').then( m => m.TeamschedulePageModule)
-  },
-  {
-    path: 'sales-proposal',
-    loadChildren: () => import('./sales-proposal/sales-proposal.module').then( m => m.SalesProposalPageModule)
-  },
-  {
-    path: 'userregistration',
-    loadChildren: () => import('./userregistration/userregistration.module').then( m => m.UserregistrationPageModule)
-  },
-  {
-    path: 'profile-edit-modal',
-    loadChildren: () => import('./profile-edit-modal/profile-edit-modal.module').then( m => m.ProfileEditModalPageModule)
-  },
-  {
-    path: 'teamdetails/:id',
-    loadChildren: () => import('./teamdetails/teamdetails.module').then( m => m.TeamdetailsPageModule)
-  },
-  {
-    path: 'teamhomepage',
-    loadChildren: () => import('./teamhomepage/teamhomepage.module').then( m => m.TeamhomepagePageModule)
-  },
-  {
-    path: 'groupschedule',
-    loadChildren: () => import('./groupschedule/groupschedule.module').then( m => m.GroupschedulePageModule)
-  },
-  {
-    path: 'groupschedule/:id',
-    loadChildren: () => import('./groupschedule/groupschedule.module').then( m => m.GroupschedulePageModule)
-  },
-  {
-    path: 'groupdetails',
-    loadChildren: () => import('./groupdetails/groupdetails.module').then( m => m.GroupdetailsPageModule)
-  },
-  {
-    path: 'clientschedule',
-    loadChildren: () => import('./clientschedule/clientschedule.module').then( m => m.ClientschedulePageModule)
-  },
-  {
-    path: 'clienthomepage',
-    loadChildren: () => import('./clienthomepage/clienthomepage.module').then( m => m.ClienthomepagePageModule)
-  },
+    {
+        path: 'teamschedule',
+        loadChildren: () => import('./teamschedule/teamschedule.module').then(m => m.TeamschedulePageModule)
+    },
+    {
+        path: 'teamschedule/:id',
+        loadChildren: () => import('./teamschedule/teamschedule.module').then(m => m.TeamschedulePageModule)
+    },
+    {
+        path: 'sales-proposal',
+        loadChildren: () => import('./sales-proposal/sales-proposal.module').then(m => m.SalesProposalPageModule)
+    },
+    {
+        path: 'userregistration',
+        loadChildren: () => import('./userregistration/userregistration.module').then(m => m.UserregistrationPageModule)
+    },
+    {
+        path: 'profile-edit-modal',
+        loadChildren: () => import('./profile-edit-modal/profile-edit-modal.module').then(m => m.ProfileEditModalPageModule)
+    },
+    {
+        path: 'teamdetails/:id',
+        loadChildren: () => import('./teamdetails/teamdetails.module').then(m => m.TeamdetailsPageModule)
+    },
+    {
+        path: 'teamhomepage',
+        loadChildren: () => import('./teamhomepage/teamhomepage.module').then(m => m.TeamhomepagePageModule)
+    },
+    {
+        path: 'groupschedule',
+        loadChildren: () => import('./groupschedule/groupschedule.module').then(m => m.GroupschedulePageModule)
+    },
+    {
+        path: 'groupschedule/:id',
+        loadChildren: () => import('./groupschedule/groupschedule.module').then(m => m.GroupschedulePageModule)
+    },
+    {
+        path: 'groupdetails',
+        loadChildren: () => import('./groupdetails/groupdetails.module').then(m => m.GroupdetailsPageModule)
+    },
+    {
+        path: 'clientschedule',
+        loadChildren: () => import('./clientschedule/clientschedule.module').then(m => m.ClientschedulePageModule)
+    },
+    {
+        path: 'clienthomepage',
+        loadChildren: () => import('./clienthomepage/clienthomepage.module').then(m => m.ClienthomepagePageModule)
+    },
+    {
+        path: 'startsurvey/:id/:type/:city/:state',
+        loadChildren: () => import('./startsurvey/startsurvey.module').then(m => m.StartsurveyPageModule),
+        canActivate: [AuthGuardService]
+    },
 
 
 
@@ -335,7 +340,7 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'legacy'})
+        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'legacy' })
     ],
     exports: [RouterModule]
 })
