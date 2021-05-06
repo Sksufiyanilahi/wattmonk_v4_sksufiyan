@@ -340,7 +340,7 @@ export class SurveyprocessPage implements OnInit {
     } else if (this.platform.is('android')) {
       this.platformname = 'android';
     } else {
-      this.platformname = 'other';
+      this.platformname = 'web';
     }
 
     // this.platform.backButton.subscribeWithPriority(100, () => {

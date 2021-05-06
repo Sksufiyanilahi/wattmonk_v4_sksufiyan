@@ -696,7 +696,7 @@ export class UtilitiesService {
         } else if (this.platform.is('android')) {
             this.platformname = 'android';
         } else {
-            this.platformname = 'other';
+            this.platformname = 'web';
         }
 
         return this.platformname;
