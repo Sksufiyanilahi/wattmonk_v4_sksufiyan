@@ -29,7 +29,7 @@ import { LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
-import { COMETCHAT_CONSTANTS } from 'src/app/contants';
+import { COMETCHAT_CONSTANTS } from 'src/app/constants';
 import { MixpanelService } from 'src/app/utilities/mixpanel.service';
 
 

@@ -12,7 +12,7 @@ import { Platform } from '@ionic/angular';
 import { NetworkdetectService } from '../networkdetect.service';
 import { User } from '../model/user.model';
 import { UserData } from '../model/userData.model';
-import { COMETCHAT_CONSTANTS } from '../contants';
+import { COMETCHAT_CONSTANTS } from '../constants';
 import { Appversion } from '../appversion';
 
 @Component({

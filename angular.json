@@ -58,6 +58,29 @@
                 }
               ]
             },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
             "ci": {
               "progress": false
             }
@@ -71,6 +94,9 @@
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
+            },
+            "test": {
+              "browserTarget": "app:build:test"
             },
             "ci": {
               "progress": false
@@ -133,6 +159,9 @@
             "production": {
               "devServerTarget": "app:serve:production"
             },
+            "test": {
+              "devServerTarget": "app:serve:test"
+            },
             "ci": {
               "devServerTarget": "app:serve:ci"
             }
@@ -146,6 +175,9 @@
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
+            },
+            "test": {
+              "browserTarget": "app:build:test"
             }
           }
         },
@@ -159,6 +191,10 @@
             "production": {
               "cordovaBuildTarget": "app:ionic-cordova-build:production",
               "devServerTarget": "app:serve:production"
+            },
+            "test": {
+              "cordovaBuildTarget": "app:ionic-cordova-build:test",
+              "devServerTarget": "app:serve:test"
             }
           }
         }

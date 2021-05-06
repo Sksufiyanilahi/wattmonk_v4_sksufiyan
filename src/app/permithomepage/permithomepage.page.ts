@@ -27,7 +27,7 @@ import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@io
 import { AddressModel } from '../model/address.model';
 
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { COMETCHAT_CONSTANTS,version } from '../contants';
+import { COMETCHAT_CONSTANTS } from '../constants';
 import { MixpanelService } from '../utilities/mixpanel.service';
 
 
@@ -37,7 +37,6 @@ import { MixpanelService } from '../utilities/mixpanel.service';
   styleUrls: ['./permithomepage.page.scss'],
 })
 export class PermithomepagePage implements OnInit {
-  private version = version;
 
   private subscription: Subscription;
 
@@ -163,21 +162,20 @@ export class PermithomepagePage implements OnInit {
   }
 
   ionViewDidEnter() {
-     ;
-    if(this.version !== this.update_version && this.update_version !==''){
+    // if(this.version !== this.update_version && this.update_version !==''){
 
-      setTimeout(()=>{
+    //   setTimeout(()=>{
 
-        this.utils.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
-          text:'Ok',
+    //     this.utils.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
+    //       text:'Ok',
 
-          handler:()=>{
-            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
-           this.ionViewDidEnter();
-          }
-        }]);
-      },2000)
-    }
+    //       handler:()=>{
+    //         this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
+    //        this.ionViewDidEnter();
+    //       }
+    //     }]);
+    //   },2000)
+    // }
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
 

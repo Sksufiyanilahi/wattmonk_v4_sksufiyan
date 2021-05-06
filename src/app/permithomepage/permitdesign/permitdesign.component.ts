@@ -23,7 +23,7 @@ import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.
 import * as moment from 'moment';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
 
-import { COMETCHAT_CONSTANTS } from '../../contants';
+import { COMETCHAT_CONSTANTS } from '../../constants';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import {File } from '@ionic-native/file/ngx';
 import { LocalNotifications} from '@ionic-native/local-notifications/ngx';

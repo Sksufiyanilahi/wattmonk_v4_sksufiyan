@@ -22,7 +22,7 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { Clients } from '../model/clients.model';
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { User } from '../model/user.model';
-import { ROLES } from '../contants';
+import { ROLES } from '../constants';
 import { HttpClient } from '@angular/common/http';
 
 export interface Country {

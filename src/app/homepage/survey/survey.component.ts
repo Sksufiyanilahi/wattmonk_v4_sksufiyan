@@ -18,7 +18,7 @@ import {DrawerState} from 'ion-bottom-drawer';
 import {AssigneeModel} from '../../model/assignee.model';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
-import {COMETCHAT_CONSTANTS} from '../../contants';
+import {COMETCHAT_CONSTANTS} from '../../constants';
 import {StorageService} from 'src/app/storage.service';
 import {Storage} from '@ionic/storage';
 import {SurveyStorageModel} from 'src/app/model/survey-storage.model';

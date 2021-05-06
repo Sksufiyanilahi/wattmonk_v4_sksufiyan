@@ -14,7 +14,7 @@ import { UtilitiesService } from '../utilities.service';
 import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
-import { COMETCHAT_CONSTANTS } from '../contants';
+import { COMETCHAT_CONSTANTS } from '../constants';
 
 import { Appversion } from '../appversion';
 

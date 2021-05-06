@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
-import { version } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { UtilitiesService } from '../utilities.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -15,8 +14,6 @@ import { StorageService } from '../storage.service';
   styleUrls: ['./peengineer.page.scss'],
 })
 export class PEengineerPage implements OnInit {
-
-  private version = version;
   private subscription: Subscription;
 
   showSearchBar = false;
@@ -56,20 +53,20 @@ export class PEengineerPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    if(this.version !== this.update_version && this.update_version !==''){
+    // if(this.version !== this.update_version && this.update_version !==''){
 
-      setTimeout(()=>{
+    //   setTimeout(()=>{
 
-        this.utils.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
-          text:'Ok',
+    //     this.utils.showAlertBox('Update App','New version of app is available on Play Store. Please update now to get latest features and bug fixes.',[{
+    //       text:'Ok',
 
-          handler:()=>{
-            this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
-           this.ionViewDidEnter();
-          }
-        }]);
-      },2000)
-    }
+    //       handler:()=>{
+    //         this.iab.create('https://play.google.com/store/apps/details?id=com.solar.wattmonk',"_system");
+    //        this.ionViewDidEnter();
+    //       }
+    //     }]);
+    //   },2000)
+    // }
     this.deactivateNetworkSwitch=  this.network.networkSwitch.subscribe(data=>{
       this.netSwitch = data;
       let user= this.storageService.getUser();

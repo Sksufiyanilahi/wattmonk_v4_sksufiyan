@@ -25,7 +25,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { ResendpagedialogPage } from 'src/app/resendpagedialog/resendpagedialog.page';
 import { PestampdelivermodalPage } from 'src/app/pestampdelivermodal/pestampdelivermodal.page';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
-import { COMETCHAT_CONSTANTS } from 'src/app/contants';
+import { COMETCHAT_CONSTANTS } from 'src/app/constants';
 import { MixpanelService } from 'src/app/utilities/mixpanel.service';
 
 @Component({

@@ -3,7 +3,6 @@ import { NavigationExtras, Router } from '@angular/router';
 import { NavController, Platform, PopoverController, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
-import { version } from '../contants';
 import { NetworkdetectService } from '../networkdetect.service';
 import { UtilitiesService } from '../utilities.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -32,7 +31,6 @@ export class ClienthomepagePage implements OnInit {
   length: number;
 
   dataSubscription: Subscription;
-  private version = version;
   showSearchBar = false;
   unreadCount;
   showFooter = true;

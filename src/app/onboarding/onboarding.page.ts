@@ -1,6 +1,6 @@
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ROLES } from '../contants';
+import { ROLES } from '../constants';
 import { User } from '../model/user.model';
 import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_COMPANY_NAME, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_PHONE_NUMBER, INVALID_REGISTRATION_NUMBER } from '../model/constants';
 import { MenuController, NavController } from '@ionic/angular';

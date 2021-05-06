@@ -13,7 +13,7 @@ import { NumberOnlyDirective } from './schedule/number.directive';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { COMETCHAT_CONSTANTS } from './contants.prod';
+import { COMETCHAT_CONSTANTS } from './constants';
 import { PopoverComponentComponent } from './popover-component/popover-component.component';
 
 @Injectable({

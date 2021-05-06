@@ -7,7 +7,7 @@ import { NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ApiService } from '../api.service';
-import { ROLES } from '../contants';
+import { ROLES } from '../constants';
 import {FIELD_REQUIRED, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE} from '../model/constants';
 import { ErrorModel } from '../model/error.model';
 import { LoginModel } from '../model/login.model';

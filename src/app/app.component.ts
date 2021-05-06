@@ -7,7 +7,7 @@ import {UtilitiesService} from './utilities.service';
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
 import {FirebaseX} from '@ionic-native/firebase-x/ngx';
 import {NetworkdetectService} from './networkdetect.service';
-import {COMETCHAT_CONSTANTS} from './contants';
+import {COMETCHAT_CONSTANTS} from './constants';
 import {UserData} from './model/userData.model';
 import {from, Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router';

@@ -13,7 +13,7 @@ import { DrawerState } from 'ion-bottom-drawer';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMET_CHAT_AUTH_KEY } from '../model/constants';
 import { Router } from '@angular/router';
-import { ROLES } from '../contants';
+import { ROLES } from '../constants';
 import { DesignComponent } from '../homepage/design/design.component';
 
 @Component({

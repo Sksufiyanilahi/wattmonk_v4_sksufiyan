@@ -12,7 +12,6 @@ import { Storage } from '@ionic/storage';
 import { DesginDataModel } from 'src/app/model/design.model';
 import * as moment from 'moment';
 import { StorageService } from 'src/app/storage.service';
-import { version } from 'src/app/contants.prod';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { Router,NavigationExtras } from '@angular/router';
@@ -23,7 +22,6 @@ import { Router,NavigationExtras } from '@angular/router';
   styleUrls: ['./newdesign.component.scss'],
 })
 export class NewdesignComponent implements OnInit {
-  private version = version;
   listOfDesignData: DesginDataModel[] = [];
   listOfDesignDataHelper: DesginDataHelper[] = [];
   private designRefreshSubscription: Subscription;

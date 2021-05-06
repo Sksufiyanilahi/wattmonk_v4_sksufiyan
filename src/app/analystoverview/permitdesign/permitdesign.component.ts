@@ -18,7 +18,6 @@ import { StorageService } from 'src/app/storage.service';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { EmailModelPage } from 'src/app/email-model/email-model.page';
-import { version } from 'src/app/contants.prod';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 
@@ -28,7 +27,6 @@ import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
   styleUrls: ['./permitdesign.component.scss'],
 })
 export class PermitdesignComponent implements OnInit {
-  private version = version;
   listOfDesignDataHelper: DesginDataHelper[] = [];
   listOfDesignsData: DesginDataModel[] = [];
   private refreshSubscription: Subscription;

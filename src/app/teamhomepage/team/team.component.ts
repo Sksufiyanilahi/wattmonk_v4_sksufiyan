@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { version } from 'src/app/contants';
 import { User } from 'src/app/model/user.model';
 import { NetworkdetectService } from 'src/app/networkdetect.service';
 import { StorageService } from 'src/app/storage.service';
@@ -23,7 +22,6 @@ import { AssigneeModel } from 'src/app/model/assignee.model';
 })
 export class TeamComponent implements OnInit {
 
-  private version = version;
   drawerState = DrawerState.Bottom;
 
   private TeamRefreshSubscription: Subscription;

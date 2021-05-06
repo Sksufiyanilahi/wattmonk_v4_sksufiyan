@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BaseUrl } from 'src/app/contants'
+import { BaseUrl } from 'src/app/constants'
 
 import {
   HttpClient,

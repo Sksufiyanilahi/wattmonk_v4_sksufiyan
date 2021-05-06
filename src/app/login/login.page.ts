@@ -7,7 +7,7 @@ import {StorageService} from '../storage.service';
 import {ErrorModel} from '../model/error.model';
 import {FIELD_REQUIRED, INVALID_EMAIL_MESSAGE} from '../model/constants';
 import {Router} from '@angular/router';
-import {ROLES} from '../contants';
+import {ROLES} from '../constants';
 import {NetworkdetectService} from '../networkdetect.service';
 import {MixpanelService} from '../utilities/mixpanel.service';
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Mixpanel,MixpanelPeople } from '@ionic-native/mixpanel/ngx';
-import { Mixpanel_CONSTANTS } from '../contants';
+import { Mixpanel_CONSTANTS } from '../constants';
 
 @Injectable({
   providedIn: 'root'

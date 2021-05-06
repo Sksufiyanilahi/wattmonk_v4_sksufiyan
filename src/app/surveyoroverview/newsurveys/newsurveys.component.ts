@@ -13,7 +13,7 @@ import * as moment from 'moment';
 import {ActionSheetController, IonContent, Platform} from '@ionic/angular';
 import {StorageService} from 'src/app/storage.service';
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
-import {COMETCHAT_CONSTANTS} from 'src/app/contants';
+import {COMETCHAT_CONSTANTS} from 'src/app/constants';
 import {NavigationExtras, Router} from '@angular/router';
 
 @Component({

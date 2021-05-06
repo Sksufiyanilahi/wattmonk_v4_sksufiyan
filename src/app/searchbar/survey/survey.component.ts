@@ -13,7 +13,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { UserRoles } from '../../model/constants';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { StorageService } from 'src/app/storage.service';
-import { ROLES } from 'src/app/contants';
+import { ROLES } from 'src/app/constants';
 
 @Component({
   selector: 'app-survey',

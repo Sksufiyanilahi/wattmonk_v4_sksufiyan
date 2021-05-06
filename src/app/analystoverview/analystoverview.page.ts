@@ -12,7 +12,7 @@ import {Subscription} from 'rxjs';
 import {DrawerState} from 'ion-bottom-drawer';
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
 import {Router} from '@angular/router';
-import {COMETCHAT_CONSTANTS, version} from '../contants';
+import {COMETCHAT_CONSTANTS} from '../constants';
 import {NetworkdetectService} from '../networkdetect.service';
 import {InAppBrowser} from '@ionic-native/in-app-browser/ngx';
 import {UserData} from '../model/userData.model';
@@ -24,7 +24,6 @@ import {UserData} from '../model/userData.model';
   styleUrls: ['./analystoverview.page.scss'],
 })
 export class AnalystoverviewPage implements OnInit, OnDestroy {
-  private version = version;
   @Output() ionInput = new EventEmitter();
 
 

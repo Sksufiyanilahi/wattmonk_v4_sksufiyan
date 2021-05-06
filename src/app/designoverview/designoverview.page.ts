@@ -14,7 +14,7 @@ import { UtilitiesService } from '../utilities.service';
 import { NetworkdetectService } from '../networkdetect.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { UserData } from '../model/userData.model';
-import { COMETCHAT_CONSTANTS,version } from '../contants.prod';
+import { COMETCHAT_CONSTANTS } from '../constants';
 
 import { Appversion } from '../appversion';
 
@@ -25,7 +25,6 @@ import { Appversion } from '../appversion';
   styleUrls: ['./designoverview.page.scss'],
 })
 export class DesignoverviewPage implements OnInit {
-  private version = version;
   private subscription: Subscription;
   update_version: string;
   netSwitch:any;

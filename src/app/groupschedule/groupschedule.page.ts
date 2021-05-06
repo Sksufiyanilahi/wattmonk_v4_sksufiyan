@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent, INVALID_MODULE_AND_INVERTER, INVALID_COMPANY_NAME } from '../model/constants';
-import { ROLES } from '../contants';
+import { ROLES } from '../constants';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { ErrorModel } from '../model/error.model';

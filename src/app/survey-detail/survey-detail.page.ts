@@ -13,7 +13,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ErrorModel } from '../model/error.model';
 import { Subscription } from 'rxjs';
 import { LaunchNavigatorOptions, LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
-import { ROLES } from '../contants';
+import { ROLES } from '../constants';
 import { ModalPageComponent } from './modal-page/modal-page.component';
 import { User } from '../model/user.model';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
