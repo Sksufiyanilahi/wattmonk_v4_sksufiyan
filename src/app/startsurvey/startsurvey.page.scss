@@ -1,0 +1,62 @@
+ion-content {
+    --ion-background-color: #000000;
+  }
+.imagearea{
+    height: 70vh;
+}
+.captureactionarea{
+    height: 10vh;
+}
+.submenuitemsrow{
+    height: 10vh;
+}
+.mainbuttonscontainer {
+    width: 100vw;
+    height: 10vh;
+    overflow: hidden;
+    white-space: nowrap;
+  
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  
+    .scroll {
+      overflow: auto;
+      background-color: #ffffff;
+      width: 100%;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+    }
+}
+.mainbuttons {
+    margin-left: 0px;
+    margin-right: 0px;
+
+    .button {
+        border: none;
+        height: auto;
+        width: 116px;
+        padding: 16px 16px;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+      .active{
+        color: #EEBB5C;
+        font-weight: 600;
+      }
+      .normal{
+        color: #000000;
+        font-weight: 100;
+      }
+      .button img {
+        width: 24px;
+        height: 24px;
+        display: block;
+        margin: 0 auto 8px;
+      }
+      .btn-link {
+        display: inline-block;
+        text-align: center;
+        text-decoration: none;
+      }
+  }

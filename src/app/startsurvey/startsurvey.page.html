@@ -1,0 +1,25 @@
+<ion-content>
+  <ion-grid class="ion-no-padding">
+    <ion-row class="imagearea">
+
+    </ion-row>
+    <ion-row class="captureactionarea">
+
+    </ion-row>
+    <ion-row class="submenuitemsrow">
+
+    </ion-row>
+    <ion-row class="mainbuttons mainbuttonscontainer">
+      <div #mainscroll class="scroll" scrollX="true">
+        <ng-container *ngFor="let button of mainmenuitems; let i = index">
+          <a href ="#" id="mainmenu{{i}}" class="btn-link" *ngIf="button.isvisible">
+            <div [ngClass]="[ button.isactive ? 'button active' : 'button normal']">
+               <img src="/assets/images/notification.svg" alt="img" >
+               <span>{{button.name}}</span>
+            </div>
+         </a>
+        </ng-container>
+      </div>
+    </ion-row>
+  </ion-grid>
+</ion-content>

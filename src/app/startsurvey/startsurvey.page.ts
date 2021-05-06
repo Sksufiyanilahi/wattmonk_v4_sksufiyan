@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
+import { SurveyStorageModel } from '../model/survey-storage.model';
+import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 
 export interface MAINMENU {
@@ -111,7 +113,9 @@ export enum VIEWMODE {
 })
 export class StartsurveyPage implements OnInit {
 
-  user: any;
+  @ViewChild('mainscroll', { static: false }) mainscroll: any;
+
+  user: User;
   surveyid: number;
   surveytype: string;
   surveycity: string;
@@ -120,6 +124,12 @@ export class StartsurveyPage implements OnInit {
   activeFormElementsArray;
   activeForm: FormGroup;
   activeFormKeysMap;
+
+  isdataloaded = false;
+  mainmenuitems: MAINMENU[];
+  selectedmainmenuindex = 0;
+  selectedsubmenuindex = 0;
+  selectedshotindex = 0;
 
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
@@ -138,7 +148,7 @@ export class StartsurveyPage implements OnInit {
   loadSurveyJSON(type){
     this.datastorage.get(type).then((data) => {
       console.log(data);
-      this.createSurveyForm(data);
+      this.createSurveyForm(data[0]);
     });
   }
 
@@ -191,6 +201,37 @@ export class StartsurveyPage implements OnInit {
       formData['shotname'] = new FormControl('', []);
       this.activeFormElementsArray.push('shotname');
       this.activeForm = new FormGroup(formData);
+
+      //Fillin data from storage if data exists
+      this.restoreSurveyStoredData(surveydata);
+  }
+
+  restoreSurveyStoredData(surveydata) {
+    this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
+      if (data) {
+      } else {
+        this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
+        this.isdataloaded = true;
+
+        this.mainmenuitems.forEach(element => {
+          if (element.isactive) {
+            this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+          }
+        });
+      }
+    });
+  }
+
+  //------------------------------------------------------------------------------------------------------------------
+  //Scrolling Methods
+  //------------------------------------------------------------------------------------------------------------------
+
+  scrollToMainmenuElement(index) {
+    const el = document.getElementById('mainmenu' + index);
+    const rect = el.getBoundingClientRect();
+    // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
+
+    this.mainscroll.nativeElement.scrollLeft = rect.left;
   }
 
 }
