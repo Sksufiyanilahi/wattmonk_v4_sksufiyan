@@ -132,7 +132,8 @@ export class OnboardingPage implements OnInit {
       lastname: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       workemail: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       userrole: new FormControl(''),
-      peengineertype: new FormControl('')
+      peengineertype: new FormControl(''),
+      usertype: new FormControl('company')
     })
     this.router.events.subscribe(e => {
       if (e instanceof ActivationStart && e.snapshot.outlet === "onboarding")
@@ -174,7 +175,6 @@ export class OnboardingPage implements OnInit {
   onboardingData() {
 
     this.apiService.getUserData(this.userId).subscribe((res: any) => {
-
       //this.checkboxValue = res.companyaddresssameasbilling;
       if (res.usertype == 'company') {
         this.isCompany = true;
