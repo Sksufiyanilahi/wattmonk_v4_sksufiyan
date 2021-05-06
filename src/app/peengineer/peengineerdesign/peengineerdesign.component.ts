@@ -745,7 +745,8 @@ designDownload(designData,event){
 
   }
 
-  async openreviewPassed(id,designData){
+  async openreviewPassed(id,designData,event){
+    event.stopPropagation()
     this.mixpanelService.track("DELIVER_PESTAMP_PAGE_OPEN", {
     });
     const modal = await this.modalController.create({
