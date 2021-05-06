@@ -106,6 +106,7 @@ export class UnassignedPage implements OnInit {
 
   ) {
     this.userData = this.storageService.getUser();
+    console.log(this.userData)
     if(this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin'){
       this.segments= 'status=created';
     }else{
@@ -329,6 +330,7 @@ this.network.networkConnect();
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
           });
+          console.log(this.listOfDesignsHelper)
           this.cdr.detectChanges();
   }
 

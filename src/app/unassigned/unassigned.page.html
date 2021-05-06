@@ -43,7 +43,7 @@
                             class="imagebutton" size="small"><img src="/assets/images/activitylist.png"
                                 style="height: 20px;" /></span>
                         <span class="chipdetail" style="background-color: #1c12a7;float:right;margin-right: 1rem;"
-                            *ngIf="designData.company !== null || designData.company!== ''">{{designData.company}}</span>
+                            *ngIf="(userData.role.type=='wattmonkadmins' || userData.role.type=='superadmin' || (userData.role.type == 'bd' && userData.parent.id==232)) && designData.createdby.company !== null">{{designData?.createdby.company}}</span>
                     </p>
 
                     <p style="margin:0px">
