@@ -1,11 +1,31 @@
 ion-content {
-    --ion-background-color: #000000;
+    --ion-background-color: #18191D;
   }
 .imagearea{
-    height: 73vh;
+    height: 76vh;
 }
 .captureactionarea{
-    height: 10vh;
+    height: 7vh;
+    .button {
+        border: none;
+        height: auto;
+        padding: 8px;
+        box-sizing: border-box;
+        font-size: 12px;
+        color: #FFFFFF;
+        font-weight: 100;
+      }
+      .button img {
+        width: 20px;
+        height: 20px;
+        display: block;
+        margin: 0 auto 8px;
+      }
+      .btn-link {
+        display: inline-block;
+        text-align: center;
+        text-decoration: none;
+      }
 }
 .submenubuttonscontainer{
     width: 100vw;
