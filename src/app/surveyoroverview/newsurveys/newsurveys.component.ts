@@ -308,7 +308,7 @@ export class NewsurveysComponent implements OnInit {
 
   resumeSurvey(surveyData, event) {
     event.stopPropagation();
-    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
   }
 
   gotoActivity(surveyData, event) {
