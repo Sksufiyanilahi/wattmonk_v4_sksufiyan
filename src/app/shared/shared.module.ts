@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmailModelPageModule } from '../email-model/email-model.module';
 import { EmailModelPage } from '../email-model/email-model.page';
@@ -12,6 +12,7 @@ import { LinkifyPipe } from '../linkify.pipe';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
+import { IonicModule } from '@ionic/angular';
 
 
 @NgModule({
@@ -22,10 +23,13 @@ import { HeaderComponent } from '../header/header.component';
     CouponOffersModalPageModule,
     DeclinepagePageModule,
     MatStepperModule,
-
+    IonicModule,
     StatisticsDetailsPageModule,
     ResendpagedialogPageModule,
     PestampdelivermodalPageModule,
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
   ],
   exports:[
     EmailModelPageModule,

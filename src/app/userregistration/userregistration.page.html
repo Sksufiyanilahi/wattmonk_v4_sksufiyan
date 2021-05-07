@@ -11,13 +11,13 @@
 
     </ion-grid> -->
 
-    
+
         <!-- <ion-row class="ion-margin-top"> -->
             <!-- <ion-col size="12" class="ion-no-margin ion-no-padding">
               <span class="subtitle">
                   Welcome
               </span>
-              
+
           </ion-col> -->
             <!-- <ion-col size="12" class="ion-no-margin ion-no-padding">
                 <span class="subtitle">
@@ -25,7 +25,7 @@
                 </span>
             </ion-col>
         </ion-row> -->
-        
+
          <div class="ion-text-start">
             <p class="account">Create Your Account</p>
           </div>
@@ -43,7 +43,7 @@
         <span class="error">{{fieldRequired}}</span>
     </div>
 </div>
-          
+
         <ion-label  position="floating" class="label">Last Name*</ion-label>
         <ion-input    type="text" placeholder="eg.Doe" class="email-input" formControlName="lastname"></ion-input>
         <div>
@@ -55,7 +55,7 @@
             *ngIf="userregistrationForm.get('lastname').value === '' && userregistrationForm.get('lastname').dirty">
             <span class="error">{{fieldRequired}}</span>
         </div>
-          </div> 
+          </div>
         <ion-label class="label">Work Email*</ion-label>
         <ion-input   type="text" placeholder="eg.Johndoe@mail.com" class="email-input" formControlName="email"></ion-input>
         <div>
@@ -69,8 +69,8 @@
                                     </div>
         </div>
         <ion-label class="label">Country*</ion-label>
-      
-          
+
+
           <!-- <ion-select class="countrylbl" >
             <ion-select-option   *ngFor="let country of filteredCountries" [value]="country.country">{{country.name}}</ion-select-option>
           </ion-select> -->
@@ -80,7 +80,7 @@
           height: 3rem;
           margin-bottom: 1rem;
           width: 90%;
-          background-color: white;" > 
+          background-color: white;" >
             <!-- <mat-label></mat-label> -->
            <input type="text"   matInput style="padding-left: 1rem;"
                 [matAutocomplete]="auto" autocomplete="off" formControlName="country" >
@@ -92,7 +92,7 @@
                     {{country.country}}</mat-option>
             </mat-autocomplete>
         </mat-form-field>
-   
+
         <div>
             <div class="error-box"
             *ngIf="userregistrationForm.get('country').value === '' && userregistrationForm.get('country').dirty">
@@ -103,16 +103,16 @@
         <ion-row>
             <ion-col size="1" style="margin-left: 5%;">
               <ion-checkbox mode="md"
-                style="margin-top: 10px; float: left" 
+                style="margin-top: 10px; float: left"
                  (ionChange)="change($event)"
               ></ion-checkbox>
             </ion-col>
             <ion-col size="10">
-              <p style="margin-top: 10px;">I agree to Platform's <span style="color: #FCE883;">Terms</span> & <span style="color: #FCE883;">Privacy Policy</span></p>
+              <p style="margin-top: 10px;">I agree to Platform's <span style="color: #EDC773;">Terms</span> & <span style="color: #EDC773;">Privacy Policy</span></p>
             </ion-col>
           </ion-row>
             <button class="registerbtn1" type="submit"  expand="block"  (click)="registerUser()" >Sign up</button>
-            <h5 style="text-align:center; margin-top: -24px; color: gray;margin-top: 0px;">Already Registered?<span style="color: #FCE883;margin-top: 0px;" (click)="gotoSignIn()"> Sign in </span></h5>
+            <h5 style="text-align:center; margin-top: -24px; color: gray;margin-top: 0px;">Already Registered?<span style="color: #EDC773;margin-top: 0px;" (click)="gotoSignIn()"> Sign in </span></h5>
   </form>
        <!-- <ion-row class="ion-margin-top">
             <ion-col size="12" class="ion-no-padding">
@@ -175,15 +175,15 @@
                             </ion-col> -->
 
                             <!-- <ion-col size="12" class="ion-margin-top">
-                         
-                            
+
+
                             <ion-select style="padding-left:9px" class="form_input select_div"
                                         ok-text="" cancel-text=""
                                         formControlName="country" interface="popover" placeholder="Country*" >
                                 <ion-select-option *ngFor="let country of countries" [value]="country.country">{{country.callingcode}}{{country.country}}</ion-select-option>
-                               
+
                             </ion-select>
-                          
+
                     </ion-col> -->
                             <!-- <ion-col size="12" class="ion-margin-top">
                                 <ion-item class="ion-no-padding" lines="none">
@@ -245,7 +245,7 @@
                 </span>
             </ion-col> -->
         <!-- </ion-row> -->
-   
+
 
 </ion-content>
 <app-footer></app-footer>

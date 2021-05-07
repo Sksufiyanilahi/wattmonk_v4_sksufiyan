@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Stripe } from '@ionic-native/stripe/ngx';
+// import { Stripe } from '@ionic-native/stripe/ngx';
 
 @Component({
   selector: 'app-stripe',
@@ -14,13 +14,13 @@ export class StripePage implements OnInit {
     cvc:''
   }
 
-  constructor(private stripe: Stripe) { }
+  constructor() { }
 
   ngOnInit() {
   }
 
   stripepayment(){
-    this.stripe.setPublishableKey("pk_test_51HUoT7EmzMn44Mbmtqd3Sfx1knRySaWxgTuOAbVlsGFmS0zVpfLnkpzDL32sZcV116MCpI3vKA2E3Zw9WEopsnFu00pyCDs0sq");
+    // this.stripe.setPublishableKey("pk_test_51HUoT7EmzMn44Mbmtqd3Sfx1knRySaWxgTuOAbVlsGFmS0zVpfLnkpzDL32sZcV116MCpI3vKA2E3Zw9WEopsnFu00pyCDs0sq");
 
         let card = {
         number: '4242424242424242',
@@ -29,9 +29,9 @@ export class StripePage implements OnInit {
         cvc: '220'
         }
 
-this.stripe.createCardToken(this.card)
-   .then(token => console.log(token.id))
-   .catch(error => console.error(error));
+// this.stripe.createCardToken(this.card)
+//    .then(token => console.log(token.id))
+//    .catch(error => console.error(error));
   }
 
 }
