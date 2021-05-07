@@ -1,5 +1,6 @@
-<ion-content class="ion-padding login-background">
-    <ion-grid class="ion-padding">
+<ion-content >
+    <app-header></app-header>
+    <!-- <ion-grid class="ion-padding">
         <ion-row class="ion-margin-top">
             <ion-col size="12" class="ion-no-margin ion-no-padding">
                 <span class="title text-bold">
@@ -8,23 +9,112 @@
             </ion-col>
         </ion-row>
 
-    </ion-grid>
+    </ion-grid> -->
 
-    <ion-grid class="ion-padding form-background">
-        <ion-row class="ion-margin-top">
+
+        <!-- <ion-row class="ion-margin-top"> -->
             <!-- <ion-col size="12" class="ion-no-margin ion-no-padding">
               <span class="subtitle">
                   Welcome
               </span>
-              
+
           </ion-col> -->
-            <ion-col size="12" class="ion-no-margin ion-no-padding">
+            <!-- <ion-col size="12" class="ion-no-margin ion-no-padding">
                 <span class="subtitle">
                     Sign up to continue
                 </span>
             </ion-col>
-        </ion-row>
-        <ion-row class="ion-margin-top">
+        </ion-row> -->
+
+         <div class="ion-text-start">
+            <p class="account">Create Your Account</p>
+          </div>
+
+          <form [formGroup]="userregistrationForm" novalidate>
+          <ion-label  position="floating" class="label">First Name*</ion-label>
+          <ion-input  type="text" placeholder="eg.john" required class="email-input"  formControlName="firstname" ></ion-input>
+         <div>
+            <div class="error-box"
+            *ngIf="userregistrationForm.get('firstname').hasError('pattern') && userregistrationForm.get('firstname').dirty">
+            <span class="error">{{firstNameError}}</span>
+        </div>
+        <div class="error-box"
+        *ngIf="userregistrationForm.get('firstname').value === '' && userregistrationForm.get('firstname').dirty">
+        <span class="error">{{fieldRequired}}</span>
+    </div>
+</div>
+
+        <ion-label  position="floating" class="label">Last Name*</ion-label>
+        <ion-input    type="text" placeholder="eg.Doe" class="email-input" formControlName="lastname"></ion-input>
+        <div>
+            <div class="error-box"
+            *ngIf="userregistrationForm.get('lastname').hasError('pattern') && userregistrationForm.get('lastname').dirty">
+            <span class="error">{{lastNameError}}</span>
+        </div>
+        <div class="error-box"
+            *ngIf="userregistrationForm.get('lastname').value === '' && userregistrationForm.get('lastname').dirty">
+            <span class="error">{{fieldRequired}}</span>
+        </div>
+          </div>
+        <ion-label class="label">Work Email*</ion-label>
+        <ion-input   type="text" placeholder="eg.Johndoe@mail.com" class="email-input" formControlName="email"></ion-input>
+        <div>
+            <div class="error-box"
+                                        *ngIf="userregistrationForm.get('email').hasError('pattern') && userregistrationForm.get('email').dirty">
+                                        <span class="error">{{emailError}}</span>
+                                                                        </div>
+                                    <div class="error-box"
+                                        *ngIf="userregistrationForm.get('email').value === '' && userregistrationForm.get('email').dirty">
+                                        <span class="error">{{fieldRequired}}</span>
+                                    </div>
+        </div>
+        <ion-label class="label">Country*</ion-label>
+
+
+          <!-- <ion-select class="countrylbl" >
+            <ion-select-option   *ngFor="let country of filteredCountries" [value]="country.country">{{country.name}}</ion-select-option>
+          </ion-select> -->
+          <mat-form-field style="  width: 100%; height: 45px; border: 0.5px solid #887b7b; border-radius: 4px; outline: none; box-sizing: border-box;
+          transition: 0.3s;
+          margin-left: 5%;
+          height: 3rem;
+          margin-bottom: 1rem;
+          width: 90%;
+          background-color: white;" >
+            <!-- <mat-label></mat-label> -->
+           <input type="text"   matInput style="padding-left: 1rem;"
+                [matAutocomplete]="auto" autocomplete="off" formControlName="country" >
+
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let country of filteredCountries | async"
+                    [value]="country.country"
+                    (onSelectionChange)="setSelectedCountry(country)" class="font">
+                    {{country.country}}</mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <div>
+            <div class="error-box"
+            *ngIf="userregistrationForm.get('country').value === '' && userregistrationForm.get('country').dirty">
+            <span class="error">{{fieldRequired}}</span>
+        </div>
+        </div>
+
+        <ion-row>
+            <ion-col size="1" style="margin-left: 5%;">
+              <ion-checkbox mode="md"
+                style="margin-top: 10px; float: left"
+                 (ionChange)="change($event)"
+              ></ion-checkbox>
+            </ion-col>
+            <ion-col size="10">
+              <p style="margin-top: 10px;">I agree to Platform's <span style="color: #EDC773;">Terms</span> & <span style="color: #EDC773;">Privacy Policy</span></p>
+            </ion-col>
+          </ion-row>
+            <button class="registerbtn1" type="submit"  expand="block"  (click)="registerUser()" >Sign up</button>
+            <h5 style="text-align:center; margin-top: -24px; color: gray;margin-top: 0px;">Already Registered?<span style="color: #EDC773;margin-top: 0px;" (click)="gotoSignIn()"> Sign in </span></h5>
+  </form>
+       <!-- <ion-row class="ion-margin-top">
             <ion-col size="12" class="ion-no-padding">
                 <form [formGroup]="userregistrationForm" novalidate>
                     <ion-grid class="ion-no-padding">
@@ -82,24 +172,24 @@
                                         <span class="error">{{fieldRequired}}</span>
                                     </div>
                                 </div>
-                            </ion-col>
+                            </ion-col> -->
 
                             <!-- <ion-col size="12" class="ion-margin-top">
-                         
-                            
+
+
                             <ion-select style="padding-left:9px" class="form_input select_div"
                                         ok-text="" cancel-text=""
                                         formControlName="country" interface="popover" placeholder="Country*" >
                                 <ion-select-option *ngFor="let country of countries" [value]="country.country">{{country.callingcode}}{{country.country}}</ion-select-option>
-                               
+
                             </ion-select>
-                          
+
                     </ion-col> -->
-                            <ion-col size="12" class="ion-margin-top">
+                            <!-- <ion-col size="12" class="ion-margin-top">
                                 <ion-item class="ion-no-padding" lines="none">
-                                    <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
+                                    <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding"> -->
                                         <!-- <mat-label></mat-label> -->
-                                        <input type="text" placeholder="Country*" class="form_input font-size" matInput
+                                        <!-- <input type="text" placeholder="Country*" class="form_input font-size" matInput
                                             [matAutocomplete]="auto" autocomplete="off" formControlName="country">
 
                                         <mat-autocomplete #auto="matAutocomplete">
@@ -140,11 +230,11 @@
                     </ion-grid>
                 </form>
             </ion-col>
-        </ion-row>
-        <ion-row class="ion-margin-top">
+        </ion-row> -->
+        <!-- <ion-row class="ion-margin-top">
             <ion-col class="ion-no-margin ion-no-padding">
                 <p class="registrationtext">Already a member? <a class="actionlink" (click)="gotoSignIn()" routerDirection="forward">Sign in</a></p>
-            </ion-col>
+            </ion-col> -->
             <!-- <ion-col size="12" class="ion-no-margin ion-no-padding">
                 <span style="font-size: 1.0em; color: black; font-weight: bold;">
                     Already a member?
@@ -154,7 +244,8 @@
                     &nbsp; Sign in
                 </span>
             </ion-col> -->
-        </ion-row>
-    </ion-grid>
+        <!-- </ion-row> -->
+
 
 </ion-content>
+<app-footer></app-footer>

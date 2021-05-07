@@ -10,6 +10,7 @@ import { UserregistrationPage } from './userregistration.page';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    SharedModule
   ],
   declarations: [UserregistrationPage]
 })
