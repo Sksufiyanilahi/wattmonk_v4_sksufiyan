@@ -8,14 +8,16 @@
             <img src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].sampleimage}}"/>
           </ion-col>
         </ion-row>
+        <!-- *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0" -->
+        <ion-row class="capturedshotsbar">
+          <div class="scroll" scrollX="true">
+            <ion-button color="dark" class="cameraimagesbutton"
+                    *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
+          <img [src]="shot.shotimage"/>
+        </ion-button>
+          </div>
+        </ion-row>
       </ion-col>
-      <!-- <div class="capturedimagesbar">
-        <ion-grid class="ion-no-padding">
-          <ion-row>
-
-          </ion-row>
-        </ion-grid>
-      </div> -->
     </ion-row>
     <ion-row class="captureactionarea">
       <ion-col style="text-align: center;">
