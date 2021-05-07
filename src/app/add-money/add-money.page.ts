@@ -13,10 +13,10 @@ import {Observable} from 'rxjs';
 import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
 import {MixpanelService} from '../utilities/mixpanel.service';
-import {loadStripe} from '@stripe/stripe-js';
+// import {loadStripe} from '@stripe/stripe-js';
 import {ICreateOrderRequest, IPayPalConfig} from 'ngx-paypal';
 
-declare var Stripe;
+// declare var Stripe;
 
 
 @Component({
@@ -34,7 +34,7 @@ export class AddMoneyPage implements OnInit {
   card: any
   token: any;
 
-  stripe = Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
+  // stripe = Stripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
   // stripe= Stripe('sk_test_51HQ4SfBlSfQmxsSflRlcq7ntq1xMbhlBVW03jzMCd1WiOZMqjglO0jO2FV6IHDSiFfDnesYt2feU7w4uEe34PfPR00iLg5qpLm'); // stripe= Stripe('sk_test_51HQ4SfBlSfQmxsSflRlcq7ntq1xMbhlBVW03jzMCd1WiOZMqjglO0jO2FV6IHDSiFfDnesYt2feU7w4uEe34PfPR00iLg5qpLm');
   userData: User;
   mode: any;
@@ -62,7 +62,7 @@ export class AddMoneyPage implements OnInit {
   //newprelimsRef:any;
   newprelimscount = 0;
   createpayment: any;
-  stripePromise = loadStripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
+  // stripePromise = loadStripe('pk_test_51HQ4cGCd1aF9ZjVZMxEWHOTjNhLTRlhxM4SFLM0lvC0fWQjJ6sxF6LLCWVWUw1ElECj2tZQKHuKkLoYysfhsn6LL00IC6pVMat');
 
   //Pestamp count
   newpestamp: Observable<any>;
@@ -242,15 +242,15 @@ export class AddMoneyPage implements OnInit {
       userid: this.userData.id,
       amount: this.amountForm.get('amount').value
     }
-    const stripe = await this.stripePromise;
-    this.apiService.getStripeSessionID(inputdata).subscribe(
-      response => {
-        return stripe.redirectToCheckout({sessionId: response.id});
-      },
-      error => {
-        this.utils.errorSnackBar("error");
-      }
-    );
+    // const stripe = await this.stripePromise;
+    // this.apiService.getStripeSessionID(inputdata).subscribe(
+    //   response => {
+    //     return stripe.redirectToCheckout({sessionId: response.id});
+    //   },
+    //   error => {
+    //     this.utils.errorSnackBar("error");
+    //   }
+    // );
   }
 
 //  setupStripe() {

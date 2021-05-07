@@ -30,6 +30,7 @@ export class LoginPage implements OnInit {
   fieldRequired = FIELD_REQUIRED;
   isLoggedInOnce = false;
   netSwitch: any;
+  buttonTitle ='Sign In'
 
   constructor(
     private formBuilder: FormBuilder,
@@ -86,14 +87,14 @@ export class LoginPage implements OnInit {
                 this.storageService.setUserName(this.loginForm.get('identifier').value);
                 this.storageService.setPassword(this.loginForm.get('password').value);
 
-                // this.storageService.setUser(response.user, response.jwt);
+                this.storageService.setUser(response.user, response.jwt);
 
                 if (response.user.isdefaultpassword) {
                   this.storageService.setJWTToken(response.jwt);
                   this.apiService.refreshHeader();
                   this.navController.navigateRoot(['changepassword'])
                 } else {
-                  this.storageService.setUser(response.user, response.jwt);
+                  // this.storageService.setUser(response.user, response.jwt);
                   this.apiService.refreshHeader();
                   // this.navController.navigateRoot(['homepage']);
                   this.navController.navigateRoot(['surveyoroverview']);

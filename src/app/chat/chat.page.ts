@@ -28,6 +28,7 @@ export class ChatPage implements OnInit {
 	data:any;
 	name:any;
 	guid:any;
+	sendbuttonactive:boolean=true
 
 	@ViewChild('content', { static: false })
 	content: any;
@@ -238,8 +239,9 @@ export class ChatPage implements OnInit {
 	}
 
 	sendMessage() {
-
-		if (this.messageText !== '') {
+      
+		if (this.messageText !== '' && this.sendbuttonactive) {
+			this.sendbuttonactive=false
 			const messageType = CometChat.MESSAGE_TYPE.TEXT;
 			const receiverType = CometChat.RECEIVER_TYPE.GROUP;
 			//  ;
@@ -251,6 +253,7 @@ export class ChatPage implements OnInit {
 					// Text Message Sent Successfully
 					this.groupMessages.push(message);
 					this.messageText = '';
+					this.sendbuttonactive=true
 					this.content.scrollToBottom(1500);
 					this.moveToBottom();
 				},
