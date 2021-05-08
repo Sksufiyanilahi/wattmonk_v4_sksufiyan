@@ -38,7 +38,7 @@
       </ion-col>
     </ion-row>
     <div>
-     
+
       <ion-slides pager="false" [options]="slideOpts">
         <ion-slide>
           <ion-card class="slide-class">
@@ -86,13 +86,13 @@
           <ion-card class="ion-no-padding custom-card ion-no-margin" (click)="teamdetail(designData,$event)">
       <ion-item-sliding>
         <ion-item lines="none">
-          
+
               <ion-row>
                 <ion-col size="auto">
               <ion-card *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
               class="profile_img">{{designData?.firstname.slice(0, 1).toUpperCase() + designData?.lastname.slice(0, 1).toUpperCase()}}</ion-card>
               <div *ngIf="!isEmptyObject(designData?.logo) && designData?.logo !==null">
-                
+
                      <img [src]="designData?.logo?.url"
                      class="profile_img"/>
               </div>
@@ -105,7 +105,7 @@
     </ion-col>
             </ion-row>
         </ion-item>
-        
+
       <ion-item-options side="end">
         <ion-item-option color="success" expandable>
           <ion-icon name="pencil"></ion-icon>
@@ -123,7 +123,7 @@
     </ion-grid>
 </ion-content>
  -->
-  <!-- <ion-tabs style="margin-top: 52px;overflow: hidden;">
+<!-- <ion-tabs style="margin-top: 52px;overflow: hidden;">
     <ion-tab-bar slot="top" class="ion-no-border">
       <ion-tab-button tab="team">
         <ion-label>Team</ion-label>
@@ -134,42 +134,63 @@
     </ion-tab-bar>
   </ion-tabs> -->
 
-  <ion-header class="ion-no-border" style="position: initial;">
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button defaultHref="logout"></ion-back-button>
-      </ion-buttons>
-      <ion-title style='float: left;'>
-        <span style="font-size: x-large;
-        font-weight: bold;
-        color: black;">
-        Teams</span>
-      <p style="margin: 0px;font-size: 13px;">company name</p>
-      </ion-title>
-  
-      <ion-buttons slot="end" class="notification-padding" style="display:flex" (click)="scheduledPage()">
-        <ion-icon name="add-circle" style="font-size: 27px;"></ion-icon>
-      </ion-buttons>
-      <ion-buttons slot="end" class="notification-padding" (click)="searchbar()">
-        <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
-      </ion-buttons>
-      <ion-buttons slot="end" class="notification-padding" [routerLink]="['/notification']" routerDirection="forward" (click)="setzero()">
-        <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
-           <span class="badge" *ngIf="unreadCount > 0">
-                        {{unreadCount > 99 ? '99+' : unreadCount}}
-                    </span>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="scroll">
-    <ion-row>
-      <ion-col size="12">
-        <h3 class="ion-padding" style="font-weight: bold;padding:0px;margin-bottom: 0px;">Overview</h3>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <!-- <ion-slides pager="false" [options]="slideOpts">
+<ion-header mode="md" class="ion-no-border" style="position: initial">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="logout"></ion-back-button>
+    </ion-buttons>
+    <ion-title style="float: left">
+      <span style="font-size: x-large; font-weight: bold; color: black">
+        Teams</span
+      >
+      <p style="margin: 0px; font-size: 13px">company name</p>
+    </ion-title>
+
+    <ion-buttons
+      slot="end"
+      class="notification-padding"
+      style="display: flex"
+      (click)="scheduledPage()"
+    >
+      <ion-icon name="add-circle" style="font-size: 27px"></ion-icon>
+    </ion-buttons>
+    <ion-buttons slot="end" class="notification-padding" (click)="searchbar()">
+      <ion-img
+        src="/assets/images/icons8-search.svg"
+        class="notification-icon"
+      ></ion-img>
+    </ion-buttons>
+    <ion-buttons
+      slot="end"
+      class="notification-padding"
+      [routerLink]="['/notification']"
+      routerDirection="forward"
+      (click)="setzero()"
+    >
+      <ion-img
+        src="/assets/images/notification.svg"
+        class="notification-icon"
+      ></ion-img>
+      <span class="badge" *ngIf="unreadCount > 0">
+        {{unreadCount > 99 ? '99+' : unreadCount}}
+      </span>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="scroll">
+  <!-- <ion-row> -->
+  <!-- <ion-col size="12"> -->
+  <h3
+    class="ion-padding"
+    style="font-weight: bold; padding: 0 0 0 25px; margin-bottom: 0px"
+  >
+    Overview
+  </h3>
+  <!-- </ion-col> -->
+  <!-- </ion-row> -->
+  <ion-row>
+    <ion-col size="12">
+      <!-- <ion-slides pager="false" [options]="slideOpts">
           <ion-slide style="width: 80px !important;" *ngFor="let list of teamList" (click)="team()">
            <ion-card>
              <ion-card-header><ion-icon name="{{list.icon}}"></ion-icon></ion-card-header>
@@ -178,95 +199,139 @@
                <p style="margin: 0px;">{{list.role}}</p>
              </ion-card-content>
            </ion-card>
-          </ion-slide>    
+          </ion-slide>
         </ion-slides> -->
-        <ion-slides pager="false" [options]="slideOpts">
-          <ion-slide>
-            <ion-card class="slide-class card-class">
-              <ion-img src="/assets/images/admin.svg" class="tab-icon"></ion-img>
-              <span>{{admin}}</span><br>
-              <span>Admins</span></ion-card>
-          </ion-slide>
-          <ion-slide>
-            <ion-card class="slide-class card-class">
+      <ion-slides pager="false" [options]="slideOpts">
+        <ion-slide class="wt">
+          <ion-card class="slide-class card-class">
+            <ion-card-header>
+              <ion-img
+                src="/assets/images/admin.svg"
+                class="tab-icon"
+              ></ion-img>
+            </ion-card-header>
+            <ion-card-content>
+              <p style="margin:0px" class="font_sz">5</p>
+              <p style="margin:0px">Admins</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+        <ion-slide class="wt">
+          <ion-card class="slide-class card-class">
+            <ion-card-header>
               <ion-img src="/assets/images/bds.svg" class="tab-icon"></ion-img>
-              <span></span><br>
-              <span>Design Managers</span></ion-card>
-          </ion-slide>
-          <ion-slide>
-            <ion-card class="slide-class card-class">
-              <ion-img src="/assets/images/surveyors.svg" class="tab-icon"></ion-img>
-              <span></span><br>
-              <span>Surveyors</span></ion-card>
-          </ion-slide>
-          <ion-slide>
-            <ion-card class="slide-class card-class">
+            </ion-card-header>
+            <ion-card-content>
+              <p  style="margin:0px" class="font_sz">33</p>
+              <p  style="margin:0px">Design Managers</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+        <ion-slide class="wt">
+          <ion-card class="slide-class card-class">
+            <ion-card-header>
+              <ion-img
+                src="/assets/images/surveyors.svg"
+                class="tab-icon"
+              ></ion-img>
+            </ion-card-header>
+            <ion-card-content>
+              <p style="margin:0px" class="font_sz">12</p>
+              <p style="margin:0px">Surveyors</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+        <ion-slide class="wt">
+          <ion-card class="slide-class card-class">
+            <ion-card-header>
               <ion-img src="/assets/images/list.svg" class="tab-icon"></ion-img>
-              <span></span><br>
-              <span>All</span></ion-card>
-          </ion-slide>
-        </ion-slides>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-segment scrollable (ionChange)="segmentChanged($event)" value="member" mode="md" style="margin-top: 5%;">
-          <ion-segment-button value="member">
-              <ion-label class="segment-btn">Member</ion-label>
-          </ion-segment-button>
-          <ion-segment-button value="groupsaplha">
-              <ion-label class="segment-btn">Groups Alpha</ion-label>
-          </ion-segment-button>
-          <ion-segment-button value="groups">
-              <ion-label class="segment-btn">Groups</ion-label>
-          </ion-segment-button>
-        </ion-segment>
-      </ion-col>
-    </ion-row>
-    <ion-content [scrollEvents]="true" style="height: 65%;position: sticky;">
+            </ion-card-header>
+            <ion-card-content>
+              <p style="margin:0px" class="font_sz">3</p>
+              <p style="margin:0px">All</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+      </ion-slides>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-segment
+        scrollable
+        (ionChange)="segmentChanged($event)"
+        value="member"
+        mode="md"
+        style="margin-top: 5%"
+      >
+        <ion-segment-button value="member">
+          <ion-label class="segment-btn">Member</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="groupsaplha">
+          <ion-label class="segment-btn">Groups Alpha</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="groups">
+          <ion-label class="segment-btn">Groups</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-col>
+  </ion-row>
+  <ion-content [scrollEvents]="true" style="height: 65%; position: sticky">
     <ion-list>
       <ion-item>
-        <ion-grid *ngIf="listOfteamData.length !== 0 ;else nodesignFound">
-          <ion-row style="margin-bottom: 40px;">
-            <ion-col *ngFor="let designData of teamData;let i = index" size="12">
-              <ion-card class="ion-no-padding custom-card ion-no-margin" (click)="teamdetail(designData,$event)">
-          <ion-item-sliding>
-            <ion-item lines="none" class="item-class">
-              
-                  <ion-row style="width: 100%;">
-                    <ion-col size="auto">
-                  <ion-card *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
-                  class="profile_img">{{designData?.firstname.slice(0, 1).toUpperCase() + designData?.lastname.slice(0, 1).toUpperCase()}}</ion-card>
-                  <div *ngIf="!isEmptyObject(designData?.logo) && designData?.logo !==null">
-                    
-                         <img [src]="designData?.logo?.url"
-                         class="profile_img"/>
-                  </div>
-                </ion-col>
-                <ion-col size="auto" style="align-self: center;">
-                  <p class="customer-name"
-                    routerDirection="forward"><span >{{designData.firstname}}&nbsp;</span>
-                    <span >{{designData.lastname}}</span>
-                </p>
-        </ion-col>
-                </ion-row>
-            </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option style="background-color: #f9ba48;" >
-              <ion-icon name="pencil"></ion-icon>
-            </ion-item-option>
-            <ion-item-option style="background-color: #f9ba48;" >
-              <ion-icon slot="icon-only" name="trash"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-        </ion-card>
-        </ion-col>
-        </ion-row>
-        </ion-grid>
+        <div *ngIf="listOfteamData.length !== 0 ;else nodesignFound">
+          <ion-row style="margin-bottom: 40px">
+            <ion-col
+              *ngFor="let designData of teamData;let i = index"
+              size="12"
+            >
+            <ion-item-sliding>
+                  <ion-card
+                    class="ion-no-padding custom-card ion-no-margin"
+                    (click)="teamdetail(designData,$event)"
+                  >
+                  <ion-item lines="none" class="item-class">
+                    <!-- <ion-row style="width: 100%"> -->
+                      <!-- <ion-col size="auto"> -->
+                        <div
+                          style="padding-left: 0px"
+                          *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
+                          class="profile_img"
+                          >{{designData?.firstname.slice(0, 1).toUpperCase() +
+                          designData?.lastname.slice(0,
+                          1).toUpperCase()}}</div
+                        >
+                        <div
+                          *ngIf="!isEmptyObject(designData?.logo) && designData?.logo !==null"
+                        >
+                          <img
+                            [src]="designData?.logo?.url"
+                            class="profile_img"
+                          />
+                        </div>
+                      <!-- </ion-col> -->
+                      <ion-col size="auto" style="align-self: center">
+                        <p class="customer-name" routerDirection="forward">
+                          <span>{{designData.firstname}}&nbsp;</span>
+                          <span>{{designData.lastname}}</span>
+                        </p>
+                      </ion-col>
+                    <!-- </ion-row> -->
+                  </ion-item>
+                </ion-card>
+                  <ion-item-options side="end">
+                    <ion-item-option style="background-color: #f9ba48">
+                      <ion-icon name="pencil"></ion-icon>
+                    </ion-item-option>
+                    <ion-item-option style="background-color: #f9ba48">
+                      <ion-icon slot="icon-only" name="trash"></ion-icon>
+                    </ion-item-option>
+                  </ion-item-options>
+                </ion-item-sliding>
+            </ion-col>
+          </ion-row>
+        </div>
       </ion-item>
     </ion-list>
   </ion-content>
-    </ion-content>
-  
-  
+</ion-content>

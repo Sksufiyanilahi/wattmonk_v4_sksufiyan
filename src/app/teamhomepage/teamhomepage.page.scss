@@ -66,12 +66,8 @@ ion-content{
 
 .slide-class{
     position: relative;
-    width: 6.6rem;
-    padding-right: 15px;
-    padding-left: 15px;display: block;
     background-color: white;
-    height: 7rem;
-    border-radius: .8rem;
+    height: 9rem;
 }
 
 ion-slide{
@@ -104,7 +100,7 @@ ion-slide{
     //border: 4px solid #4c8dff;
     margin:0px;
     border-radius:50%;
-  
+
   }
 
   .customer-name {
@@ -122,9 +118,13 @@ ion-slide{
 
   .tab-icon{
     width: 25px;
-    margin-left: 35%;
-    margin-top:20%
-    
+    // margin-left: 35%;
+    // margin-top:20%
+
+  }
+  ion-card-header{
+    display: flex;
+    justify-content: center;
   }
 
   .item-class{
@@ -167,4 +167,22 @@ ion-content.scroll {
     // }
 }
 
-.card-class:hover { background-color: #f9ba48 !important; }
+.card-class:hover {
+  background-color: #f9ba48 !important;
+  margin:0px;
+}
+
+
+.wt{
+  // width:150px !important;
+}
+
+ion-card-content{
+  font-size: 12px;
+  height:80px;
+}
+
+.font_sz{
+  font-size: 20px;
+  font-weight: bolder;
+}

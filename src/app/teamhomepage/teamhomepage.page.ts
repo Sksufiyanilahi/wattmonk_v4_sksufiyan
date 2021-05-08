@@ -24,7 +24,7 @@ export class TeamhomepagePage implements OnInit {
   slideOpts = {
     initialSlide: 1,
     slidesPerView: 3,
-  
+    speed:400,
     centeredSlides: true,
     spaceBetween: 2
   };
@@ -87,7 +87,7 @@ export class TeamhomepagePage implements OnInit {
      }
      else if(event.target.value=='groupsalpha')
      {
-       
+
      }
      else if(event.target.value == 'groups')
      {
@@ -103,7 +103,7 @@ export class TeamhomepagePage implements OnInit {
     this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
       this.getTeams(null);
     })
-    
+
   }
 
   getNotificationCount() {
@@ -389,12 +389,12 @@ export class TeamhomepagePage implements OnInit {
       this.utils.hideLoading().then(()=>{
         // if(this.isTeamBdAssign)
         // {
-        //   this.isTeamBd = true;  
+        //   this.isTeamBd = true;
         // }
         // else if(this.isTeamAdminAssign){
         //   this.isTeamAdmin = true;
         // }
-        
+
         this.dismissBottomSheet();
         this.showBottomDraw = false;
         //this.utils.showSnackBar("");
