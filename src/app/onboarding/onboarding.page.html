@@ -48,12 +48,13 @@
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Company Address*</ion-label>
                 <ion-input type="text" class="form_input" formControlName="companyaddress" autocapitalize="words"
-                            required></ion-input>
+                            required maxLength="50"></ion-input>
             </ion-item>
             <div style="height: 5px;">
               <div *ngIf="firstFormGroup.get('companyaddress').hasError('pattern') && firstFormGroup.get('companyaddress').dirty">
                 <span class="error">{{addressError}}</span>
             </div>
+            
               <div *ngIf="firstFormGroup.get('companyaddress').value === '' && firstFormGroup.get('companyaddress').dirty">
                   <span class="error">{{fieldRequired}}</span>
               </div>
@@ -93,7 +94,7 @@
         <ion-item class="ion-no-padding">
             <ion-label position="floating">Billing Address*</ion-label>
             <ion-input type="text" class="form_input" formControlName="billingaddress" autocapitalize="words"
-                        required></ion-input>
+                        required maxLength="50"></ion-input>
         </ion-item>
         <!-- <ion-item class="ion-no-padding">
           <ion-label position="floating">Billing Address*</ion-label>
@@ -117,7 +118,7 @@
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Company Name*</ion-label>
                 <ion-input type="text" formControlName="company" class="form_input" autocapitalize="words" minLength="3" maxLength="50"
-                            required></ion-input>
+                            required maxLength="50"></ion-input>
             </ion-item>
             <div style="height: 5px;">
               <div *ngIf="firstFormGroup.get('company').hasError('pattern') && firstFormGroup.get('company').dirty">

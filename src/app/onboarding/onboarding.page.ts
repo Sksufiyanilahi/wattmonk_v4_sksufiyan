@@ -93,11 +93,11 @@ export class OnboardingPage implements OnInit {
     const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
     this.firstFormGroup = this.formBuilder.group({
       usertype: new FormControl('company'),
-      billingaddress: new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
+      billingaddress: new FormControl(null, [Validators.required,Validators.maxLength(50), Validators.pattern(ADDRESSFORMAT)]),
       phone: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
       //companyaddresssameasbilling:new FormControl(''),
-      companyaddress: new FormControl(null, [Validators.required, Validators.pattern(ADDRESSFORMAT)]),
-      company: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.pattern(COMPANYFORMAT)]),
+      companyaddress: new FormControl(null, [Validators.required,Validators.maxLength(50), Validators.pattern(ADDRESSFORMAT)]),
+      company: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(COMPANYFORMAT)]),
       ispaymentmodeprepay: new FormControl(null),
       // logo:new FormControl(null, [Validators.required]),
       registrationnumber: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(20), Validators.pattern("^[0-9]{3,20}$")]),

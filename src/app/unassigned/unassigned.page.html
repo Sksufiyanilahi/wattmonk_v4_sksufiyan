@@ -42,8 +42,8 @@
                         <span fill="clear" background-border="clear" (click)="gotoActivity(designData,$event)"
                             class="imagebutton" size="small"><img src="/assets/images/activitylist.png"
                                 style="height: 20px;" /></span>
-                        <span class="chipdetail" style="background-color: #1c12a7;float:right;margin-right: 1rem;"
-                            *ngIf="(userData.role.type=='wattmonkadmins' || userData.role.type=='superadmin' || (userData.role.type == 'bd' && userData.parent.id==232)) && designData.createdby.company !== null">{{designData?.createdby.company}}</span>
+                                <span class="chipdetail" style="background-color: #1c12a7;float:right;margin-right: 1rem;"
+                                *ngIf="(userData.role.type=='wattmonkadmins' || userData.role.type=='superadmin' || (userData.role.type == 'bd' && userData.parent.id==232)) && designData.createdby.company !== null">{{designData?.createdby.company}}</span>
                     </p>
 
                     <p style="margin:0px">
