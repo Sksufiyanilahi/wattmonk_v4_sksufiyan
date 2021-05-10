@@ -254,7 +254,8 @@ export class StartsurveyPage implements OnInit {
   //Camera Picture Taking Methods
   //------------------------------------------------------------------------------------------------------------------
 
-  async openCameraToCapturePic(){
+  async openCameraToCapturePic(event){
+    event.preventDefault();
     const image = await Camera.getPhoto({
       quality: 100,
       allowEditing: false,
@@ -263,18 +264,44 @@ export class StartsurveyPage implements OnInit {
     });
 
     this.capturedImage = "data:image/jpeg;base64," + image.base64String;
-    this.changedetectorref.detectChanges();
 
-    // const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-    // const captureshot: CAPTUREDSHOT = {
-    //   menuindex: this.selectedmainmenuindex,
-    //   submenuindex: this.selectedsubmenuindex,
-    //   shotindex: this.selectedshotindex,
-    //   shotimage: this.capturedImage,
-    //   imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
-    //   imagename: currentIndex.shots[this.selectedshotindex].imagename
-    // };
-    // currentIndex.capturedshots.push(captureshot);
+    const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+    const captureshot: CAPTUREDSHOT = {
+      menuindex: this.selectedmainmenuindex,
+      submenuindex: this.selectedsubmenuindex,
+      shotindex: this.selectedshotindex,
+      shotimage: this.capturedImage,
+      imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
+      imagename: currentIndex.shots[this.selectedshotindex].imagename
+    };
+    currentIndex.capturedshots.push(captureshot);
+
+    this.changedetectorref.detectChanges();
+  }
+
+  async openPhotoGalleryToSelectPic(event){
+    event.preventDefault();
+    const image = await Camera.getPhoto({
+      quality: 100,
+      allowEditing: false,
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Photos
+    });
+
+    this.capturedImage = "data:image/jpeg;base64," + image.base64String;
+
+    const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+    const captureshot: CAPTUREDSHOT = {
+      menuindex: this.selectedmainmenuindex,
+      submenuindex: this.selectedsubmenuindex,
+      shotindex: this.selectedshotindex,
+      shotimage: this.capturedImage,
+      imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
+      imagename: currentIndex.shots[this.selectedshotindex].imagename
+    };
+    currentIndex.capturedshots.push(captureshot);
+
+    this.changedetectorref.detectChanges();
   }
 
 }
