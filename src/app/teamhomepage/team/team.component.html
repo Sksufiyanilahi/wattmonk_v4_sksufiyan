@@ -1,18 +1,18 @@
-<!-- 
+<!--
 <ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;overflow:none;" >
   <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-grid *ngIf="listOfteamData.length !== 0 ;else nodesignFound">
 
-    
+
     <ion-row style="margin-bottom: 40px;">
-     
+
       <ion-col *ngFor="let designData of teamData;let i = index" size="12">
         <ion-card class="ion-no-padding custom-card ion-no-margin" (click)="teamdetail(designData,$event)"
           style="height: 100%;">
           <p class="customer-name" routerDirection="forward">{{designData.firstname}} {{designData.lastname}}
-           
+
 
 
           </p>
@@ -20,17 +20,17 @@
           <p style="margin:0px">
             <span class="customer-email" routerDirection="forward"
               style="color: #4272B9">{{designData.role?.displayname}}</span>
-            
+
 
           </p>
           <p style="margin:0px">
             <span class="customer-email" routerDirection="forward">{{designData.email}}</span>
-            
+
 
           </p>
           <p style="margin:0px">
             <span class="customer-phone" routerDirection="forward">{{designData.phone}}</span>
-            
+
 
           </p>
           <p style="margin:0px">
@@ -45,14 +45,14 @@
         </ion-card>
       </ion-col>
     </ion-row>
-   
+
   </ion-grid>
 
   <ng-template #nodesignFound>
     <div *ngIf="listOfteamData.length === 0 " class="h-100 d-flex flex-column align-center justify-center">
 
       {{noDesignFound}}
-     
+
 
       <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
     </div>
@@ -65,7 +65,7 @@
 
   <ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="400" [draggable]="false"
       [disableDrag]="true" [shouldBounce]="true" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
-     
+
           <ion-grid class="drawer">
               <ion-row>
                   <ion-col size="12">
@@ -75,7 +75,7 @@
 
                   </ion-col>
               </ion-row>
-              
+
               <ion-row style="justify-content: flex-end;">
                   <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
                       <ion-button class="buttom-drawer-button" fill="clear" (click)="assign()">
@@ -89,108 +89,132 @@
                   </ion-col>
               </ion-row>
           </ion-grid>
-      
+
 
   </ion-bottom-drawer>
 </ng-container>
  -->
- <p>
-  Today's item: {{teamData}}
-</p>
- <ion-content [scrollEvents]="true" style="height: 65%; position: sticky">
+<p>Today's item: {{ teamData }}</p>
+<ion-content [scrollEvents]="true" style="height: 65%; position: sticky">
   <div>
-  <ion-list *ngIf="isTeamData">
-    <ion-item lines="none" style="margin-bottom: 1%" *ngFor="let designData of teamData;let i = index">
-      
-          <ion-item-sliding>
-                <ion-card
-                  class="ion-no-padding custom-card ion-no-margin"
-                  (click)="teamdetail(designData,$event)"
-                >
-                <ion-item lines="none" class="item-class">
-                 
-                      <div
-                        style="padding-left: 0px"
-                        *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
-                        class="profile_img"
-                        >{{designData?.firstname.slice(0, 1).toUpperCase() +
-                        designData?.lastname.slice(0,
-                        1).toUpperCase()}}</div
-                      >
-                      <div
-                        *ngIf="!isEmptyObject(designData?.logo) && designData?.logo !==null"
-                      >
-                        <img
-                          [src]="designData?.logo?.url"
-                          class="profile_img"
-                        />
-                      </div>
-                   
-                    <div size="auto" style="align-self: center">
-                      <p class="customer-name" routerDirection="forward">
-                        <span style="padding-left: 10px;">{{designData.firstname}}&nbsp;</span>
-                        <span>{{designData.lastname}}</span>
-                      </p>
-                    </div>
-                  
-                </ion-item>
-              </ion-card>
-                <ion-item-options side="end">
-                  <ion-item-option style="background-color: #f9ba48">
-                    <ion-icon name="pencil" (click)="edit()"></ion-icon>
-                  </ion-item-option>
-                  <ion-item-option style="background-color: #f9ba48">
-                    <ion-icon slot="icon-only" name="trash" (click)="deleteDesign()"></ion-icon>
-                  </ion-item-option>
-                </ion-item-options>
-              </ion-item-sliding>
-          
-    </ion-item>
-  </ion-list>
-    <ion-list *ngIf="!isTeamData">
-      <ion-item lines="none" *ngFor="let designData of [10,50,30,49,29]" style="margin-bottom: 3%">
-       
-            <ion-item-sliding>
-                  <ion-card
-                    class="ion-no-padding custom-card ion-no-margin"
+    <ion-list *ngIf="isTeamData">
+      <ion-item
+        lines="none"
+        style="margin-bottom: 1%"
+        *ngFor="let designData of teamData; let i = index"
+      >
+        <ion-item-sliding>
+          <ion-card
+            class="ion-no-padding custom-card ion-no-margin"
+            (click)="teamdetail(designData, $event)"
+          >
+            <ion-item lines="none" class="item-class">
+              <div
+                style="padding-left: 0px"
+                *ngIf="
+                  isEmptyObject(designData?.logo) || designData?.logo == null
+                "
+                class="profile_img"
+              >
+                {{
+                  designData?.firstname.slice(0, 1).toUpperCase() +
+                    designData?.lastname.slice(0, 1).toUpperCase()
+                }}
+              </div>
+              <div
+                *ngIf="
+                  !isEmptyObject(designData?.logo) && designData?.logo !== null
+                "
+              >
+                <img [src]="designData?.logo?.url" class="profile_img" />
+              </div>
+
+              <div size="auto" style="align-self: center">
+                <p class="customer-name" routerDirection="forward">
+                  <span style="padding-left: 10px"
+                    >{{ designData.firstname }}&nbsp;</span
                   >
-                  <ion-item lines="none" class="item-class">
-                    
-                        <div
-                          style="padding-left: 0px; background: none;"
-                          *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
-                          class="profile_img"
-                          ><ion-skeleton-text animated style="width: 100%;
-                          border-radius: 50%;"></ion-skeleton-text></div
-                        >
-                        <div
-                          *ngIf="!isEmptyObject(designData?.logo) && designData?.logo !==null"
-                        >
-                        <ion-skeleton-text animated style="width: 0px;"></ion-skeleton-text>
-                        </div>
-                      
-                      <div size="auto" style="align-self: center">
-                        <p class="customer-name" routerDirection="forward">
-                          <span><ion-skeleton-text animated style="margin-left: 10%;width: 5rem;height: 5px;"></ion-skeleton-text></span>
-                          <span></span>
-                          <span><ion-skeleton-text animated style="width: 3rem;height: 5px;"></ion-skeleton-text></span>
-                        </p>
-                      </div>
-                    
-                  </ion-item>
-                </ion-card>
-                  <ion-item-options side="end">
-                    <ion-item-option style="background-color: #f9ba48">
-                      <ion-icon name="pencil"></ion-icon>
-                    </ion-item-option>
-                    <ion-item-option style="background-color: #f9ba48">
-                      <ion-icon slot="icon-only" name="trash"></ion-icon>
-                    </ion-item-option>
-                  </ion-item-options>
-                </ion-item-sliding>
-           
+                  <span>{{ designData.lastname }}</span>
+                </p>
+              </div>
+            </ion-item>
+          </ion-card>
+          <ion-item-options side="end">
+            <ion-item-option style="background-color: #f9ba48">
+              <ion-icon name="pencil" (click)="edit()"></ion-icon>
+            </ion-item-option>
+            <ion-item-option style="background-color: #f9ba48">
+              <ion-icon
+                slot="icon-only"
+                name="trash"
+                (click)="deleteDesign()"
+              ></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
       </ion-item>
     </ion-list>
-</div>
+    <ion-list *ngIf="!isTeamData">
+      <ion-item
+        lines="none"
+        *ngFor="let designData of [10, 50, 30, 49, 29]"
+        style="margin-bottom: 3%"
+      >
+        <ion-item-sliding>
+          <ion-card class="ion-no-padding custom-card ion-no-margin">
+            <ion-item lines="none" class="item-class">
+              <div
+                style="padding-left: 0px; background: none"
+                *ngIf="
+                  isEmptyObject(designData?.logo) || designData?.logo == null
+                "
+                class="profile_img"
+              >
+                <ion-skeleton-text
+                  animated
+                  style="width: 100%; border-radius: 50%"
+                ></ion-skeleton-text>
+              </div>
+              <div
+                *ngIf="
+                  !isEmptyObject(designData?.logo) && designData?.logo !== null
+                "
+              >
+                <ion-skeleton-text
+                  animated
+                  style="width: 0px"
+                ></ion-skeleton-text>
+              </div>
 
+              <div size="auto" style="align-self: center">
+                <p class="customer-name" routerDirection="forward">
+                  <span
+                    ><ion-skeleton-text
+                      animated
+                      style="margin-left: 10%; width: 5rem; height: 5px"
+                    ></ion-skeleton-text
+                  ></span>
+                  <span></span>
+                  <span
+                    ><ion-skeleton-text
+                      animated
+                      style="width: 3rem; height: 5px"
+                    ></ion-skeleton-text
+                  ></span>
+                </p>
+              </div>
+            </ion-item>
+          </ion-card>
+          <ion-item-options side="end">
+            <ion-item-option style="background-color: #f9ba48">
+              <ion-icon name="pencil"></ion-icon>
+            </ion-item-option>
+            <ion-item-option style="background-color: #f9ba48">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>

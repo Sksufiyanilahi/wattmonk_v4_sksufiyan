@@ -105,7 +105,7 @@ ion-slide{
 
   .img{
     height: 50px;
-    width: 50px;
+    // width: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -118,7 +118,7 @@ ion-slide{
     //border: 4px solid #4c8dff;
     margin:0px;
     border-radius:50%;
-    margin-left: 25%; 
+    // margin-left: 25%;
     margin-top: 12px;
     margin-bottom: 10px;
     background:none
@@ -191,7 +191,7 @@ ion-content.scroll {
 
 .card-class:hover {
   background-color: #f9ba48 !important;
-  margin:0px;
+  margin:10px;
 }
 
 
@@ -212,7 +212,7 @@ ion-card-content{
 .custom-skeleton ion-skeleton-text {
     line-height: 13px;
   }
-  
+
   .custom-skeleton ion-skeleton-text:last-child {
     margin-bottom: 5px;
   }
