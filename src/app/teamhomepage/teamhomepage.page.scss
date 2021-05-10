@@ -186,3 +186,32 @@ ion-card-content{
   font-size: 20px;
   font-weight: bolder;
 }
+
+.custom-skeleton ion-skeleton-text {
+    line-height: 13px;
+  }
+  
+  .custom-skeleton ion-skeleton-text:last-child {
+    margin-bottom: 5px;
+  }
+
+  .fakeItem {
+    div, span {
+      background-color: lightgrey;
+      opacity: 0.5;
+      height: 1em;
+      margin-top: 10px;
+    }
+  
+    div {
+      width: 35%;
+    }
+  
+    // h3 {
+    //   width: 40%;
+    // }  
+  
+    span {
+      width: 20%;
+    }
+  }

@@ -277,14 +277,15 @@
     </ion-col>
   </ion-row>
   <ion-content [scrollEvents]="true" style="height: 65%; position: sticky">
-    <ion-list>
-      <ion-item>
-        <div *ngIf="listOfteamData.length !== 0 ;else nodesignFound">
+    <div>
+    <ion-list *ngIf="teamData">
+      <ion-item lines="none" style="margin-bottom: 1%" *ngFor="let designData of teamData;let i = index">
+        <!-- <div >
           <ion-row style="margin-bottom: 40px">
             <ion-col
-              *ngFor="let designData of teamData;let i = index"
+              
               size="12"
-            >
+            > -->
             <ion-item-sliding>
                   <ion-card
                     class="ion-no-padding custom-card ion-no-margin"
@@ -310,12 +311,12 @@
                           />
                         </div>
                       <!-- </ion-col> -->
-                      <ion-col size="auto" style="align-self: center">
+                      <div size="auto" style="align-self: center">
                         <p class="customer-name" routerDirection="forward">
-                          <span>{{designData.firstname}}&nbsp;</span>
+                          <span style="padding-left: 10px;">{{designData.firstname}}&nbsp;</span>
                           <span>{{designData.lastname}}</span>
                         </p>
-                      </ion-col>
+                      </div>
                     <!-- </ion-row> -->
                   </ion-item>
                 </ion-card>
@@ -328,10 +329,66 @@
                     </ion-item-option>
                   </ion-item-options>
                 </ion-item-sliding>
-            </ion-col>
+            <!-- </ion-col>
           </ion-row>
-        </div>
+        </div> -->
       </ion-item>
     </ion-list>
+    <ng-template *ngIf="!teamData">
+      <ion-list>
+        <ion-item lines="none" style="margin-bottom: 1%">
+          <!-- <div >
+            <ion-row style="margin-bottom: 40px">
+              <ion-col
+                
+                size="12"
+              > -->
+              <ion-item-sliding>
+                    <ion-card
+                      class="ion-no-padding custom-card ion-no-margin"
+                      (click)="teamdetail(designData,$event)"
+                    >
+                    <ion-item lines="none" class="item-class">
+                      <!-- <ion-row style="width: 100%"> -->
+                        <!-- <ion-col size="auto"> -->
+                          <div
+                            style="padding-left: 0px"
+                            *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
+                            class="profile_img"
+                            ><ion-skeleton-text animated style="width: 20%"></ion-skeleton-text></div
+                          >
+                          <div
+                            *ngIf="!isEmptyObject(designData?.logo) && designData?.logo !==null"
+                          >
+                          <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+                          </div>
+                        <!-- </ion-col> -->
+                        <div size="auto" style="align-self: center">
+                          <p class="customer-name" routerDirection="forward">
+                            <span style="padding-left: 10px;"><ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>&nbsp;</span>
+                            <span><ion-skeleton-text animated style="width: 20%"></ion-skeleton-text></span>
+                          </p>
+                        </div>
+                      <!-- </ion-row> -->
+                    </ion-item>
+                  </ion-card>
+                    <ion-item-options side="end">
+                      <ion-item-option style="background-color: #f9ba48">
+                        <ion-icon name="pencil"></ion-icon>
+                      </ion-item-option>
+                      <ion-item-option style="background-color: #f9ba48">
+                        <ion-icon slot="icon-only" name="trash"></ion-icon>
+                      </ion-item-option>
+                    </ion-item-options>
+                  </ion-item-sliding>
+              <!-- </ion-col>
+            </ion-row>
+          </div> -->
+        </ion-item>
+      </ion-list>
+    </ng-template>
+  </div>
+  
   </ion-content>
+   
 </ion-content>

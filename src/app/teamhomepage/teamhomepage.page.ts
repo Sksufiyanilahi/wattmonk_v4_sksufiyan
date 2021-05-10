@@ -37,7 +37,7 @@ export class TeamhomepagePage implements OnInit {
   showSearchBar = false;
   update_version: string;
   teamData: User[];
-  listOfteamData: any[];
+  listOfteamData: any;
   designData: any;
   overdue: any;
   id: number;
@@ -152,10 +152,10 @@ export class TeamhomepagePage implements OnInit {
       this.teamData=[];
       this.listOfteamData = [];
       var count=0;
-      this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
+      // this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
       this.apiService.getTeamData().subscribe((res) => {
          console.log(res);
-         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+        //  this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           if (res.length > 0) {
             res.forEach(element=>{
               if(element.role.id==3)
@@ -186,15 +186,15 @@ export class TeamhomepagePage implements OnInit {
           if (event !== null) {
             event.target.complete();
           }
-        })
+        // })
       }, (error) => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+        // this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
         if (event !== null) {
           event.target.complete();
         }
+      // })
       })
-      })
-    })
+    // })
   }
 
   // formatDesignData(records : teamData[]){
