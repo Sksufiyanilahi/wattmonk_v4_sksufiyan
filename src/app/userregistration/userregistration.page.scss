@@ -1,16 +1,16 @@
 .title {
     font-size: 3em;
   }
-  
+
   .text-bold {
     font-weight: bold;
   }
-  
+
   .subtitle {
     font-size: 1.5rem;
     color: #434343;
   }
-  
+
   ion-content.login-background {
     --background: white;
     background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("/assets/images/login_background.png");
@@ -18,47 +18,47 @@
     background-repeat: no-repeat;
     background-size: contain;
   }
-  
+
   .form-background {
     background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("/assets/images/wattmonk_logo.png");
     background-position: top;
     background-repeat: no-repeat;
     background-size: contain;
   }
-  
-  
-  
+
+
+
   .subtitle-sub-text {
     font-size: 1.8em;
     color: #A5A095;
   }
-  
+
   .forgot-password-text {
     color: #7DA4DD;
   }
-  
+
   .email_valid {
     color: #495057 !important;
   }
-  
+
   .password_box {
     display: flex;
     border-bottom: 1px solid #ced4da !important;
-  
+
   }
-  
+
   .password_input {
     margin-bottom: -5px;
     font-size: 14px;
   }
-  
+
   .eye_box {
     display: flex;
     align-items: center;
   }
-  
- 
-  
+
+
+
   .margin{
     margin-top: 0px;
 
@@ -102,7 +102,7 @@
     transition: 0.3s;
     margin-left: 5%;
     height: 3rem;
-    
+
     margin-bottom: 1rem;
   }
   .label{
@@ -125,7 +125,7 @@
     height: 48px;
     width: 90%;
     margin-left: 5%;
-    background-color: #FCE883;
+    background-color: #EDC773;
     margin-top: 0px;
   }
   .cancelbtn {
@@ -158,7 +158,7 @@
 
     --ion-background-color:#FBF9F4;
   }
-  
+
   .email-input{
     background-color: white;
      margin-left: 20px;

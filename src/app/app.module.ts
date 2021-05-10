@@ -24,7 +24,7 @@ import {InAppBrowser} from '@ionic-native/in-app-browser/ngx';
 import {Mixpanel, MixpanelPeople} from '@ionic-native/mixpanel/ngx';
 import {Network} from '@ionic-native/network/ngx';
 import {SocialSharing} from '@ionic-native/social-sharing/ngx';
-import {Stripe} from '@ionic-native/stripe/ngx';
+// import {Stripe} from '@ionic-native/stripe/ngx';
 import {IonicStorageModule} from '@ionic/storage';
 import {ChartsModule} from 'ng2-charts';
 import {NgxImageCompressService} from 'ngx-image-compress';
@@ -79,7 +79,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     SplashScreenPluginWeb,
     InAppBrowser,
     Network,
-    Stripe,
+    // Stripe,
     SocialSharing,
     Dialogs,
     AndroidPermissions,
