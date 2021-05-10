@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ModalController, Platform } from '@ionic/angular';
+import { ModalController, Platform, ToastController } from '@ionic/angular';
 import { DrawerState } from 'ion-bottom-drawer';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
@@ -58,10 +58,19 @@ export class TeamhomepagePage implements OnInit {
   isTeamBd:boolean = false
   isTeamAdmin:boolean = false;
 
-  admin:number;
+  admin:number=0;
+  bd:number=0;
+  designers:number=0;
+  analysts:number=0;
+  surveyor:number=0;
+  peengineer:number=0;
+  all:number=0;
 
   user: any
   unreadCount;
+  roles: any;
+  isTeamData:boolean=false;
+
   constructor(private router: Router,
     private storage: StorageService,
     private apiService: ApiService,
@@ -70,7 +79,8 @@ export class TeamhomepagePage implements OnInit {
     private iab: InAppBrowser,
     private platform: Platform,
     public modalController: ModalController,
-    private mixpanelService: MixpanelService){
+    private mixpanelService: MixpanelService,
+    private toastController:ToastController){
     // private formBuilder: FormBuilder,
     // private cdr:ChangeDetectorRef) {
     const url = this.router.url;
@@ -100,6 +110,7 @@ export class TeamhomepagePage implements OnInit {
     this.user = this.storage.getUser();
     console.log(this.user)
     this.getNotificationCount();
+   this.getRoles();
     this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
       this.getTeams(null);
     })
@@ -146,6 +157,16 @@ export class TeamhomepagePage implements OnInit {
     this.getTeamData(event,showLoader);
   }
 
+  getRoles()
+  {
+    var parentId = this.user.parent.id;
+    var roleId = this.user.role.id;
+    this.apiService.getDynamicRoles(parentId,roleId).subscribe((res)=>{
+      console.log(res)
+      this.roles = res;
+    })
+  }
+
   getTeamData(event,showLoader:boolean) {
     //this.utils.showLoading("Getting Team Data").then(() => {
       console.log(showLoader)
@@ -155,29 +176,57 @@ export class TeamhomepagePage implements OnInit {
       // this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
       this.apiService.getTeamData().subscribe((res) => {
          console.log(res);
+         this.isTeamData=true;
+            this.teamData = res;
+            console.log(this.teamData);
+            this.listOfteamData = res;
         //  this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           if (res.length > 0) {
+            console.log(res.length)
             res.forEach(element=>{
               if(element.role.id==3)
               {
                 this.teamBd.push(element);
+                ++this.bd;
+                console.log(this.bd)
               }
-              else if(element.role.id==7)
+              else if(element.role.id==5)
               {
-                ++count;
-                this.admin=count;
+                ++this.admin;
                 console.log(this.admin)
               }
+              else if(element.role.id==8)
+              {
+                
+                ++this.designers;
+                count=0;
+              }
+              else if(element.role.id==10)
+              {
+                
+                ++this.analysts;
+              }
+              else if(element.role.id==9)
+              {
+                ++this.surveyor;
+              }
+              else if(element.role.id==11)
+              {
+                
+                ++this.peengineer;
+                console.log(this.peengineer)
+              }
             })
+            
             res.forEach(element=>{
               if(element.role.id==7)
               {
                 this.teamAdmin.push(element);
+                ++this.admin;
+                console.log(this.admin)
               }
             })
-            this.teamData = res;
-            console.log(this.teamData);
-            this.listOfteamData = res;
+            this.all = res.length;
 
           }
           else {
@@ -338,6 +387,74 @@ export class TeamhomepagePage implements OnInit {
     this.router.navigate(['/teamschedule']);
 
   }
+
+  edit(data){
+    this.modalController.dismiss({'dismissed':true})
+    
+   // this.route.navigate(['/teamschedule/'+this.designData.id])
+   let objToSend: NavigationExtras = {
+    queryParams: {
+     designData:data,
+  
+     
+    },
+    skipLocationChange: false,
+    fragment: 'top' 
+  };
+  
+  
+  
+  this.router.navigate(['/teamschedule/'+data.id], { 
+  state: { productdetails: objToSend }
+  });
+  }
+
+  async deleteDesign() {
+    
+    // this.enableDisable = true;
+    const toast = await this.toastController.create({
+      header: 'Delete Design',
+      message: 'Are you sure you want to delete this Team Member ?',
+      cssClass: 'my-custom-delete-class',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.deleteDesignFromServer();
+          }
+        }, {
+          text: 'No',
+          handler: () => {
+            // this.enableDisable = false;
+          }
+        }
+      ]
+    });
+    toast.present();
+  }
+  deleteDesignFromServer() {
+    console.log(this.designData)
+    this.utils.showLoading('Deleting Design').then((success) => {
+      this.apiService.deleteTeam(this.designData.id).subscribe((result) => {
+        console.log('result', result);
+        this.utils.hideLoading().then(() => {
+          this.utils.showSnackBar(this.designData.firstname + " " + 'has been deleted successfully');
+        //  this.navController.pop();
+        this.modalController.dismiss({'dismissed':true})
+        
+        
+        this.router.navigate(['/teamhomepage/team'])
+        // this.utils.setteamModuleRefresh(true);
+         // this.utils.setteamModuleRefresh(true);
+        });
+      }, (error) => {
+        this.utils.hideLoading().then(() => {
+          this.utils.errorSnackBar('Some Error Occurred');
+        });
+      });
+    });
+  }
+
 
   refreshDesigns(event) {
     // this.skip=0;
