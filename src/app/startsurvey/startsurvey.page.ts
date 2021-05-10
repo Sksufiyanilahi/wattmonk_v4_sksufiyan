@@ -1,10 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { SurveyStorageModel } from '../model/survey-storage.model';
 import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
+import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
+
+const { Camera } = Plugins;
 
 export interface MAINMENU {
   name: string;
@@ -132,9 +135,12 @@ export class StartsurveyPage implements OnInit {
   selectedsubmenuindex = 0;
   selectedshotindex = 0;
 
+  capturedImage: string = '';
+
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private changedetectorref: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.user = this.storageuserdata.getUser();
@@ -242,6 +248,33 @@ export class StartsurveyPage implements OnInit {
     // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
 
     this.submenuscroll.nativeElement.scrollLeft = rect.left;
+  }
+
+  //------------------------------------------------------------------------------------------------------------------
+  //Camera Picture Taking Methods
+  //------------------------------------------------------------------------------------------------------------------
+
+  async openCameraToCapturePic(){
+    const image = await Camera.getPhoto({
+      quality: 100,
+      allowEditing: false,
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Camera
+    });
+
+    this.capturedImage = "data:image/jpeg;base64," + image.base64String;
+    this.changedetectorref.detectChanges();
+
+    // const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+    // const captureshot: CAPTUREDSHOT = {
+    //   menuindex: this.selectedmainmenuindex,
+    //   submenuindex: this.selectedsubmenuindex,
+    //   shotindex: this.selectedshotindex,
+    //   shotimage: this.capturedImage,
+    //   imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
+    //   imagename: currentIndex.shots[this.selectedshotindex].imagename
+    // };
+    // currentIndex.capturedshots.push(captureshot);
   }
 
 }
