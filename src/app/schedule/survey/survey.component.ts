@@ -255,9 +255,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       }
 
     }
-
     if (this.surveyForm.status === 'INVALID') {
-
       if (this.surveyForm.value.name == '') {
         this.utilities.errorSnackBar('Please enter name.');
       } else if (this.surveyForm.value.phonenumber == '') {

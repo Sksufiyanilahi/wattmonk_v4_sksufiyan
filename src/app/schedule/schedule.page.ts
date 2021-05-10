@@ -400,7 +400,6 @@ this.network.networkConnect();
   //}
 
   saveSurveyForm() {
-
     this.utilities.setScheduleFormEvent(ScheduleFormEvent.SAVE_SURVEY_FORM);
   }
 
