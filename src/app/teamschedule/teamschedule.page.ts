@@ -200,7 +200,7 @@ export class TeamschedulePage implements OnInit {
               this.utils.hideLoading().then(() =>{ 
                 this.utils.showSnackBar('Team created successfully');
                 this.utils.setteamModuleRefresh(true);
-                this.router.navigate(['/teamhomepage/team'])
+                this.router.navigate(['/teamhomepage'])
                
     
               });
@@ -239,7 +239,7 @@ export class TeamschedulePage implements OnInit {
           
             this.utils.hideLoading().then(() =>{ 
               //this.createChatGroup(response);
-              this.router.navigate(['/teamhomepage/team'])
+              this.router.navigate(['/teamhomepage'])
               this.utils.showSnackBar('Team updated succesfully');
               // this.utils.showSnackBar('Design have been saved');
               this.utils.setteamModuleRefresh(true);

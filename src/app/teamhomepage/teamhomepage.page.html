@@ -203,7 +203,7 @@
         </ion-slides> -->
       <ion-slides pager="false" [options]="slideOpts">
         <ion-slide class="wt">
-          <ion-card class="slide-class card-class">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('admin')">
             <ion-card-header *ngIf="isTeamData">
               <ion-img
                 src="/assets/images/admin.svg"
@@ -222,7 +222,7 @@
           </ion-card>
         </ion-slide>
         <ion-slide class="wt">
-          <ion-card class="slide-class card-class">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('bd')">
             <ion-card-header *ngIf="isTeamData">
               <ion-img src="/assets/images/bds.svg" class="tab-icon"></ion-img>
             </ion-card-header>
@@ -238,7 +238,7 @@
           </ion-card>
         </ion-slide>
         <ion-slide class="wt">
-          <ion-card class="slide-class card-class">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('designers')">
             <ion-card-header *ngIf="isTeamData">
               <ion-img src="/assets/images/bds.svg" class="tab-icon"></ion-img>
             </ion-card-header>
@@ -254,7 +254,7 @@
           </ion-card>
         </ion-slide>
         <ion-slide class="wt">
-          <ion-card class="slide-class card-class">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('analysts')">
             <ion-card-header *ngIf="isTeamData">
               <ion-img src="/assets/images/bds.svg" class="tab-icon"></ion-img>
             </ion-card-header>
@@ -270,7 +270,7 @@
           </ion-card>
         </ion-slide>
         <ion-slide class="wt">
-          <ion-card class="slide-class card-class">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('peengineer')">
             <ion-card-header *ngIf="isTeamData">
               <ion-img src="/assets/images/bds.svg" class="tab-icon"></ion-img>
             </ion-card-header>
@@ -286,7 +286,7 @@
           </ion-card>
         </ion-slide>
         <ion-slide class="wt">
-          <ion-card class="slide-class card-class">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('surveyor')">
             <ion-card-header *ngIf="isTeamData">
               <ion-img
                 src="/assets/images/surveyors.svg"
@@ -305,7 +305,7 @@
           </ion-card>
         </ion-slide>
         <ion-slide class="wt">
-          <ion-card class="slide-class card-class">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('all')">
             <ion-card-header *ngIf="isTeamData">
               <ion-img src="/assets/images/list.svg" class="tab-icon"></ion-img>
             </ion-card-header>

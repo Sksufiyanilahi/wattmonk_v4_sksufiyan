@@ -66,6 +66,12 @@ export class TeamhomepagePage implements OnInit {
   peengineer:number=0;
   all:number=0;
 
+  teamDesigner:User[]=[];
+  teamAnalyst:User[]=[]
+  teamPeengineer:User[]=[];
+  teamSurveyor:User[]=[];
+
+
   user: any
   unreadCount;
   roles: any;
@@ -90,18 +96,15 @@ export class TeamhomepagePage implements OnInit {
   segmentChanged(event){
     // this.skip=0;
     console.log(event)
+    this.isTeamData = false;
      if(event.target.value=='member'){
       this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
         this.getTeams(null);
       })
      }
-     else if(event.target.value=='groupsalpha')
-     {
-
-     }
      else if(event.target.value == 'groups')
      {
-
+      this.isTeamData = false;
      }
 
  }
@@ -109,6 +112,7 @@ export class TeamhomepagePage implements OnInit {
   ngOnInit() {
     this.user = this.storage.getUser();
     console.log(this.user)
+    this.isTeamData=false;
     this.getNotificationCount();
    this.getRoles();
     this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
@@ -172,7 +176,13 @@ export class TeamhomepagePage implements OnInit {
       console.log(showLoader)
       this.teamData=[];
       this.listOfteamData = [];
-      var count=0;
+      this.bd = 0;
+      this.admin = 0;
+      this.designers = 0;
+      this.analysts = 0;
+      this.surveyor=0;
+      this.peengineer = 0;
+      this.all = 0;
       // this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
       this.apiService.getTeamData().subscribe((res) => {
          console.log(res);
@@ -188,31 +198,33 @@ export class TeamhomepagePage implements OnInit {
               {
                 this.teamBd.push(element);
                 ++this.bd;
-                console.log(this.bd)
+                
               }
               else if(element.role.id==5)
               {
+                this.teamAdmin.push(element);
                 ++this.admin;
-                console.log(this.admin)
+               
               }
               else if(element.role.id==8)
               {
-                
+                this.teamDesigner.push(element);
                 ++this.designers;
-                count=0;
+                
               }
               else if(element.role.id==10)
               {
-                
+                this.teamAnalyst.push(element);
                 ++this.analysts;
               }
               else if(element.role.id==9)
               {
+                this.teamSurveyor.push(element);
                 ++this.surveyor;
               }
               else if(element.role.id==11)
               {
-                
+                this.teamPeengineer.push(element);
                 ++this.peengineer;
                 console.log(this.peengineer)
               }
@@ -244,6 +256,45 @@ export class TeamhomepagePage implements OnInit {
       // })
       })
     // })
+  }
+
+  filterAdmin(value)
+  {
+    if(value=='admin')
+    {    
+    this.teamData = [];
+    this.teamData = this.teamAdmin;
+    }
+    else if(value=='bd')
+    {
+      this.teamData = [];
+      this.teamData = this.teamBd;
+    }
+    else if(value == 'designers')
+    {
+      this.teamData = [];
+      this.teamData = this.teamDesigner;
+    }
+    else if(value =='analysts')
+    {
+      this.teamData = [];
+      this.teamData = this.teamAnalyst;
+    }
+    else if(value == 'peengineer')
+    {
+      this.teamData = [];
+      this.teamData = this.teamPeengineer;
+    }
+    else if(value == 'surveyor')
+    {
+      this.teamData=[];
+      this.teamData = this.teamSurveyor;
+    }
+    else if(value == 'all')
+    {
+      this.teamData = [];
+      this.teamData=this.listOfteamData;
+    }
   }
 
   // formatDesignData(records : teamData[]){
