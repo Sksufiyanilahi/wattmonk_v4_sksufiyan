@@ -1048,7 +1048,7 @@ export class SurveyComponent {
     })
 
 
-    let dir_name = 'Wattmonk';
+    let dir_name = 'WattMonk';
     let path = '';
     const url = designData.surveypdf.url;
     const fileTransfer: FileTransferObject = this.transfer.create();

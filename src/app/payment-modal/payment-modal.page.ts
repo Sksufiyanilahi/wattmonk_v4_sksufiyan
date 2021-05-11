@@ -296,7 +296,7 @@ confirm(){
         this.newpermitsRef.update({ count: this.newpermitscount + 1});
       }
         this.utils.hideLoading().then(()=>
-       { this.utils.showSnackBar("Design request has been send to wattmonk successfully")
+       { this.utils.showSnackBar("Design request has been send to WattMonk successfully")
        //this.navController.pop();
        if(this.design=='prelim'){
          this.router.navigate(['/homepage/design'])
@@ -402,7 +402,7 @@ confirm(){
         this.utils.showLoading("Assigning").then(()=>
           {this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
             this.utils.hideLoading().then(()=>
-           { this.utils.showSnackBar("Design request has been send to wattmonk successfully")
+           { this.utils.showSnackBar("Design request has been send to WattMonk successfully")
            this.navController.pop();
            if(this.design=='prelim'){
              this.createChatGroup(this.design);
@@ -669,7 +669,7 @@ this.removeCoupon();
                this.newpermitsRef.update({ count: this.newpermitscount + 1});
              }
                this.utils.hideLoading().then(()=>
-              { this.utils.showSnackBar("Design request has been send to wattmonk successfully")
+              { this.utils.showSnackBar("Design request has been send to WattMonk successfully")
               //this.navController.pop();
               if(this.design=='prelim'){
                 this.router.navigate(['/homepage/design'])

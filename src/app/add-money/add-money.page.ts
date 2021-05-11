@@ -406,7 +406,7 @@ export class AddMoneyPage implements OnInit {
                     };
                     this.apiService.updatePestamps(this.designId, postData).subscribe(value => {
                       this.newpestampRef.update({count: this.newpestampscount + 1});
-                      this.utils.showSnackBar("Pe Stamp request has been send to wattmonk successfully");
+                      this.utils.showSnackBar("Pe Stamp request has been send to WattMonk successfully");
                       this.router.navigate(['pestamp-homepage/pestamp-design']);
                       this.utils.setPeStampRefresh(true);
 
@@ -534,7 +534,7 @@ export class AddMoneyPage implements OnInit {
                     } else {
                       this.newpermitsRef.update({count: this.newpermitscount + 1});
                     }
-                    this.utils.showSnackBar("Design request has been send to wattmonk successfully");
+                    this.utils.showSnackBar("Design request has been send to WattMonk successfully");
                     if (this.design == 'prelim') {
                       this.router.navigate(['homepage/design']);
                       this.utils.setHomepageDesignRefresh(true);

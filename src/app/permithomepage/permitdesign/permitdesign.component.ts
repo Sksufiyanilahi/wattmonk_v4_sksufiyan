@@ -630,7 +630,7 @@ this.deactivateNetworkSwitch.unsubscribe();
     }
     else if (this.assignForm.status === 'INVALID' && ( this.designerData.status === 'created'|| this.designerData.status === 'requestaccepted'|| this.designerData.status === 'designassigned')) {
       if(this.userData.role.type=='clientsuperadmin'){
-        this.utils.errorSnackBar('Please select the wattmonk admin');
+        this.utils.errorSnackBar('Please select the WattMonk admin');
       }
       else{this.utils.errorSnackBar('Please select a designer');}
     }
@@ -712,7 +712,7 @@ this.deactivateNetworkSwitch.unsubscribe();
           if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
          {
           this.isclientassigning= true;
-          this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+          this.utils.showSnackBar('Design request has been assigned to WattMonk successfully');
           this.addUserToGroupChat();
          }else{
           this.addUserToGroupChat();
@@ -1189,7 +1189,7 @@ designDownload(designData,event){
 
 
 
-    let dir_name = 'Wattmonk';
+    let dir_name = 'WattMonk';
     let path = '';
     const url = designData.permitdesign.url;
    const fileTransfer: FileTransferObject = this.transfer.create();

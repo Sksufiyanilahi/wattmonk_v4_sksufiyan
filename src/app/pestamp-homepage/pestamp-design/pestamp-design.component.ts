@@ -778,7 +778,7 @@ designDownload(designData,event){
     })
   })
 
-    let dir_name = 'Wattmonk';
+    let dir_name = 'WattMonk';
     let path = '';
     const url = designData.stampedfiles.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
@@ -1074,7 +1074,7 @@ directAssignToWattmonk(id:number,design,event){
             //  {
             //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
             //  }else{
-              this.utils.showSnackBar('Pe Stamp request has been reassigned to wattmonk successfully');
+              this.utils.showSnackBar('Pe Stamp request has been reassigned to WattMonk successfully');
 
               //this.dismissBottomSheet();
               //this.showBottomDraw = false;

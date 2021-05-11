@@ -329,7 +329,11 @@ const routes: Routes = [
   {
     path: 'settings',
     loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
+  },  {
+    path: 'design-tracker',
+    loadChildren: () => import('./design-tracker/design-tracker.module').then( m => m.DesignTrackerPageModule)
   },
+
 
 
 

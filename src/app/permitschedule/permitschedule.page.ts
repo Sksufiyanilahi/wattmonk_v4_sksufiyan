@@ -1867,7 +1867,7 @@ export class PermitschedulePage implements OnInit {
           ;
 
 
-          this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
+          this.utils.showSnackBar('Design request has been assigned to WattMonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
           this.router.navigate(['/permithomepage'])
 
           this.utils.setHomepagePermitRefresh(this.isEdit);

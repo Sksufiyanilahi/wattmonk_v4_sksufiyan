@@ -717,7 +717,7 @@ designDownload(designData,event){
     })
   })
 
-    let dir_name = 'Wattmonk';
+    let dir_name = 'WattMonk';
     let path = '';
     const url = designData.stampedfiles.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
