@@ -40,6 +40,7 @@ import {MyLoaderComponent} from './components/my-loader/my-loader.component';
 import {CameraPreviewWeb} from '@capacitor-community/camera-preview';
 import {SplashScreenPluginWeb} from '@capacitor/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import {JoyrideModule} from 'ngx-joyride'
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent,PopoverComponentComponent],
@@ -61,7 +62,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
      MatProgressSpinnerModule,
     AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase),
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    JoyrideModule.forRoot()
 
   ],
   providers: [

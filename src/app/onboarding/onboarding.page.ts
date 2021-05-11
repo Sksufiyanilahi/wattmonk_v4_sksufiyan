@@ -11,6 +11,10 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { MatStepper } from '@angular/material/stepper';
 import { ErrorModel } from '../model/error.model';
+import { JoyrideService } from 'ngx-joyride';
+import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
+import {FirebaseX} from '@ionic-native/firebase-x/ngx';
+
 //import { Slides } from 'ionic-angular';
 
 export function getFileReader(): FileReader {
@@ -45,7 +49,7 @@ export class OnboardingPage implements OnInit {
   registrationError = INVALID_REGISTRATION_NUMBER;
   companyError = INVALID_COMPANY_NAME;
   phoneError = INVALID_PHONE_NUMBER;
-
+  // maintourRef: AngularFireObject<any>;
 
   logo: any;
   editFile: boolean = true;
@@ -73,6 +77,10 @@ export class OnboardingPage implements OnInit {
   logoSelected: boolean = false;
   checkboxValue: boolean;
   roleValue: number;
+  maintour:any;
+  maintourRef: AngularFireObject<any>;
+  runmaintour: boolean;
+  unreadCount;
 
   constructor(
     private router: Router,
@@ -82,7 +90,10 @@ export class OnboardingPage implements OnInit {
     private menu: MenuController,
     private utils: UtilitiesService,
     private navCtrl: NavController,
-    private cd: ChangeDetectorRef,) {
+    private db: AngularFireDatabase,
+    private firebase: FirebaseX,
+    private cd: ChangeDetectorRef,
+    private readonly joyrideService:JoyrideService) {
     this.user = this.storage.getUser();
     console.log(this.user);
     this.userId = this.storage.getUserID();
@@ -141,12 +152,13 @@ export class OnboardingPage implements OnInit {
     });
     this.getRoles()
     console.log("onboarding")
-    this.menu.enable(false);
+    // this.menu.enable(false);
     // this.user = this.storage.getUser();
     // console.log(this.user)
     // this.userId= this.storage.getUserID();
+    
 
-
+    this.getNotificationCount();
     this.onboardingData();
     this.paymentCharges();
     this.apiService.emitUserNameAndRole(this.user);
@@ -162,6 +174,43 @@ export class OnboardingPage implements OnInit {
 
   ionViewDidEnter() {
     this.user = this.storage.getUser();
+    this.menu.open();
+    if(this.user.role.type=='clientsuperadmin' || this.user.role.type=='clientadmin'){
+    this.startTour();}
+  }
+
+  startTour(){
+     this.maintourRef = this.db.object("devcomp_" + this.user.parent.id);
+    this.maintour = this.maintourRef.valueChanges();
+    this.maintour.subscribe(
+      (res) => {
+        console.log(res.maintour);
+        if (res.maintour == null || res.maintour == undefined || !res.maintour) {
+          this.runmaintour = true;
+          if (this.runmaintour) {
+            if (this.user.usertype == 'individual') {
+              this.joyrideService.startTour(
+                { steps: ['dashboardhighlight', 'prelimhighlight', 'surveyhighlight','permithighlight', 'pestamphighlight', 'inboxhighlight', 'searchhighlight', 'notificationhighlight'] }
+              );
+            }
+            else {
+              this.joyrideService.startTour(
+                { steps: ['dashboardhighlight', 'prelimhighlight', 'surveyhighlight','permithighlight',  'pestamphighlight', 'inboxhighlight', 'teamhighlight', 'searchhighlight', 'notificationhighlight'] }
+              );
+            }
+          }
+        }
+      },
+      (err) => console.log(err),
+      () => console.log('done!')
+    )
+    
+  
+  }
+
+
+  onMainTourDone() {
+    this.maintourRef.update({ maintour: true });
   }
 
   ngOnDestroy() {
@@ -170,6 +219,19 @@ export class OnboardingPage implements OnInit {
 
   ionViewWillLeave() {
     this.menu.enable(true);
+  }
+
+  getNotificationCount(){
+    this.apiService.getCountOfUnreadNotifications().subscribe( (count)=>{
+
+     this.unreadCount= count;
+    });
+
+
+  }
+
+  setzero(){
+    this.unreadCount= 0;
   }
 
   onboardingData() {
@@ -649,6 +711,9 @@ export class OnboardingPage implements OnInit {
     this.utils.presentPopover('design');
     this.utils.setDesignDetails(null);
     // this.route.navigate([ '/schedule/design' ]);
+  }
+  searchbar(){
+    this.router.navigate(['/search-bar1']);
   }
 
 }
