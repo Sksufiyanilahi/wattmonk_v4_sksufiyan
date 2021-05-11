@@ -341,6 +341,7 @@ export class SurveyprocessPage implements OnInit {
     } else {
       this.platformname = 'web';
     }
+    
 
     // this.platform.backButton.subscribeWithPriority(100, () => {
     //     if (!this.isSaveFormCalled) {

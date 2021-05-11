@@ -264,19 +264,7 @@ export class StartsurveyPage implements OnInit {
     });
 
     this.capturedImage = "data:image/jpeg;base64," + image.base64String;
-
-    const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-    const captureshot: CAPTUREDSHOT = {
-      menuindex: this.selectedmainmenuindex,
-      submenuindex: this.selectedsubmenuindex,
-      shotindex: this.selectedshotindex,
-      shotimage: this.capturedImage,
-      imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
-      imagename: currentIndex.shots[this.selectedshotindex].imagename
-    };
-    currentIndex.capturedshots.push(captureshot);
-
-    this.changedetectorref.detectChanges();
+    this.renderSelectedImage();
   }
 
   async openPhotoGalleryToSelectPic(event){
@@ -289,7 +277,10 @@ export class StartsurveyPage implements OnInit {
     });
 
     this.capturedImage = "data:image/jpeg;base64," + image.base64String;
+    this.renderSelectedImage();
+  }
 
+  renderSelectedImage(){
     const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
     const captureshot: CAPTUREDSHOT = {
       menuindex: this.selectedmainmenuindex,

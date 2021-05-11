@@ -150,13 +150,16 @@ export class AppComponent {
         this.registerAPNS();
       }
       SplashScreen.hide();
-      StatusBar.setStyle({
-        style: StatusBarStyle.Light
-      });
-      StatusBar.setOverlaysWebView({
-        overlay: true
-      });
+
+      //Uncomment for Android Build
+      // StatusBar.setStyle({
+      //   style: StatusBarStyle.Light
+      // });
+      // StatusBar.setOverlaysWebView({
+      //   overlay: true
+      // });
       // StatusBar.hide();
+      
     });
   }
 
