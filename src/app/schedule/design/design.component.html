@@ -60,7 +60,7 @@
         <ion-col>
           <ion-item class="ion-no-padding">
             <ion-label position="floating">name*</ion-label>
-            <ion-input type="text" class="form_input" id="name" [ngClass]="{'invalid' : desginForm.controls['name'].errors && (desginForm.controls['name'].dirty || desginForm.controls['name'].touched)}" autocapitalize="words" formControlName="name" required></ion-input>
+            <ion-input type="text" class="form_input" id="name" autocapitalize="words" formControlName="name"></ion-input>
           </ion-item>
           <div style="height: 5px">
             <div *ngIf="

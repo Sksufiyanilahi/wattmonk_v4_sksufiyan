@@ -8,7 +8,7 @@
   }
   
   .customer-name {
-    font-size: 1em;
+    font-size: 1.2em;
     color: #434343;
     font-weight: bold;
     display:table;
@@ -16,13 +16,13 @@
   }
   
   .customer-email {
-    font-size: 0.8em;
+    font-size: 1em;
     color: #666666;
   }
 
   .profile_img{
-    height: 70px;
-    width: 70px;
+    height: 55px;
+    width: 55px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,9 +49,9 @@
     background-color: #EDC773;
     font-size: 1.0em;
     font-weight: 500;
-    width: 130%;
+    width: 100%;
     padding: 4px 10px;
-    border-radius: 35px;
+    border-radius: 5px;
     text-align: center;
     height: 28px;
     color: black;
@@ -67,7 +67,11 @@
 ion-icon
 {
     font-size: large;
-    margin: 2%;
+    // margin: 2%;
+}
+
+ion-content{
+  --ion-background-color:#FBF9F4;
 }
 
 .notification-padding {
@@ -91,4 +95,20 @@ ion-icon
     align-items: center;
     justify-content: center;
     border: 1px solid white;
+}
+
+ion-header{
+  --ion-background-color:#FBF9F4
+}
+
+ion-card-header{
+  display: flex;
+  justify-content: center;
+}
+
+.bar-header {
+  border: 0px !important;
+  border-bottom-color: transparent !important;
+  background-image: none !important;
+  border-bottom: none !important;
 }

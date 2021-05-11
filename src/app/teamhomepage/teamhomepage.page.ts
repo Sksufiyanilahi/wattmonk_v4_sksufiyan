@@ -494,7 +494,7 @@ export class TeamhomepagePage implements OnInit {
         this.modalController.dismiss({'dismissed':true})
         
         
-        this.router.navigate(['/teamhomepage/team'])
+        this.router.navigate(['/teamhomepage'])
         // this.utils.setteamModuleRefresh(true);
          // this.utils.setteamModuleRefresh(true);
         });
