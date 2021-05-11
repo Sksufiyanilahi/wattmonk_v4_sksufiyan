@@ -30,7 +30,6 @@ export class ClienthomepagePage implements OnInit {
   clientData: any[];
   // clients: any[] = [];
   length: number;
-
   dataSubscription: Subscription;
   private version = version;
   showSearchBar = false;
