@@ -6,6 +6,14 @@ import { SurveyStorageModel } from '../model/survey-storage.model';
 import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
+import { ErrorModel } from '../model/error.model';
+import { ApiService } from '../api.service';
+import { UtilitiesService } from '../utilities.service';
+import { InverterMakeModel } from '../model/inverter-make.model';
+import { InverterMadeModel } from '../model/inverter-made.model';
+import { SolarMake } from '../model/solar-make.model';
+import { SolarMadeModel } from '../model/solar-made.model';
+import { RoofMaterial } from '../model/roofmaterial.model';
 
 const { Camera } = Plugins;
 
@@ -119,11 +127,24 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('mainscroll', { static: false }) mainscroll: any;
   @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
 
+  QuestionTypes = QUESTIONTYPE;
+  ViewModes = VIEWMODE;
+  ControlTypes = CONTROLTYPE;
+
   user: User;
   surveyid: number;
   surveytype: string;
   surveycity: string;
   surveystate: string;
+
+  utilities: InverterMakeModel[] = [];
+  selectedutilityid: number;
+  invertermodels: InverterMadeModel[] = [];
+  invertermakes: InverterMakeModel[] = [];
+  solarmakes: SolarMake[] = [];
+  solarmodels: SolarMadeModel[] = [];
+  roofmaterials: RoofMaterial[] = [];
+  selectedroofmaterialid: number;
 
   activeFormElementsArray;
   activeForm: FormGroup;
@@ -140,7 +161,9 @@ export class StartsurveyPage implements OnInit {
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
     private route: ActivatedRoute,
-    private changedetectorref: ChangeDetectorRef) { }
+    private changedetectorref: ChangeDetectorRef,
+    private utilitieservice: UtilitiesService,
+    private apiService: ApiService) { }
 
   ngOnInit() {
     this.user = this.storageuserdata.getUser();
@@ -152,65 +175,65 @@ export class StartsurveyPage implements OnInit {
     this.loadSurveyJSON('pvsurveyjson');
   }
 
-  loadSurveyJSON(type){
+  loadSurveyJSON(type) {
     this.datastorage.get(type).then((data) => {
       console.log(data);
       this.createSurveyForm(data[0]);
     });
   }
 
-  createSurveyForm(data){
+  createSurveyForm(data) {
     this.activeFormElementsArray = [];
     let surveydata = data.sequence;
     const formData = {};
-      this.activeFormKeysMap = {};
-      surveydata.map(item => {
-        if (item.children) {
-          item.children.map(child => {
-            if (child.inputformcontrol !== '') {
-              this.activeFormElementsArray.push(child.inputformcontrol);
-              this.activeFormKeysMap[child.inputformcontrol] = child.placeholder =='' ? child.label:child.placeholder;
-              formData[child.inputformcontrol] = new FormControl('', [Validators.required]);
-            }
-            child.shots.map(shot => {
-              if (shot.inputformcontrol !== '') {
-                this.activeFormElementsArray.push(shot.inputformcontrol);
-                this.activeFormKeysMap[shot.inputformcontrol] = shot.placeholder;
-                if (child.inputformcontrol !== '') {
-                  formData[shot.inputformcontrol] = new FormControl('', []);
-                } else {
-                  formData[shot.inputformcontrol] = new FormControl('', [Validators.required]);
-                }
-                if (shot.questiontype === 9) {
-                  this.activeFormElementsArray.push(shot.inputformcontrol2);
-                  formData[shot.inputformcontrol2] = new FormControl('', []);
-                }
+    this.activeFormKeysMap = {};
+    surveydata.map(item => {
+      if (item.children) {
+        item.children.map(child => {
+          if (child.inputformcontrol !== '') {
+            this.activeFormElementsArray.push(child.inputformcontrol);
+            this.activeFormKeysMap[child.inputformcontrol] = child.placeholder == '' ? child.label : child.placeholder;
+            formData[child.inputformcontrol] = new FormControl('', [Validators.required]);
+          }
+          child.shots.map(shot => {
+            if (shot.inputformcontrol !== '') {
+              this.activeFormElementsArray.push(shot.inputformcontrol);
+              this.activeFormKeysMap[shot.inputformcontrol] = shot.placeholder;
+              if (child.inputformcontrol !== '') {
+                formData[shot.inputformcontrol] = new FormControl('', []);
+              } else {
+                formData[shot.inputformcontrol] = new FormControl('', [Validators.required]);
               }
-            });
-          });
-        }
-        if (item.formelements) {
-          item.formelements.map(formElement => {
-            this.activeFormElementsArray.push(formElement.inputformcontrol);
-            this.activeFormKeysMap[formElement.inputformcontrol] = formElement.placeholder;
-            if (formElement.required) {
-              formData[formElement.inputformcontrol] = new FormControl('', [Validators.required]);
-            } else {
-              formData[formElement.inputformcontrol] = new FormControl('', []);
+              if (shot.questiontype === 9) {
+                this.activeFormElementsArray.push(shot.inputformcontrol2);
+                formData[shot.inputformcontrol2] = new FormControl('', []);
+              }
             }
           });
-        }
-      });
-      formData['dimensionA'] = new FormControl('', []);
-      this.activeFormElementsArray.push('dimensionA');
-      formData['dimensionB'] = new FormControl('', []);
-      this.activeFormElementsArray.push('dimensionB');
-      formData['shotname'] = new FormControl('', []);
-      this.activeFormElementsArray.push('shotname');
-      this.activeForm = new FormGroup(formData);
+        });
+      }
+      if (item.formelements) {
+        item.formelements.map(formElement => {
+          this.activeFormElementsArray.push(formElement.inputformcontrol);
+          this.activeFormKeysMap[formElement.inputformcontrol] = formElement.placeholder;
+          if (formElement.required) {
+            formData[formElement.inputformcontrol] = new FormControl('', [Validators.required]);
+          } else {
+            formData[formElement.inputformcontrol] = new FormControl('', []);
+          }
+        });
+      }
+    });
+    formData['dimensionA'] = new FormControl('', []);
+    this.activeFormElementsArray.push('dimensionA');
+    formData['dimensionB'] = new FormControl('', []);
+    this.activeFormElementsArray.push('dimensionB');
+    formData['shotname'] = new FormControl('', []);
+    this.activeFormElementsArray.push('shotname');
+    this.activeForm = new FormGroup(formData);
 
-      //Fillin data from storage if data exists
-      this.restoreSurveyStoredData(surveydata);
+    //Fillin data from storage if data exists
+    this.restoreSurveyStoredData(surveydata);
   }
 
   restoreSurveyStoredData(surveydata) {
@@ -251,10 +274,109 @@ export class StartsurveyPage implements OnInit {
   }
 
   //------------------------------------------------------------------------------------------------------------------
+  // API Calls for Autocomplete Code Starts Here
+  //------------------------------------------------------------------------------------------------------------------
+  getUtilities() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getUtilities().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilities = response;
+          this.changedetectorref.detectChanges();
+        });
+
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+
+      });
+    });
+  }
+
+  getRoofMaterials() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getRoofMaterials().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.roofmaterials = response;
+          this.changedetectorref.detectChanges();
+        });
+
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  getInverterModels(selectedmakeid: string) {
+    this.utilitieservice.showLoading('Getting inverter models').then((success) => {
+      this.apiService.getInverterMade(selectedmakeid).subscribe(response => {
+        this.utilitieservice.hideLoading();
+        this.invertermodels = response;
+      }, responseError => {
+        this.utilitieservice.hideLoading();
+        const error: ErrorModel = responseError.error;
+        this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+      });
+    });
+  }
+
+  getInverterMakes() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getInverterMake().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.invertermakes = response;
+          this.changedetectorref.detectChanges();
+        });
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  getSolarModels(selectedsolarmakeid: number) {
+    this.utilitieservice.showLoading('Getting solar models').then((success) => {
+      this.apiService.getSolarMade(selectedsolarmakeid).subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.solarmodels = response;
+        });
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  getSolarMakes() {
+    this.utilitieservice.showLoading('Loading').then(() => {
+      this.apiService.getSolarMake().subscribe(response => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.solarmakes = response;
+          this.changedetectorref.detectChanges();
+          this.getUtilities();
+        });
+      }, responseError => {
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  //------------------------------------------------------------------------------------------------------------------
   //Camera Picture Taking Methods
   //------------------------------------------------------------------------------------------------------------------
 
-  async openCameraToCapturePic(event){
+  async openCameraToCapturePic(event) {
     event.preventDefault();
     const image = await Camera.getPhoto({
       quality: 100,
@@ -267,7 +389,7 @@ export class StartsurveyPage implements OnInit {
     this.renderSelectedImage();
   }
 
-  async openPhotoGalleryToSelectPic(event){
+  async openPhotoGalleryToSelectPic(event) {
     event.preventDefault();
     const image = await Camera.getPhoto({
       quality: 100,
@@ -280,7 +402,7 @@ export class StartsurveyPage implements OnInit {
     this.renderSelectedImage();
   }
 
-  renderSelectedImage(){
+  renderSelectedImage() {
     const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
     const captureshot: CAPTUREDSHOT = {
       menuindex: this.selectedmainmenuindex,
@@ -291,8 +413,205 @@ export class StartsurveyPage implements OnInit {
       imagename: currentIndex.shots[this.selectedshotindex].imagename
     };
     currentIndex.capturedshots.push(captureshot);
+    currentIndex.shots[this.selectedshotindex].shotstatus = true;
+
+    if (currentIndex.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
+      console.log("got question type");
+      if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
+        console.log("got prompt question");
+        currentIndex.shots[this.selectedshotindex].promptquestion = true;
+        // this.iscapturingallowed = false;
+        if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
+          this.getUtilities();
+        } else if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
+          this.getInverterMakes();
+        } else if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
+          this.getRoofMaterials();
+        }
+      } else {
+        console.log("inside else");
+        this.markShotCompletion(this.selectedshotindex);
+      }
+    } else {
+      if (!currentIndex.allowmultipleshots) {
+        currentIndex.shots[this.selectedshotindex].questionstatus = true;
+        this.handleMenuSwitch();
+      } else {
+        if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
+          currentIndex.shots[this.selectedshotindex].questionstatus = true;
+          // this.markShotCompletion(this.selectedshotindex);
+          // this.updateProgressStatus();
+        }
+      }
+    }
 
     this.changedetectorref.detectChanges();
+  }
+
+  handleMenuSwitch(selectedSubMenuDoesNotExist?) {
+    // this.iscapturingallowed = true;
+
+    // Retaining previous shots
+    // this.previousmainmenuindex = this.selectedmainmenuindex;
+    // this.previoussubmenuindex = this.selectedsubmenuindex;
+    // this.previousshotindex = this.selectedshotindex;
+
+    if (
+      !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots ||
+      (
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots &&
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].multipleshotslimit !== -1 &&
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length === this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].multipleshotslimit
+      )
+    ) {
+      this.markShotCompletion(this.selectedshotindex);
+      // if (!this.editingMode) {
+      //   this.updateProgressStatus();
+      // }
+      if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1 && selectedSubMenuDoesNotExist != false) {
+        this.selectedshotindex += 1;
+        // if (this.editingMode) {
+        //   this.selectedshotindex = this.editingModePreviousIndex;
+        // }
+      } else {
+        if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+          let nextvisibleitemfound = false;
+          for (let index = this.selectedsubmenuindex; index < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1; index++) {
+            const element = this.mainmenuitems[this.selectedmainmenuindex].children[index + 1];
+            if (element.isvisible && !nextvisibleitemfound) {
+              nextvisibleitemfound = true;
+              this.selectedsubmenuindex = index + 1;
+              // if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
+              //   CameraPreview.stop();
+              //   this.stopCamera();
+              // }
+              if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+                this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                this.selectedshotindex = 0;
+              }
+              this.scrollToSubmenuElement(this.selectedsubmenuindex);
+            }
+          }
+
+          if (!nextvisibleitemfound) {
+            if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
+              // Unset previous menu and select new one
+              this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+              this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+              let nextvisiblemainitemfound = false;
+              for (let index = this.selectedmainmenuindex; index < this.mainmenuitems.length - 1; index++) {
+                const element = this.mainmenuitems[index + 1];
+                if (element.isvisible && !nextvisiblemainitemfound) {
+                  nextvisiblemainitemfound = true;
+                  this.selectedmainmenuindex = index + 1;
+                  this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+                  this.selectedshotindex = 0;
+                  this.selectedsubmenuindex = 0;
+                  // if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
+                  //   CameraPreview.stop();
+                  //   this.stopCamera();
+                  // }
+                  if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+                    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                  }
+                  this.scrollToMainmenuElement(this.selectedmainmenuindex);
+                  this.handleViewModeSwitch();
+                }
+              }
+            }
+          }
+        } else {
+          if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
+            // Unset previous menu and select new one
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+            this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+            let nextvisiblemainitemfound = false;
+            for (let index = this.selectedmainmenuindex; index < this.mainmenuitems.length - 1; index++) {
+              const element = this.mainmenuitems[index + 1];
+              if (element.isvisible && !nextvisiblemainitemfound) {
+                nextvisiblemainitemfound = true;
+                this.selectedmainmenuindex = index + 1;
+                this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+                this.selectedshotindex = 0;
+                this.selectedsubmenuindex = 0;
+                // if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
+                //   CameraPreview.stop();
+                //   this.stopCamera();
+                // }
+                if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+                  this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                }
+                this.scrollToMainmenuElement(this.selectedmainmenuindex);
+                this.handleViewModeSwitch();
+              }
+            }
+          }
+        }
+      }
+    } else {
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0) {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+        this.markShotCompletion(this.selectedshotindex);
+        // if (!this.editingMode) {
+        //   this.updateProgressStatus();
+        // }
+      }
+    }
+    // if (this.editingMode) {
+    //   this.editingMode = false;
+    //   this.editingModePreviousIndex = '';
+    // }
+  }
+
+  handleViewModeSwitch() {
+    if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+      // this.startCameraAfterPermission();
+    } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
+      // CameraPreview.stop();
+      // this.stopCamera();
+      if (this.surveytype == 'battery') {
+        this.getSolarMakes();
+      } else if (this.surveytype == 'pvbattery') {
+        this.getUtilities();
+      }
+    }
+  }
+
+  markShotCompletion(index) {
+    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus) {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].ispending = false;
+
+        let ispendingset = false;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+          if (element.ispending && !ispendingset) {
+            ispendingset = true;
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+          }
+        });
+
+        this.markMainMenuCompletion();
+      }
+    } else {
+      this.markMainMenuCompletion();
+    }
+  }
+
+  markMainMenuCompletion() {
+    let ispendingset = false;
+    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+      this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
+        if (element.ispending && !ispendingset) {
+          ispendingset = true;
+          this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+        }
+      });
+    } else {
+      this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
+    }
   }
 
 }
