@@ -253,13 +253,29 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.fetchPendingDesigns(event, showLoader);
   }
 
-     accept(id,data:string,event){
+     accept(id,data:any,event){
        event.stopPropagation();
       this.mixpanel.track("ACCEPT_PERMIT_DESIGN_PAGE_OPEN", {
       });
       this.acceptid= id;
+     
+      var tomorrow = new Date();
+      if (data.deliverytimeslab == "4-6") {
+        tomorrow.setHours(tomorrow.getHours() + 4);
+       
+      } else if (data.deliverytimeslab == "6-12") {
+        tomorrow.setHours(tomorrow.getHours() + 12);
+        
+      } else if (data.deliverytimeslab == "12-24") {
+        tomorrow.setHours(tomorrow.getHours() + 24);
+       
+      } else if (data.deliverytimeslab == "24-48") {
+        tomorrow.setHours(tomorrow.getHours() + 48);
+        
+      }
        let status={
-        status:data
+        status:"requestaccepted",
+        deliverydate:tomorrow.toISOString()
       }
       this.utils.showLoading("accepting").then(()=>{
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{

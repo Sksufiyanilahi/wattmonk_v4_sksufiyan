@@ -310,8 +310,12 @@ this.network.networkConnect();
       this.mixpanelService.track("ACCEPT_PRELIM_DESIGN_PAGE_OPEN", {
       });
         this.acceptid = id;
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        var d_date = tomorrow.toISOString();
        let status={
-        status:data
+        status:data,
+        deliverydate:d_date
       }
       this.utils.showLoading("accepting").then(()=>{
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
