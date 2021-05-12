@@ -15,6 +15,7 @@ import { SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
 import { RoofMaterial } from '../model/roofmaterial.model';
 import { Animation, AnimationController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
 
 const { Camera } = Plugins;
 
@@ -167,7 +168,8 @@ export class StartsurveyPage implements OnInit {
     private changedetectorref: ChangeDetectorRef,
     private utilitieservice: UtilitiesService,
     private apiService: ApiService,
-    private animationCtrl: AnimationController) { }
+    private animationCtrl: AnimationController,
+    private http: HttpClient) { }
 
   ngOnInit() {
     this.user = this.storageuserdata.getUser();
@@ -176,7 +178,14 @@ export class StartsurveyPage implements OnInit {
     this.surveycity = this.route.snapshot.paramMap.get('city');
     this.surveystate = this.route.snapshot.paramMap.get('state');
 
-    this.loadSurveyJSON('pvsurveyjson');
+    // this.loadSurveyJSON('pvsurveyjson');
+
+    this.http
+          .get('assets/surveyprocessjson/pv.json')
+          .subscribe((data) => {
+            console.log(data);
+            this.createSurveyForm(data[0]);
+          });
 
   }
 
@@ -235,6 +244,7 @@ export class StartsurveyPage implements OnInit {
     this.activeFormElementsArray.push('dimensionB');
     formData['shotname'] = new FormControl('', []);
     this.activeFormElementsArray.push('shotname');
+    console.log(formData);
     this.activeForm = new FormGroup(formData);
 
     //Fillin data from storage if data exists
@@ -421,9 +431,7 @@ export class StartsurveyPage implements OnInit {
     currentIndex.shots[this.selectedshotindex].shotstatus = true;
 
     if (currentIndex.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
-      console.log("got question type");
       if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
-        console.log("got prompt question");
         currentIndex.shots[this.selectedshotindex].promptquestion = true;
         // this.iscapturingallowed = false;
         if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {

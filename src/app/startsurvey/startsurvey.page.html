@@ -109,9 +109,10 @@
             {{activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value}}
           </p>
           <ion-row class="ion-float-right">
-            <ion-button fill="clear" size="small" class="action-button-color"
-              *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions"
+            <ion-col size="6" *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions">
+              <ion-button fill="clear" size="small" class="action-button-color"
               (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
+            </ion-col>
           </ion-row>
         </ion-col>
       </ion-row>
@@ -135,7 +136,7 @@
             </div>
           </form>
           <ion-row class="ion-float-right">
-            <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
+            <ion-button fill="clear" size="small" class="action-button-color" (click)="handleInputSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>

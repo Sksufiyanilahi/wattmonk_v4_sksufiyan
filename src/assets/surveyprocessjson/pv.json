@@ -1,525 +1,531 @@
 [
   {
-    "name": "Electricals",
-    "isactive": true,
-    "ispending": true,
-    "isvisible": true,
-    "viewmode": 0,
-    "children": [
+    "id":4,
+    "jobtype": "pv",
+    "sequence": [
       {
-        "allowmultipleshots": false,
-        "isvisible": true,
-        "name": "MSP",
-        "ispending": true,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
+        "name": "Electricals",
         "isactive": true,
-        "placeholder": "",
-        "shots": [
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children": [
           {
-            "questiontype": 1,
-            "imagekey": "mspimages",
-            "imagename": "msplongshot",
-            "capturedshotinfo": "Main Panel Wall Long Shot",
-            "question": "MSP is located inside or outside the building?",
-            "shotinfo": "Capture Main Panel Wall Long Shot",
-            "promptquestion": false,
-            "shotstatus": false,
+            "allowmultipleshots": false,
+            "isvisible": true,
+            "name": "MSP",
             "ispending": true,
-            "inputformcontrol": "msplocation",
+            "isexistencechecked": false,
+            "inputformcontrol": "",
             "isactive": true,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "MSP Location",
-            "questioninfo": "Provide MSP Location",
-            "questionstatus": false,
-            "result": "",
-            "actions": [
-              "inside",
-              "outside"
-            ]
+            "placeholder": "",
+            "shots": [
+              {
+                "questiontype": 1,
+                "imagekey": "mspimages",
+                "imagename": "msplongshot",
+                "capturedshotinfo": "Main Panel Wall Long Shot",
+                "question": "MSP is located inside or outside the building?",
+                "shotinfo": "Capture Main Panel Wall Long Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "msplocation",
+                "isactive": true,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "MSP Location",
+                "questioninfo": "Provide MSP Location",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "inside",
+                  "outside"
+                ]
+              },
+              {
+                "questiontype": 2,
+                "imagekey": "mspimages",
+                "imagename": "mspzoomshot",
+                "capturedshotinfo": "Main Panel Zoom Shot",
+                "question": "BUS Rating (Sticker on inside of panel door)?",
+                "shotinfo": "Capture Main Panel Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "msprating",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "MSP Rating",
+                "questioninfo": "Provide MSP Rating",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "confirm"
+                ]
+              },
+              {
+                "questiontype": 2,
+                "imagekey": "mspimages",
+                "imagename": "mspopenshutterzoomshot",
+                "capturedshotinfo": "MSP Shutter Zoom Shot",
+                "question": "Biggest breaker size inside main panel (Number is on the breaker)",
+                "shotinfo": "Picture of open main panel capture zoom shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "mainbreakersize",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "Biggest breaker size inside main panel (Number is on the breaker)",
+                "questioninfo": "Provide Biggest breaker size inside main panel (Number is on the breaker)",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "confirm"
+                ]
+              },
+              {
+                "questiontype": 1,
+                "imagekey": "mspimages",
+                "imagename": "mspwithoutcovershot",
+                "capturedshotinfo": "MSP Inside Cover Zoom Shot",
+                "question": " Main Breaker location in Main panel Top/Bottom/Center/None?",
+                "shotinfo": "Open main panel and capture zoom shot of sticker in side cover",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "mspbreaker",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "MSP Breaker",
+                "questioninfo": "Provide  Main Breaker location in Main panel Top/Bottom/Center/None",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "top",
+                  "bottom",
+                  "center",
+                  "none"
+                ]
+              }
+            ],
+            "checkexistence": false,
+            "capturedshots": []
           },
           {
-            "questiontype": 2,
-            "imagekey": "mspimages",
-            "imagename": "mspzoomshot",
-            "capturedshotinfo": "Main Panel Zoom Shot",
-            "question": "BUS Rating (Sticker on inside of panel door)?",
-            "shotinfo": "Capture Main Panel Zoom Shot",
-            "promptquestion": false,
-            "shotstatus": false,
+            "allowmultipleshots": false,
+            "isvisible": true,
+            "name": "Utility Meter",
             "ispending": true,
-            "inputformcontrol": "msprating",
-            "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "MSP Rating",
-            "questioninfo": "Provide MSP Rating",
-            "questionstatus": false,
-            "result": "",
-            "actions": [
-              "confirm"
-            ]
-          },
-          {
-            "questiontype": 10,
-            "imagekey": "mspimages",
-            "imagename": "mspopenshutterzoomshot",
-            "capturedshotinfo": "MSP Shutter Zoom Shot",
-            "question": "Biggest breaker size inside main panel (Number is on the breaker)",
-            "shotinfo": "Picture of open main panel capture zoom shot",
-            "promptquestion": false,
-            "shotstatus": false,
-            "ispending": true,
-            "inputformcontrol": "mainbreakersize",
-            "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "Biggest breaker size inside main panel (Number is on the breaker)",
-            "questioninfo": "Provide Biggest breaker size inside main panel (Number is on the breaker)",
-            "questionstatus": false,
-            "result": "",
-            "actions": [
-              "confirm"
-            ]
-          },
-          {
-            "questiontype": 1,
-            "imagekey": "mspimages",
-            "imagename": "mspwithoutcovershot",
-            "capturedshotinfo": "MSP Inside Cover Zoom Shot",
-            "question": " Main Breaker location in Main panel Top/Bottom/Center/None?",
-            "shotinfo": "Open main panel and capture zoom shot of sticker in side cover",
-            "promptquestion": false,
-            "shotstatus": false,
-            "ispending": true,
-            "inputformcontrol": "mspbreaker",
-            "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "MSP Breaker",
-            "questioninfo": "Provide  Main Breaker location in Main panel Top/Bottom/Center/None",
-            "questionstatus": false,
-            "result": "",
-            "actions": [
-              "top",
-              "bottom",
-              "center",
-              "none"
-            ]
-          }
-        ],
-        "checkexistence": false,
-        "capturedshots": []
-      },
-      {
-        "allowmultipleshots": false,
-        "isvisible": true,
-        "name": "Utility Meter",
-        "ispending": true,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "isactive": false,
-        "placeholder": "",
-        "shots": [
-          {
-            "questiontype": 1,
-            "imagekey": "utilitymeterimages",
-            "imagename": "umwideshoturl",
-            "capturedshotinfo": "Meter Wall Photo",
-            "question": "Utility meter is attached or detached with MSP?",
-            "shotinfo": "Capture Meter Wall Photo",
-            "promptquestion": false,
-            "shotstatus": false,
-            "ispending": true,
-            "inputformcontrol": "utilitymeter",
-            "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "Utility Meter",
-            "questioninfo": "Provide Utility Meter",
-            "questionstatus": false,
-            "result": "",
-            "actions": [
-              "attach",
-              "detach"
-            ]
-          },
-          {
-            "questiontype": 2,
-            "imagekey": "utilitymeterimages",
-            "imagename": "umzoomshoturl",
-            "capturedshotinfo": "Utility Meter Zoom Shot",
-            "question": "Provide Utility Meter Number",
-            "shotinfo": "Capture Utility Meter Zoom Shot",
-            "promptquestion": false,
-            "shotstatus": false,
-            "ispending": true,
-            "inputformcontrol": "utilitymeternumber",
-            "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "Utility Meter Number",
-            "questioninfo": "Provide Utility Meter Number",
-            "questionstatus": false,
-            "result": "",
-            "actions": [
-              "confirm"
-            ]
-          }
-        ],
-        "checkexistence": false,
-        "capturedshots": []
-      },
-      {
-        "allowmultipleshots": false,
-        "isvisible": true,
-        "name": "Existing PV/Solar System",
-        "ispending": true,
-        "isexistencechecked": false,
-        "inputformcontrol": "existingsolarsystem",
-        "isactive": false,
-        "placeholder": "Existing Solar System",
-        "shots": [
-          {
-            "questiontype": 1,
-            "imagekey": "pvinverterimages",
-            "imagename": "pvinverterwideshoturl",
-            "capturedshotinfo": "PV Inverter Wide Angle Shot",
-            "question": "Inverter is located inside or outside the building?",
-            "shotinfo": "Capture PV Inverter Wide Angle Shot",
-            "promptquestion": false,
-            "shotstatus": false,
-            "ispending": true,
-            "inputformcontrol": "pvinverterlocation",
-            "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "PV Inverter Location",
-            "questioninfo": "Provide Inverter Location",
-            "questionstatus": false,
-            "result": "",
-            "actions": [
-              "inside",
-              "outside"
-            ]
-          },
-          {
-            "questiontype": 9,
-            "inputformcontrol2": "invertermodel",
-            "imagekey": "pvinverterimages",
-            "imagename": "pvinverterzoomshoturl",
-            "capturedshotinfo": "PV Inverter Zoom Shot",
-            "question": "Inverter Manufacturer, Model",
-            "shotinfo": "Capture PV Inverter Zoom Shot",
-            "promptquestion": false,
-            "shotstatus": false,
-            "ispending": true,
-            "inputformcontrol": "invertermake",
-            "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "PV Inverter Manufacturer and Model",
-            "questioninfo": "Provide Inverter Manufacturer & Model",
-            "questionstatus": false,
-            "result": "",
-            "actions": [
-              "confirm"
-            ]
-          },
-          {
-            "questiontype": 0,
-            "imagekey": "pvmeterimages",
-            "imagename": "pvmeterwideshoturl",
-            "capturedshotinfo": "PV Meter Wide Angle Shot",
-            "question": "",
-            "shotinfo": "Capture PV Meter Wide Angle Shot",
-            "promptquestion": false,
-            "shotstatus": false,
-            "ispending": true,
+            "isexistencechecked": false,
             "inputformcontrol": "",
             "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
             "placeholder": "",
-            "questioninfo": "PV Meter",
-            "questionstatus": false,
-            "result": "",
-            "actions": []
+            "shots": [
+              {
+                "questiontype": 1,
+                "imagekey": "utilitymeterimages",
+                "imagename": "umwideshoturl",
+                "capturedshotinfo": "Meter Wall Photo",
+                "question": "Utility meter is attached or detached with MSP?",
+                "shotinfo": "Capture Meter Wall Photo",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "utilitymeter",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "Utility Meter",
+                "questioninfo": "Provide Utility Meter",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "attach",
+                  "detach"
+                ]
+              },
+              {
+                "questiontype": 2,
+                "imagekey": "utilitymeterimages",
+                "imagename": "umzoomshoturl",
+                "capturedshotinfo": "Utility Meter Zoom Shot",
+                "question": "Provide Utility Meter Number",
+                "shotinfo": "Capture Utility Meter Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "utilitymeternumber",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "Utility Meter Number",
+                "questioninfo": "Provide Utility Meter Number",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "confirm"
+                ]
+              }
+            ],
+            "checkexistence": false,
+            "capturedshots": []
           },
           {
-            "questiontype": 0,
-            "imagekey": "acdisconnectimages",
-            "imagename": "acdisconnectwideshoturl",
-            "capturedshotinfo": "AC Disconnect Wide Angle Shot",
-            "question": "",
-            "shotinfo": "Capture AC Disconnect Wide Angle Shot",
-            "promptquestion": false,
-            "shotstatus": false,
+            "allowmultipleshots": false,
+            "isvisible": true,
+            "name": "Existing PV/Solar System",
             "ispending": true,
+            "isexistencechecked": false,
+            "inputformcontrol": "existingsolarsystem",
+            "isactive": false,
+            "placeholder": "Existing Solar System",
+            "shots": [
+              {
+                "questiontype": 1,
+                "imagekey": "pvinverterimages",
+                "imagename": "pvinverterwideshoturl",
+                "capturedshotinfo": "PV Inverter Wide Angle Shot",
+                "question": "Inverter is located inside or outside the building?",
+                "shotinfo": "Capture PV Inverter Wide Angle Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "pvinverterlocation",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "PV Inverter Location",
+                "questioninfo": "Provide Inverter Location",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "inside",
+                  "outside"
+                ]
+              },
+              {
+                "questiontype": 9,
+                "inputformcontrol2": "invertermodel",
+                "imagekey": "pvinverterimages",
+                "imagename": "pvinverterzoomshoturl",
+                "capturedshotinfo": "PV Inverter Zoom Shot",
+                "question": "Inverter Manufacturer, Model",
+                "shotinfo": "Capture PV Inverter Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "invertermake",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "PV Inverter Manufacturer and Model",
+                "questioninfo": "Provide Inverter Manufacturer & Model",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "confirm"
+                ]
+              },
+              {
+                "questiontype": 0,
+                "imagekey": "pvmeterimages",
+                "imagename": "pvmeterwideshoturl",
+                "capturedshotinfo": "PV Meter Wide Angle Shot",
+                "question": "",
+                "shotinfo": "Capture PV Meter Wide Angle Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "",
+                "questioninfo": "PV Meter",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              },
+              {
+                "questiontype": 0,
+                "imagekey": "acdisconnectimages",
+                "imagename": "acdisconnectwideshoturl",
+                "capturedshotinfo": "AC Disconnect Wide Angle Shot",
+                "question": "",
+                "shotinfo": "Capture AC Disconnect Wide Angle Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "",
+                "questioninfo": "",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              },
+              {
+                "questiontype": 0,
+                "imagekey": "acdisconnectimages",
+                "imagename": "acdisconnectzoomshoturl",
+                "capturedshotinfo": "AC Disconnect Zoom Shot",
+                "question": "",
+                "shotinfo": "Capture AC Disconnect Zoom Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "",
+                "questioninfo": "",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              }
+            ],
+            "checkexistence": true,
+            "capturedshots": []
+          }
+        ],
+        "formelements": []
+      },
+      {
+        "name": "Roof",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children": [
+          {
+            "allowmultipleshots": true,
+            "isvisible": true,
+            "name": "Roof Photos",
+            "ispending": true,
+            "isexistencechecked": false,
             "inputformcontrol": "",
             "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
+            "multipleshotslimit": 7,
             "placeholder": "",
-            "questioninfo": "",
-            "questionstatus": false,
-            "result": "",
-            "actions": []
+            "shots": [
+              {
+                "questiontype": 6,
+                "imagekey": "roofimages",
+                "imagename": "roof",
+                "capturedshotinfo": "Roof Photos",
+                "question": "What is the roof material?",
+                "shotinfo": "Capture roof photos with all angles from the ground",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "roofmaterial",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "Roof Material",
+                "questioninfo": "Provide Roof Material",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "Confirm"
+                ]
+              }
+            ],
+            "checkexistence": false,
+            "capturedshots": []
           },
           {
-            "questiontype": 0,
-            "imagekey": "acdisconnectimages",
-            "imagename": "acdisconnectzoomshoturl",
-            "capturedshotinfo": "AC Disconnect Zoom Shot",
-            "question": "",
-            "shotinfo": "Capture AC Disconnect Zoom Shot",
-            "promptquestion": false,
-            "shotstatus": false,
+            "allowmultipleshots": true,
+            "isvisible": true,
+            "name": "Obstacles Photos",
             "ispending": true,
+            "isexistencechecked": false,
             "inputformcontrol": "",
             "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
+            "multipleshotslimit": -1,
             "placeholder": "",
-            "questioninfo": "",
-            "questionstatus": false,
-            "result": "",
-            "actions": []
+            "shots": [
+              {
+                "questiontype": 0,
+                "imagekey": "obstaclesimages",
+                "imagename": "obstacle",
+                "capturedshotinfo": "Obstacles Photos",
+                "question": "",
+                "shotinfo": "Capture install obstacles and shading on roof from the ground.",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "",
+                "questioninfo": "",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              }
+            ],
+            "checkexistence": false,
+            "capturedshots": []
           }
         ],
-        "checkexistence": true,
-        "capturedshots": []
-      }
-    ],
-    "formelements": []
-  },
-  {
-    "name": "Roof",
-    "isactive": false,
-    "ispending": true,
-    "isvisible": true,
-    "viewmode": 0,
-    "children": [
-      {
-        "allowmultipleshots": true,
-        "isvisible": true,
-        "name": "Roof Photos",
-        "ispending": true,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
-        "isactive": false,
-        "multipleshotslimit": 7,
-        "placeholder": "",
-        "shots": [
-          {
-            "questiontype": 6,
-            "imagekey": "roofimages",
-            "imagename": "roof",
-            "capturedshotinfo": "Roof Photos",
-            "question": "What is the roof material?",
-            "shotinfo": "Capture roof photos with all angles from the ground",
-            "promptquestion": false,
-            "shotstatus": false,
-            "ispending": true,
-            "inputformcontrol": "roofmaterial",
-            "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "Roof Material",
-            "questioninfo": "Provide Roof Material",
-            "questionstatus": false,
-            "result": "",
-            "actions": [
-              "Confirm"
-            ]
-          }
-        ],
-        "checkexistence": false,
-        "capturedshots": []
+        "formelements": []
       },
       {
-        "allowmultipleshots": true,
-        "isvisible": true,
-        "name": "Obstacles Photos",
-        "ispending": true,
-        "isexistencechecked": false,
-        "inputformcontrol": "",
+        "name": "Attic",
         "isactive": false,
-        "multipleshotslimit": -1,
-        "placeholder": "",
-        "shots": [
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 0,
+        "children": [
           {
-            "questiontype": 0,
-            "imagekey": "obstaclesimages",
-            "imagename": "obstacle",
-            "capturedshotinfo": "Obstacles Photos",
-            "question": "",
-            "shotinfo": "Capture install obstacles and shading on roof from the ground.",
-            "promptquestion": false,
-            "shotstatus": false,
+            "allowmultipleshots": false,
+            "isvisible": true,
+            "name": "Attic Photos",
             "ispending": true,
-            "inputformcontrol": "",
+            "isexistencechecked": false,
+            "inputformcontrol": "atticphotosrequired",
             "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
+            "placeholder": "Is structural stamp required in this area?",
+            "shots": [
+              {
+                "questiontype": 1,
+                "imagekey": "atticimages",
+                "imagename": "atticwideshoturl",
+                "capturedshotinfo": "Attic Wide Angle SHot",
+                "question": "What is the type of frame?",
+                "shotinfo": "Capture Attic Wide Angle Shot",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "framing",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "Framing",
+                "questioninfo": "Provide Type of Frame Details",
+                "questionstatus": false,
+                "result": "",
+                "actions": []
+              },
+              {
+                "questiontype": 2,
+                "imagekey": "atticimages",
+                "imagename": "atticrequiredshoturl",
+                "capturedshotinfo": "Attic Required Shot",
+                "question": "What's the distance between two rafts?",
+                "shotinfo": "Capture image with measuring tape between two rafters",
+                "promptquestion": false,
+                "shotstatus": false,
+                "ispending": true,
+                "inputformcontrol": "distancebetweentworafts",
+                "isactive": false,
+                "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
+                "placeholder": "Distance between Two Rafts",
+                "questioninfo": "Provide Spacing Details",
+                "questionstatus": false,
+                "result": "",
+                "actions": [
+                  "Confirm"
+                ]
+              }
+            ],
+            "checkexistence": true,
+            "capturedshots": []
+          }
+        ],
+        "formelements": []
+      },
+      {
+        "name": "Details",
+        "isactive": false,
+        "ispending": true,
+        "isvisible": true,
+        "viewmode": 1,
+        "children": [],
+        "formelements": [
+          {
+            "inputformcontrol": "batterysystem",
             "placeholder": "",
-            "questioninfo": "",
-            "questionstatus": false,
-            "result": "",
-            "actions": []
-          }
-        ],
-        "checkexistence": false,
-        "capturedshots": []
-      }
-    ],
-    "formelements": []
-  },
-  {
-    "name": "Attic",
-    "isactive": false,
-    "ispending": true,
-    "isvisible": true,
-    "viewmode": 0,
-    "children": [
-      {
-        "allowmultipleshots": false,
-        "isvisible": true,
-        "name": "Attic Photos",
-        "ispending": true,
-        "isexistencechecked": false,
-        "inputformcontrol": "atticphotosrequired",
-        "isactive": false,
-        "placeholder": "Is structural stamp required in this area?",
-        "shots": [
-          {
-            "questiontype": 1,
-            "imagekey": "atticimages",
-            "imagename": "atticwideshoturl",
-            "capturedshotinfo": "Attic Wide Angle SHot",
-            "question": "What is the type of frame?",
-            "shotinfo": "Capture Attic Wide Angle Shot",
-            "promptquestion": false,
-            "shotstatus": false,
-            "ispending": true,
-            "inputformcontrol": "framing",
-            "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "Framing",
-            "questioninfo": "Provide Type of Frame Details",
-            "questionstatus": false,
-            "result": "",
-            "actions": []
+            "label": "Is there any Battery System?*",
+            "visibility": true,
+            "controltype": 5,
+            "controlselement": {
+              "inputformcontrol": "detailsofbatterysystem",
+              "onvalueselection": true
+            },
+            "options": [
+              {
+                "label": "Yes",
+                "value": true
+              },
+              {
+                "label": "No",
+                "value": false
+              }
+            ],
+            "required": true
           },
           {
-            "questiontype": 2,
-            "imagekey": "atticimages",
-            "imagename": "atticrequiredshoturl",
-            "capturedshotinfo": "Attic Required Shot",
-            "question": "What's the distance between two rafts?",
-            "shotinfo": "Capture image with measuring tape between two rafters",
-            "promptquestion": false,
-            "shotstatus": false,
-            "ispending": true,
-            "inputformcontrol": "distancebetweentworafts",
-            "isactive": false,
-            "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanelwalllongshot.jpg",
-            "placeholder": "Distance between Two Rafts",
-            "questioninfo": "Provide Spacing Details",
-            "questionstatus": false,
-            "result": "",
-            "actions": [
-              "Confirm"
-            ]
-          }
-        ],
-        "checkexistence": true,
-        "capturedshots": []
-      }
-    ],
-    "formelements": []
-  },
-  {
-    "name": "Details",
-    "isactive": false,
-    "ispending": true,
-    "isvisible": true,
-    "viewmode": 1,
-    "children": [],
-    "formelements": [
-      {
-        "inputformcontrol": "batterysystem",
-        "placeholder": "",
-        "label": "Is there any Battery System?*",
-        "visibility": true,
-        "controltype": 5,
-        "controlselement": {
-          "inputformcontrol": "detailsofbatterysystem",
-          "onvalueselection": true
-        },
-        "options": [
-          {
-            "label": "Yes",
-            "value": true
+            "inputformcontrol": "detailsofbatterysystem",
+            "placeholder": "",
+            "label": "Details Of Battery System",
+            "visibility": false,
+            "controltype": 7,
+            "options": [],
+            "required": false
           },
           {
-            "label": "No",
-            "value": false
-          }
-        ],
-        "required": true
-      },
-      {
-        "inputformcontrol": "detailsofbatterysystem",
-        "placeholder": "",
-        "label": "Details Of Battery System",
-        "visibility": false,
-        "controltype": 7,
-        "options": [],
-        "required": false
-      },
-      {
-        "inputformcontrol": "esid_number",
-        "placeholder": "ESID Number",
-        "label": "ESID Number",
-        "visibility": true,
-        "controltype": 1,
-        "options": [],
-        "required": false
-      },
-      {
-        "inputformcontrol": "servicefeedsource",
-        "placeholder": "",
-        "label": "Power service line source to Main panel*",
-        "visibility": true,
-        "controltype": 5,
-        "controlselement": {},
-        "options": [
-          {
-            "label": "Overhead",
-            "value": "overhead"
+            "inputformcontrol": "esid_number",
+            "placeholder": "ESID Number",
+            "label": "ESID Number",
+            "visibility": true,
+            "controltype": 1,
+            "options": [],
+            "required": false
           },
           {
-            "label": "Underground",
-            "value": "underground"
+            "inputformcontrol": "servicefeedsource",
+            "placeholder": "",
+            "label": "Power service line source to Main panel*",
+            "visibility": true,
+            "controltype": 5,
+            "controlselement": {},
+            "options": [
+              {
+                "label": "Overhead",
+                "value": "overhead"
+              },
+              {
+                "label": "Underground",
+                "value": "underground"
+              }
+            ],
+            "required": true
+          },
+          {
+            "inputformcontrol": "additionalnotes",
+            "placeholder": "",
+            "label": "Additional notes",
+            "visibility": true,
+            "controltype": 7,
+            "options": [],
+            "required": false
+          },
+          {
+            "inputformcontrol": "Hoadetails",
+            "placeholder": "",
+            "label": "HOA details",
+            "visibility": true,
+            "controltype": 7,
+            "options": [],
+            "required": false
+          },
+          {
+            "inputformcontrol": "Hoaattachements",
+            "placeholder": "",
+            "label": "HOA attachments",
+            "visibility": true,
+            "controltype": 8,
+            "options": [],
+            "required": false
           }
-        ],
-        "required": true
-      },
-      {
-        "inputformcontrol": "additionalnotes",
-        "placeholder": "",
-        "label": "Additional notes",
-        "visibility": true,
-        "controltype": 7,
-        "options": [],
-        "required": false
-      },
-      {
-        "inputformcontrol": "Hoadetails",
-        "placeholder": "",
-        "label": "HOA details",
-        "visibility": true,
-        "controltype": 7,
-        "options": [],
-        "required": false
-      },
-      {
-        "inputformcontrol": "Hoaattachements",
-        "placeholder": "",
-        "label": "HOA attachments",
-        "visibility": true,
-        "controltype": 8,
-        "options": [],
-        "required": false
+        ]
       }
     ]
   }
