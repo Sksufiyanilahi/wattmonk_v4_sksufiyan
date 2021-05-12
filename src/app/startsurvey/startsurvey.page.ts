@@ -14,6 +14,7 @@ import { InverterMadeModel } from '../model/inverter-made.model';
 import { SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
 import { RoofMaterial } from '../model/roofmaterial.model';
+import { Animation, AnimationController } from '@ionic/angular';
 
 const { Camera } = Plugins;
 
@@ -127,6 +128,8 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('mainscroll', { static: false }) mainscroll: any;
   @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
 
+  questiongridanimation: Animation;
+
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
   ControlTypes = CONTROLTYPE;
@@ -163,7 +166,8 @@ export class StartsurveyPage implements OnInit {
     private route: ActivatedRoute,
     private changedetectorref: ChangeDetectorRef,
     private utilitieservice: UtilitiesService,
-    private apiService: ApiService) { }
+    private apiService: ApiService,
+    private animationCtrl: AnimationController) { }
 
   ngOnInit() {
     this.user = this.storageuserdata.getUser();
@@ -173,6 +177,7 @@ export class StartsurveyPage implements OnInit {
     this.surveystate = this.route.snapshot.paramMap.get('state');
 
     this.loadSurveyJSON('pvsurveyjson');
+
   }
 
   loadSurveyJSON(type) {
@@ -446,6 +451,15 @@ export class StartsurveyPage implements OnInit {
     }
 
     this.changedetectorref.detectChanges();
+
+    setTimeout(() => {
+      this.questiongridanimation = this.animationCtrl.create()
+        .addElement(document.querySelector('.questionaireview'))
+        .duration(500)
+        .easing('ease-in')
+        .fromTo('opacity', '0', '1')
+      this.questiongridanimation.play();
+    }, 10);
   }
 
   handleMenuSwitch(selectedSubMenuDoesNotExist?) {
@@ -617,7 +631,7 @@ export class StartsurveyPage implements OnInit {
   //------------------------------------------------------------------------------------------------------------------
   // Answer Submissions for Shot Questions Code
   //------------------------------------------------------------------------------------------------------------------
-   handleAnswerSubmission(result) {
+  handleAnswerSubmission(result) {
     // this.iscapturingallowed = true;
     // this.issidemenucollapsed = true;
     // this.isgallerymenucollapsed = true;
