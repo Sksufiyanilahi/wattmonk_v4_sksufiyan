@@ -1,6 +1,6 @@
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ROLES } from '../contants';
+import { ROLES,FIREBASE_DB_CONSTANTS } from '../contants';
 import { User } from '../model/user.model';
 import { FIELD_REQUIRED, INVALID_ADDRESS, INVALID_COMPANY_NAME, INVALID_EMAIL_MESSAGE, INVALID_FIRST_NAME, INVALID_LAST_NAME, INVALID_PHONE_NUMBER, INVALID_REGISTRATION_NUMBER } from '../model/constants';
 import { MenuController, NavController } from '@ionic/angular';
@@ -14,6 +14,7 @@ import { ErrorModel } from '../model/error.model';
 import { JoyrideService } from 'ngx-joyride';
 import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
 import {FirebaseX} from '@ionic-native/firebase-x/ngx';
+
 
 //import { Slides } from 'ionic-angular';
 
@@ -180,7 +181,7 @@ export class OnboardingPage implements OnInit {
   }
 
   startTour(){
-     this.maintourRef = this.db.object("devcomp_" + this.user.parent.id);
+     this.maintourRef = this.db.object(FIREBASE_DB_CONSTANTS.KEYWORD + this.user.parent.id);
     this.maintour = this.maintourRef.valueChanges();
     this.maintour.subscribe(
       (res) => {

@@ -10,6 +10,10 @@
 // }
 // export const version='1.1.3'
 // export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
+//  export const FIREBASE_DB_CONSTANTS = {
+//   KEYWORD:  "comp_"
+// }
+
 
 // export enum ROLES {
 //   Peengineer = 11,
@@ -35,6 +39,9 @@
 //    }
 // export const version='1.1.3'
 // export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
+// export const FIREBASE_DB_CONSTANTS = {
+//   KEYWORD: "testcomp_" 
+// }
 
 // export enum ROLES {
 //   Peengineer = 11,
@@ -60,6 +67,9 @@ export const COMETCHAT_CONSTANTS = {
 }
 export const version='1.1.3'
 export const Mixpanel_CONSTANTS ='e4b30b18d61b5abe078c2719911858cb';
+export const FIREBASE_DB_CONSTANTS = {
+  KEYWORD: "devcomp_" 
+}
 
 export enum ROLES {
   Peengineer = 11,
