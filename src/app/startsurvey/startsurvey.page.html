@@ -95,7 +95,7 @@
     <!-- Row for choice questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.OPTIONS">
-      <ion-col size="12">
+      <ion-col size="12" class="questionaireview-col">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
@@ -105,7 +105,7 @@
           selected {{activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value}}
         </p>
         <ion-row class="ion-float-right">
-          <ion-button fill="clear" size="small"
+          <ion-button fill="clear" size="small" class="action-button-color"
                       *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions"
                       (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
         </ion-row>
@@ -115,7 +115,7 @@
     <!-- Row for input number questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_NUMBER">
-      <ion-col size="12">
+      <ion-col size="12" class="questionaireview-col">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
@@ -141,7 +141,7 @@
     <!-- Row for mpu required checkbox with number questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.MPU_REQUIRED_CHECKBOX_WITH_NUMBER">
-      <ion-col size="12">
+      <ion-col size="12" class="questionaireview-col">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
@@ -171,7 +171,7 @@
     <!-- Row for input text questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_TEXT">
-      <ion-col size="12">
+      <ion-col size="12" class="questionaireview-col">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
@@ -197,7 +197,7 @@
     <!-- Row for input two dimensions question -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_FRAMING_SIZE">
-      <ion-col size="12">
+      <ion-col size="12" class="questionaireview-col">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
@@ -235,7 +235,7 @@
     <!-- Row for input inverter manufacturer and model question -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_INVERTER_DETAILS">
-      <ion-col size="12">
+      <ion-col size="12" class="questionaireview-col">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
@@ -271,7 +271,7 @@
     <!-- Row for question type 5 -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_SHOT_NAME">
-      <ion-col size="12">
+      <ion-col size="12" class="questionaireview-col">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
@@ -297,7 +297,7 @@
     <!-- Row for utilities questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_UTILITIES_AUTOCOMPLETE">
-      <ion-col size="12">
+      <ion-col size="12" class="questionaireview-col">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
@@ -324,7 +324,7 @@
     <!-- Row for roof materials questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_ROOF_MATERIAL_AUTOCOMPLETE">
-      <ion-col size="12">
+      <ion-col size="12" class="questionaireview-col">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>
@@ -351,7 +351,7 @@
     <!-- Row for inverter make and model questions -->
     <ion-row class="questionaireview-row ion-padding-horizontal"
              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_INVERTER_AUTOCOMPLETE">
-      <ion-col size="12">
+      <ion-col size="12" class="questionaireview-col">
         <p>
           {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
         </p>

@@ -178,8 +178,12 @@ ion-content {
 }
 
 .questionaireview-row {
-  background-color: #ffffff;
-  border-radius: 12px;
+  background-color: rgba($color: #ffffff, $alpha: 0.97);
+  border-radius: 20px;
+}
+
+.questionaireview-col{
+  padding: 16px;
 }
 
 .questionaireview-row p {
