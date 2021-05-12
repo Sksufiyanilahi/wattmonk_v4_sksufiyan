@@ -614,4 +614,145 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
+  //------------------------------------------------------------------------------------------------------------------
+  // Answer Submissions for Shot Questions Code
+  //------------------------------------------------------------------------------------------------------------------
+   handleAnswerSubmission(result) {
+    // this.iscapturingallowed = true;
+    // this.issidemenucollapsed = true;
+    // this.isgallerymenucollapsed = true;
+    const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+    const shotDetail = currentIndex.shots[this.selectedshotindex];
+    shotDetail.result = result;
+    shotDetail.promptquestion = false;
+    shotDetail.questionstatus = true;
+    this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
+    // if (this.surveytype == 'pvbattery' && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 0) {
+    //   this.handleGroundShotsVisibility();
+    // } else if (this.surveytype == 'pvbattery' && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 1) {
+    //   this.handleAtticSectionVisibility();
+    // }
+    this.handleMenuSwitch();
+  }
+
+  handleInputSubmission(form: FormGroup) {
+    const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+    const control = form.get(currentIndex.shots[this.selectedshotindex].inputformcontrol);
+    if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_FRAMING_SIZE) {
+      if (form.get('dimensionA').value != '' && form.get('dimensionB').value != '') {
+        this.handleAnswerSubmission(`${form.get('dimensionA').value}x${form.get('dimensionB').value}`);
+      } else {
+        if (form.get('dimensionA').value == '' || form.get('dimensionA').value == undefined) {
+          form.get('dimensionA').markAsTouched();
+          form.get('dimensionA').markAsDirty();
+        }
+        if (form.get('dimensionB').value == '' || form.get('dimensionB').value == undefined) {
+          form.get('dimensionB').markAsTouched();
+          form.get('dimensionB').markAsDirty();
+        }
+      }
+    } else {
+      if (control.value != '') {
+        this.handleAnswerSubmission(control.value);
+      } else {
+        control.markAsTouched();
+        control.markAsDirty();
+      }
+    }
+  }
+
+  handleInputTextSubmission(form: FormGroup) {
+    const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+    const control = form.get(currentIndex.shots[this.selectedshotindex].inputformcontrol);
+    if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_DETAILS) {
+      const inverterMake = form.get('invertermake');
+      const inverterModel = form.get('invertermodel');
+      if (inverterMake.value != '' && inverterModel.value != '') {
+        this.handleAnswerSubmission(`${inverterMake.value},${inverterModel.value}`);
+      } else {
+        if (inverterMake.value == '' || inverterMake.value == undefined) {
+          inverterMake.markAllAsTouched();
+          inverterMake.markAsDirty();
+        }
+        if (inverterModel.value == '' || inverterModel.value == undefined) {
+          inverterModel.markAllAsTouched();
+          inverterModel.markAsDirty();
+        }
+      }
+    } else {
+      if (control.value != '') {
+        this.handleAnswerSubmission(control.value);
+      } else {
+        control.markAsTouched();
+        control.markAsDirty();
+      }
+    }
+  }
+
+  handleShotNameSubmission(form: FormGroup) {
+    const shotnameformcontrol = form.get('shotname');
+    if (shotnameformcontrol.value != '') {
+      const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+      const shots = currentIndex.capturedshots;
+      shots[shots.length - 1].imagename = shotnameformcontrol.value;
+      // this.iscapturingallowed = true;
+      // this.issidemenucollapsed = true;
+      // this.isgallerymenucollapsed = true;
+      currentIndex.shots[this.selectedshotindex].promptquestion = false;
+      form.get('shotname').setValue('');
+
+      if (currentIndex.capturedshots.length == 1) {
+        currentIndex.ispending = false;
+        this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
+        // this.updateProgressStatus();
+      }
+    } else {
+      shotnameformcontrol.markAsTouched();
+      shotnameformcontrol.markAsDirty();
+    }
+  }
+
+  handleInverterFieldsSubmission() {
+    const invertermakecontrol = this.activeForm.get('invertermake');
+    const invertermodelcontrol = this.activeForm.get('invertermodel');
+    if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
+      const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+      currentIndex.shots[this.selectedshotindex].promptquestion = false;
+      currentIndex.shots[this.selectedshotindex].questionstatus = true;
+      this.handleMenuSwitch();
+    } else {
+      invertermakecontrol.markAsTouched();
+      invertermakecontrol.markAsDirty();
+      invertermodelcontrol.markAsTouched();
+      invertermodelcontrol.markAsDirty();
+    }
+  }
+
+  handleUtilitySubmission() {
+    const utilitycontrol = this.activeForm.get('utility');
+    if (utilitycontrol.value != '') {
+      const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+      currentIndex.shots[this.selectedshotindex].promptquestion = false;
+      currentIndex.shots[this.selectedshotindex].questionstatus = true;
+      this.handleMenuSwitch();
+    } else {
+      utilitycontrol.markAsTouched();
+      utilitycontrol.markAsDirty();
+    }
+  }
+
+  handleRoofMaterialSubmission() {
+    const roofmaterialcontrol = this.activeForm.get('roofmaterial');
+    if (roofmaterialcontrol.value != '') {
+      const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+      currentIndex.allowmultipleshots = true;
+      currentIndex.shots[this.selectedshotindex].promptquestion = false;
+      currentIndex.shots[this.selectedshotindex].questionstatus = true;
+      this.handleMenuSwitch();
+    } else {
+      roofmaterialcontrol.markAsTouched();
+      roofmaterialcontrol.markAsDirty();
+    }
+  }
+
 }
