@@ -55,7 +55,7 @@
     <ion-row class="childbuttons ion-justify-content-center submenubuttonscontainer">
       <div #submenuscroll class="scroll" scrollX="true">
         <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
-          <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear"
+          <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear" (click)="toggleSubMenuSelection(i)"
             [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}</ion-button>
         </ng-container>
       </div>
@@ -63,7 +63,7 @@
     <ion-row class="mainbuttons mainbuttonscontainer">
       <div #mainscroll class="scroll" scrollX="true">
         <ng-container *ngFor="let button of mainmenuitems; let i = index">
-          <a href="#" id="mainmenu{{i}}" class="btn-link" *ngIf="button.isvisible">
+          <a id="mainmenu{{i}}" class="btn-link" *ngIf="button.isvisible" (click)="toggleMainMenuSelection(i)">
             <div [ngClass]="[ button.isactive ? 'button active' : 'button normal']">
               <img src="/assets/images/{{button.name | lowercase}}.svg" alt="img">
               <span>{{button.name}}</span>

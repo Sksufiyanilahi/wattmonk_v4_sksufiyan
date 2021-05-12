@@ -269,6 +269,61 @@ export class StartsurveyPage implements OnInit {
   }
 
   //------------------------------------------------------------------------------------------------------------------
+  // Toggle Menus Manually Methods
+  //------------------------------------------------------------------------------------------------------------------
+
+  toggleMainMenuSelection(index) {
+    // this.issidemenucollapsed = true;
+    // this.isgallerymenucollapsed = true;
+
+    // // Retaining previous state
+    // this.previousmainmenuindex = this.selectedmainmenuindex;
+    // this.previoussubmenuindex = this.selectedsubmenuindex;
+    // this.previousshotindex = this.selectedshotindex;
+
+    // Set questionstatus true for question type 5
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
+    }
+
+    // Unset previous menu and select new one
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+    this.selectedmainmenuindex = index;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+
+    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+      let issubmenuset = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
+        if (element.ispending && !issubmenuset) {
+          element.isactive = true;
+          issubmenuset = true;
+          this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
+          let isshotmenuset = false;
+          element.shots.forEach(shot => {
+            if (shot.ispending && !isshotmenuset) {
+              shot.isactive = true;
+              isshotmenuset = true;
+              this.selectedshotindex = element.shots.indexOf(shot);
+            }
+          });
+        }
+      });
+    }
+
+    this.handleViewModeSwitch();
+  }
+
+  toggleSubMenuSelection(index) {
+    // this.issidemenucollapsed = true;
+    // this.isgallerymenucollapsed = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+    this.selectedsubmenuindex = index;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+    this.selectedshotindex = 0;
+  }
+
+  //------------------------------------------------------------------------------------------------------------------
   //Scrolling Methods
   //------------------------------------------------------------------------------------------------------------------
 
