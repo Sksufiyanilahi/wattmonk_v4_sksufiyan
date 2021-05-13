@@ -230,21 +230,21 @@ export class StartsurveyPage implements OnInit {
       }
       if (item.formelements) {
         item.formelements.map(formElement => {
-          this.activeFormElementsArray.push(formElement.inputformcontrol);
+          this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
           if (formElement.required) {
-            formData[formElement.inputformcontrol] = new FormControl('', [Validators.required]);
+            formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
           } else {
-            formData[formElement.inputformcontrol] = new FormControl('', []);
+            formData[formElement.inputformcontrol[0]] = new FormControl('', []);
           }
         });
       }
     });
-    formData['dimensionA'] = new FormControl('', []);
-    this.activeFormElementsArray.push('dimensionA');
-    formData['dimensionB'] = new FormControl('', []);
-    this.activeFormElementsArray.push('dimensionB');
-    formData['shotname'] = new FormControl('', []);
-    this.activeFormElementsArray.push('shotname');
+    // formData['dimensionA'] = new FormControl('', []);
+    // this.activeFormElementsArray.push('dimensionA');
+    // formData['dimensionB'] = new FormControl('', []);
+    // this.activeFormElementsArray.push('dimensionB');
+    // formData['shotname'] = new FormControl('', []);
+    // this.activeFormElementsArray.push('shotname');
     console.log(formData);
     this.activeForm = new FormGroup(formData);
 
