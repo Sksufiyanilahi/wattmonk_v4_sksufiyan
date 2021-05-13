@@ -16,7 +16,7 @@ ion-content {
 .gallerystack {
   width: 100%;
   height: 80px;
-  z-index: 9;
+  z-index: 99;
   bottom: 0;
   left: 0;
   position: absolute;
@@ -186,7 +186,7 @@ ion-content {
   position: absolute;
   top: 30vh;
   left: calc(50% - (70%/2));
-  z-index: 9999;
+  z-index: 99;
 }
 
 .questionaireview-row {
@@ -225,7 +225,7 @@ ion-content {
   position: absolute;
   top: 30vh;
   left: calc(50% - (70%/2));
-  z-index: 9999;
+  z-index: 99;
 }
 
 .checkexistenceview-row {

@@ -130,8 +130,6 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('mainscroll', { static: false }) mainscroll: any;
   @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
 
-  questiongridanimation: Animation;
-
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
   ControlTypes = CONTROLTYPE;
@@ -313,6 +311,8 @@ export class StartsurveyPage implements OnInit {
 
           if(element.checkexistence && !element.isexistencechecked){
             this.blurcaptureview = true;
+            this.changedetectorref.detectChanges();
+            this.animateElementOpacity(document.querySelector('.checkexistenceview'));
           }
         }
       });
@@ -331,7 +331,24 @@ export class StartsurveyPage implements OnInit {
 
     if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked){
       this.blurcaptureview = true;
+      this.changedetectorref.detectChanges();
+      this.animateElementOpacity(document.querySelector('.checkexistenceview'));
     }
+  }
+
+  //------------------------------------------------------------------------------------------------------------------
+  //Animation Methods
+  //------------------------------------------------------------------------------------------------------------------
+
+  animateElementOpacity(element){
+    setTimeout(() => {
+      let opacityanimation: Animation = this.animationCtrl.create()
+        .addElement(element)
+        .duration(500)
+        .easing('ease-in')
+        .fromTo('opacity', '0', '1')
+        opacityanimation.play();
+    }, 10);
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -636,14 +653,7 @@ export class StartsurveyPage implements OnInit {
 
     this.changedetectorref.detectChanges();
 
-    setTimeout(() => {
-      this.questiongridanimation = this.animationCtrl.create()
-        .addElement(document.querySelector('.questionaireview'))
-        .duration(500)
-        .easing('ease-in')
-        .fromTo('opacity', '0', '1')
-      this.questiongridanimation.play();
-    }, 10);
+    this.animateElementOpacity(document.querySelector('.questionaireview'));
   }
 
   handleMenuSwitch(selectedSubMenuDoesNotExist?) {
