@@ -1,328 +1,341 @@
-<ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
-  <ion-grid class="ion-no-padding" [ngClass]="[((this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion) || (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked)) ? 'blurbackground' : '']">
-    <div class="imagecontainer">
-      <div class="mainimage" *ngIf="capturedImage == ''">
-        <img
-          src="/assets/surveysampleimages/{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename}}.jpg"
-          width="100%" height="100%" />
-      </div>
-      <div class="mainimage" *ngIf="capturedImage != ''">
-        <img src="{{capturedImage}}" width="100%" height="100%" />
-      </div>
-      <div class="infobar">
-        <ion-row>
-          <ion-col size="2" style="text-align: left;">
-            <ion-icon class="actionbutton" name="arrow-back-outline"></ion-icon>
-          </ion-col>
-          <ion-col size="8" style="text-align: center;">
-            <p class="shotinfo">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
-            </p>
-          </ion-col>
-          <ion-col size="2" style="text-align: right;">
-            <ion-icon class="actionbutton" name="information-outline"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </div>
-      <div class="gallerystack"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
-        <div class="scroll" scrollX="true">
-          <ion-button color="dark" class="cameraimagesbutton"
-            *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
-            <img [src]="shot.shotimage" />
-          </ion-button>
+<ion-content *ngIf="isdataloaded">
+  <ion-grid class="ion-no-padding">
+    <!-- PICTURE TAKING MODE VIEW -->
+    <div class="picturemodecontainer"
+      [ngClass]="[ blurcaptureview ? 'blurbackground' : '']">
+      <div class="captureactionareacontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
+        <div class="imagecontainer">
+          <div class="mainimage" *ngIf="capturedImage == ''">
+            <img
+              src="/assets/surveysampleimages/{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename}}.jpg"
+              width="100%" height="100%" />
+          </div>
+          <div class="mainimage" *ngIf="capturedImage != ''">
+            <img src="{{capturedImage}}" width="100%" height="100%" />
+          </div>
+          <div class="infobar">
+            <ion-row>
+              <ion-col size="2" style="text-align: left;">
+                <ion-icon class="actionbutton" name="arrow-back-outline"></ion-icon>
+              </ion-col>
+              <ion-col size="8" style="text-align: center;">
+                <p class="shotinfo">
+                  {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
+                </p>
+              </ion-col>
+              <ion-col size="2" style="text-align: right;">
+                <ion-icon class="actionbutton" name="information-outline"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </div>
+          <div class="gallerystack"
+            *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
+            <div class="scroll" scrollX="true">
+              <ion-button color="dark" class="cameraimagesbutton"
+                *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
+                <img [src]="shot.shotimage" />
+              </ion-button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <ion-row class="captureactionarea">
-      <ion-col style="text-align: center;">
-        <a href="" class="btn-link" (click)="openPhotoGalleryToSelectPic($event)">
-          <div class="button">
-            <img src="/assets/images/photogallery.svg" alt="img">
-            <span>Gallery</span>
-          </div>
-        </a>
-      </ion-col>
-      <ion-col style="text-align: center;">
-        <a href="" class="btn-link" (click)="openCameraToCapturePic($event)">
-          <div class="button">
-            <img src="/assets/images/camera.svg" alt="img">
-            <span>Camera</span>
-          </div>
-        </a>
-      </ion-col>
-    </ion-row>
-    <ion-row class="childbuttons ion-justify-content-center submenubuttonscontainer">
-      <div #submenuscroll class="scroll" scrollX="true">
-        <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
-          <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear" (click)="toggleSubMenuSelection(i)"
-            [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}</ion-button>
-        </ng-container>
-      </div>
-    </ion-row>
-    <ion-row class="mainbuttons mainbuttonscontainer">
-      <div #mainscroll class="scroll" scrollX="true">
-        <ng-container *ngFor="let button of mainmenuitems; let i = index">
-          <a id="mainmenu{{i}}" class="btn-link" *ngIf="button.isvisible" (click)="toggleMainMenuSelection(i)">
-            <div [ngClass]="[ button.isactive ? 'button active' : 'button normal']">
-              <img *ngIf="button.isactive" src="/assets/images/{{button.name | lowercase}}active.svg" alt="img">
-              <img *ngIf="!button.isactive" src="/assets/images/{{button.name | lowercase}}.svg" alt="img">
-              <span>{{button.name}}</span>
-            </div>
-          </a>
-        </ng-container>
-      </div>
-    </ion-row>
-  </ion-grid>
-  <!-- CHECK EXISTENCE VIEW -->
-  <div class="checkexistenceviewcontainer" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
-    <ion-grid class="checkexistenceview">
-    <!-- Row for choice questions -->
-    <ion-row class="checkexistenceview-row ion-padding-horizontal">
-      <ion-col size="12">
-        <p>
-          Is {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name}}
-          present?
-        </p>
-        <ion-row class="ion-float-right">
-          <ion-button fill="clear" size="small" (click)="handleExistence(true)">Yes</ion-button>
-          <ion-button fill="clear" size="small" (click)="handleExistence(false)">No</ion-button>
+        <ion-row class="captureactionarea">
+          <ion-col style="text-align: center;">
+            <a href="" class="btn-link" (click)="openPhotoGalleryToSelectPic($event)">
+              <div class="button">
+                <img src="/assets/images/photogallery.svg" alt="img">
+                <span>Gallery</span>
+              </div>
+            </a>
+          </ion-col>
+          <ion-col style="text-align: center;">
+            <a href="" class="btn-link" (click)="openCameraToCapturePic($event)">
+              <div class="button">
+                <img src="/assets/images/camera.svg" alt="img">
+                <span>Camera</span>
+              </div>
+            </a>
+          </ion-col>
         </ion-row>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  </div>
+        <ion-row class="childbuttons ion-justify-content-center submenubuttonscontainer">
+          <div #submenuscroll class="scroll" scrollX="true">
+            <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
+              <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear" (click)="toggleSubMenuSelection(i)"
+                [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}</ion-button>
+            </ng-container>
+          </div>
+        </ion-row>
+      </div>
+      <ion-row class="mainbuttons mainbuttonscontainer">
+        <div #mainscroll class="scroll" scrollX="true">
+          <ng-container *ngFor="let button of mainmenuitems; let i = index">
+            <a id="mainmenu{{i}}" class="btn-link" *ngIf="button.isvisible" (click)="toggleMainMenuSelection(i)">
+              <div [ngClass]="[ button.isactive ? 'button active' : 'button normal']">
+                <img *ngIf="button.isactive" src="/assets/images/{{button.name | lowercase}}active.svg" alt="img">
+                <img *ngIf="!button.isactive" src="/assets/images/{{button.name | lowercase}}.svg" alt="img">
+                <span>{{button.name}}</span>
+              </div>
+            </a>
+          </ng-container>
+        </div>
+      </ion-row>
+    </div>
+    <!-- CHECK EXISTENCE VIEW -->
+    <div class="checkexistenceviewcontainer"
+      *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
+      <ion-grid class="checkexistenceview">
+        <!-- Row for choice questions -->
+        <ion-row class="checkexistenceview-row ion-padding-horizontal">
+          <ion-col size="12">
+            <p>
+              Is {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name}}
+              present?
+            </p>
+            <ion-row class="ion-float-right">
+              <ion-button fill="clear" size="small" (click)="handleExistence(true)">Yes</ion-button>
+              <ion-button fill="clear" size="small" (click)="handleExistence(false)">No</ion-button>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <!-- QUESTIONARE VIEW -->
+    <div class="questionaireviewcontainer"
+      *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
+      <ion-grid class="questionaireview">
 
-  <!-- QUESTIONARE VIEW -->
-  <div class="questionaireviewcontainer" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
-    <ion-grid class="questionaireview">
+        <!-- Row for choice questions -->
+        <ion-row class="questionaireview-row ion-padding-horizontal"
+          *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.OPTIONS">
+          <ion-col size="12" class="questionaireview-col">
+            <p>
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+            </p>
+            <p
+              *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value != ''">
+              You have previously
+              selected
+              {{activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value}}
+            </p>
+            <ion-row class="ion-float-right ion-margin-top">
+              <ion-col size="6"
+                *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions">
+                <ion-button fill="clear" size="small" class="yellow-button-color"
+                  (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
 
-      <!-- Row for choice questions -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.OPTIONS">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <p
-            *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value != ''">
-            You have previously
-            selected
-            {{activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value}}
-          </p>
-          <ion-row class="ion-float-right ion-margin-top">
-            <ion-col size="6" *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions">
+        <!-- Row for input number questions -->
+        <ion-row class="questionaireview-row ion-padding-horizontal"
+          *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_NUMBER">
+          <ion-col size="12" class="questionaireview-col">
+            <p>
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+            </p>
+            <form [formGroup]="activeForm" novalidate>
+              <ion-input type="number" class="form-control" autocomplete="off"
+                formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
+              </ion-input>
+              <div class="error_div">
+                <div
+                  *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+                  <span class="error">Field input is required.</span>
+                </div>
+              </div>
+            </form>
+            <ion-row class="ion-float-right ion-margin-top">
               <ion-button fill="clear" size="small" class="yellow-button-color"
-              (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-col>
-      </ion-row>
+                (click)="handleInputSubmission(activeForm)">
+                {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
+                | titlecase}}
+              </ion-button>
+            </ion-row>
+          </ion-col>
+        </ion-row>
 
-      <!-- Row for input number questions -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_NUMBER">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate>
-            <ion-input type="number" class="form-control" autocomplete="off"
-              formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
-            </ion-input>
-            <div class="error_div">
-              <div
-                *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
-                <span class="error">Field input is required.</span>
-              </div>
-            </div>
-          </form>
-          <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleInputSubmission(activeForm)">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-
-      <!-- Row for input text questions -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_TEXT">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate>
-            <ion-input class="form-control" autocomplete="off"
-              formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
-            </ion-input>
-            <div class="error_div">
-              <div
-                *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
-                <span class="error">Field input is required.</span>
-              </div>
-            </div>
-          </form>
-          <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleInputTextSubmission(activeForm)">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-
-      <!-- Row for input two dimensions question -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_FRAMING_SIZE">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate>
-            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-              <ion-input type="number" class="form-control" autocomplete="off" formControlName="dimensionA">
+        <!-- Row for input text questions -->
+        <ion-row class="questionaireview-row ion-padding-horizontal"
+          *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_TEXT">
+          <ion-col size="12" class="questionaireview-col">
+            <p>
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+            </p>
+            <form [formGroup]="activeForm" novalidate>
+              <ion-input class="form-control" autocomplete="off"
+                formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
               </ion-input>
-              <span>x</span>
-              <ion-input type="number" class="form-control" autocomplete="off" formControlName="dimensionB">
+              <div class="error_div">
+                <div
+                  *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+                  <span class="error">Field input is required.</span>
+                </div>
+              </div>
+            </form>
+            <ion-row class="ion-float-right ion-margin-top">
+              <ion-button fill="clear" size="small" class="yellow-button-color"
+                (click)="handleInputTextSubmission(activeForm)">
+                {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
+                | titlecase}}
+              </ion-button>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+
+        <!-- Row for input two dimensions question -->
+        <ion-row class="questionaireview-row ion-padding-horizontal"
+          *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_FRAMING_SIZE">
+          <ion-col size="12" class="questionaireview-col">
+            <p>
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+            </p>
+            <form [formGroup]="activeForm" novalidate>
+              <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <ion-input type="number" class="form-control" autocomplete="off" formControlName="dimensionA">
+                </ion-input>
+                <span>x</span>
+                <ion-input type="number" class="form-control" autocomplete="off" formControlName="dimensionB">
+                </ion-input>
+              </div>
+              <div class="error_div">
+                <div *ngIf="activeForm.get('dimensionA').value === '' && activeForm.get('dimensionA').dirty">
+                  <span class="error">First dimension is required.</span>
+                </div>
+              </div>
+              <div class="error_div">
+                <div *ngIf="activeForm.get('dimensionB').value === '' && activeForm.get('dimensionB').dirty">
+                  <span class="error">Second dimension is required.</span>
+                </div>
+              </div>
+            </form>
+            <ion-row class="ion-float-right ion-margin-top">
+              <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
+                {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
+                | titlecase}}
+              </ion-button>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+
+        <!-- Row for question type 5 -->
+        <ion-row class="questionaireview-row ion-padding-horizontal"
+          *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_SHOT_NAME">
+          <ion-col size="12" class="questionaireview-col">
+            <p>
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+            </p>
+            <form [formGroup]="activeForm" novalidate>
+              <ion-input type="text" class="form-control" autocomplete="off" formControlName="shotname">
               </ion-input>
-            </div>
-            <div class="error_div">
-              <div *ngIf="activeForm.get('dimensionA').value === '' && activeForm.get('dimensionA').dirty">
-                <span class="error">First dimension is required.</span>
+              <div class="error_div">
+                <div *ngIf="activeForm.get('shotname').value === '' && activeForm.get('shotname').dirty">
+                  <span class="error">Field input is required.</span>
+                </div>
               </div>
-            </div>
-            <div class="error_div">
-              <div *ngIf="activeForm.get('dimensionB').value === '' && activeForm.get('dimensionB').dirty">
-                <span class="error">Second dimension is required.</span>
-              </div>
-            </div>
-          </form>
-          <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
+            </form>
+            <ion-row class="ion-float-right ion-margin-top">
+              <ion-button fill="clear" size="small" class="yellow-button-color"
+                (click)="handleShotNameSubmission(activeForm)">
+                {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
+                | titlecase}}
+              </ion-button>
+            </ion-row>
+          </ion-col>
+        </ion-row>
 
-      <!-- Row for question type 5 -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_SHOT_NAME">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate>
-            <ion-input type="text" class="form-control" autocomplete="off" formControlName="shotname">
-            </ion-input>
-            <div class="error_div">
-              <div *ngIf="activeForm.get('shotname').value === '' && activeForm.get('shotname').dirty">
-                <span class="error">Field input is required.</span>
+        <!-- Row for utilities questions -->
+        <ion-row class="questionaireview-row ion-padding-horizontal"
+          *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_UTILITIES_AUTOCOMPLETE">
+          <ion-col size="12" class="questionaireview-col">
+            <p>
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+            </p>
+            <form [formGroup]="activeForm" novalidate>
+              <app-auto-complete [dataList]="utilities" class="form-control" mode="object"
+                formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}"
+                #make>
+              </app-auto-complete>
+              <div class="error_div">
+                <div
+                  *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+                  <span class="error">Field input is required.</span>
+                </div>
               </div>
-            </div>
-          </form>
-          <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleShotNameSubmission(activeForm)">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
+            </form>
+            <ion-row class="ion-float-right ion-margin-top">
+              <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleUtilitySubmission()">
+                {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
+                | titlecase}}
+              </ion-button>
+            </ion-row>
+          </ion-col>
+        </ion-row>
 
-      <!-- Row for utilities questions -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_UTILITIES_AUTOCOMPLETE">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate>
-            <app-auto-complete [dataList]="utilities" class="form-control" mode="object"
-              formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}"
-              #make>
-            </app-auto-complete>
-            <div class="error_div">
-              <div
-                *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
-                <span class="error">Field input is required.</span>
+        <!-- Row for roof materials questions -->
+        <ion-row class="questionaireview-row ion-padding-horizontal"
+          *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_ROOF_MATERIAL_AUTOCOMPLETE">
+          <ion-col size="12" class="questionaireview-col">
+            <p>
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+            </p>
+            <form [formGroup]="activeForm" novalidate class="inputform">
+              <app-auto-complete [dataList]="roofmaterials" class="form-control" mode="object"
+                formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}"
+                #make>
+              </app-auto-complete>
+              <div class="error_div">
+                <div
+                  *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
+                  <span class="error">Field input is required.</span>
+                </div>
               </div>
-            </div>
-          </form>
-          <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleUtilitySubmission()">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
+            </form>
+            <ion-row class="ion-float-right ion-margin-top">
+              <ion-button fill="clear" size="small" class="yellow-button-color"
+                (click)="handleRoofMaterialSubmission()">
+                {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
+                | titlecase}}
+              </ion-button>
+            </ion-row>
+          </ion-col>
+        </ion-row>
 
-      <!-- Row for roof materials questions -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_ROOF_MATERIAL_AUTOCOMPLETE">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate class="inputform">
-            <app-auto-complete [dataList]="roofmaterials" class="form-control" mode="object"
-              formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}"
-              #make>
-            </app-auto-complete>
-            <div class="error_div">
-              <div
-                *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
-                <span class="error">Field input is required.</span>
+        <!-- Row for inverter make and model questions -->
+        <ion-row class="questionaireview-row ion-padding-horizontal"
+          *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_INVERTER_AUTOCOMPLETE">
+          <ion-col size="12" class="questionaireview-col">
+            <p>
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+            </p>
+            <form [formGroup]="activeForm" novalidate class="inputform">
+              <app-auto-complete placeholder="inverter make*" [dataList]="invertermakes" class="form-control"
+                mode="object" formControlName="invertermake" #invertermake>
+              </app-auto-complete>
+              <div class="error_div ion-margin-bottom">
+                <div *ngIf="activeForm.get('invertermake').value === '' && activeForm.get('invertermake').dirty">
+                  <span class="error">Field input is required.</span>
+                </div>
               </div>
-            </div>
-          </form>
-          <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleRoofMaterialSubmission()">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-
-      <!-- Row for inverter make and model questions -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_INVERTER_AUTOCOMPLETE">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate class="inputform">
-            <app-auto-complete placeholder="inverter make*" [dataList]="invertermakes" class="form-control"
-              mode="object" formControlName="invertermake" #invertermake>
-            </app-auto-complete>
-            <div class="error_div ion-margin-bottom">
-              <div *ngIf="activeForm.get('invertermake').value === '' && activeForm.get('invertermake').dirty">
-                <span class="error">Field input is required.</span>
+              <app-auto-complete placeholder="inverter model*" [dataList]="invertermodels"
+                class="form-control ion-margin-top" mode="object" formControlName="invertermodel" #invertermodel>
+              </app-auto-complete>
+              <div class="error_div">
+                <div *ngIf="activeForm.get('invertermodel').value === '' && activeForm.get('invertermodel').dirty">
+                  <span class="error">Field input is required.</span>
+                </div>
               </div>
-            </div>
-            <app-auto-complete placeholder="inverter model*" [dataList]="invertermodels" class="form-control ion-margin-top"
-              mode="object" formControlName="invertermodel" #invertermodel>
-            </app-auto-complete>
-            <div class="error_div">
-              <div *ngIf="activeForm.get('invertermodel').value === '' && activeForm.get('invertermodel').dirty">
-                <span class="error">Field input is required.</span>
-              </div>
-            </div>
-          </form>
-          <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleInverterFieldsSubmission()">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
+            </form>
+            <ion-row class="ion-float-right ion-margin-top">
+              <ion-button fill="clear" size="small" class="yellow-button-color"
+                (click)="handleInverterFieldsSubmission()">
+                {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
+                | titlecase}}
+              </ion-button>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-grid>
 
 </ion-content>

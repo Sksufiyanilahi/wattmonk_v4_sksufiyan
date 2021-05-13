@@ -163,6 +163,7 @@ export class StartsurveyPage implements OnInit {
 
   capturedImage: string = '';
   totalimagestoupload = 0;
+  blurcaptureview = false;
 
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
@@ -600,6 +601,7 @@ export class StartsurveyPage implements OnInit {
     if (currentIndex.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
       if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
         currentIndex.shots[this.selectedshotindex].promptquestion = true;
+        this.blurcaptureview = true;
         // this.iscapturingallowed = false;
         if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
           this.getUtilities();
@@ -758,12 +760,14 @@ export class StartsurveyPage implements OnInit {
     } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
       // CameraPreview.stop();
       // this.stopCamera();
-      if (this.surveytype == 'battery') {
-        this.getSolarMakes();
-      } else if (this.surveytype == 'pvbattery') {
-        this.getUtilities();
-      }
+      // if (this.surveytype == 'battery') {
+      //   this.getSolarMakes();
+      // } else if (this.surveytype == 'pvbattery') {
+      //   this.getUtilities();
+      // }
     }
+
+    this.changedetectorref.detectChanges();
   }
 
   markShotCompletion(index) {
@@ -813,6 +817,7 @@ export class StartsurveyPage implements OnInit {
     const shotDetail = currentIndex.shots[this.selectedshotindex];
     shotDetail.result = result;
     shotDetail.promptquestion = false;
+    this.blurcaptureview = false;
     shotDetail.questionstatus = true;
     this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
     // if (this.surveytype == 'pvbattery' && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 0) {
@@ -887,6 +892,7 @@ export class StartsurveyPage implements OnInit {
       // this.issidemenucollapsed = true;
       // this.isgallerymenucollapsed = true;
       currentIndex.shots[this.selectedshotindex].promptquestion = false;
+      this.blurcaptureview = false;
       form.get('shotname').setValue('');
 
       if (currentIndex.capturedshots.length == 1) {
@@ -906,6 +912,7 @@ export class StartsurveyPage implements OnInit {
     if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
       const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       currentIndex.shots[this.selectedshotindex].promptquestion = false;
+      this.blurcaptureview = false;
       currentIndex.shots[this.selectedshotindex].questionstatus = true;
       this.handleMenuSwitch();
     } else {
@@ -921,6 +928,7 @@ export class StartsurveyPage implements OnInit {
     if (utilitycontrol.value != '') {
       const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       currentIndex.shots[this.selectedshotindex].promptquestion = false;
+      this.blurcaptureview = false;
       currentIndex.shots[this.selectedshotindex].questionstatus = true;
       this.handleMenuSwitch();
     } else {
@@ -935,6 +943,7 @@ export class StartsurveyPage implements OnInit {
       const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       currentIndex.allowmultipleshots = true;
       currentIndex.shots[this.selectedshotindex].promptquestion = false;
+      this.blurcaptureview = false;
       currentIndex.shots[this.selectedshotindex].questionstatus = true;
       this.handleMenuSwitch();
     } else {
@@ -945,6 +954,7 @@ export class StartsurveyPage implements OnInit {
 
   handleExistence(doesexist: boolean) {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
+    this.blurcaptureview = false;
     if (doesexist) {
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
