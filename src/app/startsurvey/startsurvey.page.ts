@@ -399,6 +399,9 @@ export class StartsurveyPage implements OnInit {
       this.apiService.getInverterMake().subscribe(response => {
         this.utilitieservice.hideLoading().then(() => {
           this.invertermakes = response;
+          this.activeForm.get('invertermake').valueChanges.subscribe(val => {
+            this.getInverterModels(this.activeForm.get('invertermake').value.id);
+          });
           this.changedetectorref.detectChanges();
         });
       }, responseError => {

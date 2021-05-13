@@ -295,16 +295,16 @@
           <p>
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
           </p>
-          <form [formGroup]="activeForm" novalidate>
+          <form [formGroup]="activeForm" novalidate class="inputform">
             <app-auto-complete placeholder="inverter make*" [dataList]="invertermakes" class="form-control"
               mode="object" formControlName="invertermake" #invertermake>
             </app-auto-complete>
-            <div class="error_div">
+            <div class="error_div ion-margin-bottom">
               <div *ngIf="activeForm.get('invertermake').value === '' && activeForm.get('invertermake').dirty">
                 <span class="error">Field input is required.</span>
               </div>
             </div>
-            <app-auto-complete placeholder="inverter model*" [dataList]="invertermodels" class="form-control"
+            <app-auto-complete placeholder="inverter model*" [dataList]="invertermodels" class="form-control ion-margin-top"
               mode="object" formControlName="invertermodel" #invertermodel>
             </app-auto-complete>
             <div class="error_div">

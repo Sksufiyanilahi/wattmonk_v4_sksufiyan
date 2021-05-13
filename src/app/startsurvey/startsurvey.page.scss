@@ -196,14 +196,38 @@ ion-content {
 
 .questionaireview-col{
   padding: 16px;
+
+  .error_div {
+    height: 11px;
+  }
+
+  .error {
+    color: rgb(223, 62, 62);
+    font-size: 11px;
+    margin-left: 5px;
+  }
 }
 
 .questionaireview-row p {
   font-size: 14px;
 }
 
-.error {
-  color: rgb(223, 62, 62);
-  font-size: 11px;
-  margin-left: 5px;
+.checkexistenceview {
+  width: 76vw;
+  position: relative;
+  top: 30vh;
+  z-index: 9999;
+}
+
+.checkexistenceview-row {
+  background-color: #ffffff;
+  border-radius: 12px;
+}
+
+.checkexistenceview-row p {
+  font-size: 14px;
+}
+
+.inputform{
+  --ion-background-color: rgba($color: #ffffff, $alpha: 0.97);
 }
