@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DrawerState } from 'ion-bottom-drawer';
 import { ApiService } from 'src/app/api.service';
 import { ErrorModel } from 'src/app/model/error.model';
-import { Pestamp } from 'src/app/model/pestamp.model';
+import { Pestamp, PEstampCount } from 'src/app/model/pestamp.model';
 import { StorageService } from 'src/app/storage.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import * as moment from 'moment';
@@ -72,6 +72,7 @@ export class PestampDesignComponent implements OnInit {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+  PEstampCounts: PEstampCount=<PEstampCount>{};
 
   //showLoader= true;
 
@@ -189,6 +190,13 @@ export class PestampDesignComponent implements OnInit {
                 }
 
   ngOnInit() {
+    let userId = this.storageService.getUserID()
+    
+    this.apiService.getPEstampcounts(userId).subscribe(res => {
+      this.PEstampCounts = res;
+      console.log(this.PEstampCounts
+      )
+    })
     //this.userData = this.storageService.getUser();
     this.mixpanelService.track("PESTAMP_PAGE_OPEN", {
     });

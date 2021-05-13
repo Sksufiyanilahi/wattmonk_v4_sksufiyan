@@ -15,7 +15,7 @@ import { environment } from 'src/environments/environment';
 import { Observable, Subscription } from 'rxjs';
 import { DrawerState } from 'ion-bottom-drawer';
 //import { DesginDataHelper } from 'src/app/homepage/design/design.component';
-import { DesginDataModel } from 'src/app/model/design.model';
+import { DesginDataModel, permitCounts, prelimCounts } from 'src/app/model/design.model';
 import { AssigneeModel } from 'src/app/model/assignee.model';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
@@ -90,6 +90,7 @@ export class PermitdesignComponent implements OnInit {
 //  newpermitsRef: AngularFireObject<any>;
 //  newpermitscount = 0;
   updatechat_id: boolean=false;
+  permitCounts: permitCounts=<permitCounts>{};
 
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
@@ -100,6 +101,7 @@ export class PermitdesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private storageservice:StorageService,
     private storage:Storage,
+    private storageService:StorageService,
     public alertController: AlertController,
     public modalController: ModalController,
     private socialsharing: SocialSharing,
@@ -230,6 +232,12 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   ngOnInit() {
+    let userId = this.storageService.getUserID()
+    let requesttype = "permit"
+    
+      this.apiService.getPermitcounts(userId,requesttype).subscribe(res=>{this.permitCounts =res;
+        console.log(this.permitCounts
+          )})
     this.makeDirectory();
     this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {

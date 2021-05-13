@@ -1,18 +1,18 @@
 <ion-segment scrollable (ionChange)="segmentChanged($event)" value="newDesign" mode="md">
     <ion-segment-button value="newDesign">
-        <ion-label class="segment-btn">New Designs</ion-label>
+        <ion-label class="segment-btn">New Designs ({{this.PrelimCounts.newdesign}})</ion-label>
     </ion-segment-button>
     <ion-segment-button value="InDesign">
-        <ion-label class="segment-btn">In Designing</ion-label>
+        <ion-label class="segment-btn">In Designing ({{this.PrelimCounts.indesigning}})</ion-label>
     </ion-segment-button>
     <ion-segment-button value="completed">
-        <ion-label class="segment-btn">Completed</ion-label>
+        <ion-label class="segment-btn">Completed ({{this.PrelimCounts.completed}})</ion-label>
     </ion-segment-button>
     <ion-segment-button value="InReview">
-        <ion-label class="segment-btn"> In Review</ion-label>
+        <ion-label class="segment-btn"> In Review ({{this.PrelimCounts.inreviewdesign}})</ion-label>
     </ion-segment-button>
     <ion-segment-button value="delivered">
-        <ion-label class="segment-btn">Delivered</ion-label>
+        <ion-label class="segment-btn">Delivered ({{this.PrelimCounts.delivered}}) </ion-label>
     </ion-segment-button>
 </ion-segment>
 

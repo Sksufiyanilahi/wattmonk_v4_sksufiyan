@@ -1,18 +1,18 @@
 <ion-segment scrollable (ionChange)="segmentChanged($event)" value="newpestamp" mode="md">
   <ion-segment-button value="newpestamp">
-    <ion-label class="segment-btn">New</ion-label>
+    <ion-label class="segment-btn">New ({{this.PEstampCounts.newpestamp}})</ion-label>
   </ion-segment-button>
   <ion-segment-button value="InStamping">
-    <ion-label class="segment-btn">In Stamping</ion-label>
+    <ion-label class="segment-btn">In Stamping ({{this.PEstampCounts.instamping}})</ion-label>
   </ion-segment-button>
   <ion-segment-button value="completed">
-    <ion-label class="segment-btn">Completed</ion-label>
+    <ion-label class="segment-btn">Completed ({{this.PEstampCounts.completed}})</ion-label>
   </ion-segment-button>
   <!-- <ion-segment-button value="InReview">
     <ion-label class="segment-btn"> In Review</ion-label>
   </ion-segment-button> -->
   <ion-segment-button value="delivered">
-    <ion-label class="segment-btn">Delivered</ion-label>
+    <ion-label class="segment-btn">Delivered ({{this.PEstampCounts.delivered}})</ion-label>
   </ion-segment-button>
 </ion-segment>
 <ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;">

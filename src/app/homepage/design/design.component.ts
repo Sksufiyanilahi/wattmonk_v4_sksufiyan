@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
-import { DesginDataModel, PrelimDesign } from '../../model/design.model';
+import { DesginDataModel, prelimCounts, PrelimDesign } from '../../model/design.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
@@ -78,6 +78,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string;
   storageDirectory: string;
+  PrelimCounts: prelimCounts=<prelimCounts>{};
   //counts
   // newprelims: Observable<any>;
   // newprelimsRef: AngularFireObject<any>;
@@ -249,6 +250,13 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
+    let userId = this.storageService.getUserID()
+    
+      this.apiService.getPrelimcounts(userId).subscribe(res=>{this.PrelimCounts =res;
+        console.log(this.PrelimCounts
+          )})
+      
+
 
     this.apiService.emitUserNameAndRole(this.userData);
     // this.userData = this.storageService.getUser();

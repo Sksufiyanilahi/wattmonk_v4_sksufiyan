@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyDataModel } from '../../model/survey.model';
-import { ErrorModel } from 'src/app/model/error.model';
+import { ErrorMessageList, ErrorModel } from 'src/app/model/error.model';
 import { AddressModel } from 'src/app/model/address.model';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -201,6 +201,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
             responseError => {
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
+                const status: ErrorMessageList = responseError.error;
+                console.log(status)
                 this.utilities.errorSnackBar(error.message);
               });
               //

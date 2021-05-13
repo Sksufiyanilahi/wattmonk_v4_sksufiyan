@@ -165,4 +165,20 @@ export class PrelimDesign{
   type:string;
 }
 
+export class prelimCounts{
+  completed: String;
+  delivered: String;
+  indesigning: String;
+  inreviewdesign: String;
+  newdesign: String;
+}
+
+export class permitCounts{
+  completed: String;
+  delivered: String;
+  indesigning: String;
+  inreviewdesign: String;
+  newdesign: String;
+}
+
 
