@@ -31,6 +31,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { COMETCHAT_CONSTANTS } from 'src/app/contants';
 import { MixpanelService } from 'src/app/utilities/mixpanel.service';
+import { FilterpagePage } from 'src/app/filterpage/filterpage.page';
 
 
 @Component({
@@ -1282,6 +1283,18 @@ result.then((resp) => {
 })
 
 
+}
+
+async presentModal() {
+  const modal = await this.modalController.create({
+    component: FilterpagePage,
+    cssClass: 'small-modal',
+    componentProps: {
+      requesttype:'prelim'
+    },
+    backdropDismiss: true
+  });
+  return await modal.present();
 }
 
 createNewDesignChatGroup(design:DesginDataModel) {

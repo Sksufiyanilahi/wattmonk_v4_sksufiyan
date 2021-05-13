@@ -321,5 +321,18 @@ coupon-modal-css .modal-wrapper{
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
+.small-modal{
+  .modal-wrapper {
+      position: absolute;
+      bottom: 0;
+      min-height: initial;
+      top: initial;
+      height: 75vh;
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
+      
+      
+  }
+}
 
 

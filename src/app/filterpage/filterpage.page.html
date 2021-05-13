@@ -1,0 +1,66 @@
+<ion-header>  
+  
+  <ion-toolbar>
+    <ion-title style="text-align: center;">Filter</ion-title>
+    <ion-buttons slot="start">
+      <ion-icon  name="close-outline" (click)='dismiss()' ></ion-icon>  
+    </ion-buttons>
+  </ion-toolbar>
+
+
+
+
+</ion-header>  
+
+<ion-content>
+  <!-- <form [formGroup]="filterform" novalidate style="overflow:scroll"> -->
+  <div  style="margin-top: 3px;">
+    <ion-label>Clients</ion-label>
+    <ion-list>
+     <ion-item lines="none" style="margin-top: -10px;" *ngFor="let entry of clientList; let i=index">
+       <ion-label style="color: gray;font-size: small;">{{entry.companyname}}</ion-label>
+       <ion-checkbox  mode="md" slot="end" checked="false"></ion-checkbox>
+     </ion-item>
+    </ion-list>
+    <a style="color: black;
+    font-size: small;
+    margin-left: 40px;
+    font-weight: bold;" href="#" >View All</a>
+ 
+  </div>
+  <!-- <mat-divider></mat-divider> -->
+<div style="margin-top: 3px;">
+  <ion-label>Status</ion-label>
+  <!-- <ion-list>
+    <ion-item lines="none" style="margin-top: -10px;" *ngFor="let entry1 of form1;let i=index"> -->
+      <ion-label style="color: gray;font-size: small;">On Hold</ion-label>
+      <!-- <ion-checkbox [ngModel]="checkedIdx1 == i"(ngModelChange)="$event ? checkedIdx1 = i : checkedIdx1 = -1"  mode="md" slot="end" [(ngModel)]="entry1.isChecked"></ion-checkbox> -->
+      <ion-checkbox  (onClick)="valueChanged($event,'onhold')" checked="false"></ion-checkbox>
+
+      <ion-label style="color: gray;font-size: small;">Revision</ion-label>
+      <!-- <ion-checkbox [ngModel]="checkedIdx1 == i"(ngModelChange)="$event ? checkedIdx1 = i : checkedIdx1 = -1"  mode="md" slot="end" [(ngModel)]="entry1.isChecked"></ion-checkbox> -->
+      <ion-checkbox  (onClick)="valueChanged($event,'revision')" checked="false"></ion-checkbox>
+    <!-- </ion-item>
+   </ion-list> -->
+</div>
+<!-- <mat-divider></mat-divider> -->
+<!-- <div  style="margin-top: 3px;">
+  <ion-label>Assigned To</ion-label>
+  <ion-list>
+    <ion-item lines="none" style="margin-top: -10px;" *ngFor="let entry2 of form3;let i=index">
+      <ion-label style="color: gray;font-size: small;">{{entry2.val}}</ion-label>
+      <ion-checkbox [ngModel]="checkedIdx2 == i"(ngModelChange)="$event ? checkedIdx2 = i : checkedIdx2 = -1"   mode="md" slot="end" [(ngModel)]="entry2.isChecked"></ion-checkbox>
+    </ion-item>
+   </ion-list>
+</div> 
+<a style="color: black;
+font-size: small;
+margin-left: 40px;
+font-weight: bold;"  >Clear All</a>-->
+<!-- </form> -->
+
+<ion-button style="float: right;color: black;font-weight: bold;" (click)="applyFilter()">Apply</ion-button>
+
+</ion-content>
+
+

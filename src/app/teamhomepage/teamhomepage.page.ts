@@ -38,12 +38,11 @@ export class TeamhomepagePage implements OnInit {
   update_version: string;
   teamData: User[];
   listOfteamData: any;
-  designData: any;
   overdue: any;
   id: number;
   netSwitch: any;
-  noDesignFound: string;
   length: any;
+  noMemberFound:any;
   private subscription: Subscription;
   deactivateNetworkSwitch: Subscription;
   showFooter = true;
@@ -242,7 +241,7 @@ export class TeamhomepagePage implements OnInit {
 
           }
           else {
-            this.noDesignFound = "No Result Found"
+            this.noMemberFound = "No Result Found"
           }
           if (event !== null) {
             event.target.complete();
@@ -297,73 +296,6 @@ export class TeamhomepagePage implements OnInit {
     }
   }
 
-  // formatDesignData(records : teamData[]){
-  //     this.overdue=[];
-  //     let list:teamData[];
-  //    list=this.fillinDynamicData(records);
-  //    list.forEach(element =>{
-  //      this.listOfteamData.push(element);
-  //    })
-
-  //     console.log(this.listOfteamData);
-
-  //     const tempData: teamData[] = [];
-
-
-
-  //       this.listOfteamData.forEach((designItem:any,i) => {
-  //         console.log(i);
-
-  //         if (tempData.length === 0) {
-  //           this.sDatePassed(designItem.updated_at,i);
-  //           const listOfDesign = new DesginDataHelper();
-  //           listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-  //             listOfDesign.lateby = this.overdue;
-  //           listOfDesign.listOfDesigns.push(designItem);
-  //           tempData.push(listOfDesign);
-  //           console.log(tempData);
-
-
-  // ;
-  //         } else {
-
-  //           let added = false;
-  //           tempData.forEach((DesignList) => {
-  //             // DesignList['listOfDesigns'].forEach(element=>{
-
-  //             //   console.log(element.deliverydate,":::::::::::::");
-
-  //             //   this.sDatePassed(element.deliverydate);
-  //             // })
-  //             if (!added) {
-  //               if (DesignList.date === this.datePipe.transform(designItem.updated_at, 'M/dd/yy')) {
-  //                 DesignList.listOfDesigns.push(designItem);
-  //                 this.sDatePassed(designItem.updated_at,i);
-  //                 added = true;
-  //               }
-  //             }
-  //           });
-  //           if (!added) {
-  //             ;
-  //             this.sDatePassed(designItem.updated_at,i);
-  //             const listOfDesign = new DesginDataHelper();
-  //             listOfDesign.date = this.datePipe.transform(designItem.updated_at, 'M/dd/yy');
-  //             listOfDesign.lateby = this.overdue;
-  //             listOfDesign.listOfDesigns.push(designItem);
-  //             tempData.push(listOfDesign);
-  //             added = true;
-  //           }
-  //         }
-  //       });
-  //         this.listOfteamData = tempData.sort(function (a, b) {
-  //           var dateA = new Date(a.date).getTime(),
-  //             dateB = new Date(b.date).getTime();
-  //           return dateB - dateA;
-  //         // });
-  //         // this.chatIcon(list);
-  //         // console.log(list);
-  //         // this.cdr.detectChanges();
-  // }
   async teamdetail(data, event) {
     event.stopPropagation();
     this.mixpanelService.track("DECLINE_TEAM_DETAIL_PAGE_OPEN", {
@@ -372,7 +304,7 @@ export class TeamhomepagePage implements OnInit {
       component: TeamdetailsPage,
       cssClass: 'my-custom-modal-css',
       componentProps: {
-        designData: data
+        teamData: data
       },
       backdropDismiss: false
     });
@@ -445,7 +377,7 @@ export class TeamhomepagePage implements OnInit {
    // this.route.navigate(['/teamschedule/'+this.designData.id])
    let objToSend: NavigationExtras = {
     queryParams: {
-     designData:data,
+     teamData:data,
   
      
     },
@@ -460,18 +392,18 @@ export class TeamhomepagePage implements OnInit {
   });
   }
 
-  async deleteDesign() {
+  async deleteTeam(data) {
     
     // this.enableDisable = true;
     const toast = await this.toastController.create({
-      header: 'Delete Design',
+      header: 'Delete Team Member',
       message: 'Are you sure you want to delete this Team Member ?',
       cssClass: 'my-custom-delete-class',
       buttons: [
         {
           text: 'Yes',
           handler: () => {
-            this.deleteDesignFromServer();
+            this.deleteTeamFromServer(data);
           }
         }, {
           text: 'No',
@@ -483,13 +415,13 @@ export class TeamhomepagePage implements OnInit {
     });
     toast.present();
   }
-  deleteDesignFromServer() {
-    console.log(this.designData)
-    this.utils.showLoading('Deleting Design').then((success) => {
-      this.apiService.deleteTeam(this.designData.id).subscribe((result) => {
+  deleteTeamFromServer(data) {
+    console.log(data)
+    this.utils.showLoading('Deleting Team Member').then((success) => {
+      this.apiService.deleteTeam(data.id).subscribe((result) => {
         console.log('result', result);
         this.utils.hideLoading().then(() => {
-          this.utils.showSnackBar(this.designData.firstname + " " + 'has been deleted successfully');
+          this.utils.showSnackBar(data.firstname + " " + 'has been deleted successfully');
         //  this.navController.pop();
         this.modalController.dismiss({'dismissed':true})
         
@@ -505,27 +437,6 @@ export class TeamhomepagePage implements OnInit {
       });
     });
   }
-
-
-  refreshDesigns(event) {
-    // this.skip=0;
-    let showLoader = true;
-    if (event !== null && event !== undefined) {
-      showLoader = false;
-    }
-    console.log(showLoader)
-    this.getTeamData(event,showLoader);
-  }
-  //   segmentChanged(event){
-
-  //     if(this.designData.role.type=='wattmonkadmins' || this.designData.role.name=='Admin'  ){
-  //       if(event.target.value=='groups')
-
-
-  //   }
-  // }
-  // segmentChanged(event){
-  // }
 
   openAssignSalesManager(id,data,event)
   {

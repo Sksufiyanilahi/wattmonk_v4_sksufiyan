@@ -841,5 +841,11 @@ export class ApiService {
         headers: this.headers
       })
     }
+
+    getCompanies(requesttype){
+      return this.http.get(BaseUrl +"getcompanies?requesttype="+requesttype,{
+        headers:this.headers
+      })
+    }
 }
 

@@ -76,7 +76,7 @@
   <ion-grid style="background-color: #fbf9f4" *ngIf="isClientData">
     <ion-row>
       <ion-col
-        *ngFor="let designData of clientData;let j = index;trackBy: trackdesign"
+        *ngFor="let client of clientData;let j = index;trackBy: trackdesign"
         size="12"
       >
         <ion-card
@@ -86,52 +86,52 @@
           <ion-row style="display: flex">
             <ion-col size="3">
               <ion-card
-                *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
+                *ngIf="isEmptyObject(client?.logo) || client?.logo ==null"
                 class="profile_img"
-                >{{designData?.firstname.slice(0, 1).toUpperCase() +
-                designData?.lastname.slice(0, 1).toUpperCase()}}</ion-card
+                >{{client?.firstname.slice(0, 1).toUpperCase() +
+                  client?.lastname.slice(0, 1).toUpperCase()}}</ion-card
               >
               <div
-                *ngIf="!isEmptyObject(designData?.logo) && designData?.logo !==null"
+                *ngIf="!isEmptyObject(client?.logo) && client?.logo !==null"
               >
-                <img [src]="designData?.logo?.url" class="profile_img" />
+                <img [src]="client?.logo?.url" class="profile_img" />
               </div>
             </ion-col>
             <ion-col size="6">
               <p class="customer-name" routerDirection="forward">
-                <span>{{designData.firstname}}&nbsp;</span>
-                <span>{{designData.lastname}}</span>
+                <span>{{client.firstname}}&nbsp;</span>
+                <span>{{client.lastname}}</span>
               </p>
 
               <p style="margin: 0px">
                 <span class="customer-email" routerDirection="forward"
-                  >{{designData.email}}</span
+                  >{{client.email}}</span
                 >
               </p>
               <p style="margin: 0px; font-size: 0.9em">
-                <span>{{designData.firstname}}&nbsp;</span>
-                <span>{{designData.lastname}}</span>
+                <span>{{client.firstname}}&nbsp;</span>
+                <span>{{client.lastname}}</span>
               </p>
             </ion-col>
             <ion-col size="3" style="text-align: -webkit-right">
               <!-- <ion-icon  name="chatbubble"></ion-icon> -->
               <ion-icon
                 name="pencil-outline"
-                (click)="edit(designData.id,$event)"
+                (click)="edit(client.id,$event)"
               ></ion-icon>
               <ion-icon
                 name="close"
-                (click)="blockUser(designData,$event)"
+                (click)="blockUser(client,$event)"
               ></ion-icon>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col size="3" style="align-self: center">
-              <p class="team">{{designData.totalteams}}</p>
+              <p class="team">{{client.totalteams}}</p>
               <p style="margin: 0px; font-size: smaller">Our Team</p>
             </ion-col>
             <ion-col size="3" style="align-self: center">
-              <p class="team">{{designData.totalactivedesigns}}</p>
+              <p class="team">{{client.totalactivedesigns}}</p>
               <p style="margin: 0px; font-size: smaller">Design Requests</p>
             </ion-col>
             <ion-col
@@ -142,9 +142,9 @@
                 class="chip"
                 ok-text=""
                 cancel-text=""
-                (ionChange)="switchPaymentModeCustomer($event,designData,j)"
+                (ionChange)="switchPaymentModeCustomer($event,client,j)"
                 interface="popover"
-               [(ngModel)]="designData.ispaymentmodeprepay"
+               [(ngModel)]="client.ispaymentmodeprepay"
               >
                 <ion-select-option [value]="false">Postpaid</ion-select-option>
                 <ion-select-option [value]="true">Prepaid</ion-select-option>
@@ -177,7 +177,7 @@
   </ion-grid>
   <ion-grid style="background-color: #fbf9f4" *ngIf="!isClientData">
     <ion-row>
-      <ion-col *ngFor="let designData of [10,50,30,49,29]" size="12">
+      <ion-col *ngFor="let client of [10,50,30,49,29]" size="12">
         <ion-card
           class="ion-no-padding custom-card ion-no-margin"
           style="height: 100%"
@@ -185,7 +185,7 @@
           <ion-row style="display: flex">
             <ion-col size="3">
               <ion-card
-                *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
+                *ngIf="isEmptyObject(client?.logo) || client?.logo ==null"
                 class="profile_img"
                 ><ion-skeleton-text
                   animated
