@@ -135,7 +135,7 @@
   </div>
   <!-- CHECK EXISTENCE VIEW -->
   <div class="checkexistenceviewcontainer"
-    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
+    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
     <ion-grid class="checkexistenceview">
       <!-- Row for choice questions -->
       <ion-row class="checkexistenceview-row ion-padding-horizontal">
@@ -153,7 +153,7 @@
   </div>
   <!-- QUESTIONARE VIEW -->
   <div class="questionaireviewcontainer"
-    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
+    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
     <ion-grid class="questionaireview">
 
       <!-- Row for choice questions -->
