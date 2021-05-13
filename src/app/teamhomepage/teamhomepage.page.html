@@ -485,7 +485,6 @@
               <ion-item lines="none" class="item-class">
                 <div
                   style="padding-left: 0px; background: none"
-                  *ngIf="isEmptyObject(team?.logo) || team?.logo ==null"
                   class="profile_img"
                 >
                   <ion-skeleton-text
@@ -494,7 +493,6 @@
                   ></ion-skeleton-text>
                 </div>
                 <div
-                  *ngIf="!isEmptyObject(team?.logo) && team?.logo !==null"
                 >
                   <ion-skeleton-text
                     animated

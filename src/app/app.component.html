@@ -66,7 +66,7 @@
                       <!-- <ion-item mode="md" routerLink="/comingsoon" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
                         <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
                       </ion-item> -->
-                      <ion-item joyrideStep='teamhighlight' title="Team" text="Build your team by adding new users and assigning them required roles." (next)="menu.close()" (click)="SwitchMenuAccordingtoRoles('team')" *ngIf="userData?.usertype=='company' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
+                      <ion-item joyrideStep='teamhighlight' title="Team" text="Build your team by adding new users and assigning them required roles." (next)="menuCtrl.close()" (click)="SwitchMenuAccordingtoRoles('team')" *ngIf="userData?.usertype=='company' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
                         <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
                       </ion-item>
                       <ion-item  (click)="SwitchMenuAccordingtoRoles('client')" *ngIf="userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin'" routerDirection="forward">

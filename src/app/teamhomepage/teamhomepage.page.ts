@@ -197,19 +197,19 @@ export class TeamhomepagePage implements OnInit {
               {
                 this.teamBd.push(element);
                 ++this.bd;
-                
+
               }
               else if(element.role.id==5)
               {
                 this.teamAdmin.push(element);
                 ++this.admin;
-               
+
               }
               else if(element.role.id==8)
               {
                 this.teamDesigner.push(element);
                 ++this.designers;
-                
+
               }
               else if(element.role.id==10)
               {
@@ -228,7 +228,7 @@ export class TeamhomepagePage implements OnInit {
                 console.log(this.peengineer)
               }
             })
-            
+
             res.forEach(element=>{
               if(element.role.id==7)
               {
@@ -260,7 +260,7 @@ export class TeamhomepagePage implements OnInit {
   filterAdmin(value)
   {
     if(value=='admin')
-    {    
+    {
     this.teamData = [];
     this.teamData = this.teamAdmin;
     }
@@ -373,27 +373,27 @@ export class TeamhomepagePage implements OnInit {
 
   edit(data){
     this.modalController.dismiss({'dismissed':true})
-    
+
    // this.route.navigate(['/teamschedule/'+this.designData.id])
    let objToSend: NavigationExtras = {
     queryParams: {
      teamData:data,
-  
-     
+
+
     },
     skipLocationChange: false,
-    fragment: 'top' 
+    fragment: 'top'
   };
-  
-  
-  
-  this.router.navigate(['/teamschedule/'+data.id], { 
+
+
+
+  this.router.navigate(['/teamschedule/'+data.id], {
   state: { productdetails: objToSend }
   });
   }
 
   async deleteTeam(data) {
-    
+
     // this.enableDisable = true;
     const toast = await this.toastController.create({
       header: 'Delete Team Member',
@@ -424,8 +424,8 @@ export class TeamhomepagePage implements OnInit {
           this.utils.showSnackBar(data.firstname + " " + 'has been deleted successfully');
         //  this.navController.pop();
         this.modalController.dismiss({'dismissed':true})
-        
-        
+
+
         this.router.navigate(['/teamhomepage'])
         // this.utils.setteamModuleRefresh(true);
          // this.utils.setteamModuleRefresh(true);

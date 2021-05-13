@@ -88,7 +88,7 @@ export class OnboardingPage implements OnInit {
     private formBuilder: FormBuilder,
     private storage: StorageService,
     private apiService: ApiService,
-    private menu: MenuController,
+    public menu: MenuController,
     private utils: UtilitiesService,
     private navCtrl: NavController,
     private db: AngularFireDatabase,
@@ -157,7 +157,7 @@ export class OnboardingPage implements OnInit {
     // this.user = this.storage.getUser();
     // console.log(this.user)
     // this.userId= this.storage.getUserID();
-    
+
 
     this.getNotificationCount();
     this.onboardingData();
@@ -205,8 +205,8 @@ export class OnboardingPage implements OnInit {
       (err) => console.log(err),
       () => console.log('done!')
     )
-    
-  
+
+
   }
 
 

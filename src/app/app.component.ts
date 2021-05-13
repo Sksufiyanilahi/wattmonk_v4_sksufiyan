@@ -82,8 +82,7 @@ export class AppComponent {
     private changeDetectorRef: ChangeDetectorRef,
     private mix: MixpanelService,
     private backgroundMode: BackgroundMode,
-    private alertController: AlertController,
-    public menu : MenuController
+    private alertController: AlertController
   ) {
     this.initializeApp();
     if (!navigator.onLine) {
@@ -110,7 +109,7 @@ export class AppComponent {
 
         changeDetectorRef.detectChanges();
       },
-      
+
 
 
     );
@@ -417,7 +416,7 @@ export class AppComponent {
   }
   openMenu(){
     if(this.user.usertype=='individual'){
-      this.menu.close();
+      this.menuCtrl.close();
     }
     else{}
   }

@@ -74,10 +74,10 @@ export class TeamComponent implements OnInit {
     private formBuilder: FormBuilder,
     private cdr:ChangeDetectorRef,
     private modalCtrl:ModalController,
-    private toastController:ToastController) { 
+    private toastController:ToastController) {
     }
 
-    @Output() public data = 
+    @Output() public data =
         new EventEmitter<{admin:number,bd:number,designers:number,analysts:number,surveyor:number,peengineer:number,all:number}>();
 
   ngOnInit() {
@@ -91,10 +91,10 @@ export class TeamComponent implements OnInit {
 
   send_counts()
   {
-    
-  /* we will wrap the parameters 
+
+  /* we will wrap the parameters
      to be sent inside the curly brackets.*/
-    
+
     this.data.emit({admin:this.admin, bd:this.bd,designers:this.designers,analysts:this.analysts,surveyor:this.surveyor,peengineer:this.peengineer,all:this.all});
   }
 
@@ -138,13 +138,13 @@ export class TeamComponent implements OnInit {
               }
               else if(element.role.id==8)
               {
-                
+
                 ++this.designers;
                 count=0;
               }
               else if(element.role.id==10)
               {
-                
+
                 ++this.analysts;
               }
               else if(element.role.id==9)
@@ -153,12 +153,12 @@ export class TeamComponent implements OnInit {
               }
               else if(element.role.id==11)
               {
-                
+
                 ++this.peengineer;
                 console.log(this.peengineer)
               }
             })
-            
+
             res.forEach(element=>{
               if(element.role.id==7)
               {
@@ -331,27 +331,27 @@ export class TeamComponent implements OnInit {
 
   edit(){
     this.modalCtrl.dismiss({'dismissed':true})
-    
+
    // this.route.navigate(['/teamschedule/'+this.designData.id])
    let objToSend: NavigationExtras = {
     queryParams: {
      designData:this.designData,
-  
-     
+
+
     },
     skipLocationChange: false,
-    fragment: 'top' 
+    fragment: 'top'
   };
-  
-  
-  
-  this.route.navigate(['/teamschedule/'+this.designData.id], { 
+
+
+
+  this.route.navigate(['/teamschedule/'+this.designData.id], {
   state: { productdetails: objToSend }
   });
   }
 
   async deleteDesign() {
-    
+
     // this.enableDisable = true;
     const toast = await this.toastController.create({
       header: 'Delete Design',
@@ -382,8 +382,8 @@ export class TeamComponent implements OnInit {
           this.utils.showSnackBar(this.designData.firstname + " " + 'has been deleted successfully');
         //  this.navController.pop();
         this.modalCtrl.dismiss({'dismissed':true})
-        
-        
+
+
         this.route.navigate(['/teamhomepage/team'])
         // this.utils.setteamModuleRefresh(true);
          // this.utils.setteamModuleRefresh(true);
@@ -450,12 +450,12 @@ export class TeamComponent implements OnInit {
       this.utils.hideLoading().then(()=>{
         // if(this.isTeamBdAssign)
         // {
-        //   this.isTeamBd = true;  
+        //   this.isTeamBd = true;
         // }
         // else if(this.isTeamAdminAssign){
         //   this.isTeamAdmin = true;
         // }
-        
+
         this.dismissBottomSheet();
         this.showBottomDraw = false;
         //this.utils.showSnackBar("");

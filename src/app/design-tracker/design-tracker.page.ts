@@ -1,5 +1,6 @@
 import { Component, OnInit,  ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import * as Chart from 'chart.js';
 
 @Component({
@@ -10,7 +11,7 @@ import * as Chart from 'chart.js';
 export class DesignTrackerPage implements OnInit {
   @ViewChild('barChart') barChart;
   @ViewChild("doughnutCanvas") doughnutCanvas;
-  
+
 
   // private barChart: Chart;
    slideOpts = {
@@ -24,20 +25,20 @@ export class DesignTrackerPage implements OnInit {
   Doughs:any
   colorArray: any;
 
-  constructor( private router:Router,) { }
+  constructor( private router:Router,private navCtrl:NavController) { }
 
-  
+
 
   ngOnInit() {
-    
-    
+
+
 
   }
 
   ToogleMonth(){
     this.month=true;
     this.year = false;
-    
+
   }
 
   ToogleYear(){
@@ -71,7 +72,7 @@ export class DesignTrackerPage implements OnInit {
           yAxes: [{
             ticks: {
               beginAtZero: true,
-             
+
             }
           }]
         },
@@ -92,7 +93,7 @@ export class DesignTrackerPage implements OnInit {
     this.Doughs = new Chart(this.doughnutCanvas.nativeElement, {
       type: "doughnut",
       data: {
-        
+
         datasets: [
           {
             label: "# of Votes",
@@ -109,11 +110,14 @@ export class DesignTrackerPage implements OnInit {
       }
     });
   }
-  
 
-  
+  goBack(){
+      this.navCtrl.pop();
+  }
+
+
 }
 
-  
+
 
 

@@ -126,7 +126,7 @@ export class ClienthomepagePage implements OnInit {
   scheduledPage() {
     this.mixpanelService.track("ADD_CLIENT_PAGE_OPEN", {
     });
-    this.route.navigate(['/clientscheduled/']);
+    this.route.navigate(['/clientschedule']);
 
   }
 

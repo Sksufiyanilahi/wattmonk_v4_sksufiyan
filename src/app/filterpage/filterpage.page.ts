@@ -23,7 +23,7 @@ export class FilterpagePage implements OnInit {
   public form1 = [
     { val: 'On Hold', isChecked: false },
     { val: 'Rivision', isChecked: false },
-    
+
   ];
 
   public form3= [
@@ -34,12 +34,12 @@ export class FilterpagePage implements OnInit {
 
   filterform:FormGroup;
 
-  clientList:Company;
+  clientList:Company[];
   requestType:string;
   constructor( public modalController: ModalController,
                 private apiservice:ApiService,
                 private nav:NavParams,
-                private formBuilder:FormBuilder) { 
+                private formBuilder:FormBuilder) {
                   this.requestType= this.nav.get('requesttype');
                   console.log(this.requestType)
                   this.filterform = this.formBuilder.group({
@@ -53,9 +53,9 @@ export class FilterpagePage implements OnInit {
     this.getCompanies();
   }
 
-  dismiss() {  
-    this.modalController.dismiss();  
-  }  
+  dismiss() {
+    this.modalController.dismiss();
+  }
 
 
   getCompanies(){

@@ -304,7 +304,7 @@ const routes: Routes = [
   {
     path: 'userregistration',
     loadChildren: () => import('./userregistration/userregistration.module').then( m => m.UserregistrationPageModule),
-    canActivate: [AuthGuardService]
+    // canActivate: [AuthGuardService]
   },
   {
     path: 'profile-edit-modal',
@@ -354,7 +354,7 @@ const routes: Routes = [
     path: 'design-tracker',
     loadChildren: () => import('./design-tracker/design-tracker.module').then( m => m.DesignTrackerPageModule)
   },
-  
+
 
 
 
