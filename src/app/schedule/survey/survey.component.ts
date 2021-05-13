@@ -1,6 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NavController, Platform } from '@ionic/angular';
+import { AlertController, NavController, Platform } from '@ionic/angular';
 import { AssigneeModel } from '../../model/assignee.model';
 import { UtilitiesService } from '../../utilities.service';
 import {
@@ -15,10 +15,11 @@ import { Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyDataModel } from '../../model/survey.model';
-import { ErrorModel } from 'src/app/model/error.model';
+import { ErrorMessageList, ErrorModel } from 'src/app/model/error.model';
 import { AddressModel } from 'src/app/model/address.model';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { NUMBER_TYPE } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-survey',
@@ -59,6 +60,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
   data:any;
   surveydata:any;
   browser: any;
+  SurveyResponce: any;
+  SurveyResp1: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -72,6 +75,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
     private iab: InAppBrowser,
+    private alertControl: AlertController
   ) {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
@@ -88,7 +92,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       datetime: new FormControl(''),
       comments: new FormControl(''),
       address: new FormControl('', [Validators.required]),
-      source: new FormControl(this.utilities.checkPlatform(), [Validators.required]),
+      source: new FormControl('android', [Validators.required]),
       assignedto: new FormControl(null),
       createdby: new FormControl(this.storage.getUserID(), [Validators.required]),
       latitude: new FormControl(null),
@@ -101,7 +105,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       chatid: new FormControl(null),
       oldcommentid: new FormControl(''),
       prelimdesignsurvey : new FormControl(null),
-      isdesigndelivered : new FormControl(null)
+      isdesigndelivered : new FormControl(null),
+      sameemailconfirmed: new FormControl(null)
     });
     this.surveyForm.get('jobtype').setValue('pv');
 
@@ -201,6 +206,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
             responseError => {
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
+                const status: ErrorMessageList = responseError.error;
+                console.log(status)
                 this.utilities.errorSnackBar(error.message);
               });
               //
@@ -280,7 +287,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
         }
         if (this.surveyId !== 0) {
           this.surveyForm.get('chatid').setValue(this.survey.chatid);
-          this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
+          this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => { 
             this.utilities.hideLoading().then(() => {
               this.utilities.showSnackBar('Survey has been updated');
               this.utilities.setSurveyDetailsRefresh(true);
@@ -289,8 +296,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
             });
           },
             responseError => {
+              console.log(responseError)
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
+                console.log(ErrorModel)
                 this.utilities.errorSnackBar(error.message);
               });
               //
@@ -326,7 +335,17 @@ export class SurveyComponent implements OnInit, OnDestroy {
           },
             responseError => {
               this.utilities.hideLoading().then(() => {
-                const error: ErrorModel = responseError.error;
+                var error = responseError.error;
+                this.SurveyResponce =error.message.status;
+                this.SurveyResp1 = error.message.message;
+                console.log(error.message.status)
+                if(this.SurveyResponce == "alreadyexist" ){
+                  console.log("open popup")
+                  this.showAlert();
+                    
+                  
+
+                }
                 this.utilities.errorSnackBar(error.message);
               });
               //
@@ -576,6 +595,56 @@ export class SurveyComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.autocompleteItems = [];
     }, 100);
+  }
+
+  async showAlert(){
+    await this.alertControl.create({
+      header: "Email Already Exists!!!",
+      message: this.SurveyResp1,
+      buttons:[
+        {
+          text: "yes", handler: (res) => {
+            console.log(this.surveyForm.value.sameemailconfirmed);
+            this.surveyForm.value.sameemailconfirmed = true;
+            this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
+              this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+                this.utilities.hideLoading();
+                // this.navController.pop();
+                modal.present();
+                modal.onWillDismiss().then((dismissed) => {
+                  this.utilities.sethomepageSurveyRefresh(true);
+                  if (this.userData.role.type === 'surveyors') {
+                    this.navController.navigateRoot('surveyoroverview/newsurveys');
+                  } else {
+                    this.navController.navigateRoot('homepage/survey');
+                  }
+
+                });
+                // });
+              });
+
+            },
+              responseError => {
+                this.utilities.hideLoading().then(() => {
+                  var error = responseError.error;
+                  this.utilities.errorSnackBar(error.message);
+                });
+                //
+              }
+            );
+
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        },  
+      ]
+    }).then(res=>res.present());
   }
 
   // showurl(i){

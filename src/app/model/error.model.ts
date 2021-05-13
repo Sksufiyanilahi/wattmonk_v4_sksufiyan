@@ -6,6 +6,7 @@ export class ErrorModel {
 
 export class ErrorMessageList {
   messages: ErrorMessage[];
+  status:string;
 }
 
 export class ErrorMessage {

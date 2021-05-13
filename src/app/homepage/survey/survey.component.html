@@ -1,13 +1,13 @@
 <ion-segment scrollable (ionChange)="segmentChanged($event)"
     value="status=created&status=outsourced&status=requestaccepted">
     <ion-segment-button value="status=created&status=outsourced&status=requestaccepted">
-        <ion-label class="segment-btn">New</ion-label>
+        <ion-label class="segment-btn">New ({{this.SurveyCounts.newsurvey}})</ion-label>
     </ion-segment-button>
     <ion-segment-button value="status=surveyassigned&status=surveyinprocess">
-        <ion-label class="segment-btn">In Progress</ion-label>
+        <ion-label class="segment-btn">In Progress ({{this.SurveyCounts.inprocess}})</ion-label>
     </ion-segment-button>
     <ion-segment-button value="status=surveycompleted">
-        <ion-label class="segment-btn">Completed</ion-label>
+        <ion-label class="segment-btn">Completed ({{this.SurveyCounts.completed}})</ion-label>
     </ion-segment-button>
     <!-- <ion-segment-button value="status=reviewassigned&status=reviewpassed&status=reviewfailed">
         <ion-label class="segment-btn">Review</ion-label>

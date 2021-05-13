@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
 import {UtilitiesService} from 'src/app/utilities.service';
 import {ApiService} from 'src/app/api.service';
-import {SurveyDataModel} from 'src/app/model/survey.model';
+import {SurveyCount, SurveyDataModel} from 'src/app/model/survey.model';
 import {ErrorModel} from 'src/app/model/error.model';
 import {DatePipe} from '@angular/common';
 import {Subscription} from 'rxjs';
@@ -75,6 +75,7 @@ export class SurveyComponent {
   updatechat_id: boolean = false;
   deactivateNetworkSwitch: Subscription;
   storageDirectory: string;
+  SurveyCounts: SurveyCount=<SurveyCount>{};
 
   constructor(
     public utils: UtilitiesService,
@@ -150,6 +151,11 @@ export class SurveyComponent {
 
   ngOnInit() {
     this.userData = this.storageService.getUser();
+    let userId = this.storageService.getUserID()
+    
+      this.apiService.getSurveycounts(userId).subscribe(res=>{this.SurveyCounts =res;
+        console.log(this.SurveyCounts
+          )})
 
     this.setupCometChat();
 
@@ -1048,7 +1054,7 @@ export class SurveyComponent {
     })
 
 
-    let dir_name = 'Wattmonk';
+    let dir_name = 'WattMonk';
     let path = '';
     const url = designData.surveypdf.url;
     const fileTransfer: FileTransferObject = this.transfer.create();

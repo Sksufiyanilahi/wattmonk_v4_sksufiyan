@@ -345,10 +345,16 @@ const routes: Routes = [
     path: 'clienthomepage',
     loadChildren: () => import('./clienthomepage/clienthomepage.module').then( m => m.ClienthomepagePageModule),
     canActivate: [AuthGuardService]
-  },  {
+  },
+  {
     path: 'filterpage',
     loadChildren: () => import('./filterpage/filterpage.module').then( m => m.FilterpagePageModule)
   },
+  {
+    path: 'design-tracker',
+    loadChildren: () => import('./design-tracker/design-tracker.module').then( m => m.DesignTrackerPageModule)
+  },
+  
 
 
 

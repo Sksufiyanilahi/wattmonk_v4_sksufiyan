@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
-import { DesginDataModel, PrelimDesign } from '../../model/design.model';
+import { DesginDataModel, prelimCounts, PrelimDesign } from '../../model/design.model';
 import { ApiService } from 'src/app/api.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { ErrorModel } from 'src/app/model/error.model';
@@ -79,6 +79,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   deactivateNetworkSwitch: Subscription;
   noDesignFound: string;
   storageDirectory: string;
+  PrelimCounts: prelimCounts=<prelimCounts>{};
   //counts
   // newprelims: Observable<any>;
   // newprelimsRef: AngularFireObject<any>;
@@ -250,6 +251,14 @@ this.network.networkConnect();
   }
 
   ngOnInit() {
+    let userId = this.storageService.getUserID()
+    let requesttype="prelim"
+    
+      this.apiService.getPrelimcounts(userId,requesttype).subscribe(res=>{this.PrelimCounts =res;
+        console.log(this.PrelimCounts
+          )})
+      
+
 
     this.apiService.emitUserNameAndRole(this.userData);
     // this.userData = this.storageService.getUser();
@@ -714,7 +723,7 @@ state: { productdetails: objToSend }
     }
     else if (this.assignForm.status === 'INVALID' && ( this.designerData.status === 'created'|| this.designerData.status === 'requestaccepted'|| this.designerData.status === 'designassigned')) {
       if(this.userData.role.type=='clientsuperadmin'){
-        this.utils.errorSnackBar('Please select the wattmonk admin');
+        this.utils.errorSnackBar('Please select the WattMonk admin');
       }
       else{this.utils.errorSnackBar('Please select a designer');}
     }
@@ -793,7 +802,7 @@ state: { productdetails: objToSend }
           if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
          {
            this.isclientassigning= true;
-          this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+          this.utils.showSnackBar('Design request has been assigned to WattMonk successfully');
           this.addUserToGroupChat();
          }else{
           this.addUserToGroupChat();
@@ -1261,7 +1270,7 @@ this.platform.ready().then(()=>{
 
 
 
-  let dir_name = 'Wattmonk';
+  let dir_name = 'WattMonk';
   let path = '';
   const url = designData.prelimdesign.url;
  const fileTransfer: FileTransferObject = this.transfer.create();
@@ -1411,7 +1420,7 @@ directAssignToWattmonk(id:number,event){
             //  {
             //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
             //  }else{
-              this.utils.showSnackBar('Design request has been reassigned to wattmonk successfully');
+              this.utils.showSnackBar('Design request has been reassigned to WattMonk successfully');
 
               //this.dismissBottomSheet();
               //this.showBottomDraw = false;

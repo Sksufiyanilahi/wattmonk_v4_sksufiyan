@@ -546,9 +546,9 @@
 <ion-row>
   <ion-col></ion-col>
   <ion-col size="auto">
-    <ion-button class="action-button-color" fill="clear" (click)="addForm('save')">Save</ion-button>
+    <ion-button class="action-button-color" fill="clear" (click)="addForm('save')">Save for later</ion-button>
     <ion-button class="action-button-color"
       *ngIf="(userdata.role.type=='clientsuperadmin' || userdata.role.type=='clientadmin') && ((design && design.status != 'requestdeclined') || design==null) && designId==0"
-      fill="clear" (click)="addForm('send')">Send to Wattmonk</ion-button>
+      fill="clear" (click)="addForm('send')">Send to WattMonk</ion-button>
   </ion-col>
 </ion-row>

@@ -1,0 +1,312 @@
+<ion-content style="--ion-background-color:#FBF9F4;">
+  <ion-header class="ion-no-border">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="1.5">
+          <ion-button fill="clear" (click)="goBack()" [disabled]='enableDisable'>
+            <ion-img fill="clear" src="assets/images/back.svg" class="action-icon"></ion-img>
+          </ion-button>
+        </ion-col>
+        <ion-col size="4.5">
+          <p style="margin-top: 9px; font-size: 22px; font-weight: bold;">Setting</p>
+        </ion-col>
+
+        <ion-col size="1">
+          <ion-button fill="clear" [disabled]='enableDisable'>
+            <ion-icon class="text-center" name="search-sharp" class="_color"
+              style="font-size: 26px;width:48px;text-align: center;"></ion-icon>
+          </ion-button>
+        </ion-col>
+        <ion-col size="1">
+          <ion-button fill="clear" (click)="logout()" [disabled]='enableDisable'>
+            <ion-icon class="text-center" class="_color" name="notifications"
+              style="font-size: 26px;width:48px;text-align: center;"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-header>
+
+  <ion-card style="background-color: white; padding-top: 15px; ">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <span class="title text-bold">Platform Updates</span>
+        </ion-col>
+
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col>
+          <div class="_font">
+            Personalize your platform updates, the way you want.
+          </div>
+          <div class="_font">
+            Set when you would like to be notified.
+          </div>
+        </ion-col>
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col size="5.5" style="font-weight: bold; ">
+          Events
+        </ion-col>
+        <ion-col size="3" style="font-weight: bold;">
+          Emails
+        </ion-col>
+        <ion-col size="3.5" style="font-weight: bold;">
+          Notifications
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="5.5" class="_font1">
+          Design Genrated
+        </ion-col>
+        <ion-col size="3" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+        <ion-col size="3.5" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="5.5" class="_font1">
+          Design Acknowledgement
+          (Accept/Hold)
+        </ion-col>
+        <ion-col size="3">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+        <ion-col size="3.5">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="5.5" class="_font1">
+          Design In-Designing
+        </ion-col>
+        <ion-col size="3" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+        <ion-col size="3.5" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="5.5" class="_font1">
+          Design Completed
+        </ion-col>
+        <ion-col size="3" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+        <ion-col size="3.5" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="5.5" class="_font1">
+          Design In-Review
+        </ion-col>
+        <ion-col size="3" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+        <ion-col size="3.5" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="5.5" class="_font1">
+          Design Review Passed
+        </ion-col>
+        <ion-col size="3" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+        <ion-col size="3.5" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="5.5" class="_font1">
+          Design Review Failed
+        </ion-col>
+        <ion-col size="3" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+        <ion-col size="3.5" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="5.5" class="_font1">
+          Design Delivered
+        </ion-col>
+        <ion-col size="3" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+        <ion-col size="3.5" class="ionPadding">
+          <ion-toggle></ion-toggle>
+        </ion-col>
+      </ion-row>
+      <ion-col size="12" style="margin-top: 5px" class="ion-margin-top">
+        <ion-button class="ApplyBtn">
+          Apply
+        </ion-button>
+      </ion-col>
+    </ion-grid>
+  </ion-card>
+  <ion-card style="background-color: white; padding-top: 15px; ">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <span class="title text-bold">Modules Visability</span>
+
+        </ion-col>
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col size="12">
+          <div class="_font">
+            When changed, the respective menu item's visibility in the sidebar & adat specific to that
+            module on dashboard will toggle for all of the added members within the team
+          </div>
+
+        </ion-col>
+      </ion-row><br>
+      <ion-row>
+        <ion-col size="6.5" class="_font1">
+          Prelim
+        </ion-col>
+        <ion-col size="2.5" class="_font1">
+          Visibility
+        </ion-col>
+        <ion-col size="3">
+          <ion-toggle class="ionPadding1"></ion-toggle>
+        </ion-col>
+
+      </ion-row>
+      <ion-row>
+        <ion-col size="6.5" class="_font1">
+          Permit
+        </ion-col>
+        <ion-col size="2.5" class="_font1">
+          Visibility
+        </ion-col>
+        <ion-col size="3">
+          <ion-toggle class="ionPadding1"></ion-toggle>
+        </ion-col>
+
+      </ion-row>
+      <ion-row>
+        <ion-col size="6.5" class="_font1">
+          Survey
+        </ion-col>
+        <ion-col size="2.5" class="_font1">
+          Visibility
+        </ion-col>
+        <ion-col size="3">
+          <ion-toggle class="ionPadding1"></ion-toggle>
+        </ion-col>
+
+      </ion-row>
+      <ion-row>
+        <ion-col size="6.5" class="_font1">
+          PE Stamp
+        </ion-col>
+        <ion-col size="2.5" class="_font1">
+          Visibility
+        </ion-col>
+        <ion-col size="3">
+          <ion-toggle class="ionPadding1"></ion-toggle>
+        </ion-col>
+
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+        </ion-col>
+        <ion-col size="4">
+        </ion-col>
+        <ion-col size="4" style="margin-top: 5px;" class="ion-margin-top">
+          <ion-button class="ApplyBtn">
+            Apply
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </ion-card>
+  <ion-card style="background-color: white; padding-top: 15px; ">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <span class="title text-bold">Rename Modules</span>
+
+        </ion-col>
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col size="12">
+          <div class="_font">
+            When updated, the respective menu item's name in the sidebar & terms used in search results and
+            dashboard will get affected. Two modules can't have similar names and you can't use the terms
+            that are already in use.
+          </div>
+
+        </ion-col>
+      </ion-row><br>
+      <ion-row>
+        <ion-col size="6.5" class="_font1">
+          Prelim
+        </ion-col>
+        <ion-col size="2.5" class="_font1">
+          Rename to
+        </ion-col>
+
+
+      </ion-row>
+      <ion-row>
+        <ion-col size="6.5" class="_font1">
+          Permit
+        </ion-col>
+        <ion-col size="2.5" class="_font1">
+          Rename to
+        </ion-col>
+
+      </ion-row>
+      <ion-row>
+        <ion-col size="6.5" class="_font1">
+          Survey
+        </ion-col>
+        <ion-col size="2.5" class="_font1">
+          Rename to
+        </ion-col>
+
+
+      </ion-row>
+      <ion-row>
+        <ion-col size="6.5" class="_font1">
+          PE Stamp
+        </ion-col>
+        <ion-col size="2.5" class="_font1">
+          Rename to
+        </ion-col>
+
+
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+        </ion-col>
+        <ion-col size="4">
+        </ion-col>
+        <ion-col size="4" style="margin-top: 5px;" class="ion-margin-top">
+          <ion-button class="ApplyBtn">
+            Apply
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </ion-card>
+
+
+
+</ion-content>

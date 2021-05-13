@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DrawerState } from 'ion-bottom-drawer';
 import { ApiService } from 'src/app/api.service';
 import { ErrorModel } from 'src/app/model/error.model';
-import { Pestamp } from 'src/app/model/pestamp.model';
+import { Pestamp, PEstampCount } from 'src/app/model/pestamp.model';
 import { StorageService } from 'src/app/storage.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import * as moment from 'moment';
@@ -72,6 +72,7 @@ export class PestampDesignComponent implements OnInit {
     start: '',
     app: this.launchNavigator.APP.GOOGLE_MAPS
   };
+  PEstampCounts: PEstampCount=<PEstampCount>{};
 
   //showLoader= true;
 
@@ -189,6 +190,13 @@ export class PestampDesignComponent implements OnInit {
                 }
 
   ngOnInit() {
+    let userId = this.storageService.getUserID()
+    
+    this.apiService.getPEstampcounts(userId).subscribe(res => {
+      this.PEstampCounts = res;
+      console.log(this.PEstampCounts
+      )
+    })
     //this.userData = this.storageService.getUser();
     this.mixpanelService.track("PESTAMP_PAGE_OPEN", {
     });
@@ -778,7 +786,7 @@ designDownload(designData,event){
     })
   })
 
-    let dir_name = 'Wattmonk';
+    let dir_name = 'WattMonk';
     let path = '';
     const url = designData.stampedfiles.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
@@ -1074,7 +1082,7 @@ directAssignToWattmonk(id:number,design,event){
             //  {
             //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
             //  }else{
-              this.utils.showSnackBar('Pe Stamp request has been reassigned to wattmonk successfully');
+              this.utils.showSnackBar('Pe Stamp request has been reassigned to WattMonk successfully');
 
               //this.dismissBottomSheet();
               //this.showBottomDraw = false;
