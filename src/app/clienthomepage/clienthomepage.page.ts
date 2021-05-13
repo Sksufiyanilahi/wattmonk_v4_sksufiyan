@@ -30,7 +30,6 @@ export class ClienthomepagePage implements OnInit {
   clientData: any[];
   // clients: any[] = [];
   length: number;
-
   dataSubscription: Subscription;
   private version = version;
   showSearchBar = false;
@@ -39,6 +38,8 @@ export class ClienthomepagePage implements OnInit {
   update_version: string;
   netSwitch: any;
   noDesignFound: string;
+
+  isClientData:boolean=false;
 
 
   constructor(
@@ -60,7 +61,7 @@ export class ClienthomepagePage implements OnInit {
   ngOnInit() {
     this.getNotificationCount();
     this.dataSubscription = this.utils.getHomepageDesignRefresh().subscribe((result) => {
-      this.getDesigns(null);
+     this.getDesigns(null);
     });
   }
 
@@ -75,11 +76,12 @@ export class ClienthomepagePage implements OnInit {
 
   fetchAllContractorsList(event,showLoader:boolean) {
     this.clientData=[];
-    this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Clients').then((success) => {
+   // this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Clients').then((success) => {
     this.apiService.getContractorsList().subscribe(
       (response:any) => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+      //  this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
         console.log("response", response);
+        this.isClientData = true;
         //if (response.length > 0) {
         // this.clients = this.fillinDynamicData(response);
 
@@ -93,7 +95,7 @@ export class ClienthomepagePage implements OnInit {
           event.target.complete();
         }
         console.log(this.clientData);
-        });
+       // });
       },
 
 
@@ -103,7 +105,7 @@ export class ClienthomepagePage implements OnInit {
         });
       }
     );
-    });
+   // });
 
   }
 

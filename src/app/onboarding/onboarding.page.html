@@ -1,9 +1,21 @@
  <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <!-- <ion-menu-button></ion-menu-button> -->
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>DashBoard</ion-title>
+    <ion-title >DashBoard</ion-title>
+    
+      <ion-buttons joyrideStep='searchhighlight' title="Looking for something?" text="Search page to help you look for any content that you are looking for, throughout the platform." (prev)="menu.open()" (next)="menu.close()" slot="end" class="notification-padding" (click)="searchbar()">
+          <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
+      </ion-buttons>
+    
+      <ion-buttons joyrideStep='notificationhighlight' title="Get Notified!!" text="All your important platform notifications can be found here." slot="end" (done)="onMainTourDone()" class="notification-padding" [routerLink]="['/notification']" routerDirection="forward" (click)="setzero()">
+          <ion-img src="/assets/images/notification.svg" class="notification-icon"></ion-img>
+         <span class="badge" *ngIf="unreadCount > 0">
+                      {{unreadCount > 99 ? '99+' : unreadCount}}
+                  </span>
+      </ion-buttons>
+  
     <ion-buttons slot="end">
       <ion-icon name="close-outline" [routerLink]="['/dashboard']" routerDirection="back" style="font-size: 25px;padding: 5px;"></ion-icon>
     </ion-buttons>

@@ -14,6 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SharedModule } from '../shared/shared.module';
+import { JoyrideModule } from 'ngx-joyride';
+// import { AngularFireDatabaseModule } from '@angular/fire/database/database.module';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { SharedModule } from '../shared/shared.module';
         MatButtonModule,
         MatAutocompleteModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
+        JoyrideModule.forChild(),
+        // AngularFireDatabaseModule,
   ],
   declarations: [OnboardingPage]
 })

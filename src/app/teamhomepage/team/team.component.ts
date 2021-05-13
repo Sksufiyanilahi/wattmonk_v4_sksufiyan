@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { version } from 'src/app/contants';
 import { User } from 'src/app/model/user.model';
@@ -6,8 +6,8 @@ import { NetworkdetectService } from 'src/app/networkdetect.service';
 import { StorageService } from 'src/app/storage.service';
 import { UtilitiesService } from 'src/app/utilities.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { Platform } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { AngularDelegate, Platform, ToastController } from '@ionic/angular';
+import { NavigationExtras, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { MixpanelService } from 'src/app/utilities/mixpanel.service';
 import { TeamdetailsPage } from 'src/app/teamdetails/teamdetails.page';
@@ -22,7 +22,7 @@ import { AssigneeModel } from 'src/app/model/assignee.model';
   styleUrls: ['./team.component.scss'],
 })
 export class TeamComponent implements OnInit {
-
+  // @Input()teamData: User[];
   private version = version;
   drawerState = DrawerState.Bottom;
 
@@ -52,6 +52,16 @@ export class TeamComponent implements OnInit {
   isTeamBd:boolean = false
   isTeamAdmin:boolean = false;
 
+  admin:number=0;
+  bd:number=0;
+  designers:number=0;
+  analysts:number=0;
+  surveyor:number=0;
+  peengineer:number=0;
+  all:number=0;
+
+  isTeamData:boolean=false;
+
   constructor(private apiService: ApiService,
     public utils: UtilitiesService,
     private storageservice: StorageService,
@@ -62,17 +72,30 @@ export class TeamComponent implements OnInit {
     public modalController: ModalController,
     private mixpanelService: MixpanelService,
     private formBuilder: FormBuilder,
-    private cdr:ChangeDetectorRef) { 
+    private cdr:ChangeDetectorRef,
+    private modalCtrl:ModalController,
+    private toastController:ToastController) { 
     }
+
+    @Output() public data = 
+        new EventEmitter<{admin:number,bd:number,designers:number,analysts:number,surveyor:number,peengineer:number,all:number}>();
 
   ngOnInit() {
     this.userData = this.storageservice.getUser();
     console.log(this.userData)
-    console.log("hello team")
     this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
       this.getTeams(null);
     })
 
+  }
+
+  send_counts()
+  {
+    
+  /* we will wrap the parameters 
+     to be sent inside the curly brackets.*/
+    
+    this.data.emit({admin:this.admin, bd:this.bd,designers:this.designers,analysts:this.analysts,surveyor:this.surveyor,peengineer:this.peengineer,all:this.all});
   }
 
   getTeams(event) {
@@ -89,26 +112,62 @@ export class TeamComponent implements OnInit {
       console.log(showLoader)
       this.teamData=[];
       this.listOfteamData = [];
-      this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
+      var count=0;
+      // this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
       this.apiService.getTeamData().subscribe((res) => {
          console.log(res);
-         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+         this.isTeamData=true;
+         this.send_counts();
+            this.teamData = res;
+            console.log(this.teamData);
+            this.listOfteamData = res;
+        //  this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           if (res.length > 0) {
+            console.log(res.length)
             res.forEach(element=>{
               if(element.role.id==3)
               {
                 this.teamBd.push(element);
+                ++this.bd;
+                console.log(this.bd)
+              }
+              else if(element.role.id==5)
+              {
+                ++this.admin;
+                console.log(this.admin)
+              }
+              else if(element.role.id==8)
+              {
+                
+                ++this.designers;
+                count=0;
+              }
+              else if(element.role.id==10)
+              {
+                
+                ++this.analysts;
+              }
+              else if(element.role.id==9)
+              {
+                ++this.surveyor;
+              }
+              else if(element.role.id==11)
+              {
+                
+                ++this.peengineer;
+                console.log(this.peengineer)
               }
             })
+            
             res.forEach(element=>{
               if(element.role.id==7)
               {
                 this.teamAdmin.push(element);
+                ++this.admin;
+                console.log(this.admin)
               }
             })
-            this.teamData = res;
-            console.log(this.teamData);
-            this.listOfteamData = res;
+            this.all = res.length;
 
           }
           else {
@@ -117,15 +176,15 @@ export class TeamComponent implements OnInit {
           if (event !== null) {
             event.target.complete();
           }
-        })
+        // })
       }, (error) => {
-        this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
+        // this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
         if (event !== null) {
           event.target.complete();
         }
+      // })
       })
-      })
-    })
+    // })
   }
 
   // formatDesignData(records : teamData[]){
@@ -268,6 +327,77 @@ export class TeamComponent implements OnInit {
     // });
     this.route.navigate(['/teamschedule']);
 
+  }
+
+  edit(){
+    this.modalCtrl.dismiss({'dismissed':true})
+    
+   // this.route.navigate(['/teamschedule/'+this.designData.id])
+   let objToSend: NavigationExtras = {
+    queryParams: {
+     designData:this.designData,
+  
+     
+    },
+    skipLocationChange: false,
+    fragment: 'top' 
+  };
+  
+  
+  
+  this.route.navigate(['/teamschedule/'+this.designData.id], { 
+  state: { productdetails: objToSend }
+  });
+  }
+
+  async deleteDesign() {
+    
+    // this.enableDisable = true;
+    const toast = await this.toastController.create({
+      header: 'Delete Design',
+      message: 'Are you sure you want to delete this Team Member ?',
+      cssClass: 'my-custom-delete-class',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.deleteDesignFromServer();
+          }
+        }, {
+          text: 'No',
+          handler: () => {
+            // this.enableDisable = false;
+          }
+        }
+      ]
+    });
+    toast.present();
+  }
+  deleteDesignFromServer() {
+    console.log(this.designData)
+    this.utils.showLoading('Deleting Design').then((success) => {
+      this.apiService.deleteTeam(this.designData.id).subscribe((result) => {
+        console.log('result', result);
+        this.utils.hideLoading().then(() => {
+          this.utils.showSnackBar(this.designData.firstname + " " + 'has been deleted successfully');
+        //  this.navController.pop();
+        this.modalCtrl.dismiss({'dismissed':true})
+        
+        
+        this.route.navigate(['/teamhomepage/team'])
+        // this.utils.setteamModuleRefresh(true);
+         // this.utils.setteamModuleRefresh(true);
+        });
+      }, (error) => {
+        this.utils.hideLoading().then(() => {
+          this.utils.errorSnackBar('Some Error Occurred');
+        });
+      });
+    });
+  }
+
+  isEmptyObject(obj) {
+    return obj && Object.keys(obj).length === 0;
   }
 
   refreshDesigns(event) {

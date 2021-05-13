@@ -1,3 +1,8 @@
+<ion-row>
+    <ion-col style="    text-align: -webkit-right;">
+<ion-icon name="funnel" (click)="presentModal()" style="font-size: larger"></ion-icon>
+</ion-col>
+</ion-row>
 <ion-segment scrollable (ionChange)="segmentChanged($event)" value="newDesign" mode="md">
     <ion-segment-button value="newDesign">
         <ion-label class="segment-btn">New Designs ({{this.PrelimCounts.newdesign}})</ion-label>

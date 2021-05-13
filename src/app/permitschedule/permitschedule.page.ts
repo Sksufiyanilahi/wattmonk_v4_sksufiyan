@@ -970,21 +970,26 @@ export class PermitschedulePage implements OnInit {
       var designstatus;
       var designoutsourcedto;
       var isoutsourced;
+      var deliverydate;
+
       var newConstruction = this.desginForm.get("newconstruction").value;
       if (this.designCreatedBy) {
+        var tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 2);
         designstatus = "requestaccepted";
         designoutsourcedto = "232";
         isoutsourced = "true";
         var designacceptancestarttime = new Date();
         designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+        deliverydate=tomorrow.toISOString()
 
       } else {
         designstatus = "created";
         designoutsourcedto = null;
-        isoutsourced = "false"
+        isoutsourced = "false";
+        deliverydate=""
       }
-      var tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 2);
+     
 
       if (this.designId === 0) {
         if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
@@ -1022,7 +1027,7 @@ export class PermitschedulePage implements OnInit {
               postalcode: this.desginForm.get('postalcode').value,
               status: designstatus,
               //attachments: this.desginForm.get('attachments').value,
-              deliverydate: tomorrow.toISOString(),
+              deliverydate: deliverydate,
               //creatorparentid:this.storage.getParentId()
               creatorparentid: this.desginForm.get('creatorparentid').value,
               outsourcedto: designoutsourcedto,
@@ -1066,7 +1071,7 @@ export class PermitschedulePage implements OnInit {
               postalcode: this.desginForm.get('postalcode').value,
               status: designstatus,
               //attachments: this.desginForm.get('attachments').value,
-              deliverydate: tomorrow.toISOString(),
+              deliverydate: deliverydate,
               //creatorparentid:this.storage.getParentId()
               creatorparentid: this.desginForm.get('creatorparentid').value,
               outsourcedto: designoutsourcedto,
@@ -1162,7 +1167,7 @@ export class PermitschedulePage implements OnInit {
             postalcode: this.desginForm.get('postalcode').value,
             status: this.desginForm.get('status').value,
             //attachments: this.desginForm.get('attachments').value,
-            deliverydate: tomorrow.toISOString(),
+            deliverydate: deliverydate,
             creatorparentid: this.storage.getParentId(),
             isdesignraised: true,
             inverterscount: this.desginForm.get('inverterscount').value,
@@ -1284,7 +1289,7 @@ export class PermitschedulePage implements OnInit {
               postalcode: this.desginForm.get('postalcode').value,
               status: this.desginForm.get('status').value,
               //attachments: this.desginForm.get('attachments').value,
-              deliverydate: tomorrow.toISOString(),
+              deliverydate: deliverydate,
               creatorparentid: this.desginForm.get('creatorparentid').value,
               outsourcedto: designoutsourcedto,
               designacceptancestarttime: designacceptancestarttime,
@@ -1378,7 +1383,7 @@ export class PermitschedulePage implements OnInit {
             postalcode: this.desginForm.get('postalcode').value,
             status: this.desginForm.get('status').value,
             //attachments: this.desginForm.get('attachments').value,
-            deliverydate: tomorrow.toISOString(),
+            deliverydate: deliverydate,
             creatorparentid: this.storage.getParentId(),
             isdesignraised: true,
             oldcommentid: this.oldcommentid,
