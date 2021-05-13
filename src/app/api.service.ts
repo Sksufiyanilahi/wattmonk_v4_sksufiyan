@@ -857,5 +857,13 @@ export class ApiService {
     getPEstampcounts(id):Observable<any>{
       return this.http.get(BaseUrl + 'userpestamps/count?id=' + id,{headers: this.headers});
     }
+
+    getCompanies(requesttype){
+      return this.http.get(BaseUrl +"getcompanies?requesttype="+requesttype,{
+        headers:this.headers
+      })
+    }
+
+
 }
 

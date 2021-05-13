@@ -350,6 +350,11 @@ const routes: Routes = [
     path: 'filterpage',
     loadChildren: () => import('./filterpage/filterpage.module').then( m => m.FilterpagePageModule)
   },
+  {
+    path: 'design-tracker',
+    loadChildren: () => import('./design-tracker/design-tracker.module').then( m => m.DesignTrackerPageModule)
+  },
+  
 
 
 
