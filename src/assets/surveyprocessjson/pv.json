@@ -154,7 +154,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "utilitymeternumber",
+                "inputformcontrol": "meternumber",
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "Utility Meter Number",

@@ -14,8 +14,9 @@ import { InverterMadeModel } from '../model/inverter-made.model';
 import { SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
 import { RoofMaterial } from '../model/roofmaterial.model';
-import { Animation, AnimationController } from '@ionic/angular';
+import { Animation, AnimationController, NavController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
+import { Insomnia } from '@ionic-native/insomnia/ngx';
 
 const { Camera } = Plugins;
 
@@ -161,6 +162,7 @@ export class StartsurveyPage implements OnInit {
   selectedshotindex = 0;
 
   capturedImage: string = '';
+  totalimagestoupload = 0;
 
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
@@ -169,7 +171,9 @@ export class StartsurveyPage implements OnInit {
     private utilitieservice: UtilitiesService,
     private apiService: ApiService,
     private animationCtrl: AnimationController,
-    private http: HttpClient) { }
+    private http: HttpClient,
+    private insomnia: Insomnia,
+    private navController: NavController) { }
 
   ngOnInit() {
     this.user = this.storageuserdata.getUser();
@@ -440,6 +444,113 @@ export class StartsurveyPage implements OnInit {
         });
       });
     });
+  }
+
+  //------------------------------------------------------------------------------------------------------------------
+  // API Calls to save Survey data at backend
+  //------------------------------------------------------------------------------------------------------------------
+
+  savePVFormData() {
+    this.utilitieservice.showLoading('Please wait...');
+    const data = {};
+    this.activeFormElementsArray.map(element => {
+      data[element] = this.activeForm.get(element).value;
+      if (element === 'pvinverterlocation') {
+        data[element] = this.activeForm.get('pvinverterlocation').value === '' ? null : this.activeForm.get('pvinverterlocation').value;
+      }
+      if (element === 'batterysystem') {
+        data[element] = this.activeForm.get('batterysystem').value.toString();
+      }
+      if (element === 'framing') {
+        data[element] = this.activeForm.get('framing').value === '' ? null : this.activeForm.get('framing').value;
+      }
+      if (element === 'distancebetweentworafts') {
+        // tslint:disable-next-line:max-line-length
+        data[element] = this.activeForm.get('distancebetweentworafts').value === '' ? 0 : this.activeForm.get('distancebetweentworafts').value;
+      }
+    });
+    data['status'] = 'surveycompleted';
+    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
+      this.utilitieservice.hideLoading().then(() => {
+        this.insomnia.keepAwake()
+          .then(
+            () => {
+
+            },
+
+          );
+        this.uploadImagesToServer();
+      });
+    }, (error) => {
+
+      this.utilitieservice.hideLoading().then(() => {
+        this.utilitieservice.errorSnackBar('There was some error in processing the request');
+      });
+    });
+  }
+
+  uploadImagesToServer() {
+    const imagesArray = [];
+    this.mainmenuitems.forEach(mainmenu => {
+      mainmenu.children.forEach(child => {
+        child.capturedshots.forEach(shot => {
+          imagesArray.push(shot);
+        });
+      });
+    });
+
+    this.utilitieservice.showLoading('Uploading Images').then(() => {
+      this.totalimagestoupload = imagesArray.length;
+      this.uploadImageByIndex(imagesArray, 0);
+    });
+  }
+
+  uploadImageByIndex(mapOfImages, index) {
+    if (mapOfImages.length > 0 && mapOfImages.length <= this.totalimagestoupload) {
+      const imageToUpload = mapOfImages[0];
+      if (imageToUpload.shotimage) {
+        const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
+        let filename = '';
+        if (imageToUpload.imagename === '') {
+          filename = Date.now().toString() + '.png';
+        } else {
+          filename = imageToUpload.imagename + '.png';
+        }
+        this.utilitieservice.setLoadingMessage('Uploading image ' + index + ' of ' + this.totalimagestoupload);
+        this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
+          index++;
+          mapOfImages.splice(0, 1);
+          this.uploadImageByIndex(mapOfImages, index);
+        }, (error) => {
+          index++;
+          mapOfImages.splice(0, 1);
+          this.uploadImageByIndex(mapOfImages, index);
+        });
+      } else {
+        index++;
+        mapOfImages.splice(0, 1);
+        this.uploadImageByIndex(mapOfImages, index);
+      }
+    } else {
+      this.utilitieservice.hideLoading().then(() => {
+        this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
+          modal.present();
+          modal.onWillDismiss().then((dismissed) => {
+            // this.storage.remove('' + this.surveyid);
+            if (this.user.role.type == 'surveyors') {
+              this.utilitieservice.sethomepageSurveyRefresh(true);
+              this.navController.navigateRoot('surveyoroverview');
+            } else {
+              this.utilitieservice.sethomepageSurveyRefresh(true);
+              this.navController.navigateRoot('homepage/survey');
+            }
+            this.insomnia.allowSleepAgain()
+              .then(
+              );
+          });
+        });
+      });
+    }
   }
 
   //------------------------------------------------------------------------------------------------------------------

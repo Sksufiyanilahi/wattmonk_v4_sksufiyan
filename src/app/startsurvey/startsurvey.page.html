@@ -65,7 +65,8 @@
         <ng-container *ngFor="let button of mainmenuitems; let i = index">
           <a id="mainmenu{{i}}" class="btn-link" *ngIf="button.isvisible" (click)="toggleMainMenuSelection(i)">
             <div [ngClass]="[ button.isactive ? 'button active' : 'button normal']">
-              <img src="/assets/images/{{button.name | lowercase}}.svg" alt="img">
+              <img *ngIf="button.isactive" src="/assets/images/{{button.name | lowercase}}active.svg" alt="img">
+              <img *ngIf="!button.isactive" src="/assets/images/{{button.name | lowercase}}.svg" alt="img">
               <span>{{button.name}}</span>
             </div>
           </a>
