@@ -251,8 +251,9 @@ this.network.networkConnect();
 
   ngOnInit() {
     let userId = this.storageService.getUserID()
+    let requesttype="prelim"
     
-      this.apiService.getPrelimcounts(userId).subscribe(res=>{this.PrelimCounts =res;
+      this.apiService.getPrelimcounts(userId,requesttype).subscribe(res=>{this.PrelimCounts =res;
         console.log(this.PrelimCounts
           )})
       

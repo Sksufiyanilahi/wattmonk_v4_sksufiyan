@@ -842,8 +842,8 @@ export class ApiService {
       })
     }
 
-    getPrelimcounts(id):Observable<any>{
-      return this.http.get(BaseUrl + 'userdesigns/count?id=' + id,{headers: this.headers});
+    getPrelimcounts(id,requesttype):Observable<any>{
+      return this.http.get(BaseUrl + 'userdesigns/count?id=' + id+ '&requesttype=' +requesttype,{headers: this.headers});
     }
 
     getPermitcounts(id,requesttype):Observable<any>{
