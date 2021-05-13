@@ -212,16 +212,25 @@ ion-content {
   font-size: 14px;
 }
 
+.checkexistenceviewcontainer{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .checkexistenceview {
-  width: 76vw;
-  position: relative;
+  width: 70%;
+  position: absolute;
   top: 30vh;
+  left: calc(50% - (70%/2));
   z-index: 9999;
 }
 
 .checkexistenceview-row {
-  background-color: #ffffff;
-  border-radius: 12px;
+  background-color: rgba($color: #ffffff, $alpha: 0.97);
+  border-radius: 20px;
 }
 
 .checkexistenceview-row p {

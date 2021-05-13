@@ -156,6 +156,7 @@ export class StartsurveyPage implements OnInit {
 
   isdataloaded = false;
   mainmenuitems: MAINMENU[];
+  originalmainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
   selectedsubmenuindex = 0;
   selectedshotindex = 0;
@@ -256,6 +257,7 @@ export class StartsurveyPage implements OnInit {
       if (data) {
       } else {
         this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
+        this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
 
         this.mainmenuitems.forEach(element => {
           if (element.isactive) {
@@ -938,6 +940,23 @@ export class StartsurveyPage implements OnInit {
     } else {
       roofmaterialcontrol.markAsTouched();
       roofmaterialcontrol.markAsDirty();
+    }
+  }
+
+  handleExistence(doesexist: boolean) {
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
+    if (doesexist) {
+      this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
+    } else {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+        element.ispending = false;
+        element.shotstatus = true;
+        element.questionstatus = true;
+        // this.updateProgressStatus();
+      });
+      this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
+      this.handleMenuSwitch(false);
     }
   }
 

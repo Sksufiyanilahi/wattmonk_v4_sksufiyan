@@ -1,5 +1,5 @@
 <ion-content *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
-  <ion-grid class="ion-no-padding" [ngClass]="[ this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion ? 'blurbackground' : '']">
+  <ion-grid class="ion-no-padding" [ngClass]="[((this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion) || (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked)) ? 'blurbackground' : '']">
     <div class="imagecontainer">
       <div class="mainimage" *ngIf="capturedImage == ''">
         <img
@@ -75,8 +75,8 @@
     </ion-row>
   </ion-grid>
   <!-- CHECK EXISTENCE VIEW -->
-  <ion-grid class="checkexistenceview"
-    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
+  <div class="checkexistenceviewcontainer" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
+    <ion-grid class="checkexistenceview">
     <!-- Row for choice questions -->
     <ion-row class="checkexistenceview-row ion-padding-horizontal">
       <ion-col size="12">
@@ -91,6 +91,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  </div>
 
   <!-- QUESTIONARE VIEW -->
   <div class="questionaireviewcontainer" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
@@ -267,7 +268,7 @@
           <p>
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
           </p>
-          <form [formGroup]="activeForm" novalidate>
+          <form [formGroup]="activeForm" novalidate class="inputform">
             <app-auto-complete [dataList]="roofmaterials" class="form-control" mode="object"
               formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}"
               #make>
