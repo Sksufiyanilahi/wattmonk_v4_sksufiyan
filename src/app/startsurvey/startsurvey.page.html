@@ -5,13 +5,13 @@
       <div class="captureactionareacontainer"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
         <div class="imagecontainer">
-          <div class="mainimage" *ngIf="capturedImage == ''">
+          <div class="mainimage" *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
             <img
               src="/assets/surveysampleimages/{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename}}.jpg"
               width="100%" height="100%" />
           </div>
-          <div class="mainimage" *ngIf="capturedImage != ''">
-            <img src="{{capturedImage}}" width="100%" height="100%" />
+          <div class="mainimage" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
+            <img src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}" width="100%" height="100%" />
           </div>
           <div class="infobar">
             <ion-row>
@@ -64,6 +64,59 @@
             </ng-container>
           </div>
         </ion-row>
+      </div>
+      <div class="detailsformviewcontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
+        <form [formGroup]="activeForm" class="white-bg">
+          <p class="formheader">Additional Information</p>
+          <ion-grid class="ion-padding">
+            <div *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].formelements"
+                 [ngClass]="!formElement.visibility ? 'hideElement' : ''"
+                 [attr.id]="'input_' + formElement.inputformcontrol">
+              <ion-row>
+                <ion-col>
+                  <div>
+                    <ion-label position="fixed">{{formElement.label}}</ion-label>
+                  </div>
+                  <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_TEXT">
+                    <ion-input class="form-control" [placeholder]="formElement.placeholder" autocomplete="off"
+                               [formControlName]="formElement.inputformcontrol">
+                    </ion-input>
+                  </div>
+                  <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_NUMBER">
+                    <ion-input class="form-control" type="number" [placeholder]="formElement.placeholder" autocomplete="off"
+                               [formControlName]="formElement.inputformcontrol">
+                    </ion-input>
+                  </div>
+                  <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_RADIO">
+                    <ion-radio-group
+                      (ionChange)="toggleElementVisibility(formElement.inputformcontrol, formElement.controlselement)"
+                      [formControlName]="formElement.inputformcontrol">
+                      <ion-item *ngFor="let option of formElement.options">
+                        <ion-label>{{option.label}}</ion-label>
+                        <ion-radio slot="start" [value]="option.value"></ion-radio>
+                      </ion-item>
+                    </ion-radio-group>
+                  </div>
+                  <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_TEXTAREA">
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                  [placeholder]="formElement.placeholder" [formControlName]="formElement.inputformcontrol">
+                    </ion-textarea>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </div>
+            <ion-row>
+              <ion-col>
+                <ion-button class="action-button-color" fill="clear" (click)="handleFormBack()">Back</ion-button>
+              </ion-col>
+              <ion-col size="auto">
+                <ion-button class="action-button-color" fill="clear" (click)="handleCompleteSurveyDataSubmission()">
+                  Review Survey
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
       </div>
       <ion-row class="mainbuttons mainbuttonscontainer">
         <div #mainscroll class="scroll" scrollX="true">
