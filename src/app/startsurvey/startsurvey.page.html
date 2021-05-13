@@ -3,7 +3,7 @@
     <div class="imagecontainer">
       <div class="mainimage" *ngIf="capturedImage == ''">
         <img
-          src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].sampleimage}}"
+          src="/assets/surveysampleimages/{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename}}.jpg"
           width="100%" height="100%" />
       </div>
       <div class="mainimage" *ngIf="capturedImage != ''">
@@ -112,7 +112,7 @@
           </p>
           <ion-row class="ion-float-right ion-margin-top">
             <ion-col size="6" *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions">
-              <ion-button fill="clear" size="small" class="action-button-color"
+              <ion-button fill="clear" size="small" class="yellow-button-color"
               (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
             </ion-col>
           </ion-row>
@@ -138,7 +138,7 @@
             </div>
           </form>
           <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" class="action-button-color" (click)="handleInputSubmission(activeForm)">
+            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleInputSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
@@ -165,7 +165,7 @@
             </div>
           </form>
           <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" (click)="handleInputTextSubmission(activeForm)">
+            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleInputTextSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
@@ -225,7 +225,7 @@
             </div>
           </form>
           <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" (click)="handleShotNameSubmission(activeForm)">
+            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleShotNameSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
@@ -253,7 +253,7 @@
             </div>
           </form>
           <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" (click)="handleUtilitySubmission()">
+            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleUtilitySubmission()">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
@@ -281,7 +281,7 @@
             </div>
           </form>
           <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" (click)="handleRoofMaterialSubmission()">
+            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleRoofMaterialSubmission()">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
@@ -315,7 +315,7 @@
             </div>
           </form>
           <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" (click)="handleInverterFieldsSubmission()">
+            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleInverterFieldsSubmission()">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
