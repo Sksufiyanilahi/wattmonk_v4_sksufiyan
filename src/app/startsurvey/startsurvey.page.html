@@ -66,15 +66,15 @@
         </ion-row>
       </div>
       <div class="detailsformviewcontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
-        <form [formGroup]="activeForm" class="white-bg">
+        <form [formGroup]="activeForm" class="additionalform ion-margin">
           <p class="formheader">Additional Information</p>
-          <ion-grid class="ion-padding">
+          <ion-grid class="ion-padding text-white additionalformgrid">
             <div *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].formelements"
                  [ngClass]="!formElement.visibility ? 'hideElement' : ''"
                  [attr.id]="'input_' + formElement.inputformcontrol">
               <ion-row>
                 <ion-col>
-                  <div>
+                  <div class="ion-margin-top">
                     <ion-label position="fixed">{{formElement.label}}</ion-label>
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_TEXT">
@@ -88,10 +88,10 @@
                     </ion-input>
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_RADIO">
-                    <ion-radio-group
+                    <ion-radio-group class="white-translucent-bg"
                       (ionChange)="toggleElementVisibility(formElement.inputformcontrol, formElement.controlselement)"
                       [formControlName]="formElement.inputformcontrol">
-                      <ion-item *ngFor="let option of formElement.options">
+                      <ion-item *ngFor="let option of formElement.options" class="whiteradioitem">
                         <ion-label>{{option.label}}</ion-label>
                         <ion-radio slot="start" [value]="option.value"></ion-radio>
                       </ion-item>
@@ -105,17 +105,10 @@
                 </ion-col>
               </ion-row>
             </div>
-            <ion-row>
-              <ion-col>
-                <ion-button class="action-button-color" fill="clear" (click)="handleFormBack()">Back</ion-button>
-              </ion-col>
-              <ion-col size="auto">
-                <ion-button class="action-button-color" fill="clear" (click)="handleCompleteSurveyDataSubmission()">
-                  Review Survey
-                </ion-button>
-              </ion-col>
-            </ion-row>
           </ion-grid>
+          <ion-button class="yellow-button-color ion-float-right ion-margin-top" fill="clear" (click)="handleCompleteSurveyDataSubmission()">
+            Submit
+          </ion-button>
         </form>
       </div>
       <ion-row class="mainbuttons mainbuttonscontainer">
