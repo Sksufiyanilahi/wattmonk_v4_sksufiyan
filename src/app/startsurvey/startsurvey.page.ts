@@ -183,11 +183,11 @@ export class StartsurveyPage implements OnInit {
     // this.loadSurveyJSON('pvsurveyjson');
 
     this.http
-          .get('assets/surveyprocessjson/pv.json')
-          .subscribe((data) => {
-            console.log(data);
-            this.createSurveyForm(data[0]);
-          });
+      .get('assets/surveyprocessjson/pv.json')
+      .subscribe((data) => {
+        console.log(data);
+        this.createSurveyForm(data[0]);
+      });
 
   }
 
@@ -218,7 +218,7 @@ export class StartsurveyPage implements OnInit {
               // } else {
               //   formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
               // }
-              if(shot.inputformcontrol.length > 1){
+              if (shot.inputformcontrol.length > 1) {
                 this.activeFormElementsArray.push(shot.inputformcontrol[1]);
                 formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
               }
@@ -282,10 +282,10 @@ export class StartsurveyPage implements OnInit {
     // this.previousshotindex = this.selectedshotindex;
 
     // Set questionstatus true for question type 5
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
-    }
+    // if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
+    //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+    //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
+    // }
 
     // Unset previous menu and select new one
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
@@ -294,6 +294,9 @@ export class StartsurveyPage implements OnInit {
 
     if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
       let issubmenuset = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
+        element.isactive = false;
+      });
       this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
         if (element.ispending && !issubmenuset) {
           element.isactive = true;
@@ -328,7 +331,7 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
     this.selectedshotindex = 0;
 
-    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked){
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked) {
       this.blurcaptureview = true;
       this.changedetectorref.detectChanges();
       this.animateElementOpacity(document.querySelector('.checkexistenceview'));
@@ -339,14 +342,14 @@ export class StartsurveyPage implements OnInit {
   //Animation Methods
   //------------------------------------------------------------------------------------------------------------------
 
-  animateElementOpacity(element){
+  animateElementOpacity(element) {
     setTimeout(() => {
       let opacityanimation: Animation = this.animationCtrl.create()
         .addElement(element)
         .duration(500)
         .easing('ease-in')
         .fromTo('opacity', '0', '1')
-        opacityanimation.play();
+      opacityanimation.play();
     }, 10);
   }
 
@@ -730,7 +733,7 @@ export class StartsurveyPage implements OnInit {
               }
             }
           }
-        } 
+        }
         //Looking for next main menu as children is not found
         else {
           if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
@@ -747,7 +750,7 @@ export class StartsurveyPage implements OnInit {
                 this.selectedshotindex = 0;
                 this.selectedsubmenuindex = 0;
 
-                if(element.children[this.selectedsubmenuindex].checkexistence && !element.children[this.selectedsubmenuindex].isexistencechecked){
+                if (element.children[this.selectedsubmenuindex].checkexistence && !element.children[this.selectedsubmenuindex].isexistencechecked) {
                   this.blurcaptureview = true;
                 }
                 // if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
