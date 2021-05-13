@@ -428,47 +428,47 @@
         <ion-item
           lines="none"
           style="margin-bottom: 1%"
-          *ngFor="let designData of teamData;let i = index"
+          *ngFor="let team of teamData;let i = index"
         >
           <ion-item-sliding>
             <ion-card
               class="ion-no-padding custom-card ion-no-margin"
-              (click)="teamdetail(designData,$event)"
+              (click)="teamdetail(team,$event)"
             >
               <ion-item lines="none" class="item-class">
                 <div
                   style="padding-left: 0px"
-                  *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
+                  *ngIf="isEmptyObject(team?.logo) || team?.logo ==null"
                   class="profile_img"
                 >
-                  {{designData?.firstname.slice(0, 1).toUpperCase() +
-                  designData?.lastname.slice(0, 1).toUpperCase()}}
+                  {{team?.firstname.slice(0, 1).toUpperCase() +
+                    team?.lastname.slice(0, 1).toUpperCase()}}
                 </div>
                 <div
-                  *ngIf="!isEmptyObject(designData?.logo) && designData?.logo !==null"
+                  *ngIf="!isEmptyObject(team?.logo) && team?.logo !==null"
                 >
-                  <img [src]="designData?.logo?.url" class="profile_img" />
+                  <img [src]="team?.logo?.url" class="profile_img" />
                 </div>
 
                 <div size="auto" style="align-self: center">
                   <p class="customer-name" routerDirection="forward">
                     <span style="padding-left: 10px"
-                      >{{designData.firstname}}&nbsp;</span
+                      >{{team.firstname}}&nbsp;</span
                     >
-                    <span>{{designData.lastname}}</span>
+                    <span>{{team.lastname}}</span>
                   </p>
                 </div>
               </ion-item>
             </ion-card>
             <ion-item-options side="end">
               <ion-item-option style="background-color: #f9ba48">
-                <ion-icon name="pencil" (click)="edit(designData)"></ion-icon>
+                <ion-icon name="pencil" (click)="edit(team)"></ion-icon>
               </ion-item-option>
               <ion-item-option style="background-color: #f9ba48">
                 <ion-icon
                   slot="icon-only"
                   name="trash"
-                  (click)="deleteDesign()"
+                  (click)="deleteTeam(team)"
                 ></ion-icon>
               </ion-item-option>
             </ion-item-options>
@@ -478,14 +478,14 @@
       <ion-list *ngIf="!isTeamData">
         <ion-item
           lines="none"
-          *ngFor="let designData of [10,50,30,49,29]"
+          *ngFor="let team of [10,50,30,49,29]"
           style="margin-bottom: 3%"
         >
             <ion-card class="ion-no-padding custom-card ion-no-margin" style="width: 100%;">
               <ion-item lines="none" class="item-class">
                 <div
                   style="padding-left: 0px; background: none"
-                  *ngIf="isEmptyObject(designData?.logo) || designData?.logo ==null"
+                  *ngIf="isEmptyObject(team?.logo) || team?.logo ==null"
                   class="profile_img"
                 >
                   <ion-skeleton-text
@@ -494,7 +494,7 @@
                   ></ion-skeleton-text>
                 </div>
                 <div
-                  *ngIf="!isEmptyObject(designData?.logo) && designData?.logo !==null"
+                  *ngIf="!isEmptyObject(team?.logo) && team?.logo !==null"
                 >
                   <ion-skeleton-text
                     animated
