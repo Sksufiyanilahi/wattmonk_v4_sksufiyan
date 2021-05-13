@@ -202,9 +202,8 @@ ion-content {
   font-size: 14px;
 }
 
-.square {
-  width: 100px;
-  height: 100px;
-  background: rgba(0, 0, 255, 0.5);
-  margin: 10px;
+.error {
+  color: rgb(223, 62, 62);
+  font-size: 11px;
+  margin-left: 5px;
 }

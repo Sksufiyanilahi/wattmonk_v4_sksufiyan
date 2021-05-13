@@ -153,7 +153,6 @@ export class StartsurveyPage implements OnInit {
 
   activeFormElementsArray;
   activeForm: FormGroup;
-  activeFormKeysMap;
 
   isdataloaded = false;
   mainmenuitems: MAINMENU[];
@@ -204,27 +203,25 @@ export class StartsurveyPage implements OnInit {
     this.activeFormElementsArray = [];
     let surveydata = data.sequence;
     const formData = {};
-    this.activeFormKeysMap = {};
     surveydata.map(item => {
       if (item.children) {
         item.children.map(child => {
-          if (child.inputformcontrol !== '') {
-            this.activeFormElementsArray.push(child.inputformcontrol);
-            this.activeFormKeysMap[child.inputformcontrol] = child.placeholder == '' ? child.label : child.placeholder;
-            formData[child.inputformcontrol] = new FormControl('', [Validators.required]);
+          if (child.inputformcontrol[0] !== '') {
+            this.activeFormElementsArray.push(child.inputformcontrol[0]);
+            formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
           }
           child.shots.map(shot => {
-            if (shot.inputformcontrol !== '') {
-              this.activeFormElementsArray.push(shot.inputformcontrol);
-              this.activeFormKeysMap[shot.inputformcontrol] = shot.placeholder;
-              if (child.inputformcontrol !== '') {
-                formData[shot.inputformcontrol] = new FormControl('', []);
-              } else {
-                formData[shot.inputformcontrol] = new FormControl('', [Validators.required]);
-              }
-              if (shot.questiontype === 9) {
-                this.activeFormElementsArray.push(shot.inputformcontrol2);
-                formData[shot.inputformcontrol2] = new FormControl('', []);
+            if (shot.inputformcontrol[0] !== '') {
+              this.activeFormElementsArray.push(shot.inputformcontrol[0]);
+              formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+              // if (child.inputformcontrol[0] !== '') {
+              //   formData[shot.inputformcontrol[0]] = new FormControl('', []);
+              // } else {
+              //   formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+              // }
+              if(shot.inputformcontrol.length > 1){
+                this.activeFormElementsArray.push(shot.inputformcontrol[1]);
+                formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
               }
             }
           });
@@ -233,7 +230,6 @@ export class StartsurveyPage implements OnInit {
       if (item.formelements) {
         item.formelements.map(formElement => {
           this.activeFormElementsArray.push(formElement.inputformcontrol);
-          this.activeFormKeysMap[formElement.inputformcontrol] = formElement.placeholder;
           if (formElement.required) {
             formData[formElement.inputformcontrol] = new FormControl('', [Validators.required]);
           } else {
@@ -608,7 +604,6 @@ export class StartsurveyPage implements OnInit {
           this.getRoofMaterials();
         }
       } else {
-        console.log("inside else");
         this.markShotCompletion(this.selectedshotindex);
       }
     } else {

@@ -30,7 +30,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "msplocation",
+                "inputformcontrol": ["msplocation"],
                 "isactive": true,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "MSP Location",
@@ -52,7 +52,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "msprating",
+                "inputformcontrol": ["msprating"],
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "MSP Rating",
@@ -73,7 +73,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "mainbreakersize",
+                "inputformcontrol": ["mainbreakersize"],
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "Biggest breaker size inside main panel (Number is on the breaker)",
@@ -94,7 +94,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "mspbreaker",
+                "inputformcontrol": ["mspbreaker"],
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "MSP Breaker",
@@ -132,7 +132,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "utilitymeter",
+                "inputformcontrol": ["utilitymeter"],
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "Utility Meter",
@@ -154,7 +154,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "meternumber",
+                "inputformcontrol": ["meternumber"],
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "Utility Meter Number",
@@ -189,7 +189,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "pvinverterlocation",
+                "inputformcontrol": ["pvinverterlocation"],
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "PV Inverter Location",
@@ -202,8 +202,7 @@
                 ]
               },
               {
-                "questiontype": 9,
-                "inputformcontrol2": "invertermodel",
+                "questiontype": 4,
                 "imagekey": "pvinverterimages",
                 "imagename": "pvinverterzoomshoturl",
                 "capturedshotinfo": "PV Inverter Zoom Shot",
@@ -212,7 +211,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "invertermake",
+                "inputformcontrol": ["invertermake","invertermodel"],
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "PV Inverter Manufacturer and Model",
@@ -315,7 +314,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "roofmaterial",
+                "inputformcontrol": ["roofmaterial"],
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "Roof Material",
@@ -380,7 +379,7 @@
             "name": "Attic Photos",
             "ispending": true,
             "isexistencechecked": false,
-            "inputformcontrol": "atticphotosrequired",
+            "inputformcontrol": ["atticphotosrequired"],
             "isactive": false,
             "placeholder": "Is structural stamp required in this area?",
             "shots": [
@@ -394,7 +393,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "framing",
+                "inputformcontrol": ["framing"],
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "Framing",
@@ -413,7 +412,7 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": "distancebetweentworafts",
+                "inputformcontrol": ["distancebetweentworafts"],
                 "isactive": false,
                 "sampleimage": "https://wattmonkpublic.s3.us-east-2.amazonaws.com/sampleimages/pv/mainpanellongshot.jpg",
                 "placeholder": "Distance between Two Rafts",
@@ -440,7 +439,7 @@
         "children": [],
         "formelements": [
           {
-            "inputformcontrol": "batterysystem",
+            "inputformcontrol": ["batterysystem"],
             "placeholder": "",
             "label": "Is there any Battery System?*",
             "visibility": true,
@@ -462,7 +461,7 @@
             "required": true
           },
           {
-            "inputformcontrol": "detailsofbatterysystem",
+            "inputformcontrol": ["detailsofbatterysystem"],
             "placeholder": "",
             "label": "Details Of Battery System",
             "visibility": false,
@@ -471,7 +470,7 @@
             "required": false
           },
           {
-            "inputformcontrol": "esid_number",
+            "inputformcontrol": ["esid_number"],
             "placeholder": "ESID Number",
             "label": "ESID Number",
             "visibility": true,
@@ -480,7 +479,7 @@
             "required": false
           },
           {
-            "inputformcontrol": "servicefeedsource",
+            "inputformcontrol": ["servicefeedsource"],
             "placeholder": "",
             "label": "Power service line source to Main panel*",
             "visibility": true,
@@ -499,7 +498,7 @@
             "required": true
           },
           {
-            "inputformcontrol": "additionalnotes",
+            "inputformcontrol": ["additionalnotes"],
             "placeholder": "",
             "label": "Additional notes",
             "visibility": true,
@@ -508,7 +507,7 @@
             "required": false
           },
           {
-            "inputformcontrol": "Hoadetails",
+            "inputformcontrol": ["hoadetails"],
             "placeholder": "",
             "label": "HOA details",
             "visibility": true,
@@ -517,7 +516,7 @@
             "required": false
           },
           {
-            "inputformcontrol": "Hoaattachements",
+            "inputformcontrol": ["hoaattachements"],
             "placeholder": "",
             "label": "HOA attachments",
             "visibility": true,

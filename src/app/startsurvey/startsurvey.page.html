@@ -109,7 +109,7 @@
             selected
             {{activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value}}
           </p>
-          <ion-row class="ion-float-right">
+          <ion-row class="ion-float-right ion-margin-top">
             <ion-col size="6" *ngFor="let action of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions">
               <ion-button fill="clear" size="small" class="action-button-color"
               (click)="handleAnswerSubmission(action)">{{action | titlecase}}</ion-button>
@@ -136,39 +136,8 @@
               </div>
             </div>
           </form>
-          <ion-row class="ion-float-right">
+          <ion-row class="ion-float-right ion-margin-top">
             <ion-button fill="clear" size="small" class="action-button-color" (click)="handleInputSubmission(activeForm)">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-
-      <!-- Row for mpu required checkbox with number questions -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.MPU_REQUIRED_CHECKBOX_WITH_NUMBER">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate>
-            <ion-input type="number" class="form-control" autocomplete="off"
-              formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
-            </ion-input>
-            <div class="error_div">
-              <div
-                *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
-                <span class="error">Field input is required.</span>
-              </div>
-            </div>
-            <!-- <ion-item style="font-size: 14px">
-  <ion-label>MPU Required?</ion-label>
-  <ion-checkbox class="form-control" formControlName="mpurequired"></ion-checkbox>
-  </ion-item> -->
-          </form>
-          <ion-row class="ion-float-right">
-            <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
@@ -194,7 +163,7 @@
               </div>
             </div>
           </form>
-          <ion-row class="ion-float-right">
+          <ion-row class="ion-float-right ion-margin-top">
             <ion-button fill="clear" size="small" (click)="handleInputTextSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
@@ -229,43 +198,8 @@
               </div>
             </div>
           </form>
-          <ion-row class="ion-float-right">
+          <ion-row class="ion-float-right ion-margin-top">
             <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-
-      <!-- Row for input inverter manufacturer and model question -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_INVERTER_DETAILS">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate>
-            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-              <ion-input type="text" class="form-control" autocomplete="off" placeholder="Inverter Manufacturer"
-                formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
-              </ion-input>
-              <span>&nbsp;&nbsp;</span>
-              <ion-input type="text" class="form-control" autocomplete="off" placeholder="Inverter Model"
-                formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol2}}">
-              </ion-input>
-            </div>
-            <div class="error_div">
-              <div *ngIf="activeForm.get('invertermodel').value === '' && activeForm.get('invertermodel').dirty">
-                <span class="error">Inverter manufacturer and model is required.</span>
-              </div>
-              <div *ngIf="activeForm.get('invertermake').value === '' && activeForm.get('invertermake').dirty">
-                <span class="error">Inverter manufacturer and model is required.</span>
-              </div>
-            </div>
-          </form>
-          <ion-row class="ion-float-right">
-            <ion-button fill="clear" size="small" (click)="handleInputTextSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
@@ -289,7 +223,7 @@
               </div>
             </div>
           </form>
-          <ion-row class="ion-float-right">
+          <ion-row class="ion-float-right ion-margin-top">
             <ion-button fill="clear" size="small" (click)="handleShotNameSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
@@ -317,7 +251,7 @@
               </div>
             </div>
           </form>
-          <ion-row class="ion-float-right">
+          <ion-row class="ion-float-right ion-margin-top">
             <ion-button fill="clear" size="small" (click)="handleUtilitySubmission()">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
@@ -345,7 +279,7 @@
               </div>
             </div>
           </form>
-          <ion-row class="ion-float-right">
+          <ion-row class="ion-float-right ion-margin-top">
             <ion-button fill="clear" size="small" (click)="handleRoofMaterialSubmission()">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
@@ -379,7 +313,7 @@
               </div>
             </div>
           </form>
-          <ion-row class="ion-float-right">
+          <ion-row class="ion-float-right ion-margin-top">
             <ion-button fill="clear" size="small" (click)="handleInverterFieldsSubmission()">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
