@@ -310,6 +310,10 @@ export class StartsurveyPage implements OnInit {
               this.selectedshotindex = element.shots.indexOf(shot);
             }
           });
+
+          if(element.checkexistence && !element.isexistencechecked){
+            this.blurcaptureview = true;
+          }
         }
       });
     }
@@ -324,6 +328,10 @@ export class StartsurveyPage implements OnInit {
     this.selectedsubmenuindex = index;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
     this.selectedshotindex = 0;
+
+    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked){
+      this.blurcaptureview = true;
+    }
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -658,12 +666,14 @@ export class StartsurveyPage implements OnInit {
       // if (!this.editingMode) {
       //   this.updateProgressStatus();
       // }
+      //Looking for next shot if found
       if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1 && selectedSubMenuDoesNotExist != false) {
         this.selectedshotindex += 1;
         // if (this.editingMode) {
         //   this.selectedshotindex = this.editingModePreviousIndex;
         // }
       } else {
+        //Looking for next children if found
         if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
           let nextvisibleitemfound = false;
@@ -711,7 +721,9 @@ export class StartsurveyPage implements OnInit {
               }
             }
           }
-        } else {
+        } 
+        //Looking for next main menu as children is not found
+        else {
           if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
             // Unset previous menu and select new one
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
@@ -722,9 +734,13 @@ export class StartsurveyPage implements OnInit {
               if (element.isvisible && !nextvisiblemainitemfound) {
                 nextvisiblemainitemfound = true;
                 this.selectedmainmenuindex = index + 1;
-                this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+                element.isactive = true;
                 this.selectedshotindex = 0;
                 this.selectedsubmenuindex = 0;
+
+                if(element.children[this.selectedsubmenuindex].checkexistence && !element.children[this.selectedsubmenuindex].isexistencechecked){
+                  this.blurcaptureview = true;
+                }
                 // if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
                 //   CameraPreview.stop();
                 //   this.stopCamera();
