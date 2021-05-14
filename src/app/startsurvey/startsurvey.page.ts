@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { SurveyStorageModel } from '../model/survey-storage.model';
@@ -202,7 +202,8 @@ export class StartsurveyPage implements OnInit {
     private animationCtrl: AnimationController,
     private http: HttpClient,
     private insomnia: Insomnia,
-    private navController: NavController) { }
+    private navController: NavController,
+    private storage: Storage) { }
 
   ngOnInit() {
     this.user = this.storageuserdata.getUser();
@@ -284,6 +285,31 @@ export class StartsurveyPage implements OnInit {
   restoreSurveyStoredData(surveydata) {
     this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
       if (data) {
+        this.mainmenuitems = data.menuitems;
+        this.originalmainmenuitems = data.menuitems;
+        // this.totalpercent = data.currentprogress;
+        this.selectedmainmenuindex = data.selectedmainmenuindex;
+        this.selectedsubmenuindex = data.selectedsubmenuindex;
+        this.selectedshotindex = data.selectedshotindex;
+        // this.shotcompletecount = data.shotcompletecount;
+        // this.previousmainmenuindex = data.previousmainmenuindex;
+        // this.previoussubmenuindex = data.previoussubmenuindex;
+        // this.previousshotindex = data.previousshotindex;
+
+        this.surveyid = data.surveyid;
+        this.surveytype = data.surveytype;
+        this.surveycity = data.city;
+        this.surveystate = data.state;
+        // this.latitude = data.latitude;
+        // this.longitude = data.longitude;
+        Object.keys(data.formdata).forEach((key: string) => {
+          let control: AbstractControl = null;
+          control = this.activeForm.get(key);
+          control.setValue(data.formdata[key]);
+        });
+        this.isdataloaded = true;
+        // this.setTotalStepCount();
+        this.handleViewModeSwitch();
       } else {
         this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
         this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
@@ -297,6 +323,29 @@ export class StartsurveyPage implements OnInit {
         this.isdataloaded = true;
       }
     });
+  }
+
+  preparesurveystorage(): SurveyStorageModel {
+    const surveyStorageModel = new SurveyStorageModel();
+    surveyStorageModel.menuitems = this.mainmenuitems;
+    // surveyStorageModel.currentprogress = this.totalpercent;
+    surveyStorageModel.formdata = this.activeForm.value;
+    surveyStorageModel.selectedmainmenuindex = this.selectedmainmenuindex;
+    surveyStorageModel.selectedsubmenuindex = this.selectedsubmenuindex;
+    surveyStorageModel.selectedshotindex = this.selectedshotindex;
+    // surveyStorageModel.shotcompletecount = this.shotcompletecount;
+    // surveyStorageModel.previousmainmenuindex = this.previousmainmenuindex;
+    // surveyStorageModel.previoussubmenuindex = this.previoussubmenuindex;
+    // surveyStorageModel.previousshotindex = this.previousshotindex;
+
+    surveyStorageModel.surveyid = this.surveyid;
+    surveyStorageModel.surveytype = this.surveytype;
+    surveyStorageModel.city = this.surveycity;
+    surveyStorageModel.state = this.surveystate;
+    // surveyStorageModel.latitude = this.latitude;
+    // surveyStorageModel.longitude = this.longitude;
+
+    return surveyStorageModel;
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -657,7 +706,7 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
-            // this.storage.remove('' + this.surveyid);
+            // this.storage.remove(this.user.id + '-' + this.surveyid);
             if (this.user.role.type == 'surveyors') {
               this.utilitieservice.sethomepageSurveyRefresh(true);
               this.navController.navigateRoot('surveyoroverview');
@@ -1090,4 +1139,17 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
+  handleSurveyExit() {
+    const data = this.preparesurveystorage();
+    data.saved = true;
+    this.storage.set(this.user.id + '-' + this.surveyid + '', data);
+
+    if (this.user.role.type == 'surveyors') {
+      this.utilitieservice.setDataRefresh(true);
+      this.navController.navigateBack('surveyoroverview');
+    } else {
+      this.utilitieservice.sethomepageSurveyRefresh(true);
+      this.navController.navigateBack('/homepage/survey');
+    }
+  }
 }
