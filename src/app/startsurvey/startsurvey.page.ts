@@ -14,7 +14,7 @@ import { InverterMadeModel } from '../model/inverter-made.model';
 import { SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
 import { RoofMaterial } from '../model/roofmaterial.model';
-import { Animation, AnimationController, NavController } from '@ionic/angular';
+import { Animation, AnimationController, IonSlides, NavController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 
@@ -86,6 +86,8 @@ export interface FORMELEMENTS {
     inputformcontrol: string;
     onvalueselection: any;
   } | {};
+  attachments: any;
+  fileurls: any
   required: boolean;
 }
 
@@ -97,6 +99,7 @@ export enum CONTROLTYPE {
   CONTROL_INPUT_RADIO = 5,
   CONTROL_INPUT_CHECKBOX = 6,
   CONTROL_INPUT_TEXTAREA = 7,
+  CONTROL_FILE_UPLOAD = 8,
 }
 
 export enum QUESTIONTYPE {
@@ -120,6 +123,12 @@ export enum VIEWMODE {
   GALLERY = 3
 }
 
+export function getFileReader(): FileReader {
+  const fileReader = new FileReader();
+  const zoneOriginalInstance = (fileReader as any)["__zone_symbol__originalInstance"];
+  return zoneOriginalInstance || fileReader;
+}
+
 @Component({
   selector: 'app-startsurvey',
   templateUrl: './startsurvey.page.html',
@@ -129,6 +138,28 @@ export class StartsurveyPage implements OnInit {
 
   @ViewChild('mainscroll', { static: false }) mainscroll: any;
   @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
+  @ViewChild('slideWithNav2', { static: false }) slideWithNav2: IonSlides;
+
+  sliderTwo: any;
+  sliderThree: any;
+
+  slideOptsTwo = {
+    initialSlide: 1,
+    slidesPerView: 2,
+    loop: true,
+    centeredSlides: true,
+    spaceBetween: 20
+  };
+  slideOptsThree = {
+    initialSlide: 1,
+    slidesPerView: 2,
+    loop: true,
+    centeredSlides: true,
+    spaceBetween: 20
+  };
+
+  isBeginningSlide: true;
+  isEndSlide: false;
 
   QuestionTypes = QUESTIONTYPE;
   ViewModes = VIEWMODE;
@@ -351,6 +382,67 @@ export class StartsurveyPage implements OnInit {
         .fromTo('opacity', '0', '1')
       opacityanimation.play();
     }, 10);
+  }
+
+  //------------------------------------------------------------------------------------------------------------------
+  // File Selection Methods
+  //------------------------------------------------------------------------------------------------------------------
+
+  addselectedfiles(ev, formelementindex) {
+    for (let i = 0; i < ev.target.files.length; i++) {
+      this.getFiletype(ev.target.files[i], formelementindex);
+      let reader = getFileReader();
+      reader.onload = (e: any) => {
+        if(ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')){
+          this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.push(e.target.result);
+        }else{
+          this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.push('/assets/icon/file.png');
+        }
+      }
+      reader.readAsDataURL(ev.target.files[i]);
+    }
+  }
+
+  getFiletype(file, formelementindex){
+    console.log(file)
+    var extension = file.name.substring(file.name.lastIndexOf('.'));
+    var mimetype = this.utilitieservice.getMimetype(extension);
+    window.console.log(extension, mimetype);
+    var data = new Blob([file], {
+      type: mimetype
+    });
+    console.log(data);
+    let replaceFile = new File([data], file.name, { type: mimetype });
+    this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].attachments.push(replaceFile);
+  }
+
+  removeselectedfile(i, formelementindex) {
+    // this.archFiles.splice(i, 1);
+    this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.splice(i, 1);
+  }
+
+  //Method called when slide is changed by drag or navigation
+  SlideDidChange(object, slideView) {
+    if(object != undefined){
+      this.checkIfNavDisabled(object, slideView);
+    }
+  }
+
+  //Call methods to check if slide is first or last to enable disbale navigation
+  checkIfNavDisabled(object, slideView) {
+    this.checkisBeginning(object, slideView);
+    this.checkisEnd(object, slideView);
+  }
+
+  checkisBeginning(object, slideView) {
+    slideView.isBeginning().then((istrue) => {
+      object.isBeginningSlide = istrue;
+    });
+  }
+  checkisEnd(object, slideView) {
+    slideView.isEnd().then((istrue) => {
+      object.isEndSlide = istrue;
+    });
   }
 
   //------------------------------------------------------------------------------------------------------------------

@@ -69,7 +69,7 @@
         <form [formGroup]="activeForm" class="additionalform ion-margin">
           <p class="formheader">Additional Information</p>
           <ion-grid class="ion-padding text-white additionalformgrid">
-            <div *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].formelements"
+            <div *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].formelements; let itemindex = index"
                  [ngClass]="!formElement.visibility ? 'hideElement' : ''"
                  [attr.id]="'input_' + formElement.inputformcontrol">
               <ion-row>
@@ -78,7 +78,7 @@
                     <ion-label position="fixed">{{formElement.label}}</ion-label>
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_TEXT">
-                    <ion-input class="form-control" [placeholder]="formElement.placeholder" autocomplete="off"
+                    <ion-input style="border: 1px solid #FFFFFF;" [placeholder]="formElement.placeholder" autocomplete="off"
                                [formControlName]="formElement.inputformcontrol">
                     </ion-input>
                   </div>
@@ -101,6 +101,51 @@
                     <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
                                   [placeholder]="formElement.placeholder" [formControlName]="formElement.inputformcontrol">
                     </ion-textarea>
+                  </div>
+                  <div *ngIf="formElement.controltype === ControlTypes.CONTROL_FILE_UPLOAD">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ng-container>
+                          <ion-item class="ion-no-padding" (click)="f.click()">
+                            <input id="{{itemindex}}" type="file" #f class="form_input" (change)="addselectedfiles($event, this.id)" style="margin-top: 12px"
+                            [formControlName]="formElement.inputformcontrol" multiple />
+                            <ion-icon name="attach-outline" slot="end" style="margin-top: 21px"></ion-icon>
+                          </ion-item>
+                          <ion-row>
+                            <ion-col size="12">
+                              <ion-slides pager="false" [options]="slideOptsTwo" #slideWithNav2 (ionSlideDidChange)="
+                                      SlideDidChange(formElement.fileurls, slideWithNav2)
+                                    ">
+                                <ion-slide *ngFor="let fileurl of formElement.fileurls; let i = index">
+                                  <div>
+                                    <img [src]="fileurl" style="
+                                            height: 10rem;
+                                            width: 10rem;
+                                            border: 3px solid black;
+                                          " alt="file" />
+              
+                                    <ion-icon id="{{itemindex}}" class="remove" name="close-circle-outline" (click)="removeselectedfile(i, this.itemindex)"></ion-icon>
+                                  </div>
+                                </ion-slide>
+                              </ion-slides>
+                            </ion-col>
+                          </ion-row>
+                        </ng-container>
+                      </ion-col>
+                      <!-- <ion-col size="12">
+                        <ion-slides [options]="slideOptsThree">
+                          <ng-container *ngIf="design && design.architecturaldesign !== null">
+                            <ion-slide *ngFor="let arc of design.architecturaldesign; let i = index">
+                              <div>
+                                <img [src]="arc.ext !== ('.png' || '.jpg' || '.jpeg' || '.gif') ? 'assets/icon/file.png' : arc.url "
+                                  style="height: 10rem; width: 10rem; border: 3px solid black" alt="file" />
+                                <ion-icon class="remove" name="close-circle-outline" (click)="remove(arc, i)"></ion-icon>
+                              </div>
+                            </ion-slide>
+                          </ng-container>
+                        </ion-slides>
+                      </ion-col> -->
+                    </ion-row>
                   </div>
                 </ion-col>
               </ion-row>
