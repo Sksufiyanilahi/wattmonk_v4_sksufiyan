@@ -1,7 +1,7 @@
-<ion-content *ngIf="isdataloaded">
+<ion-content *ngIf="isdataloaded" class="no-scroll">
   <!-- PICTURE TAKING MODE VIEW -->
   <div class="picturemodecontainer" [ngClass]="[ blurcaptureview ? 'blurbackground' : '']">
-    <ion-grid class="ion-no-padding">
+    <ion-grid class="ion-no-padding" style="overflow-y: hidden;">
       <div class="captureactionareacontainer"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
         <div class="imagecontainer">
@@ -106,8 +106,8 @@
                     <ion-row>
                       <ion-col size="12">
                         <ng-container>
-                          <ion-item class="ion-no-padding" (click)="f.click()">
-                            <input id="{{itemindex}}" type="file" #f class="form_input" (change)="addselectedfiles($event, this.id)" style="margin-top: 12px"
+                          <ion-item class="ion-no-padding">
+                            <input id="{{itemindex}}" type="file" class="form_input" (change)="addselectedfiles($event, this.id)" style="margin-top: 12px"
                             [formControlName]="formElement.inputformcontrol" multiple />
                             <ion-icon name="attach-outline" slot="end" style="margin-top: 21px"></ion-icon>
                           </ion-item>

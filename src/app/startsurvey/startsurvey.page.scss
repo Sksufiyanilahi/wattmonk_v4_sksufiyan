@@ -1,6 +1,9 @@
 ion-content {
   --ion-background-color: #18191d;
 }
+.no-scroll {
+  --overflow: hidden;
+}
 .imagecontainer {
   width: 100%;
   height: 77vh;
@@ -118,7 +121,7 @@ ion-content {
 }
 
 .detailsformviewcontainer {
-  height: 90vh;
+  height: 87vh;
 
   .additionalform {
     height: 100%;
@@ -138,6 +141,8 @@ ion-content {
       border: 1px solid #eebb5c;
       border-bottom-left-radius: 6px;
       border-bottom-right-radius: 6px;
+      height: 90%;
+      overflow-y: scroll;
     }
 
     .whiteradioitem {
