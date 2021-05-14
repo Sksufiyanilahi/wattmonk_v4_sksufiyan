@@ -260,6 +260,8 @@ export class StartsurveyPage implements OnInit {
       }
       if (item.formelements) {
         item.formelements.map(formElement => {
+          formElement.attachments = [];
+          formElement.fileurls = [];
           this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
           if (formElement.required) {
             formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
@@ -454,6 +456,7 @@ export class StartsurveyPage implements OnInit {
 
   getFiletype(file, formelementindex){
     console.log(file)
+    console.log(formelementindex);
     var extension = file.name.substring(file.name.lastIndexOf('.'));
     var mimetype = this.utilitieservice.getMimetype(extension);
     window.console.log(extension, mimetype);

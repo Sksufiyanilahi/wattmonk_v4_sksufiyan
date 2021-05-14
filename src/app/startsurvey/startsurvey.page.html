@@ -107,7 +107,7 @@
                       <ion-col size="12">
                         <ng-container>
                           <ion-item class="ion-no-padding">
-                            <input id="{{itemindex}}" type="file" class="form_input" (change)="addselectedfiles($event, this.id)" style="margin-top: 12px"
+                            <input #fileuploadinput [id]="itemindex" type="file" class="form_input" (change)="addselectedfiles($event, fileuploadinput.id)" style="margin-top: 12px"
                             [formControlName]="formElement.inputformcontrol" multiple />
                             <ion-icon name="attach-outline" slot="end" style="margin-top: 21px"></ion-icon>
                           </ion-item>
@@ -124,7 +124,7 @@
                                             border: 3px solid black;
                                           " alt="file" />
               
-                                    <ion-icon id="{{itemindex}}" class="remove" name="close-circle-outline" (click)="removeselectedfile(i, this.itemindex)"></ion-icon>
+                                    <ion-icon #closeicon [id]="itemindex" class="remove" name="close-circle-outline" (click)="removeselectedfile(i, closeicon.id)"></ion-icon>
                                   </div>
                                 </ion-slide>
                               </ion-slides>
