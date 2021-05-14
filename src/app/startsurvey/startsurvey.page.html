@@ -1,17 +1,21 @@
-<ion-content *ngIf="isdataloaded" class="no-scroll">
+<ion-content *ngIf="isdataloaded && !isgalleryview" class="no-scroll">
   <!-- PICTURE TAKING MODE VIEW -->
   <div class="picturemodecontainer" [ngClass]="[ blurcaptureview ? 'blurbackground' : '']">
     <ion-grid class="ion-no-padding" style="overflow-y: hidden;">
       <div class="captureactionareacontainer"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
         <div class="imagecontainer">
-          <div class="mainimage" *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
+          <div class="mainimage"
+            *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
             <img
               src="/assets/surveysampleimages/{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename}}.jpg"
               width="100%" height="100%" />
           </div>
-          <div class="mainimage" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
-            <img src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}" width="100%" height="100%" />
+          <div class="mainimage"
+            *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
+            <img
+              src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}"
+              width="100%" height="100%" />
           </div>
           <div class="infobar">
             <ion-row>
@@ -31,8 +35,7 @@
           <div class="gallerystack"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
             <div class="scroll" scrollX="true">
-              <ion-button color="dark" class="cameraimagesbutton"
-              (click)="showgalleryview()"
+              <ion-button color="dark" class="cameraimagesbutton" (click)="showgalleryview()"
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
                 <img [src]="shot.shotimage" />
               </ion-button>
@@ -66,26 +69,28 @@
           </div>
         </ion-row>
       </div>
-      <div class="detailsformviewcontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
+      <div class="detailsformviewcontainer"
+        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
         <form [formGroup]="activeForm" class="additionalform ion-margin">
           <p class="formheader">Additional Information</p>
           <ion-grid class="ion-padding text-white additionalformgrid">
-            <div *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].formelements; let itemindex = index"
-                 [ngClass]="!formElement.visibility ? 'hideElement' : ''"
-                 [attr.id]="'input_' + formElement.inputformcontrol">
+            <div
+              *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].formelements; let itemindex = index"
+              [ngClass]="!formElement.visibility ? 'hideElement' : ''"
+              [attr.id]="'input_' + formElement.inputformcontrol">
               <ion-row>
                 <ion-col>
                   <div class="ion-margin-top">
                     <ion-label position="fixed">{{formElement.label}}</ion-label>
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_TEXT">
-                    <ion-input style="border: 1px solid #FFFFFF;" [placeholder]="formElement.placeholder" autocomplete="off"
-                               [formControlName]="formElement.inputformcontrol">
+                    <ion-input style="border: 1px solid #FFFFFF;" [placeholder]="formElement.placeholder"
+                      autocomplete="off" [formControlName]="formElement.inputformcontrol">
                     </ion-input>
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_NUMBER">
-                    <ion-input class="form-control" type="number" [placeholder]="formElement.placeholder" autocomplete="off"
-                               [formControlName]="formElement.inputformcontrol">
+                    <ion-input class="form-control" type="number" [placeholder]="formElement.placeholder"
+                      autocomplete="off" [formControlName]="formElement.inputformcontrol">
                     </ion-input>
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_RADIO">
@@ -100,7 +105,7 @@
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_TEXTAREA">
                     <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"
-                                  [placeholder]="formElement.placeholder" [formControlName]="formElement.inputformcontrol">
+                      [placeholder]="formElement.placeholder" [formControlName]="formElement.inputformcontrol">
                     </ion-textarea>
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_FILE_UPLOAD">
@@ -108,8 +113,9 @@
                       <ion-col size="12">
                         <ng-container>
                           <ion-item class="ion-no-padding">
-                            <input #fileuploadinput [id]="itemindex" type="file" class="form_input" (change)="addselectedfiles($event, fileuploadinput.id)" style="margin-top: 12px"
-                            [formControlName]="formElement.inputformcontrol" multiple />
+                            <input #fileuploadinput [id]="itemindex" type="file" class="form_input"
+                              (change)="addselectedfiles($event, fileuploadinput.id)" style="margin-top: 12px"
+                              [formControlName]="formElement.inputformcontrol" multiple />
                             <ion-icon name="attach-outline" slot="end" style="margin-top: 21px"></ion-icon>
                           </ion-item>
                           <ion-row>
@@ -124,8 +130,9 @@
                                             width: 10rem;
                                             border: 3px solid black;
                                           " alt="file" />
-              
-                                    <ion-icon #closeicon [id]="itemindex" class="remove" name="close-circle-outline" (click)="removeselectedfile(i, closeicon.id)"></ion-icon>
+
+                                    <ion-icon #closeicon [id]="itemindex" class="remove" name="close-circle-outline"
+                                      (click)="removeselectedfile(i, closeicon.id)"></ion-icon>
                                   </div>
                                 </ion-slide>
                               </ion-slides>
@@ -152,7 +159,8 @@
               </ion-row>
             </div>
           </ion-grid>
-          <ion-button class="yellow-button-color ion-float-right ion-margin-top" fill="clear" (click)="handleCompleteSurveyDataSubmission()">
+          <ion-button class="yellow-button-color ion-float-right ion-margin-top" fill="clear"
+            (click)="handleCompleteSurveyDataSubmission()">
             Submit
           </ion-button>
         </form>
@@ -183,8 +191,10 @@
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].placeholder}}
           </p>
           <ion-row class="ion-float-right">
-            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleExistence(true)">Yes</ion-button>
-            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleExistence(false)">No</ion-button>
+            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleExistence(true)">Yes
+            </ion-button>
+            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleExistence(false)">No
+            </ion-button>
           </ion-row>
         </ion-col>
       </ion-row>
@@ -427,9 +437,28 @@
       </ion-row>
     </ion-grid>
   </div>
-  <!-- GALLERY VIEW -->
+  <!-- GALLERY VIEW
   <div class="galleryviewcontainer" *ngIf="isgalleryview">
-    
-  </div>
+    <ion-grid class="galleryview">
+      <ion-slides #galleryslides pager="true" [options]="slideOpts" (ionSlidesDidLoad)="slideDidChange();"
+        (ionSlideDidChange)="slideDidChange();">
+        <ion-slide
+        class="galleryslide"
+          *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
+          <ion-col size="12" class="actionareacol">
+            <ion-row class="ion-justify-content-center ion-align-items-center">
+              <p class="shotinfo" style="position: absolute; top: 1rem;">
+                {{this.mainmenuitems[shot.menuindex].children[shot.submenuindex].shots[shot.shotindex].capturedshotinfo}}
+              </p>
+              <img class="slideimage" [src]="shot.shotimage" style="object-fit: fill" />
+            </ion-row>
+          </ion-col>
+        </ion-slide>
+      </ion-slides>
+    </ion-grid>
+  </div> -->
+</ion-content>
+
+<ion-content *ngIf="isgalleryview">
 
 </ion-content>

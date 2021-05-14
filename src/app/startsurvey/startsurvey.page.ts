@@ -139,6 +139,9 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('mainscroll', { static: false }) mainscroll: any;
   @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
   @ViewChild('slideWithNav2', { static: false }) slideWithNav2: IonSlides;
+  @ViewChild('galleryslides', { static: false }) galleryslides: IonSlides;
+
+  protected sliderIndex = 0;
 
   sliderTwo: any;
   sliderThree: any;
@@ -1159,6 +1162,10 @@ export class StartsurveyPage implements OnInit {
 
   showgalleryview(){
     this.isgalleryview = true;
-    this.blurcaptureview = true;
+  }
+
+  async slideDidChange(): Promise<void> {
+    this.sliderIndex = await this.galleryslides.getActiveIndex();
+    return Promise.resolve();
   }
 }
