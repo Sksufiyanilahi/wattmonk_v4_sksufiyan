@@ -32,6 +32,7 @@
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
             <div class="scroll" scrollX="true">
               <ion-button color="dark" class="cameraimagesbutton"
+              (click)="showgalleryview()"
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
                 <img [src]="shot.shotimage" />
               </ion-button>
@@ -425,6 +426,10 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+  </div>
+  <!-- GALLERY VIEW -->
+  <div class="galleryviewcontainer" *ngIf="isgalleryview">
+    
   </div>
 
 </ion-content>

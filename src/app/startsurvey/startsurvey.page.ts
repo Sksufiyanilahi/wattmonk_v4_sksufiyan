@@ -192,6 +192,7 @@ export class StartsurveyPage implements OnInit {
 
   totalimagestoupload = 0;
   blurcaptureview = false;
+  isgalleryview = false;
 
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
@@ -1154,5 +1155,10 @@ export class StartsurveyPage implements OnInit {
       this.utilitieservice.sethomepageSurveyRefresh(true);
       this.navController.navigateBack('/homepage/survey');
     }
+  }
+
+  showgalleryview(){
+    this.isgalleryview = true;
+    this.blurcaptureview = true;
   }
 }
