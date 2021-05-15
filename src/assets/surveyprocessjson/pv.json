@@ -325,7 +325,7 @@
             "isexistencechecked": false,
             "inputformcontrol": [""],
             "isactive": false,
-            "multipleshotslimit": -1,
+            "multipleshotslimit": 7,
             "placeholder": "",
             "shots": [
               {
