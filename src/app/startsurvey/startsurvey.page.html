@@ -110,13 +110,13 @@
                       [placeholder]="formElement.placeholder" [formControlName]="formElement.inputformcontrol">
                     </ion-textarea>
                   </div>
-                  <div *ngIf="formElement.controltype === ControlTypes.CONTROL_FILE_UPLOAD">
+                  <div *ngIf="formElement.controltype === ControlTypes.CONTROL_MULTIPLE_FILE_UPLOAD">
                     <ion-row>
                       <ion-col size="12">
                         <ng-container>
                           <ion-item class="ion-no-padding">
-                            <input #fileuploadinput [id]="itemindex" type="file" class="form_input"
-                              (change)="addselectedfiles($event, fileuploadinput.id)" style="margin-top: 12px"
+                            <input #multiplefileuploadinput [id]="itemindex" type="file" class="form_input"
+                              (change)="addselectedfiles($event, multiplefileuploadinput.id)" style="margin-top: 12px"
                               [formControlName]="formElement.inputformcontrol" multiple />
                             <ion-icon name="attach-outline" slot="end" style="margin-top: 21px"></ion-icon>
                           </ion-item>
@@ -129,10 +129,33 @@
                                   <div>
                                     <img [src]="fileurl" style="height: 10rem; width: 10rem; border: 3px solid black;" alt="file" />
                                     <ion-icon class="remove" name="close-circle-outline"
-                                      (click)="removeselectedfile(i, fileuploadinput.id)"></ion-icon>
+                                      (click)="removeselectedfile(i, multiplefileuploadinput.id)"></ion-icon>
                                   </div>
                                 </ion-slide>
                               </ion-slides>
+                            </ion-col>
+                          </ion-row>
+                        </ng-container>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                  <div *ngIf="formElement.controltype === ControlTypes.CONTROL_SINGLE_FILE_UPLOAD">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ng-container>
+                          <ion-item class="ion-no-padding">
+                            <input #singlefileuploadinput [id]="itemindex" type="file" class="form_input" accept="image/*"
+                              (change)="addselectedfiles($event, singlefileuploadinput.id)" style="margin-top: 12px"
+                              [formControlName]="formElement.inputformcontrol" multiple="false" />
+                            <ion-icon name="attach-outline" slot="end" style="margin-top: 21px"></ion-icon>
+                          </ion-item>
+                          <ion-row *ngIf="formElement.fileurls.length > 0">
+                            <ion-col size="12">
+                              <div>
+                                <img [src]="formElement.fileurls[0]" style="height: 10rem; width: 10rem; border: 3px solid black;" alt="file" />
+                                <ion-icon class="remove" name="close-circle-outline"
+                                  (click)="removeselectedfile(0, singlefileuploadinput.id)"></ion-icon>
+                              </div>
                             </ion-col>
                           </ion-row>
                         </ng-container>

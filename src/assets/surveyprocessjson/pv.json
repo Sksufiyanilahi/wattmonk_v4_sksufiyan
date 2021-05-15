@@ -483,11 +483,20 @@
             "required": true
           },
           {
-            "inputformcontrol": ["additionalnotes"],
+            "inputformcontrol": ["utilitybillfront"],
             "placeholder": "",
-            "label": "Additional notes",
+            "label": "Utility Bill Front",
             "visibility": true,
-            "controltype": 7,
+            "controltype": 9,
+            "options": [],
+            "required": false
+          },
+          {
+            "inputformcontrol": ["utilitybillback"],
+            "placeholder": "",
+            "label": "Utility Bill Back",
+            "visibility": true,
+            "controltype": 9,
             "options": [],
             "required": false
           },
@@ -506,6 +515,15 @@
             "label": "HOA attachments",
             "visibility": true,
             "controltype": 8,
+            "options": [],
+            "required": false
+          },
+          {
+            "inputformcontrol": ["additionalnotes"],
+            "placeholder": "",
+            "label": "Additional notes",
+            "visibility": true,
+            "controltype": 7,
             "options": [],
             "required": false
           }

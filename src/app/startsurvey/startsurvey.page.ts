@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
@@ -99,7 +99,8 @@ export enum CONTROLTYPE {
   CONTROL_INPUT_RADIO = 5,
   CONTROL_INPUT_CHECKBOX = 6,
   CONTROL_INPUT_TEXTAREA = 7,
-  CONTROL_FILE_UPLOAD = 8,
+  CONTROL_MULTIPLE_FILE_UPLOAD = 8,
+  CONTROL_SINGLE_FILE_UPLOAD = 9
 }
 
 export enum QUESTIONTYPE {
@@ -139,6 +140,8 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('mainscroll', { static: false }) mainscroll: any;
   @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
   @ViewChild('slideWithNav2', { static: false }) slideWithNav2: IonSlides;
+  @ViewChild('singlefileuploadinput') singlefileuploadinput: ElementRef;
+  @ViewChild('multiplefileuploadinput') multiplefileuploadinput: ElementRef;
   // @ViewChild('galleryslides', { static: false }) galleryslides: IonSlides;
 
   // protected sliderIndex = 0;
@@ -468,10 +471,15 @@ export class StartsurveyPage implements OnInit {
   }
 
   removeselectedfile(i, formelementindex) {
-    console.log(formelementindex);
+    console.log(i, formelementindex);
     // this.archFiles.splice(i, 1);
     this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].attachments.splice(i, 1);
     this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.splice(i, 1);
+
+    if(this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.length == 0){
+      this.singlefileuploadinput.nativeElement.value = '';
+      this.multiplefileuploadinput.nativeElement.value = '';
+    }
   }
 
   //Method called when slide is changed by drag or navigation
