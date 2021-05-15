@@ -1056,7 +1056,7 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
-  selectcapturedshot() {
-
+  selectcapturedshot(shotindex) {
+    this.selectedshotindex = shotindex;
   }
 }
