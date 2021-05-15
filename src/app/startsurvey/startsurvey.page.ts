@@ -315,7 +315,7 @@ export class StartsurveyPage implements OnInit {
         });
         this.isdataloaded = true;
         // this.setTotalStepCount();
-        this.handleViewModeSwitch();
+        this.handleMenuSwitch(false);
       } else {
         this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
         this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
@@ -397,7 +397,7 @@ export class StartsurveyPage implements OnInit {
             }
           });
 
-          if(element.checkexistence && !element.isexistencechecked){
+          if (element.checkexistence && !element.isexistencechecked) {
             this.blurcaptureview = true;
             this.changedetectorref.detectChanges();
             this.animateElementOpacity(document.querySelector('.checkexistenceview'));
@@ -448,9 +448,9 @@ export class StartsurveyPage implements OnInit {
       this.getFiletype(ev.target.files[i], formelementindex);
       let reader = getFileReader();
       reader.onload = (e: any) => {
-        if(ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')){
+        if (ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')) {
           this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.push(e.target.result);
-        }else{
+        } else {
           this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.push('/assets/icon/file.png');
         }
       }
@@ -458,7 +458,7 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
-  getFiletype(file, formelementindex){
+  getFiletype(file, formelementindex) {
     console.log(file)
     console.log(formelementindex);
     var extension = file.name.substring(file.name.lastIndexOf('.'));
@@ -479,26 +479,32 @@ export class StartsurveyPage implements OnInit {
 
   //Method called when slide is changed by drag or navigation
   SlideDidChange(object, slideView) {
-    if(object != undefined){
+    if (object != undefined) {
       this.checkIfNavDisabled(object, slideView);
     }
   }
 
   //Call methods to check if slide is first or last to enable disbale navigation
   checkIfNavDisabled(object, slideView) {
-    this.checkisBeginning(object, slideView);
-    this.checkisEnd(object, slideView);
+    if (object != undefined) {
+      this.checkisBeginning(object, slideView);
+      this.checkisEnd(object, slideView);
+    }
   }
 
   checkisBeginning(object, slideView) {
-    slideView.isBeginning().then((istrue) => {
-      object.isBeginningSlide = istrue;
-    });
+    if (object != undefined) {
+      slideView.isBeginning().then((istrue) => {
+        object.isBeginningSlide = istrue;
+      });
+    }
   }
   checkisEnd(object, slideView) {
-    slideView.isEnd().then((istrue) => {
-      object.isEndSlide = istrue;
-    });
+    if (object != undefined) {
+      slideView.isEnd().then((istrue) => {
+        object.isEndSlide = istrue;
+      });
+    }
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -507,18 +513,22 @@ export class StartsurveyPage implements OnInit {
 
   scrollToMainmenuElement(index) {
     const el = document.getElementById('mainmenu' + index);
+    if(el && el !== null && el !== undefined){
     const rect = el.getBoundingClientRect();
     // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
 
     this.mainscroll.nativeElement.scrollLeft = rect.left;
+    }
   }
 
   scrollToSubmenuElement(index) {
     const el = document.getElementById('submenu' + index);
-    const rect = el.getBoundingClientRect();
-    // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
-
-    this.submenuscroll.nativeElement.scrollLeft = rect.left;
+    if(el && el !== null && el !== undefined){
+      const rect = el.getBoundingClientRect();
+      // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
+  
+      this.submenuscroll.nativeElement.scrollLeft = rect.left;
+    }
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1170,7 +1180,7 @@ export class StartsurveyPage implements OnInit {
   //   return Promise.resolve();
   // }
 
-  selectcapturedshot(){
+  selectcapturedshot() {
 
   }
 }
