@@ -142,12 +142,8 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('slideWithNav2', { static: false }) slideWithNav2: IonSlides;
   @ViewChild('singlefileuploadinput') singlefileuploadinput: ElementRef;
   @ViewChild('multiplefileuploadinput') multiplefileuploadinput: ElementRef;
-  // @ViewChild('galleryslides', { static: false }) galleryslides: IonSlides;
-
-  // protected sliderIndex = 0;
 
   sliderTwo: any;
-  sliderThree: any;
 
   slideOptsTwo = {
     initialSlide: 1,
@@ -191,7 +187,6 @@ export class StartsurveyPage implements OnInit {
 
   totalimagestoupload = 0;
   blurcaptureview = false;
-  // isgalleryview = false;
 
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
@@ -245,11 +240,6 @@ export class StartsurveyPage implements OnInit {
             if (shot.inputformcontrol[0] !== '') {
               this.activeFormElementsArray.push(shot.inputformcontrol[0]);
               formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-              // if (child.inputformcontrol[0] !== '') {
-              //   formData[shot.inputformcontrol[0]] = new FormControl('', []);
-              // } else {
-              //   formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-              // }
               if (shot.inputformcontrol.length > 1) {
                 this.activeFormElementsArray.push(shot.inputformcontrol[1]);
                 formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
@@ -271,12 +261,6 @@ export class StartsurveyPage implements OnInit {
         });
       }
     });
-    // formData['dimensionA'] = new FormControl('', []);
-    // this.activeFormElementsArray.push('dimensionA');
-    // formData['dimensionB'] = new FormControl('', []);
-    // this.activeFormElementsArray.push('dimensionB');
-    // formData['shotname'] = new FormControl('', []);
-    // this.activeFormElementsArray.push('shotname');
     console.log(formData);
     this.activeForm = new FormGroup(formData);
 
@@ -289,28 +273,20 @@ export class StartsurveyPage implements OnInit {
       if (data) {
         this.mainmenuitems = data.menuitems;
         this.originalmainmenuitems = data.menuitems;
-        // this.totalpercent = data.currentprogress;
         this.selectedmainmenuindex = data.selectedmainmenuindex;
         this.selectedsubmenuindex = data.selectedsubmenuindex;
         this.selectedshotindex = data.selectedshotindex;
-        // this.shotcompletecount = data.shotcompletecount;
-        // this.previousmainmenuindex = data.previousmainmenuindex;
-        // this.previoussubmenuindex = data.previoussubmenuindex;
-        // this.previousshotindex = data.previousshotindex;
 
         this.surveyid = data.surveyid;
         this.surveytype = data.surveytype;
         this.surveycity = data.city;
         this.surveystate = data.state;
-        // this.latitude = data.latitude;
-        // this.longitude = data.longitude;
         Object.keys(data.formdata).forEach((key: string) => {
           let control: AbstractControl = null;
           control = this.activeForm.get(key);
           control.setValue(data.formdata[key]);
         });
         this.isdataloaded = true;
-        // this.setTotalStepCount();
         this.handleMenuSwitch(false);
       } else {
         this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
@@ -330,22 +306,15 @@ export class StartsurveyPage implements OnInit {
   preparesurveystorage(): SurveyStorageModel {
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.menuitems = this.mainmenuitems;
-    // surveyStorageModel.currentprogress = this.totalpercent;
     surveyStorageModel.formdata = this.activeForm.value;
     surveyStorageModel.selectedmainmenuindex = this.selectedmainmenuindex;
     surveyStorageModel.selectedsubmenuindex = this.selectedsubmenuindex;
     surveyStorageModel.selectedshotindex = this.selectedshotindex;
-    // surveyStorageModel.shotcompletecount = this.shotcompletecount;
-    // surveyStorageModel.previousmainmenuindex = this.previousmainmenuindex;
-    // surveyStorageModel.previoussubmenuindex = this.previoussubmenuindex;
-    // surveyStorageModel.previousshotindex = this.previousshotindex;
 
     surveyStorageModel.surveyid = this.surveyid;
     surveyStorageModel.surveytype = this.surveytype;
     surveyStorageModel.city = this.surveycity;
     surveyStorageModel.state = this.surveystate;
-    // surveyStorageModel.latitude = this.latitude;
-    // surveyStorageModel.longitude = this.longitude;
 
     return surveyStorageModel;
   }
@@ -355,20 +324,6 @@ export class StartsurveyPage implements OnInit {
   //------------------------------------------------------------------------------------------------------------------
 
   toggleMainMenuSelection(index) {
-    // this.issidemenucollapsed = true;
-    // this.isgallerymenucollapsed = true;
-
-    // // Retaining previous state
-    // this.previousmainmenuindex = this.selectedmainmenuindex;
-    // this.previoussubmenuindex = this.selectedsubmenuindex;
-    // this.previousshotindex = this.selectedshotindex;
-
-    // Set questionstatus true for question type 5
-    // if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == this.QuestionTypes.INPUT_SHOT_NAME) {
-    //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
-    //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
-    // }
-
     // Unset previous menu and select new one
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = index;
@@ -402,12 +357,10 @@ export class StartsurveyPage implements OnInit {
       });
     }
 
-    this.handleViewModeSwitch();
+    this.changedetectorref.detectChanges();
   }
 
   toggleSubMenuSelection(index) {
-    // this.issidemenucollapsed = true;
-    // this.isgallerymenucollapsed = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
     this.selectedsubmenuindex = index;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
@@ -471,8 +424,6 @@ export class StartsurveyPage implements OnInit {
   }
 
   removeselectedfile(i, formelementindex) {
-    console.log(i, formelementindex);
-    // this.archFiles.splice(i, 1);
     this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].attachments.splice(i, 1);
     this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.splice(i, 1);
 
@@ -520,8 +471,6 @@ export class StartsurveyPage implements OnInit {
     const el = document.getElementById('mainmenu' + index);
     if(el && el !== null && el !== undefined){
     const rect = el.getBoundingClientRect();
-    // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
-
     this.mainscroll.nativeElement.scrollLeft = rect.left;
     }
   }
@@ -530,8 +479,6 @@ export class StartsurveyPage implements OnInit {
     const el = document.getElementById('submenu' + index);
     if(el && el !== null && el !== undefined){
       const rect = el.getBoundingClientRect();
-      // scrollLeft as 0px, scrollTop as "topBound"px, move in 800 milliseconds
-  
       this.submenuscroll.nativeElement.scrollLeft = rect.left;
     }
   }
@@ -657,7 +604,6 @@ export class StartsurveyPage implements OnInit {
         data[element] = this.activeForm.get('framing').value === '' ? null : this.activeForm.get('framing').value;
       }
       if (element === 'distancebetweentworafts') {
-        // tslint:disable-next-line:max-line-length
         data[element] = this.activeForm.get('distancebetweentworafts').value === '' ? 0 : this.activeForm.get('distancebetweentworafts').value;
       }
     });
@@ -728,7 +674,7 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
-            // this.storage.remove(this.user.id + '-' + this.surveyid);
+            this.storage.remove(this.user.id + '-' + this.surveyid);
             if (this.user.role.type == 'surveyors') {
               this.utilitieservice.sethomepageSurveyRefresh(true);
               this.navController.navigateRoot('surveyoroverview');
@@ -792,7 +738,6 @@ export class StartsurveyPage implements OnInit {
       if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
         currentIndex.shots[this.selectedshotindex].promptquestion = true;
         this.blurcaptureview = true;
-        // this.iscapturingallowed = false;
         if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
           this.getUtilities();
         } else if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
@@ -810,8 +755,6 @@ export class StartsurveyPage implements OnInit {
       } else {
         if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
           currentIndex.shots[this.selectedshotindex].questionstatus = true;
-          // this.markShotCompletion(this.selectedshotindex);
-          // this.updateProgressStatus();
         }
       }
     }
@@ -822,13 +765,6 @@ export class StartsurveyPage implements OnInit {
   }
 
   handleMenuSwitch(selectedSubMenuDoesNotExist?) {
-    // this.iscapturingallowed = true;
-
-    // Retaining previous shots
-    // this.previousmainmenuindex = this.selectedmainmenuindex;
-    // this.previoussubmenuindex = this.selectedsubmenuindex;
-    // this.previousshotindex = this.selectedshotindex;
-
     if (
       !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots ||
       (
@@ -838,15 +774,9 @@ export class StartsurveyPage implements OnInit {
       )
     ) {
       this.markShotCompletion(this.selectedshotindex);
-      // if (!this.editingMode) {
-      //   this.updateProgressStatus();
-      // }
       //Looking for next shot if found
       if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1 && selectedSubMenuDoesNotExist != false) {
         this.selectedshotindex += 1;
-        // if (this.editingMode) {
-        //   this.selectedshotindex = this.editingModePreviousIndex;
-        // }
       } else {
         //Looking for next children if found
         if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
@@ -857,10 +787,6 @@ export class StartsurveyPage implements OnInit {
             if (element.isvisible && !nextvisibleitemfound) {
               nextvisibleitemfound = true;
               this.selectedsubmenuindex = index + 1;
-              // if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
-              //   CameraPreview.stop();
-              //   this.stopCamera();
-              // }
               if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
                 this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
                 this.selectedshotindex = 0;
@@ -883,15 +809,11 @@ export class StartsurveyPage implements OnInit {
                   this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
                   this.selectedshotindex = 0;
                   this.selectedsubmenuindex = 0;
-                  // if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
-                  //   CameraPreview.stop();
-                  //   this.stopCamera();
-                  // }
                   if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
                     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
                   }
                   this.scrollToMainmenuElement(this.selectedmainmenuindex);
-                  this.handleViewModeSwitch();
+                  this.changedetectorref.detectChanges();
                 }
               }
             }
@@ -916,15 +838,11 @@ export class StartsurveyPage implements OnInit {
                 if (element.children[this.selectedsubmenuindex].checkexistence && !element.children[this.selectedsubmenuindex].isexistencechecked) {
                   this.blurcaptureview = true;
                 }
-                // if (this.mainmenuitems[this.selectedmainmenuindex].viewmode != VIEWMODE.CAMERA) {
-                //   CameraPreview.stop();
-                //   this.stopCamera();
-                // }
                 if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
                   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
                 }
                 this.scrollToMainmenuElement(this.selectedmainmenuindex);
-                this.handleViewModeSwitch();
+                this.changedetectorref.detectChanges();
               }
             }
           }
@@ -934,31 +852,8 @@ export class StartsurveyPage implements OnInit {
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
         this.markShotCompletion(this.selectedshotindex);
-        // if (!this.editingMode) {
-        //   this.updateProgressStatus();
-        // }
       }
     }
-    // if (this.editingMode) {
-    //   this.editingMode = false;
-    //   this.editingModePreviousIndex = '';
-    // }
-  }
-
-  handleViewModeSwitch() {
-    if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
-      // this.startCameraAfterPermission();
-    } else if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.FORM) {
-      // CameraPreview.stop();
-      // this.stopCamera();
-      // if (this.surveytype == 'battery') {
-      //   this.getSolarMakes();
-      // } else if (this.surveytype == 'pvbattery') {
-      //   this.getUtilities();
-      // }
-    }
-
-    this.changedetectorref.detectChanges();
   }
 
   markShotCompletion(index) {
@@ -974,7 +869,6 @@ export class StartsurveyPage implements OnInit {
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
           }
         });
-
         this.markMainMenuCompletion();
       }
     } else {
@@ -1001,9 +895,6 @@ export class StartsurveyPage implements OnInit {
   // Answer Submissions for Shot Questions Code
   //------------------------------------------------------------------------------------------------------------------
   handleAnswerSubmission(result) {
-    // this.iscapturingallowed = true;
-    // this.issidemenucollapsed = true;
-    // this.isgallerymenucollapsed = true;
     const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
     const shotDetail = currentIndex.shots[this.selectedshotindex];
     shotDetail.result = result;
@@ -1011,11 +902,6 @@ export class StartsurveyPage implements OnInit {
     this.blurcaptureview = false;
     shotDetail.questionstatus = true;
     this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
-    // if (this.surveytype == 'pvbattery' && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 0) {
-    //   this.handleGroundShotsVisibility();
-    // } else if (this.surveytype == 'pvbattery' && this.selectedmainmenuindex == 1 && this.selectedsubmenuindex == 0 && this.selectedshotindex == 1) {
-    //   this.handleAtticSectionVisibility();
-    // }
     this.handleMenuSwitch();
   }
 
@@ -1079,9 +965,6 @@ export class StartsurveyPage implements OnInit {
       const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       const shots = currentIndex.capturedshots;
       shots[shots.length - 1].imagename = shotnameformcontrol.value;
-      // this.iscapturingallowed = true;
-      // this.issidemenucollapsed = true;
-      // this.isgallerymenucollapsed = true;
       currentIndex.shots[this.selectedshotindex].promptquestion = false;
       this.blurcaptureview = false;
       form.get('shotname').setValue('');
@@ -1089,7 +972,6 @@ export class StartsurveyPage implements OnInit {
       if (currentIndex.capturedshots.length == 1) {
         currentIndex.ispending = false;
         this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
-        // this.updateProgressStatus();
       }
     } else {
       shotnameformcontrol.markAsTouched();
@@ -1154,7 +1036,6 @@ export class StartsurveyPage implements OnInit {
         element.ispending = false;
         element.shotstatus = true;
         element.questionstatus = true;
-        // this.updateProgressStatus();
       });
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
       this.handleMenuSwitch(false);
@@ -1174,16 +1055,6 @@ export class StartsurveyPage implements OnInit {
       this.navController.navigateBack('/homepage/survey');
     }
   }
-
-  // showgalleryview(){
-  //   this.isgalleryview = true;
-  //   this.blurcaptureview = true;
-  // }
-
-  // async slideDidChange(): Promise<void> {
-  //   this.sliderIndex = await this.galleryslides.getActiveIndex();
-  //   return Promise.resolve();
-  // }
 
   selectcapturedshot() {
 
