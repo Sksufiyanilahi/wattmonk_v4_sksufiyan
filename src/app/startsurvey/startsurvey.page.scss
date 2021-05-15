@@ -120,6 +120,21 @@ ion-content {
   padding: 0 4px;
 }
 
+// .childbuttons .completed {
+//   color: #55efc4;
+//   font-size: 12px;
+//   font-weight: 600;
+//   padding: 0 4px;
+// }
+
+// .childbuttons .completed-inactive {
+//   color: #55efc4;
+//   opacity: 0.6;
+//   font-size: 12px;
+//   font-weight: 100;
+//   padding: 0 4px;
+// }
+
 .detailsformviewcontainer {
   height: 87vh;
 
@@ -195,7 +210,7 @@ ion-content {
     font-weight: 100;
   }
   .completed {
-    background-color: rgba(106,176,76,0.3);
+    // background-color: rgba(106,176,76,0.1);
   }
   .button img {
     width: 20px;
