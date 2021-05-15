@@ -150,14 +150,7 @@ export class StartsurveyPage implements OnInit {
     initialSlide: 1,
     slidesPerView: 2,
     loop: true,
-    centeredSlides: true,
-    spaceBetween: 20
-  };
-  slideOptsThree = {
-    initialSlide: 1,
-    slidesPerView: 2,
-    loop: true,
-    centeredSlides: true,
+    centeredSlides: false,
     spaceBetween: 20
   };
 
@@ -453,6 +446,7 @@ export class StartsurveyPage implements OnInit {
         } else {
           this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.push('/assets/icon/file.png');
         }
+        console.log(this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls);
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
@@ -470,10 +464,13 @@ export class StartsurveyPage implements OnInit {
     console.log(data);
     let replaceFile = new File([data], file.name, { type: mimetype });
     this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].attachments.push(replaceFile);
+    console.log(this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].attachments);
   }
 
   removeselectedfile(i, formelementindex) {
+    console.log(formelementindex);
     // this.archFiles.splice(i, 1);
+    this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].attachments.splice(i, 1);
     this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.splice(i, 1);
   }
 
