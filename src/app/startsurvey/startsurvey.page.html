@@ -1,4 +1,4 @@
-<ion-content *ngIf="isdataloaded && !isgalleryview" class="no-scroll">
+<ion-content *ngIf="isdataloaded" class="no-scroll">
   <!-- PICTURE TAKING MODE VIEW -->
   <div class="picturemodecontainer" [ngClass]="[ blurcaptureview ? 'blurbackground' : '']">
     <ion-grid class="ion-no-padding" style="overflow-y: hidden;">
@@ -35,7 +35,7 @@
           <div class="gallerystack"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
             <div class="scroll" scrollX="true">
-              <ion-button color="dark" class="cameraimagesbutton" (click)="showgalleryview()"
+              <ion-button color="dark" class="cameraimagesbutton" (click)="selectcapturedshot()"
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let i = index">
                 <img [src]="shot.shotimage" />
               </ion-button>
@@ -437,8 +437,8 @@
       </ion-row>
     </ion-grid>
   </div>
-  <!-- GALLERY VIEW
-  <div class="galleryviewcontainer" *ngIf="isgalleryview">
+  <!-- GALLERY VIEW -->
+  <!-- <div class="galleryviewcontainer" *ngIf="isgalleryview">
     <ion-grid class="galleryview">
       <ion-slides #galleryslides pager="true" [options]="slideOpts" (ionSlidesDidLoad)="slideDidChange();"
         (ionSlideDidChange)="slideDidChange();">
@@ -457,8 +457,4 @@
       </ion-slides>
     </ion-grid>
   </div> -->
-</ion-content>
-
-<ion-content *ngIf="isgalleryview">
-
 </ion-content>
