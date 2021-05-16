@@ -424,7 +424,7 @@
           {
             "inputformcontrol": ["batterysystem"],
             "placeholder": "",
-            "label": "Is there any Battery System?*",
+            "label": "1. Is there any Battery System?*",
             "visibility": true,
             "controltype": 5,
             "controlselement": {
@@ -446,7 +446,7 @@
           {
             "inputformcontrol": ["detailsofbatterysystem"],
             "placeholder": "",
-            "label": "Details Of Battery System",
+            "label": "2. Details Of Battery System",
             "visibility": false,
             "controltype": 7,
             "options": [],
@@ -455,7 +455,7 @@
           {
             "inputformcontrol": ["esid_number"],
             "placeholder": "ESID Number",
-            "label": "ESID Number",
+            "label": "3. ESID Number",
             "visibility": true,
             "controltype": 1,
             "options": [],
@@ -464,7 +464,7 @@
           {
             "inputformcontrol": ["servicefeedsource"],
             "placeholder": "",
-            "label": "Power service line source to Main panel*",
+            "label": "4. Power service line source to Main panel* (Overhead if you can see the wires coming from the power poles to connect to home)",
             "visibility": true,
             "controltype": 5,
             "controlselement": {},
@@ -483,7 +483,7 @@
           {
             "inputformcontrol": ["utilitybillfront"],
             "placeholder": "",
-            "label": "Utility Bill Front",
+            "label": "5. Utility Bill Front",
             "visibility": true,
             "controltype": 9,
             "options": [],
@@ -492,7 +492,7 @@
           {
             "inputformcontrol": ["utilitybillback"],
             "placeholder": "",
-            "label": "Utility Bill Back",
+            "label": "6. Utility Bill Back",
             "visibility": true,
             "controltype": 9,
             "options": [],
@@ -501,7 +501,7 @@
           {
             "inputformcontrol": ["hoadetails"],
             "placeholder": "",
-            "label": "HOA details",
+            "label": "7. HOA details",
             "visibility": true,
             "controltype": 7,
             "options": [],
@@ -510,7 +510,7 @@
           {
             "inputformcontrol": ["hoaattachements"],
             "placeholder": "",
-            "label": "HOA attachments",
+            "label": "8. HOA attachments",
             "visibility": true,
             "controltype": 8,
             "options": [],
@@ -519,7 +519,7 @@
           {
             "inputformcontrol": ["additionalnotes"],
             "placeholder": "",
-            "label": "Additional notes",
+            "label": "9. Additional notes",
             "visibility": true,
             "controltype": 7,
             "options": [],
