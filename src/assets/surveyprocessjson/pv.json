@@ -371,42 +371,40 @@
             "placeholder": "Is structural stamp required in this area?",
             "shots": [
               {
-                "questiontype": 1,
+                "questiontype": 0,
                 "imagekey": "atticimages",
                 "imagename": "atticwideshoturl",
                 "capturedshotinfo": "Attic Wide Angle SHot",
-                "question": "What is the type of frame?",
+                "question": "",
                 "shotinfo": "Capture Attic Wide Angle Shot",
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["framing"],
+                "inputformcontrol": [],
                 "isactive": false,
-                "placeholder": "Framing",
-                "questioninfo": "Provide Type of Frame Details",
+                "placeholder": "",
+                "questioninfo": "",
                 "questionstatus": false,
                 "result": "",
                 "actions": []
               },
               {
-                "questiontype": 2,
+                "questiontype": 0,
                 "imagekey": "atticimages",
                 "imagename": "atticrequiredshoturl",
                 "capturedshotinfo": "Attic Required Shot",
-                "question": "What's the distance between two rafts?",
+                "question": "",
                 "shotinfo": "Capture image with measuring tape between two rafters",
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["distancebetweentworafts"],
+                "inputformcontrol": [],
                 "isactive": false,
-                "placeholder": "Distance between Two Rafts",
-                "questioninfo": "Provide Spacing Details",
+                "placeholder": "",
+                "questioninfo": "",
                 "questionstatus": false,
                 "result": "",
-                "actions": [
-                  "Confirm"
-                ]
+                "actions": []
               }
             ],
             "checkexistence": true,

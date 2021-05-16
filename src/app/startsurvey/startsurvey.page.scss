@@ -89,6 +89,31 @@ ion-content {
     text-decoration: none;
   }
 }
+
+.retakeshotarea {
+  // height: 7vh;
+  .button {
+    border: none;
+    height: auto;
+    padding: 8px;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: 100;
+  }
+  .button img {
+    width: 20px;
+    height: 20px;
+    display: block;
+    margin: 0 auto 8px;
+  }
+  .btn-link {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+  }
+}
+
 .submenubuttonscontainer {
   width: 100vw;
   // height: 7vh;
@@ -103,7 +128,8 @@ ion-content {
     overflow: auto;
     background-color: #212123;
     border-radius: 10px;
-    margin-bottom: 21px;
+    margin-bottom: 10px;
+    margin-top: 10px;
   }
 }
 .childbuttons .normal {

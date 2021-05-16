@@ -43,7 +43,7 @@
             </div>
           </div>
         </div>
-        <ion-row class="captureactionarea">
+        <ion-row class="captureactionarea" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending">
           <ion-col style="text-align: center;">
             <a href="" class="btn-link" (click)="openPhotoGalleryToSelectPic($event)">
               <div class="button">
@@ -57,6 +57,16 @@
               <div class="button">
                 <img src="/assets/images/camera.svg" alt="img">
                 <span>Camera</span>
+              </div>
+            </a>
+          </ion-col>
+        </ion-row>
+        <ion-row class="retakeshotarea" *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending">
+          <ion-col style="text-align: center;">
+            <a href="" class="btn-link" (click)="allowusertorecaptureshot($event)">
+              <div class="button">
+                <img src="/assets/images/retake.svg" alt="img">
+                <span>Retake</span>
               </div>
             </a>
           </ion-col>

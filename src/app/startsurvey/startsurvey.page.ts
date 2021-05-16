@@ -835,7 +835,7 @@ export class StartsurveyPage implements OnInit {
                 this.selectedshotindex = 0;
                 this.selectedsubmenuindex = 0;
 
-                if (element.children[this.selectedsubmenuindex].checkexistence && !element.children[this.selectedsubmenuindex].isexistencechecked) {
+                if (element.children.length > 0 && element.children[this.selectedsubmenuindex].checkexistence && !element.children[this.selectedsubmenuindex].isexistencechecked) {
                   this.blurcaptureview = true;
                 }
                 if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
@@ -1058,5 +1058,17 @@ export class StartsurveyPage implements OnInit {
 
   selectcapturedshot(shotindex) {
     this.selectedshotindex = shotindex;
+  }
+
+  allowusertorecaptureshot(event){
+    event.preventDefault();
+    const currentmainmenu = this.mainmenuitems[this.selectedmainmenuindex];
+    const currentsubmenu = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+    let shot = currentsubmenu.shots[this.selectedshotindex];
+    shot.shotstatus = false;
+    shot.ispending = true;
+    currentsubmenu.ispending = true;
+    currentmainmenu.ispending = true;
+    currentsubmenu.capturedshots.splice(this.selectedshotindex, 1);
   }
 }
