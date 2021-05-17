@@ -298,90 +298,9 @@ export class StartsurveyPage implements OnInit {
           }
         });
 
-        this.loopthroughmainmenuitems(0, this.mainmenuitems.length).then(() => {
-          console.log('All done');
-          this.isdataloaded = true;
-        });
-      }
-    });
-  }
-
-  loopthroughmainmenuitems(mainmenuindex: number, maincount: number): Promise<void> {
-    console.log("inside main menu -- " + mainmenuindex);
-    return new Promise((resolve, reject) => {
-      if (mainmenuindex == maincount) {
-        console.log("matched");
         this.isdataloaded = true;
-        resolve();
-        return;
       }
-
-      if (this.mainmenuitems[mainmenuindex].children.length > 0) {
-        this.loopthroughchildelements(mainmenuindex, 0, this.mainmenuitems[mainmenuindex].children.length);
-      } else {
-        return this.loopthroughmainmenuitems(mainmenuindex + 1, maincount);
-      }
-
-      return this.loopthroughmainmenuitems(mainmenuindex + 1, maincount);
     });
-  }
-
-  loopthroughchildelements(mainindex: number, childindex: number, childcount: number): Promise<void> {
-    console.log("inside child menu -- " + childindex);
-    return new Promise((resolve, reject) => {
-      if (childindex == childcount) {
-        resolve();
-        return;
-      }
-
-      if (this.mainmenuitems[mainindex].children[childindex].shots.length > 0) {
-        this.loopthroughshotitems(mainindex, childindex, 0, this.mainmenuitems[mainindex].children[childindex].shots.length);
-      } else {
-        return this.loopthroughchildelements(mainindex, childindex + 1, childcount);
-      }
-
-      return this.loopthroughchildelements(mainindex, childindex + 1, childcount);
-    });
-  }
-
-  loopthroughshotitems(mainindex: number, childindex: number, shotindex: number, shotcount: number): Promise<void> {
-    console.log("inside shot menu -- " + shotindex);
-    return new Promise((resolve, reject) => {
-      if (shotindex == shotcount) {
-        resolve();
-        return;
-      }
-
-      this.fillinsampleshotsdata(mainindex, childindex, shotindex);
-
-      return this.loopthroughshotitems(mainindex, childindex, shotindex + 1, shotcount);
-    });
-  }
-
-  fillinsampleshotsdata(mainindex, childindex, shotindex) {
-    try {
-      console.log("=================================");
-      console.log(this.mainmenuitems[mainindex].name + "-----" + this.mainmenuitems[mainindex].children[childindex].name + "-----" + this.mainmenuitems[mainindex].children[childindex].shots[shotindex].shotinfo);
-      this.http.get('assets/surveysampleimages/' + this.mainmenuitems[mainindex].children[childindex].shots[shotindex].imagename + '.jpg', { responseType: 'blob' })
-        .subscribe(res => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            var base64data = reader.result;
-            const captureshot: CAPTUREDSHOT = {
-              menuindex: this.selectedmainmenuindex,
-              submenuindex: this.selectedsubmenuindex,
-              shotindex: this.selectedshotindex,
-              shotimage: base64data.toString(),
-              imagekey: this.mainmenuitems[mainindex].children[childindex].shots[shotindex].imagekey,
-              imagename: this.mainmenuitems[mainindex].children[childindex].shots[shotindex].imagename
-            };
-            this.mainmenuitems[mainindex].children[childindex].capturedshots.push(captureshot);
-          }
-          reader.readAsDataURL(res);
-        });
-    } catch (error) {
-      console.log("Index not found");
-    }
   }
 
   preparesurveystorage(): SurveyStorageModel {
@@ -508,7 +427,7 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].attachments.splice(i, 1);
     this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.splice(i, 1);
 
-    if (this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.length == 0) {
+    if(this.mainmenuitems[this.selectedmainmenuindex].formelements[formelementindex].fileurls.length == 0){
       this.singlefileuploadinput.nativeElement.value = '';
       this.multiplefileuploadinput.nativeElement.value = '';
     }
@@ -550,15 +469,15 @@ export class StartsurveyPage implements OnInit {
 
   scrollToMainmenuElement(index) {
     const el = document.getElementById('mainmenu' + index);
-    if (el && el !== null && el !== undefined) {
-      const rect = el.getBoundingClientRect();
-      this.mainscroll.nativeElement.scrollLeft = rect.left;
+    if(el && el !== null && el !== undefined){
+    const rect = el.getBoundingClientRect();
+    this.mainscroll.nativeElement.scrollLeft = rect.left;
     }
   }
 
   scrollToSubmenuElement(index) {
     const el = document.getElementById('submenu' + index);
-    if (el && el !== null && el !== undefined) {
+    if(el && el !== null && el !== undefined){
       const rect = el.getBoundingClientRect();
       this.submenuscroll.nativeElement.scrollLeft = rect.left;
     }
@@ -804,7 +723,15 @@ export class StartsurveyPage implements OnInit {
 
   renderSelectedImage(capturedImage) {
     const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-    currentIndex.capturedshots[this.selectedshotindex].shotimage = capturedImage;
+    const captureshot: CAPTUREDSHOT = {
+      menuindex: this.selectedmainmenuindex,
+      submenuindex: this.selectedsubmenuindex,
+      shotindex: this.selectedshotindex,
+      shotimage: capturedImage,
+      imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
+      imagename: currentIndex.shots[this.selectedshotindex].imagename
+    };
+    currentIndex.capturedshots.push(captureshot);
     currentIndex.shots[this.selectedshotindex].shotstatus = true;
 
     if (currentIndex.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
@@ -1133,7 +1060,7 @@ export class StartsurveyPage implements OnInit {
     this.selectedshotindex = shotindex;
   }
 
-  allowusertorecaptureshot(event) {
+  allowusertorecaptureshot(event){
     event.preventDefault();
     const currentmainmenu = this.mainmenuitems[this.selectedmainmenuindex];
     const currentsubmenu = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
