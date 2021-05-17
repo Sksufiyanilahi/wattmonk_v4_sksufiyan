@@ -73,6 +73,7 @@ export interface CAPTUREDSHOT {
   shotimage: string;
   imagekey: string;
   imagename: string;
+  imagecleared: boolean;
 }
 
 export interface FORMELEMENTS {
@@ -729,7 +730,8 @@ export class StartsurveyPage implements OnInit {
       shotindex: this.selectedshotindex,
       shotimage: capturedImage,
       imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
-      imagename: currentIndex.shots[this.selectedshotindex].imagename
+      imagename: currentIndex.shots[this.selectedshotindex].imagename,
+      imagecleared: false
     };
     currentIndex.capturedshots.push(captureshot);
     currentIndex.shots[this.selectedshotindex].shotstatus = true;
@@ -1057,18 +1059,23 @@ export class StartsurveyPage implements OnInit {
   }
 
   selectcapturedshot(shotindex) {
+    console.log("selected index--"+shotindex);
     this.selectedshotindex = shotindex;
   }
 
   allowusertorecaptureshot(event){
     event.preventDefault();
-    const currentmainmenu = this.mainmenuitems[this.selectedmainmenuindex];
-    const currentsubmenu = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+    let currentmainmenu = this.mainmenuitems[this.selectedmainmenuindex];
+    let currentsubmenu = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
     let shot = currentsubmenu.shots[this.selectedshotindex];
     shot.shotstatus = false;
     shot.ispending = true;
+    shot.isactive = true;
     currentsubmenu.ispending = true;
     currentmainmenu.ispending = true;
-    currentsubmenu.capturedshots.splice(this.selectedshotindex, 1);
+    currentsubmenu.capturedshots[this.selectedshotindex].shotimage = "";
+    currentsubmenu.capturedshots[this.selectedshotindex].imagecleared = true;
+    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex]);
+    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots);
   }
 }

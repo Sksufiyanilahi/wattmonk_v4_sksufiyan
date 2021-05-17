@@ -38,7 +38,8 @@
               <ion-button color="dark" class="cameraimagesbutton"
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index"
                 (click)="selectcapturedshot(shotindex)">
-                <img [src]="shot.shotimage" />
+                <img *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
+                <img *ngIf="shot.imagecleared" src="/assets/images/nopicture.svg" />
               </ion-button>
             </div>
           </div>

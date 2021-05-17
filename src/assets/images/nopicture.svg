@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.3.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1200 1200" style="enable-background:new 0 0 1200 1200;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-width:20;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;}
+	.st3{fill:none;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:11.4961,41.804;}
+	.st4{fill:none;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:11.2706,40.984;}
+	.st5{fill:none;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10.852,39.4619;}
+	.st6{fill:none;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10.6861,38.8586;}
+</style>
+<path class="st0" d="M1084.36,982.32H115.64c-4.62,0-8.36-3.74-8.36-8.36V226.03c0-4.62,3.74-8.36,8.36-8.36h968.71
+	c4.62,0,8.36,3.74,8.36,8.36v747.94C1092.71,978.58,1088.97,982.32,1084.36,982.32z"/>
+<line class="st1" x1="107.29" y1="982.32" x2="1092.71" y2="217.68"/>
+<g>
+	<g>
+		<line class="st2" x1="107.29" y1="818.98" x2="111.71" y2="815.71"/>
+		<line class="st3" x1="145.33" y1="790.87" x2="299.97" y2="676.57"/>
+		<polyline class="st2" points="316.78,664.14 321.2,660.87 326.28,662.99 		"/>
+		<line class="st4" x1="364.11" y1="678.75" x2="1068.72" y2="972.33"/>
+		<line class="st2" x1="1087.64" y1="980.21" x2="1092.71" y2="982.32"/>
+	</g>
+</g>
+<g>
+	<g>
+		<line class="st2" x1="600" y1="775.34" x2="604.42" y2="772.07"/>
+		<line class="st3" x1="638.04" y1="747.22" x2="792.68" y2="632.92"/>
+		<polyline class="st2" points="809.49,620.5 813.91,617.23 818.99,619.34 		"/>
+		<line class="st5" x1="855.42" y1="634.52" x2="1069.42" y2="723.68"/>
+		<line class="st2" x1="1087.64" y1="731.27" x2="1092.71" y2="733.39"/>
+	</g>
+</g>
+<g>
+	<circle class="st6" cx="429.48" cy="435.76" r="110.39"/>
+</g>
+</svg>
