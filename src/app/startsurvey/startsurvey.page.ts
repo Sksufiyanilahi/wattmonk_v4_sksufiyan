@@ -188,6 +188,7 @@ export class StartsurveyPage implements OnInit {
 
   totalimagestoupload = 0;
   blurcaptureview = false;
+  recapturingmode = false;
 
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
@@ -724,16 +725,24 @@ export class StartsurveyPage implements OnInit {
 
   renderSelectedImage(capturedImage) {
     const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-    const captureshot: CAPTUREDSHOT = {
-      menuindex: this.selectedmainmenuindex,
-      submenuindex: this.selectedsubmenuindex,
-      shotindex: this.selectedshotindex,
-      shotimage: capturedImage,
-      imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
-      imagename: currentIndex.shots[this.selectedshotindex].imagename,
-      imagecleared: false
-    };
-    currentIndex.capturedshots.push(captureshot);
+    //Check if the shot image has been recaptured
+    if(this.recapturingmode){
+      currentIndex.capturedshots[this.selectedshotindex].shotimage = capturedImage;
+      currentIndex.capturedshots[this.selectedshotindex].imagecleared = false;
+      currentIndex.shots[this.selectedshotindex].ispending = false;
+      this.recapturingmode = false;
+    }else{
+      const captureshot: CAPTUREDSHOT = {
+        menuindex: this.selectedmainmenuindex,
+        submenuindex: this.selectedsubmenuindex,
+        shotindex: this.selectedshotindex,
+        shotimage: capturedImage,
+        imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
+        imagename: currentIndex.shots[this.selectedshotindex].imagename,
+        imagecleared: false
+      };
+      currentIndex.capturedshots.push(captureshot);
+    }
     currentIndex.shots[this.selectedshotindex].shotstatus = true;
 
     if (currentIndex.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
@@ -1059,7 +1068,6 @@ export class StartsurveyPage implements OnInit {
   }
 
   selectcapturedshot(shotindex) {
-    console.log("selected index--"+shotindex);
     this.selectedshotindex = shotindex;
   }
 
@@ -1075,7 +1083,6 @@ export class StartsurveyPage implements OnInit {
     currentmainmenu.ispending = true;
     currentsubmenu.capturedshots[this.selectedshotindex].shotimage = "";
     currentsubmenu.capturedshots[this.selectedshotindex].imagecleared = true;
-    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex]);
-    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots);
+    this.recapturingmode = true;
   }
 }
