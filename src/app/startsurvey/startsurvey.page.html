@@ -5,14 +5,7 @@
       <div class="captureactionareacontainer"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
         <div class="imagecontainer">
-          <div class="mainimage"
-            *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
-            <img
-              src="/assets/surveysampleimages/{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename}}.jpg"
-              width="100%" height="100%" />
-          </div>
-          <div class="mainimage"
-            *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
+          <div class="mainimage">
             <img
               src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}"
               width="100%" height="100%" />
