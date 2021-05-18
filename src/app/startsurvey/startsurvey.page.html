@@ -32,17 +32,18 @@
               </ion-col>
             </ion-row>
           </div>
-          <div class="gallerystack"
+          <ion-row class="gallerystack"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
             <div class="scroll" scrollX="true">
-              <ion-button color="dark" class="cameraimagesbutton"
-                *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index"
+              <ng-container *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index">
+                <ion-button color="dark" class="cameraimagesbutton"
                 (click)="selectcapturedshot(shotindex)">
                 <img *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
                 <img *ngIf="shot.imagecleared" src="/assets/images/nopicture.svg" />
               </ion-button>
+              </ng-container>
             </div>
-          </div>
+          </ion-row>
         </div>
         <ion-row class="captureactionarea" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending">
           <ion-col style="text-align: center;">
