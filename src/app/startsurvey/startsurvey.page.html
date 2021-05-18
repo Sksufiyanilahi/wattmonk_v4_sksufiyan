@@ -2,8 +2,7 @@
   <!-- PICTURE TAKING MODE VIEW -->
   <div class="picturemodecontainer" [ngClass]="[ blurcaptureview ? 'blurbackground' : '']">
     <ion-grid class="ion-no-padding" style="overflow-y: hidden;">
-      <div class="captureactionareacontainer"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
+      <div class="captureactionareacontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
         <div class="imagecontainer">
           <div class="mainimage"
             *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
@@ -58,22 +57,13 @@
             </a>
           </ion-col>
         </ion-row>
-        <ion-row class="childbuttons ion-justify-content-center submenubuttonscontainer">
-          <div #submenuscroll class="scroll" scrollX="true">
-            <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
-              <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
-                [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}({{button.capturedshots.length}}/{{button.shots.length}})</ion-button>
-            </ng-container>
-          </div>
-        </ion-row>
       </div>
-      <div class="detailsformviewcontainer"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
+      <div class="detailsformviewcontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
         <form [formGroup]="activeForm" class="additionalform ion-margin">
           <p class="formheader">Additional Information</p>
           <ion-grid class="ion-padding text-white additionalformgrid">
             <div
-              *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].formelements; let itemindex = index"
+              *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements; let itemindex = index"
               [ngClass]="!formElement.visibility ? 'hideElement' : ''"
               [attr.id]="'input_' + formElement.inputformcontrol">
               <ion-row>
@@ -168,13 +158,21 @@
           </ion-button>
         </form>
       </div>
-      <div class="noviewmodecontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.NONE">
+      <div class="noviewmodecontainer" *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult">
         <ion-grid class="noviewmodegrid">
           <ion-row class="ion-justify-content-center">
             <p>Section has been turned off</p>
           </ion-row>
         </ion-grid>
       </div>
+      <ion-row class="childbuttons ion-justify-content-center submenubuttonscontainer">
+        <div #submenuscroll class="scroll" scrollX="true">
+          <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
+            <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
+              [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}({{button.capturedshots.length}}/{{button.shots.length}})</ion-button>
+          </ng-container>
+        </div>
+      </ion-row>
       <ion-row class="mainbuttons mainbuttonscontainer">
         <div #mainscroll class="scroll" scrollX="true">
           <ng-container *ngFor="let button of mainmenuitems; let i = index">
@@ -195,7 +193,7 @@
             <ion-icon style="margin-left: 20px;" (click)="handleSurveyExit()" class="actionbutton" name="arrow-back-outline"></ion-icon>
           </ion-col>
           <ion-col size="8" style="text-align: center;">
-            <p class="shotinfo" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].viewmode != ViewModes.NONE">
+            <p class="shotinfo" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
             </p>
           </ion-col>
@@ -207,8 +205,7 @@
     </ion-grid>
   </div>
   <!-- CHECK EXISTENCE VIEW -->
-  <div class="checkexistenceviewcontainer"
-    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
+  <div class="checkexistenceviewcontainer" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
     <ion-grid class="checkexistenceview">
       <!-- Row for choice questions -->
       <ion-row class="checkexistenceview-row ion-padding-horizontal">
@@ -227,8 +224,7 @@
     </ion-grid>
   </div>
   <!-- QUESTIONARE VIEW -->
-  <div class="questionaireviewcontainer"
-    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
+  <div class="questionaireviewcontainer" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
     <ion-grid class="questionaireview">
 
       <!-- Row for choice questions -->

@@ -105,8 +105,9 @@
               }
             ],
             "checkexistence": false,
-            "existenceresult": false,
-            "capturedshots": []
+            "existenceresult": true,
+            "capturedshots": [],
+            "formelements": []
           },
           {
             "isvisible": true,
@@ -160,8 +161,9 @@
               }
             ],
             "checkexistence": false,
-            "existenceresult": false,
-            "capturedshots": []
+            "existenceresult": true,
+            "capturedshots": [],
+            "formelements": []
           },
           {
             "isvisible": true,
@@ -269,11 +271,11 @@
               }
             ],
             "checkexistence": true,
-            "existenceresult": false,
-            "capturedshots": []
+            "existenceresult": true,
+            "capturedshots": [],
+            "formelements": []
           }
-        ],
-        "formelements": []
+        ]
       },
       {
         "name": "Roof",
@@ -421,8 +423,9 @@
               }
             ],
             "checkexistence": false,
-            "existenceresult": false,
-            "capturedshots": []
+            "existenceresult": true,
+            "capturedshots": [],
+            "formelements": []
           },
           {
             "isvisible": true,
@@ -543,11 +546,11 @@
               }
             ],
             "checkexistence": false,
-            "existenceresult": false,
-            "capturedshots": []
+            "existenceresult": true,
+            "capturedshots": [],
+            "formelements": []
           }
-        ],
-        "formelements": []
+        ]
       },
       {
         "name": "Attic",
@@ -603,11 +606,11 @@
               }
             ],
             "checkexistence": true,
-            "existenceresult": false,
-            "capturedshots": []
+            "existenceresult": true,
+            "capturedshots": [],
+            "formelements": []
           }
-        ],
-        "formelements": []
+        ]
       },
       {
         "name": "Details",
@@ -615,111 +618,143 @@
         "ispending": true,
         "isvisible": true,
         "viewmode": 1,
-        "children": [],
-        "formelements": [
+        "children": [
           {
-            "inputformcontrol": ["batterysystem"],
+            "isvisible": true,
+            "name": "Additional Information",
+            "ispending": true,
+            "isexistencechecked": false,
+            "inputformcontrol": [],
+            "isactive": false,
             "placeholder": "",
-            "label": "1. Is there any Battery System?*",
-            "visibility": true,
-            "controltype": 5,
-            "controlselement": {
-              "inputformcontrol": ["detailsofbatterysystem"],
-              "onvalueselection": true
-            },
-            "options": [
+            "shots": [],
+            "checkexistence": true,
+            "existenceresult": true,
+            "capturedshots": [],
+            "formelements": [
               {
-                "label": "Yes",
-                "value": true
+                "inputformcontrol": ["batterysystem"],
+                "placeholder": "",
+                "label": "1. Is there any Battery System?*",
+                "visibility": true,
+                "controltype": 5,
+                "controlselement": {
+                  "inputformcontrol": ["detailsofbatterysystem"],
+                  "onvalueselection": true
+                },
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": true
+                  },
+                  {
+                    "label": "No",
+                    "value": false
+                  }
+                ],
+                "required": true,
+                "fileurls": [],
+                "attachments": []
               },
               {
-                "label": "No",
-                "value": false
-              }
-            ],
-            "required": true
-          },
-          {
-            "inputformcontrol": ["detailsofbatterysystem"],
-            "placeholder": "",
-            "label": "2. Details Of Battery System",
-            "visibility": false,
-            "controltype": 7,
-            "options": [],
-            "required": false
-          },
-          {
-            "inputformcontrol": ["esid_number"],
-            "placeholder": "ESID Number",
-            "label": "3. ESID Number",
-            "visibility": true,
-            "controltype": 1,
-            "options": [],
-            "required": false
-          },
-          {
-            "inputformcontrol": ["servicefeedsource"],
-            "placeholder": "",
-            "label": "4. Power service line source to Main panel* (Overhead if you can see the wires coming from the power poles to connect to home)",
-            "visibility": true,
-            "controltype": 5,
-            "controlselement": {},
-            "options": [
-              {
-                "label": "Overhead",
-                "value": "overhead"
+                "inputformcontrol": ["detailsofbatterysystem"],
+                "placeholder": "",
+                "label": "2. Details Of Battery System",
+                "visibility": false,
+                "controltype": 7,
+                "options": [],
+                "required": false,
+                "fileurls": [],
+                "attachments": []
               },
               {
-                "label": "Underground",
-                "value": "underground"
+                "inputformcontrol": ["esid_number"],
+                "placeholder": "ESID Number",
+                "label": "3. ESID Number",
+                "visibility": true,
+                "controltype": 1,
+                "options": [],
+                "required": false,
+                "fileurls": [],
+                "attachments": []
+              },
+              {
+                "inputformcontrol": ["servicefeedsource"],
+                "placeholder": "",
+                "label": "4. Power service line source to Main panel* (Overhead if you can see the wires coming from the power poles to connect to home)",
+                "visibility": true,
+                "controltype": 5,
+                "controlselement": {},
+                "options": [
+                  {
+                    "label": "Overhead",
+                    "value": "overhead"
+                  },
+                  {
+                    "label": "Underground",
+                    "value": "underground"
+                  }
+                ],
+                "required": true,
+                "fileurls": [],
+                "attachments": []
+              },
+              {
+                "inputformcontrol": ["utilitybillfront"],
+                "placeholder": "",
+                "label": "5. Utility Bill Front",
+                "visibility": true,
+                "controltype": 9,
+                "options": [],
+                "required": false,
+                "fileurls": [],
+                "attachments": []
+              },
+              {
+                "inputformcontrol": ["utilitybillback"],
+                "placeholder": "",
+                "label": "6. Utility Bill Back",
+                "visibility": true,
+                "controltype": 9,
+                "options": [],
+                "required": false,
+                "fileurls": [],
+                "attachments": []
+              },
+              {
+                "inputformcontrol": ["hoadetails"],
+                "placeholder": "",
+                "label": "7. HOA details",
+                "visibility": true,
+                "controltype": 7,
+                "options": [],
+                "required": false,
+                "fileurls": [],
+                "attachments": []
+              },
+              {
+                "inputformcontrol": ["hoaattachements"],
+                "placeholder": "",
+                "label": "8. HOA attachments",
+                "visibility": true,
+                "controltype": 8,
+                "options": [],
+                "required": false,
+                "fileurls": [],
+                "attachments": []
+              },
+              {
+                "inputformcontrol": ["additionalnotes"],
+                "placeholder": "",
+                "label": "9. Additional notes",
+                "visibility": true,
+                "controltype": 7,
+                "options": [],
+                "required": false,
+                "fileurls": [],
+                "attachments": []
               }
-            ],
-            "required": true
-          },
-          {
-            "inputformcontrol": ["utilitybillfront"],
-            "placeholder": "",
-            "label": "5. Utility Bill Front",
-            "visibility": true,
-            "controltype": 9,
-            "options": [],
-            "required": false
-          },
-          {
-            "inputformcontrol": ["utilitybillback"],
-            "placeholder": "",
-            "label": "6. Utility Bill Back",
-            "visibility": true,
-            "controltype": 9,
-            "options": [],
-            "required": false
-          },
-          {
-            "inputformcontrol": ["hoadetails"],
-            "placeholder": "",
-            "label": "7. HOA details",
-            "visibility": true,
-            "controltype": 7,
-            "options": [],
-            "required": false
-          },
-          {
-            "inputformcontrol": ["hoaattachements"],
-            "placeholder": "",
-            "label": "8. HOA attachments",
-            "visibility": true,
-            "controltype": 8,
-            "options": [],
-            "required": false
-          },
-          {
-            "inputformcontrol": ["additionalnotes"],
-            "placeholder": "",
-            "label": "9. Additional notes",
-            "visibility": true,
-            "controltype": 7,
-            "options": [],
-            "required": false
+            ]
           }
         ]
       }
