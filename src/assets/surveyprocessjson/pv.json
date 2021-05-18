@@ -105,6 +105,7 @@
               }
             ],
             "checkexistence": false,
+            "existenceresult": false,
             "capturedshots": []
           },
           {
@@ -159,6 +160,7 @@
               }
             ],
             "checkexistence": false,
+            "existenceresult": false,
             "capturedshots": []
           },
           {
@@ -267,6 +269,7 @@
               }
             ],
             "checkexistence": true,
+            "existenceresult": false,
             "capturedshots": []
           }
         ],
@@ -418,6 +421,7 @@
               }
             ],
             "checkexistence": false,
+            "existenceresult": false,
             "capturedshots": []
           },
           {
@@ -539,6 +543,7 @@
               }
             ],
             "checkexistence": false,
+            "existenceresult": false,
             "capturedshots": []
           }
         ],
@@ -598,6 +603,7 @@
               }
             ],
             "checkexistence": true,
+            "existenceresult": false,
             "capturedshots": []
           }
         ],

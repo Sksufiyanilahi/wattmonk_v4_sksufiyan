@@ -50,10 +50,9 @@ ion-content {
 }
 .infobar {
   position: absolute;
-  top: 40px;
+  top: 10px;
   left: 0px;
-  width: 94%;
-  margin: 0px 10px;
+  width: 100%;
 
   .shotinfo {
     display: inline-block;
@@ -153,6 +152,13 @@ ion-content {
   font-weight: 600;
 }
 
+.childbuttons .disabled {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 100;
+  opacity: 0.2;
+}
+
 // .childbuttons .completed {
 //   color: #55efc4;
 //   font-size: 12px;
@@ -201,6 +207,10 @@ ion-content {
       color: #ffffff !important;
     }
   }
+}
+
+.noviewmodecontainer{
+  height: 92vh;
 }
 
 .mainbuttonscontainer {

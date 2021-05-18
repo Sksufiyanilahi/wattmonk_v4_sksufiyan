@@ -37,6 +37,7 @@ export interface CHILDREN {
   isvisible: boolean;
   checkexistence: boolean;
   isexistencechecked: boolean;
+  existenceresult: boolean;
   inputformcontrol: string;
   placeholder?: string;
   shotscount: number;
@@ -118,9 +119,7 @@ export enum QUESTIONTYPE {
 export enum VIEWMODE {
   NONE = -1,
   CAMERA = 0,
-  FORM = 1,
-  MAP = 2,
-  GALLERY = 3
+  FORM = 1
 }
 
 export function getFileReader(): FileReader {
@@ -843,188 +842,6 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
-  // renderSelectedImage(capturedImage) {
-  //   const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-  //   //Check if the shot image has been recaptured
-  //   if (this.recapturingmode) {
-  //     currentIndex.capturedshots[this.selectedshotindex].shotimage = capturedImage;
-  //     currentIndex.capturedshots[this.selectedshotindex].imagecleared = false;
-  //     currentIndex.shots[this.selectedshotindex].ispending = false;
-  //     this.recapturingmode = false;
-  //     this.markShotCompletion(this.selectedshotindex);
-  //     // this.lookForNextPendingItem();
-  //   } else {
-  //     const captureshot: CAPTUREDSHOT = {
-  //       menuindex: this.selectedmainmenuindex,
-  //       submenuindex: this.selectedsubmenuindex,
-  //       shotindex: this.selectedshotindex,
-  //       shotimage: capturedImage,
-  //       imagekey: currentIndex.shots[this.selectedshotindex].imagekey,
-  //       imagename: currentIndex.shots[this.selectedshotindex].imagename,
-  //       imagecleared: false
-  //     };
-  //     currentIndex.capturedshots.push(captureshot);
-
-  //     currentIndex.shots[this.selectedshotindex].shotstatus = true;
-
-  //     if (currentIndex.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
-  //       if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
-  //         currentIndex.shots[this.selectedshotindex].promptquestion = true;
-  //         this.blurcaptureview = true;
-  //         if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
-  //           this.getUtilities();
-  //         } else if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
-  //           this.getInverterMakes();
-  //         } else if (currentIndex.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
-  //           this.getRoofMaterials();
-  //         }
-  //       } else {
-  //         this.markShotCompletion(this.selectedshotindex);
-  //       }
-  //     } else {
-  //       if (!currentIndex.allowmultipleshots) {
-  //         currentIndex.shots[this.selectedshotindex].questionstatus = true;
-  //         this.handleMenuSwitch();
-  //       } else {
-  //         if (!currentIndex.shots[this.selectedshotindex].questionstatus) {
-  //           currentIndex.shots[this.selectedshotindex].questionstatus = true;
-  //         }
-  //       }
-  //     }
-
-  //     this.changedetectorref.detectChanges();
-
-  //     this.animateElementOpacity(document.querySelector('.questionaireview'));
-  //   }
-  // }
-
-  // handleMenuSwitch(selectedSubMenuDoesNotExist?) {
-  //   if (
-  //     !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots ||
-  //     (
-  //       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots &&
-  //       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].multipleshotslimit !== -1 &&
-  //       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length === this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].multipleshotslimit
-  //     )
-  //   ) {
-  //     this.markShotCompletion(this.selectedshotindex);
-  //     //Looking for next shot if found
-  //     if (this.selectedshotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length - 1 && selectedSubMenuDoesNotExist != false) {
-  //       this.selectedshotindex += 1;
-  //     } else {
-  //       //Looking for next children if found
-  //       if (this.selectedsubmenuindex < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1) {
-  //         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-  //         let nextvisibleitemfound = false;
-  //         for (let index = this.selectedsubmenuindex; index < this.mainmenuitems[this.selectedmainmenuindex].children.length - 1; index++) {
-  //           const element = this.mainmenuitems[this.selectedmainmenuindex].children[index + 1];
-  //           if (element.isvisible && !nextvisibleitemfound) {
-  //             nextvisibleitemfound = true;
-  //             this.selectedsubmenuindex = index + 1;
-  //             if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
-  //               this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-  //               this.selectedshotindex = 0;
-  //             }
-  //             this.scrollToSubmenuElement(this.selectedsubmenuindex);
-  //           }
-  //         }
-
-  //         if (!nextvisibleitemfound) {
-  //           if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
-  //             // Unset previous menu and select new one
-  //             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-  //             this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-  //             let nextvisiblemainitemfound = false;
-  //             for (let index = this.selectedmainmenuindex; index < this.mainmenuitems.length - 1; index++) {
-  //               const element = this.mainmenuitems[index + 1];
-  //               if (element.isvisible && !nextvisiblemainitemfound) {
-  //                 nextvisiblemainitemfound = true;
-  //                 this.selectedmainmenuindex = index + 1;
-  //                 this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-  //                 this.selectedshotindex = 0;
-  //                 this.selectedsubmenuindex = 0;
-  //                 if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
-  //                   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-  //                 }
-  //                 this.scrollToMainmenuElement(this.selectedmainmenuindex);
-  //                 this.changedetectorref.detectChanges();
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //       //Looking for next main menu as children is not found
-  //       else {
-  //         if (this.selectedmainmenuindex < this.mainmenuitems.length - 1) {
-  //           // Unset previous menu and select new one
-  //           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-  //           this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-  //           let nextvisiblemainitemfound = false;
-  //           for (let index = this.selectedmainmenuindex; index < this.mainmenuitems.length - 1; index++) {
-  //             const element = this.mainmenuitems[index + 1];
-  //             if (element.isvisible && !nextvisiblemainitemfound) {
-  //               nextvisiblemainitemfound = true;
-  //               this.selectedmainmenuindex = index + 1;
-  //               element.isactive = true;
-  //               this.selectedshotindex = 0;
-  //               this.selectedsubmenuindex = 0;
-
-  //               if (element.children.length > 0 && element.children[this.selectedsubmenuindex].checkexistence && !element.children[this.selectedsubmenuindex].isexistencechecked) {
-  //                 this.blurcaptureview = true;
-  //               }
-  //               if (this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
-  //                 this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-  //               }
-  //               this.scrollToMainmenuElement(this.selectedmainmenuindex);
-  //               this.changedetectorref.detectChanges();
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0) {
-  //       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
-  //       this.markShotCompletion(this.selectedshotindex);
-  //     }
-  //   }
-  // }
-
-  // markShotCompletion(index) {
-  //   if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
-  //     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus) {
-  //       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].ispending = false;
-
-  //       let ispendingset = false;
-  //       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
-  //       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
-  //         if (element.ispending && !ispendingset) {
-  //           ispendingset = true;
-  //           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
-  //         }
-  //       });
-  //       this.markMainMenuCompletion();
-  //     }
-  //   } else {
-  //     this.markMainMenuCompletion();
-  //   }
-  // }
-
-  // markMainMenuCompletion() {
-  //   let ispendingset = false;
-  //   if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
-  //     this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
-  //     this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
-  //       if (element.ispending && !ispendingset) {
-  //         ispendingset = true;
-  //         this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
-  //       }
-  //     });
-  //   } else {
-  //     this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
-  //   }
-  // }
-
   //------------------------------------------------------------------------------------------------------------------
   // Answer Submissions for Shot Questions Code
   //------------------------------------------------------------------------------------------------------------------
@@ -1109,18 +926,20 @@ export class StartsurveyPage implements OnInit {
 
   handleExistence(doesexist: boolean) {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;
     this.blurcaptureview = false;
     if (doesexist) {
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
     } else {
+      this.mainmenuitems[this.selectedmainmenuindex].viewmode = VIEWMODE.NONE;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
         element.ispending = false;
         element.shotstatus = true;
         element.questionstatus = true;
       });
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
-      // this.handleMenuSwitch(false);
+      this.markchildcompletion();
     }
   }
 
@@ -1142,65 +961,4 @@ export class StartsurveyPage implements OnInit {
     currentsubmenu.capturedshots[this.selectedshotindex].imagecleared = true;
     this.recapturingmode = true;
   }
-
-  //------------------------------------------------------------------------------------------------------------------
-  // Toggle Menus Manually Methods
-  //------------------------------------------------------------------------------------------------------------------
-
-  // toggleMainMenuSelection(index) {
-  //   // Unset previous menu and select new one
-  //   this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-  //   this.selectedmainmenuindex = index;
-  //   this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-
-  //   this.lookForNextPendingItem();
-
-  //   this.changedetectorref.detectChanges();
-  // }
-
-  // toggleSubMenuSelection(index) {
-  //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-  //   this.selectedsubmenuindex = index;
-  //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-  //   this.selectedshotindex = 0;
-
-  //   if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked) {
-  //     this.blurcaptureview = true;
-  //     this.changedetectorref.detectChanges();
-  //     this.animateElementOpacity(document.querySelector('.checkexistenceview'));
-  //   }
-  // }
-
-  // lookForNextPendingItem(){
-  //   if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
-  //     let issubmenuset = false;
-  //     this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
-  //       element.isactive = false;
-  //     });
-  //     this.mainmenuitems[this.selectedmainmenuindex].children.forEach(element => {
-  //       if (element.ispending && !issubmenuset) {
-  //         console.log("next pending item---"+element.name);
-  //         element.isactive = true;
-  //         issubmenuset = true;
-  //         this.selectedsubmenuindex = this.mainmenuitems[this.selectedmainmenuindex].children.indexOf(element);
-  //         let isshotmenuset = false;
-  //         element.shots.forEach(shot => {
-  //           if (shot.ispending && !isshotmenuset) {
-  //             console.log("next pending shot---"+shot.shotinfo);
-  //             shot.isactive = true;
-  //             isshotmenuset = true;
-  //             this.selectedshotindex = element.shots.indexOf(shot);
-  //           }
-  //         });
-
-  //         if (element.checkexistence && !element.isexistencechecked) {
-  //           this.blurcaptureview = true;
-  //           this.changedetectorref.detectChanges();
-  //           this.animateElementOpacity(document.querySelector('.checkexistenceview'));
-  //         }
-  //       }
-  //     });
-  //   }
-  //   this.changedetectorref.detectChanges();
-  // }
 }

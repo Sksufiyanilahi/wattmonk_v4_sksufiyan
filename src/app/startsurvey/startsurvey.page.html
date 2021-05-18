@@ -17,21 +17,6 @@
               src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}"
               width="100%" height="100%" />
           </div>
-          <div class="infobar">
-            <ion-row>
-              <ion-col size="2" style="text-align: left;">
-                <ion-icon (click)="handleSurveyExit()" class="actionbutton" name="arrow-back-outline"></ion-icon>
-              </ion-col>
-              <ion-col size="8" style="text-align: center;">
-                <p class="shotinfo">
-                  {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
-                </p>
-              </ion-col>
-              <ion-col size="2" style="text-align: right;">
-                <ion-icon class="actionbutton" name="information-outline"></ion-icon>
-              </ion-col>
-            </ion-row>
-          </div>
           <ion-row class="gallerystack"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
             <div class="scroll" scrollX="true">
@@ -76,7 +61,7 @@
         <ion-row class="childbuttons ion-justify-content-center submenubuttonscontainer">
           <div #submenuscroll class="scroll" scrollX="true">
             <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
-              <ion-button *ngIf="button.isvisible && !button.allowmultipleshots" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
+              <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
                 [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}({{button.capturedshots.length}}/{{button.shots.length}})</ion-button>
             </ng-container>
           </div>
@@ -183,6 +168,16 @@
           </ion-button>
         </form>
       </div>
+      <div class="noviewmodecontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.NONE">
+        <ion-grid>
+          <ion-row>
+            <ion-toggle></ion-toggle>
+          </ion-row>
+          <ion-row>
+            <p>Section has been turned off</p>
+          </ion-row>
+        </ion-grid>
+      </div>
       <ion-row class="mainbuttons mainbuttonscontainer">
         <div #mainscroll class="scroll" scrollX="true">
           <ng-container *ngFor="let button of mainmenuitems; let i = index">
@@ -197,6 +192,21 @@
           </ng-container>
         </div>
       </ion-row>
+      <div class="infobar">
+        <ion-row>
+          <ion-col size="2" style="text-align: left;">
+            <ion-icon style="margin-left: 20px;" (click)="handleSurveyExit()" class="actionbutton" name="arrow-back-outline"></ion-icon>
+          </ion-col>
+          <ion-col size="8" style="text-align: center;">
+            <p class="shotinfo" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children.length > 0">
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
+            </p>
+          </ion-col>
+          <ion-col size="2" style="text-align: right;">
+            <ion-icon style="margin-right: 20px;" class="actionbutton" name="information-outline"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </div>
     </ion-grid>
   </div>
   <!-- CHECK EXISTENCE VIEW -->
