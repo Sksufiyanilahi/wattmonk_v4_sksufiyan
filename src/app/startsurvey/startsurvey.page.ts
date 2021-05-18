@@ -660,8 +660,15 @@ export class StartsurveyPage implements OnInit {
   selectemainmenu(index){
     // Unset previous menu and select new one
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+    if(this.mainmenuitems[this.selectedmainmenuindex].children.length > 0){
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+    }
     this.selectedmainmenuindex = index;
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+    this.selectedsubmenuindex = 0;
+    if(this.mainmenuitems[this.selectedmainmenuindex].children.length > 0){
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+    }
   }
 
   selectsubmenu(index){
@@ -735,18 +742,11 @@ export class StartsurveyPage implements OnInit {
         this.markshotcompletion();
       }
     } else {
-      if (!activechild.allowmultipleshots) {
-        if (!activechild.shots[this.selectedshotindex].questionstatus) {
-          activechild.shots[this.selectedshotindex].questionstatus = true;
-        }
-        //Move to next possible step
-        this.markshotcompletion();
-      } else {
-        if (!activechild.shots[this.selectedshotindex].questionstatus) {
-          activechild.shots[this.selectedshotindex].questionstatus = true;
-        }
-        //Allow capturing more pics
+      if (!activechild.shots[this.selectedshotindex].questionstatus) {
+        activechild.shots[this.selectedshotindex].questionstatus = true;
       }
+      //Move to next possible step
+      this.markshotcompletion();
     }
 
     this.changedetectorref.detectChanges();
@@ -764,18 +764,20 @@ export class StartsurveyPage implements OnInit {
   }
 
   markchildcompletion(){
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(shotelement => {
-      if(shotelement.ispending){
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+    if(!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots){
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(shotelement => {
+        if(shotelement.ispending){
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+        }
+      });
+  
+      if(!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending){
+        this.markmainmenucompletion();
+      }else{
+        this.movetonextpossibleactionablestep();
       }
-    });
-
-    if(!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending){
-      this.markmainmenucompletion();
-    }else{
-      this.movetonextpossibleactionablestep();
     }
   }
 
