@@ -342,7 +342,7 @@
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
-                "questionstatus": false,
+                "questionstatus": true,
                 "result": "",
                 "actions": []
               }

@@ -75,9 +75,9 @@
         <ion-row class="childbuttons ion-justify-content-center submenubuttonscontainer">
           <div #submenuscroll class="scroll" scrollX="true">
             <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
-              <ion-button *ngIf="button.isvisible && !button.allowmultipleshots" id="submenu{{i}}" fill="clear" (click)="toggleSubMenuSelection(i)"
+              <ion-button *ngIf="button.isvisible && !button.allowmultipleshots" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
                 [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}</ion-button>
-                <ion-button *ngIf="button.isvisible && button.allowmultipleshots" id="submenu{{i}}" fill="clear" (click)="toggleSubMenuSelection(i)"
+                <ion-button *ngIf="button.isvisible && button.allowmultipleshots" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
                 [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}({{button.capturedshots.length}}/{{button.multipleshotslimit}})</ion-button>
             </ng-container>
           </div>
@@ -187,7 +187,7 @@
       <ion-row class="mainbuttons mainbuttonscontainer">
         <div #mainscroll class="scroll" scrollX="true">
           <ng-container *ngFor="let button of mainmenuitems; let i = index">
-            <a id="mainmenu{{i}}" *ngIf="button.isvisible" (click)="toggleMainMenuSelection(i)"
+            <a id="mainmenu{{i}}" *ngIf="button.isvisible" (click)="selectemainmenu(i)"
             [ngClass]="[button.ispending ? 'btn-link' : 'btn-link completed']">
               <div [ngClass]="[button.isactive ? 'button active' : 'button normal']">
                 <img *ngIf="button.isactive" src="/assets/images/{{button.name | lowercase}}active.svg" alt="img">
@@ -231,12 +231,6 @@
         <ion-col size="12" class="questionaireview-col">
           <p>
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <p
-            *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value != ''">
-            You have previously
-            selected
-            {{activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value}}
           </p>
           <ion-row class="ion-float-right ion-margin-top">
             <ion-col size="6"
@@ -297,67 +291,6 @@
           <ion-row class="ion-float-right ion-margin-top">
             <ion-button fill="clear" size="small" class="yellow-button-color"
               (click)="handleInputTextSubmission(activeForm)">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-
-      <!-- Row for input two dimensions question -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_FRAMING_SIZE">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate>
-            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-              <ion-input type="number" class="form-control" autocomplete="off" formControlName="dimensionA">
-              </ion-input>
-              <span>x</span>
-              <ion-input type="number" class="form-control" autocomplete="off" formControlName="dimensionB">
-              </ion-input>
-            </div>
-            <div class="error_div">
-              <div *ngIf="activeForm.get('dimensionA').value === '' && activeForm.get('dimensionA').dirty">
-                <span class="error">First dimension is required.</span>
-              </div>
-            </div>
-            <div class="error_div">
-              <div *ngIf="activeForm.get('dimensionB').value === '' && activeForm.get('dimensionB').dirty">
-                <span class="error">Second dimension is required.</span>
-              </div>
-            </div>
-          </form>
-          <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
-              | titlecase}}
-            </ion-button>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-
-      <!-- Row for question type Shotname -->
-      <ion-row class="questionaireview-row ion-padding-horizontal"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_SHOT_NAME">
-        <ion-col size="12" class="questionaireview-col">
-          <p>
-            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
-          </p>
-          <form [formGroup]="activeForm" novalidate>
-            <ion-input type="text" class="form-control" autocomplete="off" formControlName="shotname">
-            </ion-input>
-            <div class="error_div">
-              <div *ngIf="activeForm.get('shotname').value === '' && activeForm.get('shotname').dirty">
-                <span class="error">Field input is required.</span>
-              </div>
-            </div>
-          </form>
-          <ion-row class="ion-float-right ion-margin-top">
-            <ion-button fill="clear" size="small" class="yellow-button-color"
-              (click)="handleShotNameSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
