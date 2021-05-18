@@ -24,6 +24,12 @@ ion-content {
   left: 0;
   position: absolute;
   background-color: #ffffffaa;
+  overflow: hidden;
+
+  .scroll {
+    overflow: auto;
+    background-color: #212123;
+  }
 
   .cameraimagesbutton {
     width: 80px;

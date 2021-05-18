@@ -791,38 +791,56 @@ export class StartsurveyPage implements OnInit {
 
   movetonextpossibleactionablestep(){
     let nextactiveshotfound = false;
-    this.mainmenuitems.forEach((mainmenu, mainindex) => {
+    //Check for next possible shot in active children
+    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0){
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shot, shotindex) => {
+        if(shot.ispending && !nextactiveshotfound){
+          this.selectedshotindex = shotindex;
+          console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo);
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+          this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+          nextactiveshotfound = true;
+          console.log(this.mainmenuitems);
+        }
+      });
+
+      //If next active shot not found im existing children then look for in complete menuitems
       if(!nextactiveshotfound){
-        this.selectedmainmenuindex = mainindex;
-        console.log(this.mainmenuitems[this.selectedmainmenuindex].name);
-        if(mainmenu.children.length > 0){
-          mainmenu.children.forEach((child, childindex) => {
-            if(!nextactiveshotfound){
-              this.selectedsubmenuindex = childindex;
-              console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
-              if(child.shots.length > 0){
-                child.shots.forEach((shot, shotindex) => {
-                  if(shot.ispending && !nextactiveshotfound){
-                    this.selectedshotindex = shotindex;
-                    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo);
-                    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+        this.mainmenuitems.forEach((mainmenu, mainindex) => {
+          if(!nextactiveshotfound){
+            this.selectedmainmenuindex = mainindex;
+            console.log(this.mainmenuitems[this.selectedmainmenuindex].name);
+            if(mainmenu.children.length > 0){
+              mainmenu.children.forEach((child, childindex) => {
+                if(!nextactiveshotfound){
+                  this.selectedsubmenuindex = childindex;
+                  console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
+                  if(child.shots.length > 0){
+                    child.shots.forEach((shot, shotindex) => {
+                      if(shot.ispending && !nextactiveshotfound){
+                        this.selectedshotindex = shotindex;
+                        console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo);
+                        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+                        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+                        nextactiveshotfound = true;
+                        console.log(this.mainmenuitems);
+                      }
+                    });
+                  }else{
                     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
                     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-                    nextactiveshotfound = true;
-                    console.log(this.mainmenuitems);
                   }
-                });
-              }else{
-                this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-                this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-              }
+                }
+              });
+            }else{
+              this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
             }
-          });
-        }else{
-          this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-        }
+          }
+        });
       }
-    });
+    }
   }
 
   // renderSelectedImage(capturedImage) {
