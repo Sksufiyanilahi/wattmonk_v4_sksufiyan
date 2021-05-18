@@ -356,6 +356,16 @@ export class StartsurveyPage implements OnInit {
     }, 10);
   }
 
+  animateViewFromTop(element){
+    setTimeout(() => {
+      let moveinanimation: Animation = this.animationCtrl.create()
+        .addElement(element)
+        .duration(600)
+        .fromTo('transform', 'translateY(-150px)', 'translateY(0px)')
+        moveinanimation.play();
+    }, 10);
+  }
+
   //------------------------------------------------------------------------------------------------------------------
   // File Selection Methods
   //------------------------------------------------------------------------------------------------------------------
@@ -983,6 +993,11 @@ export class StartsurveyPage implements OnInit {
   toggleshotdetailsview(isvisible){
     this.showinfodetailsview = isvisible;
     this.blurcaptureview = isvisible;
+
+    if(isvisible){
+      this.changedetectorref.detectChanges();
+      this.animateViewFromTop(document.querySelector('.infodetailsview'));
+    }
   }
 
   infoslidechange(){
