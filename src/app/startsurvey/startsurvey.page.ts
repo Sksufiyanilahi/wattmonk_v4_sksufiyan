@@ -812,9 +812,14 @@ export class StartsurveyPage implements OnInit {
                     console.log(this.mainmenuitems);
                   }
                 });
+              }else{
+                this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
               }
             }
           });
+        }else{
+          this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
         }
       }
     });
