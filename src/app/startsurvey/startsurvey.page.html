@@ -1,35 +1,9 @@
-<ion-content class="no-scroll">
-  <div *ngIf="showModal" class="modal-class">
-          <ion-icon name="close-circle-sharp" class="font_pad" (click)="openModal()"></ion-icon>
-      <ion-slides #slider pager="true" [options]="slideOpts" (ionSlideDidChange)='ionSlideDidChange()' class="slider_ht bullet">
-        <ion-slide>
-          <ion-row>
-            <ion-col size="12" class="ion-no-padding color">Step 1</ion-col>
-            <ion-col size="12" class="ion-no-padding">Capture main panel long shot</ion-col>
-            <ion-col class="ion-no-padding">Provide MSP location</ion-col>
-
-          </ion-row>
-          <!-- <div>Capture main panel wall long shot</div>
-          <div>Provide MSP location</div> -->
-        </ion-slide>
-        <ion-slide>
-          <h6>Step 2</h6>
-          <!-- <div>Capture main panel wall long shot</div>
-          <div>Provide MSP location</div> -->
-        </ion-slide>
-        <ion-slide>
-          <h6>Step 3</h6>
-          <!-- <div>Capture main panel wall long shot</div>
-          <div>Provide MSP location</div> -->
-        </ion-slide>
-      </ion-slides>
-    <!-- </div> -->
-  </div>
-<ng-container *ngIf="isdataloaded">
+<ion-content *ngIf="isdataloaded" class="no-scroll">
   <!-- PICTURE TAKING MODE VIEW -->
   <div class="picturemodecontainer" [ngClass]="[ blurcaptureview ? 'blurbackground' : '']">
     <ion-grid class="ion-no-padding" style="overflow-y: hidden;">
-      <div class="captureactionareacontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
+      <div class="captureactionareacontainer"
+        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
         <div class="imagecontainer">
           <div class="mainimage"
             *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
@@ -46,17 +20,18 @@
           <ion-row class="gallerystack"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
             <div class="scroll" scrollX="true">
-              <ng-container *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index">
-                <ion-button color="dark" class="cameraimagesbutton"
-                (click)="selectcapturedshot(shotindex)">
-                <img *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
-                <img *ngIf="shot.imagecleared" src="/assets/images/nopicture.svg" />
-              </ion-button>
+              <ng-container
+                *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index">
+                <ion-button color="dark" class="cameraimagesbutton" (click)="selectcapturedshot(shotindex)">
+                  <img *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
+                  <img *ngIf="shot.imagecleared" src="/assets/images/nopicture.svg" />
+                </ion-button>
               </ng-container>
             </div>
           </ion-row>
         </div>
-        <ion-row class="captureactionarea" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending">
+        <ion-row class="captureactionarea"
+          *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending">
           <ion-col style="text-align: center;">
             <a href="" class="btn-link" (click)="openPhotoGalleryToSelectPic($event)">
               <div class="button">
@@ -74,7 +49,8 @@
             </a>
           </ion-col>
         </ion-row>
-        <ion-row class="retakeshotarea" *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending">
+        <ion-row class="retakeshotarea"
+          *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending">
           <ion-col style="text-align: center;">
             <a href="" class="btn-link" (click)="allowusertorecaptureshot($event)">
               <div class="button">
@@ -85,7 +61,8 @@
           </ion-col>
         </ion-row>
       </div>
-      <div class="detailsformviewcontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
+      <div class="detailsformviewcontainer"
+        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
         <form [formGroup]="activeForm" class="additionalform ion-margin">
           <ion-grid class="ion-padding text-white additionalformgrid">
             <div
@@ -139,7 +116,8 @@
                                     ">
                                 <ion-slide *ngFor="let fileurl of formElement.fileurls; let i = index">
                                   <div>
-                                    <img [src]="fileurl" style="height: 10rem; width: 10rem; border: 3px solid black;" alt="file" />
+                                    <img [src]="fileurl" style="height: 10rem; width: 10rem; border: 3px solid black;"
+                                      alt="file" />
                                     <ion-icon class="remove" name="close-circle-outline"
                                       (click)="removeselectedfile(i, multiplefileuploadinput.id)"></ion-icon>
                                   </div>
@@ -156,15 +134,17 @@
                       <ion-col size="12">
                         <ng-container>
                           <ion-item class="ion-no-padding">
-                            <input #singlefileuploadinput [id]="itemindex" type="file" class="form_input" accept="image/*"
-                              (change)="addselectedfiles($event, singlefileuploadinput.id)" style="margin-top: 12px"
-                              [formControlName]="formElement.inputformcontrol" multiple="false" />
+                            <input #singlefileuploadinput [id]="itemindex" type="file" class="form_input"
+                              accept="image/*" (change)="addselectedfiles($event, singlefileuploadinput.id)"
+                              style="margin-top: 12px" [formControlName]="formElement.inputformcontrol"
+                              multiple="false" />
                             <ion-icon name="attach-outline" slot="end" style="margin-top: 21px"></ion-icon>
                           </ion-item>
                           <ion-row *ngIf="formElement.fileurls.length > 0">
                             <ion-col size="12">
                               <div>
-                                <img [src]="formElement.fileurls[0]" style="height: 10rem; width: 10rem; border: 3px solid black;" alt="file" />
+                                <img [src]="formElement.fileurls[0]"
+                                  style="height: 10rem; width: 10rem; border: 3px solid black;" alt="file" />
                                 <ion-icon class="remove" name="close-circle-outline"
                                   (click)="removeselectedfile(0, singlefileuploadinput.id)"></ion-icon>
                               </div>
@@ -184,7 +164,8 @@
           </ion-button>
         </form>
       </div>
-      <div class="noviewmodecontainer" *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult">
+      <div class="noviewmodecontainer"
+        *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult">
         <ion-grid class="noviewmodegrid">
           <ion-row class="ion-justify-content-center">
             <p>Section has been turned off</p>
@@ -194,10 +175,12 @@
       <ion-row class="childbuttons ion-justify-content-center submenubuttonscontainer">
         <div #submenuscroll class="scroll" scrollX="true">
           <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
-            <ion-button *ngIf="button.isvisible && button.shots.length > 0" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
-              [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}({{button.capturedshots.length}}/{{button.shots.length}})</ion-button>
-              <ion-button *ngIf="button.isvisible && button.shots.length == 0" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
-                [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}</ion-button>
+            <ion-button *ngIf="button.isvisible && button.shots.length > 0" id="submenu{{i}}" fill="clear"
+              (click)="selectsubmenu(i)" [ngClass]="[ button.isactive ? 'button active' : 'button normal']">
+              {{button.name}}({{button.capturedshots.length}}/{{button.shots.length}})</ion-button>
+            <ion-button *ngIf="button.isvisible && button.shots.length == 0" id="submenu{{i}}" fill="clear"
+              (click)="selectsubmenu(i)" [ngClass]="[ button.isactive ? 'button active' : 'button normal']">
+              {{button.name}}</ion-button>
           </ng-container>
         </div>
       </ion-row>
@@ -205,7 +188,7 @@
         <div #mainscroll class="scroll" scrollX="true">
           <ng-container *ngFor="let button of mainmenuitems; let i = index">
             <a id="mainmenu{{i}}" *ngIf="button.isvisible" (click)="selectemainmenu(i)"
-            [ngClass]="[button.ispending ? 'btn-link' : 'btn-link completed']">
+              [ngClass]="[button.ispending ? 'btn-link' : 'btn-link completed']">
               <div [ngClass]="[button.isactive ? 'button active' : 'button normal']">
                 <img *ngIf="button.isactive" src="/assets/images/{{button.name | lowercase}}active.svg" alt="img">
                 <img *ngIf="!button.isactive" src="/assets/images/{{button.name | lowercase}}.svg" alt="img">
@@ -216,10 +199,10 @@
         </div>
       </ion-row>
       <div class="infobar">
-
         <ion-row>
           <ion-col size="2" style="text-align: left;">
-            <ion-icon style="margin-left: 20px;" (click)="handleSurveyExit()" class="actionbutton" name="arrow-back-outline"></ion-icon>
+            <ion-icon style="margin-left: 20px;" (click)="handleSurveyExit()" class="actionbutton"
+              name="arrow-back-outline"></ion-icon>
           </ion-col>
           <ion-col size="8" style="text-align: center;">
             <p class="shotinfo" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
@@ -227,14 +210,16 @@
             </p>
           </ion-col>
           <ion-col size="2" style="text-align: right;">
-            <ion-icon style="margin-right: 20px;" class="actionbutton" name="information-outline" (click)="openModal()"></ion-icon>
+            <ion-icon style="margin-right: 20px;" class="actionbutton" name="information-outline"
+              (click)="toggleshotdetailsview(true)"></ion-icon>
           </ion-col>
         </ion-row>
       </div>
     </ion-grid>
   </div>
   <!-- CHECK EXISTENCE VIEW -->
-  <div class="checkexistenceviewcontainer" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
+  <div class="checkexistenceviewcontainer"
+    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked">
     <ion-grid class="checkexistenceview">
       <!-- Row for choice questions -->
       <ion-row class="checkexistenceview-row ion-padding-horizontal">
@@ -253,7 +238,8 @@
     </ion-grid>
   </div>
   <!-- QUESTIONARE VIEW -->
-  <div class="questionaireviewcontainer" *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
+  <div class="questionaireviewcontainer"
+    *ngIf="isdataloaded && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion">
     <ion-grid class="questionaireview">
 
       <!-- Row for choice questions -->
@@ -421,5 +407,19 @@
       </ion-row>
     </ion-grid>
   </div>
-</ng-container>
+  <!-- SHOT DETAILS VIEW -->
+  <div class="infodetailsviewcontainer" *ngIf="showinfodetailsview">
+    <ion-grid class="infodetailsview">
+      <ion-icon name="close-circle-sharp" class="infoclosebutton" (click)="toggleshotdetailsview(false)"></ion-icon>
+      <ion-slides #infoslider pager="true" [options]="infoslideoptions" (ionSlideDidChange)='infoslidechange()' class="infoslides">
+        <ion-slide style="width: 100%;" *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots; let i = index">
+          <ion-row>
+            <ion-col size="12" class="ion-no-padding"><p class="shotindex">Step {{i + 1}}</p></ion-col>
+            <ion-col size="12" class="ion-no-padding"><p class="shotinfo">{{shot.shotinfo}}</p></ion-col>
+            <ion-col class="ion-no-padding"><p class="shotquestion">{{shot.question}}</p></ion-col>
+          </ion-row>
+        </ion-slide>
+      </ion-slides>
+    </ion-grid>
+  </div>
 </ion-content>

@@ -186,10 +186,10 @@ export class StartsurveyPage implements OnInit {
   totalimagestoupload = 0;
   blurcaptureview = false;
   recapturingmode = false;
-  showModal: boolean=false;
+  showinfodetailsview = false;
 
 
-  public slideOpts = {
+  infoslideoptions = {
     initialSlide: 0,
     speed: 400
   };
@@ -980,10 +980,12 @@ export class StartsurveyPage implements OnInit {
     this.recapturingmode = true;
   }
 
-  openModal(){
-    this.showModal = !this.showModal;
+  toggleshotdetailsview(isvisible){
+    this.showinfodetailsview = isvisible;
+    this.blurcaptureview = isvisible;
   }
-  // hideModal(){
-  //   this.
-  // }
+
+  infoslidechange(){
+
+  }
 }

@@ -326,5 +326,13 @@ ion-slides.bullet .swiper-pagination-bullet{
   border-radius: 25px;
 }
 
-
+.infodetailsviewcontainer{
+  .swiper-pagination-bullets{
+    .swiper-pagination-bullet{
+      width: 18px !important;
+      border-radius: 26% !important;
+      height: 4px !important;
+    }
+  }
+}
 

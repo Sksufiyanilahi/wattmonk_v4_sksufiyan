@@ -191,20 +191,20 @@ ion-content {
       --color: #fff;
     }
 
-    .form_input{
+    .form_input {
       color: #ffffff !important;
     }
   }
 }
 
-.noviewmodecontainer{
+.noviewmodecontainer {
   height: 84.3vh;
 
-  .noviewmodegrid{
+  .noviewmodegrid {
     position: relative;
     top: 30vh;
 
-    p{
+    p {
       color: #eebb5c;
       font-weight: 600;
       opacity: 0.7;
@@ -347,35 +347,51 @@ ion-content {
   color: #f0bc5e !important;
 }
 
-.modal-class{
-  background: #fff;
-  height:300px;
-  z-index: 999;
-  height:160px;
-  border-radius:0 0 53px 53px;
-  position: absolute;
+.infodetailsviewcontainer {
   width: 100%;
-}
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 
-.font_pad{
-  padding: 4px;
-  font-size: 30px;
-  float:right;
-}
-.ht{
-  height: 15px;
-}
+  .infodetailsview {
+    width: 100%;
+    height: 166px;
+    position: absolute;
+    top: 0;
+    z-index: 99;
+    background: #ffffff;
+    border-radius: 0 0 36px 36px;
+  }
 
-.color{
-  color: #d38e0d;
-  font-weight: bolder;
-}
+  .infoclosebutton {
+    padding: 4px;
+    font-size: 30px;
+    position: absolute;
+    right: 0;
+    z-index: 100;
+  }
 
-.slider_ht{
-height: 150px;
-}
-ion-slides {
-  --bullet-background: #f0bc5e;
-  --bullet-background-active: #d38d0c;
+  .infoslides {
+    height: 150px;
+    --bullet-background: #888888;
+    --bullet-background-active: #eebb5c;
+  }
 
- }
+  .shotindex {
+    margin: 0px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #eebb5c;
+  }
+
+  .shotinfo {
+    margin: 6px 0px;
+    font-size: 12px;
+  }
+
+  .shotquestion {
+    margin: 0px;
+    font-size: 12px;
+  }
+}
