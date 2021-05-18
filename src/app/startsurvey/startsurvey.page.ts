@@ -702,17 +702,18 @@ export class StartsurveyPage implements OnInit {
   }
 
   handleshotimage(capturedImage){
-    const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
     const captureshot: CAPTUREDSHOT = {
       menuindex: this.selectedmainmenuindex,
       submenuindex: this.selectedsubmenuindex,
       shotindex: this.selectedshotindex,
       shotimage: capturedImage,
-      imagekey: activechild.shots[this.selectedshotindex].imagekey,
-      imagename: activechild.shots[this.selectedshotindex].imagename,
+      imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
+      imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename,
       imagecleared: false
     };
-    activechild.capturedshots.push(captureshot);
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
+    //Setting shot status true to display captured image
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
     this.handleshotquestion();
   }
 
