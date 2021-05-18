@@ -346,3 +346,36 @@ ion-content {
 .yellow-button-color {
   color: #f0bc5e !important;
 }
+
+.modal-class{
+  background: #fff;
+  height:300px;
+  z-index: 999;
+  height:160px;
+  border-radius:0 0 53px 53px;
+  position: absolute;
+  width: 100%;
+}
+
+.font_pad{
+  padding: 4px;
+  font-size: 30px;
+  float:right;
+}
+.ht{
+  height: 15px;
+}
+
+.color{
+  color: #d38e0d;
+  font-weight: bolder;
+}
+
+.slider_ht{
+height: 150px;
+}
+ion-slides {
+  --bullet-background: #f0bc5e;
+  --bullet-background-active: #d38d0c;
+
+ }

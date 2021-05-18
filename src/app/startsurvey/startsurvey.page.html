@@ -1,4 +1,31 @@
-<ion-content *ngIf="isdataloaded" class="no-scroll">
+<ion-content class="no-scroll">
+  <div *ngIf="showModal" class="modal-class">
+          <ion-icon name="close-circle-sharp" class="font_pad" (click)="openModal()"></ion-icon>
+      <ion-slides #slider pager="true" [options]="slideOpts" (ionSlideDidChange)='ionSlideDidChange()' class="slider_ht bullet">
+        <ion-slide>
+          <ion-row>
+            <ion-col size="12" class="ion-no-padding color">Step 1</ion-col>
+            <ion-col size="12" class="ion-no-padding">Capture main panel long shot</ion-col>
+            <ion-col class="ion-no-padding">Provide MSP location</ion-col>
+
+          </ion-row>
+          <!-- <div>Capture main panel wall long shot</div>
+          <div>Provide MSP location</div> -->
+        </ion-slide>
+        <ion-slide>
+          <h6>Step 2</h6>
+          <!-- <div>Capture main panel wall long shot</div>
+          <div>Provide MSP location</div> -->
+        </ion-slide>
+        <ion-slide>
+          <h6>Step 3</h6>
+          <!-- <div>Capture main panel wall long shot</div>
+          <div>Provide MSP location</div> -->
+        </ion-slide>
+      </ion-slides>
+    <!-- </div> -->
+  </div>
+<ng-container *ngIf="isdataloaded">
   <!-- PICTURE TAKING MODE VIEW -->
   <div class="picturemodecontainer" [ngClass]="[ blurcaptureview ? 'blurbackground' : '']">
     <ion-grid class="ion-no-padding" style="overflow-y: hidden;">
@@ -189,6 +216,7 @@
         </div>
       </ion-row>
       <div class="infobar">
+
         <ion-row>
           <ion-col size="2" style="text-align: left;">
             <ion-icon style="margin-left: 20px;" (click)="handleSurveyExit()" class="actionbutton" name="arrow-back-outline"></ion-icon>
@@ -199,7 +227,7 @@
             </p>
           </ion-col>
           <ion-col size="2" style="text-align: right;">
-            <ion-icon style="margin-right: 20px;" class="actionbutton" name="information-outline"></ion-icon>
+            <ion-icon style="margin-right: 20px;" class="actionbutton" name="information-outline" (click)="openModal()"></ion-icon>
           </ion-col>
         </ion-row>
       </div>
@@ -393,4 +421,5 @@
       </ion-row>
     </ion-grid>
   </div>
+</ng-container>
 </ion-content>

@@ -186,6 +186,13 @@ export class StartsurveyPage implements OnInit {
   totalimagestoupload = 0;
   blurcaptureview = false;
   recapturingmode = false;
+  showModal: boolean=false;
+
+
+  public slideOpts = {
+    initialSlide: 0,
+    speed: 400
+  };
 
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
@@ -780,7 +787,7 @@ export class StartsurveyPage implements OnInit {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
         }
       });
-  
+
       if(!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending){
         this.markmainmenucompletion();
       }else{
@@ -972,4 +979,11 @@ export class StartsurveyPage implements OnInit {
     currentsubmenu.capturedshots[this.selectedshotindex].imagecleared = true;
     this.recapturingmode = true;
   }
+
+  openModal(){
+    this.showModal = !this.showModal;
+  }
+  // hideModal(){
+  //   this.
+  // }
 }
