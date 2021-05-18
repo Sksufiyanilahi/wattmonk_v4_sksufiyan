@@ -179,22 +179,13 @@ ion-content {
 
   .additionalform {
     height: 100%;
-
-    .formheader {
-      background-color: #eebb5c;
-      padding: 12px 0px;
-      text-align: center;
-      margin-bottom: 0px;
-    }
+    padding-top: 20px;
 
     .text-white {
       color: #ffffff;
     }
 
     .additionalformgrid {
-      border: 1px solid #eebb5c;
-      border-bottom-left-radius: 6px;
-      border-bottom-right-radius: 6px;
       height: 90%;
       overflow-y: scroll;
     }

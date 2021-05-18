@@ -60,7 +60,6 @@
       </div>
       <div class="detailsformviewcontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
         <form [formGroup]="activeForm" class="additionalform ion-margin">
-          <p class="formheader">Additional Information</p>
           <ion-grid class="ion-padding text-white additionalformgrid">
             <div
               *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements; let itemindex = index"
@@ -168,8 +167,10 @@
       <ion-row class="childbuttons ion-justify-content-center submenubuttonscontainer">
         <div #submenuscroll class="scroll" scrollX="true">
           <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
-            <ion-button *ngIf="button.isvisible" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
+            <ion-button *ngIf="button.isvisible && button.shots.length > 0" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
               [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}({{button.capturedshots.length}}/{{button.shots.length}})</ion-button>
+              <ion-button *ngIf="button.isvisible && button.shots.length == 0" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
+                [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}</ion-button>
           </ng-container>
         </div>
       </ion-row>
