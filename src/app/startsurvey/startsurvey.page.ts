@@ -787,9 +787,7 @@ export class StartsurveyPage implements OnInit {
       }
     });
 
-    if(this.mainmenuitems[this.selectedmainmenuindex].ispending){
-      this.movetonextpossibleactionablestep();
-    }
+    this.movetonextpossibleactionablestep();
   }
 
   movetonextpossibleactionablestep(){
@@ -797,17 +795,17 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems.forEach((mainmenu, mainindex) => {
       if(!nextactiveshotfound){
         this.selectedmainmenuindex = mainindex;
-        console.log(this.selectedmainmenuindex);
+        console.log(this.mainmenuitems[this.selectedmainmenuindex].name);
         if(mainmenu.children.length > 0){
           mainmenu.children.forEach((child, childindex) => {
             if(!nextactiveshotfound){
               this.selectedsubmenuindex = childindex;
-              console.log(this.selectedsubmenuindex);
+              console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
               if(child.shots.length > 0){
                 child.shots.forEach((shot, shotindex) => {
-                  if(!shot.shotstatus && !nextactiveshotfound){
+                  if(shot.ispending && !nextactiveshotfound){
                     this.selectedshotindex = shotindex;
-                    console.log(this.selectedshotindex);
+                    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo);
                     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
                     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
                     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
