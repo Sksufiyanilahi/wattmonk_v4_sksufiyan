@@ -211,6 +211,17 @@ ion-content {
 
 .noviewmodecontainer{
   height: 92vh;
+
+  .noviewmodegrid{
+    position: relative;
+    top: 30vh;
+
+    p{
+      color: #eebb5c;
+      font-weight: 600;
+      opacity: 0.7;
+    }
+  }
 }
 
 .mainbuttonscontainer {

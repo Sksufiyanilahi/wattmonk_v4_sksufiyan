@@ -169,11 +169,8 @@
         </form>
       </div>
       <div class="noviewmodecontainer" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.NONE">
-        <ion-grid>
-          <ion-row>
-            <ion-toggle></ion-toggle>
-          </ion-row>
-          <ion-row>
+        <ion-grid class="noviewmodegrid">
+          <ion-row class="ion-justify-content-center">
             <p>Section has been turned off</p>
           </ion-row>
         </ion-grid>
@@ -198,7 +195,7 @@
             <ion-icon style="margin-left: 20px;" (click)="handleSurveyExit()" class="actionbutton" name="arrow-back-outline"></ion-icon>
           </ion-col>
           <ion-col size="8" style="text-align: center;">
-            <p class="shotinfo" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children.length > 0">
+            <p class="shotinfo" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].viewmode != ViewModes.NONE">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
             </p>
           </ion-col>
