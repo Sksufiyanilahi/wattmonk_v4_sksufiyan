@@ -40,8 +40,6 @@ export interface CHILDREN {
   inputformcontrol: string;
   placeholder?: string;
   shotscount: number;
-  allowmultipleshots: boolean;
-  multipleshotslimit?: number;
   capturedshots: CAPTUREDSHOT[];
   shots: SHOT[];
 }
@@ -764,8 +762,7 @@ export class StartsurveyPage implements OnInit {
   }
 
   markchildcompletion(){
-    if(!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].allowmultipleshots){
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(shotelement => {
         if(shotelement.ispending){
@@ -778,7 +775,6 @@ export class StartsurveyPage implements OnInit {
       }else{
         this.movetonextpossibleactionablestep();
       }
-    }
   }
 
   markmainmenucompletion(){

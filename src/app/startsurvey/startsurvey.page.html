@@ -76,9 +76,7 @@
           <div #submenuscroll class="scroll" scrollX="true">
             <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
               <ion-button *ngIf="button.isvisible && !button.allowmultipleshots" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
-                [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}</ion-button>
-                <ion-button *ngIf="button.isvisible && button.allowmultipleshots" id="submenu{{i}}" fill="clear" (click)="selectsubmenu(i)"
-                [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}({{button.capturedshots.length}}/{{button.multipleshotslimit}})</ion-button>
+                [ngClass]="[ button.isactive ? 'button active' : 'button normal']">{{button.name}}({{button.capturedshots.length}}/{{button.shots.length}})</ion-button>
             </ng-container>
           </div>
         </ion-row>
