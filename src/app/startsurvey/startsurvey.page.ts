@@ -261,18 +261,6 @@ export class StartsurveyPage implements OnInit {
           }
         });
       }
-      // if (item.formelements) {
-      //   item.formelements.map(formElement => {
-      //     formElement.attachments = [];
-      //     formElement.fileurls = [];
-      //     this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
-      //     if (formElement.required) {
-      //       formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-      //     } else {
-      //       formData[formElement.inputformcontrol[0]] = new FormControl('', []);
-      //     }
-      //   });
-      // }
     });
     console.log(formData);
     this.activeForm = new FormGroup(formData);
@@ -724,16 +712,22 @@ export class StartsurveyPage implements OnInit {
   }
 
   handleshotimage(capturedImage){
-    const captureshot: CAPTUREDSHOT = {
-      menuindex: this.selectedmainmenuindex,
-      submenuindex: this.selectedsubmenuindex,
-      shotindex: this.selectedshotindex,
-      shotimage: capturedImage,
-      imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
-      imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename,
-      imagecleared: false
-    };
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
+    if(this.recapturingmode){
+      this.recapturingmode = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = capturedImage;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = false;
+    }else{
+      const captureshot: CAPTUREDSHOT = {
+        menuindex: this.selectedmainmenuindex,
+        submenuindex: this.selectedsubmenuindex,
+        shotindex: this.selectedshotindex,
+        shotimage: capturedImage,
+        imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
+        imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename,
+        imagecleared: false
+      };
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
+    }
     //Setting shot status true to display captured image
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
     this.handleshotquestion();
