@@ -412,6 +412,7 @@
   <div class="infodetailsviewcontainer" *ngIf="showinfodetailsview">
     <ion-grid class="infodetailsview">
       <ion-icon name="close-circle-sharp" class="infoclosebutton" (click)="toggleshotdetailsview(false)"></ion-icon>
+      <ion-toggle class="infodetailstoggle" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence" [checked]="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult" (ionChange)="onchildmodechange($event)"></ion-toggle>
       <ion-slides #infoslider pager="true" [options]="infoslideoptions" (ionSlideDidChange)='infoslidechange()' class="infoslides">
         <ion-slide style="width: 100%;" *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots; let i = index">
           <ion-row>

@@ -1026,6 +1026,7 @@ export class StartsurveyPage implements OnInit {
 
   onchildmodechange(event){
     event.preventDefault();
+    this.showinfodetailsview = false;
     let doesexist = event.target.checked;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;

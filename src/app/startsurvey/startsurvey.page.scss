@@ -412,4 +412,14 @@ ion-content {
     margin: 0px;
     font-size: 12px;
   }
+
+  .infodetailstoggle{
+    position: absolute;
+    top: 4px;
+    left: 0;
+    --background: #eebb5caa;
+    --handle-background: #ffffff;
+    --background-checked: #747474;
+    --handle-background-checked: #eebb5c;
+  }
 }
