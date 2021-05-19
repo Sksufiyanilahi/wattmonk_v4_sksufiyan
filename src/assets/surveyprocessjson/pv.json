@@ -661,7 +661,7 @@
               {
                 "inputformcontrol": ["batterysystem"],
                 "placeholder": "",
-                "label": "1. Is there any Battery System?*",
+                "label": "Is there any Battery System?*",
                 "visibility": true,
                 "controltype": 5,
                 "controlselement": {
@@ -685,7 +685,7 @@
               {
                 "inputformcontrol": ["detailsofbatterysystem"],
                 "placeholder": "",
-                "label": "2. Details Of Battery System",
+                "label": "Details Of Battery System",
                 "visibility": false,
                 "controltype": 7,
                 "options": [],
@@ -696,7 +696,7 @@
               {
                 "inputformcontrol": ["servicefeedsource"],
                 "placeholder": "",
-                "label": "3. Power service line source to Main panel* (Overhead if you can see the wires coming from the power poles to connect to home)",
+                "label": "Power service line source to Main panel* (Overhead if you can see the wires coming from the power poles to connect to home)",
                 "visibility": true,
                 "controltype": 5,
                 "controlselement": {},
@@ -717,7 +717,7 @@
               {
                 "inputformcontrol": ["esid_number"],
                 "placeholder": "ESID Number",
-                "label": "4. ESID Number",
+                "label": "ESID Number",
                 "visibility": true,
                 "controltype": 1,
                 "options": [],
@@ -728,7 +728,7 @@
               {
                 "inputformcontrol": ["utilitybillfront"],
                 "placeholder": "Utility Bill Front",
-                "label": "5. Utility Bill Front",
+                "label": "Utility Bill Front",
                 "visibility": true,
                 "controltype": 9,
                 "options": [],
@@ -739,7 +739,7 @@
               {
                 "inputformcontrol": ["utilitybillback"],
                 "placeholder": "Utility Bill Back",
-                "label": "6. Utility Bill Back",
+                "label": "Utility Bill Back",
                 "visibility": true,
                 "controltype": 9,
                 "options": [],
@@ -750,7 +750,7 @@
               {
                 "inputformcontrol": ["hoadetails"],
                 "placeholder": "",
-                "label": "7. HOA details",
+                "label": "HOA details",
                 "visibility": true,
                 "controltype": 7,
                 "options": [],
@@ -761,7 +761,7 @@
               {
                 "inputformcontrol": ["hoaattachments"],
                 "placeholder": "HOA attachments",
-                "label": "8. HOA attachments",
+                "label": "HOA attachments",
                 "visibility": true,
                 "controltype": 8,
                 "options": [],
@@ -772,7 +772,7 @@
               {
                 "inputformcontrol": ["additionalnotes"],
                 "placeholder": "",
-                "label": "9. Additional notes",
+                "label": "Additional notes",
                 "visibility": true,
                 "controltype": 7,
                 "options": [],

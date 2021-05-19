@@ -573,10 +573,6 @@ export class StartsurveyPage implements OnInit {
   // API Calls to save Survey data at backend
   //------------------------------------------------------------------------------------------------------------------
 
-  checkforincompleteitems() {
-
-  }
-
   async navigatetoincompletestep(shotindex, childindex, mainindex) {
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     this.selectedmainmenuindex = mainindex;
@@ -1138,6 +1134,27 @@ export class StartsurveyPage implements OnInit {
       });
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
       this.markchildcompletion();
+    }
+  }
+
+  toggleElementVisibility(element, controlsElement) {
+    if (Object.keys(controlsElement).length > 0) {
+      const elementToControl = this.activeForm.get(controlsElement.inputformcontrol);
+      if (this.activeForm.get(element).value === controlsElement.onvalueselection) {
+        setTimeout(function () {
+          document.getElementById('input_'+controlsElement.inputformcontrol).classList.remove('hideElement');
+        }, 300);
+        elementToControl.enable();
+        elementToControl.setValidators([Validators.required]);
+      } else {
+        setTimeout(function () {
+          document.getElementById('input_'+controlsElement.inputformcontrol).classList.add('hideElement');
+        }, 300);
+        elementToControl.setValue('');
+        elementToControl.clearValidators();
+        elementToControl.disable();
+      }
+      this.changedetectorref.detectChanges();
     }
   }
 }

@@ -67,7 +67,7 @@
           <ion-grid class="ion-padding text-white additionalformgrid">
             <div
               *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements; let itemindex = index"
-              [ngClass]="!formElement.visibility ? 'hideElement' : ''"
+              class=""
               [attr.id]="'input_' + formElement.inputformcontrol">
               <ion-row>
                 <ion-col>
