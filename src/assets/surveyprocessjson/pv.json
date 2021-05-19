@@ -733,7 +733,7 @@
                 "attachments": []
               },
               {
-                "inputformcontrol": ["hoaattachements"],
+                "inputformcontrol": ["hoaattachments"],
                 "placeholder": "HOA attachments",
                 "label": "8. HOA attachments",
                 "visibility": true,
