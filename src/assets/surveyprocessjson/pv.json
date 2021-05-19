@@ -668,20 +668,9 @@
                 "attachments": []
               },
               {
-                "inputformcontrol": ["esid_number"],
-                "placeholder": "ESID Number",
-                "label": "3. ESID Number",
-                "visibility": true,
-                "controltype": 1,
-                "options": [],
-                "required": false,
-                "fileurls": [],
-                "attachments": []
-              },
-              {
                 "inputformcontrol": ["servicefeedsource"],
                 "placeholder": "",
-                "label": "4. Power service line source to Main panel* (Overhead if you can see the wires coming from the power poles to connect to home)",
+                "label": "3. Power service line source to Main panel* (Overhead if you can see the wires coming from the power poles to connect to home)",
                 "visibility": true,
                 "controltype": 5,
                 "controlselement": {},
@@ -696,6 +685,17 @@
                   }
                 ],
                 "required": true,
+                "fileurls": [],
+                "attachments": []
+              },
+              {
+                "inputformcontrol": ["esid_number"],
+                "placeholder": "ESID Number",
+                "label": "4. ESID Number",
+                "visibility": true,
+                "controltype": 1,
+                "options": [],
+                "required": false,
                 "fileurls": [],
                 "attachments": []
               },

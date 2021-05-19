@@ -576,12 +576,14 @@ export class StartsurveyPage implements OnInit {
     const data = {};
     this.activeFormElementsArray.map(element => {
       console.log("setting element value---" + element);
-      data[element] = this.activeForm.get(element).value;
-      if (element === 'batterysystem') {
-        data[element] = this.activeForm.get('batterysystem').value.toString();
-      }
-      if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
-        data[element] = this.activeForm.get(element).value.id;
+      if(this.activeForm.get(element).value != ''){
+        data[element] = this.activeForm.get(element).value;
+        if (element === 'batterysystem') {
+          data[element] = this.activeForm.get('batterysystem').value.toString();
+        }
+        else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
+          data[element] = this.activeForm.get(element).value.id;
+        }
       }
     });
     data['status'] = 'surveycompleted';
