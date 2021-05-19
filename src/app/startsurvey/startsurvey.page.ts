@@ -973,8 +973,13 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
-  selectcapturedshot(shotindex) {
-    this.selectedshotindex = shotindex;
+  selectcapturedshot(event, shotindex) {
+    event.preventDefault();
+    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex].shotstatus){
+      this.showinfodetailsview = false;
+      this.blurcaptureview = false;
+      this.selectedshotindex = shotindex;
+    }
   }
 
   allowusertorecaptureshot(event) {
@@ -1007,5 +1012,15 @@ export class StartsurveyPage implements OnInit {
       (index)=>{
         this.isactivesteppending = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].ispending
      });
+  }
+
+  promptstepquestion(event, index){
+    event.preventDefault();
+    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus){
+      this.showinfodetailsview = false;
+      this.blurcaptureview = true;
+      this.selectedshotindex = index;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
+    }
   }
 }
