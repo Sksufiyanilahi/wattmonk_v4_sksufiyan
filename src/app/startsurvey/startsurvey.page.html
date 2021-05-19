@@ -168,7 +168,7 @@
         *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult">
         <ion-grid class="noviewmodegrid">
           <ion-row>
-            <ion-col class="ion-text-center" size="12"><ion-toggle class="modetoggle"></ion-toggle></ion-col>
+            <ion-col class="ion-text-center" size="12"><ion-toggle class="modetoggle" (ionChange)="onchildmodechange($event)"></ion-toggle></ion-col>
             <ion-col class="ion-text-center" size="12"><p>Section has been turned off</p></ion-col>
           </ion-row>
         </ion-grid>

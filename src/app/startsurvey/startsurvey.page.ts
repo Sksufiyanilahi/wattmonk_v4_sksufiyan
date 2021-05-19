@@ -1023,4 +1023,31 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
     }
   }
+
+  onchildmodechange(event){
+    event.preventDefault();
+    let doesexist = event.target.checked;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;
+    this.blurcaptureview = false;
+    if (doesexist) {
+      this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+        element.ispending = true;
+        element.shotstatus = false;
+        if(element.questiontype != QUESTIONTYPE.NONE){
+          element.questionstatus = false;
+        }
+      });
+      console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex]);
+    } else {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+        element.ispending = false;
+        element.shotstatus = true;
+        element.questionstatus = true;
+      });
+      this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
+      this.markchildcompletion();
+    }
+  }
 }
