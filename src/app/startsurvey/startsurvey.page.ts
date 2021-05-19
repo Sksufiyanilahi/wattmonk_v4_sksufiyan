@@ -740,7 +740,7 @@ export class StartsurveyPage implements OnInit {
         } else {
           filename = imageToUpload.imagename + '.png';
         }
-        this.utilitieservice.setLoadingMessage('Uploading image ' + index + ' of ' + this.totalimagestoupload);
+        this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + this.totalimagestoupload);
         this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
           index++;
           mapOfImages.splice(0, 1);
