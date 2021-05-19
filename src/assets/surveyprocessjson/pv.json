@@ -38,7 +38,8 @@
                 "actions": [
                   "inside",
                   "outside"
-                ]
+                ],
+                "required": true
               },
               {
                 "questiontype": 2,
@@ -58,7 +59,8 @@
                 "result": "",
                 "actions": [
                   "confirm"
-                ]
+                ],
+                "required": true
               },
               {
                 "questiontype": 2,
@@ -78,7 +80,8 @@
                 "result": "",
                 "actions": [
                   "confirm"
-                ]
+                ],
+                "required": true
               },
               {
                 "questiontype": 1,
@@ -101,7 +104,8 @@
                   "bottom",
                   "center",
                   "none"
-                ]
+                ],
+                "required": true
               }
             ],
             "checkexistence": false,
@@ -137,7 +141,8 @@
                 "actions": [
                   "attach",
                   "detach"
-                ]
+                ],
+                "required": true
               },
               {
                 "questiontype": 2,
@@ -157,7 +162,8 @@
                 "result": "",
                 "actions": [
                   "confirm"
-                ]
+                ],
+                "required": true
               }
             ],
             "checkexistence": false,
@@ -193,7 +199,8 @@
                 "actions": [
                   "inside",
                   "outside"
-                ]
+                ],
+                "required": true
               },
               {
                 "questiontype": 4,
@@ -213,7 +220,8 @@
                 "result": "",
                 "actions": [
                   "confirm"
-                ]
+                ],
+                "required": true
               },
               {
                 "questiontype": 0,
@@ -231,7 +239,8 @@
                 "questioninfo": "PV Meter",
                 "questionstatus": false,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": true
               },
               {
                 "questiontype": 0,
@@ -249,7 +258,8 @@
                 "questioninfo": "",
                 "questionstatus": false,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": true
               },
               {
                 "questiontype": 0,
@@ -267,7 +277,8 @@
                 "questioninfo": "",
                 "questionstatus": false,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": true
               }
             ],
             "checkexistence": true,
@@ -311,7 +322,8 @@
                 "result": "",
                 "actions": [
                   "Confirm"
-                ]
+                ],
+                "required": true
               },
               {
                 "questiontype": 0,
@@ -329,7 +341,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               },
               {
                 "questiontype": 0,
@@ -347,7 +360,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               },
               {
                 "questiontype": 0,
@@ -365,7 +379,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               },
               {
                 "questiontype": 0,
@@ -383,7 +398,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               },
               {
                 "questiontype": 0,
@@ -401,7 +417,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               },
               {
                 "questiontype": 0,
@@ -419,7 +436,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               }
             ],
             "checkexistence": false,
@@ -452,7 +470,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               },
               {
                 "questiontype": 0,
@@ -470,7 +489,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               },
               {
                 "questiontype": 0,
@@ -488,7 +508,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               },
               {
                 "questiontype": 0,
@@ -506,7 +527,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               },
               {
                 "questiontype": 0,
@@ -524,7 +546,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               },
               {
                 "questiontype": 0,
@@ -542,7 +565,8 @@
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": false
               }
             ],
             "checkexistence": false,
@@ -584,7 +608,8 @@
                 "questioninfo": "",
                 "questionstatus": false,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": true
               },
               {
                 "questiontype": 0,
@@ -602,7 +627,8 @@
                 "questioninfo": "",
                 "questionstatus": false,
                 "result": "",
-                "actions": []
+                "actions": [],
+                "required": true
               }
             ],
             "checkexistence": true,

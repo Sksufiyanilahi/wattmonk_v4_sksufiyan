@@ -14,7 +14,7 @@ import { InverterMadeModel } from '../model/inverter-made.model';
 import { SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
 import { RoofMaterial } from '../model/roofmaterial.model';
-import { Animation, AnimationController, IonSlides, NavController } from '@ionic/angular';
+import { Animation, AnimationController, IonSlides, NavController, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 
@@ -63,6 +63,7 @@ export interface SHOT {
   placeholder?: string;
   imagekey: string;
   imagename: string;
+  required: boolean;
 }
 
 export interface CAPTUREDSHOT {
@@ -206,7 +207,8 @@ export class StartsurveyPage implements OnInit {
     private http: HttpClient,
     private insomnia: Insomnia,
     private navController: NavController,
-    private storage: Storage) { }
+    private storage: Storage,
+    public toastController: ToastController) { }
 
   ngOnInit() {
     this.user = this.storageuserdata.getUser();
@@ -571,39 +573,86 @@ export class StartsurveyPage implements OnInit {
   // API Calls to save Survey data at backend
   //------------------------------------------------------------------------------------------------------------------
 
-  saveFormData() {
-    this.utilitieservice.showLoading('Please wait...');
-    const data = {};
-    this.activeFormElementsArray.map(element => {
-      console.log("setting element value---" + element);
-      if(this.activeForm.get(element).value != ''){
-        data[element] = this.activeForm.get(element).value;
-        if (element === 'batterysystem') {
-          data[element] = this.activeForm.get('batterysystem').value.toString();
-        }
-        else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
-          data[element] = this.activeForm.get(element).value.id;
-        }
+  checkforincompleteitems() {
+
+  }
+
+  async navigatetoincompletestep(shotindex, childindex, mainindex) {
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+    this.selectedmainmenuindex = mainindex;
+    this.selectedsubmenuindex = childindex;
+    this.selectedshotindex = shotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+    const toast = await this.toastController.create({
+      message: 'Please complete the following step.',
+      duration: 2000
+    });
+    toast.present();
+  }
+
+  async saveFormData() {
+    //Code to check incomplete items
+    let nopendingshotfound = true;
+    this.mainmenuitems.forEach((mainmenuitem, mainindex) => {
+      if (mainmenuitem.ispending && nopendingshotfound) {
+        mainmenuitem.children.forEach((childelement, childindex) => {
+          if (childelement.ispending && nopendingshotfound) {
+            childelement.shots.forEach((shot, shotindex) => {
+              if (shot.required && shot.ispending && nopendingshotfound) {
+                nopendingshotfound = false;
+                this.navigatetoincompletestep(shotindex, childindex, mainindex);
+              }
+            });
+          }
+        });
       }
     });
-    data['status'] = 'surveycompleted';
-    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
-      this.utilitieservice.hideLoading().then(() => {
-        this.insomnia.keepAwake()
-          .then(
-            () => {
 
-            },
+    if (nopendingshotfound) {
+      if (this.activeForm.status == 'VALID') {
+        this.utilitieservice.showLoading('Please wait...');
+        const data = {};
+        this.activeFormElementsArray.map(element => {
+          console.log("setting element value---" + element);
+          if (this.activeForm.get(element).value != '') {
+            data[element] = this.activeForm.get(element).value;
+            if (element === 'batterysystem') {
+              data[element] = this.activeForm.get('batterysystem').value.toString();
+            }
+            else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
+              data[element] = this.activeForm.get(element).value.id;
+            }
+          }
+        });
+        data['status'] = 'surveycompleted';
+        this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
+          this.utilitieservice.hideLoading().then(() => {
+            this.insomnia.keepAwake()
+              .then(
+                () => {
 
-          );
-        this.uploadformelementsfiles(this.mainmenuitems[0], 0);
-      });
-    }, (error) => {
+                },
 
-      this.utilitieservice.hideLoading().then(() => {
-        this.utilitieservice.errorSnackBar('There was some error in processing the request');
-      });
-    });
+              );
+            this.uploadformelementsfiles(this.mainmenuitems[0], 0);
+          });
+        }, (error) => {
+
+          this.utilitieservice.hideLoading().then(() => {
+            this.utilitieservice.errorSnackBar('There was some error in processing the request');
+          });
+        });
+      }
+      else {
+        const toast = await this.toastController.create({
+          message: 'Please input required field details.',
+          duration: 2000
+        });
+        toast.present();
+      }
+    }
   }
 
   uploadformelementsfiles(mainmenuitem, mainindex) {
