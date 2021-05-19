@@ -571,7 +571,7 @@ export class StartsurveyPage implements OnInit {
   // API Calls to save Survey data at backend
   //------------------------------------------------------------------------------------------------------------------
 
-  savePVFormData() {
+  saveFormData() {
     this.utilitieservice.showLoading('Please wait...');
     const data = {};
     this.activeFormElementsArray.map(element => {
