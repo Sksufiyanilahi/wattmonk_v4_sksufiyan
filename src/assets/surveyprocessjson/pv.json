@@ -701,7 +701,7 @@
               },
               {
                 "inputformcontrol": ["utilitybillfront"],
-                "placeholder": "",
+                "placeholder": "Utility Bill Front",
                 "label": "5. Utility Bill Front",
                 "visibility": true,
                 "controltype": 9,
@@ -712,7 +712,7 @@
               },
               {
                 "inputformcontrol": ["utilitybillback"],
-                "placeholder": "",
+                "placeholder": "Utility Bill Back",
                 "label": "6. Utility Bill Back",
                 "visibility": true,
                 "controltype": 9,
@@ -734,7 +734,7 @@
               },
               {
                 "inputformcontrol": ["hoaattachements"],
-                "placeholder": "",
+                "placeholder": "HOA attachments",
                 "label": "8. HOA attachments",
                 "visibility": true,
                 "controltype": 8,
