@@ -260,7 +260,9 @@ export class StartsurveyPage implements OnInit {
             child.formelements.map(formElement => {
               formElement.attachments = [];
               formElement.fileurls = [];
-              this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
+              if(formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD){
+                this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
+              }
               if (formElement.required) {
                 formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
               } else {
@@ -573,9 +575,13 @@ export class StartsurveyPage implements OnInit {
     this.utilitieservice.showLoading('Please wait...');
     const data = {};
     this.activeFormElementsArray.map(element => {
+      console.log("setting element value---"+element);
       data[element] = this.activeForm.get(element).value;
       if (element === 'batterysystem') {
         data[element] = this.activeForm.get('batterysystem').value.toString();
+      }
+      if(element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel'){
+        data[element] = this.activeForm.get(element).value.id;
       }
     });
     data['status'] = 'surveycompleted';
@@ -614,8 +620,8 @@ export class StartsurveyPage implements OnInit {
   }
 
   uploadselectedattachments(formelement, index) {
-    this.utilitieservice.showLoading('Uploading ' + formelement.placeholder + ' file').then(() => {
-      const filedata = new FormData();
+    this.utilitieservice.setLoadingMessage('Uploading ' + formelement.placeholder + ' file');
+    const filedata = new FormData();
       filedata.append("files", formelement.attachments[index]);
       filedata.append('path', 'survey/' + this.surveyid);
       filedata.append('refId', this.surveyid + '');
@@ -629,7 +635,6 @@ export class StartsurveyPage implements OnInit {
           this.uploadImagesToServer();
         }
       });
-    });
   }
 
   uploadImagesToServer() {
@@ -918,28 +923,11 @@ export class StartsurveyPage implements OnInit {
   handleInputTextSubmission(form: FormGroup) {
     const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
     const control = form.get(activechild.shots[this.selectedshotindex].inputformcontrol);
-    if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_DETAILS) {
-      const inverterMake = form.get('invertermake');
-      const inverterModel = form.get('invertermodel');
-      if (inverterMake.value != '' && inverterModel.value != '') {
-        this.handleAnswerSubmission(`${inverterMake.value},${inverterModel.value}`);
-      } else {
-        if (inverterMake.value == '' || inverterMake.value == undefined) {
-          inverterMake.markAllAsTouched();
-          inverterMake.markAsDirty();
-        }
-        if (inverterModel.value == '' || inverterModel.value == undefined) {
-          inverterModel.markAllAsTouched();
-          inverterModel.markAsDirty();
-        }
-      }
+    if (control.value != '') {
+      this.handleAnswerSubmission(control.value);
     } else {
-      if (control.value != '') {
-        this.handleAnswerSubmission(control.value);
-      } else {
-        control.markAsTouched();
-        control.markAsDirty();
-      }
+      control.markAsTouched();
+      control.markAsDirty();
     }
   }
 
