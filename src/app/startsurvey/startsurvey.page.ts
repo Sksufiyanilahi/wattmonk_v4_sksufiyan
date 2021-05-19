@@ -138,6 +138,7 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('mainscroll', { static: false }) mainscroll: any;
   @ViewChild('submenuscroll', { static: false }) submenuscroll: any;
   @ViewChild('slideWithNav2', { static: false }) slideWithNav2: IonSlides;
+  @ViewChild('infoslider', { static: false }) infoslider: IonSlides;
   @ViewChild('singlefileuploadinput') singlefileuploadinput: ElementRef;
   @ViewChild('multiplefileuploadinput') multiplefileuploadinput: ElementRef;
 
@@ -187,6 +188,7 @@ export class StartsurveyPage implements OnInit {
   blurcaptureview = false;
   recapturingmode = false;
   showinfodetailsview = false;
+  isactivesteppending = true;
 
 
   infoslideoptions = {
@@ -1001,6 +1003,9 @@ export class StartsurveyPage implements OnInit {
   }
 
   infoslidechange(){
-
+    this.infoslider.getActiveIndex().then(
+      (index)=>{
+        this.isactivesteppending = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].ispending
+     });
   }
 }

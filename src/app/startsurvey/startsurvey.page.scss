@@ -360,8 +360,18 @@ ion-content {
     position: absolute;
     top: 0;
     z-index: 99;
-    background: #ffffff;
     border-radius: 0 0 36px 36px;
+    background-color: #ffffff;
+  }
+
+  .pending{
+    color: #718093;
+    font-weight: 100;
+  }
+
+  .completed{
+    color: #009432;
+    font-weight: 600;
   }
 
   .infoclosebutton {
@@ -375,14 +385,14 @@ ion-content {
   .infoslides {
     height: 150px;
     --bullet-background: #888888;
-    --bullet-background-active: #eebb5c;
+    --bullet-background-active: #718093;
   }
 
   .shotindex {
     margin: 0px;
     font-size: 16px;
     font-weight: 600;
-    color: #eebb5c;
+    color: #18191d;
   }
 
   .shotinfo {
