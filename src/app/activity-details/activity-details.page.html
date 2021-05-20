@@ -71,7 +71,7 @@
   <ion-row><span style="font-size:medium; float:left; color: black;">{{activities.activity}}</span></ion-row>
 <!--<span style="float: right !important; font-size: small; font-style: italic;" *ngIf="activities.performer!=null">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>-->
 <span style="float: right !important; font-size: small; font-style: italic;" *ngIf="activities.performer!=null && userData.role.type!='clientsuperadmin'">{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
-<span *ngIf="userData.role.type=='clientsuperadmin' && activities.performer.parent != userData.parent.id" style="float: right !important; font-size: small; font-style: italic;" >Wattmonk</span>
+<span *ngIf="userData.role.type=='clientsuperadmin' && activities.performer.parent != userData.parent.id" style="float: right !important; font-size: small; font-style: italic;" >WattMonk</span>
 <span *ngIf="userData.role.type=='clientsuperadmin' && activities.performer.parent == userData.parent.id" style="float: right !important; font-size: small; font-style: italic;" >{{activities.performer.firstname}} {{activities.performer.lastname}}</span>
 </ion-card>
 </ion-virtual-scroll>

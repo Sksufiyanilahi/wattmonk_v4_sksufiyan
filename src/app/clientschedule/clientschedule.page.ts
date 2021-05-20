@@ -93,7 +93,7 @@ export class ClientschedulePage implements OnInit {
       address: new FormControl(null),
       contactnumber: new FormControl(null),
       lic: new FormControl(null),
-      // countrycode : new FormControl(null), 
+      // countrycode : new FormControl(null),
       // //company : new FormControl(null),
       password: new FormControl(null),
       resetPasswordToken: new FormControl(null),
@@ -111,7 +111,7 @@ export class ClientschedulePage implements OnInit {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
     this.designData = this.router.getCurrentNavigation().extras.state;
-    this.id = this.designData.productdetails.queryParams.id;
+    this.id = 0;
   }
   ngOnInit() {
     this.user = this.storageService.getUser();

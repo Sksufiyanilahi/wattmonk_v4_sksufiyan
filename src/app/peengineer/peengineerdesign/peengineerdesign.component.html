@@ -37,6 +37,8 @@
       <span class="chipdetail" style="background-color: rgb(109, 187, 26);"   *ngIf=" designData.acceptedbypeengineer==true && designData.status == 'assigned'" >Accepted</span>
       <span class="chipdetail" style="background-color: rgb(109, 187, 26);padding: 4px 5px;" *ngIf="designData.status == 'completed'" ><ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon></span>
       <span class="chipdetail" style="background-color: rgb(183,21,64)" *ngIf="designData.isinrevisionstate"  >Revision</span>
+      <span class="chipdetail" style="background-color: rgb(109, 187, 26);"
+                            *ngIf="designData.status == 'delivered'">Delivered</span>
       </p>
 
       <p style="margin:0px">
@@ -106,7 +108,7 @@
                     </ion-col>
 
                     <ion-col *ngIf="segments=='status=completed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'">
-                      <span style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData)"
+                      <span style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(designData.id,designData,$event)"
                       >  &nbsp; Deliver</span>
                       <!-- <span (click)="openDesigners(designData.id,designData)" style="float:right !important;" class="ion-text-end action-button-color"
                       >Reassign</span> -->

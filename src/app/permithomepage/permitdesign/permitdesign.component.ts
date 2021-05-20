@@ -15,7 +15,7 @@ import { environment } from 'src/environments/environment';
 import { Observable, Subscription } from 'rxjs';
 import { DrawerState } from 'ion-bottom-drawer';
 //import { DesginDataHelper } from 'src/app/homepage/design/design.component';
-import { DesginDataModel } from 'src/app/model/design.model';
+import { DesginDataModel, permitCounts, prelimCounts } from 'src/app/model/design.model';
 import { AssigneeModel } from 'src/app/model/assignee.model';
 import { ErrorModel } from 'src/app/model/error.model';
 import { DeclinepagePage } from 'src/app/declinepage/declinepage.page';
@@ -90,6 +90,7 @@ export class PermitdesignComponent implements OnInit {
 //  newpermitsRef: AngularFireObject<any>;
 //  newpermitscount = 0;
   updatechat_id: boolean=false;
+  permitCounts: permitCounts=<permitCounts>{};
 
   constructor(private apiService:ApiService,
     private utils:UtilitiesService,
@@ -100,6 +101,7 @@ export class PermitdesignComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private storageservice:StorageService,
     private storage:Storage,
+    private storageService:StorageService,
     public alertController: AlertController,
     public modalController: ModalController,
     private socialsharing: SocialSharing,
@@ -230,6 +232,12 @@ this.deactivateNetworkSwitch.unsubscribe();
   }
 
   ngOnInit() {
+    let userId = this.storageService.getUserID()
+    let requesttype = "permit"
+    
+      this.apiService.getPermitcounts(userId,requesttype).subscribe(res=>{this.permitCounts =res;
+        console.log(this.permitCounts
+          )})
     this.makeDirectory();
     this.setupCometChat();
     this.DesignRefreshSubscription = this.utils.getHomepagePermitRefresh().subscribe((result) => {
@@ -253,13 +261,29 @@ this.deactivateNetworkSwitch.unsubscribe();
     this.fetchPendingDesigns(event, showLoader);
   }
 
-     accept(id,data:string,event){
+     accept(id,data:any,event){
        event.stopPropagation();
       this.mixpanel.track("ACCEPT_PERMIT_DESIGN_PAGE_OPEN", {
       });
       this.acceptid= id;
+     
+      var tomorrow = new Date();
+      if (data.deliverytimeslab == "4-6") {
+        tomorrow.setHours(tomorrow.getHours() + 4);
+       
+      } else if (data.deliverytimeslab == "6-12") {
+        tomorrow.setHours(tomorrow.getHours() + 12);
+        
+      } else if (data.deliverytimeslab == "12-24") {
+        tomorrow.setHours(tomorrow.getHours() + 24);
+       
+      } else if (data.deliverytimeslab == "24-48") {
+        tomorrow.setHours(tomorrow.getHours() + 48);
+        
+      }
        let status={
-        status:data
+        status:"requestaccepted",
+        deliverydate:tomorrow.toISOString()
       }
       this.utils.showLoading("accepting").then(()=>{
          this.apiService.updateDesignForm(status,id).subscribe((res:any)=>{
@@ -630,7 +654,7 @@ this.deactivateNetworkSwitch.unsubscribe();
     }
     else if (this.assignForm.status === 'INVALID' && ( this.designerData.status === 'created'|| this.designerData.status === 'requestaccepted'|| this.designerData.status === 'designassigned')) {
       if(this.userData.role.type=='clientsuperadmin'){
-        this.utils.errorSnackBar('Please select the wattmonk admin');
+        this.utils.errorSnackBar('Please select the WattMonk admin');
       }
       else{this.utils.errorSnackBar('Please select a designer');}
     }
@@ -712,7 +736,7 @@ this.deactivateNetworkSwitch.unsubscribe();
           if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
          {
           this.isclientassigning= true;
-          this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+          this.utils.showSnackBar('Design request has been assigned to WattMonk successfully');
           this.addUserToGroupChat();
          }else{
           this.addUserToGroupChat();
@@ -1189,7 +1213,7 @@ designDownload(designData,event){
 
 
 
-    let dir_name = 'Wattmonk';
+    let dir_name = 'WattMonk';
     let path = '';
     const url = designData.permitdesign.url;
    const fileTransfer: FileTransferObject = this.transfer.create();

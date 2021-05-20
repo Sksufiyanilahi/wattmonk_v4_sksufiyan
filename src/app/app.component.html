@@ -36,37 +36,37 @@
               </ion-menu-toggle>-->
               <ion-list id="inbox-list">
               <ion-menu-toggle auto-hide="false">
-                    <ion-item *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !== 'peengineer'" [routerLink]="['/dashboard']" routerDirection="forward" mode="md">
+                    <ion-item joyrideStep='dashboardhighlight' title="Dashboard" text="Here you get an overview of all your requests, along with those that needs your attention." *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !== 'peengineer'" [routerLink]="['/dashboard']" routerDirection="forward" mode="md">
                   <ion-img src="/assets/icon/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Dashboard</p></ion-item>
                 <!-- <ion-item [routerLink]="['/onboarding']" routerDirection="forward">
                   <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item> -->
-                    <ion-item  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'  && userData?.role.type!=='peengineer'" routerDirection="forward" mode="md">
+                    <ion-item joyrideStep='prelimhighlight' title="Site Assessments & Sales Proposals" text="Consolidated dashboard for all your site assessment and sales proposal requests with real-time status tracking."  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'  && userData?.role.type!=='peengineer'" routerDirection="forward" mode="md">
                        <!-- <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>  -->
                       <ion-img src="/assets/icon/Prelim.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Prelim
                         <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newprelimscounts > 0">{{ newprelimscounts }}</span></p></ion-item>
-                        <ion-item mode="md" *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='peengineer' && userData?.role.type !=='qcinspector' " (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
+                        <ion-item joyrideStep='surveyhighlight' title="Surveys" text="Consolidated dashboard for all your survey requests with real-time status tracking." mode="md" *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='peengineer' && userData?.role.type !=='qcinspector' " (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
                           <ion-img src="/assets/icon/Survey.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Survey</ion-item>
-                        <ion-item mode="md" (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="(userData?.role.type!=='surveyors' && userData?.role.type!=='peengineer') && !utilities.isspecificClient" routerDirection="forward">
+                        <ion-item joyrideStep='permithighlight' title="permit" text="Consolidated dashboard for all your premit design requests with real-time status tracking." mode="md" (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="(userData?.role.type!=='surveyors' && userData?.role.type!=='peengineer') && !utilities.isspecificClient" routerDirection="forward">
                       <ion-img src="/assets/icon/Permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Permit
                         <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
                       </ion-item>
-                        <ion-item mode="md" (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="(userData?.role.type!=='surveyors' && userData?.role.type!=='peengineer') && utilities.isspecificClient" routerDirection="forward">
+                        <ion-item joyrideStep='permithighlight' title="Designs" text="Consolidated dashboard for all your  design requests with real-time status tracking" mode="md" (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="(userData?.role.type!=='surveyors' && userData?.role.type!=='peengineer') && utilities.isspecificClient" routerDirection="forward">
                       <ion-img src="/assets/icon/Permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Designs
                         <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
                       </ion-item>
 
-                     <ion-item mode="md" [routerLink]="['/groups']" routerDirection="forward">
+                     <ion-item joyrideStep='inboxhighlight' title="Stay Connected" text="Consolidated dashboard for your group and individual chats." (next)="openMenu()" mode="md" [routerLink]="['/groups']" routerDirection="forward">
                       <ion-img src="/assets/icon/Inbox.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Inbox</ion-item>
                       <!-- <ion-item  (click)="SwitchMenuAccordingtoRoles('statistics')" *ngIf="userData?.role.type!='clientsuperadmin'" routerDirection="forward">
                        <ion-img src="/assets/icon/Stats.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Statistics</ion-item> -->
-                       <ion-item mode="md" (click)="SwitchMenuAccordingtoRoles('pestamp')" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
+                       <ion-item joyrideStep='pestamphighlight' title="PE Stamps" text="Consolidated dashboard for all your PE Stamp requests with real-time status tracking." mode="md" (click)="SwitchMenuAccordingtoRoles('pestamp')" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
                         <ion-img src="/assets/icon/PEStamping.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>PE Stamps
                         <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpestampscount > 0">{{ newpestampscount }}</span></p>
                       </ion-item>
                       <!-- <ion-item mode="md" routerLink="/comingsoon" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
                         <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
                       </ion-item> -->
-                      <ion-item  (click)="SwitchMenuAccordingtoRoles('team')" *ngIf="userData?.usertype=='company' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
+                      <ion-item joyrideStep='teamhighlight' title="Team" text="Build your team by adding new users and assigning them required roles." (next)="menuCtrl.close()" (click)="SwitchMenuAccordingtoRoles('team')" *ngIf="userData?.usertype=='company' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
                         <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
                       </ion-item>
                       <ion-item  (click)="SwitchMenuAccordingtoRoles('client')" *ngIf="userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin'" routerDirection="forward">

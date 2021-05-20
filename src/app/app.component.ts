@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
 
-import {AlertController, NavController, Platform} from '@ionic/angular';
+import {AlertController, NavController, Platform, MenuController} from '@ionic/angular';
 import {StorageService} from './storage.service';
 import {ApiService} from './api.service';
 import {UtilitiesService} from './utilities.service';
@@ -63,6 +63,8 @@ export class AppComponent {
   getclientsrole:any;
   userrole:string;
   specificclientid: any;
+  joyrideTitle="Design"
+  joyridetext ="Consolidated dashboard for all your  design requests with real-time status tracking."
 
   constructor(
     private platform: Platform,
@@ -76,6 +78,7 @@ export class AppComponent {
     private network: NetworkdetectService,
     private router: Router,
     private db: AngularFireDatabase,
+    public menuCtrl: MenuController,
     private changeDetectorRef: ChangeDetectorRef,
     private mix: MixpanelService,
     private backgroundMode: BackgroundMode,
@@ -106,6 +109,7 @@ export class AppComponent {
 
         changeDetectorRef.detectChanges();
       },
+
 
 
     );
@@ -380,7 +384,7 @@ export class AppComponent {
     } else if (this.userData.role.type !== 'clientsuperadmin' && type == 'statistics') {
       this.router.navigate(['/statistics']);
     } else if (this.userData.role.type !== 'designer' && this.userData.role.type !== 'qcinspector' && this.userData.role.type !== 'peengineer' && type == 'team') {
-      this.router.navigate(['/teamhomepage/team'])
+      this.router.navigate(['/teamhomepage'])
     }
     else if (this.userData.role.type !== 'designer' && this.userData.role.type !== 'qcinspector' && this.userData.role.type !== 'peengineer' && type == 'client') {
       this.router.navigate(['/clienthomepage'])
@@ -412,6 +416,12 @@ export class AppComponent {
 
       this.apiservice.emitMessageReceived('pushNotification');
     });
+  }
+  openMenu(){
+    if(this.user.usertype=='individual'){
+      this.menuCtrl.close();
+    }
+    else{}
   }
 
   setupCometChat(): Observable<any> {

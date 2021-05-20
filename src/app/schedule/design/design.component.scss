@@ -106,5 +106,19 @@ input[type="file"]{
   bottom: 30px;
 }
 
+// ion-item {
+//   --highlight-color-focused: var(--ion-color-primary, #3880ff);
+//     --highlight-color-valid: var(--ion-color-success, #2dd36f);
+//     --highlight-color-invalid: var(--ion-color-danger, #eb445a);
+// }
+
+// ion-item.myInvalid { border-left:5px solid red;}
+// ion-item.myValid   { border-left:5px solid green;}
+.invalid input {
+  border: 1px solid #ea6153;
+  border-radius: 5px;
+}
+
+
 
 

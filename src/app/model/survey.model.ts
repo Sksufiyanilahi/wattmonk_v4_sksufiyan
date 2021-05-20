@@ -85,4 +85,12 @@ export class SurveyDataModel {
   interconnectiondetails: string;
 }
 
+export class SurveyCount{
+  completed: String;
+delivered: String;
+inprocess: String;
+inreview: String;
+newsurvey: String;
+}
+
 

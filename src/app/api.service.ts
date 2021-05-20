@@ -841,5 +841,29 @@ export class ApiService {
         headers: this.headers
       })
     }
+
+    getPrelimcounts(id,requesttype):Observable<any>{
+      return this.http.get(BaseUrl + 'userdesigns/count?id=' + id+ '&requesttype=' +requesttype,{headers: this.headers});
+    }
+
+    getPermitcounts(id,requesttype):Observable<any>{
+      return this.http.get(BaseUrl + 'userdesigns/count?id=' + id+ '&requesttype=' +requesttype,{headers: this.headers});
+    }
+
+    getSurveycounts(id):Observable<any>{
+      return this.http.get(BaseUrl + 'usersurveys/count?id=' + id,{headers: this.headers});
+    }
+
+    getPEstampcounts(id):Observable<any>{
+      return this.http.get(BaseUrl + 'userpestamps/count?id=' + id,{headers: this.headers});
+    }
+
+    getCompanies(requesttype){
+      return this.http.get(BaseUrl +"getcompanies?requesttype="+requesttype,{
+        headers:this.headers
+      })
+    }
+
+
 }
 

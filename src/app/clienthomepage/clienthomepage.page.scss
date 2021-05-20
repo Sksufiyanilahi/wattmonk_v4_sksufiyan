@@ -2,27 +2,27 @@
     display: flex !important;
     flex-direction: column !important;
     background: white !important;
-    border-radius: 25px !important;
+    border-radius: 14px !important;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
     padding: 8px 12px;
   }
-  
+
   .customer-name {
-    font-size: 1em;
+    font-size: 1.2em;
     color: #434343;
     font-weight: bold;
     display:table;
     margin: 0px;
   }
-  
+
   .customer-email {
-    font-size: 0.8em;
+    font-size: 1em;
     color: #666666;
   }
 
   .profile_img{
-    height: 70px;
-    width: 70px;
+    height: 55px;
+    width: 55px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,7 +35,7 @@
     //border: 4px solid #4c8dff;
     margin:0px;
     border-radius:50%;
-  
+
   }
 
   .team {
@@ -49,9 +49,9 @@
     background-color: #EDC773;
     font-size: 1.0em;
     font-weight: 500;
-    width: 130%;
+    width: 65%;
     padding: 4px 10px;
-    border-radius: 35px;
+    border-radius: 5px;
     text-align: center;
     height: 28px;
     color: black;
@@ -67,7 +67,11 @@
 ion-icon
 {
     font-size: large;
-    margin: 2%;
+    // margin: 2%;
+}
+
+ion-content{
+  --ion-background-color:#FBF9F4;
 }
 
 .notification-padding {
@@ -91,4 +95,20 @@ ion-icon
     align-items: center;
     justify-content: center;
     border: 1px solid white;
+}
+
+ion-header{
+  --ion-background-color:#FBF9F4
+}
+
+ion-card-header{
+  display: flex;
+  justify-content: center;
+}
+
+.bar-header {
+  border: 0px !important;
+  border-bottom-color: transparent !important;
+  background-image: none !important;
+  border-bottom: none !important;
 }

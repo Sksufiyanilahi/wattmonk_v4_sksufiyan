@@ -328,4 +328,9 @@ state: { productdetails: objToSend }
       return await modal.present();
     }
 
+    Settings(){
+      this.router.navigate(['/settings'])
+
+    }
+
 }

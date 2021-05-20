@@ -97,3 +97,10 @@ export class Comment{
     type : string;
     createdby : User;
 }
+
+export class PEstampCount{
+    completed: String;
+    delivered: String;
+    instamping: String;
+    newpestamp: String;
+}

@@ -234,7 +234,7 @@ isArchitecturalFileUpload: boolean = false;
       postalcode: new FormControl(null),
       status: new FormControl('created'),
       attachments: new FormControl([]),
-      deliverydate: new FormControl(d_date, []),
+      deliverydate: new FormControl(),
       outsourcedto: new FormControl(null),
       isoutsourced: new FormControl('false'),
       designacceptancestarttime: new FormControl(null),
@@ -1416,7 +1416,7 @@ isArchitecturalFileUpload: boolean = false;
           ;
 
 
-          this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
+          this.utils.showSnackBar('Design request has been assigned to WattMonk successfully');//.firstname +" "+this.selectedDesigner.lastname + ' ' + 'successfully');
           this.router.navigate(['/homepage/design'])
           this.utils.setHomepageDesignRefresh(true);
         })
@@ -1525,14 +1525,17 @@ isArchitecturalFileUpload: boolean = false;
     if (this.designCreatedBy !== null && this.designCreatedByUserParent !== null) {
       var designacceptancestarttime = new Date();
       designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 15);
-
+      var tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      var d_date = tomorrow.toISOString();
       this.desginForm.patchValue({
         createdby: this.designCreatedBy,
         creatorparentid: this.designCreatedByUserParent,
         status: "requestaccepted",
         outsourcedto: "232",
         isoutsourced: "true",
-        designacceptancestarttime: designacceptancestarttime
+        designacceptancestarttime: designacceptancestarttime,
+        deliverydate:d_date
       })
     }
   }

@@ -218,19 +218,23 @@ const routes: Routes = [
     },
     {
         path: 'onhold',
-        loadChildren: () => import('./onhold/onhold.module').then(m => m.OnholdPageModule)
+        loadChildren: () => import('./onhold/onhold.module').then(m => m.OnholdPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'waitingforacceptance',
-        loadChildren: () => import('./waitingforacceptance/waitingforacceptance.module').then(m => m.WaitingforacceptancePageModule)
+        loadChildren: () => import('./waitingforacceptance/waitingforacceptance.module').then(m => m.WaitingforacceptancePageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'unassigned',
-        loadChildren: () => import('./unassigned/unassigned.module').then(m => m.UnassignedPageModule)
+        loadChildren: () => import('./unassigned/unassigned.module').then(m => m.UnassignedPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'revision',
-        loadChildren: () => import('./revision/revision.module').then(m => m.RevisionPageModule)
+        loadChildren: () => import('./revision/revision.module').then(m => m.RevisionPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'pestamp-schedule',
@@ -264,78 +268,97 @@ const routes: Routes = [
     },
     {
         path: 'peengineer',
-        loadChildren: () => import('./peengineer/peengineer.module').then(m => m.PEengineerPageModule)
+        loadChildren: () => import('./peengineer/peengineer.module').then(m => m.PEengineerPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'comingsoon',
-        loadChildren: () => import('./comingsoon/comingsoon.module').then(m => m.ComingsoonPageModule)
+        loadChildren: () => import('./comingsoon/comingsoon.module').then(m => m.ComingsoonPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'pestampdelivermodal',
-        loadChildren: () => import('./pestampdelivermodal/pestampdelivermodal.module').then(m => m.PestampdelivermodalPageModule)
+        loadChildren: () => import('./pestampdelivermodal/pestampdelivermodal.module').then(m => m.PestampdelivermodalPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'callingscreen',
-        loadChildren: () => import('./callingscreen/callingscreen.module').then(m => m.CallingscreenPageModule)
+        loadChildren: () => import('./callingscreen/callingscreen.module').then(m => m.CallingscreenPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'teamschedule',
-        loadChildren: () => import('./teamschedule/teamschedule.module').then(m => m.TeamschedulePageModule)
+        loadChildren: () => import('./teamschedule/teamschedule.module').then(m => m.TeamschedulePageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'teamschedule/:id',
-        loadChildren: () => import('./teamschedule/teamschedule.module').then(m => m.TeamschedulePageModule)
+        loadChildren: () => import('./teamschedule/teamschedule.module').then(m => m.TeamschedulePageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'sales-proposal',
-        loadChildren: () => import('./sales-proposal/sales-proposal.module').then(m => m.SalesProposalPageModule)
+        loadChildren: () => import('./sales-proposal/sales-proposal.module').then(m => m.SalesProposalPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'userregistration',
-        loadChildren: () => import('./userregistration/userregistration.module').then(m => m.UserregistrationPageModule)
+        loadChildren: () => import('./userregistration/userregistration.module').then(m => m.UserregistrationPageModule),
+        // canActivate: [AuthGuardService]
     },
     {
         path: 'profile-edit-modal',
-        loadChildren: () => import('./profile-edit-modal/profile-edit-modal.module').then(m => m.ProfileEditModalPageModule)
+        loadChildren: () => import('./profile-edit-modal/profile-edit-modal.module').then(m => m.ProfileEditModalPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'teamdetails/:id',
-        loadChildren: () => import('./teamdetails/teamdetails.module').then(m => m.TeamdetailsPageModule)
+        loadChildren: () => import('./teamdetails/teamdetails.module').then(m => m.TeamdetailsPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'teamhomepage',
-        loadChildren: () => import('./teamhomepage/teamhomepage.module').then(m => m.TeamhomepagePageModule)
+        loadChildren: () => import('./teamhomepage/teamhomepage.module').then(m => m.TeamhomepagePageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'groupschedule',
-        loadChildren: () => import('./groupschedule/groupschedule.module').then(m => m.GroupschedulePageModule)
+        loadChildren: () => import('./groupschedule/groupschedule.module').then(m => m.GroupschedulePageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'groupschedule/:id',
-        loadChildren: () => import('./groupschedule/groupschedule.module').then(m => m.GroupschedulePageModule)
+        loadChildren: () => import('./groupschedule/groupschedule.module').then(m => m.GroupschedulePageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'groupdetails',
-        loadChildren: () => import('./groupdetails/groupdetails.module').then(m => m.GroupdetailsPageModule)
+        loadChildren: () => import('./groupdetails/groupdetails.module').then(m => m.GroupdetailsPageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'clientschedule',
-        loadChildren: () => import('./clientschedule/clientschedule.module').then(m => m.ClientschedulePageModule)
+        loadChildren: () => import('./clientschedule/clientschedule.module').then(m => m.ClientschedulePageModule),
+        canActivate: [AuthGuardService]
     },
     {
         path: 'clienthomepage',
-        loadChildren: () => import('./clienthomepage/clienthomepage.module').then(m => m.ClienthomepagePageModule)
+        loadChildren: () => import('./clienthomepage/clienthomepage.module').then(m => m.ClienthomepagePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'filterpage',
+        loadChildren: () => import('./filterpage/filterpage.module').then(m => m.FilterpagePageModule)
+    },
+    {
+        path: 'design-tracker',
+        loadChildren: () => import('./design-tracker/design-tracker.module').then(m => m.DesignTrackerPageModule)
     },
     {
         path: 'startsurvey/:id/:type/:city/:state',
         loadChildren: () => import('./startsurvey/startsurvey.module').then(m => m.StartsurveyPageModule),
         canActivate: [AuthGuardService]
     },
-
-
-
-
-
 ];
 
 @NgModule({

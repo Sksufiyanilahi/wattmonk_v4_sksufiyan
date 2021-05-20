@@ -106,6 +106,7 @@ export class UnassignedPage implements OnInit {
 
   ) {
     this.userData = this.storageService.getUser();
+    console.log(this.userData)
     if(this.userData.role.type=='clientsuperadmin' || this.userData.role.type=='clientadmin'){
       this.segments= 'status=created';
     }else{
@@ -329,6 +330,7 @@ this.network.networkConnect();
               dateB = new Date(b.date).getTime();
             return dateB - dateA;
           });
+          console.log(this.listOfDesignsHelper)
           this.cdr.detectChanges();
   }
 
@@ -447,7 +449,7 @@ this.network.networkConnect();
     }
     else if (this.assignForm.status === 'INVALID' && ( this.designerData.status === 'created'|| this.designerData.status === 'requestaccepted'|| this.designerData.status === 'designassigned')) {
       if(this.userData.role.type=='clientsuperadmin'){
-        this.utils.errorSnackBar('Please select the wattmonk admin');
+        this.utils.errorSnackBar('Please select the WattMonk admin');
       }
       else{this.utils.errorSnackBar('Please select a designer');}
     }
@@ -526,7 +528,7 @@ this.network.networkConnect();
           if(this.userData.role.type==='clientsuperadmin' && this.designerData.status==='created')
          {
            this.isclientassigning= true;
-          this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
+          this.utils.showSnackBar('Design request has been assigned to WattMonk successfully');
           this.addUserToGroupChat();
          }else{
           this.addUserToGroupChat();
@@ -984,7 +986,7 @@ this.platform.ready().then(()=>{
 
 
 
-  let dir_name = 'Wattmonk';
+  let dir_name = 'WattMonk';
   let path = '';
   const url = designData.prelimdesign.url;
  const fileTransfer: FileTransferObject = this.transfer.create();
@@ -1072,7 +1074,7 @@ directAssignToWattmonk(id:number){
             //  {
             //   this.utils.showSnackBar('Design request has been assigned to wattmonk successfully');
             //  }else{
-              this.utils.showSnackBar('Design request has been reassigned to wattmonk successfully');
+              this.utils.showSnackBar('Design request has been reassigned to WattMonk successfully');
 
               //this.dismissBottomSheet();
               //this.showBottomDraw = false;

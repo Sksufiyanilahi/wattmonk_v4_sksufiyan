@@ -89,6 +89,7 @@
     "moment": "^2.29.1",
     "ng2-charts": "^2.4.2",
     "ngx-image-compress": "^11.0.3",
+    "ngx-joyride": "^2.4.0",
     "ngx-paypal": "^7.0.0",
     "ngx-pinch-zoom": "^2.5.5",
     "ngx-timer": "^1.0.6",

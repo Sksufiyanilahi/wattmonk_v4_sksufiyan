@@ -368,7 +368,7 @@ export class PestampPaymentModalPage implements OnInit {
         this.newpestampRef.update({ count: this.newpestampscount + 1});
         // }
           this.utils.hideLoading().then(()=>
-         { this.utils.showSnackBar("pe stamp request has been send to wattmonk successfully")
+         { this.utils.showSnackBar("pe stamp request has been send to WattMonk successfully")
          //this.navController.pop();
         //  if(this.design=='prelim'){
         //    this.router.navigate(['/homepage/design'])
@@ -528,7 +528,7 @@ this.router.navigate(['/add-money'], {
             {this.apiService.updateDesignForm(postData,this.id).subscribe(value=>{
               this.newpestampRef.update({ count: this.newpestampscount + 1});
               this.utils.hideLoading().then(()=>
-             { this.utils.showSnackBar("Pe Stamp request has been send to wattmonk successfully")
+             { this.utils.showSnackBar("Pe Stamp request has been send to WattMonk successfully")
              //this.navController.pop();
             //  if(this.design=='prelim'){
             //   this.router.navigate(['/homepage/design'])
@@ -784,7 +784,7 @@ this.router.navigate(['/add-money'], {
             this.newpestampRef.update({ count: this.newpestampscount + 1});
             // }
               this.utils.hideLoading().then(()=>
-             { this.utils.showSnackBar("pe stamp request has been send to wattmonk successfully")
+             { this.utils.showSnackBar("pe stamp request has been send to WattMonk successfully")
              //this.navController.pop();
             //  if(this.design=='prelim'){
             //    this.router.navigate(['/homepage/design'])

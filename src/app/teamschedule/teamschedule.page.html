@@ -52,7 +52,7 @@
         <ion-col>
             <ion-item class="ion-no-padding">
                 <ion-label position="floating">Work Email*</ion-label>
-                <ion-input type="text" class="form_input" formControlName="workemail"
+                <ion-input type="text" class="form_input" formControlName="workemail" [disabled]="isEditMode"
                             ></ion-input>
             </ion-item>
           <div style="height: 5px;">
@@ -73,7 +73,7 @@
               <ion-col size="6" *ngFor="let role of roles">
             <ion-item lines="none">
               <ion-label class="margin" style="font-size: small;">{{role.displayname}}</ion-label>
-              <ion-radio slot="start" name="{{role.role.name}}" [value]="role.role.id" (ionFocus)="roleChange(role.role.id)"></ion-radio>
+              <ion-radio slot="start" name="{{role.role.name}}" [value]="role.role.id" (ionFocus)="roleChange(role.role.id)" style="margin: 10px;"></ion-radio>
             </ion-item>
           </ion-col>
         

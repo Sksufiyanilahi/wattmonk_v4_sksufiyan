@@ -717,7 +717,7 @@ designDownload(designData,event){
     })
   })
 
-    let dir_name = 'Wattmonk';
+    let dir_name = 'WattMonk';
     let path = '';
     const url = designData.stampedfiles.url;
    const fileTransfer: FileTransferObject = this.transfer.create();
@@ -745,7 +745,8 @@ designDownload(designData,event){
 
   }
 
-  async openreviewPassed(id,designData){
+  async openreviewPassed(id,designData,event){
+    event.stopPropagation()
     this.mixpanelService.track("DELIVER_PESTAMP_PAGE_OPEN", {
     });
     const modal = await this.modalController.create({
