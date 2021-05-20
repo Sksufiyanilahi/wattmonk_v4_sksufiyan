@@ -77,7 +77,7 @@ export class CompletedsurveysComponent implements OnInit {
     this.listOfSurveyData = [];
     this.listOfSurveyDataHelper = [];
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Surveys').then((success) => {
-      this.apiService.getSurveyorSurveys("status=surveycompleted").subscribe(response => {
+      this.apiService.getSurveyorSurveys("status=completed").subscribe(response => {
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
 
           this.formatSurveyData(response);

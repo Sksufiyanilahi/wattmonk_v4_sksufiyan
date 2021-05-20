@@ -18,7 +18,7 @@
                       <span class="chipdetail" style="background-color: #1289A7;"  routerDirection="forward">
                         {{utils.formatTimeInDisplayFormat(surveyData.datetime)}}
                     </span>
-                      <!-- <span *ngIf="surveyData.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;"  routerDirection="forward">
+                      <!-- <span *ngIf="surveyData.status=='assigned'" class="chipdetail" style="background-color: #3C78D8;"  routerDirection="forward">
                         Pending
                     </span> -->
                     <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="surveyData.lateby > 0">Overdue</span> -->
@@ -58,7 +58,7 @@
                     <ion-col></ion-col>
                     <ion-col class="ion-no-margin ion-no-padding">
                    <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
-                        <ion-button *ngIf="surveyData.status=='surveyassigned'" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="assignedTo(surveyData,$event)">
+                        <ion-button *ngIf="surveyData.status=='assigned'" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="assignedTo(surveyData,$event)">
                         Start Survey
                     </ion-button>
                     <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="resumeSurvey(surveyData,$event)">

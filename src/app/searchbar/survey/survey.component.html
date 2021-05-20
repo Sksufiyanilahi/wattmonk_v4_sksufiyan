@@ -27,7 +27,7 @@
                         (click)="openAddressOnMap(surveyData.address)">{{(surveyData.address | slice:0:60) + (surveyData.address?.length > 60 ? '...' : '')}}</span>
                   <ion-row class="ion-no-margin ion-no-margin">
                       <ion-col size="auto" class="ion-no-margin ion-no-padding"
-                               *ngIf="surveyData.status !== 'surveycompleted'"
+                               *ngIf="surveyData.status !== 'completed'"
                                [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]"
                                routerDirection="forward">
                           <span class="ion-text-end action-button-color">Start Survey</span>

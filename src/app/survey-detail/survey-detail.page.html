@@ -21,7 +21,7 @@
                 </ion-grid>
             </ion-col> -->
       <ion-col size="2"
-        *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined'|| (user.role.type == 'surveyors' && survey.status == 'surveyassigned'))"
+        *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || (user.role.type == 'surveyors' && survey.status == 'assigned'))"
         style="text-align: right !important">
         <ion-button fill="clear" size="small" class="ion-no-padding" [routerLink]="['/schedule/survey/',surveyId]"
           routerDirection="forward">
@@ -29,7 +29,7 @@
         </ion-button>
       </ion-col>
       <ion-col size="2"
-        *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'requestdeclined'|| survey.status == 'surveycompleted' || (user.role.type == 'surveyors' && survey.status == 'surveyassigned'))"
+        *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || survey.status == 'completed' || (user.role.type == 'surveyors' && survey.status == 'assigned'))"
         style="text-align: right !important" size="2">
         <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteSurvey()">
           <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
@@ -56,7 +56,7 @@
   <!-- <ion-grid fixed> -->
   <!-- <ion-row> -->
   <!-- <ion-col> -->
-  <ion-segment scrollable [(ngModel)]="segments" class="wd140 colorwht" *ngIf='survey.status =="surveycompleted"'
+  <ion-segment scrollable [(ngModel)]="segments" class="wd140 colorwht" *ngIf='survey.status =="completed"'
     mode="md">
     <ion-segment-button value="SiteDetils" class="wd140 colorwht">
       <ion-label> Site Details </ion-label>
@@ -736,7 +736,7 @@
     </ion-grid> -->
 </ion-content>
 <ion-footer
-  *ngIf="((user.role.type=='clientadmin' || user.role.type=='bd')&& survey && survey.status=='created')||(user.role.type=='clientadmin' && survey && survey.status=='surveyassigned')"
+  *ngIf="((user.role.type=='clientadmin' || user.role.type=='bd')&& survey && survey.status=='created')||(user.role.type=='clientadmin' && survey && survey.status=='assigned')"
   class="ion-no-border white-bg">
   <ion-grid>
     <ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">

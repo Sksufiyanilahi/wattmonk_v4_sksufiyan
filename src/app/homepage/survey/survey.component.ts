@@ -108,7 +108,7 @@ export class SurveyComponent {
 
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl(0, [Validators.required]),
-      status: new FormControl('surveyassigned', [Validators.required])
+      status: new FormControl('assigned', [Validators.required])
     });
   }
 
@@ -565,7 +565,7 @@ export class SurveyComponent {
             postData = {
               assignedto: this.selectedDesigner.id,
               isoutsourced: "false",
-              status: "surveyassigned",
+              status: "assigned",
               surveystarttime: surveystarttime
             };
 
@@ -582,7 +582,7 @@ export class SurveyComponent {
         if (this.selectedDesigner.role.type == "surveyors") {
           postData = {
             assignedto: this.selectedDesigner.id,
-            status: "surveyassigned",
+            status: "assigned",
             surveystarttime: surveystarttime
           };
         }

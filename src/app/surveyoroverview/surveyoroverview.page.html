@@ -1,12 +1,3 @@
-
-  <!-- <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Survey</ion-title>
-  </ion-toolbar> -->
-
-
 <ion-content [forceOverscroll]="false">
   <ion-grid>
     <ion-row class="ion-align-items-center">
@@ -18,9 +9,6 @@
         <ion-col>
             <h1 class="ion-no-padding ion-no-margin home">Survey</h1>
         </ion-col>
-        <!-- <ion-col *ngIf="showSearchBar === true" >
-            <ion-searchbar debounce="0" placeholder="home" class="custom"></ion-searchbar>
-        </ion-col> -->
         <ion-col size="auto" >
           <div class="notification-padding" style="display:flex" [routerLink]="['/schedule/survey']">
               <ion-icon name="add-circle" style="font-size: 27px;"></ion-icon>
@@ -49,43 +37,8 @@
       <ion-tab-button tab="newsurveys">
         <ion-label>Pending</ion-label>
       </ion-tab-button>
-      <!-- <ion-tab-button tab="inreviewsurveys">
-        <ion-label>In Progress</ion-label>
-      </ion-tab-button> -->
       <ion-tab-button tab="completedsurveys">
         <ion-label>Completed</ion-label>
       </ion-tab-button>
-
-      <!-- <ion-tab-button tab="deliveredsurveys">
-        <ion-label>Delivered</ion-label>
-      </ion-tab-button> -->
     </ion-tab-bar>
   </ion-tabs>
-
-
-<!-- <ion-footer class="ion-no-border white-bg">
-  <div class="position-relative">
-    <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
-      <ion-row>
-        <ion-col size="4">
-          <div class="tab">
-            <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>
-            <span class="tabText">Home</span>
-          </div>
-        </ion-col>
-        <ion-col size="4" [routerLink]="['/message']">
-          <div class="tab">
-            <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
-            <span class="tabText">Messages</span>
-          </div>
-        </ion-col>
-        <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
-          <div class="tab">
-            <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
-            <span class="tabText">Profile</span>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
-</ion-footer> -->

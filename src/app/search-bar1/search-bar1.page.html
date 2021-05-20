@@ -79,7 +79,7 @@
                     <span class="chipdetail" *ngIf="search?.isoutsourced == 'true'"
                         style="background-color: rgb(246, 104, 10);"
                         [routerLink]="['/design-details/',search?.id]">Outsourced</span>
-                    <span *ngIf="search?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;"
+                    <span *ngIf="search?.status=='assigned'" class="chipdetail" style="background-color: #3C78D8;"
                         [routerLink]="['/design-details/',search?.id]">
                         pending
                     </span>
@@ -178,7 +178,7 @@
                     <span class="chipdetail" *ngIf="search?.isoutsourced == 'true'" style="background-color: #95AFC0;"
                         [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">Waiting for
                         acceptance</span>
-                    <span *ngIf="search?.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;"
+                    <span *ngIf="search?.status=='assigned'" class="chipdetail" style="background-color: #3C78D8;"
                         [routerLink]="['/survey-detail/',search?.id]" routerDirection="forward">
                         pending
                     </span></p>

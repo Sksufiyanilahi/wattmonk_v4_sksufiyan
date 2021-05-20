@@ -457,7 +457,7 @@ assignToSurveyor(){
        if(this.selectedDesigner.role.type=="surveyor") { postData = {
           designassignedto: this.selectedDesigner.id,
           isoutsourced: "false",
-          status: "surveyassigned",
+          status: "assigned",
           designstarttime: designstarttime
         };
 
@@ -474,7 +474,7 @@ assignToSurveyor(){
     } else {
       if(this.selectedDesigner.role.type=="surveyor"){ postData = {
         designassignedto: this.selectedDesigner.id,
-        status: "surveyassigned",
+        status: "assigned",
         designstarttime: designstarttime
       };}
       if(this.selectedDesigner.role.type=="qcinspector"){

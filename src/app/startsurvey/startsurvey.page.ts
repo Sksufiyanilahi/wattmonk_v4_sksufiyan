@@ -622,7 +622,7 @@ export class StartsurveyPage implements OnInit {
             }
           }
         });
-        data['status'] = 'surveycompleted';
+        data['status'] = 'completed';
         this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
           this.utilitieservice.hideLoading().then(() => {
             this.insomnia.keepAwake()

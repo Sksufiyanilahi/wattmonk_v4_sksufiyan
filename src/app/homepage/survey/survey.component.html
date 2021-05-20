@@ -3,10 +3,10 @@
     <ion-segment-button value="status=created&status=outsourced&status=requestaccepted">
         <ion-label class="segment-btn">New ({{this.SurveyCounts.newsurvey}})</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="status=surveyassigned&status=surveyinprocess">
+    <ion-segment-button value="status=assigned">
         <ion-label class="segment-btn">In Progress ({{this.SurveyCounts.inprocess}})</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="status=surveycompleted">
+    <ion-segment-button value="status=completed">
         <ion-label class="segment-btn">Completed ({{this.SurveyCounts.completed}})</ion-label>
     </ion-segment-button>
     <!-- <ion-segment-button value="status=reviewassigned&status=reviewpassed&status=reviewfailed">
@@ -49,7 +49,7 @@
                             routerDirection="forward">
                             {{utils.formatTimeInDisplayFormat(surveyData.datetime)}}
                         </span>
-                        <span routerDirection="forward" *ngIf="surveyData.status=='surveyassigned'" class="chipdetail"
+                        <span routerDirection="forward" *ngIf="surveyData.status=='assigned'" class="chipdetail"
                             style="background-color: #3C78D8;" routerDirection="forward">
                             pending
                         </span>
@@ -73,7 +73,7 @@
                         (click)="openAddressOnMap(surveyData.address,$event)">{{(surveyData.address | slice:0:60) +
                         (surveyData.address?.length > 60 ? '...' : '')}}</span>
                     <p style="margin: 0px;" class="ion-no-padding"
-                        *ngIf="segments=='status=surveyassigned&status=surveyinprocess' || segments=='status=surveycompleted'">
+                        *ngIf="segments=='status=assigned' || segments=='status=completed'">
                         <!-- <ion-col style="font-size: 0.8em;"> -->
                         <span><strong>Assigned to : {{surveyData.assignedto.firstname | titlecase}}
                                 {{surveyData.assignedto.lastname | titlecase}}</strong></span>
@@ -126,7 +126,7 @@
                             >Assign Review</span> -->
 
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
-                            *ngIf="segments=='status=surveyassigned&status=surveyinprocess'"
+                            *ngIf="segments=='status=assigned'"
                             style="margin-bottom: 5px;">
                             <span *ngIf="surveyData.status !=='surveyinprocess'"
                                 class="ion-text-end action-button-color z-100"
@@ -137,7 +137,7 @@
                                 &nbsp; Resume Survey
                             </span>
                         </ion-col>
-                        <ion-col size="auto" class=" " *ngIf="segments=='status=surveycompleted'"
+                        <ion-col size="auto" class=" " *ngIf="segments=='status=completed'"
                             style="margin-bottom: 5px;">
                             <span *ngIf="surveyData.surveypdf!== null" style="float:right !important;"
                                 class="ion-text-end action-button-color" (click)="designDownload(surveyData,$event)">
@@ -189,7 +189,7 @@
                         </ion-col>
                     </ion-row>
                     <ng-container
-                        *ngIf="userData.id==surveyData.assignedto?.id && surveyData.status =='surveyassigned'">
+                        *ngIf="userData.id==surveyData.assignedto?.id && surveyData.status =='assigned'">
                         <ion-progress-bar [value]="surveyData.totalpercent" mode="ios" color="success"
                             class="progress-bar-height"></ion-progress-bar>
                     </ng-container>

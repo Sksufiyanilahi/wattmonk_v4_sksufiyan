@@ -3,10 +3,10 @@
      <!-- <ion-segment-button value="status=created&status=outsourced&status=requestaccepted">
         <ion-label class="segment-btn">Pending</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="status=surveyassigned&status=surveyinprocess">
+      <ion-segment-button value="status=assigned">
         <ion-label class="segment-btn">In Progress</ion-label>
       </ion-segment-button>
-      <ion-segment-button value="status=surveycompleted">
+      <ion-segment-button value="status=completed">
         <ion-label class="segment-btn">Completed</ion-label>
       </ion-segment-button>-->
      <!-- <ion-segment-button value="status=reviewassigned&status=reviewpassed&status=reviewfailed">-->
@@ -40,7 +40,7 @@
                           <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                             {{surveyData.datetime | date: 'hh:mm a'}}
                         </span>
-                        <span *ngIf="surveyData.status=='surveyassigned'" class="chipdetail" style="background-color: #3C78D8;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
+                        <span *ngIf="surveyData.status=='assigned'" class="chipdetail" style="background-color: #3C78D8;" [routerLink]="['/survey-detail/',surveyData.id]" routerDirection="forward">
                           pending
                       </span>
                         <span class="chipdetail" style="background-color: rgb(246, 77, 10);" [routerLink]="['/survey-detail/',surveyData.id]" *ngIf="surveyData.lateby > 0">Overdue</span>
@@ -104,7 +104,7 @@
                       >Reassign</span>
                       </ion-col>
                       <ion-col size="auto" class="ion-no-margin ion-no-padding"
-                                  *ngIf="segments=='status=surveycompleted'" style="margin-bottom: 5px;">
+                                  *ngIf="segments=='status=completed'" style="margin-bottom: 5px;">
                           <span *ngIf="surveyData.status == 'created' || surveyData.status == 'requestaccepted'" class="ion-text-end action-button-color z-100"
                                   (click)="openSurveyors(surveyData.id)">Assign Review</span>
                       </ion-col>

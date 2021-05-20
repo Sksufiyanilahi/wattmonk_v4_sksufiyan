@@ -166,9 +166,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     } else {
       this.utilities.showLoading('Saving Survey').then(() => {
         // if(this.userData.role.type=== 'surveyors'){
-        //   this.surveyForm.get('status').setValue('surveyassigned');
-        // }else{
-        //   this.surveyForm.get('status').setValue('surveyinprocess');
+        //   this.surveyForm.get('status').setValue('assigned');
         // }
         if (this.surveyId !== 0) {
           this.surveyForm.get('chatid').setValue(this.survey.chatid);
@@ -281,7 +279,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
         this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
         if (this.userData.role.type === 'surveyors') {
           this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
-          this.surveyForm.get('status').setValue('surveyassigned');
+          this.surveyForm.get('status').setValue('assigned');
         }
         if (this.surveyId !== 0) {
           this.surveyForm.get('chatid').setValue(this.survey.chatid);
@@ -309,7 +307,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
             && this.surveyForm.get('assignedto').value !== undefined
             && this.surveyForm.get('assignedto').value !== 0
           ) {
-            this.surveyForm.get('status').setValue('surveyassigned');
+            this.surveyForm.get('status').setValue('assigned');
           }
 
           this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
@@ -419,7 +417,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           if (this.survey.assignedto !== null && this.survey.assignedto !== undefined) {
             this.surveyForm.patchValue({
               assignedto: this.survey.assignedto.id,
-              status: 'surveyassigned'
+              status: 'assigned'
             });
           }
           this.utilities.setStaticAddress(this.survey.address);
@@ -435,7 +433,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
     let postData = {
       assignedto: this.userData.id,
-      status: "surveyassigned"
+      status: "assigned"
     };
     this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
 

@@ -57,7 +57,7 @@ export class SurveyComponent implements OnInit {
 
     this.assignForm = this.formBuilder.group({
       assignedto: new FormControl('', [Validators.required]),
-      status: new FormControl('surveyassigned', [Validators.required])
+      status: new FormControl('assigned', [Validators.required])
     });
   }
 

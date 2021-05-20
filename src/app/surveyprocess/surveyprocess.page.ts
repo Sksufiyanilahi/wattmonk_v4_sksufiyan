@@ -1773,7 +1773,7 @@ export class SurveyprocessPage implements OnInit {
       pvmeter: JSON.parse(this.batteryForm.get('pvmeter').value),
       acdisconnect: JSON.parse(this.batteryForm.get('acdisconnect').value),
       interconnection: this.batteryForm.get('interconnection').value,
-      status: 'surveycompleted'
+      status: 'completed'
     };
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
 
@@ -1834,7 +1834,7 @@ export class SurveyprocessPage implements OnInit {
       rooftype: this.activeForm.get('rooftype').value,
       roofmaterial: this.activeForm.get('roofmaterial').value.id,
       additionalnotes: this.activeForm.get('additionalnotes').value,
-      status: 'surveycompleted'
+      status: 'completed'
     };
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
       this.utilitieservice.hideLoading().then(() => {
@@ -1930,7 +1930,7 @@ export class SurveyprocessPage implements OnInit {
         data[element] = this.activeForm.get('distancebetweentworafts').value === '' ? 0 : this.activeForm.get('distancebetweentworafts').value;
       }
     });
-    data['status'] = 'surveycompleted';
+    data['status'] = 'completed';
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
       this.utilitieservice.hideLoading().then(() => {
         this.insomnia.keepAwake()
