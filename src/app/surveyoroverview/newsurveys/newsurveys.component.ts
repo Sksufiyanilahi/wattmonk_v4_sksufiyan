@@ -296,12 +296,11 @@ export class NewsurveysComponent implements OnInit {
     event.stopPropagation();
     let postData = {
       assignedto: this.userData.id,
-      status: "surveyinprocess"
+      status: "assigned"
     };
     this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
 
     })
-    // this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
     this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
 
   }

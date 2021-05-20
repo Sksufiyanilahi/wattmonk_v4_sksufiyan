@@ -171,7 +171,7 @@
                         </ion-col>
                         <span class="ion-text-end action-button-color z-100" style="float:right !important;"
                             *ngIf="userData.id==surveyData.assignedto?.id && surveyData.status=='reviewfailed'"
-                            [routerLink]="['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]"
+                            [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]"
                             routerDirection="forward">
                             Redo Survey
                         </span>

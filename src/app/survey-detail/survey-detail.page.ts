@@ -183,12 +183,12 @@ export class SurveyDetailPage implements OnInit, OnDestroy {
 
     let postData = {
       assignedto: this.user.id,
-      status: "surveyinprocess"
+      status: "assigned"
     };
     this.apiService.updateSurveyForm(postData,surveyData.id).subscribe(res=>{
 
     })
-    this.router.navigate(['/camera/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state + '/' + surveyData.latitude + '/' + surveyData.longitude]);
+    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
 
 
   }
