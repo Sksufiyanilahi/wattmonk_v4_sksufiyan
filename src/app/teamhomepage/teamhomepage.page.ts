@@ -11,7 +11,6 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
-import { version } from 'src/app/contants';
 import { TeamdetailsPage } from '../teamdetails/teamdetails.page';
 
 @Component({
@@ -28,8 +27,6 @@ export class TeamhomepagePage implements OnInit {
     centeredSlides: true,
     spaceBetween: 2
   };
-
-  private version = version;
   drawerState = DrawerState.Bottom;
 
   private TeamRefreshSubscription: Subscription;
