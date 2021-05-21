@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { COMETCHAT_CONSTANTS } from './constants';
 import { PopoverComponentComponent } from './popover-component/popover-component.component';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root'
@@ -701,6 +702,17 @@ export class UtilitiesService {
 
         return this.platformname;
     }
+
+    findInvalidControls(form: FormGroup) {
+        const invalid = [];
+        const controls = form.controls;
+        for (const name in controls) {
+          if (controls[name].invalid) {
+            invalid.push(name);
+          }
+        }
+        return invalid;
+      }
 
     getMimetype(extension) {
 

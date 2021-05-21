@@ -197,6 +197,11 @@ export class StartsurveyPage implements OnInit {
     speed: 400
   };
 
+  //Progress Slider Values
+  totalpercent = 0;
+  shotcompletecount = 0;
+  totalstepcount: number;
+
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
     private route: ActivatedRoute,
@@ -290,6 +295,8 @@ export class StartsurveyPage implements OnInit {
         this.selectedmainmenuindex = data.selectedmainmenuindex;
         this.selectedsubmenuindex = data.selectedsubmenuindex;
         this.selectedshotindex = data.selectedshotindex;
+        this.totalpercent = data.currentprogress;
+        this.shotcompletecount = data.shotcompletecount;
 
         this.surveyid = data.surveyid;
         this.surveytype = data.surveytype;
@@ -301,6 +308,7 @@ export class StartsurveyPage implements OnInit {
           control.setValue(data.formdata[key]);
         });
         this.isdataloaded = true;
+        this.setTotalStepCount();
         // this.handleMenuSwitch(false);
       } else {
         this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
@@ -313,6 +321,7 @@ export class StartsurveyPage implements OnInit {
         });
 
         this.isdataloaded = true;
+        this.setTotalStepCount();
       }
     });
   }
@@ -324,6 +333,7 @@ export class StartsurveyPage implements OnInit {
     surveyStorageModel.selectedmainmenuindex = this.selectedmainmenuindex;
     surveyStorageModel.selectedsubmenuindex = this.selectedsubmenuindex;
     surveyStorageModel.selectedshotindex = this.selectedshotindex;
+    surveyStorageModel.currentprogress = this.totalpercent;
 
     surveyStorageModel.surveyid = this.surveyid;
     surveyStorageModel.surveytype = this.surveytype;
@@ -336,7 +346,7 @@ export class StartsurveyPage implements OnInit {
   handleSurveyExit() {
     const data = this.preparesurveystorage();
     data.saved = true;
-    this.storage.set(this.user.id + '-' + this.surveyid + '', data);
+    this.storage.set(this.user.id + '-' + this.surveyid, data);
 
     if (this.user.role.type == 'surveyors') {
       this.utilitieservice.setDataRefresh(true);
@@ -647,6 +657,7 @@ export class StartsurveyPage implements OnInit {
           duration: 2000
         });
         toast.present();
+        console.log(this.utilitieservice.findInvalidControls(this.activeForm));
       }
     }
   }
@@ -902,6 +913,7 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
     this.blurcaptureview = false;
+    this.updateProgressStatus();
     this.markchildcompletion();
   }
 
@@ -940,12 +952,10 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shot, shotindex) => {
         if (shot.ispending && !nextactiveshotfound) {
           this.selectedshotindex = shotindex;
-          console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo);
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
           this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
           nextactiveshotfound = true;
-          console.log(this.mainmenuitems);
         }
       });
 
@@ -985,6 +995,30 @@ export class StartsurveyPage implements OnInit {
         });
       }
     }
+  }
+
+  //------------------------------------------------------------------------------------------------------------------
+  // Progress Code
+  //------------------------------------------------------------------------------------------------------------------
+
+  updateProgressStatus() {
+    this.shotcompletecount += 1;
+    this.totalpercent = (this.shotcompletecount / this.totalstepcount);
+  }
+
+  setTotalStepCount() {
+    let totalSteps = 0;
+    this.mainmenuitems.map(mainmenuitem => {
+      mainmenuitem.children.map(child => {
+        if(child.shots.length > 0){
+          totalSteps += child.shots.length;
+        }
+        if(child.formelements.length > 0){
+          totalSteps += 1;
+        }
+      });
+    });
+    this.totalstepcount = totalSteps;
   }
 
   //------------------------------------------------------------------------------------------------------------------

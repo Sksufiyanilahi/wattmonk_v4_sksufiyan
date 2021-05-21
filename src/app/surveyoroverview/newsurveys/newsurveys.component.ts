@@ -232,8 +232,7 @@ export class NewsurveysComponent implements OnInit {
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
-      this.storage.get('' + element.id).then((data: SurveyStorageModel) => {
-
+      this.storage.get(this.storageService.getUserID() + '-' + element.id).then((data: SurveyStorageModel) => {
         if (data) {
           element.totalpercent = data.currentprogress;
 
