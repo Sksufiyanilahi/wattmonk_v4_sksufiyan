@@ -1,6 +1,6 @@
 [
   {
-    "id":4,
+    "id": 4,
     "jobtype": "pv",
     "sequence": [
       {
@@ -15,7 +15,9 @@
             "name": "MSP",
             "ispending": true,
             "isexistencechecked": false,
-            "inputformcontrol": [""],
+            "inputformcontrol": [
+              ""
+            ],
             "isactive": true,
             "placeholder": "",
             "shots": [
@@ -29,7 +31,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["msplocation"],
+                "inputformcontrol": [
+                  "msplocation"
+                ],
                 "isactive": true,
                 "placeholder": "MSP Location",
                 "questioninfo": "Provide MSP Location",
@@ -51,7 +55,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["msprating"],
+                "inputformcontrol": [
+                  "msprating"
+                ],
                 "isactive": false,
                 "placeholder": "MSP Rating",
                 "questioninfo": "Provide MSP Rating",
@@ -72,7 +78,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["mainbreakersize"],
+                "inputformcontrol": [
+                  "mainbreakersize"
+                ],
                 "isactive": false,
                 "placeholder": "Biggest breaker size inside main panel (Number is on the breaker)",
                 "questioninfo": "Provide Biggest breaker size inside main panel (Number is on the breaker)",
@@ -93,7 +101,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["mspbreaker"],
+                "inputformcontrol": [
+                  "mspbreaker"
+                ],
                 "isactive": false,
                 "placeholder": "MSP Breaker",
                 "questioninfo": "Provide  Main Breaker location in Main panel Top/Bottom/Center/None",
@@ -118,7 +128,9 @@
             "name": "Utility Meter",
             "ispending": true,
             "isexistencechecked": false,
-            "inputformcontrol": [""],
+            "inputformcontrol": [
+              ""
+            ],
             "isactive": false,
             "placeholder": "",
             "shots": [
@@ -132,7 +144,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["utilitymeter"],
+                "inputformcontrol": [
+                  "utilitymeter"
+                ],
                 "isactive": false,
                 "placeholder": "Utility Meter",
                 "questioninfo": "Provide Utility Meter",
@@ -154,7 +168,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["meternumber"],
+                "inputformcontrol": [
+                  "meternumber"
+                ],
                 "isactive": false,
                 "placeholder": "Utility Meter Number",
                 "questioninfo": "Provide Utility Meter Number",
@@ -176,7 +192,9 @@
             "name": "Existing PV/Solar System",
             "ispending": true,
             "isexistencechecked": false,
-            "inputformcontrol": ["existingsolarsystem"],
+            "inputformcontrol": [
+              "existingsolarsystem"
+            ],
             "isactive": false,
             "placeholder": "Does PV/Solar System exist?",
             "shots": [
@@ -190,7 +208,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["pvinverterlocation"],
+                "inputformcontrol": [
+                  "pvinverterlocation"
+                ],
                 "isactive": false,
                 "placeholder": "PV Inverter Location",
                 "questioninfo": "Provide Inverter Location",
@@ -212,7 +232,10 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["invertermake","invertermodel"],
+                "inputformcontrol": [
+                  "invertermake",
+                  "invertermodel"
+                ],
                 "isactive": false,
                 "placeholder": "PV Inverter Manufacturer and Model",
                 "questioninfo": "Provide Inverter Manufacturer & Model",
@@ -233,7 +256,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "PV Meter",
@@ -252,7 +277,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -271,7 +298,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -300,7 +329,9 @@
             "name": "Roof Photos",
             "ispending": true,
             "isexistencechecked": false,
-            "inputformcontrol": [""],
+            "inputformcontrol": [
+              ""
+            ],
             "isactive": false,
             "placeholder": "",
             "shots": [
@@ -314,7 +345,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": ["roofmaterial"],
+                "inputformcontrol": [
+                  "roofmaterial"
+                ],
                 "isactive": false,
                 "placeholder": "Roof Material",
                 "questioninfo": "Provide Roof Material",
@@ -335,7 +368,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -354,7 +389,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -373,7 +410,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -392,7 +431,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -411,7 +452,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -430,7 +473,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -450,7 +495,9 @@
             "name": "Obstacles Photos",
             "ispending": true,
             "isexistencechecked": false,
-            "inputformcontrol": [""],
+            "inputformcontrol": [
+              ""
+            ],
             "isactive": false,
             "placeholder": "",
             "shots": [
@@ -464,7 +511,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -483,7 +532,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -502,7 +553,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -521,7 +574,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -540,7 +595,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -559,7 +616,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -588,7 +647,9 @@
             "name": "Attic Photos",
             "ispending": true,
             "isexistencechecked": false,
-            "inputformcontrol": ["atticphotosrequired"],
+            "inputformcontrol": [
+              "atticphotosrequired"
+            ],
             "isactive": false,
             "placeholder": "Is structural stamp required in this area?",
             "shots": [
@@ -602,7 +663,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -621,7 +684,9 @@
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
-                "inputformcontrol": [""],
+                "inputformcontrol": [
+                  ""
+                ],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -650,7 +715,9 @@
             "name": "Additional Information",
             "ispending": true,
             "isexistencechecked": false,
-            "inputformcontrol": [""],
+            "inputformcontrol": [
+              ""
+            ],
             "isactive": false,
             "placeholder": "",
             "shots": [],
@@ -659,13 +726,17 @@
             "capturedshots": [],
             "formelements": [
               {
-                "inputformcontrol": ["batterysystem"],
+                "inputformcontrol": [
+                  "batterysystem"
+                ],
                 "placeholder": "",
                 "label": "Is there any Battery System?*",
                 "visibility": true,
                 "controltype": 5,
                 "controlselement": {
-                  "inputformcontrol": ["detailsofbatterysystem"],
+                  "inputformcontrol": [
+                    "detailsofbatterysystem"
+                  ],
                   "onvalueselection": true
                 },
                 "options": [
@@ -683,7 +754,9 @@
                 "attachments": []
               },
               {
-                "inputformcontrol": ["detailsofbatterysystem"],
+                "inputformcontrol": [
+                  "detailsofbatterysystem"
+                ],
                 "placeholder": "",
                 "label": "Details Of Battery System",
                 "visibility": false,
@@ -694,7 +767,9 @@
                 "attachments": []
               },
               {
-                "inputformcontrol": ["servicefeedsource"],
+                "inputformcontrol": [
+                  "servicefeedsource"
+                ],
                 "placeholder": "",
                 "label": "Power service line source to Main panel* (Overhead if you can see the wires coming from the power poles to connect to home)",
                 "visibility": true,
@@ -715,7 +790,9 @@
                 "attachments": []
               },
               {
-                "inputformcontrol": ["esid_number"],
+                "inputformcontrol": [
+                  "esid_number"
+                ],
                 "placeholder": "ESID Number",
                 "label": "ESID Number",
                 "visibility": true,
@@ -726,7 +803,9 @@
                 "attachments": []
               },
               {
-                "inputformcontrol": ["utilitybillfront"],
+                "inputformcontrol": [
+                  "utilitybillfront"
+                ],
                 "placeholder": "Utility Bill Front",
                 "label": "Utility Bill Front",
                 "visibility": true,
@@ -737,7 +816,9 @@
                 "attachments": []
               },
               {
-                "inputformcontrol": ["utilitybillback"],
+                "inputformcontrol": [
+                  "utilitybillback"
+                ],
                 "placeholder": "Utility Bill Back",
                 "label": "Utility Bill Back",
                 "visibility": true,
@@ -748,7 +829,9 @@
                 "attachments": []
               },
               {
-                "inputformcontrol": ["hoadetails"],
+                "inputformcontrol": [
+                  "hoadetails"
+                ],
                 "placeholder": "",
                 "label": "HOA details",
                 "visibility": true,
@@ -759,7 +842,9 @@
                 "attachments": []
               },
               {
-                "inputformcontrol": ["hoaattachments"],
+                "inputformcontrol": [
+                  "hoaattachments"
+                ],
                 "placeholder": "HOA attachments",
                 "label": "HOA attachments",
                 "visibility": true,
@@ -770,7 +855,9 @@
                 "attachments": []
               },
               {
-                "inputformcontrol": ["additionalnotes"],
+                "inputformcontrol": [
+                  "additionalnotes"
+                ],
                 "placeholder": "",
                 "label": "Additional notes",
                 "visibility": true,

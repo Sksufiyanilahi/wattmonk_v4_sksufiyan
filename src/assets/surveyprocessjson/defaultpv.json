@@ -1,0 +1,1269 @@
+[
+    {
+        "id": 4,
+        "jobtype": "pv",
+        "sequence": [
+            {
+                "name": "Electricals",
+                "isactive": true,
+                "ispending": true,
+                "isvisible": true,
+                "viewmode": 0,
+                "children": [
+                    {
+                        "isvisible": true,
+                        "name": "MSP",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": [
+                            ""
+                        ],
+                        "isactive": true,
+                        "placeholder": "",
+                        "shots": [
+                            {
+                                "questiontype": 1,
+                                "imagekey": "mspimages",
+                                "imagename": "msplongshot",
+                                "capturedshotinfo": "MSP Long Shot",
+                                "question": "MSP is located inside or outside the building?",
+                                "shotinfo": "Capture MSP Long Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "msplocation"
+                                ],
+                                "isactive": true,
+                                "placeholder": "MSP Location",
+                                "questioninfo": "Provide MSP Location",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "inside",
+                                    "outside"
+                                ],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 2,
+                                "imagekey": "mspimages",
+                                "imagename": "mspzoomshot",
+                                "capturedshotinfo": "MSP Zoom Shot",
+                                "question": "MSP/BUS Rating?",
+                                "shotinfo": "Capture MSP Zoom Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "msprating"
+                                ],
+                                "isactive": false,
+                                "placeholder": "MSP Rating",
+                                "questioninfo": "Provide MSP Rating",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 2,
+                                "imagekey": "mspimages",
+                                "imagename": "mspopenshutterzoomshot",
+                                "capturedshotinfo": "MSP Shutter Zoom Shot",
+                                "question": "Main Breaker Size",
+                                "shotinfo": "Open MSP Shutter & Capture Zoom Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "mainbreakersize"
+                                ],
+                                "isactive": false,
+                                "placeholder": "Main Breaker Size",
+                                "questioninfo": "Provide Main Breaker Size",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 1,
+                                "imagekey": "mspimages",
+                                "imagename": "mspwithoutcovershot",
+                                "capturedshotinfo": "MSP Inside Cover Zoom Shot",
+                                "question": "Main breaker location in MSP?",
+                                "shotinfo": "Open MSP Inside Cover & Capture Zoom Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "mspbreaker"
+                                ],
+                                "isactive": false,
+                                "placeholder": "MSP Breaker",
+                                "questioninfo": "Provide Main breaker location in MSP",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "top",
+                                    "bottom",
+                                    "center"
+                                ],
+                                "required": true
+                            }
+                        ],
+                        "checkexistence": false,
+                        "capturedshots": [],
+                        "existenceresult": true,
+                        "formelements": []
+                    },
+                    {
+                        "isvisible": true,
+                        "name": "Utility Meter",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": [
+                            ""
+                        ],
+                        "isactive": false,
+                        "placeholder": "",
+                        "shots": [
+                            {
+                                "questiontype": 1,
+                                "imagekey": "utilitymeterimages",
+                                "imagename": "umwideshoturl",
+                                "capturedshotinfo": "Utility Meter Wide Angle Shot",
+                                "question": "Utility meter is attached or detached with MSP?",
+                                "shotinfo": "Capture Utility Meter Wide Angle Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "utilitymeter"
+                                ],
+                                "isactive": false,
+                                "placeholder": "Utility Meter",
+                                "questioninfo": "Provide Utility Meter",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "attach",
+                                    "detach"
+                                ],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "utilitymeterimages",
+                                "imagename": "umzoomshoturl",
+                                "capturedshotinfo": "Utility Meter Zoom Shot",
+                                "question": "",
+                                "shotinfo": "Capture Utility Meter Zoom Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": true
+                            }
+                        ],
+                        "checkexistence": false,
+                        "capturedshots": [],
+                        "existenceresult": true,
+                        "formelements": []
+                    },
+                    {
+                        "isvisible": true,
+                        "name": "Existing PV/Solar System",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": [
+                            "existingsolarsystem"
+                        ],
+                        "isactive": false,
+                        "placeholder": "Existing Solar System",
+                        "shots": [
+                            {
+                                "questiontype": 1,
+                                "imagekey": "pvinverterimages",
+                                "imagename": "pvinverterwideshoturl",
+                                "capturedshotinfo": "PV Inverter Wide Angle Shot",
+                                "question": "Inverter is located inside or outside the building?",
+                                "shotinfo": "Capture PV Inverter Wide Angle Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "pvinverterlocation"
+                                ],
+                                "isactive": false,
+                                "placeholder": "PV Inverter Location",
+                                "questioninfo": "Provide Inverter Location",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "inside",
+                                    "outside"
+                                ],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 4,
+                                "imagekey": "pvinverterimages",
+                                "imagename": "pvinverterzoomshoturl",
+                                "capturedshotinfo": "PV Inverter Zoom Shot",
+                                "question": "Inverter Manufacturer, Model",
+                                "shotinfo": "Capture PV Inverter Zoom Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "invertermake",
+                                    "invertermodel"
+                                ],
+                                "isactive": false,
+                                "placeholder": "PV Inverter Manufacturer and Model",
+                                "questioninfo": "Provide Inverter Manufacturer & Model",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "pvmeterimages",
+                                "imagename": "pvmeterwideshoturl",
+                                "capturedshotinfo": "PV Meter Wide Angle Shot",
+                                "question": "",
+                                "shotinfo": "Capture PV Meter Wide Angle Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "PV Meter",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "acdisconnectimages",
+                                "imagename": "acdisconnectwideshoturl",
+                                "capturedshotinfo": "AC Disconnect Wide Angle Shot",
+                                "question": "",
+                                "shotinfo": "Capture AC Disconnect Wide Angle Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "acdisconnectimages",
+                                "imagename": "acdisconnectzoomshoturl",
+                                "capturedshotinfo": "AC Disconnect Zoom Shot",
+                                "question": "",
+                                "shotinfo": "Capture AC Disconnect Zoom Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": true
+                            }
+                        ],
+                        "checkexistence": true,
+                        "capturedshots": [],
+                        "existenceresult": true,
+                        "formelements": []
+                    }
+                ]
+            },
+            {
+                "name": "Roof",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "viewmode": 0,
+                "children": [
+                    {
+                        "isvisible": true,
+                        "name": "Roof Photos",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": [
+                            ""
+                        ],
+                        "isactive": false,
+                        "placeholder": "",
+                        "shots": [
+                            {
+                                "questiontype": 2,
+                                "imagekey": "roofimages",
+                                "imagename": "roofshot1",
+                                "capturedshotinfo": "Roof Photos",
+                                "question": "What's the roof tilt / slope (in degrees)?",
+                                "shotinfo": "Capture roof from all angles",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "rooftilt"
+                                ],
+                                "isactive": false,
+                                "placeholder": "Roof Tilt",
+                                "questioninfo": "Provide Roof Tilt / Slope (degrees)",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "Confirm"
+                                ],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofimages",
+                                "imagename": "roofshot2",
+                                "capturedshotinfo": "Roof Photos",
+                                "question": "",
+                                "shotinfo": "Capture roof photos with all angles from the ground",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofimages",
+                                "imagename": "roofshot3",
+                                "capturedshotinfo": "Roof Photos",
+                                "question": "",
+                                "shotinfo": "Capture roof photos with all angles from the ground",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofimages",
+                                "imagename": "roofshot4",
+                                "capturedshotinfo": "Roof Photos",
+                                "question": "",
+                                "shotinfo": "Capture roof photos with all angles from the ground",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofimages",
+                                "imagename": "roofshot5",
+                                "capturedshotinfo": "Roof Photos",
+                                "question": "",
+                                "shotinfo": "Capture roof photos with all angles from the ground",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofimages",
+                                "imagename": "roofshot6",
+                                "capturedshotinfo": "Roof Photos",
+                                "question": "",
+                                "shotinfo": "Capture roof photos with all angles from the ground",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofimages",
+                                "imagename": "roofshot7",
+                                "capturedshotinfo": "Roof Photos",
+                                "question": "",
+                                "shotinfo": "Capture roof photos with all angles from the ground",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            }
+                        ],
+                        "checkexistence": false,
+                        "capturedshots": [],
+                        "existenceresult": true,
+                        "formelements": []
+                    },
+                    {
+                        "isvisible": true,
+                        "name": "Roof Dimensions",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": "",
+                        "isactive": false,
+                        "placeholder": "",
+                        "shots": [
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofdimensionimages",
+                                "imagename": "roofdimension1",
+                                "capturedshotinfo": "Roof Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofdimensionimages",
+                                "imagename": "roofdimension2",
+                                "capturedshotinfo": "Roof Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofdimensionimages",
+                                "imagename": "roofdimension3",
+                                "capturedshotinfo": "Roof Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofdimensionimages",
+                                "imagename": "roofdimension4",
+                                "capturedshotinfo": "Roof Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofdimensionimages",
+                                "imagename": "roofdimension5",
+                                "capturedshotinfo": "Roof Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofdimensionimages",
+                                "imagename": "roofdimension6",
+                                "capturedshotinfo": "Roof Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "roofdimensionimages",
+                                "imagename": "roofdimension7",
+                                "capturedshotinfo": "Roof Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            }
+                        ],
+                        "checkexistence": false,
+                        "capturedshots": [],
+                        "existenceresult": true,
+                        "formelements": []
+                    },
+                    {
+                        "isvisible": true,
+                        "name": "Obstacles Photos",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": [
+                            ""
+                        ],
+                        "isactive": false,
+                        "placeholder": "",
+                        "shots": [
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesimages",
+                                "imagename": "obstacleshot1",
+                                "capturedshotinfo": "Obstacles Photos",
+                                "question": "",
+                                "shotinfo": "Capture obstacles photos",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesimages",
+                                "imagename": "obstacleshot2",
+                                "capturedshotinfo": "Obstacles Photos",
+                                "question": "",
+                                "shotinfo": "Capture install obstacles and shading on roof from the ground.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesimages",
+                                "imagename": "obstacleshot3",
+                                "capturedshotinfo": "Obstacles Photos",
+                                "question": "",
+                                "shotinfo": "Capture install obstacles and shading on roof from the ground.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesimages",
+                                "imagename": "obstacleshot4",
+                                "capturedshotinfo": "Obstacles Photos",
+                                "question": "",
+                                "shotinfo": "Capture install obstacles and shading on roof from the ground.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesimages",
+                                "imagename": "obstacleshot5",
+                                "capturedshotinfo": "Obstacles Photos",
+                                "question": "",
+                                "shotinfo": "Capture install obstacles and shading on roof from the ground.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesimages",
+                                "imagename": "obstacleshot6",
+                                "capturedshotinfo": "Obstacles Photos",
+                                "question": "",
+                                "shotinfo": "Capture install obstacles and shading on roof from the ground.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesimages",
+                                "imagename": "obstacleshot7",
+                                "capturedshotinfo": "Obstacles Photos",
+                                "question": "",
+                                "shotinfo": "Capture install obstacles and shading on roof from the ground.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            }
+                        ],
+                        "checkexistence": false,
+                        "capturedshots": [],
+                        "existenceresult": true,
+                        "formelements": []
+                    },
+                    {
+                        "isvisible": true,
+                        "name": "Obstacles Dimensions",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": [
+                            ""
+                        ],
+                        "isactive": false,
+                        "placeholder": "",
+                        "shots": [
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesdimensionsimages",
+                                "imagename": "obstacledimension1",
+                                "capturedshotinfo": "Obstacles Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesdimensionsimages",
+                                "imagename": "obstacledimension2",
+                                "capturedshotinfo": "Obstacles Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesdimensionsimages",
+                                "imagename": "obstacledimension3",
+                                "capturedshotinfo": "Obstacles Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesdimensionsimages",
+                                "imagename": "obstacledimension4",
+                                "capturedshotinfo": "Obstacles Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesdimensionsimages",
+                                "imagename": "obstacledimension5",
+                                "capturedshotinfo": "Obstacles Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesdimensionsimages",
+                                "imagename": "obstacledimension6",
+                                "capturedshotinfo": "Obstacles Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 0,
+                                "imagekey": "obstaclesdimensionsimages",
+                                "imagename": "obstacledimension7",
+                                "capturedshotinfo": "Obstacles Dimensions",
+                                "question": "",
+                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": true,
+                                "result": "",
+                                "actions": [],
+                                "required": false
+                            }
+                        ],
+                        "checkexistence": false,
+                        "capturedshots": [],
+                        "existenceresult": true,
+                        "formelements": []
+                    }
+                ]
+            },
+            {
+                "name": "Attic",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "viewmode": 0,
+                "children": [
+                    {
+                        "isvisible": true,
+                        "name": "Attic Photos",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": [
+                            ""
+                        ],
+                        "isactive": false,
+                        "placeholder": "",
+                        "shots": [
+                            {
+                                "questiontype": 1,
+                                "imagekey": "atticimages",
+                                "imagename": "atticwideshoturl",
+                                "capturedshotinfo": "Attic Wide Angle SHot",
+                                "question": "What is the type of frame?",
+                                "shotinfo": "Capture Attic Wide Angle Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "framing"
+                                ],
+                                "isactive": false,
+                                "placeholder": "Framing",
+                                "questioninfo": "Provide Type of Frame Details",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "truss",
+                                    "rafter"
+                                ],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 8,
+                                "imagekey": "atticimages",
+                                "imagename": "atticzoomshoturl",
+                                "capturedshotinfo": "Attic Zoom Shot",
+                                "question": "What's the size of the raft (thickness x width)?",
+                                "shotinfo": "Capture Attic Zoom Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "framingsize"
+                                ],
+                                "isactive": false,
+                                "placeholder": "Framing Size",
+                                "questioninfo": "Provide Size Details",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "Confirm"
+                                ],
+                                "required": true
+                            },
+                            {
+                                "questiontype": 2,
+                                "imagekey": "atticimages",
+                                "imagename": "atticrequiredshoturl",
+                                "capturedshotinfo": "Attic Required Shot",
+                                "question": "What's the distance between two rafts?",
+                                "shotinfo": "Capture Attic Required Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "distancebetweentworafts"
+                                ],
+                                "isactive": false,
+                                "placeholder": "Distance between Two Rafts",
+                                "questioninfo": "Provide Spacing Details",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "Confirm"
+                                ],
+                                "required": true
+                            }
+                        ],
+                        "checkexistence": false,
+                        "capturedshots": [],
+                        "existenceresult": true,
+                        "formelements": []
+                    }
+                ]
+            },
+            {
+                "name": "Appliances",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "viewmode": 0,
+                "children": [
+                    {
+                        "name": "Heavy Load Appliances",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": [
+                            ""
+                        ],
+                        "isactive": false,
+                        "placeholder": "",
+                        "shots": [
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false
+                            }
+                        ],
+                        "checkexistence": false,
+                        "capturedshots": [],
+                        "existenceresult": true,
+                        "formelements": []
+                    }
+                ]
+            },
+            {
+                "name": "Details",
+                "isactive": false,
+                "ispending": true,
+                "isvisible": true,
+                "viewmode": 1,
+                "children": [
+                    {
+                        "isvisible": true,
+                        "name": "Additional Information",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": [
+                            ""
+                        ],
+                        "isactive": false,
+                        "placeholder": "",
+                        "shots": [],
+                        "checkexistence": true,
+                        "existenceresult": true,
+                        "capturedshots": [],
+                        "formelements": [
+                            {
+                                "inputformcontrol": [
+                                    "batterysystem"
+                                ],
+                                "placeholder": "",
+                                "label": "Is there any Battery System?*",
+                                "visibility": true,
+                                "controltype": 5,
+                                "controlselement": {
+                                    "inputformcontrol": [
+                                        "detailsofbatterysystem"
+                                    ],
+                                    "onvalueselection": true
+                                },
+                                "options": [
+                                    {
+                                        "label": "Yes",
+                                        "value": true
+                                    },
+                                    {
+                                        "label": "No",
+                                        "value": false
+                                    }
+                                ],
+                                "required": true
+                            },
+                            {
+                                "inputformcontrol": [
+                                    "detailsofbatterysystem"
+                                ],
+                                "placeholder": "",
+                                "label": "Details Of Battery System",
+                                "visibility": false,
+                                "controltype": 7,
+                                "options": [],
+                                "required": false
+                            },
+                            {
+                                "inputformcontrol": [
+                                    "interconnection"
+                                ],
+                                "placeholder": "",
+                                "label": "Interconnection*",
+                                "visibility": true,
+                                "controltype": 5,
+                                "controlselement": {
+                                    "inputformcontrol": [
+                                        "interconnection_input"
+                                    ],
+                                    "onvalueselection": "more"
+                                },
+                                "options": [
+                                    {
+                                        "label": "Backfed",
+                                        "value": "backfed"
+                                    },
+                                    {
+                                        "label": "Supply Side Tap",
+                                        "value": "supplysidetap"
+                                    },
+                                    {
+                                        "label": "Load Side Tap",
+                                        "value": "loadsidetap"
+                                    },
+                                    {
+                                        "label": "More",
+                                        "value": "more",
+                                        "controls": "interconnection_input"
+                                    }
+                                ],
+                                "required": true
+                            },
+                            {
+                                "inputformcontrol": [
+                                    "interconnection_input"
+                                ],
+                                "placeholder": "",
+                                "label": "Interconnection Detail",
+                                "visibility": false,
+                                "controltype": 1,
+                                "options": [],
+                                "required": false
+                            },
+                            {
+                                "inputformcontrol": [
+                                    "servicefeedsource"
+                                ],
+                                "placeholder": "",
+                                "label": "Service feed source*",
+                                "visibility": true,
+                                "controltype": 5,
+                                "controlselement": {},
+                                "options": [
+                                    {
+                                        "label": "Overhead",
+                                        "value": "overhead"
+                                    },
+                                    {
+                                        "label": "Underground",
+                                        "value": "underground"
+                                    }
+                                ],
+                                "required": true
+                            },
+                            {
+                                "inputformcontrol": [
+                                    "additionalnotes"
+                                ],
+                                "placeholder": "",
+                                "label": "Additional notes",
+                                "visibility": true,
+                                "controltype": 7,
+                                "options": [],
+                                "required": false
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
