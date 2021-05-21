@@ -297,6 +297,8 @@ export class StartsurveyPage implements OnInit {
         this.selectedshotindex = data.selectedshotindex;
         this.totalpercent = data.currentprogress;
         this.shotcompletecount = data.shotcompletecount;
+        console.log(this.totalpercent);
+        console.log(this.shotcompletecount);
 
         this.surveyid = data.surveyid;
         this.surveytype = data.surveytype;

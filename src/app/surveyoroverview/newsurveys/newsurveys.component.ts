@@ -234,13 +234,11 @@ export class NewsurveysComponent implements OnInit {
       element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       this.storage.get(this.storageService.getUserID() + '-' + element.id).then((data: SurveyStorageModel) => {
         if (data) {
+          console.log(data.currentprogress);
           element.totalpercent = data.currentprogress;
-
         } else {
           element.totalpercent = 0;
-
         }
-
       });
     });
 
@@ -291,23 +289,28 @@ export class NewsurveysComponent implements OnInit {
     );
   }
 
-  assignedTo(surveyData, event) {
-    event.stopPropagation();
-    let postData = {
-      assignedto: this.userData.id,
-      status: "assigned"
-    };
-    this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
-
-    })
-    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
-
-  }
-
-  resumeSurvey(surveyData, event) {
+  startsurvey(surveyData, event) {
     event.stopPropagation();
     this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
   }
+
+  // assignedTo(surveyData, event) {
+  //   event.stopPropagation();
+  //   let postData = {
+  //     assignedto: this.userData.id,
+  //     status: "assigned"
+  //   };
+  //   this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
+
+  //   })
+  //   this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+
+  // }
+
+  // resumeSurvey(surveyData, event) {
+  //   event.stopPropagation();
+  //   this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+  // }
 
   gotoActivity(surveyData, event) {
 

@@ -58,10 +58,10 @@
                     <ion-col></ion-col>
                     <ion-col class="ion-no-margin ion-no-padding">
                    <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
-                        <ion-button *ngIf="surveyData.status=='assigned'" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="assignedTo(surveyData,$event)">
+                        <ion-button *ngIf="surveyData.totalpercent == 0" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="startsurvey(surveyData,$event)">
                         Start Survey
                     </ion-button>
-                    <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="resumeSurvey(surveyData,$event)">
+                    <ion-button *ngIf="surveyData.totalpercent > 0"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="startsurvey(surveyData,$event)">
                       Resume Survey
                     </ion-button>
                         <!-- <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]">
