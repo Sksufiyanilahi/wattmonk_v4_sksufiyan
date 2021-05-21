@@ -790,8 +790,13 @@ export class StartsurveyPage implements OnInit {
     this.selectedmainmenuindex = index;
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
     this.selectedsubmenuindex = 0;
-    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+    this.selectedshotindex = 0;
+    if (this.mainmenuitems[this.selectedmainmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+      this.movetonextpossibleactionablestep();
+    } else {
+      if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+      }
     }
   }
 
@@ -799,7 +804,14 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
     this.selectedsubmenuindex = index;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-    this.selectedshotindex = 0;
+    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA){
+      this.movetonextpossibleactionablestep();
+    }else{
+      if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0){
+        this.selectedshotindex = 0;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+      }
+    }
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1142,13 +1154,13 @@ export class StartsurveyPage implements OnInit {
       const elementToControl = this.activeForm.get(controlsElement.inputformcontrol);
       if (this.activeForm.get(element).value === controlsElement.onvalueselection) {
         setTimeout(function () {
-          document.getElementById('input_'+controlsElement.inputformcontrol).classList.remove('hideElement');
+          document.getElementById('input_' + controlsElement.inputformcontrol).classList.remove('hideElement');
         }, 300);
         elementToControl.enable();
         elementToControl.setValidators([Validators.required]);
       } else {
         setTimeout(function () {
-          document.getElementById('input_'+controlsElement.inputformcontrol).classList.add('hideElement');
+          document.getElementById('input_' + controlsElement.inputformcontrol).classList.add('hideElement');
         }, 300);
         elementToControl.setValue('');
         elementToControl.clearValidators();
