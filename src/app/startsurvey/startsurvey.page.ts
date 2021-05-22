@@ -921,21 +921,13 @@ export class StartsurveyPage implements OnInit {
     this.animateElementOpacity(document.querySelector('.questionaireview'));
   }
 
-  handleShotNameSubmission(form: FormGroup) {
-    const shotnameformcontrol = form.get('shotname');
+  handleShotNameSubmission() {
+    const shotnameformcontrol = this.activeForm.get('shotname');
     if (shotnameformcontrol.value != '') {
       this.blurcaptureview = false;
-      const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-      const shots = currentIndex.capturedshots;
-      shots[shots.length - 1].imageuploadname = shotnameformcontrol.value;
-      currentIndex.shots[this.selectedshotindex].promptquestion = false;
-      form.get('shotname').setValue('');
-
-      if (currentIndex.capturedshots.length == 1) {
-        currentIndex.ispending = false;
-        this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
-        this.markshotcompletion();
-      }
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imageuploadname = shotnameformcontrol.value;
+      this.activeForm.get('shotname').setValue('');
+      this.markshotcompletion();
     } else {
       shotnameformcontrol.markAsTouched();
       shotnameformcontrol.markAsDirty();
