@@ -417,8 +417,8 @@
         <ion-slide style="width: 100%;" *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots; let i = index">
           <ion-row>
             <ion-col size="12" class="ion-no-padding"><p class="shotindex">Step {{i + 1}}</p></ion-col>
-            <ion-col size="12" class="ion-no-padding"><a (click)="selectcapturedshot($event, i)" [ngClass]="[ shot.shotstatus ? 'shotinfo completed' : 'shotinfo pending']"><ion-icon *ngIf="shot.shotstatus" name="pencil"></ion-icon> {{shot.shotinfo}}</a></ion-col>
-            <ion-col *ngIf="shot.questiontype != QuestionTypes.NONE" class="ion-no-padding"><a (click)="promptstepquestion($event, i)" [ngClass]="[ shot.questionstatus ? 'shotquestion completed' : 'shotquestion pending']"><ion-icon *ngIf="shot.questionstatus" name="pencil"></ion-icon> {{shot.question}}</a></ion-col>
+            <ion-col size="12" class="ion-no-padding"><a (click)="selectcapturedshot($event, i)" [ngClass]="[ shot.shotstatus ? 'shotinfo completed' : 'shotinfo pending']"><ion-icon *ngIf="shot.shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult" name="pencil"></ion-icon> {{shot.shotinfo}}</a></ion-col>
+            <ion-col *ngIf="shot.questiontype != QuestionTypes.NONE" class="ion-no-padding"><a (click)="promptstepquestion($event, i)" [ngClass]="[ shot.questionstatus ? 'shotquestion completed' : 'shotquestion pending']"><ion-icon *ngIf="shot.questionstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult" name="pencil"></ion-icon> {{shot.question}}</a></ion-col>
           </ion-row>
         </ion-slide>
       </ion-slides>

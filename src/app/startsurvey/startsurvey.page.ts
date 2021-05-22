@@ -1135,7 +1135,7 @@ export class StartsurveyPage implements OnInit {
 
   selectcapturedshot(event, shotindex) {
     event.preventDefault();
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex].shotstatus) {
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult) {
       this.showinfodetailsview = false;
       this.blurcaptureview = false;
       this.selectedshotindex = shotindex;
@@ -1176,7 +1176,7 @@ export class StartsurveyPage implements OnInit {
 
   promptstepquestion(event, index) {
     event.preventDefault();
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus) {
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult) {
       this.showinfodetailsview = false;
       this.blurcaptureview = true;
       this.selectedshotindex = index;
