@@ -510,7 +510,7 @@
                         "name": "Roof Dimensions",
                         "ispending": true,
                         "isexistencechecked": false,
-                        "inputformcontrol": "",
+                        "inputformcontrol": [""],
                         "isactive": false,
                         "placeholder": "",
                         "shots": [
