@@ -499,7 +499,7 @@
                             {
                                 "questiontype": 0,
                                 "imagekey": "roofdimensionimages",
-                                "imagename": "roofdimension1",
+                                "imagename": "roofdimensions",
                                 "capturedshotinfo": "Roof Dimensions",
                                 "question": "",
                                 "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
@@ -516,132 +516,6 @@
                                 "result": "",
                                 "actions": [],
                                 "required": true
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "roofdimensionimages",
-                                "imagename": "roofdimension2",
-                                "capturedshotinfo": "Roof Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": false,
-                                "result": "",
-                                "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "roofdimensionimages",
-                                "imagename": "roofdimension3",
-                                "capturedshotinfo": "Roof Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": false,
-                                "result": "",
-                                "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "roofdimensionimages",
-                                "imagename": "roofdimension4",
-                                "capturedshotinfo": "Roof Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": false,
-                                "result": "",
-                                "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "roofdimensionimages",
-                                "imagename": "roofdimension5",
-                                "capturedshotinfo": "Roof Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": false,
-                                "result": "",
-                                "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "roofdimensionimages",
-                                "imagename": "roofdimension6",
-                                "capturedshotinfo": "Roof Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": false,
-                                "result": "",
-                                "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "roofdimensionimages",
-                                "imagename": "roofdimension7",
-                                "capturedshotinfo": "Roof Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the roof dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": false,
-                                "result": "",
-                                "actions": [],
-                                "required": false
                             }
                         ],
                         "checkexistence": false,
@@ -827,7 +701,7 @@
                             {
                                 "questiontype": 0,
                                 "imagekey": "obstaclesdimensionsimages",
-                                "imagename": "obstacledimension1",
+                                "imagename": "obstacledimensions",
                                 "capturedshotinfo": "Obstacles Dimensions",
                                 "question": "",
                                 "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
@@ -843,133 +717,7 @@
                                 "questionstatus": false,
                                 "result": "",
                                 "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "obstaclesdimensionsimages",
-                                "imagename": "obstacledimension2",
-                                "capturedshotinfo": "Obstacles Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": true,
-                                "result": "",
-                                "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "obstaclesdimensionsimages",
-                                "imagename": "obstacledimension3",
-                                "capturedshotinfo": "Obstacles Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": true,
-                                "result": "",
-                                "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "obstaclesdimensionsimages",
-                                "imagename": "obstacledimension4",
-                                "capturedshotinfo": "Obstacles Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": true,
-                                "result": "",
-                                "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "obstaclesdimensionsimages",
-                                "imagename": "obstacledimension5",
-                                "capturedshotinfo": "Obstacles Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": true,
-                                "result": "",
-                                "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "obstaclesdimensionsimages",
-                                "imagename": "obstacledimension6",
-                                "capturedshotinfo": "Obstacles Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": true,
-                                "result": "",
-                                "actions": [],
-                                "required": false
-                            },
-                            {
-                                "questiontype": 0,
-                                "imagekey": "obstaclesdimensionsimages",
-                                "imagename": "obstacledimension7",
-                                "capturedshotinfo": "Obstacles Dimensions",
-                                "question": "",
-                                "shotinfo": "Note down the obstacle dimensions on a paper and take a shot.",
-                                "promptquestion": false,
-                                "shotstatus": false,
-                                "ispending": true,
-                                "inputformcontrol": [
-                                    ""
-                                ],
-                                "isactive": false,
-                                "placeholder": "",
-                                "questioninfo": "",
-                                "questionstatus": true,
-                                "result": "",
-                                "actions": [],
-                                "required": false
+                                "required": true
                             }
                         ],
                         "checkexistence": false,
@@ -1083,6 +831,7 @@
                 "viewmode": 0,
                 "children": [
                     {
+                        "isvisible": true,
                         "name": "Heavy Load Appliances",
                         "ispending": true,
                         "isexistencechecked": false,
@@ -1095,7 +844,76 @@
                             {
                                 "questiontype": 5,
                                 "imagekey": "appliancesimages",
-                                "imagename": "appliances",
+                                "imagename": "appliances1",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances2",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances3",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances4",
                                 "capturedshotinfo": "Appliances Photos",
                                 "question": "Name of the appliance?",
                                 "shotinfo": "Capture all appliances of heavy load",
