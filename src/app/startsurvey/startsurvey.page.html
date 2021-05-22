@@ -24,7 +24,7 @@
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index">
                 <ion-button color="dark" class="cameraimagesbutton" (click)="selectcapturedshot($event, shotindex)">
                   <img *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
-                  <img *ngIf="shot.imagecleared" src="/assets/images/nopicture.svg" />
+                  <img style="background-color: #fff;" *ngIf="shot.imagecleared" src="/assets/images/nopicture.svg" />
                 </ion-button>
               </ng-container>
             </div>
@@ -67,8 +67,7 @@
           <ion-grid class="ion-padding text-white additionalformgrid">
             <div
               *ngFor="let formElement of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements; let itemindex = index"
-              class=""
-              [attr.id]="'input_' + formElement.inputformcontrol">
+              class="" [attr.id]="'input_' + formElement.inputformcontrol">
               <ion-row>
                 <ion-col>
                   <div class="ion-margin-top">
@@ -158,8 +157,7 @@
               </ion-row>
             </div>
           </ion-grid>
-          <ion-button class="yellow-button-color ion-float-right ion-margin-top" fill="clear"
-            (click)="saveFormData()">
+          <ion-button class="yellow-button-color ion-float-right ion-margin-top" fill="clear" (click)="saveFormData()">
             Submit
           </ion-button>
         </form>
@@ -168,8 +166,12 @@
         *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult">
         <ion-grid class="noviewmodegrid">
           <ion-row>
-            <ion-col class="ion-text-center" size="12"><ion-toggle class="modetoggle" (ionChange)="onchildmodechange($event)"></ion-toggle></ion-col>
-            <ion-col class="ion-text-center" size="12"><p>Section has been turned off</p></ion-col>
+            <ion-col class="ion-text-center" size="12">
+              <ion-toggle class="modetoggle" (ionChange)="onchildmodechange($event)"></ion-toggle>
+            </ion-col>
+            <ion-col class="ion-text-center" size="12">
+              <p>Section has been turned off</p>
+            </ion-col>
           </ion-row>
         </ion-grid>
       </div>
@@ -211,7 +213,9 @@
             </p>
           </ion-col>
           <ion-col size="2" style="text-align: right;">
-            <ion-icon *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0" style="margin-right: 20px;" class="actionbutton" name="information-outline"
+            <ion-icon
+              *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0"
+              style="margin-right: 20px;" class="actionbutton" name="information-outline"
               (click)="toggleshotdetailsview(true)"></ion-icon>
           </ion-col>
         </ion-row>
@@ -323,7 +327,7 @@
           <p>
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
           </p>
-          <form [formGroup]="activeForm" novalidate>
+          <form [formGroup]="activeForm" novalidate class="inputform">
             <app-auto-complete [dataList]="utilities" class="form-control" mode="object"
               formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}"
               #make>
@@ -406,19 +410,62 @@
           </ion-row>
         </ion-col>
       </ion-row>
+
+      <!-- Row for question type SHOT Name -->
+      <ion-row class="questionaireview-row ion-padding-horizontal"
+        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_SHOT_NAME">
+        <ion-col size="12">
+          <p>
+            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+          </p>
+          <form [formGroup]="activeForm" novalidate>
+            <ion-input type="text" class="form-control" autocomplete="off" formControlName="shotname">
+            </ion-input>
+            <div class="error_div">
+              <div *ngIf="activeForm.get('shotname').value === '' && activeForm.get('shotname').dirty">
+                <span class="error">Field input is required.</span>
+              </div>
+            </div>
+          </form>
+          <ion-row class="ion-float-right">
+            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleShotNameSubmission(activeForm)">
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
+              | titlecase}}
+            </ion-button>
+          </ion-row>
+        </ion-col>
+      </ion-row>
     </ion-grid>
   </div>
   <!-- SHOT DETAILS VIEW -->
   <div class="infodetailsviewcontainer" *ngIf="showinfodetailsview">
     <ion-grid class="infodetailsview">
       <ion-icon name="close-circle-sharp" class="infoclosebutton" (click)="toggleshotdetailsview(false)"></ion-icon>
-      <ion-toggle class="infodetailstoggle" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence" [checked]="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult" (ionChange)="onchildmodechange($event)"></ion-toggle>
-      <ion-slides #infoslider pager="true" [options]="infoslideoptions" (ionSlideDidChange)='infoslidechange()' class="infoslides">
-        <ion-slide style="width: 100%;" *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots; let i = index">
+      <ion-toggle class="infodetailstoggle"
+        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence"
+        [checked]="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
+        (ionChange)="onchildmodechange($event)"></ion-toggle>
+      <ion-slides #infoslider pager="true" [options]="infoslideoptions" (ionSlideDidChange)='infoslidechange()'
+        class="infoslides">
+        <ion-slide style="width: 100%;"
+          *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots; let i = index">
           <ion-row>
-            <ion-col size="12" class="ion-no-padding"><p class="shotindex">Step {{i + 1}}</p></ion-col>
-            <ion-col size="12" class="ion-no-padding"><a (click)="selectcapturedshot($event, i)" [ngClass]="[ shot.shotstatus ? 'shotinfo completed' : 'shotinfo pending']"><ion-icon *ngIf="shot.shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult" name="pencil"></ion-icon> {{shot.shotinfo}}</a></ion-col>
-            <ion-col *ngIf="shot.questiontype != QuestionTypes.NONE" class="ion-no-padding"><a (click)="promptstepquestion($event, i)" [ngClass]="[ shot.questionstatus ? 'shotquestion completed' : 'shotquestion pending']"><ion-icon *ngIf="shot.questionstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult" name="pencil"></ion-icon> {{shot.question}}</a></ion-col>
+            <ion-col size="12" class="ion-no-padding">
+              <p class="shotindex">Step {{i + 1}}</p>
+            </ion-col>
+            <ion-col size="12" class="ion-no-padding"><a (click)="selectcapturedshot($event, i)"
+                [ngClass]="[ shot.shotstatus ? 'shotinfo completed' : 'shotinfo pending']">
+                <ion-icon
+                  *ngIf="shot.shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
+                  name="pencil"></ion-icon> {{shot.shotinfo}}
+              </a></ion-col>
+            <ion-col *ngIf="shot.questiontype != QuestionTypes.NONE" class="ion-no-padding"><a
+                (click)="promptstepquestion($event, i)"
+                [ngClass]="[ shot.questionstatus ? 'shotquestion completed' : 'shotquestion pending']">
+                <ion-icon
+                  *ngIf="shot.questionstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
+                  name="pencil"></ion-icon> {{shot.question}}
+              </a></ion-col>
           </ion-row>
         </ion-slide>
       </ion-slides>

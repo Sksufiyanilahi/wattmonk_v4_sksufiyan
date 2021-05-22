@@ -62,6 +62,7 @@ export interface SHOT {
   placeholder?: string;
   imagekey: string;
   imagename: string;
+  imageuploadname: string;
   required: boolean;
 }
 
@@ -72,6 +73,7 @@ export interface CAPTUREDSHOT {
   shotimage: string;
   imagekey: string;
   imagename: string;
+  imageuploadname: string;
   imagecleared: boolean;
 }
 
@@ -223,7 +225,7 @@ export class StartsurveyPage implements OnInit {
 
     // this.loadSurveyJSON('pvsurveyjson');
 
-    
+
     this.http
       .get('assets/surveyprocessjson/defaultpv.json')
       .subscribe((data) => {
@@ -288,6 +290,8 @@ export class StartsurveyPage implements OnInit {
         });
       }
     });
+    formData['shotname'] = new FormControl('', []);
+    this.activeFormElementsArray.push('shotname');
     console.log(formData);
     this.activeForm = new FormGroup(formData);
 
@@ -756,10 +760,10 @@ export class StartsurveyPage implements OnInit {
       if (imageToUpload.shotimage) {
         const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
         let filename = '';
-        if (imageToUpload.imagename === '') {
+        if (imageToUpload.imageuploadname === '') {
           filename = Date.now().toString() + '.png';
         } else {
-          filename = imageToUpload.imagename + '.png';
+          filename = imageToUpload.imageuploadname + '.png';
         }
         this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + this.totalimagestoupload);
         this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
@@ -878,6 +882,7 @@ export class StartsurveyPage implements OnInit {
         shotimage: capturedImage,
         imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
         imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename,
+        imageuploadname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imageuploadname,
         imagecleared: false
       };
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
@@ -914,6 +919,27 @@ export class StartsurveyPage implements OnInit {
 
     this.changedetectorref.detectChanges();
     this.animateElementOpacity(document.querySelector('.questionaireview'));
+  }
+
+  handleShotNameSubmission(form: FormGroup) {
+    const shotnameformcontrol = form.get('shotname');
+    if (shotnameformcontrol.value != '') {
+      this.blurcaptureview = false;
+      const currentIndex = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+      const shots = currentIndex.capturedshots;
+      shots[shots.length - 1].imageuploadname = shotnameformcontrol.value;
+      currentIndex.shots[this.selectedshotindex].promptquestion = false;
+      form.get('shotname').setValue('');
+
+      if (currentIndex.capturedshots.length == 1) {
+        currentIndex.ispending = false;
+        this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
+        this.markshotcompletion();
+      }
+    } else {
+      shotnameformcontrol.markAsTouched();
+      shotnameformcontrol.markAsDirty();
+    }
   }
 
   markshotcompletion() {
