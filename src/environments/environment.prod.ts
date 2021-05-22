@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   name: "prod",
-  BaseUrl: "http://ec2-52-15-220-175.us-east-2.compute.amazonaws.com:1802/api/",
+  BaseUrl: "https://webops.wattmonk.com/api/",
   INTERCOM_APPID: "o52f08q6",
   firebase: {
     apiKey: "AIzaSyCUeAsEj_4_7YTENw2l8y8bMB4fntNXo-4",

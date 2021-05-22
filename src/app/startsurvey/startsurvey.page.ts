@@ -223,16 +223,15 @@ export class StartsurveyPage implements OnInit {
     this.surveycity = this.route.snapshot.paramMap.get('city');
     this.surveystate = this.route.snapshot.paramMap.get('state');
 
-    // this.loadSurveyJSON('pvsurveyjson');
+    this.loadSurveyJSON('pvsurveyjson');
 
 
-    this.http
-      .get('assets/surveyprocessjson/defaultpv.json')
-      .subscribe((data) => {
-        console.log(data);
-        this.createSurveyForm(data[0]);
-      });
-
+    // this.http
+    //   .get('assets/surveyprocessjson/defaultpv.json')
+    //   .subscribe((data) => {
+    //     console.log(data);
+    //     this.createSurveyForm(data[0]);
+    //   });
   }
 
   loadSurveyJSON(type) {
