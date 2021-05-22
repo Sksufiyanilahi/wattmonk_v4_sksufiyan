@@ -1199,6 +1199,9 @@ export class StartsurveyPage implements OnInit {
       this.showinfodetailsview = false;
       this.blurcaptureview = true;
       this.selectedshotindex = index;
+      if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == QUESTIONTYPE.INPUT_SHOT_NAME){
+        this.activeForm.get('shotname').setValue(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imageuploadname);
+      }
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
     }
   }
