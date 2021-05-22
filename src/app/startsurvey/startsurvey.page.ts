@@ -58,8 +58,7 @@ export interface SHOT {
   result: string;
   questionstatus: boolean;
   questiontype: QUESTIONTYPE;
-  inputformcontrol: string;
-  inputformcontrol2?: string;
+  inputformcontrol: string[];
   placeholder?: string;
   imagekey: string;
   imagename: string;
@@ -255,10 +254,18 @@ export class StartsurveyPage implements OnInit {
             child.shots.map(shot => {
               if (shot.inputformcontrol[0] !== '') {
                 this.activeFormElementsArray.push(shot.inputformcontrol[0]);
-                formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                if (shot.required) {
+                  formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                } else {
+                  formData[shot.inputformcontrol[0]] = new FormControl('', []);
+                }
                 if (shot.inputformcontrol.length > 1) {
                   this.activeFormElementsArray.push(shot.inputformcontrol[1]);
-                  formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
+                  if (shot.required) {
+                    formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
+                  } else {
+                    formData[shot.inputformcontrol[1]] = new FormControl('', []);
+                  }
                 }
               }
             });
@@ -1089,18 +1096,38 @@ export class StartsurveyPage implements OnInit {
   }
 
   handleExistence(doesexist: boolean) {
+    console.log("inside handleexistence--"+doesexist);
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;
     this.blurcaptureview = false;
     if (doesexist) {
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+        if (element.inputformcontrol[0] !== '' && element.required) {
+          this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
+          if(element.inputformcontrol.length > 1 && element.required){
+            this.activeForm.get(element.inputformcontrol[1]).setValidators([Validators.required]);
+          }
+        }
+      });
     } else {
+      console.log("settings all shots cancelled");
+      //Mark shots as completed and required false
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
         element.ispending = false;
         element.shotstatus = true;
         element.questionstatus = true;
+        element.required = false;
+        if (element.inputformcontrol[0] !== '') {
+          this.activeForm.get(element.inputformcontrol[0]).clearValidators();
+        }
+        if(element.inputformcontrol.length > 1){
+          this.activeForm.get(element.inputformcontrol[1]).clearValidators();
+        }
       });
+      console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
+
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
       this.markchildcompletion();
     }
@@ -1169,8 +1196,15 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
         element.ispending = true;
         element.shotstatus = false;
+        element.required = true;
         if (element.questiontype != QUESTIONTYPE.NONE) {
           element.questionstatus = false;
+        }
+        if (element.inputformcontrol[0] !== '' && element.required) {
+          this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
+        }
+        if(element.inputformcontrol.length > 1 && element.required){
+          this.activeForm.get(element.inputformcontrol[1]).setValidators([Validators.required]);
         }
       });
       console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex]);
@@ -1179,6 +1213,13 @@ export class StartsurveyPage implements OnInit {
         element.ispending = false;
         element.shotstatus = true;
         element.questionstatus = true;
+        element.required = false;
+        if (element.inputformcontrol[0] !== '') {
+          this.activeForm.get(element.inputformcontrol[0]).clearValidators();
+        }
+        if(element.inputformcontrol.length > 1){
+          this.activeForm.get(element.inputformcontrol[1]).clearValidators();
+        }
       });
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
       this.markchildcompletion();

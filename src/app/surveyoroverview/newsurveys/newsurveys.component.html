@@ -61,7 +61,7 @@
                         <ion-button *ngIf="surveyData.totalpercent == 0" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="startsurvey(surveyData,$event)">
                         Start Survey
                     </ion-button>
-                    <ion-button *ngIf="surveyData.totalpercent > 0"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="startsurvey(surveyData,$event)">
+                    <ion-button *ngIf="surveyData.totalpercent > 0"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="resumesurvey(surveyData,$event)">
                       Resume Survey
                     </ion-button>
                         <!-- <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]">

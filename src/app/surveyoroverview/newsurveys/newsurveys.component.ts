@@ -291,26 +291,21 @@ export class NewsurveysComponent implements OnInit {
 
   startsurvey(surveyData, event) {
     event.stopPropagation();
+    let postData = {
+      assignedto: this.userData.id,
+      status: "assigned"
+    };
+    this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
+
+    })
     this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+
   }
 
-  // assignedTo(surveyData, event) {
-  //   event.stopPropagation();
-  //   let postData = {
-  //     assignedto: this.userData.id,
-  //     status: "assigned"
-  //   };
-  //   this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
-
-  //   })
-  //   this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
-
-  // }
-
-  // resumeSurvey(surveyData, event) {
-  //   event.stopPropagation();
-  //   this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
-  // }
+  resumesurvey(surveyData, event) {
+    event.stopPropagation();
+    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+  }
 
   gotoActivity(surveyData, event) {
 
