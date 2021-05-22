@@ -170,10 +170,10 @@
                                 (click)="openAnalysts(surveyData.id,surveyData)">&nbsp;Reassign Review</span>
                         </ion-col>
                         <span class="ion-text-end action-button-color z-100" style="float:right !important;"
-                            *ngIf="userData.id==surveyData.assignedto?.id && surveyData.status=='reviewfailed'"
+                            *ngIf="userData.id==surveyData.assignedto?.id"
                             [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]"
                             routerDirection="forward">
-                            Redo Survey
+                            Start Survey
                         </span>
 
                         <ion-col *ngIf="segments=='status=delivered'">

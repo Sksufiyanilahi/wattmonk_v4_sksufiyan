@@ -4,6 +4,7 @@ import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,11 +25,12 @@ export class DashboardPage implements OnInit {
   };
   userData: any;
 
-  constructor(private apiService:ApiService,private route: ActivatedRoute,private storage:StorageService,private mixpanelService:MixpanelService,public utilities:UtilitiesService) { }
+  constructor(private apiService:ApiService,private route: ActivatedRoute,private storage:StorageService,private mixpanelService:MixpanelService,public utilities:UtilitiesService,private datastorage: Storage) { }
 
   ngOnInit() {
     this.userId= this.storage.getUserID();
     this.userData= this.storage.getUser();
+    this.fetchsurveyprocessjsons();
   //  let data = this.route.snapshot.data.userdata; // get data from resolver
   //  console.log(data);
     //this.getCount();
@@ -48,5 +50,19 @@ export class DashboardPage implements OnInit {
 
          })
   }
+
+  fetchsurveyprocessjsons() {
+		this.datastorage.get('pvsurveyjson').then((data) => {
+		  console.log(data);
+		  if (!data) {
+			this.apiService.fetchJSON(this.storage.getParentId(), 'pv').subscribe((response: any) => {
+			  console.log(response);
+			  this.datastorage.set('pvsurveyjson', response);
+			});
+		  }
+		});
+	  }
+
+
 
 }
