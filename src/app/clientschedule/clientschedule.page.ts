@@ -115,7 +115,6 @@ export class ClientschedulePage implements OnInit {
   }
   ngOnInit() {
     this.user = this.storageService.getUser();
-    console.log(this.user);
     this.fetchCountry();
     if (this.id !== 0) {
       this.isEditMode = true;
@@ -170,7 +169,6 @@ export class ClientschedulePage implements OnInit {
       this.apiservices.getContractorsData(this.id).subscribe(async (result) => {
         await this.utils.hideLoading().then(() => {
           this.design = result;
-          console.log(result)
           // this.fieldDisabled = true;
           // this.attachmentData = this.design.attachments;
           // this.architecturalData = this.design.architecturaldesign;
@@ -241,7 +239,6 @@ export class ClientschedulePage implements OnInit {
         else {
           parentid = this.user.parent.id;
         }
-        console.log(parentid);
         if (this.id == 0) {
           //  this.firstFormGroup.get('password').setValue(reset);
           //  this.firstFormGroup.get('resetPasswordToken').setValue(reset);
@@ -266,7 +263,6 @@ export class ClientschedulePage implements OnInit {
             addedby: this.firstFormGroup.get('addedby').value
           }
           this.apiservices.addContractor(postData).subscribe(response => {
-            console.log(response)
             this.utils.hideLoading().then(() => {
               //})
 
@@ -303,7 +299,6 @@ export class ClientschedulePage implements OnInit {
           }
 
           this.apiservices.updateContractorsData(this.id,postData).subscribe(response => {
-            console.log(response)
             this.utils.hideLoading().then(() => {
               //})
 
@@ -353,7 +348,6 @@ export class ClientschedulePage implements OnInit {
     //this.autoCompleteOff = true;
 
     const input = event.detail.value;
-    console.log(input)
     if (input === '') {
       this.autocompleteItems = [];
       return;

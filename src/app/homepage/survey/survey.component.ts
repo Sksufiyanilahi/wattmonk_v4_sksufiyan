@@ -154,8 +154,7 @@ export class SurveyComponent {
     let userId = this.storageService.getUserID()
     
       this.apiService.getSurveycounts(userId).subscribe(res=>{this.SurveyCounts =res;
-        console.log(this.SurveyCounts
-          )})
+        })
 
     this.setupCometChat();
 

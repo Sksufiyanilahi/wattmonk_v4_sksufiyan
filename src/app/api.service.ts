@@ -695,16 +695,13 @@ export class ApiService {
         var callType = this.callData.type;
         let callListener = new CometChat.OngoingCallListener({
           onUserJoined: (user) => {
-            console.log('User joined call:', user);
             this.pauseAudio();
           },
           onUserLeft: (user) => {
-            console.log('User left call:', user);
             this.navCtrl.pop();
             // this.pauseAudio();
           },
           onCallEnded: (call) => {
-            console.log('Call ended listener', call);
             this.navCtrl.pop();
             this.pauseAudio();
           }
@@ -715,7 +712,6 @@ export class ApiService {
           .setIsAudioOnlyCall(callType == 'audio' ? true : false)
           .setCallEventListener(callListener)
           .build();
-          console.log(callSettings,">>>>");
         CometChat.startCall(callSettings);
       }
       pauseAudio() {
@@ -772,8 +768,6 @@ export class ApiService {
 
   getDynamicRoles(parentId,roleId)
   {
-    console.log(parentId);
-    console.log(roleId)
     return this.http.get(BaseUrl +
       "/clientroles?client="+parentId+"&canbeaddedby_in="+roleId+"&_sort=id:asc",)
   }
@@ -785,7 +779,6 @@ export class ApiService {
 
   addGroup(data)
   {
-    console.log(data);
     return this.http.post(BaseUrl + "usergroups",data, {
       headers : this.headers
     })
@@ -816,7 +809,6 @@ export class ApiService {
   }
 
   addContractor(postData):Observable<User>{
-    console.log(postData)
     return this.http.post<User>(BaseUrl + "users/", JSON.stringify(postData), {
         headers: this.headers,
       })

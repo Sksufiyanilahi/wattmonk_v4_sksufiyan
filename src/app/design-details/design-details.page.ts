@@ -426,8 +426,6 @@ remove(){
 }
 
 prelimupdate(event){
-  //console.log(this.imageName);
-  //console.log(event.target.files);
   // for(var i=0; i< event.target.files.length;i++){
     // this.prelimFiles.push(event.target.files)
     this.prelimFiles= event.target.files;
@@ -435,7 +433,6 @@ prelimupdate(event){
     //this.imageName= event.target.files[0].name;
     //this.imagebox= true;
   // }
-  //console.log(this.prelimFiles);
 
     this.targetLength= event.target.files.length;
 
@@ -446,7 +443,6 @@ reader.onload = (event: any) => {
 var orientation = -1;
 let localUrl = event.target.result;
 // this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
-// console.log(res,">><><><");
 // this.image= res;
 this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
   result => {
@@ -485,11 +481,8 @@ return blob;
     // else{
 
       // const blob = this.utilities.getBlobFromImageData(this.prelimFiles);
-      // console.log(blob);
       //  let blob= this.utilities.b64toBlob(this.image);
-      //   console.log(blob);
 
-      // console.log(typeof(this.prelimFiles[0]));
       const imageData = new FormData();
       for(var i=0; i< this.prelimFiles.length;i++){
         imageData.append("files",this.prelimFiles[i]);
@@ -509,7 +502,6 @@ return blob;
               // this.updatecomments();
               // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res)=>{
               //   this.utilities.getDesignDetailsRefresh();
-              //   console.log(res,">>");
 
               // })
               //this.utilities.getDesignDetailsRefresh();
@@ -557,7 +549,6 @@ return blob;
 
 
   reportDesignReviewFailure(){
-    //console.log("Value is" + this.reviewIssuesForm.value);
     if(this.reviewIssuesForm.valid){
     this.countdownservice.stopTimer();
         let cdate = Date.now();

@@ -23,7 +23,6 @@ export class GroupdetailsPage implements OnInit {
 
   ngOnInit() {
     this.designData= this.nav.get('designData');
-    console.log(this.designData)
   }
 
   goBack() {
@@ -79,10 +78,8 @@ async deleteDesign() {
   toast.present();
 }
 deleteDesignFromServer() {
-  console.log(this.designData)
   this.utils.showLoading('Deleting Design').then((success) => {
     this.apiservice.deleteGroup(this.designData.id).subscribe((result) => {
-      console.log('result', result);
       this.utils.hideLoading().then(() => {
         this.utils.showSnackBar(this.designData.firstname + " " + 'has been deleted successfully');
       //  this.navController.pop();

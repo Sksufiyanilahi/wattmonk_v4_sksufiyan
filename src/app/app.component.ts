@@ -168,7 +168,6 @@ export class AppComponent {
   }
 
   registerAPNS() {
-    console.log("Inside register");
     PushNotifications.requestPermission().then(result => {
       if (result.granted) {
         PushNotifications.register();
@@ -178,7 +177,6 @@ export class AppComponent {
     PushNotifications.addListener('registration',
       (token: PushNotificationToken) => {
         localStorage.setItem('pushtoken', token.value);
-        console.log('Push registration success, token: ' + token.value);
         this.apiservice.pushtoken(this.user.id, {newpushtoken: localStorage.getItem('pushtoken')});
       }
     );
@@ -250,7 +248,6 @@ export class AppComponent {
     }
 
     this.deactivateGetUserData = this.apiservice.getUserName().subscribe((res: any) => {
-      console.log(res)
       this.userData = res;
       if (res.role.name == 'ContractorSuperAdmin') {
         this.userData.role.name = 'SuperAdmin';
@@ -265,11 +262,8 @@ export class AppComponent {
   getClientRole(){
     let parentId = this.userData.parent.id;
     let roleId = this.userData.role.id;
-    console.log(parentId,roleId)
   this.apiservice.getDynamicRoles(parentId,roleId).subscribe(
     (response:any) => {
-      console.log(this.userData)
-      console.log(response)
       this.getclientsrole = response.length;
       if (response.length > 0 && response[0].client.id !== 232) {
         this.specificclientid;
@@ -327,7 +321,6 @@ export class AppComponent {
           this.userrole = this.userData.role.name;
         }
       }
-      console.log(this.userrole);
     },
     error => {
       //this.notifyService.showError(error, "Error");

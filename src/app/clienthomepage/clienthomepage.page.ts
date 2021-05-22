@@ -78,7 +78,6 @@ export class ClienthomepagePage implements OnInit {
     this.apiService.getContractorsList().subscribe(
       (response:any) => {
       //  this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-        console.log("response", response);
         this.isClientData = true;
         //if (response.length > 0) {
         // this.clients = this.fillinDynamicData(response);
@@ -92,7 +91,6 @@ export class ClienthomepagePage implements OnInit {
         if (event !== null) {
           event.target.complete();
         }
-        console.log(this.clientData);
        // });
       },
 
@@ -207,14 +205,11 @@ export class ClienthomepagePage implements OnInit {
   switchPaymentModeCustomer(event,data,j)
   {
     event.stopPropagation();
-    console.log(event)
-    console.log(event.target.value,data.id)
     let chipValue = event.target.value;
     var postData={
       ispaymentmodeprepay : chipValue
     }
     this.apiService.updateContractorsData(data.id,postData).subscribe((res)=>{
-      console.log(res);
       })
   }
 

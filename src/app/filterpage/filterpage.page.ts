@@ -41,7 +41,6 @@ export class FilterpagePage implements OnInit {
                 private nav:NavParams,
                 private formBuilder:FormBuilder) {
                   this.requestType= this.nav.get('requesttype');
-                  console.log(this.requestType)
                   this.filterform = this.formBuilder.group({
                     client : new FormControl(''),
                     onhold : new FormControl(''),
@@ -60,22 +59,15 @@ export class FilterpagePage implements OnInit {
 
   getCompanies(){
     this.apiservice.getCompanies(this.requestType).subscribe((res:any)=>{
-      console.log(res);
       this.clientList=res;
-      console.log(this.clientList)
     })
   }
 
   valueChanged(event,value){
-    console.log(event);
-    console.log(value)
   }
 
   applyFilter()
   {
-    console.log(this.filterform.get('client').value)
-    console.log(this.filterform.get('onhold').value)
-    console.log(this.filterform.get('revision').value)
   }
 
 }

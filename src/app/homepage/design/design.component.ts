@@ -255,8 +255,7 @@ this.network.networkConnect();
     let requesttype="prelim"
     
       this.apiService.getPrelimcounts(userId,requesttype).subscribe(res=>{this.PrelimCounts =res;
-        console.log(this.PrelimCounts
-          )})
+      })
       
 
 

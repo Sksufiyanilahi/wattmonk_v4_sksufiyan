@@ -95,7 +95,6 @@ export class GroupschedulePage implements OnInit {
       //        addedby: new FormControl(this.storageService.getUser().id),//.currentUserValue.user.id
     })
     this.designId = +this.route.snapshot.paramMap.get('id');
-    console.log(this.designId)
     if (this.designId !== 0) {
 
       this.designData = this.router.getCurrentNavigation().extras.state;
@@ -110,7 +109,6 @@ export class GroupschedulePage implements OnInit {
     // if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' )
     // this.tabsDisabled = this.designData.productdetails.queryParams.tabsDisabled;
     // this.nonEditableField = this.designData.productdetails.queryParams.nonEditableField;
-    console.log(this.designData);
     if (this.designId !== 0) {
       setTimeout(() => {
         this.isEditMode = true;
@@ -132,8 +130,6 @@ export class GroupschedulePage implements OnInit {
   getDesignDetails() {
     this.user = this.data;
 
-    console.log(this.user);
-
     this.fieldDisabled = true;
     this.groupForm.patchValue({
       groupname: this.user.name,
@@ -142,13 +138,11 @@ export class GroupschedulePage implements OnInit {
       // clients:this.clients
     });
     this.user.members.forEach((element) => {
-      console.log(element)
       this.selectedmembers.push(element.firstname+element.lastname);
       this.selectedmembersId.push(element.id);
     })
 
     this.user.clients.forEach((element) => {
-      console.log(element)
       if(element.company!=null){
       this.selectedclients.push(element.company);
       }
@@ -167,9 +161,6 @@ export class GroupschedulePage implements OnInit {
   }
 
   submitForm() {
-
-    console.log(this.groupForm.status)
-    console.log(this.groupForm.value)
     this.groupForm.get('members').setValue(this.selectedmembers);
     this.groupForm.get('clients').setValue(this.selectedclients);
     if (this.groupForm.status === 'VALID') {
@@ -214,7 +205,6 @@ export class GroupschedulePage implements OnInit {
             status: true
           }
           this.apiservices.updateGroupData(this.designId, postData).subscribe((response: any) => {
-            console.log(response);
             this.utils.hideLoading().then(() => {
               this.router.navigate(['teamhomepage/group']);
               this.utils.showSnackBar("Group updated succesfully");
@@ -245,8 +235,6 @@ export class GroupschedulePage implements OnInit {
   }
 
   fetchTeamData() {
-    console.log("hello");
-
     this.apiservices.getTeamData().subscribe(
       response => {
         response.forEach((element) => {
@@ -255,8 +243,6 @@ export class GroupschedulePage implements OnInit {
               id: element.id,
               name: element.firstname + element.lastname,
             });
-            console.log(this.members)
-            console.log(this.membersList)
           }
         });
       },
@@ -267,11 +253,8 @@ export class GroupschedulePage implements OnInit {
   }
 
   setSelectMember(event) {
-    console.log(event)
-    console.log(event.option)
     this.selectedmembers.push(event.option.viewValue);
     this.selectedmembersId.push(event.option.value.id)
-    console.log(this.selectedmembers, this.selectedmembersId)
     this.membersInput.nativeElement.value = '';
    // this.groupForm.get('members').setValue('');
   }
@@ -296,11 +279,8 @@ export class GroupschedulePage implements OnInit {
   }
 
   setSelectClient(event) {
-    console.log(event)
-    console.log(event.option)
     this.selectedclients.push(event.option.viewValue);
     this.selectedclientsId.push(event.option.value.id)
-    console.log(this.selectedclients, this.selectedclientsId)
     this.clientInput.nativeElement.value = '';
     //this.groupForm.get('clients').setValue('');
   }

@@ -96,7 +96,6 @@ export class OnboardingPage implements OnInit {
     private cd: ChangeDetectorRef,
     private readonly joyrideService:JoyrideService) {
     this.user = this.storage.getUser();
-    console.log(this.user);
     this.userId = this.storage.getUserID();
   }
 
@@ -152,10 +151,8 @@ export class OnboardingPage implements OnInit {
         this.outlet.deactivate();
     });
     this.getRoles()
-    console.log("onboarding")
     // this.menu.enable(false);
     // this.user = this.storage.getUser();
-    // console.log(this.user)
     // this.userId= this.storage.getUserID();
 
 
@@ -185,7 +182,6 @@ export class OnboardingPage implements OnInit {
     this.maintour = this.maintourRef.valueChanges();
     this.maintour.subscribe(
       (res) => {
-        console.log(res.maintour);
         if (res.maintour == null || res.maintour == undefined || !res.maintour) {
           this.runmaintour = true;
           if (this.runmaintour) {
@@ -333,18 +329,13 @@ export class OnboardingPage implements OnInit {
   }
 
   getRoles() {
-    console.log(this.user);
     let parentId = this.user.parent.id;
     let roleId = this.user.role.id;
     this.apiService.getDynamicRoles(parentId, roleId).subscribe((res) => {
-      console.log(res);
       this.roles = res;
-      console.log(this.roles);
       if (res == 0) {
         this.apiService.getDefaultRoles(roleId).subscribe((response) => {
-          console.log(response);
           this.roles = response;
-          console.log(this.roles)
         })
       }
     })
@@ -702,7 +693,6 @@ export class OnboardingPage implements OnInit {
     }
   }
   roleChange(id) {
-    console.log(id)
     this.roleValue = id;
   }
 

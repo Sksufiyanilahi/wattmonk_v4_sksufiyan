@@ -32,7 +32,6 @@ export class DashboardPage implements OnInit {
     this.userData= this.storage.getUser();
     this.fetchsurveyprocessjsons();
   //  let data = this.route.snapshot.data.userdata; // get data from resolver
-  //  console.log(data);
     //this.getCount();
     this.mixpanelService.track('DASHBOARD_PAGE_OPEN', {
     });
@@ -53,10 +52,8 @@ export class DashboardPage implements OnInit {
 
   fetchsurveyprocessjsons() {
 		this.datastorage.get('pvsurveyjson').then((data) => {
-		  console.log(data);
 		  if (!data) {
 			this.apiService.fetchJSON(this.storage.getParentId(), 'pv').subscribe((response: any) => {
-			  console.log(response);
 			  this.datastorage.set('pvsurveyjson', response);
 			});
 		  }
