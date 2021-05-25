@@ -13,7 +13,7 @@
           </div>
           <div class="mainimage"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
-            <img
+            <img #watermarkedimage
               src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}"
               [style.height.px]="remainingheight"/>
           </div>

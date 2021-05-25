@@ -96,6 +96,7 @@
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "uk.co.workingedge.phonegap.plugin.launchnavigator": "^5.0.5",
+    "watermarkjs": "^2.1.1",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

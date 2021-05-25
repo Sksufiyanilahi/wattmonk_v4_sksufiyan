@@ -17,6 +17,8 @@ import { RoofMaterial } from '../model/roofmaterial.model';
 import { Animation, AnimationController, IonSlides, NavController, Platform, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
+import * as watermark from 'watermarkjs';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 // const { Camera } = Plugins;
 
@@ -151,6 +153,7 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('infoslider', { static: false }) infoslider: IonSlides;
   @ViewChild('singlefileuploadinput') singlefileuploadinput: ElementRef;
   @ViewChild('multiplefileuploadinput') multiplefileuploadinput: ElementRef;
+  @ViewChild('watermarkedimage') waterMarkImage: ElementRef
 
   sliderTwo: any;
 
@@ -212,6 +215,11 @@ export class StartsurveyPage implements OnInit {
 
   remainingheight = 0;
 
+  blobimagedata: any;
+
+  latitude: any = 0; //latitude
+  longitude: any = 0; //longitude
+
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
     private route: ActivatedRoute,
@@ -224,7 +232,8 @@ export class StartsurveyPage implements OnInit {
     private navController: NavController,
     private storage: Storage,
     public toastController: ToastController,
-    private platform: Platform) { }
+    private platform: Platform,
+    private geolocation: Geolocation) { }
 
   ngOnInit() {
     console.log(this.platform.height());
@@ -235,7 +244,7 @@ export class StartsurveyPage implements OnInit {
     this.surveytype = this.route.snapshot.paramMap.get('type');
 
     // this.loadSurveyJSON('pvsurveyjson');
-
+    this.getCurrentCoordinates();
 
     this.http
       .get('assets/surveyprocessjson/pv.json')
@@ -376,6 +385,26 @@ export class StartsurveyPage implements OnInit {
     const data = this.preparesurveystorage();
     data.saved = true;
     this.storage.set(this.user.id + '-' + this.surveyid, data);
+  }
+
+  watermarkImage(blobimage) {
+    watermark([blobimage])
+    .blob(watermark.text.lowerLeft("Lat: "+this.latitude+" Lng: "+this.longitude, '170px Arial', '#F5A905', 0.8))
+      .then(img => {
+        this.blobimagedata = img;
+      });
+      return this.blobimagedata;
+  }
+
+  // use geolocation to get user's device coordinates
+  getCurrentCoordinates() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.latitude = resp.coords.latitude;
+      this.longitude = resp.coords.longitude;
+      console.log(this.latitude + "----" + this.longitude);
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -770,8 +799,9 @@ export class StartsurveyPage implements OnInit {
         } else {
           filename = imageToUpload.imageuploadname + '.png';
         }
+        this.blobimagedata = this.watermarkImage(blob);
         this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + this.totalimagestoupload);
-        this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
+        this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, this.blobimagedata, filename).subscribe((data) => {
           imageToUpload.uploadstatus = true;
           index++;
           mapOfImages.splice(0, 1);
