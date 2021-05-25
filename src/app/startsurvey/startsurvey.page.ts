@@ -14,7 +14,7 @@ import { InverterMadeModel } from '../model/inverter-made.model';
 import { SolarMake } from '../model/solar-make.model';
 import { SolarMadeModel } from '../model/solar-made.model';
 import { RoofMaterial } from '../model/roofmaterial.model';
-import { Animation, AnimationController, IonSlides, NavController, ToastController } from '@ionic/angular';
+import { Animation, AnimationController, IonSlides, NavController, Platform, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 
@@ -203,6 +203,8 @@ export class StartsurveyPage implements OnInit {
   shotcompletecount = 0;
   totalstepcount: number;
 
+  remainingheight = 0;
+
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
     private route: ActivatedRoute,
@@ -214,9 +216,13 @@ export class StartsurveyPage implements OnInit {
     private insomnia: Insomnia,
     private navController: NavController,
     private storage: Storage,
-    public toastController: ToastController) { }
+    public toastController: ToastController,
+    private platform: Platform) { }
 
   ngOnInit() {
+    console.log(this.platform.height());
+    this.remainingheight = this.platform.height() - 66 - 54 - 66;
+    console.log(this.remainingheight);
     this.user = this.storageuserdata.getUser();
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
