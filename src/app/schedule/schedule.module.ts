@@ -10,7 +10,6 @@ import { UtilitiesModule } from '../utilities/utilities.module';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { NumberOnlyDirective } from './number.directive';
-import { Camera } from '@ionic-native/Camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { SharedModule } from '../shared/shared.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -44,7 +43,6 @@ import { SalesproposalComponent } from './salesproposal/salesproposal.component'
   providers: [
     Diagnostic,
     NativeGeocoder,
-    Camera,
     File
   ]
 })

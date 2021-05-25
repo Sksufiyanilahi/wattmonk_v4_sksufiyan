@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ModalController, NavParams } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { UtilitiesService } from '../utilities.service';
@@ -29,7 +28,7 @@ export class DeclinepagePage implements OnInit {
   pestampDeclineList:any=[];
   pestampDeclineFileUpload:boolean = false;
 
-  constructor(private camera: Camera,
+  constructor(
     private modalCtrl:ModalController,
     private apiservice:ApiService,
     private nav:NavParams,

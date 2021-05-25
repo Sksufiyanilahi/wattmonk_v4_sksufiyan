@@ -24,7 +24,6 @@ import { Observable, Subscription } from 'rxjs';
 import { StorageService } from '../../storage.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { DesginDataModel } from '../../model/design.model';
-import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
 // import { Intercom } from 'ng-intercom';
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
 import {Clients} from 'src/app/model/clients.model';
@@ -126,16 +125,7 @@ export class SalesproposalComponent implements OnInit {
   isArcFileDelete: boolean = false;
   arcFileUrl: any=[];
   //attachmentName = this.desginForm.get('attachments').value;
-
-  options: CameraOptions = {
-    quality: 30,
-    targetWidth: 600,
-    targetHeight: 300,
-    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-    destinationType: this.camera.DestinationType.DATA_URL,
-    encodingType: this.camera.EncodingType.PNG,
-    mediaType: this.camera.MediaType.PICTURE
-  }
+  
   fileName: any;
   logoFileName: any;
   moduledata: any;
@@ -210,7 +200,6 @@ export class SalesproposalComponent implements OnInit {
     private navController: NavController,
     private storage: StorageService,
     private route: ActivatedRoute,
-    private camera: Camera,
     public router:Router,
     private cdr:ChangeDetectorRef,
     private zone: NgZone,

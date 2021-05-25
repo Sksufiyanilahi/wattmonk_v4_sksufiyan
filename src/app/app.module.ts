@@ -16,7 +16,6 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
-import {Camera} from '@ionic-native/camera/ngx';
 import {Dialogs} from '@ionic-native/dialogs/ngx';
 import {FirebaseX} from '@ionic-native/firebase-x/ngx';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
@@ -37,7 +36,6 @@ import {SuccessModalComponent} from './utilities/success-modal/success-modal.com
 import {UtilitiesModule} from './utilities/utilities.module';
 import {PopoverComponentComponent} from './popover-component/popover-component.component';
 import {MyLoaderComponent} from './components/my-loader/my-loader.component';
-import {CameraPreviewWeb} from '@capacitor-community/camera-preview';
 import {SplashScreenPluginWeb} from '@capacitor/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {JoyrideModule} from 'ngx-joyride'
@@ -76,8 +74,6 @@ import {JoyrideModule} from 'ngx-joyride'
     FirebaseX,
     NgxImageCompressService,
     BackgroundMode,
-    Camera,
-    CameraPreviewWeb,
     SplashScreenPluginWeb,
     InAppBrowser,
     Network,
