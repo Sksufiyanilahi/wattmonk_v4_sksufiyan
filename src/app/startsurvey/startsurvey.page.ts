@@ -64,7 +64,7 @@ export interface SHOT {
   imagename: string;
   imageuploadname: string;
   required: boolean;
-  isskipped: boolean;
+  visitedonce: boolean;
 }
 
 export interface CAPTUREDSHOT {
@@ -230,15 +230,15 @@ export class StartsurveyPage implements OnInit {
     this.surveycity = this.route.snapshot.paramMap.get('city');
     this.surveystate = this.route.snapshot.paramMap.get('state');
 
-    this.loadSurveyJSON('pvsurveyjson');
+    // this.loadSurveyJSON('pvsurveyjson');
 
 
-    // this.http
-    //   .get('assets/surveyprocessjson/defaultpv.json')
-    //   .subscribe((data) => {
-    //     console.log(data);
-    //     this.createSurveyForm(data[0]);
-    //   });
+    this.http
+      .get('assets/surveyprocessjson/pv.json')
+      .subscribe((data) => {
+        console.log(data);
+        this.createSurveyForm(data[0]);
+      });
   }
 
   loadSurveyJSON(type) {
@@ -947,6 +947,7 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
     this.blurcaptureview = false;
     this.updateProgressStatus();
     this.markchildcompletion();
@@ -985,12 +986,16 @@ export class StartsurveyPage implements OnInit {
     //Check for next possible shot in active children
     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shot, shotindex) => {
-        if (shot.ispending && !nextactiveshotfound) {
+        if (!shot.visitedonce && shot.ispending && !nextactiveshotfound) {
           this.selectedshotindex = shotindex;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
           this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
           nextactiveshotfound = true;
+          if(!shot.required){
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
+            this.setallnotrequiredshotsasvisited();
+          }
         }
       });
 
@@ -1007,13 +1012,17 @@ export class StartsurveyPage implements OnInit {
                   console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
                   if (child.shots.length > 0) {
                     child.shots.forEach((shot, shotindex) => {
-                      if (shot.ispending && !nextactiveshotfound) {
+                      if (!shot.visitedonce && shot.ispending && !nextactiveshotfound) {
                         this.selectedshotindex = shotindex;
                         console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo);
                         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
                         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
                         this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
                         nextactiveshotfound = true;
+                        if(!shot.required){
+                          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
+                          this.setallnotrequiredshotsasvisited();
+                        }
                         console.log(this.mainmenuitems);
                       }
                     });
@@ -1030,6 +1039,16 @@ export class StartsurveyPage implements OnInit {
         });
       }
     }
+  }
+
+  setallnotrequiredshotsasvisited(){
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shotelement,index) => {
+      if(!shotelement.required){
+        console.log(shotelement.shotinfo);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].visitedonce = true;
+      }
+    });
+    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
   }
 
   //------------------------------------------------------------------------------------------------------------------
