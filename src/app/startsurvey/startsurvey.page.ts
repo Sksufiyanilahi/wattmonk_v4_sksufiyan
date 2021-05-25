@@ -615,8 +615,8 @@ export class StartsurveyPage implements OnInit {
 
   async savedataandclose(){
     const toast = await this.toastController.create({
-      message: 'Your survey data is stored locally. You can sync later also.',
-      duration: 2000
+      message: 'Your survey data is stored locally. You can sync completed surveys data later also.',
+      duration: 4000
     });
     toast.present();
     this.handleSurveyExit();
