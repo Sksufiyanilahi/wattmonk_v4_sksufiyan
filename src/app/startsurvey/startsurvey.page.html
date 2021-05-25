@@ -2,20 +2,20 @@
   <!-- PICTURE TAKING MODE VIEW -->
   <div class="picturemodecontainer" [ngClass]="[ blurcaptureview ? 'blurbackground' : '']">
     <ion-grid class="ion-no-padding" style="overflow-y: hidden;">
-      <div class="captureactionareacontainer"
+      <ion-row class="captureactionareacontainer"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
-        <div class="imagecontainer">
+        <ion-row class="imagecontainer" [style.height.px]="remainingheight">
           <div class="mainimage"
             *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
             <img
               src="/assets/surveysampleimages/{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename}}.jpg"
-              width="100%" height="100%" />
+              [style.height.px]="remainingheight"/>
           </div>
           <div class="mainimage"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
             <img
               src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}"
-              width="100%" height="100%" />
+              [style.height.px]="remainingheight"/>
           </div>
           <ion-row class="gallerystack"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
@@ -29,7 +29,7 @@
               </ng-container>
             </div>
           </ion-row>
-        </div>
+        </ion-row>
         <ion-row class="captureactionarea"
           *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending">
           <ion-col style="text-align: center;">
@@ -60,7 +60,7 @@
             </a>
           </ion-col>
         </ion-row>
-      </div>
+      </ion-row>
       <div class="detailsformviewcontainer"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
         <form [formGroup]="activeForm" class="additionalform ion-margin">
