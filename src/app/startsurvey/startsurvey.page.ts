@@ -614,7 +614,12 @@ export class StartsurveyPage implements OnInit {
   }
 
   async savedataandclose(){
-    
+    const toast = await this.toastController.create({
+      message: 'Your survey data is stored locally. You can sync later also.',
+      duration: 2000
+    });
+    toast.present();
+    this.handleSurveyExit();
   }
 
   async saveFormData() {
@@ -637,23 +642,7 @@ export class StartsurveyPage implements OnInit {
 
     if (nopendingshotfound) {
       if (this.activeForm.status == 'VALID') {
-        this.utilitieservice.showLoading('Please wait...');
-        const data = {};
-        this.activeFormElementsArray.map(element => {
-          if (this.activeForm.get(element).value != '') {
-            data[element] = this.activeForm.get(element).value;
-            if (element === 'batterysystem') {
-              data[element] = this.activeForm.get('batterysystem').value.toString();
-            }
-            else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
-              data[element] = this.activeForm.get(element).value.id;
-            }
-          }
-        });
-        data['status'] = 'completed';
-        this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
-          this.utilitieservice.hideLoading().then(() => {
-            this.insomnia.keepAwake()
+        this.insomnia.keepAwake()
               .then(
                 () => {
 
@@ -661,13 +650,6 @@ export class StartsurveyPage implements OnInit {
 
               );
             this.uploadformelementsfiles(this.mainmenuitems[0], 0);
-          });
-        }, (error) => {
-
-          this.utilitieservice.hideLoading().then(() => {
-            this.utilitieservice.errorSnackBar('There was some error in processing the request');
-          });
-        });
       }
       else {
         const toast = await this.toastController.create({
@@ -786,6 +768,28 @@ export class StartsurveyPage implements OnInit {
       }
     } else {
       this.utilitieservice.hideLoading().then(() => {
+        this.savedetailsformdata();
+      });
+    }
+  }
+
+  savedetailsformdata(){
+    this.utilitieservice.showLoading('Please wait...');
+    const data = {};
+    this.activeFormElementsArray.map(element => {
+      if (this.activeForm.get(element).value != '') {
+        data[element] = this.activeForm.get(element).value;
+        if (element === 'batterysystem') {
+          data[element] = this.activeForm.get('batterysystem').value.toString();
+        }
+        else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
+          data[element] = this.activeForm.get(element).value.id;
+        }
+      }
+    });
+    data['status'] = 'completed';
+    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
+      this.utilitieservice.hideLoading().then(() => {
         this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
           modal.present();
           modal.onWillDismiss().then((dismissed) => {
@@ -803,7 +807,12 @@ export class StartsurveyPage implements OnInit {
           });
         });
       });
-    }
+    }, (error) => {
+
+      this.utilitieservice.hideLoading().then(() => {
+        this.utilitieservice.errorSnackBar('There was some error in processing the request');
+      });
+    });
   }
 
   //------------------------------------------------------------------------------------------------------------------
