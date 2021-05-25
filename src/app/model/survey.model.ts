@@ -55,6 +55,7 @@ export class SurveyDataModel {
   latitude: string;
   longitude: string;
   totalpercent: number;
+  remainingfilestoupload: number;
   isoverdue: boolean;
   formattedjobtype: string;
   solarpanelsimages: Image[];

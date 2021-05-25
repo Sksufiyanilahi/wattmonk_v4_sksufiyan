@@ -20,4 +20,5 @@ export class SurveyStorageModel {
   previousmainmenuindex : number;
   previoussubmenuindex : number;
   previousshotindex : number;
+  remainingfilestoupload : number;
 }

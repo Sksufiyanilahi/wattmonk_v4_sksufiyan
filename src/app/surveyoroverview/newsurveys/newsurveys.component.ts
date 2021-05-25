@@ -235,6 +235,7 @@ export class NewsurveysComponent implements OnInit {
       this.storage.get(this.storageService.getUserID() + '-' + element.id).then((data: SurveyStorageModel) => {
         if (data) {
           console.log(data.currentprogress);
+          element.remainingfilestoupload = data.remainingfilestoupload;
           element.totalpercent = data.currentprogress;
         } else {
           element.totalpercent = 0;

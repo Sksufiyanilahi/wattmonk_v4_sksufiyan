@@ -1,74 +1,79 @@
 .custom-card {
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    padding: 8px 12px;
-  }
-
-  .customer-name {
-    font-size: 1em;
-    color: #434343;
-    font-weight: bold;
-    display:table;
-    margin: 0px;
-  }
-
-  .customer-email {
-    font-size: 0.8em;
-    color: #666666;
-  }
-
-  .customer-phone {
-    font-size: 0.8em;
-    color: #4272B9;
-  }
-
-  .customer-address {
-    margin-top: 8px;
-    margin-bottom: 8px;
-    font-size: 0.8em;
-    color: #4272B9;
-  }
-
-  .timestamp {
-    font-size: 0.7em;
-  }
-
-  .chipdetail{
-    display: inline;
-    vertical-align: middle;
-    background-color: #95afc0;
-    font-size: 0.6em;
-    padding: 4px 10px;
-    border-radius: 10px;
-    text-align: center;
-    color: #fff;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  padding: 8px 12px;
 }
 
-.latebystyle{
+.customer-name {
+  font-size: 1em;
+  color: #434343;
+  font-weight: bold;
+  display: table;
+  margin: 0px;
+}
+
+.customer-email {
+  font-size: 0.8em;
+  color: #666666;
+}
+
+.customer-phone {
+  font-size: 0.8em;
+  color: #4272b9;
+}
+
+.customer-address {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 0.8em;
+  color: #4272b9;
+}
+
+.timestamp {
+  font-size: 0.7em;
+}
+
+.chipdetail {
+  display: inline;
+  vertical-align: middle;
+  background-color: #95afc0;
+  font-size: 0.6em;
+  padding: 4px 10px;
+  border-radius: 10px;
+  text-align: center;
+  color: #fff;
+}
+
+.latebystyle {
   float: right;
   font-size: 10px;
-  color: #3C78DB;
+  color: #3c78db;
   text-align: right;
 }
-.imagebutton{
-  float:right;
+.imagebutton {
+  float: right;
   margin-top: 0px;
-
-
 }
 
-.recordupdatedon{
+.recordupdatedon {
   float: right;
   font-size: 10px;
   font-style: italic;
   text-align: right;
 }
 
-.chatbutton{
-  float:right;
+.chatbutton {
+  float: right;
   margin-top: 0px;
-  margin-right:5px;
+  margin-right: 5px;
+}
+
+.warninginfo {
+  margin-top: 8px;
+  font-size: 12px;
+  font-style: italic;
+  color: #f00;
 }
