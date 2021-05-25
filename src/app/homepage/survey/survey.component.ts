@@ -984,7 +984,7 @@ export class SurveyComponent {
     this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
 
     })
-    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]);
   }
 
   makeDirectory() {
@@ -1081,7 +1081,7 @@ export class SurveyComponent {
 
   resumeSurvey(surveyData, event) {
     event.stopPropagation();
-    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]);
   }
 
   gotoActivity(surveyData, event) {

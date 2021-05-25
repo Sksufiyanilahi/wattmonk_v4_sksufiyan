@@ -234,7 +234,7 @@ export class CompletedsurveysComponent implements OnInit {
 
   resumeSurvey(surveyData, event) {
     event.stopPropagation();
-    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]);
   }
 
   gotoActivity(surveyData, event) {

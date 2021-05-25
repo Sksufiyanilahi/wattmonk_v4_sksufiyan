@@ -28,7 +28,7 @@
                   <ion-row class="ion-no-margin ion-no-margin">
                       <ion-col size="auto" class="ion-no-margin ion-no-padding"
                                *ngIf="surveyData.status !== 'completed'"
-                               [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]"
+                               [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]"
                                routerDirection="forward">
                           <span class="ion-text-end action-button-color">Start Survey</span>
                       </ion-col>

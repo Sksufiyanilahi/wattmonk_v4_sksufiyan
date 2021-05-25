@@ -165,8 +165,6 @@ export class StartsurveyPage implements OnInit {
   user: User;
   surveyid: number;
   surveytype: string;
-  surveycity: string;
-  surveystate: string;
 
   utilities: InverterMakeModel[] = [];
   selectedutilityid: number;
@@ -227,8 +225,6 @@ export class StartsurveyPage implements OnInit {
     this.user = this.storageuserdata.getUser();
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
-    this.surveycity = this.route.snapshot.paramMap.get('city');
-    this.surveystate = this.route.snapshot.paramMap.get('state');
 
     // this.loadSurveyJSON('pvsurveyjson');
 
@@ -315,8 +311,6 @@ export class StartsurveyPage implements OnInit {
 
         this.surveyid = data.surveyid;
         this.surveytype = data.surveytype;
-        this.surveycity = data.city;
-        this.surveystate = data.state;
         Object.keys(data.formdata).forEach((key: string) => {
           let control: AbstractControl = null;
           control = this.activeForm.get(key);
@@ -352,8 +346,6 @@ export class StartsurveyPage implements OnInit {
 
     surveyStorageModel.surveyid = this.surveyid;
     surveyStorageModel.surveytype = this.surveytype;
-    surveyStorageModel.city = this.surveycity;
-    surveyStorageModel.state = this.surveystate;
 
     return surveyStorageModel;
   }
