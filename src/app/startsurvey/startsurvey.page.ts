@@ -1041,6 +1041,7 @@ export class StartsurveyPage implements OnInit {
         });
       }
     }
+    this.preparesurveystorage();
   }
 
   setallnotrequiredshotsasvisited(){
