@@ -949,7 +949,9 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
     this.blurcaptureview = false;
-    this.updateProgressStatus();
+    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required){
+      this.updateProgressStatus();
+    }
     this.markchildcompletion();
   }
 
@@ -1065,7 +1067,11 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems.map(mainmenuitem => {
       mainmenuitem.children.map(child => {
         if(child.shots.length > 0){
-          totalSteps += child.shots.length;
+          child.shots.forEach(shot => {
+            if(shot.required){
+              totalSteps += 1;
+            }
+          });
         }
         if(child.formelements.length > 0){
           totalSteps += 1;
