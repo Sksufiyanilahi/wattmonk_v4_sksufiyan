@@ -236,14 +236,12 @@ export class StartsurveyPage implements OnInit {
     this.http
       .get('assets/surveyprocessjson/pv.json')
       .subscribe((data) => {
-        console.log(data);
         this.createSurveyForm(data[0]);
       });
   }
 
   loadSurveyJSON(type) {
     this.datastorage.get(type).then((data) => {
-      console.log(data);
       this.createSurveyForm(data[0]);
     });
   }
@@ -298,7 +296,6 @@ export class StartsurveyPage implements OnInit {
     });
     formData['shotname'] = new FormControl('', []);
     this.activeFormElementsArray.push('shotname');
-    console.log(formData);
     this.activeForm = new FormGroup(formData);
 
     //Fillin data from storage if data exists
@@ -315,8 +312,6 @@ export class StartsurveyPage implements OnInit {
         this.selectedshotindex = data.selectedshotindex;
         this.totalpercent = data.currentprogress;
         this.shotcompletecount = data.shotcompletecount;
-        console.log(this.totalpercent);
-        console.log(this.shotcompletecount);
 
         this.surveyid = data.surveyid;
         this.surveytype = data.surveytype;
@@ -354,7 +349,6 @@ export class StartsurveyPage implements OnInit {
     surveyStorageModel.selectedshotindex = this.selectedshotindex;
     surveyStorageModel.currentprogress = this.totalpercent;
     surveyStorageModel.shotcompletecount = this.shotcompletecount;
-    console.log(this.totalpercent);
 
     surveyStorageModel.surveyid = this.surveyid;
     surveyStorageModel.surveytype = this.surveytype;
@@ -417,25 +411,19 @@ export class StartsurveyPage implements OnInit {
         } else {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push('/assets/icon/file.png');
         }
-        console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls);
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
   }
 
   getFiletype(file, formelementindex) {
-    console.log(file)
-    console.log(formelementindex);
     var extension = file.name.substring(file.name.lastIndexOf('.'));
     var mimetype = this.utilitieservice.getMimetype(extension);
-    window.console.log(extension, mimetype);
     var data = new Blob([file], {
       type: mimetype
     });
-    console.log(data);
     let replaceFile = new File([data], file.name, { type: mimetype });
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(replaceFile);
-    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments);
   }
 
   removeselectedfile(i, formelementindex) {
@@ -642,7 +630,6 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.showLoading('Please wait...');
         const data = {};
         this.activeFormElementsArray.map(element => {
-          console.log("setting element value---" + element);
           if (this.activeForm.get(element).value != '') {
             data[element] = this.activeForm.get(element).value;
             if (element === 'batterysystem') {
@@ -1006,17 +993,14 @@ export class StartsurveyPage implements OnInit {
         this.mainmenuitems.forEach((mainmenu, mainindex) => {
           if (!nextactiveshotfound) {
             this.selectedmainmenuindex = mainindex;
-            console.log(this.mainmenuitems[this.selectedmainmenuindex].name);
             if (mainmenu.children.length > 0) {
               mainmenu.children.forEach((child, childindex) => {
                 if (!nextactiveshotfound) {
                   this.selectedsubmenuindex = childindex;
-                  console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
                   if (child.shots.length > 0) {
                     child.shots.forEach((shot, shotindex) => {
                       if (!shot.visitedonce && shot.ispending && !nextactiveshotfound) {
                         this.selectedshotindex = shotindex;
-                        console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo);
                         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
                         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
                         this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
@@ -1025,7 +1009,6 @@ export class StartsurveyPage implements OnInit {
                           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
                           this.setallnotrequiredshotsasvisited();
                         }
-                        console.log(this.mainmenuitems);
                       }
                     });
                   } else {
@@ -1047,11 +1030,9 @@ export class StartsurveyPage implements OnInit {
   setallnotrequiredshotsasvisited(){
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shotelement,index) => {
       if(!shotelement.required){
-        console.log(shotelement.shotinfo);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].visitedonce = true;
       }
     });
-    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1080,7 +1061,6 @@ export class StartsurveyPage implements OnInit {
       });
     });
     this.totalstepcount = totalSteps;
-    console.log(this.totalstepcount);
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1149,7 +1129,6 @@ export class StartsurveyPage implements OnInit {
   }
 
   handleExistence(doesexist: boolean) {
-    console.log("inside handleexistence--"+doesexist);
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;
     this.blurcaptureview = false;
@@ -1165,7 +1144,6 @@ export class StartsurveyPage implements OnInit {
         }
       });
     } else {
-      console.log("settings all shots cancelled");
       //Mark shots as completed and required false
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
         element.ispending = false;
@@ -1179,7 +1157,6 @@ export class StartsurveyPage implements OnInit {
           this.activeForm.get(element.inputformcontrol[1]).clearValidators();
         }
       });
-      console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
 
       this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
       this.markchildcompletion();
@@ -1263,7 +1240,6 @@ export class StartsurveyPage implements OnInit {
           this.activeForm.get(element.inputformcontrol[1]).setValidators([Validators.required]);
         }
       });
-      console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex]);
     } else {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
         element.ispending = false;
