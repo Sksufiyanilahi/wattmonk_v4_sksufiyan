@@ -64,6 +64,7 @@ export interface SHOT {
   imagename: string;
   imageuploadname: string;
   required: boolean;
+  isskipped: boolean;
 }
 
 export interface CAPTUREDSHOT {
@@ -328,7 +329,6 @@ export class StartsurveyPage implements OnInit {
         });
         this.isdataloaded = true;
         this.setTotalStepCount();
-        // this.handleMenuSwitch(false);
       } else {
         this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
         this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
@@ -353,6 +353,8 @@ export class StartsurveyPage implements OnInit {
     surveyStorageModel.selectedsubmenuindex = this.selectedsubmenuindex;
     surveyStorageModel.selectedshotindex = this.selectedshotindex;
     surveyStorageModel.currentprogress = this.totalpercent;
+    surveyStorageModel.shotcompletecount = this.shotcompletecount;
+    console.log(this.totalpercent);
 
     surveyStorageModel.surveyid = this.surveyid;
     surveyStorageModel.surveytype = this.surveytype;
@@ -1052,6 +1054,7 @@ export class StartsurveyPage implements OnInit {
       });
     });
     this.totalstepcount = totalSteps;
+    console.log(this.totalstepcount);
   }
 
   //------------------------------------------------------------------------------------------------------------------
