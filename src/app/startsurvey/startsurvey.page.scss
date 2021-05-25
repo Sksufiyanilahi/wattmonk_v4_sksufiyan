@@ -6,6 +6,12 @@ ion-content {
 }
 .imagecontainer {
   width: 100%;
+
+  .mainimage{
+    img{
+      width: 100%;
+    }
+  }
 }
 
 .gallerystack {
@@ -93,6 +99,8 @@ ion-content {
 }
 
 .retakeshotarea {
+  width: 100%;
+
   .button {
     border: none;
     height: auto;

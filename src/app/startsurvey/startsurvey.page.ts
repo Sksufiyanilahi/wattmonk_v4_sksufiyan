@@ -372,6 +372,12 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
+  saveintermediatesurveydata(){
+    const data = this.preparesurveystorage();
+    data.saved = true;
+    this.storage.set(this.user.id + '-' + this.surveyid, data);
+  }
+
   //------------------------------------------------------------------------------------------------------------------
   //Animation Methods
   //------------------------------------------------------------------------------------------------------------------
@@ -605,6 +611,10 @@ export class StartsurveyPage implements OnInit {
       duration: 2000
     });
     toast.present();
+  }
+
+  async savedataandclose(){
+    
   }
 
   async saveFormData() {
@@ -1024,7 +1034,7 @@ export class StartsurveyPage implements OnInit {
         });
       }
     }
-    this.preparesurveystorage();
+    this.saveintermediatesurveydata();
   }
 
   setallnotrequiredshotsasvisited(){

@@ -44,7 +44,8 @@
                                     "inside",
                                     "outside"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 2,
@@ -68,7 +69,8 @@
                                 "actions": [
                                     "confirm"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 2,
@@ -92,7 +94,8 @@
                                 "actions": [
                                     "confirm"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 1,
@@ -119,7 +122,8 @@
                                     "center",
                                     "none"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             }
                         ],
                         "checkexistence": false,
@@ -161,7 +165,8 @@
                                     "attach",
                                     "detach"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 3,
@@ -183,7 +188,8 @@
                                 "questionstatus": false,
                                 "result": "",
                                 "actions": ["confirm"],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             }
                         ],
                         "checkexistence": false,
@@ -225,7 +231,8 @@
                                     "inside",
                                     "outside"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 4,
@@ -250,7 +257,8 @@
                                 "actions": [
                                     "confirm"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -272,7 +280,8 @@
                                 "questionstatus": false,
                                 "result": "",
                                 "actions": [],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -293,7 +302,8 @@
                                 "questionstatus": false,
                                 "result": "",
                                 "actions": [],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -315,7 +325,8 @@
                                 "questionstatus": false,
                                 "result": "",
                                 "actions": [],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             }
                         ],
                         "checkexistence": true,
@@ -365,7 +376,8 @@
                                 "actions": [
                                     "Confirm"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 6,
@@ -387,7 +399,8 @@
                                 "questionstatus": false,
                                 "result": "",
                                 "actions": ["Confirm"],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -409,7 +422,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -431,7 +445,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -453,7 +468,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -475,7 +491,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -497,7 +514,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             }
                         ],
                         "checkexistence": false,
@@ -534,7 +552,8 @@
                                 "questionstatus": false,
                                 "result": "",
                                 "actions": [],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             }
                         ],
                         "checkexistence": false,
@@ -573,7 +592,8 @@
                                 "questionstatus": false,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -595,7 +615,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -617,7 +638,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -639,7 +661,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -661,7 +684,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -683,7 +707,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -705,7 +730,8 @@
                                 "questionstatus": true,
                                 "result": "",
                                 "actions": [],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             }
                         ],
                         "checkexistence": false,
@@ -744,7 +770,8 @@
                                 "questionstatus": false,
                                 "result": "",
                                 "actions": [],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             }
                         ],
                         "checkexistence": false,
@@ -795,7 +822,8 @@
                                     "truss",
                                     "rafter"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 7,
@@ -819,7 +847,8 @@
                                 "actions": [
                                     "Confirm"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 2,
@@ -843,7 +872,8 @@
                                 "actions": [
                                     "Confirm"
                                 ],
-                                "required": true
+                                "required": true,
+                                "visitedonce": false
                             }
                         ],
                         "checkexistence": false,
@@ -893,7 +923,8 @@
                                 "actions": [
                                     "confirm"
                                 ],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 5,
@@ -917,7 +948,8 @@
                                 "actions": [
                                     "confirm"
                                 ],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 5,
@@ -941,7 +973,8 @@
                                 "actions": [
                                     "confirm"
                                 ],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             },
                             {
                                 "questiontype": 5,
@@ -965,7 +998,8 @@
                                 "actions": [
                                     "confirm"
                                 ],
-                                "required": false
+                                "required": false,
+                                "visitedonce": false
                             }
                         ],
                         "checkexistence": false,
