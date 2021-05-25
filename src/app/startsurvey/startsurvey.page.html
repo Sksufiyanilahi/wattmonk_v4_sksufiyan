@@ -163,7 +163,8 @@
         </form>
       </div>
       <div class="noviewmodecontainer"
-        *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult">
+        *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
+        [style.height.px]="remainingheight">
         <ion-grid class="noviewmodegrid">
           <ion-row>
             <ion-col class="ion-text-center" size="12">
