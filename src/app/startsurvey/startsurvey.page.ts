@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage';
 import { SurveyStorageModel } from '../model/survey-storage.model';
 import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
-import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/core';
 import { ErrorModel } from '../model/error.model';
 import { ApiService } from '../api.service';
 import { UtilitiesService } from '../utilities.service';
@@ -18,7 +18,7 @@ import { Animation, AnimationController, IonSlides, NavController, ToastControll
 import { HttpClient } from '@angular/common/http';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 
-const { Camera } = Plugins;
+// const { Camera } = Plugins;
 
 export interface MAINMENU {
   name: string;
