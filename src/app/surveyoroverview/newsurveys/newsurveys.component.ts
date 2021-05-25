@@ -65,7 +65,7 @@ export class NewsurveysComponent implements OnInit {
     });
   }
 
- 
+
 
   ionViewDidEnter() {
 

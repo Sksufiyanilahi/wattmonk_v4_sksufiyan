@@ -368,7 +368,7 @@ export class StartsurveyPage implements OnInit {
     this.storage.set(this.user.id + '-' + this.surveyid, data);
 
     if (this.user.role.type == 'surveyors') {
-      this.utilitieservice.setDataRefresh(true);
+      this.utilitieservice.sethomepageSurveyRefresh(true);
       this.navController.navigateBack('surveyoroverview');
     } else {
       this.utilitieservice.sethomepageSurveyRefresh(true);
