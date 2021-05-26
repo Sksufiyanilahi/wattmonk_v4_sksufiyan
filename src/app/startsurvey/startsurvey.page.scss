@@ -127,8 +127,6 @@ ion-content {
   width: 100vw;
   overflow: hidden;
   white-space: nowrap;
-  position: absolute;
-  bottom: 62px;
 
   ::-webkit-scrollbar {
     display: none;
@@ -210,11 +208,8 @@ ion-content {
 
 .mainbuttonscontainer {
   width: 100vw;
-  height: 66px;
   overflow: hidden;
   white-space: nowrap;
-  position: absolute;
-  bottom: 0;
 
   ::-webkit-scrollbar {
     display: none;
@@ -237,7 +232,7 @@ ion-content {
     border: none;
     height: auto;
     width: 94px;
-    padding: 12px;
+    padding: 8px;
     box-sizing: border-box;
     font-size: 14px;
   }
