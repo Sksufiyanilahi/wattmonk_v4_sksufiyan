@@ -153,8 +153,7 @@ export class SurveyComponent {
     this.userData = this.storageService.getUser();
     let userId = this.storageService.getUserID()
     
-      this.apiService.getSurveycounts(userId).subscribe(res=>{this.SurveyCounts =res;
-        })
+     
 
     this.setupCometChat();
 
@@ -209,6 +208,9 @@ export class SurveyComponent {
   //   // });
   // }
   getSurveys(event?) {
+    this.apiService.getSurveycounts(this.userData.id).subscribe(res=>{this.SurveyCounts =res;
+    })
+
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
