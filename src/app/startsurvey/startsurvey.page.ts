@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage';
 import { SurveyStorageModel } from '../model/survey-storage.model';
 import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/core';
+import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { ErrorModel } from '../model/error.model';
 import { ApiService } from '../api.service';
 import { UtilitiesService } from '../utilities.service';
@@ -17,9 +17,8 @@ import { RoofMaterial } from '../model/roofmaterial.model';
 import { Animation, AnimationController, IonSlides, NavController, Platform, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 
-// const { Camera } = Plugins;
+const { Camera } = Plugins;
 
 export interface MAINMENU {
   name: string;
@@ -234,8 +233,7 @@ export class StartsurveyPage implements OnInit {
     private navController: NavController,
     private storage: Storage,
     public toastController: ToastController,
-    private platform: Platform,
-    private geolocation: Geolocation) { }
+    private platform: Platform) { }
 
   ngOnInit() {
     this.cameraspaceremainingheight = this.platform.height() - 66 - 54 - 66;
@@ -246,7 +244,7 @@ export class StartsurveyPage implements OnInit {
     this.surveytype = this.route.snapshot.paramMap.get('type');
 
     // this.loadSurveyJSON('pvsurveyjson');
-    this.getCurrentCoordinates();
+    // this.getCurrentCoordinates();
 
     this.http
       .get('assets/surveyprocessjson/pv.json')
@@ -445,15 +443,15 @@ export class StartsurveyPage implements OnInit {
   }
 
   // use geolocation to get user's device coordinates
-  getCurrentCoordinates() {
-    this.geolocation.getCurrentPosition().then((resp) => {
-      this.latitude = resp.coords.latitude;
-      this.longitude = resp.coords.longitude;
-      console.log(this.latitude + "----" + this.longitude);
-     }).catch((error) => {
-       console.log('Error getting location', error);
-     });
-  }
+  // getCurrentCoordinates() {
+  //   this.geolocation.getCurrentPosition().then((resp) => {
+  //     this.latitude = resp.coords.latitude;
+  //     this.longitude = resp.coords.longitude;
+  //     console.log(this.latitude + "----" + this.longitude);
+  //    }).catch((error) => {
+  //      console.log('Error getting location', error);
+  //    });
+  // }
 
   //------------------------------------------------------------------------------------------------------------------
   //Animation Methods

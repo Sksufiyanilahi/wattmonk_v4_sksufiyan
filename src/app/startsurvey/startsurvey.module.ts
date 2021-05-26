@@ -9,7 +9,6 @@ import { StartsurveyPageRoutingModule } from './startsurvey-routing.module';
 import { StartsurveyPage } from './startsurvey.page';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { UtilitiesModule } from '../utilities/utilities.module';
-import { Camera } from '@ionic-native/Camera/ngx';
 
 @NgModule({
   imports: [
@@ -22,8 +21,7 @@ import { Camera } from '@ionic-native/Camera/ngx';
   ],
   declarations: [StartsurveyPage],
   providers: [
-    Insomnia,
-    Camera
+    Insomnia
   ]
 })
 export class StartsurveyPageModule {}
