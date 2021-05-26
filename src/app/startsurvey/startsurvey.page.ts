@@ -212,6 +212,7 @@ export class StartsurveyPage implements OnInit {
   shotcompletecount = 0;
   totalstepcount: number;
   remainingfilestoupload = 0;
+  failedshotstoupload : CAPTUREDSHOT[];
 
   remainingheight = 0;
 
@@ -773,7 +774,9 @@ export class StartsurveyPage implements OnInit {
   }
 
   uploadImagesToServer() {
-    const imagesArray = [];
+    this.saveintermediatesurveydata();
+
+    const imagesArray : CAPTUREDSHOT[] = [];
     this.mainmenuitems.forEach(mainmenu => {
       mainmenu.children.forEach(child => {
         child.capturedshots.forEach(shot => {
@@ -784,11 +787,11 @@ export class StartsurveyPage implements OnInit {
 
     this.utilitieservice.showLoading('Uploading Images').then(() => {
       this.totalimagestoupload = imagesArray.length;
-      this.uploadImageByIndex(imagesArray, 0);
+      this.uploadImageByIndex(imagesArray, 0, this.totalimagestoupload, false);
     });
   }
 
-  uploadImageByIndex(mapOfImages, index) {
+  uploadImageByIndex(mapOfImages : CAPTUREDSHOT[], index, totalimages, isfailedimage) {
     if (mapOfImages.length > 0 && mapOfImages.length <= this.totalimagestoupload) {
       const imageToUpload = mapOfImages[0];
       if (imageToUpload.shotimage && !imageToUpload.uploadstatus) {
@@ -800,31 +803,45 @@ export class StartsurveyPage implements OnInit {
           filename = imageToUpload.imageuploadname + '.png';
         }
         this.blobimagedata = this.watermarkImage(blob);
-        this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + this.totalimagestoupload);
+        if(isfailedimage){
+          this.utilitieservice.setLoadingMessage('Uploading failed image ' + (index + 1) + ' of ' + totalimages);
+        }else{
+          this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + totalimages);
+        }
         this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, this.blobimagedata, filename).subscribe((data) => {
           imageToUpload.uploadstatus = true;
           index++;
           mapOfImages.splice(0, 1);
-          this.uploadImageByIndex(mapOfImages, index);
+          this.saveintermediatesurveydata();
+          this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
         }, (error) => {
           imageToUpload.uploadstatus = false;
+          this.failedshotstoupload.push(imageToUpload);
           index++;
           mapOfImages.splice(0, 1);
-          this.uploadImageByIndex(mapOfImages, index);
+          this.saveintermediatesurveydata();
+          this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
         });
       } else {
         index++;
         mapOfImages.splice(0, 1);
-        this.uploadImageByIndex(mapOfImages, index);
+        this.saveintermediatesurveydata();
+        this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
       }
     } else {
       this.utilitieservice.hideLoading().then(() => {
-        this.savedetailsformdata();
+        if(this.failedshotstoupload.length > 0){
+          //Code to upload failed files
+          this.uploadImageByIndex(this.failedshotstoupload, 0, this.failedshotstoupload.length, true);
+        }else{
+          this.savedetailsformdata();
+        }
       });
     }
   }
 
   savedetailsformdata() {
+    this.saveintermediatesurveydata();
     this.utilitieservice.showLoading('Please wait...');
     const data = {};
     this.activeFormElementsArray.map(element => {
