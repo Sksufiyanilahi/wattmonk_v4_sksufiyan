@@ -6,6 +6,7 @@ ion-content {
 }
 .imagecontainer {
   width: 100%;
+  background-color: #009432;
 
   .mainimage{
     img{
@@ -72,6 +73,10 @@ ion-content {
   }
 }
 
+.captureactionareacontainer{
+  background-color: #eebb5c;
+}
+
 .captureactionarea {
   width: 100vw;
   height: 66px;
@@ -129,6 +134,7 @@ ion-content {
   white-space: nowrap;
   position: absolute;
   bottom: 62px;
+  background-color: #ff0000;
 
   ::-webkit-scrollbar {
     display: none;
@@ -136,7 +142,8 @@ ion-content {
 
   .scroll {
     overflow: auto;
-    background-color: #212123;
+    // background-color: #212123;
+    background-color: #1717bb;
     border-radius: 10px;
     margin-bottom: 10px;
     margin-top: 10px;
@@ -162,7 +169,6 @@ ion-content {
 }
 
 .detailsformviewcontainer {
-  height: 82.3vh;
 
   .additionalform {
     height: 100%;
@@ -188,7 +194,6 @@ ion-content {
 }
 
 .noviewmodecontainer {
-  height: 84.3vh;
 
   .noviewmodegrid {
     position: relative;
@@ -217,6 +222,7 @@ ion-content {
   white-space: nowrap;
   position: absolute;
   bottom: 0;
+  background-color: #009432;
 
   ::-webkit-scrollbar {
     display: none;
