@@ -6,7 +6,6 @@ ion-content {
 }
 .imagecontainer {
   width: 100%;
-  background-color: #009432;
 
   .mainimage{
     img{
@@ -73,10 +72,6 @@ ion-content {
   }
 }
 
-.captureactionareacontainer{
-  background-color: #eebb5c;
-}
-
 .captureactionarea {
   width: 100vw;
   height: 66px;
@@ -134,7 +129,6 @@ ion-content {
   white-space: nowrap;
   position: absolute;
   bottom: 62px;
-  background-color: #ff0000;
 
   ::-webkit-scrollbar {
     display: none;
@@ -142,8 +136,7 @@ ion-content {
 
   .scroll {
     overflow: auto;
-    // background-color: #212123;
-    background-color: #1717bb;
+    background-color: #212123;
     border-radius: 10px;
     margin-bottom: 10px;
     margin-top: 10px;
@@ -222,7 +215,6 @@ ion-content {
   white-space: nowrap;
   position: absolute;
   bottom: 0;
-  background-color: #009432;
 
   ::-webkit-scrollbar {
     display: none;
