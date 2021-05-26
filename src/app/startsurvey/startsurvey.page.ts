@@ -17,7 +17,6 @@ import { RoofMaterial } from '../model/roofmaterial.model';
 import { Animation, AnimationController, IonSlides, NavController, Platform, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Insomnia } from '@ionic-native/insomnia/ngx';
-import * as watermark from 'watermarkjs';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 // const { Camera } = Plugins;
@@ -153,7 +152,7 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('infoslider', { static: false }) infoslider: IonSlides;
   @ViewChild('singlefileuploadinput') singlefileuploadinput: ElementRef;
   @ViewChild('multiplefileuploadinput') multiplefileuploadinput: ElementRef;
-  @ViewChild('watermarkedimage') waterMarkImage: ElementRef
+  @ViewChild('watermarkedimage') waterMarkImage: ElementRef;
 
   sliderTwo: any;
 
@@ -212,9 +211,11 @@ export class StartsurveyPage implements OnInit {
   shotcompletecount = 0;
   totalstepcount: number;
   remainingfilestoupload = 0;
-  failedshotstoupload : CAPTUREDSHOT[];
+  failedshotstoupload : CAPTUREDSHOT[] = [];
 
-  remainingheight = 0;
+  cameraspaceremainingheight = 0;
+  noviewremainingheight = 0;
+  detailsviewremainingheight = 0;
 
   blobimagedata: any;
 
@@ -237,9 +238,9 @@ export class StartsurveyPage implements OnInit {
     private geolocation: Geolocation) { }
 
   ngOnInit() {
-    console.log(this.platform.height());
-    this.remainingheight = this.platform.height() - 66 - 54 - 66;
-    console.log(this.remainingheight);
+    this.cameraspaceremainingheight = this.platform.height() - 66 - 54 - 66;
+    this.noviewremainingheight = this.platform.height() - 66 - 54;
+    this.detailsviewremainingheight = this.platform.height() - 66 - 66 - 4;
     this.user = this.storageuserdata.getUser();
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
@@ -250,7 +251,8 @@ export class StartsurveyPage implements OnInit {
     this.http
       .get('assets/surveyprocessjson/pv.json')
       .subscribe((data) => {
-        this.createSurveyForm(data[0]);
+        this.restoreSurveyStoredData(data[0].sequence);
+        // this.createSurveyForm(data[0]);
       });
   }
 
@@ -260,9 +262,9 @@ export class StartsurveyPage implements OnInit {
     });
   }
 
-  createSurveyForm(data) {
+  createSurveyForm(surveydata) {
     this.activeFormElementsArray = [];
-    let surveydata = data.sequence;
+    // let surveydata = data.sequence;
     const formData = {};
     surveydata.map(item => {
       if (item.children) {
@@ -310,12 +312,62 @@ export class StartsurveyPage implements OnInit {
     formData['shotname'] = new FormControl('', []);
     this.activeFormElementsArray.push('shotname');
     this.activeForm = new FormGroup(formData);
+  }
 
-    //Fillin data from storage if data exists
-    this.restoreSurveyStoredData(surveydata);
+  restoreStoredForm() {
+    this.activeFormElementsArray = [];
+    // let surveydata = data.sequence;
+    const formData = {};
+    this.mainmenuitems.map(item => {
+      if (item.children) {
+        item.children.map(child => {
+          if (child.inputformcontrol[0] !== '') {
+            this.activeFormElementsArray.push(child.inputformcontrol[0]);
+            formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+          }
+          if (child.shots) {
+            child.shots.map(shot => {
+              if (shot.inputformcontrol[0] !== '') {
+                this.activeFormElementsArray.push(shot.inputformcontrol[0]);
+                if (shot.required) {
+                  formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                } else {
+                  formData[shot.inputformcontrol[0]] = new FormControl('', []);
+                }
+                if (shot.inputformcontrol.length > 1) {
+                  this.activeFormElementsArray.push(shot.inputformcontrol[1]);
+                  if (shot.required) {
+                    formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
+                  } else {
+                    formData[shot.inputformcontrol[1]] = new FormControl('', []);
+                  }
+                }
+              }
+            });
+          }
+          if (child.formelements) {
+            child.formelements.map(formElement => {
+              formElement.fileurls = [];
+              if (formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
+                this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
+              }
+              if (formElement.required) {
+                formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+              } else {
+                formData[formElement.inputformcontrol[0]] = new FormControl('', []);
+              }
+            });
+          }
+        });
+      }
+    });
+    formData['shotname'] = new FormControl('', []);
+    this.activeFormElementsArray.push('shotname');
+    this.activeForm = new FormGroup(formData);
   }
 
   restoreSurveyStoredData(surveydata) {
+    console.log(surveydata);
     this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
       if (data) {
         this.mainmenuitems = data.menuitems;
@@ -328,6 +380,9 @@ export class StartsurveyPage implements OnInit {
 
         this.surveyid = data.surveyid;
         this.surveytype = data.surveytype;
+
+        this.restoreStoredForm();
+
         Object.keys(data.formdata).forEach((key: string) => {
           let control: AbstractControl = null;
           control = this.activeForm.get(key);
@@ -336,6 +391,7 @@ export class StartsurveyPage implements OnInit {
         this.isdataloaded = true;
         this.setTotalStepCount();
       } else {
+        this.createSurveyForm(surveydata);
         this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
         this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
 
@@ -386,15 +442,6 @@ export class StartsurveyPage implements OnInit {
     const data = this.preparesurveystorage();
     data.saved = true;
     this.storage.set(this.user.id + '-' + this.surveyid, data);
-  }
-
-  watermarkImage(blobimage) {
-    watermark([blobimage])
-    .blob(watermark.text.lowerLeft("Lat: "+this.latitude+" Lng: "+this.longitude, '170px Arial', '#F5A905', 0.8))
-      .then(img => {
-        this.blobimagedata = img;
-      });
-      return this.blobimagedata;
   }
 
   // use geolocation to get user's device coordinates
@@ -660,6 +707,7 @@ export class StartsurveyPage implements OnInit {
   }
 
   async saveFormData() {
+    this.saveintermediatesurveydata();
     //Code to check incomplete items
     let nopendingshotfound = true;
     this.mainmenuitems.forEach((mainmenuitem, mainindex) => {
@@ -802,13 +850,13 @@ export class StartsurveyPage implements OnInit {
         } else {
           filename = imageToUpload.imageuploadname + '.png';
         }
-        this.blobimagedata = this.watermarkImage(blob);
+        // this.blobimagedata = this.watermarkImage(blob);
         if(isfailedimage){
           this.utilitieservice.setLoadingMessage('Uploading failed image ' + (index + 1) + ' of ' + totalimages);
         }else{
           this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + totalimages);
         }
-        this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, this.blobimagedata, filename).subscribe((data) => {
+        this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
           imageToUpload.uploadstatus = true;
           index++;
           mapOfImages.splice(0, 1);

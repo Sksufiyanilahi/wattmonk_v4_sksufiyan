@@ -4,18 +4,18 @@
     <ion-grid class="ion-no-padding" style="overflow-y: hidden;">
       <ion-row class="captureactionareacontainer"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
-        <ion-row class="imagecontainer" [style.height.px]="remainingheight">
+        <ion-row class="imagecontainer" [style.height.px]="cameraspaceremainingheight">
           <div class="mainimage"
             *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
             <img
               src="/assets/surveysampleimages/{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename}}.jpg"
-              [style.height.px]="remainingheight"/>
+              [style.height.px]="cameraspaceremainingheight"/>
           </div>
           <div class="mainimage"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
             <img #watermarkedimage
               src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}"
-              [style.height.px]="remainingheight"/>
+              [style.height.px]="cameraspaceremainingheight"/>
           </div>
           <ion-row class="gallerystack"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
@@ -63,7 +63,7 @@
       </ion-row>
       <div class="detailsformviewcontainer"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM"
-        [style.height.px]="remainingheight">
+        [style.height.px]="detailsviewremainingheight">
         <form [formGroup]="activeForm" class="additionalform ion-margin">
           <ion-grid class="ion-padding text-white additionalformgrid">
             <div
@@ -168,7 +168,7 @@
       </div>
       <div class="noviewmodecontainer"
         *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
-        [style.height.px]="remainingheight">
+        [style.height.px]="noviewremainingheight">
         <ion-grid class="noviewmodegrid">
           <ion-row>
             <ion-col class="ion-text-center" size="12">
