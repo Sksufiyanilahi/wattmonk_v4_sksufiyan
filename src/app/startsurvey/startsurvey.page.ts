@@ -448,9 +448,9 @@ export class StartsurveyPage implements OnInit {
   }
 
   saveintermediatesurveydata() {
-    // const data = this.preparesurveystorage();
-    // data.saved = true;
-    // this.storage.set(this.user.id + '-' + this.surveyid, data);
+    const data = this.preparesurveystorage();
+    data.saved = true;
+    this.storage.set(this.user.id + '-' + this.surveyid, data);
   }
 
   // use geolocation to get user's device coordinates
