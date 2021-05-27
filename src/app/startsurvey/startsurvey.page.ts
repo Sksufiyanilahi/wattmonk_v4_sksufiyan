@@ -249,7 +249,7 @@ export class StartsurveyPage implements OnInit {
     // this.getCurrentCoordinates();
 
     this.http
-      .get('assets/surveyprocessjson/pv.json')
+      .get('assets/surveyprocessjson/defaultpv.json')
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
         // this.createSurveyForm(data[0]);

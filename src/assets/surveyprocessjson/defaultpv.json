@@ -45,7 +45,8 @@
                                     "outside"
                                 ],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 2,
@@ -70,7 +71,8 @@
                                     "confirm"
                                 ],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 2,
@@ -95,7 +97,8 @@
                                     "confirm"
                                 ],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 1,
@@ -123,13 +126,15 @@
                                     "none"
                                 ],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             }
                         ],
                         "checkexistence": false,
                         "capturedshots": [],
                         "existenceresult": true,
-                        "formelements": []
+                        "formelements": [],
+                        "shotscapturedcount" : 0
                     },
                     {
                         "isvisible": true,
@@ -166,7 +171,8 @@
                                     "detach"
                                 ],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 3,
@@ -189,13 +195,15 @@
                                 "result": "",
                                 "actions": ["confirm"],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             }
                         ],
                         "checkexistence": false,
                         "capturedshots": [],
                         "existenceresult": true,
-                        "formelements": []
+                        "formelements": [],
+                        "shotscapturedcount" : 0
                     },
                     {
                         "isvisible": true,
@@ -232,7 +240,8 @@
                                     "outside"
                                 ],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 4,
@@ -258,7 +267,8 @@
                                     "confirm"
                                 ],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -281,7 +291,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -303,7 +314,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -326,13 +338,15 @@
                                 "result": "",
                                 "actions": [],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             }
                         ],
                         "checkexistence": true,
                         "capturedshots": [],
                         "existenceresult": true,
-                        "formelements": []
+                        "formelements": [],
+                        "shotscapturedcount" : 0
                     }
                 ]
             },
@@ -377,7 +391,8 @@
                                     "Confirm"
                                 ],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 6,
@@ -400,7 +415,8 @@
                                 "result": "",
                                 "actions": ["Confirm"],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -423,7 +439,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -446,7 +463,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -469,7 +487,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -492,7 +511,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -515,13 +535,15 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             }
                         ],
                         "checkexistence": false,
                         "capturedshots": [],
                         "existenceresult": true,
-                        "formelements": []
+                        "formelements": [],
+                        "shotscapturedcount" : 0
                     },
                     {
                         "isvisible": true,
@@ -553,13 +575,15 @@
                                 "result": "",
                                 "actions": [],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             }
                         ],
                         "checkexistence": false,
                         "capturedshots": [],
                         "existenceresult": true,
-                        "formelements": []
+                        "formelements": [],
+                        "shotscapturedcount" : 0
                     },
                     {
                         "isvisible": true,
@@ -593,7 +617,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -616,7 +641,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -639,7 +665,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -662,7 +689,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -685,7 +713,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -708,7 +737,8 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 0,
@@ -731,13 +761,15 @@
                                 "result": "",
                                 "actions": [],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             }
                         ],
                         "checkexistence": false,
                         "capturedshots": [],
                         "existenceresult": true,
-                        "formelements": []
+                        "formelements": [],
+                        "shotscapturedcount" : 0
                     },
                     {
                         "isvisible": true,
@@ -771,13 +803,15 @@
                                 "result": "",
                                 "actions": [],
                                 "required": true,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             }
                         ],
                         "checkexistence": false,
                         "capturedshots": [],
                         "existenceresult": true,
-                        "formelements": []
+                        "formelements": [],
+                        "shotscapturedcount" : 0
                     }
                 ]
             },
@@ -879,7 +913,9 @@
                         "checkexistence": false,
                         "capturedshots": [],
                         "existenceresult": true,
-                        "formelements": []
+                        "formelements": [],
+                        "shotscapturedcount" : 0,
+                        "capturedonce": false
                     }
                 ]
             },
@@ -924,7 +960,8 @@
                                     "confirm"
                                 ],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 5,
@@ -949,7 +986,8 @@
                                     "confirm"
                                 ],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 5,
@@ -974,7 +1012,8 @@
                                     "confirm"
                                 ],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             },
                             {
                                 "questiontype": 5,
@@ -999,13 +1038,15 @@
                                     "confirm"
                                 ],
                                 "required": false,
-                                "visitedonce": false
+                                "visitedonce": false,
+                                "capturedonce": false
                             }
                         ],
                         "checkexistence": false,
                         "capturedshots": [],
                         "existenceresult": true,
-                        "formelements": []
+                        "formelements": [],
+                        "shotscapturedcount" : 0
                     }
                 ]
             },
@@ -1146,7 +1187,8 @@
                                 "options": [],
                                 "required": false
                             }
-                        ]
+                        ],
+                        "shotscapturedcount" : 0
                     }
                 ]
             }
