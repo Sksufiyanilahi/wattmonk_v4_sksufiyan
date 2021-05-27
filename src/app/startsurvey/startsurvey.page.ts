@@ -353,8 +353,8 @@ export class StartsurveyPage implements OnInit {
           }
           if (child.formelements) {
             child.formelements.map(formElement => {
-              formElement.fileurls = [];
-              formElement.attachments = [];
+              formElement.fileurls = formElement.fileurls;
+              formElement.attachments = formElement.attachments;
               if (formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
                 this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
               }
