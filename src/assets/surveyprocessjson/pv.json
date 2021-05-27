@@ -129,7 +129,8 @@
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           },
           {
             "isvisible": true,
@@ -197,7 +198,8 @@
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           },
           {
             "isvisible": true,
@@ -335,7 +337,8 @@
             "checkexistence": true,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           }
         ]
       },
@@ -524,7 +527,8 @@
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           },
           {
             "isvisible": true,
@@ -679,7 +683,8 @@
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           }
         ]
       },
@@ -751,7 +756,8 @@
             "checkexistence": true,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           }
         ]
       },
@@ -919,7 +925,8 @@
                 "fileurls": [],
                 "attachments": []
               }
-            ]
+            ],
+            "shotscapturedcount" : 0
           }
         ]
       }

@@ -41,6 +41,7 @@ export interface CHILDREN {
   placeholder?: string;
   shotscount: number;
   capturedshots: CAPTUREDSHOT[];
+  shotscapturedcount: number;
   shots: SHOT[];
   formelements?: FORMELEMENTS[];
 }
@@ -1070,6 +1071,7 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount += 1;
     this.blurcaptureview = false;
     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required) {
       this.updateProgressStatus();
@@ -1319,6 +1321,7 @@ export class StartsurveyPage implements OnInit {
     currentmainmenu.ispending = true;
     currentsubmenu.capturedshots[this.selectedshotindex].shotimage = "";
     currentsubmenu.capturedshots[this.selectedshotindex].imagecleared = true;
+    currentsubmenu.shotscapturedcount -= 1;
     this.recapturingmode = true;
   }
 
