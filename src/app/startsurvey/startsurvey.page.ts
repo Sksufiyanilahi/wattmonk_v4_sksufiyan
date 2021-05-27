@@ -65,7 +65,6 @@ export interface SHOT {
   imagename: string;
   imageuploadname: string;
   required: boolean;
-  visitedonce: boolean;
   capturedonce: boolean;
 }
 
@@ -245,7 +244,8 @@ export class StartsurveyPage implements OnInit {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
 
-    this.loadSurveyJSON('pvsurveyjson');
+    // this.loadSurveyJSON('pvsurveyjson');
+    this.loadLocalJSON();
     // this.getCurrentCoordinates();
   }
 
@@ -391,6 +391,12 @@ export class StartsurveyPage implements OnInit {
           control = this.activeForm.get(key);
           control.setValue(data.formdata[key]);
         });
+        //Check if it retake mode or not
+        if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce){
+          this.recapturingmode = true;
+        }else{
+          this.recapturingmode = false;
+        }
         this.isdataloaded = true;
         this.setTotalStepCount();
       } else {
@@ -1079,7 +1085,6 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount += 1;
     this.blurcaptureview = false;
     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required) {
@@ -1118,10 +1123,13 @@ export class StartsurveyPage implements OnInit {
 
   movetonextpossibleactionablestep() {
     let nextactiveshotfound = false;
+    console.log(this.mainmenuitems);
+    console.log("active shot looking in different shot");
     //Check for next possible shot in active children
     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shot, shotindex) => {
-        if (!shot.visitedonce && shot.ispending && !nextactiveshotfound) {
+        if (shot.ispending && !nextactiveshotfound) {
+          console.log("shot loop---"+shot.shotinfo);
           this.selectedshotindex = shotindex;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
@@ -1134,16 +1142,43 @@ export class StartsurveyPage implements OnInit {
           }else{
             this.recapturingmode = false;
           }
-
-          if (!shot.required) {
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
-            this.setallnotrequiredshotsasvisited();
-          }
         }
       });
 
+      //Check for next possible shot in active mainmenu children
+      if(!nextactiveshotfound){
+        console.log("active shot not found so looking in different child");
+        this.mainmenuitems[this.selectedmainmenuindex].children.forEach((child, childindex) => {
+          if (!nextactiveshotfound) {
+            this.selectedsubmenuindex = childindex;
+            if (child.shots.length > 0) {
+              child.shots.forEach((shot, shotindex) => {
+                if (shot.ispending && !nextactiveshotfound) {
+                  console.log("child loop---"+shot.shotinfo);
+                  this.selectedshotindex = shotindex;
+                  this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+                  this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+                  this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+                  nextactiveshotfound = true;
+                  //Check if it retake mode or not
+                  if(shot.required && shot.capturedonce){
+                    this.recapturingmode = true;
+                  }else{
+                    this.recapturingmode = false;
+                  }
+                }
+              });
+            } else {
+              this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+              this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+            }
+          }
+        });
+      }
+
       //If next active shot not found im existing children then look for in complete menuitems
       if (!nextactiveshotfound) {
+        console.log("active shot not found so looking in different menu");
         this.mainmenuitems.forEach((mainmenu, mainindex) => {
           if (!nextactiveshotfound) {
             this.selectedmainmenuindex = mainindex;
@@ -1153,15 +1188,18 @@ export class StartsurveyPage implements OnInit {
                   this.selectedsubmenuindex = childindex;
                   if (child.shots.length > 0) {
                     child.shots.forEach((shot, shotindex) => {
-                      if (!shot.visitedonce && shot.ispending && !nextactiveshotfound) {
+                      if (shot.ispending && !nextactiveshotfound) {
+                        console.log("main loop---"+shot.shotinfo);
                         this.selectedshotindex = shotindex;
                         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
                         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
                         this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
                         nextactiveshotfound = true;
-                        if (!shot.required) {
-                          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
-                          this.setallnotrequiredshotsasvisited();
+                        //Check if it retake mode or not
+                        if(shot.required && shot.capturedonce){
+                          this.recapturingmode = true;
+                        }else{
+                          this.recapturingmode = false;
                         }
                       }
                     });
@@ -1179,14 +1217,6 @@ export class StartsurveyPage implements OnInit {
       }
     }
     this.saveintermediatesurveydata();
-  }
-
-  setallnotrequiredshotsasvisited() {
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shotelement, index) => {
-      if (!shotelement.required) {
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].visitedonce = true;
-      }
-    });
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1331,7 +1361,6 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = false;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = "";
