@@ -1273,7 +1273,9 @@ export class StartsurveyPage implements OnInit {
   handleAnswerSubmission(result) {
     const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex];
     shotDetail.result = result;
+    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result);
     this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
+    console.log(this.activeForm.get(shotDetail.inputformcontrol).value);
     this.markshotcompletion();
   }
 
