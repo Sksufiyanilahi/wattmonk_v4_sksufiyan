@@ -448,9 +448,9 @@ export class StartsurveyPage implements OnInit {
   }
 
   saveintermediatesurveydata() {
-    const data = this.preparesurveystorage();
-    data.saved = true;
-    this.storage.set(this.user.id + '-' + this.surveyid, data);
+    // const data = this.preparesurveystorage();
+    // data.saved = true;
+    // this.storage.set(this.user.id + '-' + this.surveyid, data);
   }
 
   // use geolocation to get user's device coordinates
@@ -970,6 +970,7 @@ export class StartsurveyPage implements OnInit {
   selectsubmenu(index) {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
     this.selectedsubmenuindex = index;
+    this.selectedshotindex = 0;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
       this.movetonextpossibleactionablestep();
@@ -1127,7 +1128,8 @@ export class StartsurveyPage implements OnInit {
     console.log("active shot looking in different shot");
     //Check for next possible shot in active children
     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shot, shotindex) => {
+      for (let shotindex = this.selectedshotindex; shotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length; shotindex++) {
+        const shot = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex];
         if (shot.ispending && !nextactiveshotfound) {
           console.log("shot loop---"+shot.shotinfo);
           this.selectedshotindex = shotindex;
@@ -1143,12 +1145,13 @@ export class StartsurveyPage implements OnInit {
             this.recapturingmode = false;
           }
         }
-      });
+      }
 
       //Check for next possible shot in active mainmenu children
       if(!nextactiveshotfound){
         console.log("active shot not found so looking in different child");
-        this.mainmenuitems[this.selectedmainmenuindex].children.forEach((child, childindex) => {
+        for (let childindex = this.selectedsubmenuindex + 1; childindex < this.mainmenuitems[this.selectedmainmenuindex].children.length; childindex++) {
+          const child = this.mainmenuitems[this.selectedmainmenuindex].children[childindex];
           if (!nextactiveshotfound) {
             this.selectedsubmenuindex = childindex;
             if (child.shots.length > 0) {
@@ -1173,13 +1176,14 @@ export class StartsurveyPage implements OnInit {
               this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
             }
           }
-        });
+        }
       }
 
       //If next active shot not found im existing children then look for in complete menuitems
       if (!nextactiveshotfound) {
         console.log("active shot not found so looking in different menu");
-        this.mainmenuitems.forEach((mainmenu, mainindex) => {
+        for (let mainindex = this.selectedmainmenuindex + 1; mainindex < this.mainmenuitems.length; mainindex++) {
+          const mainmenu = this.mainmenuitems[mainindex];
           if (!nextactiveshotfound) {
             this.selectedmainmenuindex = mainindex;
             if (mainmenu.children.length > 0) {
@@ -1213,7 +1217,7 @@ export class StartsurveyPage implements OnInit {
               this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
             }
           }
-        });
+        }
       }
     }
     this.saveintermediatesurveydata();
