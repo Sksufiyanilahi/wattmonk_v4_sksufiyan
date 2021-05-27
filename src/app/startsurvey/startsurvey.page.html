@@ -195,7 +195,7 @@
       <ion-row class="mainbuttons mainbuttonscontainer">
         <div #mainscroll class="scroll" scrollX="true">
           <ng-container *ngFor="let button of mainmenuitems; let i = index">
-            <a id="mainmenu{{i}}" *ngIf="button.isvisible" (click)="selectemainmenu(i)"
+            <a id="mainmenu{{i}}" *ngIf="button.isvisible" (click)="selectmainmenu(i)"
               [ngClass]="[button.ispending ? 'btn-link' : 'btn-link completed']">
               <div [ngClass]="[button.isactive ? 'button active' : 'button normal']">
                 <img *ngIf="button.isactive" src="/assets/images/{{button.name | lowercase}}active.svg" alt="img">

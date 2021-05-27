@@ -948,7 +948,7 @@ export class StartsurveyPage implements OnInit {
   // Switch Menus Manually Methods
   //------------------------------------------------------------------------------------------------------------------
 
-  selectemainmenu(index) {
+  selectmainmenu(index) {
     // Unset previous menu and select new one
     this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
     if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
@@ -1353,11 +1353,9 @@ export class StartsurveyPage implements OnInit {
 
   selectcapturedshot(event, shotindex) {
     event.preventDefault();
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex].shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult) {
-      this.showinfodetailsview = false;
-      this.blurcaptureview = false;
-      this.selectedshotindex = shotindex;
-    }
+    this.showinfodetailsview = false;
+    this.blurcaptureview = false;
+    this.selectedshotindex = shotindex;
   }
 
   allowusertorecaptureshot(event) {
@@ -1366,7 +1364,7 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+    this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = "";
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount -= 1;
