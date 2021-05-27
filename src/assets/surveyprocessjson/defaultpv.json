@@ -616,7 +616,7 @@
                                 "questionstatus": false,
                                 "result": "",
                                 "actions": [],
-                                "required": false,
+                                "required": true,
                                 "visitedonce": false,
                                 "capturedonce": false
                             },

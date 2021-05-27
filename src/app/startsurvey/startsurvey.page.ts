@@ -391,8 +391,24 @@ export class StartsurveyPage implements OnInit {
           control = this.activeForm.get(key);
           control.setValue(data.formdata[key]);
         });
+
+        //Check for formelements fields visibility
+        this.mainmenuitems.forEach(mainelement => {
+          if(mainelement.viewmode == VIEWMODE.FORM){
+            mainelement.children.forEach(childelement => {
+              if(childelement.formelements.length > 0){
+                childelement.formelements.forEach(formelement => {
+                  if(formelement.controltype == CONTROLTYPE.CONTROL_INPUT_RADIO){
+                    this.toggleElementVisibility(formelement.inputformcontrol, formelement.controlselement);
+                  }
+                });
+              }
+            });
+          }
+        });
+
         //Check if it retake mode or not
-        if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce){
+        if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce){
           this.recapturingmode = true;
         }else{
           this.recapturingmode = false;
