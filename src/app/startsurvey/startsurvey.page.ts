@@ -66,6 +66,7 @@ export interface SHOT {
   imageuploadname: string;
   required: boolean;
   visitedonce: boolean;
+  capturedonce: boolean;
 }
 
 export interface CAPTUREDSHOT {
@@ -944,6 +945,7 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
     this.selectedsubmenuindex = 0;
     this.selectedshotindex = 0;
+    console.log(this.mainmenuitems);
     if (this.mainmenuitems[this.selectedmainmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
       this.movetonextpossibleactionablestep();
     } else {
@@ -1015,6 +1017,7 @@ export class StartsurveyPage implements OnInit {
         uploadstatus: false
       };
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce = true;
     }
     //Setting shot status true to display captured image
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
@@ -1118,6 +1121,14 @@ export class StartsurveyPage implements OnInit {
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
           this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
           nextactiveshotfound = true;
+
+          //Check if it retake mode or not
+          if(shot.required && shot.capturedonce){
+            this.recapturingmode = true;
+          }else{
+            this.recapturingmode = false;
+          }
+
           if (!shot.required) {
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
             this.setallnotrequiredshotsasvisited();
@@ -1311,17 +1322,15 @@ export class StartsurveyPage implements OnInit {
 
   allowusertorecaptureshot(event) {
     event.preventDefault();
-    let currentmainmenu = this.mainmenuitems[this.selectedmainmenuindex];
-    let currentsubmenu = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-    let shot = currentsubmenu.shots[this.selectedshotindex];
-    shot.shotstatus = false;
-    shot.ispending = true;
-    shot.isactive = true;
-    currentsubmenu.ispending = true;
-    currentmainmenu.ispending = true;
-    currentsubmenu.capturedshots[this.selectedshotindex].shotimage = "";
-    currentsubmenu.capturedshots[this.selectedshotindex].imagecleared = true;
-    currentsubmenu.shotscapturedcount -= 1;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = "";
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount -= 1;
     this.recapturingmode = true;
   }
 

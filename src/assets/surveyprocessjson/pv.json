@@ -45,7 +45,8 @@
                   "outside"
                 ],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 2,
@@ -70,7 +71,8 @@
                   "confirm"
                 ],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 2,
@@ -95,7 +97,8 @@
                   "confirm"
                 ],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 1,
@@ -123,7 +126,8 @@
                   "none"
                 ],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": false,
@@ -167,7 +171,8 @@
                   "detach"
                 ],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 2,
@@ -192,7 +197,8 @@
                   "confirm"
                 ],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": false,
@@ -236,7 +242,8 @@
                   "outside"
                 ],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 4,
@@ -262,7 +269,8 @@
                   "confirm"
                 ],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -285,7 +293,8 @@
                 "result": "",
                 "actions": [],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -308,7 +317,8 @@
                 "result": "",
                 "actions": [],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -331,7 +341,8 @@
                 "result": "",
                 "actions": [],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": true,
@@ -383,7 +394,8 @@
                   "Confirm"
                 ],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -406,7 +418,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -429,7 +442,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -452,7 +466,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -475,7 +490,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -498,7 +514,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -521,7 +538,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": false,
@@ -562,7 +580,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -585,7 +604,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -608,7 +628,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -631,7 +652,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -654,7 +676,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -677,7 +700,8 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": false,
@@ -727,7 +751,8 @@
                 "result": "",
                 "actions": [],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -750,7 +775,8 @@
                 "result": "",
                 "actions": [],
                 "required": true,
-                "visitedonce": false
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": true,
