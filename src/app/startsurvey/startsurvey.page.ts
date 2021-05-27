@@ -245,21 +245,25 @@ export class StartsurveyPage implements OnInit {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
 
-    // this.loadSurveyJSON('pvsurveyjson');
+    this.loadSurveyJSON('pvsurveyjson');
     // this.getCurrentCoordinates();
-
-    this.http
-      .get('assets/surveyprocessjson/defaultpv.json')
-      .subscribe((data) => {
-        this.restoreSurveyStoredData(data[0].sequence);
-        // this.createSurveyForm(data[0]);
-      });
   }
 
   loadSurveyJSON(type) {
     this.datastorage.get(type).then((data) => {
-      this.createSurveyForm(data[0]);
+      this.restoreSurveyStoredData(data[0].sequence);
+    }).catch((error) => {
+      console.log('Error loading json', error);
+      this.loadLocalJSON();
     });
+  }
+
+  loadLocalJSON(){
+    this.http
+      .get('assets/surveyprocessjson/defaultpv.json')
+      .subscribe((data) => {
+        this.restoreSurveyStoredData(data[0].sequence);
+      });
   }
 
   createSurveyForm(surveydata) {
@@ -367,7 +371,6 @@ export class StartsurveyPage implements OnInit {
   }
 
   restoreSurveyStoredData(surveydata) {
-    console.log(surveydata);
     this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
       if (data) {
         this.mainmenuitems = data.menuitems;
@@ -633,7 +636,6 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           this.invertermakes = response;
           this.activeForm.get('invertermake').valueChanges.subscribe(val => {
-            console.log(val);
             if(val != ""){
               this.getInverterModels(this.activeForm.get('invertermake').value.id);
             }else{
@@ -950,7 +952,6 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
     this.selectedsubmenuindex = 0;
     this.selectedshotindex = 0;
-    console.log(this.mainmenuitems);
     if (this.mainmenuitems[this.selectedmainmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
       this.movetonextpossibleactionablestep();
     } else {
@@ -1251,8 +1252,6 @@ export class StartsurveyPage implements OnInit {
   handleInverterFieldsSubmission() {
     const invertermakecontrol = this.activeForm.get('invertermake');
     const invertermodelcontrol = this.activeForm.get('invertermodel');
-    console.log(invertermakecontrol.value)
-    console.log(invertermodelcontrol.value)
     if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
       this.markshotcompletion();
     } else {
