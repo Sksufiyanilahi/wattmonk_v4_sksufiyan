@@ -212,6 +212,7 @@ export class StartsurveyPage implements OnInit {
   totalstepcount: number;
   remainingfilestoupload = 0;
   failedshotstoupload : CAPTUREDSHOT[] = [];
+  failedattachmentstoupload : FILE_ATTACHMENTS[] = [];
 
   cameraspaceremainingheight = 0;
   noviewremainingheight = 0;
@@ -260,7 +261,7 @@ export class StartsurveyPage implements OnInit {
 
   loadLocalJSON(){
     this.http
-      .get('assets/surveyprocessjson/defaultpv.json')
+      .get('assets/surveyprocessjson/pv.json')
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
       });
@@ -300,6 +301,7 @@ export class StartsurveyPage implements OnInit {
           if (child.formelements) {
             child.formelements.map(formElement => {
               formElement.fileurls = [];
+              formElement.attachments = [];
               if (formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
                 this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
               }
@@ -352,6 +354,7 @@ export class StartsurveyPage implements OnInit {
           if (child.formelements) {
             child.formelements.map(formElement => {
               formElement.fileurls = [];
+              formElement.attachments = [];
               if (formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
                 this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
               }
@@ -525,6 +528,7 @@ export class StartsurveyPage implements OnInit {
         };
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push(fileobjurl);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(selectedfile);
+
         this.remainingfilestoupload += 1;
       }
       reader.readAsDataURL(ev.target.files[i]);
@@ -809,9 +813,10 @@ export class StartsurveyPage implements OnInit {
 
   uploadattachedfilewithformelement(formelements, mainindex, elementindex, fileindex) {
     if(!formelements[elementindex].attachments[fileindex].uploadstatus){
+      console.log(formelements[elementindex].placeholder);
       this.utilitieservice.showLoading('Uploading ' + formelements[elementindex].placeholder + ' file').then(() => {
         const filedata = new FormData();
-        filedata.append("files", formelements[elementindex].attachments[fileindex].attachment);
+        filedata.append("files", formelements[elementindex].attachments[fileindex].file);
         filedata.append('path', 'survey/' + this.surveyid);
         filedata.append('refId', this.surveyid + '');
         filedata.append('ref', 'survey');
@@ -821,6 +826,7 @@ export class StartsurveyPage implements OnInit {
           this.movetonextattachment(formelements, mainindex, elementindex, fileindex);
         }, (error) => {
           formelements[elementindex].attachments[fileindex].uploadstatus = false;
+          this.failedattachmentstoupload.push(formelements[elementindex].attachments[fileindex]);
           this.movetonextattachment(formelements, mainindex, elementindex, fileindex);
         });
       });
