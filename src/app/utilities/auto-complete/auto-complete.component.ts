@@ -94,8 +94,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
 
 
   onValueChanged(event) {
-
-
+    console.log("inside on value changed---"+event.detail.value);
     this.manualinput = event.detail.value;
     this.utility.manualInput.next(this.manualinput);
     // this.selectedDataName = event.detail.value;
@@ -116,6 +115,10 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
       // this.selectedDataName= event.detail.value;
       // event.detail.value = this.selectedDataName;
       // this.onChange(this.selectedDataName);
+    }
+
+    if(this.mode === 'object' && event.detail.value == ""){
+      this.onChange("");
     }
   }
 

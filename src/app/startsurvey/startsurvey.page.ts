@@ -633,7 +633,12 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           this.invertermakes = response;
           this.activeForm.get('invertermake').valueChanges.subscribe(val => {
-            this.getInverterModels(this.activeForm.get('invertermake').value.id);
+            console.log(val);
+            if(val != ""){
+              this.getInverterModels(this.activeForm.get('invertermake').value.id);
+            }else{
+              this.activeForm.get('invertermodel').setValue('');
+            }
           });
           this.changedetectorref.detectChanges();
         });
@@ -1246,6 +1251,8 @@ export class StartsurveyPage implements OnInit {
   handleInverterFieldsSubmission() {
     const invertermakecontrol = this.activeForm.get('invertermake');
     const invertermodelcontrol = this.activeForm.get('invertermodel');
+    console.log(invertermakecontrol.value)
+    console.log(invertermodelcontrol.value)
     if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
       this.markshotcompletion();
     } else {
@@ -1361,6 +1368,13 @@ export class StartsurveyPage implements OnInit {
         this.activeForm.get('shotname').setValue(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imageuploadname);
       }
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
+        this.getUtilities();
+      } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
+        this.getInverterMakes();
+      } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
+        this.getRoofMaterials();
+      }
     }
   }
 
