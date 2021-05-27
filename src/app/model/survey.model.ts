@@ -84,6 +84,7 @@ export class SurveyDataModel {
   projecttype:string;
   additionalnotes:string;
   interconnectiondetails: string;
+  addedtogroupchat: boolean;
 }
 
 export class SurveyCount{

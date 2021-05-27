@@ -290,7 +290,6 @@ export class SurveyComponent {
   formatSurveyData(records: SurveyDataModel[]) {
     this.listOfSurveyData = this.fillinDynamicData(records);
 
-
     const tempData: SurveyDataHelper[] = [];
     this.listOfSurveyData.forEach((surveyItem, i) => {
       this.sDatePassed(surveyItem.datetime, i);
@@ -353,6 +352,19 @@ export class SurveyComponent {
 
         }
       });
+
+      var groupMembersRequest = new CometChat.GroupMembersRequestBuilder(element.chatid)
+        .setLimit(10)
+        .build();
+      groupMembersRequest.fetchNext().then(
+        groupMembers => {
+
+          element.addedtogroupchat=true;
+        },
+        error => {
+
+        }
+      );
     });
 
     return records;
