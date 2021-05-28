@@ -101,6 +101,7 @@ export interface FILE_ATTACHMENTS {
   file: File;
   fileurl: any;
   uploadstatus: boolean;
+  controlname: string;
 }
 
 export enum CONTROLTYPE {
@@ -196,6 +197,7 @@ export class StartsurveyPage implements OnInit {
   selectedshotindex = 0;
 
   totalimagestoupload = 0;
+  totalfilestoupload = 0;
   blurcaptureview = false;
   recapturingmode = false;
   showinfodetailsview = false;
@@ -546,7 +548,8 @@ export class StartsurveyPage implements OnInit {
         const selectedfile: FILE_ATTACHMENTS = {
           file: object,
           fileurl: fileobjurl,
-          uploadstatus: false
+          uploadstatus: false,
+          controlname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].inputformcontrol[0]
         };
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push(fileobjurl);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(selectedfile);
@@ -789,7 +792,7 @@ export class StartsurveyPage implements OnInit {
             },
 
           );
-        this.uploadformelementsfiles(this.mainmenuitems[0], 0);
+        this.uploadfilestoserver();
       }
       else {
         const toast = await this.toastController.create({
@@ -802,80 +805,78 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
-  uploadformelementsfiles(mainmenuitem, mainindex) {
-    if (mainmenuitem.viewmode == VIEWMODE.FORM && mainmenuitem.children[0].formelements.length > 0) {
-      this.checkformelementforuploads(mainmenuitem.children[0].formelements, mainindex, 0);
-    } else {
-      mainindex = mainindex + 1;
-      if (mainindex < this.mainmenuitems.length) {
-        this.uploadformelementsfiles(this.mainmenuitems[mainindex], mainindex);
-      } else {
-        this.uploadImagesToServer();
+  uploadfilestoserver(){
+    this.saveintermediatesurveydata();
+    const filesarray : FILE_ATTACHMENTS[] = [];
+    this.mainmenuitems.forEach(mainmenu => {
+      if(mainmenu.viewmode == VIEWMODE.FORM)
+      {
+        mainmenu.children.forEach(child => {
+          if(child.formelements.length > 0){
+            child.formelements.forEach(formelement => {
+              if(formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD){
+                formelement.attachments.forEach(attachment => {
+                  filesarray.push(attachment);
+                });
+              }
+            });
+          }
+        });
       }
-    }
+    });
+
+    this.utilitieservice.showLoading('Uploading Files').then(() => {
+      this.totalfilestoupload = filesarray.length;
+      this.uploadattachmentbyindex(filesarray, 0, this.totalfilestoupload, false);
+    });
   }
 
-  checkformelementforuploads(formelements, mainindex, elementindex) {
-    if ((formelements[elementindex].controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelements[elementindex].controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) && formelements[elementindex].attachments.length > 0) {
-      this.uploadattachedfilewithformelement(formelements, mainindex, elementindex, 0);
-    } else {
-      elementindex = elementindex + 1;
-      if (elementindex < formelements.length) {
-        this.checkformelementforuploads(formelements, mainindex, elementindex);
-      } else {
-        mainindex = mainindex + 1;
-        if (mainindex < this.mainmenuitems.length) {
-          this.uploadformelementsfiles(this.mainmenuitems[mainindex], mainindex);
-        } else {
-          this.uploadImagesToServer();
+  uploadattachmentbyindex(files : FILE_ATTACHMENTS[], index, totalfiles, isfailedfile){
+    if (files.length > 0 && files.length <= this.totalfilestoupload) {
+      const fileToUpload = files[0];
+      if (fileToUpload.uploadstatus) {
+        if(isfailedfile){
+          this.utilitieservice.setLoadingMessage('Uploading failed file ' + (index + 1) + ' of ' + totalfiles);
+        }else{
+          this.utilitieservice.setLoadingMessage('Uploading file ' + (index + 1) + ' of ' + totalfiles);
         }
-      }
-    }
-  }
 
-  uploadattachedfilewithformelement(formelements, mainindex, elementindex, fileindex) {
-    if(!formelements[elementindex].attachments[fileindex].uploadstatus){
-      console.log(formelements[elementindex].placeholder);
-      this.utilitieservice.showLoading('Uploading ' + formelements[elementindex].placeholder + ' file').then(() => {
         const filedata = new FormData();
-        filedata.append("files", formelements[elementindex].attachments[fileindex].file);
+        filedata.append("files", fileToUpload.file);
         filedata.append('path', 'survey/' + this.surveyid);
         filedata.append('refId', this.surveyid + '');
         filedata.append('ref', 'survey');
-        filedata.append('field', formelements[elementindex].inputformcontrol[0]);
+        filedata.append('field', fileToUpload.controlname);
         this.apiService.uploaddesign(filedata).subscribe((data) => {
-          formelements[elementindex].attachments[fileindex].uploadstatus = true;
-          this.movetonextattachment(formelements, mainindex, elementindex, fileindex);
+          fileToUpload.uploadstatus = true;
+          index++;
+          files.splice(0, 1);
+          this.saveintermediatesurveydata();
+          this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
         }, (error) => {
-          formelements[elementindex].attachments[fileindex].uploadstatus = false;
-          this.failedattachmentstoupload.push(formelements[elementindex].attachments[fileindex]);
-          this.movetonextattachment(formelements, mainindex, elementindex, fileindex);
+          fileToUpload.uploadstatus = false;
+          this.failedattachmentstoupload.push(fileToUpload);
+          index++;
+          files.splice(0, 1);
+          this.saveintermediatesurveydata();
+          this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
         });
-      });
-    }else{
-      this.movetonextattachment(formelements, mainindex, elementindex, fileindex);
-    }
-  }
-
-  movetonextattachment(formelements, mainindex, elementindex, fileindex) {
-    this.utilitieservice.hideLoading().then(() => {
-      fileindex = fileindex + 1;
-      if (fileindex < formelements[fileindex].attachments.length) {
-        this.uploadattachedfilewithformelement(formelements, mainindex, elementindex, fileindex);
       } else {
-        elementindex = elementindex + 1;
-        if (elementindex < formelements.length) {
-          this.checkformelementforuploads(formelements, mainindex, elementindex);
-        } else {
-          mainindex = mainindex + 1;
-          if (mainindex < this.mainmenuitems.length) {
-            this.uploadformelementsfiles(this.mainmenuitems[mainindex], mainindex);
-          } else {
-            this.uploadImagesToServer();
-          }
-        }
+        index++;
+          files.splice(0, 1);
+          this.saveintermediatesurveydata();
+          this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
       }
-    });
+    } else {
+      this.utilitieservice.hideLoading().then(() => {
+        if(this.failedattachmentstoupload.length > 0){
+          //Code to upload failed files
+          this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.failedattachmentstoupload.length, true);
+        }else{
+          this.savedetailsformdata();
+        }
+      });
+    }
   }
 
   uploadImagesToServer() {
