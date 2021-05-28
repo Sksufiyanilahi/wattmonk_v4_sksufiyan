@@ -66,6 +66,7 @@ export interface SHOT {
   imageuploadname: string;
   required: boolean;
   capturedonce: boolean;
+  forminputfields: string[];
 }
 
 export interface CAPTUREDSHOT {
@@ -123,7 +124,7 @@ export enum QUESTIONTYPE {
   INPUT_SHOT_NAME = 5,
   INPUT_ROOF_MATERIAL_AUTOCOMPLETE = 6,
   INPUT_TEXT = 7,
-  INPUT_FRAMING_SIZE = 8,
+  INPUT_MULTI_NUMBER = 8,
   INPUT_INVERTER_DETAILS = 9
 }
 
@@ -245,8 +246,8 @@ export class StartsurveyPage implements OnInit {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
 
-    this.loadSurveyJSON('pvsurveyjson');
-    // this.loadLocalJSON();
+    // this.loadSurveyJSON('pvsurveyjson');
+    this.loadLocalJSON();
     // this.getCurrentCoordinates();
   }
 
@@ -261,7 +262,7 @@ export class StartsurveyPage implements OnInit {
 
   loadLocalJSON(){
     this.http
-      .get('assets/surveyprocessjson/pv.json')
+      .get('assets/surveyprocessjson/defaultpv.json')
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
       });
@@ -296,6 +297,16 @@ export class StartsurveyPage implements OnInit {
                   }
                 }
               }
+
+              if(shot.forminputfields.length > 0){
+                shot.forminputfields.forEach(element => {
+                  if(shot.required){
+                    formData[element] = new FormControl('', [Validators.required]);
+                  }else{
+                    formData[element] = new FormControl('', []);
+                  }
+                });
+              }
             });
           }
           if (child.formelements) {
@@ -316,7 +327,9 @@ export class StartsurveyPage implements OnInit {
       }
     });
     formData['shotname'] = new FormControl('', []);
+    console.log(formData);
     this.activeFormElementsArray.push('shotname');
+    console.log(this.activeFormElementsArray);
     this.activeForm = new FormGroup(formData);
   }
 
@@ -348,6 +361,15 @@ export class StartsurveyPage implements OnInit {
                     formData[shot.inputformcontrol[1]] = new FormControl('', []);
                   }
                 }
+              }
+              if(shot.forminputfields.length > 0){
+                shot.forminputfields.forEach(element => {
+                  if(shot.required){
+                    formData[element] = new FormControl('', [Validators.required]);
+                  }else{
+                    formData[element] = new FormControl('', []);
+                  }
+                });
               }
             });
           }
@@ -1288,11 +1310,34 @@ export class StartsurveyPage implements OnInit {
   handleInputSubmission(form: FormGroup) {
     const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
     const control = form.get(activechild.shots[this.selectedshotindex].inputformcontrol);
-    if (control.value != '') {
-      this.handleAnswerSubmission(control.value);
-    } else {
-      control.markAsTouched();
-      control.markAsDirty();
+    if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_MULTI_NUMBER) {
+      let anyemptyfieldfound = false;
+      let preparedresult = "";
+      activechild.shots[this.selectedshotindex].forminputfields.forEach((field, index) => {
+        console.log(form.get(field).value);
+        if (form.get(field).value != '') {
+          preparedresult += form.get(field).value;
+        }else{
+          preparedresult = "";
+          anyemptyfieldfound = true;
+          form.get(field).markAsTouched();
+          form.get(field).markAsDirty();
+        }
+        if(index < activechild.shots[this.selectedshotindex].forminputfields.length - 1){
+          preparedresult += 'X';
+        }
+      });
+      console.log(preparedresult);
+      if(!anyemptyfieldfound){
+        this.handleAnswerSubmission(preparedresult);
+      }
+    }else{
+      if (control.value != '') {
+        this.handleAnswerSubmission(control.value);
+      } else {
+        control.markAsTouched();
+        control.markAsDirty();
+      }
     }
   }
 

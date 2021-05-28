@@ -9,13 +9,13 @@
             *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
             <img
               src="/assets/surveysampleimages/{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename}}.jpg"
-              [style.height.px]="cameraspaceremainingheight"/>
+              [style.height.px]="cameraspaceremainingheight" />
           </div>
           <div class="mainimage"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
             <img #watermarkedimage
               src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}"
-              [style.height.px]="cameraspaceremainingheight"/>
+              [style.height.px]="cameraspaceremainingheight" />
           </div>
           <ion-row class="gallerystack"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
@@ -158,7 +158,8 @@
               </ion-row>
             </div>
           </ion-grid>
-          <ion-button class="yellow-button-color ion-float-left ion-margin-top" fill="clear" (click)="savedataandclose()">
+          <ion-button class="yellow-button-color ion-float-left ion-margin-top" fill="clear"
+            (click)="savedataandclose()">
             Save & Close
           </ion-button>
           <ion-button class="yellow-button-color ion-float-right ion-margin-top" fill="clear" (click)="saveFormData()">
@@ -214,7 +215,8 @@
           </ion-col>
           <ion-col size="8" style="text-align: center;">
             <p class="shotinfo" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
-              <span *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required">*</span>{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
+              <span
+                *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required">*</span>{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
             </p>
           </ion-col>
           <ion-col size="2" style="text-align: right;">
@@ -419,7 +421,7 @@
       <!-- Row for question type SHOT Name -->
       <ion-row class="questionaireview-row ion-padding-horizontal"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_SHOT_NAME">
-        <ion-col size="12">
+        <ion-col size="12" class="questionaireview-col">
           <p>
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
           </p>
@@ -434,6 +436,38 @@
           </form>
           <ion-row class="ion-float-right">
             <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleShotNameSubmission()">
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
+              | titlecase}}
+            </ion-button>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+
+      <!-- Row for input two dimensions question -->
+      <ion-row class="questionaireview-row ion-padding-horizontal"
+        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_MULTI_NUMBER">
+        <ion-col size="12" class="questionaireview-col">
+          <p>
+            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+          </p>
+          <form [formGroup]="activeForm" novalidate>
+            <ion-row>
+              <ion-col *ngFor="let fieldname of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].forminputfields; let i = index">
+                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                  <ion-input type="number" class="form-control" autocomplete="off" formControlName="{{fieldname}}">
+                  </ion-input>
+                  <span style="font-size: 24px; font-weight: 600; margin-left: 8px;" *ngIf="i < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].forminputfields.length - 1">x</span>
+                </div>
+                <div class="error_div">
+                  <div *ngIf="activeForm.get(fieldname).value === '' && activeForm.get(fieldname).dirty">
+                    <span class="error">Field input is required.</span>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </form>
+          <ion-row class="ion-float-right">
+            <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
