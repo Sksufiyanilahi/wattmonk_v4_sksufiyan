@@ -873,7 +873,7 @@ export class StartsurveyPage implements OnInit {
           //Code to upload failed files
           this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.failedattachmentstoupload.length, true);
         }else{
-          this.savedetailsformdata();
+          this.uploadImagesToServer();
         }
       });
     }
