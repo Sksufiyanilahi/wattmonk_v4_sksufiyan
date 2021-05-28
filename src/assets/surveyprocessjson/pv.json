@@ -35,6 +35,7 @@
                 "inputformcontrol": [
                   "msplocation"
                 ],
+                "forminputfields": [],
                 "isactive": true,
                 "placeholder": "MSP Location",
                 "questioninfo": "Provide MSP Location",
@@ -62,6 +63,7 @@
                 "inputformcontrol": [
                   "msprating"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "MSP Rating",
                 "questioninfo": "Provide MSP Rating",
@@ -88,6 +90,7 @@
                 "inputformcontrol": [
                   "mainbreakersize"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "Biggest breaker size inside main panel (Number is on the breaker)",
                 "questioninfo": "Provide Biggest breaker size inside main panel (Number is on the breaker)",
@@ -114,6 +117,7 @@
                 "inputformcontrol": [
                   "mspbreaker"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "MSP Breaker",
                 "questioninfo": "Provide  Main Breaker location in Main panel Top/Bottom/Center/None",
@@ -161,6 +165,7 @@
                 "inputformcontrol": [
                   "utilitymeter"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "Utility Meter",
                 "questioninfo": "Provide Utility Meter",
@@ -188,6 +193,7 @@
                 "inputformcontrol": [
                   "meternumber"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "Utility Meter Number",
                 "questioninfo": "Provide Utility Meter Number",
@@ -232,6 +238,7 @@
                 "inputformcontrol": [
                   "pvinverterlocation"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "PV Inverter Location",
                 "questioninfo": "Provide Inverter Location",
@@ -260,6 +267,7 @@
                   "invertermake",
                   "invertermodel"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "PV Inverter Manufacturer and Model",
                 "questioninfo": "Provide Inverter Manufacturer & Model",
@@ -286,6 +294,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "PV Meter",
@@ -310,6 +319,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -334,6 +344,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -385,6 +396,7 @@
                 "inputformcontrol": [
                   "roofmaterial"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "Roof Material",
                 "questioninfo": "Provide Roof Material",
@@ -411,6 +423,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -435,6 +448,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -459,6 +473,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -483,6 +498,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -507,6 +523,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -531,6 +548,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -573,6 +591,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -597,6 +616,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -621,6 +641,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -645,6 +666,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -669,6 +691,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -693,6 +716,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -744,6 +768,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -768,6 +793,7 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
