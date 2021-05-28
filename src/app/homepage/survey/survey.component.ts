@@ -342,14 +342,13 @@ export class SurveyComponent {
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
-      this.storage.get('' + element.id).then((data: SurveyStorageModel) => {
-
+      this.storage.get(this.storageService.getUserID() + '-' + element.id).then((data: SurveyStorageModel) => {
         if (data) {
+          console.log(data.currentprogress);
+          element.remainingfilestoupload = data.remainingfilestoupload;
           element.totalpercent = data.currentprogress;
-
         } else {
           element.totalpercent = 0;
-
         }
       });
 
