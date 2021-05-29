@@ -707,12 +707,12 @@ export class UtilitiesService {
         const invalid = [];
         const controls = form.controls;
         for (const name in controls) {
-          if (controls[name].invalid) {
-            invalid.push(name);
-          }
+            if (controls[name].invalid) {
+                invalid.push(name);
+            }
         }
         return invalid;
-      }
+    }
 
     getMimetype(extension) {
 
