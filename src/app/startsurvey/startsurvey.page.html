@@ -22,8 +22,8 @@
               <ng-container
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index">
                 <ion-button color="dark" class="cameraimagesbutton" (click)="selectcapturedshot($event, shotindex)">
-                  <img *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
-                  <img *ngIf="shot.imagecleared" src="/assets/images/noimage.png" />
+                  <img class="shotimage" *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
+                  <img class="noimage" *ngIf="shot.imagecleared" src="/assets/images/noimage.png" />
                 </ion-button>
               </ng-container>
             </div>
