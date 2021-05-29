@@ -196,6 +196,8 @@ export class StartsurveyPage implements OnInit {
   selectedsubmenuindex = 0;
   selectedshotindex = 0;
   nextfoundshotindex = 0;
+  nextfoundchildindex = 0;
+  nextfoundmainindex = 0;
 
   totalimagestoupload = 0;
   totalfilestoupload = 0;
@@ -1218,6 +1220,8 @@ export class StartsurveyPage implements OnInit {
                 console.log("shot loop---"+shot.shotinfo);
                 nextactiveshotfound = true;
                 this.nextfoundshotindex = shotindex;
+                this.nextfoundchildindex = childindex;
+                this.nextfoundmainindex = mainmenuindex;
                 return nextactiveshotfound;
               }
             }
@@ -1230,6 +1234,8 @@ export class StartsurveyPage implements OnInit {
 
   activateshot(){
     this.selectedshotindex = this.nextfoundshotindex;
+    this.selectedsubmenuindex = this.nextfoundchildindex;
+    this.selectedmainmenuindex = this.nextfoundmainindex;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
