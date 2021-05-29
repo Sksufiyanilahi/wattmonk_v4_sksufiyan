@@ -17,14 +17,13 @@
               src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}"
               [style.height.px]="cameraspaceremainingheight" />
           </div>
-          <ion-row class="gallerystack"
-            *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
+          <ion-row class="gallerystack">
             <div class="scroll" scrollX="true">
               <ng-container
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index">
                 <ion-button color="dark" class="cameraimagesbutton" (click)="selectcapturedshot($event, shotindex)">
                   <img *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
-                  <img style="background-color: #fff;" *ngIf="shot.imagecleared" src="/assets/images/nopicture.svg" />
+                  <img *ngIf="shot.imagecleared" src="/assets/images/noimage.png" />
                 </ion-button>
               </ng-container>
             </div>

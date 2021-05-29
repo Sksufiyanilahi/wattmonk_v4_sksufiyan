@@ -275,15 +275,16 @@ export class StartsurveyPage implements OnInit {
     this.activeFormElementsArray = [];
     // let surveydata = data.sequence;
     const formData = {};
-    surveydata.map(item => {
+    surveydata.map((item, mainindex) => {
       if (item.children) {
-        item.children.map(child => {
+        item.children.map((child, childindex) => {
           if (child.inputformcontrol[0] !== '') {
             this.activeFormElementsArray.push(child.inputformcontrol[0]);
             formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
           }
           if (child.shots) {
-            child.shots.map(shot => {
+            child.shots.map((shot, shotindex) => {
+              this.createcapturedshotofitem(shot, mainindex, childindex, shotindex);
               if (shot.inputformcontrol[0] !== '') {
                 this.activeFormElementsArray.push(shot.inputformcontrol[0]);
                 if (shot.required) {
@@ -340,15 +341,15 @@ export class StartsurveyPage implements OnInit {
     this.activeFormElementsArray = [];
     // let surveydata = data.sequence;
     const formData = {};
-    this.mainmenuitems.map(item => {
+    this.mainmenuitems.map((item, mainindex) => {
       if (item.children) {
-        item.children.map(child => {
+        item.children.map((child, childindex) => {
           if (child.inputformcontrol[0] !== '') {
             this.activeFormElementsArray.push(child.inputformcontrol[0]);
             formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
           }
           if (child.shots) {
-            child.shots.map(shot => {
+            child.shots.map((shot, shotindex) => {
               if (shot.inputformcontrol[0] !== '') {
                 this.activeFormElementsArray.push(shot.inputformcontrol[0]);
                 if (shot.required) {
@@ -398,6 +399,21 @@ export class StartsurveyPage implements OnInit {
     this.activeForm = new FormGroup(formData);
   }
 
+  createcapturedshotofitem(shot : SHOT, mainindex, childindex, shotindex){
+    const captureshot: CAPTUREDSHOT = {
+      menuindex: mainindex,
+      submenuindex: childindex,
+      shotindex: shotindex,
+      shotimage: '',
+      imagekey: shot.imagekey,
+      imagename: shot.imagename,
+      imageuploadname: shot.imageuploadname,
+      imagecleared: true,
+      uploadstatus: false
+    };
+    this.mainmenuitems[mainindex].children[childindex].capturedshots.push(captureshot);
+  }
+
   restoreSurveyStoredData(surveydata) {
     this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
       if (data) {
@@ -444,7 +460,6 @@ export class StartsurveyPage implements OnInit {
         this.isdataloaded = true;
         this.setTotalStepCount();
       } else {
-        this.createSurveyForm(surveydata);
         this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
         this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
 
@@ -453,6 +468,7 @@ export class StartsurveyPage implements OnInit {
             this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
           }
         });
+        this.createSurveyForm(surveydata);
 
         this.isdataloaded = true;
         this.setTotalStepCount();
@@ -1004,13 +1020,13 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
     this.selectedsubmenuindex = 0;
     this.selectedshotindex = 0;
-    if (this.mainmenuitems[this.selectedmainmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
-      this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
-    } else {
-      if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-      }
-    }
+    // if (this.mainmenuitems[this.selectedmainmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+    //   this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
+    // } else {
+    //   if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+    //     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+    //   }
+    // }
   }
 
   selectsubmenu(index) {
@@ -1018,14 +1034,14 @@ export class StartsurveyPage implements OnInit {
     this.selectedsubmenuindex = index;
     this.selectedshotindex = 0;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
-      this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
-    } else {
-      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
-        this.selectedshotindex = 0;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-      }
-    }
+    // if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
+    //   this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
+    // } else {
+    //   if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
+    //     this.selectedshotindex = 0;
+    //     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+    //   }
+    // }
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1059,29 +1075,23 @@ export class StartsurveyPage implements OnInit {
   }
 
   handleshotimage(capturedImage) {
-    if (this.recapturingmode) {
-      this.recapturingmode = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = capturedImage;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = false;
-    } else {
-      const captureshot: CAPTUREDSHOT = {
-        menuindex: this.selectedmainmenuindex,
-        submenuindex: this.selectedsubmenuindex,
-        shotindex: this.selectedshotindex,
-        shotimage: capturedImage,
-        imagekey: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagekey,
-        imagename: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename,
-        imageuploadname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imageuploadname,
-        imagecleared: false,
-        uploadstatus: false
-      };
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.push(captureshot);
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce = true;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount += 1;
-    }
-    //Setting shot status true to display captured image
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = capturedImage;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = false;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
+    this.updateshotscapturedcount();
     this.handleshotquestion();
+  }
+
+  updateshotscapturedcount(){
+    var capturedshots = 0;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.forEach(element => {
+      if(!element.imagecleared){
+        capturedshots += 1;
+      }
+    });
+
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount = capturedshots;
   }
 
   handleshotquestion() {
