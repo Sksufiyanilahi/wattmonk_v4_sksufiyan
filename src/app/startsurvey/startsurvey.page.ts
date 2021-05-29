@@ -200,7 +200,6 @@ export class StartsurveyPage implements OnInit {
   totalimagestoupload = 0;
   totalfilestoupload = 0;
   blurcaptureview = false;
-  recapturingmode = false;
   showinfodetailsview = false;
   isactivesteppending = true;
 
@@ -450,13 +449,6 @@ export class StartsurveyPage implements OnInit {
             });
           }
         });
-
-        //Check if it retake mode or not
-        if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0 && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce){
-          this.recapturingmode = true;
-        }else{
-          this.recapturingmode = false;
-        }
         this.isdataloaded = true;
         this.setTotalStepCount();
       } else {
@@ -1238,13 +1230,6 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
     this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-
-    //Check if it retake mode or not
-    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce){
-      this.recapturingmode = true;
-    }else{
-      this.recapturingmode = false;
-    }
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1417,7 +1402,6 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = "";
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = true;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount -= 1;
-    this.recapturingmode = true;
   }
 
   toggleshotdetailsview(isvisible) {
