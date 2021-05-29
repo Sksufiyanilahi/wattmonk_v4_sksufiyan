@@ -38,9 +38,10 @@
                         <span fill="clear" background-border="clear" (click)="gotoActivity(surveyData,$event)"
                             class="imagebutton" size="small"><img src="/assets/images/activitylist.png"
                                 style="height: 20px;" /></span>
+                                <ng-container *ngIf="surveyData?.chatid!==null && surveyData?.addedtogroupchat">
                         <span fill="clear" background-border="clear" (click)="gotoChats(surveyData,$event)"
                             class="chatbutton" size="small"><img style="height:20px"
-                                src="assets/images/chat.svg" /></span>
+                                src="assets/images/chat.svg" /></span></ng-container>
                     </p>
                     <!-- <ng-container *ngIf="surveyData?.chatid!==null && surveyData?.addedtogroupchat"> -->
                     <!-- </ng-container> -->
@@ -122,13 +123,13 @@
                         >Reassign</span>
                         </ion-col> -->
 
-                        <!-- <span *ngIf="(designData.isoutsourced=='true' && designData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (designData.isoutsourced=='false' && designData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                        <!-- <span *ngIf="(surveyData.isoutsourced=='true' && surveyData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (surveyData.isoutsourced=='false' && surveyData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(surveyData.id,surveyData)"
                             >Assign Review</span> -->
 
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
                             *ngIf="segments=='status=assigned'"
                             style="margin-bottom: 5px;">
-                            <span *ngIf="surveyData.status !=='surveyinprocess'"
+                            <span 
                                 class="ion-text-end action-button-color z-100"
                                 (click)="openSurveyors(surveyData.id,surveyData,$event)">Reassign</span>
                             <span class="ion-text-end action-button-color z-100" style="float:right !important;"
@@ -169,12 +170,12 @@
                             <span style="float:right !important;" class="ion-text-end action-button-color"
                                 (click)="openAnalysts(surveyData.id,surveyData)">&nbsp;Reassign Review</span>
                         </ion-col>
-                        <span class="ion-text-end action-button-color z-100" style="float:right !important;"
+                        <!-- <span class="ion-text-end action-button-color z-100" style="float:right !important;"
                             *ngIf="userData.id==surveyData.assignedto?.id"
-                            [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]"
+                            [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]"
                             routerDirection="forward">
                             Start Survey
-                        </span>
+                        </span> -->
 
                         <ion-col *ngIf="segments=='status=delivered'">
                             <span style="float:right !important;" class="ion-text-end action-button-color"

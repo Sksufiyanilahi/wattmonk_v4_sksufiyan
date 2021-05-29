@@ -55,7 +55,9 @@
                 </ion-col> -->
                 </ion-row>
                  <ion-row class="ion-no-margin ion-no-margin">
-                    <ion-col></ion-col>
+                    <ion-col class="ion-no-margin ion-no-padding">
+                      <p class="warninginfo" *ngIf="surveyData.remainingfilestoupload > 0">Files to upload: {{surveyData.remainingfilestoupload}}</p>
+                    </ion-col>
                     <ion-col class="ion-no-margin ion-no-padding">
                    <!--  <ion-col class="ion-no-margin ion-no-padding ion-text-end" *ngIf="today==item.date"> -->
                         <ion-button *ngIf="surveyData.totalpercent == 0" class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="startsurvey(surveyData,$event)">
@@ -64,7 +66,7 @@
                     <ion-button *ngIf="surveyData.totalpercent > 0"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" (click)="resumesurvey(surveyData,$event)">
                       Resume Survey
                     </ion-button>
-                        <!-- <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]">
+                        <!-- <ion-button *ngIf="surveyData.status=='surveyinprocess'"  class="ion-no-margin ion-no-padding" style="float: right;" fill="clear" [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]">
                         Resume Survey
                     </ion-button> -->
                     </ion-col>

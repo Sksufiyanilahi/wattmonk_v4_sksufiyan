@@ -153,8 +153,7 @@ export class SurveyComponent {
     this.userData = this.storageService.getUser();
     let userId = this.storageService.getUserID()
     
-      this.apiService.getSurveycounts(userId).subscribe(res=>{this.SurveyCounts =res;
-        })
+     
 
     this.setupCometChat();
 
@@ -209,6 +208,9 @@ export class SurveyComponent {
   //   // });
   // }
   getSurveys(event?) {
+    this.apiService.getSurveycounts(this.userData.id).subscribe(res=>{this.SurveyCounts =res;
+    })
+
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
@@ -288,7 +290,6 @@ export class SurveyComponent {
   formatSurveyData(records: SurveyDataModel[]) {
     this.listOfSurveyData = this.fillinDynamicData(records);
 
-
     const tempData: SurveyDataHelper[] = [];
     this.listOfSurveyData.forEach((surveyItem, i) => {
       this.sDatePassed(surveyItem.datetime, i);
@@ -341,16 +342,28 @@ export class SurveyComponent {
     records.forEach(element => {
       element.formattedjobtype = this.utils.getJobTypeName(element.jobtype);
       element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
-      this.storage.get('' + element.id).then((data: SurveyStorageModel) => {
-
+      this.storage.get(this.storageService.getUserID() + '-' + element.id).then((data: SurveyStorageModel) => {
         if (data) {
+          console.log(data.currentprogress);
+          element.remainingfilestoupload = data.remainingfilestoupload;
           element.totalpercent = data.currentprogress;
-
         } else {
           element.totalpercent = 0;
-
         }
       });
+
+      var groupMembersRequest = new CometChat.GroupMembersRequestBuilder(element.chatid)
+        .setLimit(10)
+        .build();
+      groupMembersRequest.fetchNext().then(
+        groupMembers => {
+
+          element.addedtogroupchat=true;
+        },
+        error => {
+
+        }
+      );
     });
 
     return records;
@@ -984,7 +997,7 @@ export class SurveyComponent {
     this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
 
     })
-    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]);
   }
 
   makeDirectory() {
@@ -1081,7 +1094,7 @@ export class SurveyComponent {
 
   resumeSurvey(surveyData, event) {
     event.stopPropagation();
-    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]);
   }
 
   gotoActivity(surveyData, event) {

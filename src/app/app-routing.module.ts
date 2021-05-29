@@ -355,7 +355,7 @@ const routes: Routes = [
         loadChildren: () => import('./design-tracker/design-tracker.module').then(m => m.DesignTrackerPageModule)
     },
     {
-        path: 'startsurvey/:id/:type/:city/:state',
+        path: 'startsurvey/:id/:type',
         loadChildren: () => import('./startsurvey/startsurvey.module').then(m => m.StartsurveyPageModule),
         canActivate: [AuthGuardService]
     },

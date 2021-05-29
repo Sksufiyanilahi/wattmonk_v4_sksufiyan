@@ -2,34 +2,33 @@
   <!-- PICTURE TAKING MODE VIEW -->
   <div class="picturemodecontainer" [ngClass]="[ blurcaptureview ? 'blurbackground' : '']">
     <ion-grid class="ion-no-padding" style="overflow-y: hidden;">
-      <div class="captureactionareacontainer"
+      <ion-row class="captureactionareacontainer"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
-        <div class="imagecontainer">
+        <ion-row class="imagecontainer" [style.height.px]="cameraspaceremainingheight">
           <div class="mainimage"
             *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
             <img
               src="/assets/surveysampleimages/{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagename}}.jpg"
-              width="100%" height="100%" />
+              [style.height.px]="cameraspaceremainingheight" />
           </div>
           <div class="mainimage"
             *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus">
-            <img
+            <img #watermarkedimage
               src="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage}}"
-              width="100%" height="100%" />
+              [style.height.px]="cameraspaceremainingheight" />
           </div>
-          <ion-row class="gallerystack"
-            *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.length > 0">
+          <ion-row class="gallerystack">
             <div class="scroll" scrollX="true">
               <ng-container
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index">
-                <ion-button color="dark" class="cameraimagesbutton" (click)="selectcapturedshot($event, shotindex)">
-                  <img *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
-                  <img style="background-color: #fff;" *ngIf="shot.imagecleared" src="/assets/images/nopicture.svg" />
+                <ion-button color="dark" (click)="selectcapturedshot($event, shotindex)" [ngClass]="[ this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex].required ? 'cameraimagesbutton required' : 'cameraimagesbutton']">
+                  <img class="shotimage" *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
+                  <img class="noimage" *ngIf="shot.imagecleared" src="/assets/images/noimage.png" />
                 </ion-button>
               </ng-container>
             </div>
           </ion-row>
-        </div>
+        </ion-row>
         <ion-row class="captureactionarea"
           *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending">
           <ion-col style="text-align: center;">
@@ -60,9 +59,10 @@
             </a>
           </ion-col>
         </ion-row>
-      </div>
+      </ion-row>
       <div class="detailsformviewcontainer"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM">
+        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult && this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.FORM"
+        [style.height.px]="detailsviewremainingheight">
         <form [formGroup]="activeForm" class="additionalform ion-margin">
           <ion-grid class="ion-padding text-white additionalformgrid">
             <div
@@ -157,13 +157,18 @@
               </ion-row>
             </div>
           </ion-grid>
+          <ion-button class="yellow-button-color ion-float-left ion-margin-top" fill="clear"
+            (click)="savedataandclose()">
+            Save & Close
+          </ion-button>
           <ion-button class="yellow-button-color ion-float-right ion-margin-top" fill="clear" (click)="saveFormData()">
             Submit
           </ion-button>
         </form>
       </div>
       <div class="noviewmodecontainer"
-        *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult">
+        *ngIf="!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
+        [style.height.px]="noviewremainingheight">
         <ion-grid class="noviewmodegrid">
           <ion-row>
             <ion-col class="ion-text-center" size="12">
@@ -180,7 +185,7 @@
           <ng-container *ngFor="let button of mainmenuitems[selectedmainmenuindex].children; let i = index">
             <ion-button *ngIf="button.isvisible && button.shots.length > 0" id="submenu{{i}}" fill="clear"
               (click)="selectsubmenu(i)" [ngClass]="[ button.isactive ? 'button active' : 'button normal']">
-              {{button.name}}({{button.capturedshots.length}}/{{button.shots.length}})</ion-button>
+              {{button.name}}({{button.shotscapturedcount}}/{{button.shots.length}})</ion-button>
             <ion-button *ngIf="button.isvisible && button.shots.length == 0" id="submenu{{i}}" fill="clear"
               (click)="selectsubmenu(i)" [ngClass]="[ button.isactive ? 'button active' : 'button normal']">
               {{button.name}}</ion-button>
@@ -190,7 +195,7 @@
       <ion-row class="mainbuttons mainbuttonscontainer">
         <div #mainscroll class="scroll" scrollX="true">
           <ng-container *ngFor="let button of mainmenuitems; let i = index">
-            <a id="mainmenu{{i}}" *ngIf="button.isvisible" (click)="selectemainmenu(i)"
+            <a id="mainmenu{{i}}" *ngIf="button.isvisible" (click)="selectmainmenu(i)"
               [ngClass]="[button.ispending ? 'btn-link' : 'btn-link completed']">
               <div [ngClass]="[button.isactive ? 'button active' : 'button normal']">
                 <img *ngIf="button.isactive" src="/assets/images/{{button.name | lowercase}}active.svg" alt="img">
@@ -209,7 +214,8 @@
           </ion-col>
           <ion-col size="8" style="text-align: center;">
             <p class="shotinfo" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].viewmode == ViewModes.CAMERA">
-              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
+              <span
+                *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required">*</span>{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotinfo}}
             </p>
           </ion-col>
           <ion-col size="2" style="text-align: right;">
@@ -414,7 +420,7 @@
       <!-- Row for question type SHOT Name -->
       <ion-row class="questionaireview-row ion-padding-horizontal"
         *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_SHOT_NAME">
-        <ion-col size="12">
+        <ion-col size="12" class="questionaireview-col">
           <p>
             {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
           </p>
@@ -429,6 +435,38 @@
           </form>
           <ion-row class="ion-float-right">
             <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleShotNameSubmission()">
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
+              | titlecase}}
+            </ion-button>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+
+      <!-- Row for input two dimensions question -->
+      <ion-row class="questionaireview-row ion-padding-horizontal"
+        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QuestionTypes.INPUT_MULTI_NUMBER">
+        <ion-col size="12" class="questionaireview-col">
+          <p>
+            {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].question}}
+          </p>
+          <form [formGroup]="activeForm" novalidate>
+            <ion-row>
+              <ion-col *ngFor="let fieldname of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].forminputfields; let i = index">
+                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                  <ion-input type="number" class="form-control" autocomplete="off" formControlName="{{fieldname}}">
+                  </ion-input>
+                  <span style="font-size: 24px; font-weight: 600; margin-left: 8px;" *ngIf="i < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].forminputfields.length - 1">x</span>
+                </div>
+                <div class="error_div">
+                  <div *ngIf="activeForm.get(fieldname).value === '' && activeForm.get(fieldname).dirty">
+                    <span class="error">Field input is required.</span>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </form>
+          <ion-row class="ion-float-right">
+            <ion-button fill="clear" size="small" (click)="handleInputSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>

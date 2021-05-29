@@ -65,7 +65,7 @@ export class NewsurveysComponent implements OnInit {
     });
   }
 
- 
+
 
   ionViewDidEnter() {
 
@@ -235,6 +235,7 @@ export class NewsurveysComponent implements OnInit {
       this.storage.get(this.storageService.getUserID() + '-' + element.id).then((data: SurveyStorageModel) => {
         if (data) {
           console.log(data.currentprogress);
+          element.remainingfilestoupload = data.remainingfilestoupload;
           element.totalpercent = data.currentprogress;
         } else {
           element.totalpercent = 0;
@@ -298,13 +299,13 @@ export class NewsurveysComponent implements OnInit {
     this.apiService.updateSurveyForm(postData, surveyData.id).subscribe(res => {
 
     })
-    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]);
 
   }
 
   resumesurvey(surveyData, event) {
     event.stopPropagation();
-    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype + '/' + surveyData.city + '/' + surveyData.state]);
+    this.router.navigate(['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]);
   }
 
   gotoActivity(surveyData, event) {

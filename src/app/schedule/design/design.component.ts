@@ -23,7 +23,6 @@ import {Observable, Subscription} from 'rxjs';
 import {StorageService} from '../../storage.service';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {DesginDataModel} from '../../model/design.model';
-import {Camera, CameraOptions} from '@ionic-native/Camera/ngx';
 // import {File} from '@ionic-native/file/ngx';
 
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
@@ -122,15 +121,6 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   //attachmentName = this.desginForm.get('attachments').value;
 
-  options: CameraOptions = {
-    quality: 30,
-    targetWidth: 600,
-    targetHeight: 300,
-    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-    destinationType: this.camera.DestinationType.DATA_URL,
-    encodingType: this.camera.EncodingType.PNG,
-    mediaType: this.camera.MediaType.PICTURE
-  }
   fileName: any;
   moduledata: any;
   // solarmake:string='solarmake';
@@ -186,7 +176,6 @@ isArchitecturalFileUpload: boolean = false;
     private navController: NavController,
     private storage: StorageService,
     private route: ActivatedRoute,
-    private camera: Camera,
     // private file: File,
     public router:Router,
     private cdr:ChangeDetectorRef,

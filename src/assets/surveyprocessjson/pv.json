@@ -35,6 +35,7 @@
                 "inputformcontrol": [
                   "msplocation"
                 ],
+                "forminputfields": [],
                 "isactive": true,
                 "placeholder": "MSP Location",
                 "questioninfo": "Provide MSP Location",
@@ -44,7 +45,9 @@
                   "inside",
                   "outside"
                 ],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 2,
@@ -60,6 +63,7 @@
                 "inputformcontrol": [
                   "msprating"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "MSP Rating",
                 "questioninfo": "Provide MSP Rating",
@@ -68,7 +72,9 @@
                 "actions": [
                   "confirm"
                 ],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 2,
@@ -84,6 +90,7 @@
                 "inputformcontrol": [
                   "mainbreakersize"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "Biggest breaker size inside main panel (Number is on the breaker)",
                 "questioninfo": "Provide Biggest breaker size inside main panel (Number is on the breaker)",
@@ -92,7 +99,9 @@
                 "actions": [
                   "confirm"
                 ],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 1,
@@ -108,6 +117,7 @@
                 "inputformcontrol": [
                   "mspbreaker"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "MSP Breaker",
                 "questioninfo": "Provide  Main Breaker location in Main panel Top/Bottom/Center/None",
@@ -119,13 +129,16 @@
                   "center",
                   "none"
                 ],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           },
           {
             "isvisible": true,
@@ -152,6 +165,7 @@
                 "inputformcontrol": [
                   "utilitymeter"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "Utility Meter",
                 "questioninfo": "Provide Utility Meter",
@@ -161,7 +175,9 @@
                   "attach",
                   "detach"
                 ],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 2,
@@ -177,6 +193,7 @@
                 "inputformcontrol": [
                   "meternumber"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "Utility Meter Number",
                 "questioninfo": "Provide Utility Meter Number",
@@ -185,13 +202,16 @@
                 "actions": [
                   "confirm"
                 ],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           },
           {
             "isvisible": true,
@@ -218,6 +238,7 @@
                 "inputformcontrol": [
                   "pvinverterlocation"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "PV Inverter Location",
                 "questioninfo": "Provide Inverter Location",
@@ -227,7 +248,9 @@
                   "inside",
                   "outside"
                 ],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 4,
@@ -244,6 +267,7 @@
                   "invertermake",
                   "invertermodel"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "PV Inverter Manufacturer and Model",
                 "questioninfo": "Provide Inverter Manufacturer & Model",
@@ -252,7 +276,9 @@
                 "actions": [
                   "confirm"
                 ],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -268,13 +294,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "PV Meter",
                 "questionstatus": false,
                 "result": "",
                 "actions": [],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -290,13 +319,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": false,
                 "result": "",
                 "actions": [],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -312,19 +344,23 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": false,
                 "result": "",
                 "actions": [],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": true,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           }
         ]
       },
@@ -360,6 +396,7 @@
                 "inputformcontrol": [
                   "roofmaterial"
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "Roof Material",
                 "questioninfo": "Provide Roof Material",
@@ -368,7 +405,9 @@
                 "actions": [
                   "Confirm"
                 ],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -384,13 +423,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -406,13 +448,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -428,13 +473,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -450,13 +498,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -472,13 +523,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -494,19 +548,23 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           },
           {
             "isvisible": true,
@@ -533,13 +591,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -555,13 +616,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -577,13 +641,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -599,13 +666,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -621,13 +691,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -643,19 +716,23 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": true,
                 "result": "",
                 "actions": [],
-                "required": false
+                "required": false,
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           }
         ]
       },
@@ -691,13 +768,16 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": false,
                 "result": "",
                 "actions": [],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               },
               {
                 "questiontype": 0,
@@ -713,19 +793,23 @@
                 "inputformcontrol": [
                   ""
                 ],
+                "forminputfields": [],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
                 "questionstatus": false,
                 "result": "",
                 "actions": [],
-                "required": true
+                "required": true,
+                "visitedonce": false,
+                "capturedonce": false
               }
             ],
             "checkexistence": true,
             "existenceresult": true,
             "capturedshots": [],
-            "formelements": []
+            "formelements": [],
+            "shotscapturedcount" : 0
           }
         ]
       },
@@ -893,7 +977,8 @@
                 "fileurls": [],
                 "attachments": []
               }
-            ]
+            ],
+            "shotscapturedcount" : 0
           }
         ]
       }
