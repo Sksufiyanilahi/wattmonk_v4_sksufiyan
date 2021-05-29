@@ -195,6 +195,7 @@ export class StartsurveyPage implements OnInit {
   selectedmainmenuindex = 0;
   selectedsubmenuindex = 0;
   selectedshotindex = 0;
+  nextfoundshotindex = 0;
 
   totalimagestoupload = 0;
   totalfilestoupload = 0;
@@ -1004,7 +1005,7 @@ export class StartsurveyPage implements OnInit {
     this.selectedsubmenuindex = 0;
     this.selectedshotindex = 0;
     if (this.mainmenuitems[this.selectedmainmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
-      this.movetonextpossibleactionablestep();
+      this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
     } else {
       if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
@@ -1018,7 +1019,7 @@ export class StartsurveyPage implements OnInit {
     this.selectedshotindex = 0;
     this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending && this.mainmenuitems[this.selectedmainmenuindex].viewmode == VIEWMODE.CAMERA) {
-      this.movetonextpossibleactionablestep();
+      this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
     } else {
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
         this.selectedshotindex = 0;
@@ -1151,7 +1152,7 @@ export class StartsurveyPage implements OnInit {
     if (!this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending) {
       this.markmainmenucompletion();
     } else {
-      this.movetonextpossibleactionablestep();
+      this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
     }
   }
 
@@ -1164,108 +1165,57 @@ export class StartsurveyPage implements OnInit {
       }
     });
 
-    this.movetonextpossibleactionablestep();
+    this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
   }
 
-  movetonextpossibleactionablestep() {
-    let nextactiveshotfound = false;
-    console.log(this.mainmenuitems);
-    console.log("active shot looking in different shot");
-    //Check for next possible shot in active children
+  movetonextpossibleactionablestep(startmainmenuindex, startchildmenuindex, startshotindex) {
     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
-      for (let shotindex = this.selectedshotindex; shotindex < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length; shotindex++) {
-        const shot = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex];
-        if (shot.ispending && !nextactiveshotfound) {
-          console.log("shot loop---"+shot.shotinfo);
-          this.selectedshotindex = shotindex;
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-          this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-          nextactiveshotfound = true;
-
-          //Check if it retake mode or not
-          if(shot.required && shot.capturedonce){
-            this.recapturingmode = true;
-          }else{
-            this.recapturingmode = false;
-          }
+      if(this.findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex)){
+        this.activateshot();
+      }else{
+        if(this.findnextpossibleshot(0, 0, 0)){
+          this.activateshot();
         }
       }
+    }
+    this.saveintermediatesurveydata();
+  }
 
-      //Check for next possible shot in active mainmenu children
+  findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex){
+    let nextactiveshotfound = false;
+    for (let mainmenuindex = startmainmenuindex; mainmenuindex < this.mainmenuitems.length; mainmenuindex++) {
+      const mainmenu = this.mainmenuitems[mainmenuindex];
       if(!nextactiveshotfound){
-        console.log("active shot not found so looking in different child");
-        for (let childindex = this.selectedsubmenuindex + 1; childindex < this.mainmenuitems[this.selectedmainmenuindex].children.length; childindex++) {
-          const child = this.mainmenuitems[this.selectedmainmenuindex].children[childindex];
-          if (!nextactiveshotfound) {
-            this.selectedsubmenuindex = childindex;
-            if (child.shots.length > 0) {
-              child.shots.forEach((shot, shotindex) => {
-                if (shot.ispending && !nextactiveshotfound) {
-                  console.log("child loop---"+shot.shotinfo);
-                  this.selectedshotindex = shotindex;
-                  this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-                  this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-                  this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-                  nextactiveshotfound = true;
-                  //Check if it retake mode or not
-                  if(shot.required && shot.capturedonce){
-                    this.recapturingmode = true;
-                  }else{
-                    this.recapturingmode = false;
-                  }
-                }
-              });
-            } else {
-              this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-              this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-            }
-          }
-        }
-      }
-
-      //If next active shot not found im existing children then look for in complete menuitems
-      if (!nextactiveshotfound) {
-        console.log("active shot not found so looking in different menu");
-        for (let mainindex = this.selectedmainmenuindex + 1; mainindex < this.mainmenuitems.length; mainindex++) {
-          const mainmenu = this.mainmenuitems[mainindex];
-          if (!nextactiveshotfound) {
-            this.selectedmainmenuindex = mainindex;
-            if (mainmenu.children.length > 0) {
-              mainmenu.children.forEach((child, childindex) => {
-                if (!nextactiveshotfound) {
-                  this.selectedsubmenuindex = childindex;
-                  if (child.shots.length > 0) {
-                    child.shots.forEach((shot, shotindex) => {
-                      if (shot.ispending && !nextactiveshotfound) {
-                        console.log("main loop---"+shot.shotinfo);
-                        this.selectedshotindex = shotindex;
-                        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-                        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-                        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-                        nextactiveshotfound = true;
-                        //Check if it retake mode or not
-                        if(shot.required && shot.capturedonce){
-                          this.recapturingmode = true;
-                        }else{
-                          this.recapturingmode = false;
-                        }
-                      }
-                    });
-                  } else {
-                    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-                    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-                  }
-                }
-              });
-            } else {
-              this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+        for (let childindex = startchildmenuindex; childindex < mainmenu.children.length; childindex++) {
+          const child = mainmenu.children[childindex];
+          if(!nextactiveshotfound){
+            for (let shotindex = startshotindex; shotindex < child.shots.length; shotindex++) {
+              const shot = child.shots[shotindex];
+              if (!nextactiveshotfound && shot.ispending) {
+                console.log("shot loop---"+shot.shotinfo);
+                nextactiveshotfound = true;
+                this.nextfoundshotindex = shotindex;
+                return nextactiveshotfound;
+              }
             }
           }
         }
       }
     }
-    this.saveintermediatesurveydata();
+  }
+
+  activateshot(){
+    this.selectedshotindex = this.nextfoundshotindex;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+
+    //Check if it retake mode or not
+    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce){
+      this.recapturingmode = true;
+    }else{
+      this.recapturingmode = false;
+    }
   }
 
   //------------------------------------------------------------------------------------------------------------------
