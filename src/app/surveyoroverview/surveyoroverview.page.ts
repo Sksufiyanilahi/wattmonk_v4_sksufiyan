@@ -60,10 +60,10 @@ export class SurveyoroverviewPage implements OnInit {
 
   fetchsurveyprocessjsons() {
     this.datastorage.get('pvsurveyjson').then((data) => {
-      console.log(data);
+      // console.log(data);
       if (!data) {
         this.apiService.fetchJSON(this.storage.getParentId(), 'pv').subscribe((response: any) => {
-          console.log(response);
+          // console.log(response);
           this.datastorage.set('pvsurveyjson', response);
         });
       }
