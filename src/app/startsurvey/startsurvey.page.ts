@@ -250,8 +250,8 @@ export class StartsurveyPage implements OnInit {
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
 
-    this.loadSurveyJSON('pvsurveyjson');
-    // this.loadLocalJSON();
+    // this.loadSurveyJSON('pvsurveyjson');
+    this.loadLocalJSON();
     // this.getCurrentCoordinates();
   }
 
@@ -266,7 +266,7 @@ export class StartsurveyPage implements OnInit {
 
   loadLocalJSON(){
     this.http
-      .get('assets/surveyprocessjson/pv.json')
+      .get('assets/surveyprocessjson/defaultpv.json')
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
       });

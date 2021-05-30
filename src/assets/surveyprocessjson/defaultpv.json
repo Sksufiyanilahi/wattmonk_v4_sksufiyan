@@ -1148,52 +1148,6 @@
                             },
                             {
                                 "inputformcontrol": [
-                                    "interconnection"
-                                ],
-                                "placeholder": "",
-                                "label": "Interconnection*",
-                                "visibility": true,
-                                "controltype": 5,
-                                "controlselement": {
-                                    "inputformcontrol": [
-                                        "interconnection_input"
-                                    ],
-                                    "onvalueselection": "more"
-                                },
-                                "options": [
-                                    {
-                                        "label": "Backfed",
-                                        "value": "backfed"
-                                    },
-                                    {
-                                        "label": "Supply Side Tap",
-                                        "value": "supplysidetap"
-                                    },
-                                    {
-                                        "label": "Load Side Tap",
-                                        "value": "loadsidetap"
-                                    },
-                                    {
-                                        "label": "More",
-                                        "value": "more",
-                                        "controls": "interconnection_input"
-                                    }
-                                ],
-                                "required": true
-                            },
-                            {
-                                "inputformcontrol": [
-                                    "interconnection_input"
-                                ],
-                                "placeholder": "",
-                                "label": "Interconnection Detail",
-                                "visibility": false,
-                                "controltype": 1,
-                                "options": [],
-                                "required": false
-                            },
-                            {
-                                "inputformcontrol": [
                                     "servicefeedsource"
                                 ],
                                 "placeholder": "",

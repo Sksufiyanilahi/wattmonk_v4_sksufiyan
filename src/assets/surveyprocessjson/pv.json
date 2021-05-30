@@ -908,7 +908,7 @@
                 "visibility": true,
                 "controltype": 1,
                 "options": [],
-                "required": false,
+                "required": true,
                 "fileurls": [],
                 "attachments": []
               },
