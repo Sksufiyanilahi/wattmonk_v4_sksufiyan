@@ -217,8 +217,8 @@ export class StartsurveyPage implements OnInit {
   shotcompletecount = 0;
   totalstepcount: number;
   remainingfilestoupload = 0;
-  failedshotstoupload : CAPTUREDSHOT[] = [];
-  failedattachmentstoupload : FILE_ATTACHMENTS[] = [];
+  failedshotstoupload: CAPTUREDSHOT[] = [];
+  failedattachmentstoupload: FILE_ATTACHMENTS[] = [];
 
   cameraspaceremainingheight = 0;
   noviewremainingheight = 0;
@@ -244,16 +244,20 @@ export class StartsurveyPage implements OnInit {
     private platform: Platform) { }
 
   ngOnInit() {
-    this.cameraspaceremainingheight = this.platform.height() - 66 - 54 - 66;
-    this.noviewremainingheight = this.platform.height() - 66 - 54;
-    this.detailsviewremainingheight = this.platform.height() - 66 - 66 - 4;
-    this.user = this.storageuserdata.getUser();
-    this.surveyid = +this.route.snapshot.paramMap.get('id');
-    this.surveytype = this.route.snapshot.paramMap.get('type');
+    try {
+      this.cameraspaceremainingheight = this.platform.height() - 66 - 54 - 66;
+      this.noviewremainingheight = this.platform.height() - 66 - 54;
+      this.detailsviewremainingheight = this.platform.height() - 66 - 66 - 4;
+      this.user = this.storageuserdata.getUser();
+      this.surveyid = +this.route.snapshot.paramMap.get('id');
+      this.surveytype = this.route.snapshot.paramMap.get('type');
 
-    // this.loadSurveyJSON('pvsurveyjson');
-    this.loadLocalJSON();
-    // this.getCurrentCoordinates();
+      // this.loadSurveyJSON('pvsurveyjson');
+      this.loadLocalJSON();
+      // this.getCurrentCoordinates();
+    } catch (error) {
+      console.log("ngOnInit---"+error);
+    }
   }
 
   loadSurveyJSON(type) {
@@ -265,7 +269,7 @@ export class StartsurveyPage implements OnInit {
     });
   }
 
-  loadLocalJSON(){
+  loadLocalJSON() {
     this.http
       .get('assets/surveyprocessjson/defaultpv.json')
       .subscribe((data) => {
@@ -274,134 +278,142 @@ export class StartsurveyPage implements OnInit {
   }
 
   createSurveyForm(surveydata) {
-    this.activeFormElementsArray = [];
-    // let surveydata = data.sequence;
-    const formData = {};
-    surveydata.map((item, mainindex) => {
-      if (item.children) {
-        item.children.map((child, childindex) => {
-          if (child.inputformcontrol[0] !== '') {
-            this.activeFormElementsArray.push(child.inputformcontrol[0]);
-            formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-          }
-          if (child.shots) {
-            child.shots.map((shot, shotindex) => {
-              this.createcapturedshotofitem(shot, mainindex, childindex, shotindex);
-              if (shot.inputformcontrol[0] !== '') {
-                this.activeFormElementsArray.push(shot.inputformcontrol[0]);
-                if (shot.required) {
-                  formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-                } else {
-                  formData[shot.inputformcontrol[0]] = new FormControl('', []);
-                }
-                if (shot.inputformcontrol.length > 1) {
-                  this.activeFormElementsArray.push(shot.inputformcontrol[1]);
+    try {
+      this.activeFormElementsArray = [];
+      // let surveydata = data.sequence;
+      const formData = {};
+      surveydata.map((item, mainindex) => {
+        if (item.children) {
+          item.children.map((child, childindex) => {
+            if (child.inputformcontrol[0] !== '') {
+              this.activeFormElementsArray.push(child.inputformcontrol[0]);
+              formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+            }
+            if (child.shots) {
+              child.shots.map((shot, shotindex) => {
+                this.createcapturedshotofitem(shot, mainindex, childindex, shotindex);
+                if (shot.inputformcontrol[0] !== '') {
+                  this.activeFormElementsArray.push(shot.inputformcontrol[0]);
                   if (shot.required) {
-                    formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
+                    formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
                   } else {
-                    formData[shot.inputformcontrol[1]] = new FormControl('', []);
+                    formData[shot.inputformcontrol[0]] = new FormControl('', []);
+                  }
+                  if (shot.inputformcontrol.length > 1) {
+                    this.activeFormElementsArray.push(shot.inputformcontrol[1]);
+                    if (shot.required) {
+                      formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
+                    } else {
+                      formData[shot.inputformcontrol[1]] = new FormControl('', []);
+                    }
                   }
                 }
-              }
 
-              if(shot.forminputfields.length > 0){
-                shot.forminputfields.forEach(element => {
-                  if(shot.required){
-                    formData[element] = new FormControl('', [Validators.required]);
-                  }else{
-                    formData[element] = new FormControl('', []);
-                  }
-                });
-              }
-            });
-          }
-          if (child.formelements) {
-            child.formelements.map(formElement => {
-              formElement.fileurls = [];
-              formElement.attachments = [];
-              if (formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
-                this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
-              }
-              if (formElement.required) {
-                formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-              } else {
-                formData[formElement.inputformcontrol[0]] = new FormControl('', []);
-              }
-            });
-          }
-        });
-      }
-    });
-    formData['shotname'] = new FormControl('', []);
-    // console.log(formData);
-    this.activeFormElementsArray.push('shotname');
-    // console.log(this.activeFormElementsArray);
-    this.activeForm = new FormGroup(formData);
+                if (shot.forminputfields.length > 0) {
+                  shot.forminputfields.forEach(element => {
+                    if (shot.required) {
+                      formData[element] = new FormControl('', [Validators.required]);
+                    } else {
+                      formData[element] = new FormControl('', []);
+                    }
+                  });
+                }
+              });
+            }
+            if (child.formelements) {
+              child.formelements.map(formElement => {
+                formElement.fileurls = [];
+                formElement.attachments = [];
+                if (formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
+                  this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
+                }
+                if (formElement.required) {
+                  formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                } else {
+                  formData[formElement.inputformcontrol[0]] = new FormControl('', []);
+                }
+              });
+            }
+          });
+        }
+      });
+      formData['shotname'] = new FormControl('', []);
+      // console.log(formData);
+      this.activeFormElementsArray.push('shotname');
+      // console.log(this.activeFormElementsArray);
+      this.activeForm = new FormGroup(formData);
+    } catch (error) {
+      console.log("createSurveyForm---"+error);
+    }
   }
 
   restoreStoredForm() {
-    this.activeFormElementsArray = [];
-    // let surveydata = data.sequence;
-    const formData = {};
-    this.mainmenuitems.map(item => {
-      if (item.children) {
-        item.children.map(child => {
-          if (child.inputformcontrol[0] !== '') {
-            this.activeFormElementsArray.push(child.inputformcontrol[0]);
-            formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-          }
-          if (child.shots) {
-            child.shots.map(shot => {
-              if (shot.inputformcontrol[0] !== '') {
-                this.activeFormElementsArray.push(shot.inputformcontrol[0]);
-                if (shot.required) {
-                  formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-                } else {
-                  formData[shot.inputformcontrol[0]] = new FormControl('', []);
-                }
-                if (shot.inputformcontrol.length > 1) {
-                  this.activeFormElementsArray.push(shot.inputformcontrol[1]);
+    try {
+      this.activeFormElementsArray = [];
+      // let surveydata = data.sequence;
+      const formData = {};
+      this.mainmenuitems.map(item => {
+        if (item.children) {
+          item.children.map(child => {
+            if (child.inputformcontrol[0] !== '') {
+              this.activeFormElementsArray.push(child.inputformcontrol[0]);
+              formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+            }
+            if (child.shots) {
+              child.shots.map(shot => {
+                if (shot.inputformcontrol[0] !== '') {
+                  this.activeFormElementsArray.push(shot.inputformcontrol[0]);
                   if (shot.required) {
-                    formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
+                    formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
                   } else {
-                    formData[shot.inputformcontrol[1]] = new FormControl('', []);
+                    formData[shot.inputformcontrol[0]] = new FormControl('', []);
+                  }
+                  if (shot.inputformcontrol.length > 1) {
+                    this.activeFormElementsArray.push(shot.inputformcontrol[1]);
+                    if (shot.required) {
+                      formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
+                    } else {
+                      formData[shot.inputformcontrol[1]] = new FormControl('', []);
+                    }
                   }
                 }
-              }
-              if(shot.forminputfields.length > 0){
-                shot.forminputfields.forEach(element => {
-                  if(shot.required){
-                    formData[element] = new FormControl('', [Validators.required]);
-                  }else{
-                    formData[element] = new FormControl('', []);
-                  }
-                });
-              }
-            });
-          }
-          if (child.formelements) {
-            child.formelements.map(formElement => {
-              formElement.fileurls = formElement.fileurls;
-              formElement.attachments = formElement.attachments;
-              if (formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
-                this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
-              }
-              if (formElement.required) {
-                formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-              } else {
-                formData[formElement.inputformcontrol[0]] = new FormControl('', []);
-              }
-            });
-          }
-        });
-      }
-    });
-    formData['shotname'] = new FormControl('', []);
-    this.activeFormElementsArray.push('shotname');
-    this.activeForm = new FormGroup(formData);
+                if (shot.forminputfields.length > 0) {
+                  shot.forminputfields.forEach(element => {
+                    if (shot.required) {
+                      formData[element] = new FormControl('', [Validators.required]);
+                    } else {
+                      formData[element] = new FormControl('', []);
+                    }
+                  });
+                }
+              });
+            }
+            if (child.formelements) {
+              child.formelements.map(formElement => {
+                formElement.fileurls = formElement.fileurls;
+                formElement.attachments = formElement.attachments;
+                if (formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
+                  this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
+                }
+                if (formElement.required) {
+                  formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                } else {
+                  formData[formElement.inputformcontrol[0]] = new FormControl('', []);
+                }
+              });
+            }
+          });
+        }
+      });
+      formData['shotname'] = new FormControl('', []);
+      this.activeFormElementsArray.push('shotname');
+      this.activeForm = new FormGroup(formData);
+    } catch (error) {
+      console.log("restoreStoredForm---"+error);
+    }
   }
 
-  createcapturedshotofitem(shot : SHOT, mainindex, childindex, shotindex){
+  createcapturedshotofitem(shot: SHOT, mainindex, childindex, shotindex) {
     const captureshot: CAPTUREDSHOT = {
       menuindex: mainindex,
       submenuindex: childindex,
@@ -417,63 +429,67 @@ export class StartsurveyPage implements OnInit {
   }
 
   restoreSurveyStoredData(surveydata) {
-    this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
-      if (data) {
-        this.mainmenuitems = data.menuitems;
-        this.originalmainmenuitems = data.menuitems;
-        this.selectedmainmenuindex = data.selectedmainmenuindex;
-        this.selectedsubmenuindex = data.selectedsubmenuindex;
-        this.selectedshotindex = data.selectedshotindex;
-        this.totalpercent = data.currentprogress;
-        this.shotcompletecount = data.shotcompletecount;
+    try {
+      this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
+        if (data) {
+          this.mainmenuitems = data.menuitems;
+          this.originalmainmenuitems = data.menuitems;
+          this.selectedmainmenuindex = data.selectedmainmenuindex;
+          this.selectedsubmenuindex = data.selectedsubmenuindex;
+          this.selectedshotindex = data.selectedshotindex;
+          this.totalpercent = data.currentprogress;
+          this.shotcompletecount = data.shotcompletecount;
 
-        this.surveyid = data.surveyid;
-        this.surveytype = data.surveytype;
+          this.surveyid = data.surveyid;
+          this.surveytype = data.surveytype;
 
-        this.restoreStoredForm();
+          this.restoreStoredForm();
 
-        Object.keys(data.formdata).forEach((key: string) => {
-          let control: AbstractControl = null;
-          control = this.activeForm.get(key);
-          control.setValue(data.formdata[key]);
-        });
+          Object.keys(data.formdata).forEach((key: string) => {
+            let control: AbstractControl = null;
+            control = this.activeForm.get(key);
+            control.setValue(data.formdata[key]);
+          });
 
-        //Check for formelements fields visibility
-        this.mainmenuitems.forEach(mainelement => {
-          if(mainelement.viewmode == VIEWMODE.FORM){
-            mainelement.children.forEach(childelement => {
-              if(childelement.formelements.length > 0){
-                childelement.formelements.forEach(formelement => {
-                  if(formelement.controltype == CONTROLTYPE.CONTROL_INPUT_RADIO){
-                    this.toggleElementVisibility(formelement.inputformcontrol, formelement.controlselement);
-                  }
-                });
-              }
-            });
-          }
-        });
-        this.isdataloaded = true;
-        this.setTotalStepCount();
-      } else {
-        this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
-        this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
+          //Check for formelements fields visibility
+          this.mainmenuitems.forEach(mainelement => {
+            if (mainelement.viewmode == VIEWMODE.FORM) {
+              mainelement.children.forEach(childelement => {
+                if (childelement.formelements.length > 0) {
+                  childelement.formelements.forEach(formelement => {
+                    if (formelement.controltype == CONTROLTYPE.CONTROL_INPUT_RADIO) {
+                      this.toggleElementVisibility(formelement.inputformcontrol, formelement.controlselement);
+                    }
+                  });
+                }
+              });
+            }
+          });
+          this.isdataloaded = true;
+          this.setTotalStepCount();
+        } else {
+          this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
+          this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
 
-        this.mainmenuitems.forEach(element => {
-          if (element.isactive) {
-            this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
-          }
-        });
-        this.createSurveyForm(surveydata);
+          this.mainmenuitems.forEach(element => {
+            if (element.isactive) {
+              this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+            }
+          });
+          this.createSurveyForm(surveydata);
 
-        this.isdataloaded = true;
-        this.setTotalStepCount();
-      }
-    });
+          this.isdataloaded = true;
+          this.setTotalStepCount();
+        }
+      });
+    } catch (error) {
+      console.log("restoreSurveyStoredData---"+error);
+    }
   }
 
   preparesurveystorage(): SurveyStorageModel {
     this.getcountoffiletoupload();
-    
+
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.menuitems = this.mainmenuitems;
     surveyStorageModel.formdata = this.activeForm.value;
@@ -521,36 +537,41 @@ export class StartsurveyPage implements OnInit {
   //    });
   // }
 
-  getcountoffiletoupload(){
-    this.remainingfilestoupload = 0;
-    this.mainmenuitems.forEach(mainmenu => {
-      mainmenu.children.forEach(child => {
-        child.capturedshots.forEach(shot => {
-          if(!shot.imagecleared && !shot.uploadstatus){
-            // console.log(shot.imagekey);
-            this.remainingfilestoupload += 1;
-          }
+  getcountoffiletoupload() {
+    try {
+      this.remainingfilestoupload = 0;
+      this.mainmenuitems.forEach(mainmenu => {
+        mainmenu.children.forEach(child => {
+          child.capturedshots.forEach(shot => {
+            if (!shot.imagecleared && !shot.uploadstatus) {
+              // console.log(shot.imagekey);
+              this.remainingfilestoupload += 1;
+            }
+          });
         });
       });
-    });
 
-    this.mainmenuitems.forEach(mainmenu => {
-      if(mainmenu.viewmode == VIEWMODE.FORM)
-      {
-        mainmenu.children.forEach(child => {
-          if(child.formelements.length > 0){
-            child.formelements.forEach(formelement => {
-              if(formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD){
-                formelement.attachments.forEach(attachment => {
-                  // console.log(attachment.controlname);
-                  this.remainingfilestoupload += 1;
-                });
-              }
-            });
-          }
-        });
-      }
-    });
+      this.mainmenuitems.forEach(mainmenu => {
+        if (mainmenu.viewmode == VIEWMODE.FORM) {
+          mainmenu.children.forEach(child => {
+            if (child.formelements.length > 0) {
+              child.formelements.forEach(formelement => {
+                if (formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
+                  formelement.attachments.forEach(attachment => {
+                    if (!attachment.uploadstatus) {
+                      // console.log(attachment.controlname);
+                      this.remainingfilestoupload += 1;
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    } catch (error) {
+      console.log("getcountoffiletoupload---"+error);
+    }
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -583,24 +604,28 @@ export class StartsurveyPage implements OnInit {
   //------------------------------------------------------------------------------------------------------------------
 
   addselectedfiles(ev, formelementindex) {
-    for (let i = 0; i < ev.target.files.length; i++) {
-      let reader = getFileReader();
-      reader.onload = (e: any) => {
-        var fileobjurl = '/assets/icon/file.png';
-        if (ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')) {
-          fileobjurl = e.target.result;
+    try {
+      for (let i = 0; i < ev.target.files.length; i++) {
+        let reader = getFileReader();
+        reader.onload = (e: any) => {
+          var fileobjurl = '/assets/icon/file.png';
+          if (ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')) {
+            fileobjurl = e.target.result;
+          }
+          var object = this.getfileobject(ev.target.files[i]);
+          const selectedfile: FILE_ATTACHMENTS = {
+            file: object,
+            fileurl: fileobjurl,
+            uploadstatus: false,
+            controlname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].inputformcontrol[0]
+          };
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push(fileobjurl);
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(selectedfile);
         }
-        var object = this.getfileobject(ev.target.files[i]);
-        const selectedfile: FILE_ATTACHMENTS = {
-          file: object,
-          fileurl: fileobjurl,
-          uploadstatus: false,
-          controlname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].inputformcontrol[0]
-        };
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push(fileobjurl);
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(selectedfile);
+        reader.readAsDataURL(ev.target.files[i]);
       }
-      reader.readAsDataURL(ev.target.files[i]);
+    } catch (error) {
+      console.log("addselectedfiles---"+error);
     }
   }
 
@@ -731,9 +756,9 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           this.invertermakes = response;
           this.activeForm.get('invertermake').valueChanges.subscribe(val => {
-            if(val != ""){
+            if (val != "") {
               this.getInverterModels(this.activeForm.get('invertermake').value.id);
-            }else{
+            } else {
               this.activeForm.get('invertermodel').setValue('');
             }
           });
@@ -785,18 +810,22 @@ export class StartsurveyPage implements OnInit {
   //------------------------------------------------------------------------------------------------------------------
 
   async navigatetoincompletestep(shotindex, childindex, mainindex) {
-    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-    this.selectedmainmenuindex = mainindex;
-    this.selectedsubmenuindex = childindex;
-    this.selectedshotindex = shotindex;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-    const toast = await this.toastController.create({
-      message: 'Please complete the following step.',
-      duration: 2000
-    });
-    toast.present();
+    try {
+      this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+      this.selectedmainmenuindex = mainindex;
+      this.selectedsubmenuindex = childindex;
+      this.selectedshotindex = shotindex;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+      this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+      const toast = await this.toastController.create({
+        message: 'Please complete the following step.',
+        duration: 2000
+      });
+      toast.present();
+    } catch (error) {
+      console.log("navigatetoincompletestep---"+error);
+    }
   }
 
   async savedataandclose() {
@@ -809,7 +838,8 @@ export class StartsurveyPage implements OnInit {
   }
 
   async saveFormData() {
-    this.saveintermediatesurveydata();
+    try {
+      this.saveintermediatesurveydata();
     //Code to check incomplete items
     let nopendingshotfound = true;
     this.mainmenuitems.forEach((mainmenuitem, mainindex) => {
@@ -847,18 +877,20 @@ export class StartsurveyPage implements OnInit {
         console.log(this.utilitieservice.findInvalidControls(this.activeForm));
       }
     }
+    } catch (error) {
+      console.log("saveFormData---"+error);
+    }
   }
 
-  uploadfilestoserver(){
+  uploadfilestoserver() {
     this.saveintermediatesurveydata();
-    const filesarray : FILE_ATTACHMENTS[] = [];
+    const filesarray: FILE_ATTACHMENTS[] = [];
     this.mainmenuitems.forEach(mainmenu => {
-      if(mainmenu.viewmode == VIEWMODE.FORM)
-      {
+      if (mainmenu.viewmode == VIEWMODE.FORM) {
         mainmenu.children.forEach(child => {
-          if(child.formelements.length > 0){
+          if (child.formelements.length > 0) {
             child.formelements.forEach(formelement => {
-              if(formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD){
+              if (formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
                 formelement.attachments.forEach(attachment => {
                   filesarray.push(attachment);
                 });
@@ -875,181 +907,197 @@ export class StartsurveyPage implements OnInit {
     });
   }
 
-  uploadattachmentbyindex(files : FILE_ATTACHMENTS[], index, totalfiles, isfailedfile){
-    if (files.length > 0 && files.length <= this.totalfilestoupload) {
-      const fileToUpload = files[0];
-      if (fileToUpload.uploadstatus) {
-        if(isfailedfile){
-          this.utilitieservice.setLoadingMessage('Uploading failed file ' + (index + 1) + ' of ' + totalfiles);
-        }else{
-          this.utilitieservice.setLoadingMessage('Uploading file ' + (index + 1) + ' of ' + totalfiles);
-        }
+  uploadattachmentbyindex(files: FILE_ATTACHMENTS[], index, totalfiles, isfailedfile) {
+    try {
+      if (files.length > 0 && files.length <= this.totalfilestoupload) {
+        const fileToUpload = files[0];
+        if (fileToUpload.uploadstatus) {
+          if (isfailedfile) {
+            this.utilitieservice.setLoadingMessage('Uploading failed file ' + (index + 1) + ' of ' + totalfiles);
+          } else {
+            this.utilitieservice.setLoadingMessage('Uploading file ' + (index + 1) + ' of ' + totalfiles);
+          }
 
-        const filedata = new FormData();
-        filedata.append("files", fileToUpload.file);
-        filedata.append('path', 'survey/' + this.surveyid);
-        filedata.append('refId', this.surveyid + '');
-        filedata.append('ref', 'survey');
-        filedata.append('field', fileToUpload.controlname);
-        this.apiService.uploaddesign(filedata).subscribe((data) => {
-          fileToUpload.uploadstatus = true;
+          const filedata = new FormData();
+          filedata.append("files", fileToUpload.file);
+          filedata.append('path', 'survey/' + this.surveyid);
+          filedata.append('refId', this.surveyid + '');
+          filedata.append('ref', 'survey');
+          filedata.append('field', fileToUpload.controlname);
+          this.apiService.uploaddesign(filedata).subscribe((data) => {
+            fileToUpload.uploadstatus = true;
+            index++;
+            files.splice(0, 1);
+            this.saveintermediatesurveydata();
+            this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
+          }, (error) => {
+            fileToUpload.uploadstatus = false;
+            this.failedattachmentstoupload.push(fileToUpload);
+            this.displayfileuploadfailuretoast(index);
+            index++;
+            files.splice(0, 1);
+            this.saveintermediatesurveydata();
+            this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
+          });
+        } else {
           index++;
           files.splice(0, 1);
           this.saveintermediatesurveydata();
           this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
-        }, (error) => {
-          fileToUpload.uploadstatus = false;
-          this.failedattachmentstoupload.push(fileToUpload);
-          this.displayfileuploadfailuretoast(index);
-          index++;
-          files.splice(0, 1);
-          this.saveintermediatesurveydata();
-          this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
-        });
-      } else {
-        index++;
-          files.splice(0, 1);
-          this.saveintermediatesurveydata();
-          this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
-      }
-    } else {
-      this.utilitieservice.hideLoading().then(() => {
-        if(this.failedattachmentstoupload.length > 0){
-          //Code to upload failed files
-          this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.failedattachmentstoupload.length, true);
-        }else{
-          this.uploadImagesToServer();
         }
-      });
+      } else {
+        this.utilitieservice.hideLoading().then(() => {
+          if (this.failedattachmentstoupload.length > 0) {
+            //Code to upload failed files
+            this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.failedattachmentstoupload.length, true);
+          } else {
+            this.uploadImagesToServer();
+          }
+        });
+      }
+    } catch (error) {
+      console.log("uploadattachmentbyindex---"+error);
     }
   }
 
   uploadImagesToServer() {
-    this.saveintermediatesurveydata();
+    try {
+      this.saveintermediatesurveydata();
 
-    const imagesArray : CAPTUREDSHOT[] = [];
-    this.mainmenuitems.forEach(mainmenu => {
-      mainmenu.children.forEach(child => {
-        child.capturedshots.forEach(shot => {
-          if(!shot.imagecleared){
-            imagesArray.push(shot);
-          }
+      const imagesArray: CAPTUREDSHOT[] = [];
+      this.mainmenuitems.forEach(mainmenu => {
+        mainmenu.children.forEach(child => {
+          child.capturedshots.forEach(shot => {
+            if (!shot.imagecleared) {
+              imagesArray.push(shot);
+            }
+          });
         });
       });
-    });
 
-    this.utilitieservice.showLoading('Uploading Images').then(() => {
-      this.totalimagestoupload = imagesArray.length;
-      this.uploadImageByIndex(imagesArray, 0, this.totalimagestoupload, false);
-    });
-  }
-
-  uploadImageByIndex(mapOfImages : CAPTUREDSHOT[], index, totalimages, isfailedimage) {
-    if (mapOfImages.length > 0 && mapOfImages.length <= this.totalimagestoupload) {
-      const imageToUpload = mapOfImages[0];
-      if (imageToUpload.shotimage && !imageToUpload.uploadstatus) {
-        const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
-        let filename = '';
-        if (imageToUpload.imageuploadname === '') {
-          filename = Date.now().toString() + '.png';
-        } else {
-          filename = imageToUpload.imageuploadname + '.png';
-        }
-        // this.blobimagedata = this.watermarkImage(blob);
-        if(isfailedimage){
-          this.utilitieservice.setLoadingMessage('Uploading failed image ' + (index + 1) + ' of ' + totalimages);
-        }else{
-          this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + totalimages);
-        }
-        this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
-          imageToUpload.uploadstatus = true;
-          index++;
-          mapOfImages.splice(0, 1);
-          this.saveintermediatesurveydata();
-          this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
-        }, (error) => {
-          imageToUpload.uploadstatus = false;
-          this.failedshotstoupload.push(imageToUpload);
-          this.displayuploadfailuretoast(index);
-          index++;
-          mapOfImages.splice(0, 1);
-          this.saveintermediatesurveydata();
-          this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
-        });
-      } else {
-        index++;
-        mapOfImages.splice(0, 1);
-        this.saveintermediatesurveydata();
-        this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
-      }
-    } else {
-      this.utilitieservice.hideLoading().then(() => {
-        if(this.failedshotstoupload.length > 0){
-          //Code to upload failed files
-          this.uploadImageByIndex(this.failedshotstoupload, 0, this.failedshotstoupload.length, true);
-        }else{
-          this.savedetailsformdata();
-        }
+      this.utilitieservice.showLoading('Uploading Images').then(() => {
+        this.totalimagestoupload = imagesArray.length;
+        this.uploadImageByIndex(imagesArray, 0, this.totalimagestoupload, false);
       });
+    } catch (error) {
+      console.log("uploadImagesToServer---"+error);
     }
   }
 
-  async displayuploadfailuretoast(imageindex){
+  uploadImageByIndex(mapOfImages: CAPTUREDSHOT[], index, totalimages, isfailedimage) {
+    try {
+      if (mapOfImages.length > 0 && mapOfImages.length <= this.totalimagestoupload) {
+        const imageToUpload = mapOfImages[0];
+        if (imageToUpload.shotimage && !imageToUpload.uploadstatus) {
+          const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
+          let filename = '';
+          if (imageToUpload.imageuploadname === '') {
+            filename = Date.now().toString() + '.png';
+          } else {
+            filename = imageToUpload.imageuploadname + '.png';
+          }
+          // this.blobimagedata = this.watermarkImage(blob);
+          if (isfailedimage) {
+            this.utilitieservice.setLoadingMessage('Uploading failed image ' + (index + 1) + ' of ' + totalimages);
+          } else {
+            this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + totalimages);
+          }
+          this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
+            imageToUpload.uploadstatus = true;
+            index++;
+            mapOfImages.splice(0, 1);
+            this.saveintermediatesurveydata();
+            this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
+          }, (error) => {
+            imageToUpload.uploadstatus = false;
+            this.failedshotstoupload.push(imageToUpload);
+            this.displayuploadfailuretoast(index);
+            index++;
+            mapOfImages.splice(0, 1);
+            this.saveintermediatesurveydata();
+            this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
+          });
+        } else {
+          index++;
+          mapOfImages.splice(0, 1);
+          this.saveintermediatesurveydata();
+          this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
+        }
+      } else {
+        this.utilitieservice.hideLoading().then(() => {
+          if (this.failedshotstoupload.length > 0) {
+            //Code to upload failed files
+            this.uploadImageByIndex(this.failedshotstoupload, 0, this.failedshotstoupload.length, true);
+          } else {
+            this.savedetailsformdata();
+          }
+        });
+      }
+    } catch (error) {
+      console.log("uploadImageByIndex---"+error);
+    }
+  }
+
+  async displayuploadfailuretoast(imageindex) {
     const toast = await this.toastController.create({
-      message: 'Failed to upload image '+imageindex,
+      message: 'Failed to upload image ' + imageindex,
       duration: 2000
     });
     toast.present();
   }
 
-  async displayfileuploadfailuretoast(fileindex){
+  async displayfileuploadfailuretoast(fileindex) {
     const toast = await this.toastController.create({
-      message: 'Failed to upload file '+fileindex,
+      message: 'Failed to upload file ' + fileindex,
       duration: 2000
     });
     toast.present();
   }
 
   savedetailsformdata() {
-    this.saveintermediatesurveydata();
-    this.utilitieservice.showLoading('Please wait...');
-    const data = {};
-    this.activeFormElementsArray.map(element => {
-      if (this.activeForm.get(element).value != '') {
-        data[element] = this.activeForm.get(element).value;
-        if (element === 'batterysystem') {
-          data[element] = this.activeForm.get('batterysystem').value.toString();
+    try {
+      this.saveintermediatesurveydata();
+      this.utilitieservice.showLoading('Please wait...');
+      const data = {};
+      this.activeFormElementsArray.map(element => {
+        if (this.activeForm.get(element).value != '') {
+          data[element] = this.activeForm.get(element).value;
+          if (element === 'batterysystem') {
+            data[element] = this.activeForm.get('batterysystem').value.toString();
+          }
+          else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
+            data[element] = this.activeForm.get(element).value.id;
+          }
         }
-        else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
-          data[element] = this.activeForm.get(element).value.id;
-        }
-      }
-    });
-    data['status'] = 'completed';
-    this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
-      this.utilitieservice.hideLoading().then(() => {
-        this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
-          modal.present();
-          modal.onWillDismiss().then((dismissed) => {
-            this.storage.remove(this.user.id + '-' + this.surveyid);
-            if (this.user.role.type == 'surveyors') {
-              this.utilitieservice.sethomepageSurveyRefresh(true);
-              this.navController.navigateRoot('surveyoroverview');
-            } else {
-              this.utilitieservice.sethomepageSurveyRefresh(true);
-              this.navController.navigateRoot('homepage/survey');
-            }
-            this.insomnia.allowSleepAgain()
-              .then(
-              );
+      });
+      data['status'] = 'completed';
+      this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
+            modal.present();
+            modal.onWillDismiss().then((dismissed) => {
+              this.storage.remove(this.user.id + '-' + this.surveyid);
+              if (this.user.role.type == 'surveyors') {
+                this.utilitieservice.sethomepageSurveyRefresh(true);
+                this.navController.navigateRoot('surveyoroverview');
+              } else {
+                this.utilitieservice.sethomepageSurveyRefresh(true);
+                this.navController.navigateRoot('homepage/survey');
+              }
+              this.insomnia.allowSleepAgain()
+                .then(
+                );
+            });
           });
         });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar('There was some error in processing the request');
+        });
       });
-    }, (error) => {
-      this.utilitieservice.hideLoading().then(() => {
-        this.utilitieservice.errorSnackBar('There was some error in processing the request');
-      });
-    });
+    } catch (error) {
+      console.log("savedetailsformdata---"+error);
+    }
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1057,28 +1105,36 @@ export class StartsurveyPage implements OnInit {
   //------------------------------------------------------------------------------------------------------------------
 
   selectmainmenu(index) {
-    // Unset previous menu and select new one
-    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-    if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-    }
-    this.selectedmainmenuindex = index;
-    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-    this.selectedsubmenuindex = 0;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-    this.selectedshotindex = 0;
-    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0){
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+    try {
+      // Unset previous menu and select new one
+      this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
+      if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+      }
+      this.selectedmainmenuindex = index;
+      this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+      this.selectedsubmenuindex = 0;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+      this.selectedshotindex = 0;
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+      }
+    } catch (error) {
+      console.log("selectmainmenu---"+error);
     }
   }
 
   selectsubmenu(index) {
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-    this.selectedsubmenuindex = index;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-    this.selectedshotindex = 0;
-    if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0){
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+    try {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+      this.selectedsubmenuindex = index;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+      this.selectedshotindex = 0;
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+      }
+    } catch (error) {
+      console.log("selectsubmenu---"+error);
     }
   }
 
@@ -1113,183 +1169,223 @@ export class StartsurveyPage implements OnInit {
   }
 
   handleshotimage(capturedImage) {
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = capturedImage;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
-    this.updateshotscapturedcount();
-    this.handleshotquestion();
+    try {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = capturedImage;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
+      this.updateshotscapturedcount();
+      this.handleshotquestion();
+    } catch (error) {
+      console.log("handleshotimage---"+error);
+    }
   }
 
-  updateshotscapturedcount(){
-    var capturedshots = 0;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.forEach(element => {
-      if(!element.imagecleared){
-        capturedshots += 1;
-      }
-    });
+  updateshotscapturedcount() {
+    try {
+      var capturedshots = 0;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots.forEach(element => {
+        if (!element.imagecleared) {
+          capturedshots += 1;
+        }
+      });
 
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount = capturedshots;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount = capturedshots;
+    } catch (error) {
+      console.log("updateshotscapturedcount---"+error);
+    }
   }
 
   handleshotquestion() {
-    const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-    if (activechild.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
-      if (!activechild.shots[this.selectedshotindex].questionstatus) {
-        activechild.shots[this.selectedshotindex].promptquestion = true;
-        this.blurcaptureview = true;
-        if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
-          this.getUtilities();
-        } else if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
-          this.getInverterMakes();
-        } else if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
-          this.getRoofMaterials();
+    try {
+      const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+      if (activechild.shots[this.selectedshotindex].questiontype != QUESTIONTYPE.NONE) {
+        if (!activechild.shots[this.selectedshotindex].questionstatus) {
+          activechild.shots[this.selectedshotindex].promptquestion = true;
+          this.blurcaptureview = true;
+          if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
+            this.getUtilities();
+          } else if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
+            this.getInverterMakes();
+          } else if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
+            this.getRoofMaterials();
+          }
+        } else {
+          //Move to next possible step
+          this.markshotcompletion();
         }
       } else {
+        if (!activechild.shots[this.selectedshotindex].questionstatus) {
+          activechild.shots[this.selectedshotindex].questionstatus = true;
+        }
         //Move to next possible step
         this.markshotcompletion();
       }
-    } else {
-      if (!activechild.shots[this.selectedshotindex].questionstatus) {
-        activechild.shots[this.selectedshotindex].questionstatus = true;
-      }
-      //Move to next possible step
-      this.markshotcompletion();
-    }
 
-    this.changedetectorref.detectChanges();
-    this.animateElementOpacity(document.querySelector('.questionaireview'));
+      this.changedetectorref.detectChanges();
+      this.animateElementOpacity(document.querySelector('.questionaireview'));
+    } catch (error) {
+      console.log("handleshotquestion---"+error);
+    }
   }
 
   handleShotNameSubmission() {
-    const shotnameformcontrol = this.activeForm.get('shotname');
-    if (shotnameformcontrol.value != '') {
-      this.blurcaptureview = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imageuploadname = shotnameformcontrol.value;
-      this.activeForm.get('shotname').setValue('');
-      this.markshotcompletion();
-    } else {
-      shotnameformcontrol.markAsTouched();
-      shotnameformcontrol.markAsDirty();
+    try {
+      const shotnameformcontrol = this.activeForm.get('shotname');
+      if (shotnameformcontrol.value != '') {
+        this.blurcaptureview = false;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imageuploadname = shotnameformcontrol.value;
+        this.activeForm.get('shotname').setValue('');
+        this.markshotcompletion();
+      } else {
+        shotnameformcontrol.markAsTouched();
+        shotnameformcontrol.markAsDirty();
+      }
+    } catch (error) {
+      console.log("handleShotNameSubmission---"+error);
     }
   }
 
   markshotcompletion() {
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
-    this.blurcaptureview = false;
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required) {
-      this.updateProgressStatus();
-    }
-
-    //Check for more pending shots in same child
-    var ispendingelementfound = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shotelement, shotindex) => {
-      if (shotelement.ispending && !ispendingelementfound) {
-        ispendingelementfound = true;
-        this.selectedshotindex = shotindex;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+    try {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
+      this.blurcaptureview = false;
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required) {
+        this.updateProgressStatus();
       }
-    });
 
-    if(ispendingelementfound){
-      this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
-    }else{
-      this.markchildcompletion();
+      //Check for more pending shots in same child
+      var ispendingelementfound = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shotelement, shotindex) => {
+        if (shotelement.ispending && !ispendingelementfound) {
+          ispendingelementfound = true;
+          this.selectedshotindex = shotindex;
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+        }
+      });
+
+      if (ispendingelementfound) {
+        this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
+      } else {
+        this.markchildcompletion();
+      }
+    } catch (error) {
+      console.log("markshotcompletion---"+error);
     }
   }
 
   markchildcompletion() {
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+    try {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
 
-    //Check for more pending child in same menu
-    var ispendingelementfound = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children.forEach((childelement, childindex) => {
-      if (childelement.ispending && !ispendingelementfound) {
-        ispendingelementfound = true;
-        this.selectedsubmenuindex = childindex;
-        this.selectedshotindex = 0;
-        this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+      //Check for more pending child in same menu
+      var ispendingelementfound = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children.forEach((childelement, childindex) => {
+        if (childelement.ispending && !ispendingelementfound) {
+          ispendingelementfound = true;
+          this.selectedsubmenuindex = childindex;
+          this.selectedshotindex = 0;
+          this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+        }
+      });
+
+      if (ispendingelementfound) {
+        this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
+      } else {
+        this.markmainmenucompletion();
       }
-    });
-
-    if(ispendingelementfound){
-      this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
-    }else{
-      this.markmainmenucompletion();
+    } catch (error) {
+      console.log("markchildcompletion---"+error);
     }
   }
 
   markmainmenucompletion() {
-    this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
-    this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-    
-    //Check for more pending main menus
-    var ispendingelementfound = false;
-    this.mainmenuitems.forEach((mainelement, mainindex) => {
-      if(mainelement.ispending && !ispendingelementfound){
-        ispendingelementfound = true;
-        this.selectedmainmenuindex = mainindex;
-        this.selectedsubmenuindex = 0;
-        this.selectedshotindex = 0;
-      }
-    });
+    try {
+      this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
+      this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
 
-    if(ispendingelementfound){
-      this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
+      //Check for more pending main menus
+      var ispendingelementfound = false;
+      this.mainmenuitems.forEach((mainelement, mainindex) => {
+        if (mainelement.ispending && !ispendingelementfound) {
+          ispendingelementfound = true;
+          this.selectedmainmenuindex = mainindex;
+          this.selectedsubmenuindex = 0;
+          this.selectedshotindex = 0;
+        }
+      });
+
+      if (ispendingelementfound) {
+        this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
+      }
+    } catch (error) {
+      console.log("markmainmenucompletion---"+error);
     }
   }
 
   movetonextpossibleactionablestep(startmainmenuindex, startchildmenuindex, startshotindex) {
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
-      if(this.findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex)){
-        this.activateshot();
-      }else{
-        if(this.findnextpossibleshot(0, 0, 0)){
+    try {
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
+        if (this.findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex)) {
           this.activateshot();
+        } else {
+          if (this.findnextpossibleshot(0, 0, 0)) {
+            this.activateshot();
+          }
         }
       }
+      this.saveintermediatesurveydata();
+    } catch (error) {
+      console.log("movetonextpossibleactionablestep---"+error);
     }
-    this.saveintermediatesurveydata();
   }
 
-  findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex){
-    let nextactiveshotfound = false;
-    for (let mainmenuindex = startmainmenuindex; mainmenuindex < this.mainmenuitems.length; mainmenuindex++) {
-      const mainmenu = this.mainmenuitems[mainmenuindex];
-      if(!nextactiveshotfound){
-        for (let childindex = startchildmenuindex; childindex < mainmenu.children.length; childindex++) {
-          const child = mainmenu.children[childindex];
-          if(!nextactiveshotfound){
-            for (let shotindex = startshotindex; shotindex < child.shots.length; shotindex++) {
-              const shot = child.shots[shotindex];
-              if (!nextactiveshotfound && shot.ispending) {
-                // console.log("shot loop---"+shot.shotinfo);
-                nextactiveshotfound = true;
-                this.nextfoundshotindex = shotindex;
-                this.nextfoundchildindex = childindex;
-                this.nextfoundmainindex = mainmenuindex;
-                return nextactiveshotfound;
+  findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex) {
+    try {
+      let nextactiveshotfound = false;
+      for (let mainmenuindex = startmainmenuindex; mainmenuindex < this.mainmenuitems.length; mainmenuindex++) {
+        const mainmenu = this.mainmenuitems[mainmenuindex];
+        if (!nextactiveshotfound) {
+          for (let childindex = startchildmenuindex; childindex < mainmenu.children.length; childindex++) {
+            const child = mainmenu.children[childindex];
+            if (!nextactiveshotfound) {
+              for (let shotindex = startshotindex; shotindex < child.shots.length; shotindex++) {
+                const shot = child.shots[shotindex];
+                if (!nextactiveshotfound && shot.ispending) {
+                  // console.log("shot loop---"+shot.shotinfo);
+                  nextactiveshotfound = true;
+                  this.nextfoundshotindex = shotindex;
+                  this.nextfoundchildindex = childindex;
+                  this.nextfoundmainindex = mainmenuindex;
+                  return nextactiveshotfound;
+                }
               }
             }
           }
         }
       }
+      return false;
+    } catch (error) {
+      console.log("findnextpossibleshot---"+error);
     }
-    return false;
   }
 
-  activateshot(){
-    this.selectedshotindex = this.nextfoundshotindex;
-    this.selectedsubmenuindex = this.nextfoundchildindex;
-    this.selectedmainmenuindex = this.nextfoundmainindex;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-    this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+  activateshot() {
+    try {
+      this.selectedshotindex = this.nextfoundshotindex;
+      this.selectedsubmenuindex = this.nextfoundchildindex;
+      this.selectedmainmenuindex = this.nextfoundmainindex;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+      this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+    } catch (error) {
+      console.log("activateshot---"+error);
+    }
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1324,124 +1420,152 @@ export class StartsurveyPage implements OnInit {
   // Answer Submissions for Shot Questions Code
   //------------------------------------------------------------------------------------------------------------------
   handleAnswerSubmission(result) {
-    const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex];
-    shotDetail.result = result;
-    // console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result);
-    this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
-    // console.log(this.activeForm.get(shotDetail.inputformcontrol).value);
-    this.markshotcompletion();
+    try {
+      const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex];
+      shotDetail.result = result;
+      // console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result);
+      this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
+      // console.log(this.activeForm.get(shotDetail.inputformcontrol).value);
+      this.markshotcompletion();
+    } catch (error) {
+      console.log("handleAnswerSubmission---"+error);
+    }
   }
 
   handleInputSubmission(form: FormGroup) {
-    const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-    const control = form.get(activechild.shots[this.selectedshotindex].inputformcontrol);
-    if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_MULTI_NUMBER) {
-      let anyemptyfieldfound = false;
-      let preparedresult = "";
-      activechild.shots[this.selectedshotindex].forminputfields.forEach((field, index) => {
-        // console.log(form.get(field).value);
-        if (form.get(field).value != '') {
-          preparedresult += form.get(field).value;
-        }else{
-          preparedresult = "";
-          anyemptyfieldfound = true;
-          form.get(field).markAsTouched();
-          form.get(field).markAsDirty();
+    try {
+      const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+      const control = form.get(activechild.shots[this.selectedshotindex].inputformcontrol);
+      if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_MULTI_NUMBER) {
+        let anyemptyfieldfound = false;
+        let preparedresult = "";
+        activechild.shots[this.selectedshotindex].forminputfields.forEach((field, index) => {
+          // console.log(form.get(field).value);
+          if (form.get(field).value != '') {
+            preparedresult += form.get(field).value;
+          } else {
+            preparedresult = "";
+            anyemptyfieldfound = true;
+            form.get(field).markAsTouched();
+            form.get(field).markAsDirty();
+          }
+          if (index < activechild.shots[this.selectedshotindex].forminputfields.length - 1) {
+            preparedresult += 'X';
+          }
+        });
+        // console.log(preparedresult);
+        if (!anyemptyfieldfound) {
+          this.handleAnswerSubmission(preparedresult);
         }
-        if(index < activechild.shots[this.selectedshotindex].forminputfields.length - 1){
-          preparedresult += 'X';
+      } else {
+        if (control.value != '') {
+          this.handleAnswerSubmission(control.value);
+        } else {
+          control.markAsTouched();
+          control.markAsDirty();
         }
-      });
-      // console.log(preparedresult);
-      if(!anyemptyfieldfound){
-        this.handleAnswerSubmission(preparedresult);
       }
-    }else{
+    } catch (error) {
+      console.log("handleInputSubmission---"+error);
+    }
+  }
+
+  handleInputTextSubmission(form: FormGroup) {
+    try {
+      const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
+      const control = form.get(activechild.shots[this.selectedshotindex].inputformcontrol);
       if (control.value != '') {
         this.handleAnswerSubmission(control.value);
       } else {
         control.markAsTouched();
         control.markAsDirty();
       }
-    }
-  }
-
-  handleInputTextSubmission(form: FormGroup) {
-    const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
-    const control = form.get(activechild.shots[this.selectedshotindex].inputformcontrol);
-    if (control.value != '') {
-      this.handleAnswerSubmission(control.value);
-    } else {
-      control.markAsTouched();
-      control.markAsDirty();
+    } catch (error) {
+      console.log("handleInputTextSubmission---"+error);
     }
   }
 
   handleInverterFieldsSubmission() {
-    const invertermakecontrol = this.activeForm.get('invertermake');
-    const invertermodelcontrol = this.activeForm.get('invertermodel');
-    if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
-      this.markshotcompletion();
-    } else {
-      invertermakecontrol.markAsTouched();
-      invertermakecontrol.markAsDirty();
-      invertermodelcontrol.markAsTouched();
-      invertermodelcontrol.markAsDirty();
+    try {
+      const invertermakecontrol = this.activeForm.get('invertermake');
+      const invertermodelcontrol = this.activeForm.get('invertermodel');
+      if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
+        this.markshotcompletion();
+      } else {
+        invertermakecontrol.markAsTouched();
+        invertermakecontrol.markAsDirty();
+        invertermodelcontrol.markAsTouched();
+        invertermodelcontrol.markAsDirty();
+      }
+    } catch (error) {
+      console.log("handleInverterFieldsSubmission---"+error);
     }
   }
 
   handleUtilitySubmission() {
-    const utilitycontrol = this.activeForm.get('utility');
-    if (utilitycontrol.value != '') {
-      this.markshotcompletion();
-    } else {
-      utilitycontrol.markAsTouched();
-      utilitycontrol.markAsDirty();
+    try {
+      const utilitycontrol = this.activeForm.get('utility');
+      if (utilitycontrol.value != '') {
+        this.markshotcompletion();
+      } else {
+        utilitycontrol.markAsTouched();
+        utilitycontrol.markAsDirty();
+      }
+    } catch (error) {
+      console.log("handleUtilitySubmission---"+error);
     }
   }
 
   handleRoofMaterialSubmission() {
-    const roofmaterialcontrol = this.activeForm.get('roofmaterial');
-    if (roofmaterialcontrol.value != '') {
-      this.markshotcompletion();
-    } else {
-      roofmaterialcontrol.markAsTouched();
-      roofmaterialcontrol.markAsDirty();
+    try {
+      const roofmaterialcontrol = this.activeForm.get('roofmaterial');
+      if (roofmaterialcontrol.value != '') {
+        this.markshotcompletion();
+      } else {
+        roofmaterialcontrol.markAsTouched();
+        roofmaterialcontrol.markAsDirty();
+      }
+    } catch (error) {
+      console.log("handleRoofMaterialSubmission---"+error);
     }
   }
 
   handleExistence(doesexist: boolean) {
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;
-    this.blurcaptureview = false;
-    if (doesexist) {
-      this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
-        if (element.inputformcontrol[0] !== '' && element.required) {
-          this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
-          if (element.inputformcontrol.length > 1 && element.required) {
-            this.activeForm.get(element.inputformcontrol[1]).setValidators([Validators.required]);
+    try {
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;
+      this.blurcaptureview = false;
+      if (doesexist) {
+        this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+          if (element.inputformcontrol[0] !== '' && element.required) {
+            this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
+            if (element.inputformcontrol.length > 1 && element.required) {
+              this.activeForm.get(element.inputformcontrol[1]).setValidators([Validators.required]);
+            }
           }
-        }
-      });
-    } else {
-      //Mark shots as completed and required false
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
-        element.ispending = false;
-        element.shotstatus = true;
-        element.questionstatus = true;
-        element.required = false;
-        if (element.inputformcontrol[0] !== '') {
-          this.activeForm.get(element.inputformcontrol[0]).clearValidators();
-        }
-        if (element.inputformcontrol.length > 1) {
-          this.activeForm.get(element.inputformcontrol[1]).clearValidators();
-        }
-      });
+        });
+      } else {
+        //Mark shots as completed and required false
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+          element.ispending = false;
+          element.shotstatus = true;
+          element.questionstatus = true;
+          element.required = false;
+          if (element.inputformcontrol[0] !== '') {
+            this.activeForm.get(element.inputformcontrol[0]).clearValidators();
+          }
+          if (element.inputformcontrol.length > 1) {
+            this.activeForm.get(element.inputformcontrol[1]).clearValidators();
+          }
+        });
 
-      this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
-      this.markchildcompletion();
+        this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
+        this.markchildcompletion();
+      }
+    } catch (error) {
+      console.log("handleExistence---"+error);
     }
   }
 
@@ -1453,15 +1577,19 @@ export class StartsurveyPage implements OnInit {
   }
 
   allowusertorecaptureshot(event) {
-    event.preventDefault();
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = false;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
-    this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = "";
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount -= 1;
+    try {
+      event.preventDefault();
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = false;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+      this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = "";
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount -= 1;
+    } catch (error) {
+      console.log("allowusertorecaptureshot---"+error);
+    }
   }
 
   toggleshotdetailsview(isvisible) {
@@ -1482,84 +1610,96 @@ export class StartsurveyPage implements OnInit {
   }
 
   promptstepquestion(event, index) {
-    event.preventDefault();
-    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult) {
-      this.showinfodetailsview = false;
-      this.blurcaptureview = true;
-      this.selectedshotindex = index;
-      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == QUESTIONTYPE.INPUT_SHOT_NAME) {
-        this.activeForm.get('shotname').setValue(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imageuploadname);
+    try {
+      event.preventDefault();
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult) {
+        this.showinfodetailsview = false;
+        this.blurcaptureview = true;
+        this.selectedshotindex = index;
+        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype == QUESTIONTYPE.INPUT_SHOT_NAME) {
+          this.activeForm.get('shotname').setValue(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imageuploadname);
+        }
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
+        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
+          this.getUtilities();
+        } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
+          this.getInverterMakes();
+        } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
+          this.getRoofMaterials();
+        }
       }
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = true;
-      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
-        this.getUtilities();
-      } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
-        this.getInverterMakes();
-      } else if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
-        this.getRoofMaterials();
-      }
+    } catch (error) {
+      console.log("promptstepquestion---"+error);
     }
   }
 
   onchildmodechange(event) {
-    event.preventDefault();
-    this.showinfodetailsview = false;
-    let doesexist = event.target.checked;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
-    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;
-    this.blurcaptureview = false;
-    if (doesexist) {
-      this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
-        element.ispending = true;
-        element.shotstatus = false;
-        element.required = true;
-        if (element.questiontype != QUESTIONTYPE.NONE) {
-          element.questionstatus = false;
-        }
-        if (element.inputformcontrol[0] !== '' && element.required) {
-          this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
-        }
-        if (element.inputformcontrol.length > 1 && element.required) {
-          this.activeForm.get(element.inputformcontrol[1]).setValidators([Validators.required]);
-        }
-      });
-    } else {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
-        element.ispending = false;
-        element.shotstatus = true;
-        element.questionstatus = true;
-        element.required = false;
-        if (element.inputformcontrol[0] !== '') {
-          this.activeForm.get(element.inputformcontrol[0]).clearValidators();
-        }
-        if (element.inputformcontrol.length > 1) {
-          this.activeForm.get(element.inputformcontrol[1]).clearValidators();
-        }
-      });
-      this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
-      this.markchildcompletion();
+    try {
+      event.preventDefault();
+      this.showinfodetailsview = false;
+      let doesexist = event.target.checked;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;
+      this.blurcaptureview = false;
+      if (doesexist) {
+        this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+          element.ispending = true;
+          element.shotstatus = false;
+          element.required = true;
+          if (element.questiontype != QUESTIONTYPE.NONE) {
+            element.questionstatus = false;
+          }
+          if (element.inputformcontrol[0] !== '' && element.required) {
+            this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
+          }
+          if (element.inputformcontrol.length > 1 && element.required) {
+            this.activeForm.get(element.inputformcontrol[1]).setValidators([Validators.required]);
+          }
+        });
+      } else {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+          element.ispending = false;
+          element.shotstatus = true;
+          element.questionstatus = true;
+          element.required = false;
+          if (element.inputformcontrol[0] !== '') {
+            this.activeForm.get(element.inputformcontrol[0]).clearValidators();
+          }
+          if (element.inputformcontrol.length > 1) {
+            this.activeForm.get(element.inputformcontrol[1]).clearValidators();
+          }
+        });
+        this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
+        this.markchildcompletion();
+      }
+    } catch (error) {
+      console.log("onchildmodechanged---"+error);
     }
   }
 
   toggleElementVisibility(element, controlsElement) {
-    if (Object.keys(controlsElement).length > 0) {
-      const elementToControl = this.activeForm.get(controlsElement.inputformcontrol);
-      if (this.activeForm.get(element).value === controlsElement.onvalueselection) {
-        setTimeout(function () {
-          document.getElementById('input_' + controlsElement.inputformcontrol).classList.remove('hideElement');
-        }, 300);
-        elementToControl.enable();
-        elementToControl.setValidators([Validators.required]);
-      } else {
-        setTimeout(function () {
-          document.getElementById('input_' + controlsElement.inputformcontrol).classList.add('hideElement');
-        }, 300);
-        elementToControl.setValue('');
-        elementToControl.clearValidators();
-        elementToControl.disable();
+    try {
+      if (Object.keys(controlsElement).length > 0) {
+        const elementToControl = this.activeForm.get(controlsElement.inputformcontrol);
+        if (this.activeForm.get(element).value === controlsElement.onvalueselection) {
+          setTimeout(function () {
+            document.getElementById('input_' + controlsElement.inputformcontrol).classList.remove('hideElement');
+          }, 300);
+          elementToControl.enable();
+          elementToControl.setValidators([Validators.required]);
+        } else {
+          setTimeout(function () {
+            document.getElementById('input_' + controlsElement.inputformcontrol).classList.add('hideElement');
+          }, 300);
+          elementToControl.setValue('');
+          elementToControl.clearValidators();
+          elementToControl.disable();
+        }
+        this.changedetectorref.detectChanges();
       }
-      this.changedetectorref.detectChanges();
+    } catch (error) {
+      console.log("toggleElementVisibility---"+error);
     }
   }
 }
