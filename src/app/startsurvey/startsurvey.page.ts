@@ -542,7 +542,6 @@ export class StartsurveyPage implements OnInit {
         mainmenu.children.forEach(child => {
           child.capturedshots.forEach(shot => {
             if (!shot.imagecleared && !shot.uploadstatus) {
-              // console.log(shot.imagekey);
               this.remainingfilestoupload += 1;
             }
           });
@@ -557,7 +556,6 @@ export class StartsurveyPage implements OnInit {
                 if (formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
                   formelement.attachments.forEach(attachment => {
                     if (!attachment.uploadstatus) {
-                      // console.log(attachment.controlname);
                       this.remainingfilestoupload += 1;
                     }
                   });
@@ -1345,7 +1343,6 @@ export class StartsurveyPage implements OnInit {
               for (let shotindex = startshotindex; shotindex < child.shots.length; shotindex++) {
                 const shot = child.shots[shotindex];
                 if (!nextactiveshotfound && shot.ispending) {
-                  // console.log("shot loop---"+shot.shotinfo);
                   nextactiveshotfound = true;
                   this.nextfoundshotindex = shotindex;
                   this.nextfoundchildindex = childindex;
@@ -1411,9 +1408,7 @@ export class StartsurveyPage implements OnInit {
     try {
       const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex];
       shotDetail.result = result;
-      // console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result);
       this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
-      // console.log(this.activeForm.get(shotDetail.inputformcontrol).value);
       this.markshotcompletion();
     } catch (error) {
       console.log("handleAnswerSubmission---"+error);
@@ -1428,7 +1423,6 @@ export class StartsurveyPage implements OnInit {
         let anyemptyfieldfound = false;
         let preparedresult = "";
         activechild.shots[this.selectedshotindex].forminputfields.forEach((field, index) => {
-          // console.log(form.get(field).value);
           if (form.get(field).value != '') {
             preparedresult += form.get(field).value;
           } else {
@@ -1441,7 +1435,6 @@ export class StartsurveyPage implements OnInit {
             preparedresult += 'X';
           }
         });
-        // console.log(preparedresult);
         if (!anyemptyfieldfound) {
           this.handleAnswerSubmission(preparedresult);
         }
