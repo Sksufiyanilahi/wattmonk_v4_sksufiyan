@@ -12,7 +12,6 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { UtilitiesModule } from '../utilities/utilities.module';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { PinchZoomModule } from 'ngx-pinch-zoom';
 
 @NgModule({
@@ -29,8 +28,7 @@ import { PinchZoomModule } from 'ngx-pinch-zoom';
   declarations: [SurveyprocessPage],
   providers: [
     CameraPreview,
-    Diagnostic,
-    Insomnia
+    Diagnostic
   ]
 })
 export class SurveyprocessPageModule {}

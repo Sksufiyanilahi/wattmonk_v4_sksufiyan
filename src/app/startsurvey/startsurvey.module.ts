@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { StartsurveyPageRoutingModule } from './startsurvey-routing.module';
 
 import { StartsurveyPage } from './startsurvey.page';
-import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { UtilitiesModule } from '../utilities/utilities.module';
 
 @NgModule({
@@ -21,7 +20,6 @@ import { UtilitiesModule } from '../utilities/utilities.module';
   ],
   declarations: [StartsurveyPage],
   providers: [
-    Insomnia
   ]
 })
 export class StartsurveyPageModule {}

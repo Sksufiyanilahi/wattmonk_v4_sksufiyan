@@ -18,7 +18,6 @@ import { SurveyStorageModel } from '../model/survey-storage.model';
 import { Storage } from '@ionic/storage';
 import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
 import { StorageService } from '../storage.service';
-import { Insomnia } from '@ionic-native/insomnia/ngx';
 import * as domtoimage from 'dom-to-image';
 import { RoofMaterial } from '../model/roofmaterial.model';
 import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
@@ -324,8 +323,7 @@ export class SurveyprocessPage implements OnInit {
     private platform: Platform,
     private routeroutlet: IonRouterOutlet,
     private storageService: StorageService,
-    private menuCtrl: MenuController,
-    private insomnia: Insomnia) {
+    private menuCtrl: MenuController) {
     this.user = this.storageuserdata.getUser();
     this.surveyid = +this.route.snapshot.paramMap.get('id');
     this.surveytype = this.route.snapshot.paramMap.get('type');
@@ -1778,13 +1776,6 @@ export class SurveyprocessPage implements OnInit {
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
 
       this.utilitieservice.hideLoading().then(() => {
-        this.insomnia.keepAwake()
-          .then(
-            () => {
-
-            },
-
-          );
         this.uploadImagesToServer();
 
       });
@@ -1838,13 +1829,6 @@ export class SurveyprocessPage implements OnInit {
     };
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((data) => {
       this.utilitieservice.hideLoading().then(() => {
-        this.insomnia.keepAwake()
-          .then(
-            () => {
-
-            },
-
-          );
         this.uploadImagesToServer();
 
       });
@@ -1933,13 +1917,6 @@ export class SurveyprocessPage implements OnInit {
     data['status'] = 'completed';
     this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
       this.utilitieservice.hideLoading().then(() => {
-        this.insomnia.keepAwake()
-          .then(
-            () => {
-
-            },
-
-          );
         this.uploadImagesToServer();
       });
     }, (error) => {
@@ -2017,11 +1994,6 @@ export class SurveyprocessPage implements OnInit {
               this.utilitieservice.sethomepageSurveyRefresh(true);
               this.navController.navigateRoot('homepage/survey');
             }
-            this.insomnia.allowSleepAgain()
-              .then(
-
-
-              );
           });
         });
       });

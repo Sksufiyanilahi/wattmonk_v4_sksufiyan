@@ -16,7 +16,6 @@ import { SolarMadeModel } from '../model/solar-made.model';
 import { RoofMaterial } from '../model/roofmaterial.model';
 import { Animation, AnimationController, IonSlides, NavController, Platform, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import { Insomnia } from '@ionic-native/insomnia/ngx';
 
 const { Camera } = Plugins;
 
@@ -237,7 +236,6 @@ export class StartsurveyPage implements OnInit {
     private apiService: ApiService,
     private animationCtrl: AnimationController,
     private http: HttpClient,
-    private insomnia: Insomnia,
     private navController: NavController,
     private storage: Storage,
     public toastController: ToastController,
@@ -859,13 +857,6 @@ export class StartsurveyPage implements OnInit {
 
     if (nopendingshotfound) {
       if (this.activeForm.status == 'VALID') {
-        this.insomnia.keepAwake()
-          .then(
-            () => {
-
-            },
-
-          );
         this.uploadfilestoserver();
       }
       else {
@@ -1084,9 +1075,6 @@ export class StartsurveyPage implements OnInit {
                 this.utilitieservice.sethomepageSurveyRefresh(true);
                 this.navController.navigateRoot('homepage/survey');
               }
-              this.insomnia.allowSleepAgain()
-                .then(
-                );
             });
           });
         });
