@@ -478,11 +478,19 @@
   <!-- SHOT DETAILS VIEW -->
   <div class="infodetailsviewcontainer" *ngIf="showinfodetailsview">
     <ion-grid class="infodetailsview">
-      <ion-icon name="close-circle-sharp" class="infoclosebutton" (click)="toggleshotdetailsview(false)"></ion-icon>
-      <ion-toggle class="infodetailstoggle"
-        *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence"
-        [checked]="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
-        (ionChange)="onchildmodechange($event)"></ion-toggle>
+      <ion-row>
+        <ion-col class="ion-no-padding">
+          <ion-item class="itemtoggle" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence">
+            <ion-label class="ion-no-margin" style="font-size: 11px;">Toggle {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name}} visibility</ion-label>
+            <ion-toggle class="infodetailstoggle"
+            [checked]="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
+            (ionChange)="onchildmodechange($event)"></ion-toggle>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-no-padding">
+          <ion-icon name="close-circle-sharp" class="infoclosebutton ion-float-right" (click)="toggleshotdetailsview(false)"></ion-icon>
+        </ion-col>
+      </ion-row>
       <ion-slides #infoslider pager="true" [options]="infoslideoptions" (ionSlideDidChange)='infoslidechange()'
         class="infoslides">
         <ion-slide style="width: 100%;"

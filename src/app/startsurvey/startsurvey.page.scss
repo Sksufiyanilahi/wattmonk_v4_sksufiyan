@@ -360,7 +360,7 @@ ion-content {
 
   .infodetailsview {
     width: 100%;
-    height: 166px;
+    height: 168px;
     position: absolute;
     top: 0;
     z-index: 99;
@@ -381,13 +381,11 @@ ion-content {
   .infoclosebutton {
     padding: 4px;
     font-size: 30px;
-    position: absolute;
-    right: 0;
     z-index: 100;
   }
 
   .infoslides {
-    height: 150px;
+    height: 124px;
     --bullet-background: #888888;
     --bullet-background-active: #718093;
   }
@@ -410,13 +408,16 @@ ion-content {
   }
 
   .infodetailstoggle{
-    position: absolute;
-    top: 4px;
-    left: 0;
     --background: #eebb5caa;
     --handle-background: #ffffff;
     --background-checked: #747474;
     --handle-background-checked: #eebb5c;
+  }
+  
+  .itemtoggle{
+    --ion-item-background:#FFFFFF;
+    --min-height: 24px;
+    --inner-border-width: 0px;
   }
 }
 
