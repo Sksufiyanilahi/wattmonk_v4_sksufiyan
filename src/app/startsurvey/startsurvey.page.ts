@@ -333,9 +333,9 @@ export class StartsurveyPage implements OnInit {
       }
     });
     formData['shotname'] = new FormControl('', []);
-    console.log(formData);
+    // console.log(formData);
     this.activeFormElementsArray.push('shotname');
-    console.log(this.activeFormElementsArray);
+    // console.log(this.activeFormElementsArray);
     this.activeForm = new FormGroup(formData);
   }
 
@@ -526,8 +526,8 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems.forEach(mainmenu => {
       mainmenu.children.forEach(child => {
         child.capturedshots.forEach(shot => {
-          if(!shot.imagecleared){
-            console.log(shot.imagekey);
+          if(!shot.imagecleared && !shot.uploadstatus){
+            // console.log(shot.imagekey);
             this.remainingfilestoupload += 1;
           }
         });
@@ -542,7 +542,7 @@ export class StartsurveyPage implements OnInit {
             child.formelements.forEach(formelement => {
               if(formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD){
                 formelement.attachments.forEach(attachment => {
-                  console.log(attachment.controlname);
+                  // console.log(attachment.controlname);
                   this.remainingfilestoupload += 1;
                 });
               }
@@ -900,6 +900,7 @@ export class StartsurveyPage implements OnInit {
         }, (error) => {
           fileToUpload.uploadstatus = false;
           this.failedattachmentstoupload.push(fileToUpload);
+          this.displayfileuploadfailuretoast(index);
           index++;
           files.splice(0, 1);
           this.saveintermediatesurveydata();
@@ -969,6 +970,7 @@ export class StartsurveyPage implements OnInit {
         }, (error) => {
           imageToUpload.uploadstatus = false;
           this.failedshotstoupload.push(imageToUpload);
+          this.displayuploadfailuretoast(index);
           index++;
           mapOfImages.splice(0, 1);
           this.saveintermediatesurveydata();
@@ -990,6 +992,22 @@ export class StartsurveyPage implements OnInit {
         }
       });
     }
+  }
+
+  async displayuploadfailuretoast(imageindex){
+    const toast = await this.toastController.create({
+      message: 'Failed to upload image '+imageindex,
+      duration: 2000
+    });
+    toast.present();
+  }
+
+  async displayfileuploadfailuretoast(fileindex){
+    const toast = await this.toastController.create({
+      message: 'Failed to upload file '+fileindex,
+      duration: 2000
+    });
+    toast.present();
   }
 
   savedetailsformdata() {
@@ -1028,7 +1046,6 @@ export class StartsurveyPage implements OnInit {
         });
       });
     }, (error) => {
-
       this.utilitieservice.hideLoading().then(() => {
         this.utilitieservice.errorSnackBar('There was some error in processing the request');
       });
@@ -1251,7 +1268,7 @@ export class StartsurveyPage implements OnInit {
             for (let shotindex = startshotindex; shotindex < child.shots.length; shotindex++) {
               const shot = child.shots[shotindex];
               if (!nextactiveshotfound && shot.ispending) {
-                console.log("shot loop---"+shot.shotinfo);
+                // console.log("shot loop---"+shot.shotinfo);
                 nextactiveshotfound = true;
                 this.nextfoundshotindex = shotindex;
                 this.nextfoundchildindex = childindex;
@@ -1309,9 +1326,9 @@ export class StartsurveyPage implements OnInit {
   handleAnswerSubmission(result) {
     const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex];
     shotDetail.result = result;
-    console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result);
+    // console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].result);
     this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
-    console.log(this.activeForm.get(shotDetail.inputformcontrol).value);
+    // console.log(this.activeForm.get(shotDetail.inputformcontrol).value);
     this.markshotcompletion();
   }
 
@@ -1322,7 +1339,7 @@ export class StartsurveyPage implements OnInit {
       let anyemptyfieldfound = false;
       let preparedresult = "";
       activechild.shots[this.selectedshotindex].forminputfields.forEach((field, index) => {
-        console.log(form.get(field).value);
+        // console.log(form.get(field).value);
         if (form.get(field).value != '') {
           preparedresult += form.get(field).value;
         }else{
@@ -1335,7 +1352,7 @@ export class StartsurveyPage implements OnInit {
           preparedresult += 'X';
         }
       });
-      console.log(preparedresult);
+      // console.log(preparedresult);
       if(!anyemptyfieldfound){
         this.handleAnswerSubmission(preparedresult);
       }
