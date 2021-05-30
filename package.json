@@ -74,6 +74,7 @@
     "cordova-plugin-firebasex": "^11.0.3",
     "cordova-plugin-geolocation": "^4.1.0",
     "cordova-plugin-inappbrowser": "^4.1.0",
+    "cordova-plugin-insomnia": "^4.3.0",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
     "cordova-plugin-mixpanel": "^4.7.0",
     "cordova-plugin-nativegeocoder": "^3.4.1",

@@ -63,6 +63,7 @@ export interface SHOT {
   placeholder?: string;
   imagekey: string;
   imagename: string;
+  imagequality: number;
   imageuploadname: string;
   required: boolean;
   capturedonce: boolean;
@@ -1071,7 +1072,7 @@ export class StartsurveyPage implements OnInit {
   async openCameraToCapturePic(event) {
     event.preventDefault();
     const image = await Camera.getPhoto({
-      quality: 100,
+      quality: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagequality,
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera
@@ -1084,7 +1085,7 @@ export class StartsurveyPage implements OnInit {
   async openPhotoGalleryToSelectPic(event) {
     event.preventDefault();
     const image = await Camera.getPhoto({
-      quality: 100,
+      quality: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].imagequality,
       allowEditing: false,
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos
