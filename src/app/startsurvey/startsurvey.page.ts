@@ -43,6 +43,8 @@ export interface CHILDREN {
   shotscapturedcount: number;
   shots: SHOT[];
   formelements?: FORMELEMENTS[];
+  requiredshotscount: number;
+  capturedshotscount: number;
 }
 
 export interface SHOT {
@@ -66,6 +68,7 @@ export interface SHOT {
   imageuploadname: string;
   required: boolean;
   capturedonce: boolean;
+  visitedonce: boolean;
   forminputfields: string[];
 }
 
@@ -283,6 +286,8 @@ export class StartsurveyPage implements OnInit {
       surveydata.map((item, mainindex) => {
         if (item.children) {
           item.children.map((child, childindex) => {
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].requiredshotscount = 0;
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshotscount = 0;
             if (child.inputformcontrol[0] !== '') {
               this.activeFormElementsArray.push(child.inputformcontrol[0]);
               formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
@@ -424,6 +429,9 @@ export class StartsurveyPage implements OnInit {
       uploadstatus: false
     };
     this.mainmenuitems[mainindex].children[childindex].capturedshots.push(captureshot);
+    if(shot.required){
+      this.mainmenuitems[mainindex].children[childindex].requiredshotscount += 1;
+    }
   }
 
   restoreSurveyStoredData(surveydata) {
@@ -474,6 +482,9 @@ export class StartsurveyPage implements OnInit {
               this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
             }
           });
+          if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0){
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
+          }
           this.createSurveyForm(surveydata);
 
           this.isdataloaded = true;
@@ -1105,6 +1116,7 @@ export class StartsurveyPage implements OnInit {
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
       }
+      this.deactivateallpreviousoptionalsteps(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
       console.log("selectmainmenu---"+error);
     }
@@ -1119,6 +1131,7 @@ export class StartsurveyPage implements OnInit {
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
       }
+      this.deactivateallpreviousoptionalsteps(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
       console.log("selectsubmenu---"+error);
     }
@@ -1241,6 +1254,7 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
       this.blurcaptureview = false;
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required) {
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshotscount += 1;
         this.updateProgressStatus();
       }
 
@@ -1342,7 +1356,7 @@ export class StartsurveyPage implements OnInit {
             if (!nextactiveshotfound) {
               for (let shotindex = startshotindex; shotindex < child.shots.length; shotindex++) {
                 const shot = child.shots[shotindex];
-                if (!nextactiveshotfound && shot.ispending) {
+                if (!nextactiveshotfound && shot.ispending && !shot.visitedonce) {
                   nextactiveshotfound = true;
                   this.nextfoundshotindex = shotindex;
                   this.nextfoundchildindex = childindex;
@@ -1368,8 +1382,48 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
       this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
+      this.deactivateallpreviousoptionalsteps(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
       console.log("activateshot---"+error);
+    }
+  }
+
+  deactivateallpreviousoptionalsteps(maxmainindex, maxchildindex) {
+    for (let mainindex = 0; mainindex <= maxmainindex; mainindex++) {
+      const mainmenu = this.mainmenuitems[mainindex];
+      if(mainmenu.ispending){
+        console.log(mainmenu.name+" main pending");
+        if(mainindex == maxmainindex){
+          for (let childindex = 0; childindex < maxchildindex; childindex++) {
+            const child = mainmenu.children[childindex];
+            if(child.ispending){
+              console.log(child.name+" child pending");
+              for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
+                const shot = child.shots[shotindex];
+                if(!shot.required){
+                  console.log(shot.shotinfo+" is not required shot");
+                  this.mainmenuitems[mainindex].children[childindex].shots[shotindex].ispending = false;
+                }
+              }
+            }
+          }
+        }else{
+          for (let childindex = 0; childindex < mainmenu.children.length; childindex++) {
+            const child = mainmenu.children[childindex];
+            if(child.ispending){
+              console.log(child.name+" child pending");
+              for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
+                const shot = child.shots[shotindex];
+                if(!shot.required){
+                  console.log(shot.shotinfo+" is not required shot");
+                  this.mainmenuitems[mainindex].children[childindex].shots[shotindex].ispending = false;
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 
