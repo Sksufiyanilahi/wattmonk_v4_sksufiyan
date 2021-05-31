@@ -1104,10 +1104,7 @@ export class StartsurveyPage implements OnInit {
   selectmainmenu(index) {
     try {
       // Unset previous menu and select new one
-      this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
-      if (this.mainmenuitems[this.selectedmainmenuindex].children.length > 0) {
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
-      }
+      this.deactivateallmenuitems();
       this.selectedmainmenuindex = index;
       this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
       this.selectedsubmenuindex = 0;
@@ -1116,7 +1113,7 @@ export class StartsurveyPage implements OnInit {
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
       }
-      this.deactivateallpreviousoptionalsteps(this.selectedmainmenuindex, this.selectedsubmenuindex);
+      this.markallpreviousoptionalstepsnotpending(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
       console.log("selectmainmenu---"+error);
     }
@@ -1124,14 +1121,15 @@ export class StartsurveyPage implements OnInit {
 
   selectsubmenu(index) {
     try {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
+      this.deactivateallmenuitems();
+      this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
       this.selectedsubmenuindex = index;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
       this.selectedshotindex = 0;
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
       }
-      this.deactivateallpreviousoptionalsteps(this.selectedmainmenuindex, this.selectedsubmenuindex);
+      this.markallpreviousoptionalstepsnotpending(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
       console.log("selectsubmenu---"+error);
     }
@@ -1281,7 +1279,6 @@ export class StartsurveyPage implements OnInit {
   markchildcompletion() {
     try {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = false;
 
       //Check for more pending child in same menu
       var ispendingelementfound = false;
@@ -1306,8 +1303,8 @@ export class StartsurveyPage implements OnInit {
 
   markmainmenucompletion() {
     try {
+      this.deactivateallmenuitems();
       this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
-      this.mainmenuitems[this.selectedmainmenuindex].isactive = false;
 
       //Check for more pending main menus
       var ispendingelementfound = false;
@@ -1330,6 +1327,7 @@ export class StartsurveyPage implements OnInit {
 
   movetonextpossibleactionablestep(startmainmenuindex, startchildmenuindex, startshotindex) {
     try {
+      this.deactivateallmenuitems();
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
         if (this.findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex)) {
           this.activateshot();
@@ -1383,13 +1381,13 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
       this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
-      this.deactivateallpreviousoptionalsteps(this.selectedmainmenuindex, this.selectedsubmenuindex);
+      this.markallpreviousoptionalstepsnotpending(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
       console.log("activateshot---"+error);
     }
   }
 
-  deactivateallpreviousoptionalsteps(maxmainindex, maxchildindex) {
+  markallpreviousoptionalstepsnotpending(maxmainindex, maxchildindex) {
     for (let mainindex = 0; mainindex <= maxmainindex; mainindex++) {
       const mainmenu = this.mainmenuitems[mainindex];
       if(mainmenu.ispending){
@@ -1425,6 +1423,20 @@ export class StartsurveyPage implements OnInit {
         }
       }
     }
+  }
+
+  deactivateallmenuitems(){
+    this.mainmenuitems.map(mainmenuitem => {
+      mainmenuitem.isactive = false;
+      mainmenuitem.children.map(child => {
+        child.isactive = false;
+        if (child.shots.length > 0) {
+          child.shots.forEach(shot => {
+            shot.isactive = false;
+          });
+        }
+      });
+    });
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1573,6 +1585,7 @@ export class StartsurveyPage implements OnInit {
       if (doesexist) {
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
+        console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
           if (element.inputformcontrol[0] !== '' && element.required) {
             this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
@@ -1678,13 +1691,9 @@ export class StartsurveyPage implements OnInit {
       this.blurcaptureview = false;
       if (doesexist) {
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
+        console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
-          element.ispending = true;
-          element.shotstatus = false;
-          element.required = true;
-          if (element.questiontype != QUESTIONTYPE.NONE) {
-            element.questionstatus = false;
-          }
           if (element.inputformcontrol[0] !== '' && element.required) {
             this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
           }
