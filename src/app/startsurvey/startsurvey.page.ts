@@ -850,7 +850,7 @@ export class StartsurveyPage implements OnInit {
       this.saveintermediatesurveydata();
     //Code to check incomplete items
     let nopendingshotfound = true;
-    console.log(this.mainmenuitems);
+    // console.log(this.mainmenuitems);
     this.mainmenuitems.forEach((mainmenuitem, mainindex) => {
       if (mainmenuitem.ispending && nopendingshotfound) {
         mainmenuitem.children.forEach((childelement, childindex) => {
@@ -1280,7 +1280,7 @@ export class StartsurveyPage implements OnInit {
 
   markchildcompletion() {
     try {
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+      // this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
 
       //Check for more pending child in same menu
       var ispendingelementfound = false;
@@ -1613,6 +1613,9 @@ export class StartsurveyPage implements OnInit {
           }
         });
 
+        this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
         this.markchildcompletion();
       }
@@ -1718,6 +1721,8 @@ export class StartsurveyPage implements OnInit {
             this.activeForm.get(element.inputformcontrol[1]).clearValidators();
           }
         });
+        this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
         this.markchildcompletion();
       }
