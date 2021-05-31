@@ -25,6 +25,7 @@ export interface MAINMENU {
   ispending: boolean;
   isvisible: boolean;
   viewmode: number;
+  visitedonce: boolean;
   children: CHILDREN[];
 }
 
@@ -277,6 +278,69 @@ export class StartsurveyPage implements OnInit {
       });
   }
 
+  restoreSurveyStoredData(surveydata) {
+    try {
+      this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
+        if (data) {
+          this.mainmenuitems = data.menuitems;
+          this.originalmainmenuitems = data.menuitems;
+          this.selectedmainmenuindex = data.selectedmainmenuindex;
+          this.selectedsubmenuindex = data.selectedsubmenuindex;
+          this.selectedshotindex = data.selectedshotindex;
+          this.totalpercent = data.currentprogress;
+          this.shotcompletecount = data.shotcompletecount;
+
+          this.surveyid = data.surveyid;
+          this.surveytype = data.surveytype;
+
+          this.restoreStoredForm();
+
+          Object.keys(data.formdata).forEach((key: string) => {
+            let control: AbstractControl = null;
+            control = this.activeForm.get(key);
+            control.setValue(data.formdata[key]);
+          });
+
+          //Check for formelements fields visibility
+          this.mainmenuitems.forEach(mainelement => {
+            if (mainelement.viewmode == VIEWMODE.FORM) {
+              mainelement.children.forEach(childelement => {
+                if (childelement.formelements.length > 0) {
+                  childelement.formelements.forEach(formelement => {
+                    if (formelement.controltype == CONTROLTYPE.CONTROL_INPUT_RADIO) {
+                      this.toggleElementVisibility(formelement.inputformcontrol, formelement.controlselement);
+                    }
+                  });
+                }
+              });
+            }
+          });
+          this.isdataloaded = true;
+          this.setTotalStepCount();
+        } else {
+          this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
+          this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
+
+          this.mainmenuitems.forEach(element => {
+            if (element.isactive) {
+              this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
+            }
+          });
+          this.mainmenuitems[this.selectedmainmenuindex].visitedonce = true;
+          if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0){
+            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
+          }
+          this.createSurveyForm(surveydata);
+
+          this.isdataloaded = true;
+          this.setTotalStepCount();
+        }
+      });
+    } catch (error) {
+      console.log("restoreSurveyStoredData---"+error);
+    }
+  }
+
   createSurveyForm(surveydata) {
     try {
       this.activeFormElementsArray = [];
@@ -430,68 +494,6 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[mainindex].children[childindex].capturedshots.push(captureshot);
     if(shot.required){
       this.mainmenuitems[mainindex].children[childindex].requiredshotscount += 1;
-    }
-  }
-
-  restoreSurveyStoredData(surveydata) {
-    try {
-      this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
-        if (data) {
-          this.mainmenuitems = data.menuitems;
-          this.originalmainmenuitems = data.menuitems;
-          this.selectedmainmenuindex = data.selectedmainmenuindex;
-          this.selectedsubmenuindex = data.selectedsubmenuindex;
-          this.selectedshotindex = data.selectedshotindex;
-          this.totalpercent = data.currentprogress;
-          this.shotcompletecount = data.shotcompletecount;
-
-          this.surveyid = data.surveyid;
-          this.surveytype = data.surveytype;
-
-          this.restoreStoredForm();
-
-          Object.keys(data.formdata).forEach((key: string) => {
-            let control: AbstractControl = null;
-            control = this.activeForm.get(key);
-            control.setValue(data.formdata[key]);
-          });
-
-          //Check for formelements fields visibility
-          this.mainmenuitems.forEach(mainelement => {
-            if (mainelement.viewmode == VIEWMODE.FORM) {
-              mainelement.children.forEach(childelement => {
-                if (childelement.formelements.length > 0) {
-                  childelement.formelements.forEach(formelement => {
-                    if (formelement.controltype == CONTROLTYPE.CONTROL_INPUT_RADIO) {
-                      this.toggleElementVisibility(formelement.inputformcontrol, formelement.controlselement);
-                    }
-                  });
-                }
-              });
-            }
-          });
-          this.isdataloaded = true;
-          this.setTotalStepCount();
-        } else {
-          this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
-          this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
-
-          this.mainmenuitems.forEach(element => {
-            if (element.isactive) {
-              this.selectedmainmenuindex = this.mainmenuitems.indexOf(element);
-            }
-          });
-          if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0){
-            this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
-          }
-          this.createSurveyForm(surveydata);
-
-          this.isdataloaded = true;
-          this.setTotalStepCount();
-        }
-      });
-    } catch (error) {
-      console.log("restoreSurveyStoredData---"+error);
     }
   }
 
@@ -848,6 +850,7 @@ export class StartsurveyPage implements OnInit {
       this.saveintermediatesurveydata();
     //Code to check incomplete items
     let nopendingshotfound = true;
+    console.log(this.mainmenuitems);
     this.mainmenuitems.forEach((mainmenuitem, mainindex) => {
       if (mainmenuitem.ispending && nopendingshotfound) {
         mainmenuitem.children.forEach((childelement, childindex) => {
@@ -1106,6 +1109,7 @@ export class StartsurveyPage implements OnInit {
       this.deactivateallmenuitems();
       this.selectedmainmenuindex = index;
       this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+      this.mainmenuitems[this.selectedmainmenuindex].visitedonce = true;
       this.selectedsubmenuindex = 0;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
       this.selectedshotindex = 0;
@@ -1334,6 +1338,9 @@ export class StartsurveyPage implements OnInit {
             this.activateshot();
           }
         }
+      }else{
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
       }
       this.saveintermediatesurveydata();
     } catch (error) {
@@ -1347,12 +1354,15 @@ export class StartsurveyPage implements OnInit {
       for (let mainmenuindex = startmainmenuindex; mainmenuindex < this.mainmenuitems.length; mainmenuindex++) {
         const mainmenu = this.mainmenuitems[mainmenuindex];
         if (!nextactiveshotfound) {
+          // console.log(mainmenu.name);
           for (let childindex = startchildmenuindex; childindex < mainmenu.children.length; childindex++) {
             const child = mainmenu.children[childindex];
             if (!nextactiveshotfound) {
+              // console.log(child.name);
               for (let shotindex = startshotindex; shotindex < child.shots.length; shotindex++) {
                 const shot = child.shots[shotindex];
-                if (!nextactiveshotfound && shot.ispending && !shot.visitedonce) {
+                if (!nextactiveshotfound && shot.ispending && (shot.required || (!shot.required && !shot.visitedonce))) {
+                  // console.log(shot.shotinfo);
                   nextactiveshotfound = true;
                   this.nextfoundshotindex = shotindex;
                   this.nextfoundchildindex = childindex;
@@ -1388,35 +1398,31 @@ export class StartsurveyPage implements OnInit {
   markallpreviousoptionalstepsnotpending(maxmainindex, maxchildindex) {
     for (let mainindex = 0; mainindex <= maxmainindex; mainindex++) {
       const mainmenu = this.mainmenuitems[mainindex];
-      if(mainmenu.ispending){
-        console.log(mainmenu.name+" main pending");
+      if(mainmenu.visitedonce){
+        console.log(mainmenu.name+" main visited once");
         if(mainindex == maxmainindex){
           for (let childindex = 0; childindex < maxchildindex; childindex++) {
             const child = mainmenu.children[childindex];
-            if(child.ispending){
-              console.log(child.name+" child pending");
+            console.log(child.name);
               for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
                 const shot = child.shots[shotindex];
                 if(!shot.required){
-                  console.log(shot.shotinfo+" is not required shot");
-                  this.mainmenuitems[mainindex].children[childindex].shots[shotindex].ispending = false;
+                  console.log(shot.shotinfo+" is not required shot so setting visited once true");
+                  this.mainmenuitems[mainindex].children[childindex].shots[shotindex].visitedonce = true;
                 }
               }
-            }
           }
         }else{
           for (let childindex = 0; childindex < mainmenu.children.length; childindex++) {
             const child = mainmenu.children[childindex];
-            if(child.ispending){
-              console.log(child.name+" child pending");
+            console.log(child.name);
               for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
                 const shot = child.shots[shotindex];
                 if(!shot.required){
-                  console.log(shot.shotinfo+" is not required shot");
-                  this.mainmenuitems[mainindex].children[childindex].shots[shotindex].ispending = false;
+                  console.log(shot.shotinfo+" is not required shot so setting visited once true");
+                  this.mainmenuitems[mainindex].children[childindex].shots[shotindex].visitedonce = true;
                 }
               }
-            }
           }
         }
       }

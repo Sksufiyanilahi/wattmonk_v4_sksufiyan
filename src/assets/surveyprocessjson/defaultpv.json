@@ -9,6 +9,7 @@
                 "ispending": true,
                 "isvisible": true,
                 "viewmode": 0,
+                "visitedonce": false,
                 "children": [
                     {
                         "isvisible": true,
@@ -378,6 +379,7 @@
                 "ispending": true,
                 "isvisible": true,
                 "viewmode": 0,
+                "visitedonce": false,
                 "children": [
                     {
                         "isvisible": true,
@@ -875,6 +877,7 @@
                 "ispending": true,
                 "isvisible": true,
                 "viewmode": 0,
+                "visitedonce": false,
                 "children": [
                     {
                         "isvisible": true,
@@ -988,6 +991,7 @@
                 "ispending": true,
                 "isvisible": true,
                 "viewmode": 0,
+                "visitedonce": false,
                 "children": [
                     {
                         "isvisible": true,
@@ -1127,6 +1131,7 @@
                 "ispending": true,
                 "isvisible": true,
                 "viewmode": 1,
+                "visitedonce": false,
                 "children": [
                     {
                         "isvisible": true,
