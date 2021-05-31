@@ -1259,187 +1259,167 @@ export class StartsurveyPage implements OnInit {
         this.updateProgressStatus();
       }
 
-      //Check for more pending shots in same child
-      var ispendingelementfound = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shotelement, shotindex) => {
-        if (shotelement.ispending && !ispendingelementfound) {
-          console.log("pending shot found--" + shotelement.shotinfo);
-          ispendingelementfound = true;
-          this.selectedshotindex = shotindex;
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
-        }
-      });
+      //Check for more pending shots in same child if found activate that
+      var startindex = this.selectedshotindex;
+      if(startindex == this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length){
+        startindex = 0;
+      }else{
+        startindex += 1;
+      }
+      var nextpendingshotfound = this.findincompleteshotinsamechild(this.selectedmainmenuindex, this.selectedsubmenuindex, startindex, this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length);
 
-      if (ispendingelementfound) {
+      if (nextpendingshotfound) {
         console.log("moving to next step");
-        this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
+        this.selectedshotindex = this.nextfoundshotindex;
+        this.activateshot();
       } else {
         console.log("marking child completion--" + this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
-        this.checkincompletechilds();
+        this.markchildcompletion();
       }
     } catch (error) {
       console.log("markshotcompletion---" + error);
     }
   }
 
-  checkincompletechilds() {
+  findincompleteshotinsamechild(mainindex, childindex, startshotindex, endshotindex){
+    var nextpendingshotfound = false;
+    console.log("main menu --"+this.mainmenuitems[mainindex].name);
+    console.log("child --"+this.mainmenuitems[mainindex].children[childindex].name);
+    for (let shotindex = startshotindex; shotindex < endshotindex; shotindex++) {
+      const shot = this.mainmenuitems[mainindex].children[childindex].shots[shotindex];
+      if (!nextpendingshotfound && shot.ispending && (shot.required || (!shot.required && !shot.visitedonce))) {
+        console.log("findincompleteshotinsamechild---"+shot.shotinfo);
+        // console.log(shot.shotinfo);
+        nextpendingshotfound = true;
+        this.nextfoundshotindex = shotindex;
+        this.selectedsubmenuindex = childindex;
+        return nextpendingshotfound;
+      }
+    }
+    if(!nextpendingshotfound && startshotindex > 0){
+      console.log("findincompleteshotinsamechild starting from start");
+      this.findincompleteshotinsamechild(mainindex, childindex, 0, startshotindex);
+    }else{
+      console.log("findincompleteshotinsamechild shot not found");
+      return nextpendingshotfound;
+    }
+  }
+
+  markchildcompletion() {
     try {
       //Check for more pending child in same menu
-      var ispendingelementfound = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children.forEach((childelement, childindex) => {
-        if (!ispendingelementfound && childelement.ispending) {
-          var isanyrequiredshotpending = this.checkanyrequiredshotpendinginchild(this.selectedmainmenuindex, childindex);
-
-          if (isanyrequiredshotpending) {
-            console.log("pending child found---" + childelement.name);
-            ispendingelementfound = true;
-            this.selectedsubmenuindex = childindex;
-            this.selectedshotindex = 0;
-            this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
-          } else {
-            this.mainmenuitems[this.selectedmainmenuindex].children[childindex].ispending = false;
-          }
-        }
-      });
-
-      if (ispendingelementfound) {
-        console.log("moving to next possible step");
-        this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
+      var startindex = this.selectedsubmenuindex;
+      if(startindex == this.mainmenuitems[this.selectedmainmenuindex].children.length){
+        startindex = 0;
+      }else{
+        startindex += 1;
+      }
+      var nextpendingshotfound = this.findincompleteshotindifferentchild(this.selectedmainmenuindex, startindex, this.mainmenuitems[this.selectedmainmenuindex].children.length, 0);
+      if (nextpendingshotfound) {
+        console.log("moving to next step");
+        this.selectedshotindex = this.nextfoundshotindex;
+        this.selectedsubmenuindex = this.nextfoundchildindex;
+        this.activateshot();
       } else {
         console.log("marking main menu completion---" + this.mainmenuitems[this.selectedmainmenuindex].name);
         this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
-        this.checkincompletemainmenus();
+        this.markmaincompletion();
       }
     } catch (error) {
       console.log("markchildcompletion---" + error);
     }
   }
 
-  checkincompletemainmenus() {
-    try {
-      //Check for more pending main menus
-      var ispendingelementfound = false;
-      this.mainmenuitems.forEach((mainelement, mainindex) => {
-        if (mainelement.ispending && !ispendingelementfound) {
-          var isanyrequiredshotpending = this.checkanyrequiredshotpendinginmainmenu(mainindex);
-
-          if (isanyrequiredshotpending) {
-            console.log("main element pending---" + mainelement.name);
-            ispendingelementfound = true;
-            this.selectedmainmenuindex = mainindex;
-            this.selectedsubmenuindex = 0;
-            this.selectedshotindex = 0;
+  findincompleteshotindifferentchild(startmainindex, startchildindex, endchildindex, startshotindex){
+    var nextpendingshotfound = false;
+    console.log("main menu in different child---"+this.mainmenuitems[startmainindex].name);
+    for (let childindex = startchildindex; childindex < endchildindex; childindex++) {
+      if(!nextpendingshotfound){
+        const child = this.mainmenuitems[startmainindex].children[childindex];
+        console.log("findincompleteshotindifferentchild---"+child.name);
+        if(child.shots.length > 0){
+          var pendingshotfound = this.findincompleteshotinsamechild(startmainindex, childindex, startshotindex, child.shots.length);
+          if(pendingshotfound){
+            nextpendingshotfound = true;
+            this.nextfoundshotindex = startshotindex;
+            this.nextfoundchildindex = childindex;
+            this.nextfoundmainindex = startmainindex;
+            return nextpendingshotfound;
           }
         }
-      });
+      }
+    }
+    if(!nextpendingshotfound && startchildindex > 0){
+      this.findincompleteshotindifferentchild(startmainindex, 0, startchildindex, 0);
+    }else{
+      return nextpendingshotfound;
+    }
+  }
 
-      this.deactivateallmenuitems();
-
-      if (ispendingelementfound) {
-        console.log("pending element found ---" + this.mainmenuitems[this.selectedmainmenuindex].name);
-        this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
+  markmaincompletion() {
+    try {
+      //Check for more pending main menus
+      var startindex = this.selectedmainmenuindex;
+      if(startindex == this.mainmenuitems.length){
+        startindex = 0;
+      }else{
+        startindex += 1;
+      }
+      var nextpendingshotfound = this.findincompleteshotindifferentmenu(0, startindex, this.mainmenuitems.length);
+      if (nextpendingshotfound) {
+        console.log("moving to next step");
+        this.selectedshotindex = this.nextfoundshotindex;
+        this.selectedsubmenuindex = this.nextfoundchildindex;
+        this.selectedmainmenuindex = this.nextfoundmainindex;
+        this.activateshot();
       } else {
         this.selectedmainmenuindex = this.mainmenuitems.length - 1;
         this.selectedsubmenuindex = 0;
         this.selectedshotindex = 0;
-        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
-        }
+        this.activateshot();
       }
     } catch (error) {
       console.log("markmainmenucompletion---" + error);
     }
   }
 
-  checkanyrequiredshotpendinginmainmenu(mainindex) {
-    this.mainmenuitems[mainindex].children.forEach(child => {
-      if (child.shots.length > 0) {
-        child.shots.forEach(shot => {
-          if (shot.required && shot.ispending) {
-            return true;
-          }
-        });
-      }
-    });
-    return false;
-  }
-
-  checkanyrequiredshotpendinginchild(mainindex, childindex) {
-    this.mainmenuitems[mainindex].children[childindex].shots.forEach(shotelement => {
-      if (shotelement.ispending && shotelement.required) {
-        return true;
-      }
-    });
-    return false;
-  }
-
-  movetonextpossibleactionablestep(startmainmenuindex, startchildmenuindex, startshotindex) {
-    try {
-      this.deactivateallmenuitems();
-      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
-        if (this.findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex)) {
-          this.activateshot();
-        } else {
-          if (this.findnextpossibleshot(0, 0, 0)) {
-            this.activateshot();
-          }
-        }
-      } else {
-        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
-      }
-      this.saveintermediatesurveydata();
-    } catch (error) {
-      console.log("movetonextpossibleactionablestep---" + error);
-    }
-  }
-
-  findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex) {
-    try {
-      let nextactiveshotfound = false;
-      for (let mainmenuindex = startmainmenuindex; mainmenuindex < this.mainmenuitems.length; mainmenuindex++) {
+  findincompleteshotindifferentmenu(startchildindex, startmainindex, endmainindex){
+    var nextpendingshotfound = false;
+    for (let mainmenuindex = startmainindex; mainmenuindex < endmainindex; mainmenuindex++) {
+      if(!nextpendingshotfound){
         const mainmenu = this.mainmenuitems[mainmenuindex];
-        if (!nextactiveshotfound) {
-          // console.log(mainmenu.name);
-          for (let childindex = startchildmenuindex; childindex < mainmenu.children.length; childindex++) {
-            const child = mainmenu.children[childindex];
-            if (!nextactiveshotfound) {
-              // console.log(child.name);
-              for (let shotindex = startshotindex; shotindex < child.shots.length; shotindex++) {
-                const shot = child.shots[shotindex];
-                if (!nextactiveshotfound && shot.ispending && (shot.required || (!shot.required && !shot.visitedonce))) {
-                  // console.log(shot.shotinfo);
-                  nextactiveshotfound = true;
-                  this.nextfoundshotindex = shotindex;
-                  this.nextfoundchildindex = childindex;
-                  this.nextfoundmainindex = mainmenuindex;
-                  return nextactiveshotfound;
-                }
-              }
-            }
-          }
+        console.log("findincompleteshotindifferentmenu---"+mainmenu.name);
+        var pendingshotfound = this.findincompleteshotindifferentchild(mainmenuindex, startchildindex, mainmenu.children.length, 0);
+        if(pendingshotfound){
+          nextpendingshotfound = true;
+          this.nextfoundmainindex = mainmenuindex;
+          return nextpendingshotfound;
         }
       }
-      return false;
-    } catch (error) {
-      console.log("findnextpossibleshot---" + error);
+    }
+    if(!nextpendingshotfound && startmainindex > 0){
+      this.findincompleteshotindifferentmenu(0, 0, startmainindex);
+    }else{
+      return nextpendingshotfound;
     }
   }
 
   activateshot() {
     try {
+      this.deactivateallmenuitems();
       this.selectedshotindex = this.nextfoundshotindex;
       this.selectedsubmenuindex = this.nextfoundchildindex;
       this.selectedmainmenuindex = this.nextfoundmainindex;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+      if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0){
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
+      }
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
       this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
       this.mainmenuitems[this.selectedmainmenuindex].visitedonce = true;
       this.markallpreviousoptionalstepsnotpending(this.selectedmainmenuindex, this.selectedsubmenuindex);
+      // this.saveintermediatesurveydata();
     } catch (error) {
       console.log("activateshot---" + error);
     }
@@ -1667,7 +1647,7 @@ export class StartsurveyPage implements OnInit {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
 
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
-        this.checkincompletechilds();
+        this.markchildcompletion();
       }
     } catch (error) {
       console.log("handleExistence---" + error);
@@ -1774,7 +1754,7 @@ export class StartsurveyPage implements OnInit {
         });
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
-        this.checkincompletechilds();
+        this.markchildcompletion();
       }
     } catch (error) {
       console.log("onchildmodechanged---" + error);
