@@ -67,7 +67,6 @@ export interface SHOT {
   imagequality: number;
   imageuploadname: string;
   required: boolean;
-  capturedonce: boolean;
   visitedonce: boolean;
   forminputfields: string[];
 }
@@ -1169,7 +1168,6 @@ export class StartsurveyPage implements OnInit {
     try {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].shotimage = capturedImage;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = false;
-      this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].capturedonce = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
       this.updateshotscapturedcount();
       this.handleshotquestion();

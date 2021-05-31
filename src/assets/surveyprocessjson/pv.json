@@ -47,8 +47,7 @@
                   "outside"
                 ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 2,
@@ -75,8 +74,7 @@
                   "confirm"
                 ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 2,
@@ -103,8 +101,7 @@
                   "confirm"
                 ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 1,
@@ -134,15 +131,14 @@
                   "none"
                 ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               }
             ],
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
             "formelements": [],
-            "shotscapturedcount" : 0
+            "shotscapturedcount": 0
           },
           {
             "isvisible": true,
@@ -181,8 +177,7 @@
                   "detach"
                 ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 2,
@@ -209,15 +204,14 @@
                   "confirm"
                 ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               }
             ],
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
             "formelements": [],
-            "shotscapturedcount" : 0
+            "shotscapturedcount": 0
           },
           {
             "isvisible": true,
@@ -256,8 +250,7 @@
                   "outside"
                 ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 4,
@@ -285,8 +278,7 @@
                   "confirm"
                 ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -311,8 +303,7 @@
                 "result": "",
                 "actions": [],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -337,8 +328,7 @@
                 "result": "",
                 "actions": [],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -363,15 +353,14 @@
                 "result": "",
                 "actions": [],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               }
             ],
             "checkexistence": true,
             "existenceresult": true,
             "capturedshots": [],
             "formelements": [],
-            "shotscapturedcount" : 0
+            "shotscapturedcount": 0
           }
         ]
       },
@@ -418,8 +407,7 @@
                   "Confirm"
                 ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -444,8 +432,7 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -470,8 +457,7 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -496,8 +482,7 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -522,8 +507,7 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -548,8 +532,7 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -574,15 +557,14 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               }
             ],
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
             "formelements": [],
-            "shotscapturedcount" : 0
+            "shotscapturedcount": 0
           },
           {
             "isvisible": true,
@@ -618,8 +600,7 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -644,8 +625,7 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -670,8 +650,7 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -696,8 +675,7 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -722,8 +700,7 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
                 "questiontype": 0,
@@ -748,15 +725,14 @@
                 "result": "",
                 "actions": [],
                 "required": false,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               }
             ],
             "checkexistence": false,
             "existenceresult": true,
             "capturedshots": [],
             "formelements": [],
-            "shotscapturedcount" : 0
+            "shotscapturedcount": 0
           }
         ]
       },
@@ -779,63 +755,69 @@
             "placeholder": "Is structural stamp required in this area?",
             "shots": [
               {
-                "questiontype": 0,
+                "questiontype": 1,
                 "imagekey": "atticimages",
                 "imagename": "atticwideshoturl",
                 "imagequality": 60,
                 "imageuploadname": "atticwideshoturl",
                 "capturedshotinfo": "Attic Wide Angle SHot",
-                "question": "",
+                "question": "What is the type of frame?",
                 "shotinfo": "Capture Attic Wide Angle Shot",
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
                 "inputformcontrol": [
-                  ""
+                  "framing"
                 ],
                 "forminputfields": [],
                 "isactive": false,
-                "placeholder": "",
-                "questioninfo": "",
+                "placeholder": "Framing",
+                "questioninfo": "Provide Type of Frame Details",
                 "questionstatus": false,
                 "result": "",
-                "actions": [],
+                "actions": [
+                  "truss",
+                  "rafter"
+                ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               },
               {
-                "questiontype": 0,
+                "questiontype": 8,
                 "imagekey": "atticimages",
                 "imagename": "atticrequiredshoturl",
                 "imagequality": 60,
                 "imageuploadname": "atticrequiredshoturl",
                 "capturedshotinfo": "Attic Required Shot",
-                "question": "",
+                "question": "What's the size of the raft (thickness x width)?",
                 "shotinfo": "Capture image with measuring tape between two rafters",
                 "promptquestion": false,
                 "shotstatus": false,
                 "ispending": true,
                 "inputformcontrol": [
-                  ""
+                  "framingsize"
                 ],
-                "forminputfields": [],
+                "forminputfields": [
+                  "raftthickness",
+                  "raftwidth"
+                ],
                 "isactive": false,
-                "placeholder": "",
-                "questioninfo": "",
+                "placeholder": "Framing Size",
+                "questioninfo": "Provide Size Details",
                 "questionstatus": false,
                 "result": "",
-                "actions": [],
+                "actions": [
+                  "Confirm"
+                ],
                 "required": true,
-                "visitedonce": false,
-                "capturedonce": false
+                "visitedonce": false
               }
             ],
             "checkexistence": true,
             "existenceresult": true,
             "capturedshots": [],
             "formelements": [],
-            "shotscapturedcount" : 0
+            "shotscapturedcount": 0
           }
         ]
       },
@@ -1004,7 +986,7 @@
                 "attachments": []
               }
             ],
-            "shotscapturedcount" : 0
+            "shotscapturedcount": 0
           }
         ]
       }
