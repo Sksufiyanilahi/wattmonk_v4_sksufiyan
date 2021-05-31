@@ -253,8 +253,8 @@ export class StartsurveyPage implements OnInit {
       this.surveyid = +this.route.snapshot.paramMap.get('id');
       this.surveytype = this.route.snapshot.paramMap.get('type');
 
-      // this.loadSurveyJSON('pvsurveyjson');
-      this.loadLocalJSON();
+      this.loadSurveyJSON('pvsurveyjson');
+      // this.loadLocalJSON();
       // this.getCurrentCoordinates();
     } catch (error) {
       console.log("ngOnInit---" + error);
