@@ -257,7 +257,7 @@ export class StartsurveyPage implements OnInit {
       this.loadLocalJSON();
       // this.getCurrentCoordinates();
     } catch (error) {
-      console.log("ngOnInit---"+error);
+      console.log("ngOnInit---" + error);
     }
   }
 
@@ -327,7 +327,7 @@ export class StartsurveyPage implements OnInit {
             }
           });
           this.mainmenuitems[this.selectedmainmenuindex].visitedonce = true;
-          if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0){
+          if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
           }
           this.createSurveyForm(surveydata);
@@ -337,7 +337,7 @@ export class StartsurveyPage implements OnInit {
         }
       });
     } catch (error) {
-      console.log("restoreSurveyStoredData---"+error);
+      console.log("restoreSurveyStoredData---" + error);
     }
   }
 
@@ -409,7 +409,7 @@ export class StartsurveyPage implements OnInit {
       // console.log(this.activeFormElementsArray);
       this.activeForm = new FormGroup(formData);
     } catch (error) {
-      console.log("createSurveyForm---"+error);
+      console.log("createSurveyForm---" + error);
     }
   }
 
@@ -475,7 +475,7 @@ export class StartsurveyPage implements OnInit {
       this.activeFormElementsArray.push('shotname');
       this.activeForm = new FormGroup(formData);
     } catch (error) {
-      console.log("restoreStoredForm---"+error);
+      console.log("restoreStoredForm---" + error);
     }
   }
 
@@ -492,7 +492,7 @@ export class StartsurveyPage implements OnInit {
       uploadstatus: false
     };
     this.mainmenuitems[mainindex].children[childindex].capturedshots.push(captureshot);
-    if(shot.required){
+    if (shot.required) {
       this.mainmenuitems[mainindex].children[childindex].requiredshotscount += 1;
     }
   }
@@ -578,7 +578,7 @@ export class StartsurveyPage implements OnInit {
         }
       });
     } catch (error) {
-      console.log("getcountoffiletoupload---"+error);
+      console.log("getcountoffiletoupload---" + error);
     }
   }
 
@@ -633,7 +633,7 @@ export class StartsurveyPage implements OnInit {
         reader.readAsDataURL(ev.target.files[i]);
       }
     } catch (error) {
-      console.log("addselectedfiles---"+error);
+      console.log("addselectedfiles---" + error);
     }
   }
 
@@ -832,7 +832,7 @@ export class StartsurveyPage implements OnInit {
       });
       toast.present();
     } catch (error) {
-      console.log("navigatetoincompletestep---"+error);
+      console.log("navigatetoincompletestep---" + error);
     }
   }
 
@@ -848,39 +848,39 @@ export class StartsurveyPage implements OnInit {
   async saveFormData() {
     try {
       this.saveintermediatesurveydata();
-    //Code to check incomplete items
-    let nopendingshotfound = true;
-    // console.log(this.mainmenuitems);
-    this.mainmenuitems.forEach((mainmenuitem, mainindex) => {
-      if (mainmenuitem.ispending && nopendingshotfound) {
-        mainmenuitem.children.forEach((childelement, childindex) => {
-          if (childelement.ispending && nopendingshotfound) {
-            childelement.shots.forEach((shot, shotindex) => {
-              if (shot.required && shot.ispending && nopendingshotfound) {
-                nopendingshotfound = false;
-                this.navigatetoincompletestep(shotindex, childindex, mainindex);
-              }
-            });
-          }
-        });
-      }
-    });
+      //Code to check incomplete items
+      let nopendingshotfound = true;
+      // console.log(this.mainmenuitems);
+      this.mainmenuitems.forEach((mainmenuitem, mainindex) => {
+        if (mainmenuitem.ispending && nopendingshotfound) {
+          mainmenuitem.children.forEach((childelement, childindex) => {
+            if (childelement.ispending && nopendingshotfound) {
+              childelement.shots.forEach((shot, shotindex) => {
+                if (shot.required && shot.ispending && nopendingshotfound) {
+                  nopendingshotfound = false;
+                  this.navigatetoincompletestep(shotindex, childindex, mainindex);
+                }
+              });
+            }
+          });
+        }
+      });
 
-    if (nopendingshotfound) {
-      if (this.activeForm.status == 'VALID') {
-        this.uploadfilestoserver();
+      if (nopendingshotfound) {
+        if (this.activeForm.status == 'VALID') {
+          this.uploadfilestoserver();
+        }
+        else {
+          const toast = await this.toastController.create({
+            message: 'Please input required field details.',
+            duration: 2000
+          });
+          toast.present();
+          console.log(this.utilitieservice.findInvalidControls(this.activeForm));
+        }
       }
-      else {
-        const toast = await this.toastController.create({
-          message: 'Please input required field details.',
-          duration: 2000
-        });
-        toast.present();
-        console.log(this.utilitieservice.findInvalidControls(this.activeForm));
-      }
-    }
     } catch (error) {
-      console.log("saveFormData---"+error);
+      console.log("saveFormData---" + error);
     }
   }
 
@@ -958,7 +958,7 @@ export class StartsurveyPage implements OnInit {
         });
       }
     } catch (error) {
-      console.log("uploadattachmentbyindex---"+error);
+      console.log("uploadattachmentbyindex---" + error);
     }
   }
 
@@ -982,7 +982,7 @@ export class StartsurveyPage implements OnInit {
         this.uploadImageByIndex(imagesArray, 0, this.totalimagestoupload, false);
       });
     } catch (error) {
-      console.log("uploadImagesToServer---"+error);
+      console.log("uploadImagesToServer---" + error);
     }
   }
 
@@ -1036,7 +1036,7 @@ export class StartsurveyPage implements OnInit {
         });
       }
     } catch (error) {
-      console.log("uploadImageByIndex---"+error);
+      console.log("uploadImageByIndex---" + error);
     }
   }
 
@@ -1095,7 +1095,7 @@ export class StartsurveyPage implements OnInit {
         });
       });
     } catch (error) {
-      console.log("savedetailsformdata---"+error);
+      console.log("savedetailsformdata---" + error);
     }
   }
 
@@ -1118,7 +1118,7 @@ export class StartsurveyPage implements OnInit {
       }
       this.markallpreviousoptionalstepsnotpending(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
-      console.log("selectmainmenu---"+error);
+      console.log("selectmainmenu---" + error);
     }
   }
 
@@ -1134,7 +1134,7 @@ export class StartsurveyPage implements OnInit {
       }
       this.markallpreviousoptionalstepsnotpending(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
-      console.log("selectsubmenu---"+error);
+      console.log("selectsubmenu---" + error);
     }
   }
 
@@ -1176,7 +1176,7 @@ export class StartsurveyPage implements OnInit {
       this.updateshotscapturedcount();
       this.handleshotquestion();
     } catch (error) {
-      console.log("handleshotimage---"+error);
+      console.log("handleshotimage---" + error);
     }
   }
 
@@ -1191,7 +1191,7 @@ export class StartsurveyPage implements OnInit {
 
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount = capturedshots;
     } catch (error) {
-      console.log("updateshotscapturedcount---"+error);
+      console.log("updateshotscapturedcount---" + error);
     }
   }
 
@@ -1224,7 +1224,7 @@ export class StartsurveyPage implements OnInit {
       this.changedetectorref.detectChanges();
       this.animateElementOpacity(document.querySelector('.questionaireview'));
     } catch (error) {
-      console.log("handleshotquestion---"+error);
+      console.log("handleshotquestion---" + error);
     }
   }
 
@@ -1241,12 +1241,13 @@ export class StartsurveyPage implements OnInit {
         shotnameformcontrol.markAsDirty();
       }
     } catch (error) {
-      console.log("handleShotNameSubmission---"+error);
+      console.log("handleShotNameSubmission---" + error);
     }
   }
 
   markshotcompletion() {
     try {
+      console.log("inside markshotcompletion");
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
@@ -1262,6 +1263,7 @@ export class StartsurveyPage implements OnInit {
       var ispendingelementfound = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((shotelement, shotindex) => {
         if (shotelement.ispending && !ispendingelementfound) {
+          console.log("pending shot found--" + shotelement.shotinfo);
           ispendingelementfound = true;
           this.selectedshotindex = shotindex;
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
@@ -1269,62 +1271,109 @@ export class StartsurveyPage implements OnInit {
       });
 
       if (ispendingelementfound) {
+        console.log("moving to next step");
         this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
       } else {
-        this.markchildcompletion();
+        console.log("marking child completion--" + this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
+        this.checkincompletechilds();
       }
     } catch (error) {
-      console.log("markshotcompletion---"+error);
+      console.log("markshotcompletion---" + error);
     }
   }
 
-  markchildcompletion() {
+  checkincompletechilds() {
     try {
-      // this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
-
       //Check for more pending child in same menu
       var ispendingelementfound = false;
       this.mainmenuitems[this.selectedmainmenuindex].children.forEach((childelement, childindex) => {
-        if (childelement.ispending && !ispendingelementfound) {
-          ispendingelementfound = true;
-          this.selectedsubmenuindex = childindex;
-          this.selectedshotindex = 0;
-          this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+        if (!ispendingelementfound && childelement.ispending) {
+          var isanyrequiredshotpending = this.checkanyrequiredshotpendinginchild(this.selectedmainmenuindex, childindex);
+
+          if (isanyrequiredshotpending) {
+            console.log("pending child found---" + childelement.name);
+            ispendingelementfound = true;
+            this.selectedsubmenuindex = childindex;
+            this.selectedshotindex = 0;
+            this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
+          } else {
+            this.mainmenuitems[this.selectedmainmenuindex].children[childindex].ispending = false;
+          }
         }
       });
 
       if (ispendingelementfound) {
+        console.log("moving to next possible step");
         this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
       } else {
-        this.markmainmenucompletion();
+        console.log("marking main menu completion---" + this.mainmenuitems[this.selectedmainmenuindex].name);
+        this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
+        this.checkincompletemainmenus();
       }
     } catch (error) {
-      console.log("markchildcompletion---"+error);
+      console.log("markchildcompletion---" + error);
     }
   }
 
-  markmainmenucompletion() {
+  checkincompletemainmenus() {
     try {
-      this.deactivateallmenuitems();
-      this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
-
       //Check for more pending main menus
       var ispendingelementfound = false;
       this.mainmenuitems.forEach((mainelement, mainindex) => {
         if (mainelement.ispending && !ispendingelementfound) {
-          ispendingelementfound = true;
-          this.selectedmainmenuindex = mainindex;
-          this.selectedsubmenuindex = 0;
-          this.selectedshotindex = 0;
+          var isanyrequiredshotpending = this.checkanyrequiredshotpendinginmainmenu(mainindex);
+
+          if (isanyrequiredshotpending) {
+            console.log("main element pending---" + mainelement.name);
+            ispendingelementfound = true;
+            this.selectedmainmenuindex = mainindex;
+            this.selectedsubmenuindex = 0;
+            this.selectedshotindex = 0;
+          }
         }
       });
 
+      this.deactivateallmenuitems();
+
       if (ispendingelementfound) {
+        console.log("pending element found ---" + this.mainmenuitems[this.selectedmainmenuindex].name);
         this.movetonextpossibleactionablestep(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex);
+      } else {
+        this.selectedmainmenuindex = this.mainmenuitems.length - 1;
+        this.selectedsubmenuindex = 0;
+        this.selectedshotindex = 0;
+        this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
+        if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
+        }
       }
     } catch (error) {
-      console.log("markmainmenucompletion---"+error);
+      console.log("markmainmenucompletion---" + error);
     }
+  }
+
+  checkanyrequiredshotpendinginmainmenu(mainindex) {
+    this.mainmenuitems[mainindex].children.forEach(child => {
+      if (child.shots.length > 0) {
+        child.shots.forEach(shot => {
+          if (shot.required && shot.ispending) {
+            return true;
+          }
+        });
+      }
+    });
+    return false;
+  }
+
+  checkanyrequiredshotpendinginchild(mainindex, childindex) {
+    this.mainmenuitems[mainindex].children[childindex].shots.forEach(shotelement => {
+      if (shotelement.ispending && shotelement.required) {
+        return true;
+      }
+    });
+    return false;
   }
 
   movetonextpossibleactionablestep(startmainmenuindex, startchildmenuindex, startshotindex) {
@@ -1338,13 +1387,13 @@ export class StartsurveyPage implements OnInit {
             this.activateshot();
           }
         }
-      }else{
+      } else {
         this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
       }
       this.saveintermediatesurveydata();
     } catch (error) {
-      console.log("movetonextpossibleactionablestep---"+error);
+      console.log("movetonextpossibleactionablestep---" + error);
     }
   }
 
@@ -1376,7 +1425,7 @@ export class StartsurveyPage implements OnInit {
       }
       return false;
     } catch (error) {
-      console.log("findnextpossibleshot---"+error);
+      console.log("findnextpossibleshot---" + error);
     }
   }
 
@@ -1389,47 +1438,48 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isactive = true;
       this.mainmenuitems[this.selectedmainmenuindex].isactive = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
+      this.mainmenuitems[this.selectedmainmenuindex].visitedonce = true;
       this.markallpreviousoptionalstepsnotpending(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
-      console.log("activateshot---"+error);
+      console.log("activateshot---" + error);
     }
   }
 
   markallpreviousoptionalstepsnotpending(maxmainindex, maxchildindex) {
     for (let mainindex = 0; mainindex <= maxmainindex; mainindex++) {
       const mainmenu = this.mainmenuitems[mainindex];
-      if(mainmenu.visitedonce){
-        console.log(mainmenu.name+" main visited once");
-        if(mainindex == maxmainindex){
+      if (mainmenu.visitedonce) {
+        // console.log(mainmenu.name+" main visited once");
+        if (mainindex == maxmainindex) {
           for (let childindex = 0; childindex < maxchildindex; childindex++) {
             const child = mainmenu.children[childindex];
-            console.log(child.name);
-              for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
-                const shot = child.shots[shotindex];
-                if(!shot.required){
-                  console.log(shot.shotinfo+" is not required shot so setting visited once true");
-                  this.mainmenuitems[mainindex].children[childindex].shots[shotindex].visitedonce = true;
-                }
+            // console.log(child.name);
+            for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
+              const shot = child.shots[shotindex];
+              if (!shot.required) {
+                // console.log(shot.shotinfo+" is not required shot so setting visited once true");
+                this.mainmenuitems[mainindex].children[childindex].shots[shotindex].visitedonce = true;
               }
+            }
           }
-        }else{
+        } else {
           for (let childindex = 0; childindex < mainmenu.children.length; childindex++) {
             const child = mainmenu.children[childindex];
-            console.log(child.name);
-              for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
-                const shot = child.shots[shotindex];
-                if(!shot.required){
-                  console.log(shot.shotinfo+" is not required shot so setting visited once true");
-                  this.mainmenuitems[mainindex].children[childindex].shots[shotindex].visitedonce = true;
-                }
+            // console.log(child.name);
+            for (let shotindex = 0; shotindex < child.shots.length; shotindex++) {
+              const shot = child.shots[shotindex];
+              if (!shot.required) {
+                // console.log(shot.shotinfo+" is not required shot so setting visited once true");
+                this.mainmenuitems[mainindex].children[childindex].shots[shotindex].visitedonce = true;
               }
+            }
           }
         }
       }
     }
   }
 
-  deactivateallmenuitems(){
+  deactivateallmenuitems() {
     this.mainmenuitems.map(mainmenuitem => {
       mainmenuitem.isactive = false;
       mainmenuitem.children.map(child => {
@@ -1481,7 +1531,7 @@ export class StartsurveyPage implements OnInit {
       this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
       this.markshotcompletion();
     } catch (error) {
-      console.log("handleAnswerSubmission---"+error);
+      console.log("handleAnswerSubmission---" + error);
     }
   }
 
@@ -1517,7 +1567,7 @@ export class StartsurveyPage implements OnInit {
         }
       }
     } catch (error) {
-      console.log("handleInputSubmission---"+error);
+      console.log("handleInputSubmission---" + error);
     }
   }
 
@@ -1532,7 +1582,7 @@ export class StartsurveyPage implements OnInit {
         control.markAsDirty();
       }
     } catch (error) {
-      console.log("handleInputTextSubmission---"+error);
+      console.log("handleInputTextSubmission---" + error);
     }
   }
 
@@ -1549,7 +1599,7 @@ export class StartsurveyPage implements OnInit {
         invertermodelcontrol.markAsDirty();
       }
     } catch (error) {
-      console.log("handleInverterFieldsSubmission---"+error);
+      console.log("handleInverterFieldsSubmission---" + error);
     }
   }
 
@@ -1563,7 +1613,7 @@ export class StartsurveyPage implements OnInit {
         utilitycontrol.markAsDirty();
       }
     } catch (error) {
-      console.log("handleUtilitySubmission---"+error);
+      console.log("handleUtilitySubmission---" + error);
     }
   }
 
@@ -1577,7 +1627,7 @@ export class StartsurveyPage implements OnInit {
         roofmaterialcontrol.markAsDirty();
       }
     } catch (error) {
-      console.log("handleRoofMaterialSubmission---"+error);
+      console.log("handleRoofMaterialSubmission---" + error);
     }
   }
 
@@ -1598,6 +1648,7 @@ export class StartsurveyPage implements OnInit {
             }
           }
         });
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
       } else {
         //Mark shots as completed and required false
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
@@ -1613,14 +1664,13 @@ export class StartsurveyPage implements OnInit {
           }
         });
 
-        this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
 
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
-        this.markchildcompletion();
+        this.checkincompletechilds();
       }
     } catch (error) {
-      console.log("handleExistence---"+error);
+      console.log("handleExistence---" + error);
     }
   }
 
@@ -1643,7 +1693,7 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount -= 1;
     } catch (error) {
-      console.log("allowusertorecaptureshot---"+error);
+      console.log("allowusertorecaptureshot---" + error);
     }
   }
 
@@ -1684,7 +1734,7 @@ export class StartsurveyPage implements OnInit {
         }
       }
     } catch (error) {
-      console.log("promptstepquestion---"+error);
+      console.log("promptstepquestion---" + error);
     }
   }
 
@@ -1708,6 +1758,7 @@ export class StartsurveyPage implements OnInit {
             this.activeForm.get(element.inputformcontrol[1]).setValidators([Validators.required]);
           }
         });
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
       } else {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
           element.ispending = false;
@@ -1721,13 +1772,12 @@ export class StartsurveyPage implements OnInit {
             this.activeForm.get(element.inputformcontrol[1]).clearValidators();
           }
         });
-        this.mainmenuitems[this.selectedmainmenuindex].ispending = true;
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
-        this.markchildcompletion();
+        this.checkincompletechilds();
       }
     } catch (error) {
-      console.log("onchildmodechanged---"+error);
+      console.log("onchildmodechanged---" + error);
     }
   }
 
@@ -1752,7 +1802,7 @@ export class StartsurveyPage implements OnInit {
         this.changedetectorref.detectChanges();
       }
     } catch (error) {
-      console.log("toggleElementVisibility---"+error);
+      console.log("toggleElementVisibility---" + error);
     }
   }
 }
