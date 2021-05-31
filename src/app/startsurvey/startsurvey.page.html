@@ -21,7 +21,7 @@
             <div class="scroll" scrollX="true">
               <ng-container
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index">
-                <ion-button color="dark" (click)="selectcapturedshot($event, shotindex)" [ngClass]="[ this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex].required ? 'cameraimagesbutton required' : 'cameraimagesbutton']">
+                <ion-button (click)="selectcapturedshot($event, shotindex)" [ngClass]="[ this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex].required ? 'cameraimagesbutton required' : 'cameraimagesbutton']">
                   <img class="shotimage" *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
                   <img class="noimage" *ngIf="shot.imagecleared" src="/assets/images/noimage.png" />
                 </ion-button>
