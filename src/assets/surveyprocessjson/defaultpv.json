@@ -38,6 +38,7 @@
                                     "msplocation"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": true,
                                 "placeholder": "MSP Location",
                                 "questioninfo": "Provide MSP Location",
@@ -67,6 +68,13 @@
                                     "msprating"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 4,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "MSP Rating",
                                 "questioninfo": "Provide MSP Rating",
@@ -95,6 +103,13 @@
                                     "mainbreakersize"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 5,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "Main Breaker Size",
                                 "questioninfo": "Provide Main Breaker Size",
@@ -123,6 +138,7 @@
                                     "mspbreaker"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "MSP Breaker",
                                 "questioninfo": "Provide Main breaker location in MSP",
@@ -172,6 +188,7 @@
                                     "utilitymeter"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "Utility Meter",
                                 "questioninfo": "Provide Utility Meter",
@@ -201,6 +218,13 @@
                                     "utility"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 0,
+                                        "maxlength": 150,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "Utility Name",
                                 "questioninfo": "Provide Utility Name",
@@ -245,6 +269,7 @@
                                     "pvinverterlocation"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "PV Inverter Location",
                                 "questioninfo": "Provide Inverter Location",
@@ -275,6 +300,18 @@
                                     "invertermodel"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 0,
+                                        "maxlength": 150,
+                                        "regex": ""
+                                    },
+                                    {
+                                        "minlength": 0,
+                                        "maxlength": 150,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "PV Inverter Manufacturer and Model",
                                 "questioninfo": "Provide Inverter Manufacturer & Model",
@@ -303,6 +340,13 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 8,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "PV Meter",
@@ -328,6 +372,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -354,6 +399,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -408,6 +454,13 @@
                                     "rooftilt"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 3,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "Roof Tilt",
                                 "questioninfo": "Provide Roof Tilt / Slope (degrees)",
@@ -436,6 +489,13 @@
                                     "roofmaterial"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 0,
+                                        "maxlength": 150,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "Roof Material",
                                 "questioninfo": "Provide Roof Material",
@@ -462,6 +522,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -488,6 +549,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -514,6 +576,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -540,6 +603,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -566,6 +630,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -608,6 +673,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -652,6 +718,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -678,6 +745,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -704,6 +772,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -730,6 +799,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -756,6 +826,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -782,6 +853,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -808,6 +880,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -852,6 +925,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -906,6 +980,7 @@
                                     "framing"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "Framing",
                                 "questioninfo": "Provide Type of Frame Details",
@@ -937,6 +1012,18 @@
                                     "raftthickness",
                                     "raftwidth"
                                 ],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 3,
+                                        "regex": ""
+                                    },
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 3,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "Framing Size",
                                 "questioninfo": "Provide Size Details",
@@ -964,6 +1051,13 @@
                                     "distancebetweentworafts"
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 3,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "Distance between Two Rafts",
                                 "questioninfo": "Provide Spacing Details",
@@ -1020,6 +1114,13 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -1048,6 +1149,13 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -1076,6 +1184,13 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -1104,6 +1219,13 @@
                                     ""
                                 ],
                                 "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regex": ""
+                                    }
+                                ],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -1172,7 +1294,8 @@
                                         "value": false
                                     }
                                 ],
-                                "required": true
+                                "required": true,
+                                "formfieldvalidations":[]
                             },
                             {
                                 "inputformcontrol": [
@@ -1183,7 +1306,14 @@
                                 "visibility": false,
                                 "controltype": 7,
                                 "options": [],
-                                "required": false
+                                "required": false,
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 250,
+                                        "regex": ""
+                                    }
+                                ]
                             },
                             {
                                 "inputformcontrol": [
@@ -1204,7 +1334,8 @@
                                         "value": "underground"
                                     }
                                 ],
-                                "required": true
+                                "required": true,
+                                "formfieldvalidations":[]
                             },
                             {
                                 "inputformcontrol": [
@@ -1215,7 +1346,14 @@
                                 "visibility": true,
                                 "controltype": 7,
                                 "options": [],
-                                "required": false
+                                "required": false,
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 250,
+                                        "regex": ""
+                                    }
+                                ]
                             }
                         ],
                         "shotscapturedcount" : 0
