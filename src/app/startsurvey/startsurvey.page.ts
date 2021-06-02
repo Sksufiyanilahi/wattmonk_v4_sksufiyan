@@ -70,6 +70,7 @@ export interface SHOT {
   required: boolean;
   visitedonce: boolean;
   forminputfields: string[];
+  formfieldvalidations: VALIDATION[];
 }
 
 export interface CAPTUREDSHOT {
@@ -98,6 +99,21 @@ export interface FORMELEMENTS {
   attachments: FILE_ATTACHMENTS[];
   fileurls: any;
   required: boolean;
+  formfieldvalidations: VALIDATION[];
+}
+
+export interface VALIDATION {
+  minlength: number;
+  maxlength: number;
+  regextype: number;
+}
+
+export enum REGEXTYPE{
+  NUMERIC = 0,
+  ALPHANUMERIC = 1,
+  ALLCHARACTERS = 2,
+  MAKE = 3,
+  MODEL = 4
 }
 
 export interface FILE_ATTACHMENTS {
@@ -253,8 +269,8 @@ export class StartsurveyPage implements OnInit {
       this.surveyid = +this.route.snapshot.paramMap.get('id');
       this.surveytype = this.route.snapshot.paramMap.get('type');
 
-      this.loadSurveyJSON('pvsurveyjson');
-      // this.loadLocalJSON();
+      // this.loadSurveyJSON('pvsurveyjson');
+      this.loadLocalJSON();
       // this.getCurrentCoordinates();
     } catch (error) {
       console.log("ngOnInit---" + error);
@@ -272,7 +288,7 @@ export class StartsurveyPage implements OnInit {
 
   loadLocalJSON() {
     this.http
-      .get('assets/surveyprocessjson/pv.json')
+      .get('assets/surveyprocessjson/defaultpv.json')
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
       });
@@ -358,31 +374,18 @@ export class StartsurveyPage implements OnInit {
             if (child.shots) {
               child.shots.map((shot, shotindex) => {
                 this.createcapturedshotofitem(shot, mainindex, childindex, shotindex);
-                if (shot.inputformcontrol[0] !== '') {
-                  this.activeFormElementsArray.push(shot.inputformcontrol[0]);
-                  if (shot.required) {
-                    formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-                  } else {
-                    formData[shot.inputformcontrol[0]] = new FormControl('', []);
-                  }
-                  if (shot.inputformcontrol.length > 1) {
-                    this.activeFormElementsArray.push(shot.inputformcontrol[1]);
-                    if (shot.required) {
-                      formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
-                    } else {
-                      formData[shot.inputformcontrol[1]] = new FormControl('', []);
-                    }
-                  }
-                }
 
-                if (shot.forminputfields.length > 0) {
-                  shot.forminputfields.forEach(element => {
-                    if (shot.required) {
-                      formData[element] = new FormControl('', [Validators.required]);
-                    } else {
-                      formData[element] = new FormControl('', []);
-                    }
+                if (shot.questiontype != QUESTIONTYPE.INPUT_MULTI_NUMBER) {
+                  shot.inputformcontrol.forEach((control, controlindex) => {
+                    this.activeFormElementsArray.push(control);
+                    this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
                   });
+                } else {
+                  if (shot.forminputfields.length > 0) {
+                    shot.forminputfields.forEach((control, controlindex) => {
+                      this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
+                    });
+                  }
                 }
               });
             }
@@ -393,18 +396,13 @@ export class StartsurveyPage implements OnInit {
                 if (formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
                   this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
                 }
-                if (formElement.required) {
-                  formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-                } else {
-                  formData[formElement.inputformcontrol[0]] = new FormControl('', []);
-                }
+                this.addformfieldvalidations(formElement.formfieldvalidations[0], formData, formElement.inputformcontrol[0], formElement.required)
               });
             }
           });
         }
       });
       formData['shotname'] = new FormControl('', []);
-      // console.log(formData);
       this.activeFormElementsArray.push('shotname');
       // console.log(this.activeFormElementsArray);
       this.activeForm = new FormGroup(formData);
@@ -427,30 +425,17 @@ export class StartsurveyPage implements OnInit {
             }
             if (child.shots) {
               child.shots.map(shot => {
-                if (shot.inputformcontrol[0] !== '') {
-                  this.activeFormElementsArray.push(shot.inputformcontrol[0]);
-                  if (shot.required) {
-                    formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-                  } else {
-                    formData[shot.inputformcontrol[0]] = new FormControl('', []);
-                  }
-                  if (shot.inputformcontrol.length > 1) {
-                    this.activeFormElementsArray.push(shot.inputformcontrol[1]);
-                    if (shot.required) {
-                      formData[shot.inputformcontrol[1]] = new FormControl('', [Validators.required]);
-                    } else {
-                      formData[shot.inputformcontrol[1]] = new FormControl('', []);
-                    }
-                  }
-                }
-                if (shot.forminputfields.length > 0) {
-                  shot.forminputfields.forEach(element => {
-                    if (shot.required) {
-                      formData[element] = new FormControl('', [Validators.required]);
-                    } else {
-                      formData[element] = new FormControl('', []);
-                    }
+                if (shot.questiontype != QUESTIONTYPE.INPUT_MULTI_NUMBER) {
+                  shot.inputformcontrol.forEach((control, controlindex) => {
+                    this.activeFormElementsArray.push(control);
+                    this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
                   });
+                } else {
+                  if (shot.forminputfields.length > 0) {
+                    shot.forminputfields.forEach((control, controlindex) => {
+                      this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
+                    });
+                  }
                 }
               });
             }
@@ -461,11 +446,7 @@ export class StartsurveyPage implements OnInit {
                 if (formElement.controltype != CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD && formElement.controltype != CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
                   this.activeFormElementsArray.push(formElement.inputformcontrol[0]);
                 }
-                if (formElement.required) {
-                  formData[formElement.inputformcontrol[0]] = new FormControl('', [Validators.required]);
-                } else {
-                  formData[formElement.inputformcontrol[0]] = new FormControl('', []);
-                }
+                this.addformfieldvalidations(formElement.formfieldvalidations[0], formData, formElement.inputformcontrol[0], formElement.required)
               });
             }
           });
@@ -494,6 +475,67 @@ export class StartsurveyPage implements OnInit {
     this.mainmenuitems[mainindex].children[childindex].capturedshots.push(captureshot);
     if (shot.required) {
       this.mainmenuitems[mainindex].children[childindex].requiredshotscount += 1;
+    }
+  }
+
+  addformfieldvalidations(validations, formData, control, isrequired){
+    if(control != ""){
+      console.log(control);
+      if (validations != undefined && isrequired){
+        let regex = this.getFieldRegex(validations.regextype, validations.minlength, validations.maxlength);
+        formData[control] = new FormControl('', Validators.compose([Validators.required, Validators.pattern(regex)]));
+      }else if (validations != undefined && !isrequired){
+        let regex = this.getFieldRegex(validations.regextype, validations.minlength, validations.maxlength);
+        formData[control] = new FormControl('', Validators.compose([Validators.pattern(regex)]));
+      }else{
+        if(isrequired){
+          formData[control] = new FormControl('', [Validators.required]);
+        }else{
+          formData[control] = new FormControl('', []);
+        }
+      }
+    }
+  }
+
+  getFieldRegex(regextype, minlength, maxlength){
+    switch (regextype) {
+      case REGEXTYPE.NUMERIC:
+        return "^[0-9]{"+minlength+","+maxlength+"}$";
+      case REGEXTYPE.ALPHANUMERIC:
+        return "^[a-zA-Z0-9]{"+minlength+","+maxlength+"}$";
+      case REGEXTYPE.ALLCHARACTERS:
+        return "^.{"+minlength+","+maxlength+"}$";
+      case REGEXTYPE.MAKE:
+        return "^[a-zA-Z-_ ]{"+minlength+","+maxlength+"}$";
+      case REGEXTYPE.MODEL:
+        return "^[a-z0-9A-Z+-_([)/. {\\]}]{"+minlength+","+maxlength+"}$";
+      default:
+        return "^.{"+minlength+","+maxlength+"}$";
+    }
+  }
+
+  getErrorMessage(control: FormControl) {
+    console.log(control.errors);
+    if (control.hasError("required")) {
+      return "Field input is required";
+    }
+
+    if(control.hasError('pattern')){
+      let validations = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].formfieldvalidations[0];
+      switch (validations.regextype) {
+        case REGEXTYPE.NUMERIC:
+        return "Field can have only numeric values and minimum "+validations.minlength+" maximum "+validations.maxlength+" length";
+      case REGEXTYPE.ALPHANUMERIC:
+        return "Field cannot have any special characters and minimum "+validations.minlength+" maximum "+validations.maxlength+" length";
+      case REGEXTYPE.ALLCHARACTERS:
+        return "(Min- "+validations.minlength+" and minimum "+validations.minlength+" maximum "+validations.maxlength+" length";
+      case REGEXTYPE.MAKE:
+        return "Please enter valid format";
+      case REGEXTYPE.MODEL:
+        return "Please enter valid format";
+      default:
+        return "(Min- "+validations.minlength+" and minimum "+validations.minlength+" maximum "+validations.maxlength+" length";
+      }
     }
   }
 
@@ -1261,9 +1303,9 @@ export class StartsurveyPage implements OnInit {
 
       //Check for more pending shots in same child if found activate that
       let startindex = this.selectedshotindex;
-      if(startindex == this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length){
+      if (startindex == this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length) {
         startindex = 0;
-      }else{
+      } else {
         startindex += 1;
       }
       let nextpendingshotfound = this.findincompleteshotinsamechild(this.selectedmainmenuindex, this.selectedsubmenuindex, startindex, this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length);
@@ -1281,15 +1323,15 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
-  findincompleteshotinsamechild(mainindex, childindex, startshotindex, endshotindex){
+  findincompleteshotinsamechild(mainindex, childindex, startshotindex, endshotindex) {
     let nextpendingshotfound = false;
-    console.log("main menu --"+this.mainmenuitems[mainindex].name);
-    console.log("child --"+this.mainmenuitems[mainindex].children[childindex].name);
+    console.log("main menu --" + this.mainmenuitems[mainindex].name);
+    console.log("child --" + this.mainmenuitems[mainindex].children[childindex].name);
     for (let shotindex = startshotindex; shotindex < endshotindex; shotindex++) {
       const shot = this.mainmenuitems[mainindex].children[childindex].shots[shotindex];
       console.log("findincompleteshotinsamechild ------ still running");
       if (!nextpendingshotfound && shot.ispending && (shot.required || (!shot.required && !shot.visitedonce))) {
-        console.log("findincompleteshotinsamechild---"+shot.shotinfo);
+        console.log("findincompleteshotinsamechild---" + shot.shotinfo);
         nextpendingshotfound = true;
         this.nextfoundshotindex = shotindex;
         this.nextfoundchildindex = childindex;
@@ -1297,10 +1339,10 @@ export class StartsurveyPage implements OnInit {
         return nextpendingshotfound;
       }
     }
-    if(!nextpendingshotfound && startshotindex > 0){
+    if (!nextpendingshotfound && startshotindex > 0) {
       console.log("findincompleteshotinsamechild starting from start");
       this.findincompleteshotinsamechild(mainindex, childindex, 0, startshotindex);
-    }else{
+    } else {
       console.log("findincompleteshotinsamechild shot not found");
       return nextpendingshotfound;
     }
@@ -1310,9 +1352,9 @@ export class StartsurveyPage implements OnInit {
     try {
       //Check for more pending child in same menu
       let startindex = this.selectedsubmenuindex;
-      if(startindex == this.mainmenuitems[this.selectedmainmenuindex].children.length){
+      if (startindex == this.mainmenuitems[this.selectedmainmenuindex].children.length) {
         startindex = 0;
-      }else{
+      } else {
         startindex += 1;
       }
       let nextpendingshotfound = this.findincompleteshotindifferentchild(this.selectedmainmenuindex, startindex, this.mainmenuitems[this.selectedmainmenuindex].children.length, 0);
@@ -1329,17 +1371,17 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
-  findincompleteshotindifferentchild(startmainindex, startchildindex, endchildindex, startshotindex){
+  findincompleteshotindifferentchild(startmainindex, startchildindex, endchildindex, startshotindex) {
     let nextpendingshotfound = false;
-    console.log("main menu in different child---"+this.mainmenuitems[startmainindex].name);
+    console.log("main menu in different child---" + this.mainmenuitems[startmainindex].name);
     for (let childindex = startchildindex; childindex < endchildindex; childindex++) {
-      if(!nextpendingshotfound){
+      if (!nextpendingshotfound) {
         const child = this.mainmenuitems[startmainindex].children[childindex];
         console.log("findincompleteshotindifferentchild ------ still running");
-        console.log("findincompleteshotindifferentchild---"+child.name);
-        if(child.shots.length > 0){
+        console.log("findincompleteshotindifferentchild---" + child.name);
+        if (child.shots.length > 0) {
           var pendingshotfound = this.findincompleteshotinsamechild(startmainindex, childindex, startshotindex, child.shots.length);
-          if(pendingshotfound){
+          if (pendingshotfound) {
             nextpendingshotfound = true;
             this.nextfoundshotindex = startshotindex;
             this.nextfoundchildindex = childindex;
@@ -1349,10 +1391,10 @@ export class StartsurveyPage implements OnInit {
         }
       }
     }
-    if(!nextpendingshotfound && startchildindex > 0){
+    if (!nextpendingshotfound && startchildindex > 0) {
       console.log("findincompleteshotindifferentchild starting from start");
       this.findincompleteshotindifferentchild(startmainindex, 0, startchildindex, 0);
-    }else{
+    } else {
       console.log("findincompleteshotindifferentchild shot not found");
       return nextpendingshotfound;
     }
@@ -1362,9 +1404,9 @@ export class StartsurveyPage implements OnInit {
     try {
       //Check for more pending main menus
       let startindex = this.selectedmainmenuindex;
-      if(startindex == this.mainmenuitems.length){
+      if (startindex == this.mainmenuitems.length) {
         startindex = 0;
-      }else{
+      } else {
         startindex += 1;
       }
       let nextpendingshotfound = this.findincompleteshotindifferentmenu(0, startindex, this.mainmenuitems.length);
@@ -1382,25 +1424,25 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
-  findincompleteshotindifferentmenu(startchildindex, startmainindex, endmainindex){
+  findincompleteshotindifferentmenu(startchildindex, startmainindex, endmainindex) {
     let nextpendingshotfound = false;
     for (let mainmenuindex = startmainindex; mainmenuindex < endmainindex; mainmenuindex++) {
-      if(!nextpendingshotfound){
+      if (!nextpendingshotfound) {
         const mainmenu = this.mainmenuitems[mainmenuindex];
         console.log("findincompleteshotindifferentmenu ------ still running");
-        console.log("findincompleteshotindifferentmenu---"+mainmenu.name);
+        console.log("findincompleteshotindifferentmenu---" + mainmenu.name);
         var pendingshotfound = this.findincompleteshotindifferentchild(mainmenuindex, startchildindex, mainmenu.children.length, 0);
-        if(pendingshotfound){
+        if (pendingshotfound) {
           nextpendingshotfound = true;
           this.nextfoundmainindex = mainmenuindex;
           return nextpendingshotfound;
         }
       }
     }
-    if(!nextpendingshotfound && startmainindex > 0){
+    if (!nextpendingshotfound && startmainindex > 0) {
       console.log("findincompleteshotindifferentmenu starting from start");
       this.findincompleteshotindifferentmenu(0, 0, startmainindex);
-    }else{
+    } else {
       console.log("findincompleteshotindifferentmenu shot not found");
       return nextpendingshotfound;
     }
@@ -1412,8 +1454,8 @@ export class StartsurveyPage implements OnInit {
       this.selectedshotindex = this.nextfoundshotindex;
       this.selectedsubmenuindex = this.nextfoundchildindex;
       this.selectedmainmenuindex = this.nextfoundmainindex;
-      console.log(this.selectedmainmenuindex + "---" + this.selectedsubmenuindex + "----"+ this.selectedshotindex);
-      if(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0){
+      console.log(this.selectedmainmenuindex + "---" + this.selectedsubmenuindex + "----" + this.selectedshotindex);
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
       }
@@ -1521,33 +1563,40 @@ export class StartsurveyPage implements OnInit {
     try {
       const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       const control = form.get(activechild.shots[this.selectedshotindex].inputformcontrol);
-      if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_MULTI_NUMBER) {
-        let anyemptyfieldfound = false;
-        let preparedresult = "";
-        activechild.shots[this.selectedshotindex].forminputfields.forEach((field, index) => {
-          if (form.get(field).value != '') {
-            preparedresult += form.get(field).value;
-          } else {
-            preparedresult = "";
-            anyemptyfieldfound = true;
-            form.get(field).markAsTouched();
-            form.get(field).markAsDirty();
+      console.log(control.errors);
+      if(!control.hasError){
+        if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_MULTI_NUMBER) {
+          let anyemptyfieldfound = false;
+          let preparedresult = "";
+          activechild.shots[this.selectedshotindex].forminputfields.forEach((field, index) => {
+            if (form.get(field).value != '') {
+              preparedresult += form.get(field).value;
+            } else {
+              preparedresult = "";
+              anyemptyfieldfound = true;
+              form.get(field).markAsTouched();
+              form.get(field).markAsDirty();
+            }
+            if (index < activechild.shots[this.selectedshotindex].forminputfields.length - 1) {
+              preparedresult += 'X';
+            }
+          });
+          if (!anyemptyfieldfound) {
+            this.handleAnswerSubmission(preparedresult);
           }
-          if (index < activechild.shots[this.selectedshotindex].forminputfields.length - 1) {
-            preparedresult += 'X';
-          }
-        });
-        if (!anyemptyfieldfound) {
-          this.handleAnswerSubmission(preparedresult);
-        }
-      } else {
-        if (control.value != '') {
-          this.handleAnswerSubmission(control.value);
         } else {
-          control.markAsTouched();
-          control.markAsDirty();
+          if (control.value != '') {
+            this.handleAnswerSubmission(control.value);
+          } else {
+            control.markAsTouched();
+            control.markAsDirty();
+          }
         }
+      }else{
+        control.markAsTouched();
+        control.markAsDirty();
       }
+      
     } catch (error) {
       console.log("handleInputSubmission---" + error);
     }
@@ -1613,12 +1662,12 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
-  marksubmenuexistence(){
+  marksubmenuexistence() {
     //Check for more pending shots in same child if found activate that
     let startindex = this.selectedshotindex;
-    if(startindex == this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length){
+    if (startindex == this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length) {
       startindex = 0;
-    }else{
+    } else {
       startindex += 1;
     }
     let nextpendingshotfound = this.findincompleteshotinsamechild(this.selectedmainmenuindex, this.selectedsubmenuindex, startindex, this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length);

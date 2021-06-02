@@ -72,7 +72,7 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 4,
-                                        "regex": ""
+                                        "regextype": 0
                                     }
                                 ],
                                 "isactive": false,
@@ -107,7 +107,7 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 5,
-                                        "regex": ""
+                                        "regextype": 0
                                     }
                                 ],
                                 "isactive": false,
@@ -220,9 +220,9 @@
                                 "forminputfields": [],
                                 "formfieldvalidations":[
                                     {
-                                        "minlength": 0,
+                                        "minlength": 1,
                                         "maxlength": 150,
-                                        "regex": ""
+                                        "regextype": 3
                                     }
                                 ],
                                 "isactive": false,
@@ -304,12 +304,12 @@
                                     {
                                         "minlength": 0,
                                         "maxlength": 150,
-                                        "regex": ""
+                                        "regextype": 3
                                     },
                                     {
                                         "minlength": 0,
                                         "maxlength": 150,
-                                        "regex": ""
+                                        "regextype": 4
                                     }
                                 ],
                                 "isactive": false,
@@ -340,13 +340,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
-                                    {
-                                        "minlength": 1,
-                                        "maxlength": 8,
-                                        "regex": ""
-                                    }
-                                ],
+                                "formfieldvalidations":[],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "PV Meter",
@@ -458,7 +452,7 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 3,
-                                        "regex": ""
+                                        "regextype": 0
                                     }
                                 ],
                                 "isactive": false,
@@ -491,9 +485,9 @@
                                 "forminputfields": [],
                                 "formfieldvalidations":[
                                     {
-                                        "minlength": 0,
+                                        "minlength": 1,
                                         "maxlength": 150,
-                                        "regex": ""
+                                        "regextype": 3
                                     }
                                 ],
                                 "isactive": false,
@@ -1016,12 +1010,12 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 3,
-                                        "regex": ""
+                                        "regextype": 0
                                     },
                                     {
                                         "minlength": 1,
                                         "maxlength": 3,
-                                        "regex": ""
+                                        "regextype": 0
                                     }
                                 ],
                                 "isactive": false,
@@ -1055,7 +1049,7 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 3,
-                                        "regex": ""
+                                        "regextype": 0
                                     }
                                 ],
                                 "isactive": false,
@@ -1118,7 +1112,7 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
-                                        "regex": ""
+                                        "regextype": 1
                                     }
                                 ],
                                 "isactive": false,
@@ -1153,7 +1147,7 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
-                                        "regex": ""
+                                        "regextype": 1
                                     }
                                 ],
                                 "isactive": false,
@@ -1188,7 +1182,7 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
-                                        "regex": ""
+                                        "regextype": 1
                                     }
                                 ],
                                 "isactive": false,
@@ -1223,7 +1217,7 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
-                                        "regex": ""
+                                        "regextype": 1
                                     }
                                 ],
                                 "isactive": false,
@@ -1311,7 +1305,7 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 250,
-                                        "regex": ""
+                                        "regextype": 2
                                     }
                                 ]
                             },
@@ -1351,7 +1345,7 @@
                                     {
                                         "minlength": 1,
                                         "maxlength": 250,
-                                        "regex": ""
+                                        "regextype": 2
                                     }
                                 ]
                             }
