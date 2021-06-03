@@ -554,7 +554,7 @@ export class StartsurveyPage implements OnInit {
     }
   }
 
-  getErrorMessage(control: FormControl) {
+  getErrorMessage(control: AbstractControl) {
     if (control.hasError("required")) {
       return "Field input is required";
     }
