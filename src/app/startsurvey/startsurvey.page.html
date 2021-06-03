@@ -308,10 +308,9 @@
             <ion-input class="form-control" autocomplete="off"
               formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
             </ion-input>
-            <div class="error_div">
-              <div
-                *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
-                <span class="error">Field input is required.</span>
+            <div class="error_div" *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).touched)">
+              <div *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid">
+                <span class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]))}}</span>
               </div>
             </div>
           </form>
@@ -334,13 +333,12 @@
           </p>
           <form [formGroup]="activeForm" novalidate class="inputform">
             <app-auto-complete [dataList]="utilities" class="form-control" mode="object"
-              formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}"
+              formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]}}"
               #make>
             </app-auto-complete>
-            <div class="error_div">
-              <div
-                *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
-                <span class="error">Field input is required.</span>
+            <div class="error_div" *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).touched)">
+              <div *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid">
+                <span class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]))}}</span>
               </div>
             </div>
           </form>
@@ -365,10 +363,9 @@
               formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}"
               #make>
             </app-auto-complete>
-            <div class="error_div">
-              <div
-                *ngIf="activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).value === '' && activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty">
-                <span class="error">Field input is required.</span>
+            <div class="error_div" *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).touched)">
+              <div *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid">
+                <span class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]))}}</span>
               </div>
             </div>
           </form>
@@ -392,17 +389,17 @@
             <app-auto-complete placeholder="inverter make*" [dataList]="invertermakes" class="form-control"
               mode="object" formControlName="invertermake" #invertermake>
             </app-auto-complete>
-            <div class="error_div ion-margin-bottom">
-              <div *ngIf="activeForm.get('invertermake').value === '' && activeForm.get('invertermake').dirty">
-                <span class="error">Field input is required.</span>
+            <div class="error_div ion-margin-bottom" *ngIf="this.activeForm.get('invertermake').invalid && (this.activeForm.get('invertermake').dirty || this.activeForm.get('invertermake').touched)">
+              <div *ngIf="this.activeForm.get('invertermake').invalid">
+                <span class="error">{{getErrorMessage(this.activeForm.get('invertermake'))}}</span>
               </div>
             </div>
             <app-auto-complete placeholder="inverter model*" [dataList]="invertermodels"
               class="form-control ion-margin-top" mode="object" formControlName="invertermodel" #invertermodel>
             </app-auto-complete>
-            <div class="error_div">
-              <div *ngIf="activeForm.get('invertermodel').value === '' && activeForm.get('invertermodel').dirty">
-                <span class="error">Field input is required.</span>
+            <div class="error_div ion-margin-bottom" *ngIf="this.activeForm.get('invertermodel').invalid && (this.activeForm.get('invertermodel').dirty || this.activeForm.get('invertermodel').touched)">
+              <div *ngIf="this.activeForm.get('invertermodel').invalid">
+                <span class="error">{{getErrorMessage(this.activeForm.get('invertermodel'))}}</span>
               </div>
             </div>
           </form>
@@ -426,9 +423,9 @@
           <form [formGroup]="activeForm" novalidate>
             <ion-input type="text" class="form-control" autocomplete="off" formControlName="shotname">
             </ion-input>
-            <div class="error_div">
-              <div *ngIf="activeForm.get('shotname').value === '' && activeForm.get('shotname').dirty">
-                <span class="error">Field input is required.</span>
+            <div class="error_div" *ngIf="this.activeForm.get('shotname').invalid && (this.activeForm.get('shotname').dirty || this.activeForm.get('shotname').touched)">
+              <div *ngIf="this.activeForm.get('shotname').invalid">
+                <span class="error">{{getErrorMessage(this.activeForm.get('shotname'))}}</span>
               </div>
             </div>
           </form>
@@ -456,9 +453,9 @@
                   </ion-input>
                   <span style="font-size: 24px; font-weight: 600; margin-left: 8px;" *ngIf="i < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].forminputfields.length - 1">x</span>
                 </div>
-                <div class="error_div">
-                  <div *ngIf="activeForm.get(fieldname).value === '' && activeForm.get(fieldname).dirty">
-                    <span class="error">Field input is required.</span>
+                <div class="error_div" *ngIf="this.activeForm.get(fieldname).invalid && (this.activeForm.get(fieldname).dirty || this.activeForm.get(fieldname).touched)">
+                  <div *ngIf="this.activeForm.get(fieldname).invalid">
+                    <span class="error">{{getErrorMessage(this.activeForm.get(fieldname))}}</span>
                   </div>
                 </div>
               </ion-col>

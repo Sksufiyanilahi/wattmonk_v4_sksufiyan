@@ -247,6 +247,8 @@ export class StartsurveyPage implements OnInit {
   latitude: any = 0; //latitude
   longitude: any = 0; //longitude
 
+  fetchinvertermodels = true;
+
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
     private route: ActivatedRoute,
@@ -381,6 +383,10 @@ export class StartsurveyPage implements OnInit {
                     this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
                   });
                 } else {
+                  if(shot.inputformcontrol[0] !== ''){
+                    this.activeFormElementsArray.push(shot.inputformcontrol[0]);
+                    formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                  }
                   if (shot.forminputfields.length > 0) {
                     shot.forminputfields.forEach((control, controlindex) => {
                       this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
@@ -404,8 +410,8 @@ export class StartsurveyPage implements OnInit {
       });
       formData['shotname'] = new FormControl('', []);
       this.activeFormElementsArray.push('shotname');
-      // console.log(this.activeFormElementsArray);
       this.activeForm = new FormGroup(formData);
+      console.log(this.activeForm);
     } catch (error) {
       console.log("createSurveyForm---" + error);
     }
@@ -431,6 +437,10 @@ export class StartsurveyPage implements OnInit {
                     this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
                   });
                 } else {
+                  if(shot.inputformcontrol[0] !== ''){
+                    this.activeFormElementsArray.push(shot.inputformcontrol[0]);
+                    formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                  }
                   if (shot.forminputfields.length > 0) {
                     shot.forminputfields.forEach((control, controlindex) => {
                       this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
@@ -455,6 +465,7 @@ export class StartsurveyPage implements OnInit {
       formData['shotname'] = new FormControl('', []);
       this.activeFormElementsArray.push('shotname');
       this.activeForm = new FormGroup(formData);
+      console.log(this.activeForm);
     } catch (error) {
       console.log("restoreStoredForm---" + error);
     }
@@ -480,7 +491,6 @@ export class StartsurveyPage implements OnInit {
 
   addformfieldvalidations(validations, formData, control, isrequired){
     if(control != ""){
-      console.log(control);
       if (validations != undefined && isrequired){
         let regex = this.getFieldRegex(validations.regextype, validations.minlength, validations.maxlength);
         formData[control] = new FormControl('', Validators.compose([Validators.required, Validators.pattern(regex)]));
@@ -506,7 +516,7 @@ export class StartsurveyPage implements OnInit {
       case REGEXTYPE.ALLCHARACTERS:
         return "^.{"+minlength+","+maxlength+"}$";
       case REGEXTYPE.MAKE:
-        return "^[a-zA-Z-_ ]{"+minlength+","+maxlength+"}$";
+        return "^[a-z0-9A-Z+-_([)/. {\\]}]{"+minlength+","+maxlength+"}$";
       case REGEXTYPE.MODEL:
         return "^[a-z0-9A-Z+-_([)/. {\\]}]{"+minlength+","+maxlength+"}$";
       default:
@@ -808,6 +818,7 @@ export class StartsurveyPage implements OnInit {
             if (val != "") {
               this.getInverterModels(this.activeForm.get('invertermake').value.id);
             } else {
+              // this.fetchinvertermodels = true;
               this.activeForm.get('invertermodel').setValue('');
             }
           });
@@ -1103,7 +1114,7 @@ export class StartsurveyPage implements OnInit {
       this.utilitieservice.showLoading('Please wait...');
       const data = {};
       this.activeFormElementsArray.map(element => {
-        if (this.activeForm.get(element).value != '') {
+        if (element != '' && this.activeForm.get(element).value != '') {
           data[element] = this.activeForm.get(element).value;
           if (element === 'batterysystem') {
             data[element] = this.activeForm.get('batterysystem').value.toString();
@@ -1586,6 +1597,7 @@ export class StartsurveyPage implements OnInit {
     try {
       const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex];
       shotDetail.result = result;
+      console.log(shotDetail.inputformcontrol);
       this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
       this.markshotcompletion();
     } catch (error) {
@@ -1597,7 +1609,6 @@ export class StartsurveyPage implements OnInit {
     try {
       const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       const control = form.get(activechild.shots[this.selectedshotindex].inputformcontrol);
-      console.log(control.errors);
       if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_MULTI_NUMBER) {
         let anyemptyfieldfound = false;
         let preparedresult = "";
@@ -1651,6 +1662,11 @@ export class StartsurveyPage implements OnInit {
       const invertermakecontrol = this.activeForm.get('invertermake');
       const invertermodelcontrol = this.activeForm.get('invertermodel');
       if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
+        // this.fetchinvertermodels = false;
+        // let makerecordid = invertermakecontrol.value;
+        // this.activeForm.get('invertermake').setValue(makerecordid);
+        // let modelrecordid = invertermodelcontrol.value;
+        // this.activeForm.get('invertermake').setValue(modelrecordid);
         this.markshotcompletion();
       } else {
         invertermakecontrol.markAsTouched();
@@ -1667,6 +1683,8 @@ export class StartsurveyPage implements OnInit {
     try {
       const utilitycontrol = this.activeForm.get('utility');
       if (utilitycontrol.value != '') {
+        // let recordid = utilitycontrol.value;
+        // this.activeForm.get('utility').setValue(recordid);
         this.markshotcompletion();
       } else {
         utilitycontrol.markAsTouched();
@@ -1681,6 +1699,8 @@ export class StartsurveyPage implements OnInit {
     try {
       const roofmaterialcontrol = this.activeForm.get('roofmaterial');
       if (roofmaterialcontrol.value != '') {
+        // let recordid = roofmaterialcontrol.value;
+        // this.activeForm.get('roofmaterial').setValue(recordid);
         this.markshotcompletion();
       } else {
         roofmaterialcontrol.markAsTouched();
