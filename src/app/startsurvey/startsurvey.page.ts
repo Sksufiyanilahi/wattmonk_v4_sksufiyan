@@ -220,7 +220,7 @@ export class StartsurveyPage implements OnInit {
 
   isdataloaded = false;
   mainmenuitems: MAINMENU[];
-  originalmainmenuitems: MAINMENU[];
+  // originalmainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
   selectedsubmenuindex = 0;
   selectedshotindex = 0;
@@ -314,7 +314,7 @@ export class StartsurveyPage implements OnInit {
 
   loadLocalJSON() {
     this.http
-      .get('assets/surveyprocessjson/defaultpv.json')
+      .get('assets/surveyprocessjson/pv.json')
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
       });
@@ -325,7 +325,6 @@ export class StartsurveyPage implements OnInit {
       this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
         if (data) {
           this.mainmenuitems = data.menuitems;
-          this.originalmainmenuitems = data.originalmainmenuitems;
           this.selectedmainmenuindex = data.selectedmainmenuindex;
           this.selectedsubmenuindex = data.selectedsubmenuindex;
           this.selectedshotindex = data.selectedshotindex;
@@ -334,6 +333,8 @@ export class StartsurveyPage implements OnInit {
 
           this.surveyid = data.surveyid;
           this.surveytype = data.surveytype;
+
+          // this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
 
           this.restoreStoredForm();
 
@@ -361,6 +362,7 @@ export class StartsurveyPage implements OnInit {
           this.setTotalStepCount();
         } else {
           this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
+          // this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
 
           this.mainmenuitems.forEach(element => {
             if (element.isactive) {
@@ -373,7 +375,6 @@ export class StartsurveyPage implements OnInit {
           }
           this.createSurveyForm(surveydata);
 
-          this.originalmainmenuitems = this.mainmenuitems;
           this.isdataloaded = true;
           this.setTotalStepCount();
         }
@@ -393,6 +394,8 @@ export class StartsurveyPage implements OnInit {
           item.children.map((child, childindex) => {
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].requiredshotscount = 0;
             this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshotscount = 0;
+            // this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].requiredshotscount = 0;
+            // this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshotscount = 0;
             if (child.inputformcontrol[0] !== '') {
               this.activeFormElementsArray.push(child.inputformcontrol[0]);
               formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
@@ -449,6 +452,8 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems.map(item => {
         if (item.children) {
           item.children.map(child => {
+            // this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].requiredshotscount = 0;
+            // this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshotscount = 0;
             if (child.inputformcontrol[0] !== '') {
               this.activeFormElementsArray.push(child.inputformcontrol[0]);
               formData[child.inputformcontrol[0]] = new FormControl('', [Validators.required]);
@@ -496,6 +501,7 @@ export class StartsurveyPage implements OnInit {
   }
 
   createcapturedshotofitem(shot: SHOT, mainindex, childindex, shotindex) {
+    console.log("shot---"+shot.shotinfo);
     const captureshot: CAPTUREDSHOT = {
       menuindex: mainindex,
       submenuindex: childindex,
@@ -577,7 +583,6 @@ export class StartsurveyPage implements OnInit {
 
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.menuitems = this.mainmenuitems;
-    surveyStorageModel.originalmainmenuitems = this.originalmainmenuitems;
     surveyStorageModel.formdata = this.activeForm.value;
     surveyStorageModel.selectedmainmenuindex = this.selectedmainmenuindex;
     surveyStorageModel.selectedsubmenuindex = this.selectedsubmenuindex;
@@ -837,6 +842,7 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           this.selectedutilityid = data.id;
         this.activeForm.get('utility').setValue(data);
+        this.markshotcompletion();
         });
       }, (error) => {
         this.utilitieservice.hideLoading().then(() => {
@@ -872,6 +878,7 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           this.selectedroofmaterialid = data.id;
         this.activeForm.get('roofmaterial').setValue(data);
+        this.markshotcompletion();
         });
       }, (error) => {
         this.utilitieservice.hideLoading().then(() => {
@@ -1084,6 +1091,7 @@ export class StartsurveyPage implements OnInit {
 
     this.utilitieservice.showLoading('Uploading Files').then(() => {
       this.totalfilestoupload = filesarray.length;
+      console.log(filesarray);
       this.uploadattachmentbyindex(filesarray, 0, this.totalfilestoupload, false);
     });
   }
@@ -1132,7 +1140,7 @@ export class StartsurveyPage implements OnInit {
             //Code to upload failed files
             this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.failedattachmentstoupload.length, true);
           } else {
-            this.uploadImagesToServer();
+            // this.uploadImagesToServer();
           }
         });
       }
@@ -1430,7 +1438,9 @@ export class StartsurveyPage implements OnInit {
   markshotcompletion() {
     try {
       this.fetchinvertermodels = true;
-      this.unsubscribeInverterMake();
+      if(this.invertermakesubscriptions != undefined || this.invertermakesubscriptions != null){
+        this.unsubscribeInverterMake();
+      }
       console.log("inside markshotcompletion");
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
@@ -1722,11 +1732,15 @@ export class StartsurveyPage implements OnInit {
           if (this.invertermodel.manualinput != '') {
             const ismodelfound = this.invertermodels.some(el => el.name === this.invertermodel.manualinput);
             if(ismodelfound){
+              let modelobj = this.invertermodels.find(el => el.name === this.invertermodel.manualinput);
+              this.activeForm.get('invertermodel').setValue(modelobj);
               this.markshotcompletion();
             }else{
               this.addinvertermodel(this.invertermodel.manualinput, invertermakecontrol.value.id);
             }
           }else{
+            let makeobj = this.invertermakes.find(el => el.name === this.invertermake.manualinput);
+            this.activeForm.get('invertermake').setValue(makeobj);
             this.markshotcompletion();
           }
         }else{
@@ -1777,8 +1791,15 @@ export class StartsurveyPage implements OnInit {
     try {
       const roofmaterialcontrol = this.activeForm.get('roofmaterial');
       if (this.roofmaterial.manualinput != '') {
-        this.addroofmaterial(this.roofmaterial.manualinput);
-        this.markshotcompletion();
+        const isfound = this.roofmaterials.some(el => el.name === this.roofmaterial.manualinput);
+        if(isfound){
+          let obj = this.roofmaterials.find(el => el.name === this.roofmaterial.manualinput);
+          this.activeForm.get('roofmaterial').setValue(obj);
+          this.markshotcompletion();
+        }
+        else{
+          this.addroofmaterial(this.roofmaterial.manualinput);
+        }
       }else{
         if (roofmaterialcontrol.value != '') {
           this.markshotcompletion();
@@ -1799,9 +1820,19 @@ export class StartsurveyPage implements OnInit {
       this.blurcaptureview = false;
       if (doesexist) {
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
-        console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+        // this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = [];
+        // this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.push(...this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
+        // console.log(this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshotscount = 0;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].requiredshotscount = 0;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount = 0;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots = [];
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((element, index) => {
+          this.createcapturedshotofitem(element, this.selectedmainmenuindex, this.selectedsubmenuindex, index);
+          element.ispending = true;
+          element.shotstatus = false;
+          element.questionstatus = false;
+          element.required = true;
           if (element.inputformcontrol[0] !== '' && element.required) {
             this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
             if (element.inputformcontrol.length > 1 && element.required) {
@@ -1824,6 +1855,7 @@ export class StartsurveyPage implements OnInit {
             this.activeForm.get(element.inputformcontrol[1]).clearValidators();
           }
         });
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots = [];
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
         this.markchildcompletion();
@@ -1903,22 +1935,32 @@ export class StartsurveyPage implements OnInit {
     try {
       event.preventDefault();
       this.showinfodetailsview = false;
+      this.blurcaptureview = false;
       let doesexist = event.target.checked;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;
-      this.blurcaptureview = false;
       if (doesexist) {
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots;
-        console.log(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
-        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
+        // this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots = [];
+        // this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.push(...this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
+        // console.log(this.originalmainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshotscount = 0;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].requiredshotscount = 0;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount = 0;
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots = [];
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((element, index) => {
+          this.createcapturedshotofitem(element, this.selectedmainmenuindex, this.selectedsubmenuindex, index);
+          element.ispending = true;
+          element.shotstatus = false;
+          element.questionstatus = false;
+          element.required = true;
           if (element.inputformcontrol[0] !== '' && element.required) {
             this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
           }
           if (element.inputformcontrol.length > 1 && element.required) {
             this.activeForm.get(element.inputformcontrol[1]).setValidators([Validators.required]);
           }
-        });
+        });``
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
       } else {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
@@ -1933,6 +1975,7 @@ export class StartsurveyPage implements OnInit {
             this.activeForm.get(element.inputformcontrol[1]).clearValidators();
           }
         });
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots = [];
         this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
         this.markchildcompletion();

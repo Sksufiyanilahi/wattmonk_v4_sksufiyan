@@ -11,7 +11,6 @@ export class SurveyStorageModel {
   latitude: number;
   longitude: number;
   menuitems : any;
-  originalmainmenuitems : any;
   formdata: any;
   currentprogress : number;
   selectedmainmenuindex : number;
