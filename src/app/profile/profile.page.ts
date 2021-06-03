@@ -90,7 +90,7 @@ this.apiService.getProfileDetails().subscribe(res=>{
   this.getemail=this.profile.getemail;
   this.getnotification=this.profile.getnotification;
 })
-this.apiService.getStatusCount().subscribe(
+this.apiService.getStatusCount(this.user.id).subscribe(
   response => {
     this.statuscount = response;
     this.activedesignjobs = this.statuscount.waitingforassigned + this.statuscount.waitingforacceptance + this.statuscount.requestaccepted + this.statuscount.designassigned

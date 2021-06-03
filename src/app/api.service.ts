@@ -732,8 +732,8 @@ export class ApiService {
       headers: this.uploadHeaders}
      ) }
 
-     getStatusCount(): Observable<any[]> {
-      return this.http.get<any[]>( BaseUrl + "designstatistics?id=" + this.userId, { headers: this.headers })}
+     getStatusCount(id): Observable<any[]> {
+      return this.http.get<any[]>( BaseUrl + "designstatistics?id=" + id, { headers: this.headers })}
 
      registerUser(data){
       return this.http.post(BaseUrl + "auth/local/register",data,{
@@ -821,14 +821,14 @@ export class ApiService {
       })
     }
     getContractorsData(id) {
-  
+
       return this.http.get(BaseUrl + "users/"+ id, {
         headers: this.headers
       })
     }
 
     updateContractorsData(id,data) {
-  
+
       return this.http.put(BaseUrl + "users/"+ id, data, {
         headers: this.headers
       })
@@ -852,6 +852,27 @@ export class ApiService {
 
     getCompanies(requesttype){
       return this.http.get(BaseUrl +"getcompanies?requesttype="+requesttype,{
+        headers:this.headers
+      })
+    }
+
+    unassignedJobs(id,data)
+    {
+      return this.http.post(BaseUrl +"unassignjobs?user="+id,data,
+      {
+        headers:this.headers
+      })
+    }
+    transferJobs(id,transferId,data)
+    {
+      return this.http.post(BaseUrl +"transferjobs?user="+id+"&transferto="+transferId,data,
+      {
+        headers:this.headers
+      })
+    }
+    getCompanyUsers(parentId,roleId)
+    {
+      return this.http.get(BaseUrl + "getcompanyusers?parentid="+parentId+"&roleid="+roleId,{
         headers:this.headers
       })
     }
