@@ -334,7 +334,7 @@
           <form [formGroup]="activeForm" novalidate class="inputform">
             <app-auto-complete [dataList]="utilities" class="form-control" mode="object"
               formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]}}"
-              #make>
+              #utility>
             </app-auto-complete>
             <div class="error_div" *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).touched)">
               <div *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid">

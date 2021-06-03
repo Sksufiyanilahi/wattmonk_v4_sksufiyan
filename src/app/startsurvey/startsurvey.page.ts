@@ -17,6 +17,8 @@ import { RoofMaterial } from '../model/roofmaterial.model';
 import { Animation, AnimationController, IonSlides, NavController, Platform, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
+import { AddressModel } from '../model/address.model';
+import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
 
 const { Camera } = Plugins;
 
@@ -175,6 +177,7 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('singlefileuploadinput') singlefileuploadinput: ElementRef;
   @ViewChild('multiplefileuploadinput') multiplefileuploadinput: ElementRef;
   @ViewChild('watermarkedimage') waterMarkImage: ElementRef;
+  @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
 
   sliderTwo: any;
 
@@ -249,6 +252,9 @@ export class StartsurveyPage implements OnInit {
   longitude: any = 0; //longitude
 
   fetchinvertermodels = true;
+  platformname: string;
+  surveycity : string = "";
+  surveystate : string = "";
 
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
@@ -272,6 +278,14 @@ export class StartsurveyPage implements OnInit {
       this.user = this.storageuserdata.getUser();
       this.surveyid = +this.route.snapshot.paramMap.get('id');
       this.surveytype = this.route.snapshot.paramMap.get('type');
+
+      if (this.platform.is('ios')) {
+        this.platformname = 'iphone';
+      } else if (this.platform.is('android')) {
+        this.platformname = 'android';
+      } else {
+        this.platformname = 'web';
+      }
 
       // this.loadSurveyJSON('pvsurveyjson');
       this.loadLocalJSON();
@@ -595,6 +609,9 @@ export class StartsurveyPage implements OnInit {
       this.latitude = resp.coords.latitude;
       this.longitude = resp.coords.longitude;
       console.log(this.latitude + "----" + this.longitude);
+      let address = this.utilitieservice.getAddressFromLatLng(this.latitude, this.longitude);
+      this.surveystate = address.state;
+      this.surveycity = address.city;
      }).catch((error) => {
        console.log('Error getting location', error);
      });
@@ -781,6 +798,29 @@ export class StartsurveyPage implements OnInit {
     });
   }
 
+  addutility(name: string){
+    const data = {
+      name: name,
+      source: this.platformname,
+      lastused: this.formatDateInBackendFormat(),
+      city: this.surveycity,
+      state: this.surveystate,
+      addedby: this.user.id
+    };
+    this.utilitieservice.showLoading('Saving').then(() => {
+      this.apiService.addUtility(data).subscribe((data) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.selectedutilityid = data.id;
+        this.activeForm.get('utility').setValue(data);
+        });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar(JSON.stringify(error));
+        });
+      });
+    });
+  }
+
   getRoofMaterials() {
     this.utilitieservice.showLoading('Loading').then(() => {
       this.apiService.getRoofMaterials().subscribe(response => {
@@ -865,6 +905,15 @@ export class StartsurveyPage implements OnInit {
         });
       });
     });
+  }
+
+  formatDateInBackendFormat() {
+    const d = new Date();
+    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+    const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+
+    return (`${ye}-${mo}-${da}`);
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1603,11 +1652,16 @@ export class StartsurveyPage implements OnInit {
   handleUtilitySubmission() {
     try {
       const utilitycontrol = this.activeForm.get('utility');
-      if (utilitycontrol.value != '') {
+      if (this.utility.manualinput != '') {
+        this.addutility(this.utility.manualinput);
         this.markshotcompletion();
-      } else {
-        utilitycontrol.markAsTouched();
-        utilitycontrol.markAsDirty();
+      }else{
+        if (utilitycontrol.value != '') {
+          this.markshotcompletion();
+        }else {
+          utilitycontrol.markAsTouched();
+          utilitycontrol.markAsDirty();
+        }
       }
     } catch (error) {
       console.log("handleUtilitySubmission---" + error);
