@@ -377,15 +377,6 @@ export class StartsurveyPage implements OnInit {
           this.isdataloaded = true;
           this.setTotalStepCount();
         }
-        this.activeForm.get('invertermake').valueChanges.subscribe(val => {
-          if(this.fetchinvertermodels){
-            if (val != "") {
-              this.getInverterModels(this.activeForm.get('invertermake').value.id);
-            } else {
-              this.activeForm.get('invertermodel').setValue('');
-            }
-          }
-        });
       });
     } catch (error) {
       console.log("restoreSurveyStoredData---" + error);
@@ -668,6 +659,22 @@ export class StartsurveyPage implements OnInit {
     } catch (error) {
       console.log("getcountoffiletoupload---" + error);
     }
+  }
+
+  subscribeInverterMake(){
+    this.invertermakesubscriptions = this.activeForm.get('invertermake').valueChanges.subscribe(val => {
+      if(this.fetchinvertermodels){
+        if (val != "") {
+          this.getInverterModels(this.activeForm.get('invertermake').value.id);
+        } else {
+          this.activeForm.get('invertermodel').setValue('');
+        }
+      }
+    });
+  }
+
+  unsubscribeInverterMake(){
+    this.invertermakesubscriptions.unsubscribe();
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1379,6 +1386,7 @@ export class StartsurveyPage implements OnInit {
           if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_UTILITIES_AUTOCOMPLETE) {
             this.getUtilities();
           } else if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_INVERTER_AUTOCOMPLETE) {
+            this.subscribeInverterMake();
             this.getInverterMakes();
           } else if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_ROOF_MATERIAL_AUTOCOMPLETE) {
             this.getRoofMaterials();
@@ -1422,6 +1430,7 @@ export class StartsurveyPage implements OnInit {
   markshotcompletion() {
     try {
       this.fetchinvertermodels = true;
+      this.unsubscribeInverterMake();
       console.log("inside markshotcompletion");
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
@@ -1429,7 +1438,7 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].ispending = false;
       this.blurcaptureview = false;
-      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required) {
+      if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].required && !this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshotscount += 1;
         this.updateProgressStatus();
       }
@@ -1868,6 +1877,7 @@ export class StartsurveyPage implements OnInit {
     try {
       event.preventDefault();
       this.fetchinvertermodels = true;
+      this.subscribeInverterMake();
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult) {
         this.showinfodetailsview = false;
         this.blurcaptureview = true;
