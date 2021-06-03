@@ -358,7 +358,11 @@ const routes: Routes = [
         path: 'startsurvey/:id/:type',
         loadChildren: () => import('./startsurvey/startsurvey.module').then(m => m.StartsurveyPageModule),
         canActivate: [AuthGuardService]
-    },
+    },  {
+    path: 'masterdetailpage',
+    loadChildren: () => import('./masterdetailpage/masterdetailpage.module').then( m => m.MasterdetailpagePageModule)
+  },
+
 ];
 
 @NgModule({

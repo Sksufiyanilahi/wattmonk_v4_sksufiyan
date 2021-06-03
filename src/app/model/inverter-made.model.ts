@@ -25,6 +25,8 @@ export class InverterMadeModel {
   created_at: Date;
   updated_at: Date;
   invertermake: Invertermake;
+  requirements:string;
+  state:string;
 }
 
 

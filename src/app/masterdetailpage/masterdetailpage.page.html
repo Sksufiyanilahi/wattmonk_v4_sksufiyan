@@ -1,0 +1,52 @@
+<ion-content class="overflow">
+  <ion-row style="padding-top: 16px;">
+    <ion-col size="auto">
+      <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()" [disabled]="enableDisable">
+          <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+      </ion-button>
+  </ion-col>
+  <ion-col size="8"></ion-col>
+  <ion-col size="1" *ngIf="((allData.createdby.id == user.id && (allData.status == 'created' || allData.status == 'requestdeclined' ||(allData.status == 'outsourced' && !user.ispaymentmodeprepay))) || (allData.status=='assigned' && allData.createdby.id==user.id)) && !isEditHide">
+    <ion-button fill="clear" size="small" class="ion-no-padding"
+         (click)="edit()" routerDirection="forward" [disabled]=enableDisable>
+        <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
+    </ion-button>
+</ion-col>
+<ion-col size="1" *ngIf="((allData.createdby.id == user.id && (allData.status == 'created' || allData.status == 'requestdeclined'||(allData.status == 'outsourced' && !user.ispaymentmodeprepay))) || (allData.status=='assigned' && allData.createdby.id==user.id)) && !isEditHide">
+    <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()" [disabled]=enableDisable>
+        <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
+    </ion-button>
+</ion-col>
+  </ion-row>
+  <!-- <ion-segment scrollable (ionChange)="segmentChanged($event)" value="prelim" mode="md">
+    <ion-segment-button value="prelim">
+        <ion-label class="segment-btn">Prelim</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="Survey">
+        <ion-label class="segment-btn">Survey</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="permit">
+        <ion-label class="segment-btn">Permit</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="Pestamp">
+        <ion-label class="segment-btn">Pestamp</ion-label>
+    </ion-segment-button> -->
+
+    <ion-tabs style="margin-top: 15%;" #tabs>
+      <ion-tab-bar slot="top" *ngIf="isTabCheck">
+        <ion-tab-button tab="prelim" *ngIf="isPrelim" (click)="changeToggle('prelim')">
+          <ion-label>Prelim</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="survey" *ngIf="isSurvey" (click)="changeToggle('survey')">
+          <ion-label>Survey</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="permit" *ngIf="isPermit" (click)="changeToggle('permit')">
+          <ion-label>Permit</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="pestamp" *ngIf="isPestamp" (click)="changeToggle('pestamp')">
+          <ion-label>Pestamp</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+
+</ion-content>

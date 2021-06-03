@@ -2,9 +2,9 @@
   <ion-grid class="ion-padding-top ion-padding-start ion-padding-end ">
     <ion-row>
       <ion-col size="2">
-        <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+        <!-- <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
           <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
-        </ion-button>
+        </ion-button> -->
       </ion-col>
       <ion-col size="6" *ngIf="iseditable">
         <ion-button fill="clear" disabled="true" size="small" class="ion-no-padding action-icon">
@@ -20,7 +20,7 @@
                     </ion-row>
                 </ion-grid>
             </ion-col> -->
-      <ion-col size="2"
+      <!-- <ion-col size="2"
         *ngIf="survey.createdby.id == user.id && (survey.status == 'created' || (user.role.type == 'surveyors' && survey.status == 'assigned'))"
         style="text-align: right !important">
         <ion-button fill="clear" size="small" class="ion-no-padding" [routerLink]="['/schedule/survey/',surveyId]"
@@ -34,7 +34,7 @@
         <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteSurvey()">
           <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
         </ion-button>
-      </ion-col>
+      </ion-col> -->
       <ion-col size="auto" *ngIf="!iseditable">
         <ion-button fill="clear" disabled="true" size="small" class="ion-no-padding action-icon">
         </ion-button>
@@ -75,7 +75,7 @@
     <ion-segment-button value="attic" class="wd140 colorwht" *ngIf="survey.atticimages.length !==0">
       <ion-label> Attic </ion-label>
     </ion-segment-button>
-    <ion-segment-button value="appliances" class="wd140 colorwht">
+    <ion-segment-button value="appliances" class="wd140 colorwht" *ngIf="survey.appliancesimages.length !==0">
       <ion-label> Appliances </ion-label>
     </ion-segment-button>
     <ion-segment-button *ngIf="survey.utilitybillback !== null || survey.utilitybillfront !==null" value="utilitybill"
@@ -92,7 +92,7 @@
     </ion-segment-button>
   </ion-segment>
   <div [ngSwitch]="segments">
-    <ion-grid *ngSwitchCase="'SiteDetils'">
+    <ion-grid *ngSwitchCase="'SiteDetils'" style="margin-bottom: 50px;">
       <ion-row class="bkg">
         <ion-col class="hgt-margin">
           <!-- <ion-item> -->
@@ -100,21 +100,25 @@
           <!-- </ion-item> -->
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="survey.name !== null">
         <ion-col size="6">Name</ion-col>
-        <ion-col size="6">{{survey.name}}</ion-col>
+        <ion-col size="6">{{survey.name == null ? nullValue : survey.name | titlecase}}</ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="survey.address !== null">
         <ion-col size="6">Address</ion-col>
-        <ion-col size="6">{{survey.address}}</ion-col>
+        <ion-col size="6">{{survey.address == null ? nullValue : survey.address | titlecase}}</ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="survey.email !== null">
         <ion-col size="6">Email</ion-col>
-        <ion-col size="6">{{survey.email}}</ion-col>
+        <ion-col size="6">{{survey.email == null ? nullValue : survey.email | titlecase}}</ion-col>
       </ion-row>
       <ion-row *ngIf="survey.phonenumber!== null">
         <ion-col size="6">Phone Number</ion-col>
-        <ion-col size="6">{{survey.phonenumber}}</ion-col>
+        <ion-col size="6">{{survey.phonenumber == null ? nullValue : survey.phonenumber | titlecase}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.company !== null">
+        <ion-col size="6" > Company</ion-col>
+        <ion-col size="6">{{survey?.company == null || '' ? nullValue : survey?.company}}</ion-col>
       </ion-row>
 
       <ion-row class="bkg">
@@ -124,15 +128,19 @@
           <!-- </ion-item> -->
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="survey.jobtype !== null">
         <ion-col size="6">Job</ion-col>
-        <ion-col size="6">{{survey.jobtype}}</ion-col>
+        <ion-col size="6">{{survey.jobtype == null ? nullValue : survey.jobtype | titlecase}}</ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="survey.projecttype !== null">
         <ion-col size="6"><span class="model-type font">Project Type</span></ion-col>
         <ion-col size="6">
-          <span class="model-name font">{{survey.projecttype}}</span>
+          <span class="model-name font">{{survey.projecttype == null ? nullValue : survey.projecttype | titlecase}}</span>
         </ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.newconstruction !== null">
+        <ion-col size="6">New Construction</ion-col>
+        <ion-col size="6">{{survey.newconstruction == null ? nullValue : survey.newconstruction | titlecase}}</ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="6">Scheduled On</ion-col>
@@ -183,7 +191,6 @@
           </div>
         </ion-col>
         <!-- <ion-col size="12" class="ion-no-padding ion-text-end">
-
                                         </ion-col> -->
 
         <!-- </div> -->
@@ -198,8 +205,20 @@
       </ion-row>
       <ion-row *ngIf="survey.assignedto!== null">
         <ion-col size="6">Assigned To</ion-col>
-        <ion-col size="6">{{survey.assignedto?.firstname}} &nbsp;
-          {{survey.assignedto?.lastname}}</ion-col>
+        <ion-col size="6">{{survey.assignedto?.firstname | titlecase}} &nbsp;
+          {{survey.assignedto?.lastname | titlecase}}</ion-col>
+      </ion-row>
+      <ion-row class="bkg">
+        <ion-col class="hgt-margin">
+          <!-- <ion-item> -->
+          <label>Created Details</label>
+          <!-- </ion-item> -->
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.createdby!== null">
+        <ion-col size="6">Created By</ion-col>
+        <ion-col size="6">{{survey.createdby?.firstname | titlecase}} &nbsp;
+          {{survey.createdby?.lastname | titlecase}}</ion-col>
       </ion-row>
     </ion-grid>
 
@@ -214,13 +233,13 @@
               *ngIf="survey.utilitymeterimages.length !==0">
               <ion-label>Utility Meter</ion-label>
             </ion-segment-button>
-            <ion-segment-button *ngIf="survey.existingsolarsystem" value="pvMeter" class="wd140" mode="md">
+            <ion-segment-button *ngIf="survey.pvmeterimages.length !== 0" value="pvMeter" class="wd140" mode="md">
               <ion-label>PV Meter</ion-label>
             </ion-segment-button>
-            <ion-segment-button *ngIf="survey.existingsolarsystem" value="pvInverter" class="wd140" mode="md">
+            <ion-segment-button *ngIf="survey.pvinverterimages.length !== 0" value="pvInverter" class="wd140" mode="md">
               <ion-label>PV Inverter</ion-label>
             </ion-segment-button>
-            <ion-segment-button value="acDisconnect" class="wd140" *ngIf="survey.existingsolarsystem" mode="md">
+            <ion-segment-button value="acDisconnect" class="wd140" *ngIf="survey.acdisconnectimages.length !== 0" mode="md">
               <ion-label>AC Disconnect</ion-label>
             </ion-segment-button>
           </ion-segment>
@@ -231,17 +250,15 @@
           <ion-slides pager="true" zoom [options]="slideOpts" class="image-slider">
             <ion-slide *ngFor="let elecmsb of survey.mspimages,let i=index">
               <ion-row>
-                <ion-col size="12" *ngIf="i==0"><span>MSP is located
-                    :</span>&nbsp;<span>{{survey.msplocation | titlecase}} for this site</span></ion-col>
-                <!-- <ion-col size="12" *ngIf="i==0"><span>MPU Required
-                    :</span>&nbsp;<span>{{survey?.mpurequired== true ? 'Yes' : 'No'}}</span></ion-col> -->
-                <ion-col size="12" *ngIf="i==1"><span>MSP/BUS Rating is :</span>&nbsp;<span>{{survey.msprating}}
+                <ion-col size="12" *ngIf="i==0 && survey.msplocation !== null"><span>MSP is located
+                    :</span>&nbsp;<span>{{survey.msplocation == null ? nullValue : survey.msplocation | titlecase}}</span></ion-col>
+                <ion-col size="12" *ngIf="i==1"><span>MSP/BUS Rating is :</span>&nbsp;<span>{{survey.msprating == null ? nullValue : survey.msprating}}
                   </span></ion-col>
-                <ion-col size="12" *ngIf="i==2"><span>Main breaker size is
-                    :</span>&nbsp;<span>{{survey.mainbreakersize}} for this site
+                <ion-col size="12" *ngIf="i==2 && survey.mainbreakersize !== null"><span>Main breaker size is
+                    :</span>&nbsp;<span>{{survey.mainbreakersize == null ? nullValue : survey.mainbreakersize}}
                   </span></ion-col>
-                <ion-col size="12" *ngIf="i==3"><span>Main Breaker location in MSP is
-                    :</span>&nbsp;<span>{{survey.mspbreaker | titlecase}} for this site
+                <ion-col size="12" *ngIf="i==3 && survey.mspbreaker !== null"><span>Main Breaker location in MSP is
+                    :</span>&nbsp;<span>{{survey.mspbreaker == null ? nullValue : survey.mspbreaker | titlecase}}
                   </span></ion-col>
                 <div class="swiper-zoom-container">
                   <img [src]="elecmsb.url" (click)="showimage(elecmsb.url)" />
@@ -254,7 +271,7 @@
           <ion-slides pager="true" [options]="slideOpts" zoom="true">
             <ion-slide *ngFor="let elecutility of survey.utilitymeterimages,let i=index">
               <ion-row>
-                <ion-col size="12" *ngIf="i==0"><span>Utility meter is
+                <ion-col size="12" *ngIf="i==0 && survey.utilitymeter !== null"><span>Utility meter is
                     :</span>&nbsp;<span>{{survey.utilitymeter | titlecase}} to MSP
                   </span></ion-col>
                 <div class="swiper-zoom-container">
@@ -279,13 +296,13 @@
           <ion-slides pager="true" [options]="slideOpts" zom="true">
             <ion-slide *ngFor="let elecpvmeter of survey.pvinverterimages,let i=index">
               <ion-row>
-                <ion-col size="12"><span>PV inverter is located
-                    :</span>&nbsp;<span>{{survey.pvinverterlocation | titlecase}} the site
+                <ion-col size="12" *ngIf="survey.pvinverterlocation !== null"><span>PV inverter is located
+                    :</span>&nbsp;<span>{{survey.pvinverterlocation == null ? nullValue : survey.pvinverterlocation | titlecase}}
                   </span></ion-col>
-                <!-- <ion-col size="12"><span>Inverter manufacturer: {{survey.invertermake | titlecase}} </span></ion-col>
-                    <ion-col size="12"><span>
-                      Inverter Model is : {{survey.invertermodel |
-                      titlecase}}</span></ion-col> -->
+                <ion-col size="12" *ngIf="survey.invertermake !== null"><span>Inverter manufacturer : {{survey.invertermake.name == null ? nullValue : survey.invertermake.name | titlecase}} </span></ion-col>
+                    <ion-col size="12" *ngIf="survey.invertermodel !== null"><span>
+                      Inverter Model is : {{survey.invertermodel == null ? nullValue : survey.invertermodel.name |
+                      titlecase}}</span></ion-col>
 
 
                 <div class="swiper-zoom-container">
@@ -310,7 +327,7 @@
       <ion-slides pager="true" [options]="slideOpts" zoom="true">
         <ion-slide *ngFor="let solarpanel of survey.solarpanelsimages">
           <div class="swiper-zoom-container">
-            <h2 class="position-fix">{{solarpanel.name}}</h2>
+            <h2 class="position-fix">{{solarpanel.name | titlecase}}</h2>
             <img [src]="solarpanel.url" (click)="showimage(solarpanel.url)" />
           </div>
         </ion-slide>
@@ -320,16 +337,16 @@
       <ion-slides pager="true" [options]="slideOpts" zoom="true">
         <ion-slide *ngFor="let roof of survey.roofimages,let i=index">
           <ion-row>
-            <ng-container *ngIf="i==0">
-              <ion-col *ngIf="survey.roofmaterial !== null" size="12"><span>Roof Material
-                  :</span>&nbsp;<span>{{survey.roofmaterial.name}}
+            <ng-container *ngIf="i==0 && survey.roofmaterial !== null">
+              <ion-col size="12"><span>Roof Material
+                  :</span>&nbsp;<span>{{survey.roofmaterial.name == null ? nullValue : survey.roofmaterial.name | titlecase}}
                 </span></ion-col>
             </ng-container>
-            <ng-container *ngIf="i==0">
-              <ion-col size ="12" *ngIf= "survey.rooftilt !='' && survey.rooftilt != null"><span >Roof Tilt :</span>&nbsp;<span>{{survey.rooftilt}} </span></ion-col>
+            <ng-container *ngIf="i==0 && survey.rooftilt !== null">
+              <ion-col size ="12"><span >Roof Tilt :</span>&nbsp;<span>{{survey.rooftilt == null || '' ? nullValue : survey.rooftilt}} </span></ion-col>
             </ng-container>
             <div class="swiper-zoom-container">
-              <h2 class="position-fix">{{roof.name}}</h2>
+              <h2 class="position-fix">{{roof.name | titlecase}}</h2>
               <img [src]="roof.url" (click)="showimage(roof.url)" />
             </div>
           </ion-row>
@@ -338,7 +355,7 @@
           <ion-row>
             <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->
             <div class="swiper-zoom-container">
-              <h2 class="position-fix">{{roofdimension?.name}}</h2>
+              <h2 class="position-fix">{{roofdimension?.name | titlecase}}</h2>
               <img [src]="roofdimension.url" (click)="showimage(roofdimension.url)" />
             </div>
           </ion-row>
@@ -347,7 +364,7 @@
           <ion-row>
             <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->
             <div class="swiper-zoom-container">
-              <h2 class="position-fix">{{roofobstacle?.name}}</h2>
+              <h2 class="position-fix">{{roofobstacle?.name | titlecase}}</h2>
               <img [src]="roofobstacle.url" (click)="showimage(roofobstacle.url)" />
             </div>
           </ion-row>
@@ -356,7 +373,7 @@
           <ion-row>
             <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->
             <div class="swiper-zoom-container">
-              <h2 class="position-fix">{{roofobstacledimension?.name}}</h2>
+              <h2 class="position-fix">{{roofobstacledimension?.name | titlecase}}</h2>
               <img [src]="roofobstacledimension.url" (click)="showimage(roofobstacledimension.url)" />
             </div>
           </ion-row>
@@ -367,18 +384,21 @@
       <ion-slides pager="true" [options]="slideOpts" zoom="true">
         <ion-slide *ngFor="let attic of survey.atticimages,let i=index">
           <ion-row>
-            <ng-container *ngIf="survey.framing !== null">
-              <ion-col size="12" *ngIf="i==0"><span>Framing is :</span>&nbsp;<span>{{survey.framing}}
+            <!-- <ng-container *ngIf="survey.framing !== null"> -->
+              <ng-container>
+              <ion-col size="12" *ngIf="i==0 && survey.framing !== null"><span>Framing is :</span>&nbsp;<span>{{survey.framing == null ? nullValue : survey.framing | titlecase}}
                 </span></ion-col>
             </ng-container>
-            <ng-container *ngIf="survey.framingsize !==''">
-              <ion-col size="12" *ngIf="i==1"><span>Framing size is : </span>&nbsp;<span>{{survey.framingsize}}
+            <!-- <ng-container *ngIf="survey.framingsize !==''"> -->
+              <ng-container>
+              <ion-col size="12" *ngIf="i==1 && survey.framingsize !== null"><span>Framing size is : </span>&nbsp;<span>{{survey.framingsize == null || '' ? nullValue : survey.framingsize}}
                 </span></ion-col>
             </ng-container>
 
-            <ion-col size="12" *ngIf="i==2"><span>Distance between two rafts :
-              </span>&nbsp;<span>{{survey.distancebetweentworafts}}
-              </span></ion-col>
+            <ion-col size="12" *ngIf="i==2 && survey.distancebetweentworafts !== null"><span>Distance between two rafts :
+              </span>&nbsp;<span>{{survey.distancebetweentworafts == null ? nullValue : survey.distancebetweentworafts}}
+              </span>
+              </ion-col>
             <div class="swiper-zoom-container">
               <img [src]="attic.url" (click)="showimage(attic.url)" />
             </div>
@@ -390,10 +410,10 @@
       <ion-slides pager="true" [options]="slideOpts" zoom="true">
         <ion-slide *ngFor="let appliance of survey.appliancesimages">
           <ion-row>
-            <ion-col size="12"><span>Appliance name is:</span>&nbsp;<span>{{appliance.name}}</span>
+            <ion-col size="12"><span>Appliance name is:</span>&nbsp;<span>{{appliance.name == null ? nullValue : appliance.name | titlecase}}</span>
             </ion-col>
             <div class="swiper-zoom-container">
-              <h2 class="position-fix">{{appliance.name}}</h2>
+              <h2 class="position-fix">{{appliance.name | titlecase}}</h2>
               <img [src]="appliance.url" (click)="showimage(appliance.url)" />
             </div>
           </ion-row>
@@ -428,7 +448,7 @@
       <ion-slides pager="true" [options]="slideOpts" zoom="true">
         <ion-slide>
           <div class="swiper-zoom-container">
-            <h2 class="position-fix">{{survey.electricalslocation.name}}</h2>
+            <h2 class="position-fix">{{survey.electricalslocation.name | titlecase}}</h2>
             <img [src]="survey.electricalslocation.url" (click)="showimage(survey.electricalslocation.url)" />
           </div>
         </ion-slide>
@@ -450,34 +470,99 @@
                         <ion-col size="6">Existing Modules Model</ion-col>
                         <ion-col size="6">{{survey.modulemodel.name}}</ion-col>
                     </ion-row> -->
-      <ion-row>
+      <ion-row *ngIf="survey.batterysystem !== null">
         <ion-col size="6">Battery System</ion-col>
-        <ion-col size="6">{{survey.batterysystem== true ? 'Yes' : 'No'}}</ion-col>
+        <ion-col size="6">{{survey.batterysystem== 'true' ? 'Yes' : 'No'}}</ion-col>
       </ion-row>
       <ion-row *ngIf="survey.batterysystem=='true'">
         <ion-col size="6">Battery details</ion-col>
-        <ion-col size="6">{{survey.comments[0]?.message}}</ion-col>
+        <ion-col size="6">{{survey.detailsofbatterysystem | titlecase}}</ion-col>
       </ion-row>
-      <ion-row>
+      <!-- <ion-row *ngIf="survey.batterybackup !== null">
+        <ion-col size="6">Battery Backup</ion-col>
+        <ion-col size="6">{{survey.batterybackup == null ? nullValue : survey.batterybackup}}</ion-col>
+      </ion-row> -->
+      <ion-row *ngIf="survey.existingsolarsystem !== null">
         <ion-col size="6">Existing Solar System</ion-col>
-        <ion-col size="6">{{survey.existingsolarsystem == 'true' ? 'Yes' : 'No'}}</ion-col>
+        <ion-col size="6">{{survey.existingsolarsystem == true ? 'Yes' : 'No'}}</ion-col>
       </ion-row>
-      <ion-row *ngIf="survey.interconnection!== null">
+      <ion-row *ngIf="survey.interconnection !== null">
         <ion-col size="6">Interconnection</ion-col>
-        <ion-col size="6">{{survey.interconnection}}</ion-col>
+        <ion-col size="6">{{survey.interconnection == null ? nullValue : survey.interconnection | titlecase}}</ion-col>
       </ion-row>
-      <ion-row *ngIf="survey.interconnectiondetails!== null">
+      <ion-row *ngIf="survey.interconnectiondetails !== null">
         <ion-col size="6">Interconnection Details</ion-col>
-        <ion-col size="6">{{survey.interconnectiondetails}}</ion-col>
+        <ion-col size="6">{{survey.interconnectiondetails == null ? nullValue : survey.interconnectiondetails | titlecase}}</ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="survey.servicefeedsource !== null">
         <ion-col size="6"> Power service line source to Main panel (Overhead if you can see the wires coming from the power poles to connect to home)</ion-col>
-        <ion-col size="6">{{survey?.servicefeedsource}}</ion-col>
+        <ion-col size="6">{{survey?.servicefeedsource | titlecase}}</ion-col>
       </ion-row>
-      <ion-row *ngIf="survey.additionalnotes !='' && survey.additionalnotes !=null">
+      <ion-row *ngIf="survey.esid !== null">
+        <ion-col size="6" > ESID</ion-col>
+        <ion-col size="6">{{survey?.esid == null || '' ? nullValue : survey?.esid}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.utility !== null">
+        <ion-col size="6" > Utility</ion-col>
+        <ion-col size="6">{{survey?.utility.name == null || '' ? nullValue : survey?.utility.name}}</ion-col>
+        <ion-col size="6">{{survey?.utility.requirements == null || '' ? nullValue : survey?.utility.requirements}}</ion-col>
+        <ion-col size="6">{{survey?.utility.state == null || '' ? nullValue : survey?.utility.state}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.pvmeter !== null">
+        <ion-col size="6" > PV Meter</ion-col>
+        <ion-col size="6">{{survey?.pvmeter == null || '' ? nullValue : survey?.pvmeter}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.acdisconnect !== null">
+        <ion-col size="6" > AC Disconnect</ion-col>
+        <ion-col size="6">{{survey?.acdisconnect == null || '' ? nullValue : survey?.acdisconnect}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.latitude !== null">
+        <ion-col size="6" > Latitude</ion-col>
+        <ion-col size="6">{{survey?.latitude == null || '' ? nullValue : survey?.latitude}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.longitude !== null">
+        <ion-col size="6" > Longitude</ion-col>
+        <ion-col size="6">{{survey?.longitude == null || '' ? nullValue : survey?.longitude}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.sizeofsingleraft !== null">
+        <ion-col size="6" > Size of single raft</ion-col>
+        <ion-col size="6">{{survey?.sizeofsingleraft == null || '' ? nullValue : survey?.sizeofsingleraft}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.requesttype !== null">
+        <ion-col size="6" > Request Type</ion-col>
+        <ion-col size="6">{{survey?.requesttype == null || '' ? nullValue : survey?.requesttype}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.meternumber !== null">
+        <ion-col size="6" > Meter Number</ion-col>
+        <ion-col size="6">{{survey?.meternumber == null || '' ? nullValue : survey?.meternumber}}</ion-col>
+      </ion-row>
+      <!-- <ion-row *ngIf="survey.additionalnotes !='' && survey.additionalnotes !=null"> -->
+        <ion-row *ngIf="survey.additionalnotes !== null">
         <ion-col size="6" > Additional notes</ion-col>
-        <ion-col size="6">{{survey?.additionalnotes}}</ion-col>
+        <ion-col size="6">{{survey?.additionalnotes == null || '' ? nullValue : survey?.additionalnotes | titlecase}}</ion-col>
       </ion-row>
+      <ion-row *ngIf="survey.hoadetails !== null">
+        <ion-col size="6" > HOA Details</ion-col>
+        <ion-col size="6">{{survey?.hoadetails == null || '' ? nullValue : survey?.hoadetails}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="survey.hoaattachments.length !== 0">
+        <ion-col size="6" > HOA Attachments</ion-col>
+        <ion-col size="6" >
+          <ion-slides pager="false" [options]="slideOpts" zoom="true">
+            <ion-slide *ngFor="let hoa of survey.hoaattachments; let i = index">
+              <div>
+                <img [src]="hoa.ext !== ('.png' || '.jpg' || '.jpeg' || '.gif') ? 'assets/icon/file.png' : hoa.url " style="
+                    height: 10rem;
+                    width: 10rem;
+                    border: 3px solid black;
+                  " alt="file" (click)="showimage(hoa.url)" />
+
+                <!-- <ion-icon class="remove" name="close-circle-outline" (click)="removePrelim(i)"></ion-icon> -->
+              </div>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row><br><br>
     </ion-grid>
   </div>
 

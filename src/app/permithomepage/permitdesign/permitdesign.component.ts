@@ -1403,7 +1403,10 @@ gotoActivity(designData,event){
   gotoDetails(designData,$event){
     // $event.preventDefault();
     // $event.stopPropagation();
-    this.route.navigate(['/permit-design-details/' + designData.id])
+    // this.route.navigate(['/permit-design-details/' + designData.id])
+    this.utils.setPrelimId(designData)
+      this.utils.setRequestType('permit')
+      this.route.navigate(['/masterdetailpage/permit/' + designData.id])
   }
 
   gotoChats(designData,event){

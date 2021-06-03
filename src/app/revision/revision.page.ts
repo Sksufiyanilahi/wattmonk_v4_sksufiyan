@@ -864,11 +864,17 @@ gotoActivity(designData,event){
     // $event.stopPropagation();
     if(designData.requesttype=='permit')
     {
-    this.router.navigate(['/permit-design-details/' + designData.id])
+    // this.router.navigate(['/permit-design-details/' + designData.id])
+    this.utils.setPrelimId(designData)
+    this.utils.setRequestType('permit')
+    this.router.navigate(['/masterdetailpage/permit/' + designData.id])
     }
     else if(designData.requesttype=='prelim')
     {
-      this.router.navigate(['design-details/' + designData.id]);
+      // this.router.navigate(['design-details/' + designData.id]);
+      this.utils.setPrelimId(designData)
+    this.utils.setRequestType('prelim')
+    this.router.navigate(['/masterdetailpage/prelim/' + designData.id])
     }
   }
 
