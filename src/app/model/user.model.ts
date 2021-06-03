@@ -32,7 +32,7 @@ export class User {
   jobcount:number;
   displayname:string;
   addedby:any;
-
+  minpermitdesignaccess:boolean;
 }
 
 export class ContractorLogo {
