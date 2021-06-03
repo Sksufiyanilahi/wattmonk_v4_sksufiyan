@@ -206,7 +206,9 @@ export class StartsurveyPage implements OnInit {
   utilities: InverterMakeModel[] = [];
   selectedutilityid: number;
   invertermodels: InverterMadeModel[] = [];
+  selectedinvertermodelid: number;
   invertermakes: InverterMakeModel[] = [];
+  selectedinvertermakeid: number;
   solarmakes: SolarMake[] = [];
   solarmodels: SolarMadeModel[] = [];
   roofmaterials: RoofMaterial[] = [];
@@ -891,6 +893,43 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           const error: ErrorModel = responseError.error;
           this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  addinvertermake(name: string){
+    const data = {
+      name: name
+    };
+    this.utilitieservice.showLoading('Saving').then(() => {
+      this.apiService.addInverterMake(data).subscribe((data) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.selectedinvertermakeid = data.id;
+        this.activeForm.get('invertermake').setValue(data);
+        });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar(JSON.stringify(error));
+        });
+      });
+    });
+  }
+
+  addinvertermodel(name: string){
+    const data = {
+      name: name,
+      invertermake: this.selectedinvertermakeid
+    };
+    this.utilitieservice.showLoading('Saving').then(() => {
+      this.apiService.addInverterModel(data).subscribe((data) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.selectedinvertermodelid = data.id;
+        this.activeForm.get('invertermodel').setValue(data);
+        });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar(JSON.stringify(error));
         });
       });
     });
@@ -1657,13 +1696,25 @@ export class StartsurveyPage implements OnInit {
     try {
       const invertermakecontrol = this.activeForm.get('invertermake');
       const invertermodelcontrol = this.activeForm.get('invertermodel');
-      if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
+
+      if (this.invertermake.manualinput != '') {
+        this.addinvertermake(this.invertermake.manualinput);
+        this.addinvertermodel(this.invertermodel.manualinput);
         this.markshotcompletion();
-      } else {
-        invertermakecontrol.markAsTouched();
-        invertermakecontrol.markAsDirty();
-        invertermodelcontrol.markAsTouched();
-        invertermodelcontrol.markAsDirty();
+      }
+      else if(this.invertermodel.manualinput != ''){
+        this.addinvertermodel(this.invertermodel.manualinput);
+        this.markshotcompletion();
+      }
+      else{
+        if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
+          this.markshotcompletion();
+        } else {
+          invertermakecontrol.markAsTouched();
+          invertermakecontrol.markAsDirty();
+          invertermodelcontrol.markAsTouched();
+          invertermodelcontrol.markAsDirty();
+        }
       }
     } catch (error) {
       console.log("handleInverterFieldsSubmission---" + error);
