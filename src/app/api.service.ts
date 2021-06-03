@@ -165,6 +165,10 @@ export class ApiService {
     return this.http.get<RoofMaterial[]>(BaseUrl + 'roofmaterials', { headers: this.headers });
   }
 
+  addRoofMaterial(data: any): Observable<RoofMaterial> {
+    return this.http.post<RoofMaterial>(BaseUrl + 'roofmaterials', data, { headers: this.headers });
+  }
+
   getInverterMade(id): Observable<InverterMadeModel[]> {
     return this.http.get<InverterMadeModel[]>(BaseUrl + 'invertermodels?invertermake.id_eq=' + id, { headers: this.headers });
   }

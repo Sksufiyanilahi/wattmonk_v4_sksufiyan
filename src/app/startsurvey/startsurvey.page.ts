@@ -178,6 +178,9 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('multiplefileuploadinput') multiplefileuploadinput: ElementRef;
   @ViewChild('watermarkedimage') waterMarkImage: ElementRef;
   @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
+  @ViewChild('roofmaterial', { static: false }) roofmaterial: AutoCompleteComponent;
+  @ViewChild('invertermake', { static: false }) invertermake: AutoCompleteComponent;
+  @ViewChild('invertermodel', { static: false }) invertermodel: AutoCompleteComponent;
 
   sliderTwo: any;
 
@@ -833,6 +836,24 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           const error: ErrorModel = responseError.error;
           this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  addroofmaterial(name: string){
+    const data = {
+      name: name
+    };
+    this.utilitieservice.showLoading('Saving').then(() => {
+      this.apiService.addRoofMaterial(data).subscribe((data) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.selectedroofmaterialid = data.id;
+        this.activeForm.get('roofmaterial').setValue(data);
+        });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar(JSON.stringify(error));
         });
       });
     });
@@ -1671,11 +1692,16 @@ export class StartsurveyPage implements OnInit {
   handleRoofMaterialSubmission() {
     try {
       const roofmaterialcontrol = this.activeForm.get('roofmaterial');
-      if (roofmaterialcontrol.value != '') {
+      if (this.roofmaterial.manualinput != '') {
+        this.addroofmaterial(this.roofmaterial.manualinput);
         this.markshotcompletion();
-      } else {
-        roofmaterialcontrol.markAsTouched();
-        roofmaterialcontrol.markAsDirty();
+      }else{
+        if (roofmaterialcontrol.value != '') {
+          this.markshotcompletion();
+        }else {
+          roofmaterialcontrol.markAsTouched();
+          roofmaterialcontrol.markAsDirty();
+        }
       }
     } catch (error) {
       console.log("handleRoofMaterialSubmission---" + error);
