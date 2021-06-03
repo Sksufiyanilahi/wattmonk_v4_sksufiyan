@@ -1080,6 +1080,7 @@ export class StartsurveyPage implements OnInit {
             child.formelements.forEach(formelement => {
               if (formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
                 formelement.attachments.forEach(attachment => {
+                  console.log(attachment);
                   filesarray.push(attachment);
                 });
               }
@@ -1100,7 +1101,7 @@ export class StartsurveyPage implements OnInit {
     try {
       if (files.length > 0 && files.length <= this.totalfilestoupload) {
         const fileToUpload = files[0];
-        if (fileToUpload.uploadstatus) {
+        if (!fileToUpload.uploadstatus) {
           if (isfailedfile) {
             this.utilitieservice.setLoadingMessage('Uploading failed file ' + (index + 1) + ' of ' + totalfiles);
           } else {
@@ -1140,12 +1141,12 @@ export class StartsurveyPage implements OnInit {
             //Code to upload failed files
             this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.failedattachmentstoupload.length, true);
           } else {
-            // this.uploadImagesToServer();
+            this.uploadImagesToServer();
           }
         });
       }
     } catch (error) {
-      console.log("uploadattachmentbyindex---" + error);
+      // console.log("uploadattachmentbyindex---" + error);
     }
   }
 
@@ -1169,7 +1170,7 @@ export class StartsurveyPage implements OnInit {
         this.uploadImageByIndex(imagesArray, 0, this.totalimagestoupload, false);
       });
     } catch (error) {
-      console.log("uploadImagesToServer---" + error);
+      // console.log("uploadImagesToServer---" + error);
     }
   }
 
@@ -1223,7 +1224,7 @@ export class StartsurveyPage implements OnInit {
         });
       }
     } catch (error) {
-      console.log("uploadImageByIndex---" + error);
+      // console.log("uploadImageByIndex---" + error);
     }
   }
 
@@ -1284,7 +1285,7 @@ export class StartsurveyPage implements OnInit {
         });
       });
     } catch (error) {
-      console.log("savedetailsformdata---" + error);
+      // console.log("savedetailsformdata---" + error);
     }
   }
 
@@ -1307,7 +1308,7 @@ export class StartsurveyPage implements OnInit {
       }
       this.markallpreviousoptionalstepsnotpending(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
-      console.log("selectmainmenu---" + error);
+      // console.log("selectmainmenu---" + error);
     }
   }
 
@@ -1323,7 +1324,7 @@ export class StartsurveyPage implements OnInit {
       }
       this.markallpreviousoptionalstepsnotpending(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
-      console.log("selectsubmenu---" + error);
+      // console.log("selectsubmenu---" + error);
     }
   }
 
@@ -1365,7 +1366,7 @@ export class StartsurveyPage implements OnInit {
       this.updateshotscapturedcount();
       this.handleshotquestion();
     } catch (error) {
-      console.log("handleshotimage---" + error);
+      // console.log("handleshotimage---" + error);
     }
   }
 
@@ -1380,7 +1381,7 @@ export class StartsurveyPage implements OnInit {
 
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount = capturedshots;
     } catch (error) {
-      console.log("updateshotscapturedcount---" + error);
+      // console.log("updateshotscapturedcount---" + error);
     }
   }
 
@@ -1414,7 +1415,7 @@ export class StartsurveyPage implements OnInit {
       this.changedetectorref.detectChanges();
       this.animateElementOpacity(document.querySelector('.questionaireview'));
     } catch (error) {
-      console.log("handleshotquestion---" + error);
+      // console.log("handleshotquestion---" + error);
     }
   }
 
@@ -1431,7 +1432,7 @@ export class StartsurveyPage implements OnInit {
         shotnameformcontrol.markAsDirty();
       }
     } catch (error) {
-      console.log("handleShotNameSubmission---" + error);
+      // console.log("handleShotNameSubmission---" + error);
     }
   }
 
@@ -1441,7 +1442,7 @@ export class StartsurveyPage implements OnInit {
       if(this.invertermakesubscriptions != undefined || this.invertermakesubscriptions != null){
         this.unsubscribeInverterMake();
       }
-      console.log("inside markshotcompletion");
+      // console.log("inside markshotcompletion");
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].shotstatus = true;
@@ -1455,22 +1456,22 @@ export class StartsurveyPage implements OnInit {
 
       //Check for more pending shots in same child if found activate that
       if(this.checkallrequiredshotscaptured()){
-        console.log("marking child completion--" + this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
+        // console.log("marking child completion--" + this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
         this.selectedsubmenuindex = 0;
         this.markchildcompletion();
       }else{
         if(this.findnextpossibleshot(this.selectedmainmenuindex, this.selectedsubmenuindex, this.selectedshotindex)){
-          console.log("moving to next step");
+          // console.log("moving to next step");
           this.activateshot();
         }else {
-          console.log("marking child completion--" + this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
+          // console.log("marking child completion--" + this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name);
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
           this.markchildcompletion();
         }
       }
     } catch (error) {
-      console.log("markshotcompletion---" + error);
+      // console.log("markshotcompletion---" + error);
     }
   }
 
@@ -1490,15 +1491,15 @@ export class StartsurveyPage implements OnInit {
       //Check for more pending child in same menu
       let nextpendingshotfound = this.findnextpossibleshot(this.selectedmainmenuindex, this.selectedsubmenuindex, 0);
       if (nextpendingshotfound) {
-        console.log("moving to next step");
+        // console.log("moving to next step");
         this.activateshot();
       } else {
-        console.log("marking main menu completion---" + this.mainmenuitems[this.selectedmainmenuindex].name);
+        // console.log("marking main menu completion---" + this.mainmenuitems[this.selectedmainmenuindex].name);
         this.mainmenuitems[this.selectedmainmenuindex].ispending = false;
         this.markmaincompletion();
       }
     } catch (error) {
-      console.log("markchildcompletion---" + error);
+      // console.log("markchildcompletion---" + error);
     }
   }
 
@@ -1507,7 +1508,7 @@ export class StartsurveyPage implements OnInit {
       //Check for more pending main menus
       let nextpendingshotfound = this.findnextpossibleshot(this.selectedmainmenuindex, 0, 0);
       if (nextpendingshotfound) {
-        console.log("moving to next step");
+        // console.log("moving to next step");
         this.activateshot();
       } else {
         this.nextfoundmainindex = this.mainmenuitems.length - 1;
@@ -1516,7 +1517,7 @@ export class StartsurveyPage implements OnInit {
         this.activateshot();
       }
     } catch (error) {
-      console.log("markmainmenucompletion---" + error);
+      // console.log("markmainmenucompletion---" + error);
     }
   }
 
@@ -1527,15 +1528,15 @@ export class StartsurveyPage implements OnInit {
       for (let mainmenuindex = startmainmenuindex; mainmenuindex < this.mainmenuitems.length; mainmenuindex++) {
         const mainmenu = this.mainmenuitems[mainmenuindex];
         if (!pendingshotfound) {
-          console.log(mainmenu.name);
+          // console.log(mainmenu.name);
           for (let childindex = startchildmenuindex; childindex < mainmenu.children.length; childindex++) {
             const child = mainmenu.children[childindex];
             if (!pendingshotfound) {
-              console.log(child.name);
+              // console.log(child.name);
               for (let shotindex = startshotindex; shotindex < child.shots.length; shotindex++) {
                 const shot = child.shots[shotindex];
                 if (!pendingshotfound && shot.ispending && (shot.required || (!shot.required && !shot.visitedonce))) {
-                  console.log(shot.shotinfo);
+                  // console.log(shot.shotinfo);
                   pendingshotfound = true;
                   this.nextfoundshotindex = shotindex;
                   this.nextfoundchildindex = childindex;
@@ -1553,7 +1554,7 @@ export class StartsurveyPage implements OnInit {
       }
       return pendingshotfound;
     } catch (error) {
-      console.log("findnextpossibleshot---" + error);
+      // console.log("findnextpossibleshot---" + error);
     }
   }
 
@@ -1563,7 +1564,7 @@ export class StartsurveyPage implements OnInit {
       this.selectedshotindex = this.nextfoundshotindex;
       this.selectedsubmenuindex = this.nextfoundchildindex;
       this.selectedmainmenuindex = this.nextfoundmainindex;
-      console.log(this.selectedmainmenuindex + "---" + this.selectedsubmenuindex + "----" + this.selectedshotindex);
+      // console.log(this.selectedmainmenuindex + "---" + this.selectedsubmenuindex + "----" + this.selectedshotindex);
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.length > 0) {
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].isactive = true;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].visitedonce = true;
@@ -1573,7 +1574,7 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].visitedonce = true;
       this.markallpreviousoptionalstepsnotpending(this.selectedmainmenuindex, this.selectedsubmenuindex);
     } catch (error) {
-      console.log("activateshot---" + error);
+      // console.log("activateshot---" + error);
     }
   }
 
@@ -1661,11 +1662,11 @@ export class StartsurveyPage implements OnInit {
     try {
       const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex];
       shotDetail.result = result;
-      console.log(shotDetail.inputformcontrol);
+      // console.log(shotDetail.inputformcontrol);
       this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
       this.markshotcompletion();
     } catch (error) {
-      console.log("handleAnswerSubmission---" + error);
+      // console.log("handleAnswerSubmission---" + error);
     }
   }
 
@@ -1702,7 +1703,7 @@ export class StartsurveyPage implements OnInit {
       }
       
     } catch (error) {
-      console.log("handleInputSubmission---" + error);
+      // console.log("handleInputSubmission---" + error);
     }
   }
 
@@ -1717,7 +1718,7 @@ export class StartsurveyPage implements OnInit {
         control.markAsDirty();
       }
     } catch (error) {
-      console.log("handleInputTextSubmission---" + error);
+      // console.log("handleInputTextSubmission---" + error);
     }
   }
 
@@ -1764,7 +1765,7 @@ export class StartsurveyPage implements OnInit {
         }
       }
     } catch (error) {
-      console.log("handleInverterFieldsSubmission---" + error);
+      // console.log("handleInverterFieldsSubmission---" + error);
     }
   }
 
@@ -1783,7 +1784,7 @@ export class StartsurveyPage implements OnInit {
         }
       }
     } catch (error) {
-      console.log("handleUtilitySubmission---" + error);
+      // console.log("handleUtilitySubmission---" + error);
     }
   }
 
@@ -1809,7 +1810,7 @@ export class StartsurveyPage implements OnInit {
         }
       }
     } catch (error) {
-      console.log("handleRoofMaterialSubmission---" + error);
+      // console.log("handleRoofMaterialSubmission---" + error);
     }
   }
 
@@ -1861,7 +1862,7 @@ export class StartsurveyPage implements OnInit {
         this.markchildcompletion();
       }
     } catch (error) {
-      console.log("handleExistence---" + error);
+      // console.log("handleExistence---" + error);
     }
   }
 
@@ -1884,7 +1885,7 @@ export class StartsurveyPage implements OnInit {
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imagecleared = true;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount -= 1;
     } catch (error) {
-      console.log("allowusertorecaptureshot---" + error);
+      // console.log("allowusertorecaptureshot---" + error);
     }
   }
 
@@ -1927,7 +1928,7 @@ export class StartsurveyPage implements OnInit {
         }
       }
     } catch (error) {
-      console.log("promptstepquestion---" + error);
+      // console.log("promptstepquestion---" + error);
     }
   }
 
@@ -1981,7 +1982,7 @@ export class StartsurveyPage implements OnInit {
         this.markchildcompletion();
       }
     } catch (error) {
-      console.log("onchildmodechanged---" + error);
+      // console.log("onchildmodechanged---" + error);
     }
   }
 
@@ -2006,7 +2007,7 @@ export class StartsurveyPage implements OnInit {
         this.changedetectorref.detectChanges();
       }
     } catch (error) {
-      console.log("toggleElementVisibility---" + error);
+      // console.log("toggleElementVisibility---" + error);
     }
   }
 }
