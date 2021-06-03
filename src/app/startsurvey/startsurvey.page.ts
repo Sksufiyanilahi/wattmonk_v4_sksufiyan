@@ -1588,11 +1588,6 @@ export class StartsurveyPage implements OnInit {
       const invertermakecontrol = this.activeForm.get('invertermake');
       const invertermodelcontrol = this.activeForm.get('invertermodel');
       if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
-        // this.fetchinvertermodels = false;
-        // let makerecordid = invertermakecontrol.value;
-        // this.activeForm.get('invertermake').setValue(makerecordid);
-        // let modelrecordid = invertermodelcontrol.value;
-        // this.activeForm.get('invertermake').setValue(modelrecordid);
         this.markshotcompletion();
       } else {
         invertermakecontrol.markAsTouched();
@@ -1609,8 +1604,6 @@ export class StartsurveyPage implements OnInit {
     try {
       const utilitycontrol = this.activeForm.get('utility');
       if (utilitycontrol.value != '') {
-        // let recordid = utilitycontrol.value;
-        // this.activeForm.get('utility').setValue(recordid);
         this.markshotcompletion();
       } else {
         utilitycontrol.markAsTouched();
@@ -1625,8 +1618,6 @@ export class StartsurveyPage implements OnInit {
     try {
       const roofmaterialcontrol = this.activeForm.get('roofmaterial');
       if (roofmaterialcontrol.value != '') {
-        // let recordid = roofmaterialcontrol.value;
-        // this.activeForm.get('roofmaterial').setValue(recordid);
         this.markshotcompletion();
       } else {
         roofmaterialcontrol.markAsTouched();
