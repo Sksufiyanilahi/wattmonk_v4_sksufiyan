@@ -4,18 +4,16 @@ import { SuccessModalComponent } from './utilities/success-modal/success-modal.c
 import { BehaviorSubject, from, Observable, Subject, Subscription } from 'rxjs';
 import { ScheduleFormEvent } from './model/constants';
 import { AddressModel } from './model/address.model';
-import { AssigneeModel } from './model/assignee.model';
 import * as moment from 'moment';
-import { User } from './model/user.model';
 import { LoginModel } from './model/login.model';
 import { StorageService } from './storage.service';
-import { NumberOnlyDirective } from './schedule/number.directive';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat/CometChat';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { COMETCHAT_CONSTANTS } from './constants';
 import { PopoverComponentComponent } from './popover-component/popover-component.component';
 import { FormGroup } from '@angular/forms';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 
 @Injectable({
     providedIn: 'root'
@@ -81,7 +79,8 @@ export class UtilitiesService {
         private navCtrl: NavController,
         private location: Location,
         private popoverController: PopoverController,
-        private platform: Platform
+        private platform: Platform,
+        private nativeGeocoder: NativeGeocoder
     ) {
         this.guid$ = this.myMethodSubject.asObservable();
         // this.listencall();
@@ -730,6 +729,39 @@ export class UtilitiesService {
             }
         }
         return invalid;
+    }
+
+    getAddressFromLatLng(latitude, longitude) : AddressModel{
+        let defaultaddress: AddressModel = {
+            address: '',
+            lat: 0,
+            long: 0,
+            country: '',
+            state: '',
+            city: '',
+            postalcode: ''
+          };
+        let geoencoderoptions: NativeGeocoderOptions = {
+            useLocale: true,
+            maxResults: 5
+          };
+        this.nativeGeocoder.reverseGeocode(latitude, longitude, geoencoderoptions)
+          .then((result: NativeGeocoderResult[]) => {
+            defaultaddress = {
+                address: '',
+                lat: latitude,
+                long: longitude,
+                country: result[0].countryName,
+                state: result[0].administrativeArea,
+                city: result[0].locality,
+                postalcode: result[0].postalCode
+              };
+              return defaultaddress;
+          })
+          .catch((error: any) => {
+            return defaultaddress;
+          });
+          return defaultaddress;
     }
 
     getMimetype(extension) {

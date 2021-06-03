@@ -144,6 +144,14 @@ export class ApiService {
     return this.http.get<InverterMakeModel[]>(BaseUrl + 'invertermakes', { headers: this.headers });
   }
 
+  addInverterMake(data: any): Observable<InverterMakeModel> {
+    return this.http.post<InverterMakeModel>(BaseUrl + 'invertermakes', data, { headers: this.headers });
+  }
+
+  addInverterModel(data: any): Observable<InverterMakeModel> {
+    return this.http.post<InverterMakeModel>(BaseUrl + 'invertermodels', data, { headers: this.headers });
+  }
+
   postInverterMake(data){
     return this.http.post<InverterMakeModel[]>(BaseUrl + 'invertermakes',data, { headers: this.headers });
   }
@@ -163,6 +171,10 @@ export class ApiService {
 
   getRoofMaterials() {
     return this.http.get<RoofMaterial[]>(BaseUrl + 'roofmaterials', { headers: this.headers });
+  }
+
+  addRoofMaterial(data: any): Observable<RoofMaterial> {
+    return this.http.post<RoofMaterial>(BaseUrl + 'roofmaterials', data, { headers: this.headers });
   }
 
   getInverterMade(id): Observable<InverterMadeModel[]> {

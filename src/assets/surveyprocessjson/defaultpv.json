@@ -1289,6 +1289,8 @@
                                     }
                                 ],
                                 "required": true,
+                                "fileurls": [],
+                "attachments": [],
                                 "formfieldvalidations":[]
                             },
                             {
@@ -1301,6 +1303,8 @@
                                 "controltype": 7,
                                 "options": [],
                                 "required": false,
+                                "fileurls": [],
+                "attachments": [],
                                 "formfieldvalidations":[
                                     {
                                         "minlength": 1,
@@ -1329,6 +1333,8 @@
                                     }
                                 ],
                                 "required": true,
+                                "fileurls": [],
+                "attachments": [],
                                 "formfieldvalidations":[]
                             },
                             {
@@ -1341,6 +1347,8 @@
                                 "controltype": 7,
                                 "options": [],
                                 "required": false,
+                                "fileurls": [],
+                                "attachments": [],
                                 "formfieldvalidations":[
                                     {
                                         "minlength": 1,

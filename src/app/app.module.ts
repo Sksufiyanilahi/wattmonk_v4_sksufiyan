@@ -41,6 +41,7 @@ import {CameraPreviewWeb} from '@capacitor-community/camera-preview';
 import {SplashScreenPluginWeb} from '@capacitor/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {JoyrideModule} from 'ngx-joyride'
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 @NgModule({
   declarations: [AppComponent, SuccessModalComponent,PopoverComponentComponent],
@@ -86,7 +87,8 @@ import {JoyrideModule} from 'ngx-joyride'
     Dialogs,
     AndroidPermissions,
     Mixpanel,
-    MixpanelPeople
+    MixpanelPeople,
+    NativeGeocoder
   ],
   exports: [
     UtilitiesModule

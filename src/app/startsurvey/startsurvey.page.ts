@@ -16,6 +16,9 @@ import { SolarMadeModel } from '../model/solar-made.model';
 import { RoofMaterial } from '../model/roofmaterial.model';
 import { Animation, AnimationController, IonSlides, NavController, Platform, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+import { AddressModel } from '../model/address.model';
+import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
 
 const { Camera } = Plugins;
 
@@ -174,6 +177,10 @@ export class StartsurveyPage implements OnInit {
   @ViewChild('singlefileuploadinput') singlefileuploadinput: ElementRef;
   @ViewChild('multiplefileuploadinput') multiplefileuploadinput: ElementRef;
   @ViewChild('watermarkedimage') waterMarkImage: ElementRef;
+  @ViewChild('utility', { static: false }) utility: AutoCompleteComponent;
+  @ViewChild('roofmaterial', { static: false }) roofmaterial: AutoCompleteComponent;
+  @ViewChild('invertermake', { static: false }) invertermake: AutoCompleteComponent;
+  @ViewChild('invertermodel', { static: false }) invertermodel: AutoCompleteComponent;
 
   sliderTwo: any;
 
@@ -199,7 +206,9 @@ export class StartsurveyPage implements OnInit {
   utilities: InverterMakeModel[] = [];
   selectedutilityid: number;
   invertermodels: InverterMadeModel[] = [];
+  selectedinvertermodelid: number;
   invertermakes: InverterMakeModel[] = [];
+  selectedinvertermakeid: number;
   solarmakes: SolarMake[] = [];
   solarmodels: SolarMadeModel[] = [];
   roofmaterials: RoofMaterial[] = [];
@@ -247,6 +256,11 @@ export class StartsurveyPage implements OnInit {
   latitude: any = 0; //latitude
   longitude: any = 0; //longitude
 
+  fetchinvertermodels = true;
+  platformname: string;
+  surveycity : string = "";
+  surveystate : string = "";
+
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
     private route: ActivatedRoute,
@@ -258,7 +272,8 @@ export class StartsurveyPage implements OnInit {
     private navController: NavController,
     private storage: Storage,
     public toastController: ToastController,
-    private platform: Platform) { }
+    private platform: Platform,
+    private geolocation: Geolocation) { }
 
   ngOnInit() {
     try {
@@ -269,9 +284,17 @@ export class StartsurveyPage implements OnInit {
       this.surveyid = +this.route.snapshot.paramMap.get('id');
       this.surveytype = this.route.snapshot.paramMap.get('type');
 
+      if (this.platform.is('ios')) {
+        this.platformname = 'iphone';
+      } else if (this.platform.is('android')) {
+        this.platformname = 'android';
+      } else {
+        this.platformname = 'web';
+      }
+
       // this.loadSurveyJSON('pvsurveyjson');
       this.loadLocalJSON();
-      // this.getCurrentCoordinates();
+      this.getCurrentCoordinates();
     } catch (error) {
       console.log("ngOnInit---" + error);
     }
@@ -381,6 +404,10 @@ export class StartsurveyPage implements OnInit {
                     this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
                   });
                 } else {
+                  if(shot.inputformcontrol[0] !== ''){
+                    this.activeFormElementsArray.push(shot.inputformcontrol[0]);
+                    formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                  }
                   if (shot.forminputfields.length > 0) {
                     shot.forminputfields.forEach((control, controlindex) => {
                       this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
@@ -404,8 +431,8 @@ export class StartsurveyPage implements OnInit {
       });
       formData['shotname'] = new FormControl('', []);
       this.activeFormElementsArray.push('shotname');
-      // console.log(this.activeFormElementsArray);
       this.activeForm = new FormGroup(formData);
+      console.log(this.activeForm);
     } catch (error) {
       console.log("createSurveyForm---" + error);
     }
@@ -431,6 +458,10 @@ export class StartsurveyPage implements OnInit {
                     this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
                   });
                 } else {
+                  if(shot.inputformcontrol[0] !== ''){
+                    this.activeFormElementsArray.push(shot.inputformcontrol[0]);
+                    formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                  }
                   if (shot.forminputfields.length > 0) {
                     shot.forminputfields.forEach((control, controlindex) => {
                       this.addformfieldvalidations(shot.formfieldvalidations[controlindex], formData, control, shot.required)
@@ -455,6 +486,7 @@ export class StartsurveyPage implements OnInit {
       formData['shotname'] = new FormControl('', []);
       this.activeFormElementsArray.push('shotname');
       this.activeForm = new FormGroup(formData);
+      console.log(this.activeForm);
     } catch (error) {
       console.log("restoreStoredForm---" + error);
     }
@@ -480,7 +512,6 @@ export class StartsurveyPage implements OnInit {
 
   addformfieldvalidations(validations, formData, control, isrequired){
     if(control != ""){
-      console.log(control);
       if (validations != undefined && isrequired){
         let regex = this.getFieldRegex(validations.regextype, validations.minlength, validations.maxlength);
         formData[control] = new FormControl('', Validators.compose([Validators.required, Validators.pattern(regex)]));
@@ -506,7 +537,7 @@ export class StartsurveyPage implements OnInit {
       case REGEXTYPE.ALLCHARACTERS:
         return "^.{"+minlength+","+maxlength+"}$";
       case REGEXTYPE.MAKE:
-        return "^[a-zA-Z-_ ]{"+minlength+","+maxlength+"}$";
+        return "^[a-z0-9A-Z+-_([)/. {\\]}]{"+minlength+","+maxlength+"}$";
       case REGEXTYPE.MODEL:
         return "^[a-z0-9A-Z+-_([)/. {\\]}]{"+minlength+","+maxlength+"}$";
       default:
@@ -578,15 +609,18 @@ export class StartsurveyPage implements OnInit {
   }
 
   // use geolocation to get user's device coordinates
-  // getCurrentCoordinates() {
-  //   this.geolocation.getCurrentPosition().then((resp) => {
-  //     this.latitude = resp.coords.latitude;
-  //     this.longitude = resp.coords.longitude;
-  //     console.log(this.latitude + "----" + this.longitude);
-  //    }).catch((error) => {
-  //      console.log('Error getting location', error);
-  //    });
-  // }
+  getCurrentCoordinates() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.latitude = resp.coords.latitude;
+      this.longitude = resp.coords.longitude;
+      console.log(this.latitude + "----" + this.longitude);
+      let address = this.utilitieservice.getAddressFromLatLng(this.latitude, this.longitude);
+      this.surveystate = address.state;
+      this.surveycity = address.city;
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+  }
 
   getcountoffiletoupload() {
     try {
@@ -769,6 +803,29 @@ export class StartsurveyPage implements OnInit {
     });
   }
 
+  addutility(name: string){
+    const data = {
+      name: name,
+      source: this.platformname,
+      lastused: this.formatDateInBackendFormat(),
+      city: this.surveycity,
+      state: this.surveystate,
+      addedby: this.user.id
+    };
+    this.utilitieservice.showLoading('Saving').then(() => {
+      this.apiService.addUtility(data).subscribe((data) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.selectedutilityid = data.id;
+        this.activeForm.get('utility').setValue(data);
+        });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar(JSON.stringify(error));
+        });
+      });
+    });
+  }
+
   getRoofMaterials() {
     this.utilitieservice.showLoading('Loading').then(() => {
       this.apiService.getRoofMaterials().subscribe(response => {
@@ -781,6 +838,24 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           const error: ErrorModel = responseError.error;
           this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  addroofmaterial(name: string){
+    const data = {
+      name: name
+    };
+    this.utilitieservice.showLoading('Saving').then(() => {
+      this.apiService.addRoofMaterial(data).subscribe((data) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.selectedroofmaterialid = data.id;
+        this.activeForm.get('roofmaterial').setValue(data);
+        });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar(JSON.stringify(error));
         });
       });
     });
@@ -808,6 +883,7 @@ export class StartsurveyPage implements OnInit {
             if (val != "") {
               this.getInverterModels(this.activeForm.get('invertermake').value.id);
             } else {
+              // this.fetchinvertermodels = true;
               this.activeForm.get('invertermodel').setValue('');
             }
           });
@@ -817,6 +893,43 @@ export class StartsurveyPage implements OnInit {
         this.utilitieservice.hideLoading().then(() => {
           const error: ErrorModel = responseError.error;
           this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
+      });
+    });
+  }
+
+  addinvertermake(name: string){
+    const data = {
+      name: name
+    };
+    this.utilitieservice.showLoading('Saving').then(() => {
+      this.apiService.addInverterMake(data).subscribe((data) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.selectedinvertermakeid = data.id;
+        this.activeForm.get('invertermake').setValue(data);
+        });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar(JSON.stringify(error));
+        });
+      });
+    });
+  }
+
+  addinvertermodel(name: string){
+    const data = {
+      name: name,
+      invertermake: this.selectedinvertermakeid
+    };
+    this.utilitieservice.showLoading('Saving').then(() => {
+      this.apiService.addInverterModel(data).subscribe((data) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.selectedinvertermodelid = data.id;
+        this.activeForm.get('invertermodel').setValue(data);
+        });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar(JSON.stringify(error));
         });
       });
     });
@@ -852,6 +965,15 @@ export class StartsurveyPage implements OnInit {
         });
       });
     });
+  }
+
+  formatDateInBackendFormat() {
+    const d = new Date();
+    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+    const mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(d);
+    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+
+    return (`${ye}-${mo}-${da}`);
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -1103,7 +1225,7 @@ export class StartsurveyPage implements OnInit {
       this.utilitieservice.showLoading('Please wait...');
       const data = {};
       this.activeFormElementsArray.map(element => {
-        if (this.activeForm.get(element).value != '') {
+        if (element != '' && this.activeForm.get(element).value != '') {
           data[element] = this.activeForm.get(element).value;
           if (element === 'batterysystem') {
             data[element] = this.activeForm.get('batterysystem').value.toString();
@@ -1114,6 +1236,8 @@ export class StartsurveyPage implements OnInit {
         }
       });
       data['status'] = 'completed';
+      data['latitude'] = this.latitude;
+      data['longitude'] = this.longitude;
       this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
         this.utilitieservice.hideLoading().then(() => {
           this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
@@ -1332,31 +1456,6 @@ export class StartsurveyPage implements OnInit {
     return allshotscaptured;
   }
 
-  // findincompleteshotinsamechild(mainindex, childindex, startshotindex, endshotindex) {
-  //   let nextpendingshotfound = false;
-  //   console.log("main menu --" + this.mainmenuitems[mainindex].name);
-  //   console.log("child --" + this.mainmenuitems[mainindex].children[childindex].name);
-  //   for (let shotindex = startshotindex; shotindex < endshotindex; shotindex++) {
-  //     const shot = this.mainmenuitems[mainindex].children[childindex].shots[shotindex];
-  //     console.log("findincompleteshotinsamechild ------ still running");
-  //     if (!nextpendingshotfound && shot.ispending && (shot.required || (!shot.required && !shot.visitedonce))) {
-  //       console.log("findincompleteshotinsamechild---" + shot.shotinfo);
-  //       nextpendingshotfound = true;
-  //       this.nextfoundshotindex = shotindex;
-  //       this.nextfoundchildindex = childindex;
-  //       this.nextfoundmainindex = mainindex;
-  //       return nextpendingshotfound;
-  //     }
-  //   }
-  //   if (!nextpendingshotfound && startshotindex > 0) {
-  //     console.log("findincompleteshotinsamechild starting from start");
-  //     this.findincompleteshotinsamechild(mainindex, childindex, 0, startshotindex);
-  //   } else {
-  //     console.log("findincompleteshotinsamechild shot not found");
-  //     return nextpendingshotfound;
-  //   }
-  // }
-
   markchildcompletion() {
     try {
       //Check for more pending child in same menu
@@ -1373,35 +1472,6 @@ export class StartsurveyPage implements OnInit {
       console.log("markchildcompletion---" + error);
     }
   }
-
-  // findincompleteshotindifferentchild(startmainindex, startchildindex, endchildindex, startshotindex) {
-  //   let nextpendingshotfound = false;
-  //   console.log("main menu in different child---" + this.mainmenuitems[startmainindex].name);
-  //   for (let childindex = startchildindex; childindex < endchildindex; childindex++) {
-  //     if (!nextpendingshotfound) {
-  //       const child = this.mainmenuitems[startmainindex].children[childindex];
-  //       console.log("findincompleteshotindifferentchild ------ still running");
-  //       console.log("findincompleteshotindifferentchild---" + child.name);
-  //       if (child.shots.length > 0) {
-  //         var pendingshotfound = this.findincompleteshotinsamechild(startmainindex, childindex, startshotindex, child.shots.length);
-  //         if (pendingshotfound) {
-  //           nextpendingshotfound = true;
-  //           this.nextfoundshotindex = startshotindex;
-  //           this.nextfoundchildindex = childindex;
-  //           this.nextfoundmainindex = startmainindex;
-  //           return nextpendingshotfound;
-  //         }
-  //       }
-  //     }
-  //   }
-  //   if (!nextpendingshotfound && startchildindex > 0) {
-  //     console.log("findincompleteshotindifferentchild starting from start");
-  //     this.findincompleteshotindifferentchild(startmainindex, 0, startchildindex, 0);
-  //   } else {
-  //     console.log("findincompleteshotindifferentchild shot not found");
-  //     return nextpendingshotfound;
-  //   }
-  // }
 
   markmaincompletion() {
     try {
@@ -1420,30 +1490,6 @@ export class StartsurveyPage implements OnInit {
       console.log("markmainmenucompletion---" + error);
     }
   }
-
-  // findincompleteshotindifferentmenu(startchildindex, startmainindex, endmainindex) {
-  //   let nextpendingshotfound = false;
-  //   for (let mainmenuindex = startmainindex; mainmenuindex < endmainindex; mainmenuindex++) {
-  //     if (!nextpendingshotfound) {
-  //       const mainmenu = this.mainmenuitems[mainmenuindex];
-  //       console.log("findincompleteshotindifferentmenu ------ still running");
-  //       console.log("findincompleteshotindifferentmenu---" + mainmenu.name);
-  //       var pendingshotfound = this.findincompleteshotindifferentchild(mainmenuindex, startchildindex, mainmenu.children.length, 0);
-  //       if (pendingshotfound) {
-  //         nextpendingshotfound = true;
-  //         this.nextfoundmainindex = mainmenuindex;
-  //         return nextpendingshotfound;
-  //       }
-  //     }
-  //   }
-  //   if (!nextpendingshotfound && startmainindex > 0) {
-  //     console.log("findincompleteshotindifferentmenu starting from start");
-  //     this.findincompleteshotindifferentmenu(0, 0, startmainindex);
-  //   } else {
-  //     console.log("findincompleteshotindifferentmenu shot not found");
-  //     return nextpendingshotfound;
-  //   }
-  // }
 
   findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex) {
     console.log("finding---"+startmainmenuindex + "---" + startchildmenuindex + "----" + startshotindex);
@@ -1586,6 +1632,7 @@ export class StartsurveyPage implements OnInit {
     try {
       const shotDetail = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex];
       shotDetail.result = result;
+      console.log(shotDetail.inputformcontrol);
       this.activeForm.get(shotDetail.inputformcontrol).setValue(result);
       this.markshotcompletion();
     } catch (error) {
@@ -1597,7 +1644,6 @@ export class StartsurveyPage implements OnInit {
     try {
       const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       const control = form.get(activechild.shots[this.selectedshotindex].inputformcontrol);
-      console.log(control.errors);
       if (activechild.shots[this.selectedshotindex].questiontype === QUESTIONTYPE.INPUT_MULTI_NUMBER) {
         let anyemptyfieldfound = false;
         let preparedresult = "";
@@ -1650,13 +1696,25 @@ export class StartsurveyPage implements OnInit {
     try {
       const invertermakecontrol = this.activeForm.get('invertermake');
       const invertermodelcontrol = this.activeForm.get('invertermodel');
-      if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
+
+      if (this.invertermake.manualinput != '') {
+        this.addinvertermake(this.invertermake.manualinput);
+        this.addinvertermodel(this.invertermodel.manualinput);
         this.markshotcompletion();
-      } else {
-        invertermakecontrol.markAsTouched();
-        invertermakecontrol.markAsDirty();
-        invertermodelcontrol.markAsTouched();
-        invertermodelcontrol.markAsDirty();
+      }
+      else if(this.invertermodel.manualinput != ''){
+        this.addinvertermodel(this.invertermodel.manualinput);
+        this.markshotcompletion();
+      }
+      else{
+        if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
+          this.markshotcompletion();
+        } else {
+          invertermakecontrol.markAsTouched();
+          invertermakecontrol.markAsDirty();
+          invertermodelcontrol.markAsTouched();
+          invertermodelcontrol.markAsDirty();
+        }
       }
     } catch (error) {
       console.log("handleInverterFieldsSubmission---" + error);
@@ -1666,11 +1724,16 @@ export class StartsurveyPage implements OnInit {
   handleUtilitySubmission() {
     try {
       const utilitycontrol = this.activeForm.get('utility');
-      if (utilitycontrol.value != '') {
+      if (this.utility.manualinput != '') {
+        this.addutility(this.utility.manualinput);
         this.markshotcompletion();
-      } else {
-        utilitycontrol.markAsTouched();
-        utilitycontrol.markAsDirty();
+      }else{
+        if (utilitycontrol.value != '') {
+          this.markshotcompletion();
+        }else {
+          utilitycontrol.markAsTouched();
+          utilitycontrol.markAsDirty();
+        }
       }
     } catch (error) {
       console.log("handleUtilitySubmission---" + error);
@@ -1680,11 +1743,16 @@ export class StartsurveyPage implements OnInit {
   handleRoofMaterialSubmission() {
     try {
       const roofmaterialcontrol = this.activeForm.get('roofmaterial');
-      if (roofmaterialcontrol.value != '') {
+      if (this.roofmaterial.manualinput != '') {
+        this.addroofmaterial(this.roofmaterial.manualinput);
         this.markshotcompletion();
-      } else {
-        roofmaterialcontrol.markAsTouched();
-        roofmaterialcontrol.markAsDirty();
+      }else{
+        if (roofmaterialcontrol.value != '') {
+          this.markshotcompletion();
+        }else {
+          roofmaterialcontrol.markAsTouched();
+          roofmaterialcontrol.markAsDirty();
+        }
       }
     } catch (error) {
       console.log("handleRoofMaterialSubmission---" + error);
