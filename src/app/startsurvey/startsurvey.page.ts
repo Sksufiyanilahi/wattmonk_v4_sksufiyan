@@ -19,6 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import { AddressModel } from '../model/address.model';
 import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
+import { Subscription } from 'rxjs';
 
 const { Camera } = Plugins;
 
@@ -261,6 +262,8 @@ export class StartsurveyPage implements OnInit {
   surveycity : string = "";
   surveystate : string = "";
 
+  invertermakesubscriptions: Subscription;
+
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
     private route: ActivatedRoute,
@@ -322,7 +325,7 @@ export class StartsurveyPage implements OnInit {
       this.datastorage.get(this.user.id + '-' + this.surveyid).then((data: SurveyStorageModel) => {
         if (data) {
           this.mainmenuitems = data.menuitems;
-          this.originalmainmenuitems = data.menuitems;
+          this.originalmainmenuitems = data.originalmainmenuitems;
           this.selectedmainmenuindex = data.selectedmainmenuindex;
           this.selectedsubmenuindex = data.selectedsubmenuindex;
           this.selectedshotindex = data.selectedshotindex;
@@ -358,7 +361,6 @@ export class StartsurveyPage implements OnInit {
           this.setTotalStepCount();
         } else {
           this.mainmenuitems = JSON.parse(JSON.stringify(surveydata));
-          this.originalmainmenuitems = JSON.parse(JSON.stringify(surveydata));
 
           this.mainmenuitems.forEach(element => {
             if (element.isactive) {
@@ -371,9 +373,19 @@ export class StartsurveyPage implements OnInit {
           }
           this.createSurveyForm(surveydata);
 
+          this.originalmainmenuitems = this.mainmenuitems;
           this.isdataloaded = true;
           this.setTotalStepCount();
         }
+        this.activeForm.get('invertermake').valueChanges.subscribe(val => {
+          if(this.fetchinvertermodels){
+            if (val != "") {
+              this.getInverterModels(this.activeForm.get('invertermake').value.id);
+            } else {
+              this.activeForm.get('invertermodel').setValue('');
+            }
+          }
+        });
       });
     } catch (error) {
       console.log("restoreSurveyStoredData---" + error);
@@ -574,6 +586,7 @@ export class StartsurveyPage implements OnInit {
 
     const surveyStorageModel = new SurveyStorageModel();
     surveyStorageModel.menuitems = this.mainmenuitems;
+    surveyStorageModel.originalmainmenuitems = this.originalmainmenuitems;
     surveyStorageModel.formdata = this.activeForm.value;
     surveyStorageModel.selectedmainmenuindex = this.selectedmainmenuindex;
     surveyStorageModel.selectedsubmenuindex = this.selectedsubmenuindex;
@@ -864,12 +877,15 @@ export class StartsurveyPage implements OnInit {
   getInverterModels(selectedmakeid: string) {
     this.utilitieservice.showLoading('Getting inverter models').then((success) => {
       this.apiService.getInverterMade(selectedmakeid).subscribe(response => {
-        this.utilitieservice.hideLoading();
-        this.invertermodels = response;
+        this.utilitieservice.hideLoading().then(() => {
+          this.invertermodels = response;
+          this.changedetectorref.detectChanges();
+        });
       }, responseError => {
-        this.utilitieservice.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        this.utilitieservice.hideLoading().then(() => {
+          const error: ErrorModel = responseError.error;
+          this.utilitieservice.errorSnackBar(error.message[0].messages[0].message);
+        });
       });
     });
   }
@@ -879,15 +895,6 @@ export class StartsurveyPage implements OnInit {
       this.apiService.getInverterMake().subscribe(response => {
         this.utilitieservice.hideLoading().then(() => {
           this.invertermakes = response;
-          this.activeForm.get('invertermake').valueChanges.subscribe(val => {
-            if (val != "") {
-              this.getInverterModels(this.activeForm.get('invertermake').value.id);
-            } else {
-              // this.fetchinvertermodels = true;
-              this.activeForm.get('invertermodel').setValue('');
-            }
-          });
-          this.changedetectorref.detectChanges();
         });
       }, responseError => {
         this.utilitieservice.hideLoading().then(() => {
@@ -906,7 +913,8 @@ export class StartsurveyPage implements OnInit {
       this.apiService.addInverterMake(data).subscribe((data) => {
         this.utilitieservice.hideLoading().then(() => {
           this.selectedinvertermakeid = data.id;
-        this.activeForm.get('invertermake').setValue(data);
+          this.addinvertermodel(this.invertermodel.manualinput, this.selectedinvertermakeid);
+          this.activeForm.get('invertermake').setValue(data);
         });
       }, (error) => {
         this.utilitieservice.hideLoading().then(() => {
@@ -916,19 +924,20 @@ export class StartsurveyPage implements OnInit {
     });
   }
 
-  addinvertermodel(name: string){
+  addinvertermodel(name: string, makeid: number){
     const data = {
       name: name,
-      invertermake: this.selectedinvertermakeid
+      invertermake: makeid
     };
     this.utilitieservice.showLoading('Saving').then(() => {
       this.apiService.addInverterModel(data).subscribe((data) => {
         this.utilitieservice.hideLoading().then(() => {
           this.selectedinvertermodelid = data.id;
-        this.activeForm.get('invertermodel').setValue(data);
+          this.activeForm.get('invertermodel').setValue(data);
+          this.markshotcompletion();
         });
       }, (error) => {
-        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.hideLoading().then(() => {
           this.utilitieservice.errorSnackBar(JSON.stringify(error));
         });
       });
@@ -1412,6 +1421,7 @@ export class StartsurveyPage implements OnInit {
 
   markshotcompletion() {
     try {
+      this.fetchinvertermodels = true;
       console.log("inside markshotcompletion");
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].promptquestion = false;
       this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].questionstatus = true;
@@ -1696,17 +1706,31 @@ export class StartsurveyPage implements OnInit {
     try {
       const invertermakecontrol = this.activeForm.get('invertermake');
       const invertermodelcontrol = this.activeForm.get('invertermodel');
-
+      this.fetchinvertermodels = false;
       if (this.invertermake.manualinput != '') {
-        this.addinvertermake(this.invertermake.manualinput);
-        this.addinvertermodel(this.invertermodel.manualinput);
-        this.markshotcompletion();
-      }
-      else if(this.invertermodel.manualinput != ''){
-        this.addinvertermodel(this.invertermodel.manualinput);
-        this.markshotcompletion();
-      }
-      else{
+        const ismakefound = this.invertermakes.some(el => el.name === this.invertermake.manualinput);
+        if(ismakefound){
+          if (this.invertermodel.manualinput != '') {
+            const ismodelfound = this.invertermodels.some(el => el.name === this.invertermodel.manualinput);
+            if(ismodelfound){
+              this.markshotcompletion();
+            }else{
+              this.addinvertermodel(this.invertermodel.manualinput, invertermakecontrol.value.id);
+            }
+          }else{
+            this.markshotcompletion();
+          }
+        }else{
+          this.addinvertermake(this.invertermake.manualinput);
+        }
+      }else if (this.invertermodel.manualinput != '') {
+        const ismodelfound = this.invertermodels.some(el => el.name === this.invertermodel.manualinput);
+        if(ismodelfound){
+          this.markshotcompletion();
+        }else{
+          this.addinvertermodel(this.invertermodel.manualinput, invertermakecontrol.value.id);
+        }
+      }else{
         if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
           this.markshotcompletion();
         } else {
@@ -1843,6 +1867,7 @@ export class StartsurveyPage implements OnInit {
   promptstepquestion(event, index) {
     try {
       event.preventDefault();
+      this.fetchinvertermodels = true;
       if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[index].questionstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult) {
         this.showinfodetailsview = false;
         this.blurcaptureview = true;
