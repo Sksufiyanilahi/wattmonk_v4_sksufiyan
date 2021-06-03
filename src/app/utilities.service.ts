@@ -68,6 +68,8 @@ export class UtilitiesService {
     toast: any;
     popover: HTMLIonPopoverElement;
     platformname: any;
+    prelimId = new BehaviorSubject<string>('');
+    requesttype = new BehaviorSubject<string>('');
 
     constructor(
         public loadingController: LoadingController,
@@ -217,6 +219,22 @@ export class UtilitiesService {
     // setPermitDesignDetailsRefresh(value: boolean) {
     //   this.permitdesignDetailsRefresh.next(value);
     // }
+
+    getPrelimId():BehaviorSubject<string> {
+        return this.prelimId;
+    }
+
+    setPrelimId(data:string) {
+        this.prelimId.next(data);
+    }
+
+    getRequestType():BehaviorSubject<string> {
+        return this.requesttype;
+    }
+
+    setRequestType(requesttype:string) {
+        this.requesttype.next(requesttype);
+    }
 
     getScheduleFormEvent(): BehaviorSubject<ScheduleFormEvent> {
         return this.saveScheduleForm;

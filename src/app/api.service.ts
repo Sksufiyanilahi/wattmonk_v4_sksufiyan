@@ -585,6 +585,13 @@ export class ApiService {
           headers: this.headers
         })
       }
+
+      deletePestampDesign(id:string): Observable<Pestamp> {
+
+        return this.http.delete<Pestamp>(BaseUrl + "pestamps/"+id, {
+          headers: this.headers
+        })
+      }
     getcounts(id){
       return this.http.get(BaseUrl + 'dashboarddesigncount?id=' + id,{headers: this.headers});
     }

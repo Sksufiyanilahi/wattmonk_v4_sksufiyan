@@ -318,7 +318,10 @@ export class NewsurveysComponent implements OnInit {
   gotoDetails(surveyData, $event) {
     // $event.preventDefault();
     // $event.stopPropagation();
-    this.router.navigate(['/survey-detail/' + surveyData.id])
+    // this.router.navigate(['/survey-detail/' + surveyData.id])
+    this.utils.setPrelimId(surveyData)
+    this.utils.setRequestType('survey')
+    this.router.navigate(['/masterdetailpage/survey/' + surveyData.id])
   }
   gotoChats(surveyData,event){
 

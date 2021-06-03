@@ -285,7 +285,10 @@ export class PermitnewdesignComponent implements OnInit {
     gotoDetails(designData,$event){
       // $event.preventDefault();
       // $event.stopPropagation();
-      this.router.navigate(['/permit-design-details/' + designData.id])
+      // this.router.navigate(['/permit-design-details/' + designData.id])
+      this.utils.setPrelimId(designData)
+      this.utils.setRequestType('permit')
+      this.router.navigate(['/masterdetailpage/permit/' + designData.id])
     }
     gotoChats(designData,event){
       event.stopPropagation();

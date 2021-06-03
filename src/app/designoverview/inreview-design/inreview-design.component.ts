@@ -212,7 +212,10 @@ user:any
     gotoDetails(designData,$event){
       // $event.preventDefault();
       // $event.stopPropagation();
-      this.router.navigate(['/design-details/' + designData.id])
+      // this.router.navigate(['/design-details/' + designData.id])
+      this.utils.setPrelimId(designData)
+      this.utils.setRequestType('prelim')
+      this.router.navigate(['/masterdetailpage/prelim/' + designData.id])
     }
 
     gotoChats(designData,event){

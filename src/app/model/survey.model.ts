@@ -1,5 +1,5 @@
 import {Image, User} from './user.model';
-import {Solarmake, Solarmodel} from './design.model';
+import {Invertermake, Solarmake, Solarmodel} from './design.model';
 // import { ImageModel } from '../camera/menu.model';
 import {InverterMadeModel} from './inverter-made.model';
 
@@ -35,8 +35,8 @@ export class SurveyDataModel {
   roofimages: Image[];
   modulemake: Solarmake;
   modulemodel: Solarmodel;
-  invertermake: string;
-  invertermodel: string;
+  invertermake: Invertermake;
+  invertermodel: InverterMadeModel;
   batterybackup: string;
   acdisconnect: string;
   mainbreakersize: number;
@@ -85,6 +85,15 @@ export class SurveyDataModel {
   additionalnotes:string;
   interconnectiondetails: string;
   addedtogroupchat: boolean;
+  company:string;
+  newconstruction:string;
+  detailsofbatterysystem:string;
+  esid:string;
+  sizeofsingleraft:any;
+  requesttype:string;
+  meternumber:string;
+  hoadetails:any;
+  hoaattachments:Image[];
 }
 
 export class SurveyCount{

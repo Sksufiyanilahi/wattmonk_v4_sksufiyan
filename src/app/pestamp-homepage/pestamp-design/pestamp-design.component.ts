@@ -1110,7 +1110,10 @@ gotoActivity(designData,event){
   gotoDetails(designData,$event){
     // $event.preventDefault();
     // $event.stopPropagation();
-    this.route.navigate(['/pestamp-design-details/' + designData.id])
+    // this.route.navigate(['/pestamp-design-details/' + designData.id])
+    this.utils.setPrelimId(designData);
+    this.utils.setRequestType('pestamp')
+    this.route.navigate(['/masterdetailpage/pestamp/' + designData.id])
   }
 
 gotoChats(designData,event){
