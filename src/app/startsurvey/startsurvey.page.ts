@@ -16,6 +16,7 @@ import { SolarMadeModel } from '../model/solar-made.model';
 import { RoofMaterial } from '../model/roofmaterial.model';
 import { Animation, AnimationController, IonSlides, NavController, Platform, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
 
 const { Camera } = Plugins;
 
@@ -260,7 +261,8 @@ export class StartsurveyPage implements OnInit {
     private navController: NavController,
     private storage: Storage,
     public toastController: ToastController,
-    private platform: Platform) { }
+    private platform: Platform,
+    private geolocation: Geolocation) { }
 
   ngOnInit() {
     try {
@@ -273,7 +275,7 @@ export class StartsurveyPage implements OnInit {
 
       // this.loadSurveyJSON('pvsurveyjson');
       this.loadLocalJSON();
-      // this.getCurrentCoordinates();
+      this.getCurrentCoordinates();
     } catch (error) {
       console.log("ngOnInit---" + error);
     }
@@ -588,15 +590,15 @@ export class StartsurveyPage implements OnInit {
   }
 
   // use geolocation to get user's device coordinates
-  // getCurrentCoordinates() {
-  //   this.geolocation.getCurrentPosition().then((resp) => {
-  //     this.latitude = resp.coords.latitude;
-  //     this.longitude = resp.coords.longitude;
-  //     console.log(this.latitude + "----" + this.longitude);
-  //    }).catch((error) => {
-  //      console.log('Error getting location', error);
-  //    });
-  // }
+  getCurrentCoordinates() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.latitude = resp.coords.latitude;
+      this.longitude = resp.coords.longitude;
+      console.log(this.latitude + "----" + this.longitude);
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+  }
 
   getcountoffiletoupload() {
     try {
@@ -1125,6 +1127,8 @@ export class StartsurveyPage implements OnInit {
         }
       });
       data['status'] = 'completed';
+      data['latitude'] = this.latitude;
+      data['longitude'] = this.longitude;
       this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
         this.utilitieservice.hideLoading().then(() => {
           this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {

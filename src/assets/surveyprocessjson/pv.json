@@ -38,6 +38,7 @@
                   "msplocation"
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": true,
                 "placeholder": "MSP Location",
                 "questioninfo": "Provide MSP Location",
@@ -66,6 +67,13 @@
                   "msprating"
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[
+                  {
+                      "minlength": 1,
+                      "maxlength": 4,
+                      "regextype": 0
+                  }
+              ],
                 "isactive": false,
                 "placeholder": "MSP Rating",
                 "questioninfo": "Provide MSP Rating",
@@ -93,6 +101,13 @@
                   "mainbreakersize"
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[
+                  {
+                      "minlength": 1,
+                      "maxlength": 5,
+                      "regextype": 0
+                  }
+              ],
                 "isactive": false,
                 "placeholder": "Biggest breaker size inside main panel (Number is on the breaker)",
                 "questioninfo": "Provide Biggest breaker size inside main panel (Number is on the breaker)",
@@ -120,6 +135,7 @@
                   "mspbreaker"
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "MSP Breaker",
                 "questioninfo": "Provide  Main Breaker location in Main panel Top/Bottom/Center/None",
@@ -168,6 +184,7 @@
                   "utilitymeter"
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "Utility Meter",
                 "questioninfo": "Provide Utility Meter",
@@ -196,6 +213,13 @@
                   "meternumber"
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[
+                  {
+                      "minlength": 1,
+                      "maxlength": 10,
+                      "regextype": 0
+                  }
+              ],
                 "isactive": false,
                 "placeholder": "Utility Meter Number",
                 "questioninfo": "Provide Utility Meter Number",
@@ -241,6 +265,7 @@
                   "pvinverterlocation"
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "PV Inverter Location",
                 "questioninfo": "Provide Inverter Location",
@@ -270,6 +295,18 @@
                   "invertermodel"
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[
+                  {
+                      "minlength": 0,
+                      "maxlength": 150,
+                      "regextype": 3
+                  },
+                  {
+                      "minlength": 0,
+                      "maxlength": 150,
+                      "regextype": 4
+                  }
+              ],
                 "isactive": false,
                 "placeholder": "PV Inverter Manufacturer and Model",
                 "questioninfo": "Provide Inverter Manufacturer & Model",
@@ -297,6 +334,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "PV Meter",
@@ -322,6 +360,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -347,6 +386,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -400,6 +440,13 @@
                   "roofmaterial"
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[
+                  {
+                      "minlength": 1,
+                      "maxlength": 150,
+                      "regextype": 3
+                  }
+              ],
                 "isactive": false,
                 "placeholder": "Roof Material",
                 "questioninfo": "Provide Roof Material",
@@ -427,6 +474,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -452,6 +500,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -477,6 +526,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -502,6 +552,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -527,6 +578,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -552,6 +604,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -595,6 +648,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -620,6 +674,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -645,6 +700,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -670,6 +726,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -695,6 +752,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -720,6 +778,7 @@
                   ""
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "",
                 "questioninfo": "",
@@ -773,6 +832,7 @@
                   "framing"
                 ],
                 "forminputfields": [],
+                "formfieldvalidations":[],
                 "isactive": false,
                 "placeholder": "Framing",
                 "questioninfo": "Provide Type of Frame Details",
@@ -804,6 +864,18 @@
                   "raftthickness",
                   "raftwidth"
                 ],
+                "formfieldvalidations":[
+                  {
+                      "minlength": 1,
+                      "maxlength": 3,
+                      "regextype": 0
+                  },
+                  {
+                      "minlength": 1,
+                      "maxlength": 3,
+                      "regextype": 0
+                  }
+              ],
                 "isactive": false,
                 "placeholder": "Framing Size",
                 "questioninfo": "Provide Size Details",
@@ -873,7 +945,8 @@
                 ],
                 "required": true,
                 "fileurls": [],
-                "attachments": []
+                "attachments": [],
+                "formfieldvalidations":[]
               },
               {
                 "inputformcontrol": [
@@ -886,7 +959,14 @@
                 "options": [],
                 "required": false,
                 "fileurls": [],
-                "attachments": []
+                "attachments": [],
+                "formfieldvalidations":[
+                  {
+                      "minlength": 1,
+                      "maxlength": 250,
+                      "regextype": 2
+                  }
+              ]
               },
               {
                 "inputformcontrol": [
@@ -909,7 +989,8 @@
                 ],
                 "required": true,
                 "fileurls": [],
-                "attachments": []
+                "attachments": [],
+                "formfieldvalidations":[]
               },
               {
                 "inputformcontrol": [
@@ -935,7 +1016,8 @@
                 "options": [],
                 "required": false,
                 "fileurls": [],
-                "attachments": []
+                "attachments": [],
+                "formfieldvalidations":[]
               },
               {
                 "inputformcontrol": [
@@ -948,7 +1030,8 @@
                 "options": [],
                 "required": false,
                 "fileurls": [],
-                "attachments": []
+                "attachments": [],
+                "formfieldvalidations":[]
               },
               {
                 "inputformcontrol": [
@@ -961,7 +1044,14 @@
                 "options": [],
                 "required": false,
                 "fileurls": [],
-                "attachments": []
+                "attachments": [],
+                "formfieldvalidations":[
+                  {
+                      "minlength": 1,
+                      "maxlength": 250,
+                      "regextype": 2
+                  }
+              ]
               },
               {
                 "inputformcontrol": [
@@ -974,7 +1064,8 @@
                 "options": [],
                 "required": false,
                 "fileurls": [],
-                "attachments": []
+                "attachments": [],
+                "formfieldvalidations":[]
               },
               {
                 "inputformcontrol": [
@@ -987,7 +1078,14 @@
                 "options": [],
                 "required": false,
                 "fileurls": [],
-                "attachments": []
+                "attachments": [],
+                "formfieldvalidations":[
+                  {
+                      "minlength": 1,
+                      "maxlength": 250,
+                      "regextype": 2
+                  }
+              ]
               }
             ],
             "shotscapturedcount": 0
