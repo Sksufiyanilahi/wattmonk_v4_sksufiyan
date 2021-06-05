@@ -7,8 +7,8 @@ ion-content {
 .imagecontainer {
   width: 100%;
 
-  .mainimage{
-    img{
+  .mainimage {
+    img {
       width: 100%;
     }
   }
@@ -42,7 +42,7 @@ ion-content {
     --background: #fff;
   }
 
-  .required{
+  .required {
     border: 1px solid #ff0000;
   }
 
@@ -172,7 +172,6 @@ ion-content {
 }
 
 .detailsformviewcontainer {
-
   .additionalform {
     height: 100%;
     padding-top: 20px;
@@ -197,7 +196,6 @@ ion-content {
 }
 
 .noviewmodecontainer {
-
   .noviewmodegrid {
     position: relative;
     top: 30vh;
@@ -208,7 +206,7 @@ ion-content {
       opacity: 0.7;
     }
 
-    .modetoggle{
+    .modetoggle {
       --background: #eebb5caa;
       --handle-background: #ffffff;
 
@@ -368,12 +366,12 @@ ion-content {
     background-color: #ffffff;
   }
 
-  .pending{
+  .pending {
     color: #718093;
     font-weight: 100;
   }
 
-  .completed{
+  .completed {
     color: #009432;
     font-weight: 600;
   }
@@ -406,15 +404,15 @@ ion-content {
     font-size: 14px;
   }
 
-  .infodetailstoggle{
+  .infodetailstoggle {
     --background: #eebb5caa;
     --handle-background: #ffffff;
     --background-checked: #747474;
     --handle-background-checked: #eebb5c;
   }
-  
-  .itemtoggle{
-    --ion-item-background:#FFFFFF;
+
+  .itemtoggle {
+    --ion-item-background: #ffffff;
     --min-height: 24px;
     --inner-border-width: 0px;
   }
