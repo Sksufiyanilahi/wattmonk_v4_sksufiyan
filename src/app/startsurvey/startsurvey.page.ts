@@ -1246,41 +1246,42 @@ export class StartsurveyPage implements OnInit {
   savedetailsformdata() {
     try {
       this.saveintermediatesurveydata();
-      this.utilitieservice.showLoading('Please wait...');
-      const data = {};
-      this.activeFormElementsArray.map(element => {
-        if (element != '' && this.activeForm.get(element).value != '') {
-          data[element] = this.activeForm.get(element).value;
-          if (element === 'batterysystem') {
-            data[element] = this.activeForm.get('batterysystem').value.toString();
+      this.utilitieservice.showLoading('Please wait...').then(() => {
+        const data = {};
+        this.activeFormElementsArray.map(element => {
+          if (element != '' && this.activeForm.get(element).value != '') {
+            data[element] = this.activeForm.get(element).value;
+            if (element === 'batterysystem') {
+              data[element] = this.activeForm.get('batterysystem').value.toString();
+            }
+            else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
+              data[element] = this.activeForm.get(element).value.id;
+            }
           }
-          else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
-            data[element] = this.activeForm.get(element).value.id;
-          }
-        }
-      });
-      data['status'] = 'completed';
-      data['latitude'] = this.latitude;
-      data['longitude'] = this.longitude;
-      this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
-            modal.present();
-            modal.onWillDismiss().then((dismissed) => {
-              this.storage.remove(this.user.id + '-' + this.surveyid);
-              if (this.user.role.type == 'surveyors') {
-                this.utilitieservice.sethomepageSurveyRefresh(true);
-                this.navController.navigateRoot('surveyoroverview');
-              } else {
-                this.utilitieservice.sethomepageSurveyRefresh(true);
-                this.navController.navigateRoot('homepage/survey');
-              }
+        });
+        data['status'] = 'completed';
+        data['latitude'] = this.latitude;
+        data['longitude'] = this.longitude;
+        this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
+          this.utilitieservice.hideLoading().then(() => {
+            this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
+              modal.present();
+              modal.onWillDismiss().then((dismissed) => {
+                this.storage.remove(this.user.id + '-' + this.surveyid);
+                if (this.user.role.type == 'surveyors') {
+                  this.utilitieservice.sethomepageSurveyRefresh(true);
+                  this.navController.navigateRoot('surveyoroverview');
+                } else {
+                  this.utilitieservice.sethomepageSurveyRefresh(true);
+                  this.navController.navigateRoot('homepage/survey');
+                }
+              });
             });
           });
-        });
-      }, (error) => {
-        this.utilitieservice.hideLoading().then(() => {
-          this.utilitieservice.errorSnackBar('There was some error in processing the request');
+        }, (error) => {
+          this.utilitieservice.hideLoading().then(() => {
+            this.utilitieservice.errorSnackBar('There was some error in processing the request');
+          });
         });
       });
     } catch (error) {
