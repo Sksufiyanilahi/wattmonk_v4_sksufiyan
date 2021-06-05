@@ -220,7 +220,6 @@ export class StartsurveyPage implements OnInit {
 
   isdataloaded = false;
   mainmenuitems: MAINMENU[];
-  // originalmainmenuitems: MAINMENU[];
   selectedmainmenuindex = 0;
   selectedsubmenuindex = 0;
   selectedshotindex = 0;
@@ -295,8 +294,8 @@ export class StartsurveyPage implements OnInit {
         this.platformname = 'web';
       }
 
-      this.loadSurveyJSON('pvsurveyjson');
-      // this.loadLocalJSON();
+      // this.loadSurveyJSON('pvsurveyjson');
+      this.loadLocalJSON();
       this.getCurrentCoordinates();
     } catch (error) {
       console.log("ngOnInit---" + error);
@@ -314,7 +313,7 @@ export class StartsurveyPage implements OnInit {
 
   loadLocalJSON() {
     this.http
-      .get('assets/surveyprocessjson/pv.json')
+      .get('assets/surveyprocessjson/defaultpv.json')
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
       });
