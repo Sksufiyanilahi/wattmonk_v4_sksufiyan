@@ -20,6 +20,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AddressModel } from '../model/address.model';
 import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
 import { Subscription } from 'rxjs';
+import { BaseUrl } from '../constants';
 
 const { Camera } = Plugins;
 
@@ -278,6 +279,7 @@ export class StartsurveyPage implements OnInit {
     private geolocation: Geolocation) { }
 
   ngOnInit() {
+    console.log(BaseUrl);
     try {
       this.cameraspaceremainingheight = this.platform.height() - 66 - 54 - 66;
       this.noviewremainingheight = this.platform.height() - 66 - 54;
