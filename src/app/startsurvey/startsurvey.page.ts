@@ -1136,17 +1136,12 @@ export class StartsurveyPage implements OnInit {
         }
       } else {
         if (this.failedattachmentstoupload.length > 0) {
-          this.utilitieservice.hideLoading().then(() => {
-            this.utilitieservice.showLoading('Uploading Failed Files').then(() => {
+          this.utilitieservice.setLoadingMessage('Uploading failed files');
               this.totalfilestoupload = this.failedattachmentstoupload.length;
               //Code to upload failed files
               this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.totalfilestoupload, true);
-            });
-          });
         } else {
-          this.utilitieservice.hideLoading().then(() => {
-            this.uploadImagesToServer();
-          });
+          this.uploadImagesToServer();
         }
       }
     } catch (error) {
@@ -1156,7 +1151,7 @@ export class StartsurveyPage implements OnInit {
 
   uploadImagesToServer() {
     try {
-      this.utilitieservice.showLoading('Uploading Images').then(() => {
+      this.utilitieservice.setLoadingMessage('Uploading Images');
         this.saveintermediatesurveydata();
 
         const imagesArray: CAPTUREDSHOT[] = [];
@@ -1172,7 +1167,6 @@ export class StartsurveyPage implements OnInit {
 
         this.totalimagestoupload = imagesArray.length;
         this.uploadImageByIndex(imagesArray, 0, this.totalimagestoupload, false);
-      });
     } catch (error) {
       // console.log("uploadImagesToServer---" + error);
     }
@@ -1219,19 +1213,13 @@ export class StartsurveyPage implements OnInit {
         }
       } else {
         if (this.failedshotstoupload.length > 0) {
-          this.utilitieservice.hideLoading().then(() => {
-            this.utilitieservice.showLoading('Uploading Failed Images').then(() => {
+          this.utilitieservice.setLoadingMessage('Uploading Failed Images');
               this.totalimagestoupload = this.failedshotstoupload.length;
               //Code to upload failed files
               this.uploadImageByIndex(this.failedshotstoupload, 0, this.totalimagestoupload, true);
-            });
-          });
         } else {
-          this.utilitieservice.hideLoading().then(() => {
-            this.utilitieservice.showLoading('Please wait...').then(() => {
+          this.utilitieservice.setLoadingMessage('Saving form data');
               this.savedetailsformdata();
-            });
-          });
         }
       }
     } catch (error) {
