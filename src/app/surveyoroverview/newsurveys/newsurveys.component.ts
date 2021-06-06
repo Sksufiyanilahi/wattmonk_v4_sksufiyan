@@ -234,7 +234,6 @@ export class NewsurveysComponent implements OnInit {
       element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       this.storage.get(this.storageService.getUserID() + '-' + element.id).then((data: SurveyStorageModel) => {
         if (data) {
-          console.log(data.currentprogress);
           element.remainingfilestoupload = data.remainingfilestoupload;
           element.totalpercent = data.currentprogress;
         } else {

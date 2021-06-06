@@ -294,11 +294,11 @@ export class StartsurveyPage implements OnInit {
         this.platformname = 'web';
       }
 
-      this.loadSurveyJSON('pvsurveyjson');
-      // this.loadLocalJSON();
+      // this.loadSurveyJSON('pvsurveyjson');
+      this.loadLocalJSON();
       this.getCurrentCoordinates();
     } catch (error) {
-      console.log("ngOnInit---" + error);
+      // console.log("ngOnInit---" + error);
     }
   }
 
@@ -306,7 +306,7 @@ export class StartsurveyPage implements OnInit {
     this.datastorage.get(type).then((data) => {
       this.restoreSurveyStoredData(data[0].sequence);
     }).catch((error) => {
-      console.log('Error loading json', error);
+      // console.log('Error loading json', error);
       this.loadLocalJSON();
     });
   }
@@ -379,7 +379,7 @@ export class StartsurveyPage implements OnInit {
         }
       });
     } catch (error) {
-      console.log("restoreSurveyStoredData---" + error);
+      // console.log("restoreSurveyStoredData---" + error);
     }
   }
 
@@ -437,9 +437,9 @@ export class StartsurveyPage implements OnInit {
       formData['shotname'] = new FormControl('', []);
       this.activeFormElementsArray.push('shotname');
       this.activeForm = new FormGroup(formData);
-      console.log(this.activeForm);
+      // console.log(this.activeForm);
     } catch (error) {
-      console.log("createSurveyForm---" + error);
+      // console.log("createSurveyForm---" + error);
     }
   }
 
@@ -493,14 +493,14 @@ export class StartsurveyPage implements OnInit {
       formData['shotname'] = new FormControl('', []);
       this.activeFormElementsArray.push('shotname');
       this.activeForm = new FormGroup(formData);
-      console.log(this.activeForm);
+      // console.log(this.activeForm);
     } catch (error) {
-      console.log("restoreStoredForm---" + error);
+      // console.log("restoreStoredForm---" + error);
     }
   }
 
   createcapturedshotofitem(shot: SHOT, mainindex, childindex, shotindex) {
-    console.log("shot---" + shot.shotinfo);
+    // console.log("shot---" + shot.shotinfo);
     const captureshot: CAPTUREDSHOT = {
       menuindex: mainindex,
       submenuindex: childindex,
@@ -621,12 +621,12 @@ export class StartsurveyPage implements OnInit {
     this.geolocation.getCurrentPosition().then((resp) => {
       this.latitude = resp.coords.latitude;
       this.longitude = resp.coords.longitude;
-      console.log(this.latitude + "----" + this.longitude);
+      // console.log(this.latitude + "----" + this.longitude);
       let address = this.utilitieservice.getAddressFromLatLng(this.latitude, this.longitude);
       this.surveystate = address.state;
       this.surveycity = address.city;
     }).catch((error) => {
-      console.log('Error getting location', error);
+      // console.log('Error getting location', error);
     });
   }
 
@@ -661,7 +661,7 @@ export class StartsurveyPage implements OnInit {
         }
       });
     } catch (error) {
-      console.log("getcountoffiletoupload---" + error);
+      // console.log("getcountoffiletoupload---" + error);
     }
   }
 
@@ -732,7 +732,7 @@ export class StartsurveyPage implements OnInit {
         reader.readAsDataURL(ev.target.files[i]);
       }
     } catch (error) {
-      console.log("addselectedfiles---" + error);
+      // console.log("addselectedfiles---" + error);
     }
   }
 
@@ -1017,7 +1017,7 @@ export class StartsurveyPage implements OnInit {
       });
       toast.present();
     } catch (error) {
-      console.log("navigatetoincompletestep---" + error);
+      // console.log("navigatetoincompletestep---" + error);
     }
   }
 
@@ -1065,33 +1065,33 @@ export class StartsurveyPage implements OnInit {
         }
       }
     } catch (error) {
-      console.log("saveFormData---" + error);
+      // console.log("saveFormData---" + error);
     }
   }
 
   uploadfilestoserver() {
-    this.saveintermediatesurveydata();
-    const filesarray: FILE_ATTACHMENTS[] = [];
-    this.mainmenuitems.forEach(mainmenu => {
-      if (mainmenu.viewmode == VIEWMODE.FORM) {
-        mainmenu.children.forEach(child => {
-          if (child.formelements.length > 0) {
-            child.formelements.forEach(formelement => {
-              if (formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
-                formelement.attachments.forEach(attachment => {
-                  console.log(attachment);
-                  filesarray.push(attachment);
-                });
-              }
-            });
-          }
-        });
-      }
-    });
-
     this.utilitieservice.showLoading('Uploading Files').then(() => {
+      this.saveintermediatesurveydata();
+      const filesarray: FILE_ATTACHMENTS[] = [];
+      this.mainmenuitems.forEach(mainmenu => {
+        if (mainmenu.viewmode == VIEWMODE.FORM) {
+          mainmenu.children.forEach(child => {
+            if (child.formelements.length > 0) {
+              child.formelements.forEach(formelement => {
+                if (formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
+                  formelement.attachments.forEach(attachment => {
+                    // console.log(attachment);
+                    filesarray.push(attachment);
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+
       this.totalfilestoupload = filesarray.length;
-      console.log(filesarray);
+      // console.log(filesarray);
       this.uploadattachmentbyindex(filesarray, 0, this.totalfilestoupload, false);
     });
   }
@@ -1135,14 +1135,19 @@ export class StartsurveyPage implements OnInit {
           this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
         }
       } else {
-        this.utilitieservice.hideLoading().then(() => {
-          if (this.failedattachmentstoupload.length > 0) {
-            //Code to upload failed files
-            this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.failedattachmentstoupload.length, true);
-          } else {
+        if (this.failedattachmentstoupload.length > 0) {
+          this.utilitieservice.hideLoading().then(() => {
+            this.utilitieservice.showLoading('Uploading Failed Files').then(() => {
+              this.totalfilestoupload = this.failedattachmentstoupload.length;
+              //Code to upload failed files
+              this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.totalfilestoupload, true);
+            });
+          });
+        } else {
+          this.utilitieservice.hideLoading().then(() => {
             this.uploadImagesToServer();
-          }
-        });
+          });
+        }
       }
     } catch (error) {
       // console.log("uploadattachmentbyindex---" + error);
@@ -1151,20 +1156,20 @@ export class StartsurveyPage implements OnInit {
 
   uploadImagesToServer() {
     try {
-      this.saveintermediatesurveydata();
+      this.utilitieservice.showLoading('Uploading Images').then(() => {
+        this.saveintermediatesurveydata();
 
-      const imagesArray: CAPTUREDSHOT[] = [];
-      this.mainmenuitems.forEach(mainmenu => {
-        mainmenu.children.forEach(child => {
-          child.capturedshots.forEach(shot => {
-            if (!shot.imagecleared) {
-              imagesArray.push(shot);
-            }
+        const imagesArray: CAPTUREDSHOT[] = [];
+        this.mainmenuitems.forEach(mainmenu => {
+          mainmenu.children.forEach(child => {
+            child.capturedshots.forEach(shot => {
+              if (!shot.imagecleared) {
+                imagesArray.push(shot);
+              }
+            });
           });
         });
-      });
 
-      this.utilitieservice.showLoading('Uploading Images').then(() => {
         this.totalimagestoupload = imagesArray.length;
         this.uploadImageByIndex(imagesArray, 0, this.totalimagestoupload, false);
       });
@@ -1213,14 +1218,21 @@ export class StartsurveyPage implements OnInit {
           this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
         }
       } else {
-        this.utilitieservice.hideLoading().then(() => {
-          if (this.failedshotstoupload.length > 0) {
-            //Code to upload failed files
-            this.uploadImageByIndex(this.failedshotstoupload, 0, this.failedshotstoupload.length, true);
-          } else {
-            this.savedetailsformdata();
-          }
-        });
+        if (this.failedshotstoupload.length > 0) {
+          this.utilitieservice.hideLoading().then(() => {
+            this.utilitieservice.showLoading('Uploading Failed Images').then(() => {
+              this.totalimagestoupload = this.failedshotstoupload.length;
+              //Code to upload failed files
+              this.uploadImageByIndex(this.failedshotstoupload, 0, this.totalimagestoupload, true);
+            });
+          });
+        } else {
+          this.utilitieservice.hideLoading().then(() => {
+            this.utilitieservice.showLoading('Please wait...').then(() => {
+              this.savedetailsformdata();
+            });
+          });
+        }
       }
     } catch (error) {
       // console.log("uploadImageByIndex---" + error);
@@ -1246,42 +1258,40 @@ export class StartsurveyPage implements OnInit {
   savedetailsformdata() {
     try {
       this.saveintermediatesurveydata();
-      this.utilitieservice.showLoading('Please wait...').then(() => {
-        const data = {};
-        this.activeFormElementsArray.map(element => {
-          if (element != '' && this.activeForm.get(element).value != '') {
-            data[element] = this.activeForm.get(element).value;
-            if (element === 'batterysystem') {
-              data[element] = this.activeForm.get('batterysystem').value.toString();
-            }
-            else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
-              data[element] = this.activeForm.get(element).value.id;
-            }
+      const data = {};
+      this.activeFormElementsArray.map(element => {
+        if (element != '' && this.activeForm.get(element).value != '') {
+          data[element] = this.activeForm.get(element).value;
+          if (element === 'batterysystem') {
+            data[element] = this.activeForm.get('batterysystem').value.toString();
           }
-        });
-        data['status'] = 'completed';
-        data['latitude'] = this.latitude;
-        data['longitude'] = this.longitude;
-        this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
-          this.utilitieservice.hideLoading().then(() => {
-            this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
-              modal.present();
-              modal.onWillDismiss().then((dismissed) => {
-                this.storage.remove(this.user.id + '-' + this.surveyid);
-                if (this.user.role.type == 'surveyors') {
-                  this.utilitieservice.sethomepageSurveyRefresh(true);
-                  this.navController.navigateRoot('surveyoroverview');
-                } else {
-                  this.utilitieservice.sethomepageSurveyRefresh(true);
-                  this.navController.navigateRoot('homepage/survey');
-                }
-              });
+          else if (element === 'roofmaterial' || element === 'invertermake' || element === 'invertermodel') {
+            data[element] = this.activeForm.get(element).value.id;
+          }
+        }
+      });
+      data['status'] = 'completed';
+      data['latitude'] = this.latitude;
+      data['longitude'] = this.longitude;
+      this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
+            modal.present();
+            modal.onWillDismiss().then((dismissed) => {
+              this.storage.remove(this.user.id + '-' + this.surveyid);
+              if (this.user.role.type == 'surveyors') {
+                this.utilitieservice.sethomepageSurveyRefresh(true);
+                this.navController.navigateRoot('surveyoroverview');
+              } else {
+                this.utilitieservice.sethomepageSurveyRefresh(true);
+                this.navController.navigateRoot('homepage/survey');
+              }
             });
           });
-        }, (error) => {
-          this.utilitieservice.hideLoading().then(() => {
-            this.utilitieservice.errorSnackBar('There was some error in processing the request');
-          });
+        });
+      }, (error) => {
+        this.utilitieservice.hideLoading().then(() => {
+          this.utilitieservice.errorSnackBar('There was some error in processing the request');
         });
       });
     } catch (error) {
@@ -1522,7 +1532,7 @@ export class StartsurveyPage implements OnInit {
   }
 
   findnextpossibleshot(startmainmenuindex, startchildmenuindex, startshotindex) {
-    console.log("finding---" + startmainmenuindex + "---" + startchildmenuindex + "----" + startshotindex);
+    // console.log("finding---" + startmainmenuindex + "---" + startchildmenuindex + "----" + startshotindex);
     try {
       let pendingshotfound = false;
       for (let mainmenuindex = startmainmenuindex; mainmenuindex < this.mainmenuitems.length; mainmenuindex++) {
