@@ -1773,8 +1773,15 @@ export class StartsurveyPage implements OnInit {
     try {
       const utilitycontrol = this.activeForm.get('utility');
       if (this.utility.manualinput != '') {
-        this.addutility(this.utility.manualinput);
-        this.markshotcompletion();
+        const isfound = this.utilities.some(el => el.name === this.utility.manualinput);
+        if (isfound) {
+          let obj = this.utilities.find(el => el.name === this.utility.manualinput);
+          this.activeForm.get('utility').setValue(obj);
+          this.markshotcompletion();
+        }
+        else {
+          this.addutility(this.utility.manualinput);
+        }
       } else {
         if (utilitycontrol.value != '') {
           this.markshotcompletion();
