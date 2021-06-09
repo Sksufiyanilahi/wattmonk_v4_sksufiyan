@@ -362,6 +362,10 @@ const routes: Routes = [
     path: 'masterdetailpage',
     loadChildren: () => import('./masterdetailpage/masterdetailpage.module').then( m => m.MasterdetailpagePageModule)
   },
+  {
+    path: 'resetpassword',
+    loadChildren: () => import('./resetpassword/resetpassword.module').then( m => m.ResetpasswordPageModule)
+  },
 
 ];
 

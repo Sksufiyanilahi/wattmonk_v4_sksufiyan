@@ -764,6 +764,17 @@ export class UtilitiesService {
           return defaultaddress;
     }
 
+    async showAlertBoxForForgot(message, button?) {
+        const alert = await this.alertController.create({
+            cssClass:'reset-button',
+            message: message,
+            buttons: button,
+            backdropDismiss: false
+        });
+
+        await alert.present();
+    }
+
     getMimetype(extension) {
 
         var mimetype;

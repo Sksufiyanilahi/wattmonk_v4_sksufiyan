@@ -26,15 +26,21 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 @font-face {
-  font-family: 'Proxima Nova Alt';
+  font-family: 'Montserrat';
   src: url('/assets/fonts/ProximaNova-Regular.otf');
 }
 
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: 'Proxima Nova Alt';
+  font-family: 'Montserrat';
+  --ion-font-family:'Montserrat'
 }
+
+ion-label{
+  font-size:14px !important;
+}
+
 
 .full-height {
   height: 100vh;
@@ -346,6 +352,43 @@ ion-slides.bullet .swiper-pagination-bullet{
       border-top-right-radius: 25px;
       
       
+  }
+}
+
+mat-form-field.field-inflex{
+  div.mat-form-field-wrapper{
+    div.mat-form-field-flex{
+
+      div.mat-form-field-infix{
+        border-top: 0px;
+      }
+    }
+  }
+}
+.reset-button{
+  // --background: #D8EAD2;
+  // --border-radius: 5px;
+  // --color: #5A6158;
+    div{
+      div{
+        button{
+          text-transform: none !important;
+          font-size: 14px !important;
+        }
+      }
+    }
+
+}
+
+.alertClass{
+  background-color: transparent;
+  div{
+    div{
+      button{
+        text-transform: capitalize !important;
+        font-weight: normal !important;
+      }
+    }
   }
 }
 

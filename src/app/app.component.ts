@@ -12,7 +12,7 @@ import {UserData} from './model/userData.model';
 import {from, Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {AngularFireDatabase, AngularFireObject} from '@angular/fire/database';
-import {MixpanelService} from './utilities/mixpanel.service';
+import { MixpanelService } from './utilities/mixpanel.service';
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {Plugins, StatusBarStyle, PushNotification, PushNotificationToken, PushNotificationActionPerformed} from '@capacitor/core';
 
@@ -205,6 +205,11 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    if(localStorage.getItem('newpasswordrequested'))
+    {
+      this.router.navigate(['/resetpassword'])
+      return;
+    }
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe((data) => {
       this.netSwitch = data;
 

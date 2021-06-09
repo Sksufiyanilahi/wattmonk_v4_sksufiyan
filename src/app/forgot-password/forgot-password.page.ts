@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UtilitiesService } from '../utilities.service';
-import { NavController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { ErrorModel } from '../model/error.model';
 import { FIELD_REQUIRED, INVALID_EMAIL_MESSAGE } from '../model/constants';
@@ -25,31 +25,45 @@ export class ForgotPasswordPage implements OnInit {
     private formBuilder: FormBuilder,
     private utils: UtilitiesService,
     private navController: NavController,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private menu: MenuController
   ) {
   }
 
   ngOnInit() {
+    this.menu.enable(false)
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.forgotPasswordForm = this.formBuilder.group({
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
+      source: new FormControl('mobile', [Validators.required]),
     });
+  }
+
+  ngOnDestroy(){
+    this.menu.enable(true)
   }
 
   resendPassword() {
     if (this.forgotPasswordForm.status === 'VALID') {
       this.utils.showLoading('Sending password Link').then(() => {
         this.apiService.sendForgotPasswordLink(this.forgotPasswordForm.value).subscribe((response) => {
+          localStorage.setItem('newpasswordrequested','true');
           this.utils.hideLoading().then(() => {
-            this.utils.showSuccessModal('Password link sent successfully').then((modal) => {
-              modal.present();
-              modal.onWillDismiss().then((dismissed) => {
-               this.goBack();
-              });
-            }, (error) => {
+            // this.utils.showSuccessModal('Password link sent successfully').then((modal) => {
+            //   modal.present();
+            //   modal.onWillDismiss().then((dismissed) => {
+            //    this.resetPassword();
+            //   });
+            // }, (error) => {
 
-            });
-           
+            // });
+            this.utils.showAlertBoxForForgot('We have sent a 6 digit code on your registered email. Please use that to reset your password.',[{
+              text:'Go to Reset Password',
+              handler:()=>{
+                this.resetPassword();
+                      }
+            }])
+
           });
         }, (responseError) => {
           const error: ErrorModel = responseError.error;
@@ -59,7 +73,8 @@ export class ForgotPasswordPage implements OnInit {
         });
       });
     } else {
-      this.utils.errorSnackBar('Invalid Email address');
+      // this.utils.errorSnackBar('Invalid Email address');
+      this.forgotPasswordForm.get('email').markAsDirty();
     }
   }
 
@@ -67,7 +82,12 @@ export class ForgotPasswordPage implements OnInit {
     this.navController.navigateBack('login');
   }
 
+  resetPassword(){
+    this.navController.navigateForward("resetpassword")
+  }
+
   ionVieWillLeave(){
   }
+
 
 }

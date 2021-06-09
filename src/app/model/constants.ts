@@ -34,8 +34,8 @@ export enum MapPageType {
   MAP_PAGE = 5
 }
 
-export const INVALID_EMAIL_MESSAGE = 'Invalid Email';
-export const FIELD_REQUIRED = 'This field is required';
+export const INVALID_EMAIL_MESSAGE = 'Please enter a valid email';
+export const FIELD_REQUIRED = 'You must enter a value';
 export const INVALID_NAME_MESSAGE='Invalid Name';
 export const INVALID_ANNUAL_UNIT = 'Invalid Annual Unit';
 export const INVALID_TILT_FOR_GROUND_MOUNT = 'Invalid Value';
@@ -48,6 +48,7 @@ export const INVALID_LAST_NAME = 'Invalid Last Name';
 export const INVALID_ADDRESS = "Invalid Address";
 export const INVALID_REGISTRATION_NUMBER = "Invalid Registration Number";
 export const INVALID_COMPANY_NAME = "Invalid Company Name";
+export const INVALID_PASSWORD = "Password must be at least 3 characters";
 
 
 export const COMET_CHAT_APP_ID = '190385dcec51285';

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-footer',
@@ -6,12 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  getFullYear: any=new Date();
 
-  constructor() {
-    this.getFullYear = this.getFullYear.getFullYear();
-  }
+  constructor(private iab: InAppBrowser) { }
 
   ngOnInit() {}
 
+  privacy(){
+    const browser = this.iab.create('https://www.wattmonk.com/privacy-policy');
+  }
+
+  agreement(){
+    const browser = this.iab.create('https://www.wattmonk.net/service-agreement');
+  }
 }

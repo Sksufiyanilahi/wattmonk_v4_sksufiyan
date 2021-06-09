@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ApiService} from '../api.service';
 import {UtilitiesService} from '../utilities.service';
-import {NavController} from '@ionic/angular';
+import {MenuController, NavController} from '@ionic/angular';
 import {StorageService} from '../storage.service';
 import {ErrorModel} from '../model/error.model';
 import {FIELD_REQUIRED, INVALID_EMAIL_MESSAGE} from '../model/constants';
@@ -22,7 +22,6 @@ const {PushNotifications} = Plugins;
   }
 )
 export class LoginPage implements OnInit {
-
   loginForm: FormGroup;
   isActiveToggleTextPassword = true;
 
@@ -30,7 +29,7 @@ export class LoginPage implements OnInit {
   fieldRequired = FIELD_REQUIRED;
   isLoggedInOnce = false;
   netSwitch: any;
-  buttonTitle ='Sign In'
+  buttonTitle ='Sign in'
 
   constructor(
     private formBuilder: FormBuilder,
@@ -38,6 +37,7 @@ export class LoginPage implements OnInit {
     private apiService: ApiService,
     private storageService: StorageService,
     private router: Router,
+    private menu: MenuController,
     private network: NetworkdetectService,
     private navController: NavController,
     private mixpanelService: MixpanelService) {
@@ -46,13 +46,18 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    this.menu.enable(false)
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.loginForm = this.formBuilder.group({
         identifier: new FormControl(this.storageService.getUserName(), [Validators.required, Validators.pattern(EMAILPATTERN)]),
-        password: new FormControl(this.storageService.getPassword(), [Validators.required, Validators.minLength(6)])
+        password: new FormControl(this.storageService.getPassword(), [Validators.required, Validators.minLength(3)])
       }
     );
 
+  }
+
+  ngOnDestroy(){
+    this.menu.enable(true)
   }
 
   ionViewDidEnter() {
@@ -74,7 +79,9 @@ export class LoginPage implements OnInit {
       if (this.loginForm.status === 'VALID') {
         this.utils.showLoading('Logging In').then(() => {
           this.apiService.login(this.loginForm.value).subscribe(response => {
+            localStorage.removeItem('newpasswordrequested');
             this.registerAPNS(response.user);
+            console.log(response.user.parent.id)
             this.utils.hideLoading().then(() => {
 
 
@@ -171,6 +178,7 @@ export class LoginPage implements OnInit {
                       this.utils.doCometUserLogin();
                     }
                   } else {
+                    // this.getuserSettings(response.user.parent.id)
                     this.navController.navigateRoot(['/dashboard'])
                     if (response.user) {
                       this.utils.doCometUserLogin();
@@ -194,10 +202,31 @@ export class LoginPage implements OnInit {
 
       } else {
         this.apiService.resetHeaders();
-        this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
+        // this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
       }
     }
   }
+
+  // getuserSettings(data){
+  //   //UserSettings Name's API
+  //   var parentId = data;
+  //   this.apiService.getUserSettings(parentId)
+  //     .subscribe((res: any) => {
+  //       this.utils.setPrelimName(res[0].nameprelim)
+  //       this.utils.setPermitName(res[0].namepermit)
+  //       this.utils.setSurveyName(res[0].namesurvey)
+  //       this.utils.setPeStampName(res[0].namepestamp)
+  //       this.utils.setDashboardName(res[0].namedashboard)
+  //       this.utils.setInboxName(res[0].nameinbox)
+  //       this.utils.setTeamName(res[0].nameteam)
+  //       this.utils.setPrelimVisibility(res[0].visibilityprelim)
+  //       this.utils.setPermitVisibility(res[0].visibilitypermit)
+  //       this.utils.setSurveyVisibility(res[0].visibilitysurvey)
+  //       this.utils.setPestampVisibility(res[0].visibilitypestamp)
+
+        
+  //     })
+  // }
 
   public toggleTextPassword() {
     this.isActiveToggleTextPassword = (this.isActiveToggleTextPassword == true) ? false : true;
@@ -255,6 +284,5 @@ export class LoginPage implements OnInit {
 
     this.apiService.pushtoken(user.id, {newpushtoken: localStorage.getItem('pushtoken')});
   }
-
 
 }

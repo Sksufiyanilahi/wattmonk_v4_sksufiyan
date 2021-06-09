@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
-import { NavController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { ErrorModel } from '../model/error.model';
 import { FIELD_REQUIRED, INVALID_EMAIL_MESSAGE } from '../model/constants';
@@ -26,6 +26,7 @@ export class ChangePasswordPage implements OnInit {
   isActiveToggleTextnewPassword: boolean=false;
   changepassword: FormGroup;
   password: string;
+  confirmpassword :string="newpassword"
 
  constructor(
    private formBuilder: FormBuilder,
@@ -34,17 +35,23 @@ export class ChangePasswordPage implements OnInit {
    private apiService: ApiService,
    private storage: StorageService,
    private deviceStorage: Storage,
+   private menu: MenuController
  ) {
  }
 
  ngOnInit() {
+  this.menu.enable(false)
    this.password= localStorage.getItem('password');
   this.changepassword = this.formBuilder.group({
-    newpassword: new FormControl('', [Validators.required, Validators.minLength(6)] ),
-    oldpassword: new FormControl('',Validators.minLength(6)),
-    confirmpassword: new FormControl('',Validators.minLength(6))
+    newpassword: new FormControl('', [Validators.required, Validators.minLength(3)] ),
+    oldpassword: new FormControl('',Validators.minLength(3)),
+    confirmpassword: new FormControl('',[Validators.required, Validators.minLength(3), this.matchValidator(this.confirmpassword)])
   })
  }
+
+ ngOnDestroy(){
+  this.menu.enable(true)
+}
 
  public toggleTextPassword() {
   this.isActiveToggleTextPassword = (this.isActiveToggleTextPassword == true) ? false : true;
@@ -111,7 +118,9 @@ getnewType() {
        });
      });
    } else {
-     this.utils.errorSnackBar('Invalid Password entered.');
+    //  this.utils.errorSnackBar('Invalid Password entered.');
+    this.changepassword.get('newpassword').markAsDirty();
+      this.changepassword.get('confirmpassword').markAsDirty();
    }
  }
 
@@ -119,8 +128,76 @@ getnewType() {
    this.navController.pop();
  }
 
+ getErrorMessage(control: AbstractControl) {
+  console.log(control)
+  var newpassword = this.changepassword.get('newpassword');
+  var confirmpassword = this.changepassword.get('confirmpassword');
+
+  if (control.hasError("required")) {
+    return "You must enter a value";
+  }
+  if (control == newpassword) {
+    return newpassword.hasError("minlength")
+      ? "Password must be at least 3 characters"
+      : "";
+  } else if (control == confirmpassword) {
+    return confirmpassword.hasError("minlength")
+      ? "Password must be at least 3 characters"
+      : "New and confirm password does not match each other. Please try again.";
+  }
+  // } else if (control == this.company) {
+  //   return this.company.hasError("pattern")
+  //     ? "Please enter a valid company name."
+  //     : "";
+  // } else if (control == this.phone) {
+  //   return this.phone.hasError("pattern")
+  //     ? "Please enter a valid phone number."
+  //     : "";
+  // }
+}
+
  ionViewWillLeave(){
  }
+
+ matchValidator(fieldName: string) {
+  let fcfirst: FormControl;
+  let fcSecond: FormControl;
+
+  return function matchValidator(control: FormControl) {
+
+      if (!control.parent) {
+          return null;
+      }
+
+      // INITIALIZING THE VALIDATOR.
+      if (!fcfirst) {
+          //INITIALIZING FormControl first
+          fcfirst = control;
+          fcSecond = control.parent.get(fieldName) as FormControl;
+
+          //FormControl Second
+          if (!fcSecond) {
+              throw new Error('matchValidator(): Second control is not found in the parent group!');
+          }
+
+          fcSecond.valueChanges.subscribe(() => {
+              fcfirst.updateValueAndValidity();
+          });
+      }
+
+      if (!fcSecond) {
+          return null;
+      }
+
+      if (fcSecond.value !== fcfirst.value) {
+          return {
+              matchOther: true
+          };
+      }
+
+      return null;
+  }
+}
 
 
 }

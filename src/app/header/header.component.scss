@@ -1,7 +1,7 @@
 .flexbox{
-  flex: 0 0 calc(calc(2 / var(--ion-grid-columns, 12)) * 61%) !important;
-  text-align-last: end;
-}
-img{
-  max-width: 50px;
-}
+    flex: 0 0 calc(calc(2 / var(--ion-grid-columns, 12)) * 61%) !important;
+    text-align-last: end;
+  }
+  img{
+    max-width: 50px;
+  }

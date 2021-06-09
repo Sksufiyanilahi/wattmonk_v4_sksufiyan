@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators, FormBuilder} from '@angular/forms';
+import { AngularFireDatabase } from '@angular/fire/database';
+import {FormControl, FormGroup, Validators, FormBuilder, AbstractControl} from '@angular/forms';
 import { Router } from '@angular/router';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { NavController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ApiService } from '../api.service';
-import { ROLES } from '../constants';
+import { COMETCHAT_CONSTANTS, FIREBASE_DB_CONSTANTS, ROLES } from '../constants';
 import {FIELD_REQUIRED, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE} from '../model/constants';
 import { ErrorModel } from '../model/error.model';
 import { LoginModel } from '../model/login.model';
@@ -30,57 +32,68 @@ export interface Country {
 })
 export class UserregistrationPage implements OnInit {
   userregistrationForm: FormGroup;
-  user:LoginModel;
-  isTermsSelect:boolean=false;
+  user: LoginModel;
+  isTermsSelect: boolean = false;
 
   firstNameError = "Invalid First Name";
   fieldRequired = FIELD_REQUIRED;
   emailError = INVALID_EMAIL_MESSAGE;
   lastNameError = "Invalid Last Name";
-  netSwitch:any;
+  netSwitch: any;
   //countries:Country[]=(countriesjson as any).default
-  countries:Country[];
+  countries: Country[];
   filteredCountries: Observable<Country[]>;
   selectedcountry: any;
+  display:boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private http:HttpClient,
-    private utils:UtilitiesService,
-    private apiService:ApiService,
-    private router:Router,
+    private http: HttpClient,
+    private utils: UtilitiesService,
+    private apiService: ApiService,
+    private router: Router,
     private iab: InAppBrowser,
-    private storageService:StorageService,
-    private navController:NavController,
-    private mixpanelService:MixpanelService,
-    private network:NetworkdetectService
-  ) { const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
-  this.userregistrationForm = this.formBuilder.group({
-    email: new FormControl("", [Validators.required, Validators.pattern(EMAILPATTERN)]),
-    firstname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
-    lastname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
-    country: new FormControl("", [Validators.required]),
-    password:new FormControl(this.utils.randomPass()),
-    username:new FormControl(null),
-    role:new FormControl(6)
+    private storageService: StorageService,
+    private navController: NavController,
+    private mixpanelService: MixpanelService,
+    private network: NetworkdetectService,
+    private menu: MenuController,
+    private db: AngularFireDatabase
+  ) {
+    const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    this.userregistrationForm = this.formBuilder.group({
+      email: new FormControl("", [Validators.required, Validators.pattern(EMAILPATTERN)]),
+      firstname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
+      lastname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
+      country: new FormControl("", [Validators.required]),
+      password: new FormControl(this.utils.randomPass()),
+      username: new FormControl(null),
+      role: new FormControl(6),
+      aggrement : new FormControl(null,Validators.required)
+    }
+    );
   }
-  );}
 
   ngOnInit() {
+    this.menu.enable(false)
     this.fetchCountry();
 
   }
 
-  fetchCountry(){
+  ngOnDestroy(){
+    this.menu.enable(true)
+  }
 
-    this.http.get("assets/country/country.json").subscribe((res:any)=>{
+  fetchCountry() {
+
+    this.http.get("assets/country/country.json").subscribe((res: any) => {
 
       this.countries = res;
       this.country();
-      this.selectedcountry=this.countries.find(c=> c.country=='United States');
+      this.selectedcountry = this.countries.find(c => c.country == 'United States');
 
-    this.userregistrationForm.get('country').setValue(this.selectedcountry.country);
-    this.setSelectedCountry(this.selectedcountry);
+      this.userregistrationForm.get('country').setValue(this.selectedcountry.country);
+      this.setSelectedCountry(this.selectedcountry);
     })
   }
 
@@ -101,8 +114,7 @@ export class UserregistrationPage implements OnInit {
 
   }
 
-  country()
-  {
+  country() {
     this.filteredCountries = this.userregistrationForm.get('country').valueChanges.pipe(
       startWith(""),
       map(value => (typeof value === "string" ? value : value.name)),
@@ -110,80 +122,119 @@ export class UserregistrationPage implements OnInit {
     );
   }
 
-  registerUser()
-  {
-    if(this.userregistrationForm.status=='VALID'){
-    if(this.isTermsSelect)
-    {
-    this.utils.showLoading("Saving").then(()=>{
-      var postData = {
-        email:this.userregistrationForm.get('email').value,
-        password:this.userregistrationForm.get('password').value,
-        username:this.userregistrationForm.get('email').value
-      }
-      this.apiService.registerUser(postData).subscribe((res:any)=>{
+  registerUser() {
+    if (this.userregistrationForm.status == 'VALID' && this.isTermsSelect) {
+      // if (this.isTermsSelect) {
+        this.utils.showLoading("Saving").then(() => {
+          var postData = {
+            email: this.userregistrationForm.get('email').value,
+            password: this.userregistrationForm.get('password').value,
+            username: this.userregistrationForm.get('email').value
+          }
+          this.apiService.registerUser(postData).subscribe((res: any) => {
 
-        this.user = res;
-        //
-         this.storageService.setJWTToken(this.user.jwt);
-        // this.storageService.setUser(this.user.user,this.user.jwt);
-        if(res){
-        this.updateUser();
-        }
+            this.user = res;
+            //
+            this.storageService.setJWTToken(this.user.jwt);
+            // this.storageService.setUser(this.user.user,this.user.jwt);
+            if (res) {
+              this.updateUser();
+            }
 
-        // const postData = {
-        //   firstname: this.userregistrationForm.get("firstname").value,
-        //   lastname: this.userregistrationForm.get("lastname").value,
-        //   country: this.userregistrationForm.get("country").value,
-        //   source: "android",
-        //   isdefaultpassword: true,
-        //   parent: this.user.user.id,
-        //   resetPasswordToken: this.userregistrationForm.get('password').value,
-        //   role: this.userregistrationForm.get('role').value
-        // };
-        // if(res){
-        //   this.apiservice.updateUser(this.user.user.id,postData).subscribe((response)=>{
-        //
-        //     this.router.navigate(['/login']);
-        //     this.utils.showSnackBar("User Registered Successfully");
-        //   })
-        // }
-      },
-      responseError => {
-        this.utils.hideLoading().then(() => {
-          const error: ErrorModel = responseError.error;
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
-        });
-        //
-      })
-    })
-  }
-  else{
-    this.utils.errorSnackBar("Please select Terms and Conditions");
-  }
-}else
-{
-  if(this.userregistrationForm.value.firstname == '' || this.userregistrationForm.get('firstname').hasError('pattern'))
-  {
-    this.utils.errorSnackBar("Please check the field first name");
-  }
-  else if(this.userregistrationForm.value.lastname == '' || this.userregistrationForm.get('lastname').hasError('pattern'))
-  {
-    this.utils.errorSnackBar("Please check the field last name");
-  }
-  else if(this.userregistrationForm.value.email == '' || this.userregistrationForm.get('email').hasError('pattern'))
-  {
-    this.utils.errorSnackBar("Please check the field email");
-  }
-  else
-  {
-    this.utils.errorSnackBar("Please check the field country");
-  }
-}
+            // const postData = {
+            //   firstname: this.userregistrationForm.get("firstname").value,
+            //   lastname: this.userregistrationForm.get("lastname").value,
+            //   country: this.userregistrationForm.get("country").value,
+            //   source: "android",
+            //   isdefaultpassword: true,
+            //   parent: this.user.user.id,
+            //   resetPasswordToken: this.userregistrationForm.get('password').value,
+            //   role: this.userregistrationForm.get('role').value
+            // };
+            // if(res){
+            //   this.apiservice.updateUser(this.user.user.id,postData).subscribe((response)=>{
+            //
+            //     this.router.navigate(['/login']);
+            //     this.utils.showSnackBar("User Registered Successfully");
+            //   })
+            // }
+          },
+            responseError => {
+              this.utils.hideLoading().then(() => {
+                const error: ErrorModel = responseError.error;
+                this.utils.errorSnackBar(error.message[0].messages[0].message);
+              });
+              //
+            })
+        })
+      // }
+      // else {
+      //   this.utils.errorSnackBar("Please select Terms and Conditions");
+      // }
+    } else {
+      // if (this.userregistrationForm.value.firstname == '' || this.userregistrationForm.get('firstname').hasError('pattern')) {
+      //   this.utils.errorSnackBar("Please check the field first name");
+      // }
+      // else if (this.userregistrationForm.value.lastname == '' || this.userregistrationForm.get('lastname').hasError('pattern')) {
+      //   this.utils.errorSnackBar("Please check the field last name");
+      // }
+      // else if (this.userregistrationForm.value.email == '' || this.userregistrationForm.get('email').hasError('pattern')) {
+      //   this.utils.errorSnackBar("Please check the field email");
+      // }
+      // else {
+      //   this.utils.errorSnackBar("Please check the field country");
+      // }
+      console.log("check")
+      this.display = true;
+      // this.userregistrationForm.markAllAsTouched();
+      this.userregistrationForm.get('firstname').markAsDirty();
+      this.userregistrationForm.get('lastname').markAsDirty();
+      this.userregistrationForm.get('email').markAsDirty();
+      this.userregistrationForm.get('aggrement').markAsDirty();
+    }
   }
 
-  updateUser()
-  {
+  getErrorMessage(control: AbstractControl) {
+    console.log(control)
+    var firstname = this.userregistrationForm.get('firstname');
+    var lastname = this.userregistrationForm.get('lastname');
+    var workemail = this.userregistrationForm.get('email');
+    var aggrement = this.userregistrationForm.get('aggrement');
+    console.log(aggrement)
+    if (control == aggrement && control.hasError("required")) {
+      console.log(control, aggrement)
+      return "This checkbox is required to be checked.";
+    }
+   
+
+    if (control.hasError("required")) {
+      return "You must enter a value";
+    }
+    if (control == firstname) {
+      return firstname.hasError("pattern")
+        ? "First name should be of min. 3 characters and contain only alphabets."
+        : "";
+    } else if (control == lastname) {
+      return lastname.hasError("pattern")
+        ? "Last name should be of min. 3 characters and contain only alphabets."
+        : "";
+    } else if (control == workemail) {
+      return workemail.hasError("pattern")
+        ? "Please enter a valid email."
+        : "";
+    }
+    // } else if (control == this.company) {
+    //   return this.company.hasError("pattern")
+    //     ? "Please enter a valid company name."
+    //     : "";
+    // } else if (control == this.phone) {
+    //   return this.phone.hasError("pattern")
+    //     ? "Please enter a valid phone number."
+    //     : "";
+    // }
+  }
+
+  updateUser() {
 
     const postData = {
       firstname: this.userregistrationForm.get("firstname").value,
@@ -195,54 +246,72 @@ export class UserregistrationPage implements OnInit {
       resetPasswordToken: this.userregistrationForm.get('password').value,
       role: this.userregistrationForm.get('role').value
     };
-    this.apiService.updateUser(this.user.user.id,postData).subscribe((response:any)=>{
+    this.apiService.updateUser(this.user.user.id, postData).subscribe((response: any) => {
 
       //this.
-     // this.storageService.setUser(response);
-     // this.apiService.refreshHeader();
+      // this.storageService.setUser(response);
+      // this.apiService.refreshHeader();
       this.utils.hideLoading();
-      this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.")
-     // this.login();
-     setTimeout(() => {
-      this.router.navigate(['/login']);
-      this.utils.showSnackBar("User Registered Successfully");
-     },3000)
+      const regitemRef = this.db.object(FIREBASE_DB_CONSTANTS.KEYWORD + response.id);
+      regitemRef.set({ newprelims: 0, newpermits: 0 });
+      // this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.")
+     this.createachatuser(""+response.id,response.firstname+" "+response.lastname);
     },
       responseError => {
         this.utils.hideLoading().then(() => {
           const error: ErrorModel = responseError.error;
           this.utils.errorSnackBar(error.message[0].messages[0].message);
         })
-  })
-}
-
-  change(event)
-  {
-
-    this.isTermsSelect = event.detail.checked;
+      })
   }
 
-  gotoSignIn(){
+  change(event) {
+    console.log(event.detail.checked)
+    if(event.detail.checked)
+    {
+      this.display = false;
+    this.isTermsSelect = true;
+    console.log(this.isTermsSelect);
+    }
+    else{
+      this.display = true;
+      this.isTermsSelect = false;
+      this.userregistrationForm.get('aggrement').setValue(null);
+      console.log(this.isTermsSelect);
+    }
+  }
+
+  gotoSignIn() {
     this.router.navigate(['/login'])
   }
 
-  showTermsAggrement(){
-    const browser = this.iab.create(" https://www.wattmonk.com/service-agreement" ,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  showTermsAggrement() {
+    const browser = this.iab.create(" https://www.wattmonk.com/service-agreement", '_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
 
-  showPrivacyPolicy(){
-    const browser = this.iab.create("https://www.wattmonk.com/privacy-policy  " ,'_system', 'location=yes,hardwareback=yes,hidden=yes');
+  showPrivacyPolicy() {
+    const browser = this.iab.create("https://www.wattmonk.com/privacy-policy  ", '_system', 'location=yes,hardwareback=yes,hidden=yes');
   }
 
-  ionViewDidEnter(){
-    this.network.networkSwitch.subscribe(data=>{
+  privacy(event){
+    event.preventDefault();
+    const browser = this.iab.create('https://www.wattmonk.com/privacy-policy');
+  }
+
+  agreement(event){
+    event.preventDefault();
+    const browser = this.iab.create('https://www.wattmonk.net/service-agreement');
+  }
+
+  ionViewDidEnter() {
+    this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
 
 
     })
 
-this.network.networkDisconnect();
-this.network.networkConnect();
+    this.network.networkDisconnect();
+    this.network.networkConnect();
   }
 
   // login() {
@@ -311,6 +380,33 @@ this.network.networkConnect();
   //     }
   //   }
   // }
+  createachatuser(userid: string, name: string) {
+    let apiKey = COMETCHAT_CONSTANTS.API_KEY;
+    //var currenttime = new Date().getTime();
+    //var uid = userid + "_" + currenttime;
+    var uid = userid;
+    var name = name;
+    var user = new CometChat.User(uid);
+    user.setName(name);
+    CometChat.createUser(user, apiKey).then(
+      user => {
+        this.utils.hideLoading();
+     
+       this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.");
+       setTimeout(() => {
+        this.router.navigate(['/login']);
+        this.utils.showSnackBar("User Registered Successfully");
+      }, 3000)
+      }, error => {
+        this.utils.hideLoading();
+        // this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.");
+        setTimeout(() => {
+         this.router.navigate(['/login']);
+         this.utils.errorSnackBar("Cometchat uid has already taken");
+       }, 3000)
+      }
+    )
+  }
 
 
 }

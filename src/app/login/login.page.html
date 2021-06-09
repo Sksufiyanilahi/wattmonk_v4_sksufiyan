@@ -27,7 +27,7 @@
                                 <ion-col size="12">
                                     <ion-label>Email*</ion-label>
                                     <ion-item class="box " lines="none"  >
-                                        <ion-input type="email" placeholder="Ex. johndoe@gmail.com"
+                                        <ion-input type="email" placeholder="eg. pat@example.com"
                                             formControlName="identifier">
                                         </ion-input>
                                     </ion-item>
@@ -38,18 +38,21 @@
                                             <span class="error">{{emailError}}</span>
                                         </div>
                                         <div
-                                            *ngIf="loginForm.get('identifier').value === '' && loginForm.get('identifier').dirty">
+                                            *ngIf="loginForm.get('identifier').value === '' && loginForm.get('identifier').dirty ||  (loginForm.get('identifier').touched && loginForm.get('identifier').invalid) && loginForm.get('identifier').pristine">
                                             <span class="error">{{fieldRequired}}</span>
                                         </div>
                                     </div>
                                 </ion-col>
 
-                                <ion-col size="12"  class="ion-margin-top">
-                                    <ion-label>Password*</ion-label>
-                                    <ion-item class="box">
+                                <ion-col size="12"  class="ion-margin-top" style="padding-bottom: 18px;">
+                                    
+                                    <p style="margin-bottom: 0px;"><ion-label>Password*</ion-label><a class="ion-padding actionlink"
+                                            [routerLink]="['/forgot-password']" routerDirection="forward">Forgot password?</a>
+                                </p>
+                                    <ion-item class="box" lines="none">
 
                                         <ion-input type="password" class="password_input" [type]="getType()"
-                                            placeholder="password" formControlName="password">
+                                            formControlName="password">
                                         </ion-input>
                                         <div class="eye_box">
                                             <ion-icon name="eye" *ngIf="!this.isActiveToggleTextPassword"
@@ -61,21 +64,26 @@
                                     </ion-item>
 
                                     <div class="error_div">
-                                        <div *ngIf="password.errors?.minlength">
+                                        <!-- <div *ngIf="password.errors?.minlength">
                                             <span class="error">Invalid password</span>
+                                        </div> -->
+                                        <div
+                                            *ngIf="loginForm.get('password').value === '' && loginForm.get('password').dirty ||  (loginForm.get('password').touched && loginForm.get('password').invalid) && loginForm.get('password').pristine">
+                                            <span class="error">{{fieldRequired}}</span>
                                         </div>
                                     </div>
                                 </ion-col>
                                 <ion-col size="12" style="left: 13px;" class="forgot-password-text">
-                                  <p style="text-align: end; margin: 0px;
+                                  <!-- <p style="text-align: end; margin: 0px;
                                   padding-top: 0px; font-size: 0.9em;" class="ion-padding actionlink"
                                       [routerLink]="['/forgot-password']" routerDirection="forward">Forgot password?
-                                </p>
+                                </p> -->
                               </ion-col>
-                                <ion-col>
+                                <!-- <ion-col>
                                     <input type="checkbox"><span class="checkBox"> Keep me signed in</span>
-                                </ion-col>
-                                <ion-col size="12" style="margin-top: 5px" class="ion-margin-top">
+                                </ion-col> -->
+                                <ion-col></ion-col>
+                                <ion-col size="12" style="margin-top: 16px" class="ion-margin-top">
                                     <ion-button class="SignInBtn" (click)="login()">
                                       {{ buttonTitle }}
                                     </ion-button>
@@ -87,7 +95,7 @@
             </ion-row>
             <ion-row class="ion-margin-top ion-no-padding">
                 <ion-col class="ion-no-margin ion-no-padding">
-                    <p class="registrationtext">Don't have an account yet? <a class="actionlink"
+                    <p class="registrationtext">Don't have an account yet? <a class="signupactionlink"
                             [routerLink]="['/userregistration']">Sign up</a></p>
                 </ion-col>
             </ion-row>
@@ -98,4 +106,3 @@
 
 </ion-content>
 <app-footer></app-footer>
-

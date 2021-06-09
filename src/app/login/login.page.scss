@@ -19,15 +19,15 @@ img{
 }
 
 .subtitle {
-  font-size: 25px;
-  color: black;
-  font-weight: bold;
+  font-size: 24px;
+  // color: black;
+  font-weight: 600;
 
 }
 
 ion-label{
-  color: #A5A095;
-  font-size: 0.9em;
+  color: #3c4257;
+  font-size: 12px;
 }
 
 ion-icon{
@@ -42,10 +42,13 @@ ion-icon{
 .box {
   width:auto;
   margin: 0 auto;
-  border-color: #403E39;
-  border-width: thin;
+  border-color: rgba(0,0,0,.12);
+  border-width: 2px;
   border-style: solid;
-  border-radius: 0.4em;
+  border-radius: 4px;
+  height: 40px;
+    display: flex;
+    margin-top:8px;
 }
 
 ion-input{
@@ -57,7 +60,40 @@ ion-input{
     appearance: none;
     padding: 12px;
     border-radius: 3px;
+    --placeholder-color:rgba(0,0,0,0.87);
+    font-size: 0.8em;
 }
+
+ion-item.ion-invalid.ion-untouched.ion-dirty {
+  border-color: var(--ion-color-danger) ;
+}
+
+ion-item.ion-invalid.ion-touched.ion-pristine {
+  border-color: var(--ion-color-danger) ;
+}
+
+ion-item.ion-invalid.ion-touched.ion-dirty {
+border-color: var(--ion-color-danger) ;
+}
+
+ion-item.ion-valid.ion-untouched.ion-dirty {
+border-color: green ;
+}
+
+ion-item.ion-valid.ion-touched.ion-dirty {
+border-color: green ;
+}
+
+ion-item{
+  --ion-background-color:white !important;
+}
+
+
+ion-item.item-input.ion-focusable.item-has-focus{
+  border-color: #EDC773 !important;
+}
+
+
 
 ion-content.login-background {
   --background: white;
@@ -95,13 +131,14 @@ ion-content.login-background {
 }
 
 .password_input {
-  margin-bottom: -5px;
+  // margin-bottom: -5px;
   font-size: 14px;
 }
 
 .eye_box {
   display: flex;
   align-items: center;
+
 }
 
 .error {
@@ -111,8 +148,22 @@ ion-content.login-background {
 }
 
 .actionlink{
-  color: #EDC773;
+  color: #f1ad1a;
   text-decoration: none;
+  text-align: end; 
+  margin: 0px;
+  padding: 0px; 
+  font-size: 14px;
+  float: right;
+}
+
+.signupactionlink{
+  color: #f1ad1a;
+  text-decoration: none;
+}
+
+ion-icon{
+  color: #212529;
 }
 
 .actionlink:hover{
@@ -120,20 +171,23 @@ ion-content.login-background {
 }
 
 .registrationtext{
-  color: #A5A095;
+  color: #3c4257;
   font-size: 15px;
 }
 
 
 .SignInBtn{
   --background:#EDC773;
-    color: #434343;
+    color: #212529;
     width: auto;
-    height: 49px;
-    border-radius: 7px;
+    height: 36px;
+    --border-radius: 4px;
     display: block;
-    font-size: 19px;
+    font-size: 14px;
     text-transform: none;
+    font-weight: 500;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .Footer1{
