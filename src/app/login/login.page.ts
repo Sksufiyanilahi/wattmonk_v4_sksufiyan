@@ -203,6 +203,8 @@ export class LoginPage implements OnInit {
       } else {
         this.apiService.resetHeaders();
         // this.utils.errorSnackBar("Entered email and password combination doesn't match any of our records. Please try again.");
+        this.loginForm.get('identifier').markAsDirty();
+        this.loginForm.get('password').markAsDirty();
       }
     }
   }
