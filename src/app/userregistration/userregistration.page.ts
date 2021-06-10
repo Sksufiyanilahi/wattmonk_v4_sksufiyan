@@ -255,7 +255,7 @@ export class UserregistrationPage implements OnInit {
       const regitemRef = this.db.object(FIREBASE_DB_CONSTANTS.KEYWORD + response.id);
       regitemRef.set({ newprelims: 0, newpermits: 0 });
       // this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.")
-     this.createachatuser(""+response.id,response.firstname+" "+response.lastname);
+     this.createachatuser(response.id,response.firstname+" "+response.lastname);
     },
       responseError => {
         this.utils.hideLoading().then(() => {
@@ -380,7 +380,7 @@ export class UserregistrationPage implements OnInit {
   //     }
   //   }
   // }
-  createachatuser(userid: string, name: string) {
+  createachatuser(userid: number, name: string) {
     let apiKey = COMETCHAT_CONSTANTS.API_KEY;
     //var currenttime = new Date().getTime();
     //var uid = userid + "_" + currenttime;
@@ -400,10 +400,10 @@ export class UserregistrationPage implements OnInit {
       }, error => {
         this.utils.hideLoading();
         // this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.");
-        setTimeout(() => {
          this.router.navigate(['/login']);
          this.utils.errorSnackBar("Cometchat uid has already taken");
-       }, 3000)
+         this.apiService.deleteTeam(userid).subscribe(res=>{
+         });
       }
     )
   }
