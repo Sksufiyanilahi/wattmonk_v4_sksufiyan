@@ -1881,47 +1881,6 @@ export class StartsurveyPage implements OnInit {
     try {
       event.preventDefault();
       this.handleExistence(event.target.checked);
-      // let doesexist = event.target.checked;
-      // this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].isexistencechecked = true;
-      // this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult = doesexist;
-      // if (doesexist) {
-      //   this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(true);
-      //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshotscount = 0;
-      //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].requiredshotscount = 0;
-      //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shotscapturedcount = 0;
-      //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots = [];
-      //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach((element, index) => {
-      //     this.createcapturedshotofitem(element, this.selectedmainmenuindex, this.selectedsubmenuindex, index);
-      //     element.ispending = true;
-      //     element.shotstatus = false;
-      //     element.questionstatus = false;
-      //     element.required = true;
-      //     if (element.inputformcontrol[0] !== '' && element.required) {
-      //       this.activeForm.get(element.inputformcontrol[0]).setValidators([Validators.required]);
-      //     }
-      //     if (element.inputformcontrol.length > 1 && element.required) {
-      //       this.activeForm.get(element.inputformcontrol[1]).setValidators([Validators.required]);
-      //     }
-      //   });
-      //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = true;
-      // } else {
-      //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots.forEach(element => {
-      //     element.ispending = false;
-      //     element.shotstatus = true;
-      //     element.questionstatus = true;
-      //     element.required = false;
-      //     if (element.inputformcontrol[0] !== '') {
-      //       this.activeForm.get(element.inputformcontrol[0]).clearValidators();
-      //     }
-      //     if (element.inputformcontrol.length > 1) {
-      //       this.activeForm.get(element.inputformcontrol[1]).clearValidators();
-      //     }
-      //   });
-      //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots = [];
-      //   this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].inputformcontrol).setValue(false);
-      //   this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].ispending = false;
-      //   this.markchildcompletion();
-      // }
     } catch (error) {
       console.log("onchildmodechanged---" + error);
     }
