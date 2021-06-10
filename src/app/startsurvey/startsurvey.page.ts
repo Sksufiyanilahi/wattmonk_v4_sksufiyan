@@ -411,7 +411,11 @@ export class StartsurveyPage implements OnInit {
                 } else {
                   if (shot.inputformcontrol[0] !== '') {
                     this.activeFormElementsArray.push(shot.inputformcontrol[0]);
-                    formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                    if(shot.required){
+                      formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                    }else{
+                      formData[shot.inputformcontrol[0]] = new FormControl('', []);
+                    }
                   }
                   if (shot.forminputfields.length > 0) {
                     shot.forminputfields.forEach((control, controlindex) => {
@@ -464,7 +468,11 @@ export class StartsurveyPage implements OnInit {
                 } else {
                   if (shot.inputformcontrol[0] !== '') {
                     this.activeFormElementsArray.push(shot.inputformcontrol[0]);
-                    formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                    if(shot.required){
+                      formData[shot.inputformcontrol[0]] = new FormControl('', [Validators.required]);
+                    }else{
+                      formData[shot.inputformcontrol[0]] = new FormControl('', []);
+                    }
                   }
                   if (shot.forminputfields.length > 0) {
                     shot.forminputfields.forEach((control, controlindex) => {
@@ -517,6 +525,7 @@ export class StartsurveyPage implements OnInit {
 
   addformfieldvalidations(validations, formData, control, isrequired) {
     if (control != "") {
+      console.log(control + "-----" + isrequired);
       if (validations != undefined && isrequired) {
         let regex = this.getFieldRegex(validations.regextype, validations.minlength, validations.maxlength);
         formData[control] = new FormControl('', Validators.compose([Validators.required, Validators.pattern(regex)]));
