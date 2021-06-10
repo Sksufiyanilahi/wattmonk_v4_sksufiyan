@@ -146,12 +146,14 @@ state: { productdetails: objToSend }
               CometChat.logout().then(()=>{
                 this.utilities.hideLoading().then(()=>{
                   this.storage.logout();
+                  this.deviceStorage.remove('pvsurveyjson');
                   // this.deviceStorage.clear();
                   this.apiService.resetHeaders();
                   this.navController.navigateRoot('login');
                 })
               },err=>{
                 this.storage.logout();
+                this.deviceStorage.remove('pvsurveyjson');
                 // this.deviceStorage.clear();
                 this.apiService.resetHeaders();
                 this.utilities.hideLoading();
