@@ -315,7 +315,7 @@ export class StartsurveyPage implements OnInit {
 
   loadLocalJSON() {
     this.http
-      .get('assets/surveyprocessjson/pv.json')
+      .get('assets/surveyprocessjson/defaultpv.json')
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
       });

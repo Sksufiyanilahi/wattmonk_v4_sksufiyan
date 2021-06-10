@@ -244,7 +244,7 @@
                                 "imagequality": 100,
                                 "imageuploadname": "subpanelopenshutterzoomshot",
                                 "capturedshotinfo": "Sub Panel Shutter Zoom Shot",
-                                "question": "Main Breaker Size",
+                                "question": "Sub Panel Main Breaker Size",
                                 "shotinfo": "Open Sub Panel Shutter & Capture Zoom Shot",
                                 "promptquestion": false,
                                 "shotstatus": false,
