@@ -296,8 +296,8 @@ export class StartsurveyPage implements OnInit {
         this.platformname = 'web';
       }
 
-      this.loadSurveyJSON('pvsurveyjson');
-      // this.loadLocalJSON();
+      // this.loadSurveyJSON('pvsurveyjson');
+      this.loadLocalJSON();
       this.getCurrentCoordinates();
     } catch (error) {
       // console.log("ngOnInit---" + error);

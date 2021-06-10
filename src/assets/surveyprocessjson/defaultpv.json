@@ -163,6 +163,156 @@
                     },
                     {
                         "isvisible": true,
+                        "name": "Sub Panel",
+                        "ispending": true,
+                        "isexistencechecked": false,
+                        "inputformcontrol": [
+                            ""
+                        ],
+                        "isactive": false,
+                        "placeholder": "",
+                        "shots": [
+                            {
+                                "questiontype": 1,
+                                "imagekey": "existingsubpanelimages",
+                                "imagename": "subpanellongshot",
+                                "imagequality": 60,
+                                "imageuploadname": "subpanellongshot",
+                                "capturedshotinfo": "Sub Panel Long Shot",
+                                "question": "Sub Panel is located inside or outside the building?",
+                                "shotinfo": "Capture Sub Panel Long Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "subpanellocation"
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[],
+                                "isactive": true,
+                                "placeholder": "Sub Panel Location",
+                                "questioninfo": "Provide Sub Panel Location",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "inside",
+                                    "outside"
+                                ],
+                                "required": true,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 2,
+                                "imagekey": "existingsubpanelimages",
+                                "imagename": "subpanelzoomshot",
+                                "imagequality": 100,
+                                "imageuploadname": "subpanelzoomshot",
+                                "capturedshotinfo": "Sub Panel Zoom Shot",
+                                "question": "Sub Panel/BUS Rating?",
+                                "shotinfo": "Capture Sub Panel Zoom Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "subpanelrating"
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 4,
+                                        "regextype": 0
+                                    }
+                                ],
+                                "isactive": false,
+                                "placeholder": "Sub Panel Rating",
+                                "questioninfo": "Provide Sub Panel Rating",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": true,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 2,
+                                "imagekey": "existingsubpanelimages",
+                                "imagename": "subpanelopenshutterzoomshot",
+                                "imagequality": 100,
+                                "imageuploadname": "subpanelopenshutterzoomshot",
+                                "capturedshotinfo": "Sub Panel Shutter Zoom Shot",
+                                "question": "Main Breaker Size",
+                                "shotinfo": "Open Sub Panel Shutter & Capture Zoom Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "subpanelmainbreakersize"
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 5,
+                                        "regextype": 0
+                                    }
+                                ],
+                                "isactive": false,
+                                "placeholder": "Main Breaker Size",
+                                "questioninfo": "Provide Main Breaker Size",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": true,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 1,
+                                "imagekey": "existingsubpanelimages",
+                                "imagename": "subpanelwithoutcovershot",
+                                "imagequality": 100,
+                                "imageuploadname": "subpanelwithoutcovershot",
+                                "capturedshotinfo": "Sub Panel Inside Cover Zoom Shot",
+                                "question": "Main breaker location in Sub Panel?",
+                                "shotinfo": "Open Sub Panel Inside Cover & Capture Zoom Shot",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    "subpanelbreaker"
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[],
+                                "isactive": false,
+                                "placeholder": "Sub Panel Breaker",
+                                "questioninfo": "Provide Main breaker location in Sub Panel",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "top",
+                                    "bottom",
+                                    "center",
+                                    "none"
+                                ],
+                                "required": true,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            }
+                        ],
+                        "checkexistence": false,
+                        "capturedshots": [],
+                        "existenceresult": true,
+                        "formelements": [],
+                        "shotscapturedcount" : 0
+                    },
+                    {
+                        "isvisible": true,
                         "name": "Utility Meter",
                         "ispending": true,
                         "isexistencechecked": false,
@@ -1203,6 +1353,286 @@
                                 "imagename": "appliances4",
                                 "imagequality": 100,
                                 "imageuploadname": "appliances4",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regextype": 1
+                                    }
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances5",
+                                "imagequality": 100,
+                                "imageuploadname": "appliances5",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regextype": 1
+                                    }
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances6",
+                                "imagequality": 100,
+                                "imageuploadname": "appliances6",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regextype": 1
+                                    }
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances7",
+                                "imagequality": 100,
+                                "imageuploadname": "appliances7",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regextype": 1
+                                    }
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances8",
+                                "imagequality": 100,
+                                "imageuploadname": "appliances8",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regextype": 1
+                                    }
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances9",
+                                "imagequality": 100,
+                                "imageuploadname": "appliances9",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regextype": 1
+                                    }
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances10",
+                                "imagequality": 100,
+                                "imageuploadname": "appliances10",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regextype": 1
+                                    }
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances11",
+                                "imagequality": 100,
+                                "imageuploadname": "appliances11",
+                                "capturedshotinfo": "Appliances Photos",
+                                "question": "Name of the appliance?",
+                                "shotinfo": "Capture all appliances of heavy load",
+                                "promptquestion": false,
+                                "shotstatus": false,
+                                "ispending": true,
+                                "inputformcontrol": [
+                                    ""
+                                ],
+                                "forminputfields": [],
+                                "formfieldvalidations":[
+                                    {
+                                        "minlength": 1,
+                                        "maxlength": 100,
+                                        "regextype": 1
+                                    }
+                                ],
+                                "isactive": false,
+                                "placeholder": "",
+                                "questioninfo": "",
+                                "questionstatus": false,
+                                "result": "",
+                                "actions": [
+                                    "confirm"
+                                ],
+                                "required": false,
+                                "visitedonce": false,
+                                "capturedonce": false
+                            },
+                            {
+                                "questiontype": 5,
+                                "imagekey": "appliancesimages",
+                                "imagename": "appliances12",
+                                "imagequality": 100,
+                                "imageuploadname": "appliances12",
                                 "capturedshotinfo": "Appliances Photos",
                                 "question": "Name of the appliance?",
                                 "shotinfo": "Capture all appliances of heavy load",
