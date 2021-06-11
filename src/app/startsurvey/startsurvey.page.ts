@@ -245,8 +245,6 @@ export class StartsurveyPage implements OnInit {
   shotcompletecount = 0;
   totalstepcount: number;
   remainingfilestoupload = 0;
-  failedshotstoupload: CAPTUREDSHOT[] = [];
-  failedattachmentstoupload: FILE_ATTACHMENTS[] = [];
 
   cameraspaceremainingheight = 0;
   noviewremainingheight = 0;
@@ -263,6 +261,9 @@ export class StartsurveyPage implements OnInit {
   surveystate: string = "";
 
   invertermakesubscriptions: Subscription;
+
+  filesarray: FILE_ATTACHMENTS[] = [];
+  imagesArray: CAPTUREDSHOT[] = [];
 
   constructor(private datastorage: Storage,
     private storageuserdata: StorageService,
@@ -296,8 +297,8 @@ export class StartsurveyPage implements OnInit {
         this.platformname = 'web';
       }
 
-      this.loadSurveyJSON('pvsurveyjson');
-      // this.loadLocalJSON();
+      // this.loadSurveyJSON('pvsurveyjson');
+      this.loadLocalJSON();
       this.getCurrentCoordinates();
     } catch (error) {
       console.log("ngOnInit---" + error);
@@ -315,7 +316,7 @@ export class StartsurveyPage implements OnInit {
 
   loadLocalJSON() {
     this.http
-      .get('assets/surveyprocessjson/defaultpv.json')
+      .get('assets/surveyprocessjson/pv.json')
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
       });
@@ -734,6 +735,7 @@ export class StartsurveyPage implements OnInit {
           };
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push(fileobjurl);
           this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(selectedfile);
+          this.saveintermediatesurveydata();
         }
         reader.readAsDataURL(ev.target.files[i]);
       }
@@ -760,6 +762,7 @@ export class StartsurveyPage implements OnInit {
       this.singlefileuploadinput.nativeElement.value = '';
       this.multiplefileuploadinput.nativeElement.value = '';
     }
+    this.saveintermediatesurveydata();
   }
 
   //Method called when slide is changed by drag or navigation
@@ -1059,7 +1062,9 @@ export class StartsurveyPage implements OnInit {
 
       if (nopendingshotfound) {
         if (this.activeForm.status == 'VALID') {
+          this.utilitieservice.showLoading('Please Wait...').then(() => {
           this.uploadfilestoserver();
+          });
         }
         else {
           const toast = await this.toastController.create({
@@ -1076,9 +1081,8 @@ export class StartsurveyPage implements OnInit {
   }
 
   uploadfilestoserver() {
-    this.utilitieservice.showLoading('Uploading Files').then(() => {
-      this.saveintermediatesurveydata();
-      const filesarray: FILE_ATTACHMENTS[] = [];
+    this.saveintermediatesurveydata();
+      this.filesarray = [];
       this.mainmenuitems.forEach(mainmenu => {
         if (mainmenu.viewmode == VIEWMODE.FORM) {
           mainmenu.children.forEach(child => {
@@ -1086,8 +1090,10 @@ export class StartsurveyPage implements OnInit {
               child.formelements.forEach(formelement => {
                 if (formelement.controltype == CONTROLTYPE.CONTROL_SINGLE_FILE_UPLOAD || formelement.controltype == CONTROLTYPE.CONTROL_MULTIPLE_FILE_UPLOAD) {
                   formelement.attachments.forEach(attachment => {
-                    console.log(attachment);
-                    filesarray.push(attachment);
+                    if(!attachment.uploadstatus){
+                      console.log(attachment);
+                      this.filesarray.push(attachment);
+                    }
                   });
                 }
               });
@@ -1096,160 +1102,107 @@ export class StartsurveyPage implements OnInit {
         }
       });
 
-      this.totalfilestoupload = filesarray.length;
-      console.log(filesarray);
-      this.uploadattachmentbyindex(filesarray, 0, this.totalfilestoupload, false);
-    });
+      this.totalfilestoupload = this.filesarray.length;
+      console.log(this.filesarray);
+      if(this.totalfilestoupload > 0){
+        this.uploadfileattachment(0);
+      }else{
+        this.uploadImagesToServer();
+      }
   }
 
-  uploadattachmentbyindex(files: FILE_ATTACHMENTS[], index, totalfiles, isfailedfile) {
+  uploadfileattachment(index){
     try {
-      if (files.length > 0 && files.length <= this.totalfilestoupload) {
-        const fileToUpload = files[0];
-        if (!fileToUpload.uploadstatus) {
-          if (isfailedfile) {
-            this.utilitieservice.setLoadingMessage('Uploading file ' + (index + 1) + ' of ' + totalfiles);
-          } else {
-            this.utilitieservice.setLoadingMessage('Uploading file ' + (index + 1) + ' of ' + totalfiles);
-          }
+      this.utilitieservice.setLoadingMessage('Uploading file ' + (index + 1) + ' of ' + this.filesarray.length);
 
-          const filedata = new FormData();
-          filedata.append("files", fileToUpload.file);
+        const filedata = new FormData();
+          filedata.append("files", this.filesarray[index].file);
           filedata.append('path', 'survey/' + this.surveyid);
           filedata.append('refId', this.surveyid + '');
           filedata.append('ref', 'survey');
-          filedata.append('field', fileToUpload.controlname);
+          filedata.append('field', this.filesarray[index].controlname);
           this.apiService.uploaddesign(filedata).subscribe((data) => {
-            fileToUpload.uploadstatus = true;
-            index++;
-            files.splice(0, 1);
+            this.filesarray[index].uploadstatus = true;
             this.saveintermediatesurveydata();
-            this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
+            if(index < this.filesarray.length - 1){
+              this.uploadfileattachment(index + 1);
+            }else{
+              this.uploadImagesToServer();
+            }
           }, (error) => {
-            fileToUpload.uploadstatus = false;
-            this.failedattachmentstoupload.push(fileToUpload);
-            this.displayfileuploadfailuretoast(index);
-            index++;
-            files.splice(0, 1);
             this.saveintermediatesurveydata();
-            this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
+            this.handleuploadfailure();
           });
-        } else {
-          index++;
-          files.splice(0, 1);
-          this.saveintermediatesurveydata();
-          this.uploadattachmentbyindex(files, index, totalfiles, isfailedfile);
-        }
-      } else {
-        if (this.failedattachmentstoupload.length > 0) {
-          this.utilitieservice.setLoadingMessage('Uploading files');
-              this.totalfilestoupload = this.failedattachmentstoupload.length;
-              //Code to upload failed files
-              this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.totalfilestoupload, true);
-        } else {
-          this.uploadImagesToServer();
-        }
-      }
     } catch (error) {
-      console.log("uploadattachmentbyindex---" + error);
+      console.log("uploadfileattachment--"+error);
     }
   }
 
   uploadImagesToServer() {
     try {
-      this.utilitieservice.setLoadingMessage('Uploading Images');
         this.saveintermediatesurveydata();
 
-        const imagesArray: CAPTUREDSHOT[] = [];
+        this.imagesArray = [];
         this.mainmenuitems.forEach(mainmenu => {
           mainmenu.children.forEach(child => {
             child.capturedshots.forEach(shot => {
-              if (!shot.imagecleared) {
-                imagesArray.push(shot);
+              if (!shot.imagecleared && !shot.uploadstatus) {
+                this.imagesArray.push(shot);
               }
             });
           });
         });
 
-        this.totalimagestoupload = imagesArray.length;
-        this.uploadImageByIndex(imagesArray, 0, this.totalimagestoupload, false);
+        this.totalimagestoupload = this.imagesArray.length;
+        if(this.totalimagestoupload > 0){
+          this.uploadimages(0);
+        }else{
+          this.savedetailsformdata();
+        }
     } catch (error) {
       console.log("uploadImagesToServer---" + error);
     }
   }
 
-  uploadImageByIndex(mapOfImages: CAPTUREDSHOT[], index, totalimages, isfailedimage) {
+  uploadimages(index){
     try {
-      if (mapOfImages.length > 0 && mapOfImages.length <= this.totalimagestoupload) {
-        const imageToUpload = mapOfImages[0];
-        if (imageToUpload.shotimage && !imageToUpload.uploadstatus) {
-          const blob = this.utilitieservice.getBlobFromImageData(imageToUpload.shotimage);
+      const blob = this.utilitieservice.getBlobFromImageData(this.imagesArray[index].shotimage);
           let filename = '';
-          if (imageToUpload.imageuploadname === '') {
+          if (this.imagesArray[index].imageuploadname === '') {
             filename = Date.now().toString() + '.png';
           } else {
-            filename = imageToUpload.imageuploadname + '.png';
+            filename = this.imagesArray[index].imageuploadname + '.png';
           }
-          if (isfailedimage) {
-            this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + totalimages);
-          } else {
-            this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + totalimages);
-          }
-          this.apiService.uploadImage(this.surveyid, imageToUpload.imagekey, blob, filename).subscribe((data) => {
-            imageToUpload.uploadstatus = true;
-            index++;
-            mapOfImages.splice(0, 1);
+          this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + this.imagesArray.length);
+          this.apiService.uploadImage(this.surveyid, this.imagesArray[index].imagekey, blob, filename).subscribe((data) => {
+            this.imagesArray[index].uploadstatus = true;
             this.saveintermediatesurveydata();
-            this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
-          }, (error) => {
-            imageToUpload.uploadstatus = false;
-            this.failedshotstoupload.push(imageToUpload);
-            this.displayuploadfailuretoast(index);
-            index++;
-            mapOfImages.splice(0, 1);
-            this.saveintermediatesurveydata();
-            this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
-          });
-        } else {
-          index++;
-          mapOfImages.splice(0, 1);
-          this.saveintermediatesurveydata();
-          this.uploadImageByIndex(mapOfImages, index, totalimages, isfailedimage);
-        }
-      } else {
-        if (this.failedshotstoupload.length > 0) {
-          this.utilitieservice.setLoadingMessage('Uploading Images');
-              this.totalimagestoupload = this.failedshotstoupload.length;
-              //Code to upload failed files
-              this.uploadImageByIndex(this.failedshotstoupload, 0, this.totalimagestoupload, true);
-        } else {
-          this.utilitieservice.setLoadingMessage('Saving form data');
+            if(index < this.imagesArray.length - 1){
+              this.uploadimages(index + 1);
+            }else{
               this.savedetailsformdata();
-        }
-      }
+            }
+          }, (error) => {
+            this.saveintermediatesurveydata();
+            this.handleuploadfailure();
+          });
     } catch (error) {
-      console.log("uploadImageByIndex---" + error);
+      console.log("uploadimages---" + error);
     }
   }
 
-  async displayuploadfailuretoast(imageindex) {
-    // const toast = await this.toastController.create({
-    //   message: 'Failed to upload image ' + imageindex,
-    //   duration: 2000
-    // });
-    // toast.present();
-  }
-
-  async displayfileuploadfailuretoast(fileindex) {
-    // const toast = await this.toastController.create({
-    //   message: 'Failed to upload file ' + fileindex,
-    //   duration: 2000
-    // });
-    // toast.present();
+  async handleuploadfailure(){
+    const toast = await this.toastController.create({
+      message: 'Unable to upload data due to network failure. Please try after sometime.',
+      duration: 3000
+    });
+    toast.present();
+    this.handleSurveyExit();
   }
 
   savedetailsformdata() {
     try {
+      this.utilitieservice.setLoadingMessage('Saving form data');
       this.saveintermediatesurveydata();
       const data = {};
       this.activeFormElementsArray.map(element => {
