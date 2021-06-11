@@ -1108,7 +1108,7 @@ export class StartsurveyPage implements OnInit {
         const fileToUpload = files[0];
         if (!fileToUpload.uploadstatus) {
           if (isfailedfile) {
-            this.utilitieservice.setLoadingMessage('Uploading failed file ' + (index + 1) + ' of ' + totalfiles);
+            this.utilitieservice.setLoadingMessage('Uploading file ' + (index + 1) + ' of ' + totalfiles);
           } else {
             this.utilitieservice.setLoadingMessage('Uploading file ' + (index + 1) + ' of ' + totalfiles);
           }
@@ -1142,7 +1142,7 @@ export class StartsurveyPage implements OnInit {
         }
       } else {
         if (this.failedattachmentstoupload.length > 0) {
-          this.utilitieservice.setLoadingMessage('Uploading failed files');
+          this.utilitieservice.setLoadingMessage('Uploading files');
               this.totalfilestoupload = this.failedattachmentstoupload.length;
               //Code to upload failed files
               this.uploadattachmentbyindex(this.failedattachmentstoupload, 0, this.totalfilestoupload, true);
@@ -1191,7 +1191,7 @@ export class StartsurveyPage implements OnInit {
             filename = imageToUpload.imageuploadname + '.png';
           }
           if (isfailedimage) {
-            this.utilitieservice.setLoadingMessage('Uploading failed image ' + (index + 1) + ' of ' + totalimages);
+            this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + totalimages);
           } else {
             this.utilitieservice.setLoadingMessage('Uploading image ' + (index + 1) + ' of ' + totalimages);
           }
@@ -1218,7 +1218,7 @@ export class StartsurveyPage implements OnInit {
         }
       } else {
         if (this.failedshotstoupload.length > 0) {
-          this.utilitieservice.setLoadingMessage('Uploading Failed Images');
+          this.utilitieservice.setLoadingMessage('Uploading Images');
               this.totalimagestoupload = this.failedshotstoupload.length;
               //Code to upload failed files
               this.uploadImageByIndex(this.failedshotstoupload, 0, this.totalimagestoupload, true);
@@ -1233,19 +1233,19 @@ export class StartsurveyPage implements OnInit {
   }
 
   async displayuploadfailuretoast(imageindex) {
-    const toast = await this.toastController.create({
-      message: 'Failed to upload image ' + imageindex,
-      duration: 2000
-    });
-    toast.present();
+    // const toast = await this.toastController.create({
+    //   message: 'Failed to upload image ' + imageindex,
+    //   duration: 2000
+    // });
+    // toast.present();
   }
 
   async displayfileuploadfailuretoast(fileindex) {
-    const toast = await this.toastController.create({
-      message: 'Failed to upload file ' + fileindex,
-      duration: 2000
-    });
-    toast.present();
+    // const toast = await this.toastController.create({
+    //   message: 'Failed to upload file ' + fileindex,
+    //   duration: 2000
+    // });
+    // toast.present();
   }
 
   savedetailsformdata() {
