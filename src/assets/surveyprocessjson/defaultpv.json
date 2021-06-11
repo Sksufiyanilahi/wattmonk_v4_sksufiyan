@@ -38,7 +38,7 @@
                                     "msplocation"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": true,
                                 "placeholder": "MSP Location",
                                 "questioninfo": "Provide MSP Location",
@@ -68,7 +68,7 @@
                                     "msprating"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 4,
@@ -103,7 +103,7 @@
                                     "mainbreakersize"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 5,
@@ -138,7 +138,7 @@
                                     "mspbreaker"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "MSP Breaker",
                                 "questioninfo": "Provide Main breaker location in MSP",
@@ -159,7 +159,7 @@
                         "capturedshots": [],
                         "existenceresult": true,
                         "formelements": [],
-                        "shotscapturedcount" : 0
+                        "shotscapturedcount": 0
                     },
                     {
                         "isvisible": true,
@@ -188,7 +188,7 @@
                                     "subpanellocation"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": true,
                                 "placeholder": "Sub Panel Location",
                                 "questioninfo": "Provide Sub Panel Location",
@@ -218,7 +218,7 @@
                                     "subpanelrating"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 4,
@@ -253,7 +253,7 @@
                                     "subpanelmainbreakersize"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 5,
@@ -288,7 +288,7 @@
                                     "subpanelbreaker"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "Sub Panel Breaker",
                                 "questioninfo": "Provide Main breaker location in Sub Panel",
@@ -309,7 +309,7 @@
                         "capturedshots": [],
                         "existenceresult": true,
                         "formelements": [],
-                        "shotscapturedcount" : 0
+                        "shotscapturedcount": 0
                     },
                     {
                         "isvisible": true,
@@ -338,7 +338,7 @@
                                     "utilitymeter"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "Utility Meter",
                                 "questioninfo": "Provide Utility Meter",
@@ -368,7 +368,7 @@
                                     "utility"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 150,
@@ -380,7 +380,9 @@
                                 "questioninfo": "Provide Utility Name",
                                 "questionstatus": false,
                                 "result": "",
-                                "actions": ["confirm"],
+                                "actions": [
+                                    "confirm"
+                                ],
                                 "required": true,
                                 "visitedonce": false,
                                 "capturedonce": false
@@ -390,7 +392,7 @@
                         "capturedshots": [],
                         "existenceresult": true,
                         "formelements": [],
-                        "shotscapturedcount" : 0
+                        "shotscapturedcount": 0
                     },
                     {
                         "isvisible": true,
@@ -419,7 +421,7 @@
                                     "pvinverterlocation"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "PV Inverter Location",
                                 "questioninfo": "Provide Inverter Location",
@@ -450,7 +452,7 @@
                                     "invertermodel"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 0,
                                         "maxlength": 150,
@@ -490,7 +492,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "PV Meter",
@@ -516,7 +518,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -543,7 +545,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -559,7 +561,7 @@
                         "capturedshots": [],
                         "existenceresult": true,
                         "formelements": [],
-                        "shotscapturedcount" : 0
+                        "shotscapturedcount": 0
                     }
                 ]
             },
@@ -598,7 +600,7 @@
                                     "rooftilt"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 3,
@@ -633,7 +635,7 @@
                                     "roofmaterial"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 150,
@@ -645,7 +647,9 @@
                                 "questioninfo": "Provide Roof Material",
                                 "questionstatus": false,
                                 "result": "",
-                                "actions": ["Confirm"],
+                                "actions": [
+                                    "Confirm"
+                                ],
                                 "required": true,
                                 "visitedonce": false,
                                 "capturedonce": false
@@ -666,7 +670,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -693,7 +697,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -720,7 +724,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -747,7 +751,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -774,7 +778,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -790,14 +794,16 @@
                         "capturedshots": [],
                         "existenceresult": true,
                         "formelements": [],
-                        "shotscapturedcount" : 0
+                        "shotscapturedcount": 0
                     },
                     {
                         "isvisible": true,
                         "name": "Roof Dimensions",
                         "ispending": true,
                         "isexistencechecked": false,
-                        "inputformcontrol": [""],
+                        "inputformcontrol": [
+                            ""
+                        ],
                         "isactive": false,
                         "placeholder": "",
                         "shots": [
@@ -817,7 +823,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -833,7 +839,7 @@
                         "capturedshots": [],
                         "existenceresult": true,
                         "formelements": [],
-                        "shotscapturedcount" : 0
+                        "shotscapturedcount": 0
                     },
                     {
                         "isvisible": true,
@@ -862,7 +868,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -889,7 +895,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -916,7 +922,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -943,7 +949,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -970,7 +976,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -997,7 +1003,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -1024,7 +1030,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -1040,7 +1046,7 @@
                         "capturedshots": [],
                         "existenceresult": true,
                         "formelements": [],
-                        "shotscapturedcount" : 0
+                        "shotscapturedcount": 0
                     },
                     {
                         "isvisible": true,
@@ -1069,7 +1075,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "",
                                 "questioninfo": "",
@@ -1085,7 +1091,7 @@
                         "capturedshots": [],
                         "existenceresult": true,
                         "formelements": [],
-                        "shotscapturedcount" : 0
+                        "shotscapturedcount": 0
                     }
                 ]
             },
@@ -1124,7 +1130,7 @@
                                     "framing"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[],
+                                "formfieldvalidations": [],
                                 "isactive": false,
                                 "placeholder": "Framing",
                                 "questioninfo": "Provide Type of Frame Details",
@@ -1156,7 +1162,7 @@
                                     "raftthickness",
                                     "raftwidth"
                                 ],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 3,
@@ -1195,7 +1201,7 @@
                                     "distancebetweentworafts"
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 3,
@@ -1218,7 +1224,7 @@
                         "capturedshots": [],
                         "existenceresult": true,
                         "formelements": [],
-                        "shotscapturedcount" : 0,
+                        "shotscapturedcount": 0,
                         "capturedonce": false
                     }
                 ]
@@ -1258,7 +1264,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1293,7 +1299,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1328,7 +1334,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1363,7 +1369,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1398,7 +1404,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1433,7 +1439,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1468,7 +1474,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1503,7 +1509,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1538,7 +1544,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1573,7 +1579,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1608,7 +1614,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1643,7 +1649,7 @@
                                     ""
                                 ],
                                 "forminputfields": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 100,
@@ -1667,7 +1673,7 @@
                         "capturedshots": [],
                         "existenceresult": true,
                         "formelements": [],
-                        "shotscapturedcount" : 0
+                        "shotscapturedcount": 0
                     }
                 ]
             },
@@ -1720,8 +1726,8 @@
                                 ],
                                 "required": true,
                                 "fileurls": [],
-                "attachments": [],
-                                "formfieldvalidations":[]
+                                "attachments": [],
+                                "formfieldvalidations": []
                             },
                             {
                                 "inputformcontrol": [
@@ -1734,8 +1740,8 @@
                                 "options": [],
                                 "required": false,
                                 "fileurls": [],
-                "attachments": [],
-                                "formfieldvalidations":[
+                                "attachments": [],
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 250,
@@ -1764,8 +1770,8 @@
                                 ],
                                 "required": true,
                                 "fileurls": [],
-                "attachments": [],
-                                "formfieldvalidations":[]
+                                "attachments": [],
+                                "formfieldvalidations": []
                             },
                             {
                                 "inputformcontrol": [
@@ -1779,7 +1785,7 @@
                                 "required": false,
                                 "fileurls": [],
                                 "attachments": [],
-                                "formfieldvalidations":[
+                                "formfieldvalidations": [
                                     {
                                         "minlength": 1,
                                         "maxlength": 250,
@@ -1788,7 +1794,7 @@
                                 ]
                             }
                         ],
-                        "shotscapturedcount" : 0
+                        "shotscapturedcount": 0
                     }
                 ]
             }
