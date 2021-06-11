@@ -173,7 +173,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.apiService.updateSurveyForm(this.surveyForm.value, this.surveyId).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
-              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
+              this.router.navigate(['/startsurvey/' + survey.id + '/' + survey.jobtype]);
             });
           },
             responseError => {
@@ -189,16 +189,16 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.surveyForm.get('assignedto').setValue(this.storage.getUserID());
           // if(this.userData.role.type === 'surveyors'){
           this.surveyForm.get('datetime').setValue(this.utilities.formatDate(this.surveyForm.get('surveydatetime').value));
-          this.surveyForm.get('status').setValue('surveyinprocess');
+          this.surveyForm.get('status').setValue('assigned');
           // }else{
-          this.surveyForm.get('status').setValue('surveyinprocess');
+          this.surveyForm.get('status').setValue('assigned');
           // }
 
           this.surveyForm.get('chatid').setValue('survey' + "_" + new Date().getTime());
           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
             this.utilities.hideLoading().then(() => {
               this.utilities.setDesignDetailsRefresh(true);
-              this.navController.navigateForward('camera/' + survey.id + '/' + survey.jobtype + '/' + survey.city + '/' + survey.state + '/' + survey.latitude + '/' + survey.longitude);
+              this.router.navigate(['/startsurvey/' + survey.id + '/' + survey.jobtype]);
             });
           },
             responseError => {

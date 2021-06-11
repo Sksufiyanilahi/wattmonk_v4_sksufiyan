@@ -229,6 +229,9 @@
             <ion-segment-button class="wd140" value="MSB" mode="md" *ngIf="survey.mspimages.length !==0">
               <ion-label>MSP</ion-label>
             </ion-segment-button>
+            <ion-segment-button class="wd140" value="Subpanel" mode="md" *ngIf="survey.existingsubpanelimages.length !==0">
+              <ion-label>Existing Subpanel Images</ion-label>
+            </ion-segment-button>
             <ion-segment-button value="utilityMeter" class="wd140" mode="md"
               *ngIf="survey.utilitymeterimages.length !==0">
               <ion-label>Utility Meter</ion-label>
@@ -250,14 +253,14 @@
           <ion-slides pager="true" zoom [options]="slideOpts" class="image-slider">
             <ion-slide *ngFor="let elecmsb of survey.mspimages,let i=index">
               <ion-row>
-                <ion-col size="12" *ngIf="i==0 && survey.msplocation !== null"><span>MSP is located
+                <ion-col size="12" *ngIf="i==0 && survey.msplocation !== null"><span>MSP  location
                     :</span>&nbsp;<span>{{survey.msplocation == null ? nullValue : survey.msplocation | titlecase}}</span></ion-col>
                 <ion-col size="12" *ngIf="i==1"><span>MSP/BUS Rating is :</span>&nbsp;<span>{{survey.msprating == null ? nullValue : survey.msprating}}
                   </span></ion-col>
-                <ion-col size="12" *ngIf="i==2 && survey.mainbreakersize !== null"><span>Main breaker size is
+                <ion-col size="12" *ngIf="i==2 && survey.mainbreakersize !== null"><span>Main breaker size 
                     :</span>&nbsp;<span>{{survey.mainbreakersize == null ? nullValue : survey.mainbreakersize}}
                   </span></ion-col>
-                <ion-col size="12" *ngIf="i==3 && survey.mspbreaker !== null"><span>Main Breaker location in MSP is
+                <ion-col size="12" *ngIf="i==3 && survey.mspbreaker !== null"><span>Main Breaker location in MSP 
                     :</span>&nbsp;<span>{{survey.mspbreaker == null ? nullValue : survey.mspbreaker | titlecase}}
                   </span></ion-col>
                 <div class="swiper-zoom-container">
@@ -267,6 +270,31 @@
             </ion-slide>
           </ion-slides>
         </div>
+
+        <div *ngSwitchCase="'Subpanel'">
+          <ion-slides pager="true" zoom [options]="slideOpts" class="image-slider">
+            <ion-slide *ngFor="let elecmsb of survey.existingsubpanelimages,let i=index">
+              <ion-row>
+                <ion-col size="12" *ngIf="i==0"><span>Subpanel  location
+                    :</span>&nbsp;<span>{{survey.subpanellocation | titlecase}} </span></ion-col>
+                <!-- <ion-col size="12" *ngIf="i==0"><span>MPU Required
+                    :</span>&nbsp;<span>{{survey?.mpurequired== true ? 'Yes' : 'No'}}</span></ion-col> -->
+                <ion-col size="12" *ngIf="i==1"><span>Subpanel Rating  :</span>&nbsp;<span>{{survey.subpanelrating}}
+                  </span></ion-col>
+                <ion-col size="12" *ngIf="i==2"><span> Subpanel Main breaker size 
+                    :</span>&nbsp;<span>{{survey.subpanelmainbreakersize}} 
+                  </span></ion-col>
+                <ion-col size="12" *ngIf="i==3"><span>Subpanel Breaker
+                    :</span>&nbsp;<span>{{survey.subpanelbreaker | titlecase}} 
+                  </span></ion-col>
+                <div class="swiper-zoom-container">
+                  <img [src]="elecmsb.url" (click)="showimage(elecmsb.url)" />
+                </div>
+              </ion-row>
+            </ion-slide>
+          </ion-slides>
+        </div>
+
         <div *ngSwitchCase="'utilityMeter'">
           <ion-slides pager="true" [options]="slideOpts" zoom="true">
             <ion-slide *ngFor="let elecutility of survey.utilitymeterimages,let i=index">
