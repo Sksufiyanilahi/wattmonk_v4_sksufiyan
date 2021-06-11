@@ -150,9 +150,9 @@ ion-content.login-background {
 .actionlink{
   color: #f1ad1a;
   text-decoration: none;
-  text-align: end; 
+  text-align: end;
   margin: 0px;
-  padding: 0px; 
+  padding: 0px;
   font-size: 14px;
   float: right;
 }
@@ -188,6 +188,10 @@ ion-icon{
     font-weight: 500;
     margin-left: 0px;
     margin-right: 0px;
+
+    --background-activated: #bb9441;
+    --background-focused: #bb9441;
+    --background-hover: #bb9441;
 }
 
 .Footer1{
