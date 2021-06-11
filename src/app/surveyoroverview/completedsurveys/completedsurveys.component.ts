@@ -160,7 +160,7 @@ export class CompletedsurveysComponent implements OnInit {
       surveyItem.lateby = this.overdue;
       if (tempData.length === 0) {
         const listOfSurvey = new SurveyDataHelper();
-        listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
+        // listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/d/yy');
         listOfSurvey.listOfSurveys.push(surveyItem);
         tempData.push(listOfSurvey);
       } else {
@@ -182,11 +182,12 @@ export class CompletedsurveysComponent implements OnInit {
         }
       }
     });
-    this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
-      var dateA = new Date(a.date).getTime(),
-        dateB = new Date(b.date).getTime();
-      return dateA - dateB;
-    });
+    this.listOfSurveyDataHelper=tempData
+    // this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+    //   var dateA = new Date(a.date).getTime(),
+    //     dateB = new Date(b.date).getTime();
+    //   return dateA - dateB;
+    // });
 
     this.listOfSurveyDataHelper.forEach((element, index) => {
       if(element.date == this.today){
@@ -194,7 +195,7 @@ export class CompletedsurveysComponent implements OnInit {
       }
     });
 
-    this.scrollTo();
+    // this.scrollTo();
     this.cdr.detectChanges();
   }
 

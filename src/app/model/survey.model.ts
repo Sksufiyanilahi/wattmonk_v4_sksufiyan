@@ -94,6 +94,10 @@ export class SurveyDataModel {
   meternumber:string;
   hoadetails:any;
   hoaattachments:Image[];
+  subpanelmainbreakersize: number;
+  subpanelbreaker: string;
+  subpanellocation: string;
+  subpanelrating: number;
 }
 
 export class SurveyCount{
