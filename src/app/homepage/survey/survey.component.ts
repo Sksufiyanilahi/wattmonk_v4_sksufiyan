@@ -345,7 +345,8 @@ export class SurveyComponent {
     }
 
     this.cdr.detectChanges();
-    this.scrollTo();
+    if(this.segments!='status=completed'){
+    this.scrollTo();}
   }
 
   fillinDynamicData(records: SurveyDataModel[]): SurveyDataModel[] {

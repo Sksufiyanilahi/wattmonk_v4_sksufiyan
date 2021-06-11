@@ -195,7 +195,7 @@ export class CompletedsurveysComponent implements OnInit {
       }
     });
 
-    this.scrollTo();
+    // this.scrollTo();
     this.cdr.detectChanges();
   }
 
