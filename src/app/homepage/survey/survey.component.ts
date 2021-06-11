@@ -294,7 +294,12 @@ export class SurveyComponent {
     this.listOfSurveyData.forEach((surveyItem, i) => {
       this.sDatePassed(surveyItem.datetime, i);
       surveyItem.lateby = this.overdue;
-      if (tempData.length === 0) {
+      if(this.segments=='status=completed'){
+        const listOfSurvey = new SurveyDataHelper();
+        listOfSurvey.listOfSurveys.push(surveyItem);
+        tempData.push(listOfSurvey);
+      }
+     else if (tempData.length === 0) {
         const listOfSurvey = new SurveyDataHelper();
         listOfSurvey.date = moment(surveyItem.datetime).utc().format('M/D/YY');
         // listOfSurvey.date = this.datePipe.transform(surveyItem.datetime, 'M/dd/yy','0');
@@ -319,9 +324,13 @@ export class SurveyComponent {
         }
       }
     });
-    // this.listOfSurveyDataHelper = tempData;
-
-    this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
+    //  this.listOfSurveyDataHelper = tempData;
+  if(this.segments=='status=completed'){
+    this.listOfSurveyDataHelper = tempData;
+    }
+    else{
+    
+     this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
       var dateA = new Date(a.date).getTime(),
         dateB = new Date(b.date).getTime();
       return dateA - dateB;
@@ -333,6 +342,7 @@ export class SurveyComponent {
         this.indexoftodayrow = index;
       }
     });
+    }
 
     this.cdr.detectChanges();
     this.scrollTo();

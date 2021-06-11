@@ -4,14 +4,14 @@
   </ion-refresher>
   <ion-grid *ngIf="listOfSurveyDataHelper.length !== 0">
     <ion-row *ngFor="let item of listOfSurveyDataHelper;let i = index" id={{i}}>
-        <ion-col size="12" class="ion-margin-top">
+        <!-- <ion-col size="12" class="ion-margin-top">
                 <span class="ion-padding" *ngIf="today === item.date" id="todayitems">
                     Today
                   </span>
             <span class="ion-padding" *ngIf="today !== item.date">
                       {{item.date | date: 'dd MMM yyyy'}}
                 </span>
-        </ion-col>
+        </ion-col> -->
         <ion-col *ngFor="let surveyData of item.listOfSurveys;let i = index " size="12">
             <div class="ion-no-padding custom-card" style="height: 100%;" (click)="gotoDetails(surveyData,$event)">
                 <p class="customer-name" >{{surveyData.name}}
