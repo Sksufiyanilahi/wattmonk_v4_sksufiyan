@@ -1130,8 +1130,10 @@ export class StartsurveyPage implements OnInit {
           this.uploadImagesToServer();
         }
       }, (error) => {
-        this.saveintermediatesurveydata();
-        this.handleuploadfailure();
+        this.utilitieservice.hideLoading().then(() => {
+          this.saveintermediatesurveydata();
+          this.handleuploadfailure();
+        });
       });
     } catch (error) {
       // console.log("uploadfileattachment--"+error);
@@ -1183,8 +1185,10 @@ export class StartsurveyPage implements OnInit {
           this.savedetailsformdata();
         }
       }, (error) => {
-        this.saveintermediatesurveydata();
-        this.handleuploadfailure();
+        this.utilitieservice.hideLoading().then(() => {
+          this.saveintermediatesurveydata();
+          this.handleuploadfailure();
+        });
       });
     } catch (error) {
       // console.log("uploadimages---" + error);
