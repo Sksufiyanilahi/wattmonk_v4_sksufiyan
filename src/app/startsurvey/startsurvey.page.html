@@ -21,7 +21,8 @@
             <div class="scroll" scrollX="true">
               <ng-container
                 *ngFor="let shot of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots; let shotindex = index">
-                <ion-button (click)="selectcapturedshot($event, shotindex)" [ngClass]="[ this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex].required ? 'cameraimagesbutton required' : 'cameraimagesbutton']">
+                <ion-button (click)="selectcapturedshot($event, shotindex)"
+                  [ngClass]="[ this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[shotindex].required ? 'cameraimagesbutton required' : 'cameraimagesbutton']">
                   <img class="shotimage" *ngIf="!shot.imagecleared" [src]="shot.shotimage" />
                   <img class="noimage" *ngIf="shot.imagecleared" src="/assets/images/noimage.png" />
                 </ion-button>
@@ -281,9 +282,12 @@
             <ion-input type="number" class="form-control" autocomplete="off"
               formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
             </ion-input>
-            <div class="error_div" *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).touched)">
-              <div *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).invalid">
-                <span class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol))}}</span>
+            <div class="error_div"
+              *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).touched)">
+              <div
+                *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol).invalid">
+                <span
+                  class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol))}}</span>
               </div>
             </div>
           </form>
@@ -308,9 +312,12 @@
             <ion-input class="form-control" autocomplete="off"
               formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}">
             </ion-input>
-            <div class="error_div" *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).touched)">
-              <div *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid">
-                <span class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]))}}</span>
+            <div class="error_div"
+              *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).touched)">
+              <div
+                *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid">
+                <span
+                  class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]))}}</span>
               </div>
             </div>
           </form>
@@ -336,9 +343,12 @@
               formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]}}"
               #utility>
             </app-auto-complete>
-            <div class="error_div" *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).touched)">
-              <div *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid">
-                <span class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]))}}</span>
+            <div class="error_div"
+              *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).touched)">
+              <div
+                *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid">
+                <span
+                  class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]))}}</span>
               </div>
             </div>
           </form>
@@ -363,9 +373,12 @@
               formControlName="{{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol}}"
               #roofmaterial>
             </app-auto-complete>
-            <div class="error_div" *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).touched)">
-              <div *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid">
-                <span class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]))}}</span>
+            <div class="error_div"
+              *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid && (this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).dirty || this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).touched)">
+              <div
+                *ngIf="this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]).invalid">
+                <span
+                  class="error">{{getErrorMessage(this.activeForm.get(this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].inputformcontrol[0]))}}</span>
               </div>
             </div>
           </form>
@@ -389,7 +402,8 @@
             <app-auto-complete placeholder="inverter make*" [dataList]="invertermakes" class="form-control"
               mode="object" formControlName="invertermake" #invertermake>
             </app-auto-complete>
-            <div class="error_div ion-margin-bottom" *ngIf="this.activeForm.get('invertermake').invalid && (this.activeForm.get('invertermake').dirty || this.activeForm.get('invertermake').touched)">
+            <div class="error_div ion-margin-bottom"
+              *ngIf="this.activeForm.get('invertermake').invalid && (this.activeForm.get('invertermake').dirty || this.activeForm.get('invertermake').touched)">
               <div *ngIf="this.activeForm.get('invertermake').invalid">
                 <span class="error">{{getErrorMessage(this.activeForm.get('invertermake'))}}</span>
               </div>
@@ -397,7 +411,8 @@
             <app-auto-complete placeholder="inverter model*" [dataList]="invertermodels"
               class="form-control ion-margin-top" mode="object" formControlName="invertermodel" #invertermodel>
             </app-auto-complete>
-            <div class="error_div ion-margin-bottom" *ngIf="this.activeForm.get('invertermodel').invalid && (this.activeForm.get('invertermodel').dirty || this.activeForm.get('invertermodel').touched)">
+            <div class="error_div ion-margin-bottom"
+              *ngIf="this.activeForm.get('invertermodel').invalid && (this.activeForm.get('invertermodel').dirty || this.activeForm.get('invertermodel').touched)">
               <div *ngIf="this.activeForm.get('invertermodel').invalid">
                 <span class="error">{{getErrorMessage(this.activeForm.get('invertermodel'))}}</span>
               </div>
@@ -423,7 +438,8 @@
           <form [formGroup]="activeForm" novalidate>
             <ion-input type="text" class="form-control" autocomplete="off" formControlName="shotname">
             </ion-input>
-            <div class="error_div" *ngIf="this.activeForm.get('shotname').invalid && (this.activeForm.get('shotname').dirty || this.activeForm.get('shotname').touched)">
+            <div class="error_div"
+              *ngIf="this.activeForm.get('shotname').invalid && (this.activeForm.get('shotname').dirty || this.activeForm.get('shotname').touched)">
               <div *ngIf="this.activeForm.get('shotname').invalid">
                 <span class="error">{{getErrorMessage(this.activeForm.get('shotname'))}}</span>
               </div>
@@ -447,13 +463,16 @@
           </p>
           <form [formGroup]="activeForm" novalidate>
             <ion-row>
-              <ion-col *ngFor="let fieldname of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].forminputfields; let i = index">
+              <ion-col
+                *ngFor="let fieldname of this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].forminputfields; let i = index">
                 <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
                   <ion-input type="number" class="form-control" autocomplete="off" formControlName="{{fieldname}}">
                   </ion-input>
-                  <span style="font-size: 24px; font-weight: 600; margin-left: 8px;" *ngIf="i < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].forminputfields.length - 1">x</span>
+                  <span style="font-size: 24px; font-weight: 600; margin-left: 8px;"
+                    *ngIf="i < this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].forminputfields.length - 1">x</span>
                 </div>
-                <div class="error_div" *ngIf="this.activeForm.get(fieldname).invalid && (this.activeForm.get(fieldname).dirty || this.activeForm.get(fieldname).touched)">
+                <div class="error_div"
+                  *ngIf="this.activeForm.get(fieldname).invalid && (this.activeForm.get(fieldname).dirty || this.activeForm.get(fieldname).touched)">
                   <div *ngIf="this.activeForm.get(fieldname).invalid">
                     <span class="error">{{getErrorMessage(this.activeForm.get(fieldname))}}</span>
                   </div>
@@ -462,7 +481,8 @@
             </ion-row>
           </form>
           <ion-row class="ion-float-right">
-            <ion-button fill="clear" size="small" class="yellow-button-color" (click)="handleInputSubmission(activeForm)">
+            <ion-button fill="clear" size="small" class="yellow-button-color"
+              (click)="handleInputSubmission(activeForm)">
               {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].actions[0]
               | titlecase}}
             </ion-button>
@@ -476,15 +496,19 @@
     <ion-grid class="infodetailsview">
       <ion-row>
         <ion-col class="ion-no-padding">
-          <ion-item class="itemtoggle" *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence">
-            <ion-label class="ion-no-margin" style="font-size: 11px;">Toggle {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name}} visibility</ion-label>
+          <ion-item class="itemtoggle"
+            *ngIf="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].checkexistence">
+            <ion-label class="ion-no-margin" style="font-size: 11px;">Toggle
+              {{this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].name}} visibility
+            </ion-label>
             <ion-toggle class="infodetailstoggle"
-            [checked]="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
-            (ionChange)="onchildmodechange($event)"></ion-toggle>
+              [checked]="this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
+              (ionChange)="onchildmodechange($event)"></ion-toggle>
           </ion-item>
         </ion-col>
         <ion-col class="ion-no-padding">
-          <ion-icon name="close-circle-sharp" class="infoclosebutton ion-float-right" (click)="toggleshotdetailsview(false)"></ion-icon>
+          <ion-icon name="close-circle-sharp" class="infoclosebutton ion-float-right"
+            (click)="toggleshotdetailsview(false)"></ion-icon>
         </ion-col>
       </ion-row>
       <ion-slides #infoslider pager="true" [options]="infoslideoptions" (ionSlideDidChange)='infoslidechange()'
@@ -495,7 +519,8 @@
             <ion-col size="12" class="ion-no-padding" style="margin-bottom: 6px;">
               <span class="shotindex">Step {{i + 1}}</span>
             </ion-col>
-            <ion-col size="12" class="ion-no-padding" style="margin-bottom: 4px;"><a (click)="selectcapturedshot($event, i)"
+            <ion-col size="12" class="ion-no-padding" style="margin-bottom: 4px;"><a
+                (click)="selectcapturedshot($event, i)"
                 [ngClass]="[ shot.shotstatus ? 'shotinfo completed' : 'shotinfo pending']">
                 <ion-icon
                   *ngIf="shot.shotstatus && this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].existenceresult"
