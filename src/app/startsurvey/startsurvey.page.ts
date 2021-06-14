@@ -297,8 +297,8 @@ export class StartsurveyPage implements OnInit {
         this.platformname = 'web';
       }
 
-      this.loadSurveyJSON('pvsurveyjson');
-      // this.loadLocalJSON();
+      // this.loadSurveyJSON('pvsurveyjson');
+      this.loadLocalJSON();
       this.getCurrentCoordinates();
     } catch (error) {
       // console.log("ngOnInit---" + error);
@@ -722,13 +722,14 @@ export class StartsurveyPage implements OnInit {
       for (let i = 0; i < ev.target.files.length; i++) {
         let reader = getFileReader();
         reader.onload = (e: any) => {
+          console.log(ev.target.files[i]);
           var fileobjurl = '/assets/icon/file.png';
           if (ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')) {
             fileobjurl = e.target.result;
           }
-          var object = this.getfileobject(ev.target.files[i]);
+          // var object = this.getfileobject(ev.target.files[i]);
           const selectedfile: FILE_ATTACHMENTS = {
-            file: object,
+            file: ev.target.files[i],
             fileurl: fileobjurl,
             uploadstatus: false,
             controlname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].inputformcontrol[0]
@@ -746,10 +747,12 @@ export class StartsurveyPage implements OnInit {
 
   getfileobject(file) {
     var extension = file.name.substring(file.name.lastIndexOf('.'));
+    console.log(extension);
     var mimetype = this.utilitieservice.getMimetype(extension);
     var data = new Blob([file], {
       type: mimetype
     });
+    console.log(data);
     return new File([data], file.name, { type: mimetype });
   }
 
@@ -759,8 +762,44 @@ export class StartsurveyPage implements OnInit {
     this.remainingfilestoupload -= 1;
 
     if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.length == 0) {
-      this.singlefileuploadinput.nativeElement.value = '';
       this.multiplefileuploadinput.nativeElement.value = '';
+    }
+    this.saveintermediatesurveydata();
+  }
+
+  addfile(ev, formelementindex) {
+    try {
+      let reader = getFileReader();
+        reader.onload = (e: any) => {
+          console.log(ev.target.files[0]);
+          var fileobjurl = '/assets/icon/file.png';
+          if (ev.target.files[0].name.includes('.png') || ev.target.files[0].name.includes('.jpeg') || ev.target.files[0].name.includes('.jpg') || ev.target.files[0].name.includes('.gif')) {
+            fileobjurl = e.target.result;
+          }
+          // var object = this.getfileobject(ev.target.files[0]);
+          const selectedfile: FILE_ATTACHMENTS = {
+            file: ev.target.files[0],
+            fileurl: fileobjurl,
+            uploadstatus: false,
+            controlname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].inputformcontrol[0]
+          };
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push(fileobjurl);
+          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(selectedfile);
+          this.saveintermediatesurveydata();
+        }
+        reader.readAsDataURL(ev.target.files[0]);
+    } catch (error) {
+      // console.log("addselectedfiles---" + error);
+    }
+  }
+
+  removefile(formelementindex) {
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.splice(0, 1);
+    this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.splice(0, 1);
+    this.remainingfilestoupload -= 1;
+
+    if (this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.length == 0) {
+      this.singlefileuploadinput.nativeElement.value = '';
     }
     this.saveintermediatesurveydata();
   }
