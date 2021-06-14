@@ -297,8 +297,8 @@ export class StartsurveyPage implements OnInit {
         this.platformname = 'web';
       }
 
-      // this.loadSurveyJSON('pvsurveyjson');
-      this.loadLocalJSON();
+      this.loadSurveyJSON('pvsurveyjson');
+      // this.loadLocalJSON();
       this.getCurrentCoordinates();
     } catch (error) {
       // console.log("ngOnInit---" + error);
@@ -722,7 +722,7 @@ export class StartsurveyPage implements OnInit {
       for (let i = 0; i < ev.target.files.length; i++) {
         let reader = getFileReader();
         reader.onload = (e: any) => {
-          console.log(ev.target.files[i]);
+          // console.log(ev.target.files[i]);
           var fileobjurl = '/assets/icon/file.png';
           if (ev.target.files[i].name.includes('.png') || ev.target.files[i].name.includes('.jpeg') || ev.target.files[i].name.includes('.jpg') || ev.target.files[i].name.includes('.gif')) {
             fileobjurl = e.target.result;
@@ -747,12 +747,12 @@ export class StartsurveyPage implements OnInit {
 
   getfileobject(file) {
     var extension = file.name.substring(file.name.lastIndexOf('.'));
-    console.log(extension);
+    // console.log(extension);
     var mimetype = this.utilitieservice.getMimetype(extension);
     var data = new Blob([file], {
       type: mimetype
     });
-    console.log(data);
+    // console.log(data);
     return new File([data], file.name, { type: mimetype });
   }
 
@@ -771,7 +771,7 @@ export class StartsurveyPage implements OnInit {
     try {
       let reader = getFileReader();
         reader.onload = (e: any) => {
-          console.log(ev.target.files[0]);
+          // console.log(ev.target.files[0]);
           var fileobjurl = '/assets/icon/file.png';
           if (ev.target.files[0].name.includes('.png') || ev.target.files[0].name.includes('.jpeg') || ev.target.files[0].name.includes('.jpg') || ev.target.files[0].name.includes('.gif')) {
             fileobjurl = e.target.result;
