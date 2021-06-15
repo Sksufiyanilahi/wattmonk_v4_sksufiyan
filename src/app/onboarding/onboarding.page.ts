@@ -505,7 +505,7 @@ export class OnboardingPage implements OnInit {
       senddesignrequestpermission = true;
     }
     this.apiService
-      .addUser(
+      .addUserForOnboarding(
         this.thirdFormGroup.get("workemail").value,
         this.thirdFormGroup.get("firstname").value,
         this.thirdFormGroup.get("lastname").value,

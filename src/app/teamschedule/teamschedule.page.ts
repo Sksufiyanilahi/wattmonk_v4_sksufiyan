@@ -74,7 +74,12 @@ export class TeamschedulePage implements OnInit {
       lastname: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
       workemail: new FormControl('', [Validators.required, Validators.pattern(MAILFORMAT)]),
       userrole: new FormControl('', [Validators.required]),
-      peengineertype: new FormControl('')
+      peengineertype: new FormControl(''),
+      prelimaccess:new FormControl(false),
+      surveyaccess:new FormControl(false),
+      permitaccess:new FormControl(false),
+      pestampaccess:new FormControl(false),
+      teamaccess:new FormControl(false)
       //      address:new FormControl(null),
       // //contactnumber : new FormControl(null),
       //  //lic: new FormControl(null),
@@ -191,6 +196,11 @@ export class TeamschedulePage implements OnInit {
     // })
   }
 
+  change()
+  {
+    console.log(this.teamForm.get('prelimaccess').value, this.teamForm.get('permitaccess').value, this.teamForm.get('surveyaccess').value)
+  }
+
   submitForm() {
 
     console.log(this.teamForm.status)
@@ -215,12 +225,16 @@ export class TeamschedulePage implements OnInit {
               this.teamForm.get("workemail").value,
               this.teamForm.get("firstname").value,
               this.teamForm.get("lastname").value,
-
               senddesignrequestpermission,
               parseInt(this.teamForm.get("userrole").value),
               this.userData.parent.minpermitdesignaccess,
               this.teamForm.get("peengineertype").value,
-              this.teamForm.get("usertype").value
+              this.teamForm.get("usertype").value,
+              this.teamForm.get('prelimaccess').value,
+              this.teamForm.get('permitaccess').value,
+              this.teamForm.get('surveyaccess').value,
+              this.teamForm.get('pestampaccess').value,
+              this.teamForm.get('teamaccess').value
             )
             .subscribe(
               (response: any) => {
@@ -260,7 +274,12 @@ export class TeamschedulePage implements OnInit {
             lastname: this.teamForm.get("lastname").value,
             email: this.teamForm.get("workemail").value,
             role: parseInt(this.teamForm.get("userrole").value),
-            peengineertype: this.teamForm.get("peengineertype").value      
+            peengineertype: this.teamForm.get("peengineertype").value,
+            visibilityprelim: this.teamForm.get('prelimaccess').value,
+            visibilitysurvey: this.teamForm.get('surveyaccess').value,
+            visibilitypermit: this.teamForm.get('permitaccess').value,
+            visibilitypestamp: this.teamForm.get('pestampaccess').value,
+            visibilityteam: this.teamForm.get('teamaccess').value    
           }
 
           this.apiservices
@@ -590,5 +609,22 @@ export class TeamschedulePage implements OnInit {
   roleChange(id) {
     console.log(id)
     this.roleValue = id;
+    if(id == "8"){
+      this.teamForm.get('prelimaccess').setValue(true);
+      this.teamForm.get('permitaccess').setValue(true);
+    }
+    if(id == "9"){
+      this.teamForm.get('surveyaccess').setValue(true);
+    }
+    if(id == "10"){
+      this.teamForm.get('prelimaccess').setValue(true);
+      this.teamForm.get('permitaccess').setValue(true);
+    }
+    if(id == "3"|| id == "4" || id == "5" || id == "6" || id == "7"){
+      this.teamForm.get('prelimaccess').setValue(true);
+      this.teamForm.get('permitaccess').setValue(true);
+      this.teamForm.get('surveyaccess').setValue(true);
+      this.teamForm.get('pestampaccess').setValue(true);
+    }
   }
 }

@@ -6,6 +6,8 @@ export const environment = {
   production: false,
   name: "dev",
   Master_Role_Id: 15,
+  Team_Head_Role_Id: 24,
+  PeAdmin:28,
   // BaseUrl: "http://localhost:1337/",
   BaseUrl: "https://devspace.wattmonk.com/api/",
   firebase: {

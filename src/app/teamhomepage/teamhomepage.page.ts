@@ -12,6 +12,13 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { TeamdetailsPage } from '../teamdetails/teamdetails.page';
+import { ROLES } from '../constants';
+
+export interface overview{
+  roleName:string;
+  rolecount:number;
+  active:boolean;
+}
 
 @Component({
   selector: 'app-teamhomepage',
@@ -61,6 +68,8 @@ export class TeamhomepagePage implements OnInit {
   surveyor:number=0;
   peengineer:number=0;
   all:number=0;
+  master:number=0;
+  teamheads:number=0;
 
   teamDesigner:User[]=[];
   teamAnalyst:User[]=[]
@@ -76,6 +85,9 @@ export class TeamhomepagePage implements OnInit {
 
   listOfAssignees: User[] = [];
   data: any;
+  overviewData:overview[]=[];
+
+  filterTeamData:User[];
 
   constructor(private router: Router,
     private storage: StorageService,
@@ -166,9 +178,23 @@ export class TeamhomepagePage implements OnInit {
   {
     var parentId = this.user.parent.id;
     var roleId = this.user.role.id;
-    this.apiService.getDynamicRoles(parentId,roleId).subscribe((res)=>{
-      console.log(res)
-      this.roles = res;
+    this.apiService.getDynamicRoles(parentId,roleId).subscribe((res:any)=>{
+      console.log(res.length)
+      if (res.length == 0) {
+        this.apiService.getDefaultRoles(roleId).subscribe((response) => {
+          console.log(response);
+          this.roles = response;
+          console.log(this.roles)
+        })
+      }
+      else{
+        res.forEach((element , i)=>{
+          if(element.role.id == ROLES.PeAdmin){
+            res.splice(i,1);
+          }
+         })
+         this.roles = res;
+      }
     })
   }
 
@@ -189,6 +215,7 @@ export class TeamhomepagePage implements OnInit {
          console.log(res);
          this.isTeamData=true;
             this.teamData = res;
+            this.filterTeamData = this.teamData;
             console.log(this.teamData);
             this.listOfteamData = res;
         //  this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
@@ -241,6 +268,54 @@ export class TeamhomepagePage implements OnInit {
             })
             this.all = res.length;
 
+            this.roles.forEach(element=>{
+              let roleCount;
+              switch (element.displayname) {
+                case "Admin":
+                  roleCount = this.admin;
+                  break;
+                case "Design Manager":
+                  roleCount = this.bd;
+                  break;
+                case  "BD" :
+                  roleCount = this.bd;
+                    break; 
+                case  "Sales Manager" :
+                  roleCount = this.bd
+                      break;       
+                case "Master":
+                  roleCount = this.master;
+                  break;
+                case "Team Head":
+                  roleCount = this.teamheads;
+                  break;
+                case "Designer":
+                  roleCount = this.designers;
+                  break;
+                case "Surveyor":
+                  roleCount = this.surveyor ;
+                  break;
+                case "Sales Representative":
+                  roleCount = this.surveyor ;
+                    break;  
+                case "Analyst":
+                  roleCount = this.analysts;
+                  break;
+                case "PE Engineer":
+                  roleCount = this.peengineer ;
+                  break;
+                case ("Master Electrician"):
+                  roleCount = this.master ;
+                    break;  
+              } 
+              this.overviewData.push({roleName:element.displayname,rolecount:roleCount,active:false})    
+            })
+            let AllOverviewCount = 0
+            this.overviewData.forEach(element=>{
+            AllOverviewCount += element.rolecount
+            })
+            this.overviewData.push({roleName:"All",rolecount:AllOverviewCount,active:true})
+
           }
           else {
             this.noMemberFound = "No Result Found"
@@ -259,43 +334,58 @@ export class TeamhomepagePage implements OnInit {
     // })
   }
 
-  filterAdmin(value)
+  filterAdmin(value,index)
   {
-    if(value=='admin')
-    {
-    this.teamData = [];
-    this.teamData = this.teamAdmin;
-    }
-    else if(value=='bd')
-    {
-      this.teamData = [];
-      this.teamData = this.teamBd;
-    }
-    else if(value == 'designers')
-    {
-      this.teamData = [];
-      this.teamData = this.teamDesigner;
-    }
-    else if(value =='analysts')
-    {
-      this.teamData = [];
-      this.teamData = this.teamAnalyst;
-    }
-    else if(value == 'peengineer')
-    {
-      this.teamData = [];
-      this.teamData = this.teamPeengineer;
-    }
-    else if(value == 'surveyor')
-    {
-      this.teamData=[];
-      this.teamData = this.teamSurveyor;
-    }
-    else if(value == 'all')
-    {
-      this.teamData = [];
-      this.teamData=this.listOfteamData;
-    }
+    console.log(value, index, this.overviewData)
+    for(let i=0; i<this.overviewData.length; i++){
+      if(i === index){
+         this.overviewData[i].active = true; 
+       } else{
+         this.overviewData[i].active = false; 
+       }
+     }
+     value = value.trim().toLowerCase();
+      this.teamData = this.filterTeamData.filter(function (tag) {
+        let searchResult;
+        let searchbyrole = tag.role.displayname.toLowerCase().indexOf(value) >= 0;
+        searchResult = searchbyrole;
+        return searchResult;
+      });
+    // if(value=='admin')
+    // {
+    // this.teamData = [];
+    // this.teamData = this.teamAdmin;
+    // }
+    // else if(value=='bd')
+    // {
+    //   this.teamData = [];
+    //   this.teamData = this.teamBd;
+    // }
+    // else if(value == 'designers')
+    // {
+    //   this.teamData = [];
+    //   this.teamData = this.teamDesigner;
+    // }
+    // else if(value =='analysts')
+    // {
+    //   this.teamData = [];
+    //   this.teamData = this.teamAnalyst;
+    // }
+    // else if(value == 'peengineer')
+    // {
+    //   this.teamData = [];
+    //   this.teamData = this.teamPeengineer;
+    // }
+    // else if(value == 'surveyor')
+    // {
+    //   this.teamData=[];
+    //   this.teamData = this.teamSurveyor;
+    // }
+    // else if(value == 'all')
+    // {
+    //   this.teamData = [];
+    //   this.teamData=this.listOfteamData;
+    // }
   }
 
   async teamdetail(data, event) {
