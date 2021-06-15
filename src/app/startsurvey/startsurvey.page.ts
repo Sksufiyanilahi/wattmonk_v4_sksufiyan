@@ -20,7 +20,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AddressModel } from '../model/address.model';
 import { AutoCompleteComponent } from '../utilities/auto-complete/auto-complete.component';
 import { Subscription } from 'rxjs';
-import { BaseUrl } from '../constants';
+import { BaseUrl, FIREBASE_DB_CONSTANTS } from '../constants';
+import { AngularFireDatabase } from "@angular/fire/database";
 
 const { Camera } = Plugins;
 
@@ -277,7 +278,8 @@ export class StartsurveyPage implements OnInit {
     private storage: Storage,
     public toastController: ToastController,
     private platform: Platform,
-    private geolocation: Geolocation) { }
+    private geolocation: Geolocation,
+    private db: AngularFireDatabase) { }
 
   ngOnInit() {
     console.log(BaseUrl);
@@ -297,8 +299,8 @@ export class StartsurveyPage implements OnInit {
         this.platformname = 'web';
       }
 
-      this.loadSurveyJSON('pvsurveyjson');
-      // this.loadLocalJSON();
+      // this.loadSurveyJSON('pvsurveyjson');
+      this.loadLocalJSON();
       this.getCurrentCoordinates();
     } catch (error) {
       // console.log("ngOnInit---" + error);
@@ -379,6 +381,11 @@ export class StartsurveyPage implements OnInit {
 
           this.isdataloaded = true;
           this.setTotalStepCount();
+
+          // //Adding data to firebase for first time
+          // const surveysobjRef = this.db.object("surveys");
+          // var keyword = FIREBASE_DB_CONSTANTS.SURVEY_KEYWORD + this.surveyid;
+          // surveysobjRef.set(this.mainmenuitems);
         }
       });
     } catch (error) {
@@ -1106,12 +1113,21 @@ export class StartsurveyPage implements OnInit {
           });
         }
         else {
+          var invalidcontrols = this.utilitieservice.findInvalidControls(this.activeForm);
+          console.log(invalidcontrols);
+          var toastmessage = 'Please input missing information of ';
+          invalidcontrols.forEach((invalidcontrol, index) => {
+            toastmessage += invalidcontrol.toUpperCase();
+            if(index < invalidcontrols.length - 1){
+              toastmessage += ", ";
+            }
+          });
+          console.log(toastmessage);
           const toast = await this.toastController.create({
-            message: 'Please input required field details.',
-            duration: 2000
+            message: toastmessage,
+            duration: 3000
           });
           toast.present();
-          // console.log(this.utilitieservice.findInvalidControls(this.activeForm));
         }
       }
     } catch (error) {
