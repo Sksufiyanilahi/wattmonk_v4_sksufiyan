@@ -192,6 +192,7 @@ export class SalesproposalComponent implements OnInit {
   isSelectSearchResult:boolean = false;
 
   imageurls: any=[];
+  invertermakedisable: boolean=true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -223,8 +224,8 @@ export class SalesproposalComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       solarmake: new FormControl('', [Validators.required]),
       solarmodel: new FormControl('', [Validators.required]),
-      invertermake: new FormControl('', [Validators.required]),
-      invertermodel: new FormControl('', [Validators.required]),
+      invertermake: new FormControl('', []),
+      invertermodel: new FormControl('', []),
       monthlybill: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(NUMBERPATTERN)]),
       inverterscount: new FormControl('1', [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
       address: new FormControl('', [Validators.required]),
@@ -860,7 +861,7 @@ export class SalesproposalComponent implements OnInit {
   getInverterMakeForForm() {
     this.apiService.getInverterMake().subscribe(response => {
 
-      this.listOfInverterMake = response;
+      // this.listOfInverterMake = response;
       this.apiService.getInverterMade(this.design.invertermake.id).subscribe(makeResponse => {
         // this.utils.hideLoading();
 
@@ -1505,9 +1506,9 @@ export class SalesproposalComponent implements OnInit {
         this.utils.errorSnackBar('Please check the field module make.');
       } else if (this.desginForm.value.solarmodel == '' || this.desginForm.get('solarmodel').hasError('pattern')) {
         this.utils.errorSnackBar('Please check the field module model.');
-      } else if (this.desginForm.value.invertermake == '' || this.desginForm.get('invertermake').hasError('pattern')) {
+      } else if (this.desginForm.value.invertermake != '' && this.desginForm.get('invertermake').hasError('pattern')) {
         this.utils.errorSnackBar('Please check the field inverter make.');
-      } else if (this.desginForm.value.invertermodel == '' || this.desginForm.get('invertermodel').hasError('pattern')) {
+      } else if (this.desginForm.value.invertermodel != '' && this.desginForm.get('invertermodel').hasError('pattern')) {
         this.utils.errorSnackBar('Please check the field inverter model.');
       } else if (this.desginForm.value.utility == '' || this.desginForm.get('utility').hasError('pattern')) {
         this.utils.errorSnackBar('Please check the field utility name.');
@@ -1614,24 +1615,33 @@ export class SalesproposalComponent implements OnInit {
 
   getInverterMade() {
 
-    this.utils.showLoading('Getting inverter models').then((success) => {
-      this.apiService.getInverterMade(this.desginForm.get('invertermake').value).subscribe(response => {
-        this.utils.hideLoading().then(() => {
+    if(this.desginForm.get('invertermake').value == ''){
+      this.invertermakedisable=true
+      console.log(this.desginForm.get('invertermake').value)
+    }
+    else{
+      console.log(this.desginForm.get('invertermake').value)
+      this.invertermakedisable=false;
+      this.utils.showLoading('Getting inverter models').then((success) => {
+        this.apiService.getInverterMade(this.desginForm.get('invertermake').value).subscribe(response => {
+          this.utils.hideLoading().then(() => {
 
-          this.listOfInverterMade = response;
-          this.desginForm.patchValue({
-            invertermodel: ''
+            this.listOfInverterMade = response;
+            this.desginForm.patchValue({
+              invertermodel: ''
+            });
           });
+        }, responseError => {
+          this.utils.hideLoading();
+          const error: ErrorModel = responseError.error;
+          this.utils.errorSnackBar(error.message[0].messages[0].message);
+        // });
+          // });
         });
-      }, responseError => {
-        this.utils.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utils.errorSnackBar(error.message[0].messages[0].message);
-      });
       // }, (reject) => {
 
-    });
-
+  })
+}
   }
 
   getInverterMake() {
@@ -1721,19 +1731,19 @@ export class SalesproposalComponent implements OnInit {
     console.log(file)
     var extension = file.name.substring(file.name.lastIndexOf('.'));
     var mimetype = this.utils.getMimetype(extension);
-    window.console.log(extension, mimetype);
-    var data = new Blob([file], {
-      type: mimetype
-    });
-    console.log(data);
-    let replaceFile = new File([data], file.name, { type: mimetype })
+    // window.console.log(extension, mimetype);
+    // var data = new Blob([file], {
+    //   type: mimetype
+    // });
+    // console.log(data);
+    // let replaceFile = new File([data], file.name, { type: mimetype })
    if(this.attachmentFileUpload)
    {
-    this.prelimFiles.push(replaceFile);
+    this.prelimFiles.push(file);
    }
    else if(this.isArchitecturalFileUpload)
    {
-    this.archFiles.push(replaceFile)
+    this.archFiles.push(file)
    }
   }
 

@@ -198,6 +198,10 @@ export class PermitschedulePage implements OnInit {
   autoCompleteOff:boolean = false;
   isSelectSearchResult:boolean = false;
 
+  invertermake=new FormControl("", [
+
+    Validators.pattern("^[a-zA-Z-_ ]{3,}$")
+  ])
 
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -241,13 +245,9 @@ export class PermitschedulePage implements OnInit {
         Validators.required,
         Validators.pattern("^[a-z0-9A-Z-_([)/. {\\]}]{5,}$")
       ]),
-      invertermake: new FormControl("", [
-        Validators.required,
-        Validators.pattern("^[a-zA-Z-_ ]{3,}$")
-      ]),
+      invertermake: this.invertermake,
       invertermodel: new FormControl("", [
-        Validators.required,
-        // Validators.pattern("^[a-z0-9A-Z-_([)/. {\\]}]{5,}$")
+      // Validators.pattern("^[a-z0-9A-Z-_([)/. {\\]}]{5,}$")
         Validators.pattern("^[a-z0-9A-Z+-_([)/. {\\]}]{3,}$")
       ]),
       monthlybill: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(NUMBERPATTERN)]),
@@ -1598,18 +1598,18 @@ export class PermitschedulePage implements OnInit {
     var extension = file.name.substring(file.name.lastIndexOf('.'));
     var mimetype = this.utils.getMimetype(extension);
     window.console.log(extension, mimetype);
-    var data = new Blob([file], {
-      type: mimetype
-    });
-    console.log(data);
-    let replaceFile = new File([data], file.name, { type: mimetype })
+    // var data = new Blob([file], {
+    //   type: mimetype
+    // });
+    // console.log(data);
+    // let replaceFile = new File([data], file.name, { type: mimetype })
    if(this.attachmentFileUpload)
    {
-    this.permitFiles.push(replaceFile);
+    this.permitFiles.push(file);
    }
    else if(this.architecturalFileUpload)
    {
-    this.archFiles.push(replaceFile)
+    this.archFiles.push(file)
    }
   }
 

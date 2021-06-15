@@ -13,7 +13,8 @@ export const environment = {
         measurementId: "G-Y5FQXTC6DJ"
     },
     FIREBASE_DB_CONSTANTS: {
-        KEYWORD: "testcomp_"
+        KEYWORD: "testcomp_",
+        SURVEY_KEYWORD: "test_survey_"
     },
     COMETCHAT_CONSTANTS: {
         APP_ID: '22738c62a78b107',

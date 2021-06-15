@@ -236,7 +236,7 @@
           <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
             <mat-label>inverter make</mat-label>
             <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto2" autocomplete="off"
-              formControlName="invertermake" required>
+              formControlName="invertermake" >
 
             <mat-autocomplete #auto2="matAutocomplete">
               <mat-option class="font" *ngFor="let invertermake of filteredInverterMakes | async"
@@ -255,7 +255,7 @@
           <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
             <mat-label>inverter model</mat-label>
             <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto3" autocomplete="off"
-              formControlName="invertermodel" required>
+              formControlName="invertermodel" [readonly]="invertermake.value.length<3">
 
             <mat-autocomplete #auto3="matAutocomplete">
               <mat-option class="font" *ngFor="let invertermodel of filteredInverterModels | async"
