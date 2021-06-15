@@ -968,6 +968,12 @@ export class ApiService {
       })
     }
 
+    getUserSetting(id:number): Observable<any> 
+    {   
+       return this.http.get<any>(BaseUrl + "usersettings?user="+id,{
+        headers: this.headers})   
+  }
+
 
 }
 

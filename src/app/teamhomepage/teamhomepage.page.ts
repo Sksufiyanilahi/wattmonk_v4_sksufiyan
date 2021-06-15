@@ -182,7 +182,6 @@ export class TeamhomepagePage implements OnInit {
       console.log(res.length)
       if (res.length == 0) {
         this.apiService.getDefaultRoles(roleId).subscribe((response) => {
-          console.log(response);
           this.roles = response;
           console.log(this.roles)
         })
@@ -336,6 +335,10 @@ export class TeamhomepagePage implements OnInit {
 
   filterAdmin(value,index)
   {
+    if(value=="All")
+    {
+      value = '';
+    }
     console.log(value, index, this.overviewData)
     for(let i=0; i<this.overviewData.length; i++){
       if(i === index){
@@ -461,6 +464,22 @@ export class TeamhomepagePage implements OnInit {
     // });
     this.router.navigate(['/teamschedule']);
 
+    let objToSend: NavigationExtras = {
+      queryParams: {
+       teamRoles:this.roles,
+  
+  
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+    };
+  
+  
+  
+    this.router.navigate(['/teamschedule'], {
+    state: { productdetails: objToSend }
+    });
+
   }
 
   edit(data){
@@ -470,6 +489,7 @@ export class TeamhomepagePage implements OnInit {
    let objToSend: NavigationExtras = {
     queryParams: {
      teamData:data,
+     teamRoles:this.roles
 
 
     },

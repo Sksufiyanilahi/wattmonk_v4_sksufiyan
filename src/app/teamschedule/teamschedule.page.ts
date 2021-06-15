@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController, NavController, Platform, ToastController } from '@ionic/angular';
@@ -40,7 +40,6 @@ export class TeamschedulePage implements OnInit {
   memberId = 0;
   tabsDisabled = false;
   isEdit: boolean = true;
-  roles: any;
   roleValue: string;
 
   statuscount: any;
@@ -51,6 +50,9 @@ export class TeamschedulePage implements OnInit {
   drawerState = DrawerState.Bottom;
   selectedMember: any;
   isOnboarding: boolean=false;
+  teamRoles: any;
+
+  userSetting:any;
   // user:User;
 
   constructor(private formBuilder: FormBuilder,
@@ -63,7 +65,8 @@ export class TeamschedulePage implements OnInit {
     private navController: NavController,
     private router: Router,
     private mixpanelService: MixpanelService,
-    private alertController:AlertController
+    private alertController:AlertController,
+    private cdr:ChangeDetectorRef
   ) {
     const MAILFORMAT = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     //const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
@@ -103,11 +106,12 @@ export class TeamschedulePage implements OnInit {
     });
     this.memberId = +this.route.snapshot.paramMap.get('id');
     console.log(this.memberId)
-      if(this.memberId !==0){
+      // if(this.memberId !==0){
         this.memberData = this.router.getCurrentNavigation().extras.state;
         this.data = this.memberData.productdetails.queryParams.teamData;
+        this.teamRoles = this.memberData.productdetails.queryParams.teamRoles;
         // this.isOnboarding = this.memberData.productdetails.queryParams.isOnboarding;
-      }
+      // }
 
   }
 
@@ -115,13 +119,12 @@ export class TeamschedulePage implements OnInit {
     this.fieldDisabled = false;
     this.userData = this.storageService.getUser();
     console.log(this.userData);
-    this.getRoles();
     if (this.memberId !== 0) {
-      setTimeout(() => {
+      // setTimeout(() => {
         this.getStatusCount(this.data.id);
         this.isEditMode = true;
         this.getDesignDetails();
-      }, 1000)
+      // }, 1000)
 
     }
   }
@@ -132,22 +135,6 @@ export class TeamschedulePage implements OnInit {
 
   }
 
-  getRoles() {
-    let parentId = this.userData.parent.id;
-    let roleId = this.userData.role.id;
-    this.apiservices.getDynamicRoles(parentId, roleId).subscribe((res) => {
-      // console.log(res);
-      this.roles = res;
-      // console.log(this.roles);
-      if (res == 0) {
-        this.apiservices.getDefaultRoles(roleId).subscribe((response) => {
-          console.log(response);
-          this.roles = response;
-          console.log(this.roles)
-        })
-      }
-    })
-  }
 
   getStatusCount(id) {
     this.apiservices.getStatusCount(id).subscribe(
@@ -170,35 +157,41 @@ export class TeamschedulePage implements OnInit {
     //this.apiservices.getTeamDetails(this.designId).subscribe(async (result) => {
 
     // await this.utils.hideLoading().then(() => {
-    this.user = this.data;
+      this.user = this.data;
+      this.apiservices.getUserSetting(this.memberId).subscribe(res=>{
+        if(res.length>0){
+        this.userSetting = res[0];
+        console.log(this.userSetting.visibilityprelim)
+      this.teamForm.patchValue({
+      prelimaccess : this.userSetting.visibilityprelim,
+      permitaccess : this.userSetting.visibilitypermit,
+      surveyaccess : this.userSetting.visibilitysurvey,
+      pestampaccess : this.userSetting.visibilitypestamp,
+      teamaccess : this.userSetting.visibilityteam
+      })
+    }
+      //this.roles = Object.(this.user)
+      this.cdr.detectChanges();
+    })
     console.log(this.user);
-
-    //this.roles = Object.(this.user)
-    console.log(this.roles);
     this.fieldDisabled = true;
-
-    this.teamForm.patchValue({
-      firstname: this.user.firstname,
-      lastname: this.user.lastname,
-      workemail: this.user.email,
-      userrole: this.user.role.id,
-      peengineertype: this.user.peengineertype,
-      source: this.utils.checkPlatform(),
-      // createdby: this.user.designId,
-      // creatorparentid: this.user.parent.designId,
-      // status: "created",
-      // outsourcedto: null,
-    });
+      this.teamForm.patchValue({
+        firstname: this.user.firstname,
+        lastname: this.user.lastname,
+        workemail: this.user.email,
+        userrole: this.user.role.id,
+        peengineertype: this.user.peengineertype,
+        source: this.utils.checkPlatform()
+        // createdby: this.user.designId,
+        // creatorparentid: this.user.parent.designId,
+        // status: "created",
+        // outsourcedto: null,
+      });
     //     })
     //   },(error) => {
     //     this.utils.hideLoading();
     //   })
     // })
-  }
-
-  change()
-  {
-    console.log(this.teamForm.get('prelimaccess').value, this.teamForm.get('permitaccess').value, this.teamForm.get('surveyaccess').value)
   }
 
   submitForm() {

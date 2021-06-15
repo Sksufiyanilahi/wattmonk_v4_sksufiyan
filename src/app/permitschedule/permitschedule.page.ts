@@ -236,7 +236,7 @@ export class PermitschedulePage implements OnInit {
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       phone: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
-      inverterscount: new FormControl('1', [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
+      inverterscount: new FormControl(1, [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
       modulemake: new FormControl("", [
         Validators.required,
         Validators.pattern("^[a-zA-Z-_ ]{3,}$")
@@ -910,7 +910,8 @@ export class PermitschedulePage implements OnInit {
   saveInverterModel() {
     const ismakefound = this.invertermakes.some(el => el.name === this.desginForm.get("invertermake").value);
     const found = this.invertermodels.some(el => el.name === this.desginForm.get("invertermodel").value);
-    if (!ismakefound || !found) {
+    var inverter = this.desginForm.get("invertermake").value;
+    if ((!ismakefound || !found) && inverter!='') {
       let invertermadedata = {
         invertermake: this.selectedInverterMakeID,
         name: this.desginForm.get('invertermodel').value
@@ -987,7 +988,7 @@ export class PermitschedulePage implements OnInit {
         designstatus = "created";
         designoutsourcedto = null;
         isoutsourced = "false";
-        deliverydate=""
+        deliverydate=null
       }
      
 
@@ -1035,7 +1036,7 @@ export class PermitschedulePage implements OnInit {
               isoutsourced: isoutsourced,
               issurveycompleted: this.desginForm.get('issurveycompleted').value,
               survey: this.surveydata.id,
-              isdesignraised: true,
+              // isdesignraised: true,
               mpurequired:this.desginForm.get('mpurequired').value
 
             }
@@ -1077,9 +1078,10 @@ export class PermitschedulePage implements OnInit {
               outsourcedto: designoutsourcedto,
               designacceptancestarttime: designacceptancestarttime,
               isoutsourced: isoutsourced,
-              isdesignraised: true,
+              // isdesignraised: false,
               inverterscount: this.desginForm.get('inverterscount').value,
-              mpurequired:this.desginForm.get('mpurequired').value
+              mpurequired:this.desginForm.get('mpurequired').value,
+              sameemailconfirmed:null
 
             }
           }
@@ -1169,7 +1171,7 @@ export class PermitschedulePage implements OnInit {
             //attachments: this.desginForm.get('attachments').value,
             deliverydate: deliverydate,
             creatorparentid: this.storage.getParentId(),
-            isdesignraised: true,
+            // isdesignraised: false,
             inverterscount: this.desginForm.get('inverterscount').value,
             mpurequired:this.desginForm.get('mpurequired').value
 
@@ -1294,7 +1296,7 @@ export class PermitschedulePage implements OnInit {
               outsourcedto: designoutsourcedto,
               designacceptancestarttime: designacceptancestarttime,
               isoutsourced: isoutsourced,
-              isdesignraised: true,
+              // isdesignraised: false,
               oldcommentid: this.oldcommentid,
               inverterscount: this.desginForm.get('inverterscount').value
 
@@ -1385,7 +1387,7 @@ export class PermitschedulePage implements OnInit {
             //attachments: this.desginForm.get('attachments').value,
             deliverydate: deliverydate,
             creatorparentid: this.storage.getParentId(),
-            isdesignraised: true,
+            // isdesignraised: false,
             oldcommentid: this.oldcommentid,
             inverterscount: this.desginForm.get('inverterscount').value
 

@@ -690,7 +690,7 @@ isArchitecturalFileUpload: boolean = false;
 
   saveModuleMake() {
 
-    const found = this.modulemakes.some(el => el.name === this.desginForm.get("modulemake").value);
+    const found = this.modulemakes.some(el => el.name === this.desginForm.get("solarmake").value);
     if (!found) {
 
       let solarmadedata = {
@@ -779,7 +779,8 @@ isArchitecturalFileUpload: boolean = false;
   saveInverterModel() {
     const ismakefound = this.invertermakes.some(el => el.name === this.desginForm.get("invertermake").value);
     const found = this.invertermodels.some(el => el.name === this.desginForm.get("invertermodel").value);
-    if (!ismakefound || !found) {
+    var inverter = this.desginForm.get("invertermake").value;
+    if ((!ismakefound || !found) && inverter!='') {
       let invertermadedata = {
         invertermake: this.selectedInverterMakeID,
         name: this.desginForm.get('invertermodel').value
