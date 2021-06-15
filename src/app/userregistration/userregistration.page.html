@@ -30,9 +30,9 @@
           </div>
 
           <form [formGroup]="userregistrationForm" novalidate>
-          <ion-row><ion-col size="12" >
-          <ion-label  position="floating" class="label">First Name*</ion-label>
-          <ion-input mode="md" type="text" placeholder="eg. john" required class="email-input"  formControlName="firstname" ></ion-input>
+          <ion-row><ion-col size="6" >
+          <ion-label style="margin-left: 10%;" position="floating" class="label">First Name*</ion-label>
+          <ion-input style="margin-left: 10%;" mode="md" type="text" placeholder="eg. john" required class="email-input"  formControlName="firstname" ></ion-input>
          <div style="height: 10px;">
             <!-- <div class="error-box"
             *ngIf="userregistrationForm.get('firstname').hasError('pattern') && userregistrationForm.get('firstname').dirty">
@@ -49,9 +49,9 @@
 
 </div>
 </ion-col>
-    <ion-col size="12">
-        <ion-label  position="floating" class="label ion-margin-top" >Last Name*</ion-label>
-        <ion-input  mode="md"  type="text" placeholder="eg. doe" class="email-input" formControlName="lastname"></ion-input>
+    <ion-col size="6">
+        <ion-label style="margin-left: 0px;" position="floating" class="label ion-margin-top" >Last Name*</ion-label>
+        <ion-input style="margin-left: 0px;" mode="md"  type="text" placeholder="eg. doe" class="email-input" formControlName="lastname"></ion-input>
         <div style="height: 10px;">
             <!-- <div class="error-box"
             *ngIf="userregistrationForm.get('lastname').hasError('pattern') && userregistrationForm.get('lastname').dirty">
@@ -68,7 +68,7 @@
           </div>
         </ion-col>
         <ion-col size="12">
-        <ion-label class="label">Work Email*</ion-label>
+        <ion-label class="label">Email*</ion-label>
         <ion-input  mode="md" type="text" placeholder="eg. pat@example.com" class="email-input" formControlName="email"></ion-input>
         <div style="height: 10px;">
             <!-- <div class="error-box"
