@@ -1,7 +1,7 @@
 <ion-row>
   <ion-col>
     <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;" *ngIf="!isEditMode">Add Team Member </h5>
-    
+
     <h5 class="ion-no-margin ion-padding" style="font-weight: bolder;padding-bottom: 2px;" *ngIf="isEditMode">Edit Team Member </h5>
    <!-- <h4 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit </h4>-->
   </ion-col>
@@ -30,7 +30,7 @@
                                 <div *ngIf="teamForm.get('firstname').value === '' && teamForm.get('firstname').dirty">
                                     <span class="error">{{fieldRequired}}</span>
                                 </div>
-                            </div> 
+                            </div>
         </ion-col>
         <ion-col size="12">
           <ion-item class="ion-no-padding">
@@ -45,7 +45,7 @@
                                 <div *ngIf="teamForm.get('lastname').value === '' && teamForm.get('lastname').dirty">
                                     <span class="error">{{fieldRequired}}</span>
                                 </div>
-                            </div> 
+                            </div>
         </ion-col>
       </ion-row>
       <ion-row >
@@ -61,9 +61,9 @@
               </div>
               <div *ngIf="teamForm.get('workemail').value === '' && teamForm.get('workemail').dirty">
                   <span class="error">{{"Enter a valid email"}}</span>
-                  
+
               </div>
-          </div> 
+          </div>
         </ion-col>
     </ion-row>
     <br>
@@ -76,7 +76,7 @@
               <ion-radio slot="start" name="{{role.role.name}}" [value]="role.role.id" (ionFocus)="roleChange(role.role.id)" style="margin: 10px;"></ion-radio>
             </ion-item>
           </ion-col>
-        
+
           <!-- <ion-col size="6" *ngIf="designData.role.type=='wattmonkadmin' || designData.role.type=='superadmin'" >
             <ion-item lines="none">
               <ion-label class="margin"   style="font-size: small;padding-left: 0%;" >Designer</ion-label>
@@ -122,7 +122,7 @@
                 </ion-select>
             </ion-item>
         </ion-col>
-      
+
           </ion-row>
           </ion-radio-group>
           <ion-row *ngIf="roleValue !==8 && roleValue !==9 && roleValue !==10 && roleValue !==11"><ion-col size="12">
@@ -130,31 +130,31 @@
           </ion-col>
           <ion-col size="4">
             <ion-item lines="none">
-            <ion-label class="margin" style="font-size: small;">Prelim</ion-label>
+            <ion-label class="margin" style="font-size: 10px !important;">Prelim</ion-label>
               <ion-checkbox slot="start" style="margin: 10px;"formControlName='prelimaccess' (ionChange)="change()"></ion-checkbox>
             </ion-item>
             </ion-col>
             <ion-col size="4">
               <ion-item lines="none">
-              <ion-label class="margin" style="font-size: small;" >Survey</ion-label>
+              <ion-label class="margin" style="font-size: 10px !important;" >Survey</ion-label>
               <ion-checkbox slot="start" style="margin: 10px;" formControlName='surveyaccess'></ion-checkbox>
             </ion-item>
             </ion-col>
             <ion-col size="4">
               <ion-item lines="none">
-              <ion-label class="margin" style="font-size: small;">Permit</ion-label>
+              <ion-label class="margin" style="font-size: 10px !important;">Permit</ion-label>
               <ion-checkbox slot="start" style="margin: 10px;"  formControlName='permitaccess'></ion-checkbox>
               </ion-item>
               </ion-col>
               <ion-col size="4">
                 <ion-item lines="none">
-              <ion-label class="margin" style="font-size: small;">PE Stamps</ion-label>
+              <ion-label class="margin" style="font-size: 10px !important;">PE Stamps</ion-label>
               <ion-checkbox slot="start" style="margin: 10px;" formControlName='pestampaccess'></ion-checkbox>
               </ion-item>
               </ion-col>
               <ion-col size="4">
                 <ion-item lines="none">
-              <ion-label class="margin" style="font-size: small;">Team</ion-label>
+              <ion-label class="margin" style="font-size: 10px !important;">Team</ion-label>
               <ion-checkbox slot="start" style="margin: 10px;" formControlName='teamaccess'></ion-checkbox>
               </ion-item>
               </ion-col>
@@ -165,12 +165,12 @@
     <ion-row>
       <ion-col></ion-col>
       <ion-col size="auto">
-        
+
         <ion-button class="action-button-color" fill="clear" (click)="submitForm()">Confirm</ion-button>
           </ion-col>
           </ion-row>
 </ion-content>
-  
+
 
       <ng-container *ngIf="showBottomDraw">
 
@@ -182,10 +182,10 @@
                 <ion-col size="12">
                   <app-user-selector (assigneeData)=getassignedata($event) placeholder="Assign" [assignees]="listOfAssignees"
                     formControlName="assignedto"></app-user-selector>
-      
+
                 </ion-col>
               </ion-row>
-      
+
               <ion-row style="justify-content: flex-end;">
                 <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
                   <ion-button class="buttom-drawer-button" fill="clear" (click)="transferJobs()">
@@ -200,6 +200,6 @@
               </ion-row>
             </ion-grid>
           </form>
-      
+
         </ion-bottom-drawer>
       </ng-container>

@@ -201,12 +201,150 @@
            </ion-card>
           </ion-slide>
         </ion-slides> -->
-      <ion-slides pager="false" [options]="slideOpts">
+      <ion-slides pager="false" [options]="slideOpts" *ngIf="isTeamData">
         <ion-slide class="wt" *ngFor="let users of overviewData; let i = index">
           <ion-card class="slide-class card-class" (click)="filterAdmin(users.roleName, i)" [ngStyle]="{'background-color': users.active ? '#EDC773':'white'}">
             <ion-card-header *ngIf="isTeamData">
               <ion-img
                 src="/assets/images/admin.svg"
+                class="tab-icon"
+              ></ion-img>
+            </ion-card-header>
+            <!-- <ion-card-header class="img" *ngIf="!isTeamData">
+              <div>
+                <ion-skeleton-text
+                  animated
+                  style="border-radius: 50%; height: 2.5rem; width: 2.6rem"
+                ></ion-skeleton-text>
+              </div>
+            </ion-card-header> -->
+            <ion-card-content>
+              <p style="margin: 0px" class="font_sz" *ngIf="isTeamData">
+                {{users.rolecount}}
+              </p>
+              <!-- <p style="margin: 0px" class="font_sz" *ngIf="!isTeamData">
+                <ion-skeleton-text
+                  animated
+                  style="width: 100%; height: 5px"
+                ></ion-skeleton-text>
+              </p> -->
+              <p style="margin: 0px">{{users.roleName}}</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+        <!-- <ion-slide class="wt">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('bd')">
+            <ion-card-header *ngIf="isTeamData">
+              <ion-img src="/assets/images/bds.svg" class="tab-icon"></ion-img>
+            </ion-card-header>
+            <ion-card-header class="img" *ngIf="!isTeamData">
+              <div>
+                <ion-skeleton-text
+                  animated
+                  style="border-radius: 50%; height: 2.5rem; width: 2.6rem"
+                ></ion-skeleton-text>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <p style="margin: 0px" class="font_sz" *ngIf="isTeamData">
+                {{bd}}
+              </p>
+              <p style="margin: 0px" class="font_sz" *ngIf="!isTeamData">
+                <ion-skeleton-text
+                  animated
+                  style="width: 100%; height: 5px"
+                ></ion-skeleton-text>
+              </p>
+              <p style="margin: 0px">Design Managers</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+        <ion-slide class="wt">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('designers')">
+            <ion-card-header *ngIf="isTeamData">
+              <ion-img src="/assets/images/bds.svg" class="tab-icon"></ion-img>
+            </ion-card-header>
+            <ion-card-header class="img" *ngIf="!isTeamData">
+              <div>
+                <ion-skeleton-text
+                  animated
+                  style="border-radius: 50%; height: 2.5rem; width: 2.6rem"
+                ></ion-skeleton-text>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <p style="margin: 0px" class="font_sz" *ngIf="isTeamData">
+                {{designers}}
+              </p>
+              <p style="margin: 0px" class="font_sz" *ngIf="!isTeamData">
+                <ion-skeleton-text
+                  animated
+                  style="width: 100%; height: 5px"
+                ></ion-skeleton-text>
+              </p>
+              <p style="margin: 0px">Designer</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+        <ion-slide class="wt">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('analysts')">
+            <ion-card-header *ngIf="isTeamData">
+              <ion-img src="/assets/images/bds.svg" class="tab-icon"></ion-img>
+            </ion-card-header>
+            <ion-card-header class="img" *ngIf="!isTeamData">
+              <div>
+                <ion-skeleton-text
+                  animated
+                  style="border-radius: 50%; height: 2.5rem; width: 2.6rem"
+                ></ion-skeleton-text>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <p style="margin: 0px" class="font_sz" *ngIf="isTeamData">
+                {{analysts}}
+              </p>
+              <p style="margin: 0px" class="font_sz" *ngIf="!isTeamData">
+                <ion-skeleton-text
+                  animated
+                  style="width: 100%; height: 5px"
+                ></ion-skeleton-text>
+              </p>
+              <p style="margin: 0px">Analysts</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+        <ion-slide class="wt">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('peengineer')">
+            <ion-card-header *ngIf="isTeamData">
+              <ion-img src="/assets/images/bds.svg" class="tab-icon"></ion-img>
+            </ion-card-header>
+            <ion-card-header class="img" *ngIf="!isTeamData">
+              <div>
+                <ion-skeleton-text
+                  animated
+                  style="border-radius: 50%; height: 2.5rem; width: 2.6rem"
+                ></ion-skeleton-text>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <p style="margin: 0px" class="font_sz" *ngIf="isTeamData">
+                {{peengineer}}
+              </p>
+              <p style="margin: 0px" class="font_sz" *ngIf="!isTeamData">
+                <ion-skeleton-text
+                  animated
+                  style="width: 100%; height: 5px"
+                ></ion-skeleton-text>
+              </p>
+              <p style="margin: 0px">PE Engineer</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+        <ion-slide class="wt">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('surveyor')">
+            <ion-card-header *ngIf="isTeamData">
+              <ion-img
+                src="/assets/images/surveyors.svg"
                 class="tab-icon"
               ></ion-img>
             </ion-card-header>
@@ -220,7 +358,7 @@
             </ion-card-header>
             <ion-card-content>
               <p style="margin: 0px" class="font_sz" *ngIf="isTeamData">
-                {{users.rolecount}}
+                {{surveyor}}
               </p>
               <p style="margin: 0px" class="font_sz" *ngIf="!isTeamData">
                 <ion-skeleton-text
@@ -228,7 +366,56 @@
                   style="width: 100%; height: 5px"
                 ></ion-skeleton-text>
               </p>
-              <p style="margin: 0px">{{users.roleName}}</p>
+              <p style="margin: 0px">Surveyors</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+        <ion-slide class="wt">
+          <ion-card class="slide-class card-class" (click)="filterAdmin('all')">
+            <ion-card-header *ngIf="isTeamData">
+              <ion-img src="/assets/images/list.svg" class="tab-icon"></ion-img>
+            </ion-card-header>
+            <ion-card-header class="img" *ngIf="!isTeamData">
+              <div>
+                <ion-skeleton-text
+                  animated
+                  style="border-radius: 50%; height: 2.5rem; width: 2.6rem"
+                ></ion-skeleton-text>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <p style="margin: 0px" class="font_sz" *ngIf="isTeamData">
+                {{all}}
+              </p>
+              <p style="margin: 0px" class="font_sz" *ngIf="!isTeamData">
+                <ion-skeleton-text
+                  animated
+                  style="width: 100%; height: 5px"
+                ></ion-skeleton-text>
+              </p>
+              <p style="margin: 0px">All</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide> -->
+      </ion-slides>
+      <ion-slides pager="false" [options]="slideOpts" *ngIf="!isTeamData">
+        <ion-slide class="wt" *ngFor="let count of [1,22,3,4]; let i = index">
+          <ion-card class="slide-class card-class">
+            <ion-card-header class="img" *ngIf="!isTeamData">
+              <div>
+                <ion-skeleton-text
+                  animated
+                  style="border-radius: 50%; height: 2.5rem; width: 2.6rem"
+                ></ion-skeleton-text>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <p style="margin: 0px" class="font_sz">
+                <ion-skeleton-text
+                  animated
+                  style="width: 100%; height: 5px"
+                ></ion-skeleton-text>
+              </p>
             </ion-card-content>
           </ion-card>
         </ion-slide>
