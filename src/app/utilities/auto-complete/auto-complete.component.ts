@@ -27,6 +27,7 @@ export class AutoCompleteComponent implements ControlValueAccessor, Validator {
   @Input() mode = 'id'; //id or object
   @Input() name='';
   @Input() selectedValue = '';
+  @Input() disab :any;
   @Output() modulename= new EventEmitter();
 
 

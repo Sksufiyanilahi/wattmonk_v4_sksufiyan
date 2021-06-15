@@ -5,7 +5,7 @@ import {SolarMake} from 'src/app/model/solar-make.model';
 import {ApiService} from 'src/app/api.service';
 import {UtilitiesService} from 'src/app/utilities.service';
 import {ErrorModel} from 'src/app/model/error.model';
-import {SolarMadeModel} from 'src/app/model/solar-made.model';
+import {Modulemake, SolarMadeModel} from 'src/app/model/solar-made.model';
 import {InverterMakeModel} from 'src/app/model/inverter-make.model';
 import {IonSlides, NavController} from '@ionic/angular';
 import {InverterMadeModel} from 'src/app/model/inverter-made.model';
@@ -17,12 +17,13 @@ import {
   INVALID_NAME_MESSAGE,
   INVALID_TILT_FOR_GROUND_MOUNT,
   ScheduleFormEvent,
-  INVALID_ADDRESS
+  INVALID_ADDRESS,
+  INVALID_MODULE_AND_INVERTER
 } from '../../model/constants';
 import {Observable, Subscription} from 'rxjs';
 import {StorageService} from '../../storage.service';
 import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
-import {DesginDataModel} from '../../model/design.model';
+import {DesginDataModel, Invertermake} from '../../model/design.model';
 // import {File} from '@ionic-native/file/ngx';
 
 import {CometChat} from '@cometchat-pro/cordova-ionic-chat';
@@ -97,6 +98,23 @@ export class DesignComponent implements OnInit, OnDestroy {
   designCreatedBy;
   designCreatedByUserParent;
 
+  modulemakes: SolarMake[] = [];
+  filteredModuleMakes: Observable<SolarMake[]>;
+  selectedModuleMakeID: number;
+
+  modulemodels: Modulemake[] = [];
+  filteredModuleModels: Observable<Modulemake[]>;
+  selectedModuleModelID: number;
+
+  invertermakes: InverterMakeModel[] = [];
+  filteredInverterMakes: Observable<InverterMakeModel[]>;
+  selectedInverterMakeID: number;
+
+  invertermodels: Invertermake[] = [];
+  filteredInverterModels: Observable<Invertermake[]>;
+  selectedInverterModelID: number;
+
+
   emailError = INVALID_EMAIL_MESSAGE;
   nameError = INVALID_NAME_MESSAGE;
   annualunitError = INVALID_ANNUAL_UNIT;
@@ -119,6 +137,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   indexOfAttachmentFile = [];
   isArcFileDelete: boolean = false;
 
+  moduleAndInverterError = INVALID_MODULE_AND_INVERTER;
+
   //attachmentName = this.desginForm.get('attachments').value;
 
   fileName: any;
@@ -131,7 +151,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   modulename: any;
   solarmake: string;
   solarmade: string;
-  invertermake: string;
+  invertermakess: string;
   invertermade: string;
   onFormSubmit: boolean = true;
   solarMakeDisposable: Subscription;
@@ -169,6 +189,11 @@ isArchitecturalFileUpload: boolean = false;
   autoCompleteOff:boolean = false;
   isSelectSearchResult:boolean = false;
 
+  invertermake=new FormControl("", [
+
+    Validators.pattern("^[a-zA-Z-_ ]{3,}$")
+  ])
+
   constructor(
     private formBuilder: FormBuilder,
     private apiService: ApiService,
@@ -195,10 +220,10 @@ isArchitecturalFileUpload: boolean = false;
       companyname: new FormControl(''),
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
-      solarmake: new FormControl('', [Validators.required]),
-      solarmodel: new FormControl('', [Validators.required]),
-      invertermake: new FormControl('', [Validators.required]),
-      invertermodel: new FormControl('', [Validators.required]),
+      solarmake: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z-_ ]{3,}$")]),
+      solarmodel: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9A-Z-_([)/. {\\]}]{5,}$")]),
+      invertermake:this.invertermake,
+      invertermodel: new FormControl('', [ Validators.pattern("^[a-z0-9A-Z+-_([)/. {\\]}]{3,}$")]),
       monthlybill: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(NUMBERPATTERN)]),
       inverterscount: new FormControl('1', [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
       address: new FormControl('', [Validators.required]),
@@ -377,12 +402,12 @@ isArchitecturalFileUpload: boolean = false;
 
     } else {
       // if(this.onFormSubmit){
-      this.solarMakeDisposable = this.desginForm.get('solarmake').valueChanges.subscribe(val => {
-        this.getSolarMade();
-      });
-      this.desginForm.get('invertermake').valueChanges.subscribe(val => {
-        this.getInverterMade();
-      });
+      // this.solarMakeDisposable = this.desginForm.get('solarmake').valueChanges.subscribe(val => {
+      //   this.getSolarMade();
+      // });
+      // this.desginForm.get('invertermake').valueChanges.subscribe(val => {
+      //   this.getInverterMade();
+      // });
       // }
       // this.addressSubscription = this.utils.getAddressObservable().subscribe((address) => {
 
@@ -413,10 +438,18 @@ isArchitecturalFileUpload: boolean = false;
       this.desginForm.patchValue({
         createdby: this.storage.getUserID()
       });
-      this.getSolarMake();
+      // this.getSolarMake();
 
 
     }
+    setTimeout(() => {
+      this.fetchModuleMakesData();
+      this.fetchInverterMakesData();
+      if (this.designId !== 0) {
+        this.loadModuleModelsData();
+        this.loadInverterModelsData();
+      }
+    });
     this.formControlValueChanged();
     this.uploadcontrolvalidation();
 
@@ -473,6 +506,311 @@ isArchitecturalFileUpload: boolean = false;
     // }
   }
 
+
+  displayFnModuleMake(modulemake: SolarMake): string {
+    return modulemake && modulemake.name ? modulemake.name : "";
+  }
+
+  private _filterModuleMake(name: string): SolarMake[] {
+    const filterValue = name.toLowerCase();
+
+    return this.modulemakes.filter(
+      modulemake => modulemake.name.toLowerCase().indexOf(filterValue) != -1
+    );
+  }
+
+  displayFnModuleModel(modulemodel: Modulemake): string {
+    return modulemodel && modulemodel.name ? modulemodel.name : "";
+  }
+
+  private _filterModuleModel(name: string): Modulemake[] {
+    const filterValue = name.toLowerCase();
+
+    return this.modulemodels.filter(
+      modulemodel => modulemodel.name.toLowerCase().indexOf(filterValue) != -1
+    );
+  }
+
+  displayFnInverterMake(invertermake: InverterMakeModel): string {
+    return invertermake && invertermake.name ? invertermake.name : "";
+  }
+
+  private _filterInverterMake(name: string): InverterMakeModel[] {
+    const filterValue = name.toLowerCase();
+
+    return this.invertermakes.filter(
+      invertermake => invertermake.name.toLowerCase().indexOf(filterValue) != -1
+    );
+  }
+
+  displayFnInverterModel(invertermodel: Invertermake): string {
+    return invertermodel && invertermodel.name ? invertermodel.name : "";
+  }
+
+  private _filterInverterModel(name: string): Invertermake[] {
+    const filterValue = name.toLowerCase();
+
+    return this.invertermodels.filter(
+      invertermodel => invertermodel.name.toLowerCase().indexOf(filterValue) != -1
+    );
+  }
+
+
+  fetchModuleMakesData() {
+
+    this.apiService.getSolarMake().subscribe(
+      response => {
+
+        this.modulemakes = response;
+        this.filteredModuleMakes = this.desginForm.get('solarmake').valueChanges.pipe(
+          startWith(""),
+          map(value => (typeof value === "string" ? value : value.name)),
+          map(name => (name ? this._filterModuleMake(name) : this.modulemakes.slice()))
+        );
+      },
+      error => {
+        this.utils.errorSnackBar("Error");
+      }
+    );
+  }
+
+  fetchModuleModelsData(_event: any, make) {
+    this.desginForm.patchValue({ modulemodel: " " })
+    if (_event.isUserInput) {
+      this.desginForm.get('solarmodel').setValue("");
+      if (this.isEditMode) {
+        this.selectedModuleModelID = null;
+      }
+      this.modulemodels = [];
+      this.selectedModuleMakeID = make.id;
+      this.apiService.getSolarMade(make.id).subscribe(
+        response => {
+
+          this.modulemodels = response;
+          this.filteredModuleModels = this.desginForm.get('solarmodel').valueChanges.pipe(
+            startWith(""),
+            map(value => (typeof value === "string" ? value : value.name)),
+            map(name => (name ? this._filterModuleModel(name) : this.modulemodels.slice()))
+          );
+        },
+        error => {
+          this.utils.errorSnackBar("Error");
+        }
+      );
+    }
+  }
+
+  loadModuleModelsData() {
+    this.modulemodels = [];
+    this.apiService.getSolarMade(this.selectedModuleMakeID).subscribe(
+      response => {
+
+        this.modulemodels = response;
+        this.filteredModuleModels = this.desginForm.get('solarmodel').valueChanges.pipe(
+          startWith(""),
+          map(value => (typeof value === "string" ? value : value.name)),
+          map(name => (name ? this._filterModuleModel(name) : this.modulemodels.slice()))
+        );
+      },
+      error => {
+        this.utils.errorSnackBar("Error");
+      }
+    );
+  }
+
+  setSelectedModuleModel(model) {
+    this.selectedModuleModelID = model.id;
+  }
+
+  fetchInverterMakesData() {
+    this.apiService.getInverterMake().subscribe(
+      response => {
+
+        this.invertermakes = response;
+        this.filteredInverterMakes = this.desginForm.get('invertermake').valueChanges.pipe(
+          startWith(""),
+          map(value => (typeof value === "string" ? value : value.name)),
+          map(name => (name ? this._filterInverterMake(name) : this.invertermakes.slice()))
+        );
+      },
+      error => {
+        this.utils.errorSnackBar("Error");
+      }
+    );
+  }
+
+ fetchInverterModelsData(_event: any, make) {
+    this.desginForm.patchValue({ invertermodel: " " })
+    if (_event.isUserInput) {
+      this.desginForm.get('invertermodel').setValue("");
+      if (this.isEditMode) {
+        this.selectedInverterModelID = null;
+      }
+      this.invertermodels = [];
+      this.selectedInverterMakeID = make.id;
+      this.apiService.getInverterMade(make.id).subscribe(
+        response => {
+
+          this.invertermodels = response;
+          this.filteredInverterModels = this.desginForm.get('invertermodel').valueChanges.pipe(
+            startWith(""),
+            map(value => (typeof value === "string" ? value : value.name)),
+            map(name => (name ? this._filterInverterModel(name) : this.invertermodels.slice()))
+          );
+        },
+        error => {
+          this.utils.errorSnackBar("Error");
+        }
+      );
+    }
+  }
+
+  loadInverterModelsData() {
+  this.invertermodels = [];
+    this.apiService.getInverterMade(this.selectedInverterMakeID).subscribe(
+      response => {
+
+        this.invertermodels = response;
+        this.filteredInverterModels = this.desginForm.get('invertermodel').valueChanges.pipe(
+          startWith(""),
+          map(value => (typeof value === "string" ? value : value.name)),
+          map(name => (name ? this._filterInverterModel(name) : this.invertermodels.slice()))
+        );
+      },
+      error => {
+        this.utils.errorSnackBar("Error");
+      }
+    );
+  }
+
+  setSelectedInverterModel(model) {
+    this.selectedInverterModelID = model.id;
+  }
+
+
+  saveModuleMake() {
+
+    const found = this.modulemakes.some(el => el.name === this.desginForm.get("modulemake").value);
+    if (!found) {
+
+      let solarmadedata = {
+
+
+        name: this.desginForm.get('solarmake').value
+      }
+      this.apiService
+        .postSolarMake(
+          solarmadedata
+        )
+        .subscribe(
+          (response: any) => {
+            this.selectedModuleMakeID = response.id;
+            this.saveModuleModel();
+          },
+          error => {
+            this.utils.errorSnackBar(
+              "Error"
+            );
+          }
+        );
+    } else {
+      this.saveModuleModel();
+    }
+  }
+
+  saveModuleModel() {
+    const ismakefound = this.modulemakes.some(el => el.name === this.desginForm.get("solarmake").value);
+
+    const found = this.modulemodels.some(el => el.name === this.desginForm.get("solarmodel").value);
+
+    if (!ismakefound || !found) {
+      let solarmadedata = {
+        modulemake: this.selectedModuleMakeID,
+        name: this.desginForm.get('solarmodel').value
+
+      }
+      this.apiService
+        .postSolarMade(
+          solarmadedata
+        )
+        .subscribe(
+          (response: any) => {
+            this.selectedModuleModelID = response.id;
+            this.saveInverterMake();
+          },
+          error => {
+            this.utils.errorSnackBar(
+              "Error"
+            );
+          }
+        );
+    } else {
+      this.saveInverterMake();
+    }
+  }
+
+  saveInverterMake() {
+    const found = this.invertermakes.some(el => el.name === this.desginForm.get("invertermake").value);
+    if (!found) {
+
+      let invertermakedata = {
+        name: this.desginForm.get("invertermake").value
+      }
+      this.apiService
+        .postInverterMake(
+          invertermakedata
+        )
+        .subscribe(
+          (response: any) => {
+            this.selectedInverterMakeID = response.id;
+            this.saveInverterModel();
+          },
+          error => {
+            this.utils.errorSnackBar(
+              "Error"
+            );
+          }
+        );
+    } else {
+      this.saveInverterModel();
+    }
+  }
+
+  saveInverterModel() {
+    const ismakefound = this.invertermakes.some(el => el.name === this.desginForm.get("invertermake").value);
+    const found = this.invertermodels.some(el => el.name === this.desginForm.get("invertermodel").value);
+    if (!ismakefound || !found) {
+      let invertermadedata = {
+        invertermake: this.selectedInverterMakeID,
+        name: this.desginForm.get('invertermodel').value
+      }
+      this.apiService
+        .postInverterMade(
+          invertermadedata
+        )
+        .subscribe(
+          (response: any) => {
+            this.selectedInverterModelID = response.id;
+            // if (this.data.isEditMode) {
+            //   this.editDesignOnServer();
+            // } else {
+            {
+              this.submitform();
+            }
+          },
+          error => {
+            this.utils.errorSnackBar(
+              "Error"
+            );
+          }
+        );
+    } else {
+
+      this.submitform();
+    }
+  }
+
+
   getDesignDetails() {
 
     this.utils.showLoading('Getting Design Details').then(() => {
@@ -508,10 +846,10 @@ isArchitecturalFileUpload: boolean = false;
             //attachments:this.design.attachments,
 
             attachments: this.design.attachments,
-            solarmake: this.design.solarmake,
-            solarmodel: this.design.solarmodel,
-            invertermake: this.design.invertermake,
-            invertermodel: this.design.invertermodel,
+            solarmake: this.design.solarmake.name,
+            solarmodel: this.design.solarmodel.name,
+            invertermake: this.design.invertermake.name,
+            invertermodel: this.design.invertermodel.name,
             inverterscount: this.design.inverterscount,
             status: this.design.status,
             oldcommentid: ''
@@ -525,10 +863,10 @@ isArchitecturalFileUpload: boolean = false;
               assignedto: this.design.assignedto.id
             });
           }
-          setTimeout(() => {
-            this.getSolarMakeForForm();
-            this.getInverterMakeForForm();
-          }, 500)
+          // setTimeout(() => {
+          //   this.getSolarMakeForForm();
+          //   this.getInverterMakeForForm();
+          // }, 500)
         });
 
       }, (error) => {
@@ -537,180 +875,180 @@ isArchitecturalFileUpload: boolean = false;
     });
   }
 
-  getSolarMakeForForm() {
+  // getSolarMakeForForm() {
 
-    this.apiService.getSolarMake().subscribe(response => {
-      this.listOfSolarMake = response;
+  //   this.apiService.getSolarMake().subscribe(response => {
+  //     this.listOfSolarMake = response;
 
-      this.apiService.getSolarMade(this.design.solarmake.id).subscribe(solarresponse => {
-        // this.utils.hideLoading().then(()=>{
-        this.listOfSolarMade = solarresponse;
-
-
-        setTimeout(() => {
-          this.desginForm.patchValue({
-            solarmake: this.design.solarmake.id,
-            solarmodel: this.design.solarmodel.id
-          });
-          // if(this.onFormSubmit){
-          this.desginForm.get('solarmake').valueChanges.subscribe(val => {
-            this.getSolarMade();
-          });
-          // }
-        }, 500);
-        // });
-      }, solarResponseError => {
-
-        const error: ErrorModel = solarResponseError.error;
-        if (error.message instanceof String) {
-          this.utils.errorSnackBar(error.message);
-        } else if (error.message instanceof Array) {
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
-        }
-      });
-
-    }, responseError => {
-      const error: ErrorModel = responseError.error;
-      if (error.message instanceof String) {
-        this.utils.errorSnackBar(error.message);
-      } else if (error.message instanceof Array) {
-        this.utils.errorSnackBar(error.message[0].messages[0].message);
-      }
-    });
-  }
-
-  getInverterMakeForForm() {
-    this.apiService.getInverterMake().subscribe(response => {
-
-      this.listOfInverterMake = response;
-      this.apiService.getInverterMade(this.design.invertermake.id).subscribe(makeResponse => {
-        // this.utils.hideLoading();
-
-        this.listOfInverterMade = makeResponse;
-
-        setTimeout(() => {
-          this.desginForm.patchValue({
-            invertermake: this.design.invertermake.id,
-            invertermodel: this.design.invertermodel.id
-          });
-          // if(this.onFormSubmit){
-          this.desginForm.get('invertermake').valueChanges.subscribe(val => {
-            this.getInverterMade();
-          });
-          // }
-        }, 500);
+  //     this.apiService.getSolarMade(this.design.solarmake.id).subscribe(solarresponse => {
+  //       // this.utils.hideLoading().then(()=>{
+  //       this.listOfSolarMade = solarresponse;
 
 
-      }, makeResponseError => {
+  //       setTimeout(() => {
+  //         this.desginForm.patchValue({
+  //           solarmake: this.design.solarmake.id,
+  //           solarmodel: this.design.solarmodel.id
+  //         });
+  //         // if(this.onFormSubmit){
+  //         this.desginForm.get('solarmake').valueChanges.subscribe(val => {
+  //           this.getSolarMade();
+  //         });
+  //         // }
+  //       }, 500);
+  //       // });
+  //     }, solarResponseError => {
 
-        const error: ErrorModel = makeResponseError.error;
-        if (error.message instanceof String) {
-          this.utils.errorSnackBar(error.message);
-        } else if (error.message instanceof Array) {
-          this.utils.errorSnackBar(error.message[0].messages[0].message);
-        }
-      });
-    }, responseError => {
-      const error: ErrorModel = responseError.error;
-      if (error.message instanceof String) {
-        this.utils.errorSnackBar(error.message);
-      } else if (error.message instanceof Array) {
-        this.utils.errorSnackBar(error.message[0].messages[0].message);
-      }
-    });
-  }
+  //       const error: ErrorModel = solarResponseError.error;
+  //       if (error.message instanceof String) {
+  //         this.utils.errorSnackBar(error.message);
+  //       } else if (error.message instanceof Array) {
+  //         this.utils.errorSnackBar(error.message[0].messages[0].message);
+  //       }
+  //     });
 
-  saveModuleMake() {
-    const found = this.listOfSolarMake.some((el: any) =>
-      el.name === this.solarmake
-    );
+  //   }, responseError => {
+  //     const error: ErrorModel = responseError.error;
+  //     if (error.message instanceof String) {
+  //       this.utils.errorSnackBar(error.message);
+  //     } else if (error.message instanceof Array) {
+  //       this.utils.errorSnackBar(error.message[0].messages[0].message);
+  //     }
+  //   });
+  // }
 
+  // getInverterMakeForForm() {
+  //   this.apiService.getInverterMake().subscribe(response => {
 
+  //     this.listOfInverterMake = response;
+  //     this.apiService.getInverterMade(this.design.invertermake.id).subscribe(makeResponse => {
+  //       // this.utils.hideLoading();
 
-    if (!found) {
-      let solarmakedata = {
-        name: this.solarmake
-      }
-      this.apiService.postSolarMake(solarmakedata).subscribe((response: any) => {
-        this.desginForm.patchValue({
-          solarmake: response.id
-        })
-        this.saveModuleModel();
-      }, err => {
+  //       this.listOfInverterMade = makeResponse;
 
-
-      })
-
-    } else {
-      this.saveModuleModel();
-    }
-  }
-
-  saveModuleModel() {
-    const ismakefound = this.listOfSolarMake.some(el => el.name === this.solarmake);
-    const found = this.listOfSolarMade.some((el: any) =>
-      el.name === this.solarmade
-    );
-
-    if (!ismakefound || !found) {
-      let solarmadedata = {
-        solarmade: this.solarmade,
-        solarmake: this.desginForm.get('solarmake').value
-      }
+  //       setTimeout(() => {
+  //         this.desginForm.patchValue({
+  //           invertermake: this.design.invertermake.id,
+  //           invertermodel: this.design.invertermodel.id
+  //         });
+  //         // if(this.onFormSubmit){
+  //         this.desginForm.get('invertermake').valueChanges.subscribe(val => {
+  //           this.getInverterMade();
+  //         });
+  //         // }
+  //       }, 500);
 
 
-      this.apiService.postSolarMade(solarmadedata).subscribe((response: any) => {
-        this.desginForm.patchValue({
-          solarmade: response.id
+  //     }, makeResponseError => {
 
-        })
-        this.saveInvertermake();
-      })
-    } else {
-      this.saveInvertermake();
-    }
-  }
+  //       const error: ErrorModel = makeResponseError.error;
+  //       if (error.message instanceof String) {
+  //         this.utils.errorSnackBar(error.message);
+  //       } else if (error.message instanceof Array) {
+  //         this.utils.errorSnackBar(error.message[0].messages[0].message);
+  //       }
+  //     });
+  //   }, responseError => {
+  //     const error: ErrorModel = responseError.error;
+  //     if (error.message instanceof String) {
+  //       this.utils.errorSnackBar(error.message);
+  //     } else if (error.message instanceof Array) {
+  //       this.utils.errorSnackBar(error.message[0].messages[0].message);
+  //     }
+  //   });
+  // }
 
-  saveInvertermake() {
-    const found = this.listOfInverterMake.some(el => el.name === this.invertermake);
-    if (!found) {
-      let invertermakedata = {
-        invertermake: this.invertermake
-      }
-      this.apiService.postInverterMake(invertermakedata).subscribe((response: any) => {
-        this.desginForm.patchValue({
-          invertermake: response.id
-        })
-        this.saveInverterMade();
-      })
-    } else {
-      this.saveInverterMade();
-    }
-
-  }
-
-  saveInverterMade() {
-    const ismakefound = this.listOfInverterMake.some(el => el.name === this.invertermake);
-    const found = this.listOfInverterMade.some(el => el.name === this.invertermade)
-
-    if (!ismakefound || !found) {
-      let invertermadedata = {
-        invertermade: this.invertermade,
-        invertermake: this.desginForm.get('invertermake').value
-      }
+  // saveModuleMake() {
+  //   const found = this.listOfSolarMake.some((el: any) =>
+  //     el.name === this.solarmake
+  //   );
 
 
-      this.apiService.postInverterMade(invertermadedata).subscribe((response: any) => {
-        this.desginForm.patchValue({
-          invertermade: response.id
-        })
-        this.submitform();
-      })
-    } else {
-      this.submitform();
-    }
 
-  }
+  //   if (!found) {
+  //     let solarmakedata = {
+  //       name: this.solarmake
+  //     }
+  //     this.apiService.postSolarMake(solarmakedata).subscribe((response: any) => {
+  //       this.desginForm.patchValue({
+  //         solarmake: response.id
+  //       })
+  //       this.saveModuleModel();
+  //     }, err => {
+
+
+  //     })
+
+  //   } else {
+  //     this.saveModuleModel();
+  //   }
+  // }
+
+  // saveModuleModel() {
+  //   const ismakefound = this.listOfSolarMake.some(el => el.name === this.solarmake);
+  //   const found = this.listOfSolarMade.some((el: any) =>
+  //     el.name === this.solarmade
+  //   );
+
+  //   if (!ismakefound || !found) {
+  //     let solarmadedata = {
+  //       solarmade: this.solarmade,
+  //       solarmake: this.desginForm.get('solarmake').value
+  //     }
+
+
+  //     this.apiService.postSolarMade(solarmadedata).subscribe((response: any) => {
+  //       this.desginForm.patchValue({
+  //         solarmade: response.id
+
+  //       })
+  //       this.saveInvertermake();
+  //     })
+  //   } else {
+  //     this.saveInvertermake();
+  //   }
+  // }
+
+  // saveInvertermake() {
+  //   const found = this.listOfInverterMake.some(el => el.name === this.invertermake);
+  //   if (!found) {
+  //     let invertermakedata = {
+  //       invertermake: this.invertermake
+  //     }
+  //     this.apiService.postInverterMake(invertermakedata).subscribe((response: any) => {
+  //       this.desginForm.patchValue({
+  //         invertermake: response.id
+  //       })
+  //       this.saveInverterMade();
+  //     })
+  //   } else {
+  //     this.saveInverterMade();
+  //   }
+
+  // }
+
+  // saveInverterMade() {
+  //   const ismakefound = this.listOfInverterMake.some(el => el.name === this.invertermake);
+  //   const found = this.listOfInverterMade.some(el => el.name === this.invertermade)
+
+  //   if (!ismakefound || !found) {
+  //     let invertermadedata = {
+  //       invertermade: this.invertermade,
+  //       invertermake: this.desginForm.get('invertermake').value
+  //     }
+
+
+  //     this.apiService.postInverterMade(invertermadedata).subscribe((response: any) => {
+  //       this.desginForm.patchValue({
+  //         invertermade: response.id
+  //       })
+  //       this.submitform();
+  //     })
+  //   } else {
+  //     this.submitform();
+  //   }
+
+  // }
 
   remove(arc, i) {
     //   this.utils.showLoading('Deleting Architecture Design').then((success)=>{
@@ -824,12 +1162,23 @@ isArchitecturalFileUpload: boolean = false;
     //   this.desginForm.get('longitude').setValue(null);
     //   this.desginForm.get('postalcode').setValue(null);
     // }
-    this.submitform();
+    if (this.desginForm.status === 'VALID') {
+      this.saveModuleMake();
+
+   } else {
+     this.submitform();
+   }
 
   }
 
   submitform() {
     if (this.desginForm.status === 'VALID') {
+      this.desginForm.patchValue({
+        solarmake: this.selectedModuleMakeID,
+        solarmodel: this.selectedModuleModelID,
+        invertermake: this.selectedInverterMakeID,
+        invertermodel: this.selectedInverterModelID,
+      })
       var newConstruction = this.desginForm.get("newconstruction").value;
       this.desginForm.get("architecturaldesign").setValue('');
       if (this.designId === 0) {
@@ -1064,77 +1413,77 @@ isArchitecturalFileUpload: boolean = false;
     });
   }
 
-  getSolarMade() {
-    this.utils.showLoading('Getting module models').then((success) => {
-      this.apiService.getSolarMade(this.desginForm.get('solarmake').value).subscribe(response => {
-        this.utils.hideLoading().then(() => {
+  // getSolarMade() {
+  //   this.utils.showLoading('Getting module models').then((success) => {
+  //     this.apiService.getSolarMade(this.desginForm.get('solarmake').value).subscribe(response => {
+  //       this.utils.hideLoading().then(() => {
 
-          this.listOfSolarMade = response;
-          this.desginForm.patchValue({
-            solarmodel: ''
-          });
-        });
-      }, responseError => {
-        this.utils.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utils.errorSnackBar(error.message[0].messages[0].message);
-      });
-      // }, (error) => {
+  //         this.listOfSolarMade = response;
+  //         this.desginForm.patchValue({
+  //           solarmodel: ''
+  //         });
+  //       });
+  //     }, responseError => {
+  //       this.utils.hideLoading();
+  //       const error: ErrorModel = responseError.error;
+  //       this.utils.errorSnackBar(error.message[0].messages[0].message);
+  //     });
+  //     // }, (error) => {
 
-    });
+  //   });
 
 
-  }
+  // }
 
   ioniViewDidEnter() {
 
 
   }
 
-  getSolarMake() {
-    this.getInverterMake();
+  // getSolarMake() {
+  //   this.getInverterMake();
 
-    this.apiService.getSolarMake().subscribe(response => {
-      this.listOfSolarMake = response;
+  //   this.apiService.getSolarMake().subscribe(response => {
+  //     this.listOfSolarMake = response;
 
-    }, responseError => {
-      const error: ErrorModel = responseError.error;
+  //   }, responseError => {
+  //     const error: ErrorModel = responseError.error;
 
-      this.utils.errorSnackBar(error.message[0].messages[0].message);
-    });
-  }
+  //     this.utils.errorSnackBar(error.message[0].messages[0].message);
+  //   });
+  // }
 
-  getInverterMade() {
+  // getInverterMade() {
 
-    this.utils.showLoading('Getting inverter models').then((success) => {
-      this.apiService.getInverterMade(this.desginForm.get('invertermake').value).subscribe(response => {
-        this.utils.hideLoading().then(() => {
+  //   this.utils.showLoading('Getting inverter models').then((success) => {
+  //     this.apiService.getInverterMade(this.desginForm.get('invertermake').value).subscribe(response => {
+  //       this.utils.hideLoading().then(() => {
 
-          this.listOfInverterMade = response;
-          this.desginForm.patchValue({
-            invertermodel: ''
-          });
-        });
-      }, responseError => {
-        this.utils.hideLoading();
-        const error: ErrorModel = responseError.error;
-        this.utils.errorSnackBar(error.message[0].messages[0].message);
-      });
-      // }, (reject) => {
+  //         this.listOfInverterMade = response;
+  //         this.desginForm.patchValue({
+  //           invertermodel: ''
+  //         });
+  //       });
+  //     }, responseError => {
+  //       this.utils.hideLoading();
+  //       const error: ErrorModel = responseError.error;
+  //       this.utils.errorSnackBar(error.message[0].messages[0].message);
+  //     });
+  //     // }, (reject) => {
 
-    });
+  //   });
 
-  }
+  // }
 
-  getInverterMake() {
-    this.apiService.getInverterMake().subscribe(response => {
+  // getInverterMake() {
+  //   this.apiService.getInverterMake().subscribe(response => {
 
-      this.listOfInverterMake = response;
-    }, responseError => {
-      const error: ErrorModel = responseError.error;
-      this.utils.errorSnackBar(error.message[0].messages[0].message);
-    });
-  }
+  //     this.listOfInverterMake = response;
+  //   }, responseError => {
+  //     const error: ErrorModel = responseError.error;
+  //     this.utils.errorSnackBar(error.message[0].messages[0].message);
+  //   });
+  // }
 
   // onProjectChange(event){
 

@@ -172,7 +172,7 @@ export class OnboardingPage implements OnInit {
 
   ionViewDidEnter() {
     this.user = this.storage.getUser();
-    this.menu.open();
+    
     if(this.user.role.type=='clientsuperadmin' || this.user.role.type=='clientadmin'){
     this.startTour();}
   }
@@ -183,6 +183,7 @@ export class OnboardingPage implements OnInit {
     this.maintour.subscribe(
       (res) => {
         if (res.maintour == null || res.maintour == undefined || !res.maintour) {
+          this.menu.open();
           this.runmaintour = true;
           if (this.runmaintour) {
             if (this.user.usertype == 'individual') {
