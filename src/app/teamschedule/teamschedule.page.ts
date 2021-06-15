@@ -260,7 +260,7 @@ export class TeamschedulePage implements OnInit {
             lastname: this.teamForm.get("lastname").value,
             email: this.teamForm.get("workemail").value,
             role: parseInt(this.teamForm.get("userrole").value),
-            peengineertype: this.teamForm.get("peengineertype").value
+            peengineertype: this.teamForm.get("peengineertype").value      
           }
 
           this.apiservices
@@ -381,7 +381,8 @@ export class TeamschedulePage implements OnInit {
             let roleId = this.teamForm.get("userrole").value;
             if(alertData == 'unassignedjobs')
             {
-              postData = {role: roleId}
+              postData = {role: roleId,
+                blocked: false }
               this.utils.showLoading("Unassigning Jobs").then(()=>{
               this.apiservices.unassignedJobs(this.data.id,postData).subscribe((res)=>{
                 console.log(res);
@@ -389,10 +390,10 @@ export class TeamschedulePage implements OnInit {
                   // this.utils.showSnackBar("Jobs Unassigned Successfully");
 
                     let rolesel = parseInt(this.teamForm.get("userrole").value);
-                    var senddesignrequestpermission = false;
-                    if (rolesel == ROLES.Designer || rolesel == ROLES.Admin || rolesel == ROLES.Surveyor || rolesel == ROLES.Peengineer || rolesel == ROLES.Analyst || rolesel == ROLES.BD) {
-                      senddesignrequestpermission = true;
-                    }
+                    // var senddesignrequestpermission = false;
+                    // if (rolesel == ROLES.Designer || rolesel == ROLES.Admin || rolesel == ROLES.Surveyor || rolesel == ROLES.Peengineer || rolesel == ROLES.Analyst || rolesel == ROLES.BD) {
+                    //   senddesignrequestpermission = true;
+                    // }
                     const postdata = {
                       firstname: this.teamForm.get("firstname").value,
                       lastname: this.teamForm.get("lastname").value,
@@ -519,21 +520,22 @@ export class TeamschedulePage implements OnInit {
       this.listOfAssignees=[];
     }
 
-    assignToDesigner()
+    transferJobs()
     {
         let roleId = this.teamForm.get("userrole").value;
-      var postData = {role: roleId}
+      var postData = {role: roleId,
+        blocked: false}
               this.utils.showLoading("Transfering Jobs").then(()=>{
               this.apiservices.transferJobs(this.data.id,this.selectedMember.id,postData).subscribe((res)=>{
                 console.log(res);
                 this.utils.hideLoading().then(()=>{
                   // this.utils.showSnackBar("Jobs Transfered Successfully");
                   // this.submitForm();
-                  let rolesel = parseInt(this.teamForm.get("userrole").value);
-                  var senddesignrequestpermission = false;
-                  if (rolesel == ROLES.Designer || rolesel == ROLES.Admin || rolesel == ROLES.Surveyor || rolesel == ROLES.Peengineer || rolesel == ROLES.Analyst || rolesel == ROLES.BD) {
-                    senddesignrequestpermission = true;
-                  }
+                  // let rolesel = parseInt(this.teamForm.get("userrole").value);
+                  // var senddesignrequestpermission = false;
+                  // if (rolesel == ROLES.Designer || rolesel == ROLES.Admin || rolesel == ROLES.Surveyor || rolesel == ROLES.Peengineer || rolesel == ROLES.Analyst || rolesel == ROLES.BD) {
+                  //   senddesignrequestpermission = true;
+                  // }
                   const postdata = {
                     firstname: this.teamForm.get("firstname").value,
                     lastname: this.teamForm.get("lastname").value,

@@ -69,7 +69,8 @@ export class UserregistrationPage implements OnInit {
       password: new FormControl(this.utils.randomPass()),
       username: new FormControl(null),
       role: new FormControl(6),
-      aggrement : new FormControl(null,Validators.required)
+      aggrement : new FormControl(null,Validators.required),
+      phonenumber: new FormControl('',[Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')])
     }
     );
   }
@@ -190,6 +191,7 @@ export class UserregistrationPage implements OnInit {
       this.userregistrationForm.get('firstname').markAsDirty();
       this.userregistrationForm.get('lastname').markAsDirty();
       this.userregistrationForm.get('email').markAsDirty();
+      this.userregistrationForm.get('phonenumber').markAsDirty();
       this.userregistrationForm.get('aggrement').markAsDirty();
     }
   }
@@ -200,6 +202,7 @@ export class UserregistrationPage implements OnInit {
     var lastname = this.userregistrationForm.get('lastname');
     var workemail = this.userregistrationForm.get('email');
     var aggrement = this.userregistrationForm.get('aggrement');
+    var phone = this.userregistrationForm.get('phonenumber');
     console.log(aggrement)
     if (control == aggrement && control.hasError("required")) {
       console.log(control, aggrement)
@@ -223,6 +226,11 @@ export class UserregistrationPage implements OnInit {
         ? "Please enter a valid email."
         : "";
     }
+    else if (control == phone) {
+      return phone.hasError("pattern")
+        ? 'Phone number should be of min. 8 and max. 15 numbers.'
+        : "";
+    }
     // } else if (control == this.company) {
     //   return this.company.hasError("pattern")
     //     ? "Please enter a valid company name."
@@ -244,7 +252,8 @@ export class UserregistrationPage implements OnInit {
       isdefaultpassword: true,
       parent: this.user.user.id,
       resetPasswordToken: this.userregistrationForm.get('password').value,
-      role: this.userregistrationForm.get('role').value
+      role: this.userregistrationForm.get('role').value,
+      phone : this.userregistrationForm.get('phonenumber').value
     };
     this.apiService.updateUser(this.user.user.id, postData).subscribe((response: any) => {
 

@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { TeamschedulePageRoutingModule } from './teamschedule-routing.module';
 
 import { TeamschedulePage } from './teamschedule.page';
+import { IonBottomDrawerModule } from 'ion-bottom-drawer';
+import { UtilitiesModule } from '../utilities/utilities.module';
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { TeamschedulePage } from './teamschedule.page';
     FormsModule,
     IonicModule,
     TeamschedulePageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    IonBottomDrawerModule,
+    UtilitiesModule
   ],
   declarations: [TeamschedulePage]
 })

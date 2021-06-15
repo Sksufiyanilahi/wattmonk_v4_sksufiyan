@@ -182,3 +182,17 @@ input[type="file"]{
 .font-size{
   font-size: 12px;
 }
+ion-bottom-drawer {
+
+  --padding: 0 !important;
+  padding: 0 !important;
+
+  --background: #F3F3F3 !important;
+  background: #F3F3F3 !important;
+
+  ion-content {
+    --background: #F3F3F3 !important;
+  }
+
+
+}

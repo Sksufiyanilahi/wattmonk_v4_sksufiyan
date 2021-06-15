@@ -891,7 +891,7 @@ export class ApiService {
     }
     getCompanyUsers(parentId,roleId)
     {
-      return this.http.get(BaseUrl + "getcompanyusers?parentid="+parentId+"&roleid="+roleId,{
+      return this.http.get(BaseUrl + "getcompanyuser?parentid="+parentId+"&roleid="+roleId,{
         headers:this.headers
       })
     }

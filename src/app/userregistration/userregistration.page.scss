@@ -90,7 +90,7 @@ ion-item{
     font-weight: 600;
     margin-top: 1.5rem;
 }
-ion-input[type="text"] {
+ion-input {
   width: 90%;
   height: 10%;
   border: 2px solid rgb(136, 123, 123);
@@ -222,7 +222,7 @@ ion-content{
 
 .email-input{
   background-color: white;
-   margin-left: 20px;
+   //margin-left: 20px;
   // --padding-start:1rem;
 }
 .error-box{

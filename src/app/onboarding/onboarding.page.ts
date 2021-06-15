@@ -49,7 +49,7 @@ export class OnboardingPage implements OnInit {
   addressError = INVALID_ADDRESS;
   registrationError = INVALID_REGISTRATION_NUMBER;
   companyError = INVALID_COMPANY_NAME;
-  phoneError = INVALID_PHONE_NUMBER;
+  // phoneError = INVALID_PHONE_NUMBER;
   // maintourRef: AngularFireObject<any>;
 
   logo: any;
@@ -105,7 +105,7 @@ export class OnboardingPage implements OnInit {
     this.firstFormGroup = this.formBuilder.group({
       usertype: new FormControl('company'),
       billingaddress: new FormControl(null, [Validators.required,Validators.maxLength(50), Validators.pattern(ADDRESSFORMAT)]),
-      phone: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
+      // phone: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern("^[0-9]{8,15}$")]),
       //companyaddresssameasbilling:new FormControl(''),
       companyaddress: new FormControl(null, [Validators.required,Validators.maxLength(50), Validators.pattern(ADDRESSFORMAT)]),
       company: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.maxLength(50), Validators.pattern(COMPANYFORMAT)]),
@@ -243,7 +243,7 @@ export class OnboardingPage implements OnInit {
       this.firstFormGroup.patchValue({
         usertype: res.usertype,
         billingaddress: res.billingaddress,
-        phone: res.phone,
+        // phone: res.phone,
         companyaddresssameasbilling: res.companyaddresssameasbilling,
         companyaddress: res.companyaddress,
         company: res.company,
@@ -286,7 +286,7 @@ export class OnboardingPage implements OnInit {
       this.isCompany = true;
       this.checkboxValue = false;
       this.firstFormGroup.patchValue({
-        phone: '',
+        // phone: '',
         billingaddress: '',
 
       })
@@ -298,7 +298,7 @@ export class OnboardingPage implements OnInit {
         company: '',
         companyaddress: '',
         registrationnumber: '',
-        phone: '',
+        // phone: '',
         billingaddress: ''
       })
       this.firstFormGroup.get('companyaddress').clearValidators();

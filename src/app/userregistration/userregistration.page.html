@@ -86,6 +86,24 @@
         </div>
     </ion-col>
     <ion-col size="12">
+        <ion-label class="label">Phone Number*</ion-label>
+        <ion-input  mode="md" type="tel" placeholder="eg. 9876543210" class="email-input" formControlName="phonenumber"></ion-input>
+        <div style="height: 10px;">
+            <!-- <div class="error-box"
+                                        *ngIf="userregistrationForm.get('email').hasError('pattern') && userregistrationForm.get('email').dirty">
+                                        <span class="error">{{emailError}}</span>
+                                                                        </div>
+                                    <div class="error-box"
+                                        *ngIf="userregistrationForm.get('email').value === '' && userregistrationForm.get('email').dirty">
+                                        <span class="error">{{fieldRequired}}</span>
+                                    </div> -->
+                                    <div class="error-box"
+            *ngIf="userregistrationForm.get('phonenumber').invalid && userregistrationForm.get('phonenumber').dirty ||  (userregistrationForm.get('phonenumber').touched && userregistrationForm.get('phonenumber').invalid) && userregistrationForm.get('phonenumber').pristine">
+            <span class="error">{{getErrorMessage(userregistrationForm.get('phonenumber'))}}</span>
+        </div>
+        </div>
+    </ion-col>
+    <ion-col size="12">
         <ion-label class="label">Country*</ion-label>
 
 

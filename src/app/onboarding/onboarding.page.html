@@ -74,23 +74,7 @@
         </ion-col>
           <!--  -->
       </ion-row>
-      <ion-row >
-        <ion-col>
-            <ion-item class="ion-no-padding">
-                <ion-label position="floating">Phone Number*</ion-label>
-                <ion-input type="tel" class="form_input" formControlName="phone"
-                            required></ion-input>
-            </ion-item>
-            <div style="height: 5px;">
-              <div *ngIf="firstFormGroup.get('phone').hasError('pattern') && firstFormGroup.get('phone').dirty">
-                <span class="error">{{phoneError}}</span>
-            </div>
-              <div *ngIf="firstFormGroup.get('phone').value === '' && firstFormGroup.get('phone').dirty">
-                  <span class="error">{{fieldRequired}}</span>
-              </div>
-          </div>
-        </ion-col>
-    </ion-row>
+      
       <ion-row *ngIf="isCompany">
         <!--For Checkbox-->
         <ion-col size="12">

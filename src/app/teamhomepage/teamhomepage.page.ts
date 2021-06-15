@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ModalController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { DrawerState } from 'ion-bottom-drawer';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../api.service';
@@ -72,6 +72,10 @@ export class TeamhomepagePage implements OnInit {
   unreadCount;
   roles: any;
   isTeamData:boolean=false;
+  activedesignjobs: any;
+
+  listOfAssignees: User[] = [];
+  data: any;
 
   constructor(private router: Router,
     private storage: StorageService,
@@ -82,7 +86,8 @@ export class TeamhomepagePage implements OnInit {
     private platform: Platform,
     public modalController: ModalController,
     private mixpanelService: MixpanelService,
-    private toastController:ToastController){
+    private toastController:ToastController,
+    private alertController:AlertController){
     // private formBuilder: FormBuilder,
     // private cdr:ChangeDetectorRef) {
     const url = this.router.url;
@@ -390,7 +395,7 @@ export class TeamhomepagePage implements OnInit {
   }
 
   async deleteTeam(data) {
-
+    this.data = data;
     // this.enableDisable = true;
     const toast = await this.toastController.create({
       header: 'Delete Team Member',
@@ -400,7 +405,8 @@ export class TeamhomepagePage implements OnInit {
         {
           text: 'Yes',
           handler: () => {
-            this.deleteTeamFromServer(data);
+            this.getStatusCount(data)
+            // this.deleteTeamFromServer(data);
           }
         }, {
           text: 'No',
@@ -424,7 +430,7 @@ export class TeamhomepagePage implements OnInit {
 
 
         this.router.navigate(['/teamhomepage'])
-        // this.utils.setteamModuleRefresh(true);
+         this.utils.setteamModuleRefresh(true);
          // this.utils.setteamModuleRefresh(true);
         });
       }, (error) => {
@@ -510,4 +516,155 @@ export class TeamhomepagePage implements OnInit {
             this.utils.setBottomBarHomepage(false);
             this.drawerState = DrawerState.Docked;
   }
+
+  getStatusCount(data) {
+    let statuscount:any
+    this.apiService.getStatusCount(data.id).subscribe(
+      response => {
+        statuscount = response;
+        this.activedesignjobs = statuscount.waitingforassigned + statuscount.waitingforacceptance + statuscount.requestaccepted + statuscount.designassigned
+          + statuscount.reviewassigned + statuscount.reviewpassed + statuscount.reviewfailed;
+        console.log(this.activedesignjobs);
+        // ++this.activedesignjobs;
+        if(this.activedesignjobs==0){
+          this.deleteTeamFromServer(data);
+
+        }else{
+          this.openreviewPassed(data);
+        }
+            }
+      ,
+      error => {
+        this.utils.errorSnackBar("Error");
+      })
+  }
+
+  async openreviewPassed(data:any){
+
+
+    // this.designId=id
+    const alert = await this.alertController.create({
+      cssClass: 'alertClass',
+      header: 'Confirm!',
+      message: 'Selected user is having active jobs in the account, either move all jobs to unassigned stage or transfer them to another user.',
+      inputs: [
+        {
+          name: 'radio1',
+          type: 'radio',
+          label: 'Unassign jobs',
+          value: 'unassignedjobs',
+          handler: () => {
+            console.log('Radio 1 selected');
+          },
+          checked: true
+        },
+        {
+          name: 'radio2',
+          type: 'radio',
+          label: 'Transfer jobs',
+          value: 'transferjobs',
+          handler: () => {
+            console.log('Radio 2 selected');
+          }
+        },
+        ] ,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+
+          }
+        }, {
+          text: 'Move',
+          handler: (alertData) => {
+            console.log(alertData)
+            var postData= {};
+            if(alertData == 'unassignedjobs')
+            {
+              postData = {blocked: true }
+              this.utils.showLoading("Unassigning Jobs").then(()=>{
+              this.apiService.unassignedJobs(data.id,postData).subscribe((res)=>{
+                console.log(res);
+                this.utils.hideLoading().then(()=>{
+                  this.utils.showSnackBar("Jobs Unassigned Successfully");
+                  // this.router.navigate(['/teamhomepage']);
+                  this.modalController.dismiss({ 'dismissed': true })
+                this.router.navigate(['/teamhomepage'])
+                  this.utils.setteamModuleRefresh(true);
+                })
+              },(error)=>{
+                this.utils.hideLoading();
+              })
+            })
+            }
+            else if(alertData == 'transferjobs')
+            {
+              // this.apiservices.getCompanyUsers(this.data.parent.id,this.data.role.id).subscribe((res)=>{
+              //   console.log(res);
+              // })
+
+              if (this.listOfAssignees.length === 0) {
+                this.utils.showLoading('Getting Users').then(() => {
+                  this.apiService.getCompanyUsers(data.parent.id,data.role.id).subscribe((assignees:any)=>{
+                    this.utils.hideLoading().then(() => {
+                      this.listOfAssignees = [];
+                      // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
+                      assignees.forEach(item => this.listOfAssignees.push(item));
+                      console.log(this.listOfAssignees)
+
+                      this.showBottomDraw = true;
+                      // this.designId = id;
+                      this.utils.setBottomBarHomepage(false);
+                      this.drawerState = DrawerState.Docked;
+                      this.assignForm.patchValue({
+                        assignedto: ''
+                      });
+                    });
+                  }, (error) => {
+                    this.utils.hideLoading().then(() => {
+                      this.utils.errorSnackBar('Some error occurred. Please try again later');
+                    });
+                  });
+                });
+
+              } else {
+                // this.designId = id;
+                this.utils.setBottomBarHomepage(false);
+                this.drawerState = DrawerState.Docked;
+                this.assignForm.patchValue({
+                  assignedto: ''
+                });
+              }
+
+            }
+
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+    }
+
+    transferJobs()
+    {
+      var postData = {
+        blocked: true }
+              this.utils.showLoading("Transfering Jobs").then(()=>{
+              this.apiService.transferJobs(this.data.id,this.selectedDesigner.id,postData).subscribe((res)=>{
+                console.log(res);
+                this.utils.hideLoading().then(()=>{
+                  this.utils.showSnackBar("Jobs Transfered Successfully");
+                  this.modalController.dismiss({ 'dismissed': true })
+                 this.router.navigate(['/teamhomepage'])
+           this.utils.setteamModuleRefresh(true);
+
+                })
+              },(error)=>{
+                this.utils.hideLoading();
+              })
+            })
+    }
 }
