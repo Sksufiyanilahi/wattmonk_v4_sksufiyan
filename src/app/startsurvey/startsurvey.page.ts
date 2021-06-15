@@ -1437,14 +1437,14 @@ export class StartsurveyPage implements OnInit {
   handleShotNameSubmission() {
     try {
       const shotnameformcontrol = this.activeForm.get('shotname');
-      if (shotnameformcontrol.value != '') {
+      if (shotnameformcontrol.value === '' || shotnameformcontrol.value === null) {
+        shotnameformcontrol.markAsTouched();
+        shotnameformcontrol.markAsDirty();
+      } else {
         this.blurcaptureview = false;
         this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].capturedshots[this.selectedshotindex].imageuploadname = shotnameformcontrol.value;
         this.activeForm.get('shotname').setValue('');
         this.markshotcompletion();
-      } else {
-        shotnameformcontrol.markAsTouched();
-        shotnameformcontrol.markAsDirty();
       }
     } catch (error) {
       // console.log("handleShotNameSubmission---" + error);
@@ -1693,13 +1693,13 @@ export class StartsurveyPage implements OnInit {
         let anyemptyfieldfound = false;
         let preparedresult = "";
         activechild.shots[this.selectedshotindex].forminputfields.forEach((field, index) => {
-          if (form.get(field).value != '') {
-            preparedresult += form.get(field).value;
-          } else {
+          if (form.get(field).value === '' || form.get(field).value === null) {
             preparedresult = "";
             anyemptyfieldfound = true;
             form.get(field).markAsTouched();
             form.get(field).markAsDirty();
+          } else {
+            preparedresult += form.get(field).value;
           }
           if (index < activechild.shots[this.selectedshotindex].forminputfields.length - 1) {
             preparedresult += 'X';
@@ -1709,11 +1709,11 @@ export class StartsurveyPage implements OnInit {
           this.handleAnswerSubmission(preparedresult);
         }
       } else {
-        if (control.value != '') {
-          this.handleAnswerSubmission(control.value);
-        } else {
+        if (control.value === '' || control.value === null) {
           control.markAsTouched();
           control.markAsDirty();
+        } else {
+          this.handleAnswerSubmission(control.value);
         }
       }
 
@@ -1726,11 +1726,11 @@ export class StartsurveyPage implements OnInit {
     try {
       const activechild = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex];
       const control = form.get(activechild.shots[this.selectedshotindex].inputformcontrol);
-      if (control.value != '') {
-        this.handleAnswerSubmission(control.value);
-      } else {
+      if (control.value === '' || control.value === null) {
         control.markAsTouched();
         control.markAsDirty();
+      } else {
+        this.handleAnswerSubmission(control.value);
       }
     } catch (error) {
       // console.log("handleInputTextSubmission---" + error);
@@ -1770,13 +1770,13 @@ export class StartsurveyPage implements OnInit {
           this.addinvertermodel(this.invertermodel.manualinput, invertermakecontrol.value.id);
         }
       } else {
-        if (invertermakecontrol.value != '' && invertermodelcontrol.value != '') {
-          this.markshotcompletion();
-        } else {
+        if (invertermakecontrol.value === '' || invertermodelcontrol.value === '' || invertermakecontrol.value === null || invertermodelcontrol.value === null) {
           invertermakecontrol.markAsTouched();
           invertermakecontrol.markAsDirty();
           invertermodelcontrol.markAsTouched();
           invertermodelcontrol.markAsDirty();
+        } else {
+          this.markshotcompletion();
         }
       }
     } catch (error) {
@@ -1798,11 +1798,11 @@ export class StartsurveyPage implements OnInit {
           this.addutility(this.utility.manualinput);
         }
       } else {
-        if (utilitycontrol.value != '') {
-          this.markshotcompletion();
-        } else {
+        if (utilitycontrol.value === '' || utilitycontrol.value === null) {
           utilitycontrol.markAsTouched();
           utilitycontrol.markAsDirty();
+        } else {
+          this.markshotcompletion();
         }
       }
     } catch (error) {
@@ -1824,11 +1824,11 @@ export class StartsurveyPage implements OnInit {
           this.addroofmaterial(this.roofmaterial.manualinput);
         }
       } else {
-        if (roofmaterialcontrol.value != '') {
-          this.markshotcompletion();
-        } else {
+        if (roofmaterialcontrol.value === '' || roofmaterialcontrol.value === null) {
           roofmaterialcontrol.markAsTouched();
           roofmaterialcontrol.markAsDirty();
+        } else {
+          this.markshotcompletion();
         }
       }
     } catch (error) {
