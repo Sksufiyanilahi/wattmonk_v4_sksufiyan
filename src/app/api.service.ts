@@ -974,6 +974,13 @@ export class ApiService {
         headers: this.headers})   
   }
 
+  getActiveJobsCount(id:number):Observable<any>
+  {
+    return this.http.get<any>(BaseUrl + "userhasactivejobs?userid="+id,{
+      headers:this.headers
+    })
+  }
+
 
 }
 

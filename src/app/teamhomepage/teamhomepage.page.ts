@@ -104,6 +104,9 @@ export class TeamhomepagePage implements OnInit {
     // private cdr:ChangeDetectorRef) {
     const url = this.router.url;
     console.log(url);
+    this.user = this.storage.getUser();
+    console.log(this.user)
+    this.getRoles();
   }
 
   segmentChanged(event){
@@ -123,15 +126,8 @@ export class TeamhomepagePage implements OnInit {
  }
 
   ngOnInit() {
-    this.user = this.storage.getUser();
-    console.log(this.user)
     this.isTeamData=false;
     this.getNotificationCount();
-   this.getRoles();
-    this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
-      this.getTeams(null);
-    })
-
   }
 
   getNotificationCount() {
@@ -183,7 +179,9 @@ export class TeamhomepagePage implements OnInit {
       if (res.length == 0) {
         this.apiService.getDefaultRoles(roleId).subscribe((response) => {
           this.roles = response;
-          console.log(this.roles)
+          this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
+            this.getTeams(null);
+          })
         })
       }
       else{
@@ -193,12 +191,17 @@ export class TeamhomepagePage implements OnInit {
           }
          })
          this.roles = res;
+         this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
+          this.getTeams(null);
+        })
       }
     })
   }
 
   getTeamData(event,showLoader:boolean) {
     //this.utils.showLoading("Getting Team Data").then(() => {
+      // this.roles = [];
+    this.overviewData = [];
       console.log(showLoader)
       this.teamData=[];
       this.listOfteamData = [];
@@ -208,6 +211,8 @@ export class TeamhomepagePage implements OnInit {
       this.analysts = 0;
       this.surveyor=0;
       this.peengineer = 0;
+      this.teamheads = 0;
+      this.master = 0;
       this.all = 0;
       // this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
       this.apiService.getTeamData().subscribe((res) => {
@@ -221,52 +226,102 @@ export class TeamhomepagePage implements OnInit {
           if (res.length > 0) {
             console.log(res.length)
             res.forEach(element=>{
-              if(element.role.id==3)
-              {
-                this.teamBd.push(element);
-                ++this.bd;
+              // if(element.role.id==3)
+              // {
+              //   this.teamBd.push(element);
+              //   ++this.bd;
 
-              }
-              else if(element.role.id==5)
-              {
-                this.teamAdmin.push(element);
-                ++this.admin;
+              // }
+              // else if(element.role.id==5)
+              // {
+              //   this.teamAdmin.push(element);
+              //   ++this.admin;
 
-              }
-              else if(element.role.id==8)
-              {
-                this.teamDesigner.push(element);
-                ++this.designers;
+              // }
+              // else if(element.role.id==8)
+              // {
+              //   this.teamDesigner.push(element);
+              //   ++this.designers;
 
-              }
-              else if(element.role.id==10)
-              {
-                this.teamAnalyst.push(element);
-                ++this.analysts;
-              }
-              else if(element.role.id==9)
-              {
-                this.teamSurveyor.push(element);
-                ++this.surveyor;
-              }
-              else if(element.role.id==11)
-              {
-                this.teamPeengineer.push(element);
-                ++this.peengineer;
-                console.log(this.peengineer)
-              }
+              // }
+              // else if(element.role.id==10)
+              // {
+              //   this.teamAnalyst.push(element);
+              //   ++this.analysts;
+              // }
+              // else if(element.role.id==9)
+              // {
+              //   this.teamSurveyor.push(element);
+              //   ++this.surveyor;
+              // }
+              // else if(element.role.id==11)
+              // {
+              //   this.teamPeengineer.push(element);
+              //   ++this.peengineer;
+              //   console.log(this.peengineer)
+              // }
+              // else if(element.role.id==24)
+              // {
+              //   ++this.teamheads;
+              // }
+              switch (element.role.displayname) {
+                case "Admin":
+                  this.teamAdmin.push(element);
+                  ++this.admin;
+                  break;
+                case "Design Manager":
+                  this.teamBd.push(element);
+                  ++this.bd;
+                  break;
+                case  "BD" :
+                  this.teamBd.push(element);
+                  ++this.bd;
+                    break; 
+                case  "Sales Manager" :
+                  this.teamBd.push(element);
+                  ++this.bd
+                      break;       
+                case "Master":
+                  ++this.master;
+                  break;
+                case "Team Head":
+                  ++this.teamheads;
+                  break;
+                case "Designer":
+                  this.teamDesigner.push(element);
+                  ++this.designers;
+                  break;
+                case "Surveyor":
+                  this.teamSurveyor.push(element);
+                  ++this.surveyor ;
+                  break;
+                case "Sales Representative":
+                  this.teamSurveyor.push(element);
+                  ++this.surveyor ;
+                    break;  
+                case "Analyst":
+                  this.teamAnalyst.push(element);
+                  ++this.analysts;
+                  break;
+                case "PE Engineer":
+                  this.teamPeengineer.push(element);
+                  ++this.peengineer ;
+                  break;
+                case ("Master Electrician"):
+                  ++this.master ;
+                    break;  
+              } 
             })
 
-            res.forEach(element=>{
-              if(element.role.id==7)
-              {
-                this.teamAdmin.push(element);
-                ++this.admin;
-                console.log(this.admin)
-              }
-            })
+            // res.forEach(element=>{
+            //   if(element.role.id==7)
+            //   {
+            //     this.teamAdmin.push(element);
+            //     ++this.admin;
+            //     console.log(this.admin)
+            //   }
+            // })
             this.all = res.length;
-
             this.roles.forEach(element=>{
               let roleCount;
               switch (element.displayname) {

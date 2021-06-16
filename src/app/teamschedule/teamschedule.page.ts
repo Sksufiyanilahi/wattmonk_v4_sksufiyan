@@ -42,8 +42,7 @@ export class TeamschedulePage implements OnInit {
   isEdit: boolean = true;
   roleValue: string;
 
-  statuscount: any;
-  activedesignjobs: any;
+  activedesignjobs: boolean;
 
   listOfAssignees: User[] = [];
   showBottomDraw: boolean = false;
@@ -53,6 +52,7 @@ export class TeamschedulePage implements OnInit {
   teamRoles: any;
 
   userSetting:any;
+  isClient:boolean;
   // user:User;
 
   constructor(private formBuilder: FormBuilder,
@@ -104,12 +104,24 @@ export class TeamschedulePage implements OnInit {
       assignedto: new FormControl('', [Validators.required])
       // comment: new FormControl('')
     });
+    this.userData = this.storageService.getUser();
+    console.log(this.userData);
+
+    if(this.userData.role.type == 'wattmonkadmins' || this.userData.role.type == 'superadmin')
+    {
+      this.isClient = false;
+    }
+    else{
+      this.isClient = true;
+    }
+
     this.memberId = +this.route.snapshot.paramMap.get('id');
     console.log(this.memberId)
       // if(this.memberId !==0){
         this.memberData = this.router.getCurrentNavigation().extras.state;
         this.data = this.memberData.productdetails.queryParams.teamData;
         this.teamRoles = this.memberData.productdetails.queryParams.teamRoles;
+        console.log(this.data)
         // this.isOnboarding = this.memberData.productdetails.queryParams.isOnboarding;
       // }
 
@@ -117,8 +129,6 @@ export class TeamschedulePage implements OnInit {
 
   ngOnInit() {
     this.fieldDisabled = false;
-    this.userData = this.storageService.getUser();
-    console.log(this.userData);
     if (this.memberId !== 0) {
       // setTimeout(() => {
         this.getStatusCount(this.data.id);
@@ -137,11 +147,13 @@ export class TeamschedulePage implements OnInit {
 
 
   getStatusCount(id) {
-    this.apiservices.getStatusCount(id).subscribe(
+    // this.apiservices.getStatusCount(id).subscribe(
+      this.apiservices.getActiveJobsCount(id).subscribe(
       response => {
-        this.statuscount = response;
-        this.activedesignjobs = this.statuscount.waitingforassigned + this.statuscount.waitingforacceptance + this.statuscount.requestaccepted + this.statuscount.designassigned
-          + this.statuscount.reviewassigned + this.statuscount.reviewpassed + this.statuscount.reviewfailed;
+        console.log(response)
+        this.activedesignjobs = response;
+        // this.activedesignjobs = this.statuscount.waitingforassigned + this.statuscount.waitingforacceptance + this.statuscount.requestaccepted + this.statuscount.designassigned
+        //   + this.statuscount.reviewassigned + this.statuscount.reviewpassed + this.statuscount.reviewfailed;
         console.log(this.activedesignjobs);
         // ++this.activedesignjobs;
             }
@@ -254,9 +266,14 @@ export class TeamschedulePage implements OnInit {
               })
         }
         else {
-          console.log(this.activedesignjobs)
-          if(this.activedesignjobs == 0)
+          console.log(this.activedesignjobs,this.data)
+          if((!this.isClient && this.activedesignjobs) || (this.isClient && this.data.role.type == 'surveyors' && this.activedesignjobs))
           {
+            this.utils.hideLoading();
+            this.openreviewPassed();
+        }
+        else
+        {
           let rolesel = parseInt(this.teamForm.get("userrole").value);
           var senddesignrequestpermission = false;
           if (rolesel == ROLES.Designer || rolesel == ROLES.Admin || rolesel == ROLES.Surveyor || rolesel == ROLES.Peengineer || rolesel == ROLES.Analyst || rolesel == ROLES.BD) {
@@ -315,11 +332,6 @@ export class TeamschedulePage implements OnInit {
 
               })
         }
-        else
-        {
-          this.utils.hideLoading();
-          this.openreviewPassed();
-        }
       }
       },
         responseError => {
@@ -357,24 +369,24 @@ export class TeamschedulePage implements OnInit {
       header: 'Confirm!',
       message: 'Selected user is having active jobs in the account, either move all jobs to unassigned stage or transfer them to another user.',
       inputs: [
+        // {
+        //   name: 'radio1',
+        //   type: 'radio',
+        //   label: 'Unassign jobs',
+        //   value: 'unassignedjobs',
+        //   handler: () => {
+        //     console.log('Radio 1 selected');
+        //   },
+        //   checked: true
+        // },
         {
-          name: 'radio1',
-          type: 'radio',
-          label: 'Unassign jobs',
-          value: 'unassignedjobs',
-          handler: () => {
-            console.log('Radio 1 selected');
-          },
-          checked: true
-        },
-        {
-          name: 'radio2',
+          name: 'radio',
           type: 'radio',
           label: 'Transfer jobs',
           value: 'transferjobs',
           handler: () => {
-            console.log('Radio 2 selected');
-          }
+          },
+          checked: true
         },
         ] ,
       buttons: [
@@ -391,68 +403,68 @@ export class TeamschedulePage implements OnInit {
             console.log(alertData)
             var postData= {};
             let roleId = this.teamForm.get("userrole").value;
-            if(alertData == 'unassignedjobs')
-            {
-              postData = {role: roleId,
-                blocked: false }
-              this.utils.showLoading("Unassigning Jobs").then(()=>{
-              this.apiservices.unassignedJobs(this.data.id,postData).subscribe((res)=>{
-                console.log(res);
-                this.utils.hideLoading().then(()=>{
-                  // this.utils.showSnackBar("Jobs Unassigned Successfully");
+            // if(alertData == 'unassignedjobs')
+            // {
+            //   postData = {role: roleId,
+            //     blocked: false }
+            //   this.utils.showLoading("Unassigning Jobs").then(()=>{
+            //   this.apiservices.unassignedJobs(this.data.id,postData).subscribe((res)=>{
+            //     console.log(res);
+            //     this.utils.hideLoading().then(()=>{
+            //       // this.utils.showSnackBar("Jobs Unassigned Successfully");
 
-                    let rolesel = parseInt(this.teamForm.get("userrole").value);
-                    // var senddesignrequestpermission = false;
-                    // if (rolesel == ROLES.Designer || rolesel == ROLES.Admin || rolesel == ROLES.Surveyor || rolesel == ROLES.Peengineer || rolesel == ROLES.Analyst || rolesel == ROLES.BD) {
-                    //   senddesignrequestpermission = true;
-                    // }
-                    const postdata = {
-                      firstname: this.teamForm.get("firstname").value,
-                      lastname: this.teamForm.get("lastname").value,
-                      email: this.teamForm.get("workemail").value,
-                      role: parseInt(this.teamForm.get("userrole").value),
-                      peengineertype: this.teamForm.get("peengineertype").value
-                    }
+            //         let rolesel = parseInt(this.teamForm.get("userrole").value);
+            //         // var senddesignrequestpermission = false;
+            //         // if (rolesel == ROLES.Designer || rolesel == ROLES.Admin || rolesel == ROLES.Surveyor || rolesel == ROLES.Peengineer || rolesel == ROLES.Analyst || rolesel == ROLES.BD) {
+            //         //   senddesignrequestpermission = true;
+            //         // }
+            //         const postdata = {
+            //           firstname: this.teamForm.get("firstname").value,
+            //           lastname: this.teamForm.get("lastname").value,
+            //           email: this.teamForm.get("workemail").value,
+            //           role: parseInt(this.teamForm.get("userrole").value),
+            //           peengineertype: this.teamForm.get("peengineertype").value
+            //         }
 
-                    this.apiservices
-                      .updateTeam(
-                        postdata, this.memberId
+            //         this.apiservices
+            //           .updateTeam(
+            //             postdata, this.memberId
 
-                      )
-                      .subscribe(
-                        (response: any) => {
+            //           )
+            //           .subscribe(
+            //             (response: any) => {
 
 
-                          this.utils.hideLoading().then(() => {
-                            this.utils.showSnackBar('Team updated succesfully');
-                            this.router.navigate(['/teamhomepage'])
-                            this.utils.setteamModuleRefresh(true);
+            //               this.utils.hideLoading().then(() => {
+            //                 this.utils.showSnackBar('Team updated succesfully');
+            //                 this.router.navigate(['/teamhomepage'])
+            //                 this.utils.setteamModuleRefresh(true);
 
-                          });
+            //               });
 
-                        },
-                        responseError => {
-                          this.utils.hideLoading().then(() => {
-                            const error: ErrorModel = responseError.error;
-                            this.utils.errorSnackBar(error.message);
-                          });
+            //             },
+            //             responseError => {
+            //               this.utils.hideLoading().then(() => {
+            //                 const error: ErrorModel = responseError.error;
+            //                 this.utils.errorSnackBar(error.message);
+            //               });
 
-                        })
-                  // this.getStatusCount(this.data.id);
-                  // this.router.navigate(['/teamhomepage']);
-                  // this.submitForm();
-                })
-              },responseError => {
-                this.utils.hideLoading().then(() => {
-                  const error: ErrorModel = responseError.error;
-                  this.utils.errorSnackBar(error.message);
-                });
+            //             })
+            //       // this.getStatusCount(this.data.id);
+            //       // this.router.navigate(['/teamhomepage']);
+            //       // this.submitForm();
+            //     })
+            //   },responseError => {
+            //     this.utils.hideLoading().then(() => {
+            //       const error: ErrorModel = responseError.error;
+            //       this.utils.errorSnackBar(error.message);
+            //     });
 
-              })
-            })
-            }
-            else if(alertData == 'transferjobs')
-            {
+            //   })
+            // })
+            // }
+            // else if(alertData == 'transferjobs')
+            // {
               // this.apiservices.getCompanyUsers(this.data.parent.id,this.data.role.id).subscribe((res)=>{
               //   console.log(res);
               // })
@@ -462,6 +474,13 @@ export class TeamschedulePage implements OnInit {
                   this.apiservices.getCompanyUsers(this.data.parent.id,this.data.role.id).subscribe((assignees:any)=>{
                     this.utils.hideLoading().then(() => {
                       this.listOfAssignees = [];
+
+                      assignees.forEach((element , i)=>{
+                        console.log(element.id, this.memberId)
+                        if(element.id == this.memberId){
+                          assignees.splice(i,1);
+                        }
+                       })
                       // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
                       assignees.forEach(item => this.listOfAssignees.push(item));
                       console.log(this.listOfAssignees)
@@ -493,7 +512,7 @@ export class TeamschedulePage implements OnInit {
               // this.apiservices.transferJobs(this.data.id,this.data.id,postData).subscribe((res)=>{
               //   console.log(res);
               // })
-            }
+            // }
             // if(alertData.comment!=""){
             //  postData = {
             //   status: "delivered",

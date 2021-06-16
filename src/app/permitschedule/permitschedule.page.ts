@@ -1173,7 +1173,8 @@ export class PermitschedulePage implements OnInit {
             creatorparentid: this.storage.getParentId(),
             // isdesignraised: false,
             inverterscount: this.desginForm.get('inverterscount').value,
-            mpurequired:this.desginForm.get('mpurequired').value
+            mpurequired:this.desginForm.get('mpurequired').value,
+            sameemailconfirmed:null
 
 
           }
