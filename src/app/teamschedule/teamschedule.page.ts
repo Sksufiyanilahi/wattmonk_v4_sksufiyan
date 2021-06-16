@@ -116,7 +116,7 @@ export class TeamschedulePage implements OnInit {
     }
 
     this.memberId = +this.route.snapshot.paramMap.get('id');
-    console.log(this.memberId)
+
       // if(this.memberId !==0){
         this.memberData = this.router.getCurrentNavigation().extras.state;
         this.data = this.memberData.productdetails.queryParams.teamData;
@@ -124,10 +124,15 @@ export class TeamschedulePage implements OnInit {
         console.log(this.data)
         // this.isOnboarding = this.memberData.productdetails.queryParams.isOnboarding;
       // }
-
   }
 
   ngOnInit() {
+    if(this.memberId !==null || this.memberId !== undefined){
+      if(this.data !==undefined){
+        this.roleValue =this.data.role.id;
+
+      }
+    }
     this.fieldDisabled = false;
     if (this.memberId !== 0) {
       // setTimeout(() => {
@@ -173,7 +178,7 @@ export class TeamschedulePage implements OnInit {
       this.apiservices.getUserSetting(this.memberId).subscribe(res=>{
         if(res.length>0){
         this.userSetting = res[0];
-        console.log(this.userSetting.visibilityprelim)
+
       this.teamForm.patchValue({
       prelimaccess : this.userSetting.visibilityprelim,
       permitaccess : this.userSetting.visibilitypermit,
@@ -185,7 +190,7 @@ export class TeamschedulePage implements OnInit {
       //this.roles = Object.(this.user)
       this.cdr.detectChanges();
     })
-    console.log(this.user);
+
     this.fieldDisabled = true;
       this.teamForm.patchValue({
         firstname: this.user.firstname,
@@ -208,8 +213,8 @@ export class TeamschedulePage implements OnInit {
 
   submitForm() {
 
-    console.log(this.teamForm.status)
-    console.log(this.activedesignjobs);
+
+
 
     if (this.teamForm.status === 'VALID') {
       // $ev.preventDefault();
@@ -289,7 +294,7 @@ export class TeamschedulePage implements OnInit {
             visibilitysurvey: this.teamForm.get('surveyaccess').value,
             visibilitypermit: this.teamForm.get('permitaccess').value,
             visibilitypestamp: this.teamForm.get('pestampaccess').value,
-            visibilityteam: this.teamForm.get('teamaccess').value    
+            visibilityteam: this.teamForm.get('teamaccess').value
           }
 
           this.apiservices
@@ -356,7 +361,7 @@ export class TeamschedulePage implements OnInit {
 
   getassignedata(asssignedata){
     this.selectedMember = asssignedata;
-  console.log(this.selectedMember)
+
 
   }
 
@@ -400,7 +405,7 @@ export class TeamschedulePage implements OnInit {
         }, {
           text: 'Move',
           handler: (alertData) => {
-            console.log(alertData)
+
             var postData= {};
             let roleId = this.teamForm.get("userrole").value;
             // if(alertData == 'unassignedjobs')
@@ -466,7 +471,7 @@ export class TeamschedulePage implements OnInit {
             // else if(alertData == 'transferjobs')
             // {
               // this.apiservices.getCompanyUsers(this.data.parent.id,this.data.role.id).subscribe((res)=>{
-              //   console.log(res);
+              //
               // })
 
               if (this.listOfAssignees.length === 0) {
@@ -483,7 +488,7 @@ export class TeamschedulePage implements OnInit {
                        })
                       // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
                       assignees.forEach(item => this.listOfAssignees.push(item));
-                      console.log(this.listOfAssignees)
+
 
                       this.showBottomDraw = true;
                       // this.designId = id;
@@ -510,7 +515,7 @@ export class TeamschedulePage implements OnInit {
               }
               // postData = {role:""}
               // this.apiservices.transferJobs(this.data.id,this.data.id,postData).subscribe((res)=>{
-              //   console.log(res);
+              //
               // })
             // }
             // if(alertData.comment!=""){
@@ -558,7 +563,7 @@ export class TeamschedulePage implements OnInit {
         blocked: false}
               this.utils.showLoading("Transfering Jobs").then(()=>{
               this.apiservices.transferJobs(this.data.id,this.selectedMember.id,postData).subscribe((res)=>{
-                console.log(res);
+
                 this.utils.hideLoading().then(()=>{
                   // this.utils.showSnackBar("Jobs Transfered Successfully");
                   // this.submitForm();
@@ -619,7 +624,7 @@ export class TeamschedulePage implements OnInit {
     }
 
   roleChange(id) {
-    console.log(id)
+
     this.roleValue = id;
     if(id == "8"){
       this.teamForm.get('prelimaccess').setValue(true);

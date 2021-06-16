@@ -683,15 +683,15 @@ export class TeamhomepagePage implements OnInit {
   }
 
   getStatusCount(data) {
-    let statuscount:any
-    this.apiService.getStatusCount(data.id).subscribe(
+    // let statuscount:any
+    this.apiService.getActiveJobsCount(data.id).subscribe(
       response => {
-        statuscount = response;
-        this.activedesignjobs = statuscount.waitingforassigned + statuscount.waitingforacceptance + statuscount.requestaccepted + statuscount.designassigned
-          + statuscount.reviewassigned + statuscount.reviewpassed + statuscount.reviewfailed;
-        console.log(this.activedesignjobs);
+        this.activedesignjobs = response;
+        // this.activedesignjobs = statuscount.waitingforassigned + statuscount.waitingforacceptance + statuscount.requestaccepted + statuscount.designassigned
+        //   + statuscount.reviewassigned + statuscount.reviewpassed + statuscount.reviewfailed;
+        // console.log(this.activedesignjobs);
         // ++this.activedesignjobs;
-        if(this.activedesignjobs==0){
+        if(!this.activedesignjobs){
           this.deleteTeamFromServer(data);
 
         }else{
@@ -713,16 +713,16 @@ export class TeamhomepagePage implements OnInit {
       header: 'Confirm!',
       message: 'Selected user is having active jobs in the account, either move all jobs to unassigned stage or transfer them to another user.',
       inputs: [
-        {
-          name: 'radio1',
-          type: 'radio',
-          label: 'Unassign jobs',
-          value: 'unassignedjobs',
-          handler: () => {
-            console.log('Radio 1 selected');
-          },
-          checked: true
-        },
+        // {
+        //   name: 'radio1',
+        //   type: 'radio',
+        //   label: 'Unassign jobs',
+        //   value: 'unassignedjobs',
+        //   handler: () => {
+        //     console.log('Radio 1 selected');
+        //   },
+        //   checked: true
+        // },
         {
           name: 'radio2',
           type: 'radio',
@@ -730,7 +730,8 @@ export class TeamhomepagePage implements OnInit {
           value: 'transferjobs',
           handler: () => {
             console.log('Radio 2 selected');
-          }
+          },
+          checked: true
         },
         ] ,
       buttons: [
@@ -746,26 +747,26 @@ export class TeamhomepagePage implements OnInit {
           handler: (alertData) => {
             console.log(alertData)
             var postData= {};
-            if(alertData == 'unassignedjobs')
-            {
-              postData = {blocked: true }
-              this.utils.showLoading("Unassigning Jobs").then(()=>{
-              this.apiService.unassignedJobs(data.id,postData).subscribe((res)=>{
-                console.log(res);
-                this.utils.hideLoading().then(()=>{
-                  this.utils.showSnackBar("Jobs Unassigned Successfully");
-                  // this.router.navigate(['/teamhomepage']);
-                  this.modalController.dismiss({ 'dismissed': true })
-                this.router.navigate(['/teamhomepage'])
-                  this.utils.setteamModuleRefresh(true);
-                })
-              },(error)=>{
-                this.utils.hideLoading();
-              })
-            })
-            }
-            else if(alertData == 'transferjobs')
-            {
+            // if(alertData == 'unassignedjobs')
+            // {
+            //   postData = {blocked: true }
+            //   this.utils.showLoading("Unassigning Jobs").then(()=>{
+            //   this.apiService.unassignedJobs(data.id,postData).subscribe((res)=>{
+            //     console.log(res);
+            //     this.utils.hideLoading().then(()=>{
+            //       this.utils.showSnackBar("Jobs Unassigned Successfully");
+            //       // this.router.navigate(['/teamhomepage']);
+            //       this.modalController.dismiss({ 'dismissed': true })
+            //     this.router.navigate(['/teamhomepage'])
+            //       this.utils.setteamModuleRefresh(true);
+            //     })
+            //   },(error)=>{
+            //     this.utils.hideLoading();
+            //   })
+            // })
+            // }
+            // else if(alertData == 'transferjobs')
+            // {
               // this.apiservices.getCompanyUsers(this.data.parent.id,this.data.role.id).subscribe((res)=>{
               //   console.log(res);
               // })
@@ -803,7 +804,7 @@ export class TeamhomepagePage implements OnInit {
                 });
               }
 
-            }
+            // }
 
           }
         }
