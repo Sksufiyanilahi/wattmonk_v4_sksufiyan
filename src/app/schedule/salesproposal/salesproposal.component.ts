@@ -1731,19 +1731,19 @@ export class SalesproposalComponent implements OnInit {
     console.log(file)
     var extension = file.name.substring(file.name.lastIndexOf('.'));
     var mimetype = this.utils.getMimetype(extension);
-    window.console.log(extension, mimetype);
-    var data = new Blob([file], {
-      type: mimetype
-    });
-    console.log(data);
-    let replaceFile = new File([data], file.name, { type: mimetype })
+    // window.console.log(extension, mimetype);
+    // var data = new Blob([file], {
+    //   type: mimetype
+    // });
+    // console.log(data);
+    // let replaceFile = new File([data], file.name, { type: mimetype })
    if(this.attachmentFileUpload)
    {
-    this.prelimFiles.push(replaceFile);
+    this.prelimFiles.push(file);
    }
    else if(this.isArchitecturalFileUpload)
    {
-    this.archFiles.push(replaceFile)
+    this.archFiles.push(file)
    }
   }
 

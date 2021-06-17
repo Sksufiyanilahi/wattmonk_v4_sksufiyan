@@ -24,6 +24,8 @@ export enum ROLES {
     Analyst = 10,
     Peengineer = 11,
     Master = environment.Master_Role_Id,
+    PeAdmin = environment.PeAdmin,
+    TeamHead = environment.Team_Head_Role_Id
 }
 
 export const MAILFORMAT = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;

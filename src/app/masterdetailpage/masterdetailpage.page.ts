@@ -250,12 +250,26 @@ export class MasterdetailpagePage implements OnInit {
 
   deleteDesignFromServer() {
     this.utils.showLoading('Deleting Design').then((success) => {
-      if (this.requesttype == 'prelim' || this.requesttype == 'permit') {
+      if (this.requesttype == 'prelim') {
         this.apiService.deleteDesign(this.allData.id).subscribe((result) => {
           this.utils.hideLoading().then(() => {
             this.utils.showSnackBar(this.allData.name + " " + 'has been deleted successfully');
             this.navController.pop();
             this.utils.setHomepageDesignRefresh(true);
+          });
+        }, (error) => {
+          this.utils.hideLoading().then(() => {
+            this.utils.errorSnackBar('Some Error Occurred');
+          });
+
+        });
+      }
+      else if (this.requesttype == 'permit') {
+        this.apiService.deleteDesign(this.allData.id).subscribe((result) => {
+          this.utils.hideLoading().then(() => {
+            this.utils.showSnackBar(this.allData.name + " " + 'has been deleted successfully');
+            this.navController.pop();
+            this.utils.setHomepagePermitRefresh(true);
           });
         }, (error) => {
           this.utils.hideLoading().then(() => {

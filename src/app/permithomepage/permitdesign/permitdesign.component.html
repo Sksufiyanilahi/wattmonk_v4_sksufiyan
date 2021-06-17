@@ -165,8 +165,8 @@
                               <ion-icon name="mail" ></ion-icon></span>
                               <span *ngIf="userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin'" style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="Resend(designData.id, designData.requesttype,$event)">
                                   Resend</span>
-                              <span *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin' || userData.role.type=='master' ||(userData.role.type!=='bd' && userData.parent.id != 232)) " style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="raisePestampRequest(designData,$event)">
-                                    Pestamp Request</span>
+                              <!-- <span *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin' || userData.role.type=='master' ||(userData.role.type!=='bd' && userData.parent.id != 232)) " style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="raisePestampRequest(designData,$event)">
+                                    Pestamp Request</span> -->
                       </ion-col>
                       <!-- <ion-col class="ion-no-margin ion-no-padding">
                           <ion-button class="ion-no-margin ion-no-padding" fill="clear" [routerLink]="['/surveyprocess/' + designData.id + '/' + designData.jobtype + '/' + designData.latitude + '/' + designData.longitude]"

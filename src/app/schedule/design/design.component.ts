@@ -690,7 +690,7 @@ isArchitecturalFileUpload: boolean = false;
 
   saveModuleMake() {
 
-    const found = this.modulemakes.some(el => el.name === this.desginForm.get("modulemake").value);
+    const found = this.modulemakes.some(el => el.name === this.desginForm.get("solarmake").value);
     if (!found) {
 
       let solarmadedata = {
@@ -779,7 +779,8 @@ isArchitecturalFileUpload: boolean = false;
   saveInverterModel() {
     const ismakefound = this.invertermakes.some(el => el.name === this.desginForm.get("invertermake").value);
     const found = this.invertermodels.some(el => el.name === this.desginForm.get("invertermodel").value);
-    if (!ismakefound || !found) {
+    var inverter = this.desginForm.get("invertermake").value;
+    if ((!ismakefound || !found) && inverter!='') {
       let invertermadedata = {
         invertermake: this.selectedInverterMakeID,
         name: this.desginForm.get('invertermodel').value
@@ -1563,21 +1564,21 @@ isArchitecturalFileUpload: boolean = false;
     var extension = file.name.substring(file.name.lastIndexOf('.'));
     var mimetype = this.utils.getMimetype(extension);
     window.console.log(extension, mimetype);
-    console.log([file])
-    var data= new Blob([file], {
-      type: mimetype,
+    // console.log([file])
+  //   var data= new Blob([file], {
+  //     type: mimetype,
 
-    });
-  console.log(data);
-  var replaceFile = new File([data], file.name, { type: mimetype })
+  //   });
+  // console.log(data);
+  // var replaceFile = new File([data], file.name, { type: mimetype })
    if(this.attachmentFileUpload)
    {
-    this.prelimFiles.push(replaceFile);
+    this.prelimFiles.push(file);
     console.log(this.prelimFiles)
    }
    else if(this.isArchitecturalFileUpload)
    {
-    this.archFiles.push(replaceFile)
+    this.archFiles.push(file)
    }
   }
 

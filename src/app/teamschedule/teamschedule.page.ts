@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController, NavController, Platform, ToastController } from '@ionic/angular';
@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent, INVALID_MODULE_AND_INVERTER, INVALID_COMPANY_NAME } from '../model/constants';
-import { ROLES } from '../constants';
+import { COMETCHAT_CONSTANTS, FIREBASE_DB_CONSTANTS, ROLES } from '../constants';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { ErrorModel } from '../model/error.model';
@@ -14,6 +14,8 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { DrawerState } from 'ion-bottom-drawer';
 import { User } from '../model/user.model';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { AngularFireDatabase } from '@angular/fire/database';
 @Component({
   selector: 'app-teamschedule',
   templateUrl: './teamschedule.page.html',
@@ -40,17 +42,18 @@ export class TeamschedulePage implements OnInit {
   memberId = 0;
   tabsDisabled = false;
   isEdit: boolean = true;
-  roles: any;
   roleValue: string;
 
-  statuscount: any;
-  activedesignjobs: any;
+  activedesignjobs: boolean;
 
   listOfAssignees: User[] = [];
   showBottomDraw: boolean = false;
   drawerState = DrawerState.Bottom;
   selectedMember: any;
-  isOnboarding: boolean=false;
+  teamRoles: any;
+
+  userSetting:any;
+  isClient:boolean;
   // user:User;
 
   constructor(private formBuilder: FormBuilder,
@@ -63,7 +66,9 @@ export class TeamschedulePage implements OnInit {
     private navController: NavController,
     private router: Router,
     private mixpanelService: MixpanelService,
-    private alertController:AlertController
+    private alertController:AlertController,
+    private cdr:ChangeDetectorRef,
+    private db:AngularFireDatabase
   ) {
     const MAILFORMAT = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     //const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
@@ -74,7 +79,12 @@ export class TeamschedulePage implements OnInit {
       lastname: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
       workemail: new FormControl('', [Validators.required, Validators.pattern(MAILFORMAT)]),
       userrole: new FormControl('', [Validators.required]),
-      peengineertype: new FormControl('')
+      peengineertype: new FormControl(''),
+      prelimaccess:new FormControl(false),
+      surveyaccess:new FormControl(false),
+      permitaccess:new FormControl(false),
+      pestampaccess:new FormControl(false),
+      teamaccess:new FormControl(false)
       //      address:new FormControl(null),
       // //contactnumber : new FormControl(null),
       //  //lic: new FormControl(null),
@@ -96,27 +106,41 @@ export class TeamschedulePage implements OnInit {
       assignedto: new FormControl('', [Validators.required])
       // comment: new FormControl('')
     });
+    this.userData = this.storageService.getUser();
+    console.log(this.userData);
+
+    if(this.userData.role.type == 'wattmonkadmins' || this.userData.role.type == 'superadmin')
+    {
+      this.isClient = false;
+    }
+    else{
+      this.isClient = true;
+    }
+
     this.memberId = +this.route.snapshot.paramMap.get('id');
-    console.log(this.memberId)
-      if(this.memberId !==0){
+
+      // if(this.memberId !==0){
         this.memberData = this.router.getCurrentNavigation().extras.state;
         this.data = this.memberData.productdetails.queryParams.teamData;
-        // this.isOnboarding = this.memberData.productdetails.queryParams.isOnboarding;
-      }
-
+        this.teamRoles = this.memberData.productdetails.queryParams.teamRoles;
+        console.log(this.data)
+      // }
   }
 
   ngOnInit() {
+    if(this.memberId !==null || this.memberId !== undefined){
+      if(this.data !==undefined){
+        this.roleValue =this.data.role.id;
+
+      }
+    }
     this.fieldDisabled = false;
-    this.userData = this.storageService.getUser();
-    console.log(this.userData);
-    this.getRoles();
     if (this.memberId !== 0) {
-      setTimeout(() => {
+      // setTimeout(() => {
         this.getStatusCount(this.data.id);
         this.isEditMode = true;
         this.getDesignDetails();
-      }, 1000)
+      // }, 1000)
 
     }
   }
@@ -127,29 +151,15 @@ export class TeamschedulePage implements OnInit {
 
   }
 
-  getRoles() {
-    let parentId = this.userData.parent.id;
-    let roleId = this.userData.role.id;
-    this.apiservices.getDynamicRoles(parentId, roleId).subscribe((res) => {
-      // console.log(res);
-      this.roles = res;
-      // console.log(this.roles);
-      if (res == 0) {
-        this.apiservices.getDefaultRoles(roleId).subscribe((response) => {
-          console.log(response);
-          this.roles = response;
-          console.log(this.roles)
-        })
-      }
-    })
-  }
 
   getStatusCount(id) {
-    this.apiservices.getStatusCount(id).subscribe(
+    // this.apiservices.getStatusCount(id).subscribe(
+      this.apiservices.getActiveJobsCount(id).subscribe(
       response => {
-        this.statuscount = response;
-        this.activedesignjobs = this.statuscount.waitingforassigned + this.statuscount.waitingforacceptance + this.statuscount.requestaccepted + this.statuscount.designassigned
-          + this.statuscount.reviewassigned + this.statuscount.reviewpassed + this.statuscount.reviewfailed;
+        console.log(response)
+        this.activedesignjobs = response;
+        // this.activedesignjobs = this.statuscount.waitingforassigned + this.statuscount.waitingforacceptance + this.statuscount.requestaccepted + this.statuscount.designassigned
+        //   + this.statuscount.reviewassigned + this.statuscount.reviewpassed + this.statuscount.reviewfailed;
         console.log(this.activedesignjobs);
         // ++this.activedesignjobs;
             }
@@ -165,25 +175,36 @@ export class TeamschedulePage implements OnInit {
     //this.apiservices.getTeamDetails(this.designId).subscribe(async (result) => {
 
     // await this.utils.hideLoading().then(() => {
-    this.user = this.data;
-    console.log(this.user);
+      this.user = this.data;
+      this.apiservices.getUserSetting(this.memberId).subscribe(res=>{
+        if(res.length>0){
+        this.userSetting = res[0];
 
-    //this.roles = Object.(this.user)
-    console.log(this.roles);
+      this.teamForm.patchValue({
+      prelimaccess : this.userSetting.visibilityprelim,
+      permitaccess : this.userSetting.visibilitypermit,
+      surveyaccess : this.userSetting.visibilitysurvey,
+      pestampaccess : this.userSetting.visibilitypestamp,
+      teamaccess : this.userSetting.visibilityteam
+      })
+    }
+      //this.roles = Object.(this.user)
+      this.cdr.detectChanges();
+    })
+
     this.fieldDisabled = true;
-
-    this.teamForm.patchValue({
-      firstname: this.user.firstname,
-      lastname: this.user.lastname,
-      workemail: this.user.email,
-      userrole: this.user.role.id,
-      peengineertype: this.user.peengineertype,
-      source: this.utils.checkPlatform(),
-      // createdby: this.user.designId,
-      // creatorparentid: this.user.parent.designId,
-      // status: "created",
-      // outsourcedto: null,
-    });
+      this.teamForm.patchValue({
+        firstname: this.user.firstname,
+        lastname: this.user.lastname,
+        workemail: this.user.email,
+        userrole: this.user.role.id,
+        peengineertype: this.user.peengineertype,
+        source: this.utils.checkPlatform()
+        // createdby: this.user.designId,
+        // creatorparentid: this.user.parent.designId,
+        // status: "created",
+        // outsourcedto: null,
+      });
     //     })
     //   },(error) => {
     //     this.utils.hideLoading();
@@ -193,8 +214,8 @@ export class TeamschedulePage implements OnInit {
 
   submitForm() {
 
-    console.log(this.teamForm.status)
-    console.log(this.activedesignjobs);
+
+
 
     if (this.teamForm.status === 'VALID') {
       // $ev.preventDefault();
@@ -215,24 +236,23 @@ export class TeamschedulePage implements OnInit {
               this.teamForm.get("workemail").value,
               this.teamForm.get("firstname").value,
               this.teamForm.get("lastname").value,
-
               senddesignrequestpermission,
               parseInt(this.teamForm.get("userrole").value),
               this.userData.parent.minpermitdesignaccess,
               this.teamForm.get("peengineertype").value,
-              this.teamForm.get("usertype").value
+              this.teamForm.get("usertype").value,
+              this.teamForm.get('prelimaccess').value,
+              this.teamForm.get('permitaccess').value,
+              this.teamForm.get('surveyaccess').value,
+              this.teamForm.get('pestampaccess').value,
+              this.teamForm.get('teamaccess').value
             )
             .subscribe(
               (response: any) => {
                 this.utils.hideLoading().then(() => {
-                  this.utils.showSnackBar('Team created successfully');
-                  this.utils.setteamModuleRefresh(true);
-                  if(!this.isOnboarding){
-                  this.router.navigate(['/teamhomepage'])
-                  }else{
-                    this.router.navigate(['/onboarding'])
-
-                  }
+                  this.createachatuser(""+response.id, response.firstname + " " + response.lastname);
+                  const regitemRef = this.db.object(FIREBASE_DB_CONSTANTS.KEYWORD + response.id);
+                    regitemRef.set({ newprelims: 0, newpermits: 0 });
 
 
                 });
@@ -247,9 +267,18 @@ export class TeamschedulePage implements OnInit {
               })
         }
         else {
-          console.log(this.activedesignjobs)
-          if(this.activedesignjobs == 0)
+          console.log(this.activedesignjobs,this.data)
+          if((!this.isClient && this.activedesignjobs))
           {
+            this.utils.hideLoading();
+            this.openreviewPassed();
+        }
+        else if((this.isClient && this.data.role.type == 'surveyors' && this.activedesignjobs)){
+          this.utils.hideLoading();
+            this.openreviewPassedForClient();
+        }
+        else
+        {
           let rolesel = parseInt(this.teamForm.get("userrole").value);
           var senddesignrequestpermission = false;
           if (rolesel == ROLES.Designer || rolesel == ROLES.Admin || rolesel == ROLES.Surveyor || rolesel == ROLES.Peengineer || rolesel == ROLES.Analyst || rolesel == ROLES.BD) {
@@ -260,7 +289,12 @@ export class TeamschedulePage implements OnInit {
             lastname: this.teamForm.get("lastname").value,
             email: this.teamForm.get("workemail").value,
             role: parseInt(this.teamForm.get("userrole").value),
-            peengineertype: this.teamForm.get("peengineertype").value      
+            peengineertype: this.teamForm.get("peengineertype").value,
+            visibilityprelim: this.teamForm.get('prelimaccess').value,
+            visibilitysurvey: this.teamForm.get('surveyaccess').value,
+            visibilitypermit: this.teamForm.get('permitaccess').value,
+            visibilitypestamp: this.teamForm.get('pestampaccess').value,
+            visibilityteam: this.teamForm.get('teamaccess').value
           }
 
           this.apiservices
@@ -274,12 +308,8 @@ export class TeamschedulePage implements OnInit {
 
                 this.utils.hideLoading().then(() => {
                   //this.createChatGroup(response);
-                  if(!this.isOnboarding){
                     this.router.navigate(['/teamhomepage'])
-                    }else{
-                      this.router.navigate(['/onboarding'])
-
-                    }
+                    
                   this.utils.showSnackBar('Team updated succesfully');
                   // this.utils.showSnackBar('Design have been saved');
                   this.utils.setteamModuleRefresh(true);
@@ -302,11 +332,6 @@ export class TeamschedulePage implements OnInit {
                 });
 
               })
-        }
-        else
-        {
-          this.utils.hideLoading();
-          this.openreviewPassed();
         }
       }
       },
@@ -332,7 +357,7 @@ export class TeamschedulePage implements OnInit {
 
   getassignedata(asssignedata){
     this.selectedMember = asssignedata;
-  console.log(this.selectedMember)
+
 
   }
 
@@ -345,24 +370,24 @@ export class TeamschedulePage implements OnInit {
       header: 'Confirm!',
       message: 'Selected user is having active jobs in the account, either move all jobs to unassigned stage or transfer them to another user.',
       inputs: [
+        // {
+        //   name: 'radio1',
+        //   type: 'radio',
+        //   label: 'Unassign jobs',
+        //   value: 'unassignedjobs',
+        //   handler: () => {
+        //     console.log('Radio 1 selected');
+        //   },
+        //   checked: true
+        // },
         {
-          name: 'radio1',
-          type: 'radio',
-          label: 'Unassign jobs',
-          value: 'unassignedjobs',
-          handler: () => {
-            console.log('Radio 1 selected');
-          },
-          checked: true
-        },
-        {
-          name: 'radio2',
+          name: 'radio',
           type: 'radio',
           label: 'Transfer jobs',
           value: 'transferjobs',
           handler: () => {
-            console.log('Radio 2 selected');
-          }
+          },
+          checked: true
         },
         ] ,
       buttons: [
@@ -376,73 +401,73 @@ export class TeamschedulePage implements OnInit {
         }, {
           text: 'Move',
           handler: (alertData) => {
-            console.log(alertData)
+
             var postData= {};
             let roleId = this.teamForm.get("userrole").value;
-            if(alertData == 'unassignedjobs')
-            {
-              postData = {role: roleId,
-                blocked: false }
-              this.utils.showLoading("Unassigning Jobs").then(()=>{
-              this.apiservices.unassignedJobs(this.data.id,postData).subscribe((res)=>{
-                console.log(res);
-                this.utils.hideLoading().then(()=>{
-                  // this.utils.showSnackBar("Jobs Unassigned Successfully");
+            // if(alertData == 'unassignedjobs')
+            // {
+            //   postData = {role: roleId,
+            //     blocked: false }
+            //   this.utils.showLoading("Unassigning Jobs").then(()=>{
+            //   this.apiservices.unassignedJobs(this.data.id,postData).subscribe((res)=>{
+            //     console.log(res);
+            //     this.utils.hideLoading().then(()=>{
+            //       // this.utils.showSnackBar("Jobs Unassigned Successfully");
 
-                    let rolesel = parseInt(this.teamForm.get("userrole").value);
-                    // var senddesignrequestpermission = false;
-                    // if (rolesel == ROLES.Designer || rolesel == ROLES.Admin || rolesel == ROLES.Surveyor || rolesel == ROLES.Peengineer || rolesel == ROLES.Analyst || rolesel == ROLES.BD) {
-                    //   senddesignrequestpermission = true;
-                    // }
-                    const postdata = {
-                      firstname: this.teamForm.get("firstname").value,
-                      lastname: this.teamForm.get("lastname").value,
-                      email: this.teamForm.get("workemail").value,
-                      role: parseInt(this.teamForm.get("userrole").value),
-                      peengineertype: this.teamForm.get("peengineertype").value
-                    }
+            //         let rolesel = parseInt(this.teamForm.get("userrole").value);
+            //         // var senddesignrequestpermission = false;
+            //         // if (rolesel == ROLES.Designer || rolesel == ROLES.Admin || rolesel == ROLES.Surveyor || rolesel == ROLES.Peengineer || rolesel == ROLES.Analyst || rolesel == ROLES.BD) {
+            //         //   senddesignrequestpermission = true;
+            //         // }
+            //         const postdata = {
+            //           firstname: this.teamForm.get("firstname").value,
+            //           lastname: this.teamForm.get("lastname").value,
+            //           email: this.teamForm.get("workemail").value,
+            //           role: parseInt(this.teamForm.get("userrole").value),
+            //           peengineertype: this.teamForm.get("peengineertype").value
+            //         }
 
-                    this.apiservices
-                      .updateTeam(
-                        postdata, this.memberId
+            //         this.apiservices
+            //           .updateTeam(
+            //             postdata, this.memberId
 
-                      )
-                      .subscribe(
-                        (response: any) => {
+            //           )
+            //           .subscribe(
+            //             (response: any) => {
 
 
-                          this.utils.hideLoading().then(() => {
-                            this.utils.showSnackBar('Team updated succesfully');
-                            this.router.navigate(['/teamhomepage'])
-                            this.utils.setteamModuleRefresh(true);
+            //               this.utils.hideLoading().then(() => {
+            //                 this.utils.showSnackBar('Team updated succesfully');
+            //                 this.router.navigate(['/teamhomepage'])
+            //                 this.utils.setteamModuleRefresh(true);
 
-                          });
+            //               });
 
-                        },
-                        responseError => {
-                          this.utils.hideLoading().then(() => {
-                            const error: ErrorModel = responseError.error;
-                            this.utils.errorSnackBar(error.message);
-                          });
+            //             },
+            //             responseError => {
+            //               this.utils.hideLoading().then(() => {
+            //                 const error: ErrorModel = responseError.error;
+            //                 this.utils.errorSnackBar(error.message);
+            //               });
 
-                        })
-                  // this.getStatusCount(this.data.id);
-                  // this.router.navigate(['/teamhomepage']);
-                  // this.submitForm();
-                })
-              },responseError => {
-                this.utils.hideLoading().then(() => {
-                  const error: ErrorModel = responseError.error;
-                  this.utils.errorSnackBar(error.message);
-                });
+            //             })
+            //       // this.getStatusCount(this.data.id);
+            //       // this.router.navigate(['/teamhomepage']);
+            //       // this.submitForm();
+            //     })
+            //   },responseError => {
+            //     this.utils.hideLoading().then(() => {
+            //       const error: ErrorModel = responseError.error;
+            //       this.utils.errorSnackBar(error.message);
+            //     });
 
-              })
-            })
-            }
-            else if(alertData == 'transferjobs')
-            {
+            //   })
+            // })
+            // }
+            // else if(alertData == 'transferjobs')
+            // {
               // this.apiservices.getCompanyUsers(this.data.parent.id,this.data.role.id).subscribe((res)=>{
-              //   console.log(res);
+              //
               // })
 
               if (this.listOfAssignees.length === 0) {
@@ -450,9 +475,16 @@ export class TeamschedulePage implements OnInit {
                   this.apiservices.getCompanyUsers(this.data.parent.id,this.data.role.id).subscribe((assignees:any)=>{
                     this.utils.hideLoading().then(() => {
                       this.listOfAssignees = [];
+
+                      assignees.forEach((element , i)=>{
+                        console.log(element.id, this.memberId)
+                        if(element.id == this.memberId){
+                          assignees.splice(i,1);
+                        }
+                       })
                       // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
                       assignees.forEach(item => this.listOfAssignees.push(item));
-                      console.log(this.listOfAssignees)
+
 
                       this.showBottomDraw = true;
                       // this.designId = id;
@@ -479,9 +511,9 @@ export class TeamschedulePage implements OnInit {
               }
               // postData = {role:""}
               // this.apiservices.transferJobs(this.data.id,this.data.id,postData).subscribe((res)=>{
-              //   console.log(res);
+              //
               // })
-            }
+            // }
             // if(alertData.comment!=""){
             //  postData = {
             //   status: "delivered",
@@ -512,6 +544,31 @@ export class TeamschedulePage implements OnInit {
     await alert.present();
     }
 
+
+    async openreviewPassedForClient(){
+
+
+      // this.designId=id
+      const alert = await this.alertController.create({
+        cssClass: 'alertClass',
+        // header: 'Confirm!',
+        message: 'This user has active jobs so you can not change role for this user',
+        
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: (blah) => {
+  
+            }
+          }
+        ]
+      });
+  
+      await alert.present();
+      }
+
     dismissBottomSheet() {
       this.showBottomDraw = false;
 
@@ -527,7 +584,7 @@ export class TeamschedulePage implements OnInit {
         blocked: false}
               this.utils.showLoading("Transfering Jobs").then(()=>{
               this.apiservices.transferJobs(this.data.id,this.selectedMember.id,postData).subscribe((res)=>{
-                console.log(res);
+
                 this.utils.hideLoading().then(()=>{
                   // this.utils.showSnackBar("Jobs Transfered Successfully");
                   // this.submitForm();
@@ -588,7 +645,50 @@ export class TeamschedulePage implements OnInit {
     }
 
   roleChange(id) {
-    console.log(id)
+
     this.roleValue = id;
+    if(id == "8"){
+      this.teamForm.get('prelimaccess').setValue(true);
+      this.teamForm.get('permitaccess').setValue(true);
+    }
+    if(id == "9"){
+      this.teamForm.get('surveyaccess').setValue(true);
+    }
+    if(id == "10"){
+      this.teamForm.get('prelimaccess').setValue(true);
+      this.teamForm.get('permitaccess').setValue(true);
+    }
+    if(id == "3"|| id == "4" || id == "5" || id == "6" || id == "7"){
+      this.teamForm.get('prelimaccess').setValue(true);
+      this.teamForm.get('permitaccess').setValue(true);
+      this.teamForm.get('surveyaccess').setValue(true);
+      this.teamForm.get('pestampaccess').setValue(true);
+    }
+  }
+
+  createachatuser(userid: string, name: string) {
+    let apiKey = COMETCHAT_CONSTANTS.API_KEY;
+    //var currenttime = new Date().getTime();
+    //var uid = userid + "_" + currenttime;
+    var uid = userid;
+    var name = name;
+    var user = new CometChat.User(uid);
+    user.setName(name);
+    CometChat.createUser(user, apiKey).then(
+      user => {
+        this.utils.hideLoading();
+        this.utils.showSnackBar('Team created successfully');
+        this.utils.setteamModuleRefresh(true);
+        this.router.navigate(['/teamhomepage'])
+       
+      }, error => {
+        this.utils.hideLoading();
+        this.utils.errorSnackBar('The cometchat uid has already been taken');
+       
+        this.utils.setteamModuleRefresh(true);
+        this.router.navigate(['/teamhomepage'])
+    
+      }
+    )
   }
 }

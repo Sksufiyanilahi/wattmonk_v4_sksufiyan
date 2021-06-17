@@ -6,6 +6,8 @@ export const environment = {
   production: false,
   name: "dev",
   Master_Role_Id: 15,
+  Team_Head_Role_Id: 24,
+  PeAdmin:28,
   // BaseUrl: "http://localhost:1337/",
   BaseUrl: "https://devspace.wattmonk.com/api/",
   firebase: {
@@ -19,7 +21,8 @@ export const environment = {
     measurementId: "G-Y5FQXTC6DJ"
   },
   FIREBASE_DB_CONSTANTS: {
-    KEYWORD: "devcomp_" 
+    KEYWORD: "devcomp_",
+    SURVEY_KEYWORD: "dev_survey_"
   },
   COMETCHAT_CONSTANTS: {
     APP_ID: '2145560cac03137',

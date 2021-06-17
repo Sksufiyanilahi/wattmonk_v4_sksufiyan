@@ -12,6 +12,13 @@ import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { TeamdetailsPage } from '../teamdetails/teamdetails.page';
+import { ROLES } from '../constants';
+
+export interface overview{
+  roleName:string;
+  rolecount:number;
+  active:boolean;
+}
 
 @Component({
   selector: 'app-teamhomepage',
@@ -61,6 +68,8 @@ export class TeamhomepagePage implements OnInit {
   surveyor:number=0;
   peengineer:number=0;
   all:number=0;
+  master:number=0;
+  teamheads:number=0;
 
   teamDesigner:User[]=[];
   teamAnalyst:User[]=[]
@@ -76,6 +85,9 @@ export class TeamhomepagePage implements OnInit {
 
   listOfAssignees: User[] = [];
   data: any;
+  overviewData:overview[]=[];
+
+  filterTeamData:User[];
 
   constructor(private router: Router,
     private storage: StorageService,
@@ -92,6 +104,9 @@ export class TeamhomepagePage implements OnInit {
     // private cdr:ChangeDetectorRef) {
     const url = this.router.url;
     console.log(url);
+    this.user = this.storage.getUser();
+    console.log(this.user)
+    this.getRoles();
   }
 
   segmentChanged(event){
@@ -111,15 +126,8 @@ export class TeamhomepagePage implements OnInit {
  }
 
   ngOnInit() {
-    this.user = this.storage.getUser();
-    console.log(this.user)
     this.isTeamData=false;
     this.getNotificationCount();
-   this.getRoles();
-    this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
-      this.getTeams(null);
-    })
-
   }
 
   getNotificationCount() {
@@ -166,14 +174,35 @@ export class TeamhomepagePage implements OnInit {
   {
     var parentId = this.user.parent.id;
     var roleId = this.user.role.id;
-    this.apiService.getDynamicRoles(parentId,roleId).subscribe((res)=>{
-      console.log(res)
-      this.roles = res;
+    this.apiService.getDynamicRoles(parentId,roleId).subscribe((res:any)=>{
+      console.log(res.length)
+      if (res.length == 0) {
+        this.apiService.getDefaultRoles(roleId).subscribe((response) => {
+          this.roles = response;
+          this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
+            this.getTeams(null);
+          })
+        })
+      }
+      else{
+        res.forEach((element , i)=>{
+          if(element.role.id == ROLES.PeAdmin){
+            res.splice(i,1);
+          }
+         })
+         this.roles = res;
+         this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
+          this.getTeams(null);
+        })
+      }
     })
   }
 
   getTeamData(event,showLoader:boolean) {
     //this.utils.showLoading("Getting Team Data").then(() => {
+      // this.roles = [];
+    this.overviewData = [];
+    this.isTeamData=false;
       console.log(showLoader)
       this.teamData=[];
       this.listOfteamData = [];
@@ -183,63 +212,164 @@ export class TeamhomepagePage implements OnInit {
       this.analysts = 0;
       this.surveyor=0;
       this.peengineer = 0;
+      this.teamheads = 0;
+      this.master = 0;
       this.all = 0;
       // this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
       this.apiService.getTeamData().subscribe((res) => {
          console.log(res);
          this.isTeamData=true;
             this.teamData = res;
+            this.filterTeamData = this.teamData;
             console.log(this.teamData);
             this.listOfteamData = res;
         //  this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           if (res.length > 0) {
             console.log(res.length)
             res.forEach(element=>{
-              if(element.role.id==3)
-              {
-                this.teamBd.push(element);
-                ++this.bd;
+              // if(element.role.id==3)
+              // {
+              //   this.teamBd.push(element);
+              //   ++this.bd;
 
-              }
-              else if(element.role.id==5)
-              {
-                this.teamAdmin.push(element);
-                ++this.admin;
+              // }
+              // else if(element.role.id==5)
+              // {
+              //   this.teamAdmin.push(element);
+              //   ++this.admin;
 
-              }
-              else if(element.role.id==8)
-              {
-                this.teamDesigner.push(element);
-                ++this.designers;
+              // }
+              // else if(element.role.id==8)
+              // {
+              //   this.teamDesigner.push(element);
+              //   ++this.designers;
 
-              }
-              else if(element.role.id==10)
-              {
-                this.teamAnalyst.push(element);
-                ++this.analysts;
-              }
-              else if(element.role.id==9)
-              {
-                this.teamSurveyor.push(element);
-                ++this.surveyor;
-              }
-              else if(element.role.id==11)
-              {
-                this.teamPeengineer.push(element);
-                ++this.peengineer;
-                console.log(this.peengineer)
-              }
+              // }
+              // else if(element.role.id==10)
+              // {
+              //   this.teamAnalyst.push(element);
+              //   ++this.analysts;
+              // }
+              // else if(element.role.id==9)
+              // {
+              //   this.teamSurveyor.push(element);
+              //   ++this.surveyor;
+              // }
+              // else if(element.role.id==11)
+              // {
+              //   this.teamPeengineer.push(element);
+              //   ++this.peengineer;
+              //   console.log(this.peengineer)
+              // }
+              // else if(element.role.id==24)
+              // {
+              //   ++this.teamheads;
+              // }
+              switch (element.role.displayname) {
+                case "Admin":
+                  this.teamAdmin.push(element);
+                  ++this.admin;
+                  break;
+                case "Design Manager":
+                  this.teamBd.push(element);
+                  ++this.bd;
+                  break;
+                case  "BD" :
+                  this.teamBd.push(element);
+                  ++this.bd;
+                    break; 
+                case  "Sales Manager" :
+                  this.teamBd.push(element);
+                  ++this.bd
+                      break;       
+                case "Master":
+                  ++this.master;
+                  break;
+                case "Team Head":
+                  ++this.teamheads;
+                  break;
+                case "Designer":
+                  this.teamDesigner.push(element);
+                  ++this.designers;
+                  break;
+                case "Surveyor":
+                  this.teamSurveyor.push(element);
+                  ++this.surveyor ;
+                  break;
+                case "Sales Representative":
+                  this.teamSurveyor.push(element);
+                  ++this.surveyor ;
+                    break;  
+                case "Analyst":
+                  this.teamAnalyst.push(element);
+                  ++this.analysts;
+                  break;
+                case "PE Engineer":
+                  this.teamPeengineer.push(element);
+                  ++this.peengineer ;
+                  break;
+                case ("Master Electrician"):
+                  ++this.master ;
+                    break;  
+              } 
             })
 
-            res.forEach(element=>{
-              if(element.role.id==7)
-              {
-                this.teamAdmin.push(element);
-                ++this.admin;
-                console.log(this.admin)
-              }
-            })
+            // res.forEach(element=>{
+            //   if(element.role.id==7)
+            //   {
+            //     this.teamAdmin.push(element);
+            //     ++this.admin;
+            //     console.log(this.admin)
+            //   }
+            // })
             this.all = res.length;
+            this.roles.forEach(element=>{
+              let roleCount;
+              switch (element.displayname) {
+                case "Admin":
+                  roleCount = this.admin;
+                  break;
+                case "Design Manager":
+                  roleCount = this.bd;
+                  break;
+                case  "BD" :
+                  roleCount = this.bd;
+                    break; 
+                case  "Sales Manager" :
+                  roleCount = this.bd
+                      break;       
+                case "Master":
+                  roleCount = this.master;
+                  break;
+                case "Team Head":
+                  roleCount = this.teamheads;
+                  break;
+                case "Designer":
+                  roleCount = this.designers;
+                  break;
+                case "Surveyor":
+                  roleCount = this.surveyor ;
+                  break;
+                case "Sales Representative":
+                  roleCount = this.surveyor ;
+                    break;  
+                case "Analyst":
+                  roleCount = this.analysts;
+                  break;
+                case "PE Engineer":
+                  roleCount = this.peengineer ;
+                  break;
+                case ("Master Electrician"):
+                  roleCount = this.master ;
+                    break;  
+              } 
+              this.overviewData.push({roleName:element.displayname,rolecount:roleCount,active:false})    
+            })
+            let AllOverviewCount = 0
+            this.overviewData.forEach(element=>{
+            AllOverviewCount += element.rolecount
+            })
+            this.overviewData.push({roleName:"All",rolecount:AllOverviewCount,active:true})
 
           }
           else {
@@ -259,43 +389,62 @@ export class TeamhomepagePage implements OnInit {
     // })
   }
 
-  filterAdmin(value)
+  filterAdmin(value,index)
   {
-    if(value=='admin')
+    if(value=="All")
     {
-    this.teamData = [];
-    this.teamData = this.teamAdmin;
+      value = '';
     }
-    else if(value=='bd')
-    {
-      this.teamData = [];
-      this.teamData = this.teamBd;
-    }
-    else if(value == 'designers')
-    {
-      this.teamData = [];
-      this.teamData = this.teamDesigner;
-    }
-    else if(value =='analysts')
-    {
-      this.teamData = [];
-      this.teamData = this.teamAnalyst;
-    }
-    else if(value == 'peengineer')
-    {
-      this.teamData = [];
-      this.teamData = this.teamPeengineer;
-    }
-    else if(value == 'surveyor')
-    {
-      this.teamData=[];
-      this.teamData = this.teamSurveyor;
-    }
-    else if(value == 'all')
-    {
-      this.teamData = [];
-      this.teamData=this.listOfteamData;
-    }
+    console.log(value, index, this.overviewData)
+    for(let i=0; i<this.overviewData.length; i++){
+      if(i === index){
+         this.overviewData[i].active = true; 
+       } else{
+         this.overviewData[i].active = false; 
+       }
+     }
+     value = value.trim().toLowerCase();
+      this.teamData = this.filterTeamData.filter(function (tag) {
+        let searchResult;
+        let searchbyrole = tag.role.displayname.toLowerCase().indexOf(value) >= 0;
+        searchResult = searchbyrole;
+        return searchResult;
+      });
+    // if(value=='admin')
+    // {
+    // this.teamData = [];
+    // this.teamData = this.teamAdmin;
+    // }
+    // else if(value=='bd')
+    // {
+    //   this.teamData = [];
+    //   this.teamData = this.teamBd;
+    // }
+    // else if(value == 'designers')
+    // {
+    //   this.teamData = [];
+    //   this.teamData = this.teamDesigner;
+    // }
+    // else if(value =='analysts')
+    // {
+    //   this.teamData = [];
+    //   this.teamData = this.teamAnalyst;
+    // }
+    // else if(value == 'peengineer')
+    // {
+    //   this.teamData = [];
+    //   this.teamData = this.teamPeengineer;
+    // }
+    // else if(value == 'surveyor')
+    // {
+    //   this.teamData=[];
+    //   this.teamData = this.teamSurveyor;
+    // }
+    // else if(value == 'all')
+    // {
+    //   this.teamData = [];
+    //   this.teamData=this.listOfteamData;
+    // }
   }
 
   async teamdetail(data, event) {
@@ -371,6 +520,22 @@ export class TeamhomepagePage implements OnInit {
     // });
     this.router.navigate(['/teamschedule']);
 
+    let objToSend: NavigationExtras = {
+      queryParams: {
+       teamRoles:this.roles,
+  
+  
+      },
+      skipLocationChange: false,
+      fragment: 'top'
+    };
+  
+  
+  
+    this.router.navigate(['/teamschedule'], {
+    state: { productdetails: objToSend }
+    });
+
   }
 
   edit(data){
@@ -380,6 +545,7 @@ export class TeamhomepagePage implements OnInit {
    let objToSend: NavigationExtras = {
     queryParams: {
      teamData:data,
+     teamRoles:this.roles
 
 
     },
@@ -518,15 +684,15 @@ export class TeamhomepagePage implements OnInit {
   }
 
   getStatusCount(data) {
-    let statuscount:any
-    this.apiService.getStatusCount(data.id).subscribe(
+    // let statuscount:any
+    this.apiService.getActiveJobsCount(data.id).subscribe(
       response => {
-        statuscount = response;
-        this.activedesignjobs = statuscount.waitingforassigned + statuscount.waitingforacceptance + statuscount.requestaccepted + statuscount.designassigned
-          + statuscount.reviewassigned + statuscount.reviewpassed + statuscount.reviewfailed;
-        console.log(this.activedesignjobs);
+        this.activedesignjobs = response;
+        // this.activedesignjobs = statuscount.waitingforassigned + statuscount.waitingforacceptance + statuscount.requestaccepted + statuscount.designassigned
+        //   + statuscount.reviewassigned + statuscount.reviewpassed + statuscount.reviewfailed;
+        // console.log(this.activedesignjobs);
         // ++this.activedesignjobs;
-        if(this.activedesignjobs==0){
+        if(!this.activedesignjobs){
           this.deleteTeamFromServer(data);
 
         }else{
@@ -548,16 +714,16 @@ export class TeamhomepagePage implements OnInit {
       header: 'Confirm!',
       message: 'Selected user is having active jobs in the account, either move all jobs to unassigned stage or transfer them to another user.',
       inputs: [
-        {
-          name: 'radio1',
-          type: 'radio',
-          label: 'Unassign jobs',
-          value: 'unassignedjobs',
-          handler: () => {
-            console.log('Radio 1 selected');
-          },
-          checked: true
-        },
+        // {
+        //   name: 'radio1',
+        //   type: 'radio',
+        //   label: 'Unassign jobs',
+        //   value: 'unassignedjobs',
+        //   handler: () => {
+        //     console.log('Radio 1 selected');
+        //   },
+        //   checked: true
+        // },
         {
           name: 'radio2',
           type: 'radio',
@@ -565,7 +731,8 @@ export class TeamhomepagePage implements OnInit {
           value: 'transferjobs',
           handler: () => {
             console.log('Radio 2 selected');
-          }
+          },
+          checked: true
         },
         ] ,
       buttons: [
@@ -581,26 +748,26 @@ export class TeamhomepagePage implements OnInit {
           handler: (alertData) => {
             console.log(alertData)
             var postData= {};
-            if(alertData == 'unassignedjobs')
-            {
-              postData = {blocked: true }
-              this.utils.showLoading("Unassigning Jobs").then(()=>{
-              this.apiService.unassignedJobs(data.id,postData).subscribe((res)=>{
-                console.log(res);
-                this.utils.hideLoading().then(()=>{
-                  this.utils.showSnackBar("Jobs Unassigned Successfully");
-                  // this.router.navigate(['/teamhomepage']);
-                  this.modalController.dismiss({ 'dismissed': true })
-                this.router.navigate(['/teamhomepage'])
-                  this.utils.setteamModuleRefresh(true);
-                })
-              },(error)=>{
-                this.utils.hideLoading();
-              })
-            })
-            }
-            else if(alertData == 'transferjobs')
-            {
+            // if(alertData == 'unassignedjobs')
+            // {
+            //   postData = {blocked: true }
+            //   this.utils.showLoading("Unassigning Jobs").then(()=>{
+            //   this.apiService.unassignedJobs(data.id,postData).subscribe((res)=>{
+            //     console.log(res);
+            //     this.utils.hideLoading().then(()=>{
+            //       this.utils.showSnackBar("Jobs Unassigned Successfully");
+            //       // this.router.navigate(['/teamhomepage']);
+            //       this.modalController.dismiss({ 'dismissed': true })
+            //     this.router.navigate(['/teamhomepage'])
+            //       this.utils.setteamModuleRefresh(true);
+            //     })
+            //   },(error)=>{
+            //     this.utils.hideLoading();
+            //   })
+            // })
+            // }
+            // else if(alertData == 'transferjobs')
+            // {
               // this.apiservices.getCompanyUsers(this.data.parent.id,this.data.role.id).subscribe((res)=>{
               //   console.log(res);
               // })
@@ -638,7 +805,7 @@ export class TeamhomepagePage implements OnInit {
                 });
               }
 
-            }
+            // }
 
           }
         }

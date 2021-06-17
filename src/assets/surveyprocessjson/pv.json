@@ -1031,7 +1031,7 @@
                   "esid_number"
                 ],
                 "placeholder": "ESID Number",
-                "label": "ESID Number",
+                "label": "ESID Number*",
                 "visibility": true,
                 "controltype": 1,
                 "options": [],
