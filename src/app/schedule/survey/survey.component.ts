@@ -106,7 +106,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       oldcommentid: new FormControl(''),
       prelimdesignsurvey : new FormControl(null),
       isdesigndelivered : new FormControl(null),
-      sameemailconfirmed: new FormControl(null)
+      sameemailconfirmed: new FormControl(null),
+      creatorparentid: new FormControl(this.storage.getParentId()),
     });
     this.surveyForm.get('jobtype').setValue('pv');
 
@@ -125,7 +126,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
       this.surveydatapresent = true
 
-
+     
     }
     this.fieldDisabled = false;
     this.userData = this.storage.getUser();
@@ -147,6 +148,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.getsurveydata();
     }
     this.getAssignees();
+   
   }
 
 
