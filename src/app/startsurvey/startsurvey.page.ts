@@ -1244,6 +1244,9 @@ export class StartsurveyPage implements OnInit {
   }
 
   savedetailsformdata() {
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate());
+    let d_date = tomorrow.toISOString();
     try {
       this.utilitieservice.setLoadingMessage('Saving form data');
       this.saveintermediatesurveydata();
@@ -1262,6 +1265,7 @@ export class StartsurveyPage implements OnInit {
       data['status'] = 'completed';
       data['latitude'] = this.latitude;
       data['longitude'] = this.longitude;
+      data['deliverydate']=d_date
       this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
         this.utilitieservice.hideLoading().then(() => {
           this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
