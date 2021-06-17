@@ -191,11 +191,9 @@ export class PestampDesignComponent implements OnInit {
 
   ngOnInit() {
     let userId = this.storageService.getUserID()
-    
+
     this.apiService.getPEstampcounts(userId).subscribe(res => {
       this.PEstampCounts = res;
-      console.log(this.PEstampCounts
-      )
     })
     //this.userData = this.storageService.getUser();
     this.mixpanelService.track("PESTAMP_PAGE_OPEN", {
@@ -750,7 +748,7 @@ designDownload(designData,event){
       );
       this.file.checkFile(resolvedDirectory.nativeURL,designData.stampedfiles.hash).then(data=>{
 
-        
+
         if(data==true){
 
         }else{

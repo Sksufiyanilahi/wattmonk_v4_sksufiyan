@@ -185,7 +185,7 @@ export class UserregistrationPage implements OnInit {
       // else {
       //   this.utils.errorSnackBar("Please check the field country");
       // }
-      console.log("check")
+
       this.display = true;
       // this.userregistrationForm.markAllAsTouched();
       this.userregistrationForm.get('firstname').markAsDirty();
@@ -197,18 +197,18 @@ export class UserregistrationPage implements OnInit {
   }
 
   getErrorMessage(control: AbstractControl) {
-    console.log(control)
+
     var firstname = this.userregistrationForm.get('firstname');
     var lastname = this.userregistrationForm.get('lastname');
     var workemail = this.userregistrationForm.get('email');
     var aggrement = this.userregistrationForm.get('aggrement');
     var phone = this.userregistrationForm.get('phonenumber');
-    console.log(aggrement)
+
     if (control == aggrement && control.hasError("required")) {
-      console.log(control, aggrement)
+
       return "This checkbox is required to be checked.";
     }
-   
+
 
     if (control.hasError("required")) {
       return "You must enter a value";
@@ -275,18 +275,18 @@ export class UserregistrationPage implements OnInit {
   }
 
   change(event) {
-    console.log(event.detail.checked)
+
     if(event.detail.checked)
     {
       this.display = false;
     this.isTermsSelect = true;
-    console.log(this.isTermsSelect);
+
     }
     else{
       this.display = true;
       this.isTermsSelect = false;
       this.userregistrationForm.get('aggrement').setValue(null);
-      console.log(this.isTermsSelect);
+
     }
   }
 
@@ -400,7 +400,7 @@ export class UserregistrationPage implements OnInit {
     CometChat.createUser(user, apiKey).then(
       user => {
         this.utils.hideLoading();
-     
+
        this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.");
        setTimeout(() => {
         this.router.navigate(['/login']);

@@ -146,10 +146,8 @@ export class PestampSchedulePage implements OnInit {
   ngOnInit() {
     this.permitdatapresent = false
     this.data = this.router.getCurrentNavigation().extras.state;
-    console.log(this.data);
     if (this.data != undefined) {
       this.permitdata = this.data.productdetails.queryParams.designData;
-      console.log(this.permitdata)
      // this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
      // this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
 

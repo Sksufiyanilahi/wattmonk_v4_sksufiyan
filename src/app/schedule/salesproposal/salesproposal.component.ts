@@ -125,7 +125,7 @@ export class SalesproposalComponent implements OnInit {
   isArcFileDelete: boolean = false;
   arcFileUrl: any=[];
   //attachmentName = this.desginForm.get('attachments').value;
-  
+
   fileName: any;
   logoFileName: any;
   moduledata: any;
@@ -1617,10 +1617,8 @@ export class SalesproposalComponent implements OnInit {
 
     if(this.desginForm.get('invertermake').value == ''){
       this.invertermakedisable=true
-      console.log(this.desginForm.get('invertermake').value)
     }
     else{
-      console.log(this.desginForm.get('invertermake').value)
       this.invertermakedisable=false;
       this.utils.showLoading('Getting inverter models').then((success) => {
         this.apiService.getInverterMade(this.desginForm.get('invertermake').value).subscribe(response => {
@@ -1691,7 +1689,7 @@ export class SalesproposalComponent implements OnInit {
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
-    
+
 
   }
 
@@ -1713,7 +1711,7 @@ export class SalesproposalComponent implements OnInit {
       }
       reader.readAsDataURL(event.target.files[i]);
     }
-    
+
     if (this.prelimFiles.length == 1) {
       this.fileName = event.target.files[0].name;
 
@@ -1817,7 +1815,7 @@ export class SalesproposalComponent implements OnInit {
   }
 
   uploadpreliumdesign(response?: any, key?: string, fileObj?: string, index?: number) {
-console.log(fileObj)
+
     const imageData = new FormData();
     // for(var i=0; i< this.prelimFiles.length;i++){
     imageData.append("files", fileObj);

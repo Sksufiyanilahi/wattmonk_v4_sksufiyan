@@ -376,7 +376,7 @@ export class PermitschedulePage implements OnInit {
         this.address = address;
         this.storage.setData(this.address);
       });
-    } 
+    }
     // else {
     //   // await this.getGeoLocation();
     //   this.subscription = this.utils.getAddressObservable().subscribe((address) => {
@@ -460,7 +460,6 @@ export class PermitschedulePage implements OnInit {
 
 
   getsurveydata() {
-    console.log(this.surveydata);
     this.desginForm.patchValue({
       name: this.surveydata.name,
       email: this.surveydata.email,
@@ -990,7 +989,7 @@ export class PermitschedulePage implements OnInit {
         isoutsourced = "false";
         deliverydate=null
       }
-     
+
 
       if (this.designId === 0) {
         if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
@@ -1086,7 +1085,6 @@ export class PermitschedulePage implements OnInit {
             }
           }
 
-          console.log(data)
 
           // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
           this.utils.showLoading('Saving').then(() => {
@@ -1303,7 +1301,7 @@ export class PermitschedulePage implements OnInit {
 
 
             }
-            console.log(data)
+
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
               // if(this.architecturalFileUpload){
               //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
@@ -1597,7 +1595,6 @@ export class PermitschedulePage implements OnInit {
   }
 
   getFiletype( file){
-    console.log(file)
     var extension = file.name.substring(file.name.lastIndexOf('.'));
     var mimetype = this.utils.getMimetype(extension);
     window.console.log(extension, mimetype);
@@ -2321,8 +2318,6 @@ export class PermitschedulePage implements OnInit {
 
     mpucheckbox(event){
       let checked = event.detail.checked
-      console.log(event.detail.checked)
-      console.log(checked)
       if(checked){
         this.desginForm.get('mpurequired').setValue(true)
       }

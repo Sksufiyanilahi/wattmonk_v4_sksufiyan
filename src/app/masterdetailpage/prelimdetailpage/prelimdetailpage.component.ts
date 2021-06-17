@@ -23,7 +23,7 @@ import { ErrorModel } from 'src/app/model/error.model';
 })
 export class PrelimdetailpageComponent implements OnInit {
 
- 
+
   prelimdesignId: number;
   prelimdesign: DesginDataModel;
   assigned = false;
@@ -262,7 +262,6 @@ export class PrelimdetailpageComponent implements OnInit {
 
   setData(result: DesginDataModel) {
     this.prelimdesign = result;
-    console.log(this.prelimdesign)
     if(this.prelimdesign.isinrevisionstate && this.prelimdesign.status=='designassigned'){
       this.imageName=[];
     }else{

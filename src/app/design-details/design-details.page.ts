@@ -555,9 +555,6 @@ export class DesignDetailsPage implements OnInit, OnDestroy {
 
       };
 
-
-
-      // console.log("this is"+ this.reviewstartdatetime);
       this.apiService.editDesign(
         this.design.id,
         postData

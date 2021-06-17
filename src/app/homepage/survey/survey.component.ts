@@ -152,8 +152,8 @@ export class SurveyComponent {
   ngOnInit() {
     this.userData = this.storageService.getUser();
     let userId = this.storageService.getUserID()
-    
-     
+
+
 
     this.setupCometChat();
 
@@ -329,7 +329,7 @@ export class SurveyComponent {
     this.listOfSurveyDataHelper = tempData;
     }
     else{
-    
+
      this.listOfSurveyDataHelper = tempData.sort(function (a, b) {
       var dateA = new Date(a.date).getTime(),
         dateB = new Date(b.date).getTime();
@@ -355,7 +355,6 @@ export class SurveyComponent {
       element.recordupdatedon = this.utils.formatDateInTimeAgo(element.updated_at);
       this.storage.get(this.storageService.getUserID() + '-' + element.id).then((data: SurveyStorageModel) => {
         if (data) {
-          console.log(data.currentprogress);
           element.remainingfilestoupload = data.remainingfilestoupload;
           element.totalpercent = data.currentprogress;
         } else {

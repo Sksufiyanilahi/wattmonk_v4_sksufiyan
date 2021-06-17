@@ -164,7 +164,6 @@ this.isradiodisable=false
 
     this.apiService.getadmins().subscribe(res=>{
       this.wattmonkadmins=res;
-     console.log(res);
 
     })
 
@@ -347,7 +346,7 @@ confirm(){
       if(this.design ==='prelim'){
       this.router.navigate(['/homepage/design'])
       this.utils.setHomepageDesignRefresh(true);
-       
+
       }
       else if(this.design==='permit'){
         this.router.navigate(['/permithomepage/permitdesign'])
@@ -565,16 +564,16 @@ else if(data.discounttype=='amount'){
         membersList.push( new CometChat.GroupMember("" + element, CometChat.GROUP_MEMBER_SCOPE.ADMIN))
       });
       CometChat.addMembersToGroup(group.getGuid(),membersList,[]).then(response=>{
-        
+
           let postdata={
             chatid:GUID
           }
 
           this.apiService.updateDesignForm(postdata,design.id).subscribe(res=>{
-          
+
           })
           // this.updateItemInList(LISTTYPE.NEW, design);
-       
+
         this.cdr.detectChanges();
       })
     })

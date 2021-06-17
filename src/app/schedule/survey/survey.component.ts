@@ -118,10 +118,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.surveydatapresent = false
     this.data = this.router.getCurrentNavigation().extras.state;
-    console.log(this.data);
     if (this.data != undefined) {
       this.surveydata = this.data.productdetails.queryParams.designData;
-      console.log(this.surveydata)
      // this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
      // this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
 
@@ -205,7 +203,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
                 const status: ErrorMessageList = responseError.error;
-                console.log(status)
+
                 this.utilities.errorSnackBar(error.message);
               });
               //
@@ -292,10 +290,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
             });
           },
             responseError => {
-              console.log(responseError)
+
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
-                console.log(ErrorModel)
+
                 this.utilities.errorSnackBar(error.message);
               });
               //
@@ -334,9 +332,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
                 var error = responseError.error;
                 this.SurveyResponce =error.message.status;
                 this.SurveyResp1 = error.message.message;
-                console.log(error.message.status)
+
                 if(this.SurveyResponce == "alreadyexist" ){
-                  console.log("open popup")
+
                   this.showAlert();
 
 
@@ -393,7 +391,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           var date = new Date(this.survey.datetime);
           var userTimezoneOffset = date.getTimezoneOffset();
          date= new Date(userTimezoneOffset - date.getTime() );
-          console.log(date)
+
           this.surveyForm.patchValue({
             name: this.survey.name,
             email: this.survey.email,
@@ -600,7 +598,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       buttons:[
         {
           text: "yes", handler: (res) => {
-            console.log(this.surveyForm.value.sameemailconfirmed);
+
             this.surveyForm.value.sameemailconfirmed = true;
             this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
               this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
@@ -636,7 +634,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+
           }
         },
       ]

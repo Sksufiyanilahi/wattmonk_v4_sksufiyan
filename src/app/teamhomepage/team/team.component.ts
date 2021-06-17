@@ -79,7 +79,7 @@ export class TeamComponent implements OnInit {
 
   ngOnInit() {
     this.userData = this.storageservice.getUser();
-    console.log(this.userData)
+
     this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
       this.getTeams(null);
     })
@@ -106,32 +106,32 @@ export class TeamComponent implements OnInit {
 
   getTeamData(event,showLoader:boolean) {
     //this.utils.showLoading("Getting Team Data").then(() => {
-      console.log(showLoader)
+
       this.teamData=[];
       this.listOfteamData = [];
       var count=0;
       // this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
       this.apiService.getTeamData().subscribe((res) => {
-         console.log(res);
+
          this.isTeamData=true;
          this.send_counts();
             this.teamData = res;
-            console.log(this.teamData);
+
             this.listOfteamData = res;
         //  this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           if (res.length > 0) {
-            console.log(res.length)
+
             res.forEach(element=>{
               if(element.role.id==3)
               {
                 this.teamBd.push(element);
                 ++this.bd;
-                console.log(this.bd)
+
               }
               else if(element.role.id==5)
               {
                 ++this.admin;
-                console.log(this.admin)
+
               }
               else if(element.role.id==8)
               {
@@ -152,7 +152,7 @@ export class TeamComponent implements OnInit {
               {
 
                 ++this.peengineer;
-                console.log(this.peengineer)
+
               }
             })
 
@@ -161,7 +161,7 @@ export class TeamComponent implements OnInit {
               {
                 this.teamAdmin.push(element);
                 ++this.admin;
-                console.log(this.admin)
+
               }
             })
             this.all = res.length;
@@ -192,14 +192,14 @@ export class TeamComponent implements OnInit {
   //      this.listOfteamData.push(element);
   //    })
 
-  //     console.log(this.listOfteamData);
+  //
 
   //     const tempData: teamData[] = [];
 
 
 
   //       this.listOfteamData.forEach((designItem:any,i) => {
-  //         console.log(i);
+  //
 
   //         if (tempData.length === 0) {
   //           this.sDatePassed(designItem.updated_at,i);
@@ -208,7 +208,7 @@ export class TeamComponent implements OnInit {
   //             listOfDesign.lateby = this.overdue;
   //           listOfDesign.listOfDesigns.push(designItem);
   //           tempData.push(listOfDesign);
-  //           console.log(tempData);
+  //
 
 
   // ;
@@ -218,7 +218,7 @@ export class TeamComponent implements OnInit {
   //           tempData.forEach((DesignList) => {
   //             // DesignList['listOfDesigns'].forEach(element=>{
 
-  //             //   console.log(element.deliverydate,":::::::::::::");
+  //             //
 
   //             //   this.sDatePassed(element.deliverydate);
   //             // })
@@ -248,7 +248,7 @@ export class TeamComponent implements OnInit {
   //           return dateB - dateA;
   //         // });
   //         // this.chatIcon(list);
-  //         // console.log(list);
+  //         //
   //         // this.cdr.detectChanges();
   // }
   async teamdetail(data, event) {
@@ -264,7 +264,7 @@ export class TeamComponent implements OnInit {
       backdropDismiss: false
     });
     modal.onDidDismiss().then((data) => {
-      console.log(data)
+
 
       if (data.data.cancel == 'cancel') {
       } else {
@@ -296,7 +296,7 @@ export class TeamComponent implements OnInit {
     // }
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
-      // console.log(this.netSwitch);
+      //
       let user = this.storageservice.getUser();
       this.apiService.emitUserNameAndRole(user);
 
@@ -371,10 +371,10 @@ export class TeamComponent implements OnInit {
     toast.present();
   }
   deleteDesignFromServer() {
-    console.log(this.designData)
+
     this.utils.showLoading('Deleting Design').then((success) => {
       this.apiService.deleteTeam(this.designData.id).subscribe((result) => {
-        console.log('result', result);
+
         this.utils.hideLoading().then(() => {
           this.utils.showSnackBar(this.designData.firstname + " " + 'has been deleted successfully');
         //  this.navController.pop();
@@ -403,7 +403,7 @@ export class TeamComponent implements OnInit {
     if (event !== null && event !== undefined) {
       showLoader = false;
     }
-    console.log(showLoader)
+
     this.getTeamData(event,showLoader);
   }
   //   segmentChanged(event){
@@ -432,18 +432,18 @@ export class TeamComponent implements OnInit {
 
   getassignedata(asssignedata){
     this.selectedDesigner = asssignedata;
-  console.log(this.selectedDesigner)
+
   }
 
   assign()
   {
-    console.log(this.id);
+
     this.utils.showLoading("Assigning").then(()=>{
     let postData={
       addedby:this.selectedDesigner.id
     }
     this.apiService.updateContractorsData(this.id,postData).subscribe((res)=>{
-      console.log(res);
+
       this.utils.hideLoading().then(()=>{
         // if(this.isTeamBdAssign)
         // {
