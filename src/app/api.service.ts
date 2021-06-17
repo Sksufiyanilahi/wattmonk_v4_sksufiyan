@@ -860,12 +860,12 @@ export class ApiService {
   getDynamicRoles(parentId,roleId)
   {
     return this.http.get(BaseUrl +
-      "/clientroles?client="+parentId+"&canbeaddedby_in="+roleId+"&_sort=id:asc",)
+      "clientroles?client="+parentId+"&canbeaddedby_in="+roleId+"&_sort=id:asc",)
   }
 
   getDefaultRoles(roleid){
     return this.http.get(BaseUrl +
-      "/clientroles?client_null=true&canbeaddedby_in="+roleid,)
+      "clientroles?client_null=true&canbeaddedby_in="+roleid,)
   }
 
   addGroup(data)

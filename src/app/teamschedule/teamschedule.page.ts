@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { ApiService } from '../api.service';
 import { FIELD_REQUIRED, INVALID_ANNUAL_UNIT, INVALID_EMAIL_MESSAGE, INVALID_NAME_MESSAGE, INVALID_TILT_FOR_GROUND_MOUNT, INVALID_PHONE_NUMBER, ScheduleFormEvent, INVALID_MODULE_AND_INVERTER, INVALID_COMPANY_NAME } from '../model/constants';
-import { ROLES } from '../constants';
+import { COMETCHAT_CONSTANTS, FIREBASE_DB_CONSTANTS, ROLES } from '../constants';
 import { StorageService } from '../storage.service';
 import { UtilitiesService } from '../utilities.service';
 import { ErrorModel } from '../model/error.model';
@@ -14,6 +14,8 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { DrawerState } from 'ion-bottom-drawer';
 import { User } from '../model/user.model';
+import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
+import { AngularFireDatabase } from '@angular/fire/database';
 @Component({
   selector: 'app-teamschedule',
   templateUrl: './teamschedule.page.html',
@@ -48,7 +50,6 @@ export class TeamschedulePage implements OnInit {
   showBottomDraw: boolean = false;
   drawerState = DrawerState.Bottom;
   selectedMember: any;
-  isOnboarding: boolean=false;
   teamRoles: any;
 
   userSetting:any;
@@ -66,7 +67,8 @@ export class TeamschedulePage implements OnInit {
     private router: Router,
     private mixpanelService: MixpanelService,
     private alertController:AlertController,
-    private cdr:ChangeDetectorRef
+    private cdr:ChangeDetectorRef,
+    private db:AngularFireDatabase
   ) {
     const MAILFORMAT = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     //const COMPANYFORMAT = '[a-zA-Z0-9. ]{3,}';
@@ -122,7 +124,6 @@ export class TeamschedulePage implements OnInit {
         this.data = this.memberData.productdetails.queryParams.teamData;
         this.teamRoles = this.memberData.productdetails.queryParams.teamRoles;
         console.log(this.data)
-        // this.isOnboarding = this.memberData.productdetails.queryParams.isOnboarding;
       // }
   }
 
@@ -249,14 +250,9 @@ export class TeamschedulePage implements OnInit {
             .subscribe(
               (response: any) => {
                 this.utils.hideLoading().then(() => {
-                  this.utils.showSnackBar('Team created successfully');
-                  this.utils.setteamModuleRefresh(true);
-                  if(!this.isOnboarding){
-                  this.router.navigate(['/teamhomepage'])
-                  }else{
-                    this.router.navigate(['/onboarding'])
-
-                  }
+                  this.createachatuser(""+response.id, response.firstname + " " + response.lastname);
+                  const regitemRef = this.db.object(FIREBASE_DB_CONSTANTS.KEYWORD + response.id);
+                    regitemRef.set({ newprelims: 0, newpermits: 0 });
 
 
                 });
@@ -272,10 +268,14 @@ export class TeamschedulePage implements OnInit {
         }
         else {
           console.log(this.activedesignjobs,this.data)
-          if((!this.isClient && this.activedesignjobs) || (this.isClient && this.data.role.type == 'surveyors' && this.activedesignjobs))
+          if((!this.isClient && this.activedesignjobs))
           {
             this.utils.hideLoading();
             this.openreviewPassed();
+        }
+        else if((this.isClient && this.data.role.type == 'surveyors' && this.activedesignjobs)){
+          this.utils.hideLoading();
+            this.openreviewPassedForClient();
         }
         else
         {
@@ -308,12 +308,8 @@ export class TeamschedulePage implements OnInit {
 
                 this.utils.hideLoading().then(() => {
                   //this.createChatGroup(response);
-                  if(!this.isOnboarding){
                     this.router.navigate(['/teamhomepage'])
-                    }else{
-                      this.router.navigate(['/onboarding'])
-
-                    }
+                    
                   this.utils.showSnackBar('Team updated succesfully');
                   // this.utils.showSnackBar('Design have been saved');
                   this.utils.setteamModuleRefresh(true);
@@ -548,6 +544,31 @@ export class TeamschedulePage implements OnInit {
     await alert.present();
     }
 
+
+    async openreviewPassedForClient(){
+
+
+      // this.designId=id
+      const alert = await this.alertController.create({
+        cssClass: 'alertClass',
+        // header: 'Confirm!',
+        message: 'This user has active jobs so you can not change role for this user',
+        
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: (blah) => {
+  
+            }
+          }
+        ]
+      });
+  
+      await alert.present();
+      }
+
     dismissBottomSheet() {
       this.showBottomDraw = false;
 
@@ -643,5 +664,31 @@ export class TeamschedulePage implements OnInit {
       this.teamForm.get('surveyaccess').setValue(true);
       this.teamForm.get('pestampaccess').setValue(true);
     }
+  }
+
+  createachatuser(userid: string, name: string) {
+    let apiKey = COMETCHAT_CONSTANTS.API_KEY;
+    //var currenttime = new Date().getTime();
+    //var uid = userid + "_" + currenttime;
+    var uid = userid;
+    var name = name;
+    var user = new CometChat.User(uid);
+    user.setName(name);
+    CometChat.createUser(user, apiKey).then(
+      user => {
+        this.utils.hideLoading();
+        this.utils.showSnackBar('Team created successfully');
+        this.utils.setteamModuleRefresh(true);
+        this.router.navigate(['/teamhomepage'])
+       
+      }, error => {
+        this.utils.hideLoading();
+        this.utils.errorSnackBar('The cometchat uid has already been taken');
+       
+        this.utils.setteamModuleRefresh(true);
+        this.router.navigate(['/teamhomepage'])
+    
+      }
+    )
   }
 }

@@ -202,6 +202,7 @@ export class TeamhomepagePage implements OnInit {
     //this.utils.showLoading("Getting Team Data").then(() => {
       // this.roles = [];
     this.overviewData = [];
+    this.isTeamData=false;
       console.log(showLoader)
       this.teamData=[];
       this.listOfteamData = [];
