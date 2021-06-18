@@ -7,7 +7,7 @@ import {UtilitiesService} from 'src/app/utilities.service';
 import {ErrorModel} from 'src/app/model/error.model';
 import {Modulemake, SolarMadeModel} from 'src/app/model/solar-made.model';
 import {InverterMakeModel} from 'src/app/model/inverter-make.model';
-import {IonSlides, NavController} from '@ionic/angular';
+import {IonSlides, NavController, ToastController} from '@ionic/angular';
 import {InverterMadeModel} from 'src/app/model/inverter-made.model';
 import {
   FIELD_REQUIRED,
@@ -206,6 +206,7 @@ isArchitecturalFileUpload: boolean = false;
     private cdr:ChangeDetectorRef,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
+    private toastController: ToastController,
     //private db: AngularFireDatabase
   ) {
     var tomorrow = new Date();
@@ -258,6 +259,7 @@ isArchitecturalFileUpload: boolean = false;
       paymenttype: new FormControl(null),
       requirementtype: new FormControl('assessment'),
       oldcommentid: new FormControl(''),
+      sameemailconfirmed:new FormControl(null),
       // uploadbox:new FormControl('')
     });
 
@@ -1225,7 +1227,14 @@ isArchitecturalFileUpload: boolean = false;
             }, responseError => {
               this.utils.hideLoading();
               const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message);
+              }
+              else{
               this.utils.errorSnackBar(error.message);
+            }
             });
           });
         } else if (this.send === ScheduleFormEvent.SEND_DESIGN_FORM) {
@@ -1259,8 +1268,15 @@ isArchitecturalFileUpload: boolean = false;
           }
             , responseError => {
               this.utils.hideLoading();
-              const error: ErrorModel = responseError.error;
-              this.utils.errorSnackBar(error.message);
+            const error: ErrorModel = responseError.error;
+            console.log(error)
+            if(responseError.error.status="alreadyexist"){
+              var message = responseError.error.message.message;
+              this.confirmEmail(message);
+            }
+            else{
+            this.utils.errorSnackBar(error.message);
+          }
             });
         }
 
@@ -2066,6 +2082,31 @@ isArchitecturalFileUpload: boolean = false;
         setTimeout(() => {
           this.autocompleteItems = [];
         }, 100);
+      }
+
+
+      async confirmEmail(message) {
+    
+        const toast = await this.toastController.create({
+          header: message,
+          message: 'Do you want to create again?',
+          cssClass: 'my-custom-confirm-class',
+          buttons: [
+            {
+              text: 'Yes',
+              handler: () => {
+                this.desginForm.get('sameemailconfirmed').setValue(true);
+                this.submitform();
+              }
+            }, {
+              text: 'No',
+              handler: () => {
+                
+              }
+            }
+          ]
+        });
+        toast.present();
       }
 }
 

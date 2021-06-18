@@ -275,6 +275,7 @@ export class PermitschedulePage implements OnInit {
       issurveycompleted: new FormControl('false'),
       creatorparentid: new FormControl(this.storage.getParentId()),
       mpurequired: new FormControl(false),
+      sameemailconfirmed:new FormControl(null)
     })
     // //For Counts
     // this.newpermitsRef = db.object('newpermitdesigns');
@@ -1037,7 +1038,8 @@ export class PermitschedulePage implements OnInit {
               issurveycompleted: this.desginForm.get('issurveycompleted').value,
               survey: this.surveydata.id,
               // isdesignraised: true,
-              mpurequired:this.desginForm.get('mpurequired').value
+              mpurequired:this.desginForm.get('mpurequired').value,
+              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value
 
             }
           } else {
@@ -1081,7 +1083,7 @@ export class PermitschedulePage implements OnInit {
               // isdesignraised: false,
               inverterscount: this.desginForm.get('inverterscount').value,
               mpurequired:this.desginForm.get('mpurequired').value,
-              sameemailconfirmed:null
+              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value
 
             }
           }
@@ -1128,9 +1130,17 @@ export class PermitschedulePage implements OnInit {
               });
               // },2000)
             }, responseError => {
-              this.utils.hideLoading();
-              const error: ErrorModel = responseError.error;
-              this.utils.errorSnackBar(error.message);
+                
+            this.utils.hideLoading();
+            const error: ErrorModel = responseError.error;
+            console.log(error)
+            if(responseError.error.status="alreadyexist"){
+              var message = responseError.error.message.message;
+              this.confirmEmail(message);
+            }
+            else{
+            this.utils.errorSnackBar(error.message);
+          }
             });
 
 
@@ -1174,7 +1184,7 @@ export class PermitschedulePage implements OnInit {
             // isdesignraised: false,
             inverterscount: this.desginForm.get('inverterscount').value,
             mpurequired:this.desginForm.get('mpurequired').value,
-            sameemailconfirmed:null
+            sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value
 
 
           }
@@ -1250,9 +1260,18 @@ export class PermitschedulePage implements OnInit {
 
             });
           }, responseError => {
+  
+            
             this.utils.hideLoading();
             const error: ErrorModel = responseError.error;
+            console.log(error)
+            if(responseError.error.status="alreadyexist"){
+              var message = responseError.error.message.message;
+              this.confirmEmail(message);
+            }
+            else{
             this.utils.errorSnackBar(error.message);
+          }
           });
 
 
@@ -1299,7 +1318,8 @@ export class PermitschedulePage implements OnInit {
               isoutsourced: isoutsourced,
               // isdesignraised: false,
               oldcommentid: this.oldcommentid,
-              inverterscount: this.desginForm.get('inverterscount').value
+              inverterscount: this.desginForm.get('inverterscount').value,
+              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value
 
 
             }
@@ -2375,5 +2395,30 @@ export class PermitschedulePage implements OnInit {
           this.autocompleteItems = [];
         }, 100);
       }
+
+      async confirmEmail(message) {
+    
+        const toast = await this.toastController.create({
+          header: message,
+          message: 'Do you want to create again?',
+          cssClass: 'my-custom-confirm-class',
+          buttons: [
+            {
+              text: 'Yes',
+              handler: () => {
+                this.desginForm.get('sameemailconfirmed').setValue(true);
+                this.submitform();
+              }
+            }, {
+              text: 'No',
+              handler: () => {
+                
+              }
+            }
+          ]
+        });
+        toast.present();
+      }
+    
 
 }

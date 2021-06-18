@@ -1,6 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AlertController, NavController, Platform } from '@ionic/angular';
+import { AlertController, NavController, Platform, ToastController } from '@ionic/angular';
 import { AssigneeModel } from '../../model/assignee.model';
 import { UtilitiesService } from '../../utilities.service';
 import {
@@ -75,7 +75,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
     private iab: InAppBrowser,
-    private alertControl: AlertController
+    private alertControl: AlertController,
+    private toastController:ToastController
   ) {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
@@ -204,12 +205,16 @@ export class SurveyComponent implements OnInit, OnDestroy {
             });
           },
             responseError => {
-              this.utilities.hideLoading().then(() => {
-                const error: ErrorModel = responseError.error;
-                const status: ErrorMessageList = responseError.error;
-                console.log(status)
-                this.utilities.errorSnackBar(error.message);
-              });
+              this.utilities.hideLoading();
+              const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message,"start");
+              }
+              else{
+              this.utilities.errorSnackBar(error.message);
+            }
               //
             }
           );
@@ -332,20 +337,16 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
           },
             responseError => {
-              this.utilities.hideLoading().then(() => {
-                var error = responseError.error;
-                this.SurveyResponce =error.message.status;
-                this.SurveyResp1 = error.message.message;
-                console.log(error.message.status)
-                if(this.SurveyResponce == "alreadyexist" ){
-                  console.log("open popup")
-                  this.showAlert();
-
-
-
-                }
-                this.utilities.errorSnackBar(error.message);
-              });
+              this.utilities.hideLoading();
+              const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message,"save");
+              }
+              else{
+              this.utilities.errorSnackBar(error.message);
+            }
               //
             }
           );
@@ -595,58 +596,85 @@ export class SurveyComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  async showAlert(){
-    await this.alertControl.create({
-      header: "Email Already Exists!!!",
-      message: this.SurveyResp1,
-      buttons:[
-        {
-          text: "yes", handler: (res) => {
-            console.log(this.surveyForm.value.sameemailconfirmed);
-            this.surveyForm.value.sameemailconfirmed = true;
-            this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
-              this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
-                this.utilities.hideLoading();
-                // this.navController.pop();
-                modal.present();
-                modal.onWillDismiss().then((dismissed) => {
-                  this.utilities.sethomepageSurveyRefresh(true);
-                  if (this.userData.role.type === 'surveyors') {
-                    this.navController.navigateRoot('surveyoroverview/newsurveys');
-                  } else {
-                    this.navController.navigateRoot('homepage/survey');
-                  }
+  // async showAlert(){
+  //   await this.alertControl.create({
+  //     header: "Email Already Exists!!!",
+  //     message: this.SurveyResp1,
+  //     buttons:[
+  //       {
+  //         text: "yes", handler: (res) => {
+  //           console.log(this.surveyForm.value.sameemailconfirmed);
+  //           this.surveyForm.value.sameemailconfirmed = true;
+  //           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
+  //             this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+  //               this.utilities.hideLoading();
+  //               // this.navController.pop();
+  //               modal.present();
+  //               modal.onWillDismiss().then((dismissed) => {
+  //                 this.utilities.sethomepageSurveyRefresh(true);
+  //                 if (this.userData.role.type === 'surveyors') {
+  //                   this.navController.navigateRoot('surveyoroverview/newsurveys');
+  //                 } else {
+  //                   this.navController.navigateRoot('homepage/survey');
+  //                 }
 
-                });
-                // });
-              });
+  //               });
+  //               // });
+  //             });
 
-            },
-              responseError => {
-                this.utilities.hideLoading().then(() => {
-                  var error = responseError.error;
-                  this.utilities.errorSnackBar(error.message);
-                });
-                //
-              }
-            );
+  //           },
+  //             responseError => {
+  //               this.utilities.hideLoading().then(() => {
+  //                 var error = responseError.error;
+  //                 this.utilities.errorSnackBar(error.message);
+  //               });
+  //               //
+  //             }
+  //           );
 
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
-        },
-      ]
-    }).then(res=>res.present());
-  }
+  //         }
+  //       },
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //         cssClass: 'secondary',
+  //         handler: (blah) => {
+  //           console.log('Confirm Cancel: blah');
+  //         }
+  //       },
+  //     ]
+  //   }).then(res=>res.present());
+  // }
 
   // showurl(i){
   //     this.browser = this.iab.create(this.surveydata.prelimdesign[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
 
   // }
+  async confirmEmail(message,value) {
+    
+    const toast = await this.toastController.create({
+      header: message,
+      message: 'Do you want to create again?',
+      cssClass: 'my-custom-confirm-class',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.surveyForm.get('sameemailconfirmed').setValue(true);
+            if(value=='save'){
+           this.saveSurvey()
+            }else{
+            this.startSurvey();
+          }
+          }
+        }, {
+          text: 'No',
+          handler: () => {
+            
+          }
+        }
+      ]
+    });
+    toast.present();
+  }
 }

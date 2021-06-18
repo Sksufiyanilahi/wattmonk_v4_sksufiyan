@@ -7,7 +7,7 @@ import {UtilitiesService} from 'src/app/utilities.service';
 import {ErrorModel} from 'src/app/model/error.model';
 import {SolarMadeModel} from 'src/app/model/solar-made.model';
 import {InverterMakeModel} from 'src/app/model/inverter-make.model';
-import {NavController, IonSlides} from '@ionic/angular';
+import {NavController, IonSlides, ToastController} from '@ionic/angular';
 import {InverterMadeModel} from 'src/app/model/inverter-made.model';
 import {
   FIELD_REQUIRED,
@@ -205,6 +205,7 @@ export class SalesproposalComponent implements OnInit {
     private cdr:ChangeDetectorRef,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
+    private toastController:ToastController
     //private db: AngularFireDatabase
   ) {
     // this.utils.showHideIntercom(true);
@@ -267,7 +268,8 @@ export class SalesproposalComponent implements OnInit {
       costofsystem: new FormControl(null, [Validators.required]),
       personname: new FormControl(null, [Validators.required, Validators.pattern(NAMEPATTERN)]),
       // companylogo : new FormControl(null),
-      requirementtype: new FormControl('proposal')
+      requirementtype: new FormControl('proposal'),
+      sameemailconfirmed:new FormControl(null)
       // uploadbox:new FormControl('')
     });
 
@@ -1217,7 +1219,14 @@ export class SalesproposalComponent implements OnInit {
             }, responseError => {
               this.utils.hideLoading();
               const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message);
+              }
+              else{
               this.utils.errorSnackBar(error.message);
+            }
             });
           });
         } else if (this.send === ScheduleFormEvent.SEND_SALES_FORM) {
@@ -1305,7 +1314,14 @@ export class SalesproposalComponent implements OnInit {
             , responseError => {
               this.utils.hideLoading();
               const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message);
+              }
+              else{
               this.utils.errorSnackBar(error.message);
+            }
             });
         }
 
@@ -2248,5 +2264,29 @@ console.log(fileObj)
         setTimeout(() => {
           this.autocompleteItems = [];
         }, 100);
+      }
+
+      async confirmEmail(message) {
+    
+        const toast = await this.toastController.create({
+          header: message,
+          message: 'Do you want to create again?',
+          cssClass: 'my-custom-confirm-class',
+          buttons: [
+            {
+              text: 'Yes',
+              handler: () => {
+                this.desginForm.get('sameemailconfirmed').setValue(true);
+                this.submitform();
+              }
+            }, {
+              text: 'No',
+              handler: () => {
+                
+              }
+            }
+          ]
+        });
+        toast.present();
       }
 }
