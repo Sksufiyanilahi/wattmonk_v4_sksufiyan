@@ -36,8 +36,8 @@ export class MasterdetailpagePage implements OnInit {
     private storageService: StorageService) {
     this.allData = this.utils.getPrelimId().value;
     this.requesttype = this.utils.getRequestType().value;
-    console.log(this.allData)
-    console.log(this.requesttype)
+
+
     // if(this.allData.design != null)
     // {
     //   this.isPermit = true
@@ -58,8 +58,8 @@ export class MasterdetailpagePage implements OnInit {
     else if (this.requesttype == 'permit') {
       this.isPermit = true;
       if (this.allData.survey != null) {
-        console.log(this.allData)
-        console.log(this.allData.survey)
+
+
         this.isSurvey = true;
         if (this.allData.survey.prelimdesignsurvey != null) {
           this.isPrelim = true;
@@ -73,7 +73,7 @@ export class MasterdetailpagePage implements OnInit {
         if (this.allData.design.survey != null) {
           this.isSurvey = true;
           this.apiService.getSurveyDetail(this.allData.design.survey).subscribe((res: any) => {
-            console.log(res);
+
             this.dataCheck = res;
             if (res.prelimdesignsurvey != null) {
               this.isPrelim = true;
@@ -88,7 +88,7 @@ export class MasterdetailpagePage implements OnInit {
 
   ngOnInit() {
     this.user = this.storageService.getUser();
-    console.log(this.user)
+
   }
 
   checkTabs()
@@ -109,7 +109,7 @@ export class MasterdetailpagePage implements OnInit {
     {
       this.isTabCheck = false;
     }
-    else 
+    else
     {
       this.isTabCheck = true;
     }
@@ -123,7 +123,7 @@ export class MasterdetailpagePage implements OnInit {
   }
 
   changeToggle(event) {
-    console.log(event)
+
     if(event==this.requesttype)
     {
       this.isEditHide = false;
@@ -134,17 +134,17 @@ export class MasterdetailpagePage implements OnInit {
     if (event == 'prelim') {
       if (this.requesttype == 'survey') {
         this.tabs.select('prelim/'+this.allData.prelimdesignsurvey.id);
-        
+
         //this.router.navigate(['masterdetailpage/prelim/' + this.allData.prelimdesignsurvey.id])
       }
       else if (this.requesttype == 'permit') {
         this.tabs.select('prelim/'+this.allData.prelimdesignsurvey.id);
-        
+
         // this.router.navigate(['masterdetailpage/prelim/' + this.allData.survey.prelimdesignsurvey.id])
       }
       else {
         this.tabs.select('prelim/'+this.dataCheck.prelimdesignsurvey.id);
-      
+
         // this.router.navigate(['masterdetailpage/prelim/' + this.dataCheck.prelimdesignsurvey.id])
       }
       // this.data = this.utils.getPrelimId()
@@ -152,14 +152,14 @@ export class MasterdetailpagePage implements OnInit {
       // this.router.navigate(['masterdetailpage/prelim/'+this.prelimId.value])
     }
     else if (event == 'survey') {
-      console.log(this.requesttype)
+
       if (this.requesttype == 'permit') {
-        console.log(this.allData)
+
         this.tabs.select('survey/'+this.allData.survey.id);
         // this.router.navigate(['masterdetailpage/survey/' + this.allData.survey.id])
       }
       else if (this.requesttype == 'pestamp') {
-        console.log(this.allData)
+
         this.tabs.select('survey/'+this.allData.design.survey);
         // this.router.navigate(['masterdetailpage/survey/' + this.allData.design.survey])
       }

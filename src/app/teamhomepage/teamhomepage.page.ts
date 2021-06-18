@@ -103,15 +103,15 @@ export class TeamhomepagePage implements OnInit {
     // private formBuilder: FormBuilder,
     // private cdr:ChangeDetectorRef) {
     const url = this.router.url;
-    console.log(url);
+
     this.user = this.storage.getUser();
-    console.log(this.user)
+
     this.getRoles();
   }
 
   segmentChanged(event){
     // this.skip=0;
-    console.log(event)
+
     this.isTeamData = false;
      if(event.target.value=='member'){
       this.TeamRefreshSubscription = this.utils.getteamModuleRefresh().subscribe((result) => {
@@ -175,7 +175,7 @@ export class TeamhomepagePage implements OnInit {
     var parentId = this.user.parent.id;
     var roleId = this.user.role.id;
     this.apiService.getDynamicRoles(parentId,roleId).subscribe((res:any)=>{
-      console.log(res.length)
+
       if (res.length == 0) {
         this.apiService.getDefaultRoles(roleId).subscribe((response) => {
           this.roles = response;
@@ -203,7 +203,7 @@ export class TeamhomepagePage implements OnInit {
       // this.roles = [];
     this.overviewData = [];
     this.isTeamData=false;
-      console.log(showLoader)
+
       this.teamData=[];
       this.listOfteamData = [];
       this.bd = 0;
@@ -217,15 +217,15 @@ export class TeamhomepagePage implements OnInit {
       this.all = 0;
       // this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Team Data').then((success) => {
       this.apiService.getTeamData().subscribe((res) => {
-         console.log(res);
+
          this.isTeamData=true;
             this.teamData = res;
             this.filterTeamData = this.teamData;
-            console.log(this.teamData);
+
             this.listOfteamData = res;
         //  this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
           if (res.length > 0) {
-            console.log(res.length)
+
             res.forEach(element=>{
               // if(element.role.id==3)
               // {
@@ -259,7 +259,7 @@ export class TeamhomepagePage implements OnInit {
               // {
               //   this.teamPeengineer.push(element);
               //   ++this.peengineer;
-              //   console.log(this.peengineer)
+              //
               // }
               // else if(element.role.id==24)
               // {
@@ -277,11 +277,11 @@ export class TeamhomepagePage implements OnInit {
                 case  "BD" :
                   this.teamBd.push(element);
                   ++this.bd;
-                    break; 
+                    break;
                 case  "Sales Manager" :
                   this.teamBd.push(element);
                   ++this.bd
-                      break;       
+                      break;
                 case "Master":
                   ++this.master;
                   break;
@@ -299,7 +299,7 @@ export class TeamhomepagePage implements OnInit {
                 case "Sales Representative":
                   this.teamSurveyor.push(element);
                   ++this.surveyor ;
-                    break;  
+                    break;
                 case "Analyst":
                   this.teamAnalyst.push(element);
                   ++this.analysts;
@@ -310,8 +310,8 @@ export class TeamhomepagePage implements OnInit {
                   break;
                 case ("Master Electrician"):
                   ++this.master ;
-                    break;  
-              } 
+                    break;
+              }
             })
 
             // res.forEach(element=>{
@@ -319,7 +319,7 @@ export class TeamhomepagePage implements OnInit {
             //   {
             //     this.teamAdmin.push(element);
             //     ++this.admin;
-            //     console.log(this.admin)
+            //
             //   }
             // })
             this.all = res.length;
@@ -334,10 +334,10 @@ export class TeamhomepagePage implements OnInit {
                   break;
                 case  "BD" :
                   roleCount = this.bd;
-                    break; 
+                    break;
                 case  "Sales Manager" :
                   roleCount = this.bd
-                      break;       
+                      break;
                 case "Master":
                   roleCount = this.master;
                   break;
@@ -352,7 +352,7 @@ export class TeamhomepagePage implements OnInit {
                   break;
                 case "Sales Representative":
                   roleCount = this.surveyor ;
-                    break;  
+                    break;
                 case "Analyst":
                   roleCount = this.analysts;
                   break;
@@ -361,9 +361,9 @@ export class TeamhomepagePage implements OnInit {
                   break;
                 case ("Master Electrician"):
                   roleCount = this.master ;
-                    break;  
-              } 
-              this.overviewData.push({roleName:element.displayname,rolecount:roleCount,active:false})    
+                    break;
+              }
+              this.overviewData.push({roleName:element.displayname,rolecount:roleCount,active:false})
             })
             let AllOverviewCount = 0
             this.overviewData.forEach(element=>{
@@ -395,12 +395,12 @@ export class TeamhomepagePage implements OnInit {
     {
       value = '';
     }
-    console.log(value, index, this.overviewData)
+
     for(let i=0; i<this.overviewData.length; i++){
       if(i === index){
-         this.overviewData[i].active = true; 
+         this.overviewData[i].active = true;
        } else{
-         this.overviewData[i].active = false; 
+         this.overviewData[i].active = false;
        }
      }
      value = value.trim().toLowerCase();
@@ -460,7 +460,7 @@ export class TeamhomepagePage implements OnInit {
       backdropDismiss: false
     });
     modal.onDidDismiss().then((data) => {
-      console.log(data)
+
 
       if (data.data.cancel == 'cancel') {
       } else {
@@ -492,7 +492,7 @@ export class TeamhomepagePage implements OnInit {
     // }
     this.deactivateNetworkSwitch = this.network.networkSwitch.subscribe(data => {
       this.netSwitch = data;
-      // console.log(this.netSwitch);
+      //
       let user = this.storage.getUser();
       this.apiService.emitUserNameAndRole(user);
 
@@ -523,15 +523,15 @@ export class TeamhomepagePage implements OnInit {
     let objToSend: NavigationExtras = {
       queryParams: {
        teamRoles:this.roles,
-  
-  
+
+
       },
       skipLocationChange: false,
       fragment: 'top'
     };
-  
-  
-  
+
+
+
     this.router.navigate(['/teamschedule'], {
     state: { productdetails: objToSend }
     });
@@ -585,10 +585,10 @@ export class TeamhomepagePage implements OnInit {
     toast.present();
   }
   deleteTeamFromServer(data) {
-    console.log(data)
+
     this.utils.showLoading('Deleting Team Member').then((success) => {
       this.apiService.deleteTeam(data.id).subscribe((result) => {
-        console.log('result', result);
+
         this.utils.hideLoading().then(() => {
           this.utils.showSnackBar(data.firstname + " " + 'has been deleted successfully');
         //  this.navController.pop();
@@ -622,18 +622,18 @@ export class TeamhomepagePage implements OnInit {
 
   getassignedata(asssignedata){
     this.selectedDesigner = asssignedata;
-  console.log(this.selectedDesigner)
+
   }
 
   assign()
   {
-    console.log(this.id);
+
     this.utils.showLoading("Assigning").then(()=>{
     let postData={
       addedby:this.selectedDesigner.id
     }
     this.apiService.updateContractorsData(this.id,postData).subscribe((res)=>{
-      console.log(res);
+
       this.utils.hideLoading().then(()=>{
         // if(this.isTeamBdAssign)
         // {
@@ -690,7 +690,7 @@ export class TeamhomepagePage implements OnInit {
         this.activedesignjobs = response;
         // this.activedesignjobs = statuscount.waitingforassigned + statuscount.waitingforacceptance + statuscount.requestaccepted + statuscount.designassigned
         //   + statuscount.reviewassigned + statuscount.reviewpassed + statuscount.reviewfailed;
-        // console.log(this.activedesignjobs);
+        //
         // ++this.activedesignjobs;
         if(!this.activedesignjobs){
           this.deleteTeamFromServer(data);
@@ -720,7 +720,7 @@ export class TeamhomepagePage implements OnInit {
         //   label: 'Unassign jobs',
         //   value: 'unassignedjobs',
         //   handler: () => {
-        //     console.log('Radio 1 selected');
+        //
         //   },
         //   checked: true
         // },
@@ -730,7 +730,7 @@ export class TeamhomepagePage implements OnInit {
           label: 'Transfer jobs',
           value: 'transferjobs',
           handler: () => {
-            console.log('Radio 2 selected');
+
           },
           checked: true
         },
@@ -746,14 +746,14 @@ export class TeamhomepagePage implements OnInit {
         }, {
           text: 'Move',
           handler: (alertData) => {
-            console.log(alertData)
+
             var postData= {};
             // if(alertData == 'unassignedjobs')
             // {
             //   postData = {blocked: true }
             //   this.utils.showLoading("Unassigning Jobs").then(()=>{
             //   this.apiService.unassignedJobs(data.id,postData).subscribe((res)=>{
-            //     console.log(res);
+            //
             //     this.utils.hideLoading().then(()=>{
             //       this.utils.showSnackBar("Jobs Unassigned Successfully");
             //       // this.router.navigate(['/teamhomepage']);
@@ -769,7 +769,7 @@ export class TeamhomepagePage implements OnInit {
             // else if(alertData == 'transferjobs')
             // {
               // this.apiservices.getCompanyUsers(this.data.parent.id,this.data.role.id).subscribe((res)=>{
-              //   console.log(res);
+              //
               // })
 
               if (this.listOfAssignees.length === 0) {
@@ -779,7 +779,7 @@ export class TeamhomepagePage implements OnInit {
                       this.listOfAssignees = [];
                       // this.listOfAssignees.push(this.utils.getDefaultAssignee(this.storage.getUserID()));
                       assignees.forEach(item => this.listOfAssignees.push(item));
-                      console.log(this.listOfAssignees)
+
 
                       this.showBottomDraw = true;
                       // this.designId = id;
@@ -821,7 +821,7 @@ export class TeamhomepagePage implements OnInit {
         blocked: true }
               this.utils.showLoading("Transfering Jobs").then(()=>{
               this.apiService.transferJobs(this.data.id,this.selectedDesigner.id,postData).subscribe((res)=>{
-                console.log(res);
+
                 this.utils.hideLoading().then(()=>{
                   this.utils.showSnackBar("Jobs Transfered Successfully");
                   this.modalController.dismiss({ 'dismissed': true })

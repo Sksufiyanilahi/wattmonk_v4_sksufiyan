@@ -81,7 +81,6 @@ export class LoginPage implements OnInit {
           this.apiService.login(this.loginForm.value).subscribe(response => {
             localStorage.removeItem('newpasswordrequested');
             this.registerAPNS(response.user);
-            console.log(response.user.parent.id)
             this.utils.hideLoading().then(() => {
 
 
@@ -226,7 +225,7 @@ export class LoginPage implements OnInit {
   //       this.utils.setSurveyVisibility(res[0].visibilitysurvey)
   //       this.utils.setPestampVisibility(res[0].visibilitypestamp)
 
-        
+
   //     })
   // }
 

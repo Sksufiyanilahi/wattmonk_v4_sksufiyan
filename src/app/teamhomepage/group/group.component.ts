@@ -40,13 +40,13 @@ export class GroupComponent implements OnInit {
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Groups').then((success) => {
       this.apiService.getGroupData().subscribe((res:any)=>{
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
-        console.log(res);
+
         if(res.length > 0){
           this.groupData = res;
         }else{
           this.noDesignFound = "No Design Found";
         }
-        console.log(this.groupData);
+
         if (event !== null) {
           event.target.complete();
         }
@@ -75,7 +75,7 @@ export class GroupComponent implements OnInit {
       backdropDismiss: false
     });
     modal.onDidDismiss().then((data) => {
-      console.log(data)
+
 
       if (data.data.cancel == 'cancel') {
       } else {

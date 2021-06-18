@@ -120,10 +120,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.surveydatapresent = false
     this.data = this.router.getCurrentNavigation().extras.state;
-    console.log(this.data);
     if (this.data != undefined) {
       this.surveydata = this.data.productdetails.queryParams.designData;
-      console.log(this.surveydata)
      // this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
      // this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
 
@@ -299,10 +297,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
             });
           },
             responseError => {
-              console.log(responseError)
+
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
-                console.log(ErrorModel)
+
                 this.utilities.errorSnackBar(error.message);
               });
               //
@@ -396,7 +394,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
           var date = new Date(this.survey.datetime);
           var userTimezoneOffset = date.getTimezoneOffset();
          date= new Date(userTimezoneOffset - date.getTime() );
-          console.log(date)
+
           this.surveyForm.patchValue({
             name: this.survey.name,
             email: this.survey.email,

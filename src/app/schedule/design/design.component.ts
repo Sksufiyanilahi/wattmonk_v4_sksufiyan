@@ -1539,7 +1539,7 @@ isArchitecturalFileUpload: boolean = false;
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
-    
+
 
   }
 
@@ -1561,7 +1561,7 @@ isArchitecturalFileUpload: boolean = false;
       }
       reader.readAsDataURL(event.target.files[i]);
     }
-    
+
     if (this.prelimFiles.length == 1) {
       this.fileName = event.target.files[0].name;
 
@@ -1590,7 +1590,6 @@ isArchitecturalFileUpload: boolean = false;
    if(this.attachmentFileUpload)
    {
     this.prelimFiles.push(file);
-    console.log(this.prelimFiles)
    }
    else if(this.isArchitecturalFileUpload)
    {
@@ -1670,7 +1669,6 @@ isArchitecturalFileUpload: boolean = false;
   }
 
   uploadpreliumdesign(response?: any, key?: string, fileObj?: string, index?: number) {
-    console.log(fileObj)
     const imageData = new FormData();
     // for(var i=0; i< this.prelimFiles.length;i++){
     imageData.append("files", fileObj);

@@ -107,7 +107,7 @@ export class TeamschedulePage implements OnInit {
       // comment: new FormControl('')
     });
     this.userData = this.storageService.getUser();
-    console.log(this.userData);
+
 
     if(this.userData.role.type == 'wattmonkadmins' || this.userData.role.type == 'superadmin')
     {
@@ -123,7 +123,7 @@ export class TeamschedulePage implements OnInit {
         this.memberData = this.router.getCurrentNavigation().extras.state;
         this.data = this.memberData.productdetails.queryParams.teamData;
         this.teamRoles = this.memberData.productdetails.queryParams.teamRoles;
-        console.log(this.data)
+
       // }
   }
 
@@ -156,11 +156,11 @@ export class TeamschedulePage implements OnInit {
     // this.apiservices.getStatusCount(id).subscribe(
       this.apiservices.getActiveJobsCount(id).subscribe(
       response => {
-        console.log(response)
+
         this.activedesignjobs = response;
         // this.activedesignjobs = this.statuscount.waitingforassigned + this.statuscount.waitingforacceptance + this.statuscount.requestaccepted + this.statuscount.designassigned
         //   + this.statuscount.reviewassigned + this.statuscount.reviewpassed + this.statuscount.reviewfailed;
-        console.log(this.activedesignjobs);
+
         // ++this.activedesignjobs;
             }
       ,
@@ -267,7 +267,7 @@ export class TeamschedulePage implements OnInit {
               })
         }
         else {
-          console.log(this.activedesignjobs,this.data)
+
           if((!this.isClient && this.activedesignjobs))
           {
             this.utils.hideLoading();
@@ -309,7 +309,7 @@ export class TeamschedulePage implements OnInit {
                 this.utils.hideLoading().then(() => {
                   //this.createChatGroup(response);
                     this.router.navigate(['/teamhomepage'])
-                    
+
                   this.utils.showSnackBar('Team updated succesfully');
                   // this.utils.showSnackBar('Design have been saved');
                   this.utils.setteamModuleRefresh(true);
@@ -376,7 +376,7 @@ export class TeamschedulePage implements OnInit {
         //   label: 'Unassign jobs',
         //   value: 'unassignedjobs',
         //   handler: () => {
-        //     console.log('Radio 1 selected');
+        //
         //   },
         //   checked: true
         // },
@@ -410,7 +410,7 @@ export class TeamschedulePage implements OnInit {
             //     blocked: false }
             //   this.utils.showLoading("Unassigning Jobs").then(()=>{
             //   this.apiservices.unassignedJobs(this.data.id,postData).subscribe((res)=>{
-            //     console.log(res);
+            //
             //     this.utils.hideLoading().then(()=>{
             //       // this.utils.showSnackBar("Jobs Unassigned Successfully");
 
@@ -477,7 +477,7 @@ export class TeamschedulePage implements OnInit {
                       this.listOfAssignees = [];
 
                       assignees.forEach((element , i)=>{
-                        console.log(element.id, this.memberId)
+
                         if(element.id == this.memberId){
                           assignees.splice(i,1);
                         }
@@ -553,19 +553,19 @@ export class TeamschedulePage implements OnInit {
         cssClass: 'alertClass',
         // header: 'Confirm!',
         message: 'This user has active jobs so you can not change role for this user',
-        
+
         buttons: [
           {
             text: 'Close',
             role: 'cancel',
             cssClass: 'secondary',
             handler: (blah) => {
-  
+
             }
           }
         ]
       });
-  
+
       await alert.present();
       }
 
@@ -680,14 +680,14 @@ export class TeamschedulePage implements OnInit {
         this.utils.showSnackBar('Team created successfully');
         this.utils.setteamModuleRefresh(true);
         this.router.navigate(['/teamhomepage'])
-       
+
       }, error => {
         this.utils.hideLoading();
         this.utils.errorSnackBar('The cometchat uid has already been taken');
-       
+
         this.utils.setteamModuleRefresh(true);
         this.router.navigate(['/teamhomepage'])
-    
+
       }
     )
   }

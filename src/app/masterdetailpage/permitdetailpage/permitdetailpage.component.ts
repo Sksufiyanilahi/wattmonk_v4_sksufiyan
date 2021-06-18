@@ -25,7 +25,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class PermitdetailpageComponent implements OnInit {
 
-   
+
   permitdesignId: number;
   permitdesign: DesginDataModel;
   assigned = false;
@@ -124,10 +124,10 @@ export class PermitdetailpageComponent implements OnInit {
   ngOnInit() {
     this.enableDisable= false;
     this.user=this.storage.getUser();
-    console.log(this.user)
+
      this.mixpanelService.track('PERMIT_DESIGN_DETAIL_PAGE_OPEN', {
     });
-    // console.log("pop after ngoninit");
+    //
     // this.utilities.getHomepagePermitRefresh().subscribe(()=>{})
 
     this.dataSubscription = this.utilities.getPermitDesignDetailsRefresh().subscribe((result) => {
@@ -251,7 +251,7 @@ export class PermitdetailpageComponent implements OnInit {
     this.utilities.showLoading('Getting Design Details').then((success) => {
       this.apiService.getDesginDetail(this.permitdesignId).subscribe((result) => {
         this.utilities.hideLoading();
-        //console.log('re', result.comments[0].message);
+        //
 
        // this.commentboxdata = result.comments[0].message;
       //  const urlArray=  Array.from(getUrls(this.commentbox));
@@ -267,13 +267,13 @@ export class PermitdetailpageComponent implements OnInit {
       //           {
       //              event.preventDefault();
       //              this._link = event.target.href;
-      //              console.log('Name is: ' + event.target.innerText);
-      //              console.log('Link is: ' + this._link);
+      //
+      //
       //              this.openUrl(this._link);
       //           }, false);
       //      })
       //      this.commentboxdata=this.sanitizer.bypassSecurityTrustHtml(this.commentbox);
-      //        console.log(this.commentboxdata);
+      //
       //   },2000)
 
         this.setData(result);
@@ -301,7 +301,7 @@ export class PermitdetailpageComponent implements OnInit {
 
   setData(result: DesginDataModel) {
     this.permitdesign = result;
-    console.log(this.permitdesign)
+
     if(this.permitdesign.isinrevisionstate && this.permitdesign.status=='designassigned'){
       this.imageName=[];
     }else{
@@ -395,7 +395,7 @@ export class PermitdetailpageComponent implements OnInit {
   }
 
   showuploadbox(){
-    // console.log(this.design.permitdesign.id);
+    //
     this.apiService.deletePrelimImage(this.permitdesign.permitdesign.id).subscribe(_res=>{})
 
     this.imageName=[];
@@ -420,7 +420,7 @@ export class PermitdetailpageComponent implements OnInit {
       var orientation = -1;
       let localUrl = event.target.result;
         // this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
-       // console.log(res,">><><><");
+       //
         // this.image= res;
     this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
     result => {
@@ -465,8 +465,8 @@ remove(){
 }
 
 permitupdate(event){
-  //console.log(this.imageName);
-  //console.log(event.target.files);
+  //
+  //
   // for(var i=0; i< event.target.files.length;i++){
     // this.permitFiles.push(event.target.files)
     this.permitFiles= event.target.files;
@@ -474,7 +474,7 @@ permitupdate(event){
     //this.imageName= event.target.files[0].name;
     //this.imagebox= true;
   // }
-  //console.log(this.permitFiles);
+  //
 
     this.targetLength= event.target.files.length;
 
@@ -485,7 +485,7 @@ reader.onload = (event: any) => {
 var orientation = -1;
 let localUrl = event.target.result;
 // this.imageCompress.compressFile(localUrl,orientation, 1000, 1000).then(res=>{
-// console.log(res,">><><><");
+//
 // this.image= res;
 this.imageCompress.compressFile(localUrl, orientation, 500, 500).then(
   result => {
@@ -524,11 +524,11 @@ return blob;
     // else{
 
       // const blob = this.utilities.getBlobFromImageData(this.permitFiles);
-      // console.log(blob);
+      //
       //  let blob= this.utilities.b64toBlob(this.image);
-      //   console.log(blob);
+      //
 
-      // console.log(typeof(this.permitFiles[0]));
+      //
 
       const imageData = new FormData();
       for(var i=0; i< this.permitFiles.length;i++){
@@ -549,7 +549,7 @@ return blob;
               // this.updatecomments();
               // this.apiService.updateDesignForm({"status":'designcompleted'},this.designId).subscribe((res)=>{
               //   this.utilities.getDesignDetailsRefresh();
-              //   console.log(res,">>");
+              //
 
               // })
               //this.utilities.getPermitDesignDetailsRefresh();
@@ -593,7 +593,7 @@ return blob;
 
 
   reportDesignReviewFailure(){
-    //console.log("Value is" + this.reviewIssuesForm.value);
+    //
     if(this.reviewIssuesForm.valid){
     this.countdownservice.stopTimer();
         let cdate = Date.now();
@@ -606,7 +606,7 @@ return blob;
 
       };
 
-     // console.log("this is"+ this.reviewstartdatetime);
+     //
       this.apiService.editDesign(
           this.permitdesign.id,
           postData
