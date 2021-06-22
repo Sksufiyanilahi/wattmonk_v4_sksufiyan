@@ -228,7 +228,7 @@ export class SalesproposalComponent implements OnInit {
       invertermake: new FormControl('', []),
       invertermodel: new FormControl('', []),
       monthlybill: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(NUMBERPATTERN)]),
-      inverterscount: new FormControl('1', [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
+      inverterscount: new FormControl(1, [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
       address: new FormControl('', [Validators.required]),
       createdby: new FormControl(''),
       assignedto: new FormControl(''),

@@ -239,7 +239,7 @@ export class AppComponent {
       } else if (this.user.role.type === 'peengineer') {
         this.navController.navigateRoot('peengineer');
       } else {
-        if (this.user.role.type === 'clientsuperadmin' || this.user.role.type === 'wattmonkadmins') {
+        if (this.user.role.type === 'clientsuperadmin' || this.user.role.type === 'wattmonkadmins' || this.user.role.type === 'superadmin') {
           this.navController.navigateRoot('dashboard');
         } else {
           this.navController.navigateRoot('permithomepage');

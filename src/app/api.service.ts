@@ -981,6 +981,15 @@ export class ApiService {
     })
   }
 
+  markAllAsRead(){
+    const params={
+      userid:this.userId
+    }
+    return this.http.post(BaseUrl + "notificationsmarkasread",params,{
+      headers:this.headers
+    })
+  }
+
 
 }
 

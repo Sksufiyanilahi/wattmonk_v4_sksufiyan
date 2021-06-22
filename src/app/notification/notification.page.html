@@ -1,39 +1,115 @@
-<ion-header>
+<ion-header class="ion-no-border" >
   <ion-toolbar>
-    <ion-back-button slot="start"></ion-back-button>
-    <ion-title>Notifications</ion-title>
+            <ion-buttons slot="start" (click)="onReturn()">
+              <ion-icon style="font-size: 25px;margin-left: 5px;" name="chevron-back-outline" ></ion-icon>
+            </ion-buttons>
+            <ion-title><p style="margin-left: 35px;"><b>Notifications</b></p></ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
-  <ion-grid style="text-align: center;">
-      <ion-spinner name="dots" *ngIf="!showLoader"></ion-spinner>
-   <ion-row *ngIf="notification.length>0;else noNotification">
-     <ion-col class="padding_adjust">
-       <!-- <ion-item  lines="none" > -->
-         <ng-container  *ngFor="let notifications of notification">
-
-           <ion-card class="ion-padding mg" (click)="updateNotificationStatus(notifications.id)" [ngClass]="notifications.status=='unread'? 'black': 'grey'">
-             <span >
-               <img class="profile-icon" src="/assets/images/icons8-checked.svg">
-               
-               <p style="white-space: normal;font-size:14px !important;text-align: justify;margin: 0px;">{{notifications.message}}
-                 <!-- <small style="color: mediumblue;float:right;">.</small> -->
-               </p>
-            
-             </span>
-              <small style="float: right;">{{notifications.created_at | date:'dd/MM/yyyy'}}</small>
-           </ion-card>
-         </ng-container>
-       <!-- </ion-item> -->
-     </ion-col>
-   </ion-row>
-   <ng-template #noNotification>
-     <ion-row>
-       <ion-col *ngIf="disableContent" style="text-align: center;margin-top: 50%;"> 
-         No Notification Found
-       </ion-col>
-     </ion-row>
-   </ng-template>
- </ion-grid>
-</ion-content>
+  <!-- <app-navbar></app-navbar> -->
+    <div>
+      <ion-text *ngIf="notification.length" style="
+      text-decoration: underline;margin-left: 4%;font-weight: 500; font-size: 14px;" (click)="markAllAsRead()">Mark all as Read</ion-text>
+    </div>
+    <ion-grid style="text-align: center;overflow-y: visible!important;" *ngIf="isNotification">
+      <!-- <ion-spinner name="dots" *ngIf="!showLoader"></ion-spinner> -->
+      <ng-container *ngIf="notification.length;else noNotification">
+      <ion-row >
+        <ion-col size="12" class="padding_adjust" *ngFor="let notifications of notification">
+            <ion-card style="border-radius: 0px;margin: 5px;box-shadow: none;border-bottom: 1px solid gray;
+             border-top: none;
+             border-right: 0 !important;
+             border-left: 0 !important;" (click)="updateNotificationStatus(notifications.id,notifications)">
+              <ion-card-header Style="padding: 4px 4px 0px 13px;">
+                <div size="3">
+                <ion-card-subtitle size="3">
+                  <ion-img *ngIf="notifications.type == 'design' && notifications.design.requesttype == 'permit'  && notifications.status=='unread' "
+                    class="profile-icon" src="./assets/icon/notification-icons/permit.svg"></ion-img>
+                  <ion-img *ngIf="notifications.type == 'design' && notifications.design.requesttype == 'permit' && notifications.status=='read'"
+                    class="profile-icon" src="./assets/icon/notification-icons/permit-gray.svg"></ion-img>
+                  <ion-img *ngIf="notifications.type == 'design' && notifications.design.requesttype == 'prelim' && notifications.status=='unread'"
+                    class="profile-icon" src="./assets/icon/notification-icons/prelim.svg"></ion-img>
+                  <ion-img *ngIf="notifications.type == 'design' && notifications.design.requesttype == 'prelim' && notifications.status=='read'"
+                    class="profile-icon" src="./assets/icon/notification-icons/prelim-gray.svg"></ion-img>
+                  <ion-img *ngIf="notifications.type == 'survey' && notifications.status=='unread'" class="profile-icon"
+                    src="./assets/icon/notification-icons/survey.svg"></ion-img>
+                  <ion-img *ngIf="notifications.type == 'survey'  && notifications.status=='read'" class="profile-icon"
+                    src="./assets/icon/notification-icons/survey-gray.svg"></ion-img>
+                  <ion-img *ngIf="notifications.type == 'pestamp'  && notifications.status=='unread'" class="profile-icon"
+                    src="./assets/icon/notification-icons/pestamp.svg"></ion-img>
+                  <ion-img *ngIf="notifications.type == 'pestamp' && notifications.status=='read'" class="profile-icon"
+                    src="./assets/icon/notification-icons/pestamp-gray.svg"></ion-img>
+                    <ion-img *ngIf="notifications.type == 'newuser' && notifications.status=='read'" class="profile-icon"
+                    src="./assets/icon/notification-icons/clients-grey.svg"></ion-img>
+                    <ion-img *ngIf="notifications.type == 'newuser' && notifications.status=='unread'" class="profile-icon"
+                    src="./assets/icon/notification-icons/clients.svg"></ion-img>
+                </ion-card-subtitle>
+              </div>
+              <div size="9">
+                <ion-card-title [ngClass]="notifications.status=='unread'? 'black1': 'grey1'" >{{notifications.title}}
+                </ion-card-title>
+              </div>
+              </ion-card-header>
+              <ion-card-content [ngClass]="notifications.status=='unread'? 'black': 'grey'">
+                <p>{{notifications.message}}</p>
+              </ion-card-content>
+              <p style="float: left;
+                margin-left: 35px;color:#111;
+                margin-bottom: 5px;font-size: 10px;margin-top: -10px;"><i>{{notifications.created_at | date:'dd/MM/yyyy'}}
+                  {{notifications.created_at | date:'shortTime'}}</i> </p>
+                <p style="float: left;
+                margin-left: 35px;color:#111;
+                margin-bottom: 5px;font-size: 10px;margin-top: -10px;" *ngIf="notifications.created_at == today"><i> Today
+                  {{notifications.created_at | date:'shortTime'}}</i></p>
+            </ion-card>
+        </ion-col>
+      </ion-row>
+    </ng-container>
+      <ng-template #noNotification>
+        <ion-row *ngIf="notification.length==0">
+          <ion-col  style="text-align: center;margin-top: 40%;">
+            <ion-img style="height: 25px;
+            margin-top: 30%;
+            margin-bottom: 5px;"src="./assets/icon/SadEmoji.svg"></ion-img>
+            <div style="font-weight: 600;">
+              Yet to break the ice
+            </div>
+          </ion-col>
+        </ion-row>
+      </ng-template>
+    </ion-grid>
+    <ion-grid style="text-align: center;overflow-y: visible!important;" *ngIf="!isNotification">
+      <ion-row>
+        <ion-col class="padding_adjust">
+          <ng-container *ngFor="let notifications of [1,2,3,4,5,6]">
+          <ion-card style="border-radius: 0px;box-shadow: none;border-bottom: 1px solid gray; border-top: none; border-right: 0 !important;
+          border-left: 0 !important;">
+            <ion-card-header Style="padding: 4px 4px 0px 10px;">
+              <ion-row>
+                <ion-col size="2">
+                  <ion-card-subtitle size="3">
+                    <ion-skeleton-text animated class="skeleton-profile-icon"></ion-skeleton-text>
+                  </ion-card-subtitle>
+                </ion-col>
+                <ion-col size="10">
+                  <ion-row style="padding-left: 0px;">
+                    <ion-skeleton-text animated style="width: 80%; height: 8px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 40%; height: 8px;"></ion-skeleton-text>
+                  </ion-row>
+                  <ion-row style="margin-top: 8px;">
+                    <ion-skeleton-text animated style="width: 65%; height: 8px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 65%; height: 8px;"></ion-skeleton-text>
+                  </ion-row>
+                  <ion-row style="margin-bottom: 5px;">
+                    <ion-skeleton-text animated style="width: 20%; height: 8px;"></ion-skeleton-text>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+            </ion-card-header>
+          </ion-card>
+        </ng-container>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>

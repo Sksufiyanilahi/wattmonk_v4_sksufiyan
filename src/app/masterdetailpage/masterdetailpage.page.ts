@@ -53,7 +53,7 @@ export class MasterdetailpagePage implements OnInit {
       this.isSurvey = true
       if (this.allData.prelimdesignsurvey != null) {
         this.isPrelim = true;
-      }
+    }
     }
     else if (this.requesttype == 'permit') {
       this.isPermit = true;
@@ -64,7 +64,7 @@ export class MasterdetailpagePage implements OnInit {
         if (this.allData.survey.prelimdesignsurvey != null) {
           this.isPrelim = true;
         }
-      }
+    }
     }
     else if (this.requesttype == 'pestamp') {
       this.isPestamp = true;
@@ -80,7 +80,7 @@ export class MasterdetailpagePage implements OnInit {
             }
           })
         }
-      }
+    }
 
     }
     this.checkTabs();
@@ -105,7 +105,7 @@ export class MasterdetailpagePage implements OnInit {
     {
       this.isTabCheck = false;
     }
-    else if(this.isPestamp && !this.isPrelim && !this.isPermit && !this.isPestamp)
+    else if(this.isPestamp && !this.isPrelim && !this.isPermit && !this.isSurvey)
     {
       this.isTabCheck = false;
     }
