@@ -47,7 +47,8 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.menu.enable(false)
-    const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    // const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+    const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&‘*+/=?^_`{|}~-]+@[a-zA-Z-]+(?:\.[a-zA-Z]+)*$/;
     this.loginForm = this.formBuilder.group({
         identifier: new FormControl(this.storageService.getUserName(), [Validators.required, Validators.pattern(EMAILPATTERN)]),
         password: new FormControl(this.storageService.getPassword(), [Validators.required, Validators.minLength(3)])
@@ -72,6 +73,10 @@ export class LoginPage implements OnInit {
   }
 
   login() {
+    // const username = this.loginForm.get('identifier').value.trim();
+    const password = this.loginForm.get('password').value.trim();
+    // this.loginForm.get('identifier').setValue(username);
+    this.loginForm.get('password').setValue(password);
     if (!this.netSwitch) {
       this.utils.errorSnackBar('No internet connection');
     } else {

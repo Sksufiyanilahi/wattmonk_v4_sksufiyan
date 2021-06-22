@@ -399,4 +399,14 @@ mat-form-field.field-inflex{
   }
 }
 
+ion-alert.signupalertcontroller{
+  // font-size:19px
+  .alert-title.sc-ion-alert{ font-size: 19px !important;}
+  div{
+    div{
+      font-size:19px !important
+    }
+  }
+}
+
 

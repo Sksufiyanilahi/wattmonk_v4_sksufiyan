@@ -42,7 +42,7 @@
         *ngIf="userregistrationForm.get('firstname').value === '' && userregistrationForm.get('firstname').dirty">
         <span class="error">{{fieldRequired}}</span>
     </div> -->
-    <div class="error-box"
+    <div class="error-box" style="margin-left: 8px;"
             *ngIf="userregistrationForm.get('firstname').invalid && userregistrationForm.get('firstname').dirty ||  (userregistrationForm.get('firstname').touched && userregistrationForm.get('firstname').invalid) && userregistrationForm.get('firstname').pristine">
             <span class="error">{{getErrorMessage(userregistrationForm.get('firstname'))}}</span>
         </div>
@@ -63,7 +63,7 @@
         </div> -->
         <div class="error-box"
             *ngIf="userregistrationForm.get('lastname').invalid && userregistrationForm.get('lastname').dirty ||  (userregistrationForm.get('lastname').touched && userregistrationForm.get('lastname').invalid) && userregistrationForm.get('lastname').pristine">
-            <span class="error">{{getErrorMessage(userregistrationForm.get('lastname'))}}</span>
+            <span class="error" style="margin-left:0px">{{getErrorMessage(userregistrationForm.get('lastname'))}}</span>
         </div>
           </div>
         </ion-col>
