@@ -79,7 +79,6 @@ export class UserregistrationPage implements OnInit {
   ngOnInit() {
     this.menu.enable(false)
     this.fetchCountry();
-    this.showController();
 
   }
 
@@ -405,17 +404,17 @@ export class UserregistrationPage implements OnInit {
       //  this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.");
       //  setTimeout(() => {
          this.showController();
-        
+
         // this.utils.showSnackBar("User Registered Successfully");
       // }, 3000)
       }, error => {
         this.utils.hideLoading();
         // this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.");
-        this.utils.errorSnackBar("Cometchat uid has already taken"); 
+        this.utils.errorSnackBar("Cometchat uid has already taken");
         this.router.navigate(['/login']);
          this.apiService.deleteTeam(userid).subscribe(res=>{
          });
-       
+
       }
     )
   }
@@ -425,6 +424,7 @@ export class UserregistrationPage implements OnInit {
       cssClass:"signupalertcontroller",
       header: "Registration Successful",
       message: "You will be redirected to login page from here. Please use the default credentials sent to your registered email to continue.",
+      mode:'md',
       buttons: [
         {
           text: 'OK',
