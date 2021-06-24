@@ -283,10 +283,10 @@ ion-content {
 }
 
 .questionaireview {
-  width: 70%;
+  width: 90%;
   position: absolute;
   top: 30vh;
-  left: calc(50% - (70% / 2));
+  left: calc(50% - (90% / 2));
   z-index: 99;
 }
 
@@ -299,7 +299,7 @@ ion-content {
   padding: 16px;
 
   .error_div {
-    height: 11px;
+    height: auto;
   }
 
   .error {
