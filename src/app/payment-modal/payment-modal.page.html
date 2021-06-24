@@ -26,12 +26,12 @@
     </ion-row>
     <ion-row >
     <ion-card style="position: relative; width:100%;" class="ion-padding">
-      <ion-row style="width: 100%;" *ngIf="design=='permit'">
+      <!-- <ion-row style="width: 100%;" *ngIf="design=='permit'">
        
         <ion-col size="12">
           <ion-label style="font-size: medium;color:#111;font-weight: bold;float: left;">Choose your delivery time</ion-label>
         </ion-col >
-      
+       -->
         
         <!-- <ion-col size="3" >
      <ion-checkbox value="6" id="1" name="box1" (ionChange)="checkboxClicking($event)"> </ion-checkbox>
@@ -53,7 +53,7 @@
       <ion-label style="font-size: larger; margin-left: 12%;  position: absolute;">24-48</ion-label>
    </ion-col>
      -->
-    <ion-radio-group style="width:100% " (ionChange)="checkboxClicking($event)"  value="delivertime" [(ngModel)]="delivertime" >
+    <!-- <ion-radio-group style="width:100% " (ionChange)="checkboxClicking($event)"  value="delivertime" [(ngModel)]="delivertime" >
       <ion-row style="height:35%" >
         <ion-col size="6">
       <ion-item lines="none">
@@ -87,7 +87,7 @@
     </ion-col>
     </ion-row>
     </ion-radio-group>
-      </ion-row>
+      </ion-row> -->
 
       <ion-row style="width: 100%;" *ngIf="user?.role.type!='clientadmin' && user?.ispaymentmodeprepay">
         <ion-col size="6">
