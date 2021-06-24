@@ -546,11 +546,13 @@
       </ion-row>
       <ion-row *ngIf="survey.latitude !== null">
         <ion-col size="6" > Latitude</ion-col>
-        <ion-col size="6">{{survey?.latitude == null || '' ? nullValue : survey?.latitude}}</ion-col>
+        <!-- <ion-col size="6">{{survey?.latitude == null || '' ? nullValue : survey?.latitude}}</ion-col> -->
+        <a (click)="openAddressOnMap(survey.address)">{{survey?.latitude == null || '' ? nullValue : survey?.latitude}}</a>
       </ion-row>
       <ion-row *ngIf="survey.longitude !== null">
         <ion-col size="6" > Longitude</ion-col>
-        <ion-col size="6">{{survey?.longitude == null || '' ? nullValue : survey?.longitude}}</ion-col>
+        <!-- <ion-col size="6">{{survey?.longitude == null || '' ? nullValue : survey?.longitude}}</ion-col> -->
+        <a (click)="openAddressOnMap(survey.address)">{{survey?.longitude == null || '' ? nullValue : survey?.longitude}}</a>
       </ion-row>
       <ion-row *ngIf="survey.sizeofsingleraft !== null">
         <ion-col size="6" > Size of single raft</ion-col>
