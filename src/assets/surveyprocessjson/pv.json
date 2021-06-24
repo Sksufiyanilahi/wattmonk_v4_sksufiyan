@@ -1038,7 +1038,13 @@
                 "required": true,
                 "fileurls": [],
                 "attachments": [],
-                "formfieldvalidations": []
+                "formfieldvalidations": [
+                  {
+                    "minlength": 4,
+                    "maxlength": 22,
+                    "regextype": 0
+                  }
+                ]
               },
               {
                 "inputformcontrol": [

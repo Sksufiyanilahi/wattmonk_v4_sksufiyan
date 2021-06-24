@@ -78,11 +78,25 @@
                     <ion-input style="border: 1px solid #FFFFFF;" [placeholder]="formElement.placeholder"
                       autocomplete="off" [formControlName]="formElement.inputformcontrol">
                     </ion-input>
+                    <div class="error_div"
+                      *ngIf="this.activeForm.get(formElement.inputformcontrol).invalid && (this.activeForm.get(formElement.inputformcontrol).dirty || this.activeForm.get(formElement.inputformcontrol).touched)">
+                      <div *ngIf="this.activeForm.get(formElement.inputformcontrol).invalid">
+                        <span
+                          class="error">{{getErrorMessage(this.activeForm.get(formElement.inputformcontrol))}}</span>
+                      </div>
+                    </div>
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_NUMBER">
                     <ion-input class="form-control" type="number" [placeholder]="formElement.placeholder"
                       autocomplete="off" [formControlName]="formElement.inputformcontrol">
                     </ion-input>
+                    <div class="error_div"
+                      *ngIf="this.activeForm.get(formElement.inputformcontrol).invalid && (this.activeForm.get(formElement.inputformcontrol).dirty || this.activeForm.get(formElement.inputformcontrol).touched)">
+                      <div *ngIf="this.activeForm.get(formElement.inputformcontrol).invalid">
+                        <span
+                          class="error">{{getErrorMessage(this.activeForm.get(formElement.inputformcontrol))}}</span>
+                      </div>
+                    </div>
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_RADIO">
                     <ion-radio-group class="white-translucent-bg"
@@ -93,6 +107,13 @@
                         <ion-radio slot="start" [value]="option.value"></ion-radio>
                       </ion-item>
                     </ion-radio-group>
+                    <div class="error_div"
+                      *ngIf="this.activeForm.get(formElement.inputformcontrol).invalid && (this.activeForm.get(formElement.inputformcontrol).dirty || this.activeForm.get(formElement.inputformcontrol).touched)">
+                      <div *ngIf="this.activeForm.get(formElement.inputformcontrol).invalid">
+                        <span
+                          class="error">{{getErrorMessage(this.activeForm.get(formElement.inputformcontrol))}}</span>
+                      </div>
+                    </div>
                   </div>
                   <div *ngIf="formElement.controltype === ControlTypes.CONTROL_INPUT_TEXTAREA">
                     <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3"

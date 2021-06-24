@@ -318,7 +318,7 @@ export class StartsurveyPage implements OnInit {
 
   loadLocalJSON() {
     this.http
-      .get('assets/surveyprocessjson/defaultpv.json')
+      .get('assets/surveyprocessjson/pv.json')
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
       });
@@ -1113,6 +1113,8 @@ export class StartsurveyPage implements OnInit {
           });
         }
         else {
+          this.activeForm.markAllAsTouched();
+          this.activeForm.markAsDirty();
           var invalidcontrols = this.utilitieservice.findInvalidControls(this.activeForm);
           console.log(invalidcontrols);
           var toastmessage = 'Please input missing information of ';
