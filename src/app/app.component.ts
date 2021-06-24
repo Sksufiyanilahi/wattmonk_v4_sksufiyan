@@ -387,9 +387,6 @@ export class AppComponent {
     else if (this.userData.role.type !== 'designer' && this.userData.role.type !== 'qcinspector' && this.userData.role.type !== 'peengineer' && type == 'client') {
       this.router.navigate(['/clienthomepage'])
     }
-    else if (this.userData.role.type !== 'designer' && this.userData.role.type !== 'qcinspector' && this.userData.role.type !== 'peengineer' && type == 'report') {
-      this.router.navigate(['/comingsoon'])
-    }
   }
 
   getFcmToken() {
