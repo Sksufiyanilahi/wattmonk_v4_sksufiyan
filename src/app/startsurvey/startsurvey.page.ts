@@ -580,13 +580,37 @@ export class StartsurveyPage implements OnInit {
         case REGEXTYPE.ALPHANUMERIC:
           return "Field cannot have any special characters and min: " + validations.minlength + " max: " + validations.maxlength + " length";
         case REGEXTYPE.ALLCHARACTERS:
-          return "(Min- " + validations.minlength + " and min: " + validations.minlength + " max: " + validations.maxlength + " length";
+          return "Min: " + validations.minlength + " max: " + validations.maxlength + " length";
         case REGEXTYPE.MAKE:
           return "Please enter valid format";
         case REGEXTYPE.MODEL:
           return "Please enter valid format";
         default:
-          return "(Min- " + validations.minlength + " and min: " + validations.minlength + " max: " + validations.maxlength + " length";
+          return "Min: " + validations.minlength + " max: " + validations.maxlength + " length";
+      }
+    }
+  }
+
+  getInputFormErrorMessage(control: AbstractControl, element: FORMELEMENTS) {
+    if (control.hasError("required")) {
+      return "Field input is required";
+    }
+
+    if (control.hasError('pattern')) {
+      let validations = element.formfieldvalidations[0];
+      switch (validations.regextype) {
+        case REGEXTYPE.NUMERIC:
+          return "Field can have only numeric values and min: " + validations.minlength + " max: " + validations.maxlength + " length";
+        case REGEXTYPE.ALPHANUMERIC:
+          return "Field cannot have any special characters and min: " + validations.minlength + " max: " + validations.maxlength + " length";
+        case REGEXTYPE.ALLCHARACTERS:
+          return "Min: " + validations.minlength + " max: " + validations.maxlength + " length";
+        case REGEXTYPE.MAKE:
+          return "Please enter valid format";
+        case REGEXTYPE.MODEL:
+          return "Please enter valid format";
+        default:
+          return "Min: " + validations.minlength + " max: " + validations.maxlength + " length";
       }
     }
   }
