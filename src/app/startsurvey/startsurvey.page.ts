@@ -801,24 +801,24 @@ export class StartsurveyPage implements OnInit {
   addfile(ev, formelementindex) {
     try {
       let reader = getFileReader();
-        reader.onload = (e: any) => {
-          // console.log(ev.target.files[0]);
-          var fileobjurl = '/assets/icon/file.png';
-          if (ev.target.files[0].name.includes('.png') || ev.target.files[0].name.includes('.jpeg') || ev.target.files[0].name.includes('.jpg') || ev.target.files[0].name.includes('.gif')) {
-            fileobjurl = e.target.result;
-          }
-          // var object = this.getfileobject(ev.target.files[0]);
-          const selectedfile: FILE_ATTACHMENTS = {
-            file: ev.target.files[0],
-            fileurl: fileobjurl,
-            uploadstatus: false,
-            controlname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].inputformcontrol[0]
-          };
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push(fileobjurl);
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(selectedfile);
-          this.saveintermediatesurveydata();
+      reader.onload = (e: any) => {
+        // console.log(ev.target.files[0]);
+        var fileobjurl = '/assets/icon/file.png';
+        if (ev.target.files[0].name.includes('.png') || ev.target.files[0].name.includes('.jpeg') || ev.target.files[0].name.includes('.jpg') || ev.target.files[0].name.includes('.gif')) {
+          fileobjurl = e.target.result;
         }
-        reader.readAsDataURL(ev.target.files[0]);
+        // var object = this.getfileobject(ev.target.files[0]);
+        const selectedfile: FILE_ATTACHMENTS = {
+          file: ev.target.files[0],
+          fileurl: fileobjurl,
+          uploadstatus: false,
+          controlname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].inputformcontrol[0]
+        };
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push(fileobjurl);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(selectedfile);
+        this.saveintermediatesurveydata();
+      }
+      reader.readAsDataURL(ev.target.files[0]);
     } catch (error) {
       // console.log("addselectedfiles---" + error);
     }
@@ -1144,7 +1144,7 @@ export class StartsurveyPage implements OnInit {
           var toastmessage = 'Please input missing information of ';
           invalidcontrols.forEach((invalidcontrol, index) => {
             toastmessage += invalidcontrol.toUpperCase();
-            if(index < invalidcontrols.length - 1){
+            if (index < invalidcontrols.length - 1) {
               toastmessage += ", ";
             }
           });
@@ -1307,7 +1307,7 @@ export class StartsurveyPage implements OnInit {
       data['status'] = 'completed';
       data['latitude'] = this.latitude;
       data['longitude'] = this.longitude;
-      data['deliverydate']=d_date
+      data['deliverydate'] = d_date
       this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
         this.utilitieservice.hideLoading().then(() => {
           this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {
