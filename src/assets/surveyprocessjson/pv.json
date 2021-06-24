@@ -787,6 +787,33 @@
                 "actions": [],
                 "required": false,
                 "visitedonce": false
+              },
+              {
+                  "questiontype": 0,
+                  "imagekey": "obstaclesimages",
+                  "imagename": "obstacleshot7",
+                  "imagequality": 60,
+                  "imageuploadname": "obstacleshot7",
+                  "capturedshotinfo": "Obstacles Photos",
+                  "question": "",
+                  "shotinfo": "Capture install obstacles and shading on roof from the ground.",
+                  "promptquestion": false,
+                  "shotstatus": false,
+                  "ispending": true,
+                  "inputformcontrol": [
+                      ""
+                  ],
+                  "forminputfields": [],
+                  "formfieldvalidations": [],
+                  "isactive": false,
+                  "placeholder": "",
+                  "questioninfo": "",
+                  "questionstatus": true,
+                  "result": "",
+                  "actions": [],
+                  "required": false,
+                  "visitedonce": false,
+                  "capturedonce": false
               }
             ],
             "checkexistence": false,
