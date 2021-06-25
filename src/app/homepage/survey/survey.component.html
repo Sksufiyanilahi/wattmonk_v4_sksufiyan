@@ -9,12 +9,6 @@
     <ion-segment-button value="status=completed">
         <ion-label class="segment-btn">Completed ({{this.SurveyCounts.completed}})</ion-label>
     </ion-segment-button>
-    <!-- <ion-segment-button value="status=reviewassigned&status=reviewpassed&status=reviewfailed">
-        <ion-label class="segment-btn">Review</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="status=delivered">
-        <ion-label class="segment-btn">Delivered</ion-label>
-    </ion-segment-button> -->
 </ion-segment>
 
 <ion-content (click)="close()" style="padding-bottom: 250px;" [scrollEvents]="true">
@@ -95,36 +89,12 @@
                                 *ngIf="(surveyData.status == 'created' && userData.usertype !== 'individual') || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'"
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="openSurveyors(surveyData.id,surveyData,$event)">Assign</span>
-                            <!-- <ion-col size="auto" class="ion-no-margin ion-no-padding" *ngIf="today==item.date && userData.role.type =='surveyor'"> -->
                             <span  *ngIf="surveyData.status == 'created'"
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="assignedTo(surveyData,$event)">
                                 Start Survey &nbsp;
                             </span>
-                            <!-- <span class="ion-text-end action-button-color" >Start Survey</span> -->
                         </ion-col>
-                        <!-- <ion-col></ion-col> -->
-                        <!-- <ion-col  size="auto" class="ion-no-margin ion-no-padding" style="margin-bottom: 5px;"> -->
-
-                        <!-- <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
-                        >Decline</span>
-                        <span *ngIf="surveyData.status == 'outsourced'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(surveyData.id)"
-                        >Accept</span> -->
-                        <!-- <span style="float: right;">
-                            <ng-container *ngIf="userData.role.type !=='clientsuperadmin'">
-                            <ion-col size="8"  *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id,surveyData)">
-                               Accept
-                            </ion-col>
-                            <ion-col size="4" *ngIf="surveyData.status == 'outsourced'"  class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id,surveyData)">
-                            Decline
-                            </ion-col></ng-container>
-                        </span> -->
-                        <!-- <span *ngIf="surveyData.status == 'requestdeclined' && userData.role.type=='clientsuperadmin'"style="float:right !important;" class="ion-text-end action-button-color z-100" (click)="openSurveyors(surveyData.id)"
-                        >Reassign</span>
-                        </ion-col> -->
-
-                        <!-- <span *ngIf="(surveyData.isoutsourced=='true' && surveyData.outsourcedcompany=='Wattmonk' && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin')) || (surveyData.isoutsourced=='false' && surveyData.outsourcedcompany==null && (userData.role.type=='wattmonkadmins'|| userData.role.type=='superadmin'|| userData.role.type=='clientsuperadmin'))" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(surveyData.id,surveyData)"
-                            >Assign Review</span> -->
 
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
                             *ngIf="segments=='status=assigned'&& surveyData.createdby.parent==userData.parent.id && userData.role.type!='master'"
@@ -135,7 +105,7 @@
                             <span class="ion-text-end action-button-color z-100" style="float:right !important;"
                                 *ngIf="userData.id==surveyData.assignedto?.id" (click)="resumeSurvey(surveyData,$event)"
                                 routerDirection="forward">
-                                &nbsp; Resume Survey
+                                &nbsp; Start Survey
                             </span>
                         </ion-col>
                         <ion-col size="auto" class=" " *ngIf="segments=='status=completed'"
@@ -170,12 +140,6 @@
                             <span style="float:right !important;" class="ion-text-end action-button-color"
                                 (click)="openAnalysts(surveyData.id,surveyData)">&nbsp;Reassign Review</span>
                         </ion-col>
-                        <!-- <span class="ion-text-end action-button-color z-100" style="float:right !important;"
-                            *ngIf="userData.id==surveyData.assignedto?.id"
-                            [routerLink]="['/startsurvey/' + surveyData.id + '/' + surveyData.jobtype]"
-                            routerDirection="forward">
-                            Start Survey
-                        </span> -->
 
                         <ion-col *ngIf="segments=='status=delivered'">
                             <span style="float:right !important;" class="ion-text-end action-button-color"
@@ -189,15 +153,6 @@
                             </span>
                         </ion-col>
                     </ion-row>
-                    <ng-container
-                        *ngIf="userData.id==surveyData.assignedto?.id && surveyData.status =='assigned'">
-                        <ion-progress-bar [value]="surveyData.totalpercent" mode="ios" color="success"
-                            class="progress-bar-height"></ion-progress-bar>
-                    </ng-container>
-                    <!-- <span class="ion-text-end timestamp"  routerDirection="forward">
-                                {{surveyData.datetime | date: 'hh:mm a'}}
-                            </span> -->
-
                 </ion-card>
 
             </ion-col>
