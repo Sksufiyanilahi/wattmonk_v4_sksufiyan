@@ -182,4 +182,9 @@ setzero(){
 
 ionViewWillLeave(){
 }
+
+goToJobListing()
+{
+  this.route.navigate(['/joblisting']);
+}
 }

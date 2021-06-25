@@ -1,0 +1,153 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button mode="md"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Job Listing</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid style="overflow: hidden; padding-bottom: 5px;">
+    <ion-row>
+      <ion-col>
+        <ion-card class="card ion-no-margin ion-no-padding">
+          <ion-card-header class="heading">Our Tasks</ion-card-header>
+          <ion-row>
+            <ion-col size="4">
+          <ion-card class="selectcard" style="margin: 0px 0px 10px 10px;" (click)="selectCard('sales')" [ngStyle]="{'background-color': active=='Sales Proposal' ? '#EDC773':'#FBF9F4'}">
+            <ion-card-header style="text-align: -webkit-center;padding-bottom: 0px;">
+              <div class="image">
+                <ion-img class="taskImage" src="assets/images/jobsalesproposal.svg"></ion-img>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <p class="cardHeading">Sales Proposal</p>
+              <p style="font-size: 11px;color: #333333;">
+                {{salesProposalJobslength}} remains
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="4">
+          <ion-card style="margin: 0px 0px 10px 0px;" class="selectcard" (click)="selectCard('site')" [ngStyle]="{'background-color': active=='Site Assessment' ? '#EDC773':'#FBF9F4'}">
+            <ion-card-header style="text-align: -webkit-center;padding-bottom: 0px;">
+              <div class="image">
+                <ion-img class="taskImage" src="assets/images/jobsiteassement.svg"></ion-img>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <p class="cardHeading">Site Assessment</p>
+            <p style="font-size:11px;color: #333333;">{{siteAssessmentJobslength}} remains</p>
+          </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="4">
+          <ion-card style="margin: 0px 10px 10px 0px;" class="selectcard" (click)="selectCard('permit')" [ngStyle]="{'background-color': active=='Permit' ? '#EDC773':'#FBF9F4'}">
+            <ion-card-header style="text-align: -webkit-center;padding-bottom: 0px;">
+              <div class="image">
+                <ion-img class="taskImage" src="assets/images/jobpermit.svg"></ion-img>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <p class="cardHeading">Permit Design</p>
+              <p style="font-size:11px;color: #333333;">{{permitJobslength}} remains</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        </ion-row>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row style="padding-top: 20px;">
+      <ion-col style="padding-bottom: 0px;">
+        <ion-item class="box ion-no-padding" lines="none">
+          <!-- <ion-searchbar (ionChange)="filterJobs()" [(ngModel)]="searchTerm" debounce="0"></ion-searchbar> -->
+          <ion-input class="search" style="background:white" placeholder="Search by name, address and mail" (ionChange)="filterJobs()" [(ngModel)]="searchTerm" debounce="0">
+            </ion-input>
+          
+          <div class="eye_box">
+            <ion-icon name="search-outline" slot="end"></ion-icon>
+          </div>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid style="overflow: scroll;">
+    <ng-container *ngIf="jobsDataLength; else noJobs">
+    <!-- <ion-row >
+      <ion-col> -->
+    <ion-card class="card " style="margin: 0px 5px 10px 5px;" *ngFor="let jobs of searchData">
+      <ion-row style="height: 30px;" *ngIf="active=='Site Assessment'">
+        <ion-col size="0.5">
+          <div class="im">
+            <ion-img class="cardImage" src="assets/images/jobsiteassement.svg"></ion-img>
+          </div>
+          </ion-col>
+          <ion-col size="11.5">
+          <p class="email" style="padding-top: 10px;">{{active}}</p>
+        </ion-col>
+        </ion-row>
+
+        <ion-row style="height: 30px;" *ngIf="active=='Sales Proposal'">
+          <ion-col size="0.5">
+            <div class="im">
+              <ion-img class="cardImage" src="assets/images/jobsalesproposal.svg"></ion-img>
+            </div>
+            </ion-col>
+            <ion-col size="11.5">
+            <p class="email" style="padding-top: 10px;">{{active}}</p>
+          </ion-col>
+          </ion-row>
+
+          <ion-row style="height: 30px;" *ngIf="active=='Permit'">
+            <ion-col size="0.5">
+              <div class="im">
+                <ion-img class="cardImage" src="assets/images/jobpermit.svg"></ion-img>
+              </div>
+              </ion-col>
+              <ion-col size="11.5">
+              <p class="email" style="padding-top: 10px;">{{active}}</p>
+            </ion-col>
+            </ion-row>
+        
+        <ion-row>
+        <ion-col size="12" class="padding">
+      <p class="name">{{jobs.name | titlecase}}</p>
+    </ion-col>
+    <ion-col size="12" class="padding">
+      <p class="email">{{jobs.email}}</p>
+    </ion-col>
+    <ion-col size="6" class="padding">
+      <p class="address">{{jobs.address}}</p>
+    </ion-col>
+    </ion-row>
+    <ion-row>
+    <ion-col size="6" class="padding"><p class="jobdate">{{jobs.created_at|date: 'dd MMM yyyy'}}</p></ion-col>
+    <ion-col size="6" class="padding" style="padding: 0px 5px 5px 0px;">
+      
+      <ion-button class="openButton" (click)="selectJob(jobs)">Select</ion-button>
+    </ion-col>
+    </ion-row>
+    </ion-card>
+  <!-- </ion-col>
+  </ion-row> -->
+</ng-container>
+<ng-template #noJobs>
+  <div *ngIf="jobsDataLength==0" class="cent">
+    No Data Found
+  </div>
+</ng-template>
+  </ion-grid>
+
+</ion-content>
+<ion-footer *ngIf="selectedJobs.length">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button class="selectedButton" (click)="openJobListingModel()">Selected Items({{selectedJobs.length}})</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

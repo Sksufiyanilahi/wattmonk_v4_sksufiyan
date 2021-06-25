@@ -358,13 +358,24 @@ const routes: Routes = [
         path: 'startsurvey/:id/:type',
         loadChildren: () => import('./startsurvey/startsurvey.module').then(m => m.StartsurveyPageModule),
         canActivate: [AuthGuardService]
-    },  {
+    },
+  {
     path: 'masterdetailpage',
     loadChildren: () => import('./masterdetailpage/masterdetailpage.module').then( m => m.MasterdetailpagePageModule)
   },
   {
     path: 'resetpassword',
     loadChildren: () => import('./resetpassword/resetpassword.module').then( m => m.ResetpasswordPageModule)
+  },
+  {
+    path: 'joblisting',
+    loadChildren: () => import('./joblisting/joblisting.module').then( m => m.JoblistingPageModule),
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'joblistingmodel',
+    loadChildren: () => import('./joblistingmodel/joblistingmodel.module').then( m => m.JoblistingmodelPageModule),
+    canActivate: [AuthGuardService]
   },
 
 ];

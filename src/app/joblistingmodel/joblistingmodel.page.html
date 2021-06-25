@@ -1,0 +1,68 @@
+<ion-header class="ion-no-border">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1" class="back">
+        <ion-button fill="clear" size="small" class="ion-no-padding" style="margin-top: 0px;" (click)="goBack()">
+          <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+      </ion-button>
+      </ion-col>
+      <ion-col size="10" style="text-align: center;">
+        <p style="margin-top: 15px; font-size: 20px;margin-left: 6px;font-weight: bold;">Selected Items</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <!-- <ion-row *ngFor="let job of JobData">
+      <ion-col> -->
+        <!-- <ion-card *ngFor="let job of data"> -->
+          <ion-row style="display: flex" *ngFor="let job of data;let i =index">
+            <ion-col size="2">
+              <!-- <ion-card
+                *ngIf="isEmptyObject(client?.logo) || client?.logo ==null"
+                class="profile_img"
+                >{{client?.firstname.slice(0, 1).toUpperCase() +
+                  client?.lastname.slice(0, 1).toUpperCase()}}</ion-card
+              >
+              <div
+                *ngIf="!isEmptyObject(client?.logo) && client?.logo !==null"
+              >
+                <img [src]="client?.logo?.url" class="profile_img" />
+              </div> -->
+            </ion-col>
+            <ion-col size="9">
+              <p class="name" routerDirection="forward">
+                <span>{{job.name}}</span>
+                <!-- <span>{{client.lastname}}</span> -->
+              </p>
+
+              <p style="margin: 0px">
+                <span class="email" routerDirection="forward"
+                  >{{job.email}}</span
+                >
+              </p>
+              <p>
+                <span class="email">{{job.phonenumber == null || '' ? '' : job.phonenumber}}</span>
+              </p>
+            </ion-col>
+            <ion-col size="1">
+              <ion-icon class="trash" name="trash" (click)="remove(job,i)"></ion-icon>
+            </ion-col>
+          </ion-row>
+        <!-- </ion-card> -->
+      <!-- </ion-col>
+    </ion-row> -->
+    
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button class="applyButton" (click)="uploadJobs()">Apply</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

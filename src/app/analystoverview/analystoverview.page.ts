@@ -420,4 +420,9 @@ export class AnalystoverviewPage implements OnInit, OnDestroy {
     this.showHome = false;
     this.showSearchBar = true;
   }
+
+  goToJobListing()
+{
+  this.route.navigate(['/joblisting']);
+}
 }

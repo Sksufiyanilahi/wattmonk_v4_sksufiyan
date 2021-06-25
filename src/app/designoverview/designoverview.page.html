@@ -28,6 +28,9 @@
         <!-- <ion-col *ngIf="showSearchBar === true" >
             <ion-searchbar debounce="0" placeholder="home" class="custom"></ion-searchbar>
         </ion-col> -->
+        <ion-col style="text-align: right;">
+          <a style="font-size: 12px;font-weight: 500;" (click)="goToJobListing()">Job Listing</a>
+        </ion-col>
         <ion-col size="auto">
             <div class="notification-padding" (click)="searchbar()">
                 <ion-img src="/assets/images/icons8-search.svg" class="notification-icon"></ion-img>
@@ -45,10 +48,8 @@
 </ion-toolbar>
 </ion-row>
 </ion-grid>
-
-
-
 </ion-content>
+
 <ion-tabs style="margin-top: 52px;">
   <ion-tab-bar slot="top">
     <ion-tab-button tab="newdesigns">

@@ -990,6 +990,28 @@ export class ApiService {
     })
   }
 
+  getSiteAssessmentJobs(id):Observable<any>{
+    return this.http.get<any>(BaseUrl + "getsiteassessmentjobs?id="+id,{
+      headers:this.headers
+    })
+  }
 
+  getSalesProposalJobs(id):Observable<any>{
+    return this.http.get<any>(BaseUrl + "getsiteproposaljobs?id="+id,{
+      headers:this.headers
+    })
+  }
+
+  getPermitJobs(id):Observable<any>{
+    return this.http.get<any>(BaseUrl + "getpermitjobs?id="+id,{
+      headers:this.headers
+    })
+  }
+
+  uploadJobs(id, postData):Observable<any>{
+    return this.http.post<any>(BaseUrl + "selfassign?id="+id,postData,{
+      headers:this.headers
+    })
+  }
 }
 
