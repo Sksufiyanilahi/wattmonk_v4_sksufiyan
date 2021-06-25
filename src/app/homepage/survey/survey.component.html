@@ -90,8 +90,8 @@
 
 
                     </ion-row>
-                    <ion-row class="ion-no-margin">
-                        <ion-col><span
+                    <ion-row class="ion-no-margin" >
+                        <ion-col *ngIf="surveyData.createdby.parent==userData.parent.id && userData.role.type!='master'"><span
                                 *ngIf="(surveyData.status == 'created' && userData.usertype !== 'individual') || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'"
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="openSurveyors(surveyData.id,surveyData,$event)">Assign</span>
@@ -127,7 +127,7 @@
                             >Assign Review</span> -->
 
                         <ion-col size="auto" class="ion-no-margin ion-no-padding"
-                            *ngIf="segments=='status=assigned'"
+                            *ngIf="segments=='status=assigned'&& surveyData.createdby.parent==userData.parent.id && userData.role.type!='master'"
                             style="margin-bottom: 5px;">
                             <span 
                                 class="ion-text-end action-button-color z-100"
@@ -140,10 +140,10 @@
                         </ion-col>
                         <ion-col size="auto" class=" " *ngIf="segments=='status=completed'"
                             style="margin-bottom: 5px;">
-                            <span *ngIf="surveyData.surveypdf!== null" style="float:right !important;"
+                            <!-- <span *ngIf="surveyData.surveypdf!== null" style="float:right !important;"
                                 class="ion-text-end action-button-color" (click)="designDownload(surveyData,$event)">
                                 <ion-icon name="cloud-download-outline"></ion-icon>
-                            </span>
+                            </span> -->
                             <!-- <span
                                 *ngIf="(userData.role.type=='clientsuperadmin' || userData.role.type=='clientadmin') && (surveyData.surveypdf== null)"
                                 style="float:right !important;" class="ion-text-end action-button-color"

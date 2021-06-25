@@ -12,7 +12,7 @@
         <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
     </ion-button>
 </ion-col>
-<ion-col size="1" *ngIf="((allData.createdby.id == user.id && (allData.status == 'created' || allData.status == 'requestdeclined'||(allData.status == 'outsourced' && !user.ispaymentmodeprepay))) || (allData.status=='assigned' && allData.createdby.id==user.id)) && !isEditHide">
+<ion-col size="1" *ngIf="((allData.createdby.id == user.id && (allData.status == 'created' ||(requesttype=='survey' && allData.status=='completed') ||allData.status == 'requestdeclined'||(allData.status == 'outsourced' && !user.ispaymentmodeprepay))) || (allData.status=='assigned' && allData.createdby.id==user.id)) && !isEditHide">
     <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()" [disabled]=enableDisable>
         <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
     </ion-button>
