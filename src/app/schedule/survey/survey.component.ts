@@ -262,7 +262,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
     for (const name in controls) {
       if (controls[name].invalid) {
         invalid.push(name);
+        
       }
+      console.log(controls)
 
     }
     if (this.surveyForm.status === 'INVALID') {
@@ -392,8 +394,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.survey = result;
           this.fieldDisabled = true;
           var date = new Date(this.survey.datetime);
-          var userTimezoneOffset = date.getTimezoneOffset();
-         date= new Date(userTimezoneOffset - date.getTime() );
+          var offset = date.getTimezoneOffset();
+            date.setMinutes(date.getMinutes() + offset);
+        //   var userTimezoneOffset = date.getTimezoneOffset();
+        //  date= new Date(userTimezoneOffset - date.getTime() );
 
           this.surveyForm.patchValue({
             name: this.survey.name,
@@ -421,7 +425,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
               status: 'assigned'
             });
           }
-          this.utilities.setStaticAddress(this.survey.address);
+           this.utilities.setStaticAddress(this.survey.address);
 
         });
       }, (error) => {

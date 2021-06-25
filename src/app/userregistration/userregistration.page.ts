@@ -5,7 +5,7 @@ import {FormControl, FormGroup, Validators, FormBuilder, AbstractControl} from '
 import { Router } from '@angular/router';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { AlertController, MenuController, NavController } from '@ionic/angular';
+import { MenuController, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ApiService } from '../api.service';
@@ -58,14 +58,13 @@ export class UserregistrationPage implements OnInit {
     private mixpanelService: MixpanelService,
     private network: NetworkdetectService,
     private menu: MenuController,
-    private db: AngularFireDatabase,
-    private alertController: AlertController
+    private db: AngularFireDatabase
   ) {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.userregistrationForm = this.formBuilder.group({
       email: new FormControl("", [Validators.required, Validators.pattern(EMAILPATTERN)]),
-      firstname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{1,}$")]),
-      lastname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{1,}$")]),
+      firstname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
+      lastname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
       country: new FormControl("", [Validators.required]),
       password: new FormControl(this.utils.randomPass()),
       username: new FormControl(null),
@@ -401,41 +400,22 @@ export class UserregistrationPage implements OnInit {
     CometChat.createUser(user, apiKey).then(
       user => {
         this.utils.hideLoading();
-      //  this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.");
-      //  setTimeout(() => {
-         this.showController();
 
-        // this.utils.showSnackBar("User Registered Successfully");
-      // }, 3000)
+       this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.");
+       setTimeout(() => {
+        this.router.navigate(['/login']);
+        this.utils.showSnackBar("User Registered Successfully");
+      }, 3000)
       }, error => {
         this.utils.hideLoading();
         // this.utils.showSnackBar("Congrats!! Let's get started. We have sent you default login credentials on your registered email.");
-        this.utils.errorSnackBar("Cometchat uid has already taken");
-        this.router.navigate(['/login']);
+         this.router.navigate(['/login']);
+         this.utils.errorSnackBar("Cometchat uid has already taken");
          this.apiService.deleteTeam(userid).subscribe(res=>{
          });
-
       }
     )
   }
 
-  async showController() {
-    const alert = await this.alertController.create({
-      cssClass:"signupalertcontroller",
-      header: "Registration Successful",
-      message: "You will be redirected to login page from here. Please use the default credentials sent to your registered email to continue.",
-      mode:'md',
-      buttons: [
-        {
-          text: 'OK',
-          handler: () => {
-            this.router.navigate(['/login']);
-          }
-        }
-      ],
-      backdropDismiss: false
-    });
-    await alert.present();
-  }
 
 }

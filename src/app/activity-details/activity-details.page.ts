@@ -51,12 +51,14 @@ designId:any;
         this.apiservice.design_activityDetails(this.designId).subscribe(response =>{
           this.utilities.hideLoading().then(()=>{
             this.activity_details=response;
+            
           })
        })}
         if(this.name=="survey"){
         this.apiservice.survey_activityDetails(this.designId).subscribe(response =>{
           this.utilities.hideLoading().then(()=>{
             this.activity_details=response;
+            
           })
         });
         }
@@ -64,7 +66,8 @@ designId:any;
           this.apiservice.pestamp_activityDetails(this.designId).subscribe(response =>{
             this.utilities.hideLoading().then(()=>{
               this.activity_details=response;
-
+            
+          
             })
           });
           }
@@ -90,8 +93,6 @@ designId:any;
 
   ionViewWillLeave(){
   }
-
-
 
 
 }
