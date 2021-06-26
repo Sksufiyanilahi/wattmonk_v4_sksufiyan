@@ -8,7 +8,8 @@ import {
   INVALID_EMAIL_MESSAGE,
   INVALID_NAME_MESSAGE,
   INVALID_PHONE_NUMBER,
-  ScheduleFormEvent
+  ScheduleFormEvent,
+  WHITESPACES
 } from '../../model/constants';
 import { ApiService } from '../../api.service';
 import { Subscription } from 'rxjs';
@@ -37,6 +38,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   emailError = INVALID_EMAIL_MESSAGE;
   phoneError = INVALID_PHONE_NUMBER;
   fieldRequired = FIELD_REQUIRED;
+  whitespaces = WHITESPACES
 
   surveyId = 0;
   private survey: SurveyDataModel;
@@ -84,7 +86,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const mydate: any = new Date().getTime();
     this.surveyForm = this.formBuilder.group({
-      name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
+      name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN),this.noWhitespaceValidator]),
       email: new FormControl('', [Validators.pattern(EMAILPATTERN)]),
       phonenumber: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
       jobtype: new FormControl('', [Validators.required]),
@@ -679,4 +681,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
     });
     toast.present();
   }
+
+   public noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { 'whitespace': true };
+}
 }

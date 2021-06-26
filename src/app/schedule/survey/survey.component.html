@@ -15,6 +15,9 @@
                         <div *ngIf="surveyForm.get('name').value === '' && surveyForm.get('name').dirty">
                             <span class="error">{{fieldRequired}}</span>
                         </div>
+                         <div *ngIf="surveyForm.get('name').hasError('whitespace') && surveyForm.get('name').dirty">
+                            <span class="error">{{whitespaces}}</span>
+                        </div>
                     </div>
                 </ion-col>
             </ion-row>

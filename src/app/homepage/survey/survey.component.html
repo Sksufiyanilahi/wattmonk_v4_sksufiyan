@@ -85,7 +85,7 @@
 
                     </ion-row>
                     <ion-row class="ion-no-margin" >
-                        <ion-col *ngIf="surveyData.createdby.parent==userData.parent.id && userData.role.type!='master'"><span
+                        <ion-col *ngIf="(surveyData.createdby.parent==userData.parent.id) && (userData.role.type!='master')"><span
                                 *ngIf="(surveyData.status == 'created' && userData.usertype !== 'individual') || (surveyData.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || surveyData.status=='requestdeclined'"
                                 style="float:right !important;" class="ion-text-end action-button-color z-100"
                                 (click)="openSurveyors(surveyData.id,surveyData,$event)">Assign</span>
