@@ -1022,5 +1022,9 @@ export class ApiService {
       headers:this.headers
     })
   }
+
+  getclientadmins(id) : Observable<any>{
+    return this.http.get<any[]>(BaseUrl + "getclientadmins?clientid="+id,{headers: this.headers});
+  }
 }
 

@@ -1,3 +1,4 @@
+
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { User } from '../model/user.model';
 import { StorageService } from '../storage.service';
@@ -52,7 +53,9 @@ netPay:any
   delivertime:String;
   designType:any;
   wattmonkadmins: any;
-
+  clientadmins: any;
+  Servicecharges: AngularFireObject<any>;
+  servicechargedata: Observable<any>;
 
 
   constructor( private storageService:StorageService,
@@ -76,6 +79,120 @@ netPay:any
       this.design = this.designData.productdetails.queryParams.designData;
       this.fulldesigndata = this.designData.productdetails.queryParams.fulldesigndata;
       this.designType = this.designData.productdetails.queryParams.designType;
+
+      this.Servicecharges = db.object("service_charges");
+      this.servicechargedata = this.Servicecharges.valueChanges()
+      this.servicechargedata.subscribe(
+       (res) => {
+       
+         if(this.fulldesigndata.requesttype=='permit'){
+          if (this.fulldesigndata.projecttype == 'residential') {
+            if (this.fulldesigndata.jobtype == 'pv') {
+              this.settingValue = res.permit_pv_residential.price
+              this.delivertime = res.permit_pv_residential.turnaroundtime
+              this.discountAmount()
+            }
+            else if (this.fulldesigndata.jobtype == 'battery') {
+              this.settingValue = res.permit_battery_residential.price
+              this.delivertime = res.permit_battery_residential.turnaroundtime
+              this.discountAmount()
+            }
+            else if (this.fulldesigndata.jobtype == 'pvbattery') {
+              this.settingValue = res.permit_pvbattery_residential.price
+              this.delivertime = res.permit_pvbattery_residential.turnaroundtime
+              this.discountAmount()
+            }
+          }
+          else if (this.fulldesigndata.projecttype == 'commercial' || this.fulldesigndata.projecttype == 'detachedbuildingorshop' || this.fulldesigndata.projecttype == 'carport') {
+            let solarCapcity = this.fulldesigndata.monthlybill / 1150
+            if (solarCapcity > 0 && solarCapcity <= 49) {
+              this.settingValue = res.permit_0_49commercial.price
+              this.delivertime = res.permit_0_49commercial.turnaroundtime
+              this.discountAmount()
+            }
+            else if (solarCapcity > 49 && solarCapcity <= 99) {
+              this.settingValue= res.permit_50_99commercial.price
+              this.delivertime = res.permit_50_99commercial.turnaroundtime
+              this.discountAmount()
+            }
+            else if (solarCapcity > 99 && solarCapcity <= 199) {
+              this.settingValue = res.permit_100_199commercial.price
+              this.delivertime = res.permit_100_199commercial.turnaroundtime
+              this.discountAmount()
+            }
+            else if (solarCapcity > 199 && solarCapcity <= 299) {
+              this.settingValue = res.permit_200_299commercial.price
+              this.delivertime = res.permit_200_299commercial.turnaroundtime
+              this.discountAmount()
+            }
+            else if (solarCapcity > 299) {
+              this.settingValue = res.permit_200_299commercial.price
+              this.delivertime = res.permit_200_299commercial.turnaroundtime
+              this.discountAmount()
+              for (let i = 300; i <= solarCapcity; i = i + 100) {
+                this.settingValue += res.permit_above_299_commercial.price
+              }
+            }
+          }
+      
+        }
+      else if(this.fulldesigndata.requesttype=='prelim')
+    {
+      if(this.fulldesigndata.requirementtype=='proposal' && this.fulldesigndata.projecttype=='residential'){
+        this.settingValue = res.proposal_residential.price
+      }
+      else if(this.fulldesigndata.requirementtype=='assessment' && this.fulldesigndata.projecttype=='residential'){
+        this.settingValue = res.assessment_residential.price
+      }
+      else if(this.fulldesigndata.requirementtype=='proposal' && (this.fulldesigndata.projecttype=='commercial' || this.fulldesigndata.projecttype =='detachedbuildingorshop' || this.fulldesigndata.projecttype =='carport')){
+        let solarCapcity = this.fulldesigndata.monthlybill/1150
+        if(solarCapcity>0 && solarCapcity<=49){
+          this.settingValue = res.proposal_0_49commercial.price
+        }
+        else if(solarCapcity>49 && solarCapcity<=99){
+          this.settingValue = res.proposal_50_99commercial.price
+        }
+        else if(solarCapcity>99 && solarCapcity<=199){
+          this.settingValue = res.proposal_100_199commercial.price
+        }
+        else if(solarCapcity>199 && solarCapcity<=299){
+          this.settingValue = res.proposal_200_299commercial.price
+        }
+        else if(solarCapcity>299){
+          this.settingValue = res.proposal_200_299commercial.price
+          for(let i =300; i<=solarCapcity;i=i+100){
+            this.settingValue += res.proposal_above_299_commercial.price
+          }
+        }
+      }
+      else if(this.fulldesigndata.requirementtype=='assessment' && (this.fulldesigndata.projecttype=='commercial' || this.fulldesigndata.projecttype =='detachedbuildingorshop' || this.fulldesigndata.projecttype =='carport')){
+        let solarCapcity = this.fulldesigndata.monthlybill/1150
+        if(solarCapcity>0 && solarCapcity<=49){
+          this.settingValue= res.assessment_0_49commercial.price
+        }
+        else if(solarCapcity>49 && solarCapcity<=99){
+          this.settingValue = res.assessment_50_99commercial.price
+        }
+        else if(solarCapcity>99 && solarCapcity<=199){
+          this.settingValue = res.assessment_100_199commercial.price
+        }
+        else if(solarCapcity>199 && solarCapcity<=299){
+          this.settingValue = res.assessment_200_299commercial.price
+        }
+        else if(solarCapcity>299){
+          this.settingValue = res.assessment_200_299commercial.price
+          for(let i =300; i<=solarCapcity;i=i+100){
+            this.settingValue += res.assessment_above_299_commercial.price
+          }
+        }
+      }
+    
+     
+    }}
+       ,
+       (err) => console.log(err),
+       () => console.log("done!")
+      );
 
     this.newpermitsRef = db.object('newpermitdesigns');
     this.newpermits = this.newpermitsRef.valueChanges();
@@ -110,7 +227,9 @@ netPay:any
 
     this.userData = this.storageService.getUser();
     this.fetchData();
-    this.servicecharges();});
+   
+    // this.servicecharges();
+  });
    /* this.apiService.getProfileDetails().subscribe(res=>{this.user=res;
     console.log(this.user)
     this.apiService.paymentDetail(this.user.id).subscribe(res=>{
@@ -119,7 +238,6 @@ netPay:any
     })});
     this.route.paramMap.subscribe( params =>{ this.id=params.get('id');
     this.design=params.get('designData')});
-
     console.log(this.id);
    console.log(this.design);*/
    setTimeout(() => {
@@ -128,9 +246,11 @@ netPay:any
     }, 3000);
 
 
+
   }
   ionViewDidEnter(){
     this.fetchData();
+  
   }
 
   ionViewDidLeave(){
@@ -144,14 +264,14 @@ fetchData(){
   // console.log(navigation)
   // console.log(this.router.getCurrentNavigation().extras.state)
 
-this.isradiodisable=false
+// this.isradiodisable=false
 
   this.apiService.getUserData(this.userData.id).subscribe(res=>{this.user=res;
-    this.delivertime=this.user.slabname
+   
     this.apiService.paymentDetail(this.user.parent.id).subscribe(res=>{
       this.count=res;
-      this.servicecharges();
-    })});
+      // this.servicecharges();
+    })})
 
 
     this.apiService.freeCharges().subscribe(res=>{
@@ -164,86 +284,97 @@ this.isradiodisable=false
 
     this.apiService.getadmins().subscribe(res=>{
       this.wattmonkadmins=res;
+    
+    })
+    this.apiService.getclientadmins(this.userData.id).subscribe(res=>{
+     
+      this.clientadmins=res
 
     })
 
 }
 
 discountAmount(){
+  
   if(this.freeCharges>this.count){
     this.discount=this.settingValue;
     this.netPay=this.settingValue-this.discount;
+    
   }
   else if(this.coupondata!=null){
     if(this.design=='prelim'){
     this.discount=this.code_discount;
     this.netPay=(this.settingValue-this.code_discount).toFixed(2);
+    
   }
     if(this.design=='permit'){
       this.discount=this.code_discount;
       this.netPay=(this.netPay-this.discount).toFixed(2);
+     
     }
   }
   else{
     if(this.design=='prelim'){
     this.discount=null;
     this.netPay=this.settingValue;
+    
     }
 
     if(this.design=='permit'){
-      this.netPay=this.servicePrice.paymentamount;
-     this.discount=this.servicePrice.slabdiscount;
+      this.netPay=this.settingValue;
+     this.discount=0;
+     
     }
   }
 }
 
-servicecharges(){
-  if(this.design=='prelim' && this.fulldesigndata.requirementtype=="assessment"){
-    this.apiService.prelimCharges().subscribe(res=>{
-      this.servicePrice=res;
-      this.servicePrice.forEach(element => {
-        this.settingValue = element.settingvalue;
-      });
-      this.discountAmount();
-    })}
-    else if(this.design=='prelim' && this.fulldesigndata.requirementtype == "proposal")
-    {
-      this.apiService.prelimSalesCharges().subscribe(res=>{
-        this.servicePrice=res;
-        this.servicePrice.forEach(element => {
-          this.settingValue = element.settingvalue;
-        });
+// servicecharges(){
+//   if(this.design=='prelim' && this.fulldesigndata.requirementtype=="assessment"){
+//     this.apiService.prelimCharges().subscribe(res=>{
+//       this.servicePrice=res;
+//       this.servicePrice.forEach(element => {
+//         this.settingValue = element.settingvalue;
+//       });
+//       this.discountAmount();
+//     })}
+//     else if(this.design=='prelim' && this.fulldesigndata.requirementtype == "proposal")
+//     {
+//       this.apiService.prelimSalesCharges().subscribe(res=>{
+//         this.servicePrice=res;
+//         this.servicePrice.forEach(element => {
+//           this.settingValue = element.settingvalue;
+//         });
 
-        this.discountAmount();
-      })
-    }
-    else{
-      var postData={
-        userparentid:this.user.parent.id,
-        timeslab:this.delivertime
-      }
-      this.apiService.permitCharges(postData).subscribe(res=>{
-        this.servicePrice=res;
-       this.settingValue=this.servicePrice.servicecharge
-
-
-        if(this.servicePrice.freedesign==true){
-          this.delivertime="6-12";
-          this.discount=this.servicePrice.slabdiscount;
-          this.netPay=0
-          this.isradiodisable=true
-        }else{
-          this.delivertime=this.servicePrice.slabname;
-          this.netPay=this.servicePrice.paymentamount;
-          this.discount=this.servicePrice.slabdiscount;
-          this.isradiodisable=false
-        }
-
-      })
-    }
+//         this.discountAmount();
+//       })
+//     }
+//     else{
+//       var postData={
+//         userparentid:this.user.parent.id,
+//         timeslab:this.delivertime
+//       }
+//       this.apiService.permitCharges(postData).subscribe(res=>{
+//         this.servicePrice=res;
+//        this.settingValue=this.servicePrice.servicecharge
 
 
-}
+//         if(this.servicePrice.freedesign==true){
+//           this.delivertime="6-12";
+//           this.discount=this.servicePrice.slabdiscount;
+//           this.netPay=0
+//           this.isradiodisable=true
+//         }else{
+//           this.delivertime=this.servicePrice.slabname;
+//           this.netPay=this.servicePrice.paymentamount;
+//           this.discount=this.servicePrice.slabdiscount;
+//           this.isradiodisable=false
+//         }
+
+//       })
+//     }
+
+
+// }
 
 confirm(){
   if(this.id!=null){
@@ -364,6 +495,7 @@ confirm(){
   }
 
   confirmforPostpaid(){
+    
     if(this.id!=null){
       var postData={};
       var designacceptancestarttime = new Date();
@@ -389,9 +521,9 @@ confirm(){
           couponid:this.utils.getCouponId().value,
           paymenttype:null,
           slabname:this.delivertime,
-          slabdiscount:this.servicePrice.slabdiscount,
-          serviceamount:this.servicePrice.paymentamount,
-          amount:this.netPay
+          serviceamount:this.settingValue,
+          amount:Number(this.netPay)
+         
         };
       }
 
@@ -551,15 +683,25 @@ else if(data.discounttype=='amount'){
     var password = "";
 
     var group = new CometChat.Group(GUID, groupName, groupType, password);
-    let adminsid=[]
+    let adminsid=[];
+    let clientadminsid=[];
   this.wattmonkadmins.forEach(element => {
     adminsid.push(element.id)
   });
+  this.clientadmins.forEach(element => {
+    clientadminsid.push(element.id)
+  });
 
     CometChat.createGroup(group).then(group=>{
-      let membersList = [
-        new CometChat.GroupMember("" + this.fulldesigndata.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
-      ];
+      let membersList = [];
+      if(this.userData.role.type!='clientadmin'||this.userData.role.type!='clientsuperadmin'){
+        membersList=[new CometChat.GroupMember("" + this.fulldesigndata.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)]
+      }
+      clientadminsid.forEach(element => {
+        membersList.push( new CometChat.GroupMember("" + element, CometChat.GROUP_MEMBER_SCOPE.ADMIN))
+      });
+        // new CometChat.GroupMember("" + this.fulldesigndata.createdby.id, CometChat.GROUP_MEMBER_SCOPE.ADMIN)
+     
       adminsid.forEach(element => {
         membersList.push( new CometChat.GroupMember("" + element, CometChat.GROUP_MEMBER_SCOPE.ADMIN))
       });
@@ -581,7 +723,7 @@ else if(data.discounttype=='amount'){
 
   checkboxClicking(event){
 
-this.servicecharges();
+// this.servicecharges();
 this.removeCoupon();
 
   }
@@ -738,5 +880,4 @@ this.removeCoupon();
     //   }).render('#paypal-button-container');
     // }, 2000)
   }
-
 
