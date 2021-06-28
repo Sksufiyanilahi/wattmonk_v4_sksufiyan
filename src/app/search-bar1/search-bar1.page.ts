@@ -25,6 +25,7 @@ export class SearchBar1Page implements OnInit {
 searchElement='';
 DesignModel:any;
 SurveyModel:[];
+PestampModel:[];
 MixModel:[];
 SortedModel:any;
 sample:any;
@@ -33,7 +34,7 @@ SearchData:any;
 surveyId = 0;
 surveyData:any;
 segments:any='requesttype=prelim&status=created&status=outsourced&status=requestaccepted';
-Type='both';
+Type='all';
 listOfDesigns: DesginDataModel[];
 listOfDesignsHelper: any[];
 designerData: any;
@@ -90,7 +91,14 @@ if(this.Type=="design"){
   this.SortedModel=this.DesignModel;
   this.chatIcon(this.SortedModel);
 }
-if(this.Type=="both"){
+if(this.Type=="pestamp"){
+  this.sample=this.fillinDynamicData(dataModel.pestamp);
+  this.PestampModel= this.sample;
+
+  this.SortedModel = this.PestampModel;
+  this.chatIcon(this.SortedModel);
+}
+if(this.Type=="all"){
   this.sample=this.fillinDynamicData(dataModel.survey);
 this.SurveyModel=this.sample;
 

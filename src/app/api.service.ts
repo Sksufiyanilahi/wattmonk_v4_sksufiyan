@@ -629,9 +629,18 @@ export class ApiService {
     }
 
     /* SEARCH PE STAMP DESIGNS */
-    getFilteredDesigns(search:string): Observable<Pestamp[]> {
-
-      return this.http.get<Pestamp[]>(BaseUrl + "userpestamps?id="+this.storageService.getUser().id+"&"+search, {
+    getFilteredDesigns(search:string,creatorParentId?:string): Observable<Pestamp[]> {
+      let data;
+      if(creatorParentId)
+      {
+        console.log('hi')
+        data = search+'&creatorparentid='+creatorParentId;
+      }
+      else{
+        console.log("hello")
+        data = search
+      }
+      return this.http.get<Pestamp[]>(BaseUrl + "userpestamps?id="+this.storageService.getUser().id+"&"+data, {
         headers: this.headers,
         //observe: "response"
       })

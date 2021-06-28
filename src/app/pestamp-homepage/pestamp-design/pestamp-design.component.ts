@@ -27,6 +27,9 @@ import { PestampdelivermodalPage } from 'src/app/pestampdelivermodal/pestampdeli
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { COMETCHAT_CONSTANTS } from 'src/app/constants';
 import { MixpanelService } from 'src/app/utilities/mixpanel.service';
+import { FilterpagePage } from 'src/app/filterpage/filterpage.page';
+import { filter } from 'rxjs/operators';
+import { Company } from 'src/app/model/company.model';
 
 @Component({
   selector: 'app-pestamp-design',
@@ -74,7 +77,16 @@ export class PestampDesignComponent implements OnInit {
   };
   PEstampCounts: PEstampCount=<PEstampCount>{};
 
+  memberId:string;
+  memberValue:string;
+  isFilterApplied:boolean=false;
+  assignedId: any;
+  assignedAnalystId: any;
+
+  segmentValue:string;
+
   //showLoader= true;
+  clientList:Company[];
 
   constructor(private storageService: StorageService,
               private utils: UtilitiesService,
@@ -99,8 +111,10 @@ export class PestampDesignComponent implements OnInit {
 
     if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
       this.segments= 'status=created&status=outsourced&status=accepted&status=declined';
+      this.segmentValue = 'newpestamp';
     }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin'){
       this.segments ='status=created&status=outsourced&status=accepted&&status=declined';
+      this.segmentValue = 'newpestamp';
     }
                 const latestDate = new Date();
     this.today = datePipe.transform(latestDate, 'M/dd/yy');
@@ -130,17 +144,21 @@ export class PestampDesignComponent implements OnInit {
 
                segmentChanged(event){
                 // this.skip=0;
+                  this.segmentValue = event.target.value;
                   if(this.userData.role.type=='wattmonkadmins' || this.userData.role.name=='Admin'  || this.userData.role.name=='ContractorAdmin' || this.userData.role.name=='BD' ){
                     if(event.target.value=='newpestamp'){
                       this.segments ='status=created&status=outsourced&status=accepted&status=declined';
+                      this.isFilterApplied = false;
                       // return this.segments;
                     }
                     else if(event.target.value=='InStamping'){
                       this.segments ="status=assigned";
+                      this.isFilterApplied = false;
                       // return this.segments;
                     }
                     else if(event.target.value=='completed'){
                       this.segments ="status=completed";
+                      this.isFilterApplied = false;
                       // return this.segments;
                     }
                    //  else if(event.target.value=='InReview'){
@@ -149,6 +167,7 @@ export class PestampDesignComponent implements OnInit {
                    //  }
                     else if(event.target.value=='delivered'){
                       this.segments ="status=delivered";
+                      this.isFilterApplied = false;
                     }
                     this.getDesigns(null);
                     // return this.segments;
@@ -156,14 +175,17 @@ export class PestampDesignComponent implements OnInit {
                   }else if(this.userData.role.type=='clientsuperadmin' || this.userData.role.name=='SuperAdmin' || this.userData.role.name=='ContractorSuperAdmin' ){
                     if(event.target.value=='newpestamp'){
                       this.segments ='status=created&status=outsourced&status=accepted&&status=declined';
+                      this.isFilterApplied = false;
                       // return this.segments;
                     }
                     else if(event.target.value=='InStamping'){
                       this.segments ="status=assigned";
+                      this.isFilterApplied = false;
                       // return this.segments;
                     }
                     else if(event.target.value=='completed'){
                       this.segments ="status=completed";
+                      this.isFilterApplied = false;
                       // return this.segments;
                     }
                    //  else if(event.target.value=='InReview'){
@@ -172,6 +194,7 @@ export class PestampDesignComponent implements OnInit {
                    //  }
                     else if(event.target.value=='delivered'){
                       this.segments ="status=delivered";
+                      this.isFilterApplied = false;
                     }
                     this.getDesigns(null);
                   }
@@ -207,13 +230,13 @@ export class PestampDesignComponent implements OnInit {
 
 
 
-   getDesigns(event) {
+   getDesigns(event,creatorParentId?:string) {
      this.skip = 0;
     let showLoader = true;
     if (event != null && event !== undefined) {
       showLoader = false;
     }
-    this.fetchPendingDesigns(event, showLoader);
+    this.fetchPendingDesigns(event, showLoader, creatorParentId);
   }
 
   ngOnDestroy()
@@ -221,14 +244,14 @@ export class PestampDesignComponent implements OnInit {
     this.PeStampRefreshSubscription.unsubscribe();
   }
 
-  fetchPendingDesigns(event, showLoader: boolean) {
+  fetchPendingDesigns(event, showLoader: boolean,creatorParentId?:string) {
     this.noDesignFound="";
 
     this.listOfDesigns = [];
     this.listOfDesignsHelper = [];
     //this.newpermitsRef.update({ count: 0 });
     this.utils.showLoadingWithPullRefreshSupport(showLoader, 'Getting Requests').then((success) => {
-      this.apiService.getFilteredDesigns(this.segments).subscribe((response:any) => {
+      this.apiService.getFilteredDesigns(this.segments,creatorParentId).subscribe((response:any) => {
 
         this.utils.hideLoadingWithPullRefreshSupport(showLoader).then(() => {
 
@@ -1251,6 +1274,55 @@ state: { productdetails: objToSend }
 
 }
 
+async presentModal() {
+  console.log("hello")
+    const modal = await this.modalController.create({
+      component: FilterpagePage,
+      cssClass: 'small-modal',
+      componentProps: {
+        requesttype:'pestamp',
+        isFilterApplied:this.isFilterApplied,
+        memberid:this.memberId
+        // company:this.clientList
+       
+        // value:this.memberValue,
+        
+        // segmentValue:this.segmentValue,
+        // assignedId:this.assignedId,
+        // assignedAnalystId:this.assignedAnalystId
+      },
+      backdropDismiss: true
+    });
+    modal.onDidDismiss().then((data) => {
+      console.log(data)
+      let filterData=data.data;
+      if(filterData != null || filterData != undefined){
+      if(filterData.id!=null){
+        this.isFilterApplied = true;
+      this.memberId = filterData.id;
+      }
+      else 
+      {
+        this.memberId = null
+      }
+      this.filterApplied(filterData);
+    }  
+    })
+    return await modal.present();
+  }
+
+
+  filterApplied(filterData)
+  {
+    this.skip=0;
+    console.log(this.memberId)
+    if(this.memberId !==null && this.memberId !==''){
+      
+      console.log("hello",this.memberId)
+      console.log(this.segmentValue)
+      this.getDesigns(null,filterData.id);
+    }
+  }
 }
 
 export class DesginDataHelper {
