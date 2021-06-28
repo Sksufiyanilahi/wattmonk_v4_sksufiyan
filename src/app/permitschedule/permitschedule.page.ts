@@ -35,6 +35,7 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { Clients } from '../model/clients.model';
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
+import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 
@@ -203,6 +204,13 @@ export class PermitschedulePage implements OnInit {
     Validators.pattern("^[a-zA-Z-_ ]{3,}$")
   ])
 
+
+  Servicecharges: AngularFireObject<any>;
+  servicechargedata: Observable<any>;
+  amount:any;
+  slabname:any
+  res: any;
+  
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
     public utils: UtilitiesService,
@@ -215,7 +223,7 @@ export class PermitschedulePage implements OnInit {
     private geolocation: Geolocation,
     private platform: Platform,
     private toastController: ToastController,
-
+    private db:AngularFireDatabase,
     private cdr:ChangeDetectorRef,
     private network:NetworkdetectService,
     private mixpanelService:MixpanelService,
@@ -293,6 +301,16 @@ export class PermitschedulePage implements OnInit {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
+
+    //code for company payment
+
+    this.Servicecharges = db.object("service_charges");
+    this.servicechargedata = this.Servicecharges.valueChanges();
+    this.servicechargedata.subscribe(
+      (res) => {
+        this.res=res});
+    
+
 
     // const url = this.router.url;
     //   const splittedUrl = url.split('/');
@@ -954,6 +972,53 @@ export class PermitschedulePage implements OnInit {
     // this.saveModuleMake();
 
     if (this.desginForm.status === 'VALID') {
+    
+         console.log("res service charges", this.res.assessment_residential);
+   
+           if (this.desginForm.get('projecttype').value == 'residential') {
+             if (this.desginForm.get('jobtype').value == 'pv') {
+               this.amount = this.res.permit_pv_residential.price
+               this.slabname = this.res.permit_pv_residential.turnaroundtime
+             }
+             else if (this.desginForm.get('jobtype').value == 'battery') {
+               this.amount = this.res.permit_battery_residential.price
+               this.slabname = this.res.permit_battery_residential.turnaroundtime
+             }
+             else if (this.desginForm.get('jobtype').value == 'pvbattery') {
+              this.amount = this.res.permit_pvbattery_residential.price
+              this.slabname = this.res.permit_pvbattery_residential.turnaroundtime
+             }
+           }
+           else if (this.desginForm.get('projecttype').value == 'commercial' || this.desginForm.get('projecttype').value == 'detachedbuildingorshop' || this.desginForm.get('projecttype').value == 'carport') {
+             let solarCapcity = this.desginForm.get('monthlybill').value / 1150
+             if (solarCapcity > 0 && solarCapcity <= 49) {
+              this.amount = this.res.permit_0_49commercial.price
+              this.slabname = this.res.permit_0_49commercial.turnaroundtime
+             }
+             else if (solarCapcity > 49 && solarCapcity <= 99) {
+              this.amount= this.res.permit_50_99commercial.price
+              this.slabname = this.res.permit_50_99commercial.turnaroundtime
+             }
+             else if (solarCapcity > 99 && solarCapcity <= 199) {
+              this.amount = this.res.permit_100_199commercial.price
+              this.slabname = this.res.permit_100_199commercial.turnaroundtime
+             }
+             else if (solarCapcity > 199 && solarCapcity <= 299) {
+              this.amount = this.res.permit_200_299commercial.price
+              this.slabname = this.res.permit_200_299commercial.turnaroundtime
+             }
+             else if (solarCapcity > 299) {
+              this.amount = this.res.permit_200_299commercial.price
+              this.slabname = this.res.permit_200_299commercial.turnaroundtime
+               for (let i = 300; i <= solarCapcity; i = i + 100) {
+                this.amount += this.res.permit_above_299_commercial.price
+               }
+             }
+           }
+       
+         console.log(this.amount);
+       
+      
       if (this.formValue == 'send') {
         this.saveModuleMake();
       } else {
@@ -964,7 +1029,7 @@ export class PermitschedulePage implements OnInit {
     }
 
   }
-
+  
   submitform() {
     var pnumber = this.desginForm.get("phone").value;
     if (this.desginForm.status === 'VALID') {
@@ -975,14 +1040,15 @@ export class PermitschedulePage implements OnInit {
 
       var newConstruction = this.desginForm.get("newconstruction").value;
       if (this.designCreatedBy) {
+      
         var tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 2);
+        tomorrow.setHours(tomorrow.getHours() + parseInt(this.slabname));
         designstatus = "requestaccepted";
         designoutsourcedto = "232";
         isoutsourced = "true";
         var designacceptancestarttime = new Date();
         designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
-        deliverydate=tomorrow.toISOString()
+        deliverydate=tomorrow
 
       } else {
         designstatus = "created";
@@ -993,6 +1059,7 @@ export class PermitschedulePage implements OnInit {
 
 
       if (this.designId === 0) {
+        
         if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
           this.mixpanelService.track("SAVE_PERMITDESIGN_PAGE", {});
           let data
@@ -1038,7 +1105,9 @@ export class PermitschedulePage implements OnInit {
               survey: this.surveydata.id,
               // isdesignraised: true,
               mpurequired:this.desginForm.get('mpurequired').value,
-              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value
+              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value,
+              amount:this.amount,
+              slabname:this.slabname
 
             }
           } else {
@@ -1082,7 +1151,9 @@ export class PermitschedulePage implements OnInit {
               // isdesignraised: false,
               inverterscount: this.desginForm.get('inverterscount').value,
               mpurequired:this.desginForm.get('mpurequired').value,
-              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value
+              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value,
+              amount:this.amount,
+              slabname:this.slabname
 
             }
           }

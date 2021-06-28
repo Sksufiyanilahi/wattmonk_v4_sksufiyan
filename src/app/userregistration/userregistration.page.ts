@@ -63,8 +63,8 @@ export class UserregistrationPage implements OnInit {
     const EMAILPATTERN = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
     this.userregistrationForm = this.formBuilder.group({
       email: new FormControl("", [Validators.required, Validators.pattern(EMAILPATTERN)]),
-      firstname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
-      lastname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{3,}$")]),
+      firstname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{1,}$")]),
+      lastname: new FormControl("", [Validators.required, Validators.pattern("^[a-zA-Z. ]{1,}$")]),
       country: new FormControl("", [Validators.required]),
       password: new FormControl(this.utils.randomPass()),
       username: new FormControl(null),
