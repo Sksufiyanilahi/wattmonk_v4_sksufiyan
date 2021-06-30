@@ -44,7 +44,7 @@
     </div> -->
     <div class="error-box"
             *ngIf="userregistrationForm.get('firstname').invalid && userregistrationForm.get('firstname').dirty ||  (userregistrationForm.get('firstname').touched && userregistrationForm.get('firstname').invalid) && userregistrationForm.get('firstname').pristine">
-            <span class="error">{{getErrorMessage(userregistrationForm.get('firstname'))}}</span>
+            <span class="error" style="margin-left: 10%;">{{getErrorMessage(userregistrationForm.get('firstname'))}}</span>
         </div>
 
 </div>

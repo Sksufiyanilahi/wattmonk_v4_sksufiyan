@@ -7,7 +7,7 @@ import {UtilitiesService} from 'src/app/utilities.service';
 import {ErrorModel} from 'src/app/model/error.model';
 import {Modulemake, SolarMadeModel} from 'src/app/model/solar-made.model';
 import {InverterMakeModel} from 'src/app/model/inverter-make.model';
-import {IonSlides, NavController} from '@ionic/angular';
+import {IonSlides, NavController, ToastController} from '@ionic/angular';
 import {InverterMadeModel} from 'src/app/model/inverter-made.model';
 import {
   FIELD_REQUIRED,
@@ -206,6 +206,7 @@ isArchitecturalFileUpload: boolean = false;
     private cdr:ChangeDetectorRef,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
+    private toastController: ToastController,
     //private db: AngularFireDatabase
   ) {
     var tomorrow = new Date();
@@ -225,7 +226,7 @@ isArchitecturalFileUpload: boolean = false;
       invertermake:this.invertermake,
       invertermodel: new FormControl('', [ Validators.pattern("^[a-z0-9A-Z+-_([)/. {\\]}]{3,}$")]),
       monthlybill: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(NUMBERPATTERN)]),
-      inverterscount: new FormControl('1', [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
+      inverterscount: new FormControl(1, [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
       address: new FormControl('', [Validators.required]),
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
@@ -258,6 +259,7 @@ isArchitecturalFileUpload: boolean = false;
       paymenttype: new FormControl(null),
       requirementtype: new FormControl('assessment'),
       oldcommentid: new FormControl(''),
+      sameemailconfirmed:new FormControl(null),
       // uploadbox:new FormControl('')
     });
 
@@ -690,7 +692,7 @@ isArchitecturalFileUpload: boolean = false;
 
   saveModuleMake() {
 
-    const found = this.modulemakes.some(el => el.name === this.desginForm.get("modulemake").value);
+    const found = this.modulemakes.some(el => el.name === this.desginForm.get("solarmake").value);
     if (!found) {
 
       let solarmadedata = {
@@ -779,7 +781,8 @@ isArchitecturalFileUpload: boolean = false;
   saveInverterModel() {
     const ismakefound = this.invertermakes.some(el => el.name === this.desginForm.get("invertermake").value);
     const found = this.invertermodels.some(el => el.name === this.desginForm.get("invertermodel").value);
-    if (!ismakefound || !found) {
+    var inverter = this.desginForm.get("invertermake").value;
+    if ((!ismakefound || !found) && inverter!='') {
       let invertermadedata = {
         invertermake: this.selectedInverterMakeID,
         name: this.desginForm.get('invertermodel').value
@@ -1173,20 +1176,77 @@ isArchitecturalFileUpload: boolean = false;
 
   submitform() {
     if (this.desginForm.status === 'VALID') {
-      this.desginForm.patchValue({
-        solarmake: this.selectedModuleMakeID,
-        solarmodel: this.selectedModuleModelID,
-        invertermake: this.selectedInverterMakeID,
-        invertermodel: this.selectedInverterModelID,
-      })
+      var designstatus;
+      var designoutsourcedto;
+      var isoutsourced;
+      var deliverydate;
+
+      if (this.designCreatedBy) {
+        var tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 2);
+        designstatus = "requestaccepted";
+        designoutsourcedto = "232";
+        isoutsourced = "true";
+        var designacceptancestarttime = new Date();
+        designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
+        deliverydate=tomorrow.toISOString()
+
+      } else {
+        designstatus = "created";
+        designoutsourcedto = null;
+        isoutsourced = "false";
+        deliverydate=null
+      }
+      
       var newConstruction = this.desginForm.get("newconstruction").value;
       this.desginForm.get("architecturaldesign").setValue('');
       if (this.designId === 0) {
 
         if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
-           ;
+           
           this.utils.showLoading('Saving').then(() => {
-            this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
+           let data = {
+              name: this.desginForm.get('name').value,
+              email: this.desginForm.get('email').value,
+              address: this.desginForm.get('address').value,
+              monthlybill: this.desginForm.get('monthlybill').value,
+              solarmake: this.selectedModuleMakeID,
+              solarmodel: this.selectedModuleModelID,
+              invertermake: this.selectedInverterMakeID,
+              invertermodel: this.selectedInverterModelID,
+              //createdby: this.storage.getUserID(),
+              createdby: this.desginForm.get('createdby').value,
+              //assignedto: this.desginForm.get('assignedto').value,
+              rooftype: this.desginForm.get('rooftype').value,
+              //architecturaldesign: this.desginForm.get('architecturaldesign').value,
+              tiltofgroundmountingsystem: this.desginForm.get('tiltofgroundmountingsystem').value,
+              mountingtype: this.desginForm.get('mountingtype').value,
+              projecttype: this.desginForm.get('projecttype').value,
+              newconstruction: this.desginForm.get('newconstruction').value,
+              source: this.desginForm.get('source').value,
+              comments: this.desginForm.get('comments').value,
+              requesttype: this.desginForm.get('requesttype').value,
+              latitude: this.desginForm.get('latitude').value,
+              longitude: this.desginForm.get('longitude').value,
+              country: this.desginForm.get('country').value,
+              state: this.desginForm.get('state').value,
+              city: this.desginForm.get('city').value,
+              postalcode: this.desginForm.get('postalcode').value,
+              status: designstatus,
+              //attachments: this.desginForm.get('attachments').value,
+              deliverydate: deliverydate,
+              //creatorparentid:this.storage.getParentId()
+              creatorparentid: this.desginForm.get('creatorparentid').value,
+              outsourcedto: designoutsourcedto,
+              designacceptancestarttime: designacceptancestarttime,
+              isoutsourced: isoutsourced,
+              // isdesignraised: false,
+              inverterscount: this.desginForm.get('inverterscount').value,
+              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value,
+              oldcommentid : this.desginForm.get('oldcommentid').value,
+              requirementtype : this.desginForm.get('requirementtype').value
+            }
+            this.apiService.addDesginForm(data).subscribe((response) => {
               // this.uploaarchitecturedesign(response.id,'architecturaldesign');
               // this.uploadpreliumdesign(response.id,'attachments')
               this.utils.hideLoading().then(() => {
@@ -1224,11 +1284,59 @@ isArchitecturalFileUpload: boolean = false;
             }, responseError => {
               this.utils.hideLoading();
               const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message);
+              }
+              else{
               this.utils.errorSnackBar(error.message);
+            }
             });
           });
         } else if (this.send === ScheduleFormEvent.SEND_DESIGN_FORM) {
-          this.apiService.addDesginForm(this.desginForm.value).subscribe((response) => {
+          let data = {
+            name: this.desginForm.get('name').value,
+            email: this.desginForm.get('email').value,
+            address: this.desginForm.get('address').value,
+            monthlybill: this.desginForm.get('monthlybill').value,
+            solarmake: this.selectedModuleMakeID,
+            solarmodel: this.selectedModuleModelID,
+            invertermake: this.selectedInverterMakeID,
+            invertermodel: this.selectedInverterModelID,
+            //createdby: this.storage.getUserID(),
+            createdby: this.desginForm.get('createdby').value,
+            //assignedto: this.desginForm.get('assignedto').value,
+            rooftype: this.desginForm.get('rooftype').value,
+            //architecturaldesign: this.desginForm.get('architecturaldesign').value,
+            tiltofgroundmountingsystem: this.desginForm.get('tiltofgroundmountingsystem').value,
+            mountingtype: this.desginForm.get('mountingtype').value,
+            projecttype: this.desginForm.get('projecttype').value,
+            newconstruction: this.desginForm.get('newconstruction').value,
+            source: this.desginForm.get('source').value,
+            comments: this.desginForm.get('comments').value,
+            requesttype: this.desginForm.get('requesttype').value,
+            latitude: this.desginForm.get('latitude').value,
+            longitude: this.desginForm.get('longitude').value,
+            country: this.desginForm.get('country').value,
+            state: this.desginForm.get('state').value,
+            city: this.desginForm.get('city').value,
+            postalcode: this.desginForm.get('postalcode').value,
+            status: designstatus,
+            //attachments: this.desginForm.get('attachments').value,
+            deliverydate: deliverydate,
+            //creatorparentid:this.storage.getParentId()
+            creatorparentid: this.desginForm.get('creatorparentid').value,
+            outsourcedto: designoutsourcedto,
+            designacceptancestarttime: designacceptancestarttime,
+            isoutsourced: isoutsourced,
+            // isdesignraised: false,
+            inverterscount: this.desginForm.get('inverterscount').value,
+            sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value,
+            oldcommentid : this.desginForm.get('oldcommentid').value,
+            requirementtype : this.desginForm.get('requirementtype').value
+          }
+          this.apiService.addDesginForm(data).subscribe((response) => {
 
             this.utils.hideLoading().then(() => {
               if (newConstruction == 'true') {
@@ -1258,16 +1366,64 @@ isArchitecturalFileUpload: boolean = false;
           }
             , responseError => {
               this.utils.hideLoading();
-              const error: ErrorModel = responseError.error;
-              this.utils.errorSnackBar(error.message);
+            const error: ErrorModel = responseError.error;
+            console.log(error)
+            if(responseError.error.status="alreadyexist"){
+              var message = responseError.error.message.message;
+              this.confirmEmail(message);
+            }
+            else{
+            this.utils.errorSnackBar(error.message);
+          }
             });
         }
 
 
       } else {
         if (this.send === ScheduleFormEvent.SAVE_DESIGN_FORM) {
+          let data = {
+            name: this.desginForm.get('name').value,
+            email: this.desginForm.get('email').value,
+            address: this.desginForm.get('address').value,
+            monthlybill: this.desginForm.get('monthlybill').value,
+            solarmake: this.selectedModuleMakeID,
+            solarmodel: this.selectedModuleModelID,
+            invertermake: this.selectedInverterMakeID,
+            invertermodel: this.selectedInverterModelID,
+            //createdby: this.storage.getUserID(),
+            createdby: this.desginForm.get('createdby').value,
+            //assignedto: this.desginForm.get('assignedto').value,
+            rooftype: this.desginForm.get('rooftype').value,
+            //architecturaldesign: this.desginForm.get('architecturaldesign').value,
+            tiltofgroundmountingsystem: this.desginForm.get('tiltofgroundmountingsystem').value,
+            mountingtype: this.desginForm.get('mountingtype').value,
+            projecttype: this.desginForm.get('projecttype').value,
+            newconstruction: this.desginForm.get('newconstruction').value,
+            source: this.desginForm.get('source').value,
+            comments: this.desginForm.get('comments').value,
+            requesttype: this.desginForm.get('requesttype').value,
+            latitude: this.desginForm.get('latitude').value,
+            longitude: this.desginForm.get('longitude').value,
+            country: this.desginForm.get('country').value,
+            state: this.desginForm.get('state').value,
+            city: this.desginForm.get('city').value,
+            postalcode: this.desginForm.get('postalcode').value,
+            status: designstatus,
+            //attachments: this.desginForm.get('attachments').value,
+            deliverydate: deliverydate,
+            //creatorparentid:this.storage.getParentId()
+            creatorparentid: this.desginForm.get('creatorparentid').value,
+            outsourcedto: designoutsourcedto,
+            designacceptancestarttime: designacceptancestarttime,
+            isoutsourced: isoutsourced,
+            // isdesignraised: false,
+            inverterscount: this.desginForm.get('inverterscount').value,
+            sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value,
+            oldcommentid : this.desginForm.get('oldcommentid').value,
+            requirementtype : this.desginForm.get('requirementtype').value
+          }
           this.utils.showLoading('Saving').then(() => {
-            this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
+            this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
               this.utils.hideLoading().then(() => {
                 if (newConstruction == 'true') {
                   this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
@@ -1294,7 +1450,48 @@ isArchitecturalFileUpload: boolean = false;
               });
           });
         } else if (this.send === ScheduleFormEvent.SEND_DESIGN_FORM) {
-          this.apiService.updateDesignForm(this.desginForm.value, this.designId).subscribe(response => {
+          let data = {
+            name: this.desginForm.get('name').value,
+            email: this.desginForm.get('email').value,
+            address: this.desginForm.get('address').value,
+            monthlybill: this.desginForm.get('monthlybill').value,
+            solarmake: this.selectedModuleMakeID,
+            solarmodel: this.selectedModuleModelID,
+            invertermake: this.selectedInverterMakeID,
+            invertermodel: this.selectedInverterModelID,
+            //createdby: this.storage.getUserID(),
+            createdby: this.desginForm.get('createdby').value,
+            //assignedto: this.desginForm.get('assignedto').value,
+            rooftype: this.desginForm.get('rooftype').value,
+            //architecturaldesign: this.desginForm.get('architecturaldesign').value,
+            tiltofgroundmountingsystem: this.desginForm.get('tiltofgroundmountingsystem').value,
+            mountingtype: this.desginForm.get('mountingtype').value,
+            projecttype: this.desginForm.get('projecttype').value,
+            newconstruction: this.desginForm.get('newconstruction').value,
+            source: this.desginForm.get('source').value,
+            comments: this.desginForm.get('comments').value,
+            requesttype: this.desginForm.get('requesttype').value,
+            latitude: this.desginForm.get('latitude').value,
+            longitude: this.desginForm.get('longitude').value,
+            country: this.desginForm.get('country').value,
+            state: this.desginForm.get('state').value,
+            city: this.desginForm.get('city').value,
+            postalcode: this.desginForm.get('postalcode').value,
+            status: designstatus,
+            //attachments: this.desginForm.get('attachments').value,
+            deliverydate: deliverydate,
+            //creatorparentid:this.storage.getParentId()
+            creatorparentid: this.desginForm.get('creatorparentid').value,
+            outsourcedto: designoutsourcedto,
+            designacceptancestarttime: designacceptancestarttime,
+            isoutsourced: isoutsourced,
+            // isdesignraised: false,
+            inverterscount: this.desginForm.get('inverterscount').value,
+            sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value,
+            oldcommentid : this.desginForm.get('oldcommentid').value,
+            requirementtype : this.desginForm.get('requirementtype').value
+          }
+          this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
             this.utils.hideLoading().then(() => {
               if (newConstruction == 'true') {
                 this.uploaarchitecturedesign(response, 'architecturaldesign', this.archFiles[0], 0);
@@ -1522,7 +1719,7 @@ isArchitecturalFileUpload: boolean = false;
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
-    
+
 
   }
 
@@ -1544,7 +1741,7 @@ isArchitecturalFileUpload: boolean = false;
       }
       reader.readAsDataURL(event.target.files[i]);
     }
-    
+
     if (this.prelimFiles.length == 1) {
       this.fileName = event.target.files[0].name;
 
@@ -1573,7 +1770,6 @@ isArchitecturalFileUpload: boolean = false;
    if(this.attachmentFileUpload)
    {
     this.prelimFiles.push(file);
-    console.log(this.prelimFiles)
    }
    else if(this.isArchitecturalFileUpload)
    {
@@ -1653,7 +1849,6 @@ isArchitecturalFileUpload: boolean = false;
   }
 
   uploadpreliumdesign(response?: any, key?: string, fileObj?: string, index?: number) {
-    console.log(fileObj)
     const imageData = new FormData();
     // for(var i=0; i< this.prelimFiles.length;i++){
     imageData.append("files", fileObj);
@@ -2065,6 +2260,31 @@ isArchitecturalFileUpload: boolean = false;
         setTimeout(() => {
           this.autocompleteItems = [];
         }, 100);
+      }
+
+
+      async confirmEmail(message) {
+    
+        const toast = await this.toastController.create({
+          header: message,
+          message: 'Do you want to create again?',
+          cssClass: 'my-custom-confirm-class',
+          buttons: [
+            {
+              text: 'Yes',
+              handler: () => {
+                this.desginForm.get('sameemailconfirmed').setValue(true);
+                this.submitform();
+              }
+            }, {
+              text: 'No',
+              handler: () => {
+                
+              }
+            }
+          ]
+        });
+        toast.present();
       }
 }
 

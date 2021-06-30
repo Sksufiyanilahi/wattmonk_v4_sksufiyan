@@ -286,6 +286,12 @@
               <span class="model-name font">{{prelimdesign.created_at == null ? nullValue : prelimdesign.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
           </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col><span class="model-type font">Creator Name</span></ion-col>
+        <ion-col size="auto">
+            <span class="model-name font">{{prelimdesign.createdby == null ? nullValue : prelimdesign.createdby.firstname | titlecase}} {{prelimdesign.createdby == null ? nullValue : prelimdesign.createdby.lastname | titlecase}}</span>
+        </ion-col>
+    </ion-row>
       <div *ngIf="(user.role.type!='clientsuperadmin' || (user.role.type==='clientsuperadmin' && prelimdesign.status==='delivered'))&&( prelimdesign.prelimdesign!=null || user.role.type=='designer')">
           <form novalidate [formGroup]="commentsForm">
 

@@ -111,3 +111,12 @@
     margin-top: 0px;
     margin-right:5px;
   }
+
+  .filterIcon{
+    z-index: 99999;
+    /* margin-top: -4px; */
+    float: right;
+    display: flow-root;
+    margin-right: 14px;
+    font-size: 20px;
+  }

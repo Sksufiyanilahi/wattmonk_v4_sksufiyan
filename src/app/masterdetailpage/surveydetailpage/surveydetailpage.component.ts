@@ -25,7 +25,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
   styleUrls: ['./surveydetailpage.component.scss'],
 })
 export class SurveydetailpageComponent implements OnInit, OnDestroy {
-    
+
   slideOpts = {
     initialSlide: 0,
     speed: 400
@@ -509,9 +509,7 @@ export class SurveydetailpageComponent implements OnInit, OnDestroy {
 
 
 showimage(url){
-  console.log(url)
   const extension = url.split('.').pop();
-  console.log(extension)
   if(extension == 'pdf')
   {
     const browser = this.iab.create(url,'_system', 'location=yes,hardwareback=yes,hidden=yes');

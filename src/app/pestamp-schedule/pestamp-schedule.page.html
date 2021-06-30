@@ -376,8 +376,8 @@
 <ion-row>
   <ion-col></ion-col>
   <ion-col size="auto">
-    <ion-button class="action-button-color" fill="clear" (click)="submitForm('save')">Save for later</ion-button>
-    <ion-button class="action-button-color"
+    <ion-button class="action-button-color" style="font-size: 12px;" fill="clear" (click)="submitForm('save')">Save for later</ion-button>
+    <ion-button class="action-button-color" style="font-size: 12px;"
       *ngIf="(userdata.role.type=='clientsuperadmin' || userdata.role.type=='clientadmin') && designId==0" fill="clear"
       (click)="submitForm('send')">Send to WattMonk</ion-button>
   </ion-col>

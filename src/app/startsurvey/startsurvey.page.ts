@@ -576,17 +576,41 @@ export class StartsurveyPage implements OnInit {
       let validations = this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].shots[this.selectedshotindex].formfieldvalidations[0];
       switch (validations.regextype) {
         case REGEXTYPE.NUMERIC:
-          return "Field can have only numeric values and minimum " + validations.minlength + " maximum " + validations.maxlength + " length";
+          return "Field can have only numeric values and min: " + validations.minlength + " max: " + validations.maxlength + " length";
         case REGEXTYPE.ALPHANUMERIC:
-          return "Field cannot have any special characters and minimum " + validations.minlength + " maximum " + validations.maxlength + " length";
+          return "Field cannot have any special characters and min: " + validations.minlength + " max: " + validations.maxlength + " length";
         case REGEXTYPE.ALLCHARACTERS:
-          return "(Min- " + validations.minlength + " and minimum " + validations.minlength + " maximum " + validations.maxlength + " length";
+          return "Min: " + validations.minlength + " max: " + validations.maxlength + " length";
         case REGEXTYPE.MAKE:
           return "Please enter valid format";
         case REGEXTYPE.MODEL:
           return "Please enter valid format";
         default:
-          return "(Min- " + validations.minlength + " and minimum " + validations.minlength + " maximum " + validations.maxlength + " length";
+          return "Min: " + validations.minlength + " max: " + validations.maxlength + " length";
+      }
+    }
+  }
+
+  getInputFormErrorMessage(control: AbstractControl, element: FORMELEMENTS) {
+    if (control.hasError("required")) {
+      return "Field input is required";
+    }
+
+    if (control.hasError('pattern')) {
+      let validations = element.formfieldvalidations[0];
+      switch (validations.regextype) {
+        case REGEXTYPE.NUMERIC:
+          return "Field can have only numeric values and min: " + validations.minlength + " max: " + validations.maxlength + " length";
+        case REGEXTYPE.ALPHANUMERIC:
+          return "Field cannot have any special characters and min: " + validations.minlength + " max: " + validations.maxlength + " length";
+        case REGEXTYPE.ALLCHARACTERS:
+          return "Min: " + validations.minlength + " max: " + validations.maxlength + " length";
+        case REGEXTYPE.MAKE:
+          return "Please enter valid format";
+        case REGEXTYPE.MODEL:
+          return "Please enter valid format";
+        default:
+          return "Min: " + validations.minlength + " max: " + validations.maxlength + " length";
       }
     }
   }
@@ -777,24 +801,24 @@ export class StartsurveyPage implements OnInit {
   addfile(ev, formelementindex) {
     try {
       let reader = getFileReader();
-        reader.onload = (e: any) => {
-          // console.log(ev.target.files[0]);
-          var fileobjurl = '/assets/icon/file.png';
-          if (ev.target.files[0].name.includes('.png') || ev.target.files[0].name.includes('.jpeg') || ev.target.files[0].name.includes('.jpg') || ev.target.files[0].name.includes('.gif')) {
-            fileobjurl = e.target.result;
-          }
-          // var object = this.getfileobject(ev.target.files[0]);
-          const selectedfile: FILE_ATTACHMENTS = {
-            file: ev.target.files[0],
-            fileurl: fileobjurl,
-            uploadstatus: false,
-            controlname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].inputformcontrol[0]
-          };
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push(fileobjurl);
-          this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(selectedfile);
-          this.saveintermediatesurveydata();
+      reader.onload = (e: any) => {
+        // console.log(ev.target.files[0]);
+        var fileobjurl = '/assets/icon/file.png';
+        if (ev.target.files[0].name.includes('.png') || ev.target.files[0].name.includes('.jpeg') || ev.target.files[0].name.includes('.jpg') || ev.target.files[0].name.includes('.gif')) {
+          fileobjurl = e.target.result;
         }
-        reader.readAsDataURL(ev.target.files[0]);
+        // var object = this.getfileobject(ev.target.files[0]);
+        const selectedfile: FILE_ATTACHMENTS = {
+          file: ev.target.files[0],
+          fileurl: fileobjurl,
+          uploadstatus: false,
+          controlname: this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].inputformcontrol[0]
+        };
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].fileurls.push(fileobjurl);
+        this.mainmenuitems[this.selectedmainmenuindex].children[this.selectedsubmenuindex].formelements[formelementindex].attachments.push(selectedfile);
+        this.saveintermediatesurveydata();
+      }
+      reader.readAsDataURL(ev.target.files[0]);
     } catch (error) {
       // console.log("addselectedfiles---" + error);
     }
@@ -1113,12 +1137,14 @@ export class StartsurveyPage implements OnInit {
           });
         }
         else {
+          this.activeForm.markAllAsTouched();
+          this.activeForm.markAsDirty();
           var invalidcontrols = this.utilitieservice.findInvalidControls(this.activeForm);
           console.log(invalidcontrols);
           var toastmessage = 'Please input missing information of ';
           invalidcontrols.forEach((invalidcontrol, index) => {
             toastmessage += invalidcontrol.toUpperCase();
-            if(index < invalidcontrols.length - 1){
+            if (index < invalidcontrols.length - 1) {
               toastmessage += ", ";
             }
           });
@@ -1260,6 +1286,9 @@ export class StartsurveyPage implements OnInit {
   }
 
   savedetailsformdata() {
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate());
+    let d_date = tomorrow.toISOString();
     try {
       this.utilitieservice.setLoadingMessage('Saving form data');
       this.saveintermediatesurveydata();
@@ -1278,6 +1307,7 @@ export class StartsurveyPage implements OnInit {
       data['status'] = 'completed';
       data['latitude'] = this.latitude;
       data['longitude'] = this.longitude;
+      data['deliverydate'] = d_date
       this.apiService.updateSurveyForm(data, this.surveyid).subscribe((response) => {
         this.utilitieservice.hideLoading().then(() => {
           this.utilitieservice.showSuccessModal('Survey completed successfully').then((modal) => {

@@ -129,7 +129,6 @@ getnewType() {
  }
 
  getErrorMessage(control: AbstractControl) {
-  console.log(control)
   var newpassword = this.changepassword.get('newpassword');
   var confirmpassword = this.changepassword.get('confirmpassword');
 

@@ -838,7 +838,7 @@ this.router.navigate(['/add-money'], {
           else if(this.amounttopay!=null && this.assignValue =='clearDues'){
            overallAmount=this.amounttopay
           }
-            console.log('onClick', data, actions);
+
             // this.resetStatus();
         },
     };

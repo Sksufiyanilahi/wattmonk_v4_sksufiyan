@@ -12,7 +12,7 @@ import { ErrorModel } from '../model/error.model';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Pestamp } from '../model/pestamp.model';
 import { NetworkdetectService } from '../networkdetect.service';
-import { NavController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { CometChat } from '@cometchat-pro/cordova-ionic-chat';
 import { MixpanelService } from '../utilities/mixpanel.service';
 
@@ -101,6 +101,7 @@ export class PestampSchedulePage implements OnInit {
     private navController: NavController,
     private cdr: ChangeDetectorRef,
     private router: Router,
+    private toastController:ToastController,
     private mixpanelService: MixpanelService) {
     const MAILFORMAT = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z]+(?:\.[a-zA-Z]+)*$/;
     this.firstFormGroup = this.formBuilder.group({
@@ -123,7 +124,8 @@ export class PestampSchedulePage implements OnInit {
       postalcode: new FormControl(null),
       mountingtype: new FormControl('', [Validators.required]),
       propertytype: new FormControl('', [Validators.required]),
-      jobtype: new FormControl('')
+      jobtype: new FormControl(''),
+      sameemailconfirmed:new FormControl(null)
       // })
       // this.secondFormGroup = this.formBuilder.group({
 
@@ -146,10 +148,8 @@ export class PestampSchedulePage implements OnInit {
   ngOnInit() {
     this.permitdatapresent = false
     this.data = this.router.getCurrentNavigation().extras.state;
-    console.log(this.data);
     if (this.data != undefined) {
       this.permitdata = this.data.productdetails.queryParams.designData;
-      console.log(this.permitdata)
      // this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
      // this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
 
@@ -621,10 +621,16 @@ export class PestampSchedulePage implements OnInit {
               }
             },
               responseError => {
-                this.utils.hideLoading().then(() => {
-                  const error: ErrorModel = responseError.error;
-                  this.utils.errorSnackBar(error.message[0].messages[0].message);
-                });
+                this.utils.hideLoading();
+                const error: ErrorModel = responseError.error;
+                console.log(error)
+                if(responseError.error.status="alreadyexist"){
+                  var message = responseError.error.message.message;
+                  this.confirmEmail(message,"save");
+                }
+                else{
+                this.utils.errorSnackBar(error.message);
+              }
                 //
               })
           })
@@ -680,10 +686,16 @@ export class PestampSchedulePage implements OnInit {
             // });
           },
             responseError => {
-              this.utils.hideLoading().then(() => {
-                const error: ErrorModel = responseError.error;
-                this.utils.errorSnackBar(error.message[0].messages[0].message);
-              });
+              this.utils.hideLoading();
+              const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message,"send");
+              }
+              else{
+              this.utils.errorSnackBar(error.message);
+            }
               //
             })
         }
@@ -1161,5 +1173,29 @@ export class PestampSchedulePage implements OnInit {
         this.cdr.detectChanges();
       })
     })
+  }
+
+  async confirmEmail(message,value) {
+    
+    const toast = await this.toastController.create({
+      header: message,
+      message: 'Do you want to create again?',
+      cssClass: 'my-custom-delete-class',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.firstFormGroup.get('sameemailconfirmed').setValue(true);
+            this.submitForm(value);
+          }
+        }, {
+          text: 'No',
+          handler: () => {
+            
+          }
+        }
+      ]
+    });
+    toast.present();
   }
 }

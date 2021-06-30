@@ -27,7 +27,7 @@ designId:any;
   constructor(private apiservice: ApiService, private route: ActivatedRoute,
     private storageService:StorageService,
     private navController: NavController,private datepipe:DatePipe,
-    private utilities:UtilitiesService,
+    public utilities:UtilitiesService,
     private mixpanelService:MixpanelService
     ) {
     this.route.paramMap.subscribe( params =>{ this.designId=params.get('id');
@@ -51,6 +51,7 @@ designId:any;
         this.apiservice.design_activityDetails(this.designId).subscribe(response =>{
           this.utilities.hideLoading().then(()=>{
             this.activity_details=response;
+            
           })
        })}
         if(this.name=="survey"){
@@ -64,7 +65,8 @@ designId:any;
           this.apiservice.pestamp_activityDetails(this.designId).subscribe(response =>{
             this.utilities.hideLoading().then(()=>{
               this.activity_details=response;
-
+            
+          
             })
           });
           }

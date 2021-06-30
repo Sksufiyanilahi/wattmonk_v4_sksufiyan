@@ -64,7 +64,7 @@ export class HomepagePage implements OnInit, OnDestroy {
 		private nativeGeocoder: NativeGeocoder,
 		private platform: Platform,
 		private datePipe: DatePipe,
-		private storage: StorageService,
+	public storage: StorageService,
 		private diagnostic: Diagnostic,
 		private alertController: AlertController,
 		private geolocation: Geolocation,

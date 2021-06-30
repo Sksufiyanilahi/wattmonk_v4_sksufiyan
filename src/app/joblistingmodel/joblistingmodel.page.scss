@@ -1,0 +1,36 @@
+.back{
+    margin-top: 13px;
+    margin-left: 0px;
+    margin-right: 10px;
+  }
+
+  .name {
+    font-size: 16px;
+    color: #434343;
+    font-weight: bold;
+    display:table;
+    margin: 0px;
+    padding: 10px 0px 0px 0px;
+  }
+
+  .email {
+    font-size: 12px;
+    color: #434343;
+    font-weight: 600;
+    display:table;
+    margin: 0px;
+    padding: 0px 0px 0px 0px;
+  }
+
+  .trash{
+    padding: 20px;
+    padding-left: 0px;
+  }
+
+  .applyButton{
+    --background:#edc773;
+    text-transform: capitalize;
+  font-size: 12px;
+  --color: #333333;
+  width: -webkit-fill-available;
+  }

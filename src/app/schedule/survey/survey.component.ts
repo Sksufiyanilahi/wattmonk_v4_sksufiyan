@@ -1,6 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AlertController, NavController, Platform } from '@ionic/angular';
+import { AlertController, NavController, Platform, ToastController } from '@ionic/angular';
 import { AssigneeModel } from '../../model/assignee.model';
 import { UtilitiesService } from '../../utilities.service';
 import {
@@ -8,7 +8,8 @@ import {
   INVALID_EMAIL_MESSAGE,
   INVALID_NAME_MESSAGE,
   INVALID_PHONE_NUMBER,
-  ScheduleFormEvent
+  ScheduleFormEvent,
+  WHITESPACES
 } from '../../model/constants';
 import { ApiService } from '../../api.service';
 import { Subscription } from 'rxjs';
@@ -37,6 +38,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
   emailError = INVALID_EMAIL_MESSAGE;
   phoneError = INVALID_PHONE_NUMBER;
   fieldRequired = FIELD_REQUIRED;
+  whitespaces = WHITESPACES
 
   surveyId = 0;
   private survey: SurveyDataModel;
@@ -75,7 +77,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
     private iab: InAppBrowser,
-    private alertControl: AlertController
+    private alertControl: AlertController,
+    private toastController:ToastController
   ) {
 
     this.surveyId = +this.route.snapshot.paramMap.get('id');
@@ -83,7 +86,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
     const EMAILPATTERN = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const mydate: any = new Date().getTime();
     this.surveyForm = this.formBuilder.group({
-      name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
+      name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN),this.noWhitespaceValidator]),
       email: new FormControl('', [Validators.pattern(EMAILPATTERN)]),
       phonenumber: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
       jobtype: new FormControl('', [Validators.required]),
@@ -106,7 +109,8 @@ export class SurveyComponent implements OnInit, OnDestroy {
       oldcommentid: new FormControl(''),
       prelimdesignsurvey : new FormControl(null),
       isdesigndelivered : new FormControl(null),
-      sameemailconfirmed: new FormControl(null)
+      sameemailconfirmed: new FormControl(null),
+      creatorparentid: new FormControl(this.storage.getParentId()),
     });
     this.surveyForm.get('jobtype').setValue('pv');
 
@@ -118,16 +122,14 @@ export class SurveyComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.surveydatapresent = false
     this.data = this.router.getCurrentNavigation().extras.state;
-    console.log(this.data);
     if (this.data != undefined) {
       this.surveydata = this.data.productdetails.queryParams.designData;
-      console.log(this.surveydata)
      // this.tabsDisabled = this.data.productdetails.queryParams.tabsDisabled;
      // this.nonEditableField = this.data.productdetails.queryParams.nonEditableField;
 
       this.surveydatapresent = true
 
-
+     
     }
     this.fieldDisabled = false;
     this.userData = this.storage.getUser();
@@ -149,6 +151,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
       this.getsurveydata();
     }
     this.getAssignees();
+   
   }
 
 
@@ -202,12 +205,16 @@ export class SurveyComponent implements OnInit, OnDestroy {
             });
           },
             responseError => {
-              this.utilities.hideLoading().then(() => {
-                const error: ErrorModel = responseError.error;
-                const status: ErrorMessageList = responseError.error;
-                console.log(status)
-                this.utilities.errorSnackBar(error.message);
-              });
+              this.utilities.hideLoading();
+              const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message,"start");
+              }
+              else{
+              this.utilities.errorSnackBar(error.message);
+            }
               //
             }
           );
@@ -257,7 +264,9 @@ export class SurveyComponent implements OnInit, OnDestroy {
     for (const name in controls) {
       if (controls[name].invalid) {
         invalid.push(name);
+        
       }
+      console.log(controls)
 
     }
     if (this.surveyForm.status === 'INVALID') {
@@ -292,10 +301,10 @@ export class SurveyComponent implements OnInit, OnDestroy {
             });
           },
             responseError => {
-              console.log(responseError)
+
               this.utilities.hideLoading().then(() => {
                 const error: ErrorModel = responseError.error;
-                console.log(ErrorModel)
+
                 this.utilities.errorSnackBar(error.message);
               });
               //
@@ -330,20 +339,16 @@ export class SurveyComponent implements OnInit, OnDestroy {
 
           },
             responseError => {
-              this.utilities.hideLoading().then(() => {
-                var error = responseError.error;
-                this.SurveyResponce =error.message.status;
-                this.SurveyResp1 = error.message.message;
-                console.log(error.message.status)
-                if(this.SurveyResponce == "alreadyexist" ){
-                  console.log("open popup")
-                  this.showAlert();
-
-
-
-                }
-                this.utilities.errorSnackBar(error.message);
-              });
+              this.utilities.hideLoading();
+              const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message,"save");
+              }
+              else{
+              this.utilities.errorSnackBar(error.message);
+            }
               //
             }
           );
@@ -391,9 +396,11 @@ export class SurveyComponent implements OnInit, OnDestroy {
           this.survey = result;
           this.fieldDisabled = true;
           var date = new Date(this.survey.datetime);
-          var userTimezoneOffset = date.getTimezoneOffset();
-         date= new Date(userTimezoneOffset - date.getTime() );
-          console.log(date)
+          var offset = date.getTimezoneOffset();
+            date.setMinutes(date.getMinutes() + offset);
+        //   var userTimezoneOffset = date.getTimezoneOffset();
+        //  date= new Date(userTimezoneOffset - date.getTime() );
+
           this.surveyForm.patchValue({
             name: this.survey.name,
             email: this.survey.email,
@@ -420,7 +427,7 @@ export class SurveyComponent implements OnInit, OnDestroy {
               status: 'assigned'
             });
           }
-          this.utilities.setStaticAddress(this.survey.address);
+           this.utilities.setStaticAddress(this.survey.address);
 
         });
       }, (error) => {
@@ -593,58 +600,91 @@ export class SurveyComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
-  async showAlert(){
-    await this.alertControl.create({
-      header: "Email Already Exists!!!",
-      message: this.SurveyResp1,
-      buttons:[
-        {
-          text: "yes", handler: (res) => {
-            console.log(this.surveyForm.value.sameemailconfirmed);
-            this.surveyForm.value.sameemailconfirmed = true;
-            this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
-              this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
-                this.utilities.hideLoading();
-                // this.navController.pop();
-                modal.present();
-                modal.onWillDismiss().then((dismissed) => {
-                  this.utilities.sethomepageSurveyRefresh(true);
-                  if (this.userData.role.type === 'surveyors') {
-                    this.navController.navigateRoot('surveyoroverview/newsurveys');
-                  } else {
-                    this.navController.navigateRoot('homepage/survey');
-                  }
+  // async showAlert(){
+  //   await this.alertControl.create({
+  //     header: "Email Already Exists!!!",
+  //     message: this.SurveyResp1,
+  //     buttons:[
+  //       {
+  //         text: "yes", handler: (res) => {
+  //           console.log(this.surveyForm.value.sameemailconfirmed);
+  //           this.surveyForm.value.sameemailconfirmed = true;
+  //           this.apiService.saveSurvey(this.surveyForm.value).subscribe(survey => {
+  //             this.utilities.showSuccessModal('Survey have been saved').then((modal) => {
+  //               this.utilities.hideLoading();
+  //               // this.navController.pop();
+  //               modal.present();
+  //               modal.onWillDismiss().then((dismissed) => {
+  //                 this.utilities.sethomepageSurveyRefresh(true);
+  //                 if (this.userData.role.type === 'surveyors') {
+  //                   this.navController.navigateRoot('surveyoroverview/newsurveys');
+  //                 } else {
+  //                   this.navController.navigateRoot('homepage/survey');
+  //                 }
 
-                });
-                // });
-              });
+  //               });
+  //               // });
+  //             });
 
-            },
-              responseError => {
-                this.utilities.hideLoading().then(() => {
-                  var error = responseError.error;
-                  this.utilities.errorSnackBar(error.message);
-                });
-                //
-              }
-            );
+  //           },
+  //             responseError => {
+  //               this.utilities.hideLoading().then(() => {
+  //                 var error = responseError.error;
+  //                 this.utilities.errorSnackBar(error.message);
+  //               });
+  //               //
+  //             }
+  //           );
 
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
-        },
-      ]
-    }).then(res=>res.present());
-  }
+  //         }
+  //       },
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //         cssClass: 'secondary',
+  //         handler: (blah) => {
+  //           console.log('Confirm Cancel: blah');
+  //         }
+  //       },
+  //     ]
+  //   }).then(res=>res.present());
+  // }
 
   // showurl(i){
   //     this.browser = this.iab.create(this.surveydata.prelimdesign[i].url,'_system', 'location=yes,hardwareback=yes,hidden=yes');
 
   // }
+  async confirmEmail(message,value) {
+    
+    const toast = await this.toastController.create({
+      header: message,
+      message: 'Do you want to create again?',
+      cssClass: 'my-custom-confirm-class',
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.surveyForm.get('sameemailconfirmed').setValue(true);
+            if(value=='save'){
+           this.saveSurvey()
+            }else{
+            this.startSurvey();
+          }
+          }
+        }, {
+          text: 'No',
+          handler: () => {
+            
+          }
+        }
+      ]
+    });
+    toast.present();
+  }
+
+   public noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { 'whitespace': true };
+}
 }

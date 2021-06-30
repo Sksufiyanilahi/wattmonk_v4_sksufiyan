@@ -97,19 +97,19 @@
         <ion-row>
             <ion-col></ion-col>
             <ion-col size="auto">
-                <ion-button class="action-button-color" fill="clear" (click)="saveDesignForm()">Save for later</ion-button>
-                <ion-button class="action-button-color" *ngIf="((userdata.role.type=='clientsuperadmin' || userdata.role.type=='clientadmin')&& ((designs && designs.status != 'requestdeclined') || designs==null)) && designId==0" fill="clear" (click)="sendDesignForm()">Send to WattMonk</ion-button>
+                <ion-button class="action-button-color" style="font-size: 12px;" fill="clear" (click)="saveDesignForm()">Save for later</ion-button>
+                <ion-button class="action-button-color" style="font-size: 12px;" *ngIf="((userdata.role.type=='clientsuperadmin' || userdata.role.type=='clientadmin')&& ((designs && designs.status != 'requestdeclined') || designs==null)) && designId==0" fill="clear" (click)="sendDesignForm()">Send to WattMonk</ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>
     <ion-grid *ngIf="currentTab === 'survey'">
         <ion-row>
             <ion-col size="auto">
-                <ion-button class="action-button-color" fill="clear" (click)="saveSurveyForm()">Save for later</ion-button>
+                <ion-button class="action-button-color" style="font-size: 12px;" fill="clear" (click)="saveSurveyForm()">Save for later</ion-button>
             </ion-col>
             <ion-col></ion-col>
             <ion-col size="auto" >
-                <ion-button class="action-button-color" fill="clear" (click)="startSurvey()">Start Survey</ion-button>
+                <ion-button class="action-button-color" style="font-size: 12px;" fill="clear" (click)="startSurvey()">Start Survey</ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>

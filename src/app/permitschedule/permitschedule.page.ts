@@ -35,6 +35,7 @@ import { NetworkdetectService } from '../networkdetect.service';
 import { Clients } from '../model/clients.model';
 import { MixpanelService } from '../utilities/mixpanel.service';
 import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
+import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 //import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 
@@ -203,6 +204,13 @@ export class PermitschedulePage implements OnInit {
     Validators.pattern("^[a-zA-Z-_ ]{3,}$")
   ])
 
+
+  Servicecharges: AngularFireObject<any>;
+  servicechargedata: Observable<any>;
+  amount:any;
+  slabname:any
+  res: any;
+  
   constructor(private formBuilder: FormBuilder,
     private apiService: ApiService,
     public utils: UtilitiesService,
@@ -215,7 +223,7 @@ export class PermitschedulePage implements OnInit {
     private geolocation: Geolocation,
     private platform: Platform,
     private toastController: ToastController,
-
+    private db:AngularFireDatabase,
     private cdr:ChangeDetectorRef,
     private network:NetworkdetectService,
     private mixpanelService:MixpanelService,
@@ -236,7 +244,7 @@ export class PermitschedulePage implements OnInit {
       name: new FormControl('', [Validators.required, Validators.pattern(NAMEPATTERN)]),
       email: new FormControl('', [Validators.required, Validators.pattern(EMAILPATTERN)]),
       phone: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern('^[0-9]{8,15}$')]),
-      inverterscount: new FormControl('1', [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
+      inverterscount: new FormControl(1, [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
       modulemake: new FormControl("", [
         Validators.required,
         Validators.pattern("^[a-zA-Z-_ ]{3,}$")
@@ -275,6 +283,7 @@ export class PermitschedulePage implements OnInit {
       issurveycompleted: new FormControl('false'),
       creatorparentid: new FormControl(this.storage.getParentId()),
       mpurequired: new FormControl(false),
+      sameemailconfirmed:new FormControl(null)
     })
     // //For Counts
     // this.newpermitsRef = db.object('newpermitdesigns');
@@ -292,6 +301,16 @@ export class PermitschedulePage implements OnInit {
     this.designId = +this.route.snapshot.paramMap.get('id');
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
     this.autocompleteItems = [];
+
+    //code for company payment
+
+    this.Servicecharges = db.object("service_charges");
+    this.servicechargedata = this.Servicecharges.valueChanges();
+    this.servicechargedata.subscribe(
+      (res) => {
+        this.res=res});
+    
+
 
     // const url = this.router.url;
     //   const splittedUrl = url.split('/');
@@ -376,7 +395,7 @@ export class PermitschedulePage implements OnInit {
         this.address = address;
         this.storage.setData(this.address);
       });
-    } 
+    }
     // else {
     //   // await this.getGeoLocation();
     //   this.subscription = this.utils.getAddressObservable().subscribe((address) => {
@@ -460,7 +479,6 @@ export class PermitschedulePage implements OnInit {
 
 
   getsurveydata() {
-    console.log(this.surveydata);
     this.desginForm.patchValue({
       name: this.surveydata.name,
       email: this.surveydata.email,
@@ -910,7 +928,8 @@ export class PermitschedulePage implements OnInit {
   saveInverterModel() {
     const ismakefound = this.invertermakes.some(el => el.name === this.desginForm.get("invertermake").value);
     const found = this.invertermodels.some(el => el.name === this.desginForm.get("invertermodel").value);
-    if (!ismakefound || !found) {
+    var inverter = this.desginForm.get("invertermake").value;
+    if ((!ismakefound || !found) && inverter!='') {
       let invertermadedata = {
         invertermake: this.selectedInverterMakeID,
         name: this.desginForm.get('invertermodel').value
@@ -953,6 +972,53 @@ export class PermitschedulePage implements OnInit {
     // this.saveModuleMake();
 
     if (this.desginForm.status === 'VALID') {
+    
+         console.log("res service charges", this.res.assessment_residential);
+   
+           if (this.desginForm.get('projecttype').value == 'residential') {
+             if (this.desginForm.get('jobtype').value == 'pv') {
+               this.amount = this.res.permit_pv_residential.price
+               this.slabname = this.res.permit_pv_residential.turnaroundtime
+             }
+             else if (this.desginForm.get('jobtype').value == 'battery') {
+               this.amount = this.res.permit_battery_residential.price
+               this.slabname = this.res.permit_battery_residential.turnaroundtime
+             }
+             else if (this.desginForm.get('jobtype').value == 'pvbattery') {
+              this.amount = this.res.permit_pvbattery_residential.price
+              this.slabname = this.res.permit_pvbattery_residential.turnaroundtime
+             }
+           }
+           else if (this.desginForm.get('projecttype').value == 'commercial' || this.desginForm.get('projecttype').value == 'detachedbuildingorshop' || this.desginForm.get('projecttype').value == 'carport') {
+             let solarCapcity = this.desginForm.get('monthlybill').value / 1150
+             if (solarCapcity > 0 && solarCapcity <= 49) {
+              this.amount = this.res.permit_0_49commercial.price
+              this.slabname = this.res.permit_0_49commercial.turnaroundtime
+             }
+             else if (solarCapcity > 49 && solarCapcity <= 99) {
+              this.amount= this.res.permit_50_99commercial.price
+              this.slabname = this.res.permit_50_99commercial.turnaroundtime
+             }
+             else if (solarCapcity > 99 && solarCapcity <= 199) {
+              this.amount = this.res.permit_100_199commercial.price
+              this.slabname = this.res.permit_100_199commercial.turnaroundtime
+             }
+             else if (solarCapcity > 199 && solarCapcity <= 299) {
+              this.amount = this.res.permit_200_299commercial.price
+              this.slabname = this.res.permit_200_299commercial.turnaroundtime
+             }
+             else if (solarCapcity > 299) {
+              this.amount = this.res.permit_200_299commercial.price
+              this.slabname = this.res.permit_200_299commercial.turnaroundtime
+               for (let i = 300; i <= solarCapcity; i = i + 100) {
+                this.amount += this.res.permit_above_299_commercial.price
+               }
+             }
+           }
+       
+         console.log(this.amount);
+       
+      
       if (this.formValue == 'send') {
         this.saveModuleMake();
       } else {
@@ -963,7 +1029,7 @@ export class PermitschedulePage implements OnInit {
     }
 
   }
-
+  
   submitform() {
     var pnumber = this.desginForm.get("phone").value;
     if (this.desginForm.status === 'VALID') {
@@ -974,24 +1040,26 @@ export class PermitschedulePage implements OnInit {
 
       var newConstruction = this.desginForm.get("newconstruction").value;
       if (this.designCreatedBy) {
+      
         var tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 2);
+        tomorrow.setHours(tomorrow.getHours() + parseInt(this.slabname));
         designstatus = "requestaccepted";
         designoutsourcedto = "232";
         isoutsourced = "true";
         var designacceptancestarttime = new Date();
         designacceptancestarttime.setMinutes(designacceptancestarttime.getMinutes() + 30);
-        deliverydate=tomorrow.toISOString()
+        deliverydate=tomorrow
 
       } else {
         designstatus = "created";
         designoutsourcedto = null;
         isoutsourced = "false";
-        deliverydate=""
+        deliverydate=null
       }
-     
+
 
       if (this.designId === 0) {
+        
         if (this.formValue === 'save' || this.send === ScheduleFormEvent.SAVE_PERMIT_FORM) {
           this.mixpanelService.track("SAVE_PERMITDESIGN_PAGE", {});
           let data
@@ -1035,8 +1103,11 @@ export class PermitschedulePage implements OnInit {
               isoutsourced: isoutsourced,
               issurveycompleted: this.desginForm.get('issurveycompleted').value,
               survey: this.surveydata.id,
-              isdesignraised: true,
-              mpurequired:this.desginForm.get('mpurequired').value
+              // isdesignraised: true,
+              mpurequired:this.desginForm.get('mpurequired').value,
+              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value,
+              amount:this.amount,
+              slabname:this.slabname
 
             }
           } else {
@@ -1077,14 +1148,16 @@ export class PermitschedulePage implements OnInit {
               outsourcedto: designoutsourcedto,
               designacceptancestarttime: designacceptancestarttime,
               isoutsourced: isoutsourced,
-              isdesignraised: true,
+              // isdesignraised: false,
               inverterscount: this.desginForm.get('inverterscount').value,
-              mpurequired:this.desginForm.get('mpurequired').value
+              mpurequired:this.desginForm.get('mpurequired').value,
+              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value,
+              amount:this.amount,
+              slabname:this.slabname
 
             }
           }
 
-          console.log(data)
 
           // this.apiService.addDesginForm(this.desginForm.value).subscribe(response => {
           this.utils.showLoading('Saving').then(() => {
@@ -1126,9 +1199,17 @@ export class PermitschedulePage implements OnInit {
               });
               // },2000)
             }, responseError => {
-              this.utils.hideLoading();
-              const error: ErrorModel = responseError.error;
-              this.utils.errorSnackBar(error.message);
+                
+            this.utils.hideLoading();
+            const error: ErrorModel = responseError.error;
+            console.log(error)
+            if(responseError.error.status="alreadyexist"){
+              var message = responseError.error.message.message;
+              this.confirmEmail(message);
+            }
+            else{
+            this.utils.errorSnackBar(error.message);
+          }
             });
 
 
@@ -1169,9 +1250,10 @@ export class PermitschedulePage implements OnInit {
             //attachments: this.desginForm.get('attachments').value,
             deliverydate: deliverydate,
             creatorparentid: this.storage.getParentId(),
-            isdesignraised: true,
+            // isdesignraised: false,
             inverterscount: this.desginForm.get('inverterscount').value,
-            mpurequired:this.desginForm.get('mpurequired').value
+            mpurequired:this.desginForm.get('mpurequired').value,
+            sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value
 
 
           }
@@ -1247,9 +1329,18 @@ export class PermitschedulePage implements OnInit {
 
             });
           }, responseError => {
+  
+            
             this.utils.hideLoading();
             const error: ErrorModel = responseError.error;
+            console.log(error)
+            if(responseError.error.status="alreadyexist"){
+              var message = responseError.error.message.message;
+              this.confirmEmail(message);
+            }
+            else{
             this.utils.errorSnackBar(error.message);
+          }
           });
 
 
@@ -1294,13 +1385,14 @@ export class PermitschedulePage implements OnInit {
               outsourcedto: designoutsourcedto,
               designacceptancestarttime: designacceptancestarttime,
               isoutsourced: isoutsourced,
-              isdesignraised: true,
+              // isdesignraised: false,
               oldcommentid: this.oldcommentid,
-              inverterscount: this.desginForm.get('inverterscount').value
+              inverterscount: this.desginForm.get('inverterscount').value,
+              sameemailconfirmed:this.desginForm.get('sameemailconfirmed').value
 
 
             }
-            console.log(data)
+
             this.apiService.updateDesignForm(data, this.designId).subscribe(response => {
               // if(this.architecturalFileUpload){
               //   this.uploaarchitecturedesign(response.id,'architecturaldesign');
@@ -1385,7 +1477,7 @@ export class PermitschedulePage implements OnInit {
             //attachments: this.desginForm.get('attachments').value,
             deliverydate: deliverydate,
             creatorparentid: this.storage.getParentId(),
-            isdesignraised: true,
+            // isdesignraised: false,
             oldcommentid: this.oldcommentid,
             inverterscount: this.desginForm.get('inverterscount').value
 
@@ -1594,7 +1686,6 @@ export class PermitschedulePage implements OnInit {
   }
 
   getFiletype( file){
-    console.log(file)
     var extension = file.name.substring(file.name.lastIndexOf('.'));
     var mimetype = this.utils.getMimetype(extension);
     window.console.log(extension, mimetype);
@@ -2318,8 +2409,6 @@ export class PermitschedulePage implements OnInit {
 
     mpucheckbox(event){
       let checked = event.detail.checked
-      console.log(event.detail.checked)
-      console.log(checked)
       if(checked){
         this.desginForm.get('mpurequired').setValue(true)
       }
@@ -2372,5 +2461,30 @@ export class PermitschedulePage implements OnInit {
           this.autocompleteItems = [];
         }, 100);
       }
+
+      async confirmEmail(message) {
+    
+        const toast = await this.toastController.create({
+          header: message,
+          message: 'Do you want to create again?',
+          cssClass: 'my-custom-confirm-class',
+          buttons: [
+            {
+              text: 'Yes',
+              handler: () => {
+                this.desginForm.get('sameemailconfirmed').setValue(true);
+                this.submitform();
+              }
+            }, {
+              text: 'No',
+              handler: () => {
+                
+              }
+            }
+          ]
+        });
+        toast.present();
+      }
+    
 
 }

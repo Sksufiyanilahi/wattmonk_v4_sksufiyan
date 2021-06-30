@@ -20,7 +20,7 @@ export class SurveyDataModel {
   address: string;
   source: string;
   assignedto?: User;
-  createdby?: User;
+  createdby?: any;
   mspimages: Image[];
   utilitymeterimages: Image[];
   acdisconnectimages: Image[];

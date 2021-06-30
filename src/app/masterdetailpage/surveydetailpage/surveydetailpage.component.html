@@ -374,7 +374,7 @@
               <ion-col size ="12"><span >Roof Tilt :</span>&nbsp;<span>{{survey.rooftilt == null || '' ? nullValue : survey.rooftilt}} </span></ion-col>
             </ng-container>
             <div class="swiper-zoom-container">
-              <h2 class="position-fix">{{roof.name | titlecase}}</h2>
+              <!-- <h2 class="position-fix">{{roof.name | titlecase}}</h2> -->
               <img [src]="roof.url" (click)="showimage(roof.url)" />
             </div>
           </ion-row>
@@ -383,7 +383,7 @@
           <ion-row>
             <!-- <ion-col size ="12"><span *ngIf="i=='0'">Roof Dimension :</span>&nbsp;<span>{{survey.numberofmodules}} </span></ion-col> -->
             <div class="swiper-zoom-container">
-              <h2 class="position-fix">{{roofdimension?.name | titlecase}}</h2>
+              <!-- <h2 class="position-fix">{{roofdimension?.name | titlecase}}</h2> -->
               <img [src]="roofdimension.url" (click)="showimage(roofdimension.url)" />
             </div>
           </ion-row>
@@ -438,10 +438,10 @@
       <ion-slides pager="true" [options]="slideOpts" zoom="true">
         <ion-slide *ngFor="let appliance of survey.appliancesimages">
           <ion-row>
-            <ion-col size="12"><span>Appliance name is:</span>&nbsp;<span>{{appliance.name == null ? nullValue : appliance.name | titlecase}}</span>
+            <ion-col size="12"><span>Appliance name is:</span>&nbsp;<span>{{appliance.name == null ? nullValue : appliance.name.split('.').slice(0, -1).join('.') | titlecase}}</span>
             </ion-col>
             <div class="swiper-zoom-container">
-              <h2 class="position-fix">{{appliance.name | titlecase}}</h2>
+              <!-- <h2 class="position-fix">{{appliance.name | titlecase}}</h2> -->
               <img [src]="appliance.url" (click)="showimage(appliance.url)" />
             </div>
           </ion-row>
@@ -527,11 +527,11 @@
         <ion-col size="6">{{survey?.servicefeedsource | titlecase}}</ion-col>
       </ion-row>
       <ion-row *ngIf="survey.esid !== null">
-        <ion-col size="6" > ESID</ion-col>
+        <ion-col size="6" > ESID Number</ion-col>
         <ion-col size="6">{{survey?.esid == null || '' ? nullValue : survey?.esid}}</ion-col>
       </ion-row>
       <ion-row *ngIf="survey.utility !== null">
-        <ion-col size="6" > Utility</ion-col>
+        <ion-col size="6" > Utility Name</ion-col>
         <ion-col size="6">{{survey?.utility.name == null || '' ? nullValue : survey?.utility.name}}</ion-col>
         <ion-col size="6">{{survey?.utility.requirements == null || '' ? nullValue : survey?.utility.requirements}}</ion-col>
         <ion-col size="6">{{survey?.utility.state == null || '' ? nullValue : survey?.utility.state}}</ion-col>

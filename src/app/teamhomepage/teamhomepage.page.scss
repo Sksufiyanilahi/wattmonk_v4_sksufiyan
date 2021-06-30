@@ -189,10 +189,10 @@ ion-content.scroll {
     // }
 }
 
-.card-class:hover {
-  background-color: #f9ba48 !important;
-  margin:10px;
-}
+// .card-class:hover {
+//   background-color: #f9ba48 !important;
+//   margin:10px;
+// }
 
 
 .wt{
@@ -215,4 +215,10 @@ ion-card-content{
 
   .custom-skeleton ion-skeleton-text:last-child {
     margin-bottom: 5px;
+  }
+
+  .cent{
+    justify-content: center;
+    display: flex;
+    margin-top: 25%;
   }

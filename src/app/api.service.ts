@@ -479,7 +479,79 @@ export class ApiService {
       role: number,
       minpermitaccess: boolean,
       peengineertype:String,
-      usertype:string
+      usertype:string,
+      visibilityprelim: boolean,
+      visibilitysurvey: boolean,
+      visibilitypermit: boolean,
+      visibilitypestamp: boolean,
+      visibilityteam: boolean
+      // address: String,
+      // country: String,
+      // callingcode: number
+    ): Observable<User> {
+      var randomPassword = this.utilities.randomPass();
+      var parentid = 0;
+      //this.parentId = this.storageService.getParentId();
+      var user = this.storageService.getUser();
+      if (user.role.id == ROLES.SuperAdmin || user.role.id == ROLES.ContractorSuperAdmin){
+        parentid = user.id;
+      }else{
+        parentid = user.parent.id;
+      }
+      const postData = {
+        firstname: firstname,
+        lastname: lastname,
+        email: workemail,
+        permissiontomakedesign:permissiontomakedesign,
+        password: randomPassword,
+        resetPasswordToken: randomPassword,
+        source: this.utilities.checkPlatform(),
+        username: workemail,
+        confirmed : true,
+        isdefaultpassword: true,
+        peengineertype:peengineertype,
+        role: role,
+        minpermitdesignaccess: minpermitaccess,
+        provider: "local",
+        parent: parentid,
+        company: this.storageService.getUser().company,//user.company,
+        addedby: this.storageService.getUser().id,//.currentUserValue.user.id
+        usertype:usertype,
+        visibilityprelim: visibilityprelim,
+        visibilitysurvey: visibilitysurvey,
+        visibilitypermit: visibilitypermit,
+        visibilitypestamp: visibilitypestamp,
+        visibilityteam: visibilityteam
+      };
+      return this.http
+        .post<User>(BaseUrl + "users", JSON.stringify(postData), {
+          headers: this.headers,
+         // observe: "response"
+        })
+        // .pipe(
+        //   map(value => {
+        //     const member: User = value.body;
+        //     return member;
+        //   }),
+        //   catchError((err: HttpErrorResponse) => {
+        //   if(err.error.error == "Unauthorized"){
+        //     this.genericService.handleusersignout();
+        //   }else{
+        //     return throwError(err.error.message);
+        //   }
+        // })
+        // );
+    }
+
+    addUserForOnboarding(
+      workemail: String,
+      firstname: String,
+      lastname: String,
+      permissiontomakedesign:boolean,
+      role: number,
+      minpermitaccess: boolean,
+      peengineertype:String,
+      usertype:string,
       // address: String,
       // country: String,
       // callingcode: number
@@ -557,9 +629,18 @@ export class ApiService {
     }
 
     /* SEARCH PE STAMP DESIGNS */
-    getFilteredDesigns(search:string): Observable<Pestamp[]> {
-
-      return this.http.get<Pestamp[]>(BaseUrl + "userpestamps?id="+this.storageService.getUser().id+"&"+search, {
+    getFilteredDesigns(search:string,creatorParentId?:string): Observable<Pestamp[]> {
+      let data;
+      if(creatorParentId)
+      {
+        console.log('hi')
+        data = search+'&creatorparentid='+creatorParentId;
+      }
+      else{
+        console.log("hello")
+        data = search
+      }
+      return this.http.get<Pestamp[]>(BaseUrl + "userpestamps?id="+this.storageService.getUser().id+"&"+data, {
         headers: this.headers,
         //observe: "response"
       })
@@ -788,12 +869,12 @@ export class ApiService {
   getDynamicRoles(parentId,roleId)
   {
     return this.http.get(BaseUrl +
-      "/clientroles?client="+parentId+"&canbeaddedby_in="+roleId+"&_sort=id:asc",)
+      "clientroles?client="+parentId+"&canbeaddedby_in="+roleId+"&_sort=id:asc",)
   }
 
   getDefaultRoles(roleid){
     return this.http.get(BaseUrl +
-      "/clientroles?client_null=true&canbeaddedby_in="+roleid,)
+      "clientroles?client_null=true&canbeaddedby_in="+roleid,)
   }
 
   addGroup(data)
@@ -896,6 +977,54 @@ export class ApiService {
       })
     }
 
+    getUserSetting(id:number): Observable<any> 
+    {   
+       return this.http.get<any>(BaseUrl + "usersettings?user="+id,{
+        headers: this.headers})   
+  }
 
+  getActiveJobsCount(id:number):Observable<any>
+  {
+    return this.http.get<any>(BaseUrl + "userhasactivejobs?userid="+id,{
+      headers:this.headers
+    })
+  }
+
+  markAllAsRead(){
+    const params={
+      userid:this.userId
+    }
+    return this.http.post(BaseUrl + "notificationsmarkasread",params,{
+      headers:this.headers
+    })
+  }
+
+  getSiteAssessmentJobs(id):Observable<any>{
+    return this.http.get<any>(BaseUrl + "getsiteassessmentjobs?id="+id,{
+      headers:this.headers
+    })
+  }
+
+  getSalesProposalJobs(id):Observable<any>{
+    return this.http.get<any>(BaseUrl + "getsiteproposaljobs?id="+id,{
+      headers:this.headers
+    })
+  }
+
+  getPermitJobs(id):Observable<any>{
+    return this.http.get<any>(BaseUrl + "getpermitjobs?id="+id,{
+      headers:this.headers
+    })
+  }
+
+  uploadJobs(id, postData):Observable<any>{
+    return this.http.post<any>(BaseUrl + "selfassign?id="+id,postData,{
+      headers:this.headers
+    })
+  }
+
+  getclientadmins(id) : Observable<any>{
+    return this.http.get<any[]>(BaseUrl + "getclientadmins?clientid="+id,{headers: this.headers});
+  }
 }
 

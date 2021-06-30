@@ -7,7 +7,7 @@ import {UtilitiesService} from 'src/app/utilities.service';
 import {ErrorModel} from 'src/app/model/error.model';
 import {SolarMadeModel} from 'src/app/model/solar-made.model';
 import {InverterMakeModel} from 'src/app/model/inverter-make.model';
-import {NavController, IonSlides} from '@ionic/angular';
+import {NavController, IonSlides, ToastController} from '@ionic/angular';
 import {InverterMadeModel} from 'src/app/model/inverter-made.model';
 import {
   FIELD_REQUIRED,
@@ -125,7 +125,7 @@ export class SalesproposalComponent implements OnInit {
   isArcFileDelete: boolean = false;
   arcFileUrl: any=[];
   //attachmentName = this.desginForm.get('attachments').value;
-  
+
   fileName: any;
   logoFileName: any;
   moduledata: any;
@@ -205,6 +205,7 @@ export class SalesproposalComponent implements OnInit {
     private cdr:ChangeDetectorRef,
     private zone: NgZone,
     private nativeGeocoder: NativeGeocoder,
+    private toastController:ToastController
     //private db: AngularFireDatabase
   ) {
     // this.utils.showHideIntercom(true);
@@ -227,7 +228,7 @@ export class SalesproposalComponent implements OnInit {
       invertermake: new FormControl('', []),
       invertermodel: new FormControl('', []),
       monthlybill: new FormControl('', [Validators.required, Validators.min(0), Validators.pattern(NUMBERPATTERN)]),
-      inverterscount: new FormControl('1', [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
+      inverterscount: new FormControl(1, [Validators.required, Validators.minLength(1), Validators.maxLength(3), Validators.pattern('[0-9]{1,3}')]),
       address: new FormControl('', [Validators.required]),
       createdby: new FormControl(''),
       assignedto: new FormControl(''),
@@ -267,7 +268,8 @@ export class SalesproposalComponent implements OnInit {
       costofsystem: new FormControl(null, [Validators.required]),
       personname: new FormControl(null, [Validators.required, Validators.pattern(NAMEPATTERN)]),
       // companylogo : new FormControl(null),
-      requirementtype: new FormControl('proposal')
+      requirementtype: new FormControl('proposal'),
+      sameemailconfirmed:new FormControl(null)
       // uploadbox:new FormControl('')
     });
 
@@ -1217,7 +1219,14 @@ export class SalesproposalComponent implements OnInit {
             }, responseError => {
               this.utils.hideLoading();
               const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message);
+              }
+              else{
               this.utils.errorSnackBar(error.message);
+            }
             });
           });
         } else if (this.send === ScheduleFormEvent.SEND_SALES_FORM) {
@@ -1305,7 +1314,14 @@ export class SalesproposalComponent implements OnInit {
             , responseError => {
               this.utils.hideLoading();
               const error: ErrorModel = responseError.error;
+              console.log(error)
+              if(responseError.error.status="alreadyexist"){
+                var message = responseError.error.message.message;
+                this.confirmEmail(message);
+              }
+              else{
               this.utils.errorSnackBar(error.message);
+            }
             });
         }
 
@@ -1617,10 +1633,8 @@ export class SalesproposalComponent implements OnInit {
 
     if(this.desginForm.get('invertermake').value == ''){
       this.invertermakedisable=true
-      console.log(this.desginForm.get('invertermake').value)
     }
     else{
-      console.log(this.desginForm.get('invertermake').value)
       this.invertermakedisable=false;
       this.utils.showLoading('Getting inverter models').then((success) => {
         this.apiService.getInverterMade(this.desginForm.get('invertermake').value).subscribe(response => {
@@ -1691,7 +1705,7 @@ export class SalesproposalComponent implements OnInit {
       }
       reader.readAsDataURL(ev.target.files[i]);
     }
-    
+
 
   }
 
@@ -1713,7 +1727,7 @@ export class SalesproposalComponent implements OnInit {
       }
       reader.readAsDataURL(event.target.files[i]);
     }
-    
+
     if (this.prelimFiles.length == 1) {
       this.fileName = event.target.files[0].name;
 
@@ -1817,7 +1831,7 @@ export class SalesproposalComponent implements OnInit {
   }
 
   uploadpreliumdesign(response?: any, key?: string, fileObj?: string, index?: number) {
-console.log(fileObj)
+
     const imageData = new FormData();
     // for(var i=0; i< this.prelimFiles.length;i++){
     imageData.append("files", fileObj);
@@ -2248,5 +2262,29 @@ console.log(fileObj)
         setTimeout(() => {
           this.autocompleteItems = [];
         }, 100);
+      }
+
+      async confirmEmail(message) {
+    
+        const toast = await this.toastController.create({
+          header: message,
+          message: 'Do you want to create again?',
+          cssClass: 'my-custom-confirm-class',
+          buttons: [
+            {
+              text: 'Yes',
+              handler: () => {
+                this.desginForm.get('sameemailconfirmed').setValue(true);
+                this.submitform();
+              }
+            }, {
+              text: 'No',
+              handler: () => {
+                
+              }
+            }
+          ]
+        });
+        toast.present();
       }
 }

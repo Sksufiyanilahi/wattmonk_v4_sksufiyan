@@ -192,6 +192,15 @@ ion-content {
     .form_input {
       color: #ffffff !important;
     }
+
+    .error_div {
+      height: 22px;
+    }
+  
+    .error {
+      color: rgb(223, 62, 62);
+      font-size: 10px;
+    }
   }
 }
 
@@ -283,10 +292,10 @@ ion-content {
 }
 
 .questionaireview {
-  width: 70%;
+  width: 90%;
   position: absolute;
   top: 30vh;
-  left: calc(50% - (70% / 2));
+  left: calc(50% - (90% / 2));
   z-index: 99;
 }
 
@@ -299,7 +308,7 @@ ion-content {
   padding: 16px;
 
   .error_div {
-    height: 11px;
+    height: auto;
   }
 
   .error {

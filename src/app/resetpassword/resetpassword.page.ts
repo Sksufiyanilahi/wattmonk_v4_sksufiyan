@@ -43,7 +43,7 @@ export class ResetpasswordPage implements OnInit {
    private deviceStorage: Storage,
    private mixpanelService:MixpanelService,
    private router:Router
-  ) { 
+  ) {
     this.resetpassword = this.formBuilder.group({
       newpassword: new FormControl('', [Validators.required, Validators.minLength(3)] ),
       // oldpassword: new FormControl('',Validators.minLength(6)),
@@ -54,16 +54,16 @@ export class ResetpasswordPage implements OnInit {
 
   ngOnInit() {
     this.password= localStorage.getItem('password');
-   
+
   }
- 
+
   public toggleTextPassword() {
    this.isActiveToggleTextPassword = (this.isActiveToggleTextPassword == true) ? false : true;
  }
   public toggleTextnewPassword() {
    this.isActiveToggleTextnewPassword = (this.isActiveToggleTextnewPassword == true) ? false : true;
  }
- 
+
  getType() {
    return this.isActiveToggleTextPassword ? 'text' : 'password';
  }
@@ -96,13 +96,13 @@ getConfirmPasswordErrorMessage() {
   if (this.resetpassword.get('confirmpassword').hasError('required')) {
     return this.fieldRequired;
   }
-  console.log("hello")
+
   return this.resetpassword.get('confirmpassword').hasError('minlength') ?'Password must be at least 3 characters':'New and confirm password does not match each other. Please try again.';
 }
- 
- 
+
+
   resetPassword() {
- 
+
     // let data={
     //  newpassword:this.resetpassword.controls.newpassword.value,
     //  confirmpassword:this.resetpassword.controls.confirmpassword.value,
@@ -118,7 +118,7 @@ getConfirmPasswordErrorMessage() {
 
       this.utils.showLoading('Resetting password').then(() => {
         this.apiService.resetpassword(postData).subscribe((response:any) => {
-          console.log(response.user.username)
+
           this.utils.hideLoading().then(() => {
             localStorage.removeItem('newpasswordrequested');
             this.utils.showSnackBar('Your password has been changed successfully!');
@@ -126,12 +126,12 @@ getConfirmPasswordErrorMessage() {
             // console.log(this.user.user.username);
            //  this.utils.showSuccessModal('User password changed successfully!').then((modal) => {
              //  this.apiService.updateresetpassword(response.user.id,postdata).subscribe(res=>{
- 
- 
- 
+
+
+
              //  },err=>{
- 
- 
+
+
              //  })
              //  modal.present();
              //  modal.onWillDismiss().then((dismissed) => {
@@ -145,7 +145,7 @@ getConfirmPasswordErrorMessage() {
            //   const error: ErrorModel = responseError.error;
            //   this.utils.errorSnackBar(error.message[0].messages[0].message);
            //  });
- 
+
           });
         }, (responseError) => {
           const error: ErrorModel = responseError.error;
@@ -161,11 +161,11 @@ getConfirmPasswordErrorMessage() {
       this.resetpassword.get('confirmpassword').markAsDirty();
     }
   }
- 
+
   goBack() {
     this.navController.pop();
   }
- 
+
   ionViewWillLeave(){
   }
 
@@ -182,7 +182,6 @@ getConfirmPasswordErrorMessage() {
         this.utils.showLoading('Logging In').then(() => {
           this.apiService.login(data).subscribe(response => {
             this.registerAPNS(response.user);
-            console.log(response.user.parent.id)
             this.utils.hideLoading().then(() => {
 
 
@@ -202,7 +201,7 @@ getConfirmPasswordErrorMessage() {
                   this.navController.navigateRoot(['surveyoroverview']);
                   if (response.user) {
                     this.utils.doCometUserLogin();
-                  
+
                 }
               } else if (response.user.role.id == ROLES.Designer) {
                 // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
@@ -225,7 +224,7 @@ getConfirmPasswordErrorMessage() {
                   if (response.user) {
                     this.utils.doCometUserLogin();
                   }
-                
+
               } else if (response.user.role.id == ROLES.Peengineer) {
                 this.storageService.setUserName(this.username);
                 this.storageService.setPassword(this.resetpassword.get('newpassword').value);
@@ -236,7 +235,7 @@ getConfirmPasswordErrorMessage() {
                   if (response.user) {
                     this.utils.doCometUserLogin();
                   }
-                
+
               } else {
 
                 // this.utils.errorSnackBar("Access Denied!! Soon we will be coming up with our platform accessibility.");
@@ -244,7 +243,7 @@ getConfirmPasswordErrorMessage() {
                 this.storageService.setPassword(this.resetpassword.get('newpassword').value);
                 this.storageService.setUser(response.user, response.jwt);
                 this.apiService.refreshHeader();
-               
+
                   if (response.user.role.type === 'clientsuperadmin' && (response.user.isonboardingcompleted == null || response.user.isonboardingcompleted == false)) {
 
                     this.navController.navigateRoot('onboarding');
@@ -297,7 +296,7 @@ getConfirmPasswordErrorMessage() {
   //       this.utils.setSurveyVisibility(res[0].visibilitysurvey)
   //       this.utils.setPestampVisibility(res[0].visibilitypestamp)
 
-        
+
   //     })
   // }
 

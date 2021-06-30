@@ -47,7 +47,7 @@
   </ion-grid>
 </ion-header>
 <ion-content class="ion-padding page-text-color" scrollY="true">
-  <ion-grid *ngIf="pestampdesign" class="page-text-color">
+  <ion-grid *ngIf="pestampdesign" class="page-text-color" style="margin-bottom: 50px">
       <ion-row>
           <ion-col class="font">
               <span (click)="openAddressOnMap(pestampdesign.deliveryaddress)" class="address">{{pestampdesign?.deliveryaddress == null || '' ? nullValue : pestampdesign?.deliveryaddress}}</span>
@@ -216,6 +216,12 @@
             <ion-col><span class="model-type font">Created at</span></ion-col>
             <ion-col size="auto">
                 <span class="model-name font">{{pestampdesign.created_at == null ? nullValue : pestampdesign.created_at | date: 'dd/MM/yyyy hh:mm a'}}</span>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col><span class="model-type font">Creator Name</span></ion-col>
+            <ion-col size="auto">
+                <span class="model-name font">{{pestampdesign.createdby == null ? nullValue : pestampdesign.createdby.firstname | titlecase}} {{pestampdesign.createdby == null ? nullValue : pestampdesign.createdby.lastname | titlecase}}</span>
             </ion-col>
         </ion-row>
     <form novalidate [formGroup]="pestampForm">

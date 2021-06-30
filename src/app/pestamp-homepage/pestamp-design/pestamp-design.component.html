@@ -1,3 +1,8 @@
+<ion-row>
+    <ion-col>
+        <ion-icon class="filterIcon" (click)="presentModal()" name="filter-outline"></ion-icon>
+    </ion-col>
+</ion-row>
 <ion-segment scrollable (ionChange)="segmentChanged($event)" value="newpestamp" mode="md">
   <ion-segment-button value="newpestamp">
     <ion-label class="segment-btn">New ({{this.PEstampCounts.newpestamp}})</ion-label>
@@ -84,7 +89,7 @@
 
                     </span>
                     <ion-col *ngIf="designData.status=='assigned' || designData.status=='completed' || designData.status=='delivered'" style="font-size: 0.8em;padding-right: 0px;">
-                    <span style=" float:right"><strong>Assigned to : {{designData.assignedto.firstname | titlecase}} {{designData.assignedto.lastname | titlecase}}</strong></span>
+                    <span style=" float:right"><strong>Assigned to : {{designData.assignedto !== null ? designData.assignedto.firstname : '' | titlecase}} {{designData.assignedto !== null ? designData.assignedto.lastname : '' | titlecase}}</strong></span>
                     </ion-col>
                     <!-- <ion-row style="margin-bottom: 0px;" >
                         <ion-col *ngIf="designData.status == 'assigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">

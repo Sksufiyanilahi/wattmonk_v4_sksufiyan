@@ -207,6 +207,13 @@ ion-label{
   --color: black;
 }
 
+.my-custom-confirm-class{
+  --background: white;
+  --border-radius: 5px;
+  --color: black;
+  font-size: 11px;
+}
+
 .z-100 {
   z-index: 100;
 }
@@ -350,8 +357,8 @@ ion-slides.bullet .swiper-pagination-bullet{
       height: 75vh;
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
-      
-      
+
+
   }
 }
 
@@ -391,5 +398,55 @@ mat-form-field.field-inflex{
     }
   }
 }
+
+ion-alert.signupalertcontroller{
+  // font-size:19px
+  div{
+    div{
+      h2{
+        font-size:16px !important
+      }
+    }
+    div{
+      font-size: 14px;
+    }
+    div{
+      button.alert-button{
+        background: #EDC773;
+        color: #111;
+
+      }
+    }
+  }
+}
+
+.joblistingmodal .modal-wrapper {
+  position: absolute;
+  bottom: 0;
+  height: 55%;
+  width: 100%;
+  border-top-left-radius: 23px;
+  border-top-right-radius: 23px;
+}
+.job-search{
+  input.native-input{
+    padding-left: 10px;
+  }
+}
+
+.small-modal{
+  .modal-wrapper {
+      position: absolute;
+      bottom: 0;
+      min-height: initial;
+      top: initial;
+      height: 75vh;
+      border-top-left-radius: 25px;
+      border-top-right-radius: 25px;
+
+
+  }
+}
+
 
 

@@ -34,5 +34,7 @@ export const environment = {
         CLIENT_ID: 'AQ8yUi98saJfVRt5-u7DpiK0Fq-JeGV8h8_QNe8KFBziitabFvZKrxMBdDw_xqa8sGSq-0fNpAzgQwDt',
         CURRENCY: 'USD',
     },
-    Master_Role_Id: 15
+    Master_Role_Id: 15,
+    Team_Head_Role_Id: 16,
+    PeAdmin:17,
 };
