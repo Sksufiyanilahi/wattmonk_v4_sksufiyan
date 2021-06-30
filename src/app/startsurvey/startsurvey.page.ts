@@ -312,7 +312,7 @@ export class StartsurveyPage implements OnInit {
       this.restoreSurveyStoredData(data[0].sequence);
     }).catch((error) => {
       // console.log('Error loading json', error);
-      this.loadLocalJSON();
+      this.fetchsurveyprocessjsons();
     });
   }
 
@@ -322,6 +322,19 @@ export class StartsurveyPage implements OnInit {
       .subscribe((data) => {
         this.restoreSurveyStoredData(data[0].sequence);
       });
+  }
+
+  fetchsurveyprocessjsons() {
+    this.datastorage.get('pvsurveyjson').then((data) => {
+      // console.log(data);
+      if (!data) {
+        this.apiService.fetchJSON(this.user.parent.id, 'pv').subscribe((response: any) => {
+          // console.log(response);
+          this.datastorage.set('pvsurveyjson', response);
+          this.restoreSurveyStoredData(response[0].sequence);
+        });
+      }
+    });
   }
 
   restoreSurveyStoredData(surveydata) {
